@@ -1,0 +1,105 @@
+@extends('layouts.landing-new')
+
+@section('content')
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-blue-50 p-4">
+    <div class="max-w-md w-full bg-white p-8 rounded-2xl shadow-2xl">
+        <!-- Demo Badge -->
+        <div class="mb-6 text-center space-y-2">
+            <span class="inline-block bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide">
+                🧪 {{ __('Demo Mode') }}
+            </span>
+            
+            @if(!env('STRIPE_KEY') && !env('STRIPE_DEMO_MODE'))
+            <p class="text-[10px] text-red-500 font-medium">
+                {{ __('Running in fallback mode because Stripe keys are missing') }}
+            </p>
+            @endif
+        </div>
+
+        <!-- Payment Info -->
+        <div class="text-center mb-8">
+            <div class="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-10 h-10 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ __('Demo Payment Page') }}</h2>
+            <p class="text-gray-600 text-sm">هذه صفحة دفع تجريبية للاختبار بدون مفاتيح Stripe</p>
+        </div>
+
+        <!-- Plan Details -->
+        <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 mb-6">
+            <div class="flex justify-between items-center mb-3">
+                <span class="text-sm text-gray-600">الخطة المختارة:</span>
+                <span class="text-lg font-bold text-indigo-600">
+                    {{ app()->getLocale() == 'ar' ? $package->name : $package->name_en }}
+                </span>
+            </div>
+            <div class="flex justify-between items-center mb-3">
+                <span class="text-sm text-gray-600">المركز:</span>
+                <span class="font-semibold text-gray-900">{{ $tenant->name }}</span>
+            </div>
+            <div class="border-t border-indigo-200 my-3"></div>
+            <div class="space-y-2">
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-sm text-gray-600">السعر الأصلي:</span>
+                    <span class="font-semibold text-gray-900">
+                        {{ number_format($basePrice, 0) }} {{ \App\Models\SiteSetting::get('currency_symbol', 'جنيه') }}
+                        <span class="text-[10px] text-gray-400">/ {{ $billingCycle === 'yearly' ? 'سنوياً' : 'شهرياً' }}</span>
+                    </span>
+                </div>
+                
+                @if($discountAmount > 0)
+                <div class="flex justify-between items-center text-sm text-emerald-600">
+                    <span class="font-medium">الخصم ({{ $couponCode }}):</span>
+                    <span class="font-bold">- {{ number_format($discountAmount, 0) }} {{ \App\Models\SiteSetting::get('currency_symbol', 'جنيه') }}</span>
+                </div>
+                @endif
+
+                <div class="flex justify-between items-center pt-2 border-t border-indigo-100">
+                    <span class="text-base font-bold text-gray-700">المجموع النهائي:</span>
+                    <div class="flex flex-col items-end">
+                        <span class="text-2xl font-black text-indigo-600">
+                            {{ number_format($totalAmount, 0) }} {{ \App\Models\SiteSetting::get('currency_symbol', 'جنيه') }}
+                        </span>
+                        <span class="text-[10px] font-bold text-indigo-400">خطة {{ $billingCycle === 'yearly' ? 'سنوية' : 'شهرية' }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Instructions -->
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-blue-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                </svg>
+                <div>
+                    <p class="text-sm text-blue-800 font-semibold mb-1">وضع التجربة</p>
+                    <p class="text-xs text-blue-700">
+                        في الوضع الحقيقي، ستُحول إلى صفحة Stripe للدفع. هنا يمكنك محاكاة عملية الدفع مباشرة.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="space-y-3">
+            <form action="{{ route('payment.demo.success') }}" method="GET">
+                <button type="submit" class="w-full bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-4 rounded-xl font-bold text-lg hover:from-green-700 hover:to-green-800 transition-all transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+                    ✓ محاكاة دفع ناجح
+                </button>
+            </form>
+
+            <a href="{{ route('payment.cancel') }}" class="block w-full bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-semibold text-center hover:bg-gray-200 transition">
+                إلغاء
+            </a>
+        </div>
+
+        <!-- Footer Note -->
+        <p class="text-center text-xs text-gray-500 mt-6">
+            لتفعيل الدفع الحقيقي، أضف مفاتيح Stripe في ملف .env وأوقف STRIPE_DEMO_MODE
+        </p>
+    </div>
+</div>
+@endsection

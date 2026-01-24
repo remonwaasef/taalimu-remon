@@ -1,0 +1,260 @@
+<?php
+
+namespace Modules\Admin\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use App\Models\Tenant;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
+class TenantController extends Controller
+{
+    protected $tenantService;
+
+    public function __construct(\App\Services\TenantService $tenantService)
+    {
+        $this->tenantService = $tenantService;
+    }
+    public function index(Request $request)
+    {
+        $this->authorize('viewAny', Tenant::class);
+        $query = Tenant::query();
+
+        if ($request->filled('search')) {
+            $search = \App\Helpers\QueryHelper::escapeLike($request->search);
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('domain', 'like', '%' . $search . '%');
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Statistics
+        $stats = [
+            'total_count' => Tenant::count(),
+            'active_count' => Tenant::where('status', 'active')->count(),
+            'inactive_count' => Tenant::where('status', 'inactive')->count(),
+            'total_students' => \App\Models\Student::count(),
+        ];
+
+        $tenants = $query->with('users')->latest()->paginate(10)->withQueryString();
+
+        return view('admin::tenants.index', compact('tenants', 'stats'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $this->authorize('create', Tenant::class);
+        return view('admin::tenants.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        $this->authorize('create', Tenant::class);
+        $request->validate([
+            'name' => 'nullable|string|max:255',
+            'domain' => 'nullable|string|max:255|unique:tenants,domain',
+            'status' => 'nullable|in:active,inactive',
+        ]);
+
+        Tenant::create([
+            'name' => $request->name,
+            'domain' => $request->domain,
+            'status' => $request->status,
+        ]);
+
+        return redirect()->route('admin.tenants.index')->with('success', 'تم إضافة المركز بنجاح');
+    }
+
+    /**
+     * Show the specified resource.
+     */
+    public function show($id)
+    {
+        $tenant = Tenant::with(['users', 'subscriptions'])->findOrFail($id);
+        $this->authorize('view', $tenant);
+
+        $stats = $this->tenantService->getTenantStats($tenant);
+        $activities = $this->tenantService->getRecentActivity($tenant);
+        $staff = $this->tenantService->getStaff($tenant);
+        $subscriptionHistory = $this->tenantService->getSubscriptionHistory($tenant);
+        $growthData = $this->tenantService->getGrowthData($tenant);
+
+        return view('admin::tenants.show', array_merge([
+            'tenant' => $tenant, 
+            'activities' => $activities,
+            'staff' => $staff,
+            'subscriptionHistory' => $subscriptionHistory,
+            'growthData' => $growthData
+        ], $stats));
+    }
+
+    /**
+     * Toggle tenant status.
+     */
+    public function toggleStatus($id)
+    {
+        $tenant = Tenant::findOrFail($id);
+        $this->authorize('update', $tenant);
+
+        $tenant->update([
+            'status' => $tenant->status === 'active' ? 'inactive' : 'active'
+        ]);
+
+        return back()->with('success', 'تم تغيير حالة المركز بنجاح.');
+    }
+
+    /**
+     * Impersonate a tenant's admin user.
+     */
+    public function impersonate($id)
+    {
+        $tenant = Tenant::findOrFail($id);
+        $this->authorize('impersonate', $tenant);
+        
+        $admin = $this->tenantService->getImpersonationUser($tenant);
+
+        if (!$admin) {
+            return back()->with('error', 'لا يوجد مستخدم مسؤول متاح لهذا المركز حالياً.');
+        }
+
+        // Store original admin ID to allow return
+        session(['impersonator_id' => auth()->id()]);
+        
+        auth()->login($admin);
+
+        // Redirect to tenant's dashboard on their subdomain
+        $protocol = request()->secure() ? 'https://' : 'http://';
+        $domain = $tenant->domain . '.' . config('app.tenant_domain');
+        $port = (request()->getPort() && !in_array(request()->getPort(), [80, 443])) ? ':' . request()->getPort() : '';
+        
+        return redirect($protocol . $domain . $port . '/dashboard');
+    }
+
+    /**
+     * Stop impersonating a tenant admin and return to super admin.
+     */
+    public function stopImpersonating()
+    {
+        if (!session()->has('impersonator_id')) {
+            return redirect()->route('home');
+        }
+
+        $adminId = session()->pull('impersonator_id');
+        $admin = \App\Models\User::find($adminId);
+
+        if ($admin) {
+            auth()->login($admin);
+            return redirect()->route('admin.dashboard')->with('success', 'تم العودة للوحة تحكم المشرف بنجاح.');
+        }
+
+        return redirect()->route('home');
+    }
+
+    /**
+     * Update admin notes for a tenant.
+     */
+    public function updateNotes(Request $request, $id)
+    {
+        $tenant = Tenant::findOrFail($id);
+        $this->authorize('updateNotes', $tenant);
+        $tenant->update([
+            'admin_notes' => $request->admin_notes
+        ]);
+
+        return back()->with('success', 'تم تحديث الملاحظات الإدارية بنجاح.');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit($id)
+    {
+        $tenant = Tenant::findOrFail($id);
+        $this->authorize('update', $tenant);
+        return view('admin::tenants.edit', compact('tenant'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, $id): RedirectResponse
+    {
+        $tenant = Tenant::findOrFail($id);
+        $this->authorize('update', $tenant);
+
+        $request->validate([
+            'name' => 'nullable|string|max:255',
+            'domain' => 'nullable|string|max:255|unique:tenants,domain,' . $id,
+            'status' => 'nullable|in:active,inactive',
+        ]);
+
+        $tenant->update([
+            'name' => $request->name,
+            'domain' => $request->domain,
+            'status' => $request->status,
+        ]);
+
+        return redirect()->route('admin.tenants.index')->with('success', 'تم تحديث المركز بنجاح');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
+    {
+        $tenant = Tenant::findOrFail($id);
+        $this->authorize('delete', $tenant);
+        
+        // Check if tenant has related data
+        $studentsCount = \App\Models\Student::where('tenant_id', $id)->count();
+        
+        if ($studentsCount > 0) {
+            return back()->withErrors(['message' => 'لا يمكن حذف المركز لأنه يحتوي على ' . $studentsCount . ' طالب.']);
+        }
+        
+        $tenant->delete();
+        
+        return redirect()->route('admin.tenants.index')->with('success', 'تم حذف المركز بنجاح');
+    }
+
+    public function resetPassword(Request $request, $id): RedirectResponse
+    {
+        $request->validate([
+            'password' => [
+                'required', 
+                'string', 
+                'confirmed',
+                \Illuminate\Validation\Rules\Password::min(8)
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised(),
+            ],
+        ]);
+
+        $tenant = Tenant::with('users')->findOrFail($id);
+        $this->authorize('resetPassword', $tenant);
+        $admin = $tenant->users->first();
+
+        if (!$admin) {
+            return back()->withErrors(['message' => 'لم يتم العثور على مسؤول لهذا المركز.']);
+        }
+
+        $admin->update([
+            'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+        ]);
+
+        return back()->with('success', 'تم تحديث كلمة المرور بنجاح.');
+    }
+}

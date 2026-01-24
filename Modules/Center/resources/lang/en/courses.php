@@ -1,0 +1,24 @@
+<?php
+
+return [
+    'title' => 'Training Courses',
+    'add_new' => 'Add New Course',
+    'search_placeholder' => 'Search by course name...',
+    'status_label' => 'Status',
+    'status_published' => 'Published',
+    'status_draft' => 'Draft',
+    'status_archived' => 'Archived',
+    'course_name' => 'Course Name',
+    'instructor' => 'Instructor',
+    'price' => 'Price',
+    'status' => 'Status',
+    'actions' => 'Actions',
+    'currency' => 'EGP',
+    'not_specified' => 'Not Specified',
+    'edit' => 'Edit',
+    'content' => 'Content',
+    'delete' => 'Delete',
+    'no_courses' => 'No courses found.',
+    'view' => 'View',
+    'delete_confirm' => 'Are you sure you want to delete this course?',
+];

@@ -1,0 +1,89 @@
+<?php
+
+return [
+    'admins_and_roles' => 'Admins & Roles',
+    'roles_permissions' => 'Roles & Permissions',
+    'add_new_role' => 'Add New Role',
+    'role_name' => 'Role Name',
+    'date_created' => 'Date Created',
+    'actions' => 'Actions',
+    'type' => 'Type',
+    'permissions_count' => 'Permissions Count',
+    'system_default' => 'System Default',
+    'custom' => 'Custom',
+    'edit' => 'Edit',
+    'delete' => 'Delete',
+    'locked' => 'Locked',
+    'no_roles_found' => 'No roles found.',
+    'create_role' => 'Create Role',
+    'create_new_role' => 'Create New Role',
+    'role_name_placeholder' => 'e.g., Exam Manager',
+    'assign_permissions' => 'Assign Permissions',
+    'manage_permissions' => 'Manage Permissions',
+    'cancel' => 'Cancel',
+    'create_role_btn' => 'Create Role',
+    'edit_role' => 'Edit Role',
+    'system_role_readonly' => 'System Role (Read Only)',
+    'save_changes' => 'Save Changes',
+    'confirm_delete' => 'Are you sure you want to delete this role?',
+
+    // Permission Groups
+    'group_students' => 'Student Management',
+    'group_instructors' => 'Instructor Management',
+    'group_courses' => 'Course Management',
+    'group_sales' => 'Sales',
+    'group_billing' => 'Billing & Finance',
+    'group_schedule' => 'Schedule',
+    'group_attendance' => 'Attendance',
+    'group_exams' => 'Exams',
+    'group_users' => 'User Management',
+    'group_settings' => 'Settings',
+    'group_reports' => 'Reports',
+    'group_other' => 'Other',
+
+    // Permissions
+    'perm_view_students' => 'View Students',
+    'perm_create_students' => 'Create Students',
+    'perm_edit_students' => 'Edit Students',
+    'perm_delete_students' => 'Delete Students',
+    'perm_manage_students' => 'Manage Students (Full Access)',
+    
+    'perm_view_instructors' => 'View Instructors',
+    'perm_create_instructors' => 'Create Instructors',
+    'perm_edit_instructors' => 'Edit Instructors',
+    'perm_delete_instructors' => 'Delete Instructors',
+    'perm_manage_instructors' => 'Manage Instructors (Full Access)',
+    
+    'perm_view_courses' => 'View Courses',
+    'perm_create_courses' => 'Create Courses',
+    'perm_edit_courses' => 'Edit Courses',
+    'perm_delete_courses' => 'Delete Courses',
+    'perm_manage_courses' => 'Manage Courses (Full Access)',
+    
+    'perm_view_sales' => 'View Sales',
+    'perm_create_sales' => 'Create Sales',
+    'perm_edit_sales' => 'Edit Sales',
+    'perm_delete_sales' => 'Delete Sales',
+    
+    'perm_view_expenses' => 'View Expenses',
+    'perm_create_expenses' => 'Create Expenses',
+    'perm_edit_expenses' => 'Edit Expenses',
+    'perm_delete_expenses' => 'Delete Expenses',
+    
+    'perm_view_billing' => 'View Billing',
+    'perm_manage_billing' => 'Manage Billing',
+    
+    'perm_view_schedule' => 'View Schedule',
+    'perm_manage_schedule' => 'Manage Schedule',
+    
+    'perm_view_attendance' => 'View Attendance',
+    'perm_take_attendance' => 'Take Attendance',
+    
+    'perm_view_exams' => 'View Exams',
+    'perm_manage_exams' => 'Manage Exams',
+    
+    'perm_manage_users' => 'Manage Users',
+    'perm_view_reports' => 'View Reports',
+    'perm_manage_settings' => 'Manage Settings',
+    'perm_manage_centers' => 'Manage Centers',
+];
