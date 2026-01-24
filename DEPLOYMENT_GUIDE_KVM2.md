@@ -25,7 +25,7 @@
 
 ### على جهازك (Windows):
 - [x] Git مثبت
-- [x] المشروع متصل بـ GitHub: `remonwaasef/Edu-saas`
+- [x] المشروع متصل بـ GitHub: `remonwaasef/taalimu-remon`
 
 ### على السيرفر:
 - [ ] نظام Ubuntu 22.04 أو أحدث
@@ -191,7 +191,7 @@ cd /var/www
 ### الخطوة 3.2: استنساخ المشروع من GitHub
 
 ```bash
-git clone https://github.com/remonwaasef/Edu-saas.git edu
+git clone https://github.com/remonwaasef/taalimu-remon.git edu
 cd edu
 ```
 
