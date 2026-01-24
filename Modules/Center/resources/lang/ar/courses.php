@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'title' => 'الدورات التدريبية',
+    'add_new' => 'إضافة دورة جديدة',
+    'search_placeholder' => 'ابحث باسم الدورة...',
+    'status_label' => 'الحالة',
+    'status_published' => 'منشور',
+    'status_draft' => 'مسودة',
+    'status_archived' => 'مؤرشف',
+    'course_name' => 'اسم الدورة',
+    'instructor' => 'المدرس',
+    'schedules' => 'المواعيد',
+    'price' => 'السعر',
+    'status' => 'الحالة',
+    'actions' => 'الإجراءات',
+    'currency' => 'ج.م',
+    'not_specified' => 'غير محدد',
+    'edit' => 'تعديل',
+    'content' => 'المحتوى',
+    'delete' => 'حذف',
+    'no_courses' => 'لا يوجد دورات مسجلة.',
+    'view' => 'عرض',
+    'delete_confirm' => 'هل أنت متأكد من حذف هذه الدورة؟',
+];

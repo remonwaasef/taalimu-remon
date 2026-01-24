@@ -1,0 +1,64 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class ConsentReportController extends Controller
+{
+    public function index()
+    {
+        // إحصائيات الموافقات
+        $stats = [
+            'total_consents' => DB::table('user_consents')->count(),
+            'analytics_accepted' => DB::table('user_consents')->where('analytics_consent', true)->count(),
+            'marketing_accepted' => DB::table('user_consents')->where('marketing_consent', true)->count(),
+            'today_consents' => DB::table('user_consents')->whereDate('created_at', today())->count(),
+        ];
+
+        // أحدث 50 موافقة
+        $recent_consents = DB::table('user_consents')
+            ->orderBy('created_at', 'desc')
+            ->limit(50)
+            ->get();
+
+        return view('admin.consent-report', compact('stats', 'recent_consents'));
+    }
+
+    public function export()
+    {
+        // تصدير جميع الموافقات إلى CSV
+        $consents = DB::table('user_consents')->get();
+        
+        $filename = 'cookie-consents-' . date('Y-m-d') . '.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"$filename\"",
+        ];
+
+        $callback = function() use ($consents) {
+            $file = fopen('php://output', 'w');
+            
+            // Headers
+            fputcsv($file, ['ID', 'User ID', 'Session ID', 'IP', 'Analytics', 'Marketing', 'Date']);
+            
+            // Data
+            foreach ($consents as $consent) {
+                fputcsv($file, [
+                    $consent->id,
+                    $consent->user_id ?? 'Guest',
+                    $consent->session_id,
+                    $consent->ip_address,
+                    $consent->analytics_consent ? 'Yes' : 'No',
+                    $consent->marketing_consent ? 'Yes' : 'No',
+                    $consent->consent_date,
+                ]);
+            }
+            
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+}

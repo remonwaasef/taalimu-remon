@@ -1,0 +1,272 @@
+@extends('center::layouts.master')
+
+@section('content')
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Curriculum for: {{ $course->title }}</h1>
+        <a href="{{ route('center.courses.index') }}" class="btn btn-secondary">Back to Courses</a>
+    </div>
+
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    <!-- Course Resources Section -->
+    <div class="card mb-4 border-0 shadow-sm rounded-4">
+        <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-paperclip text-primary me-2"></i>مصادر الكورس (ملفات إضافية)</h5>
+            <button class="btn btn-sm btn-primary rounded-pill px-3" data-bs-toggle="collapse" data-bs-target="#resourceForm">
+                <i class="fas fa-plus me-1"></i> إضافة ملف
+            </button>
+        </div>
+        <div class="collapse" id="resourceForm">
+            <div class="card-body bg-light border-top">
+                <form action="{{ route('center.resources.store', $course) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="row g-3">
+                        <div class="col-md-5">
+                            <input type="text" name="title" class="form-control" placeholder="عنوان الملف (مثلاً: ملخص الدرس الأول)" required>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="file" name="file" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary w-100">تحميل</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                @forelse($course->resources as $res)
+                    <div class="col-md-6 col-lg-4">
+                        <div class="d-flex align-items-center justify-content-between p-3 border rounded-3 bg-white">
+                            <div class="d-flex align-items-center overflow-hidden">
+                                <i class="fas fa-file-pdf text-danger fs-4 me-3"></i>
+                                <div class="text-truncate">
+                                    <div class="fw-bold text-truncate" style="max-width: 150px;">{{ $res->title }}</div>
+                                    <small class="text-muted">{{ strtoupper($res->file_type) }} • {{ round($res->file_size / 1024 / 1024, 2) }} MB</small>
+                                </div>
+                            </div>
+                            <form action="{{ route('center.resources.destroy', $res) }}" method="POST" class="ms-2">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-link text-danger p-0" onclick="return confirm('هل أنت متأكد من حذف هذا الملف؟')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @empty
+                    <div class="col-12 text-center text-muted py-3">لا توجد ملفات مضافة حالياً.</div>
+                @endforelse
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Section Form -->
+    <div class="card mb-4 border-0 shadow-sm rounded-4">
+        <div class="card-body">
+            <form action="{{ route('center.sections.store', $course) }}" method="POST" class="row g-3 align-items-center">
+                @csrf
+                <div class="col-auto flex-grow-1">
+                    <input type="text" name="title" class="form-control rounded-pill" placeholder="عنوان القسم الجديد (مثلاً: الوحدة الأولى)" required>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">إضافة قسم</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sections List -->
+    <div id="sections-list" data-url="{{ route('center.sections.reorder', $course) }}">
+        @foreach($course->sections as $section)
+            <div class="card mb-3 section-item" data-id="{{ $section->id }}">
+                <div class="card-header d-flex justify-content-between align-items-center handle" style="cursor: move; background-color: #f8f9fa;">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-grip-lines me-2 text-muted"></i>
+                        <form action="{{ route('center.sections.update', $section) }}" method="POST" class="d-inline-block">
+                            @csrf
+                            @method('PUT')
+                            <input type="text" name="title" value="{{ $section->title }}" class="form-control form-control-sm border-0 bg-transparent fw-bold" style="width: 300px;">
+                        </form>
+                    </div>
+                    <div>
+                        <form action="{{ route('center.sections.destroy', $section) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Delete this section and all its lessons?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Lessons List -->
+                    <ul class="list-group lessons-list" id="lessons-section-{{ $section->id }}" data-url="{{ route('center.lessons.reorder', $section) }}">
+                        @foreach($section->lessons as $lesson)
+                            <li class="list-group-item d-flex justify-content-between align-items-center lesson-item" data-id="{{ $lesson->id }}">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-grip-vertical me-2 text-muted handle-lesson" style="cursor: move;"></i>
+                                    <i class="fas fa-{{ $lesson->type == 'video' ? 'video' : ($lesson->type == 'quiz' ? 'question-circle' : 'file-alt') }} me-2 text-primary"></i>
+                                    <span>{{ $lesson->title }}</span>
+                                    @if($lesson->is_free)
+                                        <span class="badge bg-success ms-2">Free Preview</span>
+                                    @endif
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-secondary me-1" data-bs-toggle="modal" data-bs-target="#editLessonModal-{{ $lesson->id }}"><i class="fas fa-edit"></i></button>
+                                    <form action="{{ route('center.lessons.destroy', $lesson) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Delete this lesson?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                    </form>
+                                </div>
+
+                                <!-- Edit Lesson Modal -->
+                                <div class="modal fade" id="editLessonModal-{{ $lesson->id }}" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <form action="{{ route('center.lessons.update', $lesson) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Edit Lesson</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        <label>Title</label>
+                                                        <input type="text" name="title" class="form-control" value="{{ $lesson->title }}" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label>Type</label>
+                                                        <select name="type" class="form-select">
+                                                            <option value="video" {{ $lesson->type == 'video' ? 'selected' : '' }}>Video</option>
+                                                            <option value="text" {{ $lesson->type == 'text' ? 'selected' : '' }}>Text</option>
+                                                            <option value="quiz" {{ $lesson->type == 'quiz' ? 'selected' : '' }}>Quiz</option>
+                                                            <option value="assignment" {{ $lesson->type == 'assignment' ? 'selected' : '' }}>Assignment</option>
+                                                        </select>
+                                                    </div>
+                                                    @if($lesson->type == 'quiz')
+                                                        <div class="mb-3">
+                                                            @if($lesson->quiz)
+                                                                <a href="{{ route('center.quizzes.edit', $lesson->quiz) }}" class="btn btn-sm btn-info w-100">Manage Quiz Questions</a>
+                                                            @else
+                                                                <form action="{{ route('center.quizzes.store', $lesson) }}" method="POST">
+                                                                    @csrf
+                                                                    <div class="input-group">
+                                                                        <input type="text" name="title" class="form-control form-control-sm" placeholder="Quiz Title" value="{{ $lesson->title }}">
+                                                                        <input type="hidden" name="passing_score" value="50">
+                                                                        <button type="submit" class="btn btn-sm btn-outline-info">Initial Quiz Setup</button>
+                                                                    </div>
+                                                                </form>
+                                                            @endif
+                                                        </div>
+                                                    @elseif($lesson->type == 'assignment')
+                                                        <div class="mb-3">
+                                                            @if($lesson->assignment)
+                                                                <a href="{{ route('center.assignments.edit', $lesson->assignment) }}" class="btn btn-sm btn-warning w-100">Edit Assignment Details</a>
+                                                            @else
+                                                                <form action="{{ route('center.assignments.store', $lesson) }}" method="POST">
+                                                                    @csrf
+                                                                    <div class="input-group">
+                                                                        <input type="text" name="title" class="form-control form-control-sm" placeholder="Assignment Title" value="{{ $lesson->title }}">
+                                                                        <input type="hidden" name="max_score" value="100">
+                                                                        <button type="submit" class="btn btn-sm btn-outline-warning">Initial Assignment Setup</button>
+                                                                    </div>
+                                                                </form>
+                                                            @endif
+                                                        </div>
+                                                    @endif
+                                                    <div class="mb-3">
+                                                        <label>Content (URL or Text)</label>
+                                                        <textarea name="content" class="form-control" rows="3">{{ $lesson->content }}</textarea>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label>Duration (minutes)</label>
+                                                        <input type="number" name="duration" class="form-control" value="{{ $lesson->duration }}">
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input type="hidden" name="is_free" value="0">
+                                                        <input type="checkbox" name="is_free" value="1" class="form-check-input" id="freeCheck-{{ $lesson->id }}" {{ $lesson->is_free ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="freeCheck-{{ $lesson->id }}">Free Preview</label>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                    
+                    <!-- Add Lesson Form -->
+                    <div class="mt-3">
+                        <form action="{{ route('center.lessons.store', $section) }}" method="POST" class="row g-2">
+                            @csrf
+                            <div class="col-auto">
+                                <input type="text" name="title" class="form-control form-control-sm" placeholder="New Lesson Title" required>
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-sm btn-outline-primary">Add Lesson</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+</div>
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<script>
+    // Sections Sorting
+    new Sortable(document.getElementById('sections-list'), {
+        handle: '.handle',
+        animation: 150,
+        onEnd: function (evt) {
+            let url = document.getElementById('sections-list').dataset.url;
+            let sections = Array.from(document.querySelectorAll('.section-item')).map(el => el.dataset.id);
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ sections: sections })
+            });
+        }
+    });
+
+    // Lessons Sorting
+    document.querySelectorAll('.lessons-list').forEach(function(el) {
+        new Sortable(el, {
+            group: 'lessons', // Allow dragging between sections
+            handle: '.handle-lesson',
+            animation: 150,
+            onEnd: function (evt) {
+                let sectionId = evt.to.id.replace('lessons-section-', '');
+                let url = evt.to.dataset.url;
+                let lessons = Array.from(evt.to.querySelectorAll('.lesson-item')).map(el => el.dataset.id);
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ lessons: lessons })
+                });
+            }
+        });
+    });
+</script>
+@endpush
+@endsection

@@ -1,0 +1,321 @@
+@extends('center::layouts.master')
+
+@section('title', 'التقارير والإحصائيات')
+
+@section('content')
+<div class="container-fluid">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h1 class="h3 mb-1 text-gray-800 fw-bold">لوحة المعلومات والتقارير</h1>
+            <p class="text-muted mb-0">نظرة شاملة على أداء المركز التعليمي</p>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-primary shadow-sm rounded-pill px-3" onclick="window.print()">
+                <i class="fas fa-file-download fa-sm text-white-50 me-2"></i> تحميل تقرير PDF
+            </button>
+        </div>
+    </div>
+
+    <!-- 1. Summary Cards -->
+    <div class="row g-4 mb-4">
+        <!-- Total Students -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100 py-2 rounded-4 border-start border-4 border-primary">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs fw-bold text-primary text-uppercase mb-1">إجمالي الطلاب</div>
+                            <div class="h3 mb-0 fw-bold text-gray-800">{{ $totalStudents }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-user-graduate fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Revenue -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100 py-2 rounded-4 border-start border-4 border-success">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs fw-bold text-success text-uppercase mb-1">إجمالي الإيرادات</div>
+                            <div class="h3 mb-0 fw-bold text-gray-800">{{ number_format($totalRevenue) }} ج.م</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-sack-dollar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Courses -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100 py-2 rounded-4 border-start border-4 border-info">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs fw-bold text-info text-uppercase mb-1">الدورات النشطة</div>
+                            <div class="h3 mb-0 fw-bold text-gray-800">{{ $totalCourses }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-book-open fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Outstanding Dues -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100 py-2 rounded-4 border-start border-4 border-warning">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs fw-bold text-warning text-uppercase mb-1">مستحقات معلقة</div>
+                            <div class="h3 mb-0 fw-bold text-gray-800">{{ number_format($totalDue) }} ج.م</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-hand-holding-usd fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Charts Row 1 -->
+    <div class="row g-4 mb-4">
+        <!-- Revenue Chart -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white border-0 rounded-top-4">
+                    <h6 class="m-0 fw-bold text-primary">نمو الإيرادات (آخر 6 أشهر)</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area" style="height: 320px;">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attendance Chart -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white border-0 rounded-top-4">
+                    <h6 class="m-0 fw-bold text-primary">إحصائيات الحضور</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-pie pt-2 pb-2" style="height: 250px;">
+                        <canvas id="attendanceChart"></canvas>
+                    </div>
+                    <div class="mt-3 text-center small d-flex justify-content-center gap-3">
+                        <span class="mr-2"><i class="fas fa-circle text-success big-dot"></i> حاضر</span>
+                        <span class="mr-2"><i class="fas fa-circle text-warning big-dot"></i> متأخر</span>
+                        <span class="mr-2"><i class="fas fa-circle text-danger big-dot"></i> غائب</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Charts Row 2 -->
+    <div class="row g-4 mb-4">
+        <!-- Popular Courses -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header py-3 bg-white border-0 rounded-top-4">
+                    <h6 class="m-0 fw-bold text-primary">الدورات الأكثر شعبية</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-bar" style="height: 300px;">
+                        <canvas id="popularCoursesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Growth -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header py-3 bg-white border-0 rounded-top-4">
+                    <h6 class="m-0 fw-bold text-primary">نمو عدد الطلاب</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-bar" style="height: 300px;">
+                        <canvas id="studentGrowthChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Recent Sales Table -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-header py-3 bg-white border-0 rounded-top-4">
+            <h6 class="m-0 fw-bold text-primary">المعاملات المالية الأخيرة</h6>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table align-middle mb-0 table-hover">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="border-0 p-3">رقم العملية</th>
+                            <th class="border-0 p-3">الطالب</th>
+                            <th class="border-0 p-3">القيمة</th>
+                            <th class="border-0 p-3">المدفوع</th>
+                            <th class="border-0 p-3">الحالة</th>
+                            <th class="border-0 p-3">التاريخ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($recentSales as $sale)
+                            <tr>
+                                <td class="p-3 fw-bold text-primary">#{{ $sale->id }}</td>
+                                <td class="p-3">{{ $sale->student->name }}</td>
+                                <td class="p-3 fw-bold">{{ number_format($sale->total_amount) }} ج.م</td>
+                                <td class="p-3 text-success">{{ number_format($sale->paid_amount) }} ج.م</td>
+                                <td class="p-3">
+                                    <span class="badge rounded-pill bg-{{ $sale->status == 'paid' ? 'success' : ($sale->status == 'partial' ? 'warning' : 'danger') }} bg-opacity-10 text-{{ $sale->status == 'paid' ? 'success' : ($sale->status == 'partial' ? 'warning' : 'danger') }} px-3">
+                                        {{ $sale->status == 'paid' ? 'مدفوع' : ($sale->status == 'partial' ? 'جزئي' : 'غير مدفوع') }}
+                                    </span>
+                                </td>
+                                <td class="p-3 text-muted small">{{ $sale->created_at->format('Y-m-d h:i A') }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center py-5 text-muted">لا يوجد معاملات حديثة</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    Chart.defaults.font.family = "'Cairo', 'Nunito', sans-serif";
+    Chart.defaults.color = '#858796';
+
+    // 1. Revenue Chart (Line)
+    new Chart(document.getElementById("revenueChart"), {
+        type: 'line',
+        data: {
+            labels: @json($revenueLabels),
+            datasets: [{
+                label: "الإيرادات",
+                lineTension: 0.3,
+                backgroundColor: "rgba(78, 115, 223, 0.05)",
+                borderColor: "rgba(78, 115, 223, 1)",
+                pointRadius: 3,
+                pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                pointBorderColor: "rgba(78, 115, 223, 1)",
+                pointHoverRadius: 3,
+                pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                pointHitRadius: 10,
+                pointBorderWidth: 2,
+                data: @json($revenueData),
+            }],
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) { return 'ج.م ' + value; }
+                    }
+                }
+            },
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+
+    // 2. Attendance Chart (Doughnut)
+    new Chart(document.getElementById("attendanceChart"), {
+        type: 'doughnut',
+        data: {
+            labels: ["حاضر", "متأخر", "غائب"],
+            datasets: [{
+                data: @json($attendanceData),
+                backgroundColor: ['#1cc88a', '#f6c23e', '#e74a3b'],
+                hoverBackgroundColor: ['#17a673', '#dda20a', '#be2617'],
+                hoverBorderColor: "rgba(234, 236, 244, 1)",
+            }],
+        },
+        options: {
+            maintainAspectRatio: false,
+            cutout: '70%',
+            plugins: {
+                legend: { display: false }
+            }
+        },
+    });
+
+    // 3. Popular Courses (Bar)
+    new Chart(document.getElementById("popularCoursesChart"), {
+        type: 'bar', // or 'horizontalBar' in older chart.js, but v3+ uses indexAxis
+        data: {
+            labels: @json($popularCoursesLabels),
+            datasets: [{
+                label: "عدد الطلاب",
+                backgroundColor: "#4e73df",
+                hoverBackgroundColor: "#2e59d9",
+                borderColor: "#4e73df",
+                data: @json($popularCoursesData),
+                barThickness: 30,
+            }],
+        },
+        options: {
+            indexAxis: 'y', // Makes it horizontal
+            maintainAspectRatio: false,
+            scales: {
+                x: { beginAtZero: true }
+            },
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+
+    // 4. Student Growth (Bar)
+    new Chart(document.getElementById("studentGrowthChart"), {
+        type: 'bar',
+        data: {
+            labels: @json($growthLabels),
+            datasets: [{
+                label: "الطلاب الجدد",
+                backgroundColor: "#36b9cc",
+                hoverBackgroundColor: "#2c9faf",
+                borderColor: "#36b9cc",
+                data: @json($growthData),
+                barThickness: 40,
+            }],
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true }
+            },
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+</script>
+<style>
+    .rounded-4 { border-radius: 1rem !important; }
+    .big-dot { font-size: 0.8rem; vertical-align: middle; }
+</style>
+@endpush
+@endsection

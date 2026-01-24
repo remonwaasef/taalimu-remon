@@ -1,0 +1,408 @@
+<?php
+
+return [
+    'navbar' => [
+        'home' => 'Home',
+        'features' => 'Features',
+        'how_it_works' => 'How It Works',
+        'pricing' => 'Pricing',
+        'faq' => 'FAQ',
+        'login' => 'Login',
+        'start_free' => 'Start Free',
+    ],
+    'nav' => [
+        'features' => 'Features',
+        'pricing' => 'Pricing',
+        'testimonials' => 'Testimonials',
+        'faq' => 'FAQ',
+        'sign_in' => 'Sign In',
+        'start_trial' => 'Start Free Trial',
+    ],
+    'hero' => [
+        'badge' => 'Transform your educational center into a complete smart institution',
+        'title' => 'Manage Your Center <span class="text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan">Smartly</span>',
+        'subtitle' => 'An integrated system for managing educational centers including (Students – Attendance – Fees – Messaging – Schedules – Reports).',
+        'cta_primary' => 'Start Free Trial',
+        'cta_secondary' => 'Watch Demo',
+        'trust' => [
+            'security' => 'High Security',
+            'centers' => '+500 Centers',
+            'uptime' => '99.9% Uptime',
+        ],
+        'stats' => [
+            'revenue' => 'Revenue Increase',
+            'time' => 'Hours Saved/Week',
+            'collection' => 'Collection Rate',
+        ],
+        'mockup' => [
+            'whatsapp' => [
+                'title' => 'WhatsApp',
+                'now' => 'now',
+                'online' => 'Online',
+                'message' => 'Hello Ahmed! 👋 We wanted to remind you that your subscription payment of 150 SAR is due tomorrow.',
+                'cta' => 'Pay Now',
+            ],
+        ],
+    ],
+    'pain_points' => [
+        'title_prefix' => 'Sound',
+        'title_highlight' => 'Familiar',
+        'title_suffix' => '?',
+        'subtitle' => 'Learning centers across MENA face these challenges daily. You\'re not alone.',
+        'revenue_lost' => [
+            'title' => 'Revenue Lost',
+            'description' => 'of revenue is lost due to uncollected receivables',
+        ],
+        'time_wasted' => [
+            'title' => 'Time Wasted',
+            'description' => 'per week wasted on manual follow-up',
+        ],
+        'visibility' => [
+            'title' => 'Visibility',
+            'description' => 'cash flow visibility for informed decisions',
+        ],
+        'scheduling_chaos' => [
+            'title' => 'Scheduling Chaos',
+            'description' => 'overlapping classes and missed sessions due to manual management',
+        ],
+        'cta' => 'It\'s time to <span class="font-bold gradient-text">stop the bleeding</span> and take control.',
+    ],
+    'automation' => [
+        'badge' => 'Simple 3-Step Process',
+        'title_prefix' => 'How',
+        'title_highlight' => config('app.name'),
+        'subtitle' => 'Get started in minutes, not days. Our streamlined process makes automation effortless.',
+        'step1' => [
+            'title' => 'Add Students',
+            'description' => 'Import or add your students in seconds with our intuitive interface',
+        ],
+        'step2' => [
+            'title' => 'Automatic WhatsApp Reminders',
+            'description' => 'Set it and forget it. Smart reminders go out automatically before due dates',
+        ],
+        'step3' => [
+            'title' => 'Get Paid & Focus on Teaching',
+            'description' => 'Watch payments flow in while you focus on what matters most',
+        ],
+        'result' => [
+            'rate' => 'Up to 98% Collection Rate',
+            'text' => 'Thanks to the intelligent WhatsApp follow-up system, ensuring maximum efficiency in automatic fee collection.',
+        ],
+    ],
+    'features' => [
+        'badge' => 'Features',
+        'title' => 'Everything You Need to <span class="text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan">Succeed</span>',
+        'subtitle' => 'A complete suite of tools designed specifically for your educational center needs',
+        'learn_more' => 'Learn More',
+        'items' => [
+            [
+                'title' => 'Student Management',
+                'description' => 'Comprehensive profiles, parent data, and academic performance records.',
+            ],
+            [
+                'title' => 'Attendance Tracking',
+                'description' => 'Daily attendance and absence tracking in real-time with ease.',
+            ],
+            [
+                'title' => 'Billing & Fees',
+                'description' => 'Manage installments, automated invoicing, and smart overdue alerts.',
+            ],
+            [
+                'title' => 'WhatsApp Messaging',
+                'description' => 'Automated fee reminders and student results directly via WhatsApp.',
+            ],
+            [
+                'title' => 'Class Scheduling',
+                'description' => 'Organize classrooms, groups, and schedules with full flexibility.',
+            ],
+            [
+                'title' => 'Financial Reports',
+                'description' => 'Full visibility into revenue, expenses, and net profits for your center.',
+            ],
+            [
+                'title' => 'Instructor Management',
+                'description' => 'Organize teacher schedules, calculate salaries, and commissions accurately.',
+            ],
+            [
+                'title' => 'Courses & Lessons',
+                'description' => 'Manage course content, books, and various educational resources.',
+            ],
+        ],
+    ],
+    'pricing' => [
+        'badge' => 'Pricing',
+        'title' => 'Flexible <span class="text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan">Pricing Plans</span>',
+        'subtitle' => 'Choose the plan that fits your educational center size and needs',
+        'most_popular' => 'Most Popular',
+        'per_14_days' => '/ 14 Days',
+        'per_month' => '/ Month',
+        'per_year' => '/ Year',
+        'equivalent_to' => 'equivalent to',
+        'month_short' => 'mo',
+        'cta_note' => 'Start now for free for 14 days',
+        'monthly' => 'Monthly',
+        'yearly' => 'Yearly',
+        'save_20' => 'Save 20%',
+        'unlimited' => 'Unlimited',
+        'bottom_note' => 'All prices include VAT. No hidden fees.',
+        'plans' => [
+            'free' => [
+                'name' => 'Free Trial',
+                'price' => 'Free',
+                'description' => 'Perfect for testing the system and exploring features',
+                'cta' => 'Start Trial Now',
+                'features' => [
+                    'Up to 50 students',
+                    'WhatsApp reminders',
+                    'Basic dashboard',
+                    'Email support',
+                    '1 admin user',
+                ],
+            ],
+            'basic' => [
+                'name' => 'Basic',
+                'price' => '199 SAR',
+                'description' => 'For startups and small centers',
+                'cta' => 'Subscribe Now',
+                'features' => [
+                    'Up to 200 students',
+                    'WhatsApp + SMS reminders',
+                    'Full analytics dashboard',
+                    'Payment tracking',
+                    '3 admin users',
+                    'Priority email support',
+                ],
+            ],
+            'pro' => [
+                'name' => 'Professional',
+                'price' => '399 SAR',
+                'description' => 'For growing and large centers',
+                'cta' => 'Subscribe Now',
+                'features' => [
+                    'Unlimited students',
+                    'All communication channels',
+                    'Advanced analytics & reports',
+                    'Multi-branch support',
+                    'Unlimited admin users',
+                    'Dedicated account manager',
+                    'API Access',
+                    'White-label options',
+                ],
+                'best_value' => 'Best Value',
+            ],
+        ],
+        'cta_note' => 'Start Now – No credit card needed',
+        'comparison' => [
+            'header' => 'Detailed Feature Comparison',
+            'categories' => [
+                'core' => [
+                    'label' => 'Core Management',
+                    'features' => [
+                        'students' => 'Student Limit',
+                        'admins' => 'Admin Users',
+                        'branches' => 'Multi-branch Support',
+                    ]
+                ],
+                'smart' => [
+                    'label' => 'Smart Communication',
+                    'features' => [
+                        'whatsapp' => 'Automated WhatsApp Alerts',
+                        'sms' => 'SMS Alerts',
+                    ]
+                ],
+                'analysis' => [
+                    'label' => 'Analytics & Support',
+                    'features' => [
+                        'reports' => 'Financial Reports',
+                        'support' => 'Technical Support',
+                    ]
+                ]
+            ],
+            'plans' => [
+                'free' => [
+                    'students' => '50 Students',
+                    'admins' => '1 Admin',
+                    'branches' => false,
+                    'whatsapp' => true,
+                    'sms' => false,
+                    'reports' => 'Basic',
+                    'support' => 'Email',
+                ],
+                'basic' => [
+                    'students' => '200 Students',
+                    'admins' => '3 Admins',
+                    'branches' => false,
+                    'whatsapp' => true,
+                    'sms' => true,
+                    'reports' => 'Full',
+                    'support' => 'Priority',
+                ],
+                'pro' => [
+                    'students' => 'Unlimited',
+                    'admins' => 'Unlimited',
+                    'branches' => true,
+                    'whatsapp' => true,
+                    'sms' => true,
+                    'reports' => 'Advanced',
+                    'support' => 'Dedicated Manager',
+                ],
+            ]
+        ],
+    ],
+    'testimonials' => [
+        'badge' => 'Trusted by 10,000+ Centers',
+        'title_prefix' => 'Real Results from',
+        'title_highlight' => 'Real Centers',
+        'subtitle' => 'See how learning centers across MENA are transforming their operations with ' . config('app.name') . '.',
+        'items' => [
+            [
+                'quote' => 'We recovered 38% more revenue in just the first two months. The WhatsApp reminders are a game-changer for our collection rates.',
+                'stat_value' => '+38%',
+                'stat_label' => 'Revenue Increase',
+                'author_name' => 'Ahmed Al-Rashid',
+                'author_role' => 'Director',
+                'author_company' => 'Al-Nour Academy',
+                'author_location' => 'Dubai, UAE',
+            ],
+            [
+                'quote' => 'I used to spend 15 hours a week chasing payments. Now it\'s completely automated. I can finally focus on growing my center.',
+                'stat_value' => '15h',
+                'stat_label' => 'Hours Saved Weekly',
+                'author_name' => 'Fatima Hassan',
+                'author_role' => 'Owner',
+                'author_company' => 'Bright Minds Center',
+                'author_location' => 'Cairo, Egypt',
+            ],
+            [
+                'quote' => 'The Arabic interface and local payment support made adoption seamless. Our parents love the WhatsApp notifications.',
+                'stat_value' => '98%',
+                'stat_label' => 'Parent Satisfaction',
+                'author_name' => 'Mohammed Al-Qahtani',
+                'author_role' => 'Manager',
+                'author_company' => 'Elite Education',
+                'author_location' => 'Riyadh, KSA',
+            ],
+        ],
+    ],
+    'faq' => [
+        'badge' => 'Got Questions?',
+        'title_prefix' => 'Frequently Asked',
+        'title_highlight' => 'Questions',
+        'subtitle' => 'Everything you need to know about ' . config('app.name') . '. Can\'t find the answer? Contact our support team.',
+        'items' => [
+            [
+                'question' => 'How quickly can I get started with ' . config('app.name') . '?',
+                'answer' => 'You can be up and running in under 15 minutes. Simply sign up, import your student data (we support Excel/CSV), and configure your WhatsApp notifications. Our onboarding wizard guides you through every step.',
+            ],
+            [
+                'question' => 'Is my data secure with ' . config('app.name') . '?',
+                'answer' => 'Absolutely. We use bank-level encryption (AES-256) for all data, comply with GDPR and local data protection laws, and store data in secure data centers in the MENA region. We\'re also PCI-DSS compliant for payment processing.',
+            ],
+            [
+                'question' => 'Does ' . config('app.name') . ' work with WhatsApp Business API?',
+                'answer' => 'Yes! We\'re an official WhatsApp Business Solution Provider. This means your messages are sent through verified business accounts, ensuring high deliverability and compliance with WhatsApp\'s policies.',
+            ],
+            [
+                'question' => 'Can I use ' . config('app.name') . ' in Arabic?',
+                'answer' => 'Yes, ' . config('app.name') . ' offers full RTL support with native Arabic and French interfaces. All dashboards, reports, and communications can be in Arabic, and we support Arabic numerals and date formats.',
+            ],
+            [
+                'question' => 'What payment methods do you support?',
+                'answer' => 'We support credit/debit cards (Visa, Mastercard, AMEX), bank transfers, and popular local methods including Fawry (Egypt), STC Pay (KSA), and more. Parents can pay directly from WhatsApp messages.',
+            ],
+            [
+                'question' => 'Can I migrate from my current system?',
+                'answer' => 'Yes! We offer free migration assistance for all paid plans. Our team will help you import student data, payment history, and configure your workflows. Most migrations are completed within 24-48 hours.',
+            ],
+            [
+                'question' => 'Is the system suitable for a small center?',
+                'answer' => 'Yes, absolutely! Our system is designed to be flexible and scalable. You can start with the basic features that suit your current center size, and as your business grows, you can easily upgrade and take advantage of advanced tools. We support you every step of the way, whether you are a startup or a large educational institution.',
+            ],
+        ],
+    ],
+    'cta' => [
+        'badge' => 'Limited Time Offer',
+        'title' => 'Ready to Transform Your Educational Center?',
+        'subtitle' => 'Join hundreds of successful centers and start your journey today',
+        'cta_primary' => 'Start Free Trial',
+        'cta_secondary' => 'Schedule a Demo',
+        'trust_note' => '✓ Your data is yours alone  ✓ Full access free trial  ✓ Cancel anytime',
+        'stats' => [
+            'revenue_value' => '100%',
+            'revenue' => 'Secure & Private',
+            'time_value' => '24/7',
+            'time' => 'Instant Support',
+            'trial_value' => 'Free',
+            'trial' => 'Always Updated',
+        ],
+    ],
+    'footer' => [
+        'description' => 'A complete system for managing educational centers efficiently and professionally.',
+        'quick_links' => 'Quick Links',
+        'legal' => [
+            'title' => 'Legal',
+            'privacy' => 'Privacy Policy',
+            'terms' => 'Terms of Service',
+            'cookie' => 'Cookie Policy',
+            'gdpr' => 'GDPR Compliance',
+        ],
+        'contact' => 'Contact Us',
+        'rights' => 'All rights reserved © 2024',
+        'copyright' => 'All rights reserved © 2024 ' . config('app.name') . '.',
+        'payment_methods' => 'Secure Payment Methods',
+        'product' => [
+            'title' => 'Product',
+            'features' => 'Features',
+            'pricing' => 'Pricing',
+            'integrations' => 'Integrations',
+            'updates' => 'Updates',
+        ],
+        'company' => [
+            'title' => 'Company',
+            'about' => 'About Us',
+            'careers' => 'Careers',
+            'press' => 'Press',
+            'contact' => 'Contact',
+        ],
+        'resources' => [
+            'title' => 'Resources',
+            'blog' => 'Blog',
+            'help' => 'Help Center',
+            'docs' => 'Documentation',
+            'api' => 'API',
+        ],
+        'social' => [
+            'twitter' => 'Twitter',
+            'linkedin' => 'LinkedIn',
+            'facebook' => 'Facebook',
+            'instagram' => 'Instagram',
+        ],
+    ],
+    'comparison' => [
+        'badge' => 'Comparison',
+        'title' => 'Why <span class="text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan">Edu System</span> is the Best Choice?',
+        'subtitle' => 'Compare the struggle of traditional management with the efficiency of our advanced system.',
+        'manual' => [
+            'title' => 'Traditional Management (Paper/Excel)',
+            'items' => [
+                'Wasting time recording attendance and absence manually.',
+                'Difficulty tracking overdue fees and debts accurately.',
+                'Data loss risk if records are lost or damaged.',
+                'High cost of traditional SMS or forgetting to send them.',
+                'Chaos in scheduling and room overlaps.',
+                'Hours spent to generate a simple financial report.',
+            ],
+        ],
+        'edu' => [
+            'title' => 'Integrated Edu System',
+            'items' => [
+                'Smart and fast attendance recording with one touch.',
+                'Automatic fee tracking and instant overdue alerts.',
+                'Secure cloud storage that keeps your data safe forever.',
+                'Automated and free reminders via WhatsApp.',
+                'Smart automated scheduling that prevents any overlap.',
+                'Accurate financial reports and stats with one click.',
+            ],
+        ],
+    ],
+];

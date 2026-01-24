@@ -1,0 +1,144 @@
+<?php
+
+namespace Modules\Center\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use App\Models\Instructor;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Traits\HandlesFileUploads;
+use App\Http\Requests\Center\StoreInstructorRequest;
+use App\Http\Requests\Center\UpdateInstructorRequest;
+
+class InstructorController extends Controller
+{
+    use HandlesFileUploads;
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        $this->authorize('viewAny', Instructor::class);
+        $query = Instructor::query()->withCount('courses');
+
+        if ($request->has('search')) {
+            $search = \App\Helpers\QueryHelper::escapeLike($request->search);
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('specialization', 'like', '%' . $search . '%');
+            });
+        }
+
+        $instructors = $query->latest()->paginate(10);
+
+        return view('center::instructors.index', compact('instructors'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $this->authorize('create', Instructor::class);
+        return view('center::instructors.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreInstructorRequest $request): RedirectResponse
+    {
+        $this->authorize('create', Instructor::class);
+
+        if (!app('tenant')->hasFeature('max_instructors')) {
+            return redirect()->back()->with('error', 'لقد وصلت للحد الأقصى من المدرسين المسموح به في باقتك.');
+        }
+
+        $imagePath = $this->handleFileUpload($request, 'image', null, 'instructors');
+
+        $instructor = Instructor::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'specialization' => $request->specialization,
+            'bio' => $request->bio,
+            'image' => $imagePath ?? null,
+        ]);
+
+        // Notify Admins
+        $admins = \App\Models\User::where('tenant_id', app('tenant')->id)
+            ->whereIn('role', ['admin', 'center_admin'])
+            ->get();
+            
+        \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\GeneralNotification(
+            'instructor_registered', // Translation key
+            "تم تسجيل مدرس جديد: {$request->name}",
+            route('center.instructors.index'), // Link to instructors list (or show page if available)
+            'fas fa-chalkboard-teacher',
+            auth()->user()->name // Created By
+        ));
+
+        return redirect()->route('center.instructors.index')->with('success', 'تم إضافة المدرس بنجاح');
+    }
+
+    /**
+     * Show the specified resource.
+     */
+    public function show($id)
+    {
+        $instructor = Instructor::findOrFail($id);
+        $this->authorize('view', $instructor);
+        return view('center::instructors.show', compact('instructor'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit($id)
+    {
+        $instructor = Instructor::findOrFail($id);
+        $this->authorize('update', $instructor);
+        return view('center::instructors.edit', compact('instructor'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateInstructorRequest $request, $id): RedirectResponse
+    {
+        $instructor = Instructor::findOrFail($id);
+        $this->authorize('update', $instructor);
+
+        $instructor->name = $request->name;
+        $instructor->email = $request->email;
+        $instructor->phone = $request->phone;
+        $instructor->specialization = $request->specialization;
+        $instructor->bio = $request->bio;
+
+        if ($request->hasFile('image')) {
+             $instructor->image = $this->handleFileUpload($request, 'image', $instructor->image, 'instructors');
+        }
+
+        $instructor->save();
+
+        return redirect()->route('center.instructors.index')->with('success', 'تم تحديث بيانات المدرس بنجاح');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
+    {
+        $instructor = Instructor::findOrFail($id);
+        $this->authorize('delete', $instructor);
+
+        if ($instructor->image) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($instructor->image);
+        }
+
+        $instructor->delete();
+
+        return redirect()->route('center.instructors.index')->with('success', 'تم حذف المدرس بنجاح');
+    }
+}

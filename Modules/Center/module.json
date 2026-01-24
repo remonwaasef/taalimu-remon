@@ -1,0 +1,11 @@
+{
+    "name": "Center",
+    "alias": "center",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Center\\Providers\\CenterServiceProvider"
+    ],
+    "files": []
+}
