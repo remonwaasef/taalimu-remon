@@ -13,14 +13,9 @@ Write-Host "--- 2. Pushing to GitHub ---" -ForegroundColor Cyan
 git push origin main
 
 Write-Host "--- 3. Updating Production Server ---" -ForegroundColor Cyan
-ssh root@46.202.155.30 "cd /home/taalimu/htdocs/taalimu.com && \
-    git pull origin main && \
-    export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games && \
-    composer install --no-dev --optimize-autoloader && \
-    npm run build && \
-    php artisan migrate --force && \
-    php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache"
+# We use a single string without line breaks to avoid CRLF issues over SSH
+$remoteCmd = "git config --global --add safe.directory /home/taalimu/htdocs/taalimu.com; cd /home/taalimu/htdocs/taalimu.com && git pull origin main && export COMPOSER_ALLOW_SUPERUSER=1 && composer install --no-dev --optimize-autoloader && npm run build && php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan view:cache"
+
+ssh root@46.202.155.30 $remoteCmd
 
 Write-Host "--- Done! Your changes are live. ---" -ForegroundColor Green
