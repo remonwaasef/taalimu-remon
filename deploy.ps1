@@ -18,4 +18,9 @@ $remoteCmd = "git config --global --add safe.directory /home/taalimu/htdocs/taal
 
 ssh root@46.202.155.30 $remoteCmd
 
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "--- ERROR: Deployment failed on server! ---" -ForegroundColor Red
+    exit $LASTEXITCODE
+}
+
 Write-Host "--- Done! Your changes are live. ---" -ForegroundColor Green
