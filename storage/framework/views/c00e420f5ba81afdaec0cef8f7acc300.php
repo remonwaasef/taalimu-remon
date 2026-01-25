@@ -199,12 +199,40 @@ document.addEventListener('alpine:init', () => {
             return this.packages.find(p => p.slug === this.selectedPlan) || {name: '', price: ''};
         },
 
-        get activePriceRaw() {
-             return this.billingCycle === 'yearly' ? (this.currentPlan.yearly_price_raw || 0) : (this.currentPlan.price_raw || 0);
+        getPriceData(pkg) {
+             if(!pkg) return { amount: 0, currency: '$', yearly: 0, old: 0, discount_label: '' };
+             
+             let prices = pkg.regional_prices || {};
+             // Default from PHP data
+             let data = {
+                 amount: parseFloat(pkg.price_raw),
+                 yearly: parseFloat(pkg.yearly_price_raw),
+                 currency: pkg.currency || '$',
+                 old: parseFloat(pkg.old_price_raw || 0),
+                 discount_label: pkg.discount_label
+             };
+
+             if (this.userCountry && prices[this.userCountry]) {
+                 let r = prices[this.userCountry];
+                 data.currency = r.currency || data.currency;
+                 data.amount = parseFloat(r.amount || data.amount);
+                 data.yearly = parseFloat(r.yearly_price || (data.amount * 10)); // Default annual logic
+                 data.old = parseFloat(r.old_price || 0);
+                 data.discount_label = r.discount_label || data.discount_label;
+             }
+             return data;
         },
 
+        get currentPriceData() {
+             return this.getPriceData(this.currentPlan);
+        },
+
+        get activePriceRaw() {
+             return this.billingCycle === 'yearly' ? this.currentPriceData.yearly : this.currentPriceData.amount;
+        },
+        
         get activePriceValue() {
-             return this.billingCycle === 'yearly' ? (this.currentPlan.yearly_price_value || '') : (this.currentPlan.price_value || '');
+             return this.activePriceRaw.toLocaleString();
         },
 
         generateSlug(text) {
@@ -317,7 +345,9 @@ document.addEventListener('alpine:init', () => {
                     <?php $__currentLoopData = $packages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $package): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div @click="selectedPlan = '<?php echo e($package->slug); ?>'"
                         class="w-full text-center p-6 plan-card-compact cursor-pointer relative group/card mb-6 border transition-all duration-300 overflow-hidden"
-                        :class="selectedPlan === '<?php echo e($package->slug); ?>' ? 'selected' : 'border-white/5 hover:border-white/20 bg-white/[0.02]'">
+                        :class="selectedPlan === '<?php echo e($package->slug); ?>' ? 'selected' : 'border-white/5 hover:border-white/20 bg-white/[0.02]'"
+                        x-data="{ localPkg: packages.find(p => p.slug === '<?php echo e($package->slug); ?>') }"
+                    >
                         
                         <!-- Mini Badge for Type -->
                         <div class="inline-flex mb-3">
@@ -328,29 +358,26 @@ document.addEventListener('alpine:init', () => {
                         </div>
 
                         <!-- Ticket Price -->
-                        <!-- Ticket Price -->
-                            <div class="flex flex-col items-center">
-                                <template x-if="billingCycle === 'yearly' ? (<?php echo e($package->price * 12); ?> > <?php echo e($package->yearly_price ?: ($package->price * 10)); ?>) : (<?php echo e($package->old_price ?? 0); ?> > <?php echo e($package->price); ?>)">
+                        <div class="flex flex-col items-center" x-data="{ localPrice: getPriceData(localPkg) }" x-effect="localPrice = getPriceData(localPkg)">
+                                <template x-if="localPrice.old && ((billingCycle === 'yearly' ? (localPrice.old * 12) : localPrice.old) > (billingCycle === 'yearly' ? localPrice.yearly : localPrice.amount))">
                                     <div class="flex items-center gap-3 mb-4 px-5 py-2 bg-emerald-500/10 rounded-2xl border border-emerald-500/20 shadow-lg shadow-emerald-500/10">
                                         <del class="text-[14px] text-white/40 font-bold decoration-white/20" 
-                                             x-text="billingCycle === 'yearly' ? '<?php echo e(number_format(($package->old_price ?: $package->price) * 12, 0)); ?>' : '<?php echo e(number_format($package->old_price ?: 0, 0)); ?>'">
+                                             x-text="billingCycle === 'yearly' ? (localPrice.old * 12).toLocaleString() : localPrice.old.toLocaleString()">
                                         </del>
                                         <span class="w-1.5 h-4 bg-white/10 rounded-full"></span>
                                         <span class="text-[16px] font-black text-emerald-400 uppercase tracking-tighter">
                                             <?php echo e(__('auth.register.save')); ?> 
-                                            <span x-text="billingCycle === 'yearly' ? '<?php echo e(number_format((($package->old_price ?: $package->price) * 12) - ($package->yearly_price ?: ($package->price * 10)), 0)); ?>' : '<?php echo e(number_format(($package->old_price ?: 0) - $package->price, 0)); ?>'"></span>
+                                            <span x-text="billingCycle === 'yearly' ? ((localPrice.old * 12) - localPrice.yearly).toLocaleString() : (localPrice.old - localPrice.amount).toLocaleString()"></span>
                                         </span>
                                     </div>
                                 </template>
 
                             <div class="flex items-start justify-center transition-transform duration-500 group-hover/card:scale-105">
                                 <span class="text-5xl font-black text-white tracking-tighter leading-none" 
-                                      x-text="billingCycle === 'yearly' ? '<?php echo e(number_format($package->yearly_price ?: ($package->price * 10), 0)); ?>' : '<?php echo e(number_format($package->price, 0)); ?>'">
-                                    <?php echo e(number_format($package->price, 0)); ?>
-
+                                      x-text="billingCycle === 'yearly' ? localPrice.yearly.toLocaleString() : localPrice.amount.toLocaleString()">
                                 </span>
                                 <div class="flex flex-col ml-1 rtl:mr-1 rtl:ml-0 mt-1">
-                                    <span class="text-[14px] font-bold text-white/30"><?php echo e(\App\Models\SiteSetting::get('currency_symbol', 'جنيه')); ?></span>
+                                    <span class="text-[14px] font-bold text-white/30" x-text="localPrice.currency"></span>
                                     <span class="text-[10px] font-bold text-white/50" x-text="billingCycle === 'yearly' ? '<?php echo e(__('landing.pricing.per_year') ?? '/سنوي'); ?>' : '<?php echo e(__('landing.pricing.per_month') ?? '/شهري'); ?>'"></span>
                                 </div>
                             </div>
@@ -358,17 +385,14 @@ document.addEventListener('alpine:init', () => {
                             <template x-if="billingCycle === 'yearly'">
                                 <div class="mt-1 text-[11px] text-white/40 font-bold">
                                     (<?php echo e(__('landing.pricing.equivalent_to') ?? 'ما يعادل'); ?> 
-                                    <span x-text="Math.round((<?php echo e($package->yearly_price ?: ($package->price * 10)); ?>) / 12)"></span>
-                                    <?php echo e(\App\Models\SiteSetting::get('currency_symbol', 'جنيه')); ?>/<?php echo e(__('landing.pricing.month_short') ?? 'شهر'); ?>)
+                                    <span x-text="Math.round(localPrice.yearly / 12).toLocaleString()"></span>
+                                    <span x-text="localPrice.currency"></span>/<?php echo e(__('landing.pricing.month_short') ?? 'شهر'); ?>)
                                 </div>
                             </template>
 
-                            <?php if($package->discount_label): ?>
-                            <div class="mt-4 text-[9px] font-bold text-blue-300/40 uppercase tracking-[0.15em] border-t border-white/5 pt-3 w-full">
-                                <?php echo e($package->discount_label); ?>
-
-                            </div>
-                            <?php endif; ?>
+                            <template x-if="localPrice.discount_label">
+                                <div class="mt-4 text-[9px] font-bold text-blue-300/40 uppercase tracking-[0.15em] border-t border-white/5 pt-3 w-full" x-text="localPrice.discount_label"></div>
+                            </template>
                         </div>
                         
                         <div class="space-y-1.5 mt-3">
@@ -636,10 +660,10 @@ unset($__errorArgs, $__bag); ?>
                             <div class="flex flex-col items-center md:items-end">
                                 <div class="flex flex-col items-center md:items-end gap-1">
                                     <!-- Original Package Price (Crossed out if package has its own discount) -->
-                                    <template x-if="currentPlan.old_price_raw">
+                                    <template x-if="currentPriceData.old">
                                         <div class="flex items-center gap-2 opacity-30">
-                                            <del class="text-sm font-bold" x-text="billingCycle === 'yearly' ? (currentPlan.old_price_raw * 12).toLocaleString() : currentPlan.old_price_value"></del>
-                                            <span class="text-[10px] font-bold" x-text="currentPlan.currency"></span>
+                                            <del class="text-sm font-bold" x-text="billingCycle === 'yearly' ? (currentPriceData.old).toLocaleString() : currentPriceData.old.toLocaleString()"></del>
+                                            <span class="text-[10px] font-bold" x-text="currentPriceData.currency"></span>
                                         </div>
                                     </template>
 
@@ -648,9 +672,9 @@ unset($__errorArgs, $__bag); ?>
                                         <!-- Price before coupon if coupon added -->
                                         <template x-if="couponStatus === 'valid'">
                                             <div class="flex flex-col items-center md:items-end mb-2">
-                                                <div class="text-xs font-bold text-slate-400 line-through" x-text="activePriceValue + ' ' + currentPlan.currency"></div>
+                                                <div class="text-xs font-bold text-slate-400 line-through" x-text="activePriceValue + ' ' + currentPriceData.currency"></div>
                                                 <div class="text-[10px] font-black text-emerald-600 uppercase tracking-tight">
-                                                    <?php echo e(__('auth.register.discount_applied')); ?>: -<span x-text="couponDiscountAmount.toLocaleString() + ' ' + currentPlan.currency"></span>
+                                                    <?php echo e(__('auth.register.discount_applied')); ?>: -<span x-text="couponDiscountAmount.toLocaleString() + ' ' + currentPriceData.currency"></span>
                                                 </div>
                                             </div>
                                         </template>
@@ -659,7 +683,7 @@ unset($__errorArgs, $__bag); ?>
                                         <div class="flex items-start justify-end transition-all text-blue-600">
                                             <span class="text-5xl font-black tracking-tighter leading-none" x-text="finalPrice.toLocaleString()"></span>
                                             <div class="flex flex-col ml-1 rtl:mr-1 rtl:ml-0 mt-1">
-                                                <span class="text-[14px] font-bold opacity-40" x-text="currentPlan.currency"></span>
+                                                <span class="text-[14px] font-bold opacity-40" x-text="currentPriceData.currency"></span>
                                                 <span class="text-[10px] font-bold opacity-40 -mt-1" x-text="billingCycle === 'yearly' ? '<?php echo e(__('landing.pricing.per_year') ?? '/سنوياً'); ?>' : '<?php echo e(__('landing.pricing.per_month') ?? '/شهرياً'); ?>'"></span>
                                             </div>
                                         </div>
@@ -668,7 +692,7 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="text-[10px] font-bold text-slate-400 mt-1 text-end">
                                                 (<?php echo e(__('landing.pricing.equivalent_to') ?? 'ما يعادل'); ?> 
                                                 <span x-text="Math.round(finalPrice / 12).toLocaleString()"></span>
-                                                <span x-text="currentPlan.currency"></span>/<?php echo e(__('landing.pricing.month_short') ?? 'شهر'); ?>)
+                                                <span x-text="currentPriceData.currency"></span>/<?php echo e(__('landing.pricing.month_short') ?? 'شهر'); ?>)
                                             </div>
                                         </template>
                                     </div>
