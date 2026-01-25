@@ -20,6 +20,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (app()->environment('production')) {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         \Illuminate\Support\Facades\Gate::policy(\App\Models\AssignmentSubmission::class, \App\Policies\AssignmentSubmissionPolicy::class);
         \Illuminate\Support\Facades\Gate::policy(\App\Models\Assignment::class, \App\Policies\AssignmentPolicy::class);
         \Illuminate\Pagination\Paginator::useBootstrapFive();
