@@ -178,6 +178,27 @@
                                             </div>
                                         </div>
 
+                                        <!-- Base Pricing -->
+                                        <div class="bg-light p-3 rounded-4 mb-4">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <label class="form-label small fw-bold text-primary mb-0"><i class="bi bi-tag"></i> {{ __('admin.base_price') ?? 'Base Pricing' }}</label>
+                                            </div>
+                                            <div class="row g-2">
+                                                <div class="col-4">
+                                                    <label class="small text-muted mb-0">{{ __('admin.price_monthly') }}</label>
+                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][price]" value="{{ $package->price }}">
+                                                </div>
+                                                <div class="col-4">
+                                                    <label class="small text-muted mb-0">{{ __('admin.price_yearly') }}</label>
+                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][yearly_price]" value="{{ $package->yearly_price }}">
+                                                </div>
+                                                <div class="col-4">
+                                                    <label class="small text-muted mb-0">{{ __('admin.old_price') }}</label>
+                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][old_price]" value="{{ $package->old_price }}">
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <!-- Regional Pricing (Smart Pricing) -->
                                         <div class="bg-light p-3 rounded-4 mb-4">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
@@ -348,8 +369,6 @@
                                                 </div>
                                             </div>
 
-                                            <input type="hidden" name="packages[{{ $package->id }}][regional_prices][default][amount]" value="{{ $package->price }}">
-                                            <input type="hidden" name="packages[{{ $package->id }}][regional_prices][default][currency]" value="USD">
                                         </div>
 
                                         <div class="row g-3 mb-4">
