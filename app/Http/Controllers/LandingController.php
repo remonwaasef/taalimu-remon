@@ -16,21 +16,17 @@ class LandingController extends Controller
      */
     public function index()
     {
-        // Cache packages for 1 hour as they don't change often
-        $packages = Cache::remember('landing_packages', 3600, function () {
-            return Package::with('features')
+        // Fetch packages directly (No Cache) to ensure real-time price updates
+        $packages = Package::with('features')
                 ->where('is_active', true)
                 ->orderBy('sort_order')
                 ->get();
-        });
 
-        // Cache features by category for 1 hour
-        $featuresByCategory = Cache::remember('landing_features', 3600, function () {
-            return Feature::where('is_visible', true)
+        // Fetch features directly (No Cache)
+        $featuresByCategory = Feature::where('is_visible', true)
                 ->orderBy('sort_order')
                 ->get()
                 ->groupBy('category');
-        });
 
 
         return view('landing.new', compact('packages', 'featuresByCategory'));
