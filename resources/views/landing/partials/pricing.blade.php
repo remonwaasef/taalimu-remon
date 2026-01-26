@@ -6,10 +6,10 @@
             exchangeRates: { 'USD': 1, 'EGP': 1, 'SAR': 1, 'AED': 1, 'EUR': 1 },
             async init() {
                 try {
-                    // Fetch user location
-                    const response = await fetch('https://ipapi.co/json/');
+                    // Use geojs.io - CORS-friendly geo-location API
+                    const response = await fetch('https://get.geojs.io/v1/ip/country.json');
                     const data = await response.json();
-                    this.userCountry = data.country_code; // EG, SA, AE, FR, etc.
+                    this.userCountry = data.country; // EG, SA, AE, FR, etc.
                     
                     // Set currency symbol based on country
                     if(this.userCountry === 'EG') this.currencySymbol = 'EGP';
