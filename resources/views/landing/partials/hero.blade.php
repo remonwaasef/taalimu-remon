@@ -92,7 +92,7 @@
                         <div class="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.time') }}</div>
                     </div>
                     <div class="text-center lg:text-start p-4 rounded-2xl bg-white/70 border border-white/60 shadow-sm backdrop-blur-sm">
-                        <div class="text-3xl lg:text-4xl font-black gradient-text mb-1">98%</div>
+                        <div class="text-3xl lg:text-4xl font-black gradient-text mb-1">998%</div>
                         <div class="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.collection') }}</div>
                     </div>
                 </div>
