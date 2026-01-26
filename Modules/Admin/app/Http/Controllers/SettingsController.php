@@ -82,6 +82,27 @@ class SettingsController extends Controller
                         Package::where('id', '!=', $id)->update(['is_default' => false]);
                     }
 
+                    // START: Sync Base Price to Default Regional Price
+                    // This ensures that the valid base price is always available as the "default" smart price fallback
+                    $defaultCurrency = \App\Models\SiteSetting::get('currency_code', 'USD');
+                    $basePriceData = [
+                        'amount' => $data['price'] ?? 0,
+                        'yearly_price' => $data['yearly_price'] ?? 0,
+                        'old_price' => $data['old_price'] ?? 0,
+                        'currency' => $defaultCurrency,
+                        'discount_label' => $data['regional_prices']['default']['discount_label'] ?? null 
+                    ];
+
+                    // Merge into regional_prices
+                    if (!isset($data['regional_prices'])) {
+                        $data['regional_prices'] = [];
+                    }
+                    $data['regional_prices']['default'] = array_merge(
+                        $data['regional_prices']['default'] ?? [], 
+                        $basePriceData
+                    );
+                    // END: Sync Base Price
+
                     $package->update($data);
 
                     if (isset($data['limits'])) {

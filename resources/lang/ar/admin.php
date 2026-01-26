@@ -139,6 +139,8 @@ return [
         'users_count' => 'المستخدمين',
         'actions' => 'إجراءات',
     ],
+    'base_price' => 'السعر الأساسي',
+    'base_pricing' => 'التسعير الأساسي',
     'price' => 'السعر',
     'days' => 'أيام',
     'slug' => 'الرمز (Slug)',
