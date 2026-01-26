@@ -28,8 +28,8 @@
 
     <!-- Scripts -->
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/landing-new.css']); ?>
-    <!-- SweetAlert2 - Deferred -->
-    <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Custom CSS Variables -->
     <style>
         :root {
