@@ -130,6 +130,8 @@ return [
         'users_count' => 'Users Count',
         'actions' => 'Actions',
     ],
+    'base_price' => 'Base Price',
+    'base_pricing' => 'Base Pricing',
     'price' => 'Price',
     'days' => 'Days',
     'slug' => 'Slug (Unique)',

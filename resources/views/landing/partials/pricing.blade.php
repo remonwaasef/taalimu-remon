@@ -26,14 +26,14 @@
             getPrice(packagePrice, packageRegionalPrices) {
                 // If no regional prices, fallback to base price
                 if (!packageRegionalPrices || Object.keys(packageRegionalPrices).length === 0) {
-                    return { amount: packagePrice, currency: 'USD' }; // Or whatever default currency needed
+                    return { amount: packagePrice, currency: '{{ \App\Models\SiteSetting::get('currency_code', 'USD') }}' }; 
                 }
 
                 let priceData = packageRegionalPrices[this.userCountry] || packageRegionalPrices['default'];
                 
                 // Final fallback if specific country and default are missing in JSON
                 if(!priceData) {
-                     return { amount: packagePrice, currency: 'USD' };
+                     return { amount: packagePrice, currency: '{{ \App\Models\SiteSetting::get('currency_code', 'USD') }}' };
                 }
                 
                 return priceData;
