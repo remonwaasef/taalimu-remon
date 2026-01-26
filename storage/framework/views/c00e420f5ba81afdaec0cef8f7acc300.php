@@ -191,7 +191,7 @@ document.addEventListener('alpine:init', () => {
             try {
                 const response = await fetch('https://ipapi.co/json/');
                 const data = await response.json();
-                this.userCountry = data.country_code || 'default';
+                this.userCountry = data.country_code || '';
             } catch(e) { console.log('IP fetch failed', e); }
         },
 
@@ -314,7 +314,7 @@ document.addEventListener('alpine:init', () => {
         centerName: <?php echo e(Js::from(old('center_name'))); ?>,
         subdomain: <?php echo e(Js::from(old('subdomain'))); ?>,
         manuallyEditedSubdomain: <?php echo e(old('subdomain') ? 'true' : 'false'); ?>,
-        userCountry: 'default'
+        userCountry: ''
      })"
      dir="<?php echo e(app()->getLocale() == 'ar' ? 'rtl' : 'ltr'); ?>">
     
