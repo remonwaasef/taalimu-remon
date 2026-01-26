@@ -85,22 +85,23 @@ class SettingsController extends Controller
                     // START: Sync Base Price to Default Regional Price
                     // This ensures that the valid base price is always available as the "default" smart price fallback
                     $defaultCurrency = \App\Models\SiteSetting::get('currency_code', 'USD');
+                    
+                    // Fetch current regional prices to avoid losing data not in the request
+                    $currentRegional = $package->regional_prices ?? [];
+                    
                     $basePriceData = [
                         'amount' => $data['price'] ?? 0,
                         'yearly_price' => $data['yearly_price'] ?? 0,
                         'old_price' => $data['old_price'] ?? 0,
                         'currency' => $defaultCurrency,
-                        'discount_label' => $data['regional_prices']['default']['discount_label'] ?? null 
+                        'discount_label' => $data['regional_prices']['default']['discount_label'] ?? ($currentRegional['default']['discount_label'] ?? null) 
                     ];
 
-                    // Merge into regional_prices
-                    if (!isset($data['regional_prices'])) {
-                        $data['regional_prices'] = [];
-                    }
-                    $data['regional_prices']['default'] = array_merge(
-                        $data['regional_prices']['default'] ?? [], 
-                        $basePriceData
-                    );
+                    // Safely merge: prioritize request data for regional prices, but ensure 'default' is synced
+                    $mergedRegional = array_merge($currentRegional, $data['regional_prices'] ?? []);
+                    $mergedRegional['default'] = array_merge($mergedRegional['default'] ?? [], $basePriceData);
+                    
+                    $data['regional_prices'] = $mergedRegional;
                     // END: Sync Base Price
 
                     $package->update($data);

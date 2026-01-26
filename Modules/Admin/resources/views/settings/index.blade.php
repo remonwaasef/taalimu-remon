@@ -1,7 +1,7 @@
 @extends('admin::layouts.master')
 
-@section('title', __('admin.title'))
-@section('page-title', __('admin.title'))
+@section('title', __('admin::admin.title'))
+@section('page-title', __('admin::admin.title'))
 
 @section('content')
 <div class="container-fluid">
@@ -12,41 +12,41 @@
                 <ul class="nav nav-tabs border-0" id="settingsTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active border-0 px-4 py-3 position-relative" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-selected="true">
-                            <i class="bi bi-gear me-2"></i> {{ __('admin.general_settings') }}
+                            <i class="bi bi-gear me-2"></i> {{ __('admin::admin.general_settings') }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link border-0 px-4 py-3 position-relative" id="appearance-tab" data-bs-toggle="tab" data-bs-target="#appearance" type="button" role="tab" aria-selected="false">
-                            <i class="bi bi-palette me-2"></i> {{ __('admin.appearance') }}
+                            <i class="bi bi-palette me-2"></i> {{ __('admin::admin.appearance') }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link border-0 px-4 py-3 position-relative" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button" role="tab" aria-selected="false">
-                            <i class="bi bi-shield-lock me-2"></i> {{ __('admin.security') }}
+                            <i class="bi bi-shield-lock me-2"></i> {{ __('admin::admin.security') }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link border-0 px-4 py-3 position-relative" id="plans-tab" data-bs-toggle="tab" data-bs-target="#plans" type="button" role="tab" aria-selected="false">
-                            <i class="bi bi-card-checklist me-2"></i> {{ __('admin.plans_pricing') }}
+                            <i class="bi bi-card-checklist me-2"></i> {{ __('admin::admin.plans_pricing') }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link border-0 px-4 py-3 position-relative" id="features-tab" data-bs-toggle="tab" data-bs-target="#system-features" type="button" role="tab" aria-selected="false">
-                            <i class="bi bi-list-check me-2"></i> {{ __('admin.system_features_tab') }}
+                            <i class="bi bi-list-check me-2"></i> {{ __('admin::admin.system_features_tab') }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link border-0 px-4 py-3 position-relative" id="coupons-tab" data-bs-toggle="tab" data-bs-target="#coupons" type="button" role="tab" aria-selected="false">
-                            <i class="bi bi-ticket-perforated me-2"></i> {{ __('admin.coupons_discounts') }}
+                            <i class="bi bi-ticket-perforated me-2"></i> {{ __('admin::admin.coupons_discounts') }}
                         </button>
                     </li>
                 </ul>
                 <div class="d-flex gap-2">
                      <button type="button" class="btn btn-outline-primary rounded-pill btn-sm px-3" data-bs-toggle="modal" data-bs-target="#addPackageModal">
-                        <i class="bi bi-plus-lg me-1"></i> {{ __('admin.new_package') }}
+                        <i class="bi bi-plus-lg me-1"></i> {{ __('admin::admin.new_package') }}
                     </button>
                     <button type="submit" class="btn btn-primary rounded-pill btn-sm px-4" form="mainSettingsForm">
-                        <i class="bi bi-check2-circle me-1"></i> {{ __('admin.save_all') }}
+                        <i class="bi bi-check2-circle me-1"></i> {{ __('admin::admin.save_all') }}
                     </button>
                 </div>
             </div>
@@ -59,23 +59,23 @@
                     <div class="tab-pane fade show active" id="general" role="tabpanel">
                         <div class="row g-4">
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('admin.site_name') }}</label>
+                                <label class="form-label fw-bold">{{ __('admin::admin.site_name') }}</label>
                                 <input type="text" class="form-control rounded-4 shadow-sm border-light" name="site_name" value="{{ \App\Models\SiteSetting::get('site_name', 'EduCentral') }}">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('admin.admin_email') }}</label>
+                                <label class="form-label fw-bold">{{ __('admin::admin.admin_email') }}</label>
                                 <input type="email" class="form-control rounded-4 shadow-sm border-light" name="admin_email" value="{{ \App\Models\SiteSetting::get('admin_email', 'admin@educentral.com') }}">
                             </div>
                             <div class="col-12">
-                                <label class="form-label fw-bold">{{ __('admin.site_description') }}</label>
-                                <textarea class="form-control rounded-4 shadow-sm border-light" name="site_description" rows="3">{{ \App\Models\SiteSetting::get('site_description', __('admin.site_description_placeholder')) }}</textarea>
+                                <label class="form-label fw-bold">{{ __('admin::admin.site_description') }}</label>
+                                <textarea class="form-control rounded-4 shadow-sm border-light" name="site_description" rows="3">{{ \App\Models\SiteSetting::get('site_description', __('admin::admin.site_description_placeholder')) }}</textarea>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('admin.currency_symbol') }}</label>
+                                <label class="form-label fw-bold">{{ __('admin::admin.currency_symbol') }}</label>
                                 <input type="text" class="form-control rounded-4 shadow-sm border-light" name="currency_symbol" value="{{ \App\Models\SiteSetting::get('currency_symbol', 'جنيه') }}">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('admin.currency_code') }}</label>
+                                <label class="form-label fw-bold">{{ __('admin::admin.currency_code') }}</label>
                                 <input type="text" class="form-control rounded-4 shadow-sm border-light" name="currency_code" value="{{ \App\Models\SiteSetting::get('currency_code', 'EGP') }}">
                             </div>
                         </div>
@@ -181,19 +181,19 @@
                                         <!-- Base Pricing -->
                                         <div class="bg-light p-3 rounded-4 mb-4">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                                <label class="form-label small fw-bold text-primary mb-0"><i class="bi bi-tag"></i> {{ __('admin.base_price') ?? 'Base Pricing' }}</label>
+                                                <label class="form-label small fw-bold text-primary mb-0"><i class="bi bi-tag"></i> {{ __('admin::admin.base_price') }}</label>
                                             </div>
                                             <div class="row g-2">
                                                 <div class="col-4">
-                                                    <label class="small text-muted mb-0">{{ __('admin.price_monthly') }}</label>
+                                                    <label class="small text-muted mb-0">{{ __('admin::admin.price_monthly') }}</label>
                                                     <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][price]" value="{{ $package->price }}">
                                                 </div>
                                                 <div class="col-4">
-                                                    <label class="small text-muted mb-0">{{ __('admin.price_yearly') }}</label>
+                                                    <label class="small text-muted mb-0">{{ __('admin::admin.price_yearly') }}</label>
                                                     <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][yearly_price]" value="{{ $package->yearly_price }}">
                                                 </div>
                                                 <div class="col-4">
-                                                    <label class="small text-muted mb-0">{{ __('admin.old_price') }}</label>
+                                                    <label class="small text-muted mb-0">{{ __('admin::admin.old_price') }}</label>
                                                     <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][old_price]" value="{{ $package->old_price }}">
                                                 </div>
                                             </div>
@@ -202,8 +202,8 @@
                                         <!-- Regional Pricing (Smart Pricing) -->
                                         <div class="bg-light p-3 rounded-4 mb-4">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                                <label class="form-label small fw-bold text-primary mb-0"><i class="bi bi-globe-americas"></i> {{ __('admin.regional_prices') }} (Smart Pricing)</label>
-                                                <span class="badge bg-white text-muted border">{{ __('admin.auto_detected') }}</span>
+                                                <label class="form-label small fw-bold text-primary mb-0"><i class="bi bi-globe-americas"></i> {{ __('admin::admin.regional_prices') }} (Smart Pricing)</label>
+                                                <span class="badge bg-white text-muted border">{{ __('admin::admin.auto_detected') }}</span>
                                             </div>
                                             
                                             <div class="accordion accordion-flush" id="regionalAccordion{{ $package->id }}">
@@ -221,7 +221,7 @@
                                                             <div class="row g-2">
                                                                 <input type="hidden" name="packages[{{ $package->id }}][regional_prices][EG][currency]" value="EGP">
                                                                 <div class="col-6">
-                                                                    <label class="small text-muted mb-0">{{ __('admin.price_monthly') }}</label>
+                                                                    <label class="small text-muted mb-0">{{ __('admin::admin.price_monthly') }}</label>
                                                                     <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][EG][amount]" value="{{ $regional['EG']['amount'] ?? '' }}">
                                                                 </div>
                                                                 <div class="col-6">
