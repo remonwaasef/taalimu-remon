@@ -743,7 +743,7 @@
             <form action="{{ route('admin.coupons.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
-                    @if($errors->any())
+                    @if(isset($errors) && $errors->any())
                         <div class="alert alert-danger rounded-3">
                             <ul class="mb-0 small">
                                 @foreach($errors->all() as $error)
@@ -1127,7 +1127,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    @if($errors->any())
+    @if(isset($errors) && $errors->any())
         var addCouponModal = new bootstrap.Modal(document.getElementById('addCouponModal'));
         addCouponModal.show();
         
