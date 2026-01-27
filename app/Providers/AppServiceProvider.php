@@ -20,9 +20,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (app()->environment('production')) {
-            \Illuminate\Support\Facades\URL::forceScheme('https');
-        }
+        // if (app()->environment('production')) {
+        //     \Illuminate\Support\Facades\URL::forceScheme('https');
+        // }
 
         \Illuminate\Support\Facades\Gate::policy(\App\Models\AssignmentSubmission::class, \App\Policies\AssignmentSubmissionPolicy::class);
         \Illuminate\Support\Facades\Gate::policy(\App\Models\Assignment::class, \App\Policies\AssignmentPolicy::class);
@@ -37,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
         \Illuminate\Support\Facades\Event::subscribe(\App\Listeners\AuthenticationSubscriber::class);
 
         // Prevent N+1 queries in development
-        Model::preventLazyLoading(! app()->isProduction());
+        // Model::preventLazyLoading(! app()->isProduction());
 
         // Register Tenant Model Observers for Caching
         \App\Models\User::observe(\App\Observers\TenantModelObserver::class);
