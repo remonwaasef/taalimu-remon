@@ -624,6 +624,9 @@
     </div>
 
     <!-- ID Card Print Layout -->
+    @php
+        $qrCodeDataUri = (new \chillerlan\QRCode\QRCode())->render($student->code);
+    @endphp
     <div class="id-card-print d-none d-print-block">
         <div class="id-card-container">
             <!-- Front of Card -->
@@ -671,7 +674,7 @@
                     </div>
 
                     <div class="qr-area">
-                        <img src="{!! (new \chillerlan\QRCode\QRCode())->render($student->code) !!}" alt="QR Code">
+                        <img src="{{ $qrCodeDataUri }}" alt="QR Code" style="width: 60px; height: 60px; display: block; margin: 0 auto;">
                         <span class="code-text">{{ $student->code }}</span>
                     </div>
                 </div>
