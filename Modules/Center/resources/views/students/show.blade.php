@@ -670,9 +670,8 @@
                         </div>
                     </div>
 
-                    <div class="barcode-area">
-                        <!-- Simple CSS Barcode Effect -->
-                        <div class="barcode-lines"></div>
+                    <div class="qr-area">
+                        <img src="{{ (new \chillerlan\QRCode\QRCode())->render($student->code) }}" alt="QR Code">
                         <span class="code-text">{{ $student->code }}</span>
                     </div>
                 </div>
@@ -924,24 +923,18 @@
                 color: #334155;
             }
 
-            .barcode-area {
+            .qr-area {
                 margin-top: auto;
                 margin-bottom: 2mm;
                 text-align: center;
                 width: 90%;
             }
             
-            .barcode-lines {
-                height: 4mm;
-                background: repeating-linear-gradient(
-                    90deg,
-                    #000,
-                    #000 1px,
-                    #fff 1px,
-                    #fff 2px
-                );
-                width: 100%;
-                opacity: 0.8;
+            .qr-area img {
+                width: 18mm;
+                height: 18mm;
+                display: block;
+                margin: 0 auto;
             }
             
             .code-text {
