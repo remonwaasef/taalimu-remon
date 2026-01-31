@@ -350,7 +350,54 @@
         </div>
     </div>
 
-            // Bulk Action logic
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Stage filter buttons
+        const stageBtns = document.querySelectorAll('.stage-btn');
+        const subGradeContainers = document.querySelectorAll('.sub-grades-container');
+        const searchInput = document.getElementById('search-input');
+        let currentStageGrades = null;
+
+        stageBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                stageBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                // Hide all sub-grade containers
+                subGradeContainers.forEach(c => c.style.display = 'none');
+                
+                const stage = this.getAttribute('data-stage');
+                if (stage === 'all') {
+                    currentStageGrades = null;
+                } else {
+                    const gradesAttr = this.getAttribute('data-grades');
+                    currentStageGrades = gradesAttr ? gradesAttr.split(',') : [];
+                    // Show corresponding sub-grades
+                    const subGradeContainer = document.getElementById(stage + '-grades');
+                    if (subGradeContainer) {
+                        subGradeContainer.style.display = 'block';
+                    }
+                }
+                filterStudents();
+            });
+        });
+
+        // Grade filter buttons
+        document.querySelectorAll('.grade-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentStageGrades = [this.getAttribute('data-grade')];
+                filterStudents();
+            });
+        });
+
+        // Real-time search
+        if (searchInput) {
+            searchInput.addEventListener('input', filterStudents);
+        }
+
+        // Bulk Action logic
             const selectAll = document.getElementById('select-all');
             const studentCheckboxes = document.querySelectorAll('.student-checkbox');
             const bulkToolbar = document.getElementById('bulk-actions-toolbar');

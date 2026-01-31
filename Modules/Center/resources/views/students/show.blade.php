@@ -623,11 +623,8 @@
         </div>
     </div>
 
-    <!-- ID Card Print Layout -->
-    @php
-        $qrCodeDataUri = (new \chillerlan\QRCode\QRCode())->render($student->code);
-    @endphp
-    <div class="id-card-print d-none d-print-block">
+    <!-- ID Card Print Layout (positioned off-screen until print) -->
+    <div class="id-card-print" style="position: absolute; left: -9999px; top: 0;">
         <div class="id-card-container">
             <!-- Front of Card -->
             <div class="id-card">
@@ -674,7 +671,7 @@
                     </div>
 
                     <div class="qr-area">
-                        <img src="{{ $qrCodeDataUri }}" alt="QR Code" style="width: 60px; height: 60px; display: block; margin: 0 auto;">
+                        <div id="student-qrcode"></div>
                         <span class="code-text">{{ $student->code }}</span>
                     </div>
                 </div>
@@ -754,9 +751,9 @@
             }
 
             .id-card-print {
-                position: fixed;
-                left: 0;
-                top: 0;
+                position: fixed !important;
+                left: 0 !important;
+                top: 0 !important;
                 width: 100vw;
                 height: 100vh;
                 display: flex !important;
@@ -935,11 +932,18 @@
                 width: 90%;
             }
             
+            .qr-area canvas,
             .qr-area img {
-                width: 18mm;
-                height: 18mm;
-                display: block;
+                width: 18mm !important;
+                height: 18mm !important;
+                display: block !important;
+                visibility: visible !important;
                 margin: 0 auto;
+            }
+            
+            #student-qrcode {
+                display: block !important;
+                visibility: visible !important;
             }
             
             .code-text {
@@ -988,6 +992,24 @@
                 }
             });
         });
+    });
+</script>
+
+<!-- QR Code Library for ID Card -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const qrContainer = document.getElementById('student-qrcode');
+        if (qrContainer) {
+            new QRCode(qrContainer, {
+                text: "{{ $student->code }}",
+                width: 60,
+                height: 60,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.L
+            });
+        }
     });
 </script>
 @endsection
