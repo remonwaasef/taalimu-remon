@@ -680,7 +680,7 @@
                     </div>
 
                     <div class="qr-area">
-                        <img src="<?php echo e((new \chillerlan\QRCode\QRCode())->render($student->code)); ?>" alt="QR Code">
+                        <img src="<?php echo (new \chillerlan\QRCode\QRCode())->render($student->code); ?>" alt="QR Code">
                         <span class="code-text"><?php echo e($student->code); ?></span>
                     </div>
                 </div>
@@ -760,16 +760,17 @@
             }
 
             .id-card-print {
-                position: absolute;
+                position: fixed;
                 left: 0;
                 top: 0;
-                width: 100%;
-                height: 100%;
+                width: 100vw;
+                height: 100vh;
                 display: flex !important;
-                align-items: flex-start; /* Start from top to accommodate paper margins better */
+                align-items: flex-start;
                 justify-content: center;
                 background: white;
                 padding-top: 2cm;
+                z-index: 99999;
             }
 
             .id-card-container {
@@ -778,6 +779,7 @@
                 position: relative;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
+                z-index: 100000;
             }
 
             .id-card {
