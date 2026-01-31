@@ -189,9 +189,9 @@ document.addEventListener('alpine:init', () => {
 
         async init() {
             try {
-                const response = await fetch('https://ipapi.co/json/');
+                const response = await fetch('https://get.geojs.io/v1/ip/country.json');
                 const data = await response.json();
-                this.userCountry = data.country_code || '';
+                this.userCountry = data.country || '';
             } catch(e) { console.log('IP fetch failed', e); }
         },
 

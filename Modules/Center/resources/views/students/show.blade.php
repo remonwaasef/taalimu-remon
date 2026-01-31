@@ -623,6 +623,68 @@
         </div>
     </div>
 
+    <!-- ID Card Print Layout -->
+    <div class="id-card-print d-none d-print-block">
+        <div class="id-card-container">
+            <!-- Front of Card -->
+            <div class="id-card">
+                <!-- Header / Logo Area -->
+                <div class="id-header">
+                    <div class="logo-area">
+                        @if($tenant->logo)
+                            <img src="{{ asset('storage/' . $tenant->logo) }}" alt="Logo">
+                        @else
+                            <i class="fas fa-graduation-cap fa-2x text-white"></i>
+                        @endif
+                    </div>
+                    <div class="center-name">
+                        <h1>{{ $tenant->name ?? 'اسم المركز التعليمي' }}</h1>
+                        <span>بطاقة هوية طالب</span>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="id-body">
+                    <div class="student-photo-wrapper">
+                        @if($student->profile_photo)
+                            <img src="{{ asset('storage/' . $student->profile_photo) }}" class="student-photo">
+                        @else
+                             <div class="student-photo-placeholder">{{ substr($student->name, 0, 1) }}</div>
+                        @endif
+                        <div class="status-indicator"></div>
+                    </div>
+
+                    <h2 class="student-name">{{ $student->name }}</h2>
+                    <div class="student-meta">
+                        <span class="grade-badge">{{ $student->grade_level_name ?? '---' }}</span>
+                    </div>
+
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>كود الطالب</label>
+                            <strong>{{ $student->code }}</strong>
+                        </div>
+                        <div class="info-item">
+                            <label>العام الدراسي</label>
+                            <strong>{{ date('Y') }} - {{ date('Y')+1 }}</strong>
+                        </div>
+                    </div>
+
+                    <div class="barcode-area">
+                        <!-- Simple CSS Barcode Effect -->
+                        <div class="barcode-lines"></div>
+                        <span class="code-text">{{ $student->code }}</span>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="id-footer">
+                    <p>هذه البطاقة لإثبات هوية الطالب وتستخدم للدخول والحضور</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <style>
         :root {
             --elite-shadow: 0 20px 50px -15px rgba(58, 12, 163, 0.15);
@@ -679,11 +741,230 @@
         /* Timeline */
         .timeline-item:last-child .timeline-content { border-bottom: none !important; }
         
+        /* PRINT SPECIFIC STYLES - ID CARD */
         @media print {
-            .elite-profile-nav, .btn, .tab-pane:not(.active) { display: none !important; }
-            .col-lg-4 { display: none !important; }
-            .col-lg-8 { width: 100% !important; }
-            .card { border: 1px solid #ddd !important; box-shadow: none !important; }
+            body * {
+                visibility: hidden;
+            }
+            
+            .id-card-print, .id-card-print * {
+                visibility: visible;
+            }
+
+            .id-card-print {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                display: flex !important;
+                align-items: flex-start; /* Start from top to accommodate paper margins better */
+                justify-content: center;
+                background: white;
+                padding-top: 2cm;
+            }
+
+            .id-card-container {
+                width: 85.6mm; /* Standard ID Card Credit Card Size */
+                height: 54mm;
+                position: relative;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .id-card {
+                width: 100%;
+                height: 100%;
+                border-radius: 4mm;
+                overflow: hidden;
+                position: relative;
+                background: white;
+                border: 1px solid #e2e8f0;
+                display: flex;
+                flex-direction: column;
+            }
+
+            /* Decorative Background Elements */
+            .id-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 35%;
+                background: var(--bs-primary);
+                background: linear-gradient(135deg, var(--bs-primary) 0%, #4f46e5 100%);
+                clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
+                z-index: 0;
+            }
+
+            .id-header {
+                position: relative;
+                z-index: 1;
+                display: flex;
+                align-items: center;
+                padding: 4mm 5mm 0;
+                gap: 3mm;
+                color: white;
+            }
+
+            .logo-area img {
+                width: 10mm;
+                height: 10mm;
+                object-fit: contain;
+                filter: brightness(0) invert(1); /* Make logo white if possible, or remove filter */
+                background: rgba(255,255,255,0.2);
+                border-radius: 2mm;
+                padding: 1px;
+            }
+            
+            .center-name h1 {
+                font-size: 8pt;
+                font-weight: 800;
+                margin: 0;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+            
+            .center-name span {
+                font-size: 6pt;
+                opacity: 0.9;
+                font-weight: 600;
+            }
+
+            .id-body {
+                flex-grow: 1;
+                position: relative;
+                z-index: 2;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding-top: 2mm;
+            }
+
+            .student-photo-wrapper {
+                width: 18mm;
+                height: 18mm;
+                border-radius: 50%;
+                border: 2px solid white;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                overflow: hidden;
+                margin-bottom: 2mm;
+                background: #f1f5f9;
+                position: relative;
+            }
+             
+            .student-photo {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            
+            .student-photo-placeholder {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                color: var(--bs-primary);
+                font-size: 14pt;
+            }
+
+            .student-name {
+                font-size: 11pt;
+                font-weight: 800;
+                color: #1e293b;
+                margin: 0 0 1mm;
+                text-align: center;
+            }
+
+            .student-meta {
+                display: flex;
+                gap: 2mm;
+                margin-bottom: 2mm;
+            }
+
+            .student-meta .grade-badge {
+                font-size: 6pt;
+                background: #e0e7ff;
+                color: #4338ca;
+                padding: 0.5mm 2mm;
+                border-radius: 2mm;
+                font-weight: 700;
+                width: auto;
+                height: auto;
+            }
+
+            .info-grid {
+                display: flex;
+                justify-content: space-between;
+                width: 80%;
+                margin-bottom: 2mm;
+                border-top: 1px solid #f1f5f9;
+                padding-top: 2mm;
+            }
+
+            .info-item {
+                text-align: center;
+            }
+
+            .info-item label {
+                display: block;
+                font-size: 5pt;
+                color: #64748b;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin-bottom: 0.5mm;
+            }
+
+            .info-item strong {
+                display: block;
+                font-size: 7pt;
+                color: #334155;
+            }
+
+            .barcode-area {
+                margin-top: auto;
+                margin-bottom: 2mm;
+                text-align: center;
+                width: 90%;
+            }
+            
+            .barcode-lines {
+                height: 4mm;
+                background: repeating-linear-gradient(
+                    90deg,
+                    #000,
+                    #000 1px,
+                    #fff 1px,
+                    #fff 2px
+                );
+                width: 100%;
+                opacity: 0.8;
+            }
+            
+            .code-text {
+                font-size: 6pt;
+                font-family: monospace;
+                letter-spacing: 2px;
+                color: #475569;
+                display: block;
+                margin-top: 1px;
+            }
+
+            .id-footer {
+                background: #f8fafc;
+                padding: 1.5mm;
+                text-align: center;
+                border-top: 1px solid #e2e8f0;
+            }
+            
+            .id-footer p {
+                margin: 0;
+                font-size: 5pt;
+                color: #94a3b8;
+            }
         }
     </style>
 @endsection
