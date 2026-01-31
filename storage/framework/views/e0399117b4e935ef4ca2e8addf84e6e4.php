@@ -1,6 +1,6 @@
-@extends('center::layouts.master')
 
-@section('content')
+
+<?php $__env->startSection('content'); ?>
     <div class="row g-4 animate__animated animate__fadeIn">
         <!-- Student Header Card -->
         <div class="col-12">
@@ -9,13 +9,14 @@
                     <div class="d-flex flex-column flex-md-row align-items-center gap-4 text-center text-md-end">
                         <!-- Profile Image Section -->
                         <div class="position-relative flex-shrink-0">
-                            @if($student->profile_photo)
-                                <img src="{{ asset('storage/' . $student->profile_photo) }}" alt="{{ $student->name }}" class="rounded-circle shadow-lg border border-4 border-white" style="width: 130px; height: 130px; object-fit: cover;">
-                            @else
+                            <?php if($student->profile_photo): ?>
+                                <img src="<?php echo e(asset('storage/' . $student->profile_photo)); ?>" alt="<?php echo e($student->name); ?>" class="rounded-circle shadow-lg border border-4 border-white" style="width: 130px; height: 130px; object-fit: cover;">
+                            <?php else: ?>
                                 <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center shadow-lg border border-4 border-white" style="width: 130px; height: 130px; font-size: 3.5rem;">
-                                    {{ substr($student->name, 0, 1) }}
+                                    <?php echo e(substr($student->name, 0, 1)); ?>
+
                                 </div>
-                            @endif
+                            <?php endif; ?>
                             <div class="position-absolute bottom-0 end-0 bg-success border border-white border-4 rounded-circle p-2 pulse-success" title="نشط"></div>
                         </div>
 
@@ -23,33 +24,37 @@
                         <div class="flex-grow-1">
                             <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
                                 <div class="mb-3 mb-md-0">
-                                    <h1 class="fw-bold text-dark mb-2 display-6">{{ $student->name }}</h1>
+                                    <h1 class="fw-bold text-dark mb-2 display-6"><?php echo e($student->name); ?></h1>
                                     <div class="d-flex align-items-center gap-2 justify-content-center justify-content-md-start mb-2">
                                         <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 fw-bold">
-                                            <i class="fas fa-graduation-cap me-1"></i> {{ $student->grade_level_name }}
+                                            <i class="fas fa-graduation-cap me-1"></i> <?php echo e($student->grade_level_name); ?>
+
                                         </span>
                                         <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-3 py-2 fw-bold">
-                                            <i class="fas fa-barcode me-1"></i> {{ $student->code }}
+                                            <i class="fas fa-barcode me-1"></i> <?php echo e($student->code); ?>
+
                                         </span>
                                     </div>
                                     <div class="d-flex align-items-center gap-2 justify-content-center justify-content-md-start">
-                                        @if($student->school_name)
+                                        <?php if($student->school_name): ?>
                                             <span class="badge bg-info bg-opacity-10 text-info rounded-pill px-3 py-1">
-                                                <i class="fas fa-school me-1"></i> {{ $student->school_name }}
+                                                <i class="fas fa-school me-1"></i> <?php echo e($student->school_name); ?>
+
                                             </span>
-                                        @endif
-                                        @if($student->section_type)
+                                        <?php endif; ?>
+                                        <?php if($student->section_type): ?>
                                             <span class="badge bg-dark bg-opacity-10 text-dark rounded-pill px-3 py-1">
-                                                <i class="fas fa-shapes me-1"></i> {{ $student->section_type }}
+                                                <i class="fas fa-shapes me-1"></i> <?php echo e($student->section_type); ?>
+
                                             </span>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                                 <div class="d-flex gap-2">
-                                    <a href="https://wa.me/{{ $student->parent_phone ?? $student->guardian?->phone }}" target="_blank" class="btn btn-success rounded-pill px-4 shadow-sm hover-lift fw-bold">
+                                    <a href="https://wa.me/<?php echo e($student->parent_phone ?? $student->guardian?->phone); ?>" target="_blank" class="btn btn-success rounded-pill px-4 shadow-sm hover-lift fw-bold">
                                         <i class="fab fa-whatsapp me-2"></i> ولي الأمر
                                     </a>
-                                    <a href="{{ route('center.students.edit', $student->id) }}" class="btn btn-white border rounded-pill px-4 shadow-sm hover-lift text-dark fw-bold">
+                                    <a href="<?php echo e(route('center.students.edit', $student->id)); ?>" class="btn btn-white border rounded-pill px-4 shadow-sm hover-lift text-dark fw-bold">
                                         <i class="fas fa-edit me-2"></i> تعديل البروفايل
                                     </a>
                                 </div>
@@ -63,15 +68,15 @@
                                         <div class="text-muted small mb-2">الحضور (٪ / حاضر / غائب)</div>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="text-center">
-                                                <div class="fw-bold text-primary fs-5">{{ $stats['attendance_pct'] }}%</div>
+                                                <div class="fw-bold text-primary fs-5"><?php echo e($stats['attendance_pct']); ?>%</div>
                                                 <div style="font-size: 0.65rem;" class="text-muted">النسبة</div>
                                             </div>
                                             <div class="text-center border-start border-end px-2">
-                                                <div class="fw-bold text-success">{{ $stats['attendance_count'] }}</div>
+                                                <div class="fw-bold text-success"><?php echo e($stats['attendance_count']); ?></div>
                                                 <div style="font-size: 0.65rem;" class="text-muted">حضور</div>
                                             </div>
                                             <div class="text-center">
-                                                <div class="fw-bold text-danger">{{ $stats['absent_count'] }}</div>
+                                                <div class="fw-bold text-danger"><?php echo e($stats['absent_count']); ?></div>
                                                 <div style="font-size: 0.65rem;" class="text-muted">غياب</div>
                                             </div>
                                         </div>
@@ -84,15 +89,15 @@
                                         <div class="text-muted small mb-2">نقاط التميز (صافي / كسب / خصم)</div>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="text-center">
-                                                <div class="fw-bold text-indigo fs-5">{{ $stats['points'] }}</div>
+                                                <div class="fw-bold text-indigo fs-5"><?php echo e($stats['points']); ?></div>
                                                 <div style="font-size: 0.65rem;" class="text-muted">الرصيد</div>
                                             </div>
                                             <div class="text-center border-start border-end px-2">
-                                                <div class="fw-bold text-success">{{ $stats['points_earned'] }}</div>
+                                                <div class="fw-bold text-success"><?php echo e($stats['points_earned']); ?></div>
                                                 <div style="font-size: 0.65rem;" class="text-muted">إضافة</div>
                                             </div>
                                             <div class="text-center">
-                                                <div class="fw-bold text-danger">{{ $stats['points_spent'] }}</div>
+                                                <div class="fw-bold text-danger"><?php echo e($stats['points_spent']); ?></div>
                                                 <div style="font-size: 0.65rem;" class="text-muted">سحب</div>
                                             </div>
                                         </div>
@@ -105,15 +110,15 @@
                                         <div class="text-muted small mb-2">الاختبارات (متوسط / عدد / أعلى)</div>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="text-center">
-                                                <div class="fw-bold text-success fs-5">{{ $stats['avg_quiz_score'] }}%</div>
+                                                <div class="fw-bold text-success fs-5"><?php echo e($stats['avg_quiz_score']); ?>%</div>
                                                 <div style="font-size: 0.65rem;" class="text-muted">المتوسط</div>
                                             </div>
                                             <div class="text-center border-start border-end px-2">
-                                                <div class="fw-bold text-dark">{{ $stats['quiz_count'] }}</div>
+                                                <div class="fw-bold text-dark"><?php echo e($stats['quiz_count']); ?></div>
                                                 <div style="font-size: 0.65rem;" class="text-muted">عدد</div>
                                             </div>
                                             <div class="text-center">
-                                                <div class="fw-bold text-primary">{{ $stats['highest_score'] }}%</div>
+                                                <div class="fw-bold text-primary"><?php echo e($stats['highest_score']); ?>%</div>
                                                 <div style="font-size: 0.65rem;" class="text-muted">أعلى درجة</div>
                                             </div>
                                         </div>
@@ -126,15 +131,15 @@
                                         <div class="text-muted small mb-2">الحصص (إجمالي / حاضر / باقي)</div>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="text-center">
-                                                <div class="fw-bold text-dark fs-5">{{ $stats['total_sessions'] }}</div>
+                                                <div class="fw-bold text-dark fs-5"><?php echo e($stats['total_sessions']); ?></div>
                                                 <div style="font-size: 0.65rem;" class="text-muted">إجمالي</div>
                                             </div>
                                             <div class="text-center border-start border-end px-2">
-                                                <div class="fw-bold text-success">{{ $stats['attendance_count'] }}</div>
+                                                <div class="fw-bold text-success"><?php echo e($stats['attendance_count']); ?></div>
                                                 <div style="font-size: 0.65rem;" class="text-muted">حاضر</div>
                                             </div>
                                             <div class="text-center">
-                                                <div class="fw-bold text-warning">{{ $stats['remaining_sessions_count'] }}</div>
+                                                <div class="fw-bold text-warning"><?php echo e($stats['remaining_sessions_count']); ?></div>
                                                 <div style="font-size: 0.65rem;" class="text-muted">باقي</div>
                                             </div>
                                         </div>
@@ -190,39 +195,39 @@
                 <div class="contact-item mb-4">
                     <small class="text-muted d-block mb-1">هاتف الطالب</small>
                     <div class="d-flex align-items-center gap-2">
-                        <span class="fw-bold fs-6">{{ $student->phone }}</span>
-                        <a href="tel:{{ $student->phone }}" class="btn btn-sm btn-light rounded-circle shadow-sm"><i class="fas fa-phone-alt"></i></a>
+                        <span class="fw-bold fs-6"><?php echo e($student->phone); ?></span>
+                        <a href="tel:<?php echo e($student->phone); ?>" class="btn btn-sm btn-light rounded-circle shadow-sm"><i class="fas fa-phone-alt"></i></a>
                     </div>
                 </div>
 
                 <div class="contact-item mb-4">
-                    <small class="text-muted d-block mb-1">ولي الأمر ({{ $student->parent_relation ?? 'والد' }})</small>
-                    <div class="fw-bold fs-6 mb-1 text-dark">{{ $student->guardian?->name ?? $student->parent_name }}</div>
+                    <small class="text-muted d-block mb-1">ولي الأمر (<?php echo e($student->parent_relation ?? 'والد'); ?>)</small>
+                    <div class="fw-bold fs-6 mb-1 text-dark"><?php echo e($student->guardian?->name ?? $student->parent_name); ?></div>
                     <div class="d-flex align-items-center gap-2">
-                        <span class="text-muted small">{{ $student->guardian?->phone ?? $student->parent_phone }}</span>
-                        <a href="https://wa.me/{{ $student->guardian?->phone ?? $student->parent_phone }}" class="btn btn-sm btn-light text-success rounded-circle shadow-sm"><i class="fab fa-whatsapp"></i></a>
+                        <span class="text-muted small"><?php echo e($student->guardian?->phone ?? $student->parent_phone); ?></span>
+                        <a href="https://wa.me/<?php echo e($student->guardian?->phone ?? $student->parent_phone); ?>" class="btn btn-sm btn-light text-success rounded-circle shadow-sm"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
 
-                @if($siblings->count() > 0)
+                <?php if($siblings->count() > 0): ?>
                     <div class="pt-3 border-top mt-2">
                         <h6 class="fw-bold text-dark small mb-3">إخوة مسجلين بالمركز</h6>
                         <div class="d-flex flex-column gap-2">
-                            @foreach($siblings as $sibling)
-                                <a href="{{ route('center.students.show', $sibling->id) }}" class="sibling-chip d-flex align-items-center gap-3 p-2 bg-light rounded-4 text-decoration-none hover-lift border">
+                            <?php $__currentLoopData = $siblings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sibling): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <a href="<?php echo e(route('center.students.show', $sibling->id)); ?>" class="sibling-chip d-flex align-items-center gap-3 p-2 bg-light rounded-4 text-decoration-none hover-lift border">
                                     <div class="bg-white rounded-circle p-2 shadow-sm text-primary">
                                         <i class="fas fa-user-graduate small"></i>
                                     </div>
                                     <div class="flex-grow-1">
-                                        <div class="fw-bold text-dark small mb-0">{{ $sibling->name }}</div>
-                                        <small class="text-muted extra-small">{{ $sibling->grade->name ?? '-' }}</small>
+                                        <div class="fw-bold text-dark small mb-0"><?php echo e($sibling->name); ?></div>
+                                        <small class="text-muted extra-small"><?php echo e($sibling->grade->name ?? '-'); ?></small>
                                     </div>
                                     <i class="fas fa-chevron-left text-muted opacity-25"></i>
                                 </a>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </div>
-                @endif
+                <?php endif; ?>
             </div>
         </div>
 
@@ -246,8 +251,8 @@
                                         <i class="fas fa-school"></i>
                                     </div>
                                     <h6 class="fw-bold text-muted small">المدرسة والشعبة</h6>
-                                    <div class="fw-bold text-dark fs-5">{{ $student->school_name ?? 'غير محدد' }}</div>
-                                    <div class="text-primary fw-bold">{{ $student->section_type ?? 'عام' }}</div>
+                                    <div class="fw-bold text-dark fs-5"><?php echo e($student->school_name ?? 'غير محدد'); ?></div>
+                                    <div class="text-primary fw-bold"><?php echo e($student->section_type ?? 'عام'); ?></div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -256,25 +261,25 @@
                                         <i class="fas fa-map-marker-alt"></i>
                                     </div>
                                     <h6 class="fw-bold text-muted small">العنوان بالتفصيل</h6>
-                                    <div class="fw-bold text-dark fs-6">{{ $student->address ?? 'لا يوجد عنوان مسجل' }}</div>
+                                    <div class="fw-bold text-dark fs-6"><?php echo e($student->address ?? 'لا يوجد عنوان مسجل'); ?></div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="p-4 rounded-4 bg-white shadow-sm border h-100 text-center">
                                     <h6 class="text-muted small mb-2">تاريخ الميلاد</h6>
-                                    <div class="fw-bold">{{ $student->birth_date ? $student->birth_date->format('Y/m/d') : '---' }}</div>
+                                    <div class="fw-bold"><?php echo e($student->birth_date ? $student->birth_date->format('Y/m/d') : '---'); ?></div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="p-4 rounded-4 bg-white shadow-sm border h-100 text-center">
                                     <h6 class="text-muted small mb-2">الرقم القومي</h6>
-                                    <div class="fw-bold">{{ $student->national_id ?? '---' }}</div>
+                                    <div class="fw-bold"><?php echo e($student->national_id ?? '---'); ?></div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="p-4 rounded-4 bg-white shadow-sm border h-100 text-center">
                                     <h6 class="text-muted small mb-2">تاريخ الانضمام</h6>
-                                    <div class="fw-bold text-success">{{ $student->joined_at ? $student->joined_at->format('Y/m/d') : $student->created_at->format('Y/m/d') }}</div>
+                                    <div class="fw-bold text-success"><?php echo e($student->joined_at ? $student->joined_at->format('Y/m/d') : $student->created_at->format('Y/m/d')); ?></div>
                                 </div>
                             </div>
                         </div>
@@ -286,8 +291,8 @@
                                     <h6 class="fw-bold mb-1 text-warning">حساب الطالب</h6>
                                     <p class="text-muted mb-0 small">يستخدم الطالب هاتفه كاسم مستخدم لدخول المنصة ومراجعة الدروس والاختبارات.</p>
                                 </div>
-                                <form id="resetPasswordForm" action="{{ route('center.students.reset-password', $student->id) }}" method="POST" class="ms-auto">
-                                    @csrf
+                                <form id="resetPasswordForm" action="<?php echo e(route('center.students.reset-password', $student->id)); ?>" method="POST" class="ms-auto">
+                                    <?php echo csrf_field(); ?>
                                     <button type="button" id="resetPasswordBtn" class="btn btn-warning rounded-pill px-4 fw-bold shadow-sm">
                                         <i class="fas fa-sync-alt me-2"></i> تصفير كلمة المرور
                                     </button>
@@ -306,21 +311,21 @@
                         <div class="mb-5">
                             <h6 class="fw-bold text-dark border-start border-4 border-success ps-3 mb-4">آخر الاختبارات</h6>
                             <div class="row g-3">
-                                @forelse($quiz_attempts as $attempt)
+                                <?php $__empty_1 = true; $__currentLoopData = $quiz_attempts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $attempt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                     <div class="col-md-6">
                                         <div class="quiz-result-card bg-white border rounded-4 p-3 shadow-sm d-flex align-items-center gap-3">
-                                            <div class="grade-badge rounded-circle {{ $attempt->score >= 50 ? 'bg-success' : 'bg-danger' }} text-white fw-bold">
-                                                {{ $attempt->score }}%
+                                            <div class="grade-badge rounded-circle <?php echo e($attempt->score >= 50 ? 'bg-success' : 'bg-danger'); ?> text-white fw-bold">
+                                                <?php echo e($attempt->score); ?>%
                                             </div>
                                             <div class="flex-grow-1">
-                                                <div class="fw-bold text-dark small mb-0">{{ $attempt->quiz->title }}</div>
-                                                <small class="text-muted extra-small">{{ $attempt->completed_at->diffForHumans() }}</small>
+                                                <div class="fw-bold text-dark small mb-0"><?php echo e($attempt->quiz->title); ?></div>
+                                                <small class="text-muted extra-small"><?php echo e($attempt->completed_at->diffForHumans()); ?></small>
                                             </div>
                                         </div>
                                     </div>
-                                @empty
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                     <div class="col-12 text-center py-4 bg-light rounded-4 text-muted">لم يتم تسجيل اختبارات بعد</div>
-                                @endforelse
+                                <?php endif; ?>
                             </div>
                         </div>
 
@@ -338,16 +343,16 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse($assignments as $submission)
+                                        <?php $__empty_1 = true; $__currentLoopData = $assignments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $submission): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                             <tr>
-                                                <td class="fw-bold small text-dark">{{ $submission->assignment->title }}</td>
-                                                <td class="small text-muted">{{ $submission->submitted_at->format('Y/m/d') }}</td>
-                                                <td><span class="badge {{ $submission->grade ? 'bg-success' : 'bg-warning' }} bg-opacity-10 text-{{ $submission->grade ? 'success' : 'warning' }} rounded-pill px-3">{{ $submission->grade ?? 'قيد التصحيح' }}</span></td>
-                                                <td class="small opacity-75">{{ $submission->feedback ?? '---' }}</td>
+                                                <td class="fw-bold small text-dark"><?php echo e($submission->assignment->title); ?></td>
+                                                <td class="small text-muted"><?php echo e($submission->submitted_at->format('Y/m/d')); ?></td>
+                                                <td><span class="badge <?php echo e($submission->grade ? 'bg-success' : 'bg-warning'); ?> bg-opacity-10 text-<?php echo e($submission->grade ? 'success' : 'warning'); ?> rounded-pill px-3"><?php echo e($submission->grade ?? 'قيد التصحيح'); ?></span></td>
+                                                <td class="small opacity-75"><?php echo e($submission->feedback ?? '---'); ?></td>
                                             </tr>
-                                        @empty
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                             <tr><td colspan="4" class="text-center py-4 text-muted small">لا توجد واجبات مسجلة</td></tr>
-                                        @endforelse
+                                        <?php endif; ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -361,8 +366,8 @@
                         <div class="d-flex justify-content-between align-items-center mb-5">
                             <h4 class="fw-bold mb-0">سجل الحضور والغياب</h4>
                             <div class="d-flex gap-2">
-                                <div class="badge bg-success rounded-pill px-3">حاضر: {{ $attendance_logs->where('status', 'present')->count() }}</div>
-                                <div class="badge bg-danger rounded-pill px-3">غائب: {{ $attendance_logs->where('status', 'absent')->count() }}</div>
+                                <div class="badge bg-success rounded-pill px-3">حاضر: <?php echo e($attendance_logs->where('status', 'present')->count()); ?></div>
+                                <div class="badge bg-danger rounded-pill px-3">غائب: <?php echo e($attendance_logs->where('status', 'absent')->count()); ?></div>
                             </div>
                         </div>
 
@@ -377,23 +382,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($attendance_logs as $log)
+                                    <?php $__empty_1 = true; $__currentLoopData = $attendance_logs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $log): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                         <tr>
-                                            <td class="px-4 fw-bold small">{{ $log->session_date->format('Y-m-d') }}</td>
+                                            <td class="px-4 fw-bold small"><?php echo e($log->session_date->format('Y-m-d')); ?></td>
                                             <td>
-                                                <div class="small fw-bold text-dark">{{ $log->course->title }}</div>
-                                                <small class="text-muted extra-small">{{ __('center::schedules.' . $log->schedule->day_of_week) }} ({{ $log->schedule->start_time }})</small>
+                                                <div class="small fw-bold text-dark"><?php echo e($log->course->title); ?></div>
+                                                <small class="text-muted extra-small"><?php echo e(__('center::schedules.' . $log->schedule->day_of_week)); ?> (<?php echo e($log->schedule->start_time); ?>)</small>
                                             </td>
-                                            <td class="small text-muted">{{ $log->check_in_time ? $log->check_in_time->format('h:i A') : '---' }}</td>
+                                            <td class="small text-muted"><?php echo e($log->check_in_time ? $log->check_in_time->format('h:i A') : '---'); ?></td>
                                             <td class="px-4">
-                                                <span class="badge bg-{{ $log->status == 'present' ? 'success' : ($log->status == 'absent' ? 'danger' : 'warning') }} bg-opacity-10 text-{{ $log->status == 'present' ? 'success' : ($log->status == 'absent' ? 'danger' : 'warning') }} rounded-pill px-3 font-arabic">
-                                                    {{ $log->status == 'present' ? 'حاضر' : ($log->status == 'absent' ? 'غائب' : 'متأخر') }}
+                                                <span class="badge bg-<?php echo e($log->status == 'present' ? 'success' : ($log->status == 'absent' ? 'danger' : 'warning')); ?> bg-opacity-10 text-<?php echo e($log->status == 'present' ? 'success' : ($log->status == 'absent' ? 'danger' : 'warning')); ?> rounded-pill px-3 font-arabic">
+                                                    <?php echo e($log->status == 'present' ? 'حاضر' : ($log->status == 'absent' ? 'غائب' : 'متأخر')); ?>
+
                                                 </span>
                                             </td>
                                         </tr>
-                                    @empty
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                         <tr><td colspan="4" class="text-center py-5 text-muted">لا يوجد سجل حضور حتى الآن</td></tr>
-                                    @endforelse
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
@@ -405,30 +411,30 @@
                     <div class="card border-0 shadow-sm rounded-5 p-4 p-md-5">
                         <h4 class="fw-bold mb-5">الدورات والمجموعات</h4>
                         <div class="row g-4">
-                            @forelse($enrollments as $enrollment)
+                            <?php $__empty_1 = true; $__currentLoopData = $enrollments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $enrollment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                 <div class="col-md-6">
                                     <div class="course-elite-card bg-white border rounded-5 p-4 shadow-sm hover-lift h-100">
                                         <div class="d-flex justify-content-between mb-3 align-items-start">
                                             <div class="icon-sq bg-primary bg-opacity-10 text-primary rounded-4">
                                                 <i class="fas fa-book-reader"></i>
                                             </div>
-                                            <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{ $enrollment->status }}</span>
+                                            <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3"><?php echo e($enrollment->status); ?></span>
                                         </div>
-                                        <h5 class="fw-bold text-dark mb-1">{{ $enrollment->course->title }}</h5>
-                                        <p class="text-muted extra-small mb-4">تاريخ الاشتراك: {{ $enrollment->enrolled_at->format('Y/m/d') }}</p>
+                                        <h5 class="fw-bold text-dark mb-1"><?php echo e($enrollment->course->title); ?></h5>
+                                        <p class="text-muted extra-small mb-4">تاريخ الاشتراك: <?php echo e($enrollment->enrolled_at->format('Y/m/d')); ?></p>
                                         
                                         <div class="mb-2 d-flex justify-content-between small fw-bold">
                                             <span>التقدم</span>
-                                            <span>{{ $enrollment->progress }}%</span>
+                                            <span><?php echo e($enrollment->progress); ?>%</span>
                                         </div>
                                         <div class="progress rounded-pill bg-light" style="height: 6px;">
-                                            <div class="progress-bar rounded-pill" style="width: {{ $enrollment->progress }}%"></div>
+                                            <div class="progress-bar rounded-pill" style="width: <?php echo e($enrollment->progress); ?>%"></div>
                                         </div>
                                     </div>
                                 </div>
-                            @empty
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <div class="col-12 text-center py-5 bg-light rounded-5 text-muted">غير مشترك في أي دورات حالياً</div>
-                            @endforelse
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -450,22 +456,23 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($sales as $sale)
-                                        <tr class="cursor-pointer" onclick="window.location='{{ route('center.sales.show', $sale->id) }}'">
-                                            <td class="px-3 fw-bold">#{{ $sale->id }}</td>
-                                            <td class="fw-bold text-dark">{{ number_format($sale->total_amount, 2) }}</td>
-                                            <td class="text-success fw-bold">{{ number_format($sale->paid_amount, 2) }}</td>
-                                            <td class="text-danger fw-bold">{{ number_format($sale->total_amount - $sale->paid_amount, 2) }}</td>
-                                            <td class="small text-muted">{{ $sale->created_at->format('Y-m-d') }}</td>
+                                    <?php $__empty_1 = true; $__currentLoopData = $sales; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sale): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                        <tr class="cursor-pointer" onclick="window.location='<?php echo e(route('center.sales.show', $sale->id)); ?>'">
+                                            <td class="px-3 fw-bold">#<?php echo e($sale->id); ?></td>
+                                            <td class="fw-bold text-dark"><?php echo e(number_format($sale->total_amount, 2)); ?></td>
+                                            <td class="text-success fw-bold"><?php echo e(number_format($sale->paid_amount, 2)); ?></td>
+                                            <td class="text-danger fw-bold"><?php echo e(number_format($sale->total_amount - $sale->paid_amount, 2)); ?></td>
+                                            <td class="small text-muted"><?php echo e($sale->created_at->format('Y-m-d')); ?></td>
                                             <td>
-                                                <span class="badge bg-{{ $sale->status == 'paid' ? 'success' : ($sale->status == 'partial' ? 'warning' : 'danger') }} bg-opacity-10 text-{{ $sale->status == 'paid' ? 'success' : ($sale->status == 'partial' ? 'warning' : 'danger') }} rounded-pill px-3 fw-bold">
-                                                    {{ __('center::sales.status_' . ($sale->status == 'pending' ? 'unpaid' : $sale->status)) }}
+                                                <span class="badge bg-<?php echo e($sale->status == 'paid' ? 'success' : ($sale->status == 'partial' ? 'warning' : 'danger')); ?> bg-opacity-10 text-<?php echo e($sale->status == 'paid' ? 'success' : ($sale->status == 'partial' ? 'warning' : 'danger')); ?> rounded-pill px-3 fw-bold">
+                                                    <?php echo e(__('center::sales.status_' . ($sale->status == 'pending' ? 'unpaid' : $sale->status))); ?>
+
                                                 </span>
                                             </td>
                                         </tr>
-                                    @empty
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                         <tr><td colspan="6" class="text-center py-5 text-muted">لا توجد سجلات مالية</td></tr>
-                                    @endforelse
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
@@ -477,24 +484,24 @@
                     <div class="card border-0 shadow-sm rounded-5 p-4 p-md-5">
                         <h4 class="fw-bold mb-5">تتبع النشاطات</h4>
                         <div class="activities-timeline">
-                            @forelse($recent_activity as $activity)
+                            <?php $__empty_1 = true; $__currentLoopData = $recent_activity; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $activity): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                 <div class="timeline-item d-flex gap-4 mb-4">
                                     <div class="timeline-icon bg-light text-primary rounded-circle shadow-sm d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px;">
                                         <i class="fas fa-history small"></i>
                                     </div>
                                     <div class="timeline-content flex-grow-1 border-bottom pb-4">
                                         <div class="d-flex justify-content-between mb-1">
-                                            <h6 class="fw-bold text-dark mb-0">{{ $activity->description }}</h6>
-                                            <small class="text-muted extra-small">{{ $activity->created_at->diffForHumans() }}</small>
+                                            <h6 class="fw-bold text-dark mb-0"><?php echo e($activity->description); ?></h6>
+                                            <small class="text-muted extra-small"><?php echo e($activity->created_at->diffForHumans()); ?></small>
                                         </div>
                                         <div class="text-muted small">
-                                            بواسطة: <span class="fw-bold">{{ $activity->causer->name ?? 'النظام' }}</span>
+                                            بواسطة: <span class="fw-bold"><?php echo e($activity->causer->name ?? 'النظام'); ?></span>
                                         </div>
                                     </div>
                                 </div>
-                            @empty
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <div class="text-center py-5 text-muted">لا يوجد نشاط مسجل للتتبع</div>
-                            @endforelse
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -505,7 +512,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-5">
                             <h4 class="fw-bold mb-0">سجل النقاط والسلوك</h4>
                             <div class="badge bg-indigo-accent text-white rounded-pill px-4 py-2 fs-6 shadow-sm">
-                                الإجمالي: {{ $stats['points'] }} نقطة
+                                الإجمالي: <?php echo e($stats['points']); ?> نقطة
                             </div>
                         </div>
 
@@ -519,19 +526,20 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($point_logs as $log)
+                                    <?php $__empty_1 = true; $__currentLoopData = $point_logs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $log): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                         <tr>
                                             <td>
-                                                <span class="badge {{ $log->points > 0 ? 'bg-success' : 'bg-danger' }} rounded-pill px-3">
-                                                    {{ $log->points > 0 ? '+' : '' }}{{ $log->points }}
+                                                <span class="badge <?php echo e($log->points > 0 ? 'bg-success' : 'bg-danger'); ?> rounded-pill px-3">
+                                                    <?php echo e($log->points > 0 ? '+' : ''); ?><?php echo e($log->points); ?>
+
                                                 </span>
                                             </td>
-                                            <td class="fw-bold small">{{ $log->reason }}</td>
-                                            <td class="small text-muted">{{ $log->created_at->format('Y-m-d h:i A') }}</td>
+                                            <td class="fw-bold small"><?php echo e($log->reason); ?></td>
+                                            <td class="small text-muted"><?php echo e($log->created_at->format('Y-m-d h:i A')); ?></td>
                                         </tr>
-                                    @empty
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                         <tr><td colspan="3" class="text-center py-5 text-muted">لا توجد نقاط مسجلة حالياً</td></tr>
-                                    @endforelse
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
@@ -559,23 +567,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($bookings as $booking)
+                                    <?php $__empty_1 = true; $__currentLoopData = $bookings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $booking): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                         <tr>
-                                            <td class="px-4 fw-bold small text-dark">{{ $booking->schedule->course->title }}</td>
+                                            <td class="px-4 fw-bold small text-dark"><?php echo e($booking->schedule->course->title); ?></td>
                                             <td>
-                                                <div class="small fw-bold">{{ __('center::schedules.' . $booking->schedule->day_of_week) }}</div>
-                                                <small class="text-muted extra-small">{{ $booking->schedule->start_time }} - {{ $booking->schedule->end_time }}</small>
+                                                <div class="small fw-bold"><?php echo e(__('center::schedules.' . $booking->schedule->day_of_week)); ?></div>
+                                                <small class="text-muted extra-small"><?php echo e($booking->schedule->start_time); ?> - <?php echo e($booking->schedule->end_time); ?></small>
                                             </td>
-                                            <td class="small text-muted">{{ $booking->schedule->classroom->name }}</td>
+                                            <td class="small text-muted"><?php echo e($booking->schedule->classroom->name); ?></td>
                                             <td class="px-4">
-                                                <span class="badge bg-{{ $booking->status == 'confirmed' ? 'success' : 'danger' }} bg-opacity-10 text-{{ $booking->status == 'confirmed' ? 'success' : 'danger' }} rounded-pill px-3">
-                                                    {{ $booking->status }}
+                                                <span class="badge bg-<?php echo e($booking->status == 'confirmed' ? 'success' : 'danger'); ?> bg-opacity-10 text-<?php echo e($booking->status == 'confirmed' ? 'success' : 'danger'); ?> rounded-pill px-3">
+                                                    <?php echo e($booking->status); ?>
+
                                                 </span>
                                             </td>
                                         </tr>
-                                    @empty
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                         <tr><td colspan="4" class="text-center py-5 text-muted">لا توجد حجوزات نشطة حالياً</td></tr>
-                                    @endforelse
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
@@ -589,9 +598,9 @@
     <div class="modal fade" id="addBookingModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-elite rounded-5">
-                <form action="{{ route('center.bookings.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="student_id" value="{{ $student->id }}">
+                <form action="<?php echo e(route('center.bookings.store')); ?>" method="POST">
+                    <?php echo csrf_field(); ?>
+                    <input type="hidden" name="student_id" value="<?php echo e($student->id); ?>">
                     <div class="modal-header border-0 p-4 p-md-5 pb-0">
                         <h4 class="modal-title fw-bold">حجز موعد جديد للطالب</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -601,11 +610,11 @@
                             <label class="form-label fw-bold opacity-75">اختر المجموعة / الموعد</label>
                             <select name="schedule_id" class="form-select rounded-4 p-3 border-light bg-light" required>
                                 <option value="">--- اختر من المواعيد المتاحة ---</option>
-                                @foreach($availableSchedules as $sch)
-                                    <option value="{{ $sch->id }}">
-                                        {{ $sch->course->title }} | {{ __('center::schedules.' . $sch->day_of_week) }} ({{ $sch->start_time }} - {{ $sch->end_time }})
+                                <?php $__currentLoopData = $availableSchedules; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sch): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($sch->id); ?>">
+                                        <?php echo e($sch->course->title); ?> | <?php echo e(__('center::schedules.' . $sch->day_of_week)); ?> (<?php echo e($sch->start_time); ?> - <?php echo e($sch->end_time); ?>)
                                     </option>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                             <small class="text-muted d-block mt-2"><i class="fas fa-info-circle me-1"></i> يتم عرض المواعيد المفعلة فقط في المركز.</small>
                         </div>
@@ -631,14 +640,14 @@
                 <!-- Header / Logo Area -->
                 <div class="id-header">
                     <div class="logo-area">
-                        @if($tenant->logo)
-                            <img src="{{ asset('storage/' . $tenant->logo) }}" alt="Logo">
-                        @else
+                        <?php if($tenant->logo): ?>
+                            <img src="<?php echo e(asset('storage/' . $tenant->logo)); ?>" alt="Logo">
+                        <?php else: ?>
                             <i class="fas fa-graduation-cap fa-2x text-white"></i>
-                        @endif
+                        <?php endif; ?>
                     </div>
                     <div class="center-name">
-                        <h1>{{ $tenant->name ?? 'اسم المركز التعليمي' }}</h1>
+                        <h1><?php echo e($tenant->name ?? 'اسم المركز التعليمي'); ?></h1>
                         <span>بطاقة هوية طالب</span>
                     </div>
                 </div>
@@ -646,33 +655,33 @@
                 <!-- Main Content -->
                 <div class="id-body">
                     <div class="student-photo-wrapper">
-                        @if($student->profile_photo)
-                            <img src="{{ asset('storage/' . $student->profile_photo) }}" class="student-photo">
-                        @else
-                             <div class="student-photo-placeholder">{{ substr($student->name, 0, 1) }}</div>
-                        @endif
+                        <?php if($student->profile_photo): ?>
+                            <img src="<?php echo e(asset('storage/' . $student->profile_photo)); ?>" class="student-photo">
+                        <?php else: ?>
+                             <div class="student-photo-placeholder"><?php echo e(substr($student->name, 0, 1)); ?></div>
+                        <?php endif; ?>
                         <div class="status-indicator"></div>
                     </div>
 
-                    <h2 class="student-name">{{ $student->name }}</h2>
+                    <h2 class="student-name"><?php echo e($student->name); ?></h2>
                     <div class="student-meta">
-                        <span class="grade-badge">{{ $student->grade_level_name ?? '---' }}</span>
+                        <span class="grade-badge"><?php echo e($student->grade_level_name ?? '---'); ?></span>
                     </div>
 
                     <div class="info-grid">
                         <div class="info-item">
                             <label>كود الطالب</label>
-                            <strong>{{ $student->code }}</strong>
+                            <strong><?php echo e($student->code); ?></strong>
                         </div>
                         <div class="info-item">
                             <label>العام الدراسي</label>
-                            <strong>{{ date('Y') }} - {{ date('Y')+1 }}</strong>
+                            <strong><?php echo e(date('Y')); ?> - <?php echo e(date('Y')+1); ?></strong>
                         </div>
                     </div>
 
                     <div class="qr-area">
-                        <img src="{!! (new \chillerlan\QRCode\QRCode())->render($student->code) !!}" alt="QR Code">
-                        <span class="code-text">{{ $student->code }}</span>
+                        <img src="<?php echo e((new \chillerlan\QRCode\QRCode())->render($student->code)); ?>" alt="QR Code">
+                        <span class="code-text"><?php echo e($student->code); ?></span>
                     </div>
                 </div>
 
@@ -751,17 +760,16 @@
             }
 
             .id-card-print {
-                position: fixed;
+                position: absolute;
                 left: 0;
                 top: 0;
-                width: 100vw;
-                height: 100vh;
+                width: 100%;
+                height: 100%;
                 display: flex !important;
-                align-items: flex-start;
+                align-items: flex-start; /* Start from top to accommodate paper margins better */
                 justify-content: center;
                 background: white;
                 padding-top: 2cm;
-                z-index: 99999;
             }
 
             .id-card-container {
@@ -770,7 +778,6 @@
                 position: relative;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
-                z-index: 100000;
             }
 
             .id-card {
@@ -962,9 +969,9 @@
             }
         }
     </style>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('scripts')
+<?php $__env->startSection('scripts'); ?>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -987,4 +994,6 @@
         });
     });
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('center::layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\new project\antigravty\edu\edu\Modules/Center\resources/views/students/show.blade.php ENDPATH**/ ?>
