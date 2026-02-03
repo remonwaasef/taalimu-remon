@@ -171,6 +171,34 @@
 
                         <!-- Academic Settings -->
                         <div class="tab-pane fade" id="academic" role="tabpanel" aria-labelledby="academic-tab">
+                            
+                            <!-- 1. Templates Section (STANDALONE FORM) -->
+                            <div class="card border-0 bg-primary bg-opacity-10 mb-4 rounded-4">
+                                <div class="card-body p-3">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-7">
+                                            <h6 class="fw-bold text-primary mb-1"><i class="fas fa-magic me-2"></i>توفير الوقت؟ جرب القوالب الجاهزة</h6>
+                                            <p class="text-muted small mb-0">يمكنك اختيار نظام تعليمي جاهز (مثل النظام المصري) وسيتم ملء المراحل والصفوف تلقائياً.</p>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <form action="{{ route('center.settings.apply-template', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST" id="applyTemplateForm" class="d-flex gap-2">
+                                                @csrf
+                                                <select name="template_key" class="form-select form-select-sm rounded-pill" required>
+                                                    <option value="">اختر نموذجاً...</option>
+                                                    @foreach($templates as $key => $template)
+                                                        <option value="{{ $key }}">{{ $template['name'] }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 text-nowrap" onclick="confirmTemplate()">
+                                                    تطبيق
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2. Main Academic Settings Form -->
                             <form action="{{ route('center.settings.update-academic', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST" id="academicStructureForm">
                                 @csrf
                                 <h6 class="fw-bold text-primary mb-3">السنة الدراسية ونظام الدرجات</h6>
@@ -199,31 +227,6 @@
                                 </div>
                             </div>
 
-                            <!-- Stages & Grades Section -->
-                            <div class="card border-0 bg-primary bg-opacity-10 mb-4 rounded-4">
-                                <div class="card-body p-3">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-7">
-                                            <h6 class="fw-bold text-primary mb-1"><i class="fas fa-magic me-2"></i>توفير الوقت؟ جرب القوالب الجاهزة</h6>
-                                            <p class="text-muted small mb-0">يمكنك اختيار نظام تعليمي جاهز (مثل النظام المصري) وسيتم ملء المراحل والصفوف تلقائياً.</p>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <form action="{{ route('center.settings.apply-template', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST" id="applyTemplateForm" class="d-flex gap-2">
-                                                @csrf
-                                                <select name="template_key" class="form-select form-select-sm rounded-pill" required>
-                                                    <option value="">اختر نموذجاً...</option>
-                                                    @foreach($templates as $key => $template)
-                                                        <option value="{{ $key }}">{{ $template['name'] }}</option>
-                                                    @endforeach
-                                                </select>
-                                                <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 text-nowrap" onclick="confirmTemplate()">
-                                                    تطبيق
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h6 class="fw-bold text-primary mb-0"><i class="fas fa-layer-group me-2"></i>هيكل المراحل والصفوف الدراسية</h6>
@@ -520,12 +523,23 @@
     }
 
     function confirmTemplate() {
-        if (document.querySelector('select[name="template_key"]').value === "") {
+        const select = document.querySelector('select[name="template_key"]');
+        const form = document.getElementById('applyTemplateForm');
+        
+        if (!select || select.value === "") {
             alert('يرجى اختيار نموذج أولاً');
             return;
         }
+        
+        console.log('Applying template:', select.value);
+        
         if (confirm('تنبيه: سيؤدي تطبيق النموذج إلى مسح هيكل المراحل والصفوف الحالي واستبداله بالنموذج المختار. هل تريد الاستمرار؟')) {
-            document.getElementById('applyTemplateForm').submit();
+            if (form) {
+                form.submit();
+            } else {
+                console.error('Form applyTemplateForm not found!');
+                alert('عذراً، حدث خطأ تقني. يرجى تحديث الصفحة والمحاولة مرة أخرى.');
+            }
         }
     }
 
