@@ -14,5 +14,6 @@ return [
     'confirm_delete' => 'هل أنت متأكد من الحذف؟',
     'not_specified' => 'غير محدد',
     'student' => 'طالب',
-    'students' => 'طلاب',
+    'students_count' => '{0} طالب|{1} طالب واحد|[2,10] :count طلاب|[11,*] :count طالباً',
+    'add_asset' => 'إضافة عُهدة لهذه القاعة',
 ];
