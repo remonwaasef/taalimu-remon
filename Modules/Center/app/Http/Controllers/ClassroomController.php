@@ -16,7 +16,7 @@ class ClassroomController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Classroom::class);
-        $classrooms = Classroom::latest()->paginate(10);
+        $classrooms = Classroom::withCount('assets')->latest()->paginate(10);
         return view('center::classrooms.index', compact('classrooms'));
     }
 
