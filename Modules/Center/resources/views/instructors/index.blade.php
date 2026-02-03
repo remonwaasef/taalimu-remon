@@ -68,7 +68,7 @@
                                             </div>
                                         </div>
                                         <div>
-                                            <div class="fw-bold text-dark">{{ $instructor->name }}</div>
+                                            <a href="{{ route('center.instructors.show', $instructor->id) }}" class="fw-bold text-dark text-decoration-none hover-primary">{{ $instructor->name }}</a>
                                             @if($instructor->hiring_date)
                                                 <small class="text-muted" style="font-size: 0.7rem;">تعين في: {{ $instructor->hiring_date->format('Y/m/d') }}</small>
                                             @endif
@@ -108,7 +108,8 @@
                                             ⋮
                                         </button>
                                         <ul class="dropdown-menu border-0 shadow">
-                                            <li><a class="dropdown-item" href="{{ route('center.instructors.edit', $instructor->id) }}">{{ __('center::instructors.edit') }}</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('center.instructors.show', $instructor->id) }}"><i class="far fa-eye me-2 text-primary"></i> {{ __('center::instructors.show') }}</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('center.instructors.edit', $instructor->id) }}"><i class="far fa-edit me-2 text-success"></i> {{ __('center::instructors.edit') }}</a></li>
                                             <li>
                                                 <form action="{{ route('center.instructors.destroy', $instructor->id) }}" method="POST" class="d-inline" onsubmit="return confirm('هل أنت متأكد من عملية الحذف؟');">
                                                     @csrf
