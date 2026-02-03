@@ -50,5 +50,20 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerPolicies();
+
+        // Zero DB Hits: Cache authenticated user data in Redis
+        \Illuminate\Support\Facades\Auth::provider('cached', function ($app, array $config) {
+            return new class($app['hash'], $config['model']) extends \Illuminate\Auth\EloquentUserProvider {
+                public function retrieveById($identifier)
+                {
+                    return \Illuminate\Support\Facades\Cache::remember("user_cache_{$identifier}", 3600, function () use ($identifier) {
+                        return parent::retrieveById($identifier);
+                    });
+                }
+            };
+        });
+
+        // High-Scale: Use Cached Personal Access Tokens for API
+        \Laravel\Sanctum\Sanctum::usePersonalAccessTokenModel(\App\Models\PersonalAccessToken::class);
     }
 }

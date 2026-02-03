@@ -8,6 +8,33 @@ class Subscription extends CashierSubscription
 {
     use \App\Traits\IdentifyTenant;
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saved(function ($subscription) {
+            if ($subscription->tenant) {
+                try {
+                    if (extension_loaded('redis')) {
+                        \Illuminate\Support\Facades\Cache::store('redis')->forget("tenancy:domain:{$subscription->tenant->domain}");
+                    }
+                } catch (\Throwable $e) {}
+                \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$subscription->tenant->domain}");
+            }
+        });
+
+        static::deleted(function ($subscription) {
+            if ($subscription->tenant) {
+                try {
+                    if (extension_loaded('redis')) {
+                        \Illuminate\Support\Facades\Cache::store('redis')->forget("tenancy:domain:{$subscription->tenant->domain}");
+                    }
+                } catch (\Throwable $e) {}
+                \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$subscription->tenant->domain}");
+            }
+        });
+    }
+
     protected $fillable = [
         'tenant_id',
         'name',

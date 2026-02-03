@@ -8,7 +8,45 @@ use Illuminate\Database\Eloquent\Model;
 
 class Instructor extends Model
 {
-    use HasFactory, \App\Traits\IdentifyTenant;
+    use HasFactory, \App\Traits\IdentifyTenant, \Spatie\Activitylog\Traits\LogsActivity;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($instructor) {
+            if ($instructor->tenant_id) {
+                // High-Scale: Use the already resolved tenant from the app instance
+                $tenant = app()->bound('tenant') ? app('tenant') : Tenant::find($instructor->tenant_id);
+                if ($tenant && $tenant->id == $instructor->tenant_id) {
+                    app(\App\Services\SubscriptionService::class)->incrementUsage($tenant, 'max_instructors');
+                }
+            }
+        });
+
+        static::deleted(function ($instructor) {
+            if ($instructor->tenant_id) {
+                $tenant = app()->bound('tenant') ? app('tenant') : Tenant::find($instructor->tenant_id);
+                if ($tenant && $tenant->id == $instructor->tenant_id) {
+                    app(\App\Services\SubscriptionService::class)->decrementUsage($tenant, 'max_instructors');
+                }
+            }
+        });
+    }
+
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        $options = \Spatie\Activitylog\LogOptions::defaults()
+            ->logOnly(['name', 'email', 'specialization'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+
+        if (config('app.performance_mode')) {
+            $options->disableLogging();
+        }
+
+        return $options;
+    }
 
     protected $guarded = ['id'];
 

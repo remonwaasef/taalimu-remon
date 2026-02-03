@@ -25,7 +25,7 @@ class AnalyticsController extends Controller
         $this->authorize('viewAny', Student::class);
         
         // --- 1. General Summary ---
-        $stats = \Illuminate\Support\Facades\Cache::remember("dashboard_stats_" . app('tenant')->id, 300, function () {
+        $stats = \App\Support\TenantCache::remember("dashboard_stats", 300, function () {
             return [
                 'totalStudents' => Student::count(),
                 'totalCourses' => Course::count(),
@@ -48,7 +48,7 @@ class AnalyticsController extends Controller
         $revenueData = $monthlyRevenue->pluck('sums');
 
         // --- 3. Attendance ---
-        $attendanceStats = \Illuminate\Support\Facades\Cache::remember("analytics_attendance_" . app('tenant')->id, 300, function () {
+        $attendanceStats = \App\Support\TenantCache::remember("analytics_attendance", 300, function () {
             return $this->analyticsQuery->getAttendanceStats();
         });
         $attendanceData = [
@@ -97,7 +97,7 @@ class AnalyticsController extends Controller
     {
         $this->authorize('viewAny', Student::class);
         // 1. Summary Metrics
-        $studentStats = \Illuminate\Support\Facades\Cache::remember("student_analytics_stats_" . app('tenant')->id, 300, function () {
+        $studentStats = \App\Support\TenantCache::remember("student_analytics_stats", 300, function () {
             return [
                 'totalStudents' => Student::count(),
                 'activeStudents' => Student::where('status', 'active')->count(),
@@ -116,7 +116,7 @@ class AnalyticsController extends Controller
         $studentsByGrade = $this->analyticsQuery->getStudentsByGrade();
 
         // 4. Top Spenders - Use database aggregation
-        $topStudents = \Illuminate\Support\Facades\Cache::remember("analytics_top_students_" . app('tenant')->id, 300, function () {
+        $topStudents = \App\Support\TenantCache::remember("analytics_top_students", 300, function () {
             return Student::select('students.*')
                 ->with(['grade.stage'])
                 ->withCount('bookings')
@@ -127,7 +127,7 @@ class AnalyticsController extends Controller
         });
             
         // 5. Debtors (Students with outstanding payments) - Optimized with DB aggregation
-        $debtorStudents = \Illuminate\Support\Facades\Cache::remember("analytics_debtor_students_" . app('tenant')->id, 300, function () {
+        $debtorStudents = \App\Support\TenantCache::remember("analytics_debtor_students", 300, function () {
             return Student::select('students.*')
                 ->with(['grade.stage'])
                 ->selectRaw('SUM(sales.total_amount - sales.paid_amount) as total_debt')
@@ -156,7 +156,7 @@ class AnalyticsController extends Controller
         $this->authorize('viewAny', Instructor::class);
         
         // Cache for 5 minutes
-        $instructorStats = \Illuminate\Support\Facades\Cache::remember("instructor_stats_" . app('tenant')->id, 300, function () {
+        $instructorStats = \App\Support\TenantCache::remember("instructor_stats", 300, function () {
             // Optimized query: Get instructors with course count and total enrollments count via HasManyThrough
             $instructors = Instructor::withCount(['courses', 'enrollments as total_students'])
                 ->get();
@@ -187,7 +187,7 @@ class AnalyticsController extends Controller
         $totalDue = Sale::sum(DB::raw('total_amount - paid_amount'));
         
         $sales = Sale::with('student')->latest()->paginate(20);
-        $monthlyRevenue = \Illuminate\Support\Facades\Cache::remember("analytics_monthly_revenue_" . app('tenant')->id, 600, function () {
+        $monthlyRevenue = \App\Support\TenantCache::remember("analytics_monthly_revenue", 600, function () {
             return $this->analyticsQuery->getMonthlyRevenue(12);
         });
         return view('center::analytics.finance', compact('totalRevenue', 'totalDue', 'sales', 'monthlyRevenue'));

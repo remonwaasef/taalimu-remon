@@ -16,11 +16,35 @@ class Tenant extends Model
     {
         parent::boot();
 
+        // High-Scale: Cache Table Schema
+        if (app()->environment('production') && extension_loaded('redis')) {
+            static::$appColumns = \Illuminate\Support\Facades\Cache::store('redis')->remember(
+                'schema_columns_tenants', 
+                86400, 
+                fn() => \Illuminate\Support\Facades\Schema::getColumnListing('tenants')
+            );
+        }
+
         static::saved(function ($tenant) {
+            try {
+                if (extension_loaded('redis')) {
+                    \Illuminate\Support\Facades\Cache::store('redis')->forget("tenancy:domain:{$tenant->domain}");
+                }
+            } catch (\Throwable $e) {
+                // Fail silently if Redis is down or extension missing
+            }
+            // Keep old cache clearing for safety during transition
             \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$tenant->domain}");
         });
 
         static::deleted(function ($tenant) {
+            try {
+                if (extension_loaded('redis')) {
+                    \Illuminate\Support\Facades\Cache::store('redis')->forget("tenancy:domain:{$tenant->domain}");
+                }
+            } catch (\Throwable $e) {
+                // Fail silently
+            }
             \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$tenant->domain}");
         });
     }
@@ -89,13 +113,13 @@ class Tenant extends Model
     /**
      * Get the users for the tenant.
      */
-    /**
-     * Get the users for the tenant.
-     */
     public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(Module::class);
     }
+
+    protected static $appColumns = [];
+    public function getTableColumns() { return static::$appColumns ?: parent::getTableColumns(); }
 
     /**
      * Get the subscriptions for the tenant.
@@ -110,11 +134,27 @@ class Tenant extends Model
      */
     public function activeSubscription()
     {
+        // Check if relation is already loaded (from Cache Eager Loading)
+        if ($this->relationLoaded('currentSubscription')) {
+            return $this->currentSubscription;
+        }
+
         return $this->subscriptions()
             ->where('status', 'active')
             ->where('ends_at', '>', now())
             ->latest()
             ->first();
+    }
+
+    /**
+     * Relationship for Eager Loading in Cache
+     */
+    public function currentSubscription()
+    {
+        return $this->hasOne(Subscription::class)
+            ->where('status', 'active')
+            ->where('ends_at', '>', now())
+            ->latest();
     }
 
     /**

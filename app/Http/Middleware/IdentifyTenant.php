@@ -33,9 +33,25 @@ class IdentifyTenant
                     'path' => $request->path()
                 ]);
                 
-                $tenant = \Illuminate\Support\Facades\Cache::remember("tenant_lookup_{$tenantDomain}", 3600, function () use ($tenantDomain) {
-                    return Tenant::where('domain', $tenantDomain)->first();
-                });
+                // Max Optimization: Load full context (Tenant + Subscription + Package + Features)
+                $loadRelations = ['currentSubscription.package.features'];
+
+                try {
+                    if (extension_loaded('redis')) {
+                        $tenant = \Illuminate\Support\Facades\Cache::store('redis')->remember("tenancy:domain:{$tenantDomain}", 3600 * 24, function () use ($tenantDomain, $loadRelations) {
+                            return Tenant::with($loadRelations)
+                                ->where('domain', $tenantDomain)
+                                ->first();
+                        });
+                    } else {
+                        throw new \Exception("Redis extension not loaded");
+                    }
+                } catch (\Throwable $e) {
+                    // Failover to DB with same eager loading for performance
+                    $tenant = Tenant::with($loadRelations)
+                        ->where('domain', $tenantDomain)
+                        ->first();
+                }
             } else {
                 // Not a tenant path, skip tenant identification
                 \Illuminate\Support\Facades\Log::info('IdentifyTenant [Path Mode] - Skipped', ['path' => $request->path()]);
@@ -70,9 +86,23 @@ class IdentifyTenant
                 return $next($request);
             }
 
-            $tenant = \Illuminate\Support\Facades\Cache::remember("tenant_lookup_{$subdomain}", 3600, function () use ($subdomain) {
-                return Tenant::where('domain', $subdomain)->first();
-            });
+            // Optimized Tenant Resolution with Redis & Failover (Zero DB Hits Strategy)
+            try {
+                if (extension_loaded('redis')) {
+                    $tenant = \Illuminate\Support\Facades\Cache::store('redis')->remember("tenancy:domain:{$subdomain}", 3600 * 24, function () use ($subdomain) {
+                        return Tenant::with(['currentSubscription.package.features'])
+                            ->where('domain', $subdomain)
+                            ->first();
+                    });
+                } else {
+                    throw new \Exception("Redis extension not loaded");
+                }
+            } catch (\Throwable $e) {
+                // Fallback to DB if Redis fails or extension missing
+                $tenant = Tenant::with(['currentSubscription.package.features'])
+                    ->where('domain', $subdomain)
+                    ->first();
+            }
             
             \Illuminate\Support\Facades\Log::info('Tenant lookup [Subdomain]', ['subdomain' => $subdomain, 'found' => $tenant ? 'yes' : 'no']);
             
@@ -102,6 +132,16 @@ class IdentifyTenant
             
             view()->share('tenant', $tenant);
             URL::defaults(['tenant' => $tenant->domain]);
+            
+            // Add tenant context to logs
+            \Illuminate\Support\Facades\Log::withContext([
+                'tenant_id' => $tenant->id,
+                'tenant_domain' => $tenant->domain
+            ]);
+
+            // Dynamically set log file for this tenant
+            config(['logging.channels.single.path' => storage_path("logs/tenant_{$tenant->id}.log")]);
+            config(['logging.channels.daily.path' => storage_path("logs/tenant_{$tenant->id}.log")]);
             
             if ($request->route()) {
                 $request->route()->forgetParameter('tenant');

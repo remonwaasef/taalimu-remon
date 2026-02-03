@@ -7,6 +7,16 @@ use Illuminate\Support\Facades\DB;
 
 class ConsentReportController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (!auth()->check() || !auth()->user()->hasRole('super_admin')) {
+                abort(403, 'Unauthorized access to GDPR data.');
+            }
+            return $next($request);
+        });
+    }
+
     public function index()
     {
         // إحصائيات الموافقات

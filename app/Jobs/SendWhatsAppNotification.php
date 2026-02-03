@@ -35,6 +35,9 @@ class SendWhatsAppNotification implements ShouldQueue
      */
     public function handle(WhatsAppService $whatsAppService): void
     {
+        // Set tenant context for the job to enable global scopes
+        app()->instance('tenant', $this->tenant);
+        
         $whatsAppService->sendAttendanceNotification($this->tenant, $this->student, $this->course);
     }
 }

@@ -55,7 +55,7 @@ class StudentExportTest extends TestCase
         // Check structure of first item
         $firstItem = $data->first();
         $this->assertIsArray($firstItem);
-        $this->assertCount(6, $firstItem); // ID, Name, Email, Phone, Grade, Status
+        $this->assertCount(8, $firstItem); // ID, Name, Email, Phone, Grade, School, Section, Status
     }
 
     /** @test */
@@ -65,8 +65,9 @@ class StudentExportTest extends TestCase
         $user = User::factory()->create(['tenant_id' => $this->tenant->id]);
         $this->actingAs($user);
         
-        // Mock permission
-        $this->tenant->features()->create(['code' => 'admin', 'type' => 'boolean', 'value' => 1]);
+        // Mock permission if needed, but StudentService::getExportData() 
+        // doesn't check permissions itself, only the controller does.
+        // For service test, we don't need to mock tenant features.
 
         // Manually trigger the controller method logic (simulated) or route if possible.
         // For unit testing the service, we focus on the service method return.

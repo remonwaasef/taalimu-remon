@@ -565,7 +565,7 @@ class StudentService
         $email = "student{$counter}@local.edu";
 
         // Safety check for collisions (should be only 1 iteration in 99.9% cases)
-        while (User::where('email', $email)->exists()) {
+        while (User::withoutGlobalScopes()->where('email', $email)->exists()) {
             $counter++;
             $email = "student{$counter}@local.edu";
         }

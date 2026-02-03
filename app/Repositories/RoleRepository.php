@@ -26,7 +26,8 @@ class RoleRepository
 
         return Cache::remember($cacheKey, self::CACHE_TTL, function () use ($tenantId) {
             // Fetch Global Roles (NULL tenant_id) AND Local Roles (tenant_id = $tenantId)
-            $roles = Role::where(function ($query) use ($tenantId) {
+            $roles = Role::withoutGlobalScope(\App\Scopes\TenantScope::class)
+                ->where(function ($query) use ($tenantId) {
                 $query->where('tenant_id', $tenantId)
                       ->orWhereNull('tenant_id');
             })
@@ -48,7 +49,8 @@ class RoleRepository
      */
     public function findForTenant(int $roleId, int $tenantId): ?Role
     {
-        return Role::where('id', $roleId)
+        return Role::withoutGlobalScope(\App\Scopes\TenantScope::class)
+            ->where('id', $roleId)
             ->where(function ($query) use ($tenantId) {
                 $query->where('tenant_id', $tenantId)
                       ->orWhereNull('tenant_id');

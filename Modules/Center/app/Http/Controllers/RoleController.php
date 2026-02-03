@@ -75,7 +75,7 @@ class RoleController extends Controller
     {
         // Use Repository or Direct Find. We need to check if it's editable.
         // Even if we find a Global Role, the Policy should block 'update'.
-        $role = Role::findOrFail($id);
+        $role = Role::where('tenant_id', app('tenant')->id)->findOrFail($id);
         
         $this->authorize('update', $role); // This will throw 403 if it's a System Role
         
@@ -86,7 +86,7 @@ class RoleController extends Controller
 
     public function update(Request $request, $id)
     {
-        $role = Role::findOrFail($id);
+        $role = Role::where('tenant_id', app('tenant')->id)->findOrFail($id);
         $this->authorize('update', $role);
         
         $request->validate([
@@ -114,7 +114,7 @@ class RoleController extends Controller
 
     public function destroy($id)
     {
-        $role = Role::findOrFail($id);
+        $role = Role::where('tenant_id', app('tenant')->id)->findOrFail($id);
         $this->authorize('delete', $role);
         
         if ($role->users()->count() > 0) {

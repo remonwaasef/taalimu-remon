@@ -60,13 +60,13 @@ class SettingsController extends Controller
 
         // Handle Logo Upload
         if ($request->hasFile('logo')) {
-            $path = $request->file('logo')->store('logos', 'public');
+            $path = $request->file('logo')->store("{$tenant->id}/logos", 'public');
             $tenant->logo = $path;
         }
 
         // Handle Favicon Upload
         if ($request->hasFile('favicon')) {
-            $path = $request->file('favicon')->store('favicons', 'public');
+            $path = $request->file('favicon')->store("{$tenant->id}/favicons", 'public');
             $tenant->favicon = $path;
         }
 

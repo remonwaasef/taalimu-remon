@@ -17,12 +17,59 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles, LogsActivity, HasApiTokens, ManagesTokens, \App\Traits\IdentifyTenant;
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        // High-Scale: Cache Table Schema to prevent DESCRIBE queries
+        if (app()->environment('production') && extension_loaded('redis')) {
+            static::$appColumns = \Illuminate\Support\Facades\Cache::store('redis')->remember(
+                'schema_columns_users', 
+                86400, 
+                fn() => \Illuminate\Support\Facades\Schema::getColumnListing('users')
+            );
+        }
+
+        static::created(function ($user) {
+            if ($user->role === 'student' && $user->tenant_id) {
+                $tenant = app()->bound('tenant') ? app('tenant') : Tenant::find($user->tenant_id);
+                if ($tenant && $tenant->id == $user->tenant_id) {
+                    app(\App\Services\SubscriptionService::class)->incrementUsage($tenant, 'max_students');
+                }
+            }
+        });
+
+        static::saved(function ($user) {
+            \Illuminate\Support\Facades\Cache::forget("user_cache_{$user->id}");
+        });
+
+        static::deleted(function ($user) {
+            \Illuminate\Support\Facades\Cache::forget("user_cache_{$user->id}");
+            if ($user->role === 'student' && $user->tenant_id) {
+                $tenant = app()->bound('tenant') ? app('tenant') : Tenant::find($user->tenant_id);
+                if ($tenant && $tenant->id == $user->tenant_id) {
+                    app(\App\Services\SubscriptionService::class)->decrementUsage($tenant, 'max_students');
+                }
+            }
+        });
+    }
+
+    protected static $appColumns = [];
+    public function getTableColumns() { return static::$appColumns ?: parent::getTableColumns(); }
+
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults()
+        $options = LogOptions::defaults()
             ->logOnly(['name', 'email', 'role', 'tenant_id'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
+
+        // Performance Mode: Disable heavy logging if configured via ENV
+        if (config('app.performance_mode')) {
+            $options->disableLogging();
+        }
+
+        return $options;
     }
 
     /**
