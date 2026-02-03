@@ -52,9 +52,9 @@ class CourseController extends Controller
     public function create()
     {
         $this->authorize('create', Course::class);
-        // TenantScope applies to Instructor as well, so we only get this tenant's instructors
         $instructors = Instructor::select('id', 'name', 'email')->get();
-        return view('center::courses.create', compact('instructors'));
+        $classrooms = \App\Models\Classroom::select('id', 'name')->get();
+        return view('center::courses.create', compact('instructors', 'classrooms'));
     }
 
     /**
@@ -122,7 +122,8 @@ class CourseController extends Controller
         $course = Course::with('schedules')->findOrFail($id);
         $this->authorize('update', $course);
         $instructors = Instructor::select('id', 'name', 'email')->get();
-        return view('center::courses.edit', compact('course', 'instructors'));
+        $classrooms = \App\Models\Classroom::select('id', 'name')->get();
+        return view('center::courses.edit', compact('course', 'instructors', 'classrooms'));
     }
 
     /**
