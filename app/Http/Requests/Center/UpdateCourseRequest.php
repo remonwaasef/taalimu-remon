@@ -25,7 +25,7 @@ class UpdateCourseRequest extends FormRequest
             'schedules.*.day_of_week' => 'nullable|in:saturday,sunday,monday,tuesday,wednesday,thursday,friday',
             'schedules.*.start_time' => 'required',
             'schedules.*.end_time' => 'required|after:schedules.*.start_time',
-            'schedules.*.classroom_id' => 'required|exists:classrooms,id',
+            'schedules.*.classroom_id' => 'nullable|exists:classrooms,id',
             'schedules.*.max_students' => 'nullable|integer|min:1',
         ];
     }
