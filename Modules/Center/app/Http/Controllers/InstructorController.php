@@ -30,9 +30,10 @@ class InstructorController extends Controller
             });
         }
 
+        $activeCount = (clone $query)->where('status', 'active')->count();
         $instructors = $query->latest()->paginate(10);
 
-        return view('center::instructors.index', compact('instructors'));
+        return view('center::instructors.index', compact('instructors', 'activeCount'));
     }
 
     /**

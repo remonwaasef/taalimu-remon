@@ -21,7 +21,7 @@
             <div class="card border-0 shadow-sm rounded-4 bg-white">
                 <div class="card-body p-4">
                     <h6 class="text-muted small fw-bold">نشط حالياً</h6>
-                    <h2 class="fw-bold mb-0">{{ \App\Models\Instructor::where('status', 'active')->count() }}</h2>
+                    <h2 class="fw-bold mb-0">{{ $activeCount }}</h2>
                 </div>
             </div>
         </div>
