@@ -1,16 +1,13 @@
 <?php
 
 return [
-    'title' => 'Facturation et abonnement',
-    'current_subscription' => 'Abonnement actuel',
-    'plan' => 'Plan',
+    'title' => 'Facturation',
+    'plan' => 'Plan actuel',
     'status' => 'Statut',
-    'expires_at' => 'Expire le',
-    'no_active_subscription' => 'Aucun abonnement actif.',
-    'available_plans' => 'Plans disponibles',
-    'days' => 'jours',
-    'subscribe' => "S'abonner",
-    'unlimited' => 'Illimité',
-    'unknown_package' => 'Forfait inconnu',
-    'currency' => '$',
+    'expiry' => 'Date d\'expiration',
+    'price' => 'Prix',
+    'cycle' => 'Cycle de facturation',
+    'transactions' => 'Transactions',
+    'methods' => 'Moyens de paiement',
+    'no_transactions' => 'Aucune transaction trouvée.',
 ];

@@ -2,9 +2,9 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark">إدارة القاعات الدراسية</h2>
+        <h2 class="fw-bold text-dark">{{ __('center::classrooms.title') }}</h2>
         <a href="{{ route('center.classrooms.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
-            <span class="me-2">+</span> إضافة قاعة جديدة
+            <span class="me-2">+</span> {{ __('center::classrooms.add_new') }}
         </a>
     </div>
 
@@ -15,10 +15,10 @@
                 <table class="table align-middle">
                     <thead class="bg-light">
                         <tr>
-                            <th class="border-0 rounded-start">اسم القاعة</th>
-                            <th class="border-0">السعة الاستيعابية</th>
-                            <th class="border-0">تاريخ الإضافة</th>
-                            <th class="border-0 rounded-end">الإجراءات</th>
+                            <th class="border-0 rounded-start">{{ __('center::classrooms.name') }}</th>
+                            <th class="border-0">{{ __('center::classrooms.capacity') }}</th>
+                            <th class="border-0">{{ __('center::classrooms.created_at') }}</th>
+                            <th class="border-0 rounded-end">{{ __('center::classrooms.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -32,7 +32,7 @@
                                         <div class="fw-bold">{{ $classroom->name }}</div>
                                     </div>
                                 </td>
-                                <td>{{ $classroom->capacity ?? 'غير محدد' }} طالب</td>
+                                <td>{{ $classroom->capacity ?? __('center::classrooms.not_specified') }} {{ trans_choice('center::classrooms.student|center::classrooms.students', $classroom->capacity ?? 0) }}</td>
                                 <td class="text-muted">{{ $classroom->created_at->format('Y-m-d') }}</td>
                                 <td>
                                     <div class="{{ ($loop->remaining < 2 && $classrooms->count() > 2) ? 'dropup' : 'dropdown' }}">
@@ -40,14 +40,14 @@
                                             ⋮
                                         </button>
                                         <ul class="dropdown-menu border-0 shadow">
-                                            <li><a class="dropdown-item" href="{{ route('center.classrooms.show', $classroom) }}"><i class="fas fa-eye me-2 text-primary"></i> عرض تفاصيل الجدول</a></li>
-                                            <li><a class="dropdown-item" href="{{ route('center.classrooms.edit', $classroom) }}"><i class="fas fa-edit me-2 text-warning"></i> تعديل القاعة</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('center.classrooms.show', $classroom) }}"><i class="fas fa-eye me-2 text-primary"></i> {{ __('center::classrooms.view_schedule') }}</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('center.classrooms.edit', $classroom) }}"><i class="fas fa-edit me-2 text-warning"></i> {{ __('center::classrooms.edit') }}</a></li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
-                                                <form action="{{ route('center.classrooms.destroy', $classroom) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من الحذف؟')">
+                                                <form action="{{ route('center.classrooms.destroy', $classroom) }}" method="POST" onsubmit="return confirm('{{ __('center::classrooms.confirm_delete') }}')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button class="dropdown-item text-danger">حذف</button>
+                                                    <button class="dropdown-item text-danger">{{ __('center::classrooms.delete') }}</button>
                                                 </form>
                                             </li>
                                         </ul>
@@ -56,7 +56,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-center py-5 text-muted">لا يوجد قاعات مضافة حالياً</td>
+                                <td colspan="4" class="text-center py-5 text-muted">{{ __('center::classrooms.empty') }}</td>
                             </tr>
                         @endforelse
                     </tbody>

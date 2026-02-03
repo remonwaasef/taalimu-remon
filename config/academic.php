@@ -3,10 +3,10 @@
 return [
     'templates' => [
         'egyptian_national' => [
-            'name' => 'النظام المصري - التعليم العام',
+            'name' => 'center::academic.egyptian_national',
             'stages' => [
                 [
-                    'name' => 'المرحلة الابتدائية',
+                    'name' => 'center::academic.stages.primary',
                     'grades' => [
                         'الصف الأول الابتدائي',
                         'الصف الثاني الابتدائي',
@@ -17,7 +17,7 @@ return [
                     ],
                 ],
                 [
-                    'name' => 'المرحلة الإعدادية',
+                    'name' => 'center::academic.stages.preparatory',
                     'grades' => [
                         'الصف الأول الإعدادي',
                         'الصف الثاني الإعدادي',
@@ -25,7 +25,7 @@ return [
                     ],
                 ],
                 [
-                    'name' => 'المرحلة الثانوية',
+                    'name' => 'center::academic.stages.secondary',
                     'grades' => [
                         'الصف الأول الثانوي',
                         'الصف الثاني الثانوي',
@@ -35,10 +35,10 @@ return [
             ],
         ],
         'egyptian_azhar' => [
-            'name' => 'النظام الأزهري',
+            'name' => 'center::academic.egyptian_azhar',
             'stages' => [
                 [
-                    'name' => 'المرحلة الابتدائية الأزهرية',
+                    'name' => 'center::academic.stages.azhar_primary',
                     'grades' => [
                         'الصف الأول الابتدائي',
                         'الصف الثاني الابتدائي',
@@ -49,7 +49,7 @@ return [
                     ],
                 ],
                 [
-                    'name' => 'المرحلة الإعدادية الأزهرية',
+                    'name' => 'center::academic.stages.azhar_preparatory',
                     'grades' => [
                         'الصف الأول الإعدادي',
                         'الصف الثاني الإعدادي',
@@ -57,7 +57,7 @@ return [
                     ],
                 ],
                 [
-                    'name' => 'المرحلة الثانوية الأزهرية',
+                    'name' => 'center::academic.stages.azhar_secondary',
                     'grades' => [
                         'الاول الثانوي',
                         'الثاني الثانوي',
@@ -66,11 +66,43 @@ return [
                 ],
             ],
         ],
-        'european_system' => [
-            'name' => 'النظام الأوروبي (International/IB)',
+        'french_system' => [
+            'name' => 'center::academic.french_system',
             'stages' => [
                 [
-                    'name' => 'السنوات الابتدائية (PYP - Primary Years)',
+                    'name' => 'center::academic.stages.primaire',
+                    'grades' => [
+                        'CP',
+                        'CE1',
+                        'CE2',
+                        'CM1',
+                        'CM2',
+                    ],
+                ],
+                [
+                    'name' => 'center::academic.stages.college',
+                    'grades' => [
+                        '6ème',
+                        '5ème',
+                        '4ème',
+                        '3ème',
+                    ],
+                ],
+                [
+                    'name' => 'center::academic.stages.lycee',
+                    'grades' => [
+                        'Seconde',
+                        'Première',
+                        'Terminale',
+                    ],
+                ],
+            ],
+        ],
+        'european_system' => [
+            'name' => 'center::academic.european_system',
+            'stages' => [
+                [
+                    'name' => 'center::academic.stages.pyp',
                     'grades' => [
                         'Year 1',
                         'Year 2',
@@ -81,7 +113,7 @@ return [
                     ],
                 ],
                 [
-                    'name' => 'السنوات المتوسطة (MYP - Middle Years)',
+                    'name' => 'center::academic.stages.myp',
                     'grades' => [
                         'Year 7',
                         'Year 8',
@@ -91,42 +123,10 @@ return [
                     ],
                 ],
                 [
-                    'name' => 'برنامج الدبلوم (DP - Diploma Programme)',
+                    'name' => 'center::academic.stages.dp',
                     'grades' => [
                         'Year 12 (DP1)',
                         'Year 13 (DP2)',
-                    ],
-                ],
-            ],
-        ],
-        'french_system' => [
-            'name' => 'النظام الفرنسي (Mission Française)',
-            'stages' => [
-                [
-                    'name' => 'القسم الابتدائي (Primaire)',
-                    'grades' => [
-                        'CP',
-                        'CE1',
-                        'CE2',
-                        'CM1',
-                        'CM2',
-                    ],
-                ],
-                [
-                    'name' => 'المرحلة الإعدادية (Collège)',
-                    'grades' => [
-                        '6ème',
-                        '5ème',
-                        '4ème',
-                        '3ème',
-                    ],
-                ],
-                [
-                    'name' => 'المرحلة الثانوية (Lycée)',
-                    'grades' => [
-                        'Seconde',
-                        'Première',
-                        'Terminale',
                     ],
                 ],
             ],

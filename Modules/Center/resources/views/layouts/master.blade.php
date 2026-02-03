@@ -713,13 +713,13 @@
                     {{ auth()->user()->name ?? 'Admin' }}
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> {{ __('sidebar.profile') }}</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> {{ __('center::sidebar.profile') }}</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <form action="{{ route('center.logout', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST" class="d-inline">
                             @csrf
                             <button type="submit" class="dropdown-item text-danger">
-                                <i class="fas fa-sign-out-alt"></i> {{ __('sidebar.logout') }}
+                                <i class="fas fa-sign-out-alt"></i> {{ __('center::sidebar.logout') }}
                             </button>
                         </form>
                     </li>

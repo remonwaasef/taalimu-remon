@@ -2,14 +2,12 @@
 
 return [
     'title' => 'Instructeurs',
-    'add_new' => 'Ajouter un nouvel instructeur',
-    'search_placeholder' => 'Rechercher par nom...',
+    'add_new' => 'Ajouter un instructeur',
+    'edit' => 'Modifier l\'instructeur',
     'name' => 'Nom',
-    'specialization' => 'Spécialisation',
-    'email' => 'Email',
-    'courses_count' => 'Nombre de cours',
+    'phone' => 'Téléphone',
+    'email' => 'E-mail',
+    'specialty' => 'Spécialité',
     'actions' => 'Actions',
-    'edit' => 'Modifier',
-    'delete' => 'Supprimer',
     'no_instructors' => 'Aucun instructeur trouvé.',
 ];
