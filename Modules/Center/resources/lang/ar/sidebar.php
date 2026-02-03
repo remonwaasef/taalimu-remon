@@ -41,4 +41,7 @@ return [
     'users' => 'المستخدمين',
     'permissions' => 'الصلاحيات',
     'branches' => 'الفروع',
+    'academic_setup' => 'إعداد الهيكل الأكاديمي',
+    'courses_groups' => 'الدورات والمجموعات',
+    'student_accounts' => 'حسابات الطلاب',
 ];
