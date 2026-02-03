@@ -469,6 +469,19 @@
 
 @push('scripts')
 <script>
+    // Tab switching based on URL parameter
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const tab = urlParams.get('tab');
+        if (tab) {
+            const tabButton = document.getElementById(tab + '-tab');
+            if (tabButton) {
+                const bootstrapTab = new bootstrap.Tab(tabButton);
+                bootstrapTab.show();
+            }
+        }
+    });
+
     let stageCount = {{ count($stages) }};
 
     function addStage() {
