@@ -18,10 +18,12 @@ use App\Models\Lesson;
 class CourseService
 {
     protected $certificateService;
+    protected $conflictService;
 
-    public function __construct(CertificateService $certificateService)
+    public function __construct(CertificateService $certificateService, ScheduleConflictService $conflictService)
     {
         $this->certificateService = $certificateService;
+        $this->conflictService = $conflictService;
     }
 
     /**
@@ -159,6 +161,7 @@ class CourseService
 
     /**
      * Sync schedules for a course.
+     * @throws \Exception if schedule conflicts are detected
      */
     protected function syncSchedules(Course $course, array $schedulesData, $instructorId)
     {
@@ -169,6 +172,22 @@ class CourseService
             'الخميس' => 4, 'الجمعة' => 5, 'السبت' => 6,
         ];
 
+        // First, validate all schedules for conflicts
+        $allConflicts = [];
+        foreach ($schedulesData as $index => $scheduleData) {
+            $scheduleData['instructor_id'] = $instructorId;
+            $conflicts = $this->conflictService->validateSchedule($scheduleData, $course->id);
+            if (!empty($conflicts)) {
+                $allConflicts = array_merge($allConflicts, $conflicts);
+            }
+        }
+
+        // If any conflicts found, throw exception with all messages
+        if (!empty($allConflicts)) {
+            throw new \Exception(implode("\n", $allConflicts));
+        }
+
+        // No conflicts, proceed to save schedules
         $schedules = [];
         foreach ($schedulesData as $scheduleData) {
             $dayInput = $scheduleData['day_of_week'];
