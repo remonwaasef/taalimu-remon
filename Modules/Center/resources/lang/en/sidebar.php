@@ -33,4 +33,10 @@ return [
     'operations' => 'Operations',
     'financial' => 'Financial',
     'administration' => 'Administration',
+    'users' => 'Users',
+    'permissions' => 'Permissions',
+    'branches' => 'Branches',
+    'academic_setup' => 'Academic Structure',
+    'courses_groups' => 'Courses & Groups',
+    'student_accounts' => 'Student Accounts',
 ];
