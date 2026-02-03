@@ -54,13 +54,19 @@
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        @if($instructor->image)
-                                            <img src="{{ Storage::url($instructor->image) }}" class="rounded-circle me-3 border shadow-sm" style="width: 45px; height: 45px; object-fit: cover;" alt="{{ $instructor->name }}">
-                                        @else
-                                            <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3 fw-bold" style="width: 45px; height: 45px;">
+                                        <div class="position-relative me-3">
+                                            @if($instructor->image)
+                                                <img src="{{ Storage::url($instructor->image) }}" 
+                                                     class="rounded-circle border shadow-sm" 
+                                                     style="width: 45px; height: 45px; object-fit: cover;" 
+                                                     alt="{{ $instructor->name }}"
+                                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                            @endif
+                                            <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold" 
+                                                 style="width: 45px; height: 45px; {{ $instructor->image ? 'display: none;' : '' }}">
                                                 {{ mb_substr($instructor->name, 0, 1) }}
                                             </div>
-                                        @endif
+                                        </div>
                                         <div>
                                             <div class="fw-bold text-dark">{{ $instructor->name }}</div>
                                             @if($instructor->hiring_date)
