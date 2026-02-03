@@ -115,7 +115,7 @@ class Tenant extends Model
      */
     public function users()
     {
-        return $this->hasMany(Module::class);
+        return $this->hasMany(User::class);
     }
 
     protected static $appColumns = [];
