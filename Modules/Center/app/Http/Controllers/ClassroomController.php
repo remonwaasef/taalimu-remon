@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Classroom;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ClassroomController extends Controller
 {
@@ -45,7 +46,19 @@ class ClassroomController extends Controller
             'color' => 'nullable|string|max:7',
         ]);
 
-        Classroom::create($validated);
+        $classroom = Classroom::create($validated);
+
+        // Handle Quick Assets
+        if ($request->has('quick_assets')) {
+            foreach ($request->quick_assets as $assetName) {
+                $classroom->assets()->create([
+                    'tenant_id' => app('tenant')->id,
+                    'name' => $assetName,
+                    'type' => Str::contains($assetName, ['Projector', 'TV', 'شاشة']) ? 'electronics' : (Str::contains($assetName, 'سبورة') ? 'furniture' : 'equipment'),
+                    'status' => 'active',
+                ]);
+            }
+        }
 
         return redirect()->route('center.classrooms.index')
             ->with('success', 'تم إضافة القاعة بنجاح');

@@ -58,13 +58,46 @@
                             </div>
                         </div>
 
-                        <!-- Facilities (Visual Simulation for Future Dev) -->
-                        <h5 class="fw-bold text-dark mt-4 mb-3"><i class="fas fa-layer-group me-2 text-primary"></i>التجهيزات (مقترح للتطوير)</h5>
-                        <div class="d-flex flex-wrap gap-2 mb-4 opacity-50" title="خطوة تطويرية قادمة">
-                            <span class="badge bg-light text-dark border p-2 rounded-pill"><i class="fas fa-wifi me-1"></i> انترنت عالِ السرعة</span>
-                            <span class="badge bg-light text-dark border p-2 rounded-pill"><i class="fas fa-video me-1"></i> جهاز عرض (Projector)</span>
-                            <span class="badge bg-light text-dark border p-2 rounded-pill"><i class="fas fa-snowflake me-1"></i> تكييف</span>
-                            <span class="badge bg-light text-dark border p-2 rounded-pill"><i class="fas fa-chalkboard me-1"></i> سبورة ذكية</span>
+                        <!-- Quick Asset Selection -->
+                        <h5 class="fw-bold text-dark mt-4 mb-3"><i class="fas fa-tools me-2 text-primary"></i>التجهيزات الأساسية</h5>
+                        <p class="small text-muted mb-3">سيتم إنشاء عُهد لهذه القاعة تلقائياً عند اختيارها.</p>
+                        <div class="row g-2 mb-4">
+                            <div class="col-md-4 col-6">
+                                <div class="form-check form-switch p-2 border rounded-3 bg-white shadow-sm">
+                                    <input class="form-check-input ms-0" type="checkbox" name="quick_assets[]" value="شاشة عرض/التلفزيون" id="asset_tv">
+                                    <label class="form-check-label ms-2" for="asset_tv">شاشة عرض/TV</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-6">
+                                <div class="form-check form-switch p-2 border rounded-3 bg-white shadow-sm">
+                                    <input class="form-check-input ms-0" type="checkbox" name="quick_assets[]" value="جهاز عرض (Projector)" id="asset_projector">
+                                    <label class="form-check-label ms-2" for="asset_projector">Projector</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-6">
+                                <div class="form-check form-switch p-2 border rounded-3 bg-white shadow-sm">
+                                    <input class="form-check-input ms-0" type="checkbox" name="quick_assets[]" value="تكييف" id="asset_ac">
+                                    <label class="form-check-label ms-2" for="asset_ac">تكييف</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-6">
+                                <div class="form-check form-switch p-2 border rounded-3 bg-white shadow-sm">
+                                    <input class="form-check-input ms-0" type="checkbox" name="quick_assets[]" value="سبورة بيضاء" id="asset_whiteboard">
+                                    <label class="form-check-label ms-2" for="asset_whiteboard">سبورة بيضاء</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-6">
+                                <div class="form-check form-switch p-2 border rounded-3 bg-white shadow-sm">
+                                    <input class="form-check-input ms-0" type="checkbox" name="quick_assets[]" value="كاميرا مراقبة" id="asset_camera">
+                                    <label class="form-check-label ms-2" for="asset_camera">كاميرا مراقبة</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-6">
+                                <div class="form-check form-switch p-2 border rounded-3 bg-white shadow-sm">
+                                    <input class="form-check-input ms-0" type="checkbox" name="quick_assets[]" value="نظام صوتي" id="asset_sound">
+                                    <label class="form-check-label ms-2" for="asset_sound">نظام صوتي</label>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="d-flex gap-2 pt-3 border-top">

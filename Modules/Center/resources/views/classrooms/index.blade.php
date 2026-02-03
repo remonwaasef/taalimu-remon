@@ -37,7 +37,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td>{{ $classroom->capacity ?? __('center::classrooms.not_specified') }} {{ trans_choice('center::classrooms.student|center::classrooms.students', $classroom->capacity ?? 0) }}</td>
+                                <td>{{ $classroom->capacity ? trans_choice('center::classrooms.students_count', $classroom->capacity, ['count' => $classroom->capacity]) : __('center::classrooms.not_specified') }}</td>
                                 <td class="text-muted">{{ $classroom->created_at->format('Y-m-d') }}</td>
                                 <td>
                                     <div class="{{ ($loop->remaining < 2 && $classrooms->count() > 2) ? 'dropup' : 'dropdown' }}">
@@ -46,6 +46,7 @@
                                         </button>
                                         <ul class="dropdown-menu border-0 shadow">
                                             <li><a class="dropdown-item" href="{{ route('center.classrooms.show', $classroom) }}"><i class="fas fa-eye me-2 text-primary"></i> {{ __('center::classrooms.view_schedule') }}</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('center.assets.create', ['classroom_id' => $classroom->id]) }}"><i class="fas fa-plus me-2 text-info"></i> {{ __('center::classrooms.add_asset') }}</a></li>
                                             <li><a class="dropdown-item" href="{{ route('center.classrooms.edit', $classroom) }}"><i class="fas fa-edit me-2 text-warning"></i> {{ __('center::classrooms.edit') }}</a></li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
