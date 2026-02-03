@@ -14,41 +14,51 @@
                 <div class="card-body p-5">
                     <form action="{{ route('center.courses.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
+
+                        @if ($errors->any())
+                            <div class="alert alert-danger mb-4">
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         
                         <div class="mb-4">
                             <label class="form-label fw-bold">عنوان الدورة</label>
-                            <input type="text" name="title" value="{{ old('title') }}" class="form-control form-control-lg bg-light border-0">
+                            <input type="text" name="title" value="{{ old('title') }}" class="form-control form-control-lg bg-light border-0 @error('title') is-invalid border-danger @enderror">
                             @error('title')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label fw-bold">المدرس</label>
-                            <select name="instructor_id" class="form-select form-select-lg bg-light border-0">
+                            <select name="instructor_id" class="form-select form-select-lg bg-light border-0 @error('instructor_id') is-invalid border-danger @enderror">
                                 <option value="">اختر المدرس...</option>
                                 @foreach($instructors as $instructor)
                                     <option value="{{ $instructor->id }}" {{ old('instructor_id') == $instructor->id ? 'selected' : '' }}>{{ $instructor->name }}</option>
                                 @endforeach
                             </select>
                             @error('instructor_id')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="row mb-4">
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">السعر (ج.م)</label>
-                                <input type="number" name="price" value="{{ old('price', 0) }}" class="form-control form-control-lg bg-light border-0" min="0" step="0.01">
+                                <input type="number" name="price" value="{{ old('price', 0) }}" class="form-control form-control-lg bg-light border-0 @error('price') is-invalid border-danger @enderror" min="0" step="0.01">
                                 @error('price')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                    <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">عدد الحصص (للمبيعات)</label>
-                                <input type="number" name="sessions_count" value="{{ old('sessions_count', 0) }}" class="form-control form-control-lg bg-light border-0" min="0">
+                                <input type="number" name="sessions_count" value="{{ old('sessions_count', 0) }}" class="form-control form-control-lg bg-light border-0 @error('sessions_count') is-invalid border-danger @enderror" min="0">
                                 @error('sessions_count')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                    <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-md-4">
@@ -64,28 +74,25 @@
                                         <i class="fas fa-check-circle me-1"></i> نشر الآن
                                     </label>
                                 </div>
-                                <div class="form-text small text-muted mt-2">
-                                    اختر "نشر الآن" لإظهار الدورة للطلاب فوراً، أو "مسودة" لإخفائها مؤقتاً.
-                                </div>
                                 @error('status')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                    <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label fw-bold">صورة الغلاف</label>
-                            <input type="file" name="image" class="form-control form-control-lg bg-light border-0" accept="image/*">
+                            <input type="file" name="image" class="form-control form-control-lg bg-light border-0 @error('image') is-invalid border-danger @enderror" accept="image/*">
                             @error('image')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label fw-bold">وصف الدورة</label>
-                            <textarea name="description" class="form-control form-control-lg bg-light border-0" rows="4">{{ old('description') }}</textarea>
+                            <textarea name="description" class="form-control form-control-lg bg-light border-0 @error('description') is-invalid border-danger @enderror" rows="4">{{ old('description') }}</textarea>
                             @error('description')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                             @enderror
                         </div>
 
@@ -161,6 +168,7 @@
         const container = document.getElementById('schedules-container');
         const addButton = document.getElementById('add-schedule-btn');
         const template = document.getElementById('schedule-template');
+        const instructorSelect = document.querySelector('select[name="instructor_id"]');
         let scheduleCount = 0;
 
         // Add Schedule
@@ -175,6 +183,10 @@
             });
 
             container.appendChild(clone);
+            
+            // Attach conflict checking to new schedule item
+            const newItem = container.lastElementChild;
+            attachConflictChecker(newItem);
         });
 
         // Remove Schedule
@@ -184,8 +196,75 @@
             }
         });
 
+        // Real-time Conflict Checking
+        function attachConflictChecker(scheduleItem) {
+            const selects = scheduleItem.querySelectorAll('select');
+            const inputs = scheduleItem.querySelectorAll('input[type="time"]');
+            
+            [...selects, ...inputs].forEach(el => {
+                el.addEventListener('change', () => checkScheduleConflict(scheduleItem));
+            });
+        }
+
+        async function checkScheduleConflict(scheduleItem) {
+            const daySelect = scheduleItem.querySelector('select[name*="day_of_week"]');
+            const classroomSelect = scheduleItem.querySelector('select[name*="classroom_id"]');
+            const startTime = scheduleItem.querySelector('input[name*="start_time"]');
+            const endTime = scheduleItem.querySelector('input[name*="end_time"]');
+            
+            // Remove existing conflict indicator
+            const existingIndicator = scheduleItem.querySelector('.conflict-indicator');
+            if (existingIndicator) existingIndicator.remove();
+            
+            // Only check if all required fields are filled
+            if (!daySelect.value || !startTime.value || !endTime.value) return;
+            
+            try {
+                const response = await fetch('{{ route("center.schedules.check-conflict") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        day_of_week: daySelect.value,
+                        start_time: startTime.value,
+                        end_time: endTime.value,
+                        classroom_id: classroomSelect?.value || null,
+                        instructor_id: instructorSelect?.value || null
+                    })
+                });
+                
+                const data = await response.json();
+                
+                // Create indicator element
+                const indicator = document.createElement('div');
+                indicator.className = 'conflict-indicator mt-2';
+                
+                if (data.status === 'conflict') {
+                    indicator.className += ' alert alert-danger py-2';
+                    indicator.innerHTML = data.conflicts.map(c => `<div>${c}</div>`).join('');
+                    scheduleItem.querySelector('.card-body').appendChild(indicator);
+                } else {
+                    indicator.className += ' alert alert-success py-2';
+                    indicator.innerHTML = '<i class="fas fa-check-circle me-1"></i> الموعد متاح';
+                    scheduleItem.querySelector('.card-body').appendChild(indicator);
+                    
+                    // Auto-remove success message after 3 seconds
+                    setTimeout(() => indicator.remove(), 3000);
+                }
+            } catch (error) {
+                console.error('Error checking conflict:', error);
+            }
+        }
+
         // Add one by default
         addButton.click();
+        
+        // Listen for instructor changes to re-check all schedules
+        instructorSelect.addEventListener('change', () => {
+            document.querySelectorAll('.schedule-item').forEach(checkScheduleConflict);
+        });
     });
 </script>
 @endpush
