@@ -5,7 +5,7 @@ namespace App\DTOs;
 class CourseData
 {
     public function __construct(
-        public readonly string $title,
+        public readonly ?string $title,
         public readonly ?string $description,
         public readonly ?int $instructor_id,
         public readonly ?string $price,
@@ -21,7 +21,7 @@ class CourseData
     public static function fromArray(array $data): self
     {
         return new self(
-            title: $data['title'],
+            title: $data['title'] ?? null,
             description: $data['description'] ?? null,
             instructor_id: isset($data['instructor_id']) ? (int) $data['instructor_id'] : null,
             price: $data['price'] ?? null,

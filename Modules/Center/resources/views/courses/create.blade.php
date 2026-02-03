@@ -111,7 +111,7 @@
                                         <button type="button" class="btn-close remove-schedule"></button>
                                     </div>
                                     <div class="row g-3">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label class="small text-muted mb-1">اليوم</label>
                                             <select name="schedules[INDEX][day_of_week]" class="form-select border-0">
                                                 <option value="saturday">السبت</option>
@@ -123,11 +123,20 @@
                                                 <option value="friday">الجمعة</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
+                                            <label class="small text-muted mb-1">القاعة</label>
+                                            <select name="schedules[INDEX][classroom_id]" class="form-select border-0">
+                                                <option value="">اختر القاعة...</option>
+                                                @foreach($classrooms as $classroom)
+                                                    <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
                                             <label class="small text-muted mb-1">من</label>
                                             <input type="time" name="schedules[INDEX][start_time]" class="form-control border-0">
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label class="small text-muted mb-1">إلى</label>
                                             <input type="time" name="schedules[INDEX][end_time]" class="form-control border-0">
                                         </div>

@@ -37,6 +37,7 @@
                             @enderror
                         </div>
 
+                        <div class="row mb-4">
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">السعر (ج.م)</label>
                                 <input type="number" name="price" value="{{ old('price', $course->price) }}" class="form-control form-control-lg bg-light border-0" min="0" step="0.01">
@@ -107,33 +108,10 @@
                                                 <h6 class="fw-bold text-primary">موعد #{{ $index + 1 }}</h6>
                                                 <button type="button" class="btn-close remove-schedule"></button>
                                             </div>
-                                            <!-- Hidden ID to update existing schedules if needed, but for simple logic we might just replace them. 
-                                                 However, typical simplistic update deletes old and re-creates, or updates if ID present.
-                                                 For now, let's treat them as new inputs for simplicity or check controller logic.
-                                                 Controller typically deletes all and creates new if we don't track IDs explicitly in the loop.
-                                                 The store method was just creating. The update method is not implemented yet. 
-                                                 Let's assume we will implement Update to sync() or delete/create.
-                                            -->
                                             <div class="row g-3">
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <label class="small text-muted mb-1">اليوم</label>
                                                     <select name="schedules[{{ $index }}][day_of_week]" class="form-select border-0">
-                                                        @php
-                                                            $days = ['sunday' => 'الأحد', 'monday' => 'الاثنين', 'tuesday' => 'الثلاثاء', 'wednesday' => 'الأربعاء', 'thursday' => 'الخميس', 'friday' => 'الجمعة', 'saturday' => 'السبت'];
-                                                            // DB stores integer 0-6 now? YES. Mapping in controller store was string->int.
-                                                            // BUT data in DB is INT.
-                                                            // Wait, migration defines tinyInteger.
-                                                            // So $schedule->day_of_week is integer.
-                                                            // We need mapped values for the select options.
-                                                            // 0=Sunday, 6=Saturday.
-                                                            // Wait, previously select options were strings (value="saturday").
-                                                            // Controller converts String to Int.
-                                                            // So here we should output Strings ("monday") as values so the Controller's existing logic works?
-                                                            // Or update Controller to handle integers too.
-                                                            // Let's stick to strings values to match 'create' logic if we reuse the same logic, 
-                                                            // BUT 'update' logic is yet to be written. Can be smarter.
-                                                            // Let's use string values for options to stay compatible with 'create' form style.
-                                                        @endphp
                                                         <option value="saturday" {{ $schedule->day_of_week === 6 ? 'selected' : '' }}>السبت</option>
                                                         <option value="sunday" {{ $schedule->day_of_week === 0 ? 'selected' : '' }}>الأحد</option>
                                                         <option value="monday" {{ $schedule->day_of_week === 1 ? 'selected' : '' }}>الاثنين</option>
@@ -143,11 +121,20 @@
                                                         <option value="friday" {{ $schedule->day_of_week === 5 ? 'selected' : '' }}>الجمعة</option>
                                                     </select>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
+                                                    <label class="small text-muted mb-1">القاعة</label>
+                                                    <select name="schedules[{{ $index }}][classroom_id]" class="form-select border-0">
+                                                        <option value="">اختر القاعة...</option>
+                                                        @foreach($classrooms as $classroom)
+                                                            <option value="{{ $classroom->id }}" {{ $schedule->classroom_id == $classroom->id ? 'selected' : '' }}>{{ $classroom->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-3">
                                                     <label class="small text-muted mb-1">من</label>
                                                     <input type="time" name="schedules[{{ $index }}][start_time]" value="{{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }}" class="form-control border-0">
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <label class="small text-muted mb-1">إلى</label>
                                                     <input type="time" name="schedules[{{ $index }}][end_time]" value="{{ \Carbon\Carbon::parse($schedule->end_time)->format('H:i') }}" class="form-control border-0">
                                                 </div>
@@ -166,7 +153,7 @@
                                         <button type="button" class="btn-close remove-schedule"></button>
                                     </div>
                                     <div class="row g-3">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label class="small text-muted mb-1">اليوم</label>
                                             <select name="schedules[INDEX][day_of_week]" class="form-select border-0">
                                                 <option value="saturday">السبت</option>
@@ -178,11 +165,20 @@
                                                 <option value="friday">الجمعة</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
+                                            <label class="small text-muted mb-1">القاعة</label>
+                                            <select name="schedules[INDEX][classroom_id]" class="form-select border-0">
+                                                <option value="">اختر القاعة...</option>
+                                                @foreach($classrooms as $classroom)
+                                                    <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
                                             <label class="small text-muted mb-1">من</label>
                                             <input type="time" name="schedules[INDEX][start_time]" class="form-control border-0">
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label class="small text-muted mb-1">إلى</label>
                                             <input type="time" name="schedules[INDEX][end_time]" class="form-control border-0">
                                         </div>
