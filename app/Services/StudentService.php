@@ -543,31 +543,31 @@ class StudentService
      */
     protected function generateUniqueEmail()
     {
-        $tenantId = app('tenant')->id;
+        $tenant = app('tenant');
+        $subdomain = $tenant->domain;
         
-        // Optimization: Get the email of the most recently created student (O(1) query)
-        // This avoids counting all users or looping endlessly
-        $lastStudent = User::where('tenant_id', $tenantId)
+        // Find existing users with the NEW format in this tenant
+        $lastStudent = User::where('tenant_id', $tenant->id)
             ->where('role', 'student')
-            ->where('email', 'like', 'student%@local.edu')
+            ->where('email', 'like', "std%.{$subdomain}@taalimu.com")
             ->latest('id')
             ->first();
 
         $counter = 1;
 
-        if ($lastStudent && preg_match('/student(\d+)@/', $lastStudent->email, $matches)) {
+        if ($lastStudent && preg_match('/std(\d+)\./', $lastStudent->email, $matches)) {
             $counter = intval($matches[1]) + 1;
         } else {
-            // Fallback for first student or if pattern drastically changed
-            $counter = User::where('tenant_id', $tenantId)->where('role', 'student')->count() + 1;
+            // Fallback: check count of students in this tenant if no matching pattern found
+            $counter = User::where('tenant_id', $tenant->id)->where('role', 'student')->count() + 1;
         }
 
-        $email = "student{$counter}@local.edu";
+        $email = "std{$counter}.{$subdomain}@taalimu.com";
 
-        // Safety check for collisions (should be only 1 iteration in 99.9% cases)
+        // Global safety check for collisions across all tenants
         while (User::withoutGlobalScopes()->where('email', $email)->exists()) {
             $counter++;
-            $email = "student{$counter}@local.edu";
+            $email = "std{$counter}.{$subdomain}@taalimu.com";
         }
 
         return $email;
