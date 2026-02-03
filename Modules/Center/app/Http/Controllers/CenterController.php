@@ -42,7 +42,7 @@ class CenterController extends Controller
         $tenantId = auth()->user()->tenant_id;
         $cacheKey = "tenant_{$tenantId}_dashboard_stats";
 
-        $stats = \Illuminate\Support\Facades\Cache::remember($cacheKey, now()->addMinutes(15), function () {
+        $stats = \App\Support\TenantCache::remember($cacheKey, now()->addMinutes(15), function () {
             return [
                 'activeStudents' => Student::where('status', 'active')->count(),
                 'activeCourses' => Course::where('status', 'published')->count(),
@@ -109,6 +109,7 @@ class CenterController extends Controller
         $subquery = DB::table('quiz_attempts')
             ->join('students', 'quiz_attempts.user_id', '=', 'students.user_id')
             ->where('students.tenant_id', $tenantId)
+            ->where('quiz_attempts.tenant_id', $tenantId) // Extra security layer
             ->select('quiz_attempts.*', 'students.name', DB::raw('ROW_NUMBER() OVER(PARTITION BY quiz_attempts.user_id ORDER BY quiz_attempts.created_at DESC) as row_num'));
 
         $studentsWithDrops = DB::query()
@@ -163,6 +164,7 @@ class CenterController extends Controller
         $hasData = DB::table('quiz_attempts')
             ->join('students', 'quiz_attempts.user_id', '=', 'students.user_id')
             ->where('students.tenant_id', $tenantId)
+            ->where('quiz_attempts.tenant_id', $tenantId) // Added explicit tenant filter
             ->exists();
 
         if (!$hasData) {
@@ -176,6 +178,7 @@ class CenterController extends Controller
         $data = DB::table('quiz_attempts')
             ->join('students', 'quiz_attempts.user_id', '=', 'students.user_id')
             ->where('students.tenant_id', $tenantId)
+            ->where('quiz_attempts.tenant_id', $tenantId) // Added explicit tenant filter
             ->where('quiz_attempts.created_at', '>=', now()->subDays(7))
             ->selectRaw('DATE(quiz_attempts.created_at) as date, AVG(score) as avg_score')
             ->groupBy('date')

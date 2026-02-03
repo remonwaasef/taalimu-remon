@@ -8,16 +8,47 @@ use Illuminate\Database\Eloquent\Model;
 
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use App\Models\Tenant; // Added for Atomic Counters
 
 class Course extends Model
 {
     use HasFactory, LogsActivity, \App\Traits\IdentifyTenant;
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($course) {
+            if ($course->tenant_id) {
+                $tenant = app()->bound('tenant') ? app('tenant') : Tenant::find($course->tenant_id);
+                if ($tenant && $tenant->id == $course->tenant_id) {
+                    app(\App\Services\SubscriptionService::class)->incrementUsage($tenant, 'max_courses');
+                }
+            }
+        });
+
+        static::deleted(function ($course) {
+            if ($course->tenant_id) {
+                $tenant = app()->bound('tenant') ? app('tenant') : Tenant::find($course->tenant_id);
+                if ($tenant && $tenant->id == $course->tenant_id) {
+                    app(\App\Services\SubscriptionService::class)->decrementUsage($tenant, 'max_courses');
+                }
+            }
+        });
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults()
-            ->logOnly(['title', 'price', 'status'])
-            ->logOnlyDirty();
+        $options = LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+
+        if (config('app.performance_mode')) {
+            $options->disableLogging();
+        }
+
+        return $options;
     }
 
     protected $fillable = [

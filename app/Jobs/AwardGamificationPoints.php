@@ -35,6 +35,12 @@ class AwardGamificationPoints implements ShouldQueue
      */
     public function handle(GamificationService $gamificationService): void
     {
+        // Ensure tenant context is set for the job
+        $tenant = \App\Models\Tenant::find($this->user->tenant_id);
+        if ($tenant) {
+            app()->instance('tenant', $tenant);
+        }
+
         $gamificationService->awardPoints($this->user, $this->points, $this->reason, $this->referenceable);
     }
 }

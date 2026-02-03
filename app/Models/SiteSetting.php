@@ -22,22 +22,28 @@ class SiteSetting extends Model
     }
 
     /**
-     * Get a setting value by key.
+     * Get a setting value by key (with Redis Cache).
      */
     public static function get($key, $default = null)
     {
-        $setting = self::where('key', $key)->first();
-        return $setting ? $setting->value : $default;
+        return \Illuminate\Support\Facades\Cache::rememberForever("setting_{$key}", function () use ($key, $default) {
+            $setting = self::where('key', $key)->first();
+            return $setting ? $setting->value : $default;
+        });
     }
 
     /**
-     * Set a setting value.
+     * Set a setting value (and clear cache).
      */
     public static function set($key, $value, $group = 'general')
     {
-        return self::updateOrCreate(
+        $setting = self::updateOrCreate(
             ['key' => $key],
             ['value' => $value, 'group' => $group]
         );
+        
+        \Illuminate\Support\Facades\Cache::forget("setting_{$key}");
+        
+        return $setting;
     }
 }

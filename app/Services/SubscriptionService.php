@@ -40,28 +40,24 @@ class SubscriptionService
             return false;
         }
 
-        $package = $subscription->package;
-        
-        if (!$package) {
-            return false; // No package linked to subscription
+        // Zero DB Hits: Check if package and features are already loaded from Cache
+        if ($subscription->relationLoaded('package') && $subscription->package->relationLoaded('features')) {
+            $packageFeature = $subscription->package->features->firstWhere('code', $featureCode);
+        } else {
+            // Fallback to DB if not loaded for some reason
+            $package = $subscription->package;
+            if (!$package) return false;
+            $packageFeature = $package->features()->where('code', $featureCode)->first();
         }
-
-        $feature = Feature::where('code', $featureCode)->first();
-
-        if (!$feature) {
-            return false; // Feature doesn't exist
-        }
-
-        // Find the limit for this package
-        $packageFeature = $package->features()->where('feature_id', $feature->id)->first();
 
         if (!$packageFeature) {
             return false; // Feature not included in package
         }
 
-        $limit = $packageFeature->pivot->value;
+        // Handle both loaded collection and pivot object
+        $limit = $packageFeature->pivot ? $packageFeature->pivot->value : $packageFeature->value;
 
-        if ($feature->type === 'boolean') {
+        if ($packageFeature->type === 'boolean') {
             return filter_var($limit, FILTER_VALIDATE_BOOLEAN);
         }
 
@@ -76,11 +72,19 @@ class SubscriptionService
     }
 
     /**
-     * Get current usage for a feature.
+     * Get current usage for a feature (Atomic Optimization).
      */
     protected function getUsage(Tenant $tenant, string $featureCode): int
     {
         $cacheKey = "tenant_{$tenant->id}_usage_{$featureCode}";
+
+        // Use Atomic Counter if enabled, otherwise fallback to heavy count
+        if (extension_loaded('redis')) {
+            $usage = \Illuminate\Support\Facades\Cache::store('redis')->get($cacheKey);
+            if ($usage !== null) {
+                return (int) $usage;
+            }
+        }
 
         return \Illuminate\Support\Facades\Cache::rememberForever($cacheKey, function () use ($tenant, $featureCode) {
             switch ($featureCode) {
@@ -98,5 +102,38 @@ class SubscriptionService
                     return 0;
             }
         });
+    }
+
+    /**
+     * Increment usage counter atomically.
+     */
+    public function incrementUsage(Tenant $tenant, string $featureCode)
+    {
+        $cacheKey = "tenant_{$tenant->id}_usage_{$featureCode}";
+        try {
+            if (extension_loaded('redis')) {
+                \Illuminate\Support\Facades\Cache::store('redis')->increment($cacheKey);
+            } else {
+                \Illuminate\Support\Facades\Cache::forget($cacheKey);
+            }
+        } catch (\Throwable $e) {}
+    }
+
+    /**
+     * Decrement usage counter atomically.
+     */
+    public function decrementUsage(Tenant $tenant, string $featureCode)
+    {
+        $cacheKey = "tenant_{$tenant->id}_usage_{$featureCode}";
+        try {
+            if (extension_loaded('redis')) {
+                $current = \Illuminate\Support\Facades\Cache::store('redis')->get($cacheKey);
+                if ($current && (int)$current > 0) {
+                    \Illuminate\Support\Facades\Cache::store('redis')->decrement($cacheKey);
+                }
+            } else {
+                \Illuminate\Support\Facades\Cache::forget($cacheKey);
+            }
+        } catch (\Throwable $e) {}
     }
 }

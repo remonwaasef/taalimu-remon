@@ -21,7 +21,8 @@ class ResourceController extends Controller
             'is_public' => 'boolean',
         ]);
 
-        $path = $request->file('file')->store('resources/' . $course->id, 'public');
+        $tenantId = app('tenant')->id;
+        $path = $request->file('file')->store("{$tenantId}/resources/" . $course->id, 'local');
 
         CourseResource::create([
             'course_id' => $course->id,
@@ -40,7 +41,7 @@ class ResourceController extends Controller
     {
         $this->authorize('update', $resource->course);
 
-        Storage::disk('public')->delete($resource->file_path);
+        Storage::disk('local')->delete($resource->file_path);
         $resource->delete();
 
         return back()->with('success', 'تم حذف الملف بنجاح');
@@ -52,7 +53,7 @@ class ResourceController extends Controller
         
         // Admin/Instructor can always download
         if ($user->hasAnyRole(['admin', 'center_admin', 'instructor'])) {
-            return Storage::disk('public')->download($resource->file_path, $resource->title . '.' . $resource->file_type);
+            return Storage::disk('local')->download($resource->file_path, $resource->title . '.' . $resource->file_type);
         }
 
         // Student check
@@ -64,6 +65,6 @@ class ResourceController extends Controller
             abort(403, 'يجب الاشتراك في الدورة للوصول لهذا المورد');
         }
 
-        return Storage::disk('public')->download($resource->file_path, $resource->title . '.' . $resource->file_type);
+        return Storage::disk('local')->download($resource->file_path, $resource->title . '.' . $resource->file_type);
     }
 }

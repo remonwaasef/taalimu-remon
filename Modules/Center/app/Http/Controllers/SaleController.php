@@ -8,6 +8,7 @@ use App\Models\SaleItem;
 use App\Models\Student;
 use App\Models\Course;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Services\FinanceService;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -55,9 +56,15 @@ class SaleController extends Controller
     {
         $this->authorize('create', Sale::class);
         $request->validate([
-            'student_id' => 'required|exists:students,id',
+            'student_id' => [
+                'required',
+                Rule::exists('students', 'id')->where('tenant_id', app('tenant')->id)
+            ],
             'items' => 'required|array|min:1',
-            'items.*.id' => 'required|exists:courses,id',
+            'items.*.id' => [
+                'required', 
+                Rule::exists('courses', 'id')->where('tenant_id', app('tenant')->id)
+            ],
             'items.*.price' => 'required|numeric|min:0',
             'payment_method' => 'required|string',
             'paid_amount' => 'required|numeric|min:0',
@@ -113,6 +120,7 @@ class SaleController extends Controller
         $courses = DB::table('enrollments')
             ->join('courses', 'enrollments.course_id', '=', 'courses.id')
             ->where('enrollments.user_id', $student->user_id)
+            ->where('enrollments.tenant_id', $tenant->id)
             ->select('courses.title', 'enrollments.enrolled_at', 'enrollments.status')
             ->get();
 

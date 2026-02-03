@@ -271,7 +271,8 @@ class RegistrationController extends Controller
                 }
 
                 if (!$stripePriceId) {
-                    throw new \Exception("Stripe Price ID not found for plan: {$request->plan}.");
+                    \Log::warning("Stripe Price ID not found for plan: {$request->plan}. Falling back to demo mode for safety.");
+                    return redirect()->route('payment.demo');
                 }
 
                 $tenant->createOrGetStripeCustomer([

@@ -30,8 +30,12 @@ trait HandlesFileUploads
                 Storage::disk($disk)->delete($currentFile);
             }
             
-            // Store new file
-            return $request->file($fieldName)->store($storagePath, $disk);
+            // Store new file with Tenant Isolation
+            $tenantPrefix = app()->bound('tenant') ? app('tenant')->id : 'global';
+            // Ensure path doesn't end with slash, but prefix does if needed.
+            // Actually, best to just put it in a folder: {tenant_id}/{path}
+            // If storagePath is 'courses', result is '1/courses/filename.jpg'
+            return $request->file($fieldName)->store("{$tenantPrefix}/{$storagePath}", $disk);
         }
         
         return $currentFile;
