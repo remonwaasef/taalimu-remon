@@ -13,7 +13,8 @@ class SettingsController extends Controller
     {
         $this->authorize('update', app('tenant'));
         $stages = Stage::with('grades')->orderBy('order')->get();
-        return view('center::settings.index', compact('stages'));
+        $templates = config('academic.templates', []);
+        return view('center::settings.index', compact('stages', 'templates'));
     }
 
     public function update(Request $request)
@@ -137,5 +138,41 @@ class SettingsController extends Controller
         }
 
         return back()->with('success', 'تم تحديث الهيكل الأكاديمي بنجاح');
+    }
+
+    public function applyAcademicTemplate(Request $request)
+    {
+        $this->authorize('update', app('tenant'));
+        $request->validate([
+            'template_key' => 'required|string|in:' . implode(',', array_keys(config('academic.templates', []))),
+        ]);
+
+        $template = config("academic.templates.{$request->template_key}");
+
+        // Transaction for safety
+        \Illuminate\Support\Facades\DB::transaction(function () use ($template) {
+            // Optional: Backup or clear existing? User requested avoiding manual entry, 
+            // usually implies replacing or starting fresh.
+            // Let's clear existing to avoid messy mix.
+            Grade::query()->delete();
+            Stage::query()->delete();
+
+            foreach ($template['stages'] as $sIndex => $stageData) {
+                $stage = Stage::create([
+                    'name' => $stageData['name'],
+                    'order' => $sIndex,
+                ]);
+
+                foreach ($stageData['grades'] as $gIndex => $gradeName) {
+                    Grade::create([
+                        'stage_id' => $stage->id,
+                        'name' => $gradeName,
+                        'order' => $gIndex,
+                    ]);
+                }
+            }
+        });
+
+        return back()->with('success', 'تم تطبيق النموذج الأكاديمي بنجاح');
     }
 }

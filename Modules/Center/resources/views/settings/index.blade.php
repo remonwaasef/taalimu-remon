@@ -188,6 +188,31 @@
                             </div>
 
                             <!-- Stages & Grades Section -->
+                            <div class="card border-0 bg-primary bg-opacity-10 mb-4 rounded-4">
+                                <div class="card-body p-3">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-7">
+                                            <h6 class="fw-bold text-primary mb-1"><i class="fas fa-magic me-2"></i>توفير الوقت؟ جرب القوالب الجاهزة</h6>
+                                            <p class="text-muted small mb-0">يمكنك اختيار نظام تعليمي جاهز (مثل النظام المصري) وسيتم ملء المراحل والصفوف تلقائياً.</p>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <form action="{{ route('center.settings.apply-template', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST" id="applyTemplateForm" class="d-flex gap-2">
+                                                @csrf
+                                                <select name="template_key" class="form-select form-select-sm rounded-pill" required>
+                                                    <option value="">اختر نموذجاً...</option>
+                                                    @foreach($templates as $key => $template)
+                                                        <option value="{{ $key }}">{{ $template['name'] }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 text-nowrap" onclick="confirmTemplate()">
+                                                    تطبيق
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h6 class="fw-bold text-primary mb-0"><i class="fas fa-layer-group me-2"></i>هيكل المراحل والصفوف الدراسية</h6>
                                 <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="addStage()">
@@ -479,6 +504,16 @@
                 deletionInputs.insertAdjacentHTML('beforeend', `<input type="hidden" name="deleted_stages[]" value="${id}">`);
             }
             btn.closest('.stage-card').remove();
+        }
+    }
+
+    function confirmTemplate() {
+        if (document.querySelector('select[name="template_key"]').value === "") {
+            alert('يرجى اختيار نموذج أولاً');
+            return;
+        }
+        if (confirm('تنبيه: سيؤدي تطبيق النموذج إلى مسح هيكل المراحل والصفوف الحالي واستبداله بالنموذج المختار. هل تريد الاستمرار؟')) {
+            document.getElementById('applyTemplateForm').submit();
         }
     }
 
