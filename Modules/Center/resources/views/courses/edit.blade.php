@@ -15,6 +15,16 @@
                     <form action="{{ route('center.courses.update', $course->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
+
+                        @if ($errors->any())
+                            <div class="alert alert-danger mb-4">
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         
                         <div class="mb-4">
                             <label class="form-label fw-bold">عنوان الدورة</label>
