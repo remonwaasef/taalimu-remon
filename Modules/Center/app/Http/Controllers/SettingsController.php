@@ -162,7 +162,7 @@ class SettingsController extends Controller
                 foreach ($template['stages'] as $sIndex => $stageData) {
                     $stage = Stage::create([
                         'tenant_id' => $tenantId, // Explicitly set tenant_id
-                        'name' => $stageData['name'],
+                        'name' => __($stageData['name']),
                         'order' => $sIndex,
                     ]);
 

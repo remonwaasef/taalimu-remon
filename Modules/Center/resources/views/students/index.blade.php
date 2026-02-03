@@ -28,29 +28,29 @@
                                 <i class="fas fa-id-card fs-4"></i>
                             </div>
                             <div>
-                                <h4 class="fw-bold mb-0 text-dark">بطاقة تسجيل الطالب</h4>
-                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 mt-1">تم التفعيل بنجاح</span>
+                                <h4 class="fw-bold mb-0 text-dark">{{ __('center::students.registration_card') }}</h4>
+                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 mt-1">{{ __('center::students.activated_successfully') }}</span>
                             </div>
                         </div>
 
                         <div class="row g-4 mt-2">
                             <div class="col-sm-6">
-                                <label class="text-muted small text-uppercase fw-bold d-block mb-1">اسم الطالب</label>
+                                <label class="text-muted small text-uppercase fw-bold d-block mb-1">{{ __('center::students.name') }}</label>
                                 <span class="fw-bold fs-5">{{ session('student_name') }}</span>
                             </div>
                             <div class="col-sm-6">
-                                <label class="text-muted small text-uppercase fw-bold d-block mb-1">رقم الهاتف</label>
+                                <label class="text-muted small text-uppercase fw-bold d-block mb-1">{{ __('center::students.phone') }}</label>
                                 <span class="fw-bold text-dark">{{ session('student_phone') }}</span>
                             </div>
                             <div class="col-sm-6">
-                                <label class="text-muted small text-uppercase fw-bold d-block mb-1">البريد الإلكتروني</label>
+                                <label class="text-muted small text-uppercase fw-bold d-block mb-1">{{ __('center::students.email') }}</label>
                                 <span class="text-primary fw-bold">{{ session('student_email') }}</span>
                             </div>
                             <div class="col-sm-6">
-                                <label class="text-muted small text-uppercase fw-bold d-block mb-1">كلمة المرور المؤقتة</label>
+                                <label class="text-muted small text-uppercase fw-bold d-block mb-1">{{ __('center::students.temporary_password') }}</label>
                                 <div class="d-flex align-items-center gap-2">
                                     <span class="fs-4 fw-bold text-danger font-monospace">{{ session('generated_password') }}</span>
-                                    <button onclick="copyToClipboard('{{ session('generated_password') }}')" class="btn btn-sm btn-light rounded-circle" title="نسخ">
+                                    <button onclick="copyToClipboard('{{ session('generated_password') }}')" class="btn btn-sm btn-light rounded-circle" title="{{ __('center::students.copy') }}">
                                         <i class="fas fa-copy text-primary"></i>
                                     </button>
                                 </div>
@@ -65,13 +65,13 @@
                             @endphp
 
                             <button onclick="copyAllDetails()" class="btn btn-outline-dark rounded-pill px-4">
-                                <i class="fas fa-copy me-2"></i> نسخ كافة البيانات
+                                <i class="fas fa-copy me-2"></i> {{ __('center::students.copy_all_data') }}
                             </button>
                             <a href="{{ $whatsappUrl }}" target="_blank" class="btn btn-success rounded-pill px-4">
-                                <i class="fab fa-whatsapp me-2"></i> إرسال واتساب
+                                <i class="fab fa-whatsapp me-2"></i> {{ __('center::students.send_whatsapp') }}
                             </a>
                             <a href="{{ $mailtoUrl }}" class="btn btn-light border rounded-pill px-4">
-                                <i class="fas fa-envelope me-2"></i> إرسال إيميل
+                                <i class="fas fa-envelope me-2"></i> {{ __('center::students.send_email') }}
                             </a>
                         </div>
                     </div>
@@ -84,9 +84,9 @@
                         <div class="qr-container bg-white p-2 rounded-3 shadow-sm mb-3">
                             <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(url('/login') . '?email=' . session('student_email')) }}" alt="QR Code" style="width: 140px; height: 140px;">
                         </div>
-                        <p class="small text-muted mb-0">امسح الكود للدخول المباشر</p>
+                        <p class="small text-muted mb-0">{{ __('center::students.scan_qr_tip') }}</p>
                         <div class="mt-3 text-secondary small">
-                            <i class="fas fa-clock me-1"></i> صالح لمدة غير محدودة
+                            <i class="fas fa-clock me-1"></i> {{ __('center::students.valid_unlimited') }}
                         </div>
                     </div>
                 </div>
@@ -99,7 +99,7 @@
                     const toast = document.createElement('div');
                     toast.className = 'position-fixed bottom-0 start-50 translate-middle-x mb-5 bg-dark text-white p-3 rounded-4 shadow animate__animated animate__fadeInUp';
                     toast.style.zIndex = '9999';
-                    toast.innerHTML = '<i class="fas fa-check-circle text-success me-2"></i> تم نسخ كلمة المرور!';
+                    toast.innerHTML = '<i class="fas fa-check-circle text-success me-2"></i> {{ __('center::students.copy_success') }}';
                     document.body.appendChild(toast);
                     setTimeout(() => toast.remove(), 2000);
                 });
@@ -108,7 +108,7 @@
             function copyAllDetails() {
                 const text = `{!! addslashes($msg) !!}`;
                 navigator.clipboard.writeText(text).then(function() {
-                    alert('تم نسخ جميع البيانات بنجاح في صيغة رسالة منظمة!');
+                    alert('{{ __('center::students.copy_all_success') }}');
                 });
             }
         </script>
@@ -213,17 +213,17 @@
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
                         <span class="badge bg-primary rounded-pill me-3" id="selected-count">0</span>
-                        <span class="fw-bold text-primary">طالب محدد</span>
+                        <span class="fw-bold text-primary">{{ __('center::students.selected_count') }}</span>
                     </div>
                     <div class="d-flex gap-2">
                         <button class="btn btn-sm btn-outline-success rounded-pill px-3" onclick="bulkAction('activate')">
-                            <i class="fas fa-check me-1"></i> تفعيل
+                            <i class="fas fa-check me-1"></i> {{ __('center::students.activate') }}
                         </button>
                         <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="bulkAction('deactivate')">
-                            <i class="fas fa-times me-1"></i> إلغاء تفعيل
+                            <i class="fas fa-times me-1"></i> {{ __('center::students.deactivate') }}
                         </button>
                         <button class="btn btn-sm btn-danger rounded-pill px-3" onclick="bulkAction('delete')">
-                            <i class="fas fa-trash me-1"></i> حذف
+                            <i class="fas fa-trash me-1"></i> {{ __('center::students.delete') }}
                         </button>
                     </div>
                 </div>
@@ -276,7 +276,7 @@
                                     <div class="d-flex flex-column">
                                         <span class="text-dark small fw-medium">{{ $student->phone }}</span>
                                         @if($student->parent_phone)
-                                            <span class="text-muted x-small">ولي الأمر: {{ $student->parent_phone }}</span>
+                                            <span class="text-muted x-small">{{ __('center::students.parent_phone') }}: {{ $student->parent_phone }}</span>
                                         @endif
                                     </div>
                                 </td>
@@ -296,7 +296,7 @@
                                 <td>
                                     <span class="badge bg-{{ $student->status == 'active' ? 'success' : 'danger' }} bg-opacity-10 text-{{ $student->status == 'active' ? 'success' : 'danger' }} rounded-pill px-3">
                                         <i class="fas {{ $student->status == 'active' ? 'fa-check' : 'fa-times' }} me-1 small"></i>
-                                        {{ $student->status == 'active' ? 'نشط' : 'متوقف' }}
+                                        {{ $student->status == 'active' ? __('center::students.active') : __('center::students.stopped') }}
                                     </span>
                                 </td>
                                 <td class="text-end px-4">
@@ -309,7 +309,7 @@
                                             <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('center.students.edit', $student->id) }}"><i class="fas fa-edit me-2 text-info opacity-75"></i> {{ __('center::students.edit') }}</a></li>
                                             <li><hr class="dropdown-divider opacity-10"></li>
                                             <li>
-                                                <form action="{{ route('center.students.destroy', $student->id) }}" method="POST" class="d-inline" onsubmit="return confirm('هل أنت متأكد؟ سيتم حذف بيانات الطالب نهائياً.');">
+                                                <form action="{{ route('center.students.destroy', $student->id) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('center::students.confirm_delete_student') }}');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="dropdown-item rounded-3 text-danger mb-0">
@@ -421,9 +421,9 @@
                 const selectedIds = Array.from(studentCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
                 if (selectedIds.length === 0) return;
 
-                if (confirm(`هل أنت متأكد من تنفيذ هذا الإجراء على ${selectedIds.length} طالب؟`)) {
+                if (confirm('{{ __('center::students.bulk_confirm', ['count' => "'+selectedIds.length+'"]) }}'.replace("'+selectedIds.length+'", selectedIds.length))) {
                     // This would normally be an AJAX call
-                    alert(`جاري تنفيذ عملية [${action}] على المعرفات: ` + selectedIds.join(', '));
+                    alert('Processing [' + action + '] for IDs: ' + selectedIds.join(', '));
                     // Success simulation: 
                     // location.reload();
                 }
