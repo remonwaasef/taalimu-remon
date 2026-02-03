@@ -80,11 +80,12 @@ class ScheduleConflictService
         $conflicting = $query->with(['course', 'classroom'])->first();
 
         if ($conflicting) {
-            $courseName = $conflicting->course->title ?? 'دورة أخرى';
+            $courseName = $conflicting->course->title ?? 'دورة غير معروفة';
             $classroomName = $conflicting->classroom->name ?? 'القاعة';
-            $timeRange = Carbon::parse($conflicting->start_time)->format('H:i') . ' - ' . Carbon::parse($conflicting->end_time)->format('H:i');
+            $startTimeFormatted = Carbon::parse($conflicting->start_time)->format('h:i A');
+            $endTimeFormatted = Carbon::parse($conflicting->end_time)->format('h:i A');
             
-            return "⚠️ تعارض القاعة: {$classroomName} محجوزة بالفعل لـ \"{$courseName}\" من {$timeRange}";
+            return "❌ <b>تعارض في القاعة:</b> القاعة \"{$classroomName}\" مشغولة حالياً في دورة \"{$courseName}\" بالفترة من {$startTimeFormatted} إلى {$endTimeFormatted}.";
         }
 
         return null;
@@ -117,11 +118,12 @@ class ScheduleConflictService
         $conflicting = $query->with(['course', 'instructor'])->first();
 
         if ($conflicting) {
-            $courseName = $conflicting->course->title ?? 'دورة أخرى';
+            $courseName = $conflicting->course->title ?? 'دورة غير معروفة';
             $instructorName = $conflicting->instructor->name ?? 'المدرس';
-            $timeRange = Carbon::parse($conflicting->start_time)->format('H:i') . ' - ' . Carbon::parse($conflicting->end_time)->format('H:i');
+            $startTimeFormatted = Carbon::parse($conflicting->start_time)->format('h:i A');
+            $endTimeFormatted = Carbon::parse($conflicting->end_time)->format('h:i A');
             
-            return "⚠️ تعارض المدرس: {$instructorName} مشغول بالفعل في \"{$courseName}\" من {$timeRange}";
+            return "❌ <b>تعارض في المدرس:</b> المدرس \"{$instructorName}\" لديه حصة أخرى في دورة \"{$courseName}\" بالفترة من {$startTimeFormatted} إلى {$endTimeFormatted}.";
         }
 
         return null;
