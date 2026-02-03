@@ -44,6 +44,18 @@
                 </div>
 
                 <div class="card-body p-4">
+                    @if (session('success'))
+                        <div class="alert alert-success rounded-4 border-0 shadow-sm mb-4 fw-bold">
+                            <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="alert alert-danger rounded-4 border-0 shadow-sm mb-4 fw-bold">
+                            <i class="fas fa-exclamation-triangle me-2"></i> {{ session('error') }}
+                        </div>
+                    @endif
+
                     @if ($errors->any())
                         <div class="alert alert-danger rounded-4 border-0 shadow-sm mb-4">
                             <ul class="mb-0 small fw-bold">
