@@ -40,10 +40,32 @@
                                 </td>
                                 <td>{{ $classroom->capacity ? trans_choice('center::classrooms.students_count', $classroom->capacity, ['count' => $classroom->capacity]) : __('center::classrooms.not_specified') }}</td>
                                 <td>
-                                    <div class="d-flex align-items-center text-info">
-                                        <i class="fas fa-box-open me-2 opacity-50"></i>
-                                        <span class="fw-bold">{{ $classroom->assets_count ?? $classroom->assets->count() }}</span>
-                                    </div>
+                                    @if($classroom->assets->count() > 0)
+                                        <div class="d-flex flex-wrap gap-1" style="max-width: 250px;">
+                                            @foreach($classroom->assets->take(4) as $asset)
+                                                @php
+                                                    $icon = 'fa-box';
+                                                    $color = 'info';
+                                                    if (Str::contains($asset->name, ['جهاز عرض', 'Projector'])) { $icon = 'fa-video'; $color = 'primary'; }
+                                                    elseif (Str::contains($asset->name, ['تكييف', 'AC'])) { $icon = 'fa-snowflake'; $color = 'info'; }
+                                                    elseif (Str::contains($asset->name, ['شاشة', 'TV'])) { $icon = 'fa-tv'; $color = 'dark'; }
+                                                    elseif (Str::contains($asset->name, ['سبورة'])) { $icon = 'fa-chalkboard'; $color = 'secondary'; }
+                                                    elseif (Str::contains($asset->name, ['كاميرا'])) { $icon = 'fa-video-slash'; $color = 'danger'; }
+                                                    elseif (Str::contains($asset->name, ['صوت'])) { $icon = 'fa-volume-up'; $color = 'warning'; }
+                                                @endphp
+                                                <span class="badge bg-{{ $color }} bg-opacity-10 text-{{ $color }} border border-{{ $color }} border-opacity-25 py-1 px-2" style="font-size: 0.65rem;" title="{{ $asset->name }}">
+                                                    <i class="fas {{ $icon }} me-1"></i> {{ $asset->name }}
+                                                </span>
+                                            @endforeach
+                                            @if($classroom->assets->count() > 4)
+                                                <span class="badge bg-light text-muted border py-1 px-1" style="font-size: 0.65rem;">
+                                                    +{{ $classroom->assets->count() - 4 }}
+                                                </span>
+                                            @endif
+                                        </div>
+                                    @else
+                                        <span class="text-muted small">---</span>
+                                    @endif
                                 </td>
                                 <td class="text-muted">{{ $classroom->created_at->format('Y-m-d') }}</td>
                                 <td>
