@@ -9,34 +9,35 @@
     <div class="col-md-10 mx-auto">
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
                 <div class="card-header bg-white border-bottom-0 p-0">
+                    @php $activeTab = request('tab', 'general'); @endphp
                     <ul class="nav nav-tabs nav-fill" id="settingsTabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active py-3 fw-bold" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-selected="true">
+                            <button class="nav-link {{ $activeTab == 'general' ? 'active' : '' }} py-3 fw-bold" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-selected="{{ $activeTab == 'general' ? 'true' : 'false' }}">
                                 <i class="fas fa-info-circle me-2"></i> {{ __('center::settings.tabs.general') }}
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link py-3 fw-bold" id="academic-tab" data-bs-toggle="tab" data-bs-target="#academic" type="button" role="tab" aria-selected="false">
+                            <button class="nav-link {{ $activeTab == 'academic' ? 'active' : '' }} py-3 fw-bold" id="academic-tab" data-bs-toggle="tab" data-bs-target="#academic" type="button" role="tab" aria-selected="{{ $activeTab == 'academic' ? 'true' : 'false' }}">
                                 <i class="fas fa-graduation-cap me-2"></i> {{ __('center::settings.tabs.academic') }}
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link py-3 fw-bold" id="financial-tab" data-bs-toggle="tab" data-bs-target="#financial" type="button" role="tab" aria-selected="false">
+                            <button class="nav-link {{ $activeTab == 'financial' ? 'active' : '' }} py-3 fw-bold" id="financial-tab" data-bs-toggle="tab" data-bs-target="#financial" type="button" role="tab" aria-selected="{{ $activeTab == 'financial' ? 'true' : 'false' }}">
                                 <i class="fas fa-coins me-2"></i> {{ __('center::settings.tabs.financial') }}
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link py-3 fw-bold" id="appearance-tab" data-bs-toggle="tab" data-bs-target="#appearance" type="button" role="tab" aria-selected="false">
+                            <button class="nav-link {{ $activeTab == 'appearance' ? 'active' : '' }} py-3 fw-bold" id="appearance-tab" data-bs-toggle="tab" data-bs-target="#appearance" type="button" role="tab" aria-selected="{{ $activeTab == 'appearance' ? 'true' : 'false' }}">
                                 <i class="fas fa-paint-brush me-2"></i> {{ __('center::settings.tabs.appearance') }}
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link py-3 fw-bold" id="whatsapp-tab" data-bs-toggle="tab" data-bs-target="#whatsapp" type="button" role="tab" aria-selected="false">
+                            <button class="nav-link {{ $activeTab == 'whatsapp' ? 'active' : '' }} py-3 fw-bold" id="whatsapp-tab" data-bs-toggle="tab" data-bs-target="#whatsapp" type="button" role="tab" aria-selected="{{ $activeTab == 'whatsapp' ? 'true' : 'false' }}">
                                 <i class="fab fa-whatsapp me-2 text-success"></i> {{ __('center::settings.tabs.whatsapp') }}
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link py-3 fw-bold" id="privacy-tab" data-bs-toggle="tab" data-bs-target="#privacy" type="button" role="tab" aria-selected="false">
+                            <button class="nav-link {{ $activeTab == 'privacy' ? 'active' : '' }} py-3 fw-bold" id="privacy-tab" data-bs-toggle="tab" data-bs-target="#privacy" type="button" role="tab" aria-selected="{{ $activeTab == 'privacy' ? 'true' : 'false' }}">
                                 <i class="fas fa-user-shield me-2 text-danger"></i> {{ __('center::settings.tabs.privacy') }}
                             </button>
                         </li>
@@ -68,7 +69,7 @@
 
                     <div class="tab-content" id="settingsTabsContent">
                         <!-- General Settings -->
-                        <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+                        <div class="tab-pane fade {{ $activeTab == 'general' ? 'show active' : '' }}" id="general" role="tabpanel" aria-labelledby="general-tab">
                             <form action="{{ route('center.settings.update', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row mb-4">
@@ -170,7 +171,7 @@
                         </div>
 
                         <!-- Academic Settings -->
-                        <div class="tab-pane fade" id="academic" role="tabpanel" aria-labelledby="academic-tab">
+                        <div class="tab-pane fade {{ $activeTab == 'academic' ? 'show active' : '' }}" id="academic" role="tabpanel" aria-labelledby="academic-tab">
                             
                             <!-- 1. Templates Section (STANDALONE FORM) -->
                             <div class="card border-0 bg-primary bg-opacity-10 mb-4 rounded-4">
@@ -278,7 +279,7 @@
                         </div>
 
                         <!-- Financial Settings -->
-                        <div class="tab-pane fade" id="financial" role="tabpanel" aria-labelledby="financial-tab">
+                        <div class="tab-pane fade {{ $activeTab == 'financial' ? 'show active' : '' }}" id="financial" role="tabpanel" aria-labelledby="financial-tab">
                             <form action="{{ route('center.settings.update', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST">
                                 @csrf
                                 <h6 class="fw-bold text-primary mb-3">{{ __('center::settings.financial.title') }}</h6>
@@ -310,7 +311,7 @@
                         </div>
 
                         <!-- Appearance Settings -->
-                        <div class="tab-pane fade" id="appearance" role="tabpanel" aria-labelledby="appearance-tab">
+                        <div class="tab-pane fade {{ $activeTab == 'appearance' ? 'show active' : '' }}" id="appearance" role="tabpanel" aria-labelledby="appearance-tab">
                             <form action="{{ route('center.settings.update', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST">
                                 @csrf
                                 <h6 class="fw-bold text-primary mb-3">{{ __('center::settings.appearance.title') }}</h6>
@@ -336,7 +337,7 @@
                         </div>
 
                         <!-- WhatsApp Settings -->
-                        <div class="tab-pane fade" id="whatsapp" role="tabpanel" aria-labelledby="whatsapp-tab">
+                        <div class="tab-pane fade {{ $activeTab == 'whatsapp' ? 'show active' : '' }}" id="whatsapp" role="tabpanel" aria-labelledby="whatsapp-tab">
                             <form action="{{ route('center.settings.update', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST">
                                 @csrf
                                 <div class="d-flex align-items-center mb-4">
@@ -387,7 +388,7 @@
                         </div>
 
                         <!-- Privacy & GDPR Settings -->
-                        <div class="tab-pane fade" id="privacy" role="tabpanel" aria-labelledby="privacy-tab">
+                        <div class="tab-pane fade {{ $activeTab == 'privacy' ? 'show active' : '' }}" id="privacy" role="tabpanel" aria-labelledby="privacy-tab">
                             <div class="alert alert-warning border-0 rounded-4 mb-4">
                                 <h6 class="fw-bold"><i class="fas fa-shield-alt me-2"></i>{{ __('center::settings.privacy.title') }}</h6>
                                 <p class="small mb-0 mt-1">
@@ -468,20 +469,6 @@
 @endsection
 
 @push('scripts')
-<script>
-    // Tab switching based on URL parameter
-    document.addEventListener('DOMContentLoaded', function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const tab = urlParams.get('tab');
-        if (tab) {
-            const tabButton = document.getElementById(tab + '-tab');
-            if (tabButton) {
-                const bootstrapTab = new bootstrap.Tab(tabButton);
-                bootstrapTab.show();
-            }
-        }
-    });
-
     let stageCount = {{ count($stages) }};
 
     function addStage() {
