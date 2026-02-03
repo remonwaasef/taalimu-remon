@@ -334,6 +334,10 @@ $tenantRoutes = function () {
         Route::middleware(['feature:daily_schedules', 'permission:manage schedule'])->group(function() {
             Route::resource('schedules', ScheduleController::class)->names('center.schedules');
         });
+
+        // Schedule Conflict API (for AJAX real-time validation)
+        Route::post('api/schedules/check-conflict', [\Modules\Center\Http\Controllers\ScheduleApiController::class, 'checkConflict'])->name('center.schedules.check-conflict');
+        Route::post('api/schedules/available-slots', [\Modules\Center\Http\Controllers\ScheduleApiController::class, 'getAvailableSlots'])->name('center.schedules.available-slots');
     });
 
     // Debug routes removed for security

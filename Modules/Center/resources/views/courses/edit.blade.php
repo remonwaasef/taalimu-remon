@@ -213,6 +213,9 @@
         const container = document.getElementById('schedules-container');
         const addButton = document.getElementById('add-schedule-btn');
         const template = document.getElementById('schedule-template');
+        const courseId = {{ $course->id }};
+        const instructorSelect = document.querySelector('select[name="instructor_id"]');
+        
         // Initialize count based on existing PHP items
         let scheduleCount = {{ $course->schedules->count() }};
 
@@ -228,6 +231,10 @@
             });
 
             container.appendChild(clone);
+            
+            // Attach conflict checking to new schedule item
+            const newItem = container.lastElementChild;
+            attachConflictChecker(newItem);
         });
 
         // Remove Schedule
@@ -236,6 +243,72 @@
                 e.target.closest('.schedule-item').remove();
             }
         });
+
+        // Real-time Conflict Checking
+        function attachConflictChecker(scheduleItem) {
+            const selects = scheduleItem.querySelectorAll('select');
+            const inputs = scheduleItem.querySelectorAll('input[type="time"]');
+            
+            [...selects, ...inputs].forEach(el => {
+                el.addEventListener('change', () => checkScheduleConflict(scheduleItem));
+            });
+        }
+
+        async function checkScheduleConflict(scheduleItem) {
+            const daySelect = scheduleItem.querySelector('select[name*="day_of_week"]');
+            const classroomSelect = scheduleItem.querySelector('select[name*="classroom_id"]');
+            const startTime = scheduleItem.querySelector('input[name*="start_time"]');
+            const endTime = scheduleItem.querySelector('input[name*="end_time"]');
+            
+            // Remove existing conflict indicator
+            const existingIndicator = scheduleItem.querySelector('.conflict-indicator');
+            if (existingIndicator) existingIndicator.remove();
+            
+            // Only check if all required fields are filled
+            if (!daySelect.value || !startTime.value || !endTime.value) return;
+            
+            try {
+                const response = await fetch('{{ route("center.schedules.check-conflict") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        day_of_week: daySelect.value,
+                        start_time: startTime.value,
+                        end_time: endTime.value,
+                        classroom_id: classroomSelect?.value || null,
+                        instructor_id: instructorSelect?.value || null,
+                        exclude_course_id: courseId
+                    })
+                });
+                
+                const data = await response.json();
+                
+                // Create indicator element
+                const indicator = document.createElement('div');
+                indicator.className = 'conflict-indicator mt-2';
+                
+                if (data.status === 'conflict') {
+                    indicator.className += ' alert alert-danger py-2';
+                    indicator.innerHTML = data.conflicts.map(c => `<div>${c}</div>`).join('');
+                    scheduleItem.querySelector('.card-body').appendChild(indicator);
+                } else {
+                    indicator.className += ' alert alert-success py-2';
+                    indicator.innerHTML = '<i class="fas fa-check-circle me-1"></i> الموعد متاح';
+                    scheduleItem.querySelector('.card-body').appendChild(indicator);
+                    
+                    // Auto-remove success message after 3 seconds
+                    setTimeout(() => indicator.remove(), 3000);
+                }
+            } catch (error) {
+                console.error('Error checking conflict:', error);
+            }
+        }
+
+        // Attach conflict checker to existing schedule items
+        document.querySelectorAll('.schedule-item').forEach(attachConflictChecker);
     });
 </script>
 @endpush
