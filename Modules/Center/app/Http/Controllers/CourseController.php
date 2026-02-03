@@ -80,7 +80,7 @@ class CourseController extends Controller
     /**
      * Show the specified resource.
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $course = Course::with(['instructor', 'enrollments.user.student'])->findOrFail($id);
         $this->authorize('view', $course);
