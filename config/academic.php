@@ -59,9 +59,42 @@ return [
                 [
                     'name' => 'المرحلة الثانوية الأزهرية',
                     'grades' => [
-                        'الصف الأول الثانوي',
-                        'الصف الثاني الثانوي',
-                        'الصف الثالث الثانوي',
+                        'الاول الثانوي',
+                        'الثاني الثانوي',
+                        'الثالث الثانوي',
+                    ],
+                ],
+            ],
+        ],
+        'european_system' => [
+            'name' => 'النظام الأوروبي (International/IB)',
+            'stages' => [
+                [
+                    'name' => 'السنوات الابتدائية (PYP - Primary Years)',
+                    'grades' => [
+                        'Year 1',
+                        'Year 2',
+                        'Year 3',
+                        'Year 4',
+                        'Year 5',
+                        'Year 6',
+                    ],
+                ],
+                [
+                    'name' => 'السنوات المتوسطة (MYP - Middle Years)',
+                    'grades' => [
+                        'Year 7',
+                        'Year 8',
+                        'Year 9',
+                        'Year 10',
+                        'Year 11',
+                    ],
+                ],
+                [
+                    'name' => 'برنامج الدبلوم (DP - Diploma Programme)',
+                    'grades' => [
+                        'Year 12 (DP1)',
+                        'Year 13 (DP2)',
                     ],
                 ],
             ],
