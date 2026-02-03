@@ -14,7 +14,7 @@ git push origin main
 
 Write-Host "--- 3. Updating Production Server ---" -ForegroundColor Cyan
 # We use a single string without line breaks to avoid CRLF issues over SSH
-$remoteCmd = "git config --global --add safe.directory /home/taalimu/htdocs/taalimu.com; cd /home/taalimu/htdocs/taalimu.com && mkdir -p storage/framework/views storage/framework/cache storage/framework/sessions bootstrap/cache && chmod -R 777 storage bootstrap/cache && git pull origin main && export COMPOSER_ALLOW_SUPERUSER=1 && composer install --no-dev --optimize-autoloader && npm run build && php artisan migrate --force && php artisan optimize:clear"
+$remoteCmd = "git config --global --add safe.directory /home/taalimu/htdocs/taalimu.com; cd /home/taalimu/htdocs/taalimu.com && mkdir -p storage/framework/views storage/framework/cache storage/framework/sessions bootstrap/cache && chmod -R 777 storage bootstrap/cache && git pull origin main && export COMPOSER_ALLOW_SUPERUSER=1 && composer install --no-dev --optimize-autoloader && npm run build && php artisan migrate --force && php artisan storage:link && php artisan optimize:clear"
 
 ssh root@46.202.155.30 $remoteCmd
 
