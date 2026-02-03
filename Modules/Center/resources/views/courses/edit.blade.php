@@ -28,38 +28,38 @@
                         
                         <div class="mb-4">
                             <label class="form-label fw-bold">عنوان الدورة</label>
-                            <input type="text" name="title" value="{{ old('title', $course->title) }}" class="form-control form-control-lg bg-light border-0">
+                            <input type="text" name="title" value="{{ old('title', $course->title) }}" class="form-control form-control-lg bg-light border-0 @error('title') is-invalid border-danger @enderror">
                             @error('title')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label fw-bold">المدرس</label>
-                            <select name="instructor_id" class="form-select form-select-lg bg-light border-0">
+                            <select name="instructor_id" class="form-select form-select-lg bg-light border-0 @error('instructor_id') is-invalid border-danger @enderror">
                                 <option value="">اختر المدرس...</option>
                                 @foreach($instructors as $instructor)
                                     <option value="{{ $instructor->id }}" {{ old('instructor_id', $course->instructor_id) == $instructor->id ? 'selected' : '' }}>{{ $instructor->name }}</option>
                                 @endforeach
                             </select>
                             @error('instructor_id')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="row mb-4">
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">السعر (ج.م)</label>
-                                <input type="number" name="price" value="{{ old('price', $course->price) }}" class="form-control form-control-lg bg-light border-0" min="0" step="0.01">
+                                <input type="number" name="price" value="{{ old('price', $course->price) }}" class="form-control form-control-lg bg-light border-0 @error('price') is-invalid border-danger @enderror" min="0" step="0.01">
                                 @error('price')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                    <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">عدد الحصص (للمبيعات)</label>
-                                <input type="number" name="sessions_count" value="{{ old('sessions_count', $course->sessions_count) }}" class="form-control form-control-lg bg-light border-0" min="0">
+                                <input type="number" name="sessions_count" value="{{ old('sessions_count', $course->sessions_count) }}" class="form-control form-control-lg bg-light border-0 @error('sessions_count') is-invalid border-danger @enderror" min="0">
                                 @error('sessions_count')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                    <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-md-4">
@@ -75,7 +75,7 @@
                                     </label>
                                 </div>
                                 @error('status')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                    <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
@@ -87,17 +87,17 @@
                                     <img src="{{ Storage::url($course->image) }}" alt="Current Image" class="img-thumbnail rounded" style="height: 100px;">
                                 </div>
                             @endif
-                            <input type="file" name="image" class="form-control form-control-lg bg-light border-0" accept="image/*">
+                            <input type="file" name="image" class="form-control form-control-lg bg-light border-0 @error('image') is-invalid border-danger @enderror" accept="image/*">
                             @error('image')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label fw-bold">وصف الدورة</label>
-                            <textarea name="description" class="form-control form-control-lg bg-light border-0" rows="4">{{ old('description', $course->description) }}</textarea>
+                            <textarea name="description" class="form-control form-control-lg bg-light border-0 @error('description') is-invalid border-danger @enderror" rows="4">{{ old('description', $course->description) }}</textarea>
                             @error('description')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                             @enderror
                         </div>
 
