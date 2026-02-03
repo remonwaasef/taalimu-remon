@@ -57,9 +57,25 @@ class Instructor extends Model
         'email',
         'phone',
         'specialization',
+        'status',
+        'commission_rate',
+        'national_id',
+        'gender',
+        'hiring_date',
         'bio',
         'is_co_instructor',
         'image',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'commission_rate' => 'decimal:2',
+        'hiring_date' => 'date',
+        'is_co_instructor' => 'boolean',
     ];
 
     /**
