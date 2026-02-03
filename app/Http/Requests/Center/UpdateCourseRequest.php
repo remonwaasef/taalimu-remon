@@ -18,6 +18,7 @@ class UpdateCourseRequest extends FormRequest
             'description' => 'nullable|string',
             'instructor_id' => 'nullable|exists:instructors,id',
             'price' => 'nullable|numeric|min:0',
+            'sessions_count' => 'nullable|integer|min:0',
             'status' => 'nullable|in:draft,published',
             'image' => 'nullable|image|max:2048',
             'schedules' => 'nullable|array',

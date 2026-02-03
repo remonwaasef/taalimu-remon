@@ -73,7 +73,7 @@
                             <label class="form-label fw-bold">صورة الغلاف</label>
                             @if($course->image)
                                 <div class="mb-2">
-                                    <img src="{{ asset('storage/' . $course->image) }}" alt="Current Image" class="img-thumbnail rounded" style="height: 100px;">
+                                    <img src="{{ Storage::url($course->image) }}" alt="Current Image" class="img-thumbnail rounded" style="height: 100px;">
                                 </div>
                             @endif
                             <input type="file" name="image" class="form-control form-control-lg bg-light border-0" accept="image/*">
