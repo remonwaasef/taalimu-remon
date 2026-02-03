@@ -4,6 +4,7 @@ use Modules\Admin\Http\Controllers\AdminController;
 use Modules\Admin\Http\Controllers\TenantController;
 use Modules\Admin\Http\Controllers\AuthController;
 use Modules\Admin\Http\Controllers\SettingsController;
+use Modules\Admin\Http\Controllers\OperationIssueController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -72,6 +73,15 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::delete('coupons/{coupon}', [\Modules\Admin\Http\Controllers\CouponController::class, 'destroy'])->name('coupons.destroy');
         // Roles & Permissions
         Route::resource('roles', \Modules\Admin\Http\Controllers\RoleController::class);
+
+        // Operation Issues
+        Route::prefix('operation-issues')->name('operation-issues.')->group(function() {
+            Route::get('/', [OperationIssueController::class, 'index'])->name('index');
+            Route::get('/{uuid}', [OperationIssueController::class, 'show'])->name('show');
+            Route::patch('/{uuid}/status', [OperationIssueController::class, 'updateStatus'])->name('update-status');
+            Route::patch('/{uuid}/assign', [OperationIssueController::class, 'assign'])->name('assign');
+            Route::post('/{uuid}/comments', [OperationIssueController::class, 'addComment'])->name('comments');
+        });
 
     });
 });

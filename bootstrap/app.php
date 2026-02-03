@@ -68,6 +68,18 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        // Auto-capture all exceptions in tenant context
+        $exceptions->report(function (\Throwable $e) {
+            if (app()->bound('tenant') && app('tenant')) {
+                try {
+                    app(\App\Services\IssueLogger::class)->logException($e, request());
+                } catch (\Throwable $logError) {
+                    // Prevent infinite loops - just log to file
+                    \Illuminate\Support\Facades\Log::error('Failed to log issue: ' . $logError->getMessage());
+                }
+            }
+        });
+
         $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, $request) {
             if ($request->is('api/*')) {
                 return response()->json([
