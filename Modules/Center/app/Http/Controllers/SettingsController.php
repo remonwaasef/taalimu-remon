@@ -148,31 +148,45 @@ class SettingsController extends Controller
         ]);
 
         $template = config("academic.templates.{$request->template_key}");
+        $tenantId = app('tenant')->id;
+
+        \Illuminate\Support\Facades\Log::info("Applying academic template {$request->template_key} for tenant {$tenantId}");
 
         // Transaction for safety
-        \Illuminate\Support\Facades\DB::transaction(function () use ($template) {
-            // Optional: Backup or clear existing? User requested avoiding manual entry, 
-            // usually implies replacing or starting fresh.
-            // Let's clear existing to avoid messy mix.
-            Grade::query()->delete();
-            Stage::query()->delete();
+        try {
+            \Illuminate\Support\Facades\DB::transaction(function () use ($template, $tenantId) {
+                // Manually delete to be safe and specific
+                Grade::where('tenant_id', $tenantId)->delete();
+                Stage::where('tenant_id', $tenantId)->delete();
 
-            foreach ($template['stages'] as $sIndex => $stageData) {
-                $stage = Stage::create([
-                    'name' => $stageData['name'],
-                    'order' => $sIndex,
-                ]);
-
-                foreach ($stageData['grades'] as $gIndex => $gradeName) {
-                    Grade::create([
-                        'stage_id' => $stage->id,
-                        'name' => $gradeName,
-                        'order' => $gIndex,
+                foreach ($template['stages'] as $sIndex => $stageData) {
+                    $stage = Stage::create([
+                        'name' => $stageData['name'],
+                        'order' => $sIndex,
                     ]);
-                }
-            }
-        });
 
-        return back()->with('success', 'تم تطبيق النموذج الأكاديمي بنجاح');
+                    \Illuminate\Support\Facades\Log::info("Created Stage: {$stage->name} for Tenant: {$tenantId}");
+
+                    foreach ($stageData['grades'] as $gIndex => $gradeName) {
+                        Grade::create([
+                            'stage_id' => $stage->id,
+                            'name' => $gradeName,
+                            'order' => $gIndex,
+                        ]);
+                    }
+                }
+            });
+
+            // CRITICAL: Clear cache manually
+            Stage::clearCache();
+            
+            \Illuminate\Support\Facades\Log::info("Academic template applied successfully for tenant {$tenantId}");
+            
+            return back()->with('success', 'تم تطبيق النموذج الأكاديمي بنجاح');
+            
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Failed to apply academic template: " . $e->getMessage());
+            return back()->with('error', 'حدث خطأ أثناء تطبيق النموذج: ' . $e->getMessage());
+        }
     }
 }
