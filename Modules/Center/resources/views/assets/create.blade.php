@@ -63,7 +63,7 @@
                             <select class="form-select rounded-3" id="classroom_id" name="classroom_id">
                                 <option value="">{{ __('center::assets.none') }}</option>
                                 @foreach($classrooms as $classroom)
-                                    <option value="{{ $classroom->id }}" {{ (old('classroom_id', $asset->classroom_id ?? '') == $classroom->id) ? 'selected' : '' }}>{{ $classroom->name }}</option>
+                                    <option value="{{ $classroom->id }}" {{ (old('classroom_id', $asset->classroom_id ?? request('classroom_id')) == $classroom->id) ? 'selected' : '' }}>{{ $classroom->name }}</option>
                                 @endforeach
                             </select>
                             <label for="classroom_id">{{ __('center::assets.classroom') }}</label>
