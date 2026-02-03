@@ -22,10 +22,15 @@ class UpdateInstructorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['nullable', 'string', 'max:255', 'regex:/^[\pL\s]+$/u'],
+            'name' => ['required', 'string', 'max:255', 'regex:/^[\pL\s]+$/u'],
             'email' => 'nullable|email|max:255',
             'phone' => ['nullable', 'string', 'max:20', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
             'specialization' => ['nullable', 'string', 'max:100', 'regex:/^[\pL\s\-\.]+$/u'],
+            'status' => 'required|in:active,inactive,on_hold',
+            'commission_rate' => 'nullable|numeric|min:0|max:100',
+            'national_id' => 'nullable|string|max:30',
+            'gender' => 'nullable|in:male,female',
+            'hiring_date' => 'nullable|date',
             'bio' => 'nullable|string|max:2000',
             'image' => 'nullable|image|max:2048',
         ];

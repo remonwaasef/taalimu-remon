@@ -62,6 +62,11 @@ class InstructorController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             'specialization' => $request->specialization,
+            'status' => $request->status ?? 'active',
+            'commission_rate' => $request->commission_rate ?? 0,
+            'national_id' => $request->national_id,
+            'gender' => $request->gender,
+            'hiring_date' => $request->hiring_date,
             'bio' => $request->bio,
             'image' => $imagePath ?? null,
         ]);
@@ -114,6 +119,11 @@ class InstructorController extends Controller
         $instructor->email = $request->email;
         $instructor->phone = $request->phone;
         $instructor->specialization = $request->specialization;
+        $instructor->status = $request->status;
+        $instructor->commission_rate = $request->commission_rate;
+        $instructor->national_id = $request->national_id;
+        $instructor->gender = $request->gender;
+        $instructor->hiring_date = $request->hiring_date;
         $instructor->bio = $request->bio;
 
         if ($request->hasFile('image')) {
