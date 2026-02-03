@@ -135,6 +135,8 @@ class CourseController extends Controller
         $this->authorize('update', $course);
         
         $data = $request->validated();
+        
+        \Log::info('CourseController@update: Validated data', ['data' => $data]);
 
         if ($request->hasFile('image')) {
             $data['image'] = $this->handleFileUpload($request, 'image', $course->image, 'courses');
@@ -142,7 +144,15 @@ class CourseController extends Controller
             $data['image'] = $course->image;
         }
 
-        $this->courseService->updateCourse($course, CourseData::fromArray($data));
+        try {
+            $dto = CourseData::fromArray($data);
+            \Log::info('CourseController@update: DTO created', ['dto_array' => $dto->toArray()]);
+            $this->courseService->updateCourse($course, $dto);
+            \Log::info('CourseController@update: Update successful for course ID ' . $id);
+        } catch (\Throwable $e) {
+            \Log::error('CourseController@update: EXCEPTION', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            return redirect()->back()->withInput()->withErrors(['error' => 'حدث خطأ أثناء التحديث: ' . $e->getMessage()]);
+        }
 
         return redirect()->route('center.courses.index')->with('success', 'تم تحديث الكورس بنجاح');
     }
