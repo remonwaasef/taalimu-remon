@@ -160,6 +160,7 @@ $tenantRoutes = function () {
             Route::put('courses/{course}', [CourseController::class, 'update'])->name('center.courses.update');
             Route::post('courses/{course}/toggle-status', [CourseController::class, 'toggleStatus'])->name('center.courses.toggle-status');
             Route::post('courses/{course}/enroll', [CourseController::class, 'enroll'])->name('center.courses.enroll');
+            Route::post('courses/{course}/quick-enroll', [CourseController::class, 'quickEnroll'])->name('center.courses.quick-enroll');
         });
 
         Route::middleware(['permission:delete courses'])->group(function() {

@@ -134,29 +134,100 @@
 
     <!-- Enroll Student Modal -->
     <div class="modal fade" id="enrollStudentModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content rounded-4 border-0">
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold">تسجيل طالب جديد</h5>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content rounded-5 border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0 pt-4 px-4">
+                    <h5 class="modal-title fw-bold fs-4">تسجيل طالب في الدورة</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <form action="{{ route('center.courses.enroll', $course->id) }}" method="POST">
-                        @csrf
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">اختر الطالب</label>
-                            <select name="student_id" class="form-select" id="studentSelect" required>
-                                <option value="">ابحث عن طالب...</option>
-                                @foreach($students as $student)
-                                    <option value="{{ $student->id }}">{{ $student->name }} ({{ $student->phone }})</option>
-                                @endforeach
-                            </select>
+                <div class="modal-body p-4">
+                    <!-- Custom Tabs -->
+                    <ul class="nav nav-pills mb-4 bg-light p-1 rounded-pill" id="enrollTabs" role="tablist">
+                        <li class="nav-item flex-fill" role="presentation">
+                            <button class="nav-link active rounded-pill w-100 fw-bold" id="existing-tab" data-bs-toggle="pill" data-bs-target="#existing-panel" type="button" role="tab">
+                                <i class="fas fa-search me-2"></i> طالب مسجل مسبقاً
+                            </button>
+                        </li>
+                        <li class="nav-item flex-fill" role="presentation">
+                            <button class="nav-link rounded-pill w-100 fw-bold" id="quick-tab" data-bs-toggle="pill" data-bs-target="#quick-panel" type="button" role="tab">
+                                <i class="fas fa-user-plus me-2"></i> تسجيل سريع لجديد
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="enrollTabsContent">
+                        <!-- Panel 1: Existing Student -->
+                        <div class="tab-pane fade show active" id="existing-panel" role="tabpanel">
+                            <form action="{{ route('center.courses.enroll', $course->id) }}" method="POST" class="p-2">
+                                @csrf
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold text-dark mb-2">اختر الطالب من القائمة</label>
+                                    <select name="student_id" class="form-select border-2" id="studentSelect" required>
+                                        <option value="">ابحث عن طالب بالاسم أو الهاتف...</option>
+                                        @foreach($students as $student)
+                                            <option value="{{ $student->id }}">{{ $student->name }} ({{ $student->phone }})</option>
+                                        @endforeach
+                                    </select>
+                                    <div class="form-text mt-2"><i class="fas fa-info-circle me-1"></i> ابحث عن الطلاب غير المسجلين في هذا الكورس فقط.</div>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary rounded-pill py-3 fw-bold fs-5 shadow-sm">
+                                        إتمام التسجيل <i class="fas fa-arrow-left ms-2"></i>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                        <div class="text-end mt-4">
-                            <button type="button" class="btn btn-light rounded-pill ms-2" data-bs-dismiss="modal">إلغاء</button>
-                            <button type="submit" class="btn btn-primary rounded-pill px-4">تسجيل</button>
+
+                        <!-- Panel 2: Quick New Student -->
+                        <div class="tab-pane fade" id="quick-panel" role="tabpanel">
+                            <form action="{{ route('center.courses.quick-enroll', $course->id) }}" method="POST" class="p-2">
+                                @csrf
+                                <div class="row g-3">
+                                    <div class="col-md-12">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" name="name" class="form-control border-2 rounded-4" id="qName" placeholder="الاسم" required>
+                                            <label for="qName">اسم الطالب بالكامل</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating mb-3">
+                                            <input type="tel" name="phone" class="form-control border-2 rounded-4" id="qPhone" placeholder="الهاتف" required>
+                                            <label for="qPhone">رقم الهاتف</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating mb-3">
+                                            <input type="tel" name="parent_phone" class="form-control border-2 rounded-4" id="qParentPhone" placeholder="هاتف ولي الأمر">
+                                            <label for="qParentPhone">هاتف ولي الأمر (اختياري)</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-floating mb-4">
+                                            <select name="grade_id" class="form-select border-2 rounded-4" id="qGrade" required>
+                                                <option value="">اختر الصف الدراسي...</option>
+                                                @foreach($stages as $stage)
+                                                    <optgroup label="📂 {{ $stage->name }}">
+                                                        @foreach($stage->grades as $grade)
+                                                            <option value="{{ $grade->id }}">{{ $grade->name }}</option>
+                                                        @endforeach
+                                                    </optgroup>
+                                                @endforeach
+                                            </select>
+                                            <label for="qGrade">الصف الدراسي</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="alert alert-info border-0 rounded-4 py-3 small mb-4">
+                                    <i class="fas fa-magic me-2"></i> سيقوم النظام بإنشاء حساب للطالب وتلقائياً وتسجيله في هذه الدورة فوراً.
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-success rounded-pill py-3 fw-bold fs-5 shadow-sm">
+                                        إنشاء وتسجيل <i class="fas fa-bolt ms-2"></i>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -178,6 +249,13 @@
                 sortField: { field: "text", direction: "asc" },
                 maxOptions: null
             });
+
+            @if(isset($auto_enroll) && $auto_enroll)
+            document.addEventListener('DOMContentLoaded', function() {
+                var myModal = new bootstrap.Modal(document.getElementById('enrollStudentModal'));
+                myModal.show();
+            });
+            @endif
         </script>
     @endpush
 @endsection

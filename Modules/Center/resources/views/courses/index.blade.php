@@ -114,27 +114,32 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <div class="{{ ($loop->remaining < 2 && $courses->count() > 2) ? 'dropup' : 'dropdown' }}">
-                                        <button class="btn btn-sm btn-light rounded-circle" type="button" data-bs-toggle="dropdown">
-                                            ⋮
-                                        </button>
-                                        <ul class="dropdown-menu border-0 shadow">
-                                            <li><a class="dropdown-item" href="{{ route('center.courses.show', $course->id) }}"><i class="fas fa-eye me-2 text-muted"></i> {{ __('center::courses.view') }}</a></li>
-                                            <li><a class="dropdown-item" href="{{ route('center.courses.show', $course->id) }}"><i class="fas fa-user-plus me-2 text-success"></i> إضافة طالب للدورة</a></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item" href="{{ route('center.courses.edit', $course->id) }}"><i class="fas fa-edit me-2 text-muted"></i> {{ __('center::courses.edit') }}</a></li>
-                                            <li><a class="dropdown-item" href="{{ route('center.curriculum.edit', $course->id) }}"><i class="fas fa-book-open me-2 text-muted"></i> {{ __('center::courses.content') }}</a></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li>
-                                                <form action="{{ route('center.courses.destroy', $course->id) }}" method="POST" onsubmit="return confirm('{{ __('center::courses.delete_confirm') }}');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="dropdown-item text-danger">
-                                                        <i class="fas fa-trash-alt me-2"></i> {{ __('center::courses.delete') }}
-                                                    </button>
-                                                </form>
-                                            </li>
-                                        </ul>
+                                    <div class="d-flex align-items-center gap-1 justify-content-end">
+                                        <a href="{{ route('center.courses.show', [$course->id, 'enroll' => 1]) }}" class="btn btn-sm btn-success rounded-pill px-3 py-1 fw-bold shadow-sm d-none d-xl-inline-block">
+                                            <i class="fas fa-user-plus me-1"></i> {{ __('center::courses.enroll_student') }}
+                                        </a>
+                                        <div class="{{ ($loop->remaining < 2 && $courses->count() > 2) ? 'dropup' : 'dropdown' }}">
+                                            <button class="btn btn-sm btn-light rounded-circle" type="button" data-bs-toggle="dropdown">
+                                                ⋮
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
+                                                <li><a class="dropdown-item" href="{{ route('center.courses.show', $course->id) }}"><i class="fas fa-eye me-2 text-muted"></i> {{ __('center::courses.view') }}</a></li>
+                                                <li><a class="dropdown-item fw-bold text-success" href="{{ route('center.courses.show', [$course->id, 'enroll' => 1]) }}"><i class="fas fa-user-plus me-2"></i> {{ __('center::courses.enroll_student') }}</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" href="{{ route('center.courses.edit', $course->id) }}"><i class="fas fa-edit me-2 text-muted"></i> {{ __('center::courses.edit') }}</a></li>
+                                                <li><a class="dropdown-item" href="{{ route('center.curriculum.edit', $course->id) }}"><i class="fas fa-book-open me-2 text-muted"></i> {{ __('center::courses.content') }}</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li>
+                                                    <form action="{{ route('center.courses.destroy', $course->id) }}" method="POST" onsubmit="return confirm('{{ __('center::courses.delete_confirm') }}');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="dropdown-item text-danger">
+                                                            <i class="fas fa-trash-alt me-2"></i> {{ __('center::courses.delete') }}
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>

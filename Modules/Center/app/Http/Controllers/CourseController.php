@@ -88,8 +88,11 @@ class CourseController extends Controller
         $students = \App\Models\Student::whereDoesntHave('user.enrollments', function($q) use ($id) {
             $q->where('course_id', $id);
         })->get();
+
+        $stages = \App\Models\Stage::getCached();
+        $auto_enroll = $request->has('enroll');
         
-        return view('center::courses.show', compact('course', 'students'));
+        return view('center::courses.show', compact('course', 'students', 'stages', 'auto_enroll'));
     }
 
     public function enroll(Request $request, $id)
@@ -110,6 +113,35 @@ class CourseController extends Controller
             return back()->with('success', 'تم تسجيل الطالب في الدورة بنجاح');
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function quickEnroll(Request $request, $id)
+    {
+        $course = Course::findOrFail($id);
+        $this->authorize('enroll', $course);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'grade_id' => 'required|exists:grades,id',
+            'parent_phone' => 'nullable|string|max:20',
+        ]);
+
+        try {
+            return \DB::transaction(function() use ($request, $course) {
+                // 1. Create Student
+                $studentData = \App\DTOs\StudentData::fromArray($request->all());
+                $registrationResult = app(\App\Services\StudentService::class)->registerStudent($studentData, auth()->user());
+                $student = $registrationResult['student'];
+
+                // 2. Enroll in Course
+                $this->courseService->enrollStudent($course, $student);
+
+                return back()->with('success', 'تم إنشاء الطالب وتسجيله في الدورة بنجاح');
+            });
+        } catch (\Exception $e) {
+            return back()->with('error', 'حدث خطأ: ' . $e->getMessage());
         }
     }
 

@@ -416,6 +416,12 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="{{ route('admin.operation-issues.index') }}" class="nav-link {{ request()->routeIs('admin.operation-issues.*') ? 'active' : '' }}">
+                    <span>🔴</span>
+                    {{ __('admin.sidebar.operation_issues') ?? 'مشكلات التشغيل' }}
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="{{ route('admin.roles.index') }}" class="nav-link {{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
                     <span>🛡️</span>
                     {{ __('admin.sidebar.roles') }}
