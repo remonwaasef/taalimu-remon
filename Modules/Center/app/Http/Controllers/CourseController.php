@@ -137,6 +137,8 @@ class CourseController extends Controller
 
         if ($request->hasFile('image')) {
             $data['image'] = $this->handleFileUpload($request, 'image', $course->image, 'courses');
+        } else {
+            $data['image'] = $course->image;
         }
 
         $this->courseService->updateCourse($course, CourseData::fromArray($data));
