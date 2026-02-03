@@ -40,9 +40,10 @@
                                 </td>
                                 <td>{{ $classroom->capacity ? trans_choice('center::classrooms.students_count', $classroom->capacity, ['count' => $classroom->capacity]) : __('center::classrooms.not_specified') }}</td>
                                 <td>
-                                    <span class="badge bg-info bg-opacity-10 text-info rounded-pill px-3">
-                                        {{ $classroom->assets_count ?? $classroom->assets->count() }} قطعة
-                                    </span>
+                                    <div class="d-flex align-items-center text-info">
+                                        <i class="fas fa-box-open me-2 opacity-50"></i>
+                                        <span class="fw-bold">{{ $classroom->assets_count ?? $classroom->assets->count() }}</span>
+                                    </div>
                                 </td>
                                 <td class="text-muted">{{ $classroom->created_at->format('Y-m-d') }}</td>
                                 <td>
