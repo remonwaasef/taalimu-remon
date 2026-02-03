@@ -66,5 +66,37 @@ return [
                 ],
             ],
         ],
+        'french_system' => [
+            'name' => 'النظام الفرنسي (Mission Française)',
+            'stages' => [
+                [
+                    'name' => 'القسم الابتدائي (Primaire)',
+                    'grades' => [
+                        'CP',
+                        'CE1',
+                        'CE2',
+                        'CM1',
+                        'CM2',
+                    ],
+                ],
+                [
+                    'name' => 'المرحلة الإعدادية (Collège)',
+                    'grades' => [
+                        '6ème',
+                        '5ème',
+                        '4ème',
+                        '3ème',
+                    ],
+                ],
+                [
+                    'name' => 'المرحلة الثانوية (Lycée)',
+                    'grades' => [
+                        'Seconde',
+                        'Première',
+                        'Terminale',
+                    ],
+                ],
+            ],
+        ],
     ],
 ];
