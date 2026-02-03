@@ -17,6 +17,7 @@
                         <tr>
                             <th class="border-0 rounded-start">{{ __('center::classrooms.name') }}</th>
                             <th class="border-0">{{ __('center::classrooms.capacity') }}</th>
+                            <th class="border-0">{{ __('center::classrooms.assets_count') }}</th>
                             <th class="border-0">{{ __('center::classrooms.created_at') }}</th>
                             <th class="border-0 rounded-end">{{ __('center::classrooms.actions') }}</th>
                         </tr>
@@ -38,6 +39,11 @@
                                     </div>
                                 </td>
                                 <td>{{ $classroom->capacity ? trans_choice('center::classrooms.students_count', $classroom->capacity, ['count' => $classroom->capacity]) : __('center::classrooms.not_specified') }}</td>
+                                <td>
+                                    <span class="badge bg-info bg-opacity-10 text-info rounded-pill px-3">
+                                        {{ $classroom->assets_count ?? $classroom->assets->count() }} قطعة
+                                    </span>
+                                </td>
                                 <td class="text-muted">{{ $classroom->created_at->format('Y-m-d') }}</td>
                                 <td>
                                     <div class="{{ ($loop->remaining < 2 && $classrooms->count() > 2) ? 'dropup' : 'dropdown' }}">
@@ -62,7 +68,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-center py-5 text-muted">{{ __('center::classrooms.empty') }}</td>
+                                <td colspan="5" class="text-center py-5 text-muted">{{ __('center::classrooms.empty') }}</td>
                             </tr>
                         @endforelse
                     </tbody>
