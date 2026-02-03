@@ -12,8 +12,16 @@ class AssetController extends Controller
 {
     public function index()
     {
-        // $this->authorize('viewAny', Asset::class); // Enable after defining policy
-        $assets = Asset::with('classroom')->latest()->paginate(15);
+        // $this->authorize('viewAny', Asset::class);
+        $assets = Asset::with('classroom')
+            ->orderBy(\DB::raw('ISNULL(classroom_id)'), 'asc')
+            ->orderBy('classroom_id')
+            ->latest()
+            ->get()
+            ->groupBy(function($asset) {
+                return $asset->classroom ? $asset->classroom->name : '---';
+            });
+
         return view('center::assets.index', compact('assets'));
     }
 
