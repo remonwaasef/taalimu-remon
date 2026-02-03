@@ -161,6 +161,7 @@ class SettingsController extends Controller
 
                 foreach ($template['stages'] as $sIndex => $stageData) {
                     $stage = Stage::create([
+                        'tenant_id' => $tenantId, // Explicitly set tenant_id
                         'name' => $stageData['name'],
                         'order' => $sIndex,
                     ]);
@@ -169,6 +170,7 @@ class SettingsController extends Controller
 
                     foreach ($stageData['grades'] as $gIndex => $gradeName) {
                         Grade::create([
+                            'tenant_id' => $tenantId, // Explicitly set tenant_id
                             'stage_id' => $stage->id,
                             'name' => $gradeName,
                             'order' => $gIndex,
