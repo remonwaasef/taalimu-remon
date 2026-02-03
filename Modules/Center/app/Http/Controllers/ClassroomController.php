@@ -39,9 +39,10 @@ class ClassroomController extends Controller
         }
 
         $validated = $request->validate([
-                        'name' => 'nullable|string|max:255',
-
+            'name' => 'required|string|max:255',
             'capacity' => 'nullable|integer|min:1',
+            'type' => 'nullable|string|in:hall,lab,virtual',
+            'color' => 'nullable|string|max:7',
         ]);
 
         Classroom::create($validated);
@@ -57,7 +58,7 @@ class ClassroomController extends Controller
     {
         $this->authorize('view', $classroom);
         
-        $classroom->load(['schedules' => function($query) {
+        $classroom->load(['assets', 'schedules' => function($query) {
             $query->with(['course', 'instructor'])->orderBy('day_of_week')->orderBy('start_time');
         }]);
 
@@ -79,10 +80,12 @@ class ClassroomController extends Controller
     public function update(Request $request, Classroom $classroom): RedirectResponse
     {
         $this->authorize('update', $classroom);
+        
         $validated = $request->validate([
-                        'name' => 'nullable|string|max:255',
-
+            'name' => 'required|string|max:255',
             'capacity' => 'nullable|integer|min:1',
+            'type' => 'nullable|string|in:hall,lab,virtual',
+            'color' => 'nullable|string|max:7',
         ]);
 
         $classroom->update($validated);

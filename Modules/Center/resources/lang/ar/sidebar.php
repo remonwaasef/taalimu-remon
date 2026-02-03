@@ -44,4 +44,5 @@ return [
     'academic_setup' => 'إعداد الهيكل الأكاديمي',
     'courses_groups' => 'الدورات والمجموعات',
     'student_accounts' => 'حسابات الطلاب',
+    'assets' => 'العهد والأصول',
 ];

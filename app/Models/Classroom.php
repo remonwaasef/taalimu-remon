@@ -38,7 +38,21 @@ class Classroom extends Model
         'tenant_id',
         'name',
         'capacity',
+        'type',
+        'color',
+        'is_active',
+        'facilities_summary',
     ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'facilities_summary' => 'array',
+    ];
+
+    public function assets()
+    {
+        return $this->hasMany(Modules\Center\Models\Asset::class);
+    }
 
     public function getActivitylogOptions(): LogOptions
     {

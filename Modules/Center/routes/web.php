@@ -23,6 +23,7 @@ use Modules\Center\Http\Controllers\BookingController;
 use Modules\Center\Http\Controllers\NotificationController;
 use Modules\Center\Http\Controllers\LeaderboardController;
 use Modules\Center\Http\Controllers\QuestionBankController;
+use Modules\Center\Http\Controllers\AssetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -299,6 +300,7 @@ $tenantRoutes = function () {
         // Classroom Management
         Route::middleware(['permission:manage schedule'])->group(function() {
             Route::resource('classrooms', ClassroomController::class)->names('center.classrooms');
+            Route::resource('assets', AssetController::class)->names('center.assets');
         });
 
         // Bookings Management

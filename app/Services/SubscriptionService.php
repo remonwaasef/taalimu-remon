@@ -41,7 +41,7 @@ class SubscriptionService
         }
 
         // Zero DB Hits: Check if package and features are already loaded from Cache
-        if ($subscription->relationLoaded('package') && $subscription->package->relationLoaded('features')) {
+        if ($subscription->relationLoaded('package') && $subscription->package && $subscription->package->relationLoaded('features')) {
             $packageFeature = $subscription->package->features->firstWhere('code', $featureCode);
         } else {
             // Fallback to DB if not loaded for some reason
