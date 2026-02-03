@@ -1,0 +1,90 @@
+<?php
+
+namespace Modules\Center\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use App\Models\Modules\Center\Models\Asset;
+use App\Models\Classroom;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+
+class AssetController extends Controller
+{
+    public function index()
+    {
+        // $this->authorize('viewAny', Asset::class); // Enable after defining policy
+        $assets = Asset::with('classroom')->latest()->paginate(15);
+        return view('center::assets.index', compact('assets'));
+    }
+
+    public function create()
+    {
+        // $this->authorize('create', Asset::class);
+        $classrooms = Classroom::all();
+        return view('center::assets.create', compact('classrooms'));
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        // $this->authorize('create', Asset::class);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'code' => 'nullable|string|max:100',
+            'type' => 'required|string|in:equipment,furniture,electronics,other',
+            'status' => 'required|string|in:active,maintenance,broken,lost',
+            'classroom_id' => 'nullable|exists:classrooms,id',
+            'purchase_date' => 'nullable|date',
+            'cost' => 'nullable|numeric|min:0',
+            'notes' => 'nullable|string',
+        ]);
+
+        Asset::create($validated);
+
+        return redirect()->route('center.assets.index')
+            ->with('success', 'تم تسجيل الأصل بنجاح');
+    }
+
+    public function show(Asset $asset)
+    {
+        // $this->authorize('view', $asset);
+        return view('center::assets.show', compact('asset'));
+    }
+
+    public function edit(Asset $asset)
+    {
+        // $this->authorize('update', $asset);
+        $classrooms = Classroom::all();
+        return view('center::assets.edit', compact('asset', 'classrooms'));
+    }
+
+    public function update(Request $request, Asset $asset): RedirectResponse
+    {
+        // $this->authorize('update', $asset);
+        
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'code' => 'nullable|string|max:100',
+            'type' => 'required|string|in:equipment,furniture,electronics,other',
+            'status' => 'required|string|in:active,maintenance,broken,lost',
+            'classroom_id' => 'nullable|exists:classrooms,id',
+            'purchase_date' => 'nullable|date',
+            'cost' => 'nullable|numeric|min:0',
+            'notes' => 'nullable|string',
+        ]);
+
+        $asset->update($validated);
+
+        return redirect()->route('center.assets.index')
+            ->with('success', 'تم تحديث بيانات الأصل بنجاح');
+    }
+
+    public function destroy(Asset $asset): RedirectResponse
+    {
+        // $this->authorize('delete', $asset);
+        $asset->delete();
+
+        return redirect()->route('center.assets.index')
+            ->with('success', 'تم حذف الأصل بنجاح');
+    }
+}

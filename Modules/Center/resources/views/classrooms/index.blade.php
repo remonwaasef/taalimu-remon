@@ -26,10 +26,15 @@
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
-                                            🏢
+                                        <div class="rounded-3 d-flex align-items-center justify-content-center me-3 shadow-sm border border-2 border-white" style="width: 40px; height: 40px; background-color: {{ $classroom->color ?? '#435ebe' }}; color: white; font-size: 1.2rem;">
+                                            @if($classroom->type == 'lab') 💻 @elseif($classroom->type == 'virtual') 🌐 @else 🏢 @endif
                                         </div>
-                                        <div class="fw-bold">{{ $classroom->name }}</div>
+                                        <div>
+                                            <div class="fw-bold text-dark">{{ $classroom->name }}</div>
+                                            <span class="badge bg-light text-muted border-0 p-0" style="font-size: 0.7rem;">
+                                                {{ $classroom->type == 'lab' ? 'معمل حاسب' : ($classroom->type == 'virtual' ? 'قاعة افتراضية' : 'قاعة محاضرات') }}
+                                            </span>
+                                        </div>
                                     </div>
                                 </td>
                                 <td>{{ $classroom->capacity ?? __('center::classrooms.not_specified') }} {{ trans_choice('center::classrooms.student|center::classrooms.students', $classroom->capacity ?? 0) }}</td>

@@ -476,26 +476,41 @@
                 <span><i class="fas fa-home me-2"></i> <?php echo e(__('center::sidebar.dashboard')); ?></span>
             </a>
 
-            <!-- 1. DAILY OPERATIONS -->
-            <?php $isDailyActive = request()->routeIs('center.students.*') || request()->routeIs('center.attendance.*') || request()->routeIs('center.schedules.*'); ?>
-            <a href="#dailyCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 <?php echo e($isDailyActive ? 'sidebar-section-active' : ''); ?>" role="button" aria-expanded="<?php echo e($isDailyActive ? 'true' : 'false'); ?>">
-                <span><i class="fas fa-calendar-check me-2 <?php echo e($isDailyActive ? 'text-warning' : 'opacity-75'); ?>"></i> <?php echo e(__('center::sidebar.operations')); ?></span>
+            <!-- 1. ACADEMIC STRUCTURE SETUP -->
+            <?php $isAcademicSetupActive = request()->routeIs('center.classrooms.*') || (request()->routeIs('center.settings.index') && request('tab') == 'academic'); ?>
+            <a href="#academicSetupCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 <?php echo e($isAcademicSetupActive ? 'sidebar-section-active' : ''); ?>" role="button" aria-expanded="<?php echo e($isAcademicSetupActive ? 'true' : 'false'); ?>">
+                <span><i class="fas fa-layer-group me-2 <?php echo e($isAcademicSetupActive ? 'text-info' : 'opacity-75'); ?>"></i> <?php echo e(__('center::sidebar.academic_setup')); ?></span>
                 <i class="fas fa-chevron-down fa-xs opacity-50"></i>
             </a>
-            <div class="collapse <?php echo e($isDailyActive ? 'show' : ''); ?>" id="dailyCollapse">
+            <div class="collapse <?php echo e($isAcademicSetupActive ? 'show' : ''); ?>" id="academicSetupCollapse">
                 <div class="sidebar-submenu">
-                    <a href="<?php echo e(route('center.students.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.students.*') ? 'active' : ''); ?>">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.students')); ?>
+                    <a href="<?php echo e(route('center.classrooms.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.classrooms.*') ? 'active' : ''); ?>">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.classrooms')); ?>
 
                     </a>
+                    <a href="<?php echo e(route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'academic'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.settings.index') && request('tab') == 'academic' ? 'active' : ''); ?>">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> المراحل والصفوف الدراسية
+                    </a>
+                </div>
+            </div>
 
-                    <?php if($tenant->hasFeature('attendance_tracking')): ?>
-                    <a href="<?php echo e(route('center.attendance.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.attendance.*') ? 'active' : ''); ?>">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.attendance')); ?>
+            <!-- 2. INSTRUCTORS -->
+            <a href="<?php echo e(route('center.instructors.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-nav-link mb-1 <?php echo e(request()->routeIs('center.instructors.*') ? 'active' : ''); ?>">
+                <span><i class="fas fa-user-tie me-2"></i> <?php echo e(__('center::sidebar.instructors')); ?></span>
+            </a>
+
+            <!-- 3. COURSES & GROUPS -->
+            <?php $isCoursesActive = request()->routeIs('center.courses.*') || request()->routeIs('center.schedules.*'); ?>
+            <a href="#coursesCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 <?php echo e($isCoursesActive ? 'sidebar-section-active' : ''); ?>" role="button" aria-expanded="<?php echo e($isCoursesActive ? 'true' : 'false'); ?>">
+                <span><i class="fas fa-book-reader me-2 <?php echo e($isCoursesActive ? 'text-primary' : 'opacity-75'); ?>"></i> <?php echo e(__('center::sidebar.courses_groups')); ?></span>
+                <i class="fas fa-chevron-down fa-xs opacity-50"></i>
+            </a>
+            <div class="collapse <?php echo e($isCoursesActive ? 'show' : ''); ?>" id="coursesCollapse">
+                <div class="sidebar-submenu">
+                    <a href="<?php echo e(route('center.courses.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.courses.*') ? 'active' : ''); ?>">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.courses')); ?>
 
                     </a>
-                    <?php endif; ?>
-
                     <?php if($tenant->hasFeature('daily_schedules')): ?>
                     <a href="<?php echo e(route('center.schedules.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.schedules.*') ? 'active' : ''); ?>">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.schedules')); ?>
@@ -505,29 +520,54 @@
                 </div>
             </div>
 
-            <!-- 2. ACADEMIC MANAGEMENT -->
-            <?php $isAcademicActive = request()->routeIs('center.courses.*') || request()->routeIs('center.instructors.*') || request()->routeIs('center.classrooms.*') || request()->routeIs('center.quizzes.*') || request()->routeIs('center.questions.*'); ?>
-            <a href="#academicCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 <?php echo e($isAcademicActive ? 'sidebar-section-active' : ''); ?>" role="button" aria-expanded="<?php echo e($isAcademicActive ? 'true' : 'false'); ?>">
-                <span><i class="fas fa-book-reader me-2 <?php echo e($isAcademicActive ? 'text-info' : 'opacity-75'); ?>"></i> <?php echo e(__('center::sidebar.academic')); ?></span>
+            <!-- 4. STUDENTS -->
+            <a href="<?php echo e(route('center.students.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-nav-link mb-3 <?php echo e(request()->routeIs('center.students.*') ? 'active' : ''); ?>">
+                <span><i class="fas fa-user-graduate me-2"></i> <?php echo e(__('center::sidebar.students')); ?></span>
+            </a>
+
+            <!-- 5. FINANCIAL & ANALYTICS -->
+            <?php $isFinanceActive = request()->routeIs('center.sales.*') || request()->routeIs('center.expenses.*') || request()->routeIs('center.analytics.*'); ?>
+            <a href="#financeCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 <?php echo e($isFinanceActive ? 'sidebar-section-active' : ''); ?>" role="button" aria-expanded="<?php echo e($isFinanceActive ? 'true' : 'false'); ?>">
+                <span><i class="fas fa-chart-line me-2 <?php echo e($isFinanceActive ? 'text-success' : 'opacity-75'); ?>"></i> <?php echo e(__('center::sidebar.financial')); ?></span>
                 <i class="fas fa-chevron-down fa-xs opacity-50"></i>
             </a>
-            <div class="collapse <?php echo e($isAcademicActive ? 'show' : ''); ?>" id="academicCollapse">
+            <div class="collapse <?php echo e($isFinanceActive ? 'show' : ''); ?>" id="financeCollapse">
                 <div class="sidebar-submenu">
-                    <a href="<?php echo e(route('center.courses.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.courses.*') ? 'active' : ''); ?>">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.courses')); ?>
+                    <?php if($tenant->hasFeature('financial_reports')): ?>
+                    <a href="<?php echo e(route('center.sales.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.sales.index') ? 'active' : ''); ?>">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.sales')); ?>
 
                     </a>
-                    
-                    <a href="<?php echo e(route('center.instructors.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.instructors.*') ? 'active' : ''); ?>">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.instructors')); ?>
+                    <a href="<?php echo e(route('center.sales.account', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.sales.account') ? 'active' : ''); ?>">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.student_accounts')); ?>
 
                     </a>
-
-                    <a href="<?php echo e(route('center.classrooms.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.classrooms.*') ? 'active' : ''); ?>">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.classrooms')); ?>
+                    <a href="<?php echo e(route('center.expenses.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.expenses.*') ? 'active' : ''); ?>">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.expenses')); ?>
 
                     </a>
+                    <?php endif; ?>
+                    <a href="<?php echo e(route('center.analytics.index')); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.analytics.index') ? 'active' : ''); ?>">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::analytics.general')); ?>
 
+                    </a>
+                </div>
+            </div>
+
+            <!-- 6. DAILY OPERATIONS -->
+            <?php $isOpsActive = request()->routeIs('center.attendance.*') || request()->routeIs('center.quizzes.*') || request()->routeIs('center.questions.*'); ?>
+            <a href="#opsCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 <?php echo e($isOpsActive ? 'sidebar-section-active' : ''); ?>" role="button" aria-expanded="<?php echo e($isOpsActive ? 'true' : 'false'); ?>">
+                <span><i class="fas fa-tasks me-2 <?php echo e($isOpsActive ? 'text-warning' : 'opacity-75'); ?>"></i> <?php echo e(__('center::sidebar.operations')); ?></span>
+                <i class="fas fa-chevron-down fa-xs opacity-50"></i>
+            </a>
+            <div class="collapse <?php echo e($isOpsActive ? 'show' : ''); ?>" id="opsCollapse">
+                <div class="sidebar-submenu">
+                    <?php if($tenant->hasFeature('attendance_tracking')): ?>
+                    <a href="<?php echo e(route('center.attendance.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.attendance.*') ? 'active' : ''); ?>">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.attendance')); ?>
+
+                    </a>
+                    <?php endif; ?>
                     <?php if($tenant->hasFeature('manage_exams')): ?>
                     <a href="<?php echo e(route('center.quizzes.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.quizzes.*') ? 'active' : ''); ?>">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.exams_results')); ?>
@@ -541,46 +581,11 @@
                 </div>
             </div>
 
-            <!-- 3. FINANCE & INSIGHTS -->
-            <?php $isFinanceActive = request()->routeIs('center.sales.*') || request()->routeIs('center.expenses.*') || request()->routeIs('center.analytics.*'); ?>
-            <a href="#financeCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 <?php echo e($isFinanceActive ? 'sidebar-section-active' : ''); ?>" role="button" aria-expanded="<?php echo e($isFinanceActive ? 'true' : 'false'); ?>">
-                <span><i class="fas fa-chart-line me-2 <?php echo e($isFinanceActive ? 'text-success' : 'opacity-75'); ?>"></i> <?php echo e(__('center::sidebar.financial')); ?></span>
-                <i class="fas fa-chevron-down fa-xs opacity-50"></i>
-            </a>
-            <div class="collapse <?php echo e($isFinanceActive ? 'show' : ''); ?>" id="financeCollapse">
-                <div class="sidebar-submenu">
-                    <?php if($tenant->hasFeature('financial_reports')): ?>
-                    <a href="<?php echo e(route('center.sales.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.sales.index') ? 'active' : ''); ?>">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.sales')); ?>
-
-                    </a>
-                    
-                    <a href="<?php echo e(route('center.sales.account', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.sales.account') ? 'active' : ''); ?>">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> حسابات الطلاب
-                    </a>
-
-                    <a href="<?php echo e(route('center.expenses.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.expenses.*') ? 'active' : ''); ?>">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.expenses')); ?>
-
-                    </a>
-                    <?php endif; ?>
-                    
-                    <a href="<?php echo e(route('center.analytics.index')); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.analytics.index') ? 'active' : ''); ?>">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::analytics.general')); ?>
-
-                    </a>
-                    <a href="<?php echo e(route('center.analytics.students')); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.analytics.students') ? 'active' : ''); ?>">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::analytics.students')); ?>
-
-                    </a>
-                </div>
-            </div>
-
-            <!-- 4. ADMINISTRATION -->
+            <!-- 7. ADMINISTRATION -->
             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->any(['manage users', 'manage settings'])): ?>
-            <?php $isAdminActive = request()->routeIs('center.users.*') || request()->routeIs('center.roles.*') || request()->routeIs('center.branches.*') || request()->routeIs('center.tickets.*') || request()->routeIs('center.settings.*'); ?>
+            <?php $isAdminActive = request()->routeIs('center.users.*') || request()->routeIs('center.roles.*') || request()->routeIs('center.branches.*') || request()->routeIs('center.settings.*') || request()->routeIs('center.tickets.*'); ?>
             <a href="#adminCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 <?php echo e($isAdminActive ? 'sidebar-section-active' : ''); ?>" role="button" aria-expanded="<?php echo e($isAdminActive ? 'true' : 'false'); ?>">
-                <span><i class="fas fa-cogs me-2 <?php echo e($isAdminActive ? 'text-warning' : 'opacity-75'); ?>"></i> <?php echo e(__('center::sidebar.administration')); ?></span>
+                <span><i class="fas fa-cogs me-2 <?php echo e($isAdminActive ? 'text-secondary' : 'opacity-75'); ?>"></i> <?php echo e(__('center::sidebar.administration')); ?></span>
                 <i class="fas fa-chevron-down fa-xs opacity-50"></i>
             </a>
             <div class="collapse <?php echo e($isAdminActive ? 'show' : ''); ?>" id="adminCollapse">
@@ -589,28 +594,18 @@
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.users')); ?>
 
                     </a>
-                    
                     <?php if($tenant->hasFeature('advanced_roles')): ?>
                     <a href="<?php echo e(route('center.roles.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.roles.*') ? 'active' : ''); ?>">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.permissions')); ?>
 
                     </a>
                     <?php endif; ?>
-
-                    <?php if($tenant->hasFeature('multi_branch')): ?>
-                    <a href="<?php echo e(route('center.branches.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.branches.*') ? 'active' : ''); ?>">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.branches')); ?>
+                    <a href="<?php echo e(route('center.settings.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.settings.index') && !request('tab') ? 'active' : ''); ?>">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.settings')); ?>
 
                     </a>
-                    <?php endif; ?>
-
                     <a href="<?php echo e(route('center.tickets.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.tickets.*') ? 'active' : ''); ?>">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.support')); ?>
-
-                    </a>
-                    
-                    <a href="<?php echo e(route('center.settings.index', ['tenant' => $tenant->domain ?? 'center'])); ?>" class="sidebar-sub-link <?php echo e(request()->routeIs('center.settings.*') ? 'active' : ''); ?>">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <?php echo e(__('center::sidebar.settings')); ?>
 
                     </a>
                 </div>
@@ -737,13 +732,13 @@
 
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> <?php echo e(__('sidebar.profile')); ?></a></li>
+                    <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> <?php echo e(__('center::sidebar.profile')); ?></a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <form action="<?php echo e(route('center.logout', ['tenant' => $tenant->domain ?? 'center'])); ?>" method="POST" class="d-inline">
                             <?php echo csrf_field(); ?>
                             <button type="submit" class="dropdown-item text-danger">
-                                <i class="fas fa-sign-out-alt"></i> <?php echo e(__('sidebar.logout')); ?>
+                                <i class="fas fa-sign-out-alt"></i> <?php echo e(__('center::sidebar.logout')); ?>
 
                             </button>
                         </form>
