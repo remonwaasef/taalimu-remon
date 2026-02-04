@@ -20,4 +20,5 @@ return [
     'score' => 'الدرجة',
     'time' => 'الوقت',
     'no_recent_activity' => 'لا يوجد نشاط حديث',
+    'general' => 'التحليلات',
 ];

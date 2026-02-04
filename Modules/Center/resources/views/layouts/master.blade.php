@@ -471,18 +471,32 @@
         </style>
 
         <nav class="mt-4 px-3">
-            <!-- Dashboard (Always Visible) -->
+            <!-- 1. DASHBOARD -->
             <a href="{{ route('center.dashboard', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-nav-link mb-3 {{ request()->routeIs('center.dashboard') ? 'active' : '' }}">
                 <span><i class="fas fa-home me-2"></i> {{ __('center::sidebar.dashboard') }}</span>
             </a>
 
-            <!-- 2. STUDENTS -->
-            <a href="{{ route('center.students.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-nav-link mb-1 {{ request()->routeIs('center.students.*') ? 'active' : '' }}">
-                <span><i class="fas fa-user-graduate me-2"></i> {{ __('center::sidebar.students') }}</span>
+            <!-- 2. STUDENTS (Includes Attendance) -->
+            @php $isStudentsActive = request()->routeIs('center.students.*') || request()->routeIs('center.attendance.*'); @endphp
+            <a href="#studentsCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 {{ $isStudentsActive ? 'sidebar-section-active' : '' }}" role="button" aria-expanded="{{ $isStudentsActive ? 'true' : 'false' }}">
+                <span><i class="fas fa-user-graduate me-2 {{ $isStudentsActive ? 'text-info' : 'opacity-75' }}"></i> {{ __('center::sidebar.students') }}</span>
+                <i class="fas fa-chevron-down fa-xs opacity-50"></i>
             </a>
+            <div class="collapse {{ $isStudentsActive ? 'show' : '' }}" id="studentsCollapse">
+                <div class="sidebar-submenu">
+                    <a href="{{ route('center.students.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.students.*') ? 'active' : '' }}">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.students') }} (القائمة)
+                    </a>
+                    @if($tenant->hasFeature('attendance_tracking'))
+                    <a href="{{ route('center.attendance.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.attendance.*') ? 'active' : '' }}">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.attendance') }}
+                    </a>
+                    @endif
+                </div>
+            </div>
 
-            <!-- 3. COURSES & GROUPS -->
-            @php $isCoursesActive = request()->routeIs('center.courses.*') || request()->routeIs('center.schedules.*'); @endphp
+            <!-- 3. COURSES (Includes Schedules, Exams) -->
+            @php $isCoursesActive = request()->routeIs('center.courses.*') || request()->routeIs('center.schedules.*') || request()->routeIs('center.quizzes.*') || request()->routeIs('center.questions.*'); @endphp
             <a href="#coursesCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 {{ $isCoursesActive ? 'sidebar-section-active' : '' }}" role="button" aria-expanded="{{ $isCoursesActive ? 'true' : 'false' }}">
                 <span><i class="fas fa-book-reader me-2 {{ $isCoursesActive ? 'text-primary' : 'opacity-75' }}"></i> {{ __('center::sidebar.courses_groups') }}</span>
                 <i class="fas fa-chevron-down fa-xs opacity-50"></i>
@@ -497,27 +511,6 @@
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.schedules') }}
                     </a>
                     @endif
-                </div>
-            </div>
-
-            <!-- 4. INSTRUCTORS -->
-            <a href="{{ route('center.instructors.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-nav-link mb-1 {{ request()->routeIs('center.instructors.*') ? 'active' : '' }}">
-                <span><i class="fas fa-user-tie me-2"></i> {{ __('center::sidebar.instructors') }}</span>
-            </a>
-
-            <!-- 5. DAILY OPERATIONS (ATTENDANCE) -->
-            @php $isOpsActive = request()->routeIs('center.attendance.*') || request()->routeIs('center.quizzes.*') || request()->routeIs('center.questions.*'); @endphp
-            <a href="#opsCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 {{ $isOpsActive ? 'sidebar-section-active' : '' }}" role="button" aria-expanded="{{ $isOpsActive ? 'true' : 'false' }}">
-                <span><i class="fas fa-tasks me-2 {{ $isOpsActive ? 'text-warning' : 'opacity-75' }}"></i> {{ __('center::sidebar.operations') }}</span>
-                <i class="fas fa-chevron-down fa-xs opacity-50"></i>
-            </a>
-            <div class="collapse {{ $isOpsActive ? 'show' : '' }}" id="opsCollapse">
-                <div class="sidebar-submenu">
-                    @if($tenant->hasFeature('attendance_tracking'))
-                    <a href="{{ route('center.attendance.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.attendance.*') ? 'active' : '' }}">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.attendance') }}
-                    </a>
-                    @endif
                     @if($tenant->hasFeature('manage_exams'))
                     <a href="{{ route('center.quizzes.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.quizzes.*') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.exams_results') }}
@@ -529,7 +522,7 @@
                 </div>
             </div>
 
-            <!-- 6. FINANCIAL & ANALYTICS -->
+            <!-- 4. FINANCE (Includes Analytics) -->
             @php $isFinanceActive = request()->routeIs('center.sales.*') || request()->routeIs('center.expenses.*') || request()->routeIs('center.analytics.*'); @endphp
             <a href="#financeCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 {{ $isFinanceActive ? 'sidebar-section-active' : '' }}" role="button" aria-expanded="{{ $isFinanceActive ? 'true' : 'false' }}">
                 <span><i class="fas fa-chart-line me-2 {{ $isFinanceActive ? 'text-success' : 'opacity-75' }}"></i> {{ __('center::sidebar.financial') }}</span>
@@ -554,14 +547,26 @@
                 </div>
             </div>
 
-            <!-- 7. ACADEMIC STRUCTURE SETUP (SETTINGS) -->
-            @php $isAcademicSetupActive = request()->routeIs('center.classrooms.*') || (request()->routeIs('center.settings.index') && request('tab') == 'academic'); @endphp
-            <a href="#academicSetupCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 {{ $isAcademicSetupActive ? 'sidebar-section-active' : '' }}" role="button" aria-expanded="{{ $isAcademicSetupActive ? 'true' : 'false' }}">
-                <span><i class="fas fa-layer-group me-2 {{ $isAcademicSetupActive ? 'text-info' : 'opacity-75' }}"></i> {{ __('center::sidebar.academic_setup') }}</span>
+            <!-- 5. SETTINGS (All Config & Admin) -->
+            @canany(['manage users', 'manage settings'])
+            @php 
+                $isSettingsActive = request()->routeIs('center.instructors.*') || 
+                                    request()->routeIs('center.classrooms.*') || 
+                                    request()->routeIs('center.assets.*') || 
+                                    request()->routeIs('center.settings.*') || 
+                                    request()->routeIs('center.users.*') || 
+                                    request()->routeIs('center.roles.*') || 
+                                    request()->routeIs('center.tickets.*'); 
+            @endphp
+            <a href="#settingsCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 {{ $isSettingsActive ? 'sidebar-section-active' : '' }}" role="button" aria-expanded="{{ $isSettingsActive ? 'true' : 'false' }}">
+                <span><i class="fas fa-cogs me-2 {{ $isSettingsActive ? 'text-secondary' : 'opacity-75' }}"></i> {{ __('center::sidebar.academic_setup') }}</span>
                 <i class="fas fa-chevron-down fa-xs opacity-50"></i>
             </a>
-            <div class="collapse {{ $isAcademicSetupActive ? 'show' : '' }}" id="academicSetupCollapse">
+            <div class="collapse {{ $isSettingsActive ? 'show' : '' }}" id="settingsCollapse">
                 <div class="sidebar-submenu">
+                    <a href="{{ route('center.instructors.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.instructors.*') ? 'active' : '' }}">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.instructors') }}
+                    </a>
                     <a href="{{ route('center.classrooms.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.classrooms.*') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.classrooms') }}
                     </a>
@@ -569,20 +574,11 @@
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.assets') }}
                     </a>
                     <a href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'academic']) }}" class="sidebar-sub-link {{ request()->routeIs('center.settings.index') && request('tab') == 'academic' ? 'active' : '' }}">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> المراحل والصفوف الدراسية
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> المراحل والصفوف
                     </a>
-                </div>
-            </div>
+                    
+                    <div class="my-2 border-top border-secondary opacity-25"></div>
 
-            <!-- 8. ADMINISTRATION -->
-            @canany(['manage users', 'manage settings'])
-            @php $isAdminActive = request()->routeIs('center.users.*') || request()->routeIs('center.roles.*') || request()->routeIs('center.branches.*') || request()->routeIs('center.settings.*') || request()->routeIs('center.tickets.*'); @endphp
-            <a href="#adminCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 {{ $isAdminActive ? 'sidebar-section-active' : '' }}" role="button" aria-expanded="{{ $isAdminActive ? 'true' : 'false' }}">
-                <span><i class="fas fa-cogs me-2 {{ $isAdminActive ? 'text-secondary' : 'opacity-75' }}"></i> {{ __('center::sidebar.administration') }}</span>
-                <i class="fas fa-chevron-down fa-xs opacity-50"></i>
-            </a>
-            <div class="collapse {{ $isAdminActive ? 'show' : '' }}" id="adminCollapse">
-                <div class="sidebar-submenu">
                     <a href="{{ route('center.users.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.users.*') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.users') }}
                     </a>
