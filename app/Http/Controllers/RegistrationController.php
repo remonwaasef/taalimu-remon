@@ -157,7 +157,7 @@ class RegistrationController extends Controller
             $tenant = Tenant::create([
                 'name' => $request->center_name,
                 'email' => $request->email,
-                'phone' => $request->phone,
+                'phone' => null, 
                 'domain' => $subdomain,
                 'database_name' => 'edu_central', // Shared DB for now
                 'status' => 'active', 
@@ -345,7 +345,13 @@ class RegistrationController extends Controller
             \Log::error('Registration error: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString()
             ]);
-            return back()->withErrors(['error' => 'حدث خطأ أثناء التسجيل: ' . $e->getMessage()])->withInput();
+            
+            // Security fix: Generic error message instead of raw exception details
+            $errorMessage = app()->getLocale() == 'ar' 
+                ? 'حدث خطأ غير متوقع أثناء عملية التسجيل. يرجى المحاولة مرة أخرى لاحقاً أو التواصل مع الدعم الفني.'
+                : 'An unexpected error occurred during registration. Please try again later or contact support.';
+
+            return back()->withErrors(['error' => $errorMessage])->withInput();
         }
     }
 }

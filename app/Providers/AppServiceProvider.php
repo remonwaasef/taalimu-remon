@@ -62,6 +62,10 @@ class AppServiceProvider extends ServiceProvider
             return \Illuminate\Cache\RateLimiting\Limit::perMinute($limit)->by($request->ip());
         });
 
+        \Illuminate\Support\Facades\RateLimiter::for('coupons', function (\Illuminate\Http\Request $request) {
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute(10)->by($request->ip());
+        });
+
         \Illuminate\Support\Facades\RateLimiter::for('api', function (\Illuminate\Http\Request $request) {
             if ($request->user()) {
                 // Higher limit for admins/instructors

@@ -12,12 +12,18 @@ class PaymentController extends Controller
         $sessionId = $request->get('session_id');
 
         if ($sessionId) {
-            // Verify session data exists (it should if same browser session)
-            if (!session('tenant_domain')) {
-                // Fallback: try to find tenant by some other means if needed, 
-                // or just redirect to login with a message.
-                // For now, let's assume session persistence.
-                // If session is lost, we might want to query Stripe or Tenant by ID if we passed it.
+            try {
+                // Security fix: Verify session with Stripe
+                \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+                $session = \Stripe\Checkout\Session::retrieve($sessionId);
+
+                if ($session->payment_status !== 'paid') {
+                     \Log::warning("Payment verification failed for session: " . $sessionId);
+                     return redirect()->route('home')->withErrors(['error' => 'لم يتم إكمال عملية الدفع بنجاح.']);
+                }
+            } catch (\Exception $e) {
+                \Log::error("Stripe verification error: " . $e->getMessage());
+                return redirect()->route('home');
             }
 
             // Mark registration as successful for the view

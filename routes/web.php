@@ -64,7 +64,9 @@ Route::get('/registration-success', function() {
         return response()->json(['success' => true]);
     })->middleware('throttle:30,1');
 
-    Route::get('/api/coupons/validate', [App\Http\Controllers\CouponApiController::class, 'validateCoupon'])->name('api.coupons.validate');
+    Route::get('/api/coupons/validate', [App\Http\Controllers\CouponApiController::class, 'validateCoupon'])
+        ->middleware('throttle:coupons')
+        ->name('api.coupons.validate');
     Route::get('/login', [App\Http\Controllers\UnifiedAuthController::class, 'showLoginForm'])->name('login.portal');
     Route::post('/login', [App\Http\Controllers\UnifiedAuthController::class, 'login'])
         ->middleware('throttle:login') // Uses the 'login' rate limiter defined in AppServiceProvider
