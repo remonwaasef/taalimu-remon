@@ -51,6 +51,13 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        // Grant "Super Admin" all permissions
+        \Illuminate\Support\Facades\Gate::before(function ($user, $ability) {
+            if ($user->hasRole('super_admin') || $user->role === 'super_admin') {
+                return true;
+            }
+        });
+
         // Zero DB Hits: Cache authenticated user data in Redis
         \Illuminate\Support\Facades\Auth::provider('cached', function ($app, array $config) {
             return new class($app['hash'], $config['model']) extends \Illuminate\Auth\EloquentUserProvider {
