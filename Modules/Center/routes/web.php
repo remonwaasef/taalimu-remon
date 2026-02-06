@@ -79,12 +79,12 @@ $tenantRoutes = function () {
         Route::get('/dashboard', [CenterController::class, 'index'])->name('center.dashboard.alt');
 
         // Student Management (Admin/Secretary only)
-        Route::middleware(['permission:view students'])->group(function() {
+        Route::middleware(['can:view students'])->group(function() {
             Route::get('students', [StudentController::class, 'index'])->name('center.students.index');
             Route::get('students/export', [StudentController::class, 'export'])->name('center.students.export');
         });
 
-        Route::middleware(['permission:create students'])->group(function() {
+        Route::middleware(['can:create students'])->group(function() {
             Route::get('students/create', [StudentController::class, 'create'])->name('center.students.create');
             Route::post('students', [StudentController::class, 'store'])->name('center.students.store');
             Route::get('students/import', [StudentController::class, 'importForm'])->name('center.students.import');
@@ -93,20 +93,20 @@ $tenantRoutes = function () {
                 ->name('center.students.import.post');
         });
 
-        Route::middleware(['permission:view students'])->group(function() {
+        Route::middleware(['can:view students'])->group(function() {
             Route::get('students/{student}', [StudentController::class, 'show'])->name('center.students.show');
         });
 
 
 
-        Route::middleware(['permission:edit students'])->group(function() {
+        Route::middleware(['can:edit students'])->group(function() {
             Route::get('students/{student}/edit', [StudentController::class, 'edit'])->name('center.students.edit');
             Route::put('students/{student}', [StudentController::class, 'update'])->name('center.students.update');
             Route::post('students/{student}/toggle-status', [StudentController::class, 'toggleStatus'])->name('center.students.toggle-status');
             Route::post('students/{student}/reset-password', [StudentController::class, 'resetPassword'])->name('center.students.reset-password');
         });
 
-        Route::middleware(['permission:delete students'])->group(function() {
+        Route::middleware(['can:delete students'])->group(function() {
             Route::delete('students/{student}', [StudentController::class, 'destroy'])->name('center.students.destroy');
         });
 
@@ -114,48 +114,48 @@ $tenantRoutes = function () {
         Route::get('guardians/lookup', [StudentController::class, 'lookupGuardian'])->name('center.guardians.lookup');
 
         // Instructor Management (Admin/Secretary only)
-        Route::middleware(['permission:view instructors'])->group(function() {
+        Route::middleware(['can:view instructors'])->group(function() {
             Route::get('instructors', [InstructorController::class, 'index'])->name('center.instructors.index');
         });
 
-        Route::middleware(['permission:create instructors'])->group(function() {
+        Route::middleware(['can:create instructors'])->group(function() {
             Route::get('instructors/create', [InstructorController::class, 'create'])->name('center.instructors.create');
             Route::post('instructors', [InstructorController::class, 'store'])->name('center.instructors.store');
         });
 
-        Route::middleware(['permission:view instructors'])->group(function() {
+        Route::middleware(['can:view instructors'])->group(function() {
             Route::get('instructors/{instructor}', [InstructorController::class, 'show'])->name('center.instructors.show');
         });
 
 
 
-        Route::middleware(['permission:edit instructors'])->group(function() {
+        Route::middleware(['can:edit instructors'])->group(function() {
             Route::get('instructors/{instructor}/edit', [InstructorController::class, 'edit'])->name('center.instructors.edit');
             Route::put('instructors/{instructor}', [InstructorController::class, 'update'])->name('center.instructors.update');
             Route::post('instructors/{instructor}/toggle-status', [InstructorController::class, 'toggleStatus'])->name('center.instructors.toggle-status');
         });
 
-        Route::middleware(['permission:delete instructors'])->group(function() {
+        Route::middleware(['can:delete instructors'])->group(function() {
             Route::delete('instructors/{instructor}', [InstructorController::class, 'destroy'])->name('center.instructors.destroy');
         });
 
         // Course Management
-        Route::middleware(['permission:view courses'])->group(function() {
+        Route::middleware(['can:view courses'])->group(function() {
             Route::get('courses', [CourseController::class, 'index'])->name('center.courses.index');
         });
 
-        Route::middleware(['permission:create courses'])->group(function() {
+        Route::middleware(['can:create courses'])->group(function() {
             Route::get('courses/create', [CourseController::class, 'create'])->name('center.courses.create');
             Route::post('courses', [CourseController::class, 'store'])->name('center.courses.store');
         });
 
-        Route::middleware(['permission:view courses'])->group(function() {
+        Route::middleware(['can:view courses'])->group(function() {
             Route::get('courses/{course}', [CourseController::class, 'show'])->name('center.courses.show');
         });
 
 
 
-        Route::middleware(['permission:edit courses'])->group(function() {
+        Route::middleware(['can:edit courses'])->group(function() {
             Route::get('courses/{course}/edit', [CourseController::class, 'edit'])->name('center.courses.edit');
             Route::put('courses/{course}', [CourseController::class, 'update'])->name('center.courses.update');
             Route::post('courses/{course}/toggle-status', [CourseController::class, 'toggleStatus'])->name('center.courses.toggle-status');
@@ -163,14 +163,14 @@ $tenantRoutes = function () {
             Route::post('courses/{course}/quick-enroll', [CourseController::class, 'quickEnroll'])->name('center.courses.quick-enroll');
         });
 
-        Route::middleware(['permission:delete courses'])->group(function() {
+        Route::middleware(['can:delete courses'])->group(function() {
             Route::delete('courses/{course}', [CourseController::class, 'destroy'])->name('center.courses.destroy');
         });
 
         Route::post('courses/{course}/lessons/{lesson}/complete', [CourseController::class, 'completeLesson'])->name('center.lessons.complete');
         
         // Curriculum Management (Admin/Instructor only)
-        Route::middleware(['permission:edit courses'])->group(function() {
+        Route::middleware(['can:edit courses'])->group(function() {
             Route::get('courses/{course}/curriculum', [CurriculumController::class, 'edit'])->name('center.curriculum.edit');
             Route::post('courses/{course}/sections', [CurriculumController::class, 'storeSection'])->name('center.sections.store');
             Route::put('sections/{section}', [CurriculumController::class, 'updateSection'])->name('center.sections.update');
@@ -215,7 +215,7 @@ $tenantRoutes = function () {
         });
 
         // Assignment Management
-        Route::middleware(['permission:edit courses'])->group(function() {
+        Route::middleware(['can:edit courses'])->group(function() {
             Route::post('lessons/{lesson}/assignment', [AssignmentController::class, 'store'])->name('center.assignments.store');
             Route::get('assignments/{assignment}/edit', [AssignmentController::class, 'edit'])->name('center.assignments.edit');
             Route::put('assignments/{assignment}', [AssignmentController::class, 'update'])->name('center.assignments.update');
@@ -229,7 +229,7 @@ $tenantRoutes = function () {
         Route::get('submissions/{submission}/download', [AssignmentController::class, 'download'])->name('center.assignments.download');
 
         // Billing & Invoices
-        Route::middleware(['permission:manage billing'])->group(function() {
+        Route::middleware(['can:manage billing'])->group(function() {
             Route::get('billing', [BillingController::class, 'index'])->name('center.billing.index');
             Route::get('billing/create', [BillingController::class, 'create'])->name('center.billing.create');
             Route::post('billing', [BillingController::class, 'store'])->name('center.billing.store');
@@ -244,7 +244,7 @@ $tenantRoutes = function () {
 
         // Sales & Expenses
         Route::middleware(['feature:financial_reports'])->group(function() {
-            Route::middleware(['permission:view sales'])->group(function() {
+            Route::middleware(['can:view sales'])->group(function() {
                 Route::get('sales/account', [SaleController::class, 'account'])->name('center.sales.account');
                 Route::get('sales/student-summary/{id}', [SaleController::class, 'getStudentSummary'])->name('center.sales.student-summary');
                 Route::post('sales/{sale}/payment', [SaleController::class, 'addPayment'])->name('center.sales.payment');
@@ -252,13 +252,13 @@ $tenantRoutes = function () {
                 Route::resource('sales', SaleController::class)->names('center.sales');
             });
 
-            Route::middleware(['permission:manage billing'])->group(function() {
+            Route::middleware(['can:manage billing'])->group(function() {
                 Route::resource('expenses', \Modules\Center\Http\Controllers\ExpenseController::class)->names('center.expenses');
             });
         });
 
         // Analytics
-        Route::middleware(['permission:view reports'])->group(function() {
+        Route::middleware(['can:view reports'])->group(function() {
             Route::get('analytics', [AnalyticsController::class, 'index'])->name('center.analytics.index');
             Route::get('analytics/students', [AnalyticsController::class, 'students'])->name('center.analytics.students');
             Route::get('analytics/instructors', [AnalyticsController::class, 'instructors'])->name('center.analytics.instructors');
@@ -286,7 +286,7 @@ $tenantRoutes = function () {
         });
 
         // General Settings
-        Route::middleware(['permission:manage settings'])->group(function() {
+        Route::middleware(['can:manage settings'])->group(function() {
             Route::get('settings', [SettingsController::class, 'index'])->name('center.settings.index');
             Route::post('settings', [SettingsController::class, 'update'])->name('center.settings.update');
             Route::post('settings/academic', [SettingsController::class, 'updateAcademic'])->name('center.settings.update-academic');
@@ -299,13 +299,13 @@ $tenantRoutes = function () {
         Route::post('/gdpr/delete', [Modules\Center\Http\Controllers\GdprController::class, 'delete'])->name('gdpr.delete');
 
         // Classroom Management
-        Route::middleware(['permission:manage schedule'])->group(function() {
+        Route::middleware(['can:manage schedule'])->group(function() {
             Route::resource('classrooms', ClassroomController::class)->names('center.classrooms');
             Route::resource('assets', AssetController::class)->names('center.assets');
         });
 
         // Bookings Management
-        Route::middleware(['permission:manage schedule'])->group(function() {
+        Route::middleware(['can:manage schedule'])->group(function() {
             Route::post('bookings', [BookingController::class, 'store'])->name('center.bookings.store');
             Route::patch('bookings/{booking}/status', [BookingController::class, 'updateStatus'])->name('center.bookings.updateStatus');
             Route::delete('bookings/{booking}', [BookingController::class, 'destroy'])->name('center.bookings.destroy');
@@ -317,7 +317,7 @@ $tenantRoutes = function () {
         Route::post('notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('center.notifications.readAll');
 
         // User Management
-        Route::middleware(['permission:manage users'])->group(function() {
+        Route::middleware(['can:manage users'])->group(function() {
             Route::resource('users', \Modules\Center\Http\Controllers\UserController::class)->names('center.users');
         });
 
@@ -332,7 +332,7 @@ $tenantRoutes = function () {
         });
 
         // Schedule Management
-        Route::middleware(['feature:daily_schedules', 'permission:manage schedule'])->group(function() {
+        Route::middleware(['feature:daily_schedules', 'can:manage schedule'])->group(function() {
             Route::resource('schedules', ScheduleController::class)->names('center.schedules');
         });
 
