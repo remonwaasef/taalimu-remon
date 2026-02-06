@@ -98,19 +98,11 @@ return [
             'Swift_TransportException' => 'Email Delivery Failure (SMTP Error)',
         ],
         'actions_map' => [
-            'center' => [
-                'subscription' => [
-                    'checkout' => 'Subscription Payment Process',
-                ],
-                'courses' => [
-                    'show' => 'Viewing Course Details',
-                ],
-                'login' => 'Center Login Attempt',
-                'register' => 'New Center Registration',
-            ],
-            'admin' => [
-                'login' => 'Admin Panel Login Attempt',
-            ],
+            'center_subscription_checkout' => 'Subscription Payment Process',
+            'center_courses_show' => 'Viewing Course Details',
+            'center_login' => 'Center Login Attempt',
+            'center_register' => 'New Center Registration',
+            'admin_login' => 'Admin Panel Login Attempt',
         ],
         'severities' => [
             'critical' => 'Extremely Critical',

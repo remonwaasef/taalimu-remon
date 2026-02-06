@@ -96,9 +96,10 @@
                 <div class="w-100">
                     <h6 class="alert-heading fw-bold mb-1">{{ __('admin.operation_issues.details.action') }}</h6>
                     <p class="mb-0 text-dark">
-                        {{ __('admin.operation_issues.actions_map.' . $issue->action) != 'admin.operation_issues.actions_map.' . $issue->action 
-                            ? __('admin.operation_issues.actions_map.' . $issue->action) 
-                            : $issue->action }}
+                        @php
+                            $actionKey = 'admin.operation_issues.actions_map.' . str_replace('.', '_', $issue->action);
+                        @endphp
+                        {{ __($actionKey) != $actionKey ? __($actionKey) : $issue->action }}
                     </p>
                 </div>
             </div>
@@ -117,9 +118,7 @@
                                     <td class="pe-4">
                                         <div class="d-flex align-items-center justify-content-between">
                                             <span class="fw-bold text-dark">
-                                                {{ __('admin.operation_issues.actions_map.' . $issue->action) != 'admin.operation_issues.actions_map.' . $issue->action 
-                                                    ? __('admin.operation_issues.actions_map.' . $issue->action) 
-                                                    : $issue->action }}
+                                                {{ __($actionKey) != $actionKey ? __($actionKey) : $issue->action }}
                                             </span>
                                             <span class="badge bg-light text-muted border font-monospace">{{ $issue->method }}</span>
                                         </div>
