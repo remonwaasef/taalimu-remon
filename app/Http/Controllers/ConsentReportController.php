@@ -5,16 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class ConsentReportController extends Controller
+use Illuminate\Routing\Controllers\HasMiddleware;
+
+class ConsentReportController extends Controller implements HasMiddleware
 {
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware(function ($request, $next) {
-            if (!auth()->check() || !auth()->user()->hasRole('super_admin')) {
-                abort(403, 'Unauthorized access to GDPR data.');
-            }
-            return $next($request);
-        });
+        return [
+            function ($request, $next) {
+                if (!auth()->check() || !auth()->user()->hasRole('super_admin')) {
+                    abort(403, 'Unauthorized access to GDPR data.');
+                }
+                return $next($request);
+            },
+        ];
     }
 
     public function index()
