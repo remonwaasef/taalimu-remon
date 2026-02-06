@@ -64,7 +64,13 @@
                             <tbody>
                                 <tr>
                                     <th width="150" class="bg-light">{{ __('admin.operation_issues.details.action') }}</th>
-                                    <td><code>{{ $issue->action }}</code></td>
+                                    <td>
+                                        <p class="mb-0">
+                                            {{ __('admin.operation_issues.actions_map.' . $issue->action) != 'admin.operation_issues.actions_map.' . $issue->action 
+                                                ? __('admin.operation_issues.actions_map.' . $issue->action) 
+                                                : $issue->action }}
+                                        </p>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th class="bg-light">{{ __('admin.operation_issues.details.url') }}</th>

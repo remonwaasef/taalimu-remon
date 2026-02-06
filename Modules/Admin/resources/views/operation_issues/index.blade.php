@@ -159,7 +159,11 @@
                                 <div class="text-muted small text-truncate" style="max-width: 350px;" title="{{ $issue->message }}">
                                     {{ $issue->message }}
                                 </div>
-                                <small class="badge badge-light border text-muted mt-1">{{ $issue->action }}</small>
+                                <small class="badge badge-light border text-muted mt-1">
+                                    {{ __('admin.operation_issues.actions_map.' . $issue->action) != 'admin.operation_issues.actions_map.' . $issue->action 
+                                        ? __('admin.operation_issues.actions_map.' . $issue->action) 
+                                        : $issue->action }}
+                                </small>
                             </td>
                             <td>{{ $issue->tenant->name ?? 'N/A' }}</td>
                             <td>
