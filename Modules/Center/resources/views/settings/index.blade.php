@@ -469,6 +469,7 @@
 @endsection
 
 @push('scripts')
+<script>
     let stageCount = {{ count($stages) }};
 
     function addStage() {
