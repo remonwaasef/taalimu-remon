@@ -97,7 +97,8 @@
                     <h6 class="alert-heading fw-bold mb-1">{{ __('admin.operation_issues.details.action') }}</h6>
                     <p class="mb-0 text-dark">
                         @php
-                            $actionKey = 'admin.operation_issues.actions_map.' . str_replace('.', '_', $issue->action);
+                            $actionSafe = str_replace('.', '_', trim($issue->action));
+                            $actionKey = 'admin.operation_issues.actions_dictionary.' . $actionSafe;
                         @endphp
                         {{ __($actionKey) != $actionKey ? __($actionKey) : $issue->action }}
                     </p>

@@ -97,7 +97,7 @@ return [
             'NotFoundHttpException' => 'Attempt to Access Non-existent Link or File (404)',
             'Swift_TransportException' => 'Email Delivery Failure (SMTP Error)',
         ],
-        'actions_map' => [
+        'actions_dictionary' => [
             'center_subscription_checkout' => 'Subscription Payment Process',
             'center_courses_show' => 'Viewing Course Details',
             'center_login' => 'Center Login Attempt',

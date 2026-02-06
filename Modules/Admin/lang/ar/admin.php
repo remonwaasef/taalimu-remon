@@ -97,7 +97,7 @@ return [
             'NotFoundHttpException' => 'محاولة الوصول لرابط أو ملف غير موجود (404)',
             'Swift_TransportException' => 'فشل في إرسال البريد الإلكتروني (SMTP Error)',
         ],
-        'actions_map' => [
+        'actions_dictionary' => [
             'center_subscription_checkout' => 'عملية سداد الاشتراك',
             'center_courses_show' => 'استعراض تفاصيل الدورة',
             'center_login' => 'محاولة تسجيل الدخول للمركز',
