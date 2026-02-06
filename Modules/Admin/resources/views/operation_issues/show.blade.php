@@ -90,6 +90,19 @@
                 <button class="btn btn-sm btn-outline-danger ms-2" onclick="navigator.clipboard.writeText('{{ str_replace("'", "\'", $issue->message) }}'); this.innerHTML='COPIED'; setTimeout(() => this.innerHTML='COPY', 1000);" style="min-width: 60px;">COPY</button>
             </div>
 
+            <!-- Context Description Alert -->
+            <div class="alert alert-primary shadow-sm border-0 rounded-4 mb-4 d-flex align-items-center">
+                <i class="fas fa-search-location fs-4 me-3"></i>
+                <div class="w-100">
+                    <h6 class="alert-heading fw-bold mb-1">{{ __('admin.operation_issues.details.action') }}</h6>
+                    <p class="mb-0 text-dark">
+                        {{ __('admin.operation_issues.actions_map.' . $issue->action) != 'admin.operation_issues.actions_map.' . $issue->action 
+                            ? __('admin.operation_issues.actions_map.' . $issue->action) 
+                            : $issue->action }}
+                    </p>
+                </div>
+            </div>
+
             <!-- Issue Context Card -->
             <div class="card shadow-sm border-0 mb-4 rounded-4 overflow-hidden">
                 <div class="card-header bg-white py-3 border-bottom">

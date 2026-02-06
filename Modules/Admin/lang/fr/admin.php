@@ -98,11 +98,19 @@ return [
             'Swift_TransportException' => 'Échec de l\'envoi de l\'e-mail (Erreur SMTP)',
         ],
         'actions_map' => [
-            'center.subscription.checkout' => 'Processus de paiement de l\'abonnement',
-            'center.courses.show' => 'Affichage des détails du cours',
-            'center.login' => 'Tentative de connexion au centre',
-            'center.register' => 'Processus d\'inscription au centre',
-            'admin.login' => 'Tentative de connexion au panneau d\'administration',
+            'center' => [
+                'subscription' => [
+                    'checkout' => 'Processus de paiement de l\'abonnement',
+                ],
+                'courses' => [
+                    'show' => 'Affichage des détails du cours',
+                ],
+                'login' => 'Tentative de connexion au centre',
+                'register' => 'Processus d\'inscription au centre',
+            ],
+            'admin' => [
+                'login' => 'Tentative de connexion au panneau d\'administration',
+            ],
         ],
         'severities' => [
             'critical' => 'Extrêmement Critique',
