@@ -40,17 +40,40 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0" aria-labelledby="statusDropdown">
                     <li><h6 class="dropdown-header">{{ __('admin.operation_issues.filters.status') }}</h6></li>
-                    <form action="{{ route('admin.operation-issues.update-status', $issue->uuid) }}" method="POST">
-                        @csrf
-                        @method('PATCH')
-                        <li><button class="dropdown-item d-flex align-items-center gap-2" type="submit" name="status" value="in_progress"><span class="badge bg-warning p-1 rounded-circle"> </span> {{ __('admin.operation_issues.statuses.in_progress') }}</button></li>
-                        <li><button class="dropdown-item d-flex align-items-center gap-2" type="submit" name="status" value="resolved"><span class="badge bg-success p-1 rounded-circle"> </span> {{ __('admin.operation_issues.statuses.resolved') }}</button></li>
-                        <li><button class="dropdown-item d-flex align-items-center gap-2" type="submit" name="status" value="closed"><span class="badge bg-secondary p-1 rounded-circle"> </span> {{ __('admin.operation_issues.statuses.closed') }}</button></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><button class="dropdown-item d-flex align-items-center gap-2 text-muted" type="submit" name="status" value="wont_fix"><i class="fas fa-ban small"></i> {{ __('admin.operation_issues.statuses.wont_fix') }}</button></li>
-                    </form>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center gap-2 status-change-btn" href="#" data-status="acknowledged">
+                            <span class="badge bg-info p-1 rounded-circle"> </span> {{ __('admin.operation_issues.statuses.acknowledged') }}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center gap-2 status-change-btn" href="#" data-status="in_progress">
+                            <span class="badge bg-warning p-1 rounded-circle"> </span> {{ __('admin.operation_issues.statuses.in_progress') }}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center gap-2 status-change-btn" href="#" data-status="resolved">
+                            <span class="badge bg-success p-1 rounded-circle"> </span> {{ __('admin.operation_issues.statuses.resolved') }}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center gap-2 status-change-btn" href="#" data-status="closed">
+                            <span class="badge bg-secondary p-1 rounded-circle"> </span> {{ __('admin.operation_issues.statuses.closed') }}
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center gap-2 text-muted status-change-btn" href="#" data-status="wont_fix">
+                            <i class="fas fa-ban small"></i> {{ __('admin.operation_issues.statuses.wont_fix') }}
+                        </a>
+                    </li>
                 </ul>
             </div>
+            <!-- Hidden form for status update -->
+            <form id="statusUpdateForm" action="{{ route('admin.operation-issues.update-status', $issue->uuid) }}" method="POST" class="d-none">
+                @csrf
+                @method('PATCH')
+                <input type="hidden" name="status" id="statusInput" value="">
+            </form>
         </div>
     </div>
 
@@ -301,5 +324,23 @@
 .timeline:before {
     display: none; /* Disable default timeline line if any */
 }
+.status-change-btn { cursor: pointer; }
+.status-change-btn:hover { background-color: #f8f9fa; }
 </style>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Status change buttons
+        document.querySelectorAll('.status-change-btn').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                var status = this.getAttribute('data-status');
+                document.getElementById('statusInput').value = status;
+                document.getElementById('statusUpdateForm').submit();
+            });
+        });
+    });
+</script>
+@endpush
 @endsection
