@@ -331,6 +331,20 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Initialize status dropdown explicitly
+        var statusDropdownEl = document.getElementById('statusDropdown');
+        if (statusDropdownEl && typeof bootstrap !== 'undefined') {
+            new bootstrap.Dropdown(statusDropdownEl);
+            
+            // Add manual click handler as fallback
+            statusDropdownEl.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var dropdown = bootstrap.Dropdown.getOrCreateInstance(this);
+                dropdown.toggle();
+            });
+        }
+        
         // Status change buttons
         document.querySelectorAll('.status-change-btn').forEach(function(btn) {
             btn.addEventListener('click', function(e) {
