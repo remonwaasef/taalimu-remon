@@ -28,7 +28,7 @@
                     ? __('admin.operation_issues.messages.' . $issue->exception_class) 
                     : ($issue->exception_class ?: __('admin.operation_issues.history.system')) }}
             </h1>
-            <p class="text-muted mb-0 font-monospace small"><i class="fas fa-code me-1"></i> {{ $issue->message }}</p>
+            </h1>
         </div>
         
         <!-- Status Actions -->
@@ -80,6 +80,16 @@
     <div class="row">
         <!-- Main Content -->
         <div class="col-lg-8">
+            <!-- Error Message Alert -->
+            <div class="alert alert-danger shadow-sm border-0 rounded-4 mb-4 d-flex align-items-start">
+                <i class="fas fa-bug fs-4 me-3 mt-1"></i>
+                <div class="w-100">
+                    <h5 class="alert-heading fw-bold mb-1">{{ __('admin.operation_issues.details.error_message') }}</h5>
+                    <p class="mb-0 font-monospace text-break" style="font-size: 0.95rem;">{{ $issue->message }}</p>
+                </div>
+                <button class="btn btn-sm btn-outline-danger ms-2" onclick="navigator.clipboard.writeText('{{ str_replace("'", "\'", $issue->message) }}'); this.innerHTML='COPIED'; setTimeout(() => this.innerHTML='COPY', 1000);" style="min-width: 60px;">COPY</button>
+            </div>
+
             <!-- Issue Context Card -->
             <div class="card shadow-sm border-0 mb-4 rounded-4 overflow-hidden">
                 <div class="card-header bg-white py-3 border-bottom">
