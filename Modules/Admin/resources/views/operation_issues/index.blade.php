@@ -146,7 +146,7 @@
                         <tr>
                             <td>{{ substr($issue->uuid, 0, 8) }}...</td>
                             <td>
-                                <span class="badge badge-pill badge-{{ $issue->severity == 'critical' ? 'danger' : ($issue->severity == 'high' ? 'warning' : 'info') }}">
+                                <span class="badge {{ $issue->severity == 'critical' ? 'bg-danger text-white' : ($issue->severity == 'high' ? 'bg-warning text-dark' : 'bg-info text-white') }}">
                                     {{ __('admin.operation_issues.severities.' . $issue->severity) }}
                                 </span>
                             </td>
@@ -167,7 +167,7 @@
                             </td>
                             <td>{{ $issue->tenant->name ?? 'N/A' }}</td>
                             <td>
-                                <span class="badge badge-{{ $issue->status == 'resolved' ? 'success' : 'secondary' }}">
+                                <span class="badge {{ $issue->status == 'resolved' ? 'bg-success text-white' : 'bg-secondary text-white' }}">
                                     {{ __('admin.operation_issues.statuses.' . $issue->status) }}
                                 </span>
                             </td>

@@ -10,7 +10,7 @@ class LanguageController extends Controller
     public function switch($locale)
     {
         // Validate locale
-        if (!in_array($locale, ['ar', 'en'])) {
+        if (!in_array($locale, ['ar', 'en', 'fr'])) {
             return redirect()->back();
         }
 
