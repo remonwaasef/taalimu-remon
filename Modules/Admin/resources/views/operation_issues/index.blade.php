@@ -151,8 +151,15 @@
                                 </span>
                             </td>
                             <td>
-                                <div class="font-weight-bold text-truncate" style="max-width: 300px;">{{ $issue->title }}</div>
-                                <small class="text-muted">{{ $issue->action }}</small>
+                                <div class="font-weight-bold" style="font-size: 0.9rem;">
+                                    {{ __('admin.operation_issues.messages.' . $issue->exception_class) != 'admin.operation_issues.messages.' . $issue->exception_class 
+                                        ? __('admin.operation_issues.messages.' . $issue->exception_class) 
+                                        : ($issue->exception_class ?: __('admin.operation_issues.history.system')) }}
+                                </div>
+                                <div class="text-muted small text-truncate" style="max-width: 350px;" title="{{ $issue->message }}">
+                                    {{ $issue->message }}
+                                </div>
+                                <small class="badge badge-light border text-muted mt-1">{{ $issue->action }}</small>
                             </td>
                             <td>{{ $issue->tenant->name ?? 'N/A' }}</td>
                             <td>
