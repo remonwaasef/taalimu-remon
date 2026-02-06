@@ -284,12 +284,18 @@
             color: var(--bs-primary);
         }
 
+        .lang-dropdown {
+            position: relative;
+            z-index: 1050;
+        }
+
         .lang-dropdown .dropdown-menu {
             border: none;
             box-shadow: var(--shadow-lg);
             border-radius: 12px;
             padding: 0.5rem;
             min-width: 140px;
+            z-index: 1060;
         }
 
         .lang-dropdown .dropdown-item {
@@ -571,12 +577,24 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Initialize all Bootstrap dropdowns
+        // Initialize all Bootstrap dropdowns after DOM is ready
         document.addEventListener('DOMContentLoaded', function() {
-            var dropdownElementList = document.querySelectorAll('.dropdown-toggle');
+            // Initialize Bootstrap dropdowns
+            var dropdownElementList = document.querySelectorAll('[data-bs-toggle="dropdown"]');
             dropdownElementList.forEach(function(dropdownToggleEl) {
                 new bootstrap.Dropdown(dropdownToggleEl);
             });
+            
+            // Fallback: Manual click handler for lang dropdown
+            var langBtn = document.getElementById('langDropdown');
+            if (langBtn) {
+                langBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    var dropdown = bootstrap.Dropdown.getOrCreateInstance(this);
+                    dropdown.toggle();
+                });
+            }
         });
     </script>
     @stack('scripts')
