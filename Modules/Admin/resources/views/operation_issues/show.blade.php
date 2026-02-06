@@ -97,10 +97,26 @@
                     <h6 class="alert-heading fw-bold mb-1">{{ __('admin.operation_issues.details.action') }}</h6>
                     <p class="mb-0 text-dark">
                         @php
-                            $actionSafe = str_replace('.', '_', trim($issue->action));
+                            // Manual fallback map for critical actions
+                            $manualMap = [
+                                'center.courses.show' => 'استعراض تفاصيل الدورة',
+                                'center.subscription.checkout' => 'عملية سداد الاشتراك',
+                                'center.login' => 'محاولة تسجيل الدخول للمركز',
+                                'center.register' => 'عملية إنشاء حساب مركز جديد',
+                                'admin.login' => 'محاولة تسجيل دخول لوحة الإدارة',
+                            ];
+                            $actionTrimmed = trim($issue->action);
+                            $actionSafe = str_replace('.', '_', $actionTrimmed);
                             $actionKey = 'admin.operation_issues.actions_dictionary.' . $actionSafe;
+                            
+                            // 1. Try manual map
+                            // 2. Try translation
+                            // 3. Fallback to raw action
+                            $displayAction = $manualMap[$actionTrimmed] ?? (
+                                __($actionKey) != $actionKey ? __($actionKey) : $actionTrimmed
+                            );
                         @endphp
-                        {{ __($actionKey) != $actionKey ? __($actionKey) : $issue->action }}
+                        {{ $displayAction }}
                     </p>
                 </div>
             </div>
@@ -119,7 +135,7 @@
                                     <td class="pe-4">
                                         <div class="d-flex align-items-center justify-content-between">
                                             <span class="fw-bold text-dark">
-                                                {{ __($actionKey) != $actionKey ? __($actionKey) : $issue->action }}
+                                                {{ $displayAction }}
                                             </span>
                                             <span class="badge bg-light text-muted border font-monospace">{{ $issue->method }}</span>
                                         </div>
