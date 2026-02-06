@@ -53,7 +53,21 @@ class AuthServiceProvider extends ServiceProvider
 
         // Grant "Super Admin" all permissions
         \Illuminate\Support\Facades\Gate::before(function ($user, $ability) {
-            if ($user->hasRole('super_admin') || $user->role === 'super_admin') {
+            // Debugging Authorization
+            /*
+            \Illuminate\Support\Facades\Log::info('Gate::before Check', [
+                'user_id' => $user->id,
+                'ability' => $ability,
+                'role_attribute' => $user->role,
+                'spatie_roles' => $user->getRoleNames(),
+                'is_super_admin' => $user->hasRole('super_admin') || $user->role === 'super_admin'
+            ]);
+            */
+
+            // Case-insensitive check for Super Admin
+            if ($user->hasRole('super_admin') || 
+                strtolower($user->role) === 'super_admin' || 
+                $user->hasRole('Super Admin')) {
                 return true;
             }
         });
