@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 text-gray-800">Operation Issues Tracking</h1>
+        <h1 class="h3 text-gray-800">{{ __('admin.operation_issues.title') }}</h1>
     </div>
 
     <!-- Stats Cards -->
@@ -14,7 +14,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Critical Issues</div>
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">{{ __('admin.operation_issues.stats.critical') }}</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $stats['critical'] }}</div>
                         </div>
                         <div class="col-auto">
@@ -30,7 +30,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Open Issues</div>
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">{{ __('admin.operation_issues.stats.open') }}</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $stats['open'] }}</div>
                         </div>
                         <div class="col-auto">
@@ -46,7 +46,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Resolved Today</div>
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">{{ __('admin.operation_issues.stats.resolved_today') }}</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $stats['resolved_today'] }}</div>
                         </div>
                         <div class="col-auto">
@@ -62,7 +62,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">SLA Breached</div>
+                            <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">{{ __('admin.operation_issues.stats.sla_breached') }}</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $stats['sla_breached'] }}</div>
                         </div>
                         <div class="col-auto">
@@ -77,43 +77,43 @@
     <!-- Filters -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Filters</h6>
+            <h6 class="m-0 font-weight-bold text-primary">{{ __('admin.operation_issues.filters.title') }}</h6>
         </div>
         <div class="card-body">
             <form method="GET" action="{{ route('admin.operation-issues.index') }}">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Status</label>
+                            <label>{{ __('admin.operation_issues.filters.status') }}</label>
                             <select name="status" class="form-control">
-                                <option value="">All Statuses</option>
-                                <option value="new" {{ request('status') == 'new' ? 'selected' : '' }}>New</option>
-                                <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>In Progress</option>
-                                <option value="resolved" {{ request('status') == 'resolved' ? 'selected' : '' }}>Resolved</option>
+                                <option value="">{{ __('admin.operation_issues.filters.all_statuses') }}</option>
+                                <option value="new" {{ request('status') == 'new' ? 'selected' : '' }}>{{ __('admin.operation_issues.statuses.new') }}</option>
+                                <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>{{ __('admin.operation_issues.statuses.in_progress') }}</option>
+                                <option value="resolved" {{ request('status') == 'resolved' ? 'selected' : '' }}>{{ __('admin.operation_issues.statuses.resolved') }}</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Severity</label>
+                            <label>{{ __('admin.operation_issues.filters.severity') }}</label>
                             <select name="severity" class="form-control">
-                                <option value="">All Severities</option>
-                                <option value="critical" {{ request('severity') == 'critical' ? 'selected' : '' }}>Critical</option>
-                                <option value="high" {{ request('severity') == 'high' ? 'selected' : '' }}>High</option>
-                                <option value="medium" {{ request('severity') == 'medium' ? 'selected' : '' }}>Medium</option>
-                                <option value="low" {{ request('severity') == 'low' ? 'selected' : '' }}>Low</option>
+                                <option value="">{{ __('admin.operation_issues.filters.all_severities') }}</option>
+                                <option value="critical" {{ request('severity') == 'critical' ? 'selected' : '' }}>{{ __('admin.operation_issues.severities.critical') }}</option>
+                                <option value="high" {{ request('severity') == 'high' ? 'selected' : '' }}>{{ __('admin.operation_issues.severities.high') }}</option>
+                                <option value="medium" {{ request('severity') == 'medium' ? 'selected' : '' }}>{{ __('admin.operation_issues.severities.medium') }}</option>
+                                <option value="low" {{ request('severity') == 'low' ? 'selected' : '' }}>{{ __('admin.operation_issues.severities.low') }}</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Search</label>
-                            <input type="text" name="search" class="form-control" value="{{ request('search') }}" placeholder="Search by title, message, ID...">
+                            <label>{{ __('admin.operation_issues.filters.search') }}</label>
+                            <input type="text" name="search" class="form-control" value="{{ request('search') }}" placeholder="{{ __('admin.operation_issues.filters.search_placeholder') }}">
                         </div>
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
                         <div class="form-group w-100">
-                            <button type="submit" class="btn btn-primary w-100">Filter</button>
+                            <button type="submit" class="btn btn-primary w-100">{{ __('admin.operation_issues.filters.button') }}</button>
                         </div>
                     </div>
                 </div>
@@ -124,21 +124,21 @@
     <!-- Issues Table -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Issues List</h6>
+            <h6 class="m-0 font-weight-bold text-primary">{{ __('admin.operation_issues.list.title') }}</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Severity</th>
-                            <th>Title</th>
-                            <th>Tenant</th>
-                            <th>Status</th>
-                            <th>Occurrences</th>
-                            <th>Created</th>
-                            <th>Action</th>
+                            <th>{{ __('admin.operation_issues.list.id') }}</th>
+                            <th>{{ __('admin.operation_issues.list.severity') }}</th>
+                            <th>{{ __('admin.operation_issues.list.issue_title') }}</th>
+                            <th>{{ __('admin.operation_issues.list.tenant') }}</th>
+                            <th>{{ __('admin.operation_issues.list.status') }}</th>
+                            <th>{{ __('admin.operation_issues.list.occurrences') }}</th>
+                            <th>{{ __('admin.operation_issues.list.created') }}</th>
+                            <th>{{ __('admin.operation_issues.list.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -147,7 +147,7 @@
                             <td>{{ substr($issue->uuid, 0, 8) }}...</td>
                             <td>
                                 <span class="badge badge-pill badge-{{ $issue->severity == 'critical' ? 'danger' : ($issue->severity == 'high' ? 'warning' : 'info') }}">
-                                    {{ ucfirst($issue->severity) }}
+                                    {{ __('admin.operation_issues.severities.' . $issue->severity) }}
                                 </span>
                             </td>
                             <td>
@@ -157,20 +157,20 @@
                             <td>{{ $issue->tenant->name ?? 'N/A' }}</td>
                             <td>
                                 <span class="badge badge-{{ $issue->status == 'resolved' ? 'success' : 'secondary' }}">
-                                    {{ ucfirst(str_replace('_', ' ', $issue->status)) }}
+                                    {{ __('admin.operation_issues.statuses.' . $issue->status) }}
                                 </span>
                             </td>
                             <td class="text-center">{{ $issue->occurrence_count }}</td>
                             <td>{{ $issue->created_at->diffForHumans() }}</td>
                             <td>
                                 <a href="{{ route('admin.operation-issues.show', $issue->uuid) }}" class="btn btn-sm btn-primary">
-                                    View
+                                    {{ __('admin.operation_issues.list.view') }}
                                 </a>
                             </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="8" class="text-center py-4">No issues found.</td>
+                            <td colspan="8" class="text-center py-4">{{ __('admin.operation_issues.list.no_issues') }}</td>
                         </tr>
                         @endforelse
                     </tbody>

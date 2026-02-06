@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'title' => 'Gestion des Actifs',
+    'add_new' => 'Ajouter un Nouvel Actif',
+    'edit' => 'Modifier l\'Actif',
+    'name' => 'Nom de l\'Actif',
+    'code' => 'Code / Code-barres',
+    'type' => 'Type',
+    'status' => 'Statut',
+    'classroom' => 'Salle Liée',
+    'purchase_date' => 'Date d\'Achat',
+    'cost' => 'Coût',
+    'notes' => 'Remarques',
+    'actions' => 'Actions',
+    'empty' => 'Aucun actif enregistré pour le moment.',
+    'confirm_delete' => 'Êtes-vous sûr de vouloir supprimer cet actif ?',
+    'equipment' => 'Équipement',
+    'furniture' => 'Mobilier',
+    'electronics' => 'Électronique',
+    'other' => 'Autre',
+    'active' => 'Opérationnel',
+    'maintenance' => 'En Maintenance',
+    'broken' => 'Endommagé',
+    'lost' => 'Perdu',
+    'none' => 'Non Spécifié',
+];

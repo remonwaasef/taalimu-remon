@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'title' => 'Assets Management',
+    'add_new' => 'Add New Asset',
+    'edit' => 'Edit Asset',
+    'name' => 'Asset Name',
+    'code' => 'Asset Code / Barcode',
+    'type' => 'Type',
+    'status' => 'Status',
+    'classroom' => 'Linked Classroom',
+    'purchase_date' => 'Purchase Date',
+    'cost' => 'Cost',
+    'notes' => 'Notes',
+    'actions' => 'Actions',
+    'empty' => 'No assets recorded currently.',
+    'confirm_delete' => 'Are you sure you want to delete this asset?',
+    'equipment' => 'Equipment',
+    'furniture' => 'Furniture',
+    'electronics' => 'Electronics',
+    'other' => 'Other',
+    'active' => 'Operational',
+    'maintenance' => 'Maintenance',
+    'broken' => 'Broken',
+    'lost' => 'Lost',
+    'none' => 'Not Specified',
+];
