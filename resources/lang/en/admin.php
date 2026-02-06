@@ -87,6 +87,16 @@ return [
             'closed' => 'Permanently Closed',
             'wont_fix' => 'Ignored (Technical Exception)',
         ],
+        'messages' => [
+            'AuthenticationException' => 'Authentication or Access Permission Failure',
+            'Stripe\Exception\AuthenticationException' => 'Stripe API Key Authentication Error',
+            'ErrorException' => 'Logical Coding Error in Data Processing',
+            'ValidationException' => 'Data Validation & Verification Failure',
+            'QueryException' => 'Database Connection or Execution Issue',
+            'ModelNotFoundException' => 'Requested System Record Not Found',
+            'NotFoundHttpException' => 'Attempt to Access Non-existent Link or File (404)',
+            'Swift_TransportException' => 'Email Delivery Failure (SMTP Error)',
+        ],
         'severities' => [
             'critical' => 'Extremely Critical',
             'high' => 'High',

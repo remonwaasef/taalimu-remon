@@ -87,6 +87,16 @@ return [
             'closed' => 'مغلق نهائياً',
             'wont_fix' => 'تم تجاهله لعدم الأهمية التقنية',
         ],
+        'messages' => [
+            'AuthenticationException' => 'فشل في التحقق من الهوية أو صلاحية الوصول',
+            'Stripe\Exception\AuthenticationException' => 'خطأ في مفاتيح الربط مع بوابة Stripe (API Key)',
+            'ErrorException' => 'خطأ برمج منطقي في معالجة البيانات',
+            'ValidationException' => 'فشل في المراجعة والتدقيق على البيانات المدخلة',
+            'QueryException' => 'مشكلة في الاتصال أو تنفيذ أوامر قاعدة البيانات',
+            'ModelNotFoundException' => 'لم يتم العثور على السجل المطلوب في النظام',
+            'NotFoundHttpException' => 'محاولة الوصول لرابط أو ملف غير موجود (404)',
+            'Swift_TransportException' => 'فشل في إرسال البريد الإلكتروني (SMTP Error)',
+        ],
         'severities' => [
             'critical' => 'حرج جداً',
             'high' => 'مرتفع',

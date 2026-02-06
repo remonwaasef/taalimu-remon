@@ -14,7 +14,12 @@
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-start mb-4">
         <div>
-            <h1 class="h3 text-gray-800 mb-2">{{ $issue->title }}</h1>
+            <div class="text-xs text-primary font-weight-bold text-uppercase mb-1">
+                {{ __('admin.operation_issues.messages.' . $issue->exception_class) != 'admin.operation_issues.messages.' . $issue->exception_class 
+                    ? __('admin.operation_issues.messages.' . $issue->exception_class) 
+                    : ($issue->exception_class ?: __('admin.operation_issues.history.system')) }}
+            </div>
+            <h1 class="h3 text-gray-800 mb-2">{{ $issue->message }}</h1>
             <div class="d-flex align-items-center">
                 <span class="badge badge-{{ $issue->severity == 'critical' ? 'danger' : ($issue->severity == 'high' ? 'warning' : 'info') }} mr-2">
                     {{ __('admin.operation_issues.severities.' . $issue->severity) }}
