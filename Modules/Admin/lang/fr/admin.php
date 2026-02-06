@@ -97,7 +97,7 @@ return [
             'NotFoundHttpException' => 'Tentative d\'accès à un lien ou un fichier inexistant (404)',
             'Swift_TransportException' => 'Échec de l\'envoi de l\'e-mail (Erreur SMTP)',
         ],
-        'actions_map' => [
+        'actions_dictionary' => [
             'center_subscription_checkout' => 'Processus de paiement de l\'abonnement',
             'center_courses_show' => 'Affichage des détails du cours',
             'center_login' => 'Tentative de connexion au centre',
