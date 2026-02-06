@@ -37,17 +37,30 @@ return Application::configure(basePath: dirname(__DIR__))
         
         // Configure redirect for unauthenticated users
         $middleware->redirectGuestsTo(function ($request) {
-            // Logging removed for production
-            // Check if request is for a tenant subdomain
+            // 1. Admin Routes -> Admin Login
+            if ($request->is('admin') || $request->is('admin/*')) {
+                return route('admin.login');
+            }
+
             $host = $request->getHost();
-            $parts = explode('.', $host);
+            $mainDomain = config('app.tenant_domain');
             
-            // If subdomain exists (not just 'localhost')
-            if (count($parts) > 1 && $parts[0] !== 'www') {
-                return route('center.login', ['tenant' => $parts[0]]);
+            // 2. Main Domain / Localhost -> Unified Login Portal
+            // Check if host is exactly the main domain or www.maindomain
+            if ($host === $mainDomain || $host === 'www.' . $mainDomain || $host === 'localhost') {
+                return route('login.portal');
+            }
+
+            // 3. Tenant Subdomain -> Tenant Login
+            // Only if it ends with the main domain and has a subdomain
+            if ($mainDomain && str_ends_with($host, '.' . $mainDomain)) {
+                $subdomain = substr($host, 0, -strlen('.' . $mainDomain));
+                if ($subdomain && $subdomain !== 'www') {
+                    return route('center.login', ['tenant' => $subdomain]);
+                }
             }
             
-            // Otherwise redirect to main login portal
+            // Fallback
             return route('login.portal');
         });
 
