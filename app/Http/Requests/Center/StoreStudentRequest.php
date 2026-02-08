@@ -16,7 +16,7 @@ class StoreStudentRequest extends FormRequest
         $tenantId = app('tenant')->id;
         
         return [
-            'name' => ['nullable', 'string', 'max:255', 'regex:/^[\pL\s]+$/u'],
+            'name' => ['required', 'string', 'max:255', 'regex:/^[\pL\s]+$/u'],
             'code' => [
                 'nullable', // Service will generate if null
                 'string',
@@ -30,9 +30,9 @@ class StoreStudentRequest extends FormRequest
                 \Illuminate\Validation\Rule::unique('students', 'national_id')->where('tenant_id', $tenantId)
             ],
             'email' => 'nullable|email|unique:users,email',
-            'phone' => ['nullable', 'string', 'max:20', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
+            'phone' => ['required', 'string', 'max:20', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
             'parent_phone' => ['nullable', 'string', 'max:20', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
-            'grade_id' => 'nullable|exists:grades,id',
+            'grade_id' => 'required|exists:grades,id',
             'birth_date' => 'nullable|date|before:today',
             'gender' => 'nullable|in:male,female',
             'address' => 'nullable|string|max:255',
