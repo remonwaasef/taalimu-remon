@@ -623,7 +623,66 @@
         </div>
     </div>
 
-    <!-- ID Card is now rendered via @push('body_end') below -->
+    <!-- ID Card Print Layout (positioned off-screen until print) -->
+    <div class="id-card-print">
+        <div class="id-card-container">
+            <!-- Front of Card -->
+            <div class="id-card">
+                <!-- Header / Logo Area -->
+                <div class="id-header">
+                    <div class="logo-area">
+                        @if($tenant->logo)
+                            <img src="{{ asset('storage/' . $tenant->logo) }}" alt="Logo">
+                        @else
+                            <i class="fas fa-graduation-cap fa-2x text-white"></i>
+                        @endif
+                    </div>
+                    <div class="center-name">
+                        <h1>{{ $tenant->name ?? 'اسم المركز التعليمي' }}</h1>
+                        <span>بطاقة هوية طالب</span>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="id-body">
+                    <div class="student-photo-wrapper">
+                        @if($student->profile_photo)
+                            <img src="{{ asset('storage/' . $student->profile_photo) }}" class="student-photo">
+                        @else
+                             <div class="student-photo-placeholder">{{ substr($student->name, 0, 1) }}</div>
+                        @endif
+                        <div class="status-indicator"></div>
+                    </div>
+
+                    <h2 class="student-name">{{ $student->name }}</h2>
+                    <div class="student-meta">
+                        <span class="grade-badge">{{ $student->grade_level_name ?? '---' }}</span>
+                    </div>
+
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>كود الطالب</label>
+                            <strong>{{ $student->code }}</strong>
+                        </div>
+                        <div class="info-item">
+                            <label>العام الدراسي</label>
+                            <strong>{{ date('Y') }} - {{ date('Y')+1 }}</strong>
+                        </div>
+                    </div>
+
+                    <div class="qr-area">
+                        <div id="student-qrcode"></div>
+                        <span class="code-text">{{ $student->code }}</span>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="id-footer">
+                    <p>هذه البطاقة لإثبات هوية الطالب وتستخدم للدخول والحضور</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <style>
         :root {
@@ -681,14 +740,10 @@
         /* Timeline */
         .timeline-item:last-child .timeline-content { border-bottom: none !important; }
         
+        /* PRINT SPECIFIC STYLES - ID CARD */
         @media print {
             /* ONLY APPLY IF body.print-id-card IS PRESENT */
-            body.print-id-card .sidebar,
-            body.print-id-card .admin-footer,
-            body.print-id-card header,
-            body.print-id-card .sidebar-overlay,
-            body.print-id-card .modal,
-            body.print-id-card .main-content {
+            body.print-id-card > :not(.id-card-print) {
                 display: none !important;
             }
             
@@ -1005,67 +1060,4 @@
         }
     });
 </script>
-@endpush
-
-@push('body_end')
-    <!-- ID Card Print Layout (placed at body level for proper print targeting) -->
-    <div class="id-card-print">
-        <div class="id-card-container">
-            <!-- Front of Card -->
-            <div class="id-card">
-                <!-- Header / Logo Area -->
-                <div class="id-header">
-                    <div class="logo-area">
-                        @if($tenant->logo)
-                            <img src="{{ asset('storage/' . $tenant->logo) }}" alt="Logo">
-                        @else
-                            <i class="fas fa-graduation-cap fa-2x text-white"></i>
-                        @endif
-                    </div>
-                    <div class="center-name">
-                        <h1>{{ $tenant->name ?? 'اسم المركز التعليمي' }}</h1>
-                        <span>بطاقة هوية طالب</span>
-                    </div>
-                </div>
-
-                <!-- Main Content -->
-                <div class="id-body">
-                    <div class="student-photo-wrapper">
-                        @if($student->profile_photo)
-                            <img src="{{ asset('storage/' . $student->profile_photo) }}" class="student-photo">
-                        @else
-                             <div class="student-photo-placeholder">{{ substr($student->name, 0, 1) }}</div>
-                        @endif
-                        <div class="status-indicator"></div>
-                    </div>
-
-                    <h2 class="student-name">{{ $student->name }}</h2>
-                    <div class="student-meta">
-                        <span class="grade-badge">{{ $student->grade_level_name ?? '---' }}</span>
-                    </div>
-
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <label>كود الطالب</label>
-                            <strong>{{ $student->code }}</strong>
-                        </div>
-                        <div class="info-item">
-                            <label>العام الدراسي</label>
-                            <strong>{{ date('Y') }} - {{ date('Y')+1 }}</strong>
-                        </div>
-                    </div>
-
-                    <div class="qr-area">
-                        <div id="student-qrcode"></div>
-                        <span class="code-text">{{ $student->code }}</span>
-                    </div>
-                </div>
-
-                <!-- Footer -->
-                <div class="id-footer">
-                    <p>هذه البطاقة لإثبات هوية الطالب وتستخدم للدخول والحضور</p>
-                </div>
-            </div>
-        </div>
-    </div>
 @endpush
