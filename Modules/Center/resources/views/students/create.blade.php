@@ -77,7 +77,7 @@
                         <div class="col-md-6">
                             <div class="form-floating elite-input-group">
                                 <input type="text" name="name" value="{{ old('name') }}" class="form-control" id="nameInput" placeholder="الاسم">
-                                <label for="nameInput">اسم الطالب بالكامل</label>
+                                <label for="nameInput">اسم الطالب بالكامل <span class="text-danger">*</span></label>
                                 <div class="validation-indicator"></div>
                                 @error('name') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
@@ -85,7 +85,7 @@
                         <div class="col-md-6">
                             <div class="form-floating elite-input-group">
                                 <input type="tel" name="phone" value="{{ old('phone') }}" class="form-control" id="phoneInput" placeholder="الهاتف">
-                                <label for="phoneInput">رقم الهاتف</label>
+                                <label for="phoneInput">رقم الهاتف <span class="text-danger">*</span></label>
                                 <div class="validation-indicator"></div>
                                 @error('phone') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
@@ -95,6 +95,7 @@
                                 <input type="email" name="email" value="{{ old('email') }}" class="form-control" id="emailInput" placeholder="الإيميل">
                                 <label for="emailInput">البريد الإلكتروني (اختياري)</label>
                                 <div class="validation-indicator"></div>
+                                @error('email') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -102,24 +103,28 @@
                                 <input type="text" name="code" value="{{ old('code') }}" class="form-control" id="codeInput" placeholder="الكود">
                                 <label for="codeInput">كود الطالب المميز</label>
                                 <div class="validation-indicator"></div>
+                                @error('code') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-floating elite-input-group">
                                 <input type="text" name="address" value="{{ old('address') }}" class="form-control" id="addressInput" placeholder="العنوان">
                                 <label for="addressInput">العنوان التفصيلي</label>
+                                @error('address') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-floating elite-input-group">
                                 <input type="text" name="national_id" value="{{ old('national_id') }}" class="form-control" id="idInput" placeholder="الرقم القومي">
                                 <label for="idInput">الرقم القومي</label>
+                                @error('national_id') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-floating elite-input-group">
                                 <input type="date" name="birth_date" value="{{ old('birth_date') }}" class="form-control" id="dateInput">
                                 <label for="dateInput">تاريخ الميلاد</label>
+                                @error('birth_date') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -130,6 +135,7 @@
                                     <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>أنثى</option>
                                 </select>
                                 <label for="genderSelect">الجنس</label>
+                                @error('gender') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
 
@@ -143,6 +149,7 @@
                                 <h6 class="fw-bold mb-1">الصورة الشخصية</h6>
                                 <p class="text-muted small">اسحب ملف الصورة أو انقر للاختيار</p>
                                 <input type="file" name="profile_photo" id="photoInput" class="fake-input" accept="image/*">
+                                @error('profile_photo') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                     </div>
@@ -166,6 +173,7 @@
                                 <input type="tel" name="parent_phone" id="parent_phone" value="{{ old('parent_phone') }}" class="form-control" placeholder="هاتف ولي الأمر">
                                 <label for="parent_phone">رقم هاتف ولي الأمر</label>
                                 <div class="validation-indicator"></div>
+                                @error('parent_phone') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                                 <div id="parent-match-chip" class="match-chip d-none animate__animated animate__bounceIn">
                                     <i class="fas fa-magic me-1"></i> تم التعرف: <b id="match-name"></b>
                                 </div>
@@ -175,24 +183,28 @@
                             <div class="form-floating elite-input-group">
                                 <input type="text" name="parent_name" id="pNameInput" value="{{ old('parent_name') }}" class="form-control" placeholder="الاسم">
                                 <label for="pNameInput">اسم ولي الأمر</label>
+                                @error('parent_name') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating elite-input-group">
                                 <input type="text" name="parent_relation" value="{{ old('parent_relation') }}" class="form-control" id="relInput" placeholder="القرابة">
                                 <label for="relInput">صلة القرابة</label>
+                                @error('parent_relation') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating elite-input-group">
                                 <input type="tel" name="emergency_phone" value="{{ old('emergency_phone') }}" class="form-control" id="ePhoneInput" placeholder="طوارئ">
                                 <label for="ePhoneInput">رقم طوارئ إضافي</label>
+                                @error('emergency_phone') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="form-floating elite-input-group">
                                 <input type="text" name="parent_job" id="pJobInput" value="{{ old('parent_job') }}" class="form-control" placeholder="الوظيفة">
                                 <label for="pJobInput">وظيفة ولي الأمر</label>
+                                @error('parent_job') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                     </div>
@@ -223,7 +235,7 @@
                                         </optgroup>
                                     @endforeach
                                 </select>
-                                <label for="gradeSelect">الصف الدراسي الحالي</label>
+                                <label for="gradeSelect">الصف الدراسي الحالي <span class="text-danger">*</span></label>
                                 <div class="validation-indicator"></div>
                                 @error('grade_id') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
@@ -232,12 +244,14 @@
                             <div class="form-floating elite-input-group">
                                 <input type="text" name="school_name" value="{{ old('school_name') }}" class="form-control" id="schoolInput" placeholder="المدرسة">
                                 <label for="schoolInput">اسم المدرسة</label>
+                                @error('school_name') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating elite-input-group">
                                 <input type="text" name="section_type" value="{{ old('section_type') }}" class="form-control" id="secInput" placeholder="التخصص">
                                 <label for="secInput">الشعبة (علمي/أدبي)</label>
+                                @error('section_type') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                     </div>
