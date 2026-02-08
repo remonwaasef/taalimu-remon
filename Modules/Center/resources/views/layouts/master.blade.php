@@ -831,5 +831,6 @@
     </script>
     
     @stack('scripts')
+    @stack('body_end')
 </body>
 </html>
