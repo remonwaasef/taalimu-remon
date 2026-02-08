@@ -1020,16 +1020,25 @@
 <!-- QR Code Library for ID Card -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
+    function printIDCard() {
+        document.body.classList.add('print-id-card');
+        window.print();
+        setTimeout(() => {
+            document.body.classList.remove('print-id-card');
+        }, 1000);
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         const qrContainer = document.getElementById('student-qrcode');
         if (qrContainer) {
+            qrContainer.innerHTML = '';
             new QRCode(qrContainer, {
                 text: "{{ $student->code }}",
                 width: 60,
                 height: 60,
                 colorDark: "#000000",
                 colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.L
+                correctLevel : QRCode.CorrectLevel.H
             });
         }
     });
