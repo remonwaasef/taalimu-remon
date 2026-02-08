@@ -740,11 +740,26 @@
         /* Timeline */
         .timeline-item:last-child .timeline-content { border-bottom: none !important; }
         
-        /* PRINT SPECIFIC STYLES - ID CARD */
         @media print {
             /* ONLY APPLY IF body.print-id-card IS PRESENT */
-            body.print-id-card > :not(.id-card-print) {
+            body.print-id-card .sidebar,
+            body.print-id-card .admin-footer,
+            body.print-id-card header,
+            body.print-id-card .sidebar-overlay,
+            body.print-id-card .modal {
                 display: none !important;
+            }
+            
+            body.print-id-card .main-content > :not(.id-card-print) {
+                display: none !important;
+            }
+
+            body.print-id-card .main-content {
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                overflow: visible !important;
             }
             
             body.print-id-card .id-card-print {
