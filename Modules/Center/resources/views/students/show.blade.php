@@ -234,7 +234,7 @@
                     <div class="card border-0 shadow-sm rounded-5 p-4 p-md-5 h-100">
                         <div class="d-flex justify-content-between align-items-center mb-5">
                             <h4 class="fw-bold mb-0">المعلومات الأساسية</h4>
-                            <button type="button" onclick="window.print()" class="btn btn-light rounded-pill px-3 fw-bold">
+                            <button type="button" onclick="printIDCard()" class="btn btn-light rounded-pill px-3 fw-bold">
                                 <i class="fas fa-print me-2"></i> طباعة كارت الهوية
                             </button>
                         </div>
@@ -624,7 +624,7 @@
     </div>
 
     <!-- ID Card Print Layout (positioned off-screen until print) -->
-    <div class="id-card-print" style="display: none;">
+    <div class="id-card-print">
         <div class="id-card-container">
             <!-- Front of Card -->
             <div class="id-card">
@@ -742,59 +742,45 @@
         
         /* PRINT SPECIFIC STYLES - ID CARD */
         @media print {
-            /* 1. Hide unwanted high-level elements */
-            .sidebar, 
-            .admin-footer, 
-            .sidebar-overlay,
-            header, /* The header inside main-content */
-            .animate__fadeIn, /* The main profile content */
-            .modal {
+            /* ONLY APPLY IF body.print-id-card IS PRESENT */
+            body.print-id-card > :not(.id-card-print) {
                 display: none !important;
             }
             
-            /* 2. Reset Main Content Container */
-            .main-content {
-                margin: 0 !important;
-                padding: 0 !important;
-                width: 100% !important;
-                height: 100% !important;
-                overflow: hidden !important;
-            }
-
-            /* 3. Reset Body/HTML */
-            body, html {
-                margin: 0;
-                padding: 0;
-                height: 100%;
-                overflow: hidden;
-                background-color: white !important;
-            }
-            
-            /* 4. Show and Position ID Card */
-            .id-card-print {
+            body.print-id-card .id-card-print {
                 display: flex !important;
+                visibility: visible !important;
                 position: fixed !important;
                 left: 0 !important;
-                right: 0 !important;
                 top: 0 !important;
                 width: 100vw;
                 height: 100vh;
-                align-items: center; /* Center Vertically */
-                justify-content: center; /* Center Horizontally */
+                align-items: center;
+                justify-content: center;
                 background: white !important;
                 padding: 0 !important;
                 margin: 0 !important;
                 z-index: 999999;
                 direction: rtl !important;
                 text-align: right;
-                visibility: visible !important;
             }
 
-            .id-card-print * {
+            body.print-id-card .id-card-print * {
                 visibility: visible !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
+        }
+
+        /* Screen Styles for ID Card - Hide offscreen but rendered for QR */
+        .id-card-print {
+            position: fixed;
+            left: -9999px;
+            top: 0;
+            opacity: 0;
+            z-index: -100;
+            /* Do NOT use display: none, otherwise QR code won't generate dimensions */
+        }
 
             .id-card-container {
                 width: 85.6mm; /* Standard ID Card Credit Card Size */
