@@ -1017,30 +1017,47 @@
     });
 </script>
 
+@endsection
+
+@push('scripts')
 <!-- QR Code Library for ID Card -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-    function printIDCard() {
+    window.printIDCard = function() {
+        console.log('Starting ID Card Print...');
         document.body.classList.add('print-id-card');
-        window.print();
+        
+        // Small delay to ensure class is applied before print dialog opens
         setTimeout(() => {
-            document.body.classList.remove('print-id-card');
-        }, 1000);
+            window.print();
+            
+            // Remove class after print dialog is closed (or after a timeout)
+            // Note: print() blocks in many browsers, so this timeout runs after.
+            setTimeout(() => {
+                document.body.classList.remove('print-id-card');
+            }, 1000);
+        }, 100);
     }
 
     document.addEventListener('DOMContentLoaded', function() {
         const qrContainer = document.getElementById('student-qrcode');
         if (qrContainer) {
             qrContainer.innerHTML = '';
-            new QRCode(qrContainer, {
-                text: "{{ $student->code }}",
-                width: 60,
-                height: 60,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
+            
+            // Ensure QRCode library is loaded
+            if (typeof QRCode !== 'undefined') {
+                new QRCode(qrContainer, {
+                    text: "{{ $student->code }}",
+                    width: 60,
+                    height: 60,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+            } else {
+                console.error('QRCode library not loaded');
+            }
         }
     });
 </script>
-@endsection
+@endpush
