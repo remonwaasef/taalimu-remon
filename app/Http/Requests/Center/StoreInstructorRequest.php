@@ -24,7 +24,7 @@ class StoreInstructorRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255', 'regex:/^[\pL\s]+$/u'],
             'email' => 'nullable|email|max:255',
-            'phone' => ['nullable', 'string', 'max:20', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
+            'phone' => ['required', 'string', 'max:20', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
             'specialization' => ['nullable', 'string', 'max:100', 'regex:/^[\pL\s\-\.]+$/u'],
             'status' => 'required|in:active,inactive,on_hold',
             'commission_rate' => 'nullable|numeric|min:0|max:100',

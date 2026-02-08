@@ -46,10 +46,12 @@
                                     <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>{{ __('center::instructors.male') }}</option>
                                     <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>{{ __('center::instructors.female') }}</option>
                                 </select>
+                                @error('gender')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">{{ __('center::instructors.hiring_date') }}</label>
                                 <input type="date" name="hiring_date" value="{{ old('hiring_date') }}" class="form-control bg-light border-0">
+                                @error('hiring_date')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                         </div>
 
@@ -58,6 +60,7 @@
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::instructors.national_id') }}</label>
                                 <input type="text" name="national_id" value="{{ old('national_id') }}" class="form-control bg-light border-0" placeholder="الرقم القومي">
+                                @error('national_id')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::instructors.commission_rate') }}</label>
@@ -65,6 +68,7 @@
                                     <input type="number" step="0.01" name="commission_rate" value="{{ old('commission_rate', 0) }}" class="form-control bg-light border-0">
                                     <span class="input-group-text bg-light border-0">%</span>
                                 </div>
+                                @error('commission_rate')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                                 <small class="text-muted">النسبة التي يتقاضاها المدرس من مبيعات دوراته</small>
                             </div>
                         </div>
@@ -77,7 +81,7 @@
                                 @error('email')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('center::instructors.phone') }}</label>
+                                <label class="form-label fw-bold">{{ __('center::instructors.phone') }} <span class="text-danger">*</span></label>
                                 <input type="tel" name="phone" value="{{ old('phone') }}" class="form-control bg-light border-0">
                                 @error('phone')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
@@ -86,11 +90,13 @@
                         <div class="mb-4">
                             <label class="form-label fw-bold">{{ __('center::instructors.bio') }}</label>
                             <textarea name="bio" class="form-control bg-light border-0" rows="3">{{ old('bio') }}</textarea>
+                            @error('bio')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                         </div>
 
                         <div class="mb-5">
                             <label class="form-label fw-bold">الصورة الشخصية</label>
                             <input type="file" name="image" class="form-control bg-light border-0" accept="image/*">
+                            @error('image')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                         </div>
 
                         <div class="d-grid gap-2">
