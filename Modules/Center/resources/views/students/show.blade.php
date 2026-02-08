@@ -742,12 +742,26 @@
         
         /* PRINT SPECIFIC STYLES - ID CARD */
         @media print {
-            /* Hide everything by default but reclaim space */
-            body > :not(.id-card-print) {
+            /* 1. Hide unwanted high-level elements */
+            .sidebar, 
+            .admin-footer, 
+            .sidebar-overlay,
+            header, /* The header inside main-content */
+            .animate__fadeIn, /* The main profile content */
+            .modal {
                 display: none !important;
             }
             
-            /* Reset body */
+            /* 2. Reset Main Content Container */
+            .main-content {
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                overflow: hidden !important;
+            }
+
+            /* 3. Reset Body/HTML */
             body, html {
                 margin: 0;
                 padding: 0;
@@ -756,6 +770,7 @@
                 background-color: white !important;
             }
             
+            /* 4. Show and Position ID Card */
             .id-card-print {
                 display: flex !important;
                 position: fixed !important;
