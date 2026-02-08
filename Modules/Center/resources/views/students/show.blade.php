@@ -742,29 +742,43 @@
         
         /* PRINT SPECIFIC STYLES - ID CARD */
         @media print {
-            body * {
-                visibility: hidden;
+            /* Hide everything by default but reclaim space */
+            body > :not(.id-card-print) {
+                display: none !important;
             }
             
-            .id-card-print, .id-card-print * {
-                visibility: visible;
+            /* Reset body */
+            body, html {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                overflow: hidden;
+                background-color: white !important;
             }
-
+            
             .id-card-print {
+                display: flex !important;
                 position: fixed !important;
                 left: 0 !important;
                 right: 0 !important;
                 top: 0 !important;
                 width: 100vw;
                 height: 100vh;
-                display: flex !important;
-                align-items: flex-start;
-                justify-content: center;
-                background: white;
-                padding-top: 2cm;
-                z-index: 99999;
-                direction: rtl !important; /* Force RTL */
+                align-items: center; /* Center Vertically */
+                justify-content: center; /* Center Horizontally */
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                z-index: 999999;
+                direction: rtl !important;
                 text-align: right;
+                visibility: visible !important;
+            }
+
+            .id-card-print * {
+                visibility: visible !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
 
             .id-card-container {
@@ -880,7 +894,7 @@
             .student-name {
                 font-size: 11pt;
                 font-weight: 800;
-                color: #1e293b;
+                color: #000000 !important; /* Force Black */
                 margin: 0 0 1mm;
                 text-align: center;
             }
@@ -893,8 +907,8 @@
 
             .student-meta .grade-badge {
                 font-size: 6pt;
-                background: #e0e7ff;
-                color: #4338ca;
+                background: #e0e7ff !important;
+                color: #4338ca !important; /* Force Blue */
                 padding: 0.5mm 2mm;
                 border-radius: 2mm;
                 font-weight: 700;
@@ -918,8 +932,8 @@
 
             .info-item label {
                 display: block;
-                font-size: 5pt;
-                color: #64748b;
+                font-size: 6pt !important;
+                color: #64748b !important;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
                 margin-bottom: 0.5mm;
@@ -927,8 +941,9 @@
 
             .info-item strong {
                 display: block;
-                font-size: 7pt;
-                color: #334155;
+                font-size: 8pt !important;
+                color: #000000 !important; /* Force Black */
+                font-weight: bold !important;
             }
 
             .qr-area {
