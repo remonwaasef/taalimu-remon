@@ -6,7 +6,7 @@
         <div class="col-12">
             <div class="card border-0 shadow-elite rounded-5 overflow-hidden position-relative mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);">
                 <div class="card-body p-4 p-md-5 position-relative" style="z-index: 2;">
-                    <div class="d-flex flex-column flex-md-row align-items-center gap-4 text-center text-md-end">
+                    <div class="d-flex flex-column flex-md-row align-items-center gap-4 text-center text-md-start" style="text-align: right !important;">
                         <!-- Profile Image Section -->
                         <div class="position-relative flex-shrink-0">
                             @if($student->profile_photo)
@@ -624,7 +624,7 @@
     </div>
 
     <!-- ID Card Print Layout (positioned off-screen until print) -->
-    <div class="id-card-print" style="position: absolute; left: -9999px; top: 0;">
+    <div class="id-card-print" style="display: none;">
         <div class="id-card-container">
             <!-- Front of Card -->
             <div class="id-card">
@@ -753,6 +753,7 @@
             .id-card-print {
                 position: fixed !important;
                 left: 0 !important;
+                right: 0 !important;
                 top: 0 !important;
                 width: 100vw;
                 height: 100vh;
@@ -762,6 +763,8 @@
                 background: white;
                 padding-top: 2cm;
                 z-index: 99999;
+                direction: rtl !important; /* Force RTL */
+                text-align: right;
             }
 
             .id-card-container {
@@ -771,6 +774,8 @@
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
                 z-index: 100000;
+                margin: 0 auto;
+                direction: rtl !important;
             }
 
             .id-card {
@@ -908,6 +913,7 @@
 
             .info-item {
                 text-align: center;
+                /* flex: 1; */
             }
 
             .info-item label {
