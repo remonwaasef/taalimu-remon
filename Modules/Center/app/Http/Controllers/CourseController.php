@@ -14,6 +14,7 @@ use App\Http\Requests\Center\StoreCourseRequest;
 use App\Http\Requests\Center\UpdateCourseRequest;
 use App\DTOs\CourseData;
 use App\Services\CertificateService;
+use App\Services\FinanceService;
 use App\Models\LessonProgress;
 use App\Models\Enrollment;
 
@@ -24,12 +25,14 @@ class CourseController extends Controller
     protected $courseService;
     protected $courseQuery;
     protected $certificateService;
+    protected $financeService;
 
-    public function __construct(CourseService $courseService, CourseQuery $courseQuery, CertificateService $certificateService)
+    public function __construct(CourseService $courseService, CourseQuery $courseQuery, CertificateService $certificateService, FinanceService $financeService)
     {
         $this->courseService = $courseService;
         $this->courseQuery = $courseQuery;
         $this->certificateService = $certificateService;
+        $this->financeService = $financeService;
     }
     /**
      * Display a listing of the resource.
@@ -109,8 +112,14 @@ class CourseController extends Controller
             ->findOrFail($request->student_id);
 
         try {
-            $this->courseService->enrollStudent($course, $student);
-            return back()->with('success', 'تم تسجيل الطالب في الدورة بنجاح');
+            // إنشاء فاتورة غير مدفوعة تلقائياً عند التسجيل
+            $this->financeService->createSale([
+                'student_id' => $student->id,
+                'items' => [['id' => $course->id, 'price' => $course->price]],
+                'payment_method' => 'pending',
+                'paid_amount' => 0, // فاتورة غير مدفوعة
+            ]);
+            return back()->with('success', 'تم تسجيل الطالب وإنشاء فاتورة بنجاح');
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
@@ -135,10 +144,15 @@ class CourseController extends Controller
                 $registrationResult = app(\App\Services\StudentService::class)->registerStudent($studentData, auth()->user());
                 $student = $registrationResult['student'];
 
-                // 2. Enroll in Course
-                $this->courseService->enrollStudent($course, $student);
+                // 2. إنشاء فاتورة غير مدفوعة تلقائياً (بدلاً من التسجيل المباشر)
+                $this->financeService->createSale([
+                    'student_id' => $student->id,
+                    'items' => [['id' => $course->id, 'price' => $course->price]],
+                    'payment_method' => 'pending',
+                    'paid_amount' => 0,
+                ]);
 
-                return back()->with('success', 'تم إنشاء الطالب وتسجيله في الدورة بنجاح');
+                return back()->with('success', 'تم إنشاء الطالب وتسجيله وإنشاء فاتورة بنجاح');
             });
         } catch (\Exception $e) {
             return back()->with('error', 'حدث خطأ: ' . $e->getMessage());
