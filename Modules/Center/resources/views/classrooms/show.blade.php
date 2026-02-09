@@ -79,12 +79,12 @@
                 <div class="card-header bg-white border-0 p-4 pb-0">
                     <ul class="nav nav-tabs border-0" id="classroomTabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active border-0 fw-bold text-dark position-relative py-3" id="scheduleTab" data-bs-toggle="tab" data-bs-target="#scheduleContent" type="button" role="tab">
+                            <button class="nav-link active border-0 fw-bold text-dark position-relative py-3" id="scheduleTab" data-bs-toggle="tab" data-bs-target="#scheduleContent" type="button" role="tab" aria-controls="scheduleContent" aria-selected="true">
                                 <i class="fas fa-calendar-week me-2 text-primary"></i> الجدول الأسبوعي
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link border-0 fw-bold text-dark position-relative py-3" id="assetsTab" data-bs-toggle="tab" data-bs-target="#assetsContent" type="button" role="tab">
+                            <button class="nav-link border-0 fw-bold text-dark position-relative py-3" id="assetsTab" data-bs-toggle="tab" data-bs-target="#assetsContent" type="button" role="tab" aria-controls="assetsContent" aria-selected="false">
                                 <i class="fas fa-box me-2 text-primary"></i> العُهد والأصول ({{ $classroom->assets->count() }})
                             </button>
                         </li>
@@ -93,78 +93,79 @@
                 <div class="card-body p-4 pt-0">
                     <div class="tab-content mt-4" id="classroomTabsContent">
                         <!-- Schedule Tab -->
-                        <div class="tab-pane fade show active" id="scheduleContent" role="tabpanel">
-                    @if($classroom->schedules->isEmpty())
-                        <div class="text-center py-5">
-                            <div class="text-muted opacity-50 mb-3">
-                                <i class="fas fa-calendar-times fa-4x"></i>
-                            </div>
-                            <h5 class="text-muted">لا توجد حصص مجدولة في هذه القاعة حالياً</h5>
-                            <a href="{{ route('center.schedules.create') }}" class="btn btn-primary rounded-pill mt-3">
-                                <i class="fas fa-plus me-1"></i> جدولة حصة جديدة
-                            </a>
-                        </div>
-                    @else
-                        <div class="table-responsive">
-                            <table class="table align-middle">
-                                <thead class="bg-light">
-                                    <tr>
-                                        <th class="border-0 rounded-start">اليوم</th>
-                                        <th class="border-0">الموعد</th>
-                                        <th class="border-0">الدورة التدريبية</th>
-                                        <th class="border-0">المدرس</th>
-                                        <th class="border-0 rounded-end">الطلاب</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        $days = [
-                                            'Saturday' => 'السبت',
-                                            'Sunday' => 'الأحد',
-                                            'Monday' => 'الاثنين',
-                                            'Tuesday' => 'الثلاثاء',
-                                            'Wednesday' => 'الأربعاء',
-                                            'Thursday' => 'الخميس',
-                                            'Friday' => 'الجمعة'
-                                        ];
-                                    @endphp
-                                    @foreach($classroom->schedules as $schedule)
-                                        <tr>
-                                            <td>
-                                                <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-3">
-                                                    {{ $days[$schedule->day_of_week] ?? $schedule->day_of_week }}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="small fw-bold text-dark">
-                                                    {{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }}
-                                                    <span class="text-muted px-1">-</span>
-                                                    {{ \Carbon\Carbon::parse($schedule->end_time)->format('h:i A') }}
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="fw-bold">{{ optional($schedule->course)->title ?? 'غير محدد' }}</div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <i class="fas fa-user-tie text-muted me-2 small"></i>
-                                                    <span class="small">{{ optional($schedule->instructor)->name ?? 'غير محدد' }}</span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-light text-dark border rounded-pill px-2">
-                                                    {{ $schedule->bookings_count ?? $schedule->bookings()->count() }} / {{ $schedule->max_students }}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                        <div class="tab-pane fade show active" id="scheduleContent" role="tabpanel" aria-labelledby="scheduleTab">
+                            @if($classroom->schedules->isEmpty())
+                                <div class="text-center py-5">
+                                    <div class="text-muted opacity-50 mb-3">
+                                        <i class="fas fa-calendar-times fa-4x"></i>
+                                    </div>
+                                    <h5 class="text-muted">لا توجد حصص مجدولة في هذه القاعة حالياً</h5>
+                                    <a href="{{ route('center.schedules.create') }}" class="btn btn-primary rounded-pill mt-3">
+                                        <i class="fas fa-plus me-1"></i> جدولة حصة جديدة
+                                    </a>
+                                </div>
+                            @else
+                                <div class="table-responsive">
+                                    <table class="table align-middle">
+                                        <thead class="bg-light">
+                                            <tr>
+                                                <th class="border-0 rounded-start">اليوم</th>
+                                                <th class="border-0">الموعد</th>
+                                                <th class="border-0">الدورة التدريبية</th>
+                                                <th class="border-0">المدرس</th>
+                                                <th class="border-0 rounded-end">الطلاب</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $days = [
+                                                    'Saturday' => 'السبت',
+                                                    'Sunday' => 'الأحد',
+                                                    'Monday' => 'الاثنين',
+                                                    'Tuesday' => 'الثلاثاء',
+                                                    'Wednesday' => 'الأربعاء',
+                                                    'Thursday' => 'الخميس',
+                                                    'Friday' => 'الجمعة'
+                                                ];
+                                            @endphp
+                                            @foreach($classroom->schedules as $schedule)
+                                                <tr>
+                                                    <td>
+                                                        <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-3">
+                                                            {{ $days[$schedule->day_of_week] ?? $schedule->day_of_week }}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="small fw-bold text-dark">
+                                                            {{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }}
+                                                            <span class="text-muted px-1">-</span>
+                                                            {{ \Carbon\Carbon::parse($schedule->end_time)->format('h:i A') }}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="fw-bold">{{ optional($schedule->course)->title ?? 'غير محدد' }}</div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <i class="fas fa-user-tie text-muted me-2 small"></i>
+                                                            <span class="small">{{ optional($schedule->instructor)->name ?? 'غير محدد' }}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge bg-light text-dark border rounded-pill px-2">
+                                                            {{ $schedule->bookings_count ?? $schedule->bookings()->count() }} / {{ $schedule->max_students }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
                         </div>
 
                         <!-- Assets Tab -->
-                        <div class="tab-pane fade" id="assetsContent" role="tabpanel">
+                        <div class="tab-pane fade" id="assetsContent" role="tabpanel" aria-labelledby="assetsTab">
                             @if($classroom->assets->isEmpty())
                                 <div class="text-center py-5">
                                     <div class="text-muted opacity-50 mb-3">

@@ -48,7 +48,7 @@ $tenantRoutes = function () {
 
     // Protected Routes (Auth Only - No Subscription Check)
     Route::middleware(['auth', 'force_password_change'])->group(function() {
-        Route::post('logout', [AuthController::class, 'logout'])->name('center.logout');
+        Route::match(['get', 'post'], 'logout', [AuthController::class, 'logout'])->name('center.logout');
 
         /*
         // Two-Factor Authentication Routes (Ultimate Security Flow)
