@@ -73,4 +73,15 @@ return [
         'medium' => 'Medium',
         'low' => 'Low',
     ],
+    'onboarding' => [
+        'welcome' => 'Welcome, :name! Let\'s get your center ready 🚀',
+        'subtitle' => 'Complete these simple steps to start your educational journey',
+        'add_first_instructor' => 'Add First Instructor',
+        'instructor_added_success' => 'Instructor added successfully!',
+        'add_first_course' => 'Create First Course',
+        'course_added_success' => 'Course created successfully!',
+        'add_first_student' => 'Register First Student',
+        'student_added_success' => 'Student registered successfully!',
+        'completion_message' => 'Congratulations! You have completed all essential steps.',
+    ],
 ];

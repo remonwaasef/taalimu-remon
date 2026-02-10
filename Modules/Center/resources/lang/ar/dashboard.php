@@ -91,5 +91,16 @@ return [
             'course' => 'إنشاء أول دورة',
             'student' => 'تسجيل أول طالب',
         ]
-    ]
+    ],
+    'onboarding' => [
+        'welcome' => 'أهلاً بك يا :name! دعنا نجهز مركزك للانطلاق 🚀',
+        'subtitle' => 'أكمل هذه الخطوات البسيطة لبدء رحلتك التعليمية',
+        'add_first_instructor' => 'إضافة المدرس الأول',
+        'instructor_added_success' => 'تم إضافة المدرس بنجاح!',
+        'add_first_course' => 'إنشاء الدورة الأولى',
+        'course_added_success' => 'تم إنشاء الدورة بنجاح!',
+        'add_first_student' => 'تسجيل الطالب الأول',
+        'student_added_success' => 'تم تسجيل الطالب بنجاح!',
+        'completion_message' => 'مبروك! لقد أتممت جميع الخطوات الأساسية.',
+    ],
 ];
