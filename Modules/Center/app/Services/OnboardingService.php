@@ -22,11 +22,15 @@ class OnboardingService
         $hasInstructors = Instructor::where('tenant_id', $tenantId)->exists();
         $hasCourses = Course::where('tenant_id', $tenantId)->exists();
         $hasStudents = Student::where('tenant_id', $tenantId)->exists();
+        $hasSchedule = \App\Models\Schedule::where('tenant_id', $tenantId)->exists();
+        $hasAttendance = \Modules\Center\Models\Attendance::where('tenant_id', $tenantId)->exists();
 
         $steps = [
             ['done' => $hasInstructors, 'label' => 'إضافة مدرس'],
             ['done' => $hasCourses, 'label' => 'إنشاء دورة'],
-            ['done' => $hasStudents, 'label' => 'تسجيل طالب']
+            ['done' => $hasStudents, 'label' => 'تسجيل طالب'],
+            ['done' => $hasSchedule, 'label' => 'الجدول الدراسي'],
+            ['done' => $hasAttendance, 'label' => 'تسجيل الحضور']
         ];
 
         $completedSteps = count(array_filter($steps, fn($s) => $s['done']));
@@ -38,7 +42,9 @@ class OnboardingService
             'instructor_added' => $hasInstructors,
             'course_added' => $hasCourses,
             'student_added' => $hasStudents,
-            'all_done' => $hasInstructors && $hasCourses && $hasStudents,
+            'schedule_added' => $hasSchedule,
+            'attendance_added' => $hasAttendance,
+            'all_done' => $hasInstructors && $hasCourses && $hasStudents && $hasSchedule && $hasAttendance,
             'progress' => (int) $progress,
             'steps' => $steps
         ];

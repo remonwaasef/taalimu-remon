@@ -149,6 +149,61 @@ class CenterController extends Controller
         return response()->json(['success' => true, 'student' => $student]);
     }
 
+    public function quickAddSchedule(Request $request)
+    {
+        $tenantId = auth()->user()->tenant_id;
+        $course = \App\Models\Course::where('tenant_id', $tenantId)->first();
+        $classroom = \App\Models\Classroom::where('tenant_id', $tenantId)->first();
+        $instructor = \App\Models\Instructor::where('tenant_id', $tenantId)->first();
+
+        if (!$course || !$instructor) {
+            return response()->json(['success' => false, 'message' => 'يرجى إضافة مدرس ودورة أولاً']);
+        }
+
+        // Create a default classroom if none exists
+        if (!$classroom) {
+            $classroom = \App\Models\Classroom::create([
+                'tenant_id' => $tenantId,
+                'name' => 'القاعة الرئيسية',
+                'capacity' => 50
+            ]);
+        }
+
+        $schedule = \App\Models\Schedule::create([
+            'tenant_id' => $tenantId,
+            'course_id' => $course->id,
+            'instructor_id' => $instructor->id,
+            'classroom_id' => $classroom->id,
+            'day_of_week' => strtolower(now()->format('l')),
+            'start_time' => '10:00:00',
+            'end_time' => '12:00:00',
+        ]);
+
+        return response()->json(['success' => true, 'schedule' => $schedule]);
+    }
+
+    public function quickAddAttendance(Request $request)
+    {
+        $tenantId = auth()->user()->tenant_id;
+        $student = \App\Models\Student::where('tenant_id', $tenantId)->first();
+        $schedule = \App\Models\Schedule::where('tenant_id', $tenantId)->first();
+
+        if (!$student || !$schedule) {
+            return response()->json(['success' => false, 'message' => 'يرجى إضافة طالب وجدول أولاً']);
+        }
+
+        $attendance = \Modules\Center\Models\Attendance::create([
+            'tenant_id' => $tenantId,
+            'student_id' => $student->id,
+            'course_id' => $schedule->course_id,
+            'schedule_id' => $schedule->id,
+            'session_date' => now()->toDateString(),
+            'status' => 'present',
+        ]);
+
+        return response()->json(['success' => true, 'attendance' => $attendance]);
+    }
+
     public function completeOnboarding(Request $request)
     {
         $tenantId = auth()->user()->tenant_id;

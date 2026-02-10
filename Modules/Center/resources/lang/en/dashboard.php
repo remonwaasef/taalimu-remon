@@ -82,6 +82,10 @@ return [
         'course_added_success' => 'Course created successfully!',
         'add_first_student' => 'Register First Student',
         'student_added_success' => 'Student registered successfully!',
+        'add_first_schedule' => 'Set Up Schedule',
+        'schedule_added_success' => 'Schedule set successfully!',
+        'record_first_attendance' => 'Record First Attendance',
+        'attendance_registered_success' => 'Attendance recorded successfully!',
         'completion_message' => 'Congratulations! You have completed all essential steps.',
     ],
 ];
