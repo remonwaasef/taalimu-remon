@@ -33,6 +33,7 @@ class OnboardingService
         $progress = ($completedSteps / count($steps)) * 100;
 
         return (object) [
+            'show_cards' => !$onboardingCompleted,
             'show_sidebar_ring' => !$onboardingCompleted,
             'instructor_added' => $hasInstructors,
             'course_added' => $hasCourses,
