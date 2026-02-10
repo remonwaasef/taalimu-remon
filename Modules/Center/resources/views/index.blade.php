@@ -146,8 +146,10 @@
         </ul>
     </div>
 
-    <!-- Onboarding Cards (Living Dashboard) -->
-    @include('center::partials.onboarding-cards')
+    <!-- Launchpad Widget (Only if setup incomplete) -->
+    @if($launchpadProgress < 100)
+        @include('center::partials.launchpad')
+    @endif
 
     <div class="tab-content" id="dashboardTabsContent">
         

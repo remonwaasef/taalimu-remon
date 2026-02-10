@@ -13,15 +13,12 @@ Route::middleware(['web', 'throttle:global'])->domain(env('TENANT_DOMAIN', 'loca
         ->middleware('throttle:registration')
         ->name('register.submit');
     
-    Route::get('/registration-success', function() {
+Route::get('/registration-success', function() {
         if (!session('registration_success')) {
             return redirect()->route('register');
         }
         return view('auth.registration-success');
     })->name('registration.success');
-
-    Route::get('/register/setup', [App\Http\Controllers\CenterTypeController::class, 'show'])->name('register.setup');
-    Route::post('/register/setup', [App\Http\Controllers\CenterTypeController::class, 'store'])->name('register.setup.store');
 
     // Payment Routes
     Route::get('/payment/success', [App\Http\Controllers\PaymentController::class, 'success'])->name('payment.success');
