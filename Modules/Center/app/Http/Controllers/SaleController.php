@@ -17,10 +17,12 @@ use App\Models\Payment;
 class SaleController extends Controller
 {
     protected $financeService;
+    protected $arabicReshaper;
 
-    public function __construct(FinanceService $financeService)
+    public function __construct(FinanceService $financeService, \App\Services\ArabicReshaper $arabicReshaper)
     {
         $this->financeService = $financeService;
+        $this->arabicReshaper = $arabicReshaper;
     }
     public function index()
     {
@@ -160,6 +162,19 @@ class SaleController extends Controller
             ->findOrFail($paymentId);
 
         $this->authorize('view', $payment->sale);
+
+        // Reshape Arabic strings for PDF
+        $tenant->name = $this->arabicReshaper->reshape($tenant->name);
+        if ($payment->sale->student) {
+            $payment->sale->student->name = $this->arabicReshaper->reshape($payment->sale->student->name);
+        }
+        
+        foreach ($payment->sale->items as $item) {
+            if ($item->item) {
+                // We use a temporary property to store reshaped title for the PDF
+                $item->reshaped_title = $this->arabicReshaper->reshape($item->item->title ?: ($item->item->name ?: 'Item'));
+            }
+        }
 
         $pdf = Pdf::loadView('center::sales.receipt', compact('payment', 'tenant'))
             ->setPaper('a5', 'portrait');
