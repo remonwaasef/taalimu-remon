@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tenants', function (Blueprint $table) {
-            $table->string('center_type')->nullable()->after('status');
-            $table->timestamp('onboarding_completed_at')->nullable()->after('center_type');
+            //
         });
     }
 
@@ -23,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('tenants', function (Blueprint $table) {
-            $table->dropColumn(['center_type', 'onboarding_completed_at']);
+            //
         });
     }
 };

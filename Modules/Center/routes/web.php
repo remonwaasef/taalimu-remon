@@ -78,16 +78,6 @@ $tenantRoutes = function () {
         Route::get('/', [CenterController::class, 'index'])->name('center.dashboard');
         Route::get('/dashboard', [CenterController::class, 'index'])->name('center.dashboard.alt');
 
-        // Onboarding API (Living Dashboard)
-        Route::prefix('onboarding')->group(function() {
-            Route::post('instructor', [CenterController::class, 'quickAddInstructor'])->name('center.onboarding.instructor');
-            Route::post('course', [CenterController::class, 'quickAddCourse'])->name('center.onboarding.course');
-            Route::post('student', [CenterController::class, 'quickAddStudent'])->name('center.onboarding.student');
-            Route::post('schedule', [CenterController::class, 'quickAddSchedule'])->name('center.onboarding.schedule');
-            Route::post('attendance', [CenterController::class, 'quickAddAttendance'])->name('center.onboarding.attendance');
-            Route::post('complete', [CenterController::class, 'completeOnboarding'])->name('center.onboarding.complete');
-        });
-
         // Student Management (Admin/Secretary only)
         Route::middleware(['can:view students'])->group(function() {
             Route::get('students', [StudentController::class, 'index'])->name('center.students.index');

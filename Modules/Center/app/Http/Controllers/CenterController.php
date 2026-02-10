@@ -73,9 +73,17 @@ class CenterController extends Controller
         $performanceTrends = $this->getPerformanceTrends($tenantId);
         $aiInsights = $this->getAIInsights($tenantId, $performanceTrends['data']);
 
-        // 3. Onboarding Logic (The Living Dashboard)
-        $onboardingService = app(\Modules\Center\Services\OnboardingService::class);
-        $onboardingStatus = $onboardingService->getStatus($tenantId);
+        // 3. Launchpad Logic
+        $tenantModel = \App\Models\Tenant::find($tenantId);
+        $launchpadSteps = [
+            'profile' => !empty($tenantModel->logo) || !empty($tenantModel->phone) || !empty($tenantModel->address) || !empty($tenantModel->description),
+            'instructor' => \App\Models\Instructor::where('tenant_id', $tenantId)->exists(),
+            'course' => \App\Models\Course::where('tenant_id', $tenantId)->exists(),
+            'student' => $activeStudents > 0,
+        ];
+        
+        $completedSteps = count(array_filter($launchpadSteps));
+        $launchpadProgress = ($completedSteps / 4) * 100;
 
         return view('center::index', compact(
             'activeStudents',
@@ -86,131 +94,12 @@ class CenterController extends Controller
             'recentActivities',
             'atRiskStudents',
             'aiInsights',
+            'atRiskStudents',
+            'aiInsights',
             'performanceTrends',
-            'onboardingStatus'
+            'launchpadProgress',
+            'launchpadSteps'
         ));
-    }
-
-    public function quickAddInstructor(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20'
-        ]);
-
-        $instructor = Instructor::create([
-            'tenant_id' => auth()->user()->tenant_id,
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'status' => 'active'
-        ]);
-
-        return response()->json(['success' => true, 'instructor' => $instructor]);
-    }
-
-    public function quickAddCourse(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0'
-        ]);
-
-        $course = Course::create([
-            'tenant_id' => auth()->user()->tenant_id,
-            'title' => $request->name,
-            'price' => $request->price,
-            'status' => 'published'
-        ]);
-
-        return response()->json(['success' => true, 'course' => $course]);
-    }
-
-    public function quickAddStudent(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20'
-        ]);
-
-        $tenantId = auth()->user()->tenant_id;
-        
-        // Try to find the first grade in the first stage as default
-        $grade = \App\Models\Grade::where('tenant_id', $tenantId)->first();
-
-        $student = Student::create([
-            'tenant_id' => $tenantId,
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'grade_id' => $grade?->id,
-            'status' => 'active',
-            'joined_at' => now(),
-        ]);
-
-        return response()->json(['success' => true, 'student' => $student]);
-    }
-
-    public function quickAddSchedule(Request $request)
-    {
-        $tenantId = auth()->user()->tenant_id;
-        $course = \App\Models\Course::where('tenant_id', $tenantId)->first();
-        $classroom = \App\Models\Classroom::where('tenant_id', $tenantId)->first();
-        $instructor = \App\Models\Instructor::where('tenant_id', $tenantId)->first();
-
-        if (!$course || !$instructor) {
-            return response()->json(['success' => false, 'message' => 'يرجى إضافة مدرس ودورة أولاً']);
-        }
-
-        // Create a default classroom if none exists
-        if (!$classroom) {
-            $classroom = \App\Models\Classroom::create([
-                'tenant_id' => $tenantId,
-                'name' => 'القاعة الرئيسية',
-                'capacity' => 50
-            ]);
-        }
-
-        $schedule = \App\Models\Schedule::create([
-            'tenant_id' => $tenantId,
-            'course_id' => $course->id,
-            'instructor_id' => $instructor->id,
-            'classroom_id' => $classroom->id,
-            'day_of_week' => strtolower(now()->format('l')),
-            'start_time' => '10:00:00',
-            'end_time' => '12:00:00',
-        ]);
-
-        return response()->json(['success' => true, 'schedule' => $schedule]);
-    }
-
-    public function quickAddAttendance(Request $request)
-    {
-        $tenantId = auth()->user()->tenant_id;
-        $student = \App\Models\Student::where('tenant_id', $tenantId)->first();
-        $schedule = \App\Models\Schedule::where('tenant_id', $tenantId)->first();
-
-        if (!$student || !$schedule) {
-            return response()->json(['success' => false, 'message' => 'يرجى إضافة طالب وجدول أولاً']);
-        }
-
-        $attendance = \Modules\Center\Models\Attendance::create([
-            'tenant_id' => $tenantId,
-            'student_id' => $student->id,
-            'course_id' => $schedule->course_id,
-            'schedule_id' => $schedule->id,
-            'session_date' => now()->toDateString(),
-            'status' => 'present',
-        ]);
-
-        return response()->json(['success' => true, 'attendance' => $attendance]);
-    }
-
-    public function completeOnboarding(Request $request)
-    {
-        $tenantId = auth()->user()->tenant_id;
-        $tenant = \App\Models\Tenant::find($tenantId);
-        $tenant->update(['onboarding_completed_at' => now()]);
-
-        return response()->json(['success' => true]);
     }
 
     private function getAtRiskStudents($tenantId)
