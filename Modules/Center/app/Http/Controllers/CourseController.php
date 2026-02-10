@@ -116,7 +116,7 @@ class CourseController extends Controller
             $this->financeService->createSale([
                 'student_id' => $student->id,
                 'items' => [['id' => $course->id, 'price' => $course->price]],
-                'payment_method' => 'pending',
+                'payment_method' => 'cash',
                 'paid_amount' => 0, // فاتورة غير مدفوعة
             ]);
             return back()->with('success', 'تم تسجيل الطالب وإنشاء فاتورة بنجاح');
@@ -148,7 +148,7 @@ class CourseController extends Controller
                 $this->financeService->createSale([
                     'student_id' => $student->id,
                     'items' => [['id' => $course->id, 'price' => $course->price]],
-                    'payment_method' => 'pending',
+                    'payment_method' => 'cash',
                     'paid_amount' => 0,
                 ]);
 
