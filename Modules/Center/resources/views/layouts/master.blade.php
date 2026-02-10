@@ -111,66 +111,77 @@
             border-radius: 20px;
         }
 
-        /* Sidebar Positioning */
-        /* Desktop Default */
+        /* DEFAULT / DESKTOP STYLES (>= 993px) */
         @media (min-width: 993px) {
             [dir="rtl"] .sidebar {
                 right: 0;
-                border-left: 1px solid rgba(255, 255, 255, 0.05);
+                border-left: 1px solid var(--sidebar-border);
             }
             [dir="ltr"] .sidebar {
                 left: 0;
-                border-right: 1px solid rgba(255, 255, 255, 0.05);
+                border-right: 1px solid var(--sidebar-border);
             }
             [dir="rtl"] .main-content {
-                margin-right: var(--sidebar-width);
+                margin-right: var(--sidebar-width) !important;
+                margin-left: 0 !important;
             }
             [dir="ltr"] .main-content {
-                margin-left: var(--sidebar-width);
+                margin-left: var(--sidebar-width) !important;
+                margin-right: 0 !important;
             }
             [dir="rtl"] .admin-footer {
-                right: var(--sidebar-width);
-                left: 0;
+                right: var(--sidebar-width) !important;
+                left: 0 !important;
             }
             [dir="ltr"] .admin-footer {
-                left: var(--sidebar-width);
-                right: 0;
-            }
-        }
-
-        /* Mobile View (< 992px) */
-        @media (max-width: 992px) {
-            .sidebar {
-                box-shadow: none;
-                z-index: 1050; /* Above regular content */
-            }
-            
-            [dir="rtl"] .sidebar {
-                right: 0;
-                transform: translateX(100%);
-            }
-            [dir="ltr"] .sidebar {
-                left: 0;
-                transform: translateX(-100%);
-            }
-            
-            .sidebar.active {
-                transform: translateX(0);
-                box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
-            }
-            
-            .main-content {
-                margin-left: 0 !important;
-                margin-right: 0 !important;
-                padding: 1.5rem 1rem;
-            }
-            
-            .admin-footer {
-                left: 0 !important;
+                left: var(--sidebar-width) !important;
                 right: 0 !important;
             }
         }
 
+        /* MOBILE STYLES (< 992px) - FORCED VIA HIGHER SPECIFICITY */
+        @media (max-width: 992px) {
+            body .sidebar {
+                z-index: 2000 !important;
+                box-shadow: none;
+                width: 280px !important;
+                max-width: 85% !important;
+            }
+
+            [dir="rtl"] body .sidebar {
+                right: 0 !important;
+                left: auto !important;
+                transform: translateX(105%) !important; /* Force off-screen */
+            }
+
+            [dir="ltr"] body .sidebar {
+                left: 0 !important;
+                right: auto !important;
+                transform: translateX(-105%) !important; /* Force off-screen */
+            }
+
+            body .sidebar.active {
+                transform: translateX(0) !important;
+                box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5) !important;
+            }
+
+            body .main-content {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                width: 100% !important;
+                max-width: 100vw !important;
+                padding: 1rem !important;
+                overflow-x: hidden !important;
+            }
+
+            body .admin-footer {
+                left: 0 !important;
+                right: 0 !important;
+                width: 100% !important;
+            }
+        }
+
+        /* Common Decorative Styles */
         .sidebar .border-bottom {
             border-bottom-color: rgba(255, 255, 255, 0.1) !important;
         }
@@ -203,7 +214,6 @@
             transform: translateX(-5px);
         }
 
-        /* LTR Hover Transform Flip */
         [dir="ltr"] .sidebar .nav-link:hover {
             transform: translateX(5px);
         }
@@ -216,32 +226,19 @@
         }
 
         [dir="rtl"] .sidebar .nav-link.active::after {
-            content: '';
-            position: absolute;
-            right: -1rem;
-            top: 20%;
-            height: 60%;
-            width: 3px;
-            background: var(--primary-light);
-            border-radius: 4px 0 0 4px;
+            content: ''; position: absolute; right: -1rem; top: 20%; height: 60%; width: 3px;
+            background: var(--primary-light); border-radius: 4px 0 0 4px;
         }
 
         [dir="ltr"] .sidebar .nav-link.active::after {
-            content: '';
-            position: absolute;
-            left: -1rem;
-            top: 20%;
-            height: 60%;
-            width: 3px;
-            background: var(--primary-light);
-            border-radius: 0 4px 4px 0;
+            content: ''; position: absolute; left: -1rem; top: 20%; height: 60%; width: 3px;
+            background: var(--primary-light); border-radius: 0 4px 4px 0;
         }
         
         .sidebar .nav-link.active i {
             color: var(--primary-light);
         }
 
-        /* Main Content Area */
         .main-content {
             padding: 2rem;
             padding-bottom: 80px;
@@ -249,7 +246,6 @@
             transition: margin 0.3s ease;
         }
         
-        /* Cards */
         .card {
             border: none;
             box-shadow: var(--shadow-sm);
@@ -263,7 +259,6 @@
             transform: translateY(-2px);
         }
         
-        /* Buttons */
         .btn-primary {
             background: var(--primary-gradient);
             border: none;
@@ -278,7 +273,6 @@
             transform: translateY(-1px);
         }
         
-        /* Footer */
         .admin-footer {
             position: fixed;
             bottom: 0;
@@ -288,16 +282,15 @@
             border-top: 1px solid #e5e7eb;
             z-index: 990;
             box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
-            transition: left 0.3s ease, right 0.3s ease;
+            transition: all 0.3s ease;
         }
 
-        /* Sidebar Overlay */
         .sidebar-overlay {
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
-            z-index: 999;
+            z-index: 1999;
             display: none;
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -308,59 +301,12 @@
             opacity: 1;
         }
 
-        /* Dark Mode Bootstrap Overrides */
-        .dark-mode .dropdown-menu {
-            background-color: var(--bg-white);
-            border-color: rgba(255,255,255,0.1);
-        }
-        .dark-mode .dropdown-item {
-            color: var(--text-dark);
-        }
-        .dark-mode .dropdown-item:hover {
-            background-color: rgba(255,255,255,0.1);
-        }
-        .dark-mode .form-control, .dark-mode .form-select {
-            background-color: #1f2937; /* Slightly lighter than bg-light */
-            border-color: rgba(255,255,255,0.1);
-            color: var(--text-dark);
-        }
-        .dark-mode .form-control:focus, .dark-mode .form-select:focus {
-            background-color: #1f2937;
-            color: var(--text-dark);
-        }
-        .dark-mode .bg-white {
-            background-color: var(--bg-white) !important;
-            color: var(--text-dark) !important; /* Ensure text on white bg is visible in dark mode */
-        }
-        .dark-mode .bg-light {
-            background-color: var(--bg-light) !important;
-        }
-        .dark-mode .text-muted {
-            color: #d1d5db !important;
-        }
-        .dark-mode .form-label {
-            color: #e5e7eb !important; /* Make labels very light */
-        }
-        .dark-mode input::placeholder, .dark-mode textarea::placeholder {
-            color: #9ca3af !important;
-        }
-        .dark-mode select option {
-             background-color: #1f2937;
-             color: #f3f4f6;
-        }
-
-        /* Modal Stability Fixes */
-        body.modal-open {
-            overflow: hidden !important;
-            padding-right: 0 !important;
-        }
-        .modal {
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(4px);
-        }
-        .modal-backdrop {
-            display: none !important;
-        }
+        /* Modal & Scroll Fixes */
+        body.modal-open { overflow: hidden !important; padding-right: 0 !important; }
+        .modal { background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px); }
+        .modal-backdrop { display: none !important; }
+        
+        /* Force CSS Version 1.1 */
     </style>
     @stack('styles')
 </head>
