@@ -105,4 +105,19 @@ return [
         'copied' => 'Copied!',
         'url_copied' => 'URL copied to clipboard!',
     ],
+
+    // Center Type Selection
+    'center_type' => [
+        'title' => 'What type of center are you?',
+        'subtitle' => 'Choose the type closest to your activity - we will set up everything automatically to give you the perfect experience.',
+        'types' => [
+            'tutoring' => 'Tutoring Center',
+            'languages' => 'Language Center',
+            'quran' => 'Quran Center',
+            'vocational' => 'Vocational Training',
+            'institute' => 'Educational Institute',
+            'other' => 'Other (Custom Setup)',
+        ],
+        'continue' => 'Get Started',
+    ],
 ];

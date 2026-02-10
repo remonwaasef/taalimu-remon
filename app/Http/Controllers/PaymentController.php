@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tenant;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class PaymentController extends Controller
 {
@@ -28,6 +30,14 @@ class PaymentController extends Controller
 
             // Mark registration as successful for the view
             session(['registration_success' => true]);
+
+            // Get tenant (safely from session)
+            $tenantId = session('tenant_id');
+            if ($tenantId) {
+                $setupToken = Str::random(40);
+                Cache::put("setup_token_$setupToken", ['tenant_id' => $tenantId], now()->addMinutes(60));
+                return redirect()->route('register.setup', ['token' => $setupToken]);
+            }
 
             return redirect()->route('registration.success');
         }
@@ -112,6 +122,10 @@ class PaymentController extends Controller
         }
 
         session(['registration_success' => true]);
-        return redirect()->route('registration.success');
+        
+        $setupToken = Str::random(40);
+        Cache::put("setup_token_$setupToken", ['tenant_id' => session('tenant_id')], now()->addMinutes(60));
+        
+        return redirect()->route('register.setup', ['token' => $setupToken]);
     }
 }

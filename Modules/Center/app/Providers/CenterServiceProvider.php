@@ -27,6 +27,14 @@ class CenterServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
+
+        // Register Onboarding View Composer for Sidebar
+        view()->composer('center::layouts.master', function ($view) {
+            if (auth()->check()) {
+                $onboardingService = app(\Modules\Center\Services\OnboardingService::class);
+                $view->with('onboardingStatus', $onboardingService->getStatus(auth()->user()->tenant_id));
+            }
+        });
     }
 
     /**

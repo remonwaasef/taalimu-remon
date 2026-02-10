@@ -12,10 +12,10 @@
         <div class="col-md-8">
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-body p-5">
-                    <form action="{{ route('center.instructors.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('center.instructors.store') }}" method="POST" enctype="multipart/form-data" x-data="{ showDetails: false }">
                         @csrf
                         
-                        <!-- Personal Info -->
+                        <!-- Core Info (Always Visible) -->
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::instructors.name') }} *</label>
@@ -23,80 +23,77 @@
                                 @error('name')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-6">
+                                <label class="form-label fw-bold">{{ __('center::instructors.phone') }} <span class="text-danger">*</span></label>
+                                <input type="tel" name="phone" value="{{ old('phone') }}" class="form-control bg-light border-0" required>
+                                @error('phone')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                            </div>
+                            <div class="col-12">
                                 <label class="form-label fw-bold">{{ __('center::instructors.specialization') }}</label>
                                 <input type="text" name="specialization" value="{{ old('specialization') }}" class="form-control bg-light border-0" placeholder="مثال: رياضيات، فيزياء...">
                                 @error('specialization')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                         </div>
 
-                        <!-- Status & Administrative -->
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">{{ __('center::instructors.status') }} *</label>
-                                <select name="status" class="form-select bg-light border-0">
-                                    <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>{{ __('center::instructors.active') }}</option>
-                                    <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>{{ __('center::instructors.inactive') }}</option>
-                                    <option value="on_hold" {{ old('status') == 'on_hold' ? 'selected' : '' }}>{{ __('center::instructors.on_hold') }}</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">{{ __('center::instructors.gender') }}</label>
-                                <select name="gender" class="form-select bg-light border-0">
-                                    <option value="">-- اختر --</option>
-                                    <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>{{ __('center::instructors.male') }}</option>
-                                    <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>{{ __('center::instructors.female') }}</option>
-                                </select>
-                                @error('gender')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">{{ __('center::instructors.hiring_date') }}</label>
-                                <input type="date" name="hiring_date" value="{{ old('hiring_date') }}" class="form-control bg-light border-0">
-                                @error('hiring_date')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
-                            </div>
+                        <!-- Toggle Button -->
+                        <div class="text-center mb-4">
+                            <button type="button" @click="showDetails = !showDetails" class="btn btn-link text-decoration-none fw-bold">
+                                <span x-show="!showDetails"><i class="fas fa-plus-circle me-1"></i> إضافة بيانات إضافية (البريد، الراتب، الصورة...)</span>
+                                <span x-show="showDetails"><i class="fas fa-minus-circle me-1"></i> إخفاء البيانات الإضافية</span>
+                            </button>
                         </div>
 
-                        <!-- Identifiers & Finance -->
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('center::instructors.national_id') }}</label>
-                                <input type="text" name="national_id" value="{{ old('national_id') }}" class="form-control bg-light border-0" placeholder="الرقم القومي">
-                                @error('national_id')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('center::instructors.commission_rate') }}</label>
-                                <div class="input-group">
-                                    <input type="number" step="0.01" name="commission_rate" value="{{ old('commission_rate', 0) }}" class="form-control bg-light border-0">
-                                    <span class="input-group-text bg-light border-0">%</span>
+                        <!-- Advanced Info (Hidden by default) -->
+                        <div x-show="showDetails" x-collapse x-cloak>
+                            <!-- Status & Administrative -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">{{ __('center::instructors.status') }} *</label>
+                                    <select name="status" class="form-select bg-light border-0">
+                                        <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>{{ __('center::instructors.active') }}</option>
+                                        <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>{{ __('center::instructors.inactive') }}</option>
+                                        <option value="on_hold" {{ old('status') == 'on_hold' ? 'selected' : '' }}>{{ __('center::instructors.on_hold') }}</option>
+                                    </select>
                                 </div>
-                                @error('commission_rate')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
-                                <small class="text-muted">النسبة التي يتقاضاها المدرس من مبيعات دوراته</small>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">{{ __('center::instructors.gender') }}</label>
+                                    <select name="gender" class="form-select bg-light border-0">
+                                        <option value="">-- اختر --</option>
+                                        <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>{{ __('center::instructors.male') }}</option>
+                                        <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>{{ __('center::instructors.female') }}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">{{ __('center::instructors.hiring_date') }}</label>
+                                    <input type="date" name="hiring_date" value="{{ old('hiring_date') }}" class="form-control bg-light border-0">
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Contact Info -->
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-6">
+                            <!-- Identifiers & Finance -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">{{ __('center::instructors.national_id') }}</label>
+                                    <input type="text" name="national_id" value="{{ old('national_id') }}" class="form-control bg-light border-0" placeholder="الرقم القومي">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">{{ __('center::instructors.commission_rate') }} (%)</label>
+                                    <input type="number" step="0.01" name="commission_rate" value="{{ old('commission_rate', 0) }}" class="form-control bg-light border-0">
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
                                 <label class="form-label fw-bold">{{ __('center::instructors.email') }}</label>
                                 <input type="email" name="email" value="{{ old('email') }}" class="form-control bg-light border-0">
-                                @error('email')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('center::instructors.phone') }} <span class="text-danger">*</span></label>
-                                <input type="tel" name="phone" value="{{ old('phone') }}" class="form-control bg-light border-0">
-                                @error('phone')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">{{ __('center::instructors.bio') }}</label>
+                                <textarea name="bio" class="form-control bg-light border-0" rows="3">{{ old('bio') }}</textarea>
                             </div>
-                        </div>
 
-                        <div class="mb-4">
-                            <label class="form-label fw-bold">{{ __('center::instructors.bio') }}</label>
-                            <textarea name="bio" class="form-control bg-light border-0" rows="3">{{ old('bio') }}</textarea>
-                            @error('bio')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
-                        </div>
-
-                        <div class="mb-5">
-                            <label class="form-label fw-bold">الصورة الشخصية</label>
-                            <input type="file" name="image" class="form-control bg-light border-0" accept="image/*">
-                            @error('image')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                            <div class="mb-5">
+                                <label class="form-label fw-bold">الصورة الشخصية</label>
+                                <input type="file" name="image" class="form-control bg-light border-0" accept="image/*">
+                            </div>
                         </div>
 
                         <div class="d-grid gap-2">
