@@ -4,145 +4,225 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style>
+        @page {
+            margin: 0;
+        }
         body {
             font-family: 'DejaVu Sans', sans-serif;
-            background-color: #fff;
-            color: #333;
+            background-color: #fcfcfc;
+            color: #2D3748;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .wrapper {
+            padding: 30px;
         }
         .container {
-            border: 2px solid #3A0CA3;
-            padding: 20px;
-            border-radius: 10px;
+            background: #fff;
+            border: 1px solid #E2E8F0;
+            padding: 40px;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        .top-stripe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, #4F46E5, #7C3AED);
         }
         .header {
             text-align: center;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 40px;
         }
         .header h1 {
-            color: #3A0CA3;
-            margin: 0 0 5px 0;
-            font-size: 20px;
+            color: #1A202C;
+            margin: 0 0 8px 0;
+            font-size: 26px;
+            letter-spacing: -0.5px;
         }
-        .header p {
-            margin: 0;
+        .header .receipt-label {
+            display: inline-block;
+            background: #EEF2FF;
+            color: #4338CA;
+            padding: 4px 16px;
+            border-radius: 20px;
             font-size: 14px;
+            font-weight: bold;
+            margin-top: 5px;
         }
-        .info-table {
+        .info-grid {
             width: 100%;
-            margin-bottom: 20px;
+            margin-bottom: 35px;
+            border-collapse: collapse;
         }
-        .info-table td {
+        .info-grid td {
+            padding: 10px 0;
             vertical-align: top;
-            font-size: 12px;
+        }
+        .label {
+            color: #718096;
+            font-size: 11px;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .value {
+            font-size: 14px;
+            font-weight: bold;
+            color: #2D3748;
+        }
+        .customer-box {
+            background-color: #F8FAFC;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-right: 4px solid #4F46E5;
         }
         .table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        .table th, .table td {
-            text-align: right;
-            padding: 8px;
-            border-bottom: 1px solid #eee;
-            font-size: 12px;
+            margin-bottom: 35px;
         }
         .table th {
-            background-color: #f8f9fa;
-            color: #3A0CA3;
+            text-align: right;
+            padding: 12px 15px;
+            background-color: #F1F5F9;
+            color: #475569;
+            font-size: 11px;
+            text-transform: uppercase;
+            border-radius: 0;
+        }
+        .table td {
+            padding: 15px;
+            border-bottom: 1px solid #F1F5F9;
+            font-size: 13px;
+        }
+        .amount-display {
+            font-size: 18px;
+            font-weight: bold;
+            color: #4F46E5;
+        }
+        .summary-section {
+            width: 100%;
+            margin-top: 20px;
+        }
+        .payment-status {
+            text-align: center;
+            padding: 20px;
+        }
+        .stamp {
+            border: 3px double #059669;
+            color: #059669;
+            display: inline-block;
+            padding: 8px 25px;
+            transform: rotate(-10deg);
+            font-weight: bold;
+            border-radius: 8px;
+            font-size: 18px;
+            text-transform: uppercase;
+            opacity: 0.8;
+            background: rgba(5, 150, 105, 0.05);
         }
         .footer {
             text-align: center;
-            margin-top: 20px;
-            font-size: 10px;
-            color: #777;
-            border-top: 1px solid #eee;
-            padding-top: 10px;
-        }
-        .stamp {
-            border: 2px solid #28a745;
-            color: #28a745;
-            display: inline-block;
-            padding: 3px 10px;
-            transform: rotate(-15deg);
-            font-weight: bold;
-            margin-top: 10px;
-            border-radius: 5px;
-            font-size: 14px;
+            margin-top: 40px;
+            font-size: 11px;
+            color: #A0AEC0;
         }
         .text-left { text-align: left; }
         .text-right { text-align: right; }
         .text-center { text-align: center; }
-        .fw-bold { font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>{{ $tenant->name }}</h1>
-            <p>{{ $reshaper->reshape('إيصال استلام نقدية (Receipt)') }}</p>
-        </div>
+    <div class="wrapper">
+        <div class="container">
+            <div class="top-stripe"></div>
+            
+            <div class="header">
+                <h1>{{ $tenant->name }}</h1>
+                <div class="receipt-label">
+                    {{ $reshaper->reshape('إيصال استلام نقدية | RECEIPT') }}
+                </div>
+            </div>
 
-        <table class="info-table">
-            <tr>
-                <td class="text-right">
-                    <strong>{{ $reshaper->reshape('الرقم:') }}</strong> #{{ $payment->id }}<br>
-                    <strong>{{ $reshaper->reshape('التاريخ:') }}</strong> {{ $payment->paid_at ? $payment->paid_at->format('Y/m/d') : $payment->created_at->format('Y/m/d') }}
-                </td>
-                <td class="text-left">
-                    <strong>{{ $reshaper->reshape('رقم الفاتورة:') }}</strong> #{{ $payment->sale_id }}
-                </td>
-            </tr>
-        </table>
-
-        <div style="margin-bottom: 15px; font-size: 13px;">
-            <strong>{{ $reshaper->reshape('وصلنا من السيد/السيدة:') }}</strong> {{ $payment->sale->student->name }}<br>
-            <strong>{{ $reshaper->reshape('مبلغ وقدره:') }}</strong> {{ number_format($payment->amount, 2) }} {{ $reshaper->reshape('ج.م') }}
-        </div>
-
-        <table class="table">
-            <thead>
+            <table class="info-grid">
                 <tr>
-                    <th>{{ $reshaper->reshape('البيان (Description)') }}</th>
-                    <th style="width: 100px;">{{ $reshaper->reshape('القيمة') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{ $reshaper->reshape('دفعة من حساب كورس:') }} 
-                        {{ $payment->sale->items->first()->reshaped_title ?? $reshaper->reshape('مبيعات') }}
-                        @if($payment->sale->items->count() > 1)
-                            {{ $reshaper->reshape('(وآخرون)') }}
-                        @endif
+                    <td class="text-right" style="width: 50%;">
+                        <span class="label">{{ $reshaper->reshape('الرقم') }}</span>
+                        <span class="value">#{{ $payment->id }}</span>
                     </td>
-                    <td>{{ number_format($payment->amount, 2) }} {{ $reshaper->reshape('ج.م') }}</td>
+                    <td class="text-left" style="width: 50%;">
+                        <span class="label">{{ $reshaper->reshape('التاريخ') }}</span>
+                        <span class="value">{{ $payment->paid_at ? $payment->paid_at->format('Y/m/d') : $payment->created_at->format('Y/m/d') }}</span>
+                    </td>
                 </tr>
-            </tbody>
-        </table>
+                <tr>
+                    <td class="text-right" style="width: 50%;">
+                        <span class="label">{{ $reshaper->reshape('رقم الفاتورة') }}</span>
+                        <span class="value">#{{ $payment->sale_id }}</span>
+                    </td>
+                    <td class="text-left" style="width: 50%;">
+                        <span class="label">{{ $reshaper->reshape('طريقة الدفع') }}</span>
+                        <span class="value">
+                            @php
+                                $method = $payment->payment_method == 'cash' ? 'نقدي (Cash)' : ($payment->payment_method == 'card' ? 'فيزا (Card)' : 'تحويل (Transfer)');
+                            @endphp
+                            {{ $reshaper->reshape($method) }}
+                        </span>
+                    </td>
+                </tr>
+            </table>
 
-        <table class="info-table">
-            <tr>
-                <td class="text-right" style="width: 60%;">
-                    <strong>{{ $reshaper->reshape('طريقة الدفع:') }}</strong> 
-                    @php
-                        $method = $payment->payment_method == 'cash' ? 'نقدي' : ($payment->payment_method == 'card' ? 'فيزا' : 'تحويل');
-                    @endphp
-                    {{ $reshaper->reshape($method) }}<br>
-                    <strong>{{ $reshaper->reshape('المتبقي في الفاتورة:') }}</strong> {{ number_format($payment->sale->total_amount - $payment->sale->paid_amount, 2) }} {{ $reshaper->reshape('ج.م') }}
-                </td>
-                <td class="text-center" style="width: 40%;">
-                    <p style="margin-bottom: 5px;">{{ $reshaper->reshape('توقيع المستلم') }}</p>
-                    <div class="stamp">{{ $reshaper->reshape('مدفوع PAID') }}</div>
-                </td>
-            </tr>
-        </table>
+            <div class="customer-box">
+                <span class="label">{{ $reshaper->reshape('وصلنا من السيد / السيدة') }}</span>
+                <span class="value" style="font-size: 16px;">{{ $payment->sale->student->name }}</span>
+            </div>
 
-        <div class="footer">
-            {{ $tenant->address ?? '' }} | {{ $tenant->phone ?? '' }}<br>
-            {{ $reshaper->reshape('نشكركم على ثقتكم بنا (Thank you for your trust)') }}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="border-top-right-radius: 8px; border-bottom-right-radius: 8px;">{{ $reshaper->reshape('البيان (Description)') }}</th>
+                        <th class="text-left" style="width: 120px; border-top-left-radius: 8px; border-bottom-left-radius: 8px;">{{ $reshaper->reshape('المبلغ') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="value">{{ $payment->sale->items->first()->reshaped_title ?? $reshaper->reshape('مبيعات') }}</div>
+                            <div class="label" style="margin-top: 4px;">{{ $reshaper->reshape('دفعة من حساب كورس') }} @if($payment->sale->items->count() > 1) {{ $reshaper->reshape('(وآخرون)') }} @endif</div>
+                        </td>
+                        <td class="text-left">
+                            <span class="amount-display">{{ number_format($payment->amount, 2) }}</span>
+                            <span class="label" style="display:inline">{{ $reshaper->reshape('ج.م') }}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="summary-section">
+                <tr>
+                    <td class="text-right" style="vertical-align: middle;">
+                        <span class="label">{{ $reshaper->reshape('المتبقي في الفاتورة') }}</span>
+                        <span class="value" style="color: #E53E3E;">{{ number_format($payment->sale->total_amount - $payment->sale->paid_amount, 2) }} {{ $reshaper->reshape('ج.م') }}</span>
+                    </td>
+                    <td class="payment-status">
+                        <div class="stamp">{{ $reshaper->reshape('مدفوع | PAID') }}</div>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="footer">
+                <div style="margin-bottom: 10px; color: #4A5568; font-weight: bold;">
+                    {{ $reshaper->reshape('نشكركم على ثقتكم بنا') }}
+                </div>
+                {{ $tenant->address ?? '' }} @if($tenant->address && $tenant->phone) | @endif {{ $tenant->phone ?? '' }}
+            </div>
         </div>
     </div>
 </body>
