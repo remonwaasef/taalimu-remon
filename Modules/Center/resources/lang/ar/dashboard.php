@@ -101,6 +101,10 @@ return [
         'course_added_success' => 'تم إنشاء الدورة بنجاح!',
         'add_first_student' => 'تسجيل الطالب الأول',
         'student_added_success' => 'تم تسجيل الطالب بنجاح!',
+        'add_first_schedule' => 'ضبط الجدول الدراسي',
+        'schedule_added_success' => 'تم ضبط الجدول بنجاح!',
+        'record_first_attendance' => 'تسجيل أول حضور',
+        'attendance_registered_success' => 'تم تسجيل الحضور بنجاح!',
         'completion_message' => 'مبروك! لقد أتممت جميع الخطوات الأساسية.',
     ],
 ];

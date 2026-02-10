@@ -83,6 +83,8 @@ $tenantRoutes = function () {
             Route::post('instructor', [CenterController::class, 'quickAddInstructor'])->name('center.onboarding.instructor');
             Route::post('course', [CenterController::class, 'quickAddCourse'])->name('center.onboarding.course');
             Route::post('student', [CenterController::class, 'quickAddStudent'])->name('center.onboarding.student');
+            Route::post('schedule', [CenterController::class, 'quickAddSchedule'])->name('center.onboarding.schedule');
+            Route::post('attendance', [CenterController::class, 'quickAddAttendance'])->name('center.onboarding.attendance');
             Route::post('complete', [CenterController::class, 'completeOnboarding'])->name('center.onboarding.complete');
         });
 

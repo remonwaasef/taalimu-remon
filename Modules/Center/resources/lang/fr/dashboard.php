@@ -30,6 +30,10 @@ return [
         'course_added_success' => 'Cours créé avec succès !',
         'add_first_student' => 'Inscrire le premier étudiant',
         'student_added_success' => 'Étudiant inscrit avec succès !',
+        'add_first_schedule' => 'Configurer l\'emploi du temps',
+        'schedule_added_success' => 'Emploi du temps configuré avec succès !',
+        'record_first_attendance' => 'Enregistrer la première présence',
+        'attendance_registered_success' => 'Présence enregistrée avec succès !',
         'completion_message' => 'Félicitations ! Vous avez complété toutes les étapes essentielles.',
     ],
 ];

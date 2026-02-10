@@ -175,6 +175,86 @@
                 </div>
             </div>
         </div>
+
+        <!-- 4. Schedule Card -->
+        <div class="col-lg-4 mt-4">
+            <div class="onboarding-card bg-white rounded-5 border p-5 h-100 transition-all {{ $onboardingStatus->schedule_added ? 'is-completed' : '' }}"
+                 x-data="{ loading: false, success: {{ $onboardingStatus->schedule_added ? 'true' : 'false' }}, error: '' }">
+                
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="card-step-icon {{ $onboardingStatus->schedule_added ? 'bg-success' : 'bg-warning' }} text-white rounded-4 shadow-sm">
+                        <template x-if="success">
+                            <i class="bi bi-check-lg fs-4 animate__animated animate__flipInY"></i>
+                        </template>
+                        <template x-if="!success">
+                            <i class="bi bi-calendar-event-fill fs-4"></i>
+                        </template>
+                    </div>
+                    <h5 class="fw-bold mb-0 font-arabic">{{ __('center::dashboard.onboarding.add_first_schedule') }}</h5>
+                </div>
+
+                <div class="card-content">
+                    <template x-if="success">
+                        <div class="success-state text-center py-4">
+                            <div class="text-success fw-bold mb-2 font-arabic"><i class="bi bi-check-circle-fill me-1"></i> {{ __('center::dashboard.onboarding.schedule_added_success') }}</div>
+                            <small class="text-muted font-arabic">تم ضبط الجدول الدراسي الأساسي بنجاح</small>
+                        </div>
+                    </template>
+
+                    <template x-if="!success">
+                        <div class="text-center py-2">
+                            <p class="text-muted small mb-4 font-arabic">سيتم إنشاء جدول افتراضي للدورة الحالية في قاعة المركز الرئيسية.</p>
+                            <button @click="loading = true; fetch('{{ route('center.onboarding.schedule') }}', { method: 'POST', headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' } }).then(r => r.json()).then(d => { if(d.success) { success = true; confetti(); } else error = d.message; }).finally(() => loading = false)" 
+                                    class="btn btn-warning w-100 rounded-pill py-2 fw-bold shadow-sm text-white" :disabled="loading">
+                                <span x-show="!loading" class="font-arabic">ضبط الجدول الآن <i class="bi bi-calendar-plus ms-1"></i></span>
+                                <span x-show="loading" class="spinner-border spinner-border-sm"></span>
+                            </button>
+                            <p x-show="error" class="text-danger small mt-2 font-arabic" x-text="error"></p>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Attendance Card -->
+        <div class="col-lg-4 mt-4">
+            <div class="onboarding-card bg-white rounded-5 border p-5 h-100 transition-all {{ $onboardingStatus->attendance_added ? 'is-completed' : '' }}"
+                 x-data="{ loading: false, success: {{ $onboardingStatus->attendance_added ? 'true' : 'false' }}, error: '' }">
+                
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="card-step-icon {{ $onboardingStatus->attendance_added ? 'bg-success' : 'bg-danger' }} text-white rounded-4 shadow-sm">
+                        <template x-if="success">
+                            <i class="bi bi-check-lg fs-4 animate__animated animate__flipInY"></i>
+                        </template>
+                        <template x-if="!success">
+                            <i class="bi bi-clipboard-check-fill fs-4"></i>
+                        </template>
+                    </div>
+                    <h5 class="fw-bold mb-0 font-arabic">{{ __('center::dashboard.onboarding.record_first_attendance') }}</h5>
+                </div>
+
+                <div class="card-content">
+                    <template x-if="success">
+                        <div class="success-state text-center py-4">
+                            <div class="text-success fw-bold mb-2 font-arabic"><i class="bi bi-check-circle-fill me-1"></i> {{ __('center::dashboard.onboarding.attendance_registered_success') }}</div>
+                            <small class="text-muted font-arabic">مبروك! قمت بتسجيل أول عملية حضور بنجاح</small>
+                        </div>
+                    </template>
+
+                    <template x-if="!success">
+                        <div class="text-center py-2">
+                            <p class="text-muted small mb-4 font-arabic">قم بتسجيل حضور الطالب الأول في الجدول الذي تم إنشاؤه.</p>
+                            <button @click="loading = true; fetch('{{ route('center.onboarding.attendance') }}', { method: 'POST', headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' } }).then(r => r.json()).then(d => { if(d.success) { success = true; confetti(); } else error = d.message; }).finally(() => loading = false)" 
+                                    class="btn btn-danger w-100 rounded-pill py-2 fw-bold shadow-sm text-white" :disabled="loading">
+                                <span x-show="!loading" class="font-arabic">تسجيل الحضور <i class="bi bi-check2-all ms-1"></i></span>
+                                <span x-show="loading" class="spinner-border spinner-border-sm"></span>
+                            </button>
+                            <p x-show="error" class="text-danger small mt-2 font-arabic" x-text="error"></p>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Celebration Banner -->
