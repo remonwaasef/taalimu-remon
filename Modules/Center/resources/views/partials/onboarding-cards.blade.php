@@ -1,5 +1,6 @@
 @if($onboardingStatus->show_cards)
 <div class="onboarding-wrapper mb-8 animate__animated animate__fadeInDown">
+    @if(!$onboardingStatus->all_done)
     <!-- Welcome Header -->
     <div class="welcome-banner bg-white rounded-5 border shadow-elite p-6 mb-6 overflow-hidden relative">
         <div class="d-flex align-items-center gap-4 relative" style="z-index: 2;">
@@ -255,15 +256,18 @@
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 
     <!-- Celebration Banner -->
     @if($onboardingStatus->all_done)
-        <div class="completion-celebration mt-4 p-4 bg-success text-white rounded-5 text-center animate__animated animate__zoomIn">
-            <h4 class="fw-bold mb-1 font-arabic">🎉 {{ __('center::dashboard.onboarding.completion_message') }}</h4>
-            <p class="mb-0 font-arabic opacity-75">نظامك الآن يعمل بكامل طاقته. يمكنك البدء في استكشاف باقي المميزات.</p>
+        <div class="completion-celebration mt-4 p-5 bg-success text-white rounded-5 text-center animate__animated animate__zoomIn shadow-lg border-0">
+            <div class="display-4 mb-3">🎉</div>
+            <h3 class="fw-bold mb-3 font-arabic">{{ __('center::dashboard.onboarding.completion_message') }}</h3>
+            <p class="fs-5 mb-4 font-arabic opacity-90">نظامك الآن جاهز للعمل. بمجرد الضغط على الزر، ستنتقل إلى لوحة التحكم الرئيسية.</p>
             <button onclick="completeOnboarding()" 
-                    class="btn btn-light rounded-pill mt-3 px-5 fw-bold font-arabic shadow-sm">ابدأ الاستخدام الفعلي</button>
+                    class="btn btn-light btn-lg rounded-pill px-5 fw-bold font-arabic shadow-sm hover-lift border-0 py-3">
+                ابدأ الاستخدام الفعلي الآن <i class="bi bi-rocket-takeoff ms-2"></i>
+            </button>
         </div>
     @endif
 </div>

@@ -38,13 +38,13 @@ class OnboardingService
 
         return (object) [
             'show_cards' => !$onboardingCompleted,
-            'show_sidebar_ring' => !$onboardingCompleted,
+            'show_sidebar_ring' => !$onboardingCompleted && !$all_done,
             'instructor_added' => $hasInstructors,
             'course_added' => $hasCourses,
             'student_added' => $hasStudents,
             'schedule_added' => $hasSchedule,
             'attendance_added' => $hasAttendance,
-            'all_done' => $hasInstructors && $hasCourses && $hasStudents && $hasSchedule && $hasAttendance,
+            'all_done' => $all_done,
             'progress' => (int) $progress,
             'steps' => $steps
         ];
