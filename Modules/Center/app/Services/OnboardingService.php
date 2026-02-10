@@ -35,6 +35,7 @@ class OnboardingService
 
         $completedSteps = count(array_filter($steps, fn($s) => $s['done']));
         $progress = ($completedSteps / count($steps)) * 100;
+        $all_done = $hasInstructors && $hasCourses && $hasStudents && $hasSchedule && $hasAttendance;
 
         return (object) [
             'show_cards' => !$onboardingCompleted,
