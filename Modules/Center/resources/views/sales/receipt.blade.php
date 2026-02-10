@@ -1,5 +1,6 @@
+@inject('reshaper', 'App\Services\ArabicReshaper')
 <!DOCTYPE html>
-<html dir="rtl" lang="ar">
+<html lang="ar">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style>
@@ -9,7 +10,6 @@
             color: #333;
             margin: 0;
             padding: 20px;
-            direction: rtl;
         }
         .container {
             border: 2px solid #3A0CA3;
@@ -83,42 +83,42 @@
     <div class="container">
         <div class="header">
             <h1>{{ $tenant->name }}</h1>
-            <p>إيصال استلام نقدية (Receipt)</p>
+            <p>{{ $reshaper->reshape('إيصال استلام نقدية (Receipt)') }}</p>
         </div>
 
         <table class="info-table">
             <tr>
                 <td class="text-right">
-                    <strong>الرقم:</strong> #{{ $payment->id }}<br>
-                    <strong>التاريخ:</strong> {{ $payment->paid_at ? $payment->paid_at->format('Y/m/d') : $payment->created_at->format('Y/m/d') }}
+                    <strong>{{ $reshaper->reshape('الرقم:') }}</strong> #{{ $payment->id }}<br>
+                    <strong>{{ $reshaper->reshape('التاريخ:') }}</strong> {{ $payment->paid_at ? $payment->paid_at->format('Y/m/d') : $payment->created_at->format('Y/m/d') }}
                 </td>
                 <td class="text-left">
-                    <strong>رقم الفاتورة:</strong> #{{ $payment->sale_id }}
+                    <strong>{{ $reshaper->reshape('رقم الفاتورة:') }}</strong> #{{ $payment->sale_id }}
                 </td>
             </tr>
         </table>
 
         <div style="margin-bottom: 15px; font-size: 13px;">
-            <strong>وصلنا من السيد/السيدة:</strong> {{ $payment->sale->student->name }}<br>
-            <strong>مبلغ وقدره:</strong> {{ number_format($payment->amount, 2) }} ج.م
+            <strong>{{ $reshaper->reshape('وصلنا من السيد/السيدة:') }}</strong> {{ $payment->sale->student->name }}<br>
+            <strong>{{ $reshaper->reshape('مبلغ وقدره:') }}</strong> {{ number_format($payment->amount, 2) }} {{ $reshaper->reshape('ج.م') }}
         </div>
 
         <table class="table">
             <thead>
                 <tr>
-                    <th>البيان (Description)</th>
-                    <th style="width: 100px;">القيمة</th>
+                    <th>{{ $reshaper->reshape('البيان (Description)') }}</th>
+                    <th style="width: 100px;">{{ $reshaper->reshape('القيمة') }}</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>دفعة من حساب كورس: 
-                        {{ $payment->sale->items->first()->item->title ?? 'مبيعات' }}
+                    <td>{{ $reshaper->reshape('دفعة من حساب كورس:') }} 
+                        {{ $payment->sale->items->first()->reshaped_title ?? $reshaper->reshape('مبيعات') }}
                         @if($payment->sale->items->count() > 1)
-                            (وآخرون)
+                            {{ $reshaper->reshape('(وآخرون)') }}
                         @endif
                     </td>
-                    <td>{{ number_format($payment->amount, 2) }} ج.م</td>
+                    <td>{{ number_format($payment->amount, 2) }} {{ $reshaper->reshape('ج.م') }}</td>
                 </tr>
             </tbody>
         </table>
@@ -126,19 +126,23 @@
         <table class="info-table">
             <tr>
                 <td class="text-right" style="width: 60%;">
-                    <strong>طريقة الدفع:</strong> {{ $payment->payment_method == 'cash' ? 'نقدي' : ($payment->payment_method == 'card' ? 'فيزا' : 'تحويل') }}<br>
-                    <strong>المتبقي في الفاتورة:</strong> {{ number_format($payment->sale->total_amount - $payment->sale->paid_amount, 2) }} ج.م
+                    <strong>{{ $reshaper->reshape('طريقة الدفع:') }}</strong> 
+                    @php
+                        $method = $payment->payment_method == 'cash' ? 'نقدي' : ($payment->payment_method == 'card' ? 'فيزا' : 'تحويل');
+                    @endphp
+                    {{ $reshaper->reshape($method) }}<br>
+                    <strong>{{ $reshaper->reshape('المتبقي في الفاتورة:') }}</strong> {{ number_format($payment->sale->total_amount - $payment->sale->paid_amount, 2) }} {{ $reshaper->reshape('ج.م') }}
                 </td>
                 <td class="text-center" style="width: 40%;">
-                    <p style="margin-bottom: 5px;">توقيع المستلم</p>
-                    <div class="stamp">مدفوع PAID</div>
+                    <p style="margin-bottom: 5px;">{{ $reshaper->reshape('توقيع المستلم') }}</p>
+                    <div class="stamp">{{ $reshaper->reshape('مدفوع PAID') }}</div>
                 </td>
             </tr>
         </table>
 
         <div class="footer">
             {{ $tenant->address ?? '' }} | {{ $tenant->phone ?? '' }}<br>
-            نشكركم على ثقتكم بنا (Thank you for your trust)
+            {{ $reshaper->reshape('نشكركم على ثقتكم بنا (Thank you for your trust)') }}
         </div>
     </div>
 </body>
