@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html dir="rtl">
+<html dir="rtl" lang="ar">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style>
         body {
-            font-family: 'cairo', sans-serif;
+            font-family: 'DejaVu Sans', sans-serif;
             background-color: #fff;
             color: #333;
             margin: 0;
             padding: 20px;
+            direction: rtl;
         }
         .container {
             border: 2px solid #3A0CA3;
@@ -18,31 +19,36 @@
         .header {
             text-align: center;
             border-bottom: 2px solid #eee;
-            padding-bottom: 20px;
+            padding-bottom: 10px;
             margin-bottom: 20px;
         }
         .header h1 {
             color: #3A0CA3;
+            margin: 0 0 5px 0;
+            font-size: 20px;
+        }
+        .header p {
             margin: 0;
-            font-size: 24px;
+            font-size: 14px;
         }
-        .receipt-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
+        .info-table {
+            width: 100%;
+            margin-bottom: 20px;
         }
-        .receipt-info div {
-            width: 48%;
+        .info-table td {
+            vertical-align: top;
+            font-size: 12px;
         }
         .table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         .table th, .table td {
             text-align: right;
-            padding: 10px;
+            padding: 8px;
             border-bottom: 1px solid #eee;
+            font-size: 12px;
         }
         .table th {
             background-color: #f8f9fa;
@@ -50,42 +56,49 @@
         }
         .footer {
             text-align: center;
-            margin-top: 30px;
-            font-size: 12px;
+            margin-top: 20px;
+            font-size: 10px;
             color: #777;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
         }
         .stamp {
             border: 2px solid #28a745;
             color: #28a745;
             display: inline-block;
-            padding: 5px 15px;
+            padding: 3px 10px;
             transform: rotate(-15deg);
             font-weight: bold;
-            text-transform: uppercase;
-            margin-top: 20px;
+            margin-top: 10px;
             border-radius: 5px;
+            font-size: 14px;
         }
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .fw-bold { font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>{{ $tenant->name }}</h1>
-            <p>إيصال استلام نقدية</p>
+            <p>إيصال استلام نقدية (Receipt)</p>
         </div>
 
-        <div class="receipt-info" style="margin-bottom: 10px;">
-            <div style="float: right;">
-                <strong>الرقم:</strong> #{{ $payment->id }}<br>
-                <strong>التاريخ:</strong> {{ $payment->paid_at ? $payment->paid_at->format('Y/m/d') : $payment->created_at->format('Y/m/d') }}
-            </div>
-            <div style="float: left; text-align: left;">
-                <strong>رقم الفاتورة:</strong> #{{ $payment->sale_id }}
-            </div>
-            <div style="clear: both;"></div>
-        </div>
+        <table class="info-table">
+            <tr>
+                <td class="text-right">
+                    <strong>الرقم:</strong> #{{ $payment->id }}<br>
+                    <strong>التاريخ:</strong> {{ $payment->paid_at ? $payment->paid_at->format('Y/m/d') : $payment->created_at->format('Y/m/d') }}
+                </td>
+                <td class="text-left">
+                    <strong>رقم الفاتورة:</strong> #{{ $payment->sale_id }}
+                </td>
+            </tr>
+        </table>
 
-        <div style="margin-bottom: 20px;">
+        <div style="margin-bottom: 15px; font-size: 13px;">
             <strong>وصلنا من السيد/السيدة:</strong> {{ $payment->sale->student->name }}<br>
             <strong>مبلغ وقدره:</strong> {{ number_format($payment->amount, 2) }} ج.م
         </div>
@@ -93,8 +106,8 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>البيان</th>
-                    <th>القيمة</th>
+                    <th>البيان (Description)</th>
+                    <th style="width: 100px;">القيمة</th>
                 </tr>
             </thead>
             <tbody>
@@ -110,22 +123,22 @@
             </tbody>
         </table>
 
-        <div style="display: flex; justify-content: space-between;">
-            <div style="float: right;">
-                <strong>طريقة الدفع:</strong> {{ $payment->payment_method == 'cash' ? 'نقدي' : ($payment->payment_method == 'card' ? 'فيزا' : 'تحويل') }}<br>
-                <strong>المتبقي في الفاتورة:</strong> {{ number_format($payment->sale->total_amount - $payment->sale->paid_amount, 2) }} ج.م
-            </div>
-            <div style="float: left; text-align: center; width: 150px;">
-                <p>توقيع المستلم</p>
-                <br>
-                <div class="stamp">مدفوع</div>
-            </div>
-            <div style="clear: both;"></div>
-        </div>
+        <table class="info-table">
+            <tr>
+                <td class="text-right" style="width: 60%;">
+                    <strong>طريقة الدفع:</strong> {{ $payment->payment_method == 'cash' ? 'نقدي' : ($payment->payment_method == 'card' ? 'فيزا' : 'تحويل') }}<br>
+                    <strong>المتبقي في الفاتورة:</strong> {{ number_format($payment->sale->total_amount - $payment->sale->paid_amount, 2) }} ج.م
+                </td>
+                <td class="text-center" style="width: 40%;">
+                    <p style="margin-bottom: 5px;">توقيع المستلم</p>
+                    <div class="stamp">مدفوع PAID</div>
+                </td>
+            </tr>
+        </table>
 
         <div class="footer">
             {{ $tenant->address ?? '' }} | {{ $tenant->phone ?? '' }}<br>
-            نشكركم على ثقتكم بنا
+            نشكركم على ثقتكم بنا (Thank you for your trust)
         </div>
     </div>
 </body>
