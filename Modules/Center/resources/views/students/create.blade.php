@@ -58,25 +58,25 @@
                 </div>
             </div>
 
-            <form action="{{ route('center.students.store') }}" method="POST" enctype="multipart/form-data" id="student-form" class="needs-validation" novalidate>
+            <form action="{{ route('center.students.store') }}" method="POST" enctype="multipart/form-data" id="student-form" class="needs-validation" novalidate x-data="{ showDetails: false }">
                 @csrf
                 
-                <!-- Section 1: Personal -->
-                <div id="section-personal" class="elite-form-card bg-white rounded-5 shadow-elite border p-4 p-md-5 mb-5 transition-all">
+                <!-- Section 1: Core Data (Always Visible) -->
+                <div id="section-core" class="elite-form-card bg-white rounded-5 shadow-elite border p-4 p-md-5 mb-5 transition-all">
                     <div class="section-header d-flex align-items-center gap-3 mb-5">
                         <div class="section-icon bg-primary shadow-soft text-white rounded-4">
-                            <i class="fas fa-user-astronaut fs-4"></i>
+                            <i class="fas fa-id-card fs-4"></i>
                         </div>
                         <div>
-                            <h4 class="fw-bold mb-0">المعلومات الشخصية</h4>
-                            <p class="text-muted small mb-0">البيانات الأساسية لتعريف هوية الطالب في النظام</p>
+                            <h4 class="fw-bold mb-0">البيانات الأساسية</h4>
+                            <p class="text-muted small mb-0">أدخل البيانات الجوهرية للبدء في تسجيل الطالب</p>
                         </div>
                     </div>
 
                     <div class="row g-4">
                         <div class="col-md-6">
                             <div class="form-floating elite-input-group">
-                                <input type="text" name="name" value="{{ old('name') }}" class="form-control" id="nameInput" placeholder="الاسم">
+                                <input type="text" name="name" value="{{ old('name') }}" class="form-control" id="nameInput" placeholder="الاسم" required>
                                 <label for="nameInput">اسم الطالب بالكامل <span class="text-danger">*</span></label>
                                 <div class="validation-indicator"></div>
                                 @error('name') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
@@ -84,148 +84,15 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating elite-input-group">
-                                <input type="tel" name="phone" value="{{ old('phone') }}" class="form-control" id="phoneInput" placeholder="الهاتف">
+                                <input type="tel" name="phone" value="{{ old('phone') }}" class="form-control" id="phoneInput" placeholder="الهاتف" required>
                                 <label for="phoneInput">رقم الهاتف <span class="text-danger">*</span></label>
                                 <div class="validation-indicator"></div>
                                 @error('phone') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-floating elite-input-group">
-                                <input type="email" name="email" value="{{ old('email') }}" class="form-control" id="emailInput" placeholder="الإيميل">
-                                <label for="emailInput">البريد الإلكتروني (اختياري)</label>
-                                <div class="validation-indicator"></div>
-                                @error('email') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating elite-input-group">
-                                <input type="text" name="code" value="{{ old('code') }}" class="form-control" id="codeInput" placeholder="الكود">
-                                <label for="codeInput">كود الطالب المميز</label>
-                                <div class="validation-indicator"></div>
-                                @error('code') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-floating elite-input-group">
-                                <input type="text" name="address" value="{{ old('address') }}" class="form-control" id="addressInput" placeholder="العنوان">
-                                <label for="addressInput">العنوان التفصيلي</label>
-                                @error('address') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-floating elite-input-group">
-                                <input type="text" name="national_id" value="{{ old('national_id') }}" class="form-control" id="idInput" placeholder="الرقم القومي">
-                                <label for="idInput">الرقم القومي</label>
-                                @error('national_id') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-floating elite-input-group">
-                                <input type="date" name="birth_date" value="{{ old('birth_date') }}" class="form-control" id="dateInput">
-                                <label for="dateInput">تاريخ الميلاد</label>
-                                @error('birth_date') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-floating elite-input-group">
-                                <select name="gender" class="form-select" id="genderSelect">
-                                    <option value="">الجنس...</option>
-                                    <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>ذكر</option>
-                                    <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>أنثى</option>
-                                </select>
-                                <label for="genderSelect">الجنس</label>
-                                @error('gender') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-12 mt-4">
-                            <div class="elite-image-upload rounded-5 p-5 text-center transition-all bg-light border-dashed">
-                                <div class="upload-visual mb-3 mx-auto">
-                                    <div class="avatar-preview-box rounded-circle shadow-sm mx-auto mb-3" id="imagePreview">
-                                        <i class="fas fa-camera-retro text-primary fs-3"></i>
-                                    </div>
-                                </div>
-                                <h6 class="fw-bold mb-1">الصورة الشخصية</h6>
-                                <p class="text-muted small">اسحب ملف الصورة أو انقر للاختيار</p>
-                                <input type="file" name="profile_photo" id="photoInput" class="fake-input" accept="image/*">
-                                @error('profile_photo') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 2: Parent -->
-                <div id="section-parent" class="elite-form-card bg-white rounded-5 shadow-elite border p-4 p-md-5 mb-5 transition-all">
-                    <div class="section-header d-flex align-items-center gap-3 mb-5">
-                        <div class="section-icon bg-info shadow-soft text-white rounded-4">
-                            <i class="fas fa-user-shield fs-4"></i>
-                        </div>
-                        <div>
-                            <h4 class="fw-bold mb-0">بيانات ولي الأمر</h4>
-                            <p class="text-muted small mb-0">تفاصيل التواصل في حالات الضرورة والمتابعة الأبوية</p>
-                        </div>
-                    </div>
-
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <div class="form-floating elite-input-group position-relative">
-                                <input type="tel" name="parent_phone" id="parent_phone" value="{{ old('parent_phone') }}" class="form-control" placeholder="هاتف ولي الأمر">
-                                <label for="parent_phone">رقم هاتف ولي الأمر</label>
-                                <div class="validation-indicator"></div>
-                                @error('parent_phone') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
-                                <div id="parent-match-chip" class="match-chip d-none animate__animated animate__bounceIn">
-                                    <i class="fas fa-magic me-1"></i> تم التعرف: <b id="match-name"></b>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating elite-input-group">
-                                <input type="text" name="parent_name" id="pNameInput" value="{{ old('parent_name') }}" class="form-control" placeholder="الاسم">
-                                <label for="pNameInput">اسم ولي الأمر</label>
-                                @error('parent_name') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating elite-input-group">
-                                <input type="text" name="parent_relation" value="{{ old('parent_relation') }}" class="form-control" id="relInput" placeholder="القرابة">
-                                <label for="relInput">صلة القرابة</label>
-                                @error('parent_relation') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating elite-input-group">
-                                <input type="tel" name="emergency_phone" value="{{ old('emergency_phone') }}" class="form-control" id="ePhoneInput" placeholder="طوارئ">
-                                <label for="ePhoneInput">رقم طوارئ إضافي</label>
-                                @error('emergency_phone') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
                         <div class="col-12">
                             <div class="form-floating elite-input-group">
-                                <input type="text" name="parent_job" id="pJobInput" value="{{ old('parent_job') }}" class="form-control" placeholder="الوظيفة">
-                                <label for="pJobInput">وظيفة ولي الأمر</label>
-                                @error('parent_job') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 3: Academic -->
-                <div id="section-academic" class="elite-form-card bg-white rounded-5 shadow-elite border p-4 p-md-5 mb-5 transition-all">
-                    <div class="section-header d-flex align-items-center gap-3 mb-5">
-                        <div class="section-icon bg-success shadow-soft text-white rounded-4">
-                            <i class="fas fa-graduation-cap fs-4"></i>
-                        </div>
-                        <div>
-                            <h4 class="fw-bold mb-0">البيانات الأكاديمية</h4>
-                            <p class="text-muted small mb-0">تحديد المستوى الدراسي والانتماء التعليمي</p>
-                        </div>
-                    </div>
-
-                    <div class="row g-4">
-                        <div class="col-12">
-                            <div class="form-floating elite-input-group">
-                                <select name="grade_id" class="form-select" id="gradeSelect">
+                                <select name="grade_id" class="form-select" id="gradeSelect" required>
                                     <option value="">اختر الصف...</option>
                                     @foreach($stages as $stage)
                                         <optgroup label="📂 {{ $stage->name }}">
@@ -240,18 +107,136 @@
                                 @error('grade_id') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-floating elite-input-group">
-                                <input type="text" name="school_name" value="{{ old('school_name') }}" class="form-control" id="schoolInput" placeholder="المدرسة">
-                                <label for="schoolInput">اسم المدرسة</label>
-                                @error('school_name') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
+                    </div>
+
+                    <!-- Toggle Button for More Details -->
+                    <div class="mt-5 text-center">
+                        <button type="button" @click="showDetails = !showDetails" class="btn btn-light rounded-pill px-5 py-3 border shadow-sm transition-all hover-lift">
+                            <span x-show="!showDetails" class="fw-bold text-muted"><i class="fas fa-plus-circle me-2"></i> إضافة تفاصيل إضافية (اختياري)</span>
+                            <span x-show="showDetails" class="fw-bold text-primary"><i class="fas fa-minus-circle me-2"></i> إخفاء التفاصيل الإضافية</span>
+                        </button>
+                        <p class="text-muted small mt-3" x-show="!showDetails">العنوان، ولي الأمر، الرقم القومي، بيانات المدرسة...</p>
+                    </div>
+                </div>
+
+                <!-- Advanced Details (Hidden by default) -->
+                <div id="advanced-details" x-show="showDetails" x-transition:enter="animate__animated animate__fadeInUp" x-collapse>
+                    
+                    <!-- Partial Section 1 Refactored: Personal (Advanced) -->
+                    <div id="section-personal-advanced" class="elite-form-card bg-white rounded-5 shadow-elite border p-4 p-md-5 mb-5 transition-all">
+                        <div class="section-header d-flex align-items-center gap-3 mb-5">
+                            <div class="section-icon bg-info-subtle text-info rounded-4">
+                                <i class="fas fa-user-tag fs-4"></i>
+                            </div>
+                            <h5 class="fw-bold mb-0">بيانات شخصية إضافية</h5>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-floating elite-input-group">
+                                    <input type="email" name="email" value="{{ old('email') }}" class="form-control" id="emailInput" placeholder="الإيميل">
+                                    <label for="emailInput">البريد الإلكتروني</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating elite-input-group">
+                                    <input type="text" name="code" value="{{ old('code') }}" class="form-control" id="codeInput" placeholder="الكود">
+                                    <label for="codeInput">كود الطالب المميز</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating elite-input-group">
+                                    <input type="text" name="address" value="{{ old('address') }}" class="form-control" id="addressInput" placeholder="العنوان">
+                                    <label for="addressInput">العنوان التفصيلي</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating elite-input-group">
+                                    <input type="text" name="national_id" value="{{ old('national_id') }}" class="form-control" id="idInput" placeholder="الرقم القومي">
+                                    <label for="idInput">الرقم القومي</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating elite-input-group">
+                                    <input type="date" name="birth_date" value="{{ old('birth_date') }}" class="form-control" id="dateInput">
+                                    <label for="dateInput">تاريخ الميلاد</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating elite-input-group">
+                                    <select name="gender" class="form-select" id="genderSelect">
+                                        <option value="">الجنس...</option>
+                                        <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>ذكر</option>
+                                        <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>أنثى</option>
+                                    </select>
+                                    <label for="genderSelect">الجنس</label>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-4 text-center">
+                                <div class="elite-image-upload rounded-5 p-4 bg-light border-dashed">
+                                    <input type="file" name="profile_photo" id="photoInput" class="fake-input" accept="image/*">
+                                    <p class="text-muted small mb-0">صور الطالب الشخصية</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-floating elite-input-group">
-                                <input type="text" name="section_type" value="{{ old('section_type') }}" class="form-control" id="secInput" placeholder="التخصص">
-                                <label for="secInput">الشعبة (علمي/أدبي)</label>
-                                @error('section_type') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
+                    </div>
+
+                    <!-- Section 2: Parent -->
+                    <div id="section-parent" class="elite-form-card bg-white rounded-5 shadow-elite border p-4 p-md-5 mb-5 transition-all">
+                        <div class="section-header d-flex align-items-center gap-3 mb-5">
+                            <div class="section-icon bg-info shadow-soft text-white rounded-4">
+                                <i class="fas fa-user-shield fs-4"></i>
+                            </div>
+                            <h5 class="fw-bold mb-0">بيانات ولي الأمر</h5>
+                        </div>
+
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-floating elite-input-group position-relative">
+                                    <input type="tel" name="parent_phone" id="parent_phone" value="{{ old('parent_phone') }}" class="form-control" placeholder="هاتف ولي الأمر">
+                                    <label for="parent_phone">رقم هاتف ولي الأمر</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating elite-input-group">
+                                    <input type="text" name="parent_name" id="pNameInput" value="{{ old('parent_name') }}" class="form-control" placeholder="الاسم">
+                                    <label for="pNameInput">اسم ولي الأمر</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating elite-input-group">
+                                    <input type="text" name="parent_relation" value="{{ old('parent_relation') }}" class="form-control" id="relInput" placeholder="القرابة">
+                                    <label for="relInput">صلة القرابة</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating elite-input-group">
+                                    <input type="tel" name="emergency_phone" value="{{ old('emergency_phone') }}" class="form-control" id="ePhoneInput" placeholder="طوارئ">
+                                    <label for="ePhoneInput">رقم طوارئ إضافي</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Academic (Detailed) -->
+                    <div id="section-academic" class="elite-form-card bg-white rounded-5 shadow-elite border p-4 p-md-5 mb-5 transition-all">
+                        <div class="section-header d-flex align-items-center gap-3 mb-5">
+                            <div class="section-icon bg-success shadow-soft text-white rounded-4">
+                                <i class="fas fa-school fs-4"></i>
+                            </div>
+                            <h5 class="fw-bold mb-0">بيانات المدرسة والتخصص</h5>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-floating elite-input-group">
+                                    <input type="text" name="school_name" value="{{ old('school_name') }}" class="form-control" id="schoolInput" placeholder="المدرسة">
+                                    <label for="schoolInput">اسم المدرسة</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating elite-input-group">
+                                    <input type="text" name="section_type" value="{{ old('section_type') }}" class="form-control" id="secInput" placeholder="التخصص">
+                                    <label for="secInput">الشعبة (علمي/أدبي)</label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -260,7 +245,7 @@
                 <!-- Unified Sticky Submit Bar for Mobile -->
                 <div class="d-xl-none fixed-bottom bg-white border-top p-3 d-flex gap-2 shadow-lg" style="z-index: 1000;">
                     <button type="submit" class="btn btn-primary w-100 rounded-pill py-3 fw-bold">إتمام التسجيل</button>
-                    <a href="#section-personal" class="btn btn-outline-secondary rounded-circle p-0 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;"><i class="fas fa-arrow-up"></i></a>
+                    <a href="#section-core" class="btn btn-outline-secondary rounded-circle p-0 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;"><i class="fas fa-arrow-up"></i></a>
                 </div>
             </form>
         </div>

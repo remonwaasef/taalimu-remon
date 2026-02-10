@@ -597,6 +597,32 @@
             </div>
             @endcanany
         </nav>
+
+        @if(isset($onboardingStatus) && $onboardingStatus->show_sidebar_ring)
+        <!-- Sidebar Onboarding Progress -->
+        <div class="mt-auto p-3 mb-5">
+            <div class="rounded-4 p-3 bg-white bg-opacity-10 border border-white border-opacity-10 shadow-lg">
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="position-relative d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                        <svg viewBox="0 0 36 36" class="circular-chart" style="width: 100%; height: 100%;">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" style="fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 3;"/>
+                            <path class="circle" stroke-dasharray="{{ $onboardingStatus->progress }}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" style="fill: none; stroke: var(--primary-light); stroke-width: 3; stroke-linecap: round; transition: stroke-dasharray 0.5s ease;"/>
+                        </svg>
+                        <span class="position-absolute fw-bold text-white small" style="font-size: 0.7rem;">{{ $onboardingStatus->progress }}%</span>
+                    </div>
+                    <div>
+                        <h6 class="text-white small fw-bold mb-1">إكمال الإعداد</h6>
+                        <p class="text-white-50 extra-small mb-0" style="font-size: 0.65rem;">باقي خطوات بسيطة وتبدأ!</p>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <a href="{{ route('center.dashboard') }}" class="btn btn-primary btn-sm w-100 rounded-pill py-2" style="font-size: 0.75rem;">
+                        أكمل الإعداد الآن <i class="fas fa-arrow-left ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        @endif
     </aside>
 
     <!-- Main Content -->

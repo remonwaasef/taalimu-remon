@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class RegistrationController extends Controller
 {
@@ -243,7 +245,11 @@ class RegistrationController extends Controller
                     'total_amount' => $basePrice,
                 ]);
 
-                return redirect()->route('registration.success');
+                // Generate setup token for onboarding
+                $setupToken = Str::random(40);
+                Cache::put("setup_token_$setupToken", ['tenant_id' => $tenant->id], now()->addMinutes(60));
+
+                return redirect()->route('register.setup', ['token' => $setupToken]);
 
             } else {
                 // Paid Plan Flow
