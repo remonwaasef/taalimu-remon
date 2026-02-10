@@ -111,18 +111,66 @@
             border-radius: 20px;
         }
 
-        /* RTL Sidebar */
-        [dir="rtl"] .sidebar {
-            right: 0;
-            border-left: 1px solid rgba(255, 255, 255, 0.05);
+        /* Sidebar Positioning */
+        /* Desktop Default */
+        @media (min-width: 993px) {
+            [dir="rtl"] .sidebar {
+                right: 0;
+                border-left: 1px solid rgba(255, 255, 255, 0.05);
+            }
+            [dir="ltr"] .sidebar {
+                left: 0;
+                border-right: 1px solid rgba(255, 255, 255, 0.05);
+            }
+            [dir="rtl"] .main-content {
+                margin-right: var(--sidebar-width);
+            }
+            [dir="ltr"] .main-content {
+                margin-left: var(--sidebar-width);
+            }
+            [dir="rtl"] .admin-footer {
+                right: var(--sidebar-width);
+                left: 0;
+            }
+            [dir="ltr"] .admin-footer {
+                left: var(--sidebar-width);
+                right: 0;
+            }
         }
 
-        /* LTR Sidebar */
-        [dir="ltr"] .sidebar {
-            left: 0;
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        /* Mobile View (< 992px) */
+        @media (max-width: 992px) {
+            .sidebar {
+                box-shadow: none;
+                z-index: 1050; /* Above regular content */
+            }
+            
+            [dir="rtl"] .sidebar {
+                right: 0;
+                transform: translateX(100%);
+            }
+            [dir="ltr"] .sidebar {
+                left: 0;
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+                box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+            }
+            
+            .main-content {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                padding: 1.5rem 1rem;
+            }
+            
+            .admin-footer {
+                left: 0 !important;
+                right: 0 !important;
+            }
         }
-        
+
         .sidebar .border-bottom {
             border-bottom-color: rgba(255, 255, 255, 0.1) !important;
         }
@@ -146,6 +194,7 @@
             transition: all 0.3s ease;
             margin: 0.25rem 1rem;
             border-radius: var(--radius-sm);
+            position: relative;
         }
         
         .sidebar .nav-link:hover {
@@ -197,14 +246,7 @@
             padding: 2rem;
             padding-bottom: 80px;
             min-height: 100vh;
-        }
-
-        [dir="rtl"] .main-content {
-            margin-right: var(--sidebar-width);
-        }
-
-        [dir="ltr"] .main-content {
-            margin-left: var(--sidebar-width);
+            transition: margin 0.3s ease;
         }
         
         /* Cards */
@@ -246,49 +288,7 @@
             border-top: 1px solid #e5e7eb;
             z-index: 990;
             box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-
-        [dir="rtl"] .admin-footer {
-            right: var(--sidebar-width);
-            left: 0;
-        }
-
-        [dir="ltr"] .admin-footer {
-            left: var(--sidebar-width);
-            right: 0;
-        }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 992px) {
-            [dir="rtl"] .sidebar {
-                right: calc(-1 * var(--sidebar-width)) !important;
-            }
-            [dir="ltr"] .sidebar {
-                left: calc(-1 * var(--sidebar-width)) !important;
-            }
-            .sidebar {
-                box-shadow: none;
-            }
-            
-            [dir="rtl"] .sidebar.active {
-                right: 0 !important;
-            }
-            [dir="ltr"] .sidebar.active {
-                left: 0 !important;
-            }
-            .sidebar.active {
-                box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
-            }
-            
-            .main-content {
-                margin-left: 0 !important;
-                margin-right: 0 !important;
-            }
-            
-            .admin-footer {
-                left: 0 !important;
-                right: 0 !important;
-            }
+            transition: left 0.3s ease, right 0.3s ease;
         }
 
         /* Sidebar Overlay */
