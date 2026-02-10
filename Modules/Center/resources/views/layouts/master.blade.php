@@ -260,15 +260,23 @@
 
         /* Mobile Responsiveness */
         @media (max-width: 992px) {
+            [dir="rtl"] .sidebar {
+                right: calc(-1 * var(--sidebar-width)) !important;
+            }
+            [dir="ltr"] .sidebar {
+                left: calc(-1 * var(--sidebar-width)) !important;
+            }
             .sidebar {
-                [dir="rtl"] & { right: calc(-1 * var(--sidebar-width)) !important; }
-                [dir="ltr"] & { left: calc(-1 * var(--sidebar-width)) !important; }
                 box-shadow: none;
             }
             
+            [dir="rtl"] .sidebar.active {
+                right: 0 !important;
+            }
+            [dir="ltr"] .sidebar.active {
+                left: 0 !important;
+            }
             .sidebar.active {
-                [dir="rtl"] & { right: 0 !important; }
-                [dir="ltr"] & { left: 0 !important; }
                 box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
             }
             
