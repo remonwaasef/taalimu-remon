@@ -3,8 +3,6 @@ const OFFLINE_URL = '/offline';
 
 const FILES_TO_CACHE = [
     OFFLINE_URL,
-    '/build/assets/app.css', // Adjust based on your build output
-    '/build/assets/app.js',  // Adjust based on your build output
     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'
 ];
