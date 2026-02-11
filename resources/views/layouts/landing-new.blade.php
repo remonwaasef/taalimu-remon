@@ -26,6 +26,13 @@
     <!-- Resource Hints -->
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
+    <!-- PWA Support -->
+    <link rel="manifest" href="/manifest.json?v=2">
+    <meta name="theme-color" content="#3A0CA3">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Taalimu">
+
     <!-- Scripts -->
     @vite(['resources/css/landing-new.css'])
     <!-- SweetAlert2 -->
@@ -157,6 +164,17 @@
                 title: "{{ session('error') }}"
             });
         @endif
+    </script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((reg) => console.log('SW registered:', reg.scope))
+                    .catch((err) => console.log('SW failed:', err));
+            });
+        }
     </script>
 </body>
 </html>
