@@ -31,6 +31,13 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
+    <!-- PWA Support -->
+    <link rel="manifest" href="/manifest.json?v=1.1">
+    <meta name="theme-color" content="#3A0CA3">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Taalimu">
+    
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     
     <style>
