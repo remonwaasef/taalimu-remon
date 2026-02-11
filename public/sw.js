@@ -1,28 +1,19 @@
-const CACHE_NAME = 'educenter-v1';
-const OFFLINE_URL = '/offline';
-
-const FILES_TO_CACHE = [
-    OFFLINE_URL,
-    'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
-    'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'
-];
+const CACHE_NAME = 'taalimu-v2';
 
 self.addEventListener('install', (event) => {
-    event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-            console.log('[ServiceWorker] Pre-caching offline page');
-            return cache.addAll(FILES_TO_CACHE);
-        })
-    );
+    console.log('[ServiceWorker] Installing v2...');
+    // Skip pre-caching to avoid installation failures
+    // Assets will be cached on-the-fly instead
     self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
+    console.log('[ServiceWorker] Activating v2...');
     event.waitUntil(
         caches.keys().then((keyList) => {
             return Promise.all(keyList.map((key) => {
                 if (key !== CACHE_NAME) {
-                    console.log('[ServiceWorker] Removing old cache', key);
+                    console.log('[ServiceWorker] Removing old cache:', key);
                     return caches.delete(key);
                 }
             }));
@@ -32,20 +23,31 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    // Only handle GET requests
     if (event.request.method !== 'GET') return;
 
     event.respondWith(
         fetch(event.request)
+            .then((response) => {
+                // Cache successful responses for offline use
+                if (response.status === 200) {
+                    const responseClone = response.clone();
+                    caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(event.request, responseClone);
+                    });
+                }
+                return response;
+            })
             .catch(() => {
                 return caches.match(event.request)
                     .then((response) => {
-                        if (response) {
-                            return response;
-                        }
-                        // If request is for a page (HTML), return offline page
-                        if (event.request.headers.get('accept').includes('text/html')) {
-                            return caches.match(OFFLINE_URL);
+                        if (response) return response;
+                        // Return a simple offline message for HTML pages
+                        if (event.request.headers.get('accept') &&
+                            event.request.headers.get('accept').includes('text/html')) {
+                            return new Response(
+                                '<html dir="rtl"><body style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:Cairo,sans-serif;background:#f0f2f5;"><div style="text-align:center;"><h1>📡 لا يوجد اتصال</h1><p>يرجى التحقق من اتصالك بالإنترنت</p></div></body></html>',
+                                { headers: { 'Content-Type': 'text/html; charset=utf-8' } }
+                            );
                         }
                     });
             })
