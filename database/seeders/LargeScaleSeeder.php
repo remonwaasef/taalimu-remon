@@ -10,7 +10,6 @@ use App\Models\User;
 use App\Models\Student;
 use App\Models\Course;
 use App\Models\Enrollment;
-use Faker\Factory as Faker;
 
 class LargeScaleSeeder extends Seeder
 {
@@ -27,7 +26,6 @@ class LargeScaleSeeder extends Seeder
 
         $this->command->info("Seeding data for Tenant: {$tenant->domain}...");
 
-        $faker = Faker::create();
         $BATCH_SIZE = 1000; // Batch size for inserts
         $TOTAL_STUDENTS = 500; // Generate 500 students for quick verification (was 10000)
         $TOTAL_COURSES = 50;    // Generate 50 courses
@@ -61,8 +59,8 @@ class LargeScaleSeeder extends Seeder
                 'tenant_id' => $tenant->id,
                 'instructor_id' => $instructor->id,
                 'title' => "Load Test Course #{$i}",
-                'description' => $faker->sentence,
-                'price' => $faker->numberBetween(100, 5000),
+                'description' => "Test description for course #{$i}",
+                'price' => 500,
                 'status' => 'published',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -130,7 +128,7 @@ class LargeScaleSeeder extends Seeder
                         'user_id' => $user->id,
                         'name' => "Student {$currentStudentIndex}",
                         'email' => $user->email,
-                        'phone' => $faker->phoneNumber,
+                        'phone' => '010' . str_pad($currentStudentIndex, 8, '0', STR_PAD_LEFT),
                         'status' => 'active',
                     ]);
 
