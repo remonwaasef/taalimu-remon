@@ -23,14 +23,11 @@ use App\Models\Enrollment;
 use App\Models\Subscription;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
-use Faker\Factory as Faker;
 
 class FullSystemDemoSeeder extends Seeder
 {
     public function run()
     {
-        $faker = Faker::create();
-
         // 1. Create Demo Tenant
         $tenant = Tenant::updateOrCreate(
             ['domain' => 'demo-center'],
