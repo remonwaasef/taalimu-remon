@@ -458,7 +458,15 @@
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
                     <li><a class="dropdown-item" href="#">{{ __('admin.sidebar.profile') }}</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">{{ __('admin.sidebar.logout') }}</a></li>
+                    <li>
+                        <form action="{{ route('admin.logout') }}" method="POST" id="admin-logout-form" class="d-none">
+                            @csrf
+                        </form>
+                        <a class="dropdown-item text-danger" href="{{ route('admin.logout') }}" 
+                           onclick="event.preventDefault(); document.getElementById('admin-logout-form').submit();">
+                            <i class="bi bi-box-arrow-right me-2"></i> {{ __('admin.sidebar.logout') }}
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
