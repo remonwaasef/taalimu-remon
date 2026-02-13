@@ -287,6 +287,7 @@ class FullSystemDemoSeeder extends Seeder
                         'tenant_id' => $tenant->id,
                         'course_id' => $enrolledCourse->id,
                         'status' => 'present',
+                        'check_in_time' => now()->subDays(2)->setTime(9, 0),
                     ]
                 );
             }
