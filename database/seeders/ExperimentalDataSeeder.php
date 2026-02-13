@@ -24,13 +24,12 @@ use App\Models\Subscription;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
-use Faker\Factory as Faker;
 
 class ExperimentalDataSeeder extends Seeder
 {
     public function run()
     {
-        $faker = Faker::create('ar_SA');
+        $faker_mode = false; // Faker removed
 
         $centers = [
             [
@@ -98,10 +97,10 @@ class ExperimentalDataSeeder extends Seeder
                 $instructor = Instructor::updateOrCreate(
                     ['email' => "instructor{$i}@{$centerData['domain']}.com", 'tenant_id' => $tenant->id],
                     [
-                        'name' => $faker->name,
+                        'name' => "مدرس تجريبي {$i}",
                         'specialization' => $centerData['specialization'],
                         'bio' => 'مدرس متخصص وخبير في مجاله لسنوات طويلة.',
-                        'phone' => '010' . $faker->numberBetween(10000000, 99999999),
+                        'phone' => '010' . str_pad($i, 8, '0', STR_PAD_LEFT),
                     ]
                 );
                 
@@ -146,7 +145,7 @@ class ExperimentalDataSeeder extends Seeder
                     [
                         'instructor_id' => $instructors[$index % count($instructors)]->id,
                         'description' => "دورة تدريبية متكاملة في " . $title,
-                        'price' => $faker->numberBetween(200, 1000),
+                        'price' => 500 + ($index * 100),
                         'status' => 'published',
                     ]
                 );
@@ -158,9 +157,9 @@ class ExperimentalDataSeeder extends Seeder
                 $student = Student::updateOrCreate(
                     ['email' => "student{$i}@{$centerData['domain']}.com", 'tenant_id' => $tenant->id],
                     [
-                        'name' => $faker->name,
-                        'phone' => '012' . $faker->numberBetween(10000000, 99999999),
-                        'grade_level' => (string)$faker->numberBetween(1, 12),
+                        'name' => "طالب تجريبي {$i}",
+                        'phone' => '012' . str_pad($i, 8, '0', STR_PAD_LEFT),
+                        'grade_level' => (string)(($i % 12) + 1),
                         'status' => 'active',
                         'joined_at' => now()->subMonths(2),
                     ]
@@ -181,8 +180,8 @@ class ExperimentalDataSeeder extends Seeder
 
                 $students[] = $student;
 
-                // Enroll student in 1-2 random courses
-                $enrolledCourses = $faker->randomElements($courses, rand(1, 2));
+                // Enroll student in first 2 courses
+                $enrolledCourses = array_slice($courses, 0, 2);
                 foreach ($enrolledCourses as $course) {
                     Enrollment::updateOrCreate(
                         ['user_id' => $user->id, 'course_id' => $course->id],
@@ -257,7 +256,7 @@ class ExperimentalDataSeeder extends Seeder
                                         [
                                             'tenant_id' => $tenant->id,
                                             'course_id' => $course->id,
-                                            'status' => $faker->randomElement(['present', 'present', 'late']),
+                                            'status' => 'present',
                                             'check_in_time' => $date->copy()->setTime(10, 0),
                                         ]
                                     );
