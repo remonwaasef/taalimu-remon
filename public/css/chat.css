@@ -1,175 +1,140 @@
-/* Executive Chat Interface - V4 Modern Compact */
-:root {
-    --chat-sent-bg: #3A0CA3;
-    --chat-received-bg: #ffffff;
-    --chat-sent-text: #ffffff;
-    --chat-received-text: #1e293b;
-    --chat-border: #f1f5f9;
-    --chat-shadow-soft: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-}
-
-.chat-container {
-    padding: 24px;
+/* Clean SaaS Chat Interface - V5 Professional */
+.chat-wrapper {
     background: #ffffff;
-    border-radius: 16px;
-    max-height: 650px;
-    overflow-y: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    border: 1px solid #e2e8f0;
-}
-
-.message-wrapper {
-    display: flex;
     gap: 12px;
-    max-width: 85%;
+    max-height: 700px;
+    overflow-y: auto;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.message-wrapper.sent {
-    flex-direction: row-reverse;
+.chat-item {
+    display: flex;
+    flex-direction: column;
+    max-width: 70%;
+    width: fit-content;
+}
+
+/* Base Alignment: User Right, Others Left */
+.chat-item.sent {
     align-self: flex-end;
+    align-items: flex-end;
 }
 
-.message-wrapper.received {
+.chat-item.received {
     align-self: flex-start;
+    align-items: flex-start;
 }
 
-/* RTL Overrides for proper directionality */
-[dir="rtl"] .message-wrapper.sent {
-    flex-direction: row;
+/* RTL Alignment Flip: flex-start is Right in RTL */
+[dir="rtl"] .chat-item.sent {
     align-self: flex-start;
+    align-items: flex-start;
 }
 
-[dir="rtl"] .message-wrapper.received {
-    flex-direction: row-reverse;
+[dir="rtl"] .chat-item.received {
     align-self: flex-end;
+    align-items: flex-end;
+}
+
+.chat-bubble {
+    padding: 10px 16px;
+    border-radius: 16px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    word-wrap: break-word;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.chat-item.sent .chat-bubble {
+    background-color: #3A0CA3;
+    color: #ffffff;
+    border-bottom-right-radius: 4px;
+}
+
+.chat-item.received .chat-bubble {
+    background-color: #f9fafb;
+    color: #111827;
+    border: 1px solid #e5e7eb;
+    border-bottom-left-radius: 4px;
+}
+
+/* RTL Bubble Tails Flip */
+[dir="rtl"] .chat-item.sent .chat-bubble {
+    border-bottom-right-radius: 16px;
+    border-bottom-left-radius: 4px;
+}
+
+[dir="rtl"] .chat-item.received .chat-bubble {
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 4px;
+}
+
+.chat-meta {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin-top: 4px;
+    font-weight: 500;
 }
 
 .chat-avatar {
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
-    background: #e2e8f0;
+    background: #f3f4f6;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
+    margin-bottom: 4px;
+    font-weight: bold;
     font-size: 0.8rem;
-    color: #64748b;
-    flex-shrink: 0;
+    color: #4b5563;
 }
 
 .sent .chat-avatar {
-    background: var(--chat-sent-bg);
+    background: #3A0CA3;
     color: white;
 }
 
-.received .chat-avatar {
-    background: #f1f5f9;
-    color: #3A0CA3;
-    border: 1px solid #e2e8f0;
-}
-
-.message-content {
-    display: flex;
-    flex-direction: column;
-}
-
-.sent .message-content {
-    align-items: flex-end;
-}
-
-.received .message-content {
-    align-items: flex-start;
-}
-
-/* RTL Content Alignment */
-[dir="rtl"] .sent .message-content {
-    align-items: flex-start;
-}
-
-[dir="rtl"] .received .message-content {
-    align-items: flex-end;
-}
-
-.message-bubble {
-    padding: 10px 16px;
-    border-radius: 18px;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    width: fit-content;
-    max-width: 100%;
-    box-shadow: var(--chat-shadow-soft);
-    word-wrap: break-word;
-}
-
-.sent .message-bubble {
-    background-color: var(--chat-sent-bg);
-    color: var(--chat-sent-text);
-    border-bottom-right-radius: 4px;
-}
-
-.received .message-bubble {
-    background-color: var(--chat-received-bg);
-    color: var(--chat-received-text);
-    border: 1px solid var(--chat-border);
-    border-bottom-left-radius: 4px;
-}
-
-/* RTL Bubble Tails */
-[dir="rtl"] .sent .message-bubble {
-    border-bottom-right-radius: 18px;
-    border-bottom-left-radius: 4px;
-}
-
-[dir="rtl"] .received .message-bubble {
-    border-bottom-left-radius: 18px;
-    border-bottom-right-radius: 4px;
-}
-
-.message-meta {
-    font-size: 0.75rem;
-    color: #94a3b8;
-    margin-top: 4px;
-    font-weight: 600;
-}
-
-.badge-support {
-    background: #fee2e2;
-    color: #ef4444;
-    font-size: 0.65rem;
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin-right: 4px;
-}
-
-/* Compact Reply Area */
-.chat-reply-area {
-    margin-top: 16px;
-    background: #f8fafc;
+/* Reply Well */
+.reply-well {
+    margin-top: 20px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
     border-radius: 12px;
     padding: 12px;
-    border: 1px solid #e2e8f0;
 }
 
-.chat-reply-area textarea {
-    border: none;
-    background: transparent;
+.reply-well textarea {
+    border: none !important;
+    background: transparent !important;
     width: 100%;
     resize: none;
+    outline: none;
     padding: 8px;
     font-size: 0.95rem;
 }
 
-.chat-reply-area textarea:focus {
-    outline: none;
-}
-
-.reply-footer {
+.reply-btn-container {
     display: flex;
     justify-content: flex-end;
     margin-top: 8px;
+    border-top: 1px solid #f3f4f6;
     padding-top: 8px;
-    border-top: 1px solid #e2e8f0;
+}
+
+.support-label {
+    background: #fee2e2;
+    color: #dc2626;
+    font-size: 0.65rem;
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-right: 4px;
+    text-transform: uppercase;
+    font-weight: bold;
 }
