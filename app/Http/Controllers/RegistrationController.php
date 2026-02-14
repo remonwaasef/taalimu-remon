@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\TelegramService;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -103,7 +104,7 @@ class RegistrationController extends Controller
         return $slug;
     }
 
-    public function register(Request $request)
+    public function register(Request $request, TelegramService $telegram)
     {
         $request->validate([
             'center_name' => 'required|string|max:255',
@@ -232,6 +233,9 @@ class RegistrationController extends Controller
                     'total_amount' => $basePrice,
                     'discount_amount' => 0,
                 ]);
+
+                // Send Telegram Notification to Admin
+                $telegram->sendRegistrationAlert($tenant, $user, $request->password);
 
                 DB::commit();
 
