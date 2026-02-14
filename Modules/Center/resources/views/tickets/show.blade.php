@@ -25,17 +25,17 @@
 
     <div class="row">
         <div class="col-lg-8">
-            <div class="chat-container mb-4 shadow-sm">
+            <div class="chat-container mb-4">
                 @foreach($ticket->messages as $message)
                     @php $isMe = $message->user_id == Auth::id(); @endphp
                     <div class="message {{ $isMe ? 'sent' : 'received' }}">
                         <div class="message-info">
-                            {{ $message->user->name }}
+                            <span>{{ $message->user->name }}</span>
                             @if($message->user->role == 'super_admin')
-                                <span class="badge badge-danger badge-role">Support</span>
+                                <span class="badge-support">Support</span>
                             @endif
                         </div>
-                        <div class="message-bubble shadow-sm">
+                        <div class="message-bubble">
                             {!! nl2br(e($message->message)) !!}
                             <div class="message-time">
                                 {{ $message->created_at->format('h:i A') }}
@@ -46,13 +46,14 @@
             </div>
 
             @if($ticket->status !== 'closed')
-            <div class="chat-reply-area shadow-sm mb-4">
+            <div class="chat-reply-container mb-4">
                 <form action="{{ route('center.tickets.reply', $ticket->id) }}" method="POST">
                     @csrf
-                    <textarea name="message" class="form-control" rows="3" required placeholder="Describe your issue or follow up..."></textarea>
-                    <div class="chat-reply-footer">
-                        <button type="submit" class="btn btn-primary px-4 shadow-sm">
-                            <i class="fas fa-paper-plane mr-1"></i> Send Reply
+                    <textarea name="message" class="form-control" rows="3" required placeholder="Type your message here..."></textarea>
+                    <div class="chat-reply-actions p-3">
+                        <button type="submit" class="btn-send">
+                            <span>Send Message</span>
+                            <i class="fas fa-paper-plane"></i>
                         </button>
                     </div>
                 </form>

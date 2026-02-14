@@ -35,19 +35,19 @@
 
     <div class="row">
         <div class="col-lg-8">
-            <div class="chat-container mb-4 shadow-sm">
+            <div class="chat-container mb-4">
                 @foreach($ticket->messages as $message)
                     @php $isMe = $message->user_id == Auth::id(); @endphp
                     <div class="message {{ $isMe ? 'sent' : 'received' }}">
                         <div class="message-info">
-                            {{ $message->user->name }}
+                            <span>{{ $message->user->name }}</span>
                             @if($message->user->role == 'super_admin')
-                                <span class="badge badge-danger badge-role">Admin</span>
+                                <span class="badge-support">Support</span>
                             @else
-                                <span class="badge badge-info badge-role text-white">{{ $message->user->role }}</span>
+                                <span class="badge bg-info text-white" style="font-size: 0.6rem;">{{ $message->user->role }}</span>
                             @endif
                         </div>
-                        <div class="message-bubble shadow-sm">
+                        <div class="message-bubble">
                             {!! nl2br(e($message->message)) !!}
                             <div class="message-time">
                                 {{ $message->created_at->format('h:i A') }}
@@ -58,13 +58,14 @@
             </div>
 
             @if($ticket->status !== 'closed')
-            <div class="chat-reply-area shadow-sm mb-4">
+            <div class="chat-reply-container mb-4">
                 <form action="{{ route('admin.tickets.reply', $ticket->id) }}" method="POST">
                     @csrf
-                    <textarea name="message" class="form-control" rows="3" required placeholder="Type your response to the center..."></textarea>
-                    <div class="chat-reply-footer">
-                        <button type="submit" class="btn btn-primary px-4 shadow-sm">
-                            <i class="fas fa-paper-plane mr-1"></i> Send Reply
+                    <textarea name="message" class="form-control" rows="3" required placeholder="Response to the center..."></textarea>
+                    <div class="chat-reply-actions p-3">
+                        <button type="submit" class="btn-send">
+                            <span>Send Message</span>
+                            <i class="fas fa-paper-plane"></i>
                         </button>
                     </div>
                 </form>
