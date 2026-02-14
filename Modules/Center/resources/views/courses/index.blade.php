@@ -39,12 +39,16 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         @if($course->image)
-                                            <img src="{{ Storage::url($course->image) }}" class="rounded-3 me-3" style="width: 48px; height: 48px; object-fit: cover;" alt="{{ $course->title }}">
-                                        @else
-                                            <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center me-3" style="width: 48px; height: 48px;">
-                                                📚
-                                            </div>
+                                            <img src="{{ Storage::url($course->image) }}" 
+                                                 class="rounded-3 me-3" 
+                                                 style="width: 48px; height: 48px; object-fit: cover;" 
+                                                 alt="{{ $course->title }}"
+                                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                         @endif
+                                        <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center me-3" 
+                                             style="width: 48px; height: 48px; {{ $course->image ? 'display: none;' : '' }}">
+                                            📚
+                                        </div>
                                         <div>
                                             <div class="fw-bold">{{ $course->title }}</div>
                                             <small class="text-muted">{{ Str::limit($course->description, 30) }}</small>
