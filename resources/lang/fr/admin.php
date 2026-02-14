@@ -213,4 +213,5 @@ return [
         'users_count' => 'Utilisateurs',
         'actions' => 'Actions',
     ],
+    'phone' => 'Numéro de téléphone',
 ];

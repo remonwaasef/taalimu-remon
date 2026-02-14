@@ -107,10 +107,10 @@
             @csrf
             
             <div class="space-y-1.5">
-                <label class="text-[11px] font-bold text-slate-500 px-1 font-arabic uppercase tracking-wider">{{ __('auth.login.email') }} / رقم الهاتف</label>
+                <label class="text-[11px] font-bold text-slate-500 px-1 font-arabic uppercase tracking-wider">{{ __('auth.login.email_or_phone') }}</label>
                 <input type="text" name="email" 
                     class="w-full h-12 input-compact px-4 text-sm font-medium font-arabic text-slate-900 placeholder:text-slate-400"
-                    placeholder="name@example.com / 01xxxxxxxx"
+                    placeholder="{{ __('auth.login.email_or_phone') }}"
                     required autofocus>
             </div>
 

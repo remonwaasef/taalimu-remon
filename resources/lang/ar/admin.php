@@ -275,4 +275,5 @@ return [
     'instructors' => 'مدرس',
     'regional_prices' => 'أسعار المناطق',
     'auto_detected' => 'اكتشاف تلقائي',
+    'phone' => 'رقم الهاتف',
 ];
