@@ -67,9 +67,9 @@
                                 <small class="text-muted">اتركها فارغة لاستخدام المعلم المرتبط بالدورة تلقائياً.</small>
                             </div>
 
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">اليوم</label>
-                                <select name="day_of_week" class="form-select @error('day_of_week') is-invalid @enderror">
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold d-block">اختيار الأيام</label>
+                                <div class="d-flex flex-wrap gap-2">
                                     @php
                                         $days = [
                                             0 => 'الأحد',
@@ -82,12 +82,15 @@
                                         ];
                                     @endphp
                                     @foreach($days as $value => $label)
-                                        <option value="{{ $value }}" {{ old('day_of_week', $schedule->day_of_week ?? '') == $value ? 'selected' : '' }}>
-                                            {{ $label }}
-                                        </option>
+                                        <div class="day-checkbox">
+                                            <input type="checkbox" name="days[]" value="{{ $value }}" class="btn-check" id="day_{{ $value }}" {{ in_array($value, old('days', [])) ? 'checked' : '' }}>
+                                            <label class="btn btn-outline-primary rounded-pill px-3 py-2 fw-bold" for="day_{{ $value }}">
+                                                {{ $label }}
+                                            </label>
+                                        </div>
                                     @endforeach
-                                </select>
-                                @error('day_of_week') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                </div>
+                                @error('days') <div class="text-danger small mt-2">{{ $message }}</div> @enderror
                             </div>
 
                             <div class="col-md-4">
