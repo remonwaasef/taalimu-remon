@@ -23,28 +23,6 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Get schedules for a specific course (Ajax).
-     */
-    public function getCourseSchedules(Course $course)
-    {
-        $this->authorize('view', $course);
-        $schedules = Schedule::where('course_id', $course->id)
-            ->with(['classroom', 'instructor'])
-            ->get();
-        
-        return response()->json($schedules);
-    }
-
-    /**
-     * Get scheduling metadata (Ajax).
-     */
-    public function getMetadata()
-    {
-        $this->authorize('viewAny', Schedule::class);
-        return response()->json($this->getFormData());
-    }
-
-    /**
      * Get form data for create and edit views.
      */
     protected function getFormData(): array
@@ -68,50 +46,34 @@ class ScheduleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request): RedirectResponse
     {
         $this->authorize('create', Schedule::class);
-        $request->validate([
-            'course_id' => 'required|exists:courses,id',
-            'classroom_id' => 'required|exists:classrooms,id',
+        $validated = $request->validate([
+                        'course_id' => 'nullable|exists:courses,id',
+
+                        'classroom_id' => 'nullable|exists:classrooms,id',
+
             'instructor_id' => 'nullable|exists:instructors,id',
-            'days' => 'required|array|min:1',
-            'days.*' => 'integer|between:0,6',
-            'start_time' => 'required',
-            'end_time' => 'required|after:start_time',
+                        'day_of_week' => 'nullable|integer|between:0,6',
+
+                        'start_time' => 'nullable',
+
+                        'end_time' => 'nullable|after:start_time',
+
             'max_students' => 'nullable|integer|min:1',
         ]);
 
-        $days = $request->days;
-        $commonData = $request->only(['course_id', 'classroom_id', 'instructor_id', 'start_time', 'end_time', 'max_students']);
-        
-        $conflicts = [];
-        foreach ($days as $day) {
-            $data = array_merge($commonData, ['day_of_week' => $day]);
-            $error = $this->getConflictError($data);
-            if ($error) {
-                $daysNames = [0 => 'الأحد', 1 => 'الإثنين', 2 => 'الثلاثاء', 3 => 'الأربعاء', 4 => 'الخميس', 5 => 'الجمعة', 6 => 'السبت'];
-                $conflicts[] = "يوم {$daysNames[$day]}: {$error}";
-            }
+        // Conflict Detection
+        $conflictError = $this->getConflictError($validated);
+        if ($conflictError) {
+            return back()->withInput()->withErrors(['conflict' => $conflictError]);
         }
 
-        if (count($conflicts) > 0) {
-            return back()->withInput()->withErrors(['conflict' => $conflicts]);
-        }
-
-        foreach ($days as $day) {
-            Schedule::create(array_merge($commonData, ['day_of_week' => $day]));
-        }
-
-        if (request()->ajax() || request()->wantsJson()) {
-            return response()->json(['success' => true, 'message' => 'تم إضافة المواعيد بنجاح']);
-        }
+        Schedule::create($validated);
 
         return redirect()->route('center.schedules.index')
-            ->with('success', 'تم إضافة المواعيد بنجاح');
+            ->with('success', 'تم إضافة الموعد بنجاح');
     }
 
     /**
@@ -133,18 +95,24 @@ class ScheduleController extends Controller
     {
         $this->authorize('update', $schedule);
         $validated = $request->validate([
-            'course_id' => 'required|exists:courses,id',
-            'classroom_id' => 'required|exists:classrooms,id',
+                        'course_id' => 'nullable|exists:courses,id',
+
+                        'classroom_id' => 'nullable|exists:classrooms,id',
+
             'instructor_id' => 'nullable|exists:instructors,id',
-            'day_of_week' => 'required|integer|between:0,6',
-            'start_time' => 'required',
-            'end_time' => 'required|after:start_time',
+                        'day_of_week' => 'nullable|integer|between:0,6',
+
+                        'start_time' => 'nullable',
+
+                        'end_time' => 'nullable|after:start_time',
+
             'max_students' => 'nullable|integer|min:1',
         ]);
 
+        // Conflict Detection (excluding current schedule)
         $conflictError = $this->getConflictError($validated, $schedule->id);
         if ($conflictError) {
-            return back()->withInput()->withErrors(['conflict' => "خطأ: {$conflictError}"]);
+            return back()->withInput()->withErrors(['conflict' => $conflictError]);
         }
 
         $schedule->update($validated);
@@ -161,17 +129,13 @@ class ScheduleController extends Controller
         $this->authorize('delete', $schedule);
         $schedule->delete();
 
-        if (request()->ajax()) {
-            return response()->json(['success' => true]);
-        }
-
         return redirect()->route('center.schedules.index')
             ->with('success', 'تم حذف الموعد بنجاح');
     }
 
     protected function getConflictError($data, $excludeId = null)
     {
-        if (!isset($data['day_of_week']) || empty($data['start_time']) || empty($data['end_time'])) {
+        if (empty($data['day_of_week']) || empty($data['start_time']) || empty($data['end_time'])) {
             return null;
         }
 
@@ -191,7 +155,7 @@ class ScheduleController extends Controller
         if (!empty($data['classroom_id'])) {
             $classroomConflict = (clone $query)->where('classroom_id', $data['classroom_id'])->with('course')->first();
             if ($classroomConflict) {
-                return "هذه القاعة محجوزة لدورة: " . $classroomConflict->course->title;
+                return __('center::schedules.classroom_conflict', ['course' => $classroomConflict->course->title]);
             }
         }
 
@@ -199,7 +163,7 @@ class ScheduleController extends Controller
         if (!empty($data['instructor_id'])) {
             $instructorConflict = (clone $query)->where('instructor_id', $data['instructor_id'])->with('course')->first();
             if ($instructorConflict) {
-                return "هذا المعلم لديه حصة أخرى في نفس الوقت لدورة: " . $instructorConflict->course->title;
+                return __('center::schedules.instructor_conflict', ['course' => $instructorConflict->course->title]);
             }
         }
 
