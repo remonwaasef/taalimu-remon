@@ -532,7 +532,7 @@ document.addEventListener('alpine:init', () => {
                                         required value="{{ old('email') }}">
                                 </div>
                                 <div class="space-y-1">
-                                    <label class="label-compact px-1 font-arabic">{{ __('admin.phone') ?? 'رقم الهاتف' }}</label>
+                                    <label class="label-compact px-1 font-arabic">{{ __('auth.register.phone') }}</label>
                                     <input type="text" name="phone" 
                                         class="w-full h-12 input-compact px-4 text-sm font-medium text-slate-900"
                                         placeholder="010xxxxxxx"

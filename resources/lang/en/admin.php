@@ -226,6 +226,7 @@ return [
         'users_count' => 'Users Count',
         'actions' => 'Actions',
     ],
+    'phone' => 'Phone Number',
     'base_price' => 'Base Price',
     'base_pricing' => 'Base Pricing',
     'price' => 'Price',
