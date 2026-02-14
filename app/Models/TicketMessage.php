@@ -24,6 +24,6 @@ class TicketMessage extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withoutGlobalScope(\App\Scopes\TenantScope::class);
     }
 }
