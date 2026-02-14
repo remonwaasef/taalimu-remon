@@ -2,16 +2,27 @@
 
 @section('title', 'Ticket #' . $ticket->id)
 
+@push('css')
+<link rel="stylesheet" href="{{ asset('css/chat.css') }}">
+@endpush
+
 @section('content')
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Ticket #{{ $ticket->id }}: {{ $ticket->subject }}</h1>
-        <div>
-            <span class="badge badge-{{ $ticket->status == 'open' ? 'success' : 'secondary' }} mr-2">{{ ucfirst($ticket->status) }}</span>
+        <h1 class="h3 mb-0 text-gray-800">
+            <i class="fas fa-headset mr-2 text-primary"></i>
+            Ticket #{{ $ticket->id }}: {{ $ticket->subject }}
+        </h1>
+        <div class="d-flex align-items-center">
+            <span class="badge badge-pill px-3 py-2 badge-{{ $ticket->status == 'open' ? 'success' : 'secondary' }} mr-3">
+                {{ strtoupper($ticket->status) }}
+            </span>
             @if($ticket->status !== 'closed')
                 <form action="{{ route('admin.tickets.close', $ticket->id) }}" method="POST" class="d-inline">
                     @csrf
-                    <button type="submit" class="btn btn-danger btn-sm">Close Ticket</button>
+                    <button type="submit" class="btn btn-danger btn-sm shadow-sm">
+                        <i class="fas fa-times-circle mr-1"></i> Close Ticket
+                    </button>
                 </form>
             @endif
         </div>
@@ -19,49 +30,74 @@
 
     <div class="row">
         <div class="col-lg-8">
-            <!-- Messages -->
-            @foreach($ticket->messages as $message)
-                <div class="card shadow mb-4 {{ $message->user_id == Auth::id() ? 'border-left-primary' : 'border-left-warning' }}">
-                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold {{ $message->user_id == Auth::id() ? 'text-primary' : 'text-warning' }}">
-                            {{ $message->user->name }} ({{ $message->user->role }})
-                        </h6>
-                        <small class="text-muted">{{ $message->created_at->format('M d, Y h:i A') }}</small>
-                    </div>
-                    <div class="card-body">
-                        {{ $message->message }}
-                    </div>
-                </div>
-            @endforeach
-
-            <!-- Reply Form -->
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Reply</h6>
-                </div>
-                <div class="card-body">
-                    <form action="{{ route('admin.tickets.reply', $ticket->id) }}" method="POST">
-                        @csrf
-                        <div class="form-group">
-                            <textarea name="message" class="form-control" rows="3" required placeholder="Type your reply..."></textarea>
+            <div class="chat-container mb-4 shadow-sm">
+                @foreach($ticket->messages as $message)
+                    @php $isMe = $message->user_id == Auth::id(); @endphp
+                    <div class="message {{ $isMe ? 'sent' : 'received' }}">
+                        <div class="message-info">
+                            {{ $message->user->name }}
+                            @if($message->user->role == 'super_admin')
+                                <span class="badge badge-danger badge-role">Admin</span>
+                            @else
+                                <span class="badge badge-info badge-role text-white">{{ $message->user->role }}</span>
+                            @endif
                         </div>
-                        <button type="submit" class="btn btn-primary">Send Reply</button>
-                    </form>
-                </div>
+                        <div class="message-bubble shadow-sm">
+                            {!! nl2br(e($message->message)) !!}
+                            <div class="message-time">
+                                {{ $message->created_at->format('h:i A') }}
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
+
+            @if($ticket->status !== 'closed')
+            <div class="chat-reply-area shadow-sm mb-4">
+                <form action="{{ route('admin.tickets.reply', $ticket->id) }}" method="POST">
+                    @csrf
+                    <textarea name="message" class="form-control" rows="3" required placeholder="Type your response to the center..."></textarea>
+                    <div class="chat-reply-footer">
+                        <button type="submit" class="btn btn-primary px-4 shadow-sm">
+                            <i class="fas fa-paper-plane mr-1"></i> Send Reply
+                        </button>
+                    </div>
+                </form>
+            </div>
+            @endif
         </div>
 
         <div class="col-lg-4">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Ticket Info</h6>
+            <div class="card shadow-sm border-0 mb-4 rounded-lg">
+                <div class="card-header bg-white border-bottom-0 py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Context Information</h6>
                 </div>
                 <div class="card-body">
-                    <p><strong>Tenant:</strong> {{ $ticket->tenant->name }}</p>
-                    <p><strong>User:</strong> {{ $ticket->user->name }}</p>
-                    <p><strong>Category:</strong> {{ ucfirst($ticket->category) }}</p>
-                    <p><strong>Priority:</strong> {{ ucfirst($ticket->priority) }}</p>
-                    <p><strong>Created:</strong> {{ $ticket->created_at->format('M d, Y') }}</p>
+                    <div class="mb-3">
+                        <small class="text-uppercase text-muted font-weight-bold">Center / Tenant</small>
+                        <div class="h6 font-weight-bold text-gray-800">{{ $ticket->tenant->name }}</div>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-uppercase text-muted font-weight-bold">Requester</small>
+                        <div class="text-gray-700">{{ $ticket->user->name }}</div>
+                    </div>
+                    <hr>
+                    <div class="mb-3">
+                        <small class="text-uppercase text-muted font-weight-bold">Category</small>
+                        <div class="text-gray-700">{{ ucfirst($ticket->category) }}</div>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-uppercase text-muted font-weight-bold">Priority</small>
+                        <div>
+                            <span class="badge badge-{{ $ticket->priority == 'high' ? 'danger' : ($ticket->priority == 'medium' ? 'warning' : 'info') }}">
+                                {{ strtoupper($ticket->priority) }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mb-0">
+                        <small class="text-uppercase text-muted font-weight-bold">Created On</small>
+                        <div class="text-gray-700">{{ $ticket->created_at->format('M d, Y') }}</div>
+                    </div>
                 </div>
             </div>
         </div>
