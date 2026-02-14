@@ -1,4 +1,4 @@
-/* Professional Chat Interface */
+/* Professional Chat Interface - V2 Premium */
 .chat-container {
     padding: 24px;
     background: #fdfdfd;
@@ -7,113 +7,122 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    gap: 20px;
+    background-image: radial-gradient(#e5e7eb 0.5px, transparent 0.5px);
+    background-size: 20px 20px;
 }
 
 .message {
     display: flex;
     flex-direction: column;
-    max-width: 80%;
-    margin-bottom: 8px;
+    max-width: 85%;
+    position: relative;
 }
 
-/* Alignment for RTL and LTR support */
+/* Base Alignment: Default to Left */
+.message.received {
+    align-self: flex-start;
+    align-items: flex-start;
+}
+
+/* Default Sent: Right */
+.message.sent {
+    align-self: flex-end;
+    align-items: flex-end;
+}
+
+/* RTL Specific Overrides if needed, but flex-end/start usually follow direction */
 [dir="rtl"] .message.sent {
     align-self: flex-start;
     align-items: flex-start;
 }
+
 [dir="rtl"] .message.received {
     align-self: flex-end;
     align-items: flex-end;
 }
 
-[dir="ltr"] .message.sent {
-    align-self: flex-end;
-    align-items: flex-end;
+/* Bubble Styling */
+.message-bubble {
+    padding: 14px 20px;
+    border-radius: 20px;
+    font-size: 1rem;
+    line-height: 1.6;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    word-wrap: break-word;
+    white-space: pre-line;
 }
-[dir="ltr"] .message.received {
-    align-self: flex-start;
-    align-items: flex-start;
+
+/* Sent Bubbles (Blue/Indigo Gradient) */
+.message.sent .message-bubble {
+    background: linear-gradient(135deg, #3A0CA3 0%, #2A4DFF 100%);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+/* Received Bubbles (White/Gray) */
+.message.received .message-bubble {
+    background-color: #ffffff;
+    color: #1e293b;
+    border: 1px solid #f1f5f9;
+    border-bottom-left-radius: 4px;
 }
 
 .message-info {
-    font-size: 0.8rem;
-    font-weight: 600;
-    margin-bottom: 4px;
-    color: #4a5568;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
-
-.message-bubble {
-    padding: 12px 18px;
-    border-radius: 18px;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    position: relative;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-/* Sent Messages (Current User) */
-.message.sent .message-bubble {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-}
-
-[dir="rtl"] .message.sent .message-bubble { border-bottom-right-radius: 4px; }
-[dir="ltr"] .message.sent .message-bubble { border-bottom-right-radius: 4px; }
-
-/* Received Messages (Others) */
-.message.received .message-bubble {
-    background-color: #ffffff;
-    color: #2d3748;
-    border: 1px solid #edf2f7;
-}
-
-[dir="rtl"] .message.received .message-bubble { border-bottom-left-radius: 4px; }
-[dir="ltr"] .message.received .message-bubble { border-bottom-left-radius: 4px; }
 
 .message-time {
     font-size: 0.7rem;
-    margin-top: 6px;
-    color: #a0aec0;
+    margin-top: 8px;
+    opacity: 0.7;
 }
 
 .message.sent .message-time {
-    color: rgba(255, 255, 255, 0.8);
+    text-align: right;
+    color: rgba(255, 255, 255, 0.9);
 }
 
-/* Role Badges */
-.badge-role {
+.message.received .message-time {
+    color: #94a3b8;
+}
+
+/* Support Badge */
+.support-badge {
+    background: #ef4444;
+    color: white;
     font-size: 0.65rem;
-    padding: 2px 6px;
-    border-radius: 10px;
-    margin-left: 5px;
+    padding: 2px 8px;
+    border-radius: 20px;
     text-transform: uppercase;
-    font-weight: 800;
+    letter-spacing: 0.5px;
 }
 
+/* Reply Area Fixes */
 .chat-reply-area {
-    margin-top: 24px;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    margin-top: 20px;
+    padding: 10px;
+    transition: all 0.3s ease;
+}
+
+.chat-reply-area:focus-within {
+    box-shadow: 0 10px 15px -3px rgba(58, 12, 163, 0.1);
+    border-color: #3A0CA3;
 }
 
 .chat-reply-area textarea {
-    border: none;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent;
+    font-size: 1rem;
     padding: 15px;
-    resize: none;
-    font-size: 0.95rem;
-}
-
-.chat-reply-area textarea:focus {
-    box-shadow: none;
-}
-
-.chat-reply-footer {
-    padding: 10px 15px;
-    background-color: #f7fafc;
-    border-top: 1px solid #edf2f7;
-    display: flex;
-    justify-content: flex-end;
 }

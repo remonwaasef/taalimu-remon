@@ -2,8 +2,13 @@
 
 @section('title', 'Ticket #' . $ticket->id)
 
-@push('css')
+@push('styles')
 <link rel="stylesheet" href="{{ asset('css/chat.css') }}">
+<style>
+    /* Inline safety overrides */
+    .chat-container { display: flex !important; flex-direction: column !important; }
+    .message { display: flex !important; margin-bottom: 12px !important; }
+</style>
 @endpush
 
 @section('content')
