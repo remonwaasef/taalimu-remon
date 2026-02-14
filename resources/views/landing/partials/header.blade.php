@@ -29,6 +29,8 @@
                     {{ __('landing.nav.start_trial') }}
                 </a>
                 
+                <x-pwa-install />
+                
                 <!-- Language Switcher Dropdown -->
                 <div x-data="{ langOpen: false }" class="relative">
                     <button 
@@ -101,6 +103,8 @@
                     <a href="{{ route('register') }}" class="inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2 w-full">
                         {{ __('landing.nav.start_trial') }}
                     </a>
+                    
+                    <x-pwa-install buttonClass="inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-accent text-accent-foreground shadow hover:bg-accent/90 h-10 px-4 py-2 w-full" />
                     
                     <!-- Language Options -->
                     <div class="pt-2 border-t border-border/50">

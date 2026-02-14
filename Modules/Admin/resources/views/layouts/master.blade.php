@@ -510,6 +510,8 @@
                         @endforeach
                     </ul>
                 </div>
+
+                <x-pwa-install buttonClass="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-bold d-flex align-items-center gap-2" />
                 
                 <!-- Quick Search or Notification could go here -->
             </div>
