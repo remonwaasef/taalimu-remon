@@ -14,6 +14,7 @@ class TicketService
     public function reply(Ticket $ticket, string $message)
     {
         $ticketMessage = TicketMessage::create([
+            'tenant_id' => $ticket->tenant_id,
             'ticket_id' => $ticket->id,
             'user_id' => Auth::id(),
             'message' => $message,
@@ -49,6 +50,7 @@ class TicketService
         ]);
 
         TicketMessage::create([
+            'tenant_id' => $ticket->tenant_id,
             'ticket_id' => $ticket->id,
             'user_id' => Auth::id(),
             'message' => $data['message'],
