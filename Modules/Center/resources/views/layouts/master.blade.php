@@ -733,7 +733,7 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 // Add timestamp to bust CDN cache
-                navigator.serviceWorker.register('/service-worker.js?v=4')
+                navigator.serviceWorker.register('/service-worker.js?v=5')
                     .then(reg => console.log('SW registered:', reg.scope))
                     .catch(err => console.log('SW failed:', err));
             });
@@ -766,7 +766,6 @@
             });
         @endif
 
-        // Real-time Risk Detection Listener
         document.addEventListener('DOMContentLoaded', function() {
             if (window.Echo) {
                 console.log('Echo initialized, subscribing to channel: center.{{ $tenant->id }}');
@@ -774,10 +773,6 @@
                     .listen('.risk.detected', (e) => {
                         console.log('Risk Event Received:', e);
                         
-                        // Play a sound (optional, but good for "Engine" feel)
-                        // const audio = new Audio('/sounds/alert.mp3'); 
-                        // audio.play().catch(e => console.log('Audio blocked'));
-
                         Toast.fire({
                             icon: 'warning',
                             title: '⚠️ ' + (e.message || 'Risk Detected'),
@@ -786,7 +781,7 @@
                         });
                     });
             } else {
-                console.error('Laravel Echo not loaded');
+                console.log('Real-time notifications not enabled (Echo not loaded).');
             }
         });
     </script>
