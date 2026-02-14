@@ -139,6 +139,12 @@ class IdentifyTenant
                 'tenant_domain' => $tenant->domain
             ]);
 
+            // Set timezone dynamically for multi-region support
+            if ($tenant->timezone) {
+                date_default_timezone_set($tenant->timezone);
+                config(['app.timezone' => $tenant->timezone]);
+            }
+
             // Dynamically set log file for this tenant
             config(['logging.channels.single.path' => storage_path("logs/tenant_{$tenant->id}.log")]);
             config(['logging.channels.daily.path' => storage_path("logs/tenant_{$tenant->id}.log")]);

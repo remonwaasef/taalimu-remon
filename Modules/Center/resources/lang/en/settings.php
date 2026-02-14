@@ -18,6 +18,7 @@ return [
         'email' => 'Email Address',
         'address' => 'Address',
         'description' => 'Description',
+        'timezone' => 'Local Timezone',
         'social_links' => 'Social Links',
         'facebook' => 'Facebook Link',
         'instagram' => 'Instagram Link',

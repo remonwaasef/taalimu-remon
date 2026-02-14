@@ -130,6 +130,17 @@
                                     <label class="form-label fw-bold small text-muted">{{ __('center::settings.general.description') }}</label>
                                     <textarea name="description" class="form-control" rows="3">{{ old('description', $tenant->description) }}</textarea>
                                 </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.general.timezone') }}</label>
+                                    <select name="timezone" class="form-select select2">
+                                        @foreach(timezone_identifiers_list() as $timezone)
+                                            <option value="{{ $timezone }}" {{ $tenant->timezone == $timezone ? 'selected' : '' }}>
+                                                {{ $timezone }} ({{ \Carbon\Carbon::now($timezone)->format('h:i A') }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <small class="text-muted">{{ __('center::settings.general.timezone_help') ?? 'يستخدم هذا التوقيت في جميع كشوف التحضير والتقارير.' }}</small>
+                                </div>
 
                                 <!-- Social Media Links -->
                                 <div class="col-12 mt-4">
