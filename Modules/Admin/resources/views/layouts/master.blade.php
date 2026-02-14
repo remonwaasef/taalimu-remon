@@ -26,6 +26,15 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Taalimu">
+
+    <script>
+        window.pwaDeferredPrompt = window.pwaDeferredPrompt || null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            window.pwaDeferredPrompt = e;
+            window.dispatchEvent(new CustomEvent('pwa-prompt-available'));
+        });
+    </script>
     
     
     

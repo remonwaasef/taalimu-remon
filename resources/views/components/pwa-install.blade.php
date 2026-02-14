@@ -50,14 +50,30 @@
             deferredPrompt: null,
             canInstall: false,
             init() {
+                // Check if prompt was already captured by global listener
+                if (window.pwaDeferredPrompt) {
+                    this.deferredPrompt = window.pwaDeferredPrompt;
+                    this.canInstall = true;
+                }
+
+                // Listen for potential new prompts or late-firing events
                 window.addEventListener('beforeinstallprompt', (e) => {
                     e.preventDefault();
                     this.deferredPrompt = e;
                     this.canInstall = true;
                 });
 
+                // Custom event dispatched by global layout listener
+                window.addEventListener('pwa-prompt-available', () => {
+                    if (window.pwaDeferredPrompt) {
+                        this.deferredPrompt = window.pwaDeferredPrompt;
+                        this.canInstall = true;
+                    }
+                });
+
                 window.addEventListener('appinstalled', () => {
                     this.deferredPrompt = null;
+                    window.pwaDeferredPrompt = null;
                     this.canInstall = false;
                 });
 
@@ -66,11 +82,14 @@
                 }
             },
             async installApp() {
-                if (!this.deferredPrompt) return;
-                this.deferredPrompt.prompt();
-                const { outcome } = await this.deferredPrompt.userChoice;
+                const prompt = this.deferredPrompt || window.pwaDeferredPrompt;
+                if (!prompt) return;
+                
+                prompt.prompt();
+                const { outcome } = await prompt.userChoice;
                 if (outcome === 'accepted') {
                     this.deferredPrompt = null;
+                    window.pwaDeferredPrompt = null;
                     this.canInstall = false;
                 }
             }
