@@ -27,7 +27,7 @@
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
     <!-- PWA Support -->
-    <link rel="manifest" href="/manifest.json?v=2">
+    <link rel="manifest" href="/manifest.json?v=3">
     <meta name="theme-color" content="#3A0CA3">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -179,11 +179,17 @@
         @endif
     </script>
 
-    <!-- Service Worker Registration -->
+    <!-- Service Worker Registration & PWA Redirection -->
     <script>
+        // Redirect to login if opened as PWA from home page
+        if (window.matchMedia('(display-mode: standalone)').matches && 
+            (window.location.pathname === '/' || window.location.pathname === '')) {
+            window.location.href = '/login';
+        }
+
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
+                navigator.serviceWorker.register('/service-worker.js?v=6')
                     .then((reg) => console.log('SW registered:', reg.scope))
                     .catch((err) => console.log('SW failed:', err));
             });

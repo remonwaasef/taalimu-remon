@@ -21,7 +21,7 @@
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     
     <!-- PWA Support -->
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="/manifest.json?v=3">
     <meta name="theme-color" content="#3A0CA3">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -625,7 +625,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
+                navigator.serviceWorker.register('/service-worker.js?v=6')
                     .then((reg) => console.log('SW registered:', reg.scope))
                     .catch((err) => console.log('SW failed:', err));
             });

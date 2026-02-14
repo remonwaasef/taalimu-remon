@@ -1,4 +1,4 @@
-const CACHE_NAME = 'taalimu-v5';
+const CACHE_NAME = 'taalimu-v6';
 
 self.addEventListener('install', () => {
     console.log('[Taalimu SW] Installing v5...');
