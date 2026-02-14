@@ -60,7 +60,7 @@ class User extends Authenticatable
     public function getActivitylogOptions(): LogOptions
     {
         $options = LogOptions::defaults()
-            ->logOnly(['name', 'email', 'role', 'tenant_id'])
+            ->logOnly(['name', 'email', 'phone', 'role', 'tenant_id'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
 
@@ -80,6 +80,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'password',
         'role',
         'tenant_id',

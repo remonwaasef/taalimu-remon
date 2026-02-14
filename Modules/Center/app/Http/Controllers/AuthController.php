@@ -104,23 +104,34 @@ class AuthController extends Controller
                 if ($instructor && $instructor->user_id) {
                     $user = \App\Models\User::find($instructor->user_id);
                 } else {
-                    // 3. Try Center Admin (using tenant phone)
-                    $tenant = app('tenant');
-                    if ($tenant && $tenant->phone) {
-                        $tenantPhone = preg_replace('/[^0-9]/', '', $tenant->phone);
-                        $inputPhone = preg_replace('/[^0-9]/', '', $request->email);
-                        
-                        if ($tenantPhone === $inputPhone || 
-                            '0' . $tenantPhone === $inputPhone || 
-                            $tenantPhone === '0' . $inputPhone ||
-                            substr($tenantPhone, 1) === $inputPhone ||
-                            $tenantPhone === substr($inputPhone, 1)) {
+                    // 3. Try User table directly (for center_admin or others without separate profiles)
+                    $user = \App\Models\User::where('tenant_id', app('tenant')->id)
+                        ->where(function($q) use ($request, $phone) {
+                            $q->where('phone', $request->email)
+                              ->orWhere('phone', $phone)
+                              ->orWhere('phone', '0' . $phone)
+                              ->orWhere('phone', substr($phone, 1));
+                        })->first();
+
+                    if (!$user) {
+                        // 4. Try Center Admin (using tenant phone)
+                        $tenant = app('tenant');
+                        if ($tenant && $tenant->phone) {
+                            $tenantPhone = preg_replace('/[^0-9]/', '', $tenant->phone);
+                            $inputPhone = preg_replace('/[^0-9]/', '', $request->email);
                             
-                            // Find the primary center admin
-                            $user = \App\Models\User::where('tenant_id', $tenant->id)
-                                ->where('role', 'center_admin')
-                                ->orderBy('id', 'asc')
-                                ->first();
+                            if ($tenantPhone === $inputPhone || 
+                                '0' . $tenantPhone === $inputPhone || 
+                                $tenantPhone === '0' . $inputPhone ||
+                                substr($tenantPhone, 1) === $inputPhone ||
+                                $tenantPhone === substr($inputPhone, 1)) {
+                                
+                                // Find the primary center admin
+                                $user = \App\Models\User::where('tenant_id', $tenant->id)
+                                    ->where('role', 'center_admin')
+                                    ->orderBy('id', 'asc')
+                                    ->first();
+                            }
                         }
                     }
                 }

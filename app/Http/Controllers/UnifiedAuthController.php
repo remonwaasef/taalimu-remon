@@ -16,10 +16,16 @@ class UnifiedAuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
+        $loginData = $request->validate([
+            'email' => ['required', 'string'],
             'password' => ['required'],
         ]);
+
+        $loginField = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
+        $credentials = [
+            $loginField => $request->email,
+            'password' => $request->password,
+        ];
 
         // Try to authenticate
         if (Auth::attempt($credentials)) {

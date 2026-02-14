@@ -517,7 +517,7 @@ document.addEventListener('alpine:init', () => {
 
 
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div class="space-y-1">
                                     <label class="label-compact px-1 font-arabic">{{ __('auth.register.full_name') }}</label>
                                     <input type="text" name="name" 
@@ -530,6 +530,13 @@ document.addEventListener('alpine:init', () => {
                                         class="w-full h-12 input-compact px-4 text-sm font-medium text-slate-900"
                                         placeholder="mail@example.com"
                                         required value="{{ old('email') }}">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="label-compact px-1 font-arabic">{{ __('admin.phone') ?? 'رقم الهاتف' }}</label>
+                                    <input type="text" name="phone" 
+                                        class="w-full h-12 input-compact px-4 text-sm font-medium text-slate-900"
+                                        placeholder="010xxxxxxx"
+                                        required value="{{ old('phone') }}">
                                 </div>
                             </div>
 
