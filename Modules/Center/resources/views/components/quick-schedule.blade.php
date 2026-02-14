@@ -96,8 +96,20 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('quickScheduleLoading').style.display = 'block';
         document.getElementById('quickScheduleContent').style.display = 'none';
         
-        const bootstrapModal = new bootstrap.Modal(modal);
-        bootstrapModal.show();
+        const modalEl = document.getElementById('quickScheduleModal');
+        // Check if bootstrap is available (Vite bundle might be loading)
+        if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+            let bootstrapModal = bootstrap.Modal.getInstance(modalEl);
+            if (!bootstrapModal) {
+                bootstrapModal = new bootstrap.Modal(modalEl);
+            }
+            bootstrapModal.show();
+        } else {
+            // Fallback for immediate click if Vite is slow
+            console.warn('Bootstrap is not loaded yet');
+            alert('يتم الآن تحميل ملفات النظام، يرجى المحاولة بعد قليل...');
+            return;
+        }
 
         loadMetadata().then(() => {
             loadCourseSchedules(courseId);
