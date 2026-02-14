@@ -67,7 +67,8 @@ class Tenant extends Model
                 'linkedin_url', 
                 'domain', 
                 'status',
-                'settings'
+                'settings',
+                'timezone'
             ])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
@@ -90,6 +91,7 @@ class Tenant extends Model
         'database_name',
         'status',
         'settings',
+        'timezone',
     ];
 
     /**

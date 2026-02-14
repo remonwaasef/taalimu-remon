@@ -35,6 +35,7 @@ class SettingsController extends Controller
             'twitter_url' => 'nullable|url',
             'youtube_url' => 'nullable|url',
             'linkedin_url' => 'nullable|url',
+            'timezone' => 'nullable|string|in:' . implode(',', timezone_identifiers_list()),
             'logo' => 'nullable|image|max:2048',
             'favicon' => 'nullable|image|max:1024',
             'settings' => 'nullable|array',
@@ -50,6 +51,7 @@ class SettingsController extends Controller
         $tenant->twitter_url = $request->twitter_url;
         $tenant->youtube_url = $request->youtube_url;
         $tenant->linkedin_url = $request->linkedin_url;
+        $tenant->timezone = $request->timezone;
 
         // Retrieve current settings or init array for academic/financial/appearance
         $settings = $tenant->settings ?? [];

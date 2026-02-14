@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tenants', function (Blueprint $table) {
-            //
+            $table->string('timezone')->default('Africa/Cairo')->after('linkedin_url');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('tenants', function (Blueprint $table) {
-            //
+            $table->dropColumn('timezone');
         });
     }
 };
