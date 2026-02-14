@@ -44,8 +44,8 @@ class SubscriptionService
         if ($subscription->relationLoaded('package') && $subscription->package && $subscription->package->relationLoaded('features')) {
             $packageFeature = $subscription->package->features->firstWhere('code', $featureCode);
         } else {
-            // Fallback to DB if not loaded for some reason
-            $package = $subscription->package;
+            // Use resolved_package attribute which has fallbacks for demo/mismatched price IDs
+            $package = $subscription->resolved_package;
             if (!$package) return false;
             $packageFeature = $package->features()->where('code', $featureCode)->first();
         }

@@ -84,12 +84,15 @@ class PaymentController extends Controller
                 ->first();
 
             if (!$existingSub) {
+                $priceSlug = session('selected_plan', 'pro');
+                // Ensure slug is consistent with Package model ('basic' instead of 'starter' if that's what's used)
+                
                 \App\Models\Subscription::create([
                     'tenant_id' => $tenant->id,
                     'name' => 'default',
                     'stripe_id' => 'sub_demo_' . \Illuminate\Support\Str::random(10),
                     'stripe_status' => 'active',
-                    'stripe_price' => 'price_demo_' . session('selected_plan', 'pro'),
+                    'stripe_price' => 'price_demo_' . $priceSlug,
                     'quantity' => 1,
                     'ends_at' => session('billing_cycle') === 'yearly' ? now()->addYear() : now()->addDays(30),
                     'status' => 'active',

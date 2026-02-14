@@ -80,7 +80,7 @@ class PackageSeeder extends Seeder
                 'name' => 'البداية',
                 'name_en' => 'Starter',
                 'slug' => 'basic', // Keeping slug 'basic'
-                'stripe_price_id' => 'price_starter',
+                'stripe_price_id' => config('services.stripe.price_basic') ?: 'price_starter',
                 'price' => 250.00,
                 'yearly_price' => 2500.00,
                 'old_price' => 350.00,
@@ -116,7 +116,7 @@ class PackageSeeder extends Seeder
                 'name' => 'النمو',
                 'name_en' => 'Growth',
                 'slug' => 'pro', // Keeping slug 'pro'
-                'stripe_price_id' => 'price_growth',
+                'stripe_price_id' => config('services.stripe.price_pro') ?: 'price_growth',
                 'price' => 600.00,
                 'yearly_price' => 6000.00,
                 'old_price' => 800.00,
