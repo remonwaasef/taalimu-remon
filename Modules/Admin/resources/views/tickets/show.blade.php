@@ -37,20 +37,23 @@
         <div class="col-lg-8">
             <div class="chat-container mb-4">
                 @foreach($ticket->messages as $message)
-                    @php $isMe = $message->user_id == Auth::id(); @endphp
-                    <div class="message {{ $isMe ? 'sent' : 'received' }}">
-                        <div class="message-info">
-                            <span>{{ $message->user->name }}</span>
-                            @if($message->user->role == 'super_admin')
-                                <span class="badge-support">Support</span>
-                            @else
-                                <span class="badge bg-info text-white" style="font-size: 0.6rem;">{{ $message->user->role }}</span>
-                            @endif
-                        </div>
-                        <div class="message-bubble">
-                            {!! nl2br(e($message->message)) !!}
-                            <div class="message-time">
-                                {{ $message->created_at->format('h:i A') }}
+                    @php 
+                        $isMe = $message->user_id == Auth::id(); 
+                        $initials = strtoupper(substr($message->user->name, 0, 1) . substr(explode(' ', $message->user->name)[1] ?? '', 0, 1));
+                    @endphp
+                    <div class="message-wrapper {{ $isMe ? 'sent' : 'received' }}">
+                        <div class="chat-avatar">{{ $initials }}</div>
+                        <div class="message-content">
+                            <div class="message-bubble">
+                                {!! nl2br(e($message->message)) !!}
+                            </div>
+                            <div class="message-meta">
+                                @if($message->user->role == 'super_admin')
+                                    <span class="badge-support">Admin</span>
+                                @else
+                                    <span class="badge badge-sm bg-light text-dark font-weight-normal border">{{ $message->user->role }}</span>
+                                @endif
+                                {{ $message->user->name }} • {{ $message->created_at->format('h:i A') }}
                             </div>
                         </div>
                     </div>
@@ -58,14 +61,13 @@
             </div>
 
             @if($ticket->status !== 'closed')
-            <div class="chat-reply-container mb-4">
+            <div class="chat-reply-area mb-4 shadow-sm">
                 <form action="{{ route('admin.tickets.reply', $ticket->id) }}" method="POST">
                     @csrf
-                    <textarea name="message" class="form-control" rows="3" required placeholder="Response to the center..."></textarea>
-                    <div class="chat-reply-actions p-3">
-                        <button type="submit" class="btn-send">
-                            <span>Send Message</span>
-                            <i class="fas fa-paper-plane"></i>
+                    <textarea name="message" rows="2" required placeholder="Type your response..."></textarea>
+                    <div class="reply-footer">
+                        <button type="submit" class="btn btn-primary btn-sm px-4">
+                            Send Response <i class="fas fa-paper-plane ms-1"></i>
                         </button>
                     </div>
                 </form>
