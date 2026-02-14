@@ -33,6 +33,17 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Taalimu">
 
+    <script>
+        // Global PWA State Handler
+        window.pwaDeferredPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            window.pwaDeferredPrompt = e;
+            // Dispatch custom event for components that are already loaded
+            window.dispatchEvent(new CustomEvent('pwa-prompt-available'));
+        });
+    </script>
+
     <!-- Scripts -->
     @vite(['resources/css/landing-new.css'])
     <!-- SweetAlert2 -->
