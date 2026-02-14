@@ -35,39 +35,44 @@
 
     <div class="row">
         <div class="col-lg-8">
-            <div class="chat-container mb-4">
+            <div class="chat-wrapper mb-4">
                 @foreach($ticket->messages as $message)
                     @php 
                         $isMe = $message->user_id == Auth::id(); 
-                        $initials = strtoupper(substr($message->user->name, 0, 1) . substr(explode(' ', $message->user->name)[1] ?? '', 0, 1));
+                        $senderName = $message->user->name;
+                        $initials = mb_substr($senderName, 0, 1, 'UTF-8');
+                        if (str_contains($senderName, ' ')) {
+                            $parts = explode(' ', $senderName);
+                            if (isset($parts[1])) {
+                                $initials .= mb_substr($parts[1], 0, 1, 'UTF-8');
+                            }
+                        }
                     @endphp
-                    <div class="message-wrapper {{ $isMe ? 'sent' : 'received' }}">
+                    <div class="chat-item {{ $isMe ? 'sent' : 'received' }}">
                         <div class="chat-avatar">{{ $initials }}</div>
-                        <div class="message-content">
-                            <div class="message-bubble">
-                                {!! nl2br(e($message->message)) !!}
-                            </div>
-                            <div class="message-meta">
-                                @if($message->user->role == 'super_admin')
-                                    <span class="badge-support">Admin</span>
-                                @else
-                                    <span class="badge badge-sm bg-light text-dark font-weight-normal border">{{ $message->user->role }}</span>
-                                @endif
-                                {{ $message->user->name }} • {{ $message->created_at->format('h:i A') }}
-                            </div>
+                        <div class="chat-bubble">
+                            {!! nl2br(e($message->message)) !!}
+                        </div>
+                        <div class="chat-meta">
+                            @if($message->user->role == 'super_admin')
+                                <span class="support-label">Support</span>
+                            @else
+                                <span class="badge bg-light text-dark border me-1" style="font-size: 0.65rem;">{{ $message->user->role }}</span>
+                            @endif
+                            {{ $senderName }} • {{ $message->created_at->format('h:i A') }}
                         </div>
                     </div>
                 @endforeach
             </div>
 
             @if($ticket->status !== 'closed')
-            <div class="chat-reply-area mb-4 shadow-sm">
+            <div class="reply-well mb-4">
                 <form action="{{ route('admin.tickets.reply', $ticket->id) }}" method="POST">
                     @csrf
-                    <textarea name="message" rows="2" required placeholder="Type your response..."></textarea>
-                    <div class="reply-footer">
-                        <button type="submit" class="btn btn-primary btn-sm px-4">
-                            Send Response <i class="fas fa-paper-plane ms-1"></i>
+                    <textarea name="message" rows="2" required placeholder="Type your message..."></textarea>
+                    <div class="reply-btn-container">
+                        <button type="submit" class="btn btn-primary px-4">
+                            Send Reply <i class="fas fa-paper-plane ms-2"></i>
                         </button>
                     </div>
                 </form>
