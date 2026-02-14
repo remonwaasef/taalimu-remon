@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tenant;
+use App\Services\TelegramService;
 
 class PaymentController extends Controller
 {
-    public function success(Request $request)
+    public function success(Request $request, TelegramService $telegram)
     {
         $sessionId = $request->get('session_id');
 
@@ -28,6 +29,11 @@ class PaymentController extends Controller
 
             // Mark registration as successful for the view
             session(['registration_success' => true]);
+
+            // Notify Admin
+            $tenant = Tenant::find(session('tenant_id'));
+            $user = \App\Models\User::where('tenant_id', $tenant->id)->where('role', 'center_admin')->first();
+            $telegram->sendRegistrationAlert($tenant, $user, '******** (Password set during registration)');
 
             return redirect()->route('registration.success');
         }
@@ -66,7 +72,7 @@ class PaymentController extends Controller
         return view('auth.payment-demo', compact('package', 'tenant', 'couponCode', 'discountAmount', 'totalAmount', 'basePrice', 'billingCycle'));
     }
 
-    public function demoSuccess()
+    public function demoSuccess(TelegramService $telegram)
     {
         // Simulate successful payment in demo mode
         if (!session('tenant_id')) {
@@ -115,6 +121,11 @@ class PaymentController extends Controller
         }
 
         session(['registration_success' => true]);
+
+        // Notify Admin
+        $user = \App\Models\User::where('tenant_id', $tenant->id)->where('role', 'center_admin')->first();
+        $telegram->sendRegistrationAlert($tenant, $user, '******** (Password set during registration)');
+
         return redirect()->route('registration.success');
     }
 }
