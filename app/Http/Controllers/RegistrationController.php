@@ -109,6 +109,7 @@ class RegistrationController extends Controller
             'center_name' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
+            'phone' => 'required|string|max:20|unique:users,phone',
             'password' => [
                 'required', 
                 'string', 
@@ -157,7 +158,7 @@ class RegistrationController extends Controller
             $tenant = Tenant::create([
                 'name' => $request->center_name,
                 'email' => $request->email,
-                'phone' => null, 
+                'phone' => $request->phone, 
                 'domain' => $subdomain,
                 'database_name' => 'edu_central', // Shared DB for now
                 'status' => 'active', 
@@ -167,6 +168,7 @@ class RegistrationController extends Controller
             $user = new User([
                 'name' => $request->name,
                 'email' => $request->email,
+                'phone' => $request->phone,
                 'password' => Hash::make($request->password),
                 'locale' => session('locale', 'ar'),
             ]);

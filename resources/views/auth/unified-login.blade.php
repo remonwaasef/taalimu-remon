@@ -27,17 +27,17 @@
                 @csrf
                 
                 <div>
-                    <label for="email" class="block text-sm font-bold text-muted-foreground mb-2">{{ __('auth.login.email') }}</label>
+                    <label for="email" class="block text-sm font-bold text-muted-foreground mb-2">{{ __('auth.login.email') }} / {{ __('admin.phone') ?? 'رقم الهاتف' }}</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 start-0 ps-3 flex items-center pointer-events-none">
-                            <i class="fas fa-envelope text-muted-foreground"></i>
+                            <i class="fas fa-user text-muted-foreground"></i>
                         </div>
-                        <input type="email" 
+                        <input type="text" 
                                id="email" 
                                name="email" 
                                value="{{ old('email') }}" 
                                class="block w-full ps-10 py-3 bg-muted/30 border border-border rounded-xl text-foreground focus:ring-2 focus:ring-primary focus:border-primary transition-colors @error('email') border-red-500 @enderror" 
-                               placeholder="name@example.com"
+                               placeholder="{{ __('auth.login.email') }} / {{ __('admin.phone') ?? 'رقم الهاتف' }}"
                                required 
                                autofocus>
                     </div>
