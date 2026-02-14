@@ -88,6 +88,11 @@ class AttendanceController extends Controller
             'status' => 'required|in:present,late,absent',
             'session_date' => 'required|date|before_or_equal:today',
         ]);
+        
+        $schedule = Schedule::findOrFail($validated['schedule_id']);
+        if (now()->isAfter(Carbon::parse($schedule->end_time))) {
+            return back()->with('error', 'لا يمكن تسجيل الحضور بعد انتهاء وقت الحصة');
+        }
 
         $this->attendanceService->markAttendance(array_merge($validated, [
             'tenant_id' => app('tenant')->id
@@ -123,6 +128,10 @@ class AttendanceController extends Controller
 
         if ($this->attendanceService->hasAttendedToday($student->id, $schedule->id)) {
             return view('center::attendance.success', ['message' => 'تم تسجيل حضورك بالفعل لهذه الحصة اليوم!']);
+        }
+
+        if (now()->isAfter(Carbon::parse($schedule->end_time))) {
+            return view('center::attendance.success', ['message' => 'عذراً، انتهى وقت تسجيل الحضور لهذه الحصة.']);
         }
 
         $this->attendanceService->markAttendance([

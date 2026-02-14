@@ -38,13 +38,23 @@
                                             <div class="small text-muted"><i class="bi bi-geo-alt me-1"></i>{{ $session->classroom->name ?? __('center::schedules.classroom') }}</div>
                                         </td>
                                         <td class="text-center">
+                                            @php
+                                                $sessionEnd = \Carbon\Carbon::parse($session->end_time);
+                                                $isEnded = now()->isAfter($sessionEnd);
+                                            @endphp
                                             <div class="d-flex justify-content-center gap-2">
-                                                <a href="{{ route('center.attendance.show', $session) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                                    <i class="bi bi-card-checklist me-1"></i> التحضير اليدوي
-                                                </a>
-                                                <a href="{{ route('center.attendance.qr', $session) }}" class="btn btn-sm btn-primary rounded-pill px-3">
-                                                    <i class="bi bi-qr-code me-1"></i> عرض الـ QR
-                                                </a>
+                                                @if($isEnded)
+                                                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2">
+                                                        <i class="bi bi-calendar-x me-1"></i> انتهى وقت الحصة
+                                                    </span>
+                                                @else
+                                                    <a href="{{ route('center.attendance.show', $session) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                                        <i class="bi bi-card-checklist me-1"></i> التحضير اليدوي
+                                                    </a>
+                                                    <a href="{{ route('center.attendance.qr', $session) }}" class="btn btn-sm btn-primary rounded-pill px-3">
+                                                        <i class="bi bi-qr-code me-1"></i> عرض الـ QR
+                                                    </a>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
