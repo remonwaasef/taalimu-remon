@@ -283,6 +283,7 @@ $tenantRoutes = function () {
             // QR Attendance
             Route::get('attendance/qr/{schedule}', [AttendanceController::class, 'showQr'])->name('center.attendance.qr');
             Route::get('attendance/mark/{schedule}', [AttendanceController::class, 'markByQr'])->name('center.attendance.markByQr');
+            Route::post('attendance/bulk-absent/{schedule}', [AttendanceController::class, 'bulkAbsent'])->name('center.attendance.bulkAbsent');
         });
 
         // General Settings

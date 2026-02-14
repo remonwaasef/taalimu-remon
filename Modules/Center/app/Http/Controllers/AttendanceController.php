@@ -90,15 +90,47 @@ class AttendanceController extends Controller
         ]);
         
         $schedule = Schedule::findOrFail($validated['schedule_id']);
-        if (now()->isAfter(Carbon::parse($schedule->end_time))) {
-            return back()->with('error', 'لا يمكن تسجيل الحضور بعد انتهاء وقت الحصة');
+        if (now()->isAfter(Carbon::parse($schedule->end_time)) && $validated['status'] !== 'absent') {
+            return back()->with('error', 'لا يمكن تسجيل الحضور بعد انتهاء وقت الحصة (يمكنك فقط تسجيل الغياب)');
         }
 
         $this->attendanceService->markAttendance(array_merge($validated, [
             'tenant_id' => app('tenant')->id
         ]));
 
-        return back()->with('success', 'تم تسجيل الحضور بنجاح');
+        return back()->with('success', 'تم تحديث الحالة بنجاح');
+    }
+
+    /**
+     * Mark all unrecorded students as absent for a session.
+     */
+    public function bulkAbsent(Schedule $schedule): RedirectResponse
+    {
+        $this->authorize('create', Attendance::class);
+        
+        $schedule->load('course.enrollments.user.student');
+        $recordedStudentIds = Attendance::where('schedule_id', $schedule->id)
+            ->whereDate('session_date', today())
+            ->pluck('student_id')
+            ->toArray();
+
+        $markedCount = 0;
+        foreach ($schedule->course->enrollments as $enrollment) {
+            $student = $enrollment->user->student ?? null;
+            if ($student && !in_array($student->id, $recordedStudentIds)) {
+                $this->attendanceService->markAttendance([
+                    'tenant_id' => app('tenant')->id,
+                    'student_id' => $student->id,
+                    'course_id' => $schedule->course_id,
+                    'schedule_id' => $schedule->id,
+                    'session_date' => today(),
+                    'status' => 'absent'
+                ]);
+                $markedCount++;
+            }
+        }
+
+        return back()->with('success', "تم تسجيل غياب $markedCount طلاب بنجاح");
     }
 
     /**
