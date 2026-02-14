@@ -333,6 +333,8 @@ $tenantRoutes = function () {
 
         // Schedule Management
         Route::middleware(['feature:daily_schedules', 'can:manage schedule'])->group(function() {
+            Route::get('api/schedules/metadata', [ScheduleController::class, 'getMetadata'])->name('center.schedules.metadata');
+            Route::get('api/schedules/course/{course}', [ScheduleController::class, 'getCourseSchedules'])->name('center.schedules.course');
             Route::resource('schedules', ScheduleController::class)->names('center.schedules');
         });
 

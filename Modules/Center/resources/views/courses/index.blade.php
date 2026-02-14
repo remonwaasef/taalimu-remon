@@ -129,6 +129,7 @@
                                             <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
                                                 <li><a class="dropdown-item" href="{{ route('center.courses.show', $course->id) }}"><i class="fas fa-eye me-2 text-muted"></i> {{ __('center::courses.view') }}</a></li>
                                                 <li><a class="dropdown-item fw-bold text-success" href="{{ route('center.courses.show', [$course->id, 'enroll' => 1]) }}"><i class="fas fa-user-plus me-2"></i> {{ __('center::courses.enroll_student') }}</a></li>
+                                                <li><a class="dropdown-item" href="javascript:void(0)" onclick="openQuickSchedule({{ $course->id }}, '{{ addslashes($course->title) }}')"><i class="far fa-calendar-alt me-2 text-muted"></i> إدارة المواعيد</a></li>
                                                 <li><hr class="dropdown-divider"></li>
                                                 <li><a class="dropdown-item" href="{{ route('center.courses.edit', $course->id) }}"><i class="fas fa-edit me-2 text-muted"></i> {{ __('center::courses.edit') }}</a></li>
                                                 <li><a class="dropdown-item" href="{{ route('center.curriculum.edit', $course->id) }}"><i class="fas fa-book-open me-2 text-muted"></i> {{ __('center::courses.content') }}</a></li>
@@ -163,3 +164,7 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    @include('center::components.quick-schedule')
+@endpush
