@@ -44,9 +44,9 @@
                                             @endphp
                                             <div class="d-flex justify-content-center gap-2">
                                                 @if($isEnded)
-                                                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2">
-                                                        <i class="bi bi-calendar-x me-1"></i> انتهى وقت الحصة
-                                                    </span>
+                                                    <a href="{{ route('center.attendance.show', $session) }}" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                                                        <i class="bi bi-person-x me-1"></i> تسجيل الغياب
+                                                    </a>
                                                 @else
                                                     <a href="{{ route('center.attendance.show', $session) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
                                                         <i class="bi bi-card-checklist me-1"></i> التحضير اليدوي

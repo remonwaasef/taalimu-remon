@@ -19,7 +19,19 @@
                         <h5 class="fw-bold mb-1"><i class="bi bi-people me-2"></i>قائمة الطلاب المسجلين</h5>
                         <p class="text-muted small mb-0">الحصة: {{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }} - القاعة: {{ $schedule->classroom->name ?? __('center::schedules.classroom') }}</p>
                     </div>
-                    <div class="text-end">
+                    <div class="text-end d-flex align-items-center gap-2">
+                        @php
+                            $isEnded = now()->isAfter(\Carbon\Carbon::parse($schedule->end_time));
+                            $hasUnrecorded = $schedule->course->enrollments->count() > $attendances->count();
+                        @endphp
+                        @if($isEnded && $hasUnrecorded)
+                            <form action="{{ route('center.attendance.bulkAbsent', $schedule) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm">
+                                    <i class="bi bi-person-x-fill me-1"></i> تسجيل الجميع غياب
+                                </button>
+                            </form>
+                        @endif
                         <span class="badge bg-primary px-3 rounded-pill">{{ today()->format('Y-m-d') }}</span>
                     </div>
                 </div>
@@ -53,6 +65,10 @@
                                                     {{ $attendance->status == 'present' ? 'حاضر' : ($attendance->status == 'late' ? 'متأخر' : 'غائب') }}
                                                     <small class="d-block text-muted" style="font-size: 0.6rem;">{{ $attendance->check_in_time->format('h:i A') }}</small>
                                                 </span>
+                                            @elseif($isEnded)
+                                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">
+                                                    غائب (تلقائي)
+                                                </span>
                                             @else
                                                 <span class="text-muted small">لم يتم التحضير بعد</span>
                                             @endif
@@ -66,7 +82,7 @@
                                                     <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
                                                     <input type="hidden" name="session_date" value="{{ today()->format('Y-m-d') }}">
                                                     <input type="hidden" name="status" value="present">
-                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'present' ? 'success' : 'outline-success' }} rounded-pill px-3">حاضر</button>
+                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'present' ? 'success' : 'outline-success' }} rounded-pill px-3" {{ $isEnded && (!$attendance || $attendance->status !== 'present') ? 'disabled' : '' }}>حاضر</button>
                                                 </form>
                                                 
                                                 <form action="{{ route('center.attendance.store') }}" method="POST">
@@ -76,7 +92,7 @@
                                                     <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
                                                     <input type="hidden" name="session_date" value="{{ today()->format('Y-m-d') }}">
                                                     <input type="hidden" name="status" value="late">
-                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'late' ? 'warning' : 'outline-warning' }} rounded-pill px-3">متأخر</button>
+                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'late' ? 'warning' : 'outline-warning' }} rounded-pill px-3" {{ $isEnded && (!$attendance || $attendance->status !== 'late') ? 'disabled' : '' }}>متأخر</button>
                                                 </form>
 
                                                 <form action="{{ route('center.attendance.store') }}" method="POST">
