@@ -14,9 +14,15 @@ import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 window.Pusher = Pusher;
 
+const reverbKey = import.meta.env.VITE_REVERB_APP_KEY;
+
+if (!reverbKey) {
+    console.warn('Laravel Echo: VITE_REVERB_APP_KEY is not defined. Real-time features may not work.');
+}
+
 window.Echo = new Echo({
     broadcaster: 'reverb',
-    key: import.meta.env.VITE_REVERB_APP_KEY,
+    key: reverbKey,
     wsHost: import.meta.env.VITE_REVERB_HOST,
     wsPort: import.meta.env.VITE_REVERB_PORT ?? 80,
     wssPort: import.meta.env.VITE_REVERB_PORT ?? 443,
