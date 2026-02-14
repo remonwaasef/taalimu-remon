@@ -1,14 +1,12 @@
-const CACHE_NAME = 'taalimu-v2';
+const CACHE_NAME = 'taalimu-sw-v4';
 
 self.addEventListener('install', (event) => {
-    console.log('[ServiceWorker] Installing v2...');
-    // Skip pre-caching to avoid installation failures
-    // Assets will be cached on-the-fly instead
+    console.log('[ServiceWorker] Installing v4...');
     self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
-    console.log('[ServiceWorker] Activating v2...');
+    console.log('[ServiceWorker] Activating v4...');
     event.waitUntil(
         caches.keys().then((keyList) => {
             return Promise.all(keyList.map((key) => {
@@ -28,7 +26,6 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
         fetch(event.request)
             .then((response) => {
-                // Cache successful responses for offline use
                 if (response.status === 200) {
                     const responseClone = response.clone();
                     caches.open(CACHE_NAME).then((cache) => {
@@ -41,7 +38,6 @@ self.addEventListener('fetch', (event) => {
                 return caches.match(event.request)
                     .then((response) => {
                         if (response) return response;
-                        // Return a simple offline message for HTML pages
                         if (event.request.headers.get('accept') &&
                             event.request.headers.get('accept').includes('text/html')) {
                             return new Response(
@@ -49,6 +45,8 @@ self.addEventListener('fetch', (event) => {
                                 { headers: { 'Content-Type': 'text/html; charset=utf-8' } }
                             );
                         }
+                        console.warn('[ServiceWorker] Fetch failed and no cache fallback for:', event.request.url);
+                        return new Response('', { status: 408, statusText: 'Network Error' });
                     });
             })
     );
