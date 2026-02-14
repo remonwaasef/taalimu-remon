@@ -733,7 +733,7 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 // Add timestamp to bust CDN cache
-                navigator.serviceWorker.register('/service-worker.js')
+                navigator.serviceWorker.register('/service-worker.js?v=4')
                     .then(reg => console.log('SW registered:', reg.scope))
                     .catch(err => console.log('SW failed:', err));
             });

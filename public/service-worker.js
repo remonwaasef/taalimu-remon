@@ -1,12 +1,12 @@
-const CACHE_NAME = 'taalimu-v3';
+const CACHE_NAME = 'taalimu-v4';
 
 self.addEventListener('install', () => {
-    console.log('[Taalimu SW] Installing v3...');
+    console.log('[Taalimu SW] Installing v4...');
     self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
-    console.log('[Taalimu SW] Activating v3...');
+    console.log('[Taalimu SW] Activating v4...');
     event.waitUntil(
         caches.keys().then((keys) => {
             return Promise.all(
@@ -41,7 +41,7 @@ self.addEventListener('fetch', (event) => {
                             { headers: { 'Content-Type': 'text/html; charset=utf-8' } }
                         );
                     }
-                    // Return a basic error response for non-HTML requests if not in cache
+                    console.warn('[Taalimu SW] Fetch failed and no cache fallback for:', event.request.url);
                     return new Response('', { status: 408, statusText: 'Network Error' });
                 });
             })
