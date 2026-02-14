@@ -324,7 +324,14 @@
                         @empty
                             <tr>
                                 <td colspan="7" class="text-center py-5">
-                                    <img src="https://cdni.iconscout.com/illustration/premium/thumb/searching-no-result-illustration-download-in-svg-png-gif-file-formats--resultless-not-found-nothing-found-data-empty-miscellaneous-pack-people-illustrations-5795908.png" style="width: 200px; opacity: 0.5;">
+                                    <div class="mb-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-muted opacity-50">
+                                            <circle cx="11" cy="11" r="8"></circle>
+                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                            <line x1="11" y1="8" x2="11" y2="14"></line>
+                                            <line x1="8" y1="11" x2="14" y2="11"></line>
+                                        </svg>
+                                    </div>
                                     <p class="text-muted mt-3 mb-0">{{ __('center::students.no_students') }}</p>
                                 </td>
                             </tr>
@@ -440,7 +447,14 @@
                     emptyRow = document.createElement('tr');
                     emptyRow.id = 'empty-state-row';
                     emptyRow.innerHTML = `<td colspan="7" class="text-center py-5">
-                                    <img src="https://cdni.iconscout.com/illustration/premium/thumb/searching-no-result-illustration-download-in-svg-png-gif-file-formats--resultless-not-found-nothing-found-data-empty-miscellaneous-pack-people-illustrations-5795908.png" style="width: 200px; opacity: 0.5;">
+                                    <div class="mb-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-muted opacity-50">
+                                            <circle cx="11" cy="11" r="8"></circle>
+                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                            <line x1="11" y1="8" x2="11" y2="14"></line>
+                                            <line x1="8" y1="11" x2="14" y2="11"></line>
+                                        </svg>
+                                    </div>
                                     <p class="text-muted mt-3 mb-0">{{ __('center::students.no_students') }}</p>
                                 </td>`;
                 }

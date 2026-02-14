@@ -41,6 +41,8 @@ self.addEventListener('fetch', (event) => {
                             { headers: { 'Content-Type': 'text/html; charset=utf-8' } }
                         );
                     }
+                    // Return a basic error response for non-HTML requests if not in cache
+                    return new Response('', { status: 408, statusText: 'Network Error' });
                 });
             })
     );
