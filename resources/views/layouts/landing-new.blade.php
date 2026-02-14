@@ -127,6 +127,8 @@
             @yield('content')
         </main>
 
+        <x-pwa-install />
+
         @include('landing.partials.footer')
     </div>
     
