@@ -28,8 +28,14 @@
                             @forelse($attendances as $attendance)
                                 <tr>
                                     <td class="p-4 border-light fw-bold text-dark">{{ $attendance->course->name }}</td>
-                                    <td class="p-4 border-light text-muted">{{ $attendance->session_date }}</td>
-                                    <td class="p-4 border-light text-muted">{{ \Carbon\Carbon::parse($attendance->check_in_time)->format('h:i A') }}</td>
+                                    <td class="p-4 border-light text-muted">{{ $attendance->session_date->format('Y-m-d') }}</td>
+                                    <td class="p-4 border-light text-muted">
+                                        @if($attendance->check_in_time)
+                                            {{ \Carbon\Carbon::parse($attendance->check_in_time)->format('h:i A') }}
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
                                     <td class="p-4 border-light">
                                         @if($attendance->status == 'present')
                                             <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">حاضر</span>
