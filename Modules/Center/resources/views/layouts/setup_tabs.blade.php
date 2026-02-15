@@ -43,3 +43,31 @@
         </ul>
     </div>
 </div>
+
+<style>
+    #schoolManagementTabs .nav-link {
+        color: #6c757d;
+        border: none;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+        margin: 0 4px;
+        border-radius: 8px 8px 0 0;
+    }
+    
+    #schoolManagementTabs .nav-link:hover {
+        background: #e9ecef;
+        color: var(--bs-primary);
+    }
+
+    #schoolManagementTabs .nav-link.active {
+        background: #fff;
+        color: var(--bs-primary) !important;
+        border-bottom: 3px solid var(--bs-primary);
+        box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+    }
+
+    #schoolManagementTabs .nav-link.active i {
+        color: var(--bs-primary) !important;
+    }
+</style>
