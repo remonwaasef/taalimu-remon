@@ -169,6 +169,9 @@ $tenantRoutes = function () {
 
         Route::post('courses/{course}/lessons/{lesson}/complete', [CourseController::class, 'completeLesson'])->name('center.lessons.complete');
         
+        // Course Player Route (Accessible to enrolled students)
+        Route::get('courses/{course}/player', [CoursePlayerController::class, 'show'])->name('center.courses.player');
+        
         // Curriculum Management (Admin/Instructor only)
         Route::middleware(['can:edit courses'])->group(function() {
             Route::get('courses/{course}/curriculum', [CurriculumController::class, 'edit'])->name('center.curriculum.edit');
