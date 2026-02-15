@@ -75,7 +75,9 @@ class CampusController extends Controller
         $enrolledCourseIds = $student->enrollments()->pluck('course_id');
 
         // 2. Fetch Schedules for these courses
-        $schedules = \App\Models\Schedule::with(['course', 'classroom', 'instructor'])
+        $schedules = \App\Models\Schedule::with(['course', 'classroom' => function($q) {
+                $q->withoutGlobalScopes(); 
+            }, 'instructor'])
             ->whereIn('course_id', $enrolledCourseIds)
             ->orderBy('start_time')
             ->get()
