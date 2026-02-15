@@ -26,9 +26,19 @@ class CampusController extends Controller
         $tenantId = app('tenant')->id;
         
         $enrollments = $student->enrollments()
-            ->with(['course.sections.lessons', 'certificate'])
+            ->with(['course.sections.lessons'])
             ->latest('updated_at')
             ->get();
+
+        // Manual Eager Load Certificates to avoid HasOne joining issue
+        $certificates = $student->certificates()
+            ->whereIn('course_id', $enrollments->pluck('course_id'))
+            ->get()
+            ->keyBy('course_id');
+
+        foreach ($enrollments as $enrollment) {
+            $enrollment->setRelation('certificate', $certificates->get($enrollment->course_id));
+        }
 
         // 1. Gamification Stats
         $points = $user->points;

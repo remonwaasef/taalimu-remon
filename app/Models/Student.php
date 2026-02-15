@@ -161,4 +161,9 @@ class Student extends Model
     {
         return $this->hasMany(Sale::class);
     }
+
+    public function certificates()
+    {
+        return $this->hasMany(\App\Models\Certificate::class);
+    }
 }
