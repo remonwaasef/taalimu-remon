@@ -5,11 +5,17 @@
 @section('page-title', __('center::settings.title'))
 
 @section('content')
+    @php $activeTab = request('tab', 'general'); @endphp
+    
+    @if($activeTab == 'academic')
+        @include('center::layouts.setup_tabs')
+    @endif
+
 <div class="row">
     <div class="col-md-10 mx-auto">
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                @if($activeTab != 'academic')
                 <div class="card-header bg-white border-bottom-0 p-0">
-                    @php $activeTab = request('tab', 'general'); @endphp
                     <ul class="nav nav-tabs nav-fill" id="settingsTabs" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link {{ $activeTab == 'general' ? 'active' : '' }} py-3 fw-bold" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-selected="{{ $activeTab == 'general' ? 'true' : 'false' }}">
@@ -43,6 +49,7 @@
                         </li>
                     </ul>
                 </div>
+                @endif
 
                 <div class="card-body p-4">
                     @if (session('success'))
