@@ -45,4 +45,6 @@ return [
     'courses_groups' => 'الدورات',
     'student_accounts' => 'حسابات الطلاب',
     'assets' => 'العهد والأصول',
+    'school_management' => 'إدارة المدرسة',
+
 ];
