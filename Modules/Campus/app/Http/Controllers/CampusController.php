@@ -70,9 +70,29 @@ class CampusController extends Controller
     public function schedule()
     {
         $student = auth()->user()->student;
-        // For now, schedules are not fully implemented in DB, 
-        // we'll pass the student and handle empty state or mock data in view.
-        return view('campus::schedule', compact('student'));
+        
+        // 1. Get Enrolled Course IDs
+        $enrolledCourseIds = $student->enrollments()->pluck('course_id');
+
+        // 2. Fetch Schedules for these courses
+        $schedules = \App\Models\Schedule::with(['course', 'classroom', 'instructor'])
+            ->whereIn('course_id', $enrolledCourseIds)
+            ->orderBy('start_time')
+            ->get()
+            ->groupBy('day_of_week');
+
+        // 3. Define Week Days (Arabic) - Matches Center Module Convention (0=Sunday)
+        $days = [
+            0 => 'الأحد',
+            1 => 'الاثنين',
+            2 => 'الثلاثاء',
+            3 => 'الأربعاء',
+            4 => 'الخميس',
+            5 => 'الجمعة',
+            6 => 'السبت',
+        ];
+
+        return view('campus::schedule', compact('student', 'schedules', 'days'));
     }
 
     public function finances()
