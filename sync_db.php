@@ -69,21 +69,19 @@ $migrations = [
 ];
 
 try {
-    DB::transaction(function () use ($migrations) {
-        echo "1. Clearing existing migration history...\n";
-        DB::table('migrations')->truncate();
+    echo "1. Clearing existing migration history...\n";
+    DB::table('migrations')->delete(); // Using delete instead of truncate to be safer
 
-        echo "2. Injecting new 50-file migration history...\n";
-        $batch = 1;
-        $data = [];
-        foreach ($migrations as $migration) {
-            $data[] = [
-                'migration' => $migration,
-                'batch' => $batch,
-            ];
-        }
-        DB::table('migrations')->insert($data);
-    });
+    echo "2. Injecting new 50-file migration history...\n";
+    $batch = 1;
+    $data = [];
+    foreach ($migrations as $migration) {
+        $data[] = [
+            'migration' => $migration,
+            'batch' => $batch,
+        ];
+    }
+    DB::table('migrations')->insert($data);
 
     echo "--- SUCCESS! Migrations table synchronized. ---\n";
     echo "You can now safely run php artisan migrate.\n";
