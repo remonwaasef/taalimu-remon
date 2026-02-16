@@ -83,6 +83,7 @@ class User extends Authenticatable
         'phone',
         'password',
         'role',
+        'points',
         'tenant_id',
         'instructor_id',
         'must_change_password',

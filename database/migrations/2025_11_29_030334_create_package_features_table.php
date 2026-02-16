@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('package_id')->constrained()->cascadeOnDelete();
             $table->foreignId('feature_id')->constrained()->cascadeOnDelete();
-            $table->string('value'); // e.g., "100" or "true"
+            $table->string('value')->nullable();
             $table->timestamps();
         });
     }

@@ -13,16 +13,17 @@ return new class extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tenant_id')->constrained()->onDelete('cascade');
-            $table->foreignId('instructor_id')->constrained()->onDelete('cascade');
+            $table->foreignId('tenant_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('instructor_id')->nullable()->constrained()->nullOnDelete();
             $table->string('title');
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2)->default(0);
+            $table->integer('sessions_count')->default(0);
             $table->string('image')->nullable();
-            $table->string('status')->default('draft'); // draft, published, archived
+            $table->string('status')->default('active');
             $table->timestamps();
             
-            $table->index('tenant_id');
+            $table->index(['tenant_id', 'status']);
         });
     }
 
