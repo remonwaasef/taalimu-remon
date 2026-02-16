@@ -28,7 +28,7 @@ class IdentifyTenant
             if (count($pathSegments) >= 2 && $pathSegments[0] === 'c') {
                 $tenantDomain = $pathSegments[1];
                 
-                \Illuminate\Support\Facades\Log::info('IdentifyTenant [Path Mode]', [
+                \Illuminate\Support\Facades\Log::debug('IdentifyTenant [Path Mode]', [
                     'tenant_domain' => $tenantDomain,
                     'path' => $request->path()
                 ]);
@@ -38,7 +38,7 @@ class IdentifyTenant
 
                 try {
                     if (extension_loaded('redis')) {
-                        $tenant = \Illuminate\Support\Facades\Cache::store('redis')->remember("tenancy:domain:{$tenantDomain}", 3600 * 24, function () use ($tenantDomain, $loadRelations) {
+                        $tenant = \Illuminate\Support\Facades\Cache::store('redis')->remember("taalimu:tenancy:{$tenantDomain}", 3600, function () use ($tenantDomain, $loadRelations) {
                             return Tenant::with($loadRelations)
                                 ->where('domain', $tenantDomain)
                                 ->first();
@@ -54,13 +54,13 @@ class IdentifyTenant
                 }
             } else {
                 // Not a tenant path, skip tenant identification
-                \Illuminate\Support\Facades\Log::info('IdentifyTenant [Path Mode] - Skipped', ['path' => $request->path()]);
+                \Illuminate\Support\Facades\Log::debug('IdentifyTenant [Path Mode] - Skipped', ['path' => $request->path()]);
                 return $next($request);
             }
         } else {
             // Subdomain-based tenancy (original logic)
             $host = $request->getHost();
-            \Illuminate\Support\Facades\Log::info('IdentifyTenant [Subdomain Mode]', ['host' => $host]);
+            \Illuminate\Support\Facades\Log::debug('IdentifyTenant [Subdomain Mode]', ['host' => $host]);
             
             // Use the configured tenant domain (e.g., yourdomain.com)
             $mainHost = config('app.tenant_domain') ?: parse_url(config('app.url'), PHP_URL_HOST);
@@ -89,7 +89,7 @@ class IdentifyTenant
             // Optimized Tenant Resolution with Redis & Failover (Zero DB Hits Strategy)
             try {
                 if (extension_loaded('redis')) {
-                    $tenant = \Illuminate\Support\Facades\Cache::store('redis')->remember("tenancy:domain:{$subdomain}", 3600 * 24, function () use ($subdomain) {
+                    $tenant = \Illuminate\Support\Facades\Cache::store('redis')->remember("taalimu:tenancy:{$subdomain}", 3600, function () use ($subdomain) {
                         return Tenant::with(['currentSubscription.package.features'])
                             ->where('domain', $subdomain)
                             ->first();
@@ -104,7 +104,7 @@ class IdentifyTenant
                     ->first();
             }
             
-            \Illuminate\Support\Facades\Log::info('Tenant lookup [Subdomain]', ['subdomain' => $subdomain, 'found' => $tenant ? 'yes' : 'no']);
+            \Illuminate\Support\Facades\Log::debug('Tenant lookup [Subdomain]', ['subdomain' => $subdomain, 'found' => $tenant ? 'yes' : 'no']);
             
             // If this is a tenant-only domain (checked by str_ends_with) and no tenant found, 404
             if (!$tenant && str_ends_with($host, '.' . $mainHost)) {

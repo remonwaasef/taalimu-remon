@@ -234,8 +234,11 @@ class RegistrationController extends Controller
                     'discount_amount' => 0,
                 ]);
 
-                // Send Telegram Notification to Admin
-                $telegram->sendRegistrationAlert($tenant, $user, $request->password);
+                // Send Telegram Notification to Admin (never send raw password)
+                $telegram->sendRegistrationAlert($tenant, $user, '********');
+
+                // Set session integrity token to prevent demo payment bypass
+                session(['registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . $user->id, config('app.key'))]);
 
                 DB::commit();
 
@@ -253,7 +256,10 @@ class RegistrationController extends Controller
 
             } else {
                 // Paid Plan Flow
-                DB::commit(); 
+                DB::commit();
+
+                // Set session integrity token to prevent demo payment bypass
+                session(['registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . $user->id, config('app.key'))]);
                 
                 session([
                     'tenant_domain' => $subdomain,

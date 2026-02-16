@@ -28,7 +28,7 @@ class Tenant extends Model
         static::saved(function ($tenant) {
             try {
                 if (extension_loaded('redis')) {
-                    \Illuminate\Support\Facades\Cache::store('redis')->forget("tenancy:domain:{$tenant->domain}");
+                    \Illuminate\Support\Facades\Cache::store('redis')->forget("taalimu:tenancy:{$tenant->domain}");
                 }
             } catch (\Throwable $e) {
                 // Fail silently if Redis is down or extension missing
@@ -40,7 +40,7 @@ class Tenant extends Model
         static::deleted(function ($tenant) {
             try {
                 if (extension_loaded('redis')) {
-                    \Illuminate\Support\Facades\Cache::store('redis')->forget("tenancy:domain:{$tenant->domain}");
+                    \Illuminate\Support\Facades\Cache::store('redis')->forget("taalimu:tenancy:{$tenant->domain}");
                 }
             } catch (\Throwable $e) {
                 // Fail silently

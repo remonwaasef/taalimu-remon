@@ -60,13 +60,14 @@ class UnifiedAuthController extends Controller
             session(['locale' => $currentLocale]);
             
             // Generate distinct token for cross-domain login
-            $token = \Illuminate\Support\Str::random(40);
+            $token = \Illuminate\Support\Str::random(64);
             \Illuminate\Support\Facades\Cache::put('login_token_' . $token, [
                 'user_id' => $user->id,
                 'tenant_id' => $tenant->id,
                 'locale' => $currentLocale,
                 'ua' => hash('sha256', (string) $request->userAgent()),
-            ], now()->addSeconds(60));
+                'ip' => hash('sha256', $request->ip()),
+            ], now()->addSeconds(30));
             
             
             // Redirect to tenant login with token

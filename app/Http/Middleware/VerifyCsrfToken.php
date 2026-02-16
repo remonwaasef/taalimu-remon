@@ -12,7 +12,6 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        'logout',
-        '*/logout',
+        // No CSRF exemptions — all routes should be protected
     ];
 }
