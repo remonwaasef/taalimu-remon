@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('question_options', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('tenant_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('question_id')->constrained()->cascadeOnDelete();
             $table->text('content');
             $table->boolean('is_correct')->default(false);
             $table->timestamps();
+
+            $table->index('tenant_id');
         });
     }
 

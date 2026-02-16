@@ -13,13 +13,16 @@ return new class extends Migration
     {
         Schema::create('assignment_submissions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('tenant_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('assignment_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('file_path');
+            $table->string('file_path')->nullable();
             $table->integer('grade')->nullable();
             $table->text('feedback')->nullable();
-            $table->timestamp('submitted_at')->useCurrent();
+            $table->timestamp('submitted_at')->nullable();
             $table->timestamps();
+
+            $table->index(['tenant_id', 'user_id']);
         });
     }
 

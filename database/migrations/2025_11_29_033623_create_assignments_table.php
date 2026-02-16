@@ -13,12 +13,15 @@ return new class extends Migration
     {
         Schema::create('assignments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('tenant_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('lesson_id')->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->text('description')->nullable();
             $table->dateTime('due_date')->nullable();
             $table->integer('max_score')->default(100);
             $table->timestamps();
+
+            $table->index('tenant_id');
         });
     }
 

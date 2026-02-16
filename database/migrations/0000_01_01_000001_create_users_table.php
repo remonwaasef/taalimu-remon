@@ -13,12 +13,24 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('tenant_id')->nullable()->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('instructor_id')->nullable();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('phone')->nullable()->index();
+            $table->string('role')->default('student'); // admin, center_admin, student
+            $table->integer('points')->default(0);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->text('google2fa_secret')->nullable();
+            $table->boolean('google2fa_enabled')->default(false);
+            $table->boolean('must_change_password')->default(false);
+            $table->string('locale')->nullable()->default('en');
             $table->rememberToken();
             $table->timestamps();
+
+            $table->index('tenant_id');
+            $table->index('instructor_id');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

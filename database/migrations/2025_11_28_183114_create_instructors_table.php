@@ -13,15 +13,23 @@ return new class extends Migration
     {
         Schema::create('instructors', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tenant_id')->constrained()->onDelete('cascade');
+            $table->foreignId('tenant_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('email')->nullable();
+            $table->string('phone')->nullable();
             $table->string('specialization')->nullable();
+            $table->string('status')->default('active');
+            $table->decimal('commission_rate', 5, 2)->default(0);
+            $table->string('national_id')->nullable();
+            $table->enum('gender', ['male', 'female'])->nullable();
+            $table->date('hiring_date')->nullable();
             $table->text('bio')->nullable();
+            $table->boolean('is_co_instructor')->default(false);
             $table->string('image')->nullable();
             $table->timestamps();
             
-            $table->index('tenant_id');
+            $table->index(['tenant_id', 'status']);
         });
     }
 
