@@ -33,20 +33,35 @@ class BasicWAF
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Check all input for suspicious patterns
+        // Check all input for suspicious patterns (recursively)
         $inputs = array_merge(
             $request->all(),
-            $request->query->all(),
-            $request->headers->all()
+            $request->query->all()
         );
 
-        foreach ($inputs as $key => $value) {
-            if (is_string($value) && $this->isSuspicious($value)) {
+        // Recursively extract all string values from nested arrays
+        $flatValues = [];
+        array_walk_recursive($inputs, function ($value, $key) use (&$flatValues) {
+            if (is_string($value)) {
+                $flatValues[$key] = $value;
+            }
+        });
+
+        // Also check critical headers (User-Agent, Referer)
+        foreach (['user-agent', 'referer'] as $header) {
+            $headerValue = $request->header($header);
+            if (is_string($headerValue)) {
+                $flatValues['header_' . $header] = $headerValue;
+            }
+        }
+
+        foreach ($flatValues as $key => $value) {
+            if ($this->isSuspicious($value)) {
                 Log::channel('security')->warning('Suspicious request detected', [
                     'ip' => $request->ip(),
                     'url' => $request->fullUrl(),
                     'input_key' => $key,
-                    'input_value' => $value,
+                    'input_value' => mb_substr($value, 0, 200),
                     'user_agent' => $request->userAgent(),
                 ]);
 

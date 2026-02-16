@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 // Main domain routes (without tenant subdomain)
 // Main domain routes
 // Main domain routes
-Route::middleware(['web', 'throttle:global'])->domain(env('TENANT_DOMAIN', 'localhost'))->group(function () {
+Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain', 'localhost'))->group(function () {
     Route::get('/', [App\Http\Controllers\LandingController::class, 'index'])->name('home');
 
     Route::get('/register', [App\Http\Controllers\RegistrationController::class, 'showRegistrationForm'])->name('register');
@@ -26,7 +26,9 @@ Route::get('/registration-success', function() {
     
     // Demo Payment Routes (for testing without Stripe)
     Route::get('/payment/demo', [App\Http\Controllers\PaymentController::class, 'demo'])->name('payment.demo');
-    Route::get('/payment/demo/success', [App\Http\Controllers\PaymentController::class, 'demoSuccess'])->name('payment.demo.success');
+    Route::get('/payment/demo/success', [App\Http\Controllers\PaymentController::class, 'demoSuccess'])
+        ->middleware('throttle:3,60')
+        ->name('payment.demo.success');
 
     Route::view('/offline', 'offline');
 
@@ -73,7 +75,7 @@ Route::get('/registration-success', function() {
         ->name('unified.login.submit');
 });
 
-// Global Language Switcher (Accessible from any domain)
+// Global Language Switcher (Accessible from any domain) — rate limited to prevent locale flooding
 Route::get('lang/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'ar', 'fr'])) {
         session(['locale' => $locale]);
@@ -82,7 +84,7 @@ Route::get('lang/{locale}', function ($locale) {
         }
     }
     return redirect()->back();
-})->name('lang.switch');
+})->middleware('throttle:10,1')->name('lang.switch');
 
 // Debug routes removed for security - uncomment only in development if needed
 // if (app()->environment('local')) { ... }

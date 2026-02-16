@@ -12,7 +12,7 @@ use Carbon\CarbonInterval;
 
 class OperationIssue extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, \App\Traits\IdentifyTenant;
 
     protected $fillable = [
         'uuid',

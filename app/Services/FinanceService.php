@@ -30,9 +30,12 @@ class FinanceService
         return DB::transaction(function () use ($data) {
             $tenantId = app('tenant')->id;
 
-            // 1. Fetch actual prices from DB to prevent manipulation
+            // 1. Fetch actual prices from DB — scoped to current tenant to prevent cross-tenant manipulation
             $courseIds = collect($data['items'])->pluck('id')->toArray();
-            $courses = Course::whereIn('id', $courseIds)->get()->keyBy('id');
+            $courses = Course::whereIn('id', $courseIds)
+                ->where('tenant_id', $tenantId)
+                ->get()
+                ->keyBy('id');
 
             $totalAmount = 0;
             $itemsToCreate = [];
@@ -68,14 +71,16 @@ class FinanceService
                 'notes' => $data['notes'] ?? null,
             ]);
 
-            // 4. Create Sale Items
-            $student = Student::find($data['student_id']);
+            // 4. Create Sale Items — reuse already loaded courses
+            $student = Student::where('id', $data['student_id'])
+                ->where('tenant_id', $tenantId)
+                ->firstOrFail();
             foreach ($itemsToCreate as $itemData) {
                 $itemData['sale_id'] = $sale->id;
                 SaleItem::create($itemData);
 
                 if ($itemData['item_type'] === Course::class && $student) {
-                    $course = Course::find($itemData['item_id']);
+                    $course = $courses->get($itemData['item_id']); // Use cached collection instead of N+1
                     if ($course) {
                         try {
                             $enrollment = $this->courseService->enrollStudent($course, $student);
