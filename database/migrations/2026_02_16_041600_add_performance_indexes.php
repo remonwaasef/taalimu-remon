@@ -39,12 +39,7 @@ return new class extends Migration
             });
         }
 
-        // Enrollments: composite index for student+course lookups
-        if (!$this->hasIndex('enrollments', 'enrollments_student_course_index')) {
-            Schema::table('enrollments', function (Blueprint $table) {
-                $table->index(['student_id', 'course_id'], 'enrollments_student_course_index');
-            });
-        }
+        // Enrollments: already has (user_id, course_id) index from creation migration — skipped
 
         // Sales: tenant+student for finance queries
         if (!$this->hasIndex('sales', 'sales_tenant_student_index')) {
@@ -81,7 +76,6 @@ return new class extends Migration
             'tenants' => 'tenants_domain_index',
             'users' => ['users_tenant_id_index', 'users_email_index'],
             'students' => 'students_tenant_id_index',
-            'enrollments' => 'enrollments_student_course_index',
             'sales' => 'sales_tenant_student_index',
             'courses' => 'courses_tenant_id_index',
             'schedules' => 'schedules_tenant_id_index',
