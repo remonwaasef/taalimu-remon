@@ -139,7 +139,7 @@ class AttendanceController extends Controller
     public function showQr(Request $request, Schedule $schedule)
     {
         $this->authorize('viewAny', Attendance::class);
-        $url = $this->attendanceService->generateQrUrl($schedule->id, $request->route('tenant'));
+        $url = $this->attendanceService->generateQrUrl($schedule->id, app('tenant')->domain);
 
         return view('center::attendance.qr', compact('schedule', 'url'));
     }
@@ -173,7 +173,7 @@ class AttendanceController extends Controller
         }
 
         $this->attendanceService->markAttendance([
-            'tenant_id' => $request->route('tenant'),
+            'tenant_id' => app('tenant')->id,
             'student_id' => $student->id,
             'course_id' => $schedule->course_id,
             'schedule_id' => $schedule->id,
