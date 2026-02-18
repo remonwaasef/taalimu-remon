@@ -248,7 +248,8 @@
             html5QrcodeScanner.start({ facingMode: "environment" }, config, onScanSuccess)
             .catch(err => {
                 console.error("Error starting scanner", err);
-                document.getElementById('reader').innerHTML = '<div class="alert alert-danger m-3">فشل في تشغيل الكاميرا. يرجى التحقق من الأذونات.</div>';
+                alert("فشل تشغيل الكاميرا: " + err);
+                document.getElementById('reader').innerHTML = '<div class="alert alert-danger m-3">فشل في تشغيل الكاميرا. يرجى التأكد من استخدام HTTPS والسماح للكاميرا.</div>';
             });
         });
 
