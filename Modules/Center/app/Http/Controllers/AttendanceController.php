@@ -10,6 +10,7 @@ use App\Models\Enrollment;
 use Modules\Center\Models\Attendance;
 use Illuminate\Support\Facades\URL;
 use Carbon\Carbon;
+use App\Models\Student;
 use Illuminate\Http\RedirectResponse;
 
 class AttendanceController extends Controller
@@ -191,20 +192,58 @@ class AttendanceController extends Controller
     public function markByQr(Request $request, Schedule $schedule)
     {
         if (! $request->hasValidSignature()) {
-            abort(403, 'QR Code Expired or Invalid.');
+            abort(403, 'انتهت صلاحية رمز QR أو أنه غير صالح. يرجى مسح الرمز مرة أخرى.');
         }
 
         if (!auth()->check()) {
-            return view('center::attendance.scan-login', ['schedule' => $schedule]);
+            return view('center::attendance.scan-login', [
+                'schedule' => $schedule,
+                'qrUrl' => $request->fullUrl(),
+            ]);
         }
 
         $student = auth()->user()->student;
         if (!$student) {
-            // Logged in but not a student (e.g. Admin)
             auth()->logout();
-            return view('center::attendance.scan-login', ['schedule' => $schedule, 'message' => 'هذا الحساب ليس حساب طالب. يرجى تسجيل الدخول بحساب طالب.']);
+            return view('center::attendance.scan-login', [
+                'schedule' => $schedule,
+                'qrUrl' => $request->fullUrl(),
+                'message' => 'هذا الحساب ليس حساب طالب. يرجى تسجيل الدخول بحساب طالب.',
+            ]);
         }
 
+        return $this->processQrAttendance($student, $schedule);
+    }
+
+    /**
+     * Handle login + attendance from scan-login form.
+     */
+    public function loginAndMark(Request $request, Schedule $schedule)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+            'qr_url' => 'nullable|string',
+        ]);
+
+        if (!auth()->attempt(['email' => $request->email, 'password' => $request->password])) {
+            return back()->withErrors(['email' => 'بيانات الدخول غير صحيحة.'])->withInput();
+        }
+
+        $student = auth()->user()->student;
+        if (!$student) {
+            auth()->logout();
+            return back()->with('message', 'هذا الحساب ليس حساب طالب. يرجى تسجيل الدخول بحساب طالب.');
+        }
+
+        return $this->processQrAttendance($student, $schedule);
+    }
+
+    /**
+     * Process QR attendance once we have an authenticated student.
+     */
+    private function processQrAttendance(Student $student, Schedule $schedule)
+    {
         if ($this->attendanceService->hasAttendedToday($student->id, $schedule->id)) {
             return view('center::attendance.success', ['message' => 'تم تسجيل حضورك بالفعل لهذه الحصة اليوم!']);
         }
@@ -222,6 +261,6 @@ class AttendanceController extends Controller
             'status' => 'present'
         ]);
 
-        return view('center::attendance.success', ['message' => 'تم تسجيل حضورك بنجاح!']);
+        return view('center::attendance.success', ['message' => 'تم تسجيل حضورك بنجاح! 🎉']);
     }
 }

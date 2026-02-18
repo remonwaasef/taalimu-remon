@@ -20,13 +20,21 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('center.login.submit') }}">
+                    @if($errors->any())
+                        <div class="alert alert-danger text-center">
+                            @foreach($errors->all() as $error)
+                                <p class="mb-0">{{ $error }}</p>
+                            @endforeach
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('center.attendance.loginAndMark', $schedule) }}">
                         @csrf
-                        <input type="hidden" name="redirect_to" value="{{ request()->fullUrl() }}">
+                        <input type="hidden" name="qr_url" value="{{ $qrUrl ?? request()->fullUrl() }}">
                         
                         <div class="mb-3">
                             <label for="email" class="form-label">البريد الإلكتروني</label>
-                            <input type="email" class="form-control form-control-lg" id="email" name="email" required autofocus>
+                            <input type="email" class="form-control form-control-lg" id="email" name="email" value="{{ old('email') }}" required autofocus>
                         </div>
 
                         <div class="mb-3">
@@ -36,7 +44,7 @@
 
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">
-                                تسجيل الدخول وتأكيد الحضور
+                                <i class="bi bi-box-arrow-in-right me-2"></i>تسجيل الدخول وتأكيد الحضور
                             </button>
                         </div>
                     </form>
