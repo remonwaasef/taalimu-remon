@@ -20,6 +20,15 @@ class IdentifyTenant
         // Global Session/Cookie compatibility for multi-subdomain (Cross-domain handoff)
         // Set this BEFORE skipping identification to ensure even main domain uses shared cookies
         $mainHost = config('app.tenant_domain') ?: parse_url(config('app.url'), PHP_URL_HOST);
+        $host = $request->getHost();
+
+        \Illuminate\Support\Facades\Log::debug('IdentifyTenant Diagnostic', [
+            'host' => $host,
+            'mainHost' => $mainHost,
+            'app_url' => config('app.url'),
+            'env_tenant_domain' => env('TENANT_DOMAIN'),
+        ]);
+
         if ($mainHost && $mainHost !== 'localhost' && !str_contains($mainHost, 'localhost')) {
             // Set session domain to allow cookie sharing between subdomains
             config(['session.domain' => '.' . $mainHost]);
