@@ -187,4 +187,25 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
         return redirect()->route('center.login', ['tenant' => app('tenant')->domain]);
     }
+    public function magicLogin(Request $request, \App\Models\Student $student)
+    {
+        if (!$request->hasValidSignature()) {
+            abort(403, 'Invalid or expired login link.');
+        }
+
+        if ($student->tenant_id !== app('tenant')->id) {
+            abort(403, 'Invalid tenant.');
+        }
+
+        if ($student->user) {
+            Auth::login($student->user);
+            $request->session()->regenerate();
+            
+            return redirect()->route('campus.index', ['tenant' => app('tenant')->domain])
+                ->with('success', __('Welcome back, :name!', ['name' => $student->name]));
+        }
+
+        return redirect()->route('center.login')
+            ->withErrors(['email' => __('Login failed. Student has no user account.')]);
+    }
 }

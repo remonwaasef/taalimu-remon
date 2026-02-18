@@ -44,6 +44,11 @@ $tenantRoutes = function () {
         Route::post('login', [AuthController::class, 'login'])
             ->middleware('throttle:login')
             ->name('center.login.submit');
+            
+        // Magic Login (QR Code)
+        Route::get('magic-login/{student}', [AuthController::class, 'magicLogin'])
+            ->name('center.login.magic')
+            ->middleware('signed');
     });
 
     // Protected Routes (Auth Only - No Subscription Check)

@@ -81,9 +81,19 @@
                         <div class="ticket-stub-decoration top"></div>
                         <div class="ticket-stub-decoration bottom"></div>
                         
-                        <div class="qr-container bg-white p-2 rounded-3 shadow-sm mb-3">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(url('/login') . '?email=' . session('student_email')) }}" alt="QR Code" style="width: 140px; height: 140px;">
-                        </div>
+                        @if(session('student_email'))
+                            @php
+                                $studentForQr = \App\Models\Student::where('email', session('student_email'))->where('tenant_id', app('tenant')->id)->first();
+                                $qrUrl = $studentForQr ? \Illuminate\Support\Facades\URL::signedRoute('center.login.magic', ['student' => $studentForQr->id, 'tenant' => app('tenant')->domain]) : url('/login');
+                            @endphp
+                            <div class="qr-container bg-white p-2 rounded-3 shadow-sm mb-3">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode($qrUrl) }}" alt="QR Code" style="width: 140px; height: 140px;">
+                            </div>
+                        @else
+                            <div class="qr-container bg-white p-2 rounded-3 shadow-sm mb-3">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(url('/login')) }}" alt="QR Code" style="width: 140px; height: 140px;">
+                            </div>
+                        @endif
                         <p class="small text-muted mb-0">{{ __('center::students.scan_qr_tip') }}</p>
                         <div class="mt-3 text-secondary small">
                             <i class="fas fa-clock me-1"></i> {{ __('center::students.valid_unlimited') }}
