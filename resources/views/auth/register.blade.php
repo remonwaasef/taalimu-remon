@@ -236,7 +236,9 @@ document.addEventListener('alpine:init', () => {
         },
 
         get activePriceRaw() {
-             return this.billingCycle === 'yearly' ? this.currentPriceData.yearly : this.currentPriceData.amount;
+            const plan = this.currentPlan;
+            const priceData = this.getPriceData(plan);
+            return this.billingCycle === 'yearly' ? (priceData.yearly || 0) : (priceData.amount || 0);
         },
         
         get activePriceValue() {
@@ -652,7 +654,7 @@ document.addEventListener('alpine:init', () => {
                         <div class="mt-10 mb-8 p-6 rounded-[32px] bg-white border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.05)] transition-all duration-300 group/summary">
                             <div class="flex flex-col items-center md:items-start text-center md:text-start">
                                 <span class="text-[11px] font-black text-blue-500/40 uppercase tracking-[0.2em] mb-2">{{ __('auth.register.selected_plan') }}</span>
-                                <h3 class="text-xl font-black text-slate-900 font-arabic leading-none" x-text="currentPlan.name"></h3>
+                                <h3 class="text-xl font-black text-slate-900 font-arabic leading-none" x-text="currentPlan.name || '{{ __('auth.register.please_select_plan') ?? 'يرجى اختيار باقة' }}'"></h3>
                             </div>
                             
                             <div class="flex flex-col items-center md:items-end">
@@ -719,6 +721,25 @@ document.addEventListener('alpine:init', () => {
                 </div>
             </div>
         </div>
+        @if(request('debug'))
+        <div class="fixed bottom-4 left-4 z-[9999] bg-slate-900/90 text-white p-6 rounded-3xl backdrop-blur-xl border border-white/10 max-w-md max-h-[400px] overflow-auto text-[10px] font-mono shadow-2xl">
+            <h4 class="text-blue-400 font-black mb-3 border-b border-white/10 pb-2 uppercase tracking-widest">Debug Console</h4>
+            <div class="space-y-4">
+                <div>
+                    <span class="text-slate-400 block mb-1">Selected Plan:</span>
+                    <span class="text-emerald-400 font-bold" x-text="selectedPlan"></span>
+                </div>
+                <div>
+                    <span class="text-slate-400 block mb-1">User Country:</span>
+                    <span x-text="userCountry"></span>
+                </div>
+                <div>
+                    <span class="text-slate-400 block mb-1">Packages JSON:</span>
+                    <pre class="bg-black/40 p-3 rounded-xl whitespace-pre-wrap select-all" x-text="JSON.stringify(packages, null, 2)"></pre>
+                </div>
+            </div>
+        </div>
+        @endif
     </div>
 </div>
 @endsection
