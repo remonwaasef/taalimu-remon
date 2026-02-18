@@ -55,6 +55,11 @@ $tenantRoutes = function () {
         Route::post('password/change', [AuthController::class, 'changePassword'])->name('center.password.change.submit');
     });
 
+    // QR Attendance Mark - Public route (protected by signed URL, NOT by auth middleware)
+    // Students scan this from their phone and may not be logged in
+    Route::get('attendance/mark/{schedule}', [AttendanceController::class, 'markByQr'])->name('center.attendance.markByQr');
+    Route::post('attendance/mark/{schedule}/login', [AttendanceController::class, 'loginAndMark'])->name('center.attendance.loginAndMark');
+
     // Protected Routes (Auth Only - No Subscription Check)
     Route::middleware(['auth', 'force_password_change'])->group(function() {
         Route::match(['get', 'post'], 'logout', [AuthController::class, 'logout'])->name('center.logout');
@@ -292,9 +297,8 @@ $tenantRoutes = function () {
             Route::get('attendance/schedule/{schedule}', [AttendanceController::class, 'show'])->name('center.attendance.show');
             Route::post('attendance', [AttendanceController::class, 'store'])->name('center.attendance.store');
             
-            // QR Attendance
+            // QR Attendance (showQr is for teachers only, markByQr moved to public routes above)
             Route::get('attendance/qr/{schedule}', [AttendanceController::class, 'showQr'])->name('center.attendance.qr');
-            Route::get('attendance/mark/{schedule}', [AttendanceController::class, 'markByQr'])->name('center.attendance.markByQr');
             Route::post('attendance/bulk-absent/{schedule}', [AttendanceController::class, 'bulkAbsent'])->name('center.attendance.bulkAbsent');
         });
 
