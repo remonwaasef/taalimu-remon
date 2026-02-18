@@ -356,9 +356,7 @@ if ($mode === 'path') {
     Route::prefix('c/{tenant}')
         ->middleware([\App\Http\Middleware\IdentifyTenant::class])
         ->group($tenantRoutes);
-} else {
     // Subdomain-based tenancy: {tenant}.domain.com/...
     Route::domain(config('app.tenant_domain') == 'localhost' ? '{tenant}.localhost' : '{tenant}.' . config('app.tenant_domain'))
-        ->middleware([\App\Http\Middleware\IdentifyTenant::class])
         ->group($tenantRoutes);
 }

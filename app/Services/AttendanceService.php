@@ -86,8 +86,12 @@ class AttendanceService
     /**
      * Generate a signed QR URL for attendance.
      */
-    public function generateQrUrl(int $scheduleId, string $tenantDomain)
+    public function generateQrUrl(int $scheduleId, ?string $tenantDomain = null)
     {
+        if (!$tenantDomain && app()->bound('tenant')) {
+            $tenantDomain = app('tenant')->domain;
+        }
+
         return URL::temporarySignedRoute(
             'center.attendance.markByQr',
             now()->addSeconds(60),
