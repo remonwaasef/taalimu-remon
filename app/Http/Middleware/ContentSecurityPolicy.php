@@ -52,7 +52,7 @@ class ContentSecurityPolicy
         $response->headers->set('X-Frame-Options', 'DENY');
         $response->headers->set('X-XSS-Protection', '1; mode=block');
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
-        $response->headers->set('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+        $response->headers->set('Permissions-Policy', 'geolocation=(), microphone=(), camera=(self)');
 
         // HSTS - Strict Transport Security (Only in production/https)
         if (!app()->environment('local')) {
