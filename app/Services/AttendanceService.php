@@ -94,7 +94,7 @@ class AttendanceService
 
         return URL::temporarySignedRoute(
             'center.attendance.markByQr',
-            now()->addSeconds(60),
+            now()->addMinutes(5),
             [
                 'tenant' => $tenantDomain,
                 'schedule' => $scheduleId,

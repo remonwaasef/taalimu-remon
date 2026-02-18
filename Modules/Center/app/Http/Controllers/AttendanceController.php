@@ -153,9 +153,15 @@ class AttendanceController extends Controller
             abort(403, 'QR Code Expired or Invalid.');
         }
 
+        if (!auth()->check()) {
+            return view('center::attendance.scan-login', ['schedule' => $schedule]);
+        }
+
         $student = auth()->user()->student;
         if (!$student) {
-            return redirect()->route('center.login')->with('error', 'Must be logged in as a student.');
+            // Logged in but not a student (e.g. Admin)
+            auth()->logout();
+            return view('center::attendance.scan-login', ['schedule' => $schedule, 'message' => 'هذا الحساب ليس حساب طالب. يرجى تسجيل الدخول بحساب طالب.']);
         }
 
         if ($this->attendanceService->hasAttendedToday($student->id, $schedule->id)) {
