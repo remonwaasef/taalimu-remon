@@ -39,6 +39,14 @@ class AppServiceProvider extends ServiceProvider
         // Prevent N+1 queries in development
         // Model::preventLazyLoading(! app()->isProduction());
 
+        // Global Session/Cookie compatibility for multi-subdomain
+        // Set this in boot() to ensure it's ready BEFORE StartSession middleware runs
+        $mainDomain = config('app.tenant_domain');
+        if ($mainDomain && $mainDomain !== 'localhost' && !str_contains($mainDomain, 'localhost')) {
+            config(['session.domain' => '.' . str_replace('www.', '', $mainDomain)]);
+            config(['session.same_site' => 'lax']);
+        }
+
         // Register Tenant Model Observers for Caching
         \App\Models\User::observe(\App\Observers\TenantModelObserver::class);
         \App\Models\Instructor::observe(\App\Observers\TenantModelObserver::class);
