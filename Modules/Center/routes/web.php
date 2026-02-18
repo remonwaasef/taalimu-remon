@@ -49,6 +49,10 @@ $tenantRoutes = function () {
         Route::get('magic-login/{student}', [AuthController::class, 'magicLogin'])
             ->name('center.login.magic')
             ->middleware('signed');
+
+        // Force Password Change Routes
+        Route::get('password/change', [AuthController::class, 'showChangePasswordForm'])->name('center.password.change');
+        Route::post('password/change', [AuthController::class, 'changePassword'])->name('center.password.change.submit');
     });
 
     // Protected Routes (Auth Only - No Subscription Check)

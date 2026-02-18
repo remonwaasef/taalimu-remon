@@ -13,8 +13,8 @@ class ForcePasswordChange
      */
     protected $except = [
         'center.logout',
-        'password.change',
-        'password.change.submit',
+        'center.password.change',
+        'center.password.change.submit',
         'lang.switch',
     ];
 
@@ -30,7 +30,7 @@ class ForcePasswordChange
             $routeName = $request->route()->getName();
             
             if (!in_array($routeName, $this->except)) {
-                return redirect()->route('password.change')
+                return redirect()->route('center.password.change')
                     ->with('warning', 'يجب عليك تغيير كلمة المرور قبل المتابعة.');
             }
         }
