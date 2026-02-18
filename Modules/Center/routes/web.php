@@ -356,7 +356,19 @@ if ($mode === 'path') {
     Route::prefix('c/{tenant}')
         ->middleware([\App\Http\Middleware\IdentifyTenant::class])
         ->group($tenantRoutes);
+}
+
+// Register subdomain routes for both 'subdomain' AND 'path' modes (hybrid support)
+if ($mode === 'path' || $mode === 'subdomain') {
+    $domain = config('app.tenant_domain');
+    $appUrlHost = parse_url(config('app.url'), PHP_URL_HOST);
+    
+    // Fallback to APP_URL host if tenant_domain is localhost but we are on a real domain (production)
+    if (($domain === 'localhost' || empty($domain)) && $appUrlHost && $appUrlHost !== 'localhost') {
+        $domain = $appUrlHost;
+    }
+
     // Subdomain-based tenancy: {tenant}.domain.com/...
-    Route::domain(config('app.tenant_domain') == 'localhost' ? '{tenant}.localhost' : '{tenant}.' . config('app.tenant_domain'))
+    Route::domain($domain == 'localhost' ? '{tenant}.localhost' : '{tenant}.' . $domain)
         ->group($tenantRoutes);
 }
