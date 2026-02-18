@@ -712,13 +712,24 @@
         const close = document.getElementById('sidebarClose');
 
         function toggleSidebar() {
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
+            if (sidebar) sidebar.classList.toggle('active');
+            if (overlay) overlay.classList.toggle('active');
         }
 
-        toggle?.addEventListener('click', toggleSidebar);
-        close?.addEventListener('click', toggleSidebar);
-        overlay?.addEventListener('click', toggleSidebar);
+        if (toggle) toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleSidebar();
+        });
+        
+        if (close) close.addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleSidebar();
+        });
+
+        if (overlay) overlay.addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleSidebar();
+        });
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
