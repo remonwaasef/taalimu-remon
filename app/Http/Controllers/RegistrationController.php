@@ -13,12 +13,6 @@ class RegistrationController extends Controller
 {
     public function showRegistrationForm()
     {
-        // Force update branding settings if they are still showing defaults
-        if (\App\Models\SiteSetting::get('site_name') === 'EduCentral' || \App\Models\SiteSetting::get('site_name') === null) {
-            \App\Models\SiteSetting::set('site_name', 'Taalimu');
-            \App\Models\SiteSetting::set('site_description', 'نظام إدارة المراكز التعليمية المتطور');
-        }
-
         // Bypassing cache to ensure data is fresh after seeder
         $packages = \App\Models\Package::with('features')
             ->where('is_active', true)

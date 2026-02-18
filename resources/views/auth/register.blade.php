@@ -188,10 +188,6 @@ document.addEventListener('alpine:init', () => {
         userCountry: 'default',
 
         async init() {
-            console.log('Registration Packages:', this.packages);
-            console.log('Packages Type:', Array.isArray(this.packages) ? 'Array' : typeof this.packages);
-            console.log('Packages Length:', this.packages.length);
-            
             // Default select first plan if requested plan is invalid or missing
             if (!this.packages.find || !this.packages.find(p => p.slug === this.selectedPlan)) {
                 this.selectedPlan = (this.packages && this.packages.length > 0) ? this.packages[0].slug : '';
@@ -724,25 +720,6 @@ document.addEventListener('alpine:init', () => {
                 </div>
             </div>
         </div>
-        @if(request('debug'))
-        <div class="fixed bottom-4 left-4 z-[9999] bg-slate-900/90 text-white p-6 rounded-3xl backdrop-blur-xl border border-white/10 max-w-md max-h-[400px] overflow-auto text-[10px] font-mono shadow-2xl">
-            <h4 class="text-blue-400 font-black mb-3 border-b border-white/10 pb-2 uppercase tracking-widest">Debug Console</h4>
-            <div class="space-y-4">
-                <div>
-                    <span class="text-slate-400 block mb-1">Selected Plan:</span>
-                    <span class="text-emerald-400 font-bold" x-text="selectedPlan"></span>
-                </div>
-                <div>
-                    <span class="text-slate-400 block mb-1">User Country:</span>
-                    <span x-text="userCountry"></span>
-                </div>
-                <div>
-                    <span class="text-slate-400 block mb-1">Packages JSON:</span>
-                    <pre class="bg-black/40 p-3 rounded-xl whitespace-pre-wrap select-all" x-text="JSON.stringify(packages, null, 2)"></pre>
-                </div>
-            </div>
-        </div>
-        @endif
     </div>
 </div>
 @endsection
