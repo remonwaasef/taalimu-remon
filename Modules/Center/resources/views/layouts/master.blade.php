@@ -566,14 +566,15 @@
     <!-- Main Content -->
     <main class="main-content">
         <!-- Header -->
-        <header class="d-flex justify-content-between align-items-center mb-4">
-            <div class="d-flex align-items-center gap-3">
+        <!-- Header -->
+        <header class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+            <div class="d-flex align-items-center gap-2">
                 <button class="btn btn-white bg-white border shadow-sm rounded-circle d-lg-none p-0 d-flex align-items-center justify-content-center" id="sidebarToggle" style="width: 40px; height: 40px;">
                     <i class="fas fa-bars text-primary"></i>
                 </button>
-                <h2 class="fw-bold mb-0" style="font-size: 1.5rem;">@yield('page-title', __('sidebar.overview'))</h2>
+                <h2 class="fw-bold mb-0 d-none d-sm-block" style="font-size: 1.25rem;">@yield('page-title', __('sidebar.overview'))</h2>
             </div>
-            <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center gap-2">
                 <!-- Notifications Dropdown -->
                 <div class="dropdown">
                     <button class="btn btn-white bg-white border shadow-sm rounded-pill px-3 dropdown-toggle no-caret position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false">
