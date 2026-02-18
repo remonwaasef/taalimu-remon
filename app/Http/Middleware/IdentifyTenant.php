@@ -17,6 +17,16 @@ class IdentifyTenant
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Global Session/Cookie compatibility for multi-subdomain (Cross-domain handoff)
+        // Set this BEFORE skipping identification to ensure even main domain uses shared cookies
+        $mainHost = config('app.tenant_domain') ?: parse_url(config('app.url'), PHP_URL_HOST);
+        if ($mainHost && $mainHost !== 'localhost' && !str_contains($mainHost, 'localhost')) {
+            // Set session domain to allow cookie sharing between subdomains
+            config(['session.domain' => '.' . $mainHost]);
+            // Set same_site to lax for better mobile compatibility (Safari/ITP)
+            config(['session.same_site' => 'lax']);
+        }
+
         $mode = config('app.tenancy_mode', 'subdomain');
         $tenant = null;
         
@@ -160,7 +170,7 @@ class IdentifyTenant
         if ($mode === 'path' && count($request->segments()) >= 2 && $request->segments()[0] === 'c') {
             abort(404, 'Center not found.');
         }
-        
+
         return $next($request);
     }
 }
