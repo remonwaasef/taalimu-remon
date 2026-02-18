@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 // Main domain routes (without tenant subdomain)
 // Main domain routes
 // Main domain routes
-Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain', 'localhost'))->group(function () {
+Route::middleware(['web', 'throttle:global', \App\Http\Middleware\IdentifyTenant::class])->domain(config('app.tenant_domain', 'localhost'))->group(function () {
     Route::get('/', [App\Http\Controllers\LandingController::class, 'index'])->name('home');
 
     Route::get('/register', [App\Http\Controllers\RegistrationController::class, 'showRegistrationForm'])->name('register');
