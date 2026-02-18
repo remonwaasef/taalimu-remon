@@ -1134,7 +1134,7 @@
     }
 </script>
 
-@endsection
+@endpush
 
 @push('scripts')
 <!-- QR Code Library for ID Card -->
