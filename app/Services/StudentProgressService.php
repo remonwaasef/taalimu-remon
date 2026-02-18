@@ -24,22 +24,20 @@ class StudentProgressService
      */
     public function getNextLesson(Enrollment $enrollment)
     {
-        $lastProgress = LessonProgress::where('enrollment_id', $enrollment->id)
+        $allLessons = $enrollment->course->sections->flatMap->lessons;
+        $courseLessonIds = $allLessons->pluck('id');
+        
+        $lastProgress = LessonProgress::where('user_id', $enrollment->user_id)
+            ->whereIn('lesson_id', $courseLessonIds)
             ->latest('updated_at')
             ->first();
 
         if (!$lastProgress) {
             // Start from the first lesson
-            return $enrollment->course->sections->first()?->lessons?->first();
+            return $allLessons->first();
         }
 
         // Find next lesson after the last completed one
-        // Note: This assumes lessons are loaded or need to be loaded. 
-        // Optimized to not load everything if possible, but flatMap approach requires loading sections.
-        // For standard course sizes this is acceptable.
-        
-        $allLessons = $enrollment->course->sections->flatMap->lessons;
-        
         $currentIndex = $allLessons->search(function($item) use ($lastProgress) {
             return $item->id == $lastProgress->lesson_id;
         });
