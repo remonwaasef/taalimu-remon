@@ -1,7 +1,74 @@
 @extends('center::layouts.master')
 
 @section('content')
+    @if(session('generated_password'))
+        @php
+            $msg = "مرحباً " . session('student_name') . "،\nيسعدنا انضمامك إلينا! 🎉\n\nبيانات الدخول الخاصة بك:\nرابط المنصة: " . url('/login') . "\nاسم المستخدم: " . (session('student_phone') ?? $student->phone) . "\nكلمة المرور: " . session('generated_password') . "\n\nنصيحة: سيُطلب منك تغيير كلمة المرور عند أول دخول للأمان.";
+            $whatsappUrl = "https://wa.me/" . (session('student_phone') ?? $student->phone) . "?text=" . urlencode($msg);
+            $mailtoUrl = "mailto:" . (session('student_email') ?? $student->email) . "?subject=تم إعادة تعيين كلمة مرورك&body=" . rawurlencode($msg);
+            
+            $qrUrl = \Illuminate\Support\Facades\URL::signedRoute('center.login.magic', ['student' => $student->id, 'tenant' => app('tenant')->domain]);
+        @endphp
+
+        <div class="premium-ticket-container mb-5 animate__animated animate__fadeIn">
+            <div class="premium-ticket shadow-lg">
+                <div class="row g-0">
+                    <!-- Left Side: Student Info -->
+                    <div class="col-md-8 p-4 bg-white rounded-start-4 position-relative overflow-hidden">
+                        <div class="ticket-decoration"></div>
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <i class="fas fa-key fs-4"></i>
+                            </div>
+                            <div>
+                                <h4 class="fw-bold mb-0 text-dark">تم تصفير كلمة المرور</h4>
+                                <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3 mt-1">يجب تزويد الطالب بالبيانات الجديدة</span>
+                            </div>
+                        </div>
+
+                        <div class="row g-4 mt-2">
+                            <div class="col-sm-6">
+                                <label class="text-muted small text-uppercase fw-bold d-block mb-1">اسم الطالب</label>
+                                <span class="fw-bold fs-5">{{ $student->name }}</span>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="text-muted small text-uppercase fw-bold d-block mb-1">كلمة المرور الجديدة</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="fs-4 fw-bold text-danger font-monospace">{{ session('generated_password') }}</span>
+                                    <button onclick="copyToClipboard('{{ session('generated_password') }}')" class="btn btn-sm btn-light rounded-circle" title="نسخ">
+                                        <i class="fas fa-copy text-primary"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-top d-flex flex-wrap gap-2">
+                            <button onclick="copyAllDetails()" class="btn btn-outline-dark rounded-pill px-4">
+                                <i class="fas fa-copy me-2"></i> نسخ جميع البيانات
+                            </button>
+                            <a href="{{ $whatsappUrl }}" target="_blank" class="btn btn-success rounded-pill px-4">
+                                <i class="fab fa-whatsapp me-2"></i> إرسال عبر واتساب
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right Side: QR Code -->
+                    <div class="col-md-4 p-4 text-center d-flex flex-column align-items-center justify-content-center bg-light rounded-end-4 border-start border-dashed position-relative">
+                        <div class="ticket-stub-decoration top"></div>
+                        <div class="ticket-stub-decoration bottom"></div>
+                        
+                        <div class="qr-container bg-white p-2 rounded-3 shadow-sm mb-3">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode($qrUrl) }}" alt="QR Code" style="width: 140px; height: 140px;">
+                        </div>
+                        <p class="small text-muted mb-0">سكان للدخول المباشر (Magic Login)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <div class="row g-4 animate__animated animate__fadeIn">
+
         <!-- Student Header Card -->
         <div class="col-12">
             <div class="card border-0 shadow-elite rounded-5 overflow-hidden position-relative mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);">
@@ -734,6 +801,37 @@
 
         .hover-lift:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0,0,0,0.08) !important; }
         .border-dashed-warning { border: 2px dashed rgba(255, 193, 7, 0.3); }
+
+        /* Ticket Styles */
+        .premium-ticket {
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        .border-dashed {
+            border-left: 2px dashed #dee2e6 !important;
+        }
+        .ticket-stub-decoration {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #f8fafc;
+            border-radius: 50%;
+            left: -15px;
+            z-index: 10;
+        }
+        .ticket-stub-decoration.top { top: -15px; }
+        .ticket-stub-decoration.bottom { bottom: -15px; }
+        
+        @media (max-width: 768px) {
+            .border-dashed {
+                border-left: none !important;
+                border-top: 2px dashed #dee2e6 !important;
+            }
+            .ticket-stub-decoration {
+                display: none;
+            }
+        }
         
         .grade-badge { width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem; }
 
@@ -1015,6 +1113,26 @@
             });
         });
     });
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function() {
+            const toast = document.createElement('div');
+            toast.className = 'position-fixed bottom-0 start-50 translate-middle-x mb-5 bg-dark text-white p-3 rounded-4 shadow animate__animated animate__fadeInUp';
+            toast.style.zIndex = '9999';
+            toast.innerHTML = '<i class="fas fa-check-circle text-success me-2"></i> تم النسخ بنجاح';
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
+        });
+    }
+
+    function copyAllDetails() {
+        @if(session('generated_password'))
+            const text = `{!! addslashes($msg) !!}`;
+            navigator.clipboard.writeText(text).then(function() {
+                alert('تم نسخ جميع البيانات بنجاح');
+            });
+        @endif
+    }
 </script>
 
 @endsection
