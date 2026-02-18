@@ -150,69 +150,86 @@
 @push('scripts')
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
-    let html5QrcodeScanner;
-    let restartScannerTimeout;
-    const qrConfig = { fps: 10, qrbox: { width: 250, height: 250 } };
+    let html5QrScanner = null;
+    let scannerRunning = false;
+    const scanConfig = { fps: 10, qrbox: { width: 250, height: 250 } };
+
+    function onScanSuccess(decodedText) {
+        console.log('[QR] Scanned:', decodedText);
+        
+        // Stop scanner immediately
+        stopScanner();
+        
+        // 1. Try to extract student ID from Magic Login URL
+        const urlMatch = decodedText.match(/magic-login\/(\d+)/);
+        if (urlMatch && urlMatch[1]) {
+            console.log('[QR] Magic-login ID found:', urlMatch[1]);
+            markAttendance(urlMatch[1], null);
+            return;
+        }
+
+        // 2. Pure number → treat as student ID
+        if (/^\d+$/.test(decodedText.trim())) {
+            console.log('[QR] Numeric ID:', decodedText.trim());
+            markAttendance(decodedText.trim(), null);
+            return;
+        }
+
+        // 3. Any other text → treat as student code (e.g. "S-9-1001")
+        if (decodedText && decodedText.trim().length > 0) {
+            console.log('[QR] Student code:', decodedText.trim());
+            markAttendance(null, decodedText.trim());
+            return;
+        }
+
+        showResult('رمز QR غير صالح. تأكد من مسح بطاقة الطالب.', 'danger');
+        setTimeout(startScanner, 3000);
+    }
 
     function startScanner() {
-        if (!html5QrcodeScanner) {
-            html5QrcodeScanner = new Html5QrcodeScanner(
-                "reader", qrConfig, /* verbose= */ false);
-        }
-        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+        const readerEl = document.getElementById('reader');
+        if (!readerEl) return;
+        
+        // Clear previous content
+        readerEl.innerHTML = '';
+        document.getElementById('scan-result').classList.add('d-none');
+        
+        html5QrScanner = new Html5Qrcode("reader");
+        
+        html5QrScanner.start(
+            { facingMode: "environment" },
+            scanConfig,
+            onScanSuccess,
+            () => {} // ignore scan failures (normal while pointing camera)
+        ).then(() => {
+            scannerRunning = true;
+            console.log('[QR] Scanner started successfully');
+        }).catch(err => {
+            scannerRunning = false;
+            console.error('[QR] Camera error:', err);
+            readerEl.innerHTML = '<div class="alert alert-danger m-3">' +
+                '<i class="bi bi-camera-video-off me-2"></i>' +
+                'فشل في تشغيل الكاميرا.<br>' +
+                '<small class="text-muted">تأكد من:<br>• استخدام HTTPS<br>• السماح بالوصول للكاميرا من إعدادات المتصفح</small>' +
+                '</div>';
+        });
     }
 
-    function onScanSuccess(decodedText, decodedResult) {
-        // Stop the scanner once success
-        if (html5QrcodeScanner) {
-            html5QrcodeScanner.clear().catch(error => {
-                console.error("Failed to clear html5QrcodeScanner.", error);
+    function stopScanner() {
+        if (html5QrScanner && scannerRunning) {
+            html5QrScanner.stop().then(() => {
+                html5QrScanner.clear();
+                scannerRunning = false;
+                console.log('[QR] Scanner stopped');
+            }).catch(err => {
+                console.error('[QR] Stop error:', err);
+                scannerRunning = false;
             });
         }
-
-        clearTimeout(restartScannerTimeout);
-
-        // 1. Try to extract ID from URL (Magic Login format)
-        const urlMatch = decodedText.match(/magic-login\/(\d+)/);
-        
-        if (urlMatch && urlMatch[1]) {
-            markAttendance(urlMatch[1]);
-            return;
-        }
-
-        // 2. If already a number, treat as Student ID or Code
-        if (/^\d+$/.test(decodedText)) {
-            markAttendance(decodedText);
-            return;
-        }
-
-        // 3. Otherwise treat as a potential Student Code (alphanumeric)
-        if (decodedText && decodedText.length > 0) {
-            markAttendance(null, decodedText);
-            return;
-        }
-
-        showResult('رمز QR غير صالح. تأكد من مسح بطاقة الطالب أو كود الدخول.', 'danger');
-        restartScannerTimeout = setTimeout(startScanner, 3000);
     }
 
-    function onScanFailure(error) {
-        // Ignore failure - common while scanning
-    }
-
-    function setLoading(isLoading) {
-        const resultDiv = document.getElementById('scan-result');
-        if (isLoading) {
-            resultDiv.classList.remove('d-none');
-            resultDiv.innerHTML = '<div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div> جاري تسجيل الحضور...';
-            resultDiv.className = 'position-absolute bottom-0 start-0 w-100 p-3 bg-white bg-opacity-90 text-primary fw-bold';
-        } else {
-            resultDiv.classList.add('d-none');
-        }
-    }
-
-    function markAttendance(studentId = null, studentCode = null) {
-        setLoading(true);
+    function markAttendance(studentId, studentCode) {
+        showResult('<div class="spinner-border spinner-border-sm me-2"></div> جاري تسجيل الحضور...', 'primary');
         
         const payload = {
             course_id: '{{ $schedule->course_id }}',
@@ -220,9 +237,10 @@
             session_date: '{{ today()->format("Y-m-d") }}',
             status: 'present'
         };
-
         if (studentId) payload.student_id = studentId;
         if (studentCode) payload.student_code = studentCode;
+
+        console.log('[QR] Sending attendance:', payload);
 
         fetch('{{ route("center.attendance.store") }}', {
             method: 'POST',
@@ -234,35 +252,26 @@
             body: JSON.stringify(payload)
         })
         .then(response => {
-            if (response.headers.get("content-type") && response.headers.get("content-type").indexOf("application/json") !== -1) {
-                 return response.json().then(data => ({ status: response.status, body: data }));
-            } else {
-                 // Even if it redirects back success, the status is usually 200/302.
-                 // If it returns HTML (like a redirect to the same page), we consider it success if status is ok.
-                 return { status: response.status, body: {} };
+            const contentType = response.headers.get("content-type") || '';
+            if (contentType.includes("application/json")) {
+                return response.json().then(data => ({ ok: response.ok, status: response.status, body: data }));
             }
+            // Non-JSON response (redirect/HTML) — treat 2xx as success
+            return { ok: response.ok, status: response.status, body: { message: response.ok ? 'تم بنجاح' : 'فشل' } };
         })
-        .then(({ status, body }) => {
-            if (status >= 200 && status < 300) {
-                 showResult('✅ تم تسجيل الحضور للطالب بنجاح!', 'success');
-                 setTimeout(() => location.reload(), 1000);
+        .then(({ ok, status, body }) => {
+            if (ok) {
+                showResult('✅ ' + (body.message || 'تم تسجيل الحضور بنجاح!'), 'success');
+                setTimeout(() => location.reload(), 1500);
             } else {
-                 showResult('❌ ' + (body.message || 'فشل التسجيل (قد يكون مسجلاً بالفعل أو انتهى الوقت)'), 'danger');
-                 setTimeout(() => {
-                     if(html5QrcodeScanner.getState() === Html5QrcodeScannerState.PAUSED) {
-                        html5QrcodeScanner.resume();
-                     }
-                 }, 2000);
+                showResult('❌ ' + (body.message || 'فشل التسجيل'), 'danger');
+                setTimeout(startScanner, 3000);
             }
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('[QR] Network error:', error);
             showResult('❌ حدث خطأ في الاتصال بالسيرفر', 'danger');
-            setTimeout(() => {
-                 if(html5QrcodeScanner.getState() === Html5QrcodeScannerState.PAUSED) {
-                    html5QrcodeScanner.resume();
-                 }
-            }, 2000);
+            setTimeout(startScanner, 3000);
         });
     }
 
@@ -270,34 +279,25 @@
         const resultDiv = document.getElementById('scan-result');
         resultDiv.classList.remove('d-none');
         resultDiv.innerHTML = message;
-        
-        const textClass = type === 'success' ? 'text-success' : (type === 'warning' ? 'text-warning' : 'text-danger');
-        resultDiv.className = `position-absolute bottom-0 start-0 w-100 p-3 bg-white bg-opacity-95 fw-bold ${textClass}`;
+        const colorMap = { success: 'text-success', danger: 'text-danger', warning: 'text-warning', primary: 'text-primary' };
+        resultDiv.className = 'position-absolute bottom-0 start-0 w-100 p-3 bg-white bg-opacity-95 fw-bold ' + (colorMap[type] || 'text-dark');
     }
 
-    // Initialize Modal Events
-    const scanModal = document.getElementById('scanQrModal');
-    if (scanModal) {
-        scanModal.addEventListener('shown.bs.modal', function () {
-            html5QrcodeScanner = new Html5Qrcode("reader");
-            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
-            
-            html5QrcodeScanner.start({ facingMode: "environment" }, config, onScanSuccess)
-            .catch(err => {
-                console.error("Error starting scanner", err);
-                alert("فشل تشغيل الكاميرا: " + err);
-                document.getElementById('reader').innerHTML = '<div class="alert alert-danger m-3">فشل في تشغيل الكاميرا. يرجى التأكد من استخدام HTTPS والسماح للكاميرا.</div>';
+    // ─── Modal Lifecycle ───
+    document.addEventListener('DOMContentLoaded', function() {
+        const scanModal = document.getElementById('scanQrModal');
+        if (scanModal) {
+            scanModal.addEventListener('shown.bs.modal', function () {
+                console.log('[QR] Modal opened, starting scanner...');
+                startScanner();
             });
-        });
 
-        scanModal.addEventListener('hidden.bs.modal', function () {
-            if (html5QrcodeScanner) {
-                html5QrcodeScanner.stop().then(() => {
-                    html5QrcodeScanner.clear();
-                }).catch(err => console.error("Failed to stop scanner", err));
-            }
-        });
-    }
+            scanModal.addEventListener('hidden.bs.modal', function () {
+                console.log('[QR] Modal closed, stopping scanner...');
+                stopScanner();
+            });
+        }
+    });
 </script>
 @endpush
 @endsection
