@@ -82,23 +82,64 @@ class AttendanceController extends Controller
     {
         $this->authorize('create', Attendance::class);
         $validated = $request->validate([
-            'student_id' => 'required|exists:students,id',
+            'student_id' => 'nullable|exists:students,id',
+            'student_code' => 'nullable|string',
             'course_id' => 'required|exists:courses,id',
             'schedule_id' => 'required|exists:schedules,id',
-            'status' => 'required|in:present,late,absent',
             'session_date' => 'required|date|before_or_equal:today',
+            'status' => 'required|in:present,absent,late,excused'
         ]);
-        
+
+        $studentId = $request->student_id;
+
+        // If student_id is not provided, try to find by code
+        if (!$studentId && $request->student_code) {
+            $student = \App\Models\Student::where('tenant_id', app('tenant')->id)
+                ->where('code', $request->student_code)
+                ->first();
+            
+            if (!$student) {
+                // Try finding by ID directly just in case the code is actually an ID
+                $student = \App\Models\Student::where('tenant_id', app('tenant')->id)
+                    ->where('id', $request->student_code)
+                    ->first();
+            }
+
+            if (!$student) {
+                return $request->expectsJson() 
+                    ? response()->json(['success' => false, 'message' => 'لم يتم العثور على الطالب بهذا الكود.'], 404)
+                    : back()->with('error', 'لم يتم العثور على الطالب بهذا الكود.');
+            }
+            $studentId = $student->id;
+        }
+
+        if (!$studentId) {
+            return $request->expectsJson()
+                ? response()->json(['success' => false, 'message' => 'معرف الطالب مطلوب.'], 422)
+                : back()->with('error', 'معرف الطالب مطلوب.');
+        }
+
         $schedule = Schedule::findOrFail($validated['schedule_id']);
         if (now()->isAfter(Carbon::parse($schedule->end_time)) && $validated['status'] !== 'absent') {
-            return back()->with('error', 'لا يمكن تسجيل الحضور بعد انتهاء وقت الحصة (يمكنك فقط تسجيل الغياب)');
+            return $request->expectsJson()
+                ? response()->json(['success' => false, 'message' => 'لا يمكن تسجيل الحضور بعد انتهاء وقت الحصة.'], 422)
+                : back()->with('error', 'لا يمكن تسجيل الحصة بعد انتهاء وقت الحصة (يمكنك فقط تسجيل الغياب)');
+        }
+
+        if ($this->attendanceService->hasAttendedToday($studentId, $request->schedule_id)) {
+            return $request->expectsJson()
+                ? response()->json(['success' => false, 'message' => 'هذا الطالب مسجل حضوره بالفعل.'], 422)
+                : back()->with('error', 'هذا الطالب مسجل حضوره بالفعل اليوم');
         }
 
         $this->attendanceService->markAttendance(array_merge($validated, [
-            'tenant_id' => app('tenant')->id
+            'tenant_id' => app('tenant')->id,
+            'student_id' => $studentId, // Ensure the resolved student ID is used
         ]));
 
-        return back()->with('success', 'تم تحديث الحالة بنجاح');
+        return $request->expectsJson()
+            ? response()->json(['success' => true, 'message' => 'تم تسجيل الحضور بنجاح!'])
+            : back()->with('success', 'تم تحديث الحالة بنجاح');
     }
 
     /**

@@ -151,36 +151,79 @@
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
     let html5QrcodeScanner;
+    let restartScannerTimeout;
+    const qrConfig = { fps: 10, qrbox: { width: 250, height: 250 } };
+
+    function startScanner() {
+        if (!html5QrcodeScanner) {
+            html5QrcodeScanner = new Html5QrcodeScanner(
+                "reader", qrConfig, /* verbose= */ false);
+        }
+        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    }
 
     function onScanSuccess(decodedText, decodedResult) {
-        // Stop scanning temporarily
+        // Stop the scanner once success
         if (html5QrcodeScanner) {
-            html5QrcodeScanner.pause();
+            html5QrcodeScanner.clear().catch(error => {
+                console.error("Failed to clear html5QrcodeScanner.", error);
+            });
         }
 
-        const resultDiv = document.getElementById('scan-result');
-        resultDiv.classList.remove('d-none');
-        resultDiv.innerHTML = '<div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div> جاري تسجيل الحضور...';
-        resultDiv.className = 'position-absolute bottom-0 start-0 w-100 p-3 bg-white bg-opacity-90 text-primary fw-bold';
+        clearTimeout(restartScannerTimeout);
 
-        // Extract Student ID from URL
-        // Expected format: .../magic-login/{id}?signature=...
-        const match = decodedText.match(/magic-login\/(\d+)/);
+        // 1. Try to extract ID from URL (Magic Login format)
+        const urlMatch = decodedText.match(/magic-login\/(\d+)/);
         
-        if (match && match[1]) {
-            const studentId = match[1];
-            markAttendance(studentId);
+        if (urlMatch && urlMatch[1]) {
+            markAttendance(urlMatch[1]);
+            return;
+        }
+
+        // 2. If already a number, treat as Student ID or Code
+        if (/^\d+$/.test(decodedText)) {
+            markAttendance(decodedText);
+            return;
+        }
+
+        // 3. Otherwise treat as a potential Student Code (alphanumeric)
+        if (decodedText && decodedText.length > 0) {
+            markAttendance(null, decodedText);
+            return;
+        }
+
+        showResult('رمز QR غير صالح. تأكد من مسح بطاقة الطالب أو كود الدخول.', 'danger');
+        restartScannerTimeout = setTimeout(startScanner, 3000);
+    }
+
+    function onScanFailure(error) {
+        // Ignore failure - common while scanning
+    }
+
+    function setLoading(isLoading) {
+        const resultDiv = document.getElementById('scan-result');
+        if (isLoading) {
+            resultDiv.classList.remove('d-none');
+            resultDiv.innerHTML = '<div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div> جاري تسجيل الحضور...';
+            resultDiv.className = 'position-absolute bottom-0 start-0 w-100 p-3 bg-white bg-opacity-90 text-primary fw-bold';
         } else {
-            showResult('رمز QR غير صالح. تأكد من استخدام بطاقة الطالب مع الرابط الجديد.', 'danger');
-            setTimeout(() => {
-                 if(html5QrcodeScanner.getState() === Html5QrcodeScannerState.PAUSED) {
-                    html5QrcodeScanner.resume();
-                 }
-            }, 2000);
+            resultDiv.classList.add('d-none');
         }
     }
 
-    function markAttendance(studentId) {
+    function markAttendance(studentId = null, studentCode = null) {
+        setLoading(true);
+        
+        const payload = {
+            course_id: '{{ $schedule->course_id }}',
+            schedule_id: '{{ $schedule->id }}',
+            session_date: '{{ today()->format("Y-m-d") }}',
+            status: 'present'
+        };
+
+        if (studentId) payload.student_id = studentId;
+        if (studentCode) payload.student_code = studentCode;
+
         fetch('{{ route("center.attendance.store") }}', {
             method: 'POST',
             headers: {
@@ -188,13 +231,7 @@
                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify({
-                student_id: studentId,
-                course_id: '{{ $schedule->course_id }}',
-                schedule_id: '{{ $schedule->id }}', 
-                session_date: '{{ today()->format("Y-m-d") }}',
-                status: 'present'
-            })
+            body: JSON.stringify(payload)
         })
         .then(response => {
             if (response.headers.get("content-type") && response.headers.get("content-type").indexOf("application/json") !== -1) {
