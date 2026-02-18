@@ -78,6 +78,14 @@ class UnifiedAuthController extends Controller
             // Redirect to tenant login with token
             $loginUrl = tenant_url('login?token=' . $token, $tenant);
             
+            \Illuminate\Support\Facades\Log::info('Unified Login: Redirecting', [
+                'user_id' => $user->id,
+                'target_url' => $loginUrl,
+                'is_secure' => request()->isSecure(),
+                'app_url' => config('app.url'),
+                'tenant_domain' => config('app.tenant_domain'),
+            ]);
+
             return redirect($loginUrl);
         }
 
