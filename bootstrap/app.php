@@ -17,6 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Trust all proxies to ensure HTTPS is detected correctly behind load balancers
+        $middleware->trustProxies(at: '*');
+
         // Add SetLocale middleware globally for web routes
         $middleware->web(prepend: [
             \App\Http\Middleware\IdentifyTenant::class,
