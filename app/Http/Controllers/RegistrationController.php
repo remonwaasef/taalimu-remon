@@ -13,13 +13,11 @@ class RegistrationController extends Controller
 {
     public function showRegistrationForm()
     {
-        // Cache packages for 1 hour as they don't change often
-        $packages = \Illuminate\Support\Facades\Cache::remember('landing_packages', 3600, function () {
-            return \App\Models\Package::with('features')
-                ->where('is_active', true)
-                ->orderBy('sort_order')
-                ->get();
-        });
+        // Bypassing cache to ensure data is fresh after seeder
+        $packages = \App\Models\Package::with('features')
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get();
 
         $packagesData = $packages->map(function($p) {
             $currency = \App\Models\SiteSetting::get('currency_symbol', 'جنيه');
@@ -32,7 +30,7 @@ class RegistrationController extends Controller
 
             return [
                 'slug' => $p->slug,
-                'name' => app()->getLocale() == 'ar' ? $p->name : $p->name_en,
+                'name' => app()->getLocale() == 'ar' ? $p->name : ($p->name_en ?: $p->name),
                 'price' => number_format($p->price, 0) . ' ' . $currency,
                 'price_value' => number_format($p->price, 0),
                 'price_raw' => (float)$p->price,
