@@ -189,9 +189,12 @@ document.addEventListener('alpine:init', () => {
 
         async init() {
             console.log('Registration Packages:', this.packages);
+            console.log('Packages Type:', Array.isArray(this.packages) ? 'Array' : typeof this.packages);
+            console.log('Packages Length:', this.packages.length);
+            
             // Default select first plan if requested plan is invalid or missing
-            if (!this.packages.find(p => p.slug === this.selectedPlan)) {
-                this.selectedPlan = this.packages.length > 0 ? this.packages[0].slug : '';
+            if (!this.packages.find || !this.packages.find(p => p.slug === this.selectedPlan)) {
+                this.selectedPlan = (this.packages && this.packages.length > 0) ? this.packages[0].slug : '';
             }
 
             try {
