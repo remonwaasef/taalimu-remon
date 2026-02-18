@@ -208,4 +208,30 @@ class AuthController extends Controller
         return redirect()->route('center.login')
             ->withErrors(['email' => __('Login failed. Student has no user account.')]);
     }
+
+    public function showChangePasswordForm()
+    {
+        return view('center::auth.passwords.change', ['tenant' => app('tenant')]);
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $user = auth()->user();
+        $user->password = \Illuminate\Support\Facades\Hash::make($request->password);
+        $user->must_change_password = false;
+        $user->save();
+        
+        // Redirect based on role
+        if ($user->role === 'student') {
+             return redirect()->route('campus.index', ['tenant' => app('tenant')->domain])
+                ->with('success', __('Password updated successfully.'));
+        }
+
+        return redirect()->route('center.dashboard', ['tenant' => app('tenant')->domain])
+            ->with('success', __('Password updated successfully.'));
+    }
 }
