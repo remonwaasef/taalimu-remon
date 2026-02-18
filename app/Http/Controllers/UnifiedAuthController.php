@@ -61,14 +61,19 @@ class UnifiedAuthController extends Controller
             
             // Generate distinct token for cross-domain login
             $token = \Illuminate\Support\Str::random(64);
+            
+            // Store token in cache (valid for 60 seconds)
+            // We removed IP and UA checks to prevent issues with mobile networks and proxies regarding IP changes
             \Illuminate\Support\Facades\Cache::put('login_token_' . $token, [
                 'user_id' => $user->id,
                 'tenant_id' => $tenant->id,
                 'locale' => $currentLocale,
-                'ua' => hash('sha256', (string) $request->userAgent()),
-                'ip' => hash('sha256', $request->ip()),
-            ], now()->addSeconds(30));
+            ], now()->addSeconds(60));
             
+            \Illuminate\Support\Facades\Log::info('Unified Login: Token generated', [
+                'user_id' => $user->id, 
+                'tenant' => $tenant->domain
+            ]);
             
             // Redirect to tenant login with token
             $loginUrl = tenant_url('login?token=' . $token, $tenant);
