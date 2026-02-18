@@ -146,40 +146,57 @@
             }
         }
 
-        /* MOBILE STYLES (< 992px) - FORCED VIA HIGHER SPECIFICITY */
+        /* MOBILE STYLES (< 992px) */
         @media (max-width: 992px) {
+            html, body {
+                overflow-x: hidden !important;
+                width: 100%;
+                position: relative;
+            }
+
             body .sidebar {
                 z-index: 2000 !important;
                 box-shadow: none;
                 width: 280px !important;
                 max-width: 85% !important;
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                transition: transform 0.3s ease-in-out;
             }
 
             [dir="rtl"] body .sidebar {
                 right: 0 !important;
                 left: auto !important;
-                transform: translateX(105%) !important; /* Force off-screen */
+                transform: translateX(100%) !important;
             }
 
             [dir="ltr"] body .sidebar {
                 left: 0 !important;
                 right: auto !important;
-                transform: translateX(-105%) !important; /* Force off-screen */
+                transform: translateX(-100%) !important;
             }
 
             body .sidebar.active {
                 transform: translateX(0) !important;
-                box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5) !important;
+                box-shadow: 0 0 15px rgba(0,0,0,0.5) !important;
             }
 
             body .main-content {
-                margin-left: 0 !important;
-                margin-right: 0 !important;
+                margin: 0 !important;
                 width: 100% !important;
-                max-width: 100vw !important;
-                padding: 1rem !important;
+                max-width: 100% !important;
+                padding: 1.5rem !important; 
+                padding-bottom: 5rem !important;
                 overflow-x: hidden !important;
             }
+
+            body .admin-footer {
+                width: 100% !important;
+                left: 0 !important;
+                right: 0 !important;
+            }
+        }
 
             body .admin-footer {
                 left: 0 !important;
