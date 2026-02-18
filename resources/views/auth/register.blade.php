@@ -188,6 +188,12 @@ document.addEventListener('alpine:init', () => {
         userCountry: 'default',
 
         async init() {
+            console.log('Registration Packages:', this.packages);
+            // Default select first plan if requested plan is invalid or missing
+            if (!this.packages.find(p => p.slug === this.selectedPlan)) {
+                this.selectedPlan = this.packages.length > 0 ? this.packages[0].slug : '';
+            }
+
             try {
                 const response = await fetch('https://get.geojs.io/v1/ip/country.json');
                 const data = await response.json();
@@ -196,7 +202,9 @@ document.addEventListener('alpine:init', () => {
         },
 
         get currentPlan() {
-            return this.packages.find(p => p.slug === this.selectedPlan) || {name: '', price: ''};
+            const plan = this.packages.find(p => p.slug === this.selectedPlan);
+            if (!plan) return {name: 'Plan not found', price: '0', price_raw: 0, currency: '$', yearly_price_raw: 0};
+            return plan;
         },
 
         getPriceData(pkg) {
