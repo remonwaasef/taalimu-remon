@@ -41,8 +41,10 @@ class SubscriptionService
         }
 
         // Zero DB Hits: Check if package and features are already loaded from Cache
-        if ($subscription->relationLoaded('package') && $subscription->package && $subscription->package->relationLoaded('features')) {
-            $packageFeature = $subscription->package->features->firstWhere('code', $featureCode);
+        $package = $subscription->relationLoaded('package') ? $subscription->package : null;
+        
+        if ($package && $package->relationLoaded('features')) {
+            $packageFeature = $package->features->firstWhere('code', $featureCode);
         } else {
             // Use resolved_package attribute which has fallbacks for demo/mismatched price IDs
             $package = $subscription->resolved_package;
