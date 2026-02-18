@@ -16,11 +16,10 @@ class AuthController extends Controller
             $data = \Illuminate\Support\Facades\Cache::pull('login_token_' . $token);
             
             if ($data) {
-                // Validate User Agent to prevent token theft
-                $uaMatches = isset($data['ua']) && $data['ua'] === hash('sha256', (string) $request->userAgent());
+                // Check if the token belongs to this tenant
                 $tenantMatches = app()->bound('tenant') && isset($data['tenant_id']) && (int) $data['tenant_id'] === (int) app('tenant')->id;
 
-                if ($uaMatches && $tenantMatches && isset($data['user_id'])) {
+                if ($tenantMatches && isset($data['user_id'])) {
                     Auth::loginUsingId($data['user_id']);
                     $request->session()->regenerate();
 
@@ -31,6 +30,8 @@ class AuthController extends Controller
                     $user = auth()->user();
 
                     if ($user && $user->tenant_id === app('tenant')->id) {
+                        \Illuminate\Support\Facades\Log::info('Unified Login: Success', ['user_id' => $user->id]);
+                        
                         if ($user->role === 'center_admin') {
                             return redirect()->route('center.dashboard', ['tenant' => app('tenant')->domain]);
                         } elseif ($user->role === 'student') {
@@ -41,7 +42,14 @@ class AuthController extends Controller
                     Auth::logout();
                     return redirect()->route('center.login', ['tenant' => app('tenant')->domain])
                         ->withErrors(['email' => __('auth.failed')]);
+                } else {
+                    \Illuminate\Support\Facades\Log::warning('Unified Login: Tenant Mismatch or Invalid Data', [
+                        'token_tenant' => $data['tenant_id'] ?? 'null',
+                        'current_tenant' => app('tenant')->id ?? 'null'
+                    ]);
                 }
+            } else {
+                \Illuminate\Support\Facades\Log::warning('Unified Login: Token Expired or Invalid', ['token' => substr($token, 0, 10) . '...']);
             }
         }
         
