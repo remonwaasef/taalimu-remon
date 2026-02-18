@@ -18,7 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         // Add SetLocale middleware globally for web routes
-        $middleware->web(append: [
+        $middleware->web(prepend: [
+            \App\Http\Middleware\IdentifyTenant::class,
+        ], append: [
             \App\Http\Middleware\SetLocale::class,
             \App\Http\Middleware\ContentSecurityPolicy::class,
             \App\Http\Middleware\BasicWAF::class,

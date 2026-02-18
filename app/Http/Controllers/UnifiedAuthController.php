@@ -39,9 +39,19 @@ class UnifiedAuthController extends Controller
             }
             
             // Get user's tenant
+            \Illuminate\Support\Facades\Log::debug('Unified Login Attempt', [
+                'user_id' => $user->id,
+                'tenant_id' => $user->tenant_id,
+                'email' => $user->email,
+            ]);
+
             $tenant = Tenant::find($user->tenant_id);
             
             if (!$tenant) {
+                \Illuminate\Support\Facades\Log::warning('Tenant not found for user', [
+                    'user_id' => $user->id,
+                    'tenant_id' => $user->tenant_id
+                ]);
                 Auth::logout();
                 return back()->withErrors([
                     'email' => 'لا يمكن العثور على المركز الخاص بك.',
