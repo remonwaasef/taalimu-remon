@@ -31,16 +31,51 @@ class CleanupRoles extends Command
         
         $this->info('Starting Role Cleanup...');
 
+        // --- STEP 1: Fix Orphaned Assignments (Zombies) ---
+        // These are model_has_roles entries where the role_id no longer exists in roles table
+        // This happens if RolesAndPermissionsSeeder deleted tenant roles but didn't reassign users.
+        $this->info('Checking for orphaned role assignments (Zombie links)...');
+        $orphans = DB::table('model_has_roles')
+            ->whereNotExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('roles')
+                    ->whereColumn('roles.id', 'model_has_roles.role_id');
+            })
+            ->get();
+
+        $orphanedFixedCount = 0;
+        foreach ($orphans as $orphan) {
+            // Find user's intended role from the 'role' column in users table
+            $user = DB::table('users')->where('id', $orphan->model_id)->first();
+            if ($user && $user->role) {
+                // Find the new global role that replaced the deleted tenant-specific one
+                $globalRole = Role::where('name', $user->role)->whereNull('tenant_id')->first();
+                if ($globalRole) {
+                    DB::table('model_has_roles')
+                        ->where('model_id', $orphan->model_id)
+                        ->where('role_id', $orphan->role_id)
+                        ->update(['role_id' => $globalRole->id]);
+                    $orphanedFixedCount++;
+                }
+            }
+        }
+        if ($orphanedFixedCount > 0) {
+            $this->info("Fixed {$orphanedFixedCount} orphaned role assignments.");
+        }
+
+        // --- STEP 2: Merge Existing Duplicate Roles ---
         $duplicates = Role::whereIn('name', $systemRoles)
             ->whereNotNull('tenant_id')
             ->get();
 
-        if ($duplicates->isEmpty()) {
-            $this->info('No duplicate roles found.');
+        if ($duplicates->isEmpty() && $orphanedFixedCount === 0) {
+            $this->info('No duplicate or orphaned roles found.');
             return;
         }
 
-        $this->info("Found {$duplicates->count()} duplicate roles. Starting merge...");
+        if (!$duplicates->isEmpty()) {
+            $this->info("Found {$duplicates->count()} duplicate roles. Starting merge...");
+        }
 
         foreach ($duplicates as $duplicate) {
             $globalRole = Role::where('name', $duplicate->name)
