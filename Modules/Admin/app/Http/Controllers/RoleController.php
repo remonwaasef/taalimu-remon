@@ -102,6 +102,14 @@ class RoleController extends Controller
 
         $role->update(['name' => $request->name]);
         
+        // Prevent renaming core system roles which are hardcoded in policies/logic
+        $systemRoles = ['super_admin', 'center_admin', 'instructor', 'student', 'secretary', 'accountant', 'staff'];
+        if (in_array($role->getOriginal('name'), $systemRoles) && $request->name !== $role->getOriginal('name')) {
+            return back()->with('error', __('Cannot rename a core system role. You can only modify its permissions.'));
+        }
+
+        $role->update(['name' => $request->name]);
+        
         if ($request->has('permissions')) {
             $role->syncPermissions($request->permissions);
 
@@ -126,8 +134,9 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($id);
         
-        if ($role->name === 'super_admin') {
-            return back()->with('error', __('Cannot delete Super Admin role.'));
+        $systemRoles = ['super_admin', 'center_admin', 'instructor', 'student', 'secretary', 'accountant', 'staff'];
+        if (in_array($role->name, $systemRoles)) {
+            return back()->with('error', __('Cannot delete core system roles.'));
         }
         
         if ($role->users()->count() > 0) {
