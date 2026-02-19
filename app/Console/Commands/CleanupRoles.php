@@ -107,6 +107,10 @@ class CleanupRoles extends Command
             $duplicate->delete();
         }
 
+        // 3. Clear Spatie Cache to apply changes immediately
+        $this->info('Resetting Spatie permission cache...');
+        \Illuminate\Support\Facades\Artisan::call('permission:cache-reset');
+
         $this->info('Role Cleanup completed successfully.');
     }
 }
