@@ -349,7 +349,7 @@ $tenantRoutes = function () {
         });
 
         // Schedule Management
-        Route::middleware(['feature:daily_schedules', 'can:manage schedule'])->group(function() {
+        Route::middleware(['feature:daily_schedules'])->group(function() {
             Route::resource('schedules', ScheduleController::class)->names('center.schedules');
         });
 
