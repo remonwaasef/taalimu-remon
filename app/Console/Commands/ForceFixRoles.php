@@ -43,20 +43,37 @@ class ForceFixRoles extends Command
         $users = User::all();
         $this->info("Step 2: Syncing roles for {$users->count()} users...");
 
+        // Map legacy/common role names to the ones in our seeder
+        $roleMapping = [
+            'admin' => 'super_admin',
+            'administrator' => 'super_admin',
+            // Add other mappings if discovered
+        ];
+
         $fixedCount = 0;
         foreach ($users as $user) {
             if (!$user->role) {
                 continue;
             }
 
-            // Normalization
+            // Normalization & Mapping
             $roleName = strtolower($user->role);
+            if (isset($roleMapping[$roleName])) {
+                $roleName = $roleMapping[$roleName];
+            }
             
             // Set Spatie Team context to the user's tenant
             if ($user->tenant_id) {
                 app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($user->tenant_id);
             } else {
                 app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId(null);
+            }
+
+            // Check if role exists before assigning
+            $roleExists = Role::where('name', $roleName)->exists();
+            if (!$roleExists) {
+                $this->warn("Role '{$roleName}' does not exist in guard 'web'. Skipping user {$user->email}.");
+                continue;
             }
 
             // Check if user already has the role in Spatie for this tenant
