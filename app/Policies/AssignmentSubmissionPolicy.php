@@ -22,12 +22,12 @@ class AssignmentSubmissionPolicy
 
         // 2. Instructor of the course can download
         $course = $submission->assignment?->lesson?->section?->course;
-        if ($user->role === 'instructor' && $course && $user->instructor_id && (int)$course->instructor_id === (int)$user->instructor_id) {
+        if ($user->hasRole('instructor') && $course && $user->instructor_id && (int)$course->instructor_id === (int)$user->instructor_id) {
             return true;
         }
 
         // 3. Admin of the tenant can download
-        if (in_array($user->role, ['center_admin', 'admin'])) {
+        if ($user->hasAnyRole(['center_admin', 'admin'])) {
             $assignment = $submission->assignment;
             if (!$assignment) return false;
             

@@ -59,6 +59,12 @@ class CleanupRoles extends Command
                 ->where('role_id', $duplicate->id)
                 ->update(['role_id' => $globalRole->id]);
 
+            // 1.1 Update users table role column for consistency
+            DB::table('users')
+                ->where('role', $duplicate->name)
+                ->where('tenant_id', $duplicate->tenant_id) // Be specific to avoid cross-tenant issues if role names match
+                ->update(['role' => $globalRole->name]);
+
             // 2. Reassign permissions in role_has_permissions (optional, but safer to keep global permissions)
             // Note: In our current architecture, global roles should be the source of truth.
             
