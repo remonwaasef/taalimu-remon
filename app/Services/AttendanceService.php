@@ -138,7 +138,7 @@ class AttendanceService
      */
     public function getLateLevels(): array
     {
-        $lateLevels = app('tenant')->settings['academic']['late_levels'] ?? [];
+        $lateLevels = app('tenant')->settings['academic']['late_levels'] ?? config('academic.late_rules.defaults', []);
         
         usort($lateLevels, function($a, $b) {
             return $b['minutes'] <=> $a['minutes'];
