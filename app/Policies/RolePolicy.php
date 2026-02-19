@@ -14,7 +14,7 @@ class RolePolicy
 
     public function view(User $user, Role $role): bool
     {
-        return is_null($role->tenant_id) || $user->tenant_id === $role->tenant_id;
+        return is_null($role->tenant_id) || (int)$user->tenant_id === (int)$role->tenant_id;
     }
 
     public function create(User $user): bool

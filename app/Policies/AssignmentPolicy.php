@@ -17,7 +17,7 @@ class AssignmentPolicy
             return $this->belongsToSameTenant($user, $assignment);
         }
 
-        if ($user->role === 'instructor') {
+        if ($user->hasRole('instructor')) {
             $course = $assignment->lesson?->section?->course;
             return $course && $user->instructor_id && $course->instructor_id === $user->instructor_id;
         }
@@ -36,7 +36,7 @@ class AssignmentPolicy
             return $this->belongsToSameTenant($user, $assignment);
         }
 
-        if ($user->role === 'instructor') {
+        if ($user->hasRole('instructor')) {
             $course = $assignment->lesson->section->course;
             return $course && $user->instructor_id && $course->instructor_id === $user->instructor_id;
         }
@@ -82,6 +82,6 @@ class AssignmentPolicy
             return false;
         }
         
-        return $course->tenant_id === $user->tenant_id;
+        return (int)$course->tenant_id === (int)$user->tenant_id;
     }
 }
