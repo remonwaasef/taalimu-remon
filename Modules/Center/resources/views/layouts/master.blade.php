@@ -146,6 +146,21 @@
             }
         }
 
+        /* GUEST / NO SIDEBAR STYLES */
+        @media (min-width: 993px) {
+            body.no-sidebar [dir="rtl"] .main-content {
+                margin-right: 0 !important;
+            }
+            body.no-sidebar [dir="ltr"] .main-content {
+                margin-left: 0 !important;
+            }
+            body.no-sidebar .admin-footer {
+                left: 0 !important;
+                right: 0 !important;
+                width: 100% !important;
+            }
+        }
+
         /* MOBILE STYLES (< 992px) */
         @media (max-width: 992px) {
             html, body {
@@ -327,7 +342,7 @@
     </style>
     @stack('styles')
 </head>
-<body class="{{ ($tenant->settings['appearance']['dark_mode'] ?? false) ? 'dark-mode' : '' }}">
+<body class="{{ ($tenant->settings['appearance']['dark_mode'] ?? false) ? 'dark-mode' : '' }} {{ !auth()->check() ? 'no-sidebar' : '' }}">
 
     @if(session()->has('impersonator_id'))
         <div class="alert alert-warning mb-0 rounded-0 border-0 p-2 d-flex justify-content-between align-items-center" style="z-index: 1050; position: relative;">
@@ -344,6 +359,7 @@
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- Sidebar -->
+    @auth
     <aside class="sidebar" id="sidebar">
         <div class="p-4 border-bottom d-flex align-items-center justify-content-between gap-3" style="border-bottom-color: var(--sidebar-border) !important;">
             <div class="d-flex align-items-center gap-3">
@@ -562,6 +578,7 @@
             @endcanany
         </nav>
     </aside>
+    @endauth
 
     <!-- Main Content -->
     <main class="main-content">
@@ -569,13 +586,16 @@
         <!-- Header -->
         <header class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
             <div class="d-flex align-items-center gap-2">
+                @auth
                 <button class="btn btn-white bg-white border shadow-sm rounded-circle d-lg-none p-0 d-flex align-items-center justify-content-center" id="sidebarToggle" style="width: 40px; height: 40px;">
                     <i class="fas fa-bars text-primary"></i>
                 </button>
+                @endauth
                 <h2 class="fw-bold mb-0 d-none d-sm-block" style="font-size: 1.25rem;">@yield('page-title', __('sidebar.overview'))</h2>
             </div>
             <div class="d-flex align-items-center gap-2">
                 <!-- Notifications Dropdown -->
+                @auth
                 <div class="dropdown">
                     <button class="btn btn-white bg-white border shadow-sm rounded-pill px-3 dropdown-toggle no-caret position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell text-primary"></i>
@@ -652,6 +672,7 @@
 
                     </ul>
                 </div>
+                @endauth
 
                 <!-- Language Switcher -->
                 <div class="dropdown">
@@ -671,6 +692,7 @@
                     </ul>
                 </div>
 
+                @auth
                 <div class="dropdown">
                 <button class="btn btn-white bg-white border shadow-sm rounded-pill px-3 dropdown-toggle" type="button" data-bs-toggle="dropdown">
                     <i class="fas fa-user-circle me-2"></i>
@@ -689,6 +711,11 @@
                     </li>
                 </ul>
             </div>
+            @else
+            <a href="{{ route('center.login') }}" class="btn btn-primary rounded-pill px-4">
+                <i class="fas fa-sign-in-alt me-2"></i> {{ __('center::sidebar.login') }}
+            </a>
+            @endauth
         </header>
 
         <!-- Flash Messages (Handled by SweetAlert2) -->
