@@ -132,4 +132,12 @@ return [
             ],
         ],
     ],
+
+    'late_rules' => [
+        'defaults' => [
+            ['minutes' => 15, 'label' => 'تأخير بسيط'],
+            ['minutes' => 30, 'label' => 'تأخير (نصف ساعة)'],
+            ['minutes' => 60, 'label' => 'تأخير كبير (ساعة)'],
+        ]
+    ],
 ];

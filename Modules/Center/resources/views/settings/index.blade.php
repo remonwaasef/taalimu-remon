@@ -296,16 +296,31 @@
                                 <p class="text-muted small mb-3">{{ __('center::settings.academic.late_levels_help') }}</p>
                                 
                                 <div id="late-levels-container">
-                                    @php $lateLevels = $tenant->settings['academic']['late_levels'] ?? []; @endphp
+                                    @php 
+                                        $hasCustomLevels = isset($tenant->settings['academic']['late_levels']);
+                                        $lateLevels = $tenant->settings['academic']['late_levels'] ?? config('academic.late_rules.defaults', []); 
+                                    @endphp
+                                    
+                                    @if(!$hasCustomLevels)
+                                        <div class="alert alert-info py-2 px-3 small border-0 mb-3 bg-opacity-10 text-info" id="system-defaults-alert">
+                                            <i class="fas fa-info-circle me-2"></i> يتم حالياً تطبيق مواعيد التأخير الافتراضية للنظام. يمكنك تعديلها أو إضافة مواعيد أخرى أدناه.
+                                        </div>
+                                    @endif
+
                                     @foreach($lateLevels as $lIndex => $level)
                                         <div class="late-level-item d-flex align-items-center gap-2 mb-2 bg-light p-2 rounded-3">
                                             <input type="number" name="settings[academic][late_levels][{{ $lIndex }}][minutes]" class="form-control form-control-sm" style="width: 100px;" value="{{ $level['minutes'] }}" placeholder="{{ __('center::settings.academic.threshold_minutes') }}" required>
                                             <input type="text" name="settings[academic][late_levels][{{ $lIndex }}][label]" class="form-control form-control-sm" value="{{ $level['label'] }}" placeholder="{{ __('center::settings.academic.level_label') }}" required>
-                                            <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="this.parentElement.remove()">
+                                            <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeLateLevel(this)">
                                                 <i class="fas fa-times"></i>
                                             </button>
                                         </div>
                                     @endforeach
+                                </div>
+                                <div class="text-start mt-2">
+                                    <button type="button" class="btn btn-link btn-sm text-muted p-0" onclick="restoreLateDefaults()">
+                                        <i class="fas fa-undo-alt me-1"></i> استعادة المواعيد الافتراضية للنظام
+                                    </button>
                                 </div>
                             </div>
 
@@ -594,14 +609,56 @@
         btn.closest('.grade-item').remove();
     }
 
+    function removeLateLevel(btn) {
+        btn.closest('.late-level-item').remove();
+        // Show defaults alert if empty (optional enhancement)
+        const container = document.getElementById('late-levels-container');
+        if (container.querySelectorAll('.late-level-item').length === 0) {
+            // We could show a message or just leave it empty
+        }
+    }
+
+    const systemLateDefaults = @json(config('academic.late_rules.defaults', []));
+
+    function restoreLateDefaults() {
+        if (!confirm('هل أنت متأكد من استعادة المواعيد الافتراضية للنظام؟ سيتم مسح جميع تعديلاتك الحالية.')) {
+            return;
+        }
+
+        const container = document.getElementById('late-levels-container');
+        container.innerHTML = '';
+
+        // Remove the system-defaults-alert if it exists
+        const alert = document.getElementById('system-defaults-alert');
+        if (alert) alert.remove();
+
+        systemLateDefaults.forEach((level, index) => {
+            const html = `
+                <div class="late-level-item d-flex align-items-center gap-2 mb-2 bg-light p-2 rounded-3">
+                    <input type="number" name="settings[academic][late_levels][${index}][minutes]" class="form-control form-control-sm" style="width: 100px;" value="${level.minutes}" required>
+                    <input type="text" name="settings[academic][late_levels][${index}][label]" class="form-control form-control-sm" value="${level.label}" required>
+                    <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeLateLevel(this)">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        });
+    }
+
     function addLateLevel() {
         const container = document.getElementById('late-levels-container');
-        const index = container.children.length;
+        const index = container.querySelectorAll('.late-level-item').length;
+        
+        // Remove the system-defaults-alert if it exists (first customization)
+        const alert = document.getElementById('system-defaults-alert');
+        if (alert) alert.remove();
+
         const html = `
             <div class="late-level-item d-flex align-items-center gap-2 mb-2 bg-light p-2 rounded-3">
                 <input type="number" name="settings[academic][late_levels][${index}][minutes]" class="form-control form-control-sm" style="width: 100px;" placeholder="{{ __('center::settings.academic.threshold_minutes') }}" required>
                 <input type="text" name="settings[academic][late_levels][${index}][label]" class="form-control form-control-sm" placeholder="{{ __('center::settings.academic.level_label') }}" required>
-                <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="this.parentElement.remove()">
+                <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeLateLevel(this)">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
