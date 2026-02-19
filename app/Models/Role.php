@@ -7,9 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Role extends SpatieRole
 {
-    use \App\Traits\IsImmutable;
     use \Spatie\Activitylog\Traits\LogsActivity;
-    use \App\Traits\IdentifyTenant;
 
     public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
     {
