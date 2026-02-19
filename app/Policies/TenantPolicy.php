@@ -23,7 +23,7 @@ class TenantPolicy
     {
         // Super admins can view any tenant
         // Regular admins can only view their own tenant
-        return $user->hasRole('super_admin') || $user->tenant_id === $tenant->id;
+        return $user->hasRole('super_admin') || (int)$user->tenant_id === (int)$tenant->id;
     }
 
     /**
@@ -56,7 +56,7 @@ class TenantPolicy
         }
 
         // Center admins can update their own tenant
-        return $user->hasRole('center_admin') && $user->tenant_id === $tenant->id;
+        return $user->hasAnyRole(['center_admin', 'admin']) && (int)$user->tenant_id === (int)$tenant->id;
     }
 
     /**
