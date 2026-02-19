@@ -14,7 +14,7 @@ class SchedulePolicy
 
     public function view(User $user, Schedule $schedule): bool
     {
-        return $user->tenant_id === $schedule->tenant_id;
+        return (int)$user->tenant_id === (int)$schedule->tenant_id;
     }
 
     public function create(User $user): bool
@@ -24,13 +24,13 @@ class SchedulePolicy
 
     public function update(User $user, Schedule $schedule): bool
     {
-        return $user->tenant_id === $schedule->tenant_id && 
+        return (int)$user->tenant_id === (int)$schedule->tenant_id && 
                $user->hasAnyRole(['center_admin', 'admin']);
     }
 
     public function delete(User $user, Schedule $schedule): bool
     {
-        return $user->tenant_id === $schedule->tenant_id && 
+        return (int)$user->tenant_id === (int)$schedule->tenant_id && 
                $user->hasAnyRole(['center_admin', 'admin']);
     }
 }
