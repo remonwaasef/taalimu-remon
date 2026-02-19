@@ -149,7 +149,7 @@ class RolesAndPermissionsSeeder extends Seeder
             $attendancePermissions,
             $examPermissions,
             $reportPermissions,
-            ['manage users'] // إدارة مستخدمي المركز فقط
+            ['manage users', 'manage settings'] // إدارة مستخدمي المركز والإعدادات
         ));
         
         // 3. Instructor - صلاحيات محدودة
