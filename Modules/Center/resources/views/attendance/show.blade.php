@@ -67,7 +67,11 @@
                                         <td class="text-center">
                                             @if($attendance)
                                                 <span class="badge bg-{{ $attendance->status == 'present' ? 'success' : ($attendance->status == 'late' ? 'warning' : 'danger') }} bg-opacity-10 text-{{ $attendance->status == 'present' ? 'success' : ($attendance->status == 'late' ? 'warning' : 'danger') }} rounded-pill px-3">
-                                                    {{ $attendance->status == 'present' ? 'حاضر' : ($attendance->status == 'late' ? 'متأخر' : 'غائب') }}
+                                                    @if($attendance->status == 'late')
+                                                        {{ $attendance->late_label ?? 'متأخر' }} ({{ $attendance->late_minutes }} د)
+                                                    @else
+                                                        {{ $attendance->status == 'present' ? 'حاضر' : 'غائب' }}
+                                                    @endif
                                                     <small class="d-block text-muted" style="font-size: 0.6rem;">{{ $attendance->check_in_time->format('h:i A') }}</small>
                                                 </span>
                                             @elseif($isEnded)

@@ -255,36 +255,60 @@
                             </div>
 
                             <div id="stages-container">
-                                    @foreach($stages as $sIndex => $stage)
-                                        <div class="stage-card card border bg-light mb-3 rounded-3 overflow-hidden shadow-none" data-index="{{ $sIndex }}">
-                                            <div class="card-header bg-white d-flex align-items-center gap-3 py-2 border-bottom">
-                                                <input type="hidden" name="stages[{{ $sIndex }}][id]" value="{{ $stage->id }}">
-                                                <input type="text" name="stages[{{ $sIndex }}][name]" class="form-control form-control-sm fw-bold border-0 bg-light" value="{{ $stage->name }}" placeholder="{{ __('center::settings.academic.stage_name_placeholder') }}">
-                                                <div class="ms-auto d-flex gap-2">
-                                                    <button type="button" class="btn btn-sm btn-light text-primary" onclick="addGrade({{ $sIndex }})" title="{{ __('center::settings.academic.add_grade') }}">
-                                                        <i class="fas fa-plus-circle"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-light text-danger" onclick="removeStage(this, {{ $stage->id }})" title="{{ __('center::settings.academic.remove_stage') }}">
-                                                        <i class="fas fa-trash-alt"></i>
-                                                    </button>
-                                                </div>
+                                @foreach($stages as $sIndex => $stage)
+                                    <div class="stage-card card border bg-light mb-3 rounded-3 overflow-hidden shadow-none" data-index="{{ $sIndex }}">
+                                        <div class="card-header bg-white d-flex align-items-center gap-3 py-2 border-bottom">
+                                            <input type="hidden" name="stages[{{ $sIndex }}][id]" value="{{ $stage->id }}">
+                                            <input type="text" name="stages[{{ $sIndex }}][name]" class="form-control form-control-sm fw-bold border-0 bg-light" value="{{ $stage->name }}" placeholder="{{ __('center::settings.academic.stage_name_placeholder') }}">
+                                            <div class="ms-auto d-flex gap-2">
+                                                <button type="button" class="btn btn-sm btn-light text-primary" onclick="addGrade({{ $sIndex }})" title="{{ __('center::settings.academic.add_grade') }}">
+                                                    <i class="fas fa-plus-circle"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-light text-danger" onclick="removeStage(this, {{ $stage->id }})" title="{{ __('center::settings.academic.remove_stage') }}">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
                                             </div>
-                                            <div class="card-body p-3">
-                                                <div class="grades-container d-flex flex-wrap gap-2">
-                                                    @foreach($stage->grades as $gIndex => $grade)
-                                                        <div class="grade-item d-flex align-items-center bg-white border rounded-pill px-3 py-1 shadow-sm">
-                                                            <input type="hidden" name="stages[{{ $sIndex }}][grades][{{ $gIndex }}][id]" value="{{ $grade->id }}">
-                                                            <input type="text" name="stages[{{ $sIndex }}][grades][{{ $gIndex }}][name]" class="form-control form-control-sm border-0 p-0 text-center" style="width: 100px; font-size: 0.85rem;" value="{{ $grade->name }}" placeholder="{{ __('center::settings.academic.grade_name_placeholder') }}">
-                                                            <button type="button" class="btn btn-link btn-sm text-danger p-0 ms-2" onclick="removeGrade(this, {{ $grade->id }})">
-                                                                <i class="fas fa-times-circle"></i>
-                                                            </button>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
+                                        </div>
+                                        <div class="card-body p-3">
+                                            <div class="grades-container d-flex flex-wrap gap-2">
+                                                @foreach($stage->grades as $gIndex => $grade)
+                                                    <div class="grade-item d-flex align-items-center bg-white border rounded-pill px-3 py-1 shadow-sm">
+                                                        <input type="hidden" name="stages[{{ $sIndex }}][grades][{{ $gIndex }}][id]" value="{{ $grade->id }}">
+                                                        <input type="text" name="stages[{{ $sIndex }}][grades][{{ $gIndex }}][name]" class="form-control form-control-sm border-0 p-0 text-center" style="width: 100px; font-size: 0.85rem;" value="{{ $grade->name }}" placeholder="{{ __('center::settings.academic.grade_name_placeholder') }}">
+                                                        <button type="button" class="btn btn-link btn-sm text-danger p-0 ms-2" onclick="removeGrade(this, {{ $grade->id }})">
+                                                            <i class="fas fa-times-circle"></i>
+                                                        </button>
+                                                    </div>
+                                                @endforeach
                                             </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <div class="mt-5 mb-3 border-top pt-4">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="fw-bold text-danger mb-0"><i class="fas fa-clock me-2"></i>{{ __('center::settings.academic.attendance_rules') }}</h6>
+                                    <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="addLateLevel()">
+                                        <i class="fas fa-plus me-1"></i> {{ __('center::settings.academic.add_level') }}
+                                    </button>
+                                </div>
+                                <p class="text-muted small mb-3">{{ __('center::settings.academic.late_levels_help') }}</p>
+                                
+                                <div id="late-levels-container">
+                                    @php $lateLevels = $tenant->settings['academic']['late_levels'] ?? []; @endphp
+                                    @foreach($lateLevels as $lIndex => $level)
+                                        <div class="late-level-item d-flex align-items-center gap-2 mb-2 bg-light p-2 rounded-3">
+                                            <input type="number" name="settings[academic][late_levels][{{ $lIndex }}][minutes]" class="form-control form-control-sm" style="width: 100px;" value="{{ $level['minutes'] }}" placeholder="{{ __('center::settings.academic.threshold_minutes') }}" required>
+                                            <input type="text" name="settings[academic][late_levels][{{ $lIndex }}][label]" class="form-control form-control-sm" value="{{ $level['label'] }}" placeholder="{{ __('center::settings.academic.level_label') }}" required>
+                                            <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="this.parentElement.remove()">
+                                                <i class="fas fa-times"></i>
+                                            </button>
                                         </div>
                                     @endforeach
                                 </div>
+                            </div>
+
 
                                 <div id="deletion-inputs"></div>
 
@@ -568,6 +592,21 @@
             deletionInputs.insertAdjacentHTML('beforeend', `<input type="hidden" name="deleted_grades[]" value="${id}">`);
         }
         btn.closest('.grade-item').remove();
+    }
+
+    function addLateLevel() {
+        const container = document.getElementById('late-levels-container');
+        const index = container.children.length;
+        const html = `
+            <div class="late-level-item d-flex align-items-center gap-2 mb-2 bg-light p-2 rounded-3">
+                <input type="number" name="settings[academic][late_levels][${index}][minutes]" class="form-control form-control-sm" style="width: 100px;" placeholder="{{ __('center::settings.academic.threshold_minutes') }}" required>
+                <input type="text" name="settings[academic][late_levels][${index}][label]" class="form-control form-control-sm" placeholder="{{ __('center::settings.academic.level_label') }}" required>
+                <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
     }
 </script>
 @endpush

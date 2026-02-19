@@ -252,15 +252,24 @@ class AttendanceController extends Controller
             return view('center::attendance.success', ['message' => 'عذراً، انتهى وقت تسجيل الحضور لهذه الحصة.']);
         }
 
+        $lateData = $this->attendanceService->determineStatus($schedule);
+
         $this->attendanceService->markAttendance([
             'tenant_id' => app('tenant')->id,
             'student_id' => $student->id,
             'course_id' => $schedule->course_id,
             'schedule_id' => $schedule->id,
             'session_date' => today(),
-            'status' => 'present'
+            'status' => $lateData['status'],
+            'late_minutes' => $lateData['late_minutes'],
+            'late_label' => $lateData['late_label'],
         ]);
 
-        return view('center::attendance.success', ['message' => 'تم تسجيل حضورك بنجاح! 🎉']);
+        $successMsg = 'تم تسجيل حضورك بنجاح! 🎉';
+        if ($lateData['status'] === 'late') {
+            $successMsg = "تم تسجيل حضورك بنجاح (تأخير: {$lateData['late_minutes']} دقيقة - {$lateData['late_label']})";
+        }
+
+        return view('center::attendance.success', ['message' => $successMsg]);
     }
 }
