@@ -50,12 +50,18 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|unique:roles,name',
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('roles')->where(fn ($q) => $q->whereNull('tenant_id'))
+            ],
             'permissions' => 'nullable|array',
             'permissions.*' => 'exists:permissions,name',
+        ], [], [
+            'name' => __('admin.roles.role_name'),
         ]);
 
-        $role = Role::create(['name' => $request->name, 'guard_name' => 'web']);
+        $role = Role::create(['name' => $request->name, 'guard_name' => 'web', 'tenant_id' => null]);
         
         if ($request->has('permissions')) {
             $role->syncPermissions($request->permissions);
@@ -82,21 +88,32 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($id);
         
-        // Prevent editing super_admin name if critical
-        if ($role->name === 'super_admin') {
-             // Maybe allow permission sync but not renaming?
-        }
-
         $request->validate([
-            'name' => 'required|string|unique:roles,name,' . $id,
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('roles')->ignore($id)->where(fn ($q) => $q->whereNull('tenant_id'))
+            ],
             'permissions' => 'nullable|array',
             'permissions.*' => 'exists:permissions,name',
+        ], [], [
+            'name' => __('admin.roles.role_name'),
         ]);
 
         $role->update(['name' => $request->name]);
         
         if ($request->has('permissions')) {
             $role->syncPermissions($request->permissions);
+
+            // Professional Sync: Propagate changes to all tenant-specific roles with the same name
+            // This ensures that existing centers get updated permissions for global role clones (if any exist)
+            $tenantRoles = Role::where('name', $role->name)
+                ->whereNotNull('tenant_id')
+                ->get();
+
+            foreach ($tenantRoles as $tenantRole) {
+                $tenantRole->syncPermissions($request->permissions);
+            }
         }
 
         return redirect()->route('admin.roles.index')->with('success', __('Role updated successfully.'));

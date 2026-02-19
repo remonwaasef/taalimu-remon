@@ -178,24 +178,6 @@ class RegistrationController extends Controller
             // Set Spatie Team Context
             app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
 
-            // Create Tenant Roles & Sync Permissions
-            $roles = ['center_admin', 'instructor', 'student', 'secretary', 'accountant', 'staff'];
-            foreach ($roles as $roleName) {
-                $globalRole = \Spatie\Permission\Models\Role::where('name', $roleName)
-                    ->whereNull('tenant_id')
-                    ->first();
-
-                $tenantRole = \Spatie\Permission\Models\Role::firstOrCreate([
-                    'name' => $roleName,
-                    'tenant_id' => $tenant->id,
-                    'guard_name' => 'web'
-                ]);
-                
-                if ($globalRole && $globalRole->permissions->count() > 0) {
-                     $tenantRole->syncPermissions($globalRole->permissions);
-                }
-            }
-
             $user->assignRole('center_admin');
 
             // 3. Handle Subscription based on selected plan
