@@ -23,7 +23,7 @@ class QuizAttemptPolicy
         $course = $quiz->lesson->section->course;
         
         return $course->tenant_id === $user->tenant_id && 
-               in_array($user->role, ['center_admin', 'admin', 'instructor']);
+               $user->hasAnyRole(['center_admin', 'admin', 'instructor']);
     }
 
     /**

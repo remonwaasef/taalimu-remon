@@ -13,7 +13,7 @@ class AssignmentPolicy
      */
     public function view(User $user, Assignment $assignment): bool
     {
-        if (in_array($user->role, ['center_admin', 'staff'])) {
+        if ($user->hasAnyRole(['center_admin', 'staff'])) {
             return $this->belongsToSameTenant($user, $assignment);
         }
 
@@ -32,7 +32,7 @@ class AssignmentPolicy
      */
     public function update(User $user, Assignment $assignment): bool
     {
-        if ($user->role === 'center_admin') {
+        if ($user->hasRole('center_admin')) {
             return $this->belongsToSameTenant($user, $assignment);
         }
 
@@ -49,7 +49,7 @@ class AssignmentPolicy
      */
     public function viewAny(User $user): bool
     {
-        return in_array($user->role, ['center_admin', 'instructor', 'staff', 'secretary']);
+        return $user->hasAnyRole(['center_admin', 'instructor', 'staff', 'secretary']);
     }
 
     /**
@@ -58,7 +58,7 @@ class AssignmentPolicy
     public function delete(User $user, Assignment $assignment): bool
     {
         return $this->belongsToSameTenant($user, $assignment) && 
-               in_array($user->role, ['center_admin', 'admin']);
+               $user->hasAnyRole(['center_admin', 'admin']);
     }
 
 

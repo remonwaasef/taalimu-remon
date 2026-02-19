@@ -12,16 +12,16 @@ class QuizPolicy
      */
     public function viewAny(User $user): bool
     {
-        return in_array($user->role, ['center_admin', 'instructor']);
+        return $user->hasAnyRole(['center_admin', 'instructor']);
     }
 
     public function view(User $user, Quiz $quiz): bool
     {
-        if ($user->role === 'center_admin') {
+        if ($user->hasRole('center_admin')) {
             return $this->belongsToSameTenant($user, $quiz);
         }
 
-        if ($user->role === 'instructor') {
+        if ($user->hasRole('instructor')) {
             $course = $quiz->lesson->section->course;
             return $course && $user->instructor_id && $course->instructor_id === $user->instructor_id;
         }
@@ -34,11 +34,11 @@ class QuizPolicy
      */
     public function update(User $user, Quiz $quiz): bool
     {
-        if ($user->role === 'center_admin') {
+        if ($user->hasRole('center_admin')) {
             return $this->belongsToSameTenant($user, $quiz);
         }
 
-        if ($user->role === 'instructor') {
+        if ($user->hasRole('instructor')) {
             $course = $quiz->lesson->section->course;
             return $course && $user->instructor_id && $course->instructor_id === $user->instructor_id;
         }
@@ -52,7 +52,7 @@ class QuizPolicy
     public function delete(User $user, Quiz $quiz): bool
     {
         return $this->belongsToSameTenant($user, $quiz) && 
-               $user->role === 'center_admin';
+               $user->hasRole('center_admin');
     }
 
     /**

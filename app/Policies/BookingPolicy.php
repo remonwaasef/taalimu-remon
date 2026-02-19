@@ -9,7 +9,7 @@ class BookingPolicy
 {
     public function viewAny(User $user): bool
     {
-        return in_array($user->role, ['center_admin', 'admin', 'instructor']);
+        return $user->hasAnyRole(['center_admin', 'admin', 'instructor']);
     }
 
     public function view(User $user, Booking $booking): bool
@@ -19,18 +19,18 @@ class BookingPolicy
 
     public function create(User $user): bool
     {
-        return in_array($user->role, ['center_admin', 'admin', 'instructor']);
+        return $user->hasAnyRole(['center_admin', 'admin', 'instructor']);
     }
 
     public function update(User $user, Booking $booking): bool
     {
         return $user->tenant_id === $booking->tenant_id && 
-               in_array($user->role, ['center_admin', 'admin', 'instructor']);
+               $user->hasAnyRole(['center_admin', 'admin', 'instructor']);
     }
 
     public function delete(User $user, Booking $booking): bool
     {
         return $user->tenant_id === $booking->tenant_id && 
-               in_array($user->role, ['center_admin', 'admin']);
+               $user->hasAnyRole(['center_admin', 'admin']);
     }
 }
