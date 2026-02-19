@@ -18,6 +18,8 @@ class Attendance extends Model
         'session_date',
         'check_in_time',
         'status',
+        'late_minutes',
+        'late_label',
     ];
 
     protected $casts = [

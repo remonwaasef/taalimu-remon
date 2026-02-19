@@ -108,7 +108,22 @@ class SettingsController extends Controller
         if ($request->has('settings')) {
             $tenant = app('tenant');
             $settings = $tenant->settings ?? [];
-            $settings = array_replace_recursive($settings, $request->input('settings'));
+            
+            // Handle late_levels explicitly to support deletions (avoid array_replace_recursive merging indices)
+            if (isset($request->settings['academic']['late_levels'])) {
+                if (!isset($settings['academic'])) {
+                    $settings['academic'] = [];
+                }
+                $settings['academic']['late_levels'] = $request->settings['academic']['late_levels'];
+                
+                // Remove late_levels from the settings array before merging the rest
+                $mergedSettings = $request->input('settings');
+                unset($mergedSettings['academic']['late_levels']);
+                $settings = array_replace_recursive($settings, $mergedSettings);
+            } else {
+                $settings = array_replace_recursive($settings, $request->input('settings'));
+            }
+
             $tenant->settings = $settings;
             $tenant->save();
         }
