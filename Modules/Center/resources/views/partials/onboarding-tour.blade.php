@@ -1,4 +1,4 @@
-@if(auth()->check() && !auth()->user()->tenant->onboarding_completed_at && auth()->user()->role === 'center_admin')
+@if(auth()->check() && app()->bound('tenant') && !app('tenant')->onboarding_completed_at && auth()->user()->role === 'center_admin')
     
     <!-- Shepherd.js -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css"/>
