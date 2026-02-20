@@ -1,58 +1,122 @@
 @extends('center::layouts.master')
 
 @section('content')
-    <div class="mb-4">
-        <h2 class="fw-bold text-dark">نظام الامتحانات والنتائج</h2>
-        <p class="text-muted">إدارة الاختبارات ومتابعة أداء الطلاب في الدورات المختلفة.</p>
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div>
+            <h2 class="fw-bold text-dark mb-1">نظام الامتحانات والنتائج</h2>
+            <p class="text-muted mb-0">نظرة عامة على أداء الطلاب وإدارة محتوى الاختبارات.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ route('center.questions.index') }}" class="btn btn-outline-primary rounded-pill px-4 shadow-sm">
+                <i class="bi bi-database-fill me-2"></i>بنك الأسئلة
+            </a>
+            <a href="{{ route('center.courses.index') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                <i class="bi bi-plus-circle-fill me-2"></i>إنشاء اختبار جديد
+            </a>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 bg-primary bg-opacity-10 rounded-4 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <i class="bi bi-journal-text text-primary fs-3"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">إجمالي الاختبارات</h6>
+                        <h3 class="fw-bold mb-0 text-dark">{{ number_format($totalQuizzesCount) }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 bg-success bg-opacity-10 rounded-4 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <i class="bi bi-people-fill text-success fs-3"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">محاولات الطلاب</h6>
+                        <h3 class="fw-bold mb-0 text-dark">{{ number_format($totalAttemptsCount) }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 bg-warning bg-opacity-10 rounded-4 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <i class="bi bi-trophy-fill text-warning fs-3"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">متوسط النجاح</h6>
+                        <h3 class="fw-bold mb-0 text-dark">{{ number_format($avgPassingRate, 1) }}%</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="row g-4">
         <!-- Quizzes List -->
-        <div class="col-md-8">
-            <div class="card border-0 shadow-sm rounded-4 h-100">
-                <div class="card-header bg-white border-0 p-4 pb-0">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 h-100 bg-white">
+                <div class="card-header bg-transparent border-0 p-4 pb-0 d-flex justify-content-between align-items-center">
                     <h5 class="fw-bold mb-0"><i class="bi bi-journal-check me-2 text-primary"></i>الاختبارات المتوفرة</h5>
                 </div>
                 <div class="card-body p-4">
                     <div class="table-responsive">
-                        <table class="table align-middle">
-                            <thead class="bg-light">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light bg-opacity-50">
                                 <tr>
-                                    <th class="border-0 rounded-start">الاختبار / الدورة</th>
-                                    <th class="border-0">درجة النجاح</th>
-                                    <th class="border-0">الوقت</th>
-                                    <th class="border-0 text-center">الإجراءات</th>
+                                    <th class="border-0 rounded-start text-muted fw-semibold">الاختبار / الدورة</th>
+                                    <th class="border-0 text-muted fw-semibold">درجة النجاح</th>
+                                    <th class="border-0 text-muted fw-semibold">الوقت</th>
+                                    <th class="border-0 text-center text-muted fw-semibold">الإجراءات</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($quizzes as $quiz)
                                     <tr>
                                         <td>
-                                            <div class="fw-bold">{{ $quiz->title }}</div>
-                                            <small class="text-muted">{{ $quiz->lesson->section->course->title }}</small>
+                                            <div class="fw-bold text-dark">{{ $quiz->title }}</div>
+                                            <small class="text-muted d-block mt-1">
+                                                <i class="bi bi-book me-1"></i>{{ $quiz->lesson->section->course->title }}
+                                            </small>
                                         </td>
                                         <td>
-                                            <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">
+                                            <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">
                                                 {{ $quiz->passing_score }}%
                                             </span>
                                         </td>
                                         <td>
-                                            <small class="text-muted"><i class="bi bi-clock me-1"></i>{{ $quiz->duration_minutes ?? 'بدون وقت' }} دقيقة</small>
+                                            <small class="text-muted fw-medium">
+                                                <i class="bi bi-clock me-1 text-primary"></i>
+                                                {{ $quiz->duration_minutes ?? 'غير محدود' }} دقيقة
+                                            </small>
                                         </td>
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center gap-2">
-                                                <a href="{{ route('center.quizzes.edit', $quiz) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                                    <i class="bi bi-pencil me-1"></i> تعديل
+                                                <a href="{{ route('center.quizzes.edit', $quiz) }}" class="btn btn-sm btn-outline-primary border-0 rounded-circle" title="تعديل">
+                                                    <i class="bi bi-pencil-square fs-5"></i>
                                                 </a>
-                                                <a href="{{ route('center.quizzes.show', $quiz) }}" class="btn btn-sm btn-light rounded-pill px-3">
-                                                    <i class="bi bi-eye me-1"></i> معاينة
+                                                <a href="{{ route('center.quizzes.show', $quiz) }}" class="btn btn-sm btn-outline-secondary border-0 rounded-circle" title="معاينة">
+                                                    <i class="bi bi-eye fs-5"></i>
                                                 </a>
                                             </div>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="text-center py-5 text-muted">لا يوجد اختبارات منشأة بعد</td>
+                                        <td colspan="4" class="text-center py-5">
+                                            <div class="py-4">
+                                                <i class="bi bi-journal-x fs-1 text-muted opacity-25 mb-3 d-block"></i>
+                                                <p class="text-muted mb-0">لا يوجد اختبارات منشأة بعد</p>
+                                                <a href="{{ route('center.courses.index') }}" class="btn btn-link text-primary mt-2">ابدأ بإنشاء أول اختبار الآن</a>
+                                            </div>
+                                        </td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -63,37 +127,50 @@
         </div>
 
         <!-- Recent Attempts -->
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm rounded-4 h-100">
-                <div class="card-header bg-white border-0 p-4 pb-0">
-                    <h5 class="fw-bold mb-0"><i class="bi bi-reception-4 me-2 text-success"></i>نشاط الطلاب الأخير</h5>
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 bg-white">
+                <div class="card-header bg-transparent border-0 p-4 pb-0">
+                    <h5 class="fw-bold mb-0"><i class="bi bi-lightning-charge-fill me-2 text-warning"></i>آخر النتائج</h5>
                 </div>
                 <div class="card-body p-4">
                     <div class="list-group list-group-flush">
                         @forelse($recentAttempts as $attempt)
-                            <div class="list-group-item px-0 border-0 mb-3">
-                                <div class="d-flex align-items-center">
+                            <div class="list-group-item px-0 border-0 mb-3 bg-transparent">
+                                <div class="d-flex align-items-center p-2 rounded-3 hover-bg-light transition-all">
                                     <div class="flex-shrink-0">
-                                        <div class="bg-{{ $attempt->passed ? 'success' : 'danger' }} bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                            <i class="bi bi-{{ $attempt->passed ? 'check-circle' : 'x-circle' }} text-{{ $attempt->passed ? 'success' : 'danger' }}"></i>
+                                        <div class="bg-{{ $attempt->passed ? 'success' : 'danger' }} bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                                            <i class="bi bi-{{ $attempt->passed ? 'person-check' : 'person-x' }} fs-5 text-{{ $attempt->passed ? 'success' : 'danger' }}"></i>
                                         </div>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
-                                        <div class="fw-bold small">{{ $attempt->user->name }}</div>
-                                        <div class="text-muted" style="font-size: 0.75rem;">{{ $attempt->quiz->title }}</div>
-                                        <small class="text-muted" style="font-size: 0.7rem;">{{ $attempt->completed_at ? $attempt->completed_at->diffForHumans() : 'جاري الحل' }}</small>
+                                        <div class="fw-bold text-dark small mb-0">{{ $attempt->user->name }}</div>
+                                        <div class="text-muted text-truncate" style="font-size: 0.75rem; max-width: 150px;">{{ $attempt->quiz->title }}</div>
+                                        <div class="d-flex align-items-center gap-2 mt-1">
+                                            <span class="badge bg-{{ $attempt->passed ? 'success' : 'danger' }} bg-opacity-10 text-{{ $attempt->passed ? 'success' : 'danger' }} p-0 px-2" style="font-size: 0.65rem;">
+                                                {{ $attempt->passed ? 'ناجح' : 'راسب' }}
+                                            </span>
+                                            <small class="text-muted" style="font-size: 0.65rem;"><i class="bi bi-clock-history me-1"></i>{{ $attempt->completed_at ? $attempt->completed_at->diffForHumans() : 'جاري' }}</small>
+                                        </div>
                                     </div>
-                                    <div class="ms-auto">
-                                        <div class="fw-bold text-{{ $attempt->passed ? 'success' : 'danger' }}">{{ number_format($attempt->score, 0) }}%</div>
+                                    <div class="ms-auto text-end">
+                                        <div class="fw-bold text-{{ $attempt->passed ? 'success' : 'danger' }} fs-5">{{ number_format($attempt->score, 0) }}%</div>
                                     </div>
                                 </div>
                             </div>
                         @empty
-                            <div class="text-center py-4 text-muted small">لا يوجد نتائج طلاب حتى الآن</div>
+                            <div class="text-center py-5">
+                                <i class="bi bi-graph-up fs-1 text-muted opacity-25 mb-3 d-block"></i>
+                                <p class="text-muted small mb-0">لا يوجد نتائج طلاب حتى الآن</p>
+                            </div>
                         @endforelse
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <style>
+        .hover-bg-light:hover { background-color: rgba(0,0,0, 0.02); }
+        .transition-all { transition: all 0.2s ease; }
+    </style>
 @endsection

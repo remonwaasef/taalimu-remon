@@ -23,15 +23,27 @@ class QuizController extends Controller
         $tenantId = app('tenant')->id;
         
         // Fetch quizzes belonging to this tenant's courses
-        $quizzes = \App\Models\Quiz::whereHas('lesson.section.course', function($query) use ($tenantId) {
+        $quizzesQuery = \App\Models\Quiz::whereHas('lesson.section.course', function($query) use ($tenantId) {
             $query->where('tenant_id', $tenantId);
-        })->with('lesson.section.course')->get();
+        });
+
+        $quizzes = (clone $quizzesQuery)->with('lesson.section.course')->get();
 
         $recentAttempts = \App\Models\QuizAttempt::whereHas('quiz.lesson.section.course', function($query) use ($tenantId) {
             $query->where('tenant_id', $tenantId);
         })->with(['quiz', 'user'])->latest()->take(10)->get();
 
-        return view('center::quizzes.index', compact('quizzes', 'recentAttempts'));
+        // Statistics
+        $totalQuizzesCount = $quizzes->count();
+        $allAttemptsQuery = \App\Models\QuizAttempt::whereHas('quiz.lesson.section.course', function($query) use ($tenantId) {
+            $query->where('tenant_id', $tenantId);
+        });
+        
+        $totalAttemptsCount = $allAttemptsQuery->count();
+        $passedAttemptsCount = (clone $allAttemptsQuery)->where('passed', true)->count();
+        $avgPassingRate = $totalAttemptsCount > 0 ? ($passedAttemptsCount / $totalAttemptsCount) * 100 : 0;
+
+        return view('center::quizzes.index', compact('quizzes', 'recentAttempts', 'totalQuizzesCount', 'totalAttemptsCount', 'avgPassingRate'));
     }
 
     public function store(Request $request, \App\Models\Lesson $lesson)
