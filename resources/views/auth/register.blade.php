@@ -131,10 +131,10 @@
     }
 
     .bulb.active-length { background-color: #10B981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6), 0 0 4px rgba(16, 185, 129, 0.4); }
-    .bulb.active-upper  { background-color: #3B82F6; box-shadow: 0 0 12px rgba(59, 130, 246, 0.6), 0 0 4px rgba(59, 130, 246, 0.4); }
-    .bulb.active-lower  { background-color: #8B5CF6; box-shadow: 0 0 12px rgba(139, 92, 246, 0.6), 0 0 4px rgba(139, 92, 246, 0.4); }
-    .bulb.active-number { background-color: #F59E0B; box-shadow: 0 0 12px rgba(245, 158, 11, 0.6), 0 0 4px rgba(245, 158, 11, 0.4); }
-    .bulb.active-symbol { background-color: #EF4444; box-shadow: 0 0 12px rgba(239, 68, 68, 0.6), 0 0 4px rgba(239, 68, 68, 0.4); }
+    .bulb.active-upper  { background-color: #10B981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6), 0 0 4px rgba(16, 185, 129, 0.4); }
+    .bulb.active-lower  { background-color: #10B981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6), 0 0 4px rgba(16, 185, 129, 0.4); }
+    .bulb.active-number { background-color: #10B981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6), 0 0 4px rgba(16, 185, 129, 0.4); }
+    .bulb.active-symbol { background-color: #10B981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6), 0 0 4px rgba(16, 185, 129, 0.4); }
 
     .bulb-text {
         font-size: 11px;
