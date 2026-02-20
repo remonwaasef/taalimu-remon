@@ -115,7 +115,7 @@
                                     @endif
                                 </div>
                                 <div>
-                                    <button class="btn btn-sm btn-outline-secondary me-1" data-bs-toggle="modal" data-bs-target="#editLessonModal-{{ $lesson->id }}"><i class="fas fa-edit"></i></button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary me-1" data-bs-toggle="modal" data-bs-target="#editLessonModal-{{ $lesson->id }}"><i class="fas fa-edit"></i></button>
                                     <form action="{{ route('center.lessons.destroy', $lesson) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Delete this lesson?');">
                                         @csrf
                                         @method('DELETE')
@@ -123,84 +123,6 @@
                                     </form>
                                 </div>
 
-                                <!-- Edit Lesson Modal -->
-                                <div class="modal fade" id="editLessonModal-{{ $lesson->id }}" tabindex="-1">
-                                    <div class="modal-dialog">
-                                        <form action="{{ route('center.lessons.update', $lesson) }}" method="POST">
-                                            @csrf
-                                            @method('PUT')
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Edit Lesson</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="mb-3">
-                                                        <label>Title</label>
-                                                        <input type="text" name="title" class="form-control" value="{{ $lesson->title }}" required>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label>Type</label>
-                                                        <select name="type" class="form-select">
-                                                            <option value="video" {{ $lesson->type == 'video' ? 'selected' : '' }}>Video</option>
-                                                            <option value="text" {{ $lesson->type == 'text' ? 'selected' : '' }}>Text</option>
-                                                            <option value="quiz" {{ $lesson->type == 'quiz' ? 'selected' : '' }}>Quiz</option>
-                                                            <option value="assignment" {{ $lesson->type == 'assignment' ? 'selected' : '' }}>Assignment</option>
-                                                        </select>
-                                                    </div>
-                                                    @if($lesson->type == 'quiz')
-                                                        <div class="mb-3">
-                                                            @if($lesson->quiz)
-                                                                <a href="{{ route('center.quizzes.edit', $lesson->quiz) }}" class="btn btn-sm btn-info w-100">Manage Quiz Questions</a>
-                                                            @else
-                                                                <form action="{{ route('center.quizzes.store', $lesson) }}" method="POST">
-                                                                    @csrf
-                                                                    <div class="input-group">
-                                                                        <input type="text" name="title" class="form-control form-control-sm" placeholder="Quiz Title" value="{{ $lesson->title }}">
-                                                                        <input type="hidden" name="passing_score" value="50">
-                                                                        <button type="submit" class="btn btn-sm btn-outline-info">Initial Quiz Setup</button>
-                                                                    </div>
-                                                                </form>
-                                                            @endif
-                                                        </div>
-                                                    @elseif($lesson->type == 'assignment')
-                                                        <div class="mb-3">
-                                                            @if($lesson->assignment)
-                                                                <a href="{{ route('center.assignments.edit', $lesson->assignment) }}" class="btn btn-sm btn-warning w-100">Edit Assignment Details</a>
-                                                            @else
-                                                                <form action="{{ route('center.assignments.store', $lesson) }}" method="POST">
-                                                                    @csrf
-                                                                    <div class="input-group">
-                                                                        <input type="text" name="title" class="form-control form-control-sm" placeholder="Assignment Title" value="{{ $lesson->title }}">
-                                                                        <input type="hidden" name="max_score" value="100">
-                                                                        <button type="submit" class="btn btn-sm btn-outline-warning">Initial Assignment Setup</button>
-                                                                    </div>
-                                                                </form>
-                                                            @endif
-                                                        </div>
-                                                    @endif
-                                                    <div class="mb-3">
-                                                        <label>Content (URL or Text)</label>
-                                                        <textarea name="content" class="form-control" rows="3">{{ $lesson->content }}</textarea>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label>Duration (minutes)</label>
-                                                        <input type="number" name="duration" class="form-control" value="{{ $lesson->duration }}">
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input type="hidden" name="is_free" value="0">
-                                                        <input type="checkbox" name="is_free" value="1" class="form-check-input" id="freeCheck-{{ $lesson->id }}" {{ $lesson->is_free ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="freeCheck-{{ $lesson->id }}">Free Preview</label>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
                             </li>
                         @endforeach
                     </ul>
@@ -221,6 +143,94 @@
             </div>
         @endforeach
     </div>
+
+    <!-- Edit Lesson Modals (Moved outside the loop) -->
+    @foreach($course->sections as $section)
+        @foreach($section->lessons as $lesson)
+            <div class="modal fade" id="editLessonModal-{{ $lesson->id }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form action="{{ route('center.lessons.update', $lesson) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit Lesson</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Title</label>
+                                    <input type="text" name="title" id="lesson_title_{{ $lesson->id }}" class="form-control" value="{{ $lesson->title }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Type</label>
+                                    <select name="type" class="form-select">
+                                        <option value="video" {{ $lesson->type == 'video' ? 'selected' : '' }}>Video</option>
+                                        <option value="text" {{ $lesson->type == 'text' ? 'selected' : '' }}>Text</option>
+                                        <option value="quiz" {{ $lesson->type == 'quiz' ? 'selected' : '' }}>Quiz</option>
+                                        <option value="assignment" {{ $lesson->type == 'assignment' ? 'selected' : '' }}>Assignment</option>
+                                    </select>
+                                </div>
+
+                                @if($lesson->type == 'quiz')
+                                    <div class="mb-3">
+                                        @if($lesson->quiz)
+                                            <a href="{{ route('center.quizzes.edit', $lesson->quiz) }}" class="btn btn-sm btn-info w-100">Manage Quiz Questions</a>
+                                        @else
+                                            <div class="p-3 border rounded bg-light">
+                                                <p class="small text-muted mb-2">Quiz Setup required</p>
+                                                <button type="button" class="btn btn-sm btn-outline-info w-100" onclick="submitInitialSetup('{{ route('center.quizzes.store', $lesson) }}', 'lesson_title_{{ $lesson->id }}', {passing_score: 50})">
+                                                    Initial Quiz Setup
+                                                </button>
+                                            </div>
+                                        @endif
+                                    </div>
+                                @elseif($lesson->type == 'assignment')
+                                    <div class="mb-3">
+                                        @if($lesson->assignment)
+                                            <a href="{{ route('center.assignments.edit', $lesson->assignment) }}" class="btn btn-sm btn-warning w-100">Edit Assignment Details</a>
+                                        @else
+                                            <div class="p-3 border rounded bg-light">
+                                                <p class="small text-muted mb-2">Assignment Setup required</p>
+                                                <button type="button" class="btn btn-sm btn-outline-warning w-100" onclick="submitInitialSetup('{{ route('center.assignments.store', $lesson) }}', 'lesson_title_{{ $lesson->id }}', {max_score: 100})">
+                                                    Initial Assignment Setup
+                                                </button>
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endif
+
+                                <div class="mb-3">
+                                    <label class="form-label">Content (URL or Text)</label>
+                                    <textarea name="content" class="form-control" rows="3">{{ $lesson->content }}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Duration (minutes)</label>
+                                    <input type="number" name="duration" class="form-control" value="{{ $lesson->duration }}">
+                                </div>
+                                <div class="form-check">
+                                    <input type="hidden" name="is_free" value="0">
+                                    <input type="checkbox" name="is_free" value="1" class="form-check-input" id="freeCheckModal-{{ $lesson->id }}" {{ $lesson->is_free ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="freeCheckModal-{{ $lesson->id }}">Free Preview</label>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        @endforeach
+    @endforeach
+
+    <!-- Hidden form for initial setup actions (avoiding nested forms) -->
+    <form id="initialSetupForm" method="POST" style="display: none;">
+        @csrf
+        <input type="hidden" name="title" id="setup_title">
+        <div id="setup_extra_fields"></div>
+    </form>
 </div>
 
 @push('scripts')
@@ -265,8 +275,29 @@
                     body: JSON.stringify({ lessons: lessons })
                 });
             }
-        });
     });
+
+    // Helper for initial setup without nested forms
+    function submitInitialSetup(url, titleInputId, extraFields = {}) {
+        const form = document.getElementById('initialSetupForm');
+        const titleInput = document.getElementById(titleInputId);
+        const extraContainer = document.getElementById('setup_extra_fields');
+        
+        form.action = url;
+        document.getElementById('setup_title').value = titleInput.value;
+        
+        // Clear and add extra fields
+        extraContainer.innerHTML = '';
+        for (const [key, value] of Object.entries(extraFields)) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = key;
+            input.value = value;
+            extraContainer.appendChild(input);
+        }
+        
+        form.submit();
+    }
 </script>
 @endpush
 @endsection
