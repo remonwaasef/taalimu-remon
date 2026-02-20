@@ -259,4 +259,17 @@ class CenterController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id) {}
+
+    /**
+     * Mark onboarding as complete.
+     */
+    public function completeOnboarding()
+    {
+        $tenant = app('tenant');
+        if ($tenant) {
+            $tenant->update(['onboarding_completed_at' => now()]);
+        }
+        
+        return response()->json(['success' => true]);
+    }
 }
