@@ -92,7 +92,6 @@ class Tenant extends Model
         'status',
         'settings',
         'timezone',
-        'onboarding_completed_at',
     ];
 
     /**
@@ -111,7 +110,6 @@ class Tenant extends Model
     protected $casts = [
         'settings' => 'array',
         'trial_ends_at' => 'datetime',
-        'onboarding_completed_at' => 'datetime',
     ];
 
     /**
