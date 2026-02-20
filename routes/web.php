@@ -28,9 +28,16 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
         return back()->with('message', 'Verification link sent!');
     })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
     
-    // Protected Dashboard Route (Example)
+    // Protected Dashboard Route
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        $user = auth()->user();
+        if ($user && $user->tenant_id) {
+            $tenant = \App\Models\Tenant::find($user->tenant_id);
+            if ($tenant) {
+                return redirect()->away(tenant_url('dashboard', $tenant));
+            }
+        }
+        return redirect()->route('login.portal');
     })->middleware(['auth', 'verified'])->name('dashboard');
     
 Route::get('/registration-success', function() {
