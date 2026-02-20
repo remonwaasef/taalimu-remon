@@ -136,7 +136,10 @@
                         {
                             text: nextLabel,
                             classes: 'btn-tour-primary',
-                            action: tour.next
+                            action: function() {
+                                localStorage.setItem('onboarding_step', 3);
+                                window.location.href = "{{ route('center.instructors.create', ['tenant' => $tenant->domain]) }}?onboarding_step=3";
+                            }
                         }
                     ]
                 });
@@ -156,18 +159,23 @@
 
                 // Intercept Form Submit to redirect to next step
                 document.querySelector('#general form')?.addEventListener('submit', function(e) {
-                    // We assume save is successful for now, or we rely on the controller redirect (if we could control it).
-                    // Since we can't easily change the controller redirect without touching logic, 
-                    // we'll rely on the user manually clicking or a "soft" intercept.
-                    // BETTER APPROACH: Just update localStorage so when they come back or go to next page it knows.
-                    localStorage.setItem('onboarding_step', 3);
-                    setTimeout(() => {
-                        window.location.href = "{{ route('center.instructors.create', ['tenant' => $tenant->domain]) }}?onboarding_step=3";
-                    }, 1000); // Wait a bit for default submit (if ajax) or allow normal submit
+                     localStorage.setItem('onboarding_step', 3);
+                     // Allow form to submit normally
                 });
+
+                // Auto-advance if success message is present
+                if (document.querySelector('.alert-success')) {
+                     localStorage.setItem('onboarding_step', 3);
+                     window.location.href = "{{ route('center.instructors.create', ['tenant' => $tenant->domain]) }}?onboarding_step=3";
+                }
             }
 
-            // STEP 3: CREATE INSTRUCTOR
+            // STEP 3: INSTRUCTORS
+            // If user is on index page (after save), redirect to next step
+            if (route === 'center.instructors.index' && currentTourStep === 3) {
+                 localStorage.setItem('onboarding_step', 4);
+                 window.location.href = "{{ route('center.courses.create', ['tenant' => $tenant->domain]) }}?onboarding_step=4";
+            }
             if (route === 'center.instructors.create' && currentTourStep === 3) {
                 tour.addStep({
                     id: 'instructor-intro',
@@ -180,7 +188,10 @@
                         {
                             text: nextLabel,
                             classes: 'btn-tour-primary',
-                            action: tour.next
+                            action: function() {
+                                localStorage.setItem('onboarding_step', 4);
+                                window.location.href = "{{ route('center.courses.create', ['tenant' => $tenant->domain]) }}?onboarding_step=4";
+                            }
                         }
                     ]
                 });
@@ -189,19 +200,15 @@
 
                 document.querySelector('form')?.addEventListener('submit', function() {
                     localStorage.setItem('onboarding_step', 4);
-                    // The standard form submit redirect goes to index usually.
-                    // We need to catch them there or force the next URL here?
-                    // Let's rely on them navigating manually or we can try to hook.
-                    // Ideally, we'd hook the "success" toast/redirect, but for now let's guide them.
                 });
             }
-            
-            // If they land on instructors index and step is 4 (meaning they just saved), redirect to courses create
-            if (route === 'center.instructors.index' && currentTourStep === 4) {
-                 window.location.href = "{{ route('center.courses.create', ['tenant' => $tenant->domain]) }}?onboarding_step=4";
-            }
 
-            // STEP 4: CREATE COURSE
+            // STEP 4: COURSES
+            // If user is on index page (after save), redirect to next step
+            if (route === 'center.courses.index' && currentTourStep === 4) {
+                 localStorage.setItem('onboarding_step', 5);
+                 window.location.href = "{{ route('center.students.create', ['tenant' => $tenant->domain]) }}?onboarding_step=5";
+            }
             if (route === 'center.courses.create' && currentTourStep === 4) {
                  tour.addStep({
                     id: 'course-intro',
@@ -214,7 +221,10 @@
                         {
                             text: nextLabel,
                             classes: 'btn-tour-primary',
-                            action: tour.next
+                            action: function() {
+                                localStorage.setItem('onboarding_step', 5);
+                                window.location.href = "{{ route('center.students.create', ['tenant' => $tenant->domain]) }}?onboarding_step=5";
+                            }
                         }
                     ]
                 });
@@ -244,7 +254,7 @@
                         {
                             text: nextLabel,
                             classes: 'btn-tour-primary',
-                            action: tour.next
+                            action: finishOnboarding
                         }
                     ]
                 });
