@@ -9,15 +9,9 @@ use App\Models\Student;
 use App\Models\Instructor;
 use Spatie\Permission\Models\Role;
 use Modules\Center\Models\Branch;
-use App\Models\Schedule;
-use App\Policies\AssignmentPolicy;
-use App\Policies\CoursePolicy;
-use App\Policies\QuizPolicy;
-use App\Policies\StudentPolicy;
-use App\Policies\InstructorPolicy;
-use App\Policies\RolePolicy;
-use App\Policies\BranchPolicy;
 use App\Policies\SchedulePolicy;
+use App\Models\Question;
+use App\Policies\QuestionPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -36,6 +30,7 @@ class AuthServiceProvider extends ServiceProvider
         Role::class => RolePolicy::class,
         Branch::class => BranchPolicy::class,
         Schedule::class => SchedulePolicy::class,
+        Question::class => QuestionPolicy::class,
         // New Policies for Authorization Security
         \App\Models\Tenant::class => \App\Policies\TenantPolicy::class,
         \App\Models\User::class => \App\Policies\UserPolicy::class,
