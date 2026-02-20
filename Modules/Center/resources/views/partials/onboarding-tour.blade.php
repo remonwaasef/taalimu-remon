@@ -183,7 +183,7 @@
                     text: isRtl
                         ? 'الخطوة التالية هي إضافة كادر التدريس. المدرس هو أساس العملية التعليمية.'
                         : 'Next step is adding teaching staff. Instructors are the core of the educational process.',
-                    attachTo: { element: 'form', on: 'right' },
+                    attachTo: { element: '.card form', on: 'bottom' },
                     buttons: [
                         {
                             text: nextLabel,
@@ -216,7 +216,7 @@
                     text: isRtl
                         ? 'الآن أنشئ دورتك الأولى. اربطها بالمدرس الذي أضفته للتو.'
                         : 'Now create your first course. Link it to the instructor you just added.',
-                    attachTo: { element: 'form', on: 'left' },
+                    attachTo: { element: '.card form', on: 'bottom' },
                      buttons: [
                         {
                             text: nextLabel,
@@ -249,7 +249,7 @@
                     text: isRtl
                         ? 'أخيراً، أضف طالباً وسجله في الدورة. سيحصل الطالب على QR Code للحضور.'
                         : 'Finally, add a student and enroll them in the course. They will get a QR Code for attendance.',
-                    attachTo: { element: 'form', on: 'right' },
+                    attachTo: { element: '#student-form', on: 'bottom' },
                      buttons: [
                         {
                             text: nextLabel,
@@ -261,7 +261,7 @@
                 
                 tour.start();
 
-                document.querySelector('form')?.addEventListener('submit', function() {
+                document.querySelector('#student-form')?.addEventListener('submit', function() {
                     localStorage.setItem('onboarding_step', 6);
                 });
             }
