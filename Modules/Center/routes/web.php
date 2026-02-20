@@ -60,11 +60,6 @@ $tenantRoutes = function () {
     Route::get('attendance/mark/{schedule}', [AttendanceController::class, 'markByQr'])->name('center.attendance.markByQr');
     Route::post('attendance/mark/{schedule}/login', [AttendanceController::class, 'loginAndMark'])->name('center.attendance.loginAndMark');
 
-    // Onboarding Completion Route (Auth, no subscription/onboarding check)
-    Route::middleware(['auth', 'force_password_change'])->group(function() {
-        Route::post('onboarding/complete', [CenterController::class, 'completeOnboarding'])->name('center.onboarding.complete');
-    });
-
     // Protected Routes (Auth Only - No Subscription Check)
     Route::middleware(['auth', 'force_password_change'])->group(function() {
         Route::match(['get', 'post'], 'logout', [AuthController::class, 'logout'])->name('center.logout');
@@ -91,8 +86,8 @@ $tenantRoutes = function () {
         Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->name('center.subscription.cancel');
     });
 
-    // Protected Routes with Subscription Check + Onboarding Check
-    Route::middleware(['auth', 'subscription', 'force_password_change', 'force_onboarding'])->group(function() {
+    // Protected Routes with Subscription Check
+    Route::middleware(['auth', 'subscription', 'force_password_change'])->group(function() {
         // Dashboard
         Route::get('/', [CenterController::class, 'index'])->name('center.dashboard');
         Route::get('/dashboard', [CenterController::class, 'index'])->name('center.dashboard.alt');
