@@ -504,6 +504,9 @@ document.addEventListener('alpine:init', () => {
                     </div>
                     <form action="{{ route('register.submit') }}" method="POST" class="space-y-4">
                         @csrf
+                        @if(request('google_id'))
+                            <input type="hidden" name="google_id" value="{{ request('google_id') }}">
+                        @endif
                         
                         <!-- Global Error Alert -->
                         @if ($errors->any())
@@ -541,6 +544,7 @@ document.addEventListener('alpine:init', () => {
                                     @input="if(!manuallyEditedSubdomain) { subdomain = generateSlug(centerName); }"
                                     class="w-full h-12 input-compact px-4 text-sm font-medium font-arabic text-slate-900"
                                     placeholder="{{ __('auth.register.center_name_placeholder') }}" 
+                                    value="{{ request('center_name') }}"
                                     required>
                                 @error('center_name') <p class="text-red-500 text-[10px] font-bold mt-1 px-1">{{ $message }}</p> @enderror
                             </div>
@@ -552,21 +556,21 @@ document.addEventListener('alpine:init', () => {
                                     <label class="label-compact px-1 font-arabic">{{ __('auth.register.full_name') }}</label>
                                     <input type="text" name="name" 
                                         class="w-full h-12 input-compact px-4 text-sm font-medium font-arabic text-slate-900"
-                                        required value="{{ old('name') }}">
+                                        required value="{{ old('name', request('name')) }}">
                                 </div>
                                 <div class="space-y-1">
                                     <label class="label-compact px-1 font-arabic">{{ __('auth.register.email') }}</label>
                                     <input type="email" name="email" 
                                         class="w-full h-12 input-compact px-4 text-sm font-medium text-slate-900"
                                         placeholder="mail@example.com"
-                                        required value="{{ old('email') }}">
+                                        required value="{{ old('email', request('email')) }}">
                                 </div>
                                 <div class="space-y-1">
                                     <label class="label-compact px-1 font-arabic">{{ __('auth.register.phone') }}</label>
                                     <input type="text" name="phone" 
                                         class="w-full h-12 input-compact px-4 text-sm font-medium text-slate-900"
                                         placeholder="010xxxxxxx"
-                                        required value="{{ old('phone') }}">
+                                        required value="{{ old('phone', request('phone')) }}">
                                 </div>
                             </div>
 
