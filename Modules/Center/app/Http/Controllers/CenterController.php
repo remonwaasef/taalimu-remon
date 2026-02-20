@@ -76,7 +76,6 @@ class CenterController extends Controller
         // 3. Launchpad Logic
         $tenantModel = \App\Models\Tenant::find($tenantId);
         $launchpadSteps = [
-            'system' => \App\Models\Stage::where('tenant_id', $tenantId)->exists(),
             'profile' => !empty($tenantModel->logo) || !empty($tenantModel->phone) || !empty($tenantModel->address) || !empty($tenantModel->description),
             'instructor' => \App\Models\Instructor::where('tenant_id', $tenantId)->exists(),
             'course' => \App\Models\Course::where('tenant_id', $tenantId)->exists(),
@@ -84,17 +83,7 @@ class CenterController extends Controller
         ];
         
         $completedSteps = count(array_filter($launchpadSteps));
-        $launchpadProgress = ($completedSteps / 5) * 100;
-
-        $onboardingIncomplete = !($tenantModel->settings['onboarding_completed'] ?? false);
-        // Backup check if settings flag is not set but data is present
-        if ($onboardingIncomplete && $launchpadSteps['system'] && $launchpadSteps['instructor'] && $launchpadSteps['course']) {
-             $onboardingIncomplete = false;
-             $settings = $tenantModel->settings ?? [];
-             $settings['onboarding_completed'] = true;
-             $tenantModel->settings = $settings;
-             $tenantModel->save();
-        }
+        $launchpadProgress = ($completedSteps / 4) * 100;
 
         return view('center::index', compact(
             'activeStudents',
@@ -109,8 +98,7 @@ class CenterController extends Controller
             'aiInsights',
             'performanceTrends',
             'launchpadProgress',
-            'launchpadSteps',
-            'onboardingIncomplete'
+            'launchpadSteps'
         ));
     }
 
