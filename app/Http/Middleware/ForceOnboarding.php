@@ -46,7 +46,14 @@ class ForceOnboarding
         }
 
         // Redirect to dashboard with onboarding query param if not already there
-        if ($request->routeIs('center.dashboard') || $request->routeIs('center.dashboard.alt')) {
+        // Allow tour routes (Settings, Instructors, Courses, Students)
+        if ($request->routeIs('center.dashboard') || 
+            $request->routeIs('center.dashboard.alt') ||
+            $request->routeIs('center.settings.*') ||
+            $request->routeIs('center.instructors.*') ||
+            $request->routeIs('center.courses.*') ||
+            $request->routeIs('center.students.*') ||
+            $request->routeIs('center.attendance.*')) {
             return $next($request);
         }
 
