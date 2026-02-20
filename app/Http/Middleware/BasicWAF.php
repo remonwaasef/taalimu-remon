@@ -20,7 +20,7 @@ class BasicWAF
         // XSS
         '/<script[^>]*>.*?<\/script>/i',
         '/javascript:/i',
-        '/on\w+\s*=/i',
+        '/(?:\s|["\'\/>])on\w+\s*=/i',
         
         // Path Traversal
         '/\.\.[\/\\\\]/',
