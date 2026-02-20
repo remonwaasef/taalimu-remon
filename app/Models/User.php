@@ -97,6 +97,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'must_change_password',
         'locale',
         'google_id',
+        'email_verified_at',
     ];
 
     /**
