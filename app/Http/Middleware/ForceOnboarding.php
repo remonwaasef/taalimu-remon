@@ -12,10 +12,7 @@ class ForceOnboarding
      * Routes excluded from the onboarding check.
      */
     protected array $except = [
-        'center.onboarding',
-        'center.onboarding.save-step',
         'center.onboarding.complete',
-        'center.onboarding.skip',
         'center.logout',
         'center.login',
         'center.password.change',
@@ -48,8 +45,12 @@ class ForceOnboarding
             return $next($request);
         }
 
-        // Redirect to onboarding wizard
+        // Redirect to dashboard with onboarding query param if not already there
+        if ($request->routeIs('center.dashboard') || $request->routeIs('center.dashboard.alt')) {
+            return $next($request);
+        }
+
         $tenantParam = $tenant->domain ?? $request->route('tenant');
-        return redirect()->route('center.onboarding', ['tenant' => $tenantParam]);
+        return redirect()->route('center.dashboard', ['tenant' => $tenantParam, 'onboarding_step' => 1]);
     }
 }

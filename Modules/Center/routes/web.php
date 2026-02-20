@@ -24,7 +24,6 @@ use Modules\Center\Http\Controllers\NotificationController;
 use Modules\Center\Http\Controllers\LeaderboardController;
 use Modules\Center\Http\Controllers\QuestionBankController;
 use Modules\Center\Http\Controllers\AssetController;
-use Modules\Center\Http\Controllers\OnboardingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,11 +60,9 @@ $tenantRoutes = function () {
     Route::get('attendance/mark/{schedule}', [AttendanceController::class, 'markByQr'])->name('center.attendance.markByQr');
     Route::post('attendance/mark/{schedule}/login', [AttendanceController::class, 'loginAndMark'])->name('center.attendance.loginAndMark');
 
-    // Onboarding Wizard Routes (Auth, no subscription/onboarding check)
+    // Onboarding Completion Route (Auth, no subscription/onboarding check)
     Route::middleware(['auth', 'force_password_change'])->group(function() {
-        Route::get('onboarding', [OnboardingController::class, 'index'])->name('center.onboarding');
-        Route::post('onboarding/save-step', [OnboardingController::class, 'saveStep'])->name('center.onboarding.save-step');
-        Route::post('onboarding/complete', [OnboardingController::class, 'complete'])->name('center.onboarding.complete');
+        Route::post('onboarding/complete', [CenterController::class, 'completeOnboarding'])->name('center.onboarding.complete');
     });
 
     // Protected Routes (Auth Only - No Subscription Check)
