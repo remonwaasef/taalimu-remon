@@ -93,6 +93,8 @@ Route::get('/registration-success', function() {
     Route::post('/login', [App\Http\Controllers\UnifiedAuthController::class, 'login'])
         ->middleware('throttle:login') // Uses the 'login' rate limiter defined in AppServiceProvider
         ->name('unified.login.submit');
+    
+    Route::post('/logout', [App\Http\Controllers\UnifiedAuthController::class, 'logout'])->name('logout');
 
     // Social Auth Routes
     Route::get('auth/google', [App\Http\Controllers\SocialAuthController::class, 'redirectToGoogle'])->name('auth.google');
