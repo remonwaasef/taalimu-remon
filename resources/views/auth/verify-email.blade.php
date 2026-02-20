@@ -32,7 +32,7 @@
             </button>
         </form>
 
-        <form method="POST" action="{{ route('center.logout') }}" class="mt-4">
+        <form method="POST" action="{{ route('logout') }}" class="mt-4">
             @csrf
             <button type="submit" class="text-sm text-slate-400 hover:text-slate-600 font-medium font-arabic">
                 {{ __('Log Out') }}
