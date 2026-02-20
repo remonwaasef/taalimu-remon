@@ -220,6 +220,39 @@
 
         <!-- Sidebar: Personal & Family -->
         <div class="col-lg-4">
+            <!-- QR Code Card (Always Visible) -->
+            <div class="card border-0 shadow-elite rounded-5 p-4 mb-4 text-center overflow-hidden position-relative">
+                <div class="position-absolute top-0 end-0 p-3 opacity-10">
+                    <i class="fas fa-qrcode fs-1"></i>
+                </div>
+                <h6 class="fw-bold text-dark border-bottom pb-3 mb-4">بطاقة التعريف الرقمية</h6>
+                
+                <div class="qr-display-container bg-light rounded-4 p-4 mb-3 position-relative shadow-inner">
+                    <div id="sidebar-student-qrcode" class="d-flex justify-content-center"></div>
+                    <div class="mt-3">
+                        <code class="text-primary fw-bold fs-5">#{{ $student->code }}</code>
+                    </div>
+                </div>
+                
+                <p class="small text-muted mb-4 px-2">استخدم هذا الرمز لتسجيل الحضور السريع أو الدخول المباشر للمنصة.</p>
+                
+                @php
+                    $magicLoginUrl = \Illuminate\Support\Facades\URL::signedRoute('center.login.magic', [
+                        'student' => $student->id, 
+                        'tenant' => app('tenant')->domain
+                    ]);
+                @endphp
+                
+                <div class="d-grid gap-2">
+                    <button onclick="copyToClipboard('{{ $magicLoginUrl }}')" class="btn btn-primary rounded-pill fw-bold shadow-sm">
+                        <i class="fas fa-magic me-2"></i> رابط الدخول السريع
+                    </button>
+                    <button onclick="printIDCard()" class="btn btn-outline-dark rounded-pill fw-bold border-2">
+                        <i class="fas fa-print me-2"></i> طباعة الكارت الملون
+                    </button>
+                </div>
+            </div>
+
             <!-- Sidebar Navigation (ScrollSpy Lite) -->
             <div class="card border-0 shadow-sm rounded-5 p-4 mb-4">
                 <h6 class="fw-bold text-dark opacity-50 small text-uppercase mb-4">أقسام الملف</h6>
@@ -1158,11 +1191,11 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         const qrContainer = document.getElementById('student-qrcode');
-        if (qrContainer) {
-            qrContainer.innerHTML = '';
-            
-            // Ensure QRCode library is loaded
-            if (typeof QRCode !== 'undefined') {
+        const sidebarQrContainer = document.getElementById('sidebar-student-qrcode');
+
+        if (typeof QRCode !== 'undefined') {
+            if (qrContainer) {
+                qrContainer.innerHTML = '';
                 new QRCode(qrContainer, {
                     text: "{{ $student->code }}",
                     width: 60,
@@ -1171,9 +1204,21 @@
                     colorLight: "#ffffff",
                     correctLevel : QRCode.CorrectLevel.H
                 });
-            } else {
-                console.error('QRCode library not loaded');
             }
+
+            if (sidebarQrContainer) {
+                sidebarQrContainer.innerHTML = '';
+                new QRCode(sidebarQrContainer, {
+                    text: "{{ $student->code }}",
+                    width: 150,
+                    height: 150,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+            }
+        } else {
+            console.error('QRCode library not loaded');
         }
     });
 </script>
