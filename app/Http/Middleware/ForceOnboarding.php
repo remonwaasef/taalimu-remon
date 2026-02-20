@@ -47,10 +47,11 @@ class ForceOnboarding
         }
 
         // Check if onboarding is completed
-        $tenant = app('tenant');
-        if (!$tenant) {
+        if (!app()->bound('tenant')) {
             return $next($request);
         }
+
+        $tenant = app('tenant');
 
         $isCompleted = $tenant->settings['onboarding_completed'] ?? false;
 
