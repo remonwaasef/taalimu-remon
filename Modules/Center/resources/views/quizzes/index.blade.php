@@ -10,8 +10,8 @@
             <a href="{{ route('center.questions.index') }}" class="btn btn-outline-primary rounded-pill px-4 shadow-sm">
                 <i class="bi bi-database-fill me-2"></i>بنك الأسئلة
             </a>
-            <a href="{{ route('center.courses.index') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
-                <i class="bi bi-plus-circle-fill me-2"></i>إنشاء اختبار جديد
+            <a href="{{ route('center.courses.index') }}" class="btn btn-primary rounded-pill px-4 shadow-sm" title="يتم إنشاء الاختبارات من داخل دروس الدورات">
+                <i class="bi bi-plus-circle-fill me-2"></i>إدارة المناهج لإنشاء اختبار
             </a>
         </div>
     </div>
