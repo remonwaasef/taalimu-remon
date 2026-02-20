@@ -826,6 +826,7 @@
     </script>
     
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
+    @include('center::partials.onboarding-tour')
     @stack('scripts')
 </body>
 </html>
