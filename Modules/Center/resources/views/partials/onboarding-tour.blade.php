@@ -131,7 +131,7 @@
                     text: isRtl 
                         ? 'هنا يمكنك تعديل اسم المركز، الشعار، والنظام التعليمي. قم بملء البيانات ثم اضغط حفظ.'
                         : 'Here you can edit your center name, logo, and academic system. Fill in the data and click save.',
-                    attachTo: { element: 'form', on: 'bottom' },
+                    attachTo: { element: '#general form', on: 'bottom' },
                     buttons: [
                         {
                             text: nextLabel,
@@ -155,7 +155,7 @@
                 tour.start();
 
                 // Intercept Form Submit to redirect to next step
-                document.querySelector('form')?.addEventListener('submit', function(e) {
+                document.querySelector('#general form')?.addEventListener('submit', function(e) {
                     // We assume save is successful for now, or we rely on the controller redirect (if we could control it).
                     // Since we can't easily change the controller redirect without touching logic, 
                     // we'll rely on the user manually clicking or a "soft" intercept.
