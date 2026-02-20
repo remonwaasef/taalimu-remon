@@ -135,6 +135,7 @@
     .bulb.active-lower  { background-color: #10B981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6), 0 0 4px rgba(16, 185, 129, 0.4); }
     .bulb.active-number { background-color: #10B981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6), 0 0 4px rgba(16, 185, 129, 0.4); }
     .bulb.active-symbol { background-color: #10B981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6), 0 0 4px rgba(16, 185, 129, 0.4); }
+    .bulb.active-match  { background-color: #10B981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6), 0 0 4px rgba(16, 185, 129, 0.4); }
 
     .bulb-text {
         font-size: 11px;
@@ -602,6 +603,11 @@ document.addEventListener('alpine:init', () => {
                                         <div class="bulb-container" :class="passwordCriteria.symbol ? 'active' : ''">
                                             <div class="bulb" :class="passwordCriteria.symbol ? 'active-symbol' : ''"></div>
                                             <span class="bulb-text font-arabic">{{ __('auth.register.password_criteria.symbols') }}</span>
+                                        </div>
+                                        <!-- Match -->
+                                        <div class="bulb-container" :class="isPasswordMatch ? 'active' : ''">
+                                            <div class="bulb" :class="isPasswordMatch ? 'active-match' : ''"></div>
+                                            <span class="bulb-text font-arabic">{{ __('auth.register.password_criteria.match') ?? 'تطابق' }}</span>
                                         </div>
                                     </div>
                                 </div>
