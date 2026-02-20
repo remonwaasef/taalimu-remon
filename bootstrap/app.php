@@ -24,7 +24,6 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(prepend: [
             \App\Http\Middleware\IdentifyTenant::class,
         ], append: [
-            \App\Http\Middleware\ForceOnboarding::class,
             \App\Http\Middleware\SetLocale::class,
             \App\Http\Middleware\ContentSecurityPolicy::class,
             \App\Http\Middleware\BasicWAF::class,

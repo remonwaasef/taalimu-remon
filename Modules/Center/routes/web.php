@@ -90,17 +90,6 @@ $tenantRoutes = function () {
     Route::middleware(['auth', 'subscription', 'force_password_change'])->group(function() {
         // Dashboard
         Route::get('/', [CenterController::class, 'index'])->name('center.dashboard');
-
-        // Onboarding AJAX Routes
-        Route::prefix('onboarding')->name('center.onboarding.')->group(function() {
-            Route::post('template', [OnboardingController::class, 'applyTemplate'])->name('template');
-            Route::post('instructor', [OnboardingController::class, 'storeInstructor'])->name('instructor');
-            Route::post('course', [OnboardingController::class, 'storeCourse'])->name('course');
-            Route::post('student', [OnboardingController::class, 'storeStudent'])->name('student');
-            Route::post('enroll', [OnboardingController::class, 'enroll'])->name('enroll');
-            Route::post('complete', [OnboardingController::class, 'complete'])->name('complete');
-            Route::get('get-grades', [OnboardingController::class, 'getGrades'])->name('get-grades');
-        });
         Route::get('/dashboard', [CenterController::class, 'index'])->name('center.dashboard.alt');
 
         // Student Management (Admin/Secretary only)
