@@ -79,7 +79,7 @@ class AttendanceController extends Controller
     /**
      * Manually mark attendance for a student.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         $this->authorize('create', Attendance::class);
         $validated = $request->validate([
@@ -146,7 +146,7 @@ class AttendanceController extends Controller
     /**
      * Mark all unrecorded students as absent for a session.
      */
-    public function bulkAbsent(Schedule $schedule): RedirectResponse
+    public function bulkAbsent(Schedule $schedule)
     {
         $this->authorize('create', Attendance::class);
         
