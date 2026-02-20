@@ -41,10 +41,11 @@ class SocialAuthController extends Controller
             // 2. Check if user exists with same email → Link google_id & Login
             $existingUser = User::where('email', $googleUser->email)->first();
             if ($existingUser) {
-                $existingUser->update([
+                $existingUser->forceFill([
                     'google_id' => $googleUser->id,
                     'email_verified_at' => $existingUser->email_verified_at ?? now(),
-                ]);
+                ])->save();
+                
                 Auth::login($existingUser, true);
                 return redirect()->intended('/dashboard');
             }
