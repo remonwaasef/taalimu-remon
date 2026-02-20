@@ -12,6 +12,26 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
     Route::post('/register', [App\Http\Controllers\RegistrationController::class, 'register'])
         ->middleware('throttle:registration')
         ->name('register.submit');
+
+    // Email Verification Routes
+    Route::get('/email/verify', function () {
+        return view('auth.verify-email');
+    })->middleware('auth')->name('verification.notice');
+
+    Route::get('/email/verify/{id}/{hash}', function (\Illuminate\Foundation\Auth\EmailVerificationRequest $request) {
+        $request->fulfill();
+        return redirect('/dashboard'); // or wherever you want to redirect
+    })->middleware(['auth', 'signed'])->name('verification.verify');
+
+    Route::post('/email/verification-notification', function (Illuminate\Http\Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+        return back()->with('message', 'Verification link sent!');
+    })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+    
+    // Protected Dashboard Route (Example)
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->middleware(['auth', 'verified'])->name('dashboard');
     
 Route::get('/registration-success', function() {
         if (!session('registration_success')) {
@@ -73,6 +93,10 @@ Route::get('/registration-success', function() {
     Route::post('/login', [App\Http\Controllers\UnifiedAuthController::class, 'login'])
         ->middleware('throttle:login') // Uses the 'login' rate limiter defined in AppServiceProvider
         ->name('unified.login.submit');
+
+    // Social Auth Routes
+    Route::get('auth/google', [App\Http\Controllers\SocialAuthController::class, 'redirectToGoogle'])->name('auth.google');
+    Route::get('auth/google/callback', [App\Http\Controllers\SocialAuthController::class, 'handleGoogleCallback']);
 });
 
 // Global Language Switcher (Accessible from any domain) — rate limited to prevent locale flooding

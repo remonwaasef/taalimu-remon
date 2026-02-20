@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
 
 class RegistrationController extends Controller
 {
@@ -174,6 +175,8 @@ class RegistrationController extends Controller
             $user->tenant_id = $tenant->id;
             $user->role = 'center_admin';
             $user->save();
+            
+            event(new Registered($user));
             
             // Set Spatie Team Context
             app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
