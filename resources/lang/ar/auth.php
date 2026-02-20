@@ -56,6 +56,7 @@ return [
             'lower' => 'حرف صغير',
             'numbers' => 'أرقام',
             'symbols' => 'رموز',
+            'match' => 'تطابق',
         ],
         'features' => [
             'max_students' => 'عدد الطلاب المتاح',

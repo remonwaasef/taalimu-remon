@@ -56,6 +56,7 @@ return [
             'lower' => 'abc',
             'numbers' => '123',
             'symbols' => '#@!',
+            'match' => 'Match',
         ],
         'features' => [
             'max_students' => 'Student Limit',
