@@ -30,7 +30,16 @@ class ForcePasswordChange
             $routeName = $request->route()->getName();
             
             if (!in_array($routeName, $this->except)) {
-                return redirect()->route('center.password.change')
+                // Determine the tenant parameter for the redirect
+                $tenant = null;
+                if (app()->bound('tenant')) {
+                    $tenant = app('tenant')->domain;
+                } else {
+                    // Fallback to route parameter if bound tenant is missing (e.g. for common prefixes like 'www')
+                    $tenant = $request->route('tenant');
+                }
+
+                return redirect()->route('center.password.change', ['tenant' => $tenant])
                     ->with('warning', 'يجب عليك تغيير كلمة المرور قبل المتابعة.');
             }
         }
