@@ -111,6 +111,32 @@
         box-shadow: var(--shadow-sm);
     }
 
+    .onboarding-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(10, 10, 12, 0.9);
+        backdrop-filter: blur(10px);
+        z-index: 2100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .wizard-card {
+        width: 100%;
+        max-width: 900px;
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .onboarding-locked {
+        overflow: hidden !important;
+    }
+
     @keyframes pulse-animation {
         0% { box-shadow: 0 0 0 0 rgba(46, 213, 115, 0.4); }
         70% { box-shadow: 0 0 0 10px rgba(46, 213, 115, 0); }
@@ -118,7 +144,12 @@
     }
 </style>
 
-<div class="container-fluid py-4">
+<div class="container-fluid py-4 {{ $onboardingIncomplete ? 'onboarding-locked' : '' }}">
+    <!-- Onboarding Wizard -->
+    @if($onboardingIncomplete)
+        @include('center::partials.onboarding-wizard')
+    @endif
+
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
