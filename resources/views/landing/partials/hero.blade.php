@@ -1,8 +1,6 @@
-<section class="relative min-h-screen pt-20 lg:pt-24 overflow-hidden mesh-gradient noise-overlay">
+<section class="relative min-h-screen pt-20 lg:pt-24 overflow-hidden hero-professional-bg noise-overlay">
     <!-- Background Elements -->
     <div class="absolute top-0 right-0 w-full h-full gradient-hero opacity-5 blur-xl"></div>
-    <div class="absolute -top-24 -left-24 w-96 h-96 bg-primary-purple/10 rounded-full"></div>
-    <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-cyan/5 rounded-full"></div>
     
     <div 
         dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"
@@ -163,12 +161,8 @@
                     </div>
                     
                     <!-- Floating Decorative Elements -->
-                    <div class="absolute -top-12 -left-12 w-32 h-32 bg-cyan/20 rounded-full"></div>
-                    <div class="absolute -bottom-16 right-0 w-48 h-48 bg-light-purple/10 rounded-full"></div>
-                    
-                    <!-- Abstract Shapes -->
-                    <div class="absolute top-1/2 right-0 w-24 h-24 border-2 border-white/10 rounded-full animate-float opacity-50"></div>
-                    <div class="absolute bottom-1/4 left-0 w-16 h-16 bg-white/10 rounded-2xl rotate-45 animate-float-delayed"></div>
+                    <div class="absolute -top-12 -left-12 w-32 h-32 bg-cyan/10 rounded-full blur-2xl"></div>
+                    <div class="absolute -bottom-16 right-0 w-48 h-48 bg-light-purple/5 rounded-full blur-2xl"></div>
                 </div>
             </div>
             </div>
