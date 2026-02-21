@@ -1,82 +1,89 @@
-<footer class="bg-secondary border-t border-border/50" style="padding: 2rem 0;">
-    <div class="container mx-auto px-4 lg:px-8">
-        <!-- Main Footer Content -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 1.5rem;">
-            <!-- Brand Column -->
-            <div>
-                <a href="{{ route('home') }}" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
-                    <div class="w-8 h-8 rounded-lg gradient-hero flex items-center justify-center">
-                        <span class="text-primary-foreground font-bold">{{ substr(\App\Models\SiteSetting::get('site_name', config('app.name')), 0, 1) }}</span>
-                    </div>
-                    <span style="font-weight: bold; font-size: 1.125rem; color: white;">{{ \App\Models\SiteSetting::get('site_name', config('app.name')) }}</span>
-                </a>
-                <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.875rem;">
+<footer class="bg-dark-purple relative overflow-hidden pt-20 pb-10">
+    <!-- Decorative Accents -->
+    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-primary-purple/5 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 right-0 w-64 h-64 bg-cyan/5 rounded-full blur-3xl"></div>
+
+    <div class="container relative mx-auto px-4 lg:px-8">
+        <!-- Main Footer Links -->
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 md:gap-12 mb-20">
+            
+            <!-- Brand/About Column -->
+            <div class="col-span-2 lg:col-span-2 space-y-8">
+                <div>
+                    <a href="{{ route('home') }}" class="inline-flex items-center gap-3 group">
+                        <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/10 group-hover:bg-white/20 transition-all duration-300 shadow-xl shadow-black/20">
+                            <span class="text-white font-black text-2xl leading-none">{{ substr(\App\Models\SiteSetting::get('site_name', config('app.name')), 0, 1) }}</span>
+                        </div>
+                        <span class="text-2xl font-black text-white tracking-tight">{{ \App\Models\SiteSetting::get('site_name', config('app.name')) }}</span>
+                    </a>
+                </div>
+                <p class="text-gray-text/60 text-base leading-relaxed max-w-sm font-medium">
                     {{ \App\Models\SiteSetting::get('site_description', __('landing.hero.subtitle')) }}
                 </p>
+                
+                <!-- Social Media -->
+                <div class="flex items-center gap-5">
+                    <a href="#" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gray-text/40 hover:bg-cyan hover:text-dark-purple transition-all duration-300 border border-white/5 group">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8V9c-4-.531-7-2-9-4 0 0-4 9 5 13-2 1-5 1.5-7 1 4 4 10 4 15 1 5-3 5-15 4-16.01 1-.49 1.98-.689 3-.99z"/></svg>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gray-text/40 hover:bg-cyan hover:text-dark-purple transition-all duration-300 border border-white/5 group">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gray-text/40 hover:bg-cyan hover:text-dark-purple transition-all duration-300 border border-white/5 group">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gray-text/40 hover:bg-cyan hover:text-dark-purple transition-all duration-300 border border-white/5 group">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01"/></svg>
+                    </a>
+                </div>
             </div>
 
             <!-- Product Links -->
             <div>
-                <h5 style="font-weight: 600; color: white; font-size: 0.875rem; margin-bottom: 0.75rem;">{{ __('landing.footer.product.title') }}</h5>
-                <ul style="list-style: none; padding: 0; margin: 0;">
-                    <li style="margin-bottom: 0.5rem;">
-                        <a href="#features" style="color: rgba(255, 255, 255, 0.7); font-size: 0.75rem; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='rgb(0, 255, 255)'" onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">
-                            {{ __('landing.footer.product.features') }}
-                        </a>
-                    </li>
-                    <li style="margin-bottom: 0.5rem;">
-                        <a href="#pricing" style="color: rgba(255, 255, 255, 0.7); font-size: 0.75rem; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='rgb(0, 255, 255)'" onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">
-                            {{ __('landing.footer.product.pricing') }}
-                        </a>
-                    </li>
+                <h4 class="text-white font-bold text-lg mb-8">{{ __('landing.footer.product.title') }}</h4>
+                <ul class="space-y-4">
+                    <li><a href="#features" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.product.features') }}</a></li>
+                    <li><a href="#pricing" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.product.pricing') }}</a></li>
+                    <li><a href="#" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.product.integrations') }}</a></li>
+                    <li><a href="#" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.product.updates') }}</a></li>
                 </ul>
             </div>
-            
-            <!-- Company Links -->
+
+            <!-- Support Links -->
             <div>
-                <h5 style="font-weight: 600; color: white; font-size: 0.875rem; margin-bottom: 0.75rem;">{{ __('landing.footer.company.title') }}</h5>
-                <ul style="list-style: none; padding: 0; margin: 0;">
-                    <li style="margin-bottom: 0.5rem;">
-                        <a href="#" style="color: rgba(255, 255, 255, 0.7); font-size: 0.75rem; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='rgb(0, 255, 255)'" onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">
-                            {{ __('landing.footer.company.about') }}
-                        </a>
-                    </li>
-                    <li style="margin-bottom: 0.5rem;">
-                        <a href="#" style="color: rgba(255, 255, 255, 0.7); font-size: 0.75rem; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='rgb(0, 255, 255)'" onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">
-                            {{ __('landing.footer.company.contact') }}
-                        </a>
-                    </li>
+                <h4 class="text-white font-bold text-lg mb-8">{{ __('landing.footer.resources.title') }}</h4>
+                <ul class="space-y-4">
+                    <li><a href="#" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.resources.help') }}</a></li>
+                    <li><a href="#" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.resources.docs') }}</a></li>
+                    <li><a href="#" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.resources.blog') }}</a></li>
+                    <li><a href="#" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.resources.api') }}</a></li>
                 </ul>
             </div>
 
             <!-- Legal Links -->
             <div>
-                <h5 style="font-weight: 600; color: white; font-size: 0.875rem; margin-bottom: 0.75rem;">{{ __('landing.footer.legal.title') }}</h5>
-                <ul style="list-style: none; padding: 0; margin: 0;">
-                    <li style="margin-bottom: 0.5rem;">
-                        <a href="{{ route('privacy') }}" style="color: rgba(255, 255, 255, 0.7); font-size: 0.75rem; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='rgb(0, 255, 255)'" onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">
-                            {{ __('landing.footer.legal.privacy') }}
-                        </a>
-                    </li>
-                    <li style="margin-bottom: 0.5rem;">
-                        <a href="{{ route('terms') }}" style="color: rgba(255, 255, 255, 0.7); font-size: 0.75rem; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='rgb(0, 255, 255)'" onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">
-                            {{ __('landing.footer.legal.terms') }}
-                        </a>
-                    </li>
+                <h4 class="text-white font-bold text-lg mb-8">{{ __('landing.footer.legal.title') }}</h4>
+                <ul class="space-y-4">
+                    <li><a href="{{ route('privacy') }}" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.legal.privacy') }}</a></li>
+                    <li><a href="{{ route('terms') }}" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.legal.terms') }}</a></li>
+                    <li><a href="{{ route('cookies') }}" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.legal.cookie') }}</a></li>
+                    <li><button onclick="openCookieSettings()" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('gdpr.banner.settings') }}</button></li>
                 </ul>
             </div>
         </div>
 
-        <!-- Bottom Bar -->
-        <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 1rem;">
-            <div style="display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 0.75rem; font-size: 0.75rem; color: rgba(255, 255, 255, 0.5);">
-                <p style="margin: 0;">{{ __('landing.footer.copyright') }}</p>
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <a href="{{ route('cookies') }}" style="color: rgba(255, 255, 255, 0.5); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='rgb(0, 255, 255)'" onmouseout="this.style.color='rgba(255, 255, 255, 0.5)'">{{ __('landing.footer.legal.cookie') }}</a>
-                    <button onclick="openCookieSettings()" style="color: rgba(255, 255, 255, 0.5); background: none; border: none; cursor: pointer; text-decoration: none; transition: color 0.3s; font-size: 0.75rem;" onmouseover="this.style.color='rgb(0, 255, 255)'" onmouseout="this.style.color='rgba(255, 255, 255, 0.5)'">{{ __('gdpr.banner.settings') }}</button>
-                    <a href="#" style="color: rgba(255, 255, 255, 0.5); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='rgb(0, 255, 255)'" onmouseout="this.style.color='rgba(255, 255, 255, 0.5)'">{{ __('landing.footer.social.twitter') }}</a>
-                    <a href="#" style="color: rgba(255, 255, 255, 0.5); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='rgb(0, 255, 255)'" onmouseout="this.style.color='rgba(255, 255, 255, 0.5)'">{{ __('landing.footer.social.linkedin') }}</a>
-                    <a href="#" style="color: rgba(255, 255, 255, 0.5); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='rgb(0, 255, 255)'" onmouseout="this.style.color='rgba(255, 255, 255, 0.5)'">{{ __('landing.footer.social.facebook') }}</a>
+        <!-- Bottom Footer Section -->
+        <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-gray-text/40 text-sm font-medium">
+                {{ __('landing.footer.copyright') }}
+            </div>
+            
+            <!-- System Status -->
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success-green/10 border border-success-green/20">
+                    <span class="w-2 h-2 rounded-full bg-success-green animate-pulse"></span>
+                    <span class="text-[10px] font-bold text-success-green uppercase tracking-wider">All Systems Operational</span>
                 </div>
             </div>
         </div>
