@@ -26,7 +26,7 @@ return [
         'cta_secondary' => 'Watch Demo',
         'trust' => [
             'security' => 'High Security',
-            'centers' => '+500 Centers',
+            'centers' => 'Next-Gen Management',
             'uptime' => '99.9% Uptime',
         ],
         'stats' => [

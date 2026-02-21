@@ -26,7 +26,7 @@ return [
         'cta_secondary' => 'شاهد العرض',
         'trust' => [
             'security' => 'أمان عالي',
-            'centers' => '+500 مركز',
+            'centers' => 'الجيل القادم من الإدارة',
             'uptime' => '99.9% توافر',
         ],
         'stats' => [
