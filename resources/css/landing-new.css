@@ -68,8 +68,8 @@
         /* Gradients - Power Palette */
         /* Gradient 1: Deep Indigo -> Royal Blue */
         --gradient-hero: linear-gradient(135deg, #3A0CA3 0%, #2A4DFF 100%);
-        /* Gradient 2: Royal Blue -> Lighter Blue */
-        --gradient-cta: linear-gradient(135deg, #2A4DFF 0%, #4361EE 100%);
+        /* Gradient 2: Premium Indigo -> Deep Purple */
+        --gradient-cta: linear-gradient(135deg, #1E1B4B 0%, #312E81 100%);
         /* Gradient 3: Soft Stats Background */
         --gradient-card: linear-gradient(135deg, #E3F2FF 0%, #F8FBFF 100%);
         /* Gradient 4: Aqua Accent */
