@@ -99,8 +99,8 @@
             <!-- Right Content - Hybrid Mockup -->
             <div class="w-full lg:w-[55%] relative flex items-center justify-center lg:justify-end">
                 <div 
-                    class="relative z-10 w-full max-w-[750px] animate-fade-in-right transform-gpu backface-hidden"
-                    style="animation-delay: 0.2s; will-change: transform;"
+                    class="relative z-10 w-full max-w-[750px] animate-fade-in-right animate-float-slow transform-gpu backface-hidden"
+                    style="animation-delay: 0.2s;"
                 >
                     <!-- Localized Floating WhatsApp Notification -->
                     <div 
@@ -139,8 +139,21 @@
                         </div>
                     </div>
 
-                    <!-- Professional Mockup Base -->
-                    <div class="relative group">
+                    <!-- Elite Browser Frame Mockup -->
+                    <div class="relative group browser-frame-shadow p-2 md:p-3 bg-white/40 backdrop-blur-xl border border-white/50 rounded-3xl overflow-hidden">
+                        <!-- Browser Header -->
+                        <div class="flex items-center justify-between px-4 pb-3 md:pb-4 border-b border-black/5 mb-2">
+                            <div class="flex gap-1.5">
+                                <div class="w-2 md:w-2.5 h-2 md:h-2.5 rounded-full bg-red-400/80"></div>
+                                <div class="w-2 md:w-2.5 h-2 md:h-2.5 rounded-full bg-amber-400/80"></div>
+                                <div class="w-2 md:w-2.5 h-2 md:h-2.5 rounded-full bg-emerald-400/80"></div>
+                            </div>
+                            <div class="h-5 md:h-6 px-10 rounded-full bg-black/5 border border-black/5 flex items-center justify-center">
+                                <div class="w-2 h-2 rounded-full bg-black/10"></div>
+                            </div>
+                            <div class="w-6 md:w-10"></div>
+                        </div>
+
                         @php
                             $heroImage = match(app()->getLocale()) {
                                 'en' => 'hero-mockup-en.webp',
@@ -151,7 +164,7 @@
                         <img 
                             src="{{ asset('images/' . $heroImage) }}" 
                             alt="EduFlow Dashboard Mockup" 
-                            class="w-full h-auto rounded-3xl"
+                            class="w-full h-auto rounded-xl md:rounded-2xl border border-black/5 shadow-inner"
                             width="750"
                             height="500"
                             decoding="async"
@@ -160,9 +173,9 @@
                         >
                     </div>
                     
-                    <!-- Floating Decorative Elements -->
-                    <div class="absolute -top-12 -left-12 w-32 h-32 bg-cyan/10 rounded-full blur-2xl"></div>
-                    <div class="absolute -bottom-16 right-0 w-48 h-48 bg-light-purple/5 rounded-full blur-2xl"></div>
+                    <!-- Floating Decorative Depth -->
+                    <div class="absolute -top-12 -left-12 w-32 h-32 bg-cyan/10 rounded-full blur-2xl -z-10 animate-pulse"></div>
+                    <div class="absolute -bottom-16 right-0 w-48 h-48 bg-light-purple/5 rounded-full blur-3xl -z-10 animate-pulse" style="animation-delay: 1s;"></div>
                 </div>
             </div>
             </div>
