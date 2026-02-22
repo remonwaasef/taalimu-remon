@@ -44,7 +44,6 @@
                         </li>
                     </ul>
                 </div>
-                @endif
 
                 <div class="card-body p-4">
                     @if (session('success'))
