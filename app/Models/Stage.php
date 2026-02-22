@@ -37,6 +37,10 @@ class Stage extends Model
     {
         $tenantId = app('tenant')->id ?? 0;
         cache()->forget("tenant_{$tenantId}_stages");
+        
+        // Also clear dashboard metrics as they depend on stage existence
+        cache()->forget("tenant_{$tenantId}_dashboard_stats_v3");
+        cache()->forget("tenant_{$tenantId}_recent_activities");
     }
 
     public static function getCached()
