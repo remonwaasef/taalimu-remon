@@ -26,8 +26,8 @@
     <div class="card-body p-4 position-relative">
         <div class="row align-items-center mb-4">
             <div class="col-lg-7">
-                <h3 class="fw-bold mb-2 text-dark">🚀 {{ __('center::dashboard.launchpad.title', ['name' => auth()->user()->name]) }}</h3>
-                <p class="text-muted lead mb-0">{{ __('center::dashboard.launchpad.subtitle') }}</p>
+                <h5 class="fw-bold mb-1 text-dark">🚀 {{ __('center::dashboard.launchpad.title', ['name' => auth()->user()->name]) }}</h5>
+                <p class="text-muted small mb-0">{{ __('center::dashboard.launchpad.subtitle') }}</p>
             </div>
             <div class="col-lg-5">
                 <div class="mt-3 mt-lg-0">
@@ -72,21 +72,27 @@
                             </div>
 
                             <!-- Content -->
-                            <h5 class="fw-bold mb-2 {{ $isCompleted ? 'text-success' : 'text-dark' }}">
+                            <h6 class="fw-bold mb-1 {{ $isCompleted ? 'text-success' : 'text-dark' }}">
                                 {{ __('center::dashboard.launchpad.steps.'.$key.'.title') }}
-                            </h5>
-                            <p class="text-muted small mb-4 flex-grow-1">
-                                {{ __('center::dashboard.launchpad.steps.'.$key.'.desc') }}
-                            </p>
+                            </h6>
+                            
+                            @if($isCurrent)
+                                <p class="text-muted small mb-3 flex-grow-1">
+                                    {{ __('center::dashboard.launchpad.steps.'.$key.'.desc') }}
+                                </p>
+                            @else
+                                <div class="mb-3 flex-grow-1"></div>
+                            @endif
 
                             <!-- Button -->
                             @if($isCompleted)
-                                <div class="text-success fw-bold small">
-                                    <i class="fas fa-check-circle me-1"></i> تم الانجاز
+                                <div class="text-success fw-bold x-small">
+                                    <i class="fas fa-check-circle me-1"></i> تم
                                 </div>
                             @else
                                 <a href="{{ route($data['route']) }}" 
-                                   class="btn {{ $isCurrent ? 'btn-'.$data['color'] : 'btn-outline-light text-muted' }} rounded-pill btn-sm fw-bold px-4 py-2 mt-auto">
+                                   class="btn {{ $isCurrent ? 'btn-'.$data['color'] : 'btn-outline-light text-muted border-0' }} rounded-pill btn-sm fw-bold px-3 py-1 mt-auto"
+                                   style="font-size: 0.75rem;">
                                    {{ __('center::dashboard.launchpad.action') }}
                                 </a>
                             @endif
