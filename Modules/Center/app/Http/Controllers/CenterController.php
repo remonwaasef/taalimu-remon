@@ -38,13 +38,25 @@ class CenterController extends Controller
              return redirect()->route('campus.index');
         }
 
-        // 1. Summary Metrics (Cached for 15 minutes)
+        // 1. Summary Metrics & Setup Progress (Cached for 15 minutes)
         $tenantId = auth()->user()->tenant_id;
-        $cacheKey = "tenant_{$tenantId}_dashboard_stats";
+        $cacheKey = "tenant_{$tenantId}_dashboard_stats_v2";
 
-        $stats = \App\Support\TenantCache::remember($cacheKey, now()->addMinutes(15), function () {
+        $dashboardData = \App\Support\TenantCache::remember($cacheKey, now()->addMinutes(15), function () use ($tenantId) {
+            $activeStudentsCount = Student::where('status', 'active')->count();
+            
+            $launchpadSteps = [
+                'profile' => \App\Models\Tenant::where('id', $tenantId)
+                    ->where(function($q) {
+                        $q->whereNotNull('logo')->orWhereNotNull('phone')->orWhereNotNull('address');
+                    })->exists(),
+                'instructor' => Instructor::where('tenant_id', $tenantId)->exists(),
+                'course' => Course::where('tenant_id', $tenantId)->exists(),
+                'student' => $activeStudentsCount > 0,
+            ];
+
             return [
-                'activeStudents' => Student::where('status', 'active')->count(),
+                'activeStudents' => $activeStudentsCount,
                 'activeCourses' => Course::where('status', 'published')->count(),
                 'monthlyRevenue' => Sale::where('status', 'paid')
                     ->whereMonth('created_at', now()->month)
@@ -53,37 +65,34 @@ class CenterController extends Controller
                 'monthlyExpenses' => Expense::whereMonth('date', now()->month)
                     ->whereYear('date', now()->year)
                     ->sum('amount'),
+                'launchpadSteps' => $launchpadSteps,
             ];
         });
 
-        $activeStudents = $stats['activeStudents'];
-        $activeCourses = $stats['activeCourses'];
-        $monthlyRevenue = $stats['monthlyRevenue'];
-        $monthlyExpenses = $stats['monthlyExpenses'];
+        $activeStudents = $dashboardData['activeStudents'];
+        $activeCourses = $dashboardData['activeCourses'];
+        $monthlyRevenue = $dashboardData['monthlyRevenue'];
+        $monthlyExpenses = $dashboardData['monthlyExpenses'];
+        $launchpadSteps = $dashboardData['launchpadSteps'];
         $netProfit = $monthlyRevenue - $monthlyExpenses;
+        
+        $completedSteps = count(array_filter($launchpadSteps));
+        $launchpadProgress = ($completedSteps / 4) * 100;
 
-        // 1.1 Fetch Recent Activities for this tenant
-        $recentActivities = \Spatie\Activitylog\Models\Activity::where('properties->tenant_id', $tenantId)
-            ->latest()
-            ->take(10)
-            ->get();
+        // 1.1 Fetch Recent Activities (Cached for 5 minutes)
+        $activityCacheKey = "tenant_{$tenantId}_recent_activities";
+        $recentActivities = \App\Support\TenantCache::remember($activityCacheKey, now()->addMinutes(5), function () use ($tenantId) {
+            return \Spatie\Activitylog\Models\Activity::where('properties->tenant_id', $tenantId)
+                ->with(['causer', 'subject'])
+                ->latest()
+                ->take(10)
+                ->get();
+        });
 
         // 2. AI Early Warning Logic
         $atRiskStudents = $this->getAtRiskStudents($tenantId);
         $performanceTrends = $this->getPerformanceTrends($tenantId);
         $aiInsights = $this->getAIInsights($tenantId, $performanceTrends['data']);
-
-        // 3. Launchpad Logic
-        $tenantModel = \App\Models\Tenant::find($tenantId);
-        $launchpadSteps = [
-            'profile' => !empty($tenantModel->logo) || !empty($tenantModel->phone) || !empty($tenantModel->address) || !empty($tenantModel->description),
-            'instructor' => \App\Models\Instructor::where('tenant_id', $tenantId)->exists(),
-            'course' => \App\Models\Course::where('tenant_id', $tenantId)->exists(),
-            'student' => $activeStudents > 0,
-        ];
-        
-        $completedSteps = count(array_filter($launchpadSteps));
-        $launchpadProgress = ($completedSteps / 4) * 100;
 
         return view('center::index', compact(
             'activeStudents',
@@ -92,8 +101,6 @@ class CenterController extends Controller
             'monthlyExpenses',
             'netProfit',
             'recentActivities',
-            'atRiskStudents',
-            'aiInsights',
             'atRiskStudents',
             'aiInsights',
             'performanceTrends',
