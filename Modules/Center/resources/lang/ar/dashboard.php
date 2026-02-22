@@ -86,10 +86,11 @@ return [
         'progress' => 'نسبة الإعداد',
         'action' => 'ابدأ الآن',
         'steps' => [
-            'profile' => 'إكمال ملف المركز',
+            'education_system' => 'اختيار نظام التعليم',
             'instructor' => 'إضافة أول مدرس',
             'course' => 'إنشاء أول دورة',
             'student' => 'تسجيل أول طالب',
+            'attendance' => 'تسجيل حضور',
         ]
     ]
 ];
