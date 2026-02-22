@@ -659,5 +659,19 @@
         `;
         container.insertAdjacentHTML('beforeend', html);
     }
+
+    // Tab Activation Fix
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const tab = urlParams.get('tab');
+        if (tab) {
+            const tabEl = document.querySelector(`#${tab}-tab`);
+            if (tabEl) {
+                // Ensure Bootstrap is available
+                const bsTab = new bootstrap.Tab(tabEl);
+                bsTab.show();
+            }
+        }
+    });
 </script>
 @endpush

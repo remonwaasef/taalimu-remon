@@ -569,17 +569,23 @@
             </a>
             <div class="collapse {{ $isSettingsActive ? 'show' : '' }}" id="settingsCollapse">
                 <div class="sidebar-submenu">
-                    <a href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'academic']) }}" class="sidebar-sub-link {{ request()->routeIs('center.settings.index') && request('tab') == 'academic' ? 'active' : '' }}">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::settings.tabs.academic') }}
-                    </a>
                     <a href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'general']) }}" class="sidebar-sub-link {{ request()->routeIs('center.settings.index') && (request('tab') == 'general' || !request('tab')) ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::settings.tabs.general') }} (والمطبعة)
+                    </a>
+                    <a href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'academic']) }}" class="sidebar-sub-link {{ request()->routeIs('center.settings.index') && request('tab') == 'academic' ? 'active' : '' }}">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::settings.tabs.academic') }}
                     </a>
                     <a href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'financial']) }}" class="sidebar-sub-link {{ request()->routeIs('center.settings.index') && request('tab') == 'financial' ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::settings.tabs.financial') }}
                     </a>
+                    <a href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'appearance']) }}" class="sidebar-sub-link {{ request()->routeIs('center.settings.index') && request('tab') == 'appearance' ? 'active' : '' }}">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::settings.tabs.appearance') }}
+                    </a>
                     <a href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'whatsapp']) }}" class="sidebar-sub-link {{ request()->routeIs('center.settings.index') && request('tab') == 'whatsapp' ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::settings.tabs.whatsapp') }}
+                    </a>
+                    <a href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'privacy']) }}" class="sidebar-sub-link {{ request()->routeIs('center.settings.index') && request('tab') == 'privacy' ? 'active' : '' }}">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::settings.tabs.privacy') }}
                     </a>
                     <a href="{{ route('center.users.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.users.*') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.users') }}
