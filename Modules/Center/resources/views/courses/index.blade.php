@@ -120,16 +120,16 @@
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center gap-1 justify-content-end">
-                                        <a href="{{ route('center.courses.show', [$course->id, 'enroll' => 1]) }}" class="btn btn-sm btn-success rounded-pill px-3 py-1 fw-bold shadow-sm d-none d-xl-inline-block">
+                                        <button type="button" onclick="openEnrollModal('{{ $course->id }}', '{{ addslashes($course->title) }}')" class="btn btn-sm btn-success rounded-pill px-3 py-1 fw-bold shadow-sm d-none d-xl-inline-block border-0">
                                             <i class="fas fa-user-plus me-1"></i> {{ __('center::courses.enroll_student') }}
-                                        </a>
+                                        </button>
                                         <div class="{{ ($loop->remaining < 2 && $courses->count() > 2) ? 'dropup' : 'dropdown' }}">
                                             <button class="btn btn-sm btn-light rounded-circle" type="button" data-bs-toggle="dropdown">
                                                 ⋮
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
                                                 <li><a class="dropdown-item" href="{{ route('center.courses.show', $course->id) }}"><i class="fas fa-eye me-2 text-muted"></i> {{ __('center::courses.view') }}</a></li>
-                                                <li><a class="dropdown-item fw-bold text-success" href="{{ route('center.courses.show', [$course->id, 'enroll' => 1]) }}"><i class="fas fa-user-plus me-2"></i> {{ __('center::courses.enroll_student') }}</a></li>
+                                                <li><button type="button" class="dropdown-item fw-bold text-success" onclick="openEnrollModal('{{ $course->id }}', '{{ addslashes($course->title) }}')"><i class="fas fa-user-plus me-2"></i> {{ __('center::courses.enroll_student') }}</button></li>
                                                 <li><hr class="dropdown-divider"></li>
                                                 <li><a class="dropdown-item" href="{{ route('center.courses.edit', $course->id) }}"><i class="fas fa-edit me-2 text-muted"></i> {{ __('center::courses.edit') }}</a></li>
                                                 <li><a class="dropdown-item" href="{{ route('center.curriculum.edit', $course->id) }}"><i class="fas fa-book-open me-2 text-muted"></i> {{ __('center::courses.content') }}</a></li>
@@ -164,4 +164,180 @@
             </div>
         </div>
     </div>
+
+    <!-- Unified Enroll Student Modal -->
+    <div class="modal fade" id="unifiedEnrollModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content rounded-5 border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0 pt-4 px-4 bg-light bg-opacity-50">
+                    <h5 class="modal-title fw-bold fs-4">تسجيل طالب في: <span id="dynamicCourseTitle" class="text-primary"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 bg-light bg-opacity-50 border-bottom">
+                    <!-- Custom Tabs -->
+                    <ul class="nav nav-pills bg-white p-1 rounded-pill shadow-sm" id="enrollTabs" role="tablist">
+                        <li class="nav-item flex-fill" role="presentation">
+                            <button class="nav-link active rounded-pill w-100 fw-bold" id="existing-tab" data-bs-toggle="pill" data-bs-target="#existing-panel" type="button" role="tab">
+                                <i class="fas fa-search me-2"></i> طالب مسجل مسبقاً
+                            </button>
+                        </li>
+                        <li class="nav-item flex-fill" role="presentation">
+                            <button class="nav-link rounded-pill w-100 fw-bold" id="quick-tab" data-bs-toggle="pill" data-bs-target="#quick-panel" type="button" role="tab">
+                                <i class="fas fa-user-plus me-2"></i> تسجيل سريع لجديد
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-body p-4 pt-3">
+                    <div class="tab-content" id="enrollTabsContent">
+                        <!-- Panel 1: Existing Student -->
+                        <div class="tab-pane fade show active" id="existing-panel" role="tabpanel">
+                            <form id="existingStudentForm" action="" method="POST" class="p-2">
+                                @csrf
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold text-dark mb-2">اختر الطالب من القائمة</label>
+                                    <select name="student_id" class="form-select border-2" id="unifiedStudentSelect" required placeholder="ابحث عن طالب بالاسم أو الهاتف...">
+                                        <option value="">ابحث عن طالب بالاسم أو الهاتف...</option>
+                                        @foreach($students as $student)
+                                            <option value="{{ $student->id }}">{{ $student->name }} ({{ $student->phone }})</option>
+                                        @endforeach
+                                    </select>
+                                    <div class="form-text mt-2"><i class="fas fa-info-circle me-1"></i> نصيحة: اكتب الاسم أو رقم الهاتف للوصول السريع.</div>
+                                </div>
+                                <div class="d-grid gap-2 mt-4">
+                                    <button type="submit" class="btn btn-primary rounded-pill py-3 fw-bold fs-5 shadow-sm">
+                                        إتمام التسجيل <i class="fas fa-check-circle ms-2"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Panel 2: Quick New Student -->
+                        <div class="tab-pane fade" id="quick-panel" role="tabpanel">
+                            <form id="quickNewStudentForm" action="" method="POST" class="p-2">
+                                @csrf
+                                <div class="row g-3">
+                                    <div class="col-md-12">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" name="name" class="form-control border-2 rounded-4 bg-light" id="qName" placeholder="الاسم" required>
+                                            <label for="qName">اسم الطالب بالكامل</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating mb-3">
+                                            <input type="tel" name="phone" class="form-control border-2 rounded-4 bg-light" id="qPhone" placeholder="الهاتف" required>
+                                            <label for="qPhone">رقم الهاتف</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating mb-3">
+                                            <input type="tel" name="parent_phone" class="form-control border-2 rounded-4 bg-light" id="qParentPhone" placeholder="هاتف ولي الأمر">
+                                            <label for="qParentPhone">هاتف ولي الأمر (اختياري)</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-floating mb-2">
+                                            <select name="grade_id" class="form-select border-2 rounded-4 bg-light" id="qGrade" required>
+                                                <option value="">اختر الصف الدراسي...</option>
+                                                @foreach($stages as $stage)
+                                                    <optgroup label="📂 {{ $stage->name }}">
+                                                        @foreach($stage->grades as $grade)
+                                                            <option value="{{ $grade->id }}">{{ $grade->name }}</option>
+                                                        @endforeach
+                                                    </optgroup>
+                                                @endforeach
+                                            </select>
+                                            <label for="qGrade">الصف الدراسي</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="alert flex-row d-flex align-items-center bg-info bg-opacity-10 text-info border-0 rounded-4 py-3 small my-3">
+                                    <i class="fas fa-magic fa-lg me-3 ms-1"></i>
+                                    <div>سيقوم النظام بإنشاء ملف للطالب وتسجيله تلقائياً في هذه الدورة فوراً وفي خطوة واحدة.</div>
+                                </div>
+                                <div class="d-grid gap-2 mt-2">
+                                    <button type="submit" id="quickEnrollSubmitBtn" class="btn btn-success rounded-pill py-3 fw-bold fs-5 shadow-sm">
+                                        إنشاء إشتراك وتأكيد <i class="fas fa-bolt ms-2"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @push('styles')
+        <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
+        <style>
+            .ts-control { border-radius: 0.75rem !important; padding: 0.85rem 1rem !important; border-width: 2px !important; background-color: #f8f9fa !important; }
+            .ts-dropdown { border-radius: 0.75rem !important; box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important; padding: 0.5rem; }
+            .modal-content.rounded-5 { border-radius: 1.5rem !important; overflow: hidden; }
+        </style>
+    @endpush
+
+    @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+        <script>
+            let unifiedTomSelect = null;
+            
+            document.addEventListener('DOMContentLoaded', function() {
+                // Initialize TomSelect only once
+                unifiedTomSelect = new TomSelect('#unifiedStudentSelect', {
+                    plugins: ['dropdown_input'],
+                    sortField: { field: "text", direction: "asc" },
+                    maxOptions: 50,
+                    render: {
+                        no_results: function(data, escape) {
+                            return '<div class="no-results p-3 text-muted text-center">لم يتم العثور على طلاب مطابقة...</div>';
+                        }
+                    }
+                });
+                
+                // Add loading state to the quick enroll form
+                document.getElementById('quickNewStudentForm').addEventListener('submit', function() {
+                    let btn = document.getElementById('quickEnrollSubmitBtn');
+                    btn.disabled = true;
+                    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> جاري الحفظ...';
+                });
+                
+                // Also add loading to existing form
+                document.getElementById('existingStudentForm').addEventListener('submit', function() {
+                    let btn = this.querySelector('button[type="submit"]');
+                    btn.disabled = true;
+                    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> جاري التسجيل...';
+                });
+            });
+
+            function openEnrollModal(courseId, courseTitle) {
+                // Set the dynamic title
+                document.getElementById('dynamicCourseTitle').innerText = courseTitle;
+                
+                // Update forms actions based on course ID
+                let enrollUrl = `/center/courses/${courseId}/enroll`;
+                let quickEnrollUrl = `/center/courses/${courseId}/quick-enroll`;
+                
+                document.getElementById('existingStudentForm').action = enrollUrl;
+                document.getElementById('quickNewStudentForm').action = quickEnrollUrl;
+                
+                // Clear inputs if any previous data
+                if (unifiedTomSelect) {
+                    unifiedTomSelect.clear();
+                }
+                document.getElementById('qName').value = '';
+                document.getElementById('qPhone').value = '';
+                document.getElementById('qParentPhone').value = '';
+                document.getElementById('qGrade').value = '';
+                
+                // Ensure Existing Tab is shown by default
+                let existingTab = new bootstrap.Tab(document.getElementById('existing-tab'));
+                existingTab.show();
+                
+                // Show modal
+                var myModal = new bootstrap.Modal(document.getElementById('unifiedEnrollModal'));
+                myModal.show();
+            }
+        </script>
+    @endpush
 @endsection

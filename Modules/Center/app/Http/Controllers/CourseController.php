@@ -34,9 +34,6 @@ class CourseController extends Controller
         $this->certificateService = $certificateService;
         $this->financeService = $financeService;
     }
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $this->authorize('viewAny', Course::class);
@@ -45,8 +42,12 @@ class CourseController extends Controller
         $query = $this->courseQuery->apply($query, $request->all());
 
         $courses = $query->latest()->paginate(10);
+        
+        // Load data needed for the unified Quick Enroll Modal
+        $students = \App\Models\Student::select('id', 'name', 'phone')->get();
+        $stages = \App\Models\Stage::getCached();
 
-        return view('center::courses.index', compact('courses'));
+        return view('center::courses.index', compact('courses', 'students', 'stages'));
     }
 
     /**
