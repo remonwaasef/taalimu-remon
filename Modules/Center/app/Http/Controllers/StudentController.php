@@ -84,7 +84,7 @@ class StudentController extends Controller
         session()->flash('student_phone', $result['student']->phone);
         session()->flash('student_email', $result['student']->email);
 
-        return redirect()->route('center.students.index', ['tenant' => app('tenant')->domain])->with('success', 'تم تسجيل الطالب وإنشاء حساب دخول له بنجاح');
+        return redirect()->route('center.students.index', ['tenant' => app('tenant')->domain])->with('success', __('center::messages.msg_081'));
     }
 
 
@@ -141,7 +141,7 @@ class StudentController extends Controller
 
         $this->studentService->updateStudent($student, StudentData::fromArray($data), auth()->user());
 
-        return redirect()->route('center.students.index', ['tenant' => app('tenant')->domain])->with('success', 'تم تحديث بيانات الطالب بنجاح');
+        return redirect()->route('center.students.index', ['tenant' => app('tenant')->domain])->with('success', __('center::messages.msg_082'));
     }
 
     public function resetPassword($id): RedirectResponse
@@ -151,7 +151,7 @@ class StudentController extends Controller
 
         $newPassword = $this->studentService->resetPassword($student->user);
 
-        return redirect()->back()->with('success', 'تم إعادة تعيين كلمة المرور بنجاح')
+        return redirect()->back()->with('success', __('center::messages.msg_083'))
             ->with('generated_password', $newPassword)
             ->with('student_name', $student->name);
     }
@@ -171,7 +171,7 @@ class StudentController extends Controller
 
         $this->studentService->deleteStudent($student, auth()->user());
 
-        return redirect()->route('center.students.index', ['tenant' => app('tenant')->domain])->with('success', 'تم حذف الطالب بنجاح');
+        return redirect()->route('center.students.index', ['tenant' => app('tenant')->domain])->with('success', __('center::messages.msg_084'));
     }
 
     public function export()
@@ -214,7 +214,7 @@ class StudentController extends Controller
         $this->authorize('create', Student::class);
         
         if (!app('tenant')->hasFeature('max_students')) {
-            return redirect()->back()->with('error', 'لقد وصلت للحد الأقصى من الطلاب المسموح به في باقتك.');
+            return redirect()->back()->with('error', __('center::messages.msg_085'));
         }
 
         $request->validate([
@@ -226,7 +226,7 @@ class StudentController extends Controller
         \App\Jobs\ImportStudentsJob::dispatch($path, app('tenant')->id, auth()->id());
 
         return redirect()->route('center.students.index', ['tenant' => app('tenant')->domain])
-            ->with('success', 'بدأت عملية الاستيراد في الخلفية. ستتلقى إشعاراً عند اكتمالها.');
+            ->with('success', __('center::messages.msg_086'));
     }
 
     /**

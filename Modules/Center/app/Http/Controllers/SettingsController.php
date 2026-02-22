@@ -38,7 +38,7 @@ class SettingsController extends Controller
             $request->file('favicon')
         );
 
-        return back()->with('success', 'تم تحديث الإعدادات بنجاح');
+        return back()->with('success', __('center::messages.msg_078'));
     }
 
     public function updateAcademic(UpdateAcademicRequest $request)
@@ -47,14 +47,14 @@ class SettingsController extends Controller
 
         $this->settingsService->updateAcademicStructure($tenant, $request->validated());
 
-        return back()->with('success', 'تم تحديث الهيكل الأكاديمي بنجاح');
+        return back()->with('success', __('center::messages.msg_079'));
     }
 
     public function applyAcademicTemplate(ApplyTemplateRequest $request)
     {
         try {
             $this->settingsService->applyTemplate(app('tenant'), $request->template_key);
-            return back()->with('success', 'تم تطبيق النموذج الأكاديمي بنجاح');
+            return back()->with('success', __('center::messages.msg_080'));
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error("Failed to apply academic template: " . $e->getMessage());
             return back()->with('error', 'حدث خطأ أثناء تطبيق النموذج: ' . $e->getMessage());

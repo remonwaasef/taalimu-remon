@@ -49,7 +49,7 @@ class QuestionBankController extends Controller
             ]);
         }
 
-        return redirect()->route('center.questions.index')->with('success', 'Question added to bank.');
+        return redirect()->route('center.questions.index')->with('success', __('center::messages.msg_053'));
     }
 
     public function edit(Question $question)
@@ -74,14 +74,14 @@ class QuestionBankController extends Controller
 
         $question->update($validated);
 
-        return redirect()->route('center.questions.index')->with('success', 'Question updated.');
+        return redirect()->route('center.questions.index')->with('success', __('center::messages.msg_054'));
     }
 
     public function destroy(Question $question)
     {
         $this->authorize('delete', $question);
         $question->delete();
-        return back()->with('success', 'Question removed from bank.');
+        return back()->with('success', __('center::messages.msg_055'));
     }
 
     // Category Methods
@@ -89,6 +89,6 @@ class QuestionBankController extends Controller
     {
         $request->validate(['name' => 'required|string|max:255']);
         QuestionCategory::create(['name' => $request->name]);
-        return back()->with('success', 'Category created.');
+        return back()->with('success', __('center::messages.msg_056'));
     }
 }

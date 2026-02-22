@@ -18,7 +18,7 @@ return [
     'record_attendance' => 'Record Attendance',
     'collect_fees' => 'Collect Fees',
     'search_student' => 'Search Student',
-    'todays_sessions' => "Today's Sessions",
+    'todays_sessions' => 'Today\'s Sessions',
     'scheduled_session' => 'Scheduled Session for Today',
     'smart_analytics_center' => 'Smart Analytics Center',
     'financial_reports_ai' => 'Financial Reports & AI-Powered Performance Analytics',
@@ -51,6 +51,8 @@ return [
         'Sale' => 'Sale',
         'Package' => 'Package',
         'Coupon' => 'Coupon',
+        'package' => 'Package',
+        'coupon' => 'Discount Coupon',
     ],
     'ai_early_warning' => 'AI Early Warning System',
     'at_risk_students' => 'At-Risk Students (Observation Required)',
@@ -72,5 +74,38 @@ return [
         'high' => 'High',
         'medium' => 'Medium',
         'low' => 'Low',
+    ],
+    'enroll_student' => 'Enroll Student',
+    'report' => 'Report',
+    'system_status' => 'System Status',
+    'real_time_monitoring' => 'Real-time monitoring is active',
+    'vs_last_month' => 'vs Last Month',
+    'launchpad' => [
+        'title' => 'Welcome :name! Let\'s get your center ready 🚀',
+        'subtitle' => 'Complete these simple steps to start your educational journey',
+        'progress' => 'Setup Progress',
+        'action' => 'Start Now',
+        'steps' => [
+            'education_system' => [
+                'title' => 'Education System',
+                'desc' => 'Draw the roadmap.. Choose the stages and grades for your center.',
+            ],
+            'instructor' => [
+                'title' => 'Add your first Instructor',
+                'desc' => 'Build your outstanding team.. Add creative instructors to present your content.',
+            ],
+            'course' => [
+                'title' => 'Create your first Course',
+                'desc' => 'Start the journey.. Link the instructor with students and launch your first group.',
+            ],
+            'student' => [
+                'title' => 'Enroll your first Student',
+                'desc' => 'Welcome your new students.. Start enrolling students in your courses.',
+            ],
+            'attendance' => [
+                'title' => 'Take Attendance',
+                'desc' => 'Monitor discipline.. Start tracking the attendance and absence of your students accurately.',
+            ],
+        ],
     ],
 ];

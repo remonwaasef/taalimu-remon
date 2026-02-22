@@ -68,7 +68,7 @@ class RoleController extends Controller
             $role->syncPermissions($request->permissions);
         }
 
-        return redirect()->route('center.roles.index')->with('success', 'تم إنشاء الدور بنجاح');
+        return redirect()->route('center.roles.index')->with('success', __('center::messages.msg_070'));
     }
 
     public function edit($id)
@@ -109,7 +109,7 @@ class RoleController extends Controller
             $role->syncPermissions($request->permissions);
         }
 
-        return redirect()->route('center.roles.index')->with('success', 'تم تحديث الدور بنجاح');
+        return redirect()->route('center.roles.index')->with('success', __('center::messages.msg_071'));
     }
 
     public function destroy($id)
@@ -118,11 +118,11 @@ class RoleController extends Controller
         $this->authorize('delete', $role);
         
         if ($role->users()->count() > 0) {
-            return back()->with('error', 'لا يمكن حذف الدور لأنه مستخدم من قبل مستخدمين');
+            return back()->with('error', __('center::messages.msg_072'));
         }
 
         $role->delete();
 
-        return redirect()->route('center.roles.index')->with('success', 'تم حذف الدور بنجاح');
+        return redirect()->route('center.roles.index')->with('success', __('center::messages.msg_073'));
     }
 }

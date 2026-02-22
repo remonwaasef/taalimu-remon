@@ -73,7 +73,7 @@ class ScheduleController extends Controller
         Schedule::create($validated);
 
         return redirect()->route('center.schedules.index')
-            ->with('success', 'تم إضافة الموعد بنجاح');
+            ->with('success', __('center::messages.msg_075'));
     }
 
     /**
@@ -118,7 +118,7 @@ class ScheduleController extends Controller
         $schedule->update($validated);
 
         return redirect()->route('center.schedules.index')
-            ->with('success', 'تم تحديث الموعد بنجاح');
+            ->with('success', __('center::messages.msg_076'));
     }
 
     /**
@@ -130,7 +130,7 @@ class ScheduleController extends Controller
         $schedule->delete();
 
         return redirect()->route('center.schedules.index')
-            ->with('success', 'تم حذف الموعد بنجاح');
+            ->with('success', __('center::messages.msg_077'));
     }
 
     protected function getConflictError($data, $excludeId = null)

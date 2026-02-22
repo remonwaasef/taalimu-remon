@@ -52,7 +52,7 @@ class TicketController extends Controller
         ]));
 
         return redirect()->route('center.tickets.show', ['tenant' => $tenant->domain, 'ticket' => $ticket->id])
-            ->with('success', 'Ticket created successfully.');
+            ->with('success', __('center::messages.msg_089'));
     }
 
     public function show($ticketId)
@@ -77,6 +77,6 @@ class TicketController extends Controller
 
         $this->ticketService->reply($ticket, $request->message);
 
-        return back()->with('success', 'Reply sent.');
+        return back()->with('success', __('center::messages.msg_090'));
     }
 }

@@ -110,7 +110,7 @@ class SaleController extends Controller
             return response()->json(['success' => true, 'message' => 'Payment added successfully']);
         }
 
-        return back()->with('success', 'Payment added and recorded in ledger.');
+        return back()->with('success', __('center::messages.msg_074'));
     }
 
     public function getStudentSummary($id)

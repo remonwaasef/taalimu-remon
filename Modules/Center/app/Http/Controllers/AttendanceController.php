@@ -109,7 +109,7 @@ class AttendanceController extends Controller
             if (!$student) {
                 return $request->expectsJson() 
                     ? response()->json(['success' => false, 'message' => 'لم يتم العثور على الطالب بهذا الكود.'], 404)
-                    : back()->with('error', 'لم يتم العثور على الطالب بهذا الكود.');
+                    : back()->with('error', __('center::messages.msg_009'));
             }
             $studentId = $student->id;
         }
@@ -117,20 +117,20 @@ class AttendanceController extends Controller
         if (!$studentId) {
             return $request->expectsJson()
                 ? response()->json(['success' => false, 'message' => 'معرف الطالب مطلوب.'], 422)
-                : back()->with('error', 'معرف الطالب مطلوب.');
+                : back()->with('error', __('center::messages.msg_010'));
         }
 
         $schedule = Schedule::findOrFail($validated['schedule_id']);
         if (now()->isAfter(Carbon::parse($schedule->end_time)) && $validated['status'] !== 'absent') {
             return $request->expectsJson()
                 ? response()->json(['success' => false, 'message' => 'لا يمكن تسجيل الحضور بعد انتهاء وقت الحصة.'], 422)
-                : back()->with('error', 'لا يمكن تسجيل الحصة بعد انتهاء وقت الحصة (يمكنك فقط تسجيل الغياب)');
+                : back()->with('error', __('center::messages.msg_011'));
         }
 
         if ($this->attendanceService->hasAttendedToday($studentId, $request->schedule_id)) {
             return $request->expectsJson()
                 ? response()->json(['success' => false, 'message' => 'هذا الطالب مسجل حضوره بالفعل.'], 422)
-                : back()->with('error', 'هذا الطالب مسجل حضوره بالفعل اليوم');
+                : back()->with('error', __('center::messages.msg_012'));
         }
 
         $this->attendanceService->markAttendance(array_merge($validated, [
@@ -140,7 +140,7 @@ class AttendanceController extends Controller
 
         return $request->expectsJson()
             ? response()->json(['success' => true, 'message' => 'تم تسجيل الحضور بنجاح!'])
-            : back()->with('success', 'تم تحديث الحالة بنجاح');
+            : back()->with('success', __('center::messages.msg_013'));
     }
 
     /**
@@ -233,7 +233,7 @@ class AttendanceController extends Controller
         $student = auth()->user()->student;
         if (!$student) {
             auth()->logout();
-            return back()->with('message', 'هذا الحساب ليس حساب طالب. يرجى تسجيل الدخول بحساب طالب.');
+            return back()->with('message', __('center::messages.msg_014'));
         }
 
         return $this->processQrAttendance($student, $schedule);

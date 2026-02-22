@@ -50,7 +50,7 @@ class AssetController extends Controller
         Asset::create($validated);
 
         return redirect()->route('center.assets.index')
-            ->with('success', 'تم تسجيل الأصل بنجاح');
+            ->with('success', __('center::messages.msg_002'));
     }
 
     public function show(Asset $asset)
@@ -84,7 +84,7 @@ class AssetController extends Controller
         $asset->update($validated);
 
         return redirect()->route('center.assets.index')
-            ->with('success', 'تم تحديث بيانات الأصل بنجاح');
+            ->with('success', __('center::messages.msg_003'));
     }
 
     public function destroy(Asset $asset): RedirectResponse
@@ -93,6 +93,6 @@ class AssetController extends Controller
         $asset->delete();
 
         return redirect()->route('center.assets.index')
-            ->with('success', 'تم حذف الأصل بنجاح');
+            ->with('success', __('center::messages.msg_004'));
     }
 }

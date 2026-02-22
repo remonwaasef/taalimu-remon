@@ -93,4 +93,5 @@ return [
     'copy_success' => 'Mot de passe copié !',
     'copy_all_success' => 'Toutes les données ont été copiées avec succès !',
     'bulk_confirm' => 'Êtes-vous sûr de vouloir effectuer cette action sur :count étudiant(s) ?',
+    'export_file' => 'Exporter le Fichier',
 ];

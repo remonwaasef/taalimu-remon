@@ -35,7 +35,7 @@ class UnifiedAuthController extends Controller
             if ($user->role === 'admin' && is_null($user->tenant_id)) {
                 Auth::logout();
                 return redirect()->route('admin.login')
-                    ->with('info', 'يرجى استخدام صفحة تسجيل دخول المشرف.');
+                    ->with('info', __('messages.msg_001'));
             }
             
             // Get user's tenant

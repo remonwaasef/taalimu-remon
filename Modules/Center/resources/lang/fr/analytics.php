@@ -20,4 +20,5 @@ return [
     'score' => 'Score',
     'time' => 'Heure',
     'no_recent_activity' => 'Aucune activité récente',
+    'general' => 'Analyses',
 ];

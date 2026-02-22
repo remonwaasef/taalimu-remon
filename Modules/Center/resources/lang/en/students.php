@@ -93,4 +93,5 @@ return [
     'copy_success' => 'Password copied!',
     'copy_all_success' => 'All data copied successfully!',
     'bulk_confirm' => 'Are you sure you want to perform this action on :count students?',
+    'export_file' => 'Export File',
 ];

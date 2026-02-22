@@ -20,7 +20,7 @@ return [
     ],
     'hero' => [
         'badge' => 'Transformez votre centre éducatif en une institution intelligente complète',
-        'title' => 'Gérez Votre Centre <span class="text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan">Intelligemment</span>',
+        'title' => 'Gérez Votre Centre <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan\">Intelligemment</span>',
         'subtitle' => 'Un système intégré pour la gestion des centres éducatifs, comprenant (Étudiants – Présence – Frais – Messagerie – Horaires – Rapports).',
         'cta_primary' => 'Essayer Gratuitement',
         'cta_secondary' => 'Voir la Démo',
@@ -65,12 +65,12 @@ return [
             'title' => 'Chaos des Horaires',
             'description' => 'chevauchement des cours et sessions manquées par gestion manuelle',
         ],
-        'cta' => 'Il est temps d\'<span class="font-bold gradient-text">arrêter l\'hémorragie</span> et de reprendre le contrôle.',
+        'cta' => 'Il est temps d\'<span class=\"font-bold gradient-text\">arrêter l\'hémorragie</span> et de reprendre le contrôle.',
     ],
     'automation' => [
         'badge' => 'Processus Simple en 3 Étapes',
         'title_prefix' => 'Comment',
-        'title_highlight' => config('app.name'),
+        'title_highlight' => 'remon',
         'subtitle' => 'Démarrez en quelques minutes, pas des jours. Notre processus simplifié rend l\'automatisation sans effort.',
         'step1' => [
             'title' => 'Ajoutez des Étudiants',
@@ -91,39 +91,39 @@ return [
     ],
     'features' => [
         'badge' => 'Fonctionnalités',
-        'title' => 'Tout ce Dont Vous Avez Besoin pour <span class="text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan">Réussir</span>',
+        'title' => 'Tout ce Dont Vous Avez Besoin pour <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan\">Réussir</span>',
         'subtitle' => 'Une suite complète d\'outils conçus spécifiquement pour les besoins de votre centre éducatif',
         'learn_more' => 'En Savoir Plus',
         'items' => [
-            [
+            0 => [
                 'title' => 'Gestion des Étudiants',
                 'description' => 'Profils complets, données parentales et dossiers de performance.',
             ],
-            [
+            1 => [
                 'title' => 'Suivi de Présence',
                 'description' => 'Suivi quotidien des présences et des absences en temps réel.',
             ],
-            [
+            2 => [
                 'title' => 'Facturation & Frais',
                 'description' => 'Gérer les traites, facturation automatisée et alertes de retard.',
             ],
-            [
+            3 => [
                 'title' => 'Messagerie WhatsApp',
                 'description' => 'Rappels de frais automatisés et résultats directement via WhatsApp.',
             ],
-            [
+            4 => [
                 'title' => 'Gestion des Horaires',
                 'description' => 'Organiser les salles, les groupes et les horaires avec flexibilité.',
             ],
-            [
+            5 => [
                 'title' => 'Rapports Financiers',
                 'description' => 'Visibilité complète sur les revenus, dépenses et bénéfices nets.',
             ],
-            [
+            6 => [
                 'title' => 'Gestion des Enseignants',
                 'description' => 'Organiser les horaires, les salaires et les commissions avec précision.',
             ],
-            [
+            7 => [
                 'title' => 'Cours & Leçons',
                 'description' => 'Gérer le contenu des cours, les livres et les ressources pédagogiques.',
             ],
@@ -131,7 +131,7 @@ return [
     ],
     'pricing' => [
         'badge' => 'Tarifs',
-        'title' => 'Plans Tarifaires <span class="text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan">Flexibles</span>',
+        'title' => 'Plans Tarifaires <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan\">Flexibles</span>',
         'subtitle' => 'Choisissez le plan qui correspond à la taille et aux besoins de votre centre éducatif',
         'most_popular' => 'Le Plus Populaire',
         'per_14_days' => '/ 14 Jours',
@@ -144,11 +144,11 @@ return [
                 'description' => 'Parfait pour tester le système et explorer les fonctionnalités',
                 'cta' => 'Commencer l\'Essai',
                 'features' => [
-                    'Jusqu\'à 50 étudiants',
-                    'Rappels WhatsApp',
-                    'Tableau de bord basique',
-                    'Support par email',
-                    '1 utilisateur admin',
+                    0 => 'Jusqu\'à 50 étudiants',
+                    1 => 'Rappels WhatsApp',
+                    2 => 'Tableau de bord basique',
+                    3 => 'Support par email',
+                    4 => '1 utilisateur admin',
                 ],
             ],
             'basic' => [
@@ -157,13 +157,14 @@ return [
                 'description' => 'Pour les startups et petits centres',
                 'cta' => 'S\'Abonner',
                 'features' => [
-                    'Jusqu\'à 200 étudiants',
-                    'Rappels WhatsApp + SMS',
-                    'Tableau de bord analytique complet',
-                    'Suivi des paiements',
-                    '3 utilisateurs admin',
-                    'Support par email prioritaire',
+                    0 => 'Jusqu\'à 200 étudiants',
+                    1 => 'Rappels WhatsApp + SMS',
+                    2 => 'Tableau de bord analytique complet',
+                    3 => 'Suivi des paiements',
+                    4 => '3 utilisateurs admin',
+                    5 => 'Support par email prioritaire',
                 ],
+                'badge' => 'Populaire',
             ],
             'pro' => [
                 'name' => 'Professionnel',
@@ -171,15 +172,17 @@ return [
                 'description' => 'Pour les centres en croissance et grands',
                 'cta' => 'S\'Abonner',
                 'features' => [
-                    'Étudiants illimités',
-                    'Tous les canaux de communication',
-                    'Analyses et rapports avancés',
-                    'Support multi-succursales',
-                    'Utilisateurs admin illimités',
-                    'Gestionnaire de compte dédié',
-                    'Accès API',
-                    'Options de marque blanche',
+                    0 => 'Étudiants illimités',
+                    1 => 'Tous les canaux de communication',
+                    2 => 'Analyses et rapports avancés',
+                    3 => 'Support multi-succursales',
+                    4 => 'Utilisateurs admin illimités',
+                    5 => 'Gestionnaire de compte dédié',
+                    6 => 'Accès API',
+                    7 => 'Options de marque blanche',
                 ],
+                'badge' => 'Pour les Entreprises',
+                'best_value' => 'Meilleur Choix',
             ],
         ],
         'cta_note' => 'Commencez maintenant - Aucune carte de crédit requise',
@@ -192,22 +195,36 @@ return [
                         'students' => 'Limite d\'étudiants',
                         'admins' => 'Utilisateurs Admin',
                         'branches' => 'Support multi-succursales',
-                    ]
+                        'max_students' => 'Nombre d\'Étudiants',
+                        'max_admins' => 'Administrateurs',
+                        'max_courses' => 'Nombre de Cours',
+                        'storage_limit' => 'Espace de Stockage',
+                        'max_instructors' => 'Nombre d\'Instructeurs',
+                        'max_classrooms' => 'Nombre de Salles',
+                        'advanced_reports' => 'Rapports Avancés',
+                        'priority_support' => 'Support Prioritaire',
+                        'multi_branch' => 'Support Multi-succursales',
+                    ],
                 ],
                 'smart' => [
                     'label' => 'Communication Intelligente',
                     'features' => [
                         'whatsapp' => 'Alertes WhatsApp Automatisées',
                         'sms' => 'Alertes SMS',
-                    ]
+                        'api_access' => 'Accès API',
+                        'whatsapp_alerts' => 'Alertes WhatsApp',
+                        'sms_alerts' => 'Alertes SMS',
+                    ],
                 ],
                 'analysis' => [
                     'label' => 'Analyses & Support',
                     'features' => [
                         'reports' => 'Rapports Financiers',
                         'support' => 'Support Technique',
-                    ]
-                ]
+                        'financial_reports' => 'Rapports Financiers',
+                        'technical_support' => 'Support Technique',
+                    ],
+                ],
             ],
             'plans' => [
                 'free' => [
@@ -237,16 +254,24 @@ return [
                     'reports' => 'Avancé',
                     'support' => 'Gestionnaire dédié',
                 ],
-            ]
+            ],
         ],
+        'per_year' => '/ par an',
+        'equivalent_to' => 'Équivalent à',
+        'month_short' => 'mois',
+        'monthly' => 'Mensuel',
+        'yearly' => 'Annuel',
+        'save_20' => 'Économisez 17%',
+        'days' => 'jours',
+        'unlimited' => 'Illimité',
     ],
     'testimonials' => [
         'badge' => 'Approuvé par 10 000+ Centres',
         'title_prefix' => 'Résultats Réels de',
         'title_highlight' => 'Vrais Centres',
-        'subtitle' => 'Découvrez comment les centres d\'apprentissage à travers la région MENA transforment leurs opérations avec ' . config('app.name') . '.',
+        'subtitle' => 'Découvrez comment les centres d\'apprentissage à travers la région MENA transforment leurs opérations avec remon.',
         'items' => [
-            [
+            0 => [
                 'quote' => 'Nous avons récupéré 38% de revenus supplémentaires en seulement deux mois. Les rappels WhatsApp ont changé la donne pour nos taux de recouvrement.',
                 'stat_value' => '+38%',
                 'stat_label' => 'Augmentation des Revenus',
@@ -255,7 +280,7 @@ return [
                 'author_company' => 'Académie Al-Nour',
                 'author_location' => 'Dubaï, EAU',
             ],
-            [
+            1 => [
                 'quote' => 'Je passais 15 heures par semaine à poursuivre les paiements. Maintenant c\'est complètement automatisé. Je peux enfin me concentrer sur le développement de mon centre.',
                 'stat_value' => '15h',
                 'stat_label' => 'Heures Économisées par Semaine',
@@ -264,7 +289,7 @@ return [
                 'author_company' => 'Centre Bright Minds',
                 'author_location' => 'Le Caire, Égypte',
             ],
-            [
+            2 => [
                 'quote' => 'L\'interface arabe et le support des méthodes de paiement locales ont rendu l\'adoption transparente. Nos parents adorent les notifications WhatsApp.',
                 'stat_value' => '98%',
                 'stat_label' => 'Satisfaction des Parents',
@@ -279,33 +304,33 @@ return [
         'badge' => 'Des Questions?',
         'title_prefix' => 'Questions',
         'title_highlight' => 'Fréquemment Posées',
-        'subtitle' => 'Tout ce que vous devez savoir sur ' . config('app.name') . '. Vous ne trouvez pas la réponse? Contactez notre équipe de support.',
+        'subtitle' => 'Tout ce que vous devez savoir sur remon. Vous ne trouvez pas la réponse? Contactez notre équipe de support.',
         'items' => [
-            [
-                'question' => 'En combien de temps puis-je commencer avec ' . config('app.name') . '?',
+            0 => [
+                'question' => 'En combien de temps puis-je commencer avec remon?',
                 'answer' => 'Vous pouvez être opérationnel en moins de 15 minutes. Il suffit de vous inscrire, d\'importer vos données étudiantes (nous supportons Excel/CSV), et de configurer vos notifications WhatsApp. Notre assistant d\'intégration vous guide à chaque étape.',
             ],
-            [
-                'question' => 'Mes données sont-elles sécurisées avec ' . config('app.name') . '?',
+            1 => [
+                'question' => 'Mes données sont-elles sécurisées avec remon?',
                 'answer' => 'Absolument. Nous utilisons un chiffrement de niveau bancaire (AES-256) pour toutes les données, nous nous conformons au RGPD et aux lois locales de protection des données, et nous stockons les données dans des centres de données sécurisés dans la région MENA. Nous sommes également conformes PCI-DSS pour le traitement des paiements.',
             ],
-            [
-                'question' => ' ' . config('app.name') . ' fonctionne-t-il avec l\'API WhatsApp Business?',
+            2 => [
+                'question' => ' remon fonctionne-t-il avec l\'API WhatsApp Business?',
                 'answer' => 'Oui! Nous sommes un fournisseur officiel de solutions WhatsApp Business. Cela signifie que vos messages sont envoyés via des comptes professionnels vérifiés, garantissant une haute délivrabilité et la conformité avec les politiques de WhatsApp.',
             ],
-            [
-                'question' => 'Puis-je utiliser ' . config('app.name') . ' en arabe?',
-                'answer' => 'Oui, ' . config('app.name') . ' offre un support RTL complet avec des interfaces natives en arabe et français. Tous les tableaux de bord, rapports et communications peuvent être en arabe, et nous supportons les chiffres arabes et les formats de date.',
+            3 => [
+                'question' => 'Puis-je utiliser remon en arabe?',
+                'answer' => 'Oui, remon offre un support RTL complet avec des interfaces natives en arabe et français. Tous les tableaux de bord, rapports et communications peuvent être en arabe, et nous supportons les chiffres arabes et les formats de date.',
             ],
-            [
+            4 => [
                 'question' => 'Quelles méthodes de paiement supportez-vous?',
                 'answer' => 'Nous supportons les cartes de crédit/débit (Visa, Mastercard, AMEX), les virements bancaires, et les méthodes locales populaires incluant Fawry (Égypte), STC Pay (Arabie Saoudite), et plus encore. Les parents peuvent payer directement depuis les messages WhatsApp.',
             ],
-            [
+            5 => [
                 'question' => 'Puis-je migrer depuis mon système actuel?',
                 'answer' => 'Oui! Nous offrons une assistance de migration gratuite pour tous les plans payants. Notre équipe vous aidera à importer les données étudiantes, l\'historique des paiements, et à configurer vos workflows. La plupart des migrations sont complétées en 24-48 heures.',
             ],
-            [
+            6 => [
                 'question' => 'Le système est-il adapté à un petit centre ?',
                 'answer' => 'Oui, absolument ! Notre système est conçu pour être flexible et évolutif. Vous pouvez commencer avec les fonctionnalités de base qui correspondent à la taille actuelle de votre centre, et à mesure que votre entreprise se développe, vous pouvez facilement passer à la vitesse supérieure et profiter d\'outils avancés. Nous vous accompagnons à chaque étape, que vous soyez une startup ou une grande institution éducative.',
             ],
@@ -339,7 +364,7 @@ return [
         ],
         'contact' => 'Contactez-Nous',
         'rights' => 'Tous droits réservés © 2024',
-        'copyright' => 'Tous droits réservés © 2024 ' . config('app.name') . '.',
+        'copyright' => 'Tous droits réservés © 2024 remon.',
         'payment_methods' => 'Méthodes de Paiement Sécurisées',
         'product' => [
             'title' => 'Produit',
@@ -371,28 +396,28 @@ return [
     ],
     'comparison' => [
         'badge' => 'Comparaison',
-        'title' => 'Pourquoi <span class="text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan">Edu System</span> est le Meilleur Choix ?',
+        'title' => 'Pourquoi <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan\">Edu System</span> est le Meilleur Choix ?',
         'subtitle' => 'Comparez la difficulté de la gestion traditionnelle avec l\'efficacité de notre système avancé.',
         'manual' => [
             'title' => 'Gestion Traditionnelle (Papier/Excel)',
             'items' => [
-                'Perte de temps dans l\'enregistrement manuel des présences.',
-                'Difficulté à suivre les retards de paiement avec précision.',
-                'Risque de perte de données si les registres sont endommagés.',
-                'Coût élevé des SMS traditionnels ou oubli des envois.',
-                'Chaos dans la gestion des horaires et des salles.',
-                'Heures nécessaires pour générer un simple rapport financier.',
+                0 => 'Perte de temps dans l\'enregistrement manuel des présences.',
+                1 => 'Difficulté à suivre les retards de paiement avec précision.',
+                2 => 'Risque de perte de données si les registres sont endommagés.',
+                3 => 'Coût élevé des SMS traditionnels ou oubli des envois.',
+                4 => 'Chaos dans la gestion des horaires et des salles.',
+                5 => 'Heures nécessaires pour générer un simple rapport financier.',
             ],
         ],
         'edu' => [
             'title' => 'Système Edu Intégré',
             'items' => [
-                'Enregistrement intelligent des présences en un seul clic.',
-                'Suivi automatique des frais et alertes instantanées.',
-                'Stockage cloud sécurisé qui préserve vos données pour toujours.',
-                'Rappels automatisés et gratuits via WhatsApp.',
-                'Planification automatisée intelligente sans chevauchement.',
-                'Rapports financiers précis en un seul clic.',
+                0 => 'Enregistrement intelligent des présences en un seul clic.',
+                1 => 'Suivi automatique des frais et alertes instantanées.',
+                2 => 'Stockage cloud sécurisé qui préserve vos données pour toujours.',
+                3 => 'Rappels automatisés et gratuits via WhatsApp.',
+                4 => 'Planification automatisée intelligente sans chevauchement.',
+                5 => 'Rapports financiers précis en un seul clic.',
             ],
         ],
     ],

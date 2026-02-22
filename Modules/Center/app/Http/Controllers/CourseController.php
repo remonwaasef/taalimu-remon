@@ -69,7 +69,7 @@ class CourseController extends Controller
         $this->authorize('create', Course::class);
 
         if (!app('tenant')->hasFeature('max_courses')) {
-            return redirect()->back()->with('error', 'لقد وصلت للحد الأقصى من الكورسات المسموح به في باقتك.');
+            return redirect()->back()->with('error', __('center::messages.msg_025'));
         }
 
         $data = $request->validated();
@@ -78,7 +78,7 @@ class CourseController extends Controller
 
         $this->courseService->createCourse(CourseData::fromArray($data));
 
-        return redirect()->route('center.courses.index')->with('success', 'تم إنشاء الكورس بنجاح');
+        return redirect()->route('center.courses.index')->with('success', __('center::messages.msg_026'));
     }
 
     /**
@@ -120,7 +120,7 @@ class CourseController extends Controller
                 'payment_method' => 'cash',
                 'paid_amount' => 0, // فاتورة غير مدفوعة
             ]);
-            return back()->with('success', 'تم تسجيل الطالب وإنشاء فاتورة بنجاح');
+            return back()->with('success', __('center::messages.msg_027'));
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
@@ -153,7 +153,7 @@ class CourseController extends Controller
                     'paid_amount' => 0,
                 ]);
 
-                return back()->with('success', 'تم إنشاء الطالب وتسجيله وإنشاء فاتورة بنجاح');
+                return back()->with('success', __('center::messages.msg_028'));
             });
         } catch (\Exception $e) {
             return back()->with('error', 'حدث خطأ: ' . $e->getMessage());
@@ -201,14 +201,14 @@ class CourseController extends Controller
             return redirect()->back()->withInput()->withErrors(['error' => 'حدث خطأ أثناء التحديث: ' . $e->getMessage()]);
         }
 
-        return redirect()->route('center.courses.index')->with('success', 'تم تحديث الكورس بنجاح');
+        return redirect()->route('center.courses.index')->with('success', __('center::messages.msg_029'));
     }
 
     public function completeLesson(Course $course, $lessonId)
     {
         try {
             $this->courseService->completeLesson($course, $lessonId, auth()->user());
-            return back()->with('success', 'Lesson marked as complete!');
+            return back()->with('success', __('center::messages.msg_030'));
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
@@ -225,6 +225,6 @@ class CourseController extends Controller
         
         $this->courseService->deleteCourse($course);
         
-        return redirect()->route('center.courses.index')->with('success', 'تم حذف الدورة بنجاح');
+        return redirect()->route('center.courses.index')->with('success', __('center::messages.msg_031'));
     }
 }

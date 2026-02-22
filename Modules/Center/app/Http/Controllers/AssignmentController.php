@@ -21,7 +21,7 @@ class AssignmentController extends Controller
 
         $assignment = $lesson->assignment()->create($validated);
 
-        return redirect()->route('center.assignments.edit', $assignment)->with('success', 'Assignment created.');
+        return redirect()->route('center.assignments.edit', $assignment)->with('success', __('center::messages.msg_005'));
     }
 
     public function edit(\App\Models\Assignment $assignment)
@@ -44,7 +44,7 @@ class AssignmentController extends Controller
 
         $assignment->update($validated);
 
-        return back()->with('success', 'Assignment updated.');
+        return back()->with('success', __('center::messages.msg_006'));
     }
 
     // Student Methods
@@ -74,7 +74,7 @@ class AssignmentController extends Controller
             ]
         );
 
-        return back()->with('success', 'Assignment submitted successfully.');
+        return back()->with('success', __('center::messages.msg_007'));
     }
 
     public function download(\App\Models\AssignmentSubmission $submission)
@@ -106,7 +106,7 @@ class AssignmentController extends Controller
             'feedback' => $request->feedback,
         ]);
 
-        return back()->with('success', 'Grade saved.');
+        return back()->with('success', __('center::messages.msg_008'));
     }
 
     // End of Controller

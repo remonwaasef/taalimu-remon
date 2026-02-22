@@ -28,4 +28,6 @@ return [
     'custom_domain' => 'Custom Domain',
     'remove_branding' => 'Remove Branding',
     'priority_support' => 'Priority Support',
+    'whatsapp_alerts' => 'Automated WhatsApp Alerts',
+    'multi_branch' => 'Multi-branch Support',
 ];

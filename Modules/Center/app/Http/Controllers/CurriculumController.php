@@ -25,7 +25,7 @@ class CurriculumController extends Controller
             'title' => $request->title,
             'sort_order' => $course->sections()->max('sort_order') + 1
         ]);
-        return back()->with('success', 'Section created.');
+        return back()->with('success', __('center::messages.msg_034'));
     }
 
     public function updateSection(Request $request, \App\Models\Section $section)
@@ -33,14 +33,14 @@ class CurriculumController extends Controller
         $this->authorize('update', $section->course);
         $request->validate(['title' => 'required|string|min:2|max:255']);
         $section->update(['title' => $request->title]);
-        return back()->with('success', 'Section updated.');
+        return back()->with('success', __('center::messages.msg_035'));
     }
 
     public function destroySection(\App\Models\Section $section)
     {
         $this->authorize('update', $section->course);
         $section->delete();
-        return back()->with('success', 'Section deleted.');
+        return back()->with('success', __('center::messages.msg_036'));
     }
 
     public function storeLesson(Request $request, \App\Models\Section $section)
@@ -51,7 +51,7 @@ class CurriculumController extends Controller
             'title' => $request->title,
             'sort_order' => $section->lessons()->max('sort_order') + 1
         ]);
-        return back()->with('success', 'Lesson created.');
+        return back()->with('success', __('center::messages.msg_037'));
     }
 
     public function updateLesson(Request $request, \App\Models\Lesson $lesson)
@@ -72,14 +72,14 @@ class CurriculumController extends Controller
         }
         
         $lesson->update($validated);
-        return back()->with('success', 'Lesson updated.');
+        return back()->with('success', __('center::messages.msg_038'));
     }
 
     public function destroyLesson(\App\Models\Lesson $lesson)
     {
         $this->authorize('update', $lesson->section->course);
         $lesson->delete();
-        return back()->with('success', 'Lesson deleted.');
+        return back()->with('success', __('center::messages.msg_039'));
     }
 
     public function reorderSections(Request $request, \App\Models\Course $course)

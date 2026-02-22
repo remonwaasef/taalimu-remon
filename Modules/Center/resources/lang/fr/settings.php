@@ -24,6 +24,7 @@ return [
         'twitter' => 'Lien Twitter',
         'youtube' => 'Lien YouTube',
         'save' => 'Enregistrer les modifications',
+        'timezone' => 'Fuseau Horaire',
     ],
     'academic' => [
         'year_grading' => 'Année Académique & Notation',
@@ -47,6 +48,13 @@ return [
         'select_template_first' => 'Veuillez d\'abord sélectionner un modèle',
         'confirm_delete_stage' => 'Êtes-vous sûr de vouloir supprimer ce cycle et toutes ses classes ?',
         'tech_error' => 'Désolé, une erreur technique est survenue. Veuillez rafraîchir la page et réessayer.',
+        'attendance_rules' => 'Règles de Présence et Retard',
+        'late_levels' => 'Niveaux de Retard',
+        'late_levels_help' => 'Définissez les niveaux de retard.',
+        'threshold_minutes' => 'Minutes',
+        'level_label' => 'Description (ex: Retard léger)',
+        'add_level' => 'Ajouter un Niveau',
+        'confirm_delete_level' => 'Êtes-vous sûr ?',
     ],
     'financial' => [
         'title' => 'Paramètres de Facturation & Devise',
@@ -72,8 +80,8 @@ return [
         'instance_id' => 'ID de l\'instance',
         'token' => 'Jeton (Clé API)',
         'info_title' => 'Quels messages seront envoyés ?',
-        'attendance_msg' => 'Notification de présence : Lorsqu\'un étudiant est marqué présent, les parents reçoivent : "L\'étudiant [Nom] est arrivé...".',
-        'payment_msg' => 'Notification de paiement : Lorsqu\'un paiement est reçu : "Reçu [Montant]... Reste [Solde]".',
+        'attendance_msg' => 'Notification de présence : Lorsqu\'un étudiant est marqué présent, les parents reçoivent : \"L\'étudiant [Nom] est arrivé...\".',
+        'payment_msg' => 'Notification de paiement : Lorsqu\'un paiement est reçu : \"Reçu [Montant]... Reste [Solde]\".',
     ],
     'privacy' => [
         'title' => 'Centre de Contrôle des Données (RGPD)',

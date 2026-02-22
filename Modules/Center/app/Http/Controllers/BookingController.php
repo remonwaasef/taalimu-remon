@@ -34,7 +34,7 @@ class BookingController extends Controller
             ->exists();
 
         if ($exists) {
-            return back()->with('error', 'الطالب مسجل بالفعل في هذه الحصة.');
+            return back()->with('error', __('center::messages.msg_015'));
         }
 
         // Check Capacity
@@ -43,7 +43,7 @@ class BookingController extends Controller
             ->count();
 
         if ($currentBookingsCount >= $schedule->max_students) {
-            return back()->with('error', 'عذراً، هذه الحصة مكتملة العدد.');
+            return back()->with('error', __('center::messages.msg_016'));
         }
 
         Booking::create([
@@ -54,7 +54,7 @@ class BookingController extends Controller
             'notes' => $request->notes,
         ]);
 
-        return back()->with('success', 'تم حجز الحصة للطالب بنجاح.');
+        return back()->with('success', __('center::messages.msg_017'));
     }
 
     /**
@@ -71,7 +71,7 @@ class BookingController extends Controller
 
         $booking->update(['status' => $request->status]);
 
-        return back()->with('success', 'تم تحديث حالة الحجز بنجاح.');
+        return back()->with('success', __('center::messages.msg_018'));
     }
 
     /**
@@ -83,6 +83,6 @@ class BookingController extends Controller
         $this->authorize('delete', $booking);
         $booking->delete();
 
-        return back()->with('success', 'تم حذف الحجز بنجاح.');
+        return back()->with('success', __('center::messages.msg_019'));
     }
 }

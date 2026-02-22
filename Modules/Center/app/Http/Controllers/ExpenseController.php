@@ -58,7 +58,7 @@ class ExpenseController extends Controller
 
         Expense::create($validated);
 
-        return redirect()->route('center.expenses.index')->with('success', 'تم تسجيل المصروف بنجاح');
+        return redirect()->route('center.expenses.index')->with('success', __('center::messages.msg_040'));
     }
 
     public function edit(Expense $expense)
@@ -89,7 +89,7 @@ class ExpenseController extends Controller
 
         $expense->update($validated);
 
-        return redirect()->route('center.expenses.index')->with('success', 'تم تحديث المصروف بنجاح');
+        return redirect()->route('center.expenses.index')->with('success', __('center::messages.msg_041'));
     }
 
     public function destroy(Expense $expense)
@@ -102,6 +102,6 @@ class ExpenseController extends Controller
 
         $expense->delete();
 
-        return redirect()->route('center.expenses.index')->with('success', 'تم حذف المصروف بنجاح');
+        return redirect()->route('center.expenses.index')->with('success', __('center::messages.msg_042'));
     }
 }

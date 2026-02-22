@@ -34,7 +34,7 @@ class ResourceController extends Controller
             'is_public' => $request->is_public ?? false,
         ]);
 
-        return back()->with('success', 'تم رفع الملف بنجاح');
+        return back()->with('success', __('center::messages.msg_068'));
     }
 
     public function destroy(CourseResource $resource)
@@ -44,7 +44,7 @@ class ResourceController extends Controller
         Storage::disk('local')->delete($resource->file_path);
         $resource->delete();
 
-        return back()->with('success', 'تم حذف الملف بنجاح');
+        return back()->with('success', __('center::messages.msg_069'));
     }
 
     public function download(CourseResource $resource)

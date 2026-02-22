@@ -21,17 +21,22 @@ return [
     'attendance_tracking' => 'Suivi des présences',
     'max_branches' => 'Nombre maximum de succursales',
     'unlimited' => 'Illimité',
-    
-    // Noms des packages
     'packages' => [
         'free-trial' => 'Essai gratuit',
         'basic' => 'Plan de base',
         'pro' => 'Plan professionnel',
     ],
-    
     'categories' => [
         'core' => 'Gestion de base',
         'smart' => 'Communication intelligente & automatisation',
         'analysis' => 'Analyse & support',
-    ]
+    ],
+    'yes' => 'Oui',
+    'no' => 'Non',
+    'enabled' => 'Activé',
+    'disabled' => 'Désactivé',
+    'video_support' => 'Support Vidéo',
+    'marketing_tools' => 'Outils Marketing',
+    'custom_domain' => 'Domaine Personnalisé',
+    'remove_branding' => 'Supprimer la Marque',
 ];
