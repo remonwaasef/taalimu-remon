@@ -100,7 +100,7 @@
 
         <div style="margin-bottom: 15px; font-size: 13px;">
             <strong>{{ $reshaper->reshape('وصلنا من السيد/السيدة:') }}</strong> {{ $payment->sale->student->name }}<br>
-            <strong>{{ $reshaper->reshape(__('center::messages.blade_0609')) }}</strong> {{ number_format($payment->amount, 2) }} {{ $reshaper->reshape(__('center::messages.blade_0610')) }}
+            <strong>{{ $reshaper->reshape(__('center::messages.blade_0609')) }}</strong> {{ number_format($payment->amount, 2) }} {{ $reshaper->reshape(__('center::messages.blade_0610', ['currency' => get_currency_symbol()])) }}
         </div>
 
         <table class="table">
@@ -118,7 +118,7 @@
                             {{ $reshaper->reshape(__('center::messages.blade_0614')) }}
                         @endif
                     </td>
-                    <td>{{ number_format($payment->amount, 2) }} {{ $reshaper->reshape(__('center::messages.blade_0615')) }}</td>
+                    <td>{{ number_format($payment->amount, 2) }} {{ $reshaper->reshape(__('center::messages.blade_0615', ['currency' => get_currency_symbol()])) }}</td>
                 </tr>
             </tbody>
         </table>
@@ -131,7 +131,7 @@
                         $method = $payment->payment_method == 'cash' ? __('center::messages.blade_0617') : ($payment->payment_method == 'card' ? __('center::messages.blade_0618') : __('center::messages.blade_0619'));
                     @endphp
                     {{ $reshaper->reshape($method) }}<br>
-                    <strong>{{ $reshaper->reshape(__('center::messages.blade_0620')) }}</strong> {{ number_format($payment->sale->total_amount - $payment->sale->paid_amount, 2) }} {{ $reshaper->reshape(__('center::messages.blade_0621')) }}
+                    <strong>{{ $reshaper->reshape(__('center::messages.blade_0620')) }}</strong> {{ number_format($payment->sale->total_amount - $payment->sale->paid_amount, 2) }} {{ $reshaper->reshape(__('center::messages.blade_0621', ['currency' => get_currency_symbol()])) }}
                 </td>
                 <td class="text-center" style="width: 40%;">
                     <p style="margin-bottom: 5px;">{{ $reshaper->reshape(__('center::messages.blade_0622')) }}</p>

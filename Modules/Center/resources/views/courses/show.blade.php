@@ -59,7 +59,7 @@
                     </div>
                     <div>
                         <h6 class="text-muted mb-1">{{ __('center::messages.blade_0377') }}</h6>
-                        <h3 class="fw-bold mb-0">{{ number_format($course->price, 2) }} ج.م</h3>
+                        <h3 class="fw-bold mb-0">{{ format_price($course->price) }}</h3>
                     </div>
                 </div>
             </div>

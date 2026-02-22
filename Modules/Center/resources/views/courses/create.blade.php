@@ -46,7 +46,7 @@
 
                         <div class="row mb-4">
                             <div class="col-md-4">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0275') }}</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0275', ['currency' => get_currency_symbol()]) }}</label>
                                 <input type="number" name="price" value="{{ old('price', 0) }}" class="form-control form-control-lg bg-light border-0 @error('price') is-invalid border-danger @enderror" min="0" step="0.01">
                                 @error('price')
                                     <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>

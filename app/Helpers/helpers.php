@@ -101,3 +101,54 @@ if (!function_exists('tenant_asset')) {
         return tenant_url('assets/' . ltrim($path, '/'), $tenant);
     }
 }
+
+if (!function_exists('get_currency_symbol')) {
+    /**
+     * Get the currency symbol for the current tenant.
+     *
+     * @return string
+     */
+    function get_currency_symbol(): string
+    {
+        $tenant = current_tenant();
+        $currency = $tenant->settings['financial']['currency'] ?? 'EGP';
+        
+        $symbols = [
+            'EGP' => 'EGP',
+            'SAR' => 'SAR',
+            'USD' => '$',
+            'EUR' => '€',
+        ];
+
+        // Locale specific Arabic symbols
+        if (app()->getLocale() == 'ar') {
+            $symbols['EGP'] = 'ج.م';
+            $symbols['SAR'] = 'ر.س';
+        }
+
+        return $symbols[$currency] ?? $currency;
+    }
+}
+
+if (!function_exists('format_price')) {
+    /**
+     * Format price with currency symbol.
+     *
+     * @param float|int $amount
+     * @param bool $withSymbol
+     * @return string
+     */
+    function format_price($amount, bool $withSymbol = true): string
+    {
+        $formatted = number_format($amount, 2);
+        
+        if (!$withSymbol) {
+            return $formatted;
+        }
+
+        $symbol = get_currency_symbol();
+        
+        // Right-to-left or Left-to-right placement logic could be added here if needed
+        return $formatted . ' ' . $symbol;
+    }
+}

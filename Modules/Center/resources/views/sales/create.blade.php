@@ -29,7 +29,7 @@
                                     <i class="fas fa-graduation-cap"></i>
                                 </div>
                                 <h6 class="fw-bold mb-2 text-dark">{{ $course->title }}</h6>
-                                <div class="text-primary fw-bold">{{ number_format($course->price, 2) }} {{ __('center::sales.currency') }}</div>
+                                <div class="text-primary fw-bold">{{ number_format($course->price, 2) }} {{ get_currency_symbol() }}</div>
                             </div>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <span class="small text-muted">{{ __('center::messages.blade_0584') }}</span>
-                            <span id="summaryDebt" class="badge bg-danger">{{ __('center::messages.blade_0585') }}</span>
+                            <span id="summaryDebt" class="badge bg-danger">{{ __('center::messages.blade_0585', ['currency' => get_currency_symbol()]) }}</span>
                         </div>
                         <hr class="my-2 opacity-25">
                         <div id="summaryCourses" class="small text-muted mb-3">
@@ -89,7 +89,7 @@
 
                     <div class="d-flex justify-content-between align-items-center mb-4 p-3 bg-light rounded-4">
                         <span class="fw-bold text-muted">{{ __('center::sales.amount') }}:</span>
-                        <span id="totalAmount" class="fs-4 fw-bold text-primary">0.00 {{ __('center::sales.currency') }}</span>
+                        <span id="totalAmount" class="fs-4 fw-bold text-primary">0.00 {{ get_currency_symbol() }}</span>
                     </div>
 
                     <div class="mb-3">
@@ -105,7 +105,7 @@
                         <label class="form-label fw-bold">{{ __('center::sales.paid_amount') }}</label>
                         <div class="input-group">
                             <input type="number" step="0.01" name="paid_amount" id="paid_amount" class="form-control rounded-3 shadow-none border" value="0.00">
-                            <span class="input-group-text bg-white border">{{ __('center::sales.currency') }}</span>
+                            <span class="input-group-text bg-white border">{{ get_currency_symbol() }}</span>
                         </div>
                     </div>
 
@@ -137,7 +137,7 @@
 @push('scripts')
 <script>
     let cart = [];
-    const currency = '{{ __('center::sales.currency') }}';
+    const currency = '{{ get_currency_symbol() }}';
 
     function fetchStudentSummary(studentId) {
         if (!studentId) {
