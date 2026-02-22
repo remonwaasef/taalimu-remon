@@ -24,6 +24,7 @@ use Modules\Center\Http\Controllers\NotificationController;
 use Modules\Center\Http\Controllers\LeaderboardController;
 use Modules\Center\Http\Controllers\QuestionBankController;
 use Modules\Center\Http\Controllers\AssetController;
+use Modules\Center\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
