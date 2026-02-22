@@ -122,7 +122,7 @@
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('center.settings.apply-template', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST">
+            <form action="{{ route('center.settings.apply-template', ['tenant' => app('tenant')->domain]) }}" method="POST" id="educationSystemForm">
                 @csrf
                 <div class="modal-body px-4 pb-4">
                     <p class="text-muted small mb-4">
@@ -143,14 +143,28 @@
                 </div>
                 <div class="modal-footer border-top-0 px-4 pb-4 gap-2">
                     <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">إلغاء</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">
-                        <i class="fas fa-check-circle me-1"></i> اعتماد واطلاق المركز
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm" id="submitTemplateBtn">
+                        <span class="normal-state">
+                            <i class="fas fa-check-circle me-1"></i> اعتماد واطلاق المركز
+                        </span>
+                        <span class="loading-state d-none">
+                            <i class="fas fa-spinner fa-spin me-1"></i> جاري الحفظ...
+                        </span>
                     </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('educationSystemForm').addEventListener('submit', function() {
+        const btn = document.getElementById('submitTemplateBtn');
+        btn.disabled = true;
+        btn.querySelector('.normal-state').classList.add('d-none');
+        btn.querySelector('.loading-state').classList.remove('d-none');
+    });
+</script>
 
 <style>
     .hover-translate-y-n3:hover {
