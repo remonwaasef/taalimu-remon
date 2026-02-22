@@ -23,7 +23,7 @@
                     <div class="row g-4">
                         <div class="col-md-6">
                             <label class="form-label fw-bold small">{{ __('center::expenses.category') }}</label>
-                            <input type="text" name="category" class="form-control rounded-pill @error('category') is-invalid @enderror" placeholder="{{ __('center::messages.blade_0489') }}" value="{{ old('category') }}">
+                            <input type="text" name="category" class="form-control rounded-pill @error('category') is-invalid @enderror" placeholder="{{ __('center::messages.blade_0414') }}" value="{{ old('category') }}">
                             @error('category')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -73,7 +73,7 @@
                                 <input type="file" name="attachment" id="attachment" class="d-none">
                                 <label for="attachment" class="cursor-pointer mb-0 w-100">
                                     <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-2"></i>
-                                    <p class="mb-0 text-muted">اضغط هنا أو اسحب صورة الإيصال للرفع (اختياري)</p>
+                                    <p class="mb-0 text-muted">{{ __('center::messages.blade_0410') }}</p>
                                     <small class="text-muted">JPG, PNG, PDF (Max 2MB)</small>
                                 </label>
                             </div>
@@ -81,8 +81,8 @@
 
                         <div class="col-12 text-end">
                             <hr class="my-4 opacity-10">
-                            <a href="{{ route('center.expenses.index') }}" class="btn btn-light rounded-pill px-4 me-2 border">{{ __('center::messages.blade_0486') }}</a>
-                            <button type="submit" class="btn btn-primary rounded-pill px-5">{{ __('center::messages.blade_0487') }}</button>
+                            <a href="{{ route('center.expenses.index') }}" class="btn btn-light rounded-pill px-4 me-2 border">{{ __('center::messages.blade_0411') }}</a>
+                            <button type="submit" class="btn btn-primary rounded-pill px-5">{{ __('center::messages.blade_0412') }}</button>
                         </div>
                     </div>
                 </form>
@@ -93,7 +93,7 @@
     <div class="col-lg-4">
         <div class="card border-0 shadow-sm rounded-4 bg-primary text-white p-2">
             <div class="card-body">
-                <h5 class="fw-bold mb-3"><i class="fas fa-info-circle me-2"></i>{{ __('center::messages.blade_0488') }}</h5>
+                <h5 class="fw-bold mb-3"><i class="fas fa-info-circle me-2"></i>{{ __('center::messages.blade_0413') }}</h5>
                 <p class="small opacity-75 mb-0">
                     تسجيل المصروفات يساعدك على حساب "صافي الأرباح" بدقة في لوحة التقارير المالية. تأكد من إرفاق صورة الإيصال لضمان التوثيق المالي الصحيح.
                 </p>

@@ -90,10 +90,10 @@
                             <h3>الاختبار: {{ $lesson->title }}</h3>
                             @php $quiz = $lesson->quiz; @endphp
                             @if($quiz)
-                                <p class="text-muted">درجة النجاح: {{ $quiz->passing_score }}% | الوقت: {{ $quiz->duration_minutes ?? __('center::messages.blade_0449') }} دقيقة</p>
-                                <a href="{{ route('center.quizzes.show', $quiz) }}" class="btn btn-primary btn-lg rounded-pill px-5">{{ __('center::messages.blade_0443') }}</a>
+                                <p class="text-muted">درجة النجاح: {{ $quiz->passing_score }}% | الوقت: {{ $quiz->duration_minutes ?? __('center::messages.blade_0370') }} دقيقة</p>
+                                <a href="{{ route('center.quizzes.show', $quiz) }}" class="btn btn-primary btn-lg rounded-pill px-5">{{ __('center::messages.blade_0364') }}</a>
                             @else
-                                <p class="text-danger">{{ __('center::messages.blade_0444') }}</p>
+                                <p class="text-danger">{{ __('center::messages.blade_0365') }}</p>
                             @endif
                         </div>
                     @elseif($lesson->type == 'assignment')
@@ -102,10 +102,10 @@
                             <h3>التكليف: {{ $lesson->title }}</h3>
                             @php $assignment = $lesson->assignment; @endphp
                             @if($assignment)
-                                <p class="text-muted">أقصى درجة: {{ $assignment->max_score }} | موعد التسليم: {{ $assignment->due_date ? $assignment->due_date->format('Y-m-d') : __('center::messages.blade_0450') }}</p>
-                                <a href="{{ route('center.assignments.show', $assignment) }}" class="btn btn-success btn-lg rounded-pill px-5">{{ __('center::messages.blade_0445') }}</a>
+                                <p class="text-muted">أقصى درجة: {{ $assignment->max_score }} | موعد التسليم: {{ $assignment->due_date ? $assignment->due_date->format('Y-m-d') : 'غير محدد' }}</p>
+                                <a href="{{ route('center.assignments.show', $assignment) }}" class="btn btn-success btn-lg rounded-pill px-5">{{ __('center::messages.blade_0366') }}</a>
                             @else
-                                <p class="text-danger">{{ __('center::messages.blade_0446') }}</p>
+                                <p class="text-danger">{{ __('center::messages.blade_0367') }}</p>
                             @endif
                         </div>
                     @endif
@@ -116,7 +116,7 @@
                 <div class="card-header bg-white border-0 p-0 overflow-hidden">
                     <ul class="nav nav-pills nav-fill bg-light border-bottom p-1" id="lessonTabs" role="tablist">
                         <li class="nav-item">
-                            <button class="nav-link active rounded-pill py-2" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button">{{ __('center::messages.blade_0447') }}</button>
+                            <button class="nav-link active rounded-pill py-2" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button">{{ __('center::messages.blade_0368') }}</button>
                         </li>
                         <li class="nav-item">
                             <button class="nav-link rounded-pill py-2" id="resources-tab" data-bs-toggle="tab" data-bs-target="#resources" type="button">
@@ -130,7 +130,7 @@
                         <div class="tab-pane fade show active" id="about">
                             <h4 class="fw-bold mb-3">{{ $lesson->title }}</h4>
                             <div class="text-muted">
-                                {!! nl2br(e($lesson->description ?? __('center::messages.blade_0451'))) !!}
+                                {!! nl2br(e($lesson->description ?? __('center::messages.blade_0371'))) !!}
                             </div>
                         </div>
                         <div class="tab-pane fade" id="resources">
@@ -153,7 +153,7 @@
                                 @empty
                                     <div class="col-12 text-center text-muted py-4">
                                         <i class="fas fa-folder-open fa-2x mb-2 opacity-50"></i>
-                                        <p>{{ __('center::messages.blade_0448') }}</p>
+                                        <p>{{ __('center::messages.blade_0369') }}</p>
                                     </div>
                                 @endforelse
                             </div>

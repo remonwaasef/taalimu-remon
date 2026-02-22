@@ -4,7 +4,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2 class="fw-bold text-dark mb-1">{{ __('center::assets.title') }}</h2>
-            <p class="text-muted small mb-0">{{ __('center::messages.blade_0198') }}</p>
+            <p class="text-muted small mb-0">{{ __('center::messages.blade_0107') }}</p>
         </div>
         <a href="{{ route('center.assets.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
             <span class="me-2">+</span> {{ __('center::assets.add_new') }}
@@ -16,7 +16,7 @@
             <div class="card-header bg-light bg-opacity-50 py-3 border-0 d-flex justify-content-between align-items-center">
                 <h6 class="fw-bold text-dark mb-0">
                     <i class="fas fa-door-open me-2 text-primary"></i> 
-                    {{ $classroomName == '---' ? __('center::messages.blade_0201') : $classroomName }}
+                    {{ $classroomName == '---' ? __('center::messages.blade_0110') : $classroomName }}
                     <span class="badge bg-white text-primary border rounded-pill ms-2 fw-normal" style="font-size: 0.75rem;">{{ $items->count() }} قطعة</span>
                 </h6>
                 @if($classroomName != '---')
@@ -81,7 +81,7 @@
                                                     <form action="{{ route('center.assets.destroy', $asset) }}" method="POST" onsubmit="return confirm('{{ __('center::assets.confirm_delete') }}')">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button class="dropdown-item text-danger">{{ __('center::messages.blade_0199') }}</button>
+                                                        <button class="dropdown-item text-danger">{{ __('center::messages.blade_0108') }}</button>
                                                     </form>
                                                 </li>
                                             </ul>
@@ -101,7 +101,7 @@
                     <i class="fas fa-boxes fa-5x"></i>
                 </div>
                 <h5 class="text-muted">{{ __('center::assets.empty') }}</h5>
-                <a href="{{ route('center.assets.create') }}" class="btn btn-primary rounded-pill mt-3 px-4">{{ __('center::messages.blade_0200') }}</a>
+                <a href="{{ route('center.assets.create') }}" class="btn btn-primary rounded-pill mt-3 px-4">{{ __('center::messages.blade_0109') }}</a>
             </div>
         </div>
     @endforelse

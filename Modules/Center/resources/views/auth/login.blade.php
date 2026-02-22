@@ -93,7 +93,7 @@
                     </svg>
                     <div>
                          <h3 class="text-sm font-bold text-red-800 font-arabic mb-1">
-                            {{ __(__('center::messages.blade_0245')) }}
+                            {{ __(__('center::messages.blade_0155')) }}
                         </h3>
                         <p class="text-sm text-red-600 font-arabic leading-relaxed">
                             {{ $errors->first() }}

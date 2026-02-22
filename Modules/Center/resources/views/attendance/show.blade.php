@@ -5,8 +5,8 @@
         <h2 class="fw-bold text-dark">تسجيل الحضور: {{ $schedule->course->title }}</h2>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('center.attendance.index') }}">{{ __('center::messages.blade_0221') }}</a></li>
-                <li class="breadcrumb-item active">{{ __('center::messages.blade_0222') }}</li>
+                <li class="breadcrumb-item"><a href="{{ route('center.attendance.index') }}">{{ __('center::messages.blade_0130') }}</a></li>
+                <li class="breadcrumb-item active">{{ __('center::messages.blade_0131') }}</li>
             </ol>
         </nav>
     </div>
@@ -16,13 +16,13 @@
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-header bg-white border-0 p-4 pb-0 d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="fw-bold mb-1"><i class="bi bi-people me-2"></i>{{ __('center::messages.blade_0223') }}</h5>
+                        <h5 class="fw-bold mb-1"><i class="bi bi-people me-2"></i>{{ __('center::messages.blade_0132') }}</h5>
                         <p class="text-muted small mb-0">الحصة: {{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }} - القاعة: {{ $schedule->classroom->name ?? __('center::schedules.classroom') }}</p>
                     </div>
                     <div class="text-end d-flex align-items-center gap-2">
                         <!-- Scan Button -->
                         <button type="button" class="btn btn-success btn-sm rounded-pill px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#scanQrModal">
-                            <i class="bi bi-qr-code-scan me-1"></i>{{ __('center::messages.blade_0224') }}</button>
+                            <i class="bi bi-qr-code-scan me-1"></i>{{ __('center::messages.blade_0133') }}</button>
 
                         @php
                             $isEnded = now()->isAfter(\Carbon\Carbon::parse($schedule->end_time));
@@ -32,7 +32,7 @@
                             <form action="{{ route('center.attendance.bulkAbsent', $schedule) }}" method="POST">
                                 @csrf
                                 <button type="submit" class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm">
-                                    <i class="bi bi-person-x-fill me-1"></i>{{ __('center::messages.blade_0225') }}</button>
+                                    <i class="bi bi-person-x-fill me-1"></i>{{ __('center::messages.blade_0134') }}</button>
                             </form>
                         @endif
                         <span class="badge bg-primary px-3 rounded-pill">{{ today()->format('Y-m-d') }}</span>
@@ -43,10 +43,10 @@
                         <table class="table align-middle">
                             <thead class="bg-light">
                                 <tr>
-                                    <th class="border-0 rounded-start">{{ __('center::messages.blade_0226') }}</th>
-                                    <th class="border-0">{{ __('center::messages.blade_0227') }}</th>
-                                    <th class="border-0 text-center">{{ __('center::messages.blade_0228') }}</th>
-                                    <th class="border-0 rounded-end text-center">{{ __('center::messages.blade_0229') }}</th>
+                                    <th class="border-0 rounded-start">{{ __('center::messages.blade_0135') }}</th>
+                                    <th class="border-0">{{ __('center::messages.blade_0136') }}</th>
+                                    <th class="border-0 text-center">{{ __('center::messages.blade_0137') }}</th>
+                                    <th class="border-0 rounded-end text-center">{{ __('center::messages.blade_0138') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -66,18 +66,16 @@
                                             @if($attendance)
                                                 <span class="badge bg-{{ $attendance->status == 'present' ? 'success' : ($attendance->status == 'late' ? 'warning' : 'danger') }} bg-opacity-10 text-{{ $attendance->status == 'present' ? 'success' : ($attendance->status == 'late' ? 'warning' : 'danger') }} rounded-pill px-3">
                                                     @if($attendance->status == 'late')
-                                                        {{ $attendance->late_label ?? __('center::messages.blade_0238') }} ({{ $attendance->late_minutes }} د)
+                                                        {{ $attendance->late_label ?? __('center::messages.blade_0148') }} ({{ $attendance->late_minutes }} د)
                                                     @else
-                                                        {{ $attendance->status == 'present' ? __('center::messages.blade_0239') : __('center::messages.blade_0240') }}
+                                                        {{ $attendance->status == 'present' ? __('center::messages.blade_0149') : __('center::messages.blade_0150') }}
                                                     @endif
                                                     <small class="d-block text-muted" style="font-size: 0.6rem;">{{ $attendance->check_in_time->format('h:i A') }}</small>
                                                 </span>
                                             @elseif($isEnded)
-                                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">
-                                                    غائب (تلقائي)
-                                                </span>
+                                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">{{ __('center::messages.blade_0139') }}</span>
                                             @else
-                                                <span class="text-muted small">{{ __('center::messages.blade_0230') }}</span>
+                                                <span class="text-muted small">{{ __('center::messages.blade_0140') }}</span>
                                             @endif
                                         </td>
                                         <td class="text-center">
@@ -89,7 +87,7 @@
                                                     <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
                                                     <input type="hidden" name="session_date" value="{{ today()->format('Y-m-d') }}">
                                                     <input type="hidden" name="status" value="present">
-                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'present' ? 'success' : 'outline-success' }} rounded-pill px-3" {{ $isEnded && (!$attendance || $attendance->status !== 'present') ? 'disabled' : '' }}>{{ __('center::messages.blade_0231') }}</button>
+                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'present' ? 'success' : 'outline-success' }} rounded-pill px-3" {{ $isEnded && (!$attendance || $attendance->status !== 'present') ? 'disabled' : '' }}>{{ __('center::messages.blade_0141') }}</button>
                                                 </form>
                                                 
                                                 <form action="{{ route('center.attendance.store') }}" method="POST">
@@ -99,7 +97,7 @@
                                                     <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
                                                     <input type="hidden" name="session_date" value="{{ today()->format('Y-m-d') }}">
                                                     <input type="hidden" name="status" value="late">
-                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'late' ? 'warning' : 'outline-warning' }} rounded-pill px-3" {{ $isEnded && (!$attendance || $attendance->status !== 'late') ? 'disabled' : '' }}>{{ __('center::messages.blade_0232') }}</button>
+                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'late' ? 'warning' : 'outline-warning' }} rounded-pill px-3" {{ $isEnded && (!$attendance || $attendance->status !== 'late') ? 'disabled' : '' }}>{{ __('center::messages.blade_0142') }}</button>
                                                 </form>
 
                                                 <form action="{{ route('center.attendance.store') }}" method="POST">
@@ -109,7 +107,7 @@
                                                     <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
                                                     <input type="hidden" name="session_date" value="{{ today()->format('Y-m-d') }}">
                                                     <input type="hidden" name="status" value="absent">
-                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'absent' ? 'danger' : 'outline-danger' }} rounded-pill px-3">{{ __('center::messages.blade_0233') }}</button>
+                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'absent' ? 'danger' : 'outline-danger' }} rounded-pill px-3">{{ __('center::messages.blade_0143') }}</button>
                                                 </form>
                                             </div>
                                         </td>
@@ -117,7 +115,7 @@
                                     @endif
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="text-center py-5 text-muted">{{ __('center::messages.blade_0234') }}</td>
+                                        <td colspan="4" class="text-center py-5 text-muted">{{ __('center::messages.blade_0144') }}</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -133,12 +131,12 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content overflow-hidden rounded-4 border-0 shadow-lg">
             <div class="modal-header border-0 bg-primary text-white">
-                <h5 class="modal-title fw-bold"><i class="bi bi-qr-code-scan me-2"></i>{{ __('center::messages.blade_0235') }}</h5>
+                <h5 class="modal-title fw-bold"><i class="bi bi-qr-code-scan me-2"></i>{{ __('center::messages.blade_0145') }}</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-0 text-center bg-dark position-relative">
                 <div id="reader" style="width: 100%; min-height: 300px;"></div>
-                <div id="scan-result" class="position-absolute bottom-0 start-0 w-100 p-3 bg-white bg-opacity-90 text-dark fw-bold d-none">{{ __('center::messages.blade_0236') }}</div>
+                <div id="scan-result" class="position-absolute bottom-0 start-0 w-100 p-3 bg-white bg-opacity-90 text-dark fw-bold d-none">{{ __('center::messages.blade_0146') }}</div>
             </div>
             <div class="modal-footer border-0 bg-light justify-content-center">
                 <small class="text-muted">وجه الكاميرا نحو رمز QR في بطاقة الطالب</small>
@@ -210,7 +208,7 @@
             readerEl.innerHTML = '<div class="alert alert-danger m-3">' +
                 '<i class="bi bi-camera-video-off me-2"></i>' +
                 'فشل في تشغيل الكاميرا.<br>' +
-                '<small class="text-muted">{{ __('center::messages.blade_0237') }}<br>• استخدام HTTPS<br>• السماح بالوصول للكاميرا من إعدادات المتصفح</small>' +
+                '<small class="text-muted">{{ __('center::messages.blade_0147') }}<br>• استخدام HTTPS<br>• السماح بالوصول للكاميرا من إعدادات المتصفح</small>' +
                 '</div>';
         });
     }
@@ -257,14 +255,14 @@
                 return response.json().then(data => ({ ok: response.ok, status: response.status, body: data }));
             }
             // Non-JSON response (redirect/HTML) — treat 2xx as success
-            return { ok: response.ok, status: response.status, body: { message: response.ok ? __('center::messages.blade_0241') : __('center::messages.blade_0242') } };
+            return { ok: response.ok, status: response.status, body: { message: response.ok ? __('center::messages.blade_0151') : __('center::messages.blade_0152') } };
         })
         .then(({ ok, status, body }) => {
             if (ok) {
-                showResult('✅ ' + (body.message || __('center::messages.blade_0243')), 'success');
+                showResult('✅ ' + (body.message || __('center::messages.blade_0153')), 'success');
                 setTimeout(() => location.reload(), 1500);
             } else {
-                showResult('❌ ' + (body.message || __('center::messages.blade_0244')), 'danger');
+                showResult('❌ ' + (body.message || __('center::messages.blade_0154')), 'danger');
                 setTimeout(startScanner, 3000);
             }
         })

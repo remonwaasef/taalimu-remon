@@ -71,18 +71,18 @@
             <!-- Quick Stats -->
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-body p-4">
-                    <h6 class="fw-bold mb-4">{{ __('center::messages.blade_0025') }}</h6>
+                    <h6 class="fw-bold mb-4">{{ __('center::messages.blade_0447') }}</h6>
                     <div class="row text-center g-3">
                         <div class="col-6">
                             <div class="bg-light rounded-3 p-3">
                                 <h3 class="fw-bold mb-0 text-primary">{{ $instructor->courses_count ?? $instructor->courses()->count() }}</h3>
-                                <small class="text-muted">{{ __('center::messages.blade_0026') }}</small>
+                                <small class="text-muted">{{ __('center::messages.blade_0448') }}</small>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="bg-light rounded-3 p-3">
                                 <h3 class="fw-bold mb-0 text-success">{{ $instructor->commission_rate }}%</h3>
-                                <small class="text-muted">{{ __('center::messages.blade_0027') }}</small>
+                                <small class="text-muted">{{ __('center::messages.blade_0449') }}</small>
                             </div>
                         </div>
                     </div>
@@ -94,7 +94,7 @@
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm rounded-4 mb-4">
                 <div class="card-header bg-white border-0 py-4 px-4">
-                    <h5 class="fw-bold mb-0">{{ __('center::messages.blade_0028') }}</h5>
+                    <h5 class="fw-bold mb-0">{{ __('center::messages.blade_0450') }}</h5>
                 </div>
                 <div class="card-body px-4 pb-4">
                     <div class="row g-4">
@@ -117,7 +117,7 @@
                         <div class="col-12">
                             <hr class="opacity-10 my-2">
                             <label class="text-muted small d-block mb-2">{{ __('center::instructors.bio') }}</label>
-                            <p class="text-dark bg-light p-3 rounded-3 mb-0" style="white-space: pre-line;">{{ $instructor->bio ?? __('center::messages.blade_0031') }}</p>
+                            <p class="text-dark bg-light p-3 rounded-3 mb-0" style="white-space: pre-line;">{{ $instructor->bio ?? __('center::messages.blade_0453') }}</p>
                         </div>
                     </div>
                 </div>
@@ -127,8 +127,8 @@
             <div class="card border-0 shadow-sm rounded-4 bg-light">
                 <div class="card-body p-5 text-center">
                     <div class="mb-3"><i class="fas fa-file-invoice-dollar fa-3x opacity-25"></i></div>
-                    <h6 class="fw-bold">{{ __('center::messages.blade_0029') }}</h6>
-                    <p class="text-muted small mb-0">{{ __('center::messages.blade_0030') }}</p>
+                    <h6 class="fw-bold">{{ __('center::messages.blade_0451') }}</h6>
+                    <p class="text-muted small mb-0">{{ __('center::messages.blade_0452') }}</p>
                 </div>
             </div>
         </div>

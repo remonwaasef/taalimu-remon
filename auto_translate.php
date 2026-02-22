@@ -82,7 +82,15 @@ function appendToLangFile($filePath, $translations) {
         if (!is_array($existing)) $existing = [];
     }
     
+    // Clear old blade_ keys to avoid orphans from previous runs
+    foreach ($existing as $k => $v) {
+        if (strpos($k, 'blade_') === 0) {
+            unset($existing[$k]);
+        }
+    }
+    
     $merged = array_merge($existing, $translations);
+    ksort($merged); // Sort keys for better organization
     
     $content = "<?php\n\nreturn [\n";
     foreach ($merged as $k => $v) {

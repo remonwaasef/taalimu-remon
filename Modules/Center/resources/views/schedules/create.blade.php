@@ -2,11 +2,11 @@
 
 @section('content')
     <div class="mb-4">
-        <h2 class="fw-bold text-dark">{{ isset($schedule) ? __('center::messages.blade_0703') : __('center::messages.blade_0704') }}</h2>
+        <h2 class="fw-bold text-dark">{{ isset($schedule) ? __('center::messages.blade_0666') : __('center::messages.blade_0667') }}</h2>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('center.schedules.index') }}">{{ __('center::messages.blade_0688') }}</a></li>
-                <li class="breadcrumb-item active">{{ isset($schedule) ? __('center::messages.blade_0705') : __('center::messages.blade_0706') }}</li>
+                <li class="breadcrumb-item"><a href="{{ route('center.schedules.index') }}">{{ __('center::messages.blade_0649') }}</a></li>
+                <li class="breadcrumb-item active">{{ isset($schedule) ? __('center::messages.blade_0668') : __('center::messages.blade_0669') }}</li>
             </ol>
         </nav>
     </div>
@@ -28,9 +28,9 @@
 
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0689') }}</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0650') }}</label>
                                 <select name="course_id" class="form-select @error('course_id') is-invalid @enderror">
-                                    <option value="">{{ __('center::messages.blade_0690') }}</option>
+                                    <option value="">{{ __('center::messages.blade_0651') }}</option>
                                     @foreach($courses as $course)
                                         <option value="{{ $course->id }}" {{ old('course_id', $schedule->course_id ?? request()->course_id) == $course->id ? 'selected' : '' }}>
                                             {{ $course->title }}
@@ -41,9 +41,9 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0691') }}</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0652') }}</label>
                                 <select name="classroom_id" class="form-select @error('classroom_id') is-invalid @enderror">
-                                    <option value="">{{ __('center::messages.blade_0692') }}</option>
+                                    <option value="">{{ __('center::messages.blade_0653') }}</option>
                                     @foreach($classrooms as $classroom)
                                         <option value="{{ $classroom->id }}" {{ old('classroom_id', $schedule->classroom_id ?? '') == $classroom->id ? 'selected' : '' }}>
                                             {{ $classroom->name }} (سعة: {{ $classroom->capacity ?? '∞' }})
@@ -54,9 +54,9 @@
                             </div>
 
                             <div class="col-md-12">
-                                <label class="form-label fw-bold">المعلم (اختياري)</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0654') }}</label>
                                 <select name="instructor_id" class="form-select @error('instructor_id') is-invalid @enderror">
-                                    <option value="">{{ __('center::messages.blade_0693') }}</option>
+                                    <option value="">{{ __('center::messages.blade_0655') }}</option>
                                     @foreach($instructors as $instructor)
                                         <option value="{{ $instructor->id }}" {{ old('instructor_id', $schedule->instructor_id ?? '') == $instructor->id ? 'selected' : '' }}>
                                             {{ $instructor->name }}
@@ -64,21 +64,21 @@
                                     @endforeach
                                 </select>
                                 @error('instructor_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                <small class="text-muted">{{ __('center::messages.blade_0694') }}</small>
+                                <small class="text-muted">{{ __('center::messages.blade_0656') }}</small>
                             </div>
 
                             <div class="col-md-4">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0695') }}</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0657') }}</label>
                                 <select name="day_of_week" class="form-select @error('day_of_week') is-invalid @enderror">
                                     @php
                                         $days = [
-                                            0 => __('center::messages.blade_0707'),
-                                            1 => __('center::messages.blade_0708'),
-                                            2 => __('center::messages.blade_0709'),
-                                            3 => __('center::messages.blade_0710'),
-                                            4 => __('center::messages.blade_0711'),
-                                            5 => __('center::messages.blade_0712'),
-                                            6 => __('center::messages.blade_0713'),
+                                            0 => __('center::messages.blade_0670'),
+                                            1 => __('center::messages.blade_0671'),
+                                            2 => __('center::messages.blade_0672'),
+                                            3 => __('center::messages.blade_0673'),
+                                            4 => __('center::messages.blade_0674'),
+                                            5 => __('center::messages.blade_0675'),
+                                            6 => __('center::messages.blade_0676'),
                                         ];
                                     @endphp
                                     @foreach($days as $value => $label)
@@ -91,27 +91,27 @@
                             </div>
 
                             <div class="col-md-4">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0696') }}</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0658') }}</label>
                                 <input type="time" name="start_time" class="form-control @error('start_time') is-invalid @enderror" value="{{ old('start_time', $schedule->start_time ?? '') }}">
                                 @error('start_time') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
 
                             <div class="col-md-4">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0697') }}</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0659') }}</label>
                                 <input type="time" name="end_time" class="form-control @error('end_time') is-invalid @enderror" value="{{ old('end_time', $schedule->end_time ?? '') }}">
                                 @error('end_time') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
 
                             <div class="col-md-6 mb-4">
-                                <label class="form-label fw-bold">أقصى عدد للطلاب (اختياري)</label>
-                                <input type="number" name="max_students" class="form-control @error('max_students') is-invalid @enderror" value="{{ old('max_students', $schedule->max_students ?? '') }}" placeholder="{{ __('center::messages.blade_0702') }}">
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0660') }}</label>
+                                <input type="number" name="max_students" class="form-control @error('max_students') is-invalid @enderror" value="{{ old('max_students', $schedule->max_students ?? '') }}" placeholder="{{ __('center::messages.blade_0665') }}">
                                 @error('max_students') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                         </div>
 
                         <div class="d-flex gap-2 pb-5">
-                            <button type="submit" class="btn btn-primary px-4 rounded-pill">{{ __('center::messages.blade_0698') }}</button>
-                            <a href="{{ route('center.schedules.index') }}" class="btn btn-light px-4 rounded-pill">{{ __('center::messages.blade_0699') }}</a>
+                            <button type="submit" class="btn btn-primary px-4 rounded-pill">{{ __('center::messages.blade_0661') }}</button>
+                            <a href="{{ route('center.schedules.index') }}" class="btn btn-light px-4 rounded-pill">{{ __('center::messages.blade_0662') }}</a>
                         </div>
                     </form>
                 </div>
@@ -121,7 +121,7 @@
         <div class="col-md-4">
             <div class="card border-0 shadow-sm rounded-4 bg-primary text-white">
                 <div class="card-body p-4">
-                    <h5 class="fw-bold mb-3"><i class="bi bi-info-circle me-2"></i>{{ __('center::messages.blade_0700') }}</h5>
+                    <h5 class="fw-bold mb-3"><i class="bi bi-info-circle me-2"></i>{{ __('center::messages.blade_0663') }}</h5>
                     <ul class="list-unstyled mb-0">
                         <li class="mb-2 small">• سيقوم النظام تلقائياً بمنع أي تعارض في حجز نفس القاعة في نفس الوقت.</li>
                         <li class="mb-2 small">• سيتم التأكد أيضاً من تفرغ المعلم في هذا الوقت قبل الحفظ.</li>
@@ -174,7 +174,7 @@
                     },
                     render:{
                         no_results:function(data,escape){
-                            return '<div class="no-results p-2 text-muted">{{ __('center::messages.blade_0701') }}</div>';
+                            return '<div class="no-results p-2 text-muted">{{ __('center::messages.blade_0664') }}</div>';
                         }
                     }
                 });

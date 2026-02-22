@@ -2,7 +2,7 @@
 <html dir="rtl">
 <head>
     <meta charset="utf-8">
-    <title>{{ __('center::messages.blade_0246') }}</title>
+    <title>{{ __('center::messages.blade_0156') }}</title>
     <style>
         @font-face {
             font-family: 'Amiri';
@@ -87,15 +87,15 @@
     <div class="certificate-container">
         <div class="certificate-border">
             <div class="header">
-                <h1>{{ __('center::messages.blade_0247') }}</h1>
-                <p>{{ __('center::messages.blade_0248') }}</p>
+                <h1>{{ __('center::messages.blade_0157') }}</h1>
+                <p>{{ __('center::messages.blade_0158') }}</p>
             </div>
             
             <div class="content">
-                <p>{{ __('center::messages.blade_0249') }}</p>
+                <p>{{ __('center::messages.blade_0159') }}</p>
                 <div class="student-name">{{ $certificate->metadata['student_name'] ?? $student->user->name }}</div>
                 
-                <p>{{ __('center::messages.blade_0250') }}</p>
+                <p>{{ __('center::messages.blade_0160') }}</p>
                 <div class="course-title">{{ $certificate->metadata['course_title'] ?? $course->title }}</div>
                 
                 <p>وذلك بتاريخ {{ $certificate->issued_at->format('Y/m/d') }}</p>
@@ -103,16 +103,16 @@
             
             <div class="footer">
                 <div class="footer-cell">
-                    <p>{{ __('center::messages.blade_0251') }}</p>
+                    <p>{{ __('center::messages.blade_0161') }}</p>
                     <div style="height: 60px;"></div>
                 </div>
                 <div class="footer-cell">
                     <div class="qr-placeholder">
-                        <small style="font-size: 10px; display: block; margin-top: 40px;">{{ __('center::messages.blade_0252') }}</small>
+                        <small style="font-size: 10px; display: block; margin-top: 40px;">{{ __('center::messages.blade_0162') }}</small>
                     </div>
                 </div>
                 <div class="footer-cell">
-                    <p>{{ __('center::messages.blade_0253') }}</p>
+                    <p>{{ __('center::messages.blade_0163') }}</p>
                     <div style="height: 60px;"></div>
                 </div>
             </div>

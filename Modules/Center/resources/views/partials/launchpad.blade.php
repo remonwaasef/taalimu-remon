@@ -87,7 +87,7 @@
                             <!-- Button -->
                             @if($isCompleted)
                                 <div class="text-success fw-bold x-small">
-                                    <i class="fas fa-check-circle me-1"></i>{{ __('center::messages.blade_0521') }}</div>
+                                    <i class="fas fa-check-circle me-1"></i>{{ __('center::messages.blade_0479') }}</div>
                             @elseif($key === 'education_system')
                                 <button type="button" 
                                         class="btn {{ $isCurrent ? 'btn-'.$data['color'] : 'btn-outline-light text-muted border-0' }} rounded-pill btn-sm fw-bold px-3 py-1 mt-auto"
@@ -128,24 +128,24 @@
                         {{ __('center::dashboard.launchpad.steps.education_system.desc') }}
                     </p>
                     
-                    <label class="form-label fw-bold small text-muted mb-2">{{ __('center::messages.blade_0522') }}</label>
+                    <label class="form-label fw-bold small text-muted mb-2">{{ __('center::messages.blade_0480') }}</label>
                     <select name="template_key" class="form-select rounded-pill mb-3" required>
-                        <option value="">{{ __('center::messages.blade_0523') }}</option>
+                        <option value="">{{ __('center::messages.blade_0481') }}</option>
                         @foreach(config('academic.templates', []) as $tKey => $template)
                             <option value="{{ $tKey }}">{{ __($template['name']) }}</option>
                         @endforeach
                     </select>
 
                     <div class="alert alert-soft-primary border-0 rounded-3 small py-2 px-3 mb-0">
-                        <i class="fas fa-info-circle me-1"></i>{{ __('center::messages.blade_0524') }}</div>
+                        <i class="fas fa-info-circle me-1"></i>{{ __('center::messages.blade_0482') }}</div>
                 </div>
                 <div class="modal-footer border-top-0 px-4 pb-4 gap-2">
-                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">{{ __('center::messages.blade_0525') }}</button>
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">{{ __('center::messages.blade_0483') }}</button>
                     <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm" id="submitTemplateBtn">
                         <span class="normal-state">
-                            <i class="fas fa-check-circle me-1"></i>{{ __('center::messages.blade_0526') }}</span>
+                            <i class="fas fa-check-circle me-1"></i>{{ __('center::messages.blade_0484') }}</span>
                         <span class="loading-state d-none">
-                            <i class="fas fa-spinner fa-spin me-1"></i>{{ __('center::messages.blade_0527') }}</span>
+                            <i class="fas fa-spinner fa-spin me-1"></i>{{ __('center::messages.blade_0485') }}</span>
                     </button>
                 </div>
             </form>
