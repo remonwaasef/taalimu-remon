@@ -12,7 +12,7 @@ class ActivityLogController extends Controller
     {
         $this->authorize('manage settings', \App\Models\Tenant::class);
 
-        $activities = Activity::with('causer')
+        $activities = Activity::with(['causer', 'subject'])
             ->where(function ($query) {
                 // Activities performed on models scoped to this tenant
                 $query->whereHasMorph('subject', [\App\Models\User::class, \App\Models\Student::class, \App\Models\Course::class], function ($q) {

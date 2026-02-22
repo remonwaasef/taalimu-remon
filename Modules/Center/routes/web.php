@@ -57,8 +57,12 @@ $tenantRoutes = function () {
 
     // QR Attendance Mark - Public route (protected by signed URL, NOT by auth middleware)
     // Students scan this from their phone and may not be logged in
-    Route::get('attendance/mark/{schedule}', [AttendanceController::class, 'markByQr'])->name('center.attendance.markByQr');
-    Route::post('attendance/mark/{schedule}/login', [AttendanceController::class, 'loginAndMark'])->name('center.attendance.loginAndMark');
+    Route::get('attendance/mark/{schedule}', [AttendanceController::class, 'markByQr'])
+        ->middleware('throttle:scanner')
+        ->name('center.attendance.markByQr');
+    Route::post('attendance/mark/{schedule}/login', [AttendanceController::class, 'loginAndMark'])
+        ->middleware('throttle:scanner')
+        ->name('center.attendance.loginAndMark');
 
     // Protected Routes (Auth Only - No Subscription Check)
     Route::middleware(['auth', 'force_password_change'])->group(function() {
@@ -117,7 +121,9 @@ $tenantRoutes = function () {
             Route::get('students/{student}/edit', [StudentController::class, 'edit'])->name('center.students.edit');
             Route::put('students/{student}', [StudentController::class, 'update'])->name('center.students.update');
             Route::post('students/{student}/toggle-status', [StudentController::class, 'toggleStatus'])->name('center.students.toggle-status');
-            Route::post('students/{student}/reset-password', [StudentController::class, 'resetPassword'])->name('center.students.reset-password');
+            Route::post('students/{student}/reset-password', [StudentController::class, 'resetPassword'])
+                 ->middleware('throttle:password-reset')
+                 ->name('center.students.reset-password');
         });
 
         Route::middleware(['can:delete students'])->group(function() {

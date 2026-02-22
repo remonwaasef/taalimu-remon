@@ -42,9 +42,22 @@ class AppServiceProvider extends ServiceProvider
         // Global Session/Cookie compatibility for multi-subdomain
         // Set this in boot() to ensure it's ready BEFORE StartSession middleware runs
         $mainDomain = config('app.tenant_domain');
+        $host = request()->getHost();
+
         if ($mainDomain && $mainDomain !== 'localhost' && !str_contains($mainDomain, 'localhost')) {
-            config(['session.domain' => '.' . str_replace('www.', '', $mainDomain)]);
-            config(['session.same_site' => 'lax']);
+            // Only force the session domain if the request is actually accessing via the main domain/subdomain
+            // This prevents breaking sessions (419 errors) on Mobile when testing via LAN IPs like 192.168.x.x
+            if (str_ends_with($host, str_replace('www.', '', $mainDomain))) {
+                config(['session.domain' => '.' . str_replace('www.', '', $mainDomain)]);
+            }
+
+            // PWAs and Cross-Domain Token Logins on mobile often require SameSite=None and Secure
+            if (request()->secure() || app()->environment('production')) {
+                config(['session.same_site' => 'none']);
+                config(['session.secure' => true]);
+            } else {
+                config(['session.same_site' => 'lax']);
+            }
         }
 
         // Register Tenant Model Observers for Caching
@@ -65,9 +78,21 @@ class AppServiceProvider extends ServiceProvider
             return \Illuminate\Cache\RateLimiting\Limit::perMinute($limit)->by($request->email.$request->ip());
         });
 
+        \Illuminate\Support\Facades\RateLimiter::for('password-reset', function (\Illuminate\Http\Request $request) {
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute(3)->by($request->email.$request->ip());
+        });
+
         \Illuminate\Support\Facades\RateLimiter::for('registration', function (\Illuminate\Http\Request $request) {
             $limit = app()->environment('local') ? 50 : 5;
             return \Illuminate\Cache\RateLimiting\Limit::perMinute($limit)->by($request->ip());
+        });
+
+        // Protect QR Scanner Endpoints against spam scanning
+        \Illuminate\Support\Facades\RateLimiter::for('scanner', function (\Illuminate\Http\Request $request) {
+            if ($request->user()) {
+                return \Illuminate\Cache\RateLimiting\Limit::perMinute(60)->by($request->user()->id);
+            }
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute(10)->by($request->ip());
         });
 
         \Illuminate\Support\Facades\RateLimiter::for('coupons', function (\Illuminate\Http\Request $request) {
