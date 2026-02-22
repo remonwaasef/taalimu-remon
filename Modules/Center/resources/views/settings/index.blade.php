@@ -7,14 +7,9 @@
 @section('content')
     @php $activeTab = request('tab', 'general'); @endphp
     
-    @if($activeTab == 'academic')
-        @include('center::layouts.setup_tabs')
-    @endif
-
 <div class="row">
     <div class="col-md-10 mx-auto">
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                @if($activeTab != 'academic')
                 <div class="card-header bg-white border-bottom-0 p-0">
                     <ul class="nav nav-tabs nav-fill" id="settingsTabs" role="tablist">
                         <li class="nav-item" role="presentation">
