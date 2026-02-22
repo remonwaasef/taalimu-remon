@@ -89,6 +89,14 @@
                                 <div class="text-success fw-bold x-small">
                                     <i class="fas fa-check-circle me-1"></i> تم
                                 </div>
+                            @elseif($key === 'education_system')
+                                <button type="button" 
+                                        class="btn {{ $isCurrent ? 'btn-'.$data['color'] : 'btn-outline-light text-muted border-0' }} rounded-pill btn-sm fw-bold px-3 py-1 mt-auto"
+                                        style="font-size: 0.75rem;"
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#educationSystemModal">
+                                   {{ __('center::dashboard.launchpad.action') }}
+                                </button>
                             @else
                                 <a href="{{ route($data['route']) }}" 
                                    class="btn {{ $isCurrent ? 'btn-'.$data['color'] : 'btn-outline-light text-muted border-0' }} rounded-pill btn-sm fw-bold px-3 py-1 mt-auto"
@@ -100,6 +108,46 @@
                     </div>
                 </div>
             @endforeach
+        </div>
+    </div>
+</div>
+
+<!-- Quick Education System Setup Modal -->
+<div class="modal fade" id="educationSystemModal" tabindex="-1" aria-labelledby="educationSystemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-bottom-0 pt-4 px-4">
+                <h5 class="modal-title fw-bold" id="educationSystemModalLabel">
+                    <i class="fas fa-map-signs text-primary me-2"></i> {{ __('center::dashboard.launchpad.steps.education_system.title') }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('center.settings.apply-template', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST">
+                @csrf
+                <div class="modal-body px-4 pb-4">
+                    <p class="text-muted small mb-4">
+                        {{ __('center::dashboard.launchpad.steps.education_system.desc') }}
+                    </p>
+                    
+                    <label class="form-label fw-bold small text-muted mb-2">اختر النظام التعليمي لمركزك:</label>
+                    <select name="template_key" class="form-select rounded-pill mb-3" required>
+                        <option value="">-- اختر النموذج --</option>
+                        @foreach(config('academic.templates', []) as $tKey => $template)
+                            <option value="{{ $tKey }}">{{ __($template['name']) }}</option>
+                        @endforeach
+                    </select>
+
+                    <div class="alert alert-soft-primary border-0 rounded-3 small py-2 px-3 mb-0">
+                        <i class="fas fa-info-circle me-1"></i> سيقوم النظام تلقائياً بإنشاء المراحل والصفوف الدراسية بناءً على اختيارك، ويمكنك دائماً تعديلها لاحقاً من الإعدادات.
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 px-4 pb-4 gap-2">
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">
+                        <i class="fas fa-check-circle me-1"></i> اعتماد واطلاق المركز
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
