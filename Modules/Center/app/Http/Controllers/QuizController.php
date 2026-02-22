@@ -57,7 +57,7 @@ class QuizController extends Controller
 
         $quiz = $lesson->quiz()->create($validated);
 
-        return redirect()->route('center.quizzes.edit', $quiz)->with('success', 'Quiz created.');
+        return redirect()->route('center.quizzes.edit', $quiz)->with('success', __('center::messages.msg_057'));
     }
 
     public function edit(\App\Models\Quiz $quiz)
@@ -74,7 +74,7 @@ class QuizController extends Controller
         
         $quiz->update($request->validated());
 
-        return back()->with('success', 'Quiz updated.');
+        return back()->with('success', __('center::messages.msg_058'));
     }
 
     public function storeQuestion(Request $request, \App\Models\Quiz $quiz)
@@ -98,7 +98,7 @@ class QuizController extends Controller
             $question->options()->create(['content' => 'Option 2', 'is_correct' => false]);
         }
 
-        return back()->with('success', 'Question added.');
+        return back()->with('success', __('center::messages.msg_059'));
     }
 
     public function updateQuestion(Request $request, \App\Models\Question $question)
@@ -111,14 +111,14 @@ class QuizController extends Controller
 
         $question->update($request->only('content', 'points'));
 
-        return back()->with('success', 'Question updated.');
+        return back()->with('success', __('center::messages.msg_060'));
     }
 
     public function destroyQuestion(\App\Models\Question $question)
     {
         $this->authorize('update', $question->quiz);
         $question->delete();
-        return back()->with('success', 'Question deleted.');
+        return back()->with('success', __('center::messages.msg_061'));
     }
 
     public function storeOption(Request $request, \App\Models\Question $question)
@@ -126,7 +126,7 @@ class QuizController extends Controller
         $this->authorize('update', $question->quiz);
         $request->validate(['content' => 'required|string|min:1|max:500']);
         $question->options()->create(['content' => $request->content, 'is_correct' => false]);
-        return back()->with('success', 'Option added.');
+        return back()->with('success', __('center::messages.msg_062'));
     }
 
     public function updateOption(Request $request, \App\Models\QuestionOption $option)
@@ -134,14 +134,14 @@ class QuizController extends Controller
         $this->authorize('update', $option->question->quiz);
         $request->validate(['content' => 'required|string|min:1|max:500']);
         $option->update(['content' => $request->content]);
-        return back()->with('success', 'Option updated.');
+        return back()->with('success', __('center::messages.msg_063'));
     }
 
     public function destroyOption(\App\Models\QuestionOption $option)
     {
         $this->authorize('update', $option->question->quiz);
         $option->delete();
-        return back()->with('success', 'Option deleted.');
+        return back()->with('success', __('center::messages.msg_064'));
     }
 
     public function setCorrectOption(\App\Models\QuestionOption $option)
@@ -150,7 +150,7 @@ class QuizController extends Controller
         // Reset other options for this question
         $option->question->options()->update(['is_correct' => false]);
         $option->update(['is_correct' => true]);
-        return back()->with('success', 'Correct answer set.');
+        return back()->with('success', __('center::messages.msg_065'));
     }
 
     // Student Methods
@@ -161,7 +161,7 @@ class QuizController extends Controller
         if ($this->quizService->hasPassed($quiz, auth()->id())) {
             return redirect()->route('center.quizzes.result', [
                 'attempt' => $quiz->attempts()->where('user_id', auth()->id())->where('passed', true)->first()->id
-            ])->with('info', 'You have already passed this quiz.');
+            ])->with('info', __('center::messages.msg_066'));
         }
 
         $sessionKey = 'quiz_start_' . $quiz->id . '_' . auth()->id();
@@ -191,7 +191,7 @@ class QuizController extends Controller
         $startTime = session($sessionKey);
 
         if (!$this->quizService->isTimeValid($quiz, $startTime)) {
-            return back()->with('error', 'Time limit exceeded. Submission rejected.');
+            return back()->with('error', __('center::messages.msg_067'));
         }
 
         $attempt = $this->quizService->submitQuiz($quiz, $request->answers);

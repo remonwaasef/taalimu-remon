@@ -24,6 +24,6 @@ class NotificationController extends Controller
     public function markAllAsRead()
     {
         auth()->user()->unreadNotifications->markAsRead();
-        return back()->with('success', 'تم تحديد الكل كمقروء');
+        return back()->with('success', __('center::messages.msg_052'));
     }
 }

@@ -39,4 +39,11 @@ return [
     'academic_setup' => 'Structure Académique',
     'courses_groups' => 'Cours & Groupes',
     'student_accounts' => 'Comptes Étudiants',
+    'expenses' => 'Dépenses',
+    'questions_bank' => 'Banque de Questions',
+    'leaderboard' => 'Classement',
+    'student_updated' => 'Étudiant mis à jour',
+    'student_deleted' => 'Étudiant supprimé',
+    'assets' => 'Équipements',
+    'school_management' => 'Gestion Scolaire',
 ];

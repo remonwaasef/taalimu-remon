@@ -21,4 +21,6 @@ return [
     'no_courses' => 'No courses found.',
     'view' => 'View',
     'delete_confirm' => 'Are you sure you want to delete this course?',
+    'schedules' => 'Schedules',
+    'enroll_student' => 'Enroll Student',
 ];

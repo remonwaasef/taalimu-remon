@@ -15,4 +15,7 @@ return [
     'not_specified' => 'Non spécifié',
     'student' => 'étudiant',
     'students' => 'étudiants',
+    'students_count' => '{0} Étudiant|{1} 1 Étudiant|[2,*] :count Étudiants',
+    'add_asset' => 'Ajouter un équipement',
+    'assets_count' => 'Équipements',
 ];

@@ -37,7 +37,7 @@ class BranchController extends Controller
     {
         $this->authorize('create', Branch::class);
         if (!app('tenant')->hasFeature('max_branches')) {
-            return redirect()->back()->with('error', 'لقد وصلت للحد الأقصى من الفروع المسموح به في باقتك. يرجى الترقية لإضافة المزيد من الفروع.');
+            return redirect()->back()->with('error', __('center::messages.msg_020'));
         }
 
         $request->validate([

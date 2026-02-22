@@ -39,4 +39,11 @@ return [
     'academic_setup' => 'Academic Structure',
     'courses_groups' => 'Courses & Groups',
     'student_accounts' => 'Student Accounts',
+    'expenses' => 'Expenses',
+    'questions_bank' => 'Question Bank',
+    'leaderboard' => 'Leaderboard',
+    'student_updated' => 'Student updated successfully',
+    'student_deleted' => 'Student deleted successfully',
+    'assets' => 'Assets & Inventory',
+    'school_management' => 'School Management',
 ];

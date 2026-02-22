@@ -15,4 +15,7 @@ return [
     'not_specified' => 'Not Specified',
     'student' => 'Student',
     'students' => 'Students',
+    'students_count' => '{0} Student|{1} 1 Student|[2,*] :count Students',
+    'add_asset' => 'Add Asset to this Classroom',
+    'assets_count' => 'Assets & Inventory',
 ];

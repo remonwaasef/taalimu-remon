@@ -34,7 +34,7 @@ class SubscriptionController extends Controller
         $tenant = app('tenant');
 
         if (!$package->stripe_price_id) {
-            return back()->with('error', 'This package is not configured for payments.');
+            return back()->with('error', __('center::messages.msg_087'));
         }
 
         return $tenant->newSubscription('default', $package->stripe_price_id)
@@ -57,6 +57,6 @@ class SubscriptionController extends Controller
      */
     public function cancel()
     {
-        return redirect()->route('center.subscription.index')->with('info', 'Subscription process cancelled.');
+        return redirect()->route('center.subscription.index')->with('info', __('center::messages.msg_088'));
     }
 }

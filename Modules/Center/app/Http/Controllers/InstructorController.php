@@ -53,7 +53,7 @@ class InstructorController extends Controller
         $this->authorize('create', Instructor::class);
 
         if (!app('tenant')->hasFeature('max_instructors')) {
-            return redirect()->back()->with('error', 'لقد وصلت للحد الأقصى من المدرسين المسموح به في باقتك.');
+            return redirect()->back()->with('error', __('center::messages.msg_048'));
         }
 
         $imagePath = $this->handleFileUpload($request, 'image', null, 'instructors');
@@ -85,7 +85,7 @@ class InstructorController extends Controller
             auth()->user()->name // Created By
         ));
 
-        return redirect()->route('center.instructors.index')->with('success', 'تم إضافة المدرس بنجاح');
+        return redirect()->route('center.instructors.index')->with('success', __('center::messages.msg_049'));
     }
 
     /**
@@ -133,7 +133,7 @@ class InstructorController extends Controller
 
         $instructor->save();
 
-        return redirect()->route('center.instructors.index')->with('success', 'تم تحديث بيانات المدرس بنجاح');
+        return redirect()->route('center.instructors.index')->with('success', __('center::messages.msg_050'));
     }
 
     /**
@@ -150,6 +150,6 @@ class InstructorController extends Controller
 
         $instructor->delete();
 
-        return redirect()->route('center.instructors.index')->with('success', 'تم حذف المدرس بنجاح');
+        return redirect()->route('center.instructors.index')->with('success', __('center::messages.msg_051'));
     }
 }

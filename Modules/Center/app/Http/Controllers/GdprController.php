@@ -25,7 +25,7 @@ class GdprController extends Controller
         
         // Ensure only students can export their data via this route
         if (!$user->hasRole('student')) {
-            return redirect()->back()->with('error', 'Only students can export data.');
+            return redirect()->back()->with('error', __('center::messages.msg_043'));
         }
 
         try {
@@ -39,7 +39,7 @@ class GdprController extends Controller
 
         } catch (\Exception $e) {
             Log::error('GDPR Export Failed: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Failed to generate data export. Please try again.');
+            return redirect()->back()->with('error', __('center::messages.msg_044'));
         }
     }
 
@@ -57,7 +57,7 @@ class GdprController extends Controller
         ]);
 
         if (!$user->hasRole('student')) {
-            return redirect()->back()->with('error', 'Only students can delete their account.');
+            return redirect()->back()->with('error', __('center::messages.msg_045'));
         }
 
         try {
@@ -67,11 +67,11 @@ class GdprController extends Controller
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            return redirect('/')->with('success', 'Your account has been permanently deleted.');
+            return redirect('/')->with('success', __('center::messages.msg_046'));
 
         } catch (\Exception $e) {
             Log::error('GDPR Deletion Failed: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Failed to delete account. Please contact support.');
+            return redirect()->back()->with('error', __('center::messages.msg_047'));
         }
     }
 }

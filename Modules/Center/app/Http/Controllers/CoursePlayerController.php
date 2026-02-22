@@ -32,7 +32,7 @@ class CoursePlayerController extends Controller
             if ($firstLesson) {
                 return redirect()->route('center.courses.player', ['course' => $course->id, 'lesson' => $firstLesson->id]);
             }
-            return redirect()->route('center.courses.show', $course)->with('error', 'No lessons available.');
+            return redirect()->route('center.courses.show', $course)->with('error', __('center::messages.msg_032'));
         }
 
         // Check if lesson belongs to course
@@ -77,7 +77,7 @@ class CoursePlayerController extends Controller
             ]);
         }
 
-        return back()->with('success', 'Lesson marked as complete.');
+        return back()->with('success', __('center::messages.msg_033'));
     }
 
     // Unused resource methods removed

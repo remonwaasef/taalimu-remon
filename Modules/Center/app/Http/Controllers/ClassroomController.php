@@ -36,7 +36,7 @@ class ClassroomController extends Controller
     {
         $this->authorize('create', Classroom::class);
         if (!app('tenant')->hasFeature('max_classrooms')) {
-            return redirect()->back()->with('error', 'لقد وصلت للحد الأقصى من القاعات المسموح به في باقتك.');
+            return redirect()->back()->with('error', __('center::messages.msg_021'));
         }
 
         $validated = $request->validate([
@@ -61,7 +61,7 @@ class ClassroomController extends Controller
         }
 
         return redirect()->route('center.classrooms.index')
-            ->with('success', 'تم إضافة القاعة بنجاح');
+            ->with('success', __('center::messages.msg_022'));
     }
 
     /**
@@ -104,7 +104,7 @@ class ClassroomController extends Controller
         $classroom->update($validated);
 
         return redirect()->route('center.classrooms.index')
-            ->with('success', 'تم تحديث القاعة بنجاح');
+            ->with('success', __('center::messages.msg_023'));
     }
 
     /**
@@ -116,6 +116,6 @@ class ClassroomController extends Controller
         $classroom->delete();
 
         return redirect()->route('center.classrooms.index')
-            ->with('success', 'تم حذف القاعة بنجاح');
+            ->with('success', __('center::messages.msg_024'));
     }
 }
