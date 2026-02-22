@@ -96,6 +96,10 @@ $tenantRoutes = function () {
         Route::get('/', [CenterController::class, 'index'])->name('center.dashboard');
         Route::get('/dashboard', [CenterController::class, 'index'])->name('center.dashboard.alt');
 
+        // User Profile
+        Route::get('profile', [UserController::class, 'profile'])->name('center.profile');
+        Route::post('profile', [UserController::class, 'updateProfile'])->name('center.profile.update');
+
         // Student Management (Admin/Secretary only)
         Route::middleware(['can:view students'])->group(function() {
             Route::get('students', [StudentController::class, 'index'])->name('center.students.index');

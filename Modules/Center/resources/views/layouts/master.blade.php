@@ -697,23 +697,6 @@
                 </div>
                 @endauth
 
-                <!-- Language Switcher -->
-                <div class="dropdown">
-                    <button class="btn btn-white bg-white border shadow-sm rounded-pill px-3 dropdown-toggle fw-bold" type="button" data-bs-toggle="dropdown">
-                        @if(app()->getLocale() == 'ar')
-                            <i class="fas fa-globe me-1"></i> العربية
-                        @elseif(app()->getLocale() == 'fr')
-                            <i class="fas fa-globe me-1"></i> Français
-                        @else
-                            <i class="fas fa-globe me-1"></i> English
-                        @endif
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item {{ app()->getLocale() == 'ar' ? 'active' : '' }}" href="{{ route('lang.switch', 'ar') }}">{{ __('center::messages.blade_0456') }}</a></li>
-                        <li><a class="dropdown-item {{ app()->getLocale() == 'en' ? 'active' : '' }}" href="{{ route('lang.switch', 'en') }}">English</a></li>
-                        <li><a class="dropdown-item {{ app()->getLocale() == 'fr' ? 'active' : '' }}" href="{{ route('lang.switch', 'fr') }}">Français</a></li>
-                    </ul>
-                </div>
 
                 @auth
                 <div class="dropdown">
@@ -722,7 +705,7 @@
                     {{ auth()->user()->name ?? 'Admin' }}
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> {{ __('center::sidebar.profile') }}</a></li>
+                    <li><a class="dropdown-item" href="{{ route('center.profile') }}"><i class="fas fa-user"></i> {{ __('center::sidebar.profile') }}</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <form action="{{ route('center.logout', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST" class="d-inline">
