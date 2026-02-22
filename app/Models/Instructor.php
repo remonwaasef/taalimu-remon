@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Instructor extends Model
 {
-    use HasFactory, \App\Traits\IdentifyTenant, \Spatie\Activitylog\Traits\LogsActivity;
+    use HasFactory, \App\Traits\IdentifyTenant, \Spatie\Activitylog\Traits\LogsActivity, \App\Traits\ClearsDashboardCache;
 
     protected static function boot()
     {

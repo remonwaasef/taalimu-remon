@@ -11,7 +11,7 @@ use Spatie\Activitylog\LogOptions;
 
 class Student extends Model
 {
-    use HasFactory, LogsActivity, \App\Traits\IdentifyTenant;
+    use HasFactory, LogsActivity, \App\Traits\IdentifyTenant, \App\Traits\ClearsDashboardCache;
 
     protected static function boot()
     {

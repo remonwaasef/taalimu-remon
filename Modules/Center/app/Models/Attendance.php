@@ -8,7 +8,7 @@ use App\Traits\IdentifyTenant;
 
 class Attendance extends Model
 {
-    use HasFactory, IdentifyTenant;
+    use HasFactory, IdentifyTenant, \App\Traits\ClearsDashboardCache;
 
     protected $fillable = [
         'tenant_id',
