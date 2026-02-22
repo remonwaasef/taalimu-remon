@@ -12,7 +12,7 @@ use App\Models\Tenant; // Added for Atomic Counters
 
 class Course extends Model
 {
-    use HasFactory, LogsActivity, \App\Traits\IdentifyTenant;
+    use HasFactory, LogsActivity, \App\Traits\IdentifyTenant, \App\Traits\ClearsDashboardCache;
 
     protected static function boot()
     {

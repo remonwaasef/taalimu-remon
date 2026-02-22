@@ -10,7 +10,7 @@ use Spatie\Activitylog\LogOptions;
 
 class Stage extends Model
 {
-    use HasFactory, LogsActivity, \App\Traits\IdentifyTenant;
+    use HasFactory, LogsActivity, \App\Traits\IdentifyTenant, \App\Traits\ClearsDashboardCache;
 
     protected $fillable = [
         'tenant_id',
@@ -29,8 +29,7 @@ class Stage extends Model
 
     protected static function booted(): void
     {
-        static::saved(fn() => static::clearCache());
-        static::deleted(fn() => static::clearCache());
+        // Trait handle booted/static events
     }
 
     public static function clearCache()
@@ -38,9 +37,8 @@ class Stage extends Model
         $tenantId = app('tenant')->id ?? 0;
         cache()->forget("tenant_{$tenantId}_stages");
         
-        // Also clear dashboard metrics as they depend on stage existence
-        cache()->forget("tenant_{$tenantId}_dashboard_stats_v3");
-        cache()->forget("tenant_{$tenantId}_recent_activities");
+        // Use the trait's method for dashboard-wide clearing
+        static::clearDashboardCache();
     }
 
     public static function getCached()
