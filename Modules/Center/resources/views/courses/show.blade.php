@@ -15,11 +15,11 @@
         </div>
         <div class="d-flex gap-2">
             <a href="{{ route('center.curriculum.edit', $course->id) }}" class="btn btn-outline-primary rounded-pill px-4">
-                <i class="fas fa-chalkboard me-2"></i>{{ __('center::messages.blade_0452') }}</a>
+                <i class="fas fa-chalkboard me-2"></i>{{ __('center::messages.blade_0372') }}</a>
             <a href="{{ route('center.courses.edit', $course->id) }}" class="btn btn-outline-secondary rounded-pill px-4">
-                <i class="fas fa-edit me-2"></i>{{ __('center::messages.blade_0453') }}</a>
+                <i class="fas fa-edit me-2"></i>{{ __('center::messages.blade_0373') }}</a>
             <button class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#enrollStudentModal">
-                <i class="fas fa-user-plus me-2"></i>{{ __('center::messages.blade_0454') }}</button>
+                <i class="fas fa-user-plus me-2"></i>{{ __('center::messages.blade_0374') }}</button>
         </div>
     </div>
 
@@ -32,7 +32,7 @@
                         <i class="fas fa-users fa-lg"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">{{ __('center::messages.blade_0455') }}</h6>
+                        <h6 class="text-muted mb-1">{{ __('center::messages.blade_0375') }}</h6>
                         <h3 class="fw-bold mb-0">{{ $course->enrollments->count() }}</h3>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                         <i class="fas fa-check-circle fa-lg"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">{{ __('center::messages.blade_0456') }}</h6>
+                        <h6 class="text-muted mb-1">{{ __('center::messages.blade_0376') }}</h6>
                         <h3 class="fw-bold mb-0">{{ number_format($course->enrollments->avg('progress'), 1) }}%</h3>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                         <i class="fas fa-money-bill fa-lg"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">{{ __('center::messages.blade_0457') }}</h6>
+                        <h6 class="text-muted mb-1">{{ __('center::messages.blade_0377') }}</h6>
                         <h3 class="fw-bold mb-0">{{ number_format($course->price, 2) }} ج.م</h3>
                     </div>
                 </div>
@@ -69,17 +69,17 @@
     <!-- Enrolled Students List -->
     <div class="card border-0 shadow-sm rounded-4">
         <div class="card-header bg-white border-0 py-3">
-            <h5 class="fw-bold mb-0">{{ __('center::messages.blade_0458') }}</h5>
+            <h5 class="fw-bold mb-0">{{ __('center::messages.blade_0378') }}</h5>
         </div>
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
                 <thead class="bg-light">
                     <tr>
-                        <th class="border-0 rounded-start">{{ __('center::messages.blade_0459') }}</th>
-                        <th class="border-0">{{ __('center::messages.blade_0460') }}</th>
-                        <th class="border-0">{{ __('center::messages.blade_0461') }}</th>
-                        <th class="border-0">{{ __('center::messages.blade_0462') }}</th>
-                        <th class="border-0 rounded-end">{{ __('center::messages.blade_0463') }}</th>
+                        <th class="border-0 rounded-start">{{ __('center::messages.blade_0379') }}</th>
+                        <th class="border-0">{{ __('center::messages.blade_0380') }}</th>
+                        <th class="border-0">{{ __('center::messages.blade_0381') }}</th>
+                        <th class="border-0">{{ __('center::messages.blade_0382') }}</th>
+                        <th class="border-0 rounded-end">{{ __('center::messages.blade_0383') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -120,7 +120,7 @@
                         <tr>
                             <td colspan="5" class="text-center py-5 text-muted">
                                 <i class="fas fa-users-slash fa-2x mb-3"></i>
-                                <p class="mb-0">{{ __('center::messages.blade_0464') }}</p>
+                                <p class="mb-0">{{ __('center::messages.blade_0384') }}</p>
                             </td>
                         </tr>
                     @endforelse
@@ -134,7 +134,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content rounded-5 border-0 shadow-lg">
                 <div class="modal-header border-0 pb-0 pt-4 px-4">
-                    <h5 class="modal-title fw-bold fs-4">{{ __('center::messages.blade_0465') }}</h5>
+                    <h5 class="modal-title fw-bold fs-4">{{ __('center::messages.blade_0385') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
@@ -142,11 +142,11 @@
                     <ul class="nav nav-pills mb-4 bg-light p-1 rounded-pill" id="enrollTabs" role="tablist">
                         <li class="nav-item flex-fill" role="presentation">
                             <button class="nav-link active rounded-pill w-100 fw-bold" id="existing-tab" data-bs-toggle="pill" data-bs-target="#existing-panel" type="button" role="tab">
-                                <i class="fas fa-search me-2"></i>{{ __('center::messages.blade_0466') }}</button>
+                                <i class="fas fa-search me-2"></i>{{ __('center::messages.blade_0386') }}</button>
                         </li>
                         <li class="nav-item flex-fill" role="presentation">
                             <button class="nav-link rounded-pill w-100 fw-bold" id="quick-tab" data-bs-toggle="pill" data-bs-target="#quick-panel" type="button" role="tab">
-                                <i class="fas fa-user-plus me-2"></i>{{ __('center::messages.blade_0467') }}</button>
+                                <i class="fas fa-user-plus me-2"></i>{{ __('center::messages.blade_0387') }}</button>
                         </li>
                     </ul>
 
@@ -156,17 +156,17 @@
                             <form action="{{ route('center.courses.enroll', $course->id) }}" method="POST" class="p-2">
                                 @csrf
                                 <div class="mb-4">
-                                    <label class="form-label fw-bold text-dark mb-2">{{ __('center::messages.blade_0468') }}</label>
+                                    <label class="form-label fw-bold text-dark mb-2">{{ __('center::messages.blade_0388') }}</label>
                                     <select name="student_id" class="form-select border-2" id="studentSelect" required>
-                                        <option value="">{{ __('center::messages.blade_0469') }}</option>
+                                        <option value="">{{ __('center::messages.blade_0389') }}</option>
                                         @foreach($students as $student)
                                             <option value="{{ $student->id }}">{{ $student->name }} ({{ $student->phone }})</option>
                                         @endforeach
                                     </select>
-                                    <div class="form-text mt-2"><i class="fas fa-info-circle me-1"></i>{{ __('center::messages.blade_0470') }}</div>
+                                    <div class="form-text mt-2"><i class="fas fa-info-circle me-1"></i>{{ __('center::messages.blade_0390') }}</div>
                                 </div>
                                 <div class="d-grid gap-2">
-                                    <button type="submit" class="btn btn-primary rounded-pill py-3 fw-bold fs-5 shadow-sm">{{ __('center::messages.blade_0471') }}<i class="fas fa-arrow-left ms-2"></i>
+                                    <button type="submit" class="btn btn-primary rounded-pill py-3 fw-bold fs-5 shadow-sm">{{ __('center::messages.blade_0391') }}<i class="fas fa-arrow-left ms-2"></i>
                                     </button>
                                 </div>
                             </form>
@@ -179,26 +179,26 @@
                                 <div class="row g-3">
                                     <div class="col-md-12">
                                         <div class="form-floating mb-3">
-                                            <input type="text" name="name" class="form-control border-2 rounded-4" id="qName" placeholder="{{ __('center::messages.blade_0478') }}" required>
-                                            <label for="qName">{{ __('center::messages.blade_0472') }}</label>
+                                            <input type="text" name="name" class="form-control border-2 rounded-4" id="qName" placeholder="{{ __('center::messages.blade_0399') }}" required>
+                                            <label for="qName">{{ __('center::messages.blade_0392') }}</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-floating mb-3">
-                                            <input type="tel" name="phone" class="form-control border-2 rounded-4" id="qPhone" placeholder="{{ __('center::messages.blade_0479') }}" required>
-                                            <label for="qPhone">{{ __('center::messages.blade_0473') }}</label>
+                                            <input type="tel" name="phone" class="form-control border-2 rounded-4" id="qPhone" placeholder="{{ __('center::messages.blade_0400') }}" required>
+                                            <label for="qPhone">{{ __('center::messages.blade_0393') }}</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-floating mb-3">
-                                            <input type="tel" name="parent_phone" class="form-control border-2 rounded-4" id="qParentPhone" placeholder="{{ __('center::messages.blade_0480') }}">
-                                            <label for="qParentPhone">هاتف ولي الأمر (اختياري)</label>
+                                            <input type="tel" name="parent_phone" class="form-control border-2 rounded-4" id="qParentPhone" placeholder="{{ __('center::messages.blade_0401') }}">
+                                            <label for="qParentPhone">{{ __('center::messages.blade_0394') }}</label>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-floating mb-4">
                                             <select name="grade_id" class="form-select border-2 rounded-4" id="qGrade" required>
-                                                <option value="">{{ __('center::messages.blade_0474') }}</option>
+                                                <option value="">{{ __('center::messages.blade_0395') }}</option>
                                                 @foreach($stages as $stage)
                                                     <optgroup label="📂 {{ $stage->name }}">
                                                         @foreach($stage->grades as $grade)
@@ -207,14 +207,14 @@
                                                     </optgroup>
                                                 @endforeach
                                             </select>
-                                            <label for="qGrade">{{ __('center::messages.blade_0475') }}</label>
+                                            <label for="qGrade">{{ __('center::messages.blade_0396') }}</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="alert alert-info border-0 rounded-4 py-3 small mb-4">
-                                    <i class="fas fa-magic me-2"></i>{{ __('center::messages.blade_0476') }}</div>
+                                    <i class="fas fa-magic me-2"></i>{{ __('center::messages.blade_0397') }}</div>
                                 <div class="d-grid gap-2">
-                                    <button type="submit" class="btn btn-success rounded-pill py-3 fw-bold fs-5 shadow-sm">{{ __('center::messages.blade_0477') }}<i class="fas fa-bolt ms-2"></i>
+                                    <button type="submit" class="btn btn-success rounded-pill py-3 fw-bold fs-5 shadow-sm">{{ __('center::messages.blade_0398') }}<i class="fas fa-bolt ms-2"></i>
                                     </button>
                                 </div>
                             </form>

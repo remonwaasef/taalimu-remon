@@ -140,7 +140,7 @@
                                             </option>
                                         @endforeach
                                     </select>
-                                    <small class="text-muted">{{ __('center::settings.general.timezone_help') ?? __('center::messages.blade_0744') }}</small>
+                                    <small class="text-muted">{{ __('center::settings.general.timezone_help') ?? __('center::messages.blade_0709') }}</small>
                                 </div>
 
                                 <!-- Social Media Links -->
@@ -297,7 +297,7 @@
                                     
                                     @if(!$hasCustomLevels)
                                         <div class="alert alert-info py-2 px-3 small border-0 mb-3 bg-opacity-10 text-info" id="system-defaults-alert">
-                                            <i class="fas fa-info-circle me-2"></i>{{ __('center::messages.blade_0740') }}</div>
+                                            <i class="fas fa-info-circle me-2"></i>{{ __('center::messages.blade_0705') }}</div>
                                     @endif
 
                                     @foreach($lateLevels as $lIndex => $level)
@@ -312,7 +312,7 @@
                                 </div>
                                 <div class="text-start mt-2">
                                     <button type="button" class="btn btn-link btn-sm text-muted p-0" onclick="restoreLateDefaults()">
-                                        <i class="fas fa-undo-alt me-1"></i>{{ __('center::messages.blade_0741') }}</button>
+                                        <i class="fas fa-undo-alt me-1"></i>{{ __('center::messages.blade_0706') }}</button>
                                 </div>
                             </div>
 
@@ -414,7 +414,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label fw-bold small text-muted">{{ __('center::settings.whatsapp.token') }}</label>
-                                                <input type="text" name="settings[whatsapp][token]" class="form-control" value="{{ $tenant->settings['whatsapp']['token'] ?? '' }}" placeholder="{{ __('center::messages.blade_0742') }}">
+                                                <input type="text" name="settings[whatsapp][token]" class="form-control" value="{{ $tenant->settings['whatsapp']['token'] ?? '' }}" placeholder="{{ __('center::messages.blade_0707') }}">
                                             </div>
                                         </div>
                                     </div>
@@ -613,7 +613,7 @@
     const systemLateDefaults = @json(config('academic.late_rules.defaults', []));
 
     function restoreLateDefaults() {
-        if (!confirm('{{ __('center::messages.blade_0743') }}')) {
+        if (!confirm('{{ __('center::messages.blade_0708') }}')) {
             return;
         }
 

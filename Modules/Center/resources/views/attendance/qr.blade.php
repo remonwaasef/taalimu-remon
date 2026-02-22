@@ -4,7 +4,7 @@
 <div class="container text-center mt-5">
     <div class="card shadow-lg border-0 rounded-4 mx-auto" style="max-width: 500px;">
         <div class="card-header bg-primary text-white p-4">
-            <h3 class="fw-bold mb-1"><i class="bi bi-qr-code-scan me-2"></i>{{ __('center::messages.blade_0214') }}</h3>
+            <h3 class="fw-bold mb-1"><i class="bi bi-qr-code-scan me-2"></i>{{ __('center::messages.blade_0123') }}</h3>
             <p class="mb-0">{{ $schedule->course->title }}</p>
             <small class="opacity-75">الحصة: {{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }}</small>
         </div>
@@ -12,7 +12,7 @@
             <div id="qrcode" class="d-flex justify-content-center my-4"></div>
             
             <div class="alert alert-light border-0 small text-muted">
-                <i class="bi bi-info-circle me-1"></i>{{ __('center::messages.blade_0215') }}</div>
+                <i class="bi bi-info-circle me-1"></i>{{ __('center::messages.blade_0124') }}</div>
             
             <div class="mt-3">
                 <span class="badge bg-primary bg-opacity-10 text-primary px-3 rounded-pill">تاريخ اليوم: {{ now()->format('Y-m-d') }}</span>

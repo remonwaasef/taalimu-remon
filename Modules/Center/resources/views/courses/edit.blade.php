@@ -3,7 +3,7 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold text-dark">تعديل الدورة: {{ $course->title }}</h2>
-        <a href="{{ route('center.courses.index') }}" class="btn btn-outline-secondary rounded-pill px-4">{{ __('center::messages.blade_0380') }}</a>
+        <a href="{{ route('center.courses.index') }}" class="btn btn-outline-secondary rounded-pill px-4">{{ __('center::messages.blade_0298') }}</a>
     </div>
 
     <div class="row justify-content-center">
@@ -25,7 +25,7 @@
                         @endif
                         
                         <div class="mb-4">
-                            <label class="form-label fw-bold">{{ __('center::messages.blade_0381') }}</label>
+                            <label class="form-label fw-bold">{{ __('center::messages.blade_0299') }}</label>
                             <input type="text" name="title" value="{{ old('title', $course->title) }}" class="form-control form-control-lg bg-light border-0 @error('title') is-invalid border-danger @enderror">
                             @error('title')
                                 <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
@@ -33,9 +33,9 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label fw-bold">{{ __('center::messages.blade_0382') }}</label>
+                            <label class="form-label fw-bold">{{ __('center::messages.blade_0300') }}</label>
                             <select name="instructor_id" class="form-select form-select-lg bg-light border-0 @error('instructor_id') is-invalid border-danger @enderror">
-                                <option value="">{{ __('center::messages.blade_0383') }}</option>
+                                <option value="">{{ __('center::messages.blade_0301') }}</option>
                                 @foreach($instructors as $instructor)
                                     <option value="{{ $instructor->id }}" {{ old('instructor_id', $course->instructor_id) == $instructor->id ? 'selected' : '' }}>{{ $instructor->name }}</option>
                                 @endforeach
@@ -47,28 +47,28 @@
 
                         <div class="row mb-4">
                             <div class="col-md-4">
-                                <label class="form-label fw-bold">السعر (ج.م)</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0302') }}</label>
                                 <input type="number" name="price" value="{{ old('price', $course->price) }}" class="form-control form-control-lg bg-light border-0 @error('price') is-invalid border-danger @enderror" min="0" step="0.01">
                                 @error('price')
                                     <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label fw-bold">عدد الحصص (للمبيعات)</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0303') }}</label>
                                 <input type="number" name="sessions_count" value="{{ old('sessions_count', $course->sessions_count) }}" class="form-control form-control-lg bg-light border-0 @error('sessions_count') is-invalid border-danger @enderror" min="0">
                                 @error('sessions_count')
                                     <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0384') }}</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0304') }}</label>
                                 <div class="d-flex gap-2">
                                     <input type="radio" class="btn-check" name="status" id="status_draft" value="draft" {{ old('status', $course->status) == 'draft' ? 'checked' : '' }}>
                                     <label class="btn btn-outline-secondary flex-grow-1 rounded-pill" for="status_draft">
-                                        <i class="fas fa-pencil-alt me-1"></i>{{ __('center::messages.blade_0385') }}</label>
+                                        <i class="fas fa-pencil-alt me-1"></i>{{ __('center::messages.blade_0305') }}</label>
                                     <input type="radio" class="btn-check" name="status" id="status_published" value="published" {{ old('status', $course->status) == 'published' ? 'checked' : '' }}>
                                     <label class="btn btn-outline-success flex-grow-1 rounded-pill" for="status_published">
-                                        <i class="fas fa-check-circle me-1"></i>{{ __('center::messages.blade_0386') }}</label>
+                                        <i class="fas fa-check-circle me-1"></i>{{ __('center::messages.blade_0306') }}</label>
                                 </div>
                                 @error('status')
                                     <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
@@ -77,7 +77,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label fw-bold">{{ __('center::messages.blade_0387') }}</label>
+                            <label class="form-label fw-bold">{{ __('center::messages.blade_0307') }}</label>
                             @if($course->image)
                                 <div class="mb-2">
                                     <img src="{{ Storage::url($course->image) }}" alt="Current Image" class="img-thumbnail rounded" style="height: 100px;">
@@ -90,7 +90,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label fw-bold">{{ __('center::messages.blade_0388') }}</label>
+                            <label class="form-label fw-bold">{{ __('center::messages.blade_0308') }}</label>
                             <textarea name="description" class="form-control form-control-lg bg-light border-0 @error('description') is-invalid border-danger @enderror" rows="4">{{ old('description', $course->description) }}</textarea>
                             @error('description')
                                 <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
@@ -100,9 +100,9 @@
                         <!-- Schedule Section -->
                         <div class="mb-4">
                             <label class="form-label fw-bold d-flex justify-content-between align-items-center">
-                                <span>{{ __('center::messages.blade_0389') }}</span>
+                                <span>{{ __('center::messages.blade_0309') }}</span>
                                 <button type="button" id="add-schedule-btn" class="btn btn-sm btn-outline-primary rounded-pill">
-                                    <i class="fas fa-plus"></i>{{ __('center::messages.blade_0390') }}</button>
+                                    <i class="fas fa-plus"></i>{{ __('center::messages.blade_0310') }}</button>
                             </label>
                             
                             <div id="schedules-container">
@@ -115,32 +115,32 @@
                                             </div>
                                             <div class="row g-3">
                                                 <div class="col-md-3">
-                                                    <label class="small text-muted mb-1">{{ __('center::messages.blade_0391') }}</label>
+                                                    <label class="small text-muted mb-1">{{ __('center::messages.blade_0311') }}</label>
                                                     <select name="schedules[{{ $index }}][day_of_week]" class="form-select border-0">
-                                                        <option value="saturday" {{ $schedule->day_of_week === 6 ? 'selected' : '' }}>{{ __('center::messages.blade_0392') }}</option>
-                                                        <option value="sunday" {{ $schedule->day_of_week === 0 ? 'selected' : '' }}>{{ __('center::messages.blade_0393') }}</option>
-                                                        <option value="monday" {{ $schedule->day_of_week === 1 ? 'selected' : '' }}>{{ __('center::messages.blade_0394') }}</option>
-                                                        <option value="tuesday" {{ $schedule->day_of_week === 2 ? 'selected' : '' }}>{{ __('center::messages.blade_0395') }}</option>
-                                                        <option value="wednesday" {{ $schedule->day_of_week === 3 ? 'selected' : '' }}>{{ __('center::messages.blade_0396') }}</option>
-                                                        <option value="thursday" {{ $schedule->day_of_week === 4 ? 'selected' : '' }}>{{ __('center::messages.blade_0397') }}</option>
-                                                        <option value="friday" {{ $schedule->day_of_week === 5 ? 'selected' : '' }}>{{ __('center::messages.blade_0398') }}</option>
+                                                        <option value="saturday" {{ $schedule->day_of_week === 6 ? 'selected' : '' }}>{{ __('center::messages.blade_0312') }}</option>
+                                                        <option value="sunday" {{ $schedule->day_of_week === 0 ? 'selected' : '' }}>{{ __('center::messages.blade_0313') }}</option>
+                                                        <option value="monday" {{ $schedule->day_of_week === 1 ? 'selected' : '' }}>{{ __('center::messages.blade_0314') }}</option>
+                                                        <option value="tuesday" {{ $schedule->day_of_week === 2 ? 'selected' : '' }}>{{ __('center::messages.blade_0315') }}</option>
+                                                        <option value="wednesday" {{ $schedule->day_of_week === 3 ? 'selected' : '' }}>{{ __('center::messages.blade_0316') }}</option>
+                                                        <option value="thursday" {{ $schedule->day_of_week === 4 ? 'selected' : '' }}>{{ __('center::messages.blade_0317') }}</option>
+                                                        <option value="friday" {{ $schedule->day_of_week === 5 ? 'selected' : '' }}>{{ __('center::messages.blade_0318') }}</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <label class="small text-muted mb-1">{{ __('center::messages.blade_0399') }}</label>
+                                                    <label class="small text-muted mb-1">{{ __('center::messages.blade_0319') }}</label>
                                                     <select name="schedules[{{ $index }}][classroom_id]" class="form-select border-0">
-                                                        <option value="">{{ __('center::messages.blade_0400') }}</option>
+                                                        <option value="">{{ __('center::messages.blade_0320') }}</option>
                                                         @foreach($classrooms as $classroom)
                                                             <option value="{{ $classroom->id }}" {{ $schedule->classroom_id == $classroom->id ? 'selected' : '' }}>{{ $classroom->name }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <label class="small text-muted mb-1">{{ __('center::messages.blade_0401') }}</label>
+                                                    <label class="small text-muted mb-1">{{ __('center::messages.blade_0321') }}</label>
                                                     <input type="time" name="schedules[{{ $index }}][start_time]" value="{{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }}" class="form-control border-0">
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <label class="small text-muted mb-1">{{ __('center::messages.blade_0402') }}</label>
+                                                    <label class="small text-muted mb-1">{{ __('center::messages.blade_0322') }}</label>
                                                     <input type="time" name="schedules[{{ $index }}][end_time]" value="{{ \Carbon\Carbon::parse($schedule->end_time)->format('H:i') }}" class="form-control border-0">
                                                 </div>
                                             </div>
@@ -154,37 +154,37 @@
                             <div class="schedule-item card bg-light border-0 mb-3">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between mb-2">
-                                        <h6 class="fw-bold text-primary">{{ __('center::messages.blade_0403') }}</h6>
+                                        <h6 class="fw-bold text-primary">{{ __('center::messages.blade_0323') }}</h6>
                                         <button type="button" class="btn-close remove-schedule"></button>
                                     </div>
                                     <div class="row g-3">
                                         <div class="col-md-3">
-                                            <label class="small text-muted mb-1">{{ __('center::messages.blade_0404') }}</label>
+                                            <label class="small text-muted mb-1">{{ __('center::messages.blade_0324') }}</label>
                                             <select name="schedules[INDEX][day_of_week]" class="form-select border-0">
-                                                <option value="saturday">{{ __('center::messages.blade_0405') }}</option>
-                                                <option value="sunday">{{ __('center::messages.blade_0406') }}</option>
-                                                <option value="monday">{{ __('center::messages.blade_0407') }}</option>
-                                                <option value="tuesday">{{ __('center::messages.blade_0408') }}</option>
-                                                <option value="wednesday">{{ __('center::messages.blade_0409') }}</option>
-                                                <option value="thursday">{{ __('center::messages.blade_0410') }}</option>
-                                                <option value="friday">{{ __('center::messages.blade_0411') }}</option>
+                                                <option value="saturday">{{ __('center::messages.blade_0325') }}</option>
+                                                <option value="sunday">{{ __('center::messages.blade_0326') }}</option>
+                                                <option value="monday">{{ __('center::messages.blade_0327') }}</option>
+                                                <option value="tuesday">{{ __('center::messages.blade_0328') }}</option>
+                                                <option value="wednesday">{{ __('center::messages.blade_0329') }}</option>
+                                                <option value="thursday">{{ __('center::messages.blade_0330') }}</option>
+                                                <option value="friday">{{ __('center::messages.blade_0331') }}</option>
                                             </select>
                                         </div>
                                         <div class="col-md-3">
-                                            <label class="small text-muted mb-1">{{ __('center::messages.blade_0412') }}</label>
+                                            <label class="small text-muted mb-1">{{ __('center::messages.blade_0332') }}</label>
                                             <select name="schedules[INDEX][classroom_id]" class="form-select border-0">
-                                                <option value="">{{ __('center::messages.blade_0413') }}</option>
+                                                <option value="">{{ __('center::messages.blade_0333') }}</option>
                                                 @foreach($classrooms as $classroom)
                                                     <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="col-md-3">
-                                            <label class="small text-muted mb-1">{{ __('center::messages.blade_0414') }}</label>
+                                            <label class="small text-muted mb-1">{{ __('center::messages.blade_0334') }}</label>
                                             <input type="time" name="schedules[INDEX][start_time]" class="form-control border-0">
                                         </div>
                                         <div class="col-md-3">
-                                            <label class="small text-muted mb-1">{{ __('center::messages.blade_0415') }}</label>
+                                            <label class="small text-muted mb-1">{{ __('center::messages.blade_0335') }}</label>
                                             <input type="time" name="schedules[INDEX][end_time]" class="form-control border-0">
                                         </div>
                                     </div>
@@ -193,7 +193,7 @@
                         </template>
 
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">{{ __('center::messages.blade_0416') }}</button>
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">{{ __('center::messages.blade_0336') }}</button>
                         </div>
                     </form>
                 </div>

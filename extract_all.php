@@ -3,15 +3,15 @@
 $dirCenter = __DIR__ . '/Modules/Center/resources/views';
 
 $extracted = [];
-$counter = 100; // start from 100 to avoid conflicts with test if any
+$counter = 1; // reset to 1
 
 function processBladeDir($dir, $prefix) {
     global $extracted, $counter;
     $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir));
     
     $patterns = [
-        // 1. Text between HTML tags: >العربية<
-        '/>\s*(?P<text>[\s،؟!.:\-0-9]*\p{Arabic}[\p{Arabic}\s،؟!.:\-0-9]*)\s*</u' => function($match, &$extracted, &$counter, &$modified, $prefix) {
+        // 1. Text between HTML tags: >العربية (مع أقواس)<
+        '/>\s*(?P<text>[\s،؟!.:\-()0-9]*\p{Arabic}[\p{Arabic}\s،؟!.:\-()0-9]*)\s*</u' => function($match, &$extracted, &$counter, &$modified, $prefix) {
             $text = trim($match['text']);
             if (!preg_match('/\p{Arabic}/u', $text)) return $match[0];
             $key = 'blade_' . sprintf('%04d', $counter++);
@@ -20,8 +20,8 @@ function processBladeDir($dir, $prefix) {
             $modified = true;
             return ">{{ __('{$langGroup}{$key}') }}<";
         },
-        // 2. Placeholder attributes: placeholder="العربية"
-        '/placeholder="(?P<text>[\p{Arabic}\s،؟!.:\-]+)"/u' => function($match, &$extracted, &$counter, &$modified, $prefix) {
+        // 2. Placeholder attributes: placeholder="العربية (مع أقواس)"
+        '/placeholder="(?P<text>[\p{Arabic}\s،؟!.:\-()]+)"/u' => function($match, &$extracted, &$counter, &$modified, $prefix) {
             $text = trim($match['text']);
             if (!preg_match('/\p{Arabic}/u', $text)) return $match[0];
             $key = 'blade_' . sprintf('%04d', $counter++);
@@ -31,7 +31,7 @@ function processBladeDir($dir, $prefix) {
             return 'placeholder="{{ __(\'' . $langGroup . $key . '\') }}"';
         },
         // 3. title attributes: title="العربية"
-        '/title="(?P<text>[\p{Arabic}\s،؟!.:\-]+)"/u' => function($match, &$extracted, &$counter, &$modified, $prefix) {
+        '/title="(?P<text>[\p{Arabic}\s،؟!.:\-()]+)"/u' => function($match, &$extracted, &$counter, &$modified, $prefix) {
             $text = trim($match['text']);
             if (!preg_match('/\p{Arabic}/u', $text)) return $match[0];
             $key = 'blade_' . sprintf('%04d', $counter++);
@@ -41,7 +41,7 @@ function processBladeDir($dir, $prefix) {
             return 'title="{{ __(\'' . $langGroup . $key . '\') }}"';
         },
         // 4. alt attributes: alt="العربية"
-        '/alt="(?P<text>[\p{Arabic}\s،؟!.:\-]+)"/u' => function($match, &$extracted, &$counter, &$modified, $prefix) {
+        '/alt="(?P<text>[\p{Arabic}\s،؟!.:\-()]+)"/u' => function($match, &$extracted, &$counter, &$modified, $prefix) {
             $text = trim($match['text']);
             if (!preg_match('/\p{Arabic}/u', $text)) return $match[0];
             $key = 'blade_' . sprintf('%04d', $counter++);
@@ -51,7 +51,7 @@ function processBladeDir($dir, $prefix) {
             return 'alt="{{ __(\'' . $langGroup . $key . '\') }}"';
         },
         // 5. value attributes (for submit buttons usually): value="العربية"
-        '/value="(?P<text>[\p{Arabic}\s،؟!.:\-]+)"/u' => function($match, &$extracted, &$counter, &$modified, $prefix) {
+        '/value="(?P<text>[\p{Arabic}\s،؟!.:\-()]+)"/u' => function($match, &$extracted, &$counter, &$modified, $prefix) {
             $text = trim($match['text']);
             if (!preg_match('/\p{Arabic}/u', $text)) return $match[0];
             $key = 'blade_' . sprintf('%04d', $counter++);
@@ -61,7 +61,7 @@ function processBladeDir($dir, $prefix) {
             return 'value="{{ __(\'' . $langGroup . $key . '\') }}"';
         },
         // 6. confirm dialogs: confirm('العربية')
-        '/confirm\(\'(?P<text>[\p{Arabic}\s،؟!.:\-]+)\'\)/u' => function($match, &$extracted, &$counter, &$modified, $prefix) {
+        '/confirm\(\'(?P<text>[\p{Arabic}\s،؟!.:\-()]+)\'\)/u' => function($match, &$extracted, &$counter, &$modified, $prefix) {
             $text = trim($match['text']);
             if (!preg_match('/\p{Arabic}/u', $text)) return $match[0];
             $key = 'blade_' . sprintf('%04d', $counter++);
@@ -71,7 +71,7 @@ function processBladeDir($dir, $prefix) {
             return 'confirm(\'{{ __(\'' . $langGroup . $key . '\') }}\')';
         },
         // 7. Simple Blade string literals containing Arabic: 'العربية'
-        "/'(?P<text>[\p{Arabic}\s،؟!.:\-]+)'/u" => function($match, &$extracted, &$counter, &$modified, $prefix) {
+        "/'(?P<text>[\p{Arabic}\s،؟!.:\-()]+)'/u" => function($match, &$extracted, &$counter, &$modified, $prefix) {
             $text = trim($match['text']);
             if (!preg_match('/\p{Arabic}/u', $text)) return $match[0];
             

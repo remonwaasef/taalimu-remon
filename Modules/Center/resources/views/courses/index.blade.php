@@ -65,13 +65,13 @@
                                                 <span class="fw-bold">{{ $course->schedules->count() }} مواعيد</span>
                                             </button>
                                             <div class="dropdown-menu border-0 shadow-lg p-2 rounded-4" style="min-width: 250px;">
-                                                <h6 class="dropdown-header text-primary fw-bold mb-2">{{ __('center::messages.blade_0417') }}</h6>
+                                                <h6 class="dropdown-header text-primary fw-bold mb-2">{{ __('center::messages.blade_0337') }}</h6>
                                                 <div class="d-flex flex-column gap-2">
                                                     @foreach($course->schedules as $schedule)
                                                         @php
                                                             $days = [
-                                                                0 => __('center::messages.blade_0436'), 1 => __('center::messages.blade_0437'), 2 => __('center::messages.blade_0438'), 
-                                                                3 => __('center::messages.blade_0439'), 4 => __('center::messages.blade_0440'), 5 => __('center::messages.blade_0441'), 6 => __('center::messages.blade_0442')
+                                                                0 => __('center::messages.blade_0357'), 1 => __('center::messages.blade_0358'), 2 => __('center::messages.blade_0359'), 
+                                                                3 => __('center::messages.blade_0360'), 4 => __('center::messages.blade_0361'), 5 => __('center::messages.blade_0362'), 6 => __('center::messages.blade_0363')
                                                             ];
                                                             $dayName = $days[$schedule->day_of_week] ?? $schedule->day_of_week;
                                                             $start = \Carbon\Carbon::parse($schedule->start_time)->format('h:i A');
@@ -170,7 +170,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content rounded-5 border-0 shadow-lg">
                 <div class="modal-header border-0 pb-0 pt-4 px-4 bg-light bg-opacity-50">
-                    <h5 class="modal-title fw-bold fs-4">{{ __('center::messages.blade_0418') }}<span id="dynamicCourseTitle" class="text-primary"></span></h5>
+                    <h5 class="modal-title fw-bold fs-4">{{ __('center::messages.blade_0338') }}<span id="dynamicCourseTitle" class="text-primary"></span></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4 bg-light bg-opacity-50 border-bottom">
@@ -178,11 +178,11 @@
                     <ul class="nav nav-pills bg-white p-1 rounded-pill shadow-sm" id="enrollTabs" role="tablist">
                         <li class="nav-item flex-fill" role="presentation">
                             <button class="nav-link active rounded-pill w-100 fw-bold" id="existing-tab" data-bs-toggle="pill" data-bs-target="#existing-panel" type="button" role="tab">
-                                <i class="fas fa-search me-2"></i>{{ __('center::messages.blade_0419') }}</button>
+                                <i class="fas fa-search me-2"></i>{{ __('center::messages.blade_0339') }}</button>
                         </li>
                         <li class="nav-item flex-fill" role="presentation">
                             <button class="nav-link rounded-pill w-100 fw-bold" id="quick-tab" data-bs-toggle="pill" data-bs-target="#quick-panel" type="button" role="tab">
-                                <i class="fas fa-user-plus me-2"></i>{{ __('center::messages.blade_0420') }}</button>
+                                <i class="fas fa-user-plus me-2"></i>{{ __('center::messages.blade_0340') }}</button>
                         </li>
                     </ul>
                 </div>
@@ -193,17 +193,17 @@
                             <form id="existingStudentForm" action="" method="POST" class="p-2">
                                 @csrf
                                 <div class="mb-4">
-                                    <label class="form-label fw-bold text-dark mb-2">{{ __('center::messages.blade_0421') }}</label>
-                                    <select name="student_id" class="form-select border-2" id="unifiedStudentSelect" required placeholder="{{ __('center::messages.blade_0432') }}">
-                                        <option value="">{{ __('center::messages.blade_0422') }}</option>
+                                    <label class="form-label fw-bold text-dark mb-2">{{ __('center::messages.blade_0341') }}</label>
+                                    <select name="student_id" class="form-select border-2" id="unifiedStudentSelect" required placeholder="{{ __('center::messages.blade_0353') }}">
+                                        <option value="">{{ __('center::messages.blade_0342') }}</option>
                                         @foreach($students as $student)
                                             <option value="{{ $student->id }}">{{ $student->name }} ({{ $student->phone }})</option>
                                         @endforeach
                                     </select>
-                                    <div class="form-text mt-2"><i class="fas fa-info-circle me-1"></i>{{ __('center::messages.blade_0423') }}</div>
+                                    <div class="form-text mt-2"><i class="fas fa-info-circle me-1"></i>{{ __('center::messages.blade_0343') }}</div>
                                 </div>
                                 <div class="d-grid gap-2 mt-4">
-                                    <button type="submit" class="btn btn-primary rounded-pill py-3 fw-bold fs-5 shadow-sm">{{ __('center::messages.blade_0424') }}<i class="fas fa-check-circle ms-2"></i>
+                                    <button type="submit" class="btn btn-primary rounded-pill py-3 fw-bold fs-5 shadow-sm">{{ __('center::messages.blade_0344') }}<i class="fas fa-check-circle ms-2"></i>
                                     </button>
                                 </div>
                             </form>
@@ -216,26 +216,26 @@
                                 <div class="row g-3">
                                     <div class="col-md-12">
                                         <div class="form-floating mb-3">
-                                            <input type="text" name="name" class="form-control border-2 rounded-4 bg-light" id="qName" placeholder="{{ __('center::messages.blade_0433') }}" required>
-                                            <label for="qName">{{ __('center::messages.blade_0425') }}</label>
+                                            <input type="text" name="name" class="form-control border-2 rounded-4 bg-light" id="qName" placeholder="{{ __('center::messages.blade_0354') }}" required>
+                                            <label for="qName">{{ __('center::messages.blade_0345') }}</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-floating mb-3">
-                                            <input type="tel" name="phone" class="form-control border-2 rounded-4 bg-light" id="qPhone" placeholder="{{ __('center::messages.blade_0434') }}" required>
-                                            <label for="qPhone">{{ __('center::messages.blade_0426') }}</label>
+                                            <input type="tel" name="phone" class="form-control border-2 rounded-4 bg-light" id="qPhone" placeholder="{{ __('center::messages.blade_0355') }}" required>
+                                            <label for="qPhone">{{ __('center::messages.blade_0346') }}</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-floating mb-3">
-                                            <input type="tel" name="parent_phone" class="form-control border-2 rounded-4 bg-light" id="qParentPhone" placeholder="{{ __('center::messages.blade_0435') }}">
-                                            <label for="qParentPhone">هاتف ولي الأمر (اختياري)</label>
+                                            <input type="tel" name="parent_phone" class="form-control border-2 rounded-4 bg-light" id="qParentPhone" placeholder="{{ __('center::messages.blade_0356') }}">
+                                            <label for="qParentPhone">{{ __('center::messages.blade_0347') }}</label>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-floating mb-2">
                                             <select name="grade_id" class="form-select border-2 rounded-4 bg-light" id="qGrade" required>
-                                                <option value="">{{ __('center::messages.blade_0427') }}</option>
+                                                <option value="">{{ __('center::messages.blade_0348') }}</option>
                                                 @foreach($stages as $stage)
                                                     <optgroup label="📂 {{ $stage->name }}">
                                                         @foreach($stage->grades as $grade)
@@ -244,16 +244,16 @@
                                                     </optgroup>
                                                 @endforeach
                                             </select>
-                                            <label for="qGrade">{{ __('center::messages.blade_0428') }}</label>
+                                            <label for="qGrade">{{ __('center::messages.blade_0349') }}</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="alert flex-row d-flex align-items-center bg-info bg-opacity-10 text-info border-0 rounded-4 py-3 small my-3">
                                     <i class="fas fa-magic fa-lg me-3 ms-1"></i>
-                                    <div>{{ __('center::messages.blade_0429') }}</div>
+                                    <div>{{ __('center::messages.blade_0350') }}</div>
                                 </div>
                                 <div class="d-grid gap-2 mt-2">
-                                    <button type="submit" id="quickEnrollSubmitBtn" class="btn btn-success rounded-pill py-3 fw-bold fs-5 shadow-sm">{{ __('center::messages.blade_0430') }}<i class="fas fa-bolt ms-2"></i>
+                                    <button type="submit" id="quickEnrollSubmitBtn" class="btn btn-success rounded-pill py-3 fw-bold fs-5 shadow-sm">{{ __('center::messages.blade_0351') }}<i class="fas fa-bolt ms-2"></i>
                                     </button>
                                 </div>
                             </form>
@@ -286,7 +286,7 @@
                     maxOptions: 50,
                     render: {
                         no_results: function(data, escape) {
-                            return '<div class="no-results p-3 text-muted text-center">{{ __('center::messages.blade_0431') }}</div>';
+                            return '<div class="no-results p-3 text-muted text-center">{{ __('center::messages.blade_0352') }}</div>';
                         }
                     }
                 });

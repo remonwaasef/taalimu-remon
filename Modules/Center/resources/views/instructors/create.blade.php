@@ -2,8 +2,8 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark">{{ __('center::messages.blade_0001') }}</h2>
-        <a href="{{ route('center.instructors.index') }}" class="btn btn-outline-secondary rounded-pill px-4">{{ __('center::messages.blade_0002') }}</a>
+        <h2 class="fw-bold text-dark">{{ __('center::messages.blade_0421') }}</h2>
+        <a href="{{ route('center.instructors.index') }}" class="btn btn-outline-secondary rounded-pill px-4">{{ __('center::messages.blade_0422') }}</a>
     </div>
 
     <div class="row justify-content-center">
@@ -22,7 +22,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::instructors.specialization') }}</label>
-                                <input type="text" name="specialization" value="{{ old('specialization') }}" class="form-control bg-light border-0" placeholder="{{ __('center::messages.blade_0008') }}">
+                                <input type="text" name="specialization" value="{{ old('specialization') }}" class="form-control bg-light border-0" placeholder="{{ __('center::messages.blade_0428') }}">
                                 @error('specialization')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">{{ __('center::instructors.gender') }}</label>
                                 <select name="gender" class="form-select bg-light border-0">
-                                    <option value="">{{ __('center::messages.blade_0003') }}</option>
+                                    <option value="">{{ __('center::messages.blade_0423') }}</option>
                                     <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>{{ __('center::instructors.male') }}</option>
                                     <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>{{ __('center::instructors.female') }}</option>
                                 </select>
@@ -57,7 +57,7 @@
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::instructors.national_id') }}</label>
-                                <input type="text" name="national_id" value="{{ old('national_id') }}" class="form-control bg-light border-0" placeholder="{{ __('center::messages.blade_0009') }}">
+                                <input type="text" name="national_id" value="{{ old('national_id') }}" class="form-control bg-light border-0" placeholder="{{ __('center::messages.blade_0429') }}">
                                 @error('national_id')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-6">
@@ -67,7 +67,7 @@
                                     <span class="input-group-text bg-light border-0">%</span>
                                 </div>
                                 @error('commission_rate')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
-                                <small class="text-muted">{{ __('center::messages.blade_0004') }}</small>
+                                <small class="text-muted">{{ __('center::messages.blade_0424') }}</small>
                             </div>
                         </div>
 
@@ -92,14 +92,14 @@
                         </div>
 
                         <div class="mb-5">
-                            <label class="form-label fw-bold">{{ __('center::messages.blade_0005') }}</label>
+                            <label class="form-label fw-bold">{{ __('center::messages.blade_0425') }}</label>
                             <input type="file" name="image" class="form-control bg-light border-0" accept="image/*">
                             @error('image')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                         </div>
 
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm py-3 fw-bold">{{ __('center::messages.blade_0006') }}</button>
-                            <a href="{{ route('center.instructors.index') }}" class="btn btn-light rounded-pill py-3">{{ __('center::messages.blade_0007') }}</a>
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm py-3 fw-bold">{{ __('center::messages.blade_0426') }}</button>
+                            <a href="{{ route('center.instructors.index') }}" class="btn btn-light rounded-pill py-3">{{ __('center::messages.blade_0427') }}</a>
                         </div>
                     </form>
                 </div>
@@ -167,7 +167,7 @@
                 
                 if (original !== clean) {
                     this.value = clean;
-                    showWarning(this, 'نص فقط (بدون أرقام أو رموز خاصة)');
+                    showWarning(this, __('center::messages.blade_0430'));
                 }
             });
         }

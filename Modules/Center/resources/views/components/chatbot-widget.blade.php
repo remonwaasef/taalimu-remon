@@ -14,12 +14,12 @@
         <div class="card-body d-flex flex-column" style="height: 400px;">
             <div id="chatbot-messages" class="flex-grow-1 overflow-auto mb-3" style="max-height: 350px;">
                 <div class="text-center text-muted py-4">
-                    <p>{{ __('center::messages.blade_0349') }}</p>
+                    <p>{{ __('center::messages.blade_0265') }}</p>
                 </div>
             </div>
             <div class="input-group">
-                <input type="text" id="chatbot-input" class="form-control" placeholder="{{ __('center::messages.blade_0351') }}">
-                <button id="chatbot-send" class="btn btn-primary">{{ __('center::messages.blade_0350') }}</button>
+                <input type="text" id="chatbot-input" class="form-control" placeholder="{{ __('center::messages.blade_0267') }}">
+                <button id="chatbot-send" class="btn btn-primary">{{ __('center::messages.blade_0266') }}</button>
             </div>
         </div>
     </div>
@@ -74,11 +74,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.success) {
                 addMessage(data.message, 'bot');
             } else {
-                addMessage (__('center::messages.blade_0352'), 'bot');
+                addMessage (__('center::messages.blade_0268'), 'bot');
             }
         } catch (error) {
             document.getElementById(typingId).remove();
-            addMessage(__('center::messages.blade_0353'), 'bot');
+            addMessage(__('center::messages.blade_0269'), 'bot');
         }
     };
 

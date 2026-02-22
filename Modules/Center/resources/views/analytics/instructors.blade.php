@@ -1,28 +1,28 @@
 @extends('center::layouts.master')
 
-@section('title', __('center::messages.blade_0172'))
+@section('title', __('center::messages.blade_0078'))
 
 @section('content')
 <div class="container-fluid">
     <div class="d-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">{{ __('center::messages.blade_0166') }}</h1>
+        <h1 class="h3 mb-0 text-gray-800">{{ __('center::messages.blade_0071') }}</h1>
         <a href="{{ route('center.analytics.index') }}" class="btn btn-sm btn-outline-secondary">
-            <i class="fas fa-arrow-right"></i>{{ __('center::messages.blade_0167') }}</a>
+            <i class="fas fa-arrow-right"></i>{{ __('center::messages.blade_0072') }}</a>
     </div>
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">{{ __('center::messages.blade_0168') }}</h6>
+            <h6 class="m-0 font-weight-bold text-primary">{{ __('center::messages.blade_0073') }}</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>{{ __('center::messages.blade_0169') }}</th>
-                            <th>{{ __('center::messages.blade_0170') }}</th>
-                            <th>{{ __('center::messages.blade_0171') }}</th>
-                            <th>التقييم (قريباً)</th>
+                            <th>{{ __('center::messages.blade_0074') }}</th>
+                            <th>{{ __('center::messages.blade_0075') }}</th>
+                            <th>{{ __('center::messages.blade_0076') }}</th>
+                            <th>{{ __('center::messages.blade_0077') }}</th>
                         </tr>
                     </thead>
                     <tbody>
