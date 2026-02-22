@@ -1,7 +1,7 @@
 @extends('center::layouts.master')
 
 @section('content')
-    @include('center::layouts.setup_tabs')
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2 class="fw-bold text-dark mb-1">{{ __('center::sidebar.schedules') }}</h2>

@@ -1,7 +1,7 @@
 @extends('center::layouts.master')
 
 @section('content')
-    @include('center::layouts.setup_tabs')
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold text-dark">{{ __('center::instructors.title') }}</h2>
         <a href="{{ route('center.instructors.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
