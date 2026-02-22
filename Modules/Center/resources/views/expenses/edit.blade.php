@@ -33,7 +33,7 @@
                         <div class="col-md-6">
                             <label class="form-label fw-bold small">{{ __('center::expenses.amount') }}</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-light border-end-0 rounded-start-pill">{{ __('center::expenses.currency') }}</span>
+                                <span class="input-group-text bg-light border-end-0 rounded-start-pill">{{ get_currency_symbol() }}</span>
                                 <input type="number" step="0.01" name="amount" class="form-control border-start-0 rounded-end-pill @error('amount') is-invalid @enderror" value="{{ old('amount', $expense->amount) }}">
                             </div>
                             @error('amount')

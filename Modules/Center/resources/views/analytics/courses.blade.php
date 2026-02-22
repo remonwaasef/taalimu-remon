@@ -33,7 +33,7 @@
                                 <td>{{ $course->instructor->name ?? __('center::messages.blade_0026') }}</td>
                                 <td>{{ $course->enrollments_count }}</td>
                                 <td>{{ $course->schedules_count }}</td>
-                                <td>{{ number_format($course->price) }} ج.م</td>
+                                <td>{{ format_price($course->price) }}</td>
                             </tr>
                         @endforeach
                     </tbody>

@@ -61,7 +61,7 @@
                                 {{ $expense->category }}
                             </span>
                         </td>
-                        <td class="fw-bold text-danger">-{{ number_format($expense->amount, 2) }} {{ __('center::expenses.currency') }}</td>
+                        <td class="fw-bold text-danger">-{{ format_price($expense->amount) }}</td>
                         <td class="text-muted small">{{ $expense->date->format('Y-m-d') }}</td>
                         <td>
                             <span class="small text-dark fw-medium">

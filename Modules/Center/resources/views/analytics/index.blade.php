@@ -42,7 +42,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col me-2">
                             <div class="text-xs fw-bold text-success text-uppercase mb-1">{{ __('center::messages.blade_0048') }}</div>
-                            <div class="h3 mb-0 fw-bold text-gray-800">{{ number_format($totalRevenue) }} ج.م</div>
+                            <div class="h3 mb-0 fw-bold text-gray-800">{{ format_price($totalRevenue) }}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-sack-dollar fa-2x text-gray-300"></i>
@@ -76,7 +76,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col me-2">
                             <div class="text-xs fw-bold text-warning text-uppercase mb-1">{{ __('center::messages.blade_0050') }}</div>
-                            <div class="h3 mb-0 fw-bold text-gray-800">{{ number_format($totalDue) }} ج.م</div>
+                            <div class="h3 mb-0 fw-bold text-gray-800">{{ format_price($totalDue) }}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-hand-holding-usd fa-2x text-gray-300"></i>
@@ -177,8 +177,8 @@
                             <tr>
                                 <td class="p-3 fw-bold text-primary">#{{ $sale->id }}</td>
                                 <td class="p-3">{{ $sale->student->name }}</td>
-                                <td class="p-3 fw-bold">{{ number_format($sale->total_amount) }} ج.م</td>
-                                <td class="p-3 text-success">{{ number_format($sale->paid_amount) }} ج.م</td>
+                                <td class="p-3 fw-bold">{{ format_price($sale->total_amount) }}</td>
+                                <td class="p-3 text-success">{{ format_price($sale->paid_amount) }}</td>
                                 <td class="p-3">
                                     <span class="badge rounded-pill bg-{{ $sale->status == 'paid' ? 'success' : ($sale->status == 'partial' ? 'warning' : 'danger') }} bg-opacity-10 text-{{ $sale->status == 'paid' ? 'success' : ($sale->status == 'partial' ? 'warning' : 'danger') }} px-3">
                                         {{ $sale->status == 'paid' ? __('center::messages.blade_0067') : ($sale->status == 'partial' ? __('center::messages.blade_0068') : __('center::messages.blade_0069')) }}
@@ -231,7 +231,7 @@
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        callback: function(value) { return __('center::messages.blade_0070') + value; }
+                        callback: function(value) { return '{{ get_currency_symbol() }} ' + value; }
                     }
                 }
             },

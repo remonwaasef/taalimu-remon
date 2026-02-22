@@ -18,7 +18,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">{{ __('center::messages.blade_0029') }}</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($totalRevenue) }} ج.م</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ format_price($totalRevenue) }}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -34,7 +34,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">{{ __('center::messages.blade_0030') }}</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($totalDue) }} ج.م</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ format_price($totalDue) }}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-exclamation-circle fa-2x text-gray-300"></i>
@@ -129,7 +129,7 @@
             layout: { padding: { left: 10, right: 25, top: 25, bottom: 0 } },
             scales: {
                 xAxes: [{ gridLines: { display: false, drawBorder: false }, ticks: { maxTicksLimit: 7 } }],
-                yAxes: [{ ticks: { maxTicksLimit: 5, padding: 10, callback: function(value) { return __('center::messages.blade_0044') + value; } }, gridLines: { color: "rgb(234, 236, 244)", zeroLineColor: "rgb(234, 236, 244)", drawBorder: false, borderDash: [2], zeroLineBorderDash: [2] } }],
+                yAxes: [{ ticks: { maxTicksLimit: 5, padding: 10, callback: function(value) { return '{{ get_currency_symbol() }} ' + value; } }, gridLines: { color: "rgb(234, 236, 244)", zeroLineColor: "rgb(234, 236, 244)", drawBorder: false, borderDash: [2], zeroLineBorderDash: [2] } }],
             },
             legend: { display: false },
         }

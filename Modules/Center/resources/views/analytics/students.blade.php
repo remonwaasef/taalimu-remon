@@ -147,7 +147,7 @@
                                             </div>
                                         </td>
                                         <td class="p-3 text-end fw-bold text-success">
-                                            {{ number_format($student->sales_count > 0 ? $student->sales->sum('paid_amount') : 0) }} ج.م
+                                            {{ format_price($student->sales_count > 0 ? $student->sales->sum('paid_amount') : 0) }}
                                         </td>
                                     </tr>
                                 @empty
@@ -193,7 +193,7 @@
                                             </div>
                                         </td>
                                         <td class="p-3 text-end fw-bold text-danger">
-                                            {{ number_format($student->total_debt) }} ج.م
+                                            {{ format_price($student->total_debt) }}
                                         </td>
                                     </tr>
                                 @empty
