@@ -73,15 +73,15 @@
                             @if($expense->attachment)
                                 <div class="mb-3 small d-flex align-items-center">
                                     <i class="fas fa-file-image text-primary me-2"></i>
-                                    <span>المرفق الحالي: </span>
-                                    <a href="{{ asset('storage/' . $expense->attachment) }}" target="_blank" class="ms-1 text-primary">عرض الملف</a>
+                                    <span>{{ __('center::messages.blade_0490') }}</span>
+                                    <a href="{{ asset('storage/' . $expense->attachment) }}" target="_blank" class="ms-1 text-primary">{{ __('center::messages.blade_0491') }}</a>
                                 </div>
                             @endif
                             <div class="upload-box p-4 border-dashed rounded-4 text-center bg-light">
                                 <input type="file" name="attachment" id="attachment" class="d-none">
                                 <label for="attachment" class="cursor-pointer mb-0 w-100">
                                     <i class="fas fa-sync-alt fa-3x text-primary mb-2"></i>
-                                    <p class="mb-0 text-muted">اضغط هنا لاستبدال المرفق الحالي</p>
+                                    <p class="mb-0 text-muted">{{ __('center::messages.blade_0492') }}</p>
                                     <small class="text-muted">JPG, PNG, PDF (Max 2MB)</small>
                                 </label>
                             </div>
@@ -89,8 +89,8 @@
 
                         <div class="col-12 text-end">
                             <hr class="my-4 opacity-10">
-                            <a href="{{ route('center.expenses.index') }}" class="btn btn-light rounded-pill px-4 me-2 border">إلغاء</a>
-                            <button type="submit" class="btn btn-primary rounded-pill px-5">تحديث البيانات</button>
+                            <a href="{{ route('center.expenses.index') }}" class="btn btn-light rounded-pill px-4 me-2 border">{{ __('center::messages.blade_0493') }}</a>
+                            <button type="submit" class="btn btn-primary rounded-pill px-5">{{ __('center::messages.blade_0494') }}</button>
                         </div>
                     </div>
                 </form>

@@ -1,7 +1,7 @@
 @extends('center::layouts.master')
 
-@section('title', 'تعديل مستخدم')
-@section('page-title', 'تعديل مستخدم')
+@section('title', __('center::messages.blade_0976'))
+@section('page-title', __('center::messages.blade_0977'))
 
 @section('content')
 <div class="row justify-content-center">
@@ -16,7 +16,7 @@
                     @method('PUT')
                     
                     <div class="mb-3">
-                        <label for="name" class="form-label">الاسم الكامل</label>
+                        <label for="name" class="form-label">{{ __('center::messages.blade_0968') }}</label>
                         <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $user->name) }}">
                         @error('name')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -24,7 +24,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="email" class="form-label">البريد الإلكتروني</label>
+                        <label for="email" class="form-label">{{ __('center::messages.blade_0969') }}</label>
                         <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $user->email) }}">
                         @error('email')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -32,25 +32,25 @@
                     </div>
 
                     <div class="alert alert-info py-2">
-                        <small><i class="fas fa-info-circle me-1"></i> اترك حقول كلمة المرور فارغة إذا كنت لا تريد تغييرها.</small>
+                        <small><i class="fas fa-info-circle me-1"></i>{{ __('center::messages.blade_0970') }}</small>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="password" class="form-label">كلمة المرور الجديدة</label>
+                            <label for="password" class="form-label">{{ __('center::messages.blade_0971') }}</label>
                             <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password">
                             @error('password')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="password_confirmation" class="form-label">تأكيد كلمة المرور</label>
+                            <label for="password_confirmation" class="form-label">{{ __('center::messages.blade_0972') }}</label>
                             <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="role" class="form-label">الدور الوظيفي</label>
+                        <label for="role" class="form-label">{{ __('center::messages.blade_0973') }}</label>
                         <select class="form-select @error('role') is-invalid @enderror" id="role" name="role">
                             @foreach($roles as $r)
                                 <option value="{{ $r->name }}" {{ old('role', $user->role) == $r->name ? 'selected' : '' }}>
@@ -64,8 +64,8 @@
                     </div>
 
                     <div class="d-flex gap-2 justify-content-end mt-4">
-                        <a href="{{ route('center.users.index') }}" class="btn btn-outline-secondary">إلغاء</a>
-                        <button type="submit" class="btn btn-primary">حفظ التعديلات</button>
+                        <a href="{{ route('center.users.index') }}" class="btn btn-outline-secondary">{{ __('center::messages.blade_0974') }}</a>
+                        <button type="submit" class="btn btn-primary">{{ __('center::messages.blade_0975') }}</button>
                     </div>
                 </form>
             </div>

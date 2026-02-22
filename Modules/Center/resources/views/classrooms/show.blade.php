@@ -7,19 +7,17 @@
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-1">
-                    <li class="breadcrumb-item"><a href="{{ route('center.classrooms.index') }}">إدارة القاعات</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">تفاصيل القاعة</li>
+                    <li class="breadcrumb-item"><a href="{{ route('center.classrooms.index') }}">{{ __('center::messages.blade_0314') }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ __('center::messages.blade_0315') }}</li>
                 </ol>
             </nav>
             <h2 class="fw-bold text-dark mb-0">{{ $classroom->name }}</h2>
         </div>
         <div class="d-flex gap-2">
             <a href="{{ route('center.classrooms.edit', $classroom) }}" class="btn btn-outline-primary rounded-pill px-4">
-                <i class="fas fa-edit me-1"></i> تعديل
-            </a>
+                <i class="fas fa-edit me-1"></i>{{ __('center::messages.blade_0316') }}</a>
             <a href="{{ route('center.classrooms.index') }}" class="btn btn-light rounded-pill px-4">
-                <i class="fas fa-arrow-right me-1"></i> عودة
-            </a>
+                <i class="fas fa-arrow-right me-1"></i>{{ __('center::messages.blade_0317') }}</a>
         </div>
     </div>
 
@@ -34,7 +32,7 @@
                         </div>
                         <h4 class="fw-bold mb-1">{{ $classroom->name }}</h4>
                         <span class="badge bg-light text-primary border border-primary border-opacity-10 px-3 py-2 rounded-pill">
-                            {{ $classroom->type == 'lab' ? 'معمل حاسب' : ($classroom->type == 'virtual' ? 'قاعة افتراضية' : 'قاعة محاضرات') }}
+                            {{ $classroom->type == 'lab' ? __('center::messages.blade_0336') : ($classroom->type == 'virtual' ? __('center::messages.blade_0337') : __('center::messages.blade_0338')) }}
                         </span>
                     </div>
 
@@ -44,8 +42,8 @@
                                 <i class="fas fa-users text-primary"></i>
                             </div>
                             <div>
-                                <small class="text-muted d-block">السعة الاستيعابية</small>
-                                <span class="fw-bold text-dark">{{ $classroom->capacity ?? 'غير محدد' }} طالب</span>
+                                <small class="text-muted d-block">{{ __('center::messages.blade_0318') }}</small>
+                                <span class="fw-bold text-dark">{{ $classroom->capacity ?? __('center::messages.blade_0339') }} طالب</span>
                             </div>
                         </div>
 
@@ -54,7 +52,7 @@
                                 <i class="fas fa-calendar-alt text-primary"></i>
                             </div>
                             <div>
-                                <small class="text-muted d-block">إجمالي الحصص</small>
+                                <small class="text-muted d-block">{{ __('center::messages.blade_0319') }}</small>
                                 <span class="fw-bold text-dark">{{ $classroom->schedules->count() }} حصة أسبوعية</span>
                             </div>
                         </div>
@@ -64,7 +62,7 @@
                                 <i class="fas fa-clock text-primary"></i>
                             </div>
                             <div>
-                                <small class="text-muted d-block">تاريخ الإضافة</small>
+                                <small class="text-muted d-block">{{ __('center::messages.blade_0320') }}</small>
                                 <span class="fw-bold text-dark">{{ $classroom->created_at->format('Y-m-d') }}</span>
                             </div>
                         </div>
@@ -80,8 +78,7 @@
                     <ul class="nav nav-tabs border-0" id="classroomTabs" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active border-0 fw-bold text-dark position-relative py-3" id="scheduleTab" data-bs-toggle="tab" data-bs-target="#scheduleContent" type="button" role="tab" aria-controls="scheduleContent" aria-selected="true">
-                                <i class="fas fa-calendar-week me-2 text-primary"></i> الجدول الأسبوعي
-                            </button>
+                                <i class="fas fa-calendar-week me-2 text-primary"></i>{{ __('center::messages.blade_0321') }}</button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link border-0 fw-bold text-dark position-relative py-3" id="assetsTab" data-bs-toggle="tab" data-bs-target="#assetsContent" type="button" role="tab" aria-controls="assetsContent" aria-selected="false">
@@ -99,33 +96,32 @@
                                     <div class="text-muted opacity-50 mb-3">
                                         <i class="fas fa-calendar-times fa-4x"></i>
                                     </div>
-                                    <h5 class="text-muted">لا توجد حصص مجدولة في هذه القاعة حالياً</h5>
+                                    <h5 class="text-muted">{{ __('center::messages.blade_0322') }}</h5>
                                     <a href="{{ route('center.schedules.create') }}" class="btn btn-primary rounded-pill mt-3">
-                                        <i class="fas fa-plus me-1"></i> جدولة حصة جديدة
-                                    </a>
+                                        <i class="fas fa-plus me-1"></i>{{ __('center::messages.blade_0323') }}</a>
                                 </div>
                             @else
                                 <div class="table-responsive">
                                     <table class="table align-middle">
                                         <thead class="bg-light">
                                             <tr>
-                                                <th class="border-0 rounded-start">اليوم</th>
-                                                <th class="border-0">الموعد</th>
-                                                <th class="border-0">الدورة التدريبية</th>
-                                                <th class="border-0">المدرس</th>
-                                                <th class="border-0 rounded-end">الطلاب</th>
+                                                <th class="border-0 rounded-start">{{ __('center::messages.blade_0324') }}</th>
+                                                <th class="border-0">{{ __('center::messages.blade_0325') }}</th>
+                                                <th class="border-0">{{ __('center::messages.blade_0326') }}</th>
+                                                <th class="border-0">{{ __('center::messages.blade_0327') }}</th>
+                                                <th class="border-0 rounded-end">{{ __('center::messages.blade_0328') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @php
                                                 $days = [
-                                                    'Saturday' => 'السبت',
-                                                    'Sunday' => 'الأحد',
-                                                    'Monday' => 'الاثنين',
-                                                    'Tuesday' => 'الثلاثاء',
-                                                    'Wednesday' => 'الأربعاء',
-                                                    'Thursday' => 'الخميس',
-                                                    'Friday' => 'الجمعة'
+                                                    'Saturday' => __('center::messages.blade_0340'),
+                                                    'Sunday' => __('center::messages.blade_0341'),
+                                                    'Monday' => __('center::messages.blade_0342'),
+                                                    'Tuesday' => __('center::messages.blade_0343'),
+                                                    'Wednesday' => __('center::messages.blade_0344'),
+                                                    'Thursday' => __('center::messages.blade_0345'),
+                                                    'Friday' => __('center::messages.blade_0346')
                                                 ];
                                             @endphp
                                             @foreach($classroom->schedules as $schedule)
@@ -143,12 +139,12 @@
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <div class="fw-bold">{{ optional($schedule->course)->title ?? 'غير محدد' }}</div>
+                                                        <div class="fw-bold">{{ optional($schedule->course)->title ?? __('center::messages.blade_0347') }}</div>
                                                     </td>
                                                     <td>
                                                         <div class="d-flex align-items-center">
                                                             <i class="fas fa-user-tie text-muted me-2 small"></i>
-                                                            <span class="small">{{ optional($schedule->instructor)->name ?? 'غير محدد' }}</span>
+                                                            <span class="small">{{ optional($schedule->instructor)->name ?? __('center::messages.blade_0348') }}</span>
                                                         </div>
                                                     </td>
                                                     <td>
@@ -171,20 +167,19 @@
                                     <div class="text-muted opacity-50 mb-3">
                                         <i class="fas fa-boxes fa-4x"></i>
                                     </div>
-                                    <h5 class="text-muted">لا توجد عُهد مسجلة لهذه القاعة</h5>
+                                    <h5 class="text-muted">{{ __('center::messages.blade_0329') }}</h5>
                                     <a href="{{ route('center.assets.create', ['classroom_id' => $classroom->id]) }}" class="btn btn-primary rounded-pill mt-3">
-                                        <i class="fas fa-plus me-1"></i> إضافة عُهدة جديدة
-                                    </a>
+                                        <i class="fas fa-plus me-1"></i>{{ __('center::messages.blade_0330') }}</a>
                                 </div>
                             @else
                                 <div class="table-responsive">
                                     <table class="table align-middle">
                                         <thead class="bg-light">
                                             <tr>
-                                                <th class="border-0 rounded-start">الاسم</th>
-                                                <th class="border-0">النوع</th>
-                                                <th class="border-0">الحالة</th>
-                                                <th class="border-0 rounded-end">العمليات</th>
+                                                <th class="border-0 rounded-start">{{ __('center::messages.blade_0331') }}</th>
+                                                <th class="border-0">{{ __('center::messages.blade_0332') }}</th>
+                                                <th class="border-0">{{ __('center::messages.blade_0333') }}</th>
+                                                <th class="border-0 rounded-end">{{ __('center::messages.blade_0334') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -219,8 +214,7 @@
                                 </div>
                                 <div class="text-center mt-3">
                                     <a href="{{ route('center.assets.create', ['classroom_id' => $classroom->id]) }}" class="btn btn-sm btn-outline-primary rounded-pill">
-                                        <i class="fas fa-plus me-1"></i> إضافة قطعة أخرى
-                                    </a>
+                                        <i class="fas fa-plus me-1"></i>{{ __('center::messages.blade_0335') }}</a>
                                 </div>
                             @endif
                         </div>

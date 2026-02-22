@@ -6,27 +6,27 @@
         <div class="col-xl-3 d-none d-xl-block">
             <div class="sticky-top" style="top: 100px; z-index: 10;">
                 <div class="elite-nav-card bg-white rounded-5 shadow-elite border p-4">
-                    <h6 class="fw-bold mb-4 text-dark opacity-50 small text-uppercase letter-spacing-1">أقسام التسجيل</h6>
+                    <h6 class="fw-bold mb-4 text-dark opacity-50 small text-uppercase letter-spacing-1">{{ __('center::messages.blade_0745') }}</h6>
                     <div class="nav flex-column gap-3 elite-vertical-nav">
                         <a href="#section-personal" class="nav-link active" data-section="personal">
                             <div class="nav-dot"></div>
                             <div class="nav-content">
-                                <span class="nav-label">البيانات الشخصية</span>
-                                <small class="text-muted">الاسم، الهاتف، الصورة</small>
+                                <span class="nav-label">{{ __('center::messages.blade_0746') }}</span>
+                                <small class="text-muted">{{ __('center::messages.blade_0747') }}</small>
                             </div>
                         </a>
                         <a href="#section-parent" class="nav-link" data-section="parent">
                             <div class="nav-dot"></div>
                             <div class="nav-content">
-                                <span class="nav-label">بيانات ولي الأمر</span>
-                                <small class="text-muted">الطوارئ، هاتف الوالد</small>
+                                <span class="nav-label">{{ __('center::messages.blade_0748') }}</span>
+                                <small class="text-muted">{{ __('center::messages.blade_0749') }}</small>
                             </div>
                         </a>
                         <a href="#section-academic" class="nav-link" data-section="academic">
                             <div class="nav-dot"></div>
                             <div class="nav-content">
-                                <span class="nav-label">البيانات الدراسية</span>
-                                <small class="text-muted">الصف، المدرسة، التخصص</small>
+                                <span class="nav-label">{{ __('center::messages.blade_0750') }}</span>
+                                <small class="text-muted">{{ __('center::messages.blade_0751') }}</small>
                             </div>
                         </a>
                     </div>
@@ -34,10 +34,9 @@
                     <div class="mt-5 pt-4 border-top">
                         <div class="d-flex align-items-center gap-2 text-success small mb-3">
                             <i class="fas fa-shield-halved"></i>
-                            <span class="fw-bold">تشفير البيانات نشط</span>
+                            <span class="fw-bold">{{ __('center::messages.blade_0752') }}</span>
                         </div>
-                        <button type="button" onclick="document.getElementById('student-form').submit()" class="btn btn-primary w-100 rounded-pill py-3 fw-bold shadow-elite btn-elite-submit">
-                            حفظ الملف النهائي <i class="fas fa-check-double ms-2"></i>
+                        <button type="button" onclick="document.getElementById('student-form').submit()" class="btn btn-primary w-100 rounded-pill py-3 fw-bold shadow-elite btn-elite-submit">{{ __('center::messages.blade_0753') }}<i class="fas fa-check-double ms-2"></i>
                         </button>
                     </div>
                 </div>
@@ -49,12 +48,11 @@
             <div class="header-action-bar mb-5 animate__animated animate__fadeIn">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h2 class="fw-bold text-dark mb-1">تسجيل طالب جديد</h2>
-                        <p class="text-muted mb-0">واجهة تسجيل حديثة وموحدة لإدارة بيانات الطلاب</p>
+                        <h2 class="fw-bold text-dark mb-1">{{ __('center::messages.blade_0754') }}</h2>
+                        <p class="text-muted mb-0">{{ __('center::messages.blade_0755') }}</p>
                     </div>
                     <a href="{{ route('center.students.index') }}" class="btn btn-white border shadow-sm rounded-pill px-4 hover-lift">
-                        <i class="fas fa-arrow-right me-2"></i> قائمة الطلاب
-                    </a>
+                        <i class="fas fa-arrow-right me-2"></i>{{ __('center::messages.blade_0756') }}</a>
                 </div>
             </div>
 
@@ -68,31 +66,31 @@
                             <i class="fas fa-user-astronaut fs-4"></i>
                         </div>
                         <div>
-                            <h4 class="fw-bold mb-0">المعلومات الشخصية</h4>
-                            <p class="text-muted small mb-0">البيانات الأساسية لتعريف هوية الطالب في النظام</p>
+                            <h4 class="fw-bold mb-0">{{ __('center::messages.blade_0757') }}</h4>
+                            <p class="text-muted small mb-0">{{ __('center::messages.blade_0758') }}</p>
                         </div>
                     </div>
 
                     <div class="row g-4">
                         <div class="col-md-6">
                             <div class="form-floating elite-input-group">
-                                <input type="text" name="name" value="{{ old('name') }}" class="form-control" id="nameInput" placeholder="الاسم">
-                                <label for="nameInput">اسم الطالب بالكامل <span class="text-danger">*</span></label>
+                                <input type="text" name="name" value="{{ old('name') }}" class="form-control" id="nameInput" placeholder="{{ __('center::messages.blade_0785') }}">
+                                <label for="nameInput">{{ __('center::messages.blade_0759') }}<span class="text-danger">*</span></label>
                                 <div class="validation-indicator"></div>
                                 @error('name') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating elite-input-group">
-                                <input type="tel" name="phone" value="{{ old('phone') }}" class="form-control" id="phoneInput" placeholder="الهاتف">
-                                <label for="phoneInput">رقم الهاتف <span class="text-danger">*</span></label>
+                                <input type="tel" name="phone" value="{{ old('phone') }}" class="form-control" id="phoneInput" placeholder="{{ __('center::messages.blade_0786') }}">
+                                <label for="phoneInput">{{ __('center::messages.blade_0760') }}<span class="text-danger">*</span></label>
                                 <div class="validation-indicator"></div>
                                 @error('phone') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating elite-input-group">
-                                <input type="email" name="email" value="{{ old('email') }}" class="form-control" id="emailInput" placeholder="الإيميل">
+                                <input type="email" name="email" value="{{ old('email') }}" class="form-control" id="emailInput" placeholder="{{ __('center::messages.blade_0787') }}">
                                 <label for="emailInput">البريد الإلكتروني (اختياري)</label>
                                 <div class="validation-indicator"></div>
                                 @error('email') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
@@ -100,41 +98,41 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating elite-input-group">
-                                <input type="text" name="code" value="{{ old('code') }}" class="form-control" id="codeInput" placeholder="الكود">
-                                <label for="codeInput">كود الطالب المميز</label>
+                                <input type="text" name="code" value="{{ old('code') }}" class="form-control" id="codeInput" placeholder="{{ __('center::messages.blade_0788') }}">
+                                <label for="codeInput">{{ __('center::messages.blade_0761') }}</label>
                                 <div class="validation-indicator"></div>
                                 @error('code') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-floating elite-input-group">
-                                <input type="text" name="address" value="{{ old('address') }}" class="form-control" id="addressInput" placeholder="العنوان">
-                                <label for="addressInput">العنوان التفصيلي</label>
+                                <input type="text" name="address" value="{{ old('address') }}" class="form-control" id="addressInput" placeholder="{{ __('center::messages.blade_0789') }}">
+                                <label for="addressInput">{{ __('center::messages.blade_0762') }}</label>
                                 @error('address') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-floating elite-input-group">
-                                <input type="text" name="national_id" value="{{ old('national_id') }}" class="form-control" id="idInput" placeholder="الرقم القومي">
-                                <label for="idInput">الرقم القومي</label>
+                                <input type="text" name="national_id" value="{{ old('national_id') }}" class="form-control" id="idInput" placeholder="{{ __('center::messages.blade_0790') }}">
+                                <label for="idInput">{{ __('center::messages.blade_0763') }}</label>
                                 @error('national_id') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-floating elite-input-group">
                                 <input type="date" name="birth_date" value="{{ old('birth_date') }}" class="form-control" id="dateInput">
-                                <label for="dateInput">تاريخ الميلاد</label>
+                                <label for="dateInput">{{ __('center::messages.blade_0764') }}</label>
                                 @error('birth_date') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-floating elite-input-group">
                                 <select name="gender" class="form-select" id="genderSelect">
-                                    <option value="">الجنس...</option>
-                                    <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>ذكر</option>
-                                    <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>أنثى</option>
+                                    <option value="">{{ __('center::messages.blade_0765') }}</option>
+                                    <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>{{ __('center::messages.blade_0766') }}</option>
+                                    <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>{{ __('center::messages.blade_0767') }}</option>
                                 </select>
-                                <label for="genderSelect">الجنس</label>
+                                <label for="genderSelect">{{ __('center::messages.blade_0768') }}</label>
                                 @error('gender') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
@@ -146,8 +144,8 @@
                                         <i class="fas fa-camera-retro text-primary fs-3"></i>
                                     </div>
                                 </div>
-                                <h6 class="fw-bold mb-1">الصورة الشخصية</h6>
-                                <p class="text-muted small">اسحب ملف الصورة أو انقر للاختيار</p>
+                                <h6 class="fw-bold mb-1">{{ __('center::messages.blade_0769') }}</h6>
+                                <p class="text-muted small">{{ __('center::messages.blade_0770') }}</p>
                                 <input type="file" name="profile_photo" id="photoInput" class="fake-input" accept="image/*">
                                 @error('profile_photo') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
@@ -162,48 +160,48 @@
                             <i class="fas fa-user-shield fs-4"></i>
                         </div>
                         <div>
-                            <h4 class="fw-bold mb-0">بيانات ولي الأمر</h4>
-                            <p class="text-muted small mb-0">تفاصيل التواصل في حالات الضرورة والمتابعة الأبوية</p>
+                            <h4 class="fw-bold mb-0">{{ __('center::messages.blade_0771') }}</h4>
+                            <p class="text-muted small mb-0">{{ __('center::messages.blade_0772') }}</p>
                         </div>
                     </div>
 
                     <div class="row g-4">
                         <div class="col-md-6">
                             <div class="form-floating elite-input-group position-relative">
-                                <input type="tel" name="parent_phone" id="parent_phone" value="{{ old('parent_phone') }}" class="form-control" placeholder="هاتف ولي الأمر">
-                                <label for="parent_phone">رقم هاتف ولي الأمر</label>
+                                <input type="tel" name="parent_phone" id="parent_phone" value="{{ old('parent_phone') }}" class="form-control" placeholder="{{ __('center::messages.blade_0791') }}">
+                                <label for="parent_phone">{{ __('center::messages.blade_0773') }}</label>
                                 <div class="validation-indicator"></div>
                                 @error('parent_phone') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                                 <div id="parent-match-chip" class="match-chip d-none animate__animated animate__bounceIn">
-                                    <i class="fas fa-magic me-1"></i> تم التعرف: <b id="match-name"></b>
+                                    <i class="fas fa-magic me-1"></i>{{ __('center::messages.blade_0774') }}<b id="match-name"></b>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating elite-input-group">
-                                <input type="text" name="parent_name" id="pNameInput" value="{{ old('parent_name') }}" class="form-control" placeholder="الاسم">
-                                <label for="pNameInput">اسم ولي الأمر</label>
+                                <input type="text" name="parent_name" id="pNameInput" value="{{ old('parent_name') }}" class="form-control" placeholder="{{ __('center::messages.blade_0792') }}">
+                                <label for="pNameInput">{{ __('center::messages.blade_0775') }}</label>
                                 @error('parent_name') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating elite-input-group">
-                                <input type="text" name="parent_relation" value="{{ old('parent_relation') }}" class="form-control" id="relInput" placeholder="القرابة">
-                                <label for="relInput">صلة القرابة</label>
+                                <input type="text" name="parent_relation" value="{{ old('parent_relation') }}" class="form-control" id="relInput" placeholder="{{ __('center::messages.blade_0793') }}">
+                                <label for="relInput">{{ __('center::messages.blade_0776') }}</label>
                                 @error('parent_relation') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating elite-input-group">
-                                <input type="tel" name="emergency_phone" value="{{ old('emergency_phone') }}" class="form-control" id="ePhoneInput" placeholder="طوارئ">
-                                <label for="ePhoneInput">رقم طوارئ إضافي</label>
+                                <input type="tel" name="emergency_phone" value="{{ old('emergency_phone') }}" class="form-control" id="ePhoneInput" placeholder="{{ __('center::messages.blade_0794') }}">
+                                <label for="ePhoneInput">{{ __('center::messages.blade_0777') }}</label>
                                 @error('emergency_phone') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="form-floating elite-input-group">
-                                <input type="text" name="parent_job" id="pJobInput" value="{{ old('parent_job') }}" class="form-control" placeholder="الوظيفة">
-                                <label for="pJobInput">وظيفة ولي الأمر</label>
+                                <input type="text" name="parent_job" id="pJobInput" value="{{ old('parent_job') }}" class="form-control" placeholder="{{ __('center::messages.blade_0795') }}">
+                                <label for="pJobInput">{{ __('center::messages.blade_0778') }}</label>
                                 @error('parent_job') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
@@ -217,8 +215,8 @@
                             <i class="fas fa-graduation-cap fs-4"></i>
                         </div>
                         <div>
-                            <h4 class="fw-bold mb-0">البيانات الأكاديمية</h4>
-                            <p class="text-muted small mb-0">تحديد المستوى الدراسي والانتماء التعليمي</p>
+                            <h4 class="fw-bold mb-0">{{ __('center::messages.blade_0779') }}</h4>
+                            <p class="text-muted small mb-0">{{ __('center::messages.blade_0780') }}</p>
                         </div>
                     </div>
 
@@ -226,7 +224,7 @@
                         <div class="col-12">
                             <div class="form-floating elite-input-group">
                                 <select name="grade_id" class="form-select" id="gradeSelect">
-                                    <option value="">اختر الصف...</option>
+                                    <option value="">{{ __('center::messages.blade_0781') }}</option>
                                     @foreach($stages as $stage)
                                         <optgroup label="📂 {{ $stage->name }}">
                                             @foreach($stage->grades as $grade)
@@ -235,21 +233,21 @@
                                         </optgroup>
                                     @endforeach
                                 </select>
-                                <label for="gradeSelect">الصف الدراسي الحالي <span class="text-danger">*</span></label>
+                                <label for="gradeSelect">{{ __('center::messages.blade_0782') }}<span class="text-danger">*</span></label>
                                 <div class="validation-indicator"></div>
                                 @error('grade_id') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating elite-input-group">
-                                <input type="text" name="school_name" value="{{ old('school_name') }}" class="form-control" id="schoolInput" placeholder="المدرسة">
-                                <label for="schoolInput">اسم المدرسة</label>
+                                <input type="text" name="school_name" value="{{ old('school_name') }}" class="form-control" id="schoolInput" placeholder="{{ __('center::messages.blade_0796') }}">
+                                <label for="schoolInput">{{ __('center::messages.blade_0783') }}</label>
                                 @error('school_name') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating elite-input-group">
-                                <input type="text" name="section_type" value="{{ old('section_type') }}" class="form-control" id="secInput" placeholder="التخصص">
+                                <input type="text" name="section_type" value="{{ old('section_type') }}" class="form-control" id="secInput" placeholder="{{ __('center::messages.blade_0797') }}">
                                 <label for="secInput">الشعبة (علمي/أدبي)</label>
                                 @error('section_type') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
@@ -259,7 +257,7 @@
 
                 <!-- Unified Sticky Submit Bar for Mobile -->
                 <div class="d-xl-none fixed-bottom bg-white border-top p-3 d-flex gap-2 shadow-lg" style="z-index: 1000;">
-                    <button type="submit" class="btn btn-primary w-100 rounded-pill py-3 fw-bold">إتمام التسجيل</button>
+                    <button type="submit" class="btn btn-primary w-100 rounded-pill py-3 fw-bold">{{ __('center::messages.blade_0784') }}</button>
                     <a href="#section-personal" class="btn btn-outline-secondary rounded-circle p-0 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;"><i class="fas fa-arrow-up"></i></a>
                 </div>
             </form>

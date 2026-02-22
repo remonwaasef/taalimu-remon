@@ -2,10 +2,8 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark">تعديل بيانات المدرس</h2>
-        <a href="{{ route('center.instructors.index') }}" class="btn btn-outline-secondary rounded-pill px-4">
-            عودة للقائمة
-        </a>
+        <h2 class="fw-bold text-dark">{{ __('center::messages.blade_0010') }}</h2>
+        <a href="{{ route('center.instructors.index') }}" class="btn btn-outline-secondary rounded-pill px-4">{{ __('center::messages.blade_0011') }}</a>
     </div>
 
     <div class="row justify-content-center">
@@ -25,7 +23,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::instructors.specialization') }}</label>
-                                <input type="text" name="specialization" value="{{ old('specialization', $instructor->specialization) }}" class="form-control bg-light border-0" placeholder="مثال: رياضيات، فيزياء...">
+                                <input type="text" name="specialization" value="{{ old('specialization', $instructor->specialization) }}" class="form-control bg-light border-0" placeholder="{{ __('center::messages.blade_0019') }}">
                                 @error('specialization')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                         </div>
@@ -43,7 +41,7 @@
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">{{ __('center::instructors.gender') }}</label>
                                 <select name="gender" class="form-select bg-light border-0">
-                                    <option value="">-- اختر --</option>
+                                    <option value="">{{ __('center::messages.blade_0012') }}</option>
                                     <option value="male" {{ old('gender', $instructor->gender) == 'male' ? 'selected' : '' }}>{{ __('center::instructors.male') }}</option>
                                     <option value="female" {{ old('gender', $instructor->gender) == 'female' ? 'selected' : '' }}>{{ __('center::instructors.female') }}</option>
                                 </select>
@@ -58,7 +56,7 @@
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::instructors.national_id') }}</label>
-                                <input type="text" name="national_id" value="{{ old('national_id', $instructor->national_id) }}" class="form-control bg-light border-0" placeholder="الرقم القومي">
+                                <input type="text" name="national_id" value="{{ old('national_id', $instructor->national_id) }}" class="form-control bg-light border-0" placeholder="{{ __('center::messages.blade_0020') }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::instructors.commission_rate') }}</label>
@@ -66,7 +64,7 @@
                                     <input type="number" step="0.01" name="commission_rate" value="{{ old('commission_rate', $instructor->commission_rate) }}" class="form-control bg-light border-0">
                                     <span class="input-group-text bg-light border-0">%</span>
                                 </div>
-                                <small class="text-muted">النسبة التي يتقاضاها المدرس من مبيعات دوراته</small>
+                                <small class="text-muted">{{ __('center::messages.blade_0013') }}</small>
                             </div>
                         </div>
 
@@ -90,22 +88,22 @@
                         </div>
 
                         <div class="mb-5">
-                            <label class="form-label fw-bold">الصورة الشخصية</label>
+                            <label class="form-label fw-bold">{{ __('center::messages.blade_0014') }}</label>
                             @if($instructor->image)
                                 <div class="mb-3">
                                     <div class="position-relative d-inline-block">
                                         <img src="{{ Storage::url($instructor->image) }}" class="rounded-4 shadow-sm" style="width: 120px; height: 120px; object-fit: cover;">
-                                        <div class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary border border-light">الصورة الحالية</div>
+                                        <div class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary border border-light">{{ __('center::messages.blade_0015') }}</div>
                                     </div>
                                 </div>
                             @endif
                             <input type="file" name="image" class="form-control bg-light border-0" accept="image/*">
-                            <small class="text-muted">اتركها فارغة إذا لم ترد تغيير الصورة</small>
+                            <small class="text-muted">{{ __('center::messages.blade_0016') }}</small>
                         </div>
 
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm py-3 fw-bold">حفظ التغييرات</button>
-                            <a href="{{ route('center.instructors.index') }}" class="btn btn-light rounded-pill py-3">إلغاء</a>
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm py-3 fw-bold">{{ __('center::messages.blade_0017') }}</button>
+                            <a href="{{ route('center.instructors.index') }}" class="btn btn-light rounded-pill py-3">{{ __('center::messages.blade_0018') }}</a>
                         </div>
                     </form>
                 </div>

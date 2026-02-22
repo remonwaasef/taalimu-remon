@@ -14,12 +14,12 @@
         <div class="card-body d-flex flex-column" style="height: 400px;">
             <div id="chatbot-messages" class="flex-grow-1 overflow-auto mb-3" style="max-height: 350px;">
                 <div class="text-center text-muted py-4">
-                    <p>مرحباً! كيف يمكنني مساعدتك؟</p>
+                    <p>{{ __('center::messages.blade_0349') }}</p>
                 </div>
             </div>
             <div class="input-group">
-                <input type="text" id="chatbot-input" class="form-control" placeholder="اكتب رسالتك...">
-                <button id="chatbot-send" class="btn btn-primary">إرسال</button>
+                <input type="text" id="chatbot-input" class="form-control" placeholder="{{ __('center::messages.blade_0351') }}">
+                <button id="chatbot-send" class="btn btn-primary">{{ __('center::messages.blade_0350') }}</button>
             </div>
         </div>
     </div>
@@ -74,11 +74,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.success) {
                 addMessage(data.message, 'bot');
             } else {
-                addMessage ('عذراً، حدث خطأ.', 'bot');
+                addMessage (__('center::messages.blade_0352'), 'bot');
             }
         } catch (error) {
             document.getElementById(typingId).remove();
-            addMessage('عذراً، حدث خطأ في الاتصال.', 'bot');
+            addMessage(__('center::messages.blade_0353'), 'bot');
         }
     };
 

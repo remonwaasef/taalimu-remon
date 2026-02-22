@@ -13,7 +13,7 @@
         <div class="col-md-3">
             <div class="card border-0 shadow-sm rounded-4 bg-primary text-white">
                 <div class="card-body p-4">
-                    <h6 class="opacity-75 small fw-bold">إجمالي المدرسين</h6>
+                    <h6 class="opacity-75 small fw-bold">{{ __('center::messages.blade_0021') }}</h6>
                     <h2 class="fw-bold mb-0">{{ $instructors->total() }}</h2>
                 </div>
             </div>
@@ -21,7 +21,7 @@
         <div class="col-md-3">
             <div class="card border-0 shadow-sm rounded-4 bg-white">
                 <div class="card-body p-4">
-                    <h6 class="text-muted small fw-bold">نشط حالياً</h6>
+                    <h6 class="text-muted small fw-bold">{{ __('center::messages.blade_0022') }}</h6>
                     <h2 class="fw-bold mb-0">{{ $activeCount }}</h2>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                             <th class="border-0 rounded-start">{{ __('center::instructors.name') }}</th>
                             <th class="border-0">{{ __('center::instructors.specialization') }}</th>
                             <th class="border-0">{{ __('center::instructors.status') }}</th>
-                            <th class="border-0">بيانات الاتصال</th>
+                            <th class="border-0">{{ __('center::messages.blade_0023') }}</th>
                             <th class="border-0">{{ __('center::instructors.courses_count') }}</th>
                             <th class="border-0 rounded-end">{{ __('center::instructors.actions') }}</th>
                         </tr>
@@ -113,7 +113,7 @@
                                             <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('center.instructors.edit', $instructor->id) }}"><i class="far fa-edit me-2 text-success opacity-75"></i> {{ __('center::instructors.edit') }}</a></li>
                                             <li><hr class="dropdown-divider opacity-10"></li>
                                             <li>
-                                                <form action="{{ route('center.instructors.destroy', $instructor->id) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('center::instructors.confirm_delete_instructor') ?? 'هل أنت متأكد من عملية الحذف؟' }}');">
+                                                <form action="{{ route('center.instructors.destroy', $instructor->id) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('center::instructors.confirm_delete_instructor') ?? __('center::messages.blade_0024') }}');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="dropdown-item rounded-3 text-danger mb-0">

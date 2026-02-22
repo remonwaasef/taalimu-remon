@@ -1,22 +1,20 @@
 @extends('center::layouts.master')
 
-@section('title', 'تحليلات الطلاب')
+@section('title', __('center::messages.blade_0189'))
 
 @section('content')
 <div class="container-fluid">
     <!-- Header -->
     <div class="d-flex align-items-center justify-content-between mb-4">
         <div>
-            <h1 class="h3 mb-1 text-gray-800 fw-bold">تحليلات الطلاب</h1>
-            <p class="text-muted mb-0">نظرة شاملة على بيانات الطلاب، النمو، والأداء المالي.</p>
+            <h1 class="h3 mb-1 text-gray-800 fw-bold">{{ __('center::messages.blade_0173') }}</h1>
+            <p class="text-muted mb-0">{{ __('center::messages.blade_0174') }}</p>
         </div>
         <div class="d-flex gap-2">
             <button class="btn btn-sm btn-white border shadow-sm rounded-pill px-3" onclick="window.print()">
-                <i class="fas fa-print me-2"></i> طباعة التقرير
-            </button>
+                <i class="fas fa-print me-2"></i>{{ __('center::messages.blade_0175') }}</button>
             <a href="{{ route('center.analytics.index') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                <i class="fas fa-arrow-left me-2"></i> عودة
-            </a>
+                <i class="fas fa-arrow-left me-2"></i>{{ __('center::messages.blade_0176') }}</a>
         </div>
     </div>
 
@@ -28,7 +26,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col me-2">
-                            <div class="text-xs fw-bold text-primary text-uppercase mb-1">إجمالي الطلاب</div>
+                            <div class="text-xs fw-bold text-primary text-uppercase mb-1">{{ __('center::messages.blade_0177') }}</div>
                             <div class="h3 mb-0 fw-bold text-gray-800">{{ $totalStudents }}</div>
                         </div>
                         <div class="col-auto">
@@ -47,7 +45,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col me-2">
-                            <div class="text-xs fw-bold text-success text-uppercase mb-1">الطلاب النشطين</div>
+                            <div class="text-xs fw-bold text-success text-uppercase mb-1">{{ __('center::messages.blade_0178') }}</div>
                             <div class="h3 mb-0 fw-bold text-gray-800">{{ $activeStudents }}</div>
                             <small class="text-muted">الذين لديهم حالة "نشط"</small>
                         </div>
@@ -67,9 +65,9 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col me-2">
-                            <div class="text-xs fw-bold text-danger text-uppercase mb-1">الطلاب غير النشطين</div>
+                            <div class="text-xs fw-bold text-danger text-uppercase mb-1">{{ __('center::messages.blade_0179') }}</div>
                             <div class="h3 mb-0 fw-bold text-gray-800">{{ $inactiveStudents }}</div>
-                            <small class="text-muted">حسابات معطلة أو خارجة</small>
+                            <small class="text-muted">{{ __('center::messages.blade_0180') }}</small>
                         </div>
                         <div class="col-auto">
                             <div class="icon-circle bg-danger bg-opacity-10 text-danger">
@@ -102,15 +100,13 @@
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-header py-3 bg-white border-0 rounded-top-4">
-                    <h6 class="m-0 fw-bold text-primary">توزيع المراحل الدراسية</h6>
+                    <h6 class="m-0 fw-bold text-primary">{{ __('center::messages.blade_0181') }}</h6>
                 </div>
                 <div class="card-body">
                     <div class="chart-pie pt-2 pb-2" style="height: 250px;">
                         <canvas id="gradeDistributionChart"></canvas>
                     </div>
-                    <div class="mt-4 text-center small text-muted">
-                        يعرض هذا الرسم توزيع الطلاب حسب المرحلة الدراسية المسجلة.
-                    </div>
+                    <div class="mt-4 text-center small text-muted">{{ __('center::messages.blade_0182') }}</div>
                 </div>
             </div>
         </div>
@@ -131,8 +127,8 @@
                         <table class="table align-middle mb-0 table-hover">
                             <thead class="bg-light">
                                 <tr>
-                                    <th class="border-0 p-3">الطالب</th>
-                                    <th class="border-0 p-3 text-end">إجمالي المدفوعات</th>
+                                    <th class="border-0 p-3">{{ __('center::messages.blade_0183') }}</th>
+                                    <th class="border-0 p-3 text-end">{{ __('center::messages.blade_0184') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -156,7 +152,7 @@
                                         </td>
                                     </tr>
                                 @empty
-                                    <tr><td colspan="2" class="text-center py-4 text-muted">لا توجد بيانات</td></tr>
+                                    <tr><td colspan="2" class="text-center py-4 text-muted">{{ __('center::messages.blade_0185') }}</td></tr>
                                 @endforelse
                             </tbody>
                         </table>
@@ -178,8 +174,8 @@
                         <table class="table align-middle mb-0 table-hover">
                             <thead class="bg-light">
                                 <tr>
-                                    <th class="border-0 p-3">الطالب</th>
-                                    <th class="border-0 p-3 text-end">المبلغ المستحق</th>
+                                    <th class="border-0 p-3">{{ __('center::messages.blade_0186') }}</th>
+                                    <th class="border-0 p-3 text-end">{{ __('center::messages.blade_0187') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -203,7 +199,7 @@
                                         </td>
                                     </tr>
                                 @empty
-                                    <tr><td colspan="2" class="text-center py-4 text-muted">لا يوجد مديونيات</td></tr>
+                                    <tr><td colspan="2" class="text-center py-4 text-muted">{{ __('center::messages.blade_0188') }}</td></tr>
                                 @endforelse
                             </tbody>
                         </table>

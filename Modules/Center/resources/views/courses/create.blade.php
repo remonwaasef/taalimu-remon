@@ -2,10 +2,8 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark">إضافة دورة جديدة</h2>
-        <a href="{{ route('center.courses.index') }}" class="btn btn-outline-secondary rounded-pill px-4">
-            عودة للقائمة
-        </a>
+        <h2 class="fw-bold text-dark">{{ __('center::messages.blade_0354') }}</h2>
+        <a href="{{ route('center.courses.index') }}" class="btn btn-outline-secondary rounded-pill px-4">{{ __('center::messages.blade_0355') }}</a>
     </div>
 
     <div class="row justify-content-center">
@@ -26,7 +24,7 @@
                         @endif
                         
                         <div class="mb-4">
-                            <label class="form-label fw-bold">عنوان الدورة</label>
+                            <label class="form-label fw-bold">{{ __('center::messages.blade_0356') }}</label>
                             <input type="text" name="title" value="{{ old('title') }}" class="form-control form-control-lg bg-light border-0 @error('title') is-invalid border-danger @enderror">
                             @error('title')
                                 <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
@@ -34,9 +32,9 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label fw-bold">المدرس</label>
+                            <label class="form-label fw-bold">{{ __('center::messages.blade_0357') }}</label>
                             <select name="instructor_id" class="form-select form-select-lg bg-light border-0 @error('instructor_id') is-invalid border-danger @enderror">
-                                <option value="">اختر المدرس...</option>
+                                <option value="">{{ __('center::messages.blade_0358') }}</option>
                                 @foreach($instructors as $instructor)
                                     <option value="{{ $instructor->id }}" {{ old('instructor_id') == $instructor->id ? 'selected' : '' }}>{{ $instructor->name }}</option>
                                 @endforeach
@@ -62,17 +60,15 @@
                                 @enderror
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label fw-bold">حالة الدورة</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0359') }}</label>
                                 <div class="d-flex gap-2">
                                     <input type="radio" class="btn-check" name="status" id="status_draft" value="draft" {{ old('status', 'draft') == 'draft' ? 'checked' : '' }}>
                                     <label class="btn btn-outline-secondary flex-grow-1 rounded-pill" for="status_draft">
-                                        <i class="fas fa-pencil-alt me-1"></i> مسودة
-                                    </label>
+                                        <i class="fas fa-pencil-alt me-1"></i>{{ __('center::messages.blade_0360') }}</label>
 
                                     <input type="radio" class="btn-check" name="status" id="status_published" value="published" {{ old('status') == 'published' ? 'checked' : '' }}>
                                     <label class="btn btn-outline-success flex-grow-1 rounded-pill" for="status_published">
-                                        <i class="fas fa-check-circle me-1"></i> نشر الآن
-                                    </label>
+                                        <i class="fas fa-check-circle me-1"></i>{{ __('center::messages.blade_0361') }}</label>
                                 </div>
                                 @error('status')
                                     <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
@@ -81,7 +77,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label fw-bold">صورة الغلاف</label>
+                            <label class="form-label fw-bold">{{ __('center::messages.blade_0362') }}</label>
                             <input type="file" name="image" class="form-control form-control-lg bg-light border-0 @error('image') is-invalid border-danger @enderror" accept="image/*">
                             @error('image')
                                 <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
@@ -89,7 +85,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label fw-bold">وصف الدورة</label>
+                            <label class="form-label fw-bold">{{ __('center::messages.blade_0363') }}</label>
                             <textarea name="description" class="form-control form-control-lg bg-light border-0 @error('description') is-invalid border-danger @enderror" rows="4">{{ old('description') }}</textarea>
                             @error('description')
                                 <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
@@ -99,10 +95,9 @@
                         <!-- Schedule Section -->
                         <div class="mb-4">
                             <label class="form-label fw-bold d-flex justify-content-between align-items-center">
-                                <span>مواعيد الدورة</span>
+                                <span>{{ __('center::messages.blade_0364') }}</span>
                                 <button type="button" id="add-schedule-btn" class="btn btn-sm btn-outline-primary rounded-pill">
-                                    <i class="fas fa-plus"></i> إضافة موعد
-                                </button>
+                                    <i class="fas fa-plus"></i>{{ __('center::messages.blade_0365') }}</button>
                             </label>
                             
                             <div id="schedules-container">
@@ -114,37 +109,37 @@
                             <div class="schedule-item card bg-light border-0 mb-3">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between mb-2">
-                                        <h6 class="fw-bold text-primary">موعد جديد</h6>
+                                        <h6 class="fw-bold text-primary">{{ __('center::messages.blade_0366') }}</h6>
                                         <button type="button" class="btn-close remove-schedule"></button>
                                     </div>
                                     <div class="row g-3">
                                         <div class="col-md-3">
-                                            <label class="small text-muted mb-1">اليوم</label>
+                                            <label class="small text-muted mb-1">{{ __('center::messages.blade_0367') }}</label>
                                             <select name="schedules[INDEX][day_of_week]" class="form-select border-0">
-                                                <option value="saturday">السبت</option>
-                                                <option value="sunday">الأحد</option>
-                                                <option value="monday">الاثنين</option>
-                                                <option value="tuesday">الثلاثاء</option>
-                                                <option value="wednesday">الأربعاء</option>
-                                                <option value="thursday">الخميس</option>
-                                                <option value="friday">الجمعة</option>
+                                                <option value="saturday">{{ __('center::messages.blade_0368') }}</option>
+                                                <option value="sunday">{{ __('center::messages.blade_0369') }}</option>
+                                                <option value="monday">{{ __('center::messages.blade_0370') }}</option>
+                                                <option value="tuesday">{{ __('center::messages.blade_0371') }}</option>
+                                                <option value="wednesday">{{ __('center::messages.blade_0372') }}</option>
+                                                <option value="thursday">{{ __('center::messages.blade_0373') }}</option>
+                                                <option value="friday">{{ __('center::messages.blade_0374') }}</option>
                                             </select>
                                         </div>
                                         <div class="col-md-3">
-                                            <label class="small text-muted mb-1">القاعة</label>
+                                            <label class="small text-muted mb-1">{{ __('center::messages.blade_0375') }}</label>
                                             <select name="schedules[INDEX][classroom_id]" class="form-select border-0">
-                                                <option value="">اختر القاعة...</option>
+                                                <option value="">{{ __('center::messages.blade_0376') }}</option>
                                                 @foreach($classrooms as $classroom)
                                                     <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="col-md-3">
-                                            <label class="small text-muted mb-1">من</label>
+                                            <label class="small text-muted mb-1">{{ __('center::messages.blade_0377') }}</label>
                                             <input type="time" name="schedules[INDEX][start_time]" class="form-control border-0">
                                         </div>
                                         <div class="col-md-3">
-                                            <label class="small text-muted mb-1">إلى</label>
+                                            <label class="small text-muted mb-1">{{ __('center::messages.blade_0378') }}</label>
                                             <input type="time" name="schedules[INDEX][end_time]" class="form-control border-0">
                                         </div>
                                     </div>
@@ -153,7 +148,7 @@
                         </template>
 
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">حفظ الدورة</button>
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">{{ __('center::messages.blade_0379') }}</button>
                         </div>
                     </form>
                 </div>

@@ -89,36 +89,36 @@
         <table class="info-table">
             <tr>
                 <td class="text-right">
-                    <strong>{{ $reshaper->reshape('الرقم:') }}</strong> #{{ $payment->id }}<br>
-                    <strong>{{ $reshaper->reshape('التاريخ:') }}</strong> {{ $payment->paid_at ? $payment->paid_at->format('Y/m/d') : $payment->created_at->format('Y/m/d') }}
+                    <strong>{{ $reshaper->reshape(__('center::messages.blade_0646')) }}</strong> #{{ $payment->id }}<br>
+                    <strong>{{ $reshaper->reshape(__('center::messages.blade_0647')) }}</strong> {{ $payment->paid_at ? $payment->paid_at->format('Y/m/d') : $payment->created_at->format('Y/m/d') }}
                 </td>
                 <td class="text-left">
-                    <strong>{{ $reshaper->reshape('رقم الفاتورة:') }}</strong> #{{ $payment->sale_id }}
+                    <strong>{{ $reshaper->reshape(__('center::messages.blade_0648')) }}</strong> #{{ $payment->sale_id }}
                 </td>
             </tr>
         </table>
 
         <div style="margin-bottom: 15px; font-size: 13px;">
             <strong>{{ $reshaper->reshape('وصلنا من السيد/السيدة:') }}</strong> {{ $payment->sale->student->name }}<br>
-            <strong>{{ $reshaper->reshape('مبلغ وقدره:') }}</strong> {{ number_format($payment->amount, 2) }} {{ $reshaper->reshape('ج.م') }}
+            <strong>{{ $reshaper->reshape(__('center::messages.blade_0649')) }}</strong> {{ number_format($payment->amount, 2) }} {{ $reshaper->reshape(__('center::messages.blade_0650')) }}
         </div>
 
         <table class="table">
             <thead>
                 <tr>
                     <th>{{ $reshaper->reshape('البيان (Description)') }}</th>
-                    <th style="width: 100px;">{{ $reshaper->reshape('القيمة') }}</th>
+                    <th style="width: 100px;">{{ $reshaper->reshape(__('center::messages.blade_0651')) }}</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ $reshaper->reshape('دفعة من حساب كورس:') }} 
-                        {{ $payment->sale->items->first()->reshaped_title ?? $reshaper->reshape('مبيعات') }}
+                    <td>{{ $reshaper->reshape(__('center::messages.blade_0652')) }} 
+                        {{ $payment->sale->items->first()->reshaped_title ?? $reshaper->reshape(__('center::messages.blade_0653')) }}
                         @if($payment->sale->items->count() > 1)
                             {{ $reshaper->reshape('(وآخرون)') }}
                         @endif
                     </td>
-                    <td>{{ number_format($payment->amount, 2) }} {{ $reshaper->reshape('ج.م') }}</td>
+                    <td>{{ number_format($payment->amount, 2) }} {{ $reshaper->reshape(__('center::messages.blade_0654')) }}</td>
                 </tr>
             </tbody>
         </table>
@@ -126,15 +126,15 @@
         <table class="info-table">
             <tr>
                 <td class="text-right" style="width: 60%;">
-                    <strong>{{ $reshaper->reshape('طريقة الدفع:') }}</strong> 
+                    <strong>{{ $reshaper->reshape(__('center::messages.blade_0655')) }}</strong> 
                     @php
-                        $method = $payment->payment_method == 'cash' ? 'نقدي' : ($payment->payment_method == 'card' ? 'فيزا' : 'تحويل');
+                        $method = $payment->payment_method == 'cash' ? __('center::messages.blade_0656') : ($payment->payment_method == 'card' ? __('center::messages.blade_0657') : __('center::messages.blade_0658'));
                     @endphp
                     {{ $reshaper->reshape($method) }}<br>
-                    <strong>{{ $reshaper->reshape('المتبقي في الفاتورة:') }}</strong> {{ number_format($payment->sale->total_amount - $payment->sale->paid_amount, 2) }} {{ $reshaper->reshape('ج.م') }}
+                    <strong>{{ $reshaper->reshape(__('center::messages.blade_0659')) }}</strong> {{ number_format($payment->sale->total_amount - $payment->sale->paid_amount, 2) }} {{ $reshaper->reshape(__('center::messages.blade_0660')) }}
                 </td>
                 <td class="text-center" style="width: 40%;">
-                    <p style="margin-bottom: 5px;">{{ $reshaper->reshape('توقيع المستلم') }}</p>
+                    <p style="margin-bottom: 5px;">{{ $reshaper->reshape(__('center::messages.blade_0661')) }}</p>
                     <div class="stamp">{{ $reshaper->reshape('مدفوع PAID') }}</div>
                 </td>
             </tr>

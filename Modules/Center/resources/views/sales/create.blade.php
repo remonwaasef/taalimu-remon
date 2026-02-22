@@ -60,12 +60,12 @@
                     <!-- Student Summary Card (Hidden by default) -->
                     <div id="studentSummaryCard" class="bg-light rounded-4 p-3 mb-4 d-none">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="fw-bold mb-0 text-dark">الملف المالي للطالب</h6>
-                            <span id="summaryStatus" class="badge rounded-pill px-3">نشط</span>
+                            <h6 class="fw-bold mb-0 text-dark">{{ __('center::messages.blade_0622') }}</h6>
+                            <span id="summaryStatus" class="badge rounded-pill px-3">{{ __('center::messages.blade_0623') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="small text-muted">إجمالي المديونية:</span>
-                            <span id="summaryDebt" class="badge bg-danger">0.00 ج.م</span>
+                            <span class="small text-muted">{{ __('center::messages.blade_0624') }}</span>
+                            <span id="summaryDebt" class="badge bg-danger">{{ __('center::messages.blade_0625') }}</span>
                         </div>
                         <hr class="my-2 opacity-25">
                         <div id="summaryCourses" class="small text-muted mb-3">
@@ -76,8 +76,7 @@
                         </div>
                         <div class="text-center">
                             <a id="summaryProfileLink" href="#" class="btn btn-sm btn-outline-primary w-100 rounded-pill small mb-2">
-                                <i class="fas fa-user-circle me-1"></i> عرض ملف الطالب بالكامل
-                            </a>
+                                <i class="fas fa-user-circle me-1"></i>{{ __('center::messages.blade_0626') }}</a>
                         </div>
                     </div>
 
@@ -163,7 +162,7 @@
 
                     // Subscription Status
                     if (data.student.status === 'active') {
-                        statusEl.innerText = 'حساب نشط';
+                        statusEl.innerText = __('center::messages.blade_0633');
                         statusEl.className = 'badge bg-success bg-opacity-10 text-success rounded-pill px-3';
                     } else {
                         statusEl.innerText = 'حساب غير نشط/منتهي';
@@ -171,30 +170,30 @@
                     }
 
                     // Courses
-                    coursesDiv.innerHTML = '<div class="fw-bold mb-1 small text-dark"><i class="fas fa-book me-1"></i> الكورسات الحالية:</div>';
+                    coursesDiv.innerHTML = '<div class="fw-bold mb-1 small text-dark"><i class="fas fa-book me-1"></i>{{ __('center::messages.blade_0627') }}</div>';
                     if (data.courses.length > 0) {
                         data.courses.forEach(c => {
                             coursesDiv.innerHTML += `<div class="ms-2">• ${c.title} <span class="badge bg-light text-dark py-0 small">${c.status}</span></div>`;
                         });
                     } else {
-                        coursesDiv.innerHTML += '<div class="ms-2">لا يوجد كورسات حالياً</div>';
+                        coursesDiv.innerHTML += '<div class="ms-2">{{ __('center::messages.blade_0628') }}</div>';
                     }
 
                     // Unpaid Invoices
-                    invoicesDiv.innerHTML = '<div class="fw-bold mb-1 small text-danger"><i class="fas fa-exclamation-circle me-1"></i> مديونيات سابقة:</div>';
+                    invoicesDiv.innerHTML = '<div class="fw-bold mb-1 small text-danger"><i class="fas fa-exclamation-circle me-1"></i>{{ __('center::messages.blade_0629') }}</div>';
                     if (data.unpaid_invoices.length > 0) {
                         data.unpaid_invoices.forEach(inv => {
                             invoicesDiv.innerHTML += `
                                 <div class="d-flex justify-content-between align-items-center mb-2 ms-2 p-2 bg-white rounded-3 border">
                                     <span class="small">فاتورة #${inv.id} (${inv.remaining.toFixed(2)})</span>
                                     <div class="d-flex gap-1">
-                                        <button type="button" class="btn btn-xs btn-success py-0 px-2 small rounded-pill" onclick="quickPay(${inv.id}, ${inv.remaining}, ${studentId})">سداد</button>
-                                        <a href="/sales/${inv.id}" target="_blank" class="btn btn-xs btn-light py-0 px-2 small rounded-pill border">عرض</a>
+                                        <button type="button" class="btn btn-xs btn-success py-0 px-2 small rounded-pill" onclick="quickPay(${inv.id}, ${inv.remaining}, ${studentId})">{{ __('center::messages.blade_0630') }}</button>
+                                        <a href="/sales/${inv.id}" target="_blank" class="btn btn-xs btn-light py-0 px-2 small rounded-pill border">{{ __('center::messages.blade_0631') }}</a>
                                     </div>
                                 </div>`;
                         });
                     } else {
-                        invoicesDiv.innerHTML += '<div class="ms-2">لا يوجد مديونيات سابقة</div>';
+                        invoicesDiv.innerHTML += '<div class="ms-2">{{ __('center::messages.blade_0632') }}</div>';
                     }
                 }
             });
@@ -203,7 +202,7 @@
     function quickPay(saleId, remaining, studentId) {
         Swal.fire({
             title: 'تحصيل دفعة - فاتورة #' + saleId,
-            text: 'المبلغ المتبقي: ' + remaining.toFixed(2) + ' ' + currency,
+            text: __('center::messages.blade_0634') + remaining.toFixed(2) + ' ' + currency,
             input: 'number',
             inputAttributes: {
                 min: 0.01,
@@ -212,14 +211,14 @@
             },
             inputValue: remaining,
             showCancelButton: true,
-            confirmButtonText: 'تأكيد التحصيل',
-            cancelButtonText: 'إلغاء',
+            confirmButtonText: __('center::messages.blade_0635'),
+            cancelButtonText: __('center::messages.blade_0636'),
             showLoaderOnConfirm: true,
             preConfirm: (amount) => {
                 const data = {
                     amount: amount,
                     payment_method: 'cash', // Default to cash for quick pay
-                    notes: 'تحصيل سريع من شاشة المبيعات',
+                    notes: __('center::messages.blade_0637'),
                     _token: '{{ csrf_token() }}'
                 };
                 return fetch(`/sales/${saleId}/payment`, {
@@ -238,7 +237,7 @@
             allowOutsideClick: () => !Swal.isLoading()
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire({ icon: 'success', title: 'تم التحصيل بنجاح' });
+                Swal.fire({ icon: 'success', title: __('center::messages.blade_0638') });
                 fetchStudentSummary(studentId); // Refresh summary
             }
         });
@@ -326,7 +325,7 @@
         };
 
         Swal.fire({
-            title: 'جاري الحفظ...',
+            title: __('center::messages.blade_0639'),
             didOpen: () => { Swal.showLoading(); }
         });
 
@@ -343,19 +342,19 @@
             if (data.success) {
                 Swal.fire({
                     icon: 'success',
-                    title: 'تمت العملية!',
-                    text: 'تم تسجيل عملية البيع وتنسيب الطالب للكورسات المختارة بنجاح.',
-                    confirmButtonText: 'حسناً'
+                    title: __('center::messages.blade_0640'),
+                    text: __('center::messages.blade_0641'),
+                    confirmButtonText: __('center::messages.blade_0642')
                 }).then(() => {
                     window.location.href = '{{ route("center.sales.index") }}';
                 });
             } else {
-                Swal.fire({ icon: 'error', text: 'خطأ: ' + (data.message || 'لم ينجح الحفظ') });
+                Swal.fire({ icon: 'error', text: __('center::messages.blade_0643') + (data.message || __('center::messages.blade_0644')) });
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            Swal.fire({ icon: 'error', text: 'حدث خطأ أثناء الاتصال بالخادم' });
+            Swal.fire({ icon: 'error', text: __('center::messages.blade_0645') });
         });
     }
 </script>

@@ -3,8 +3,8 @@
 @section('content')
 <div class="container-fluid p-0">
     <div class="mb-4">
-        <h4 class="fw-bold mb-1"><i class="fas fa-trophy me-2 text-warning"></i> لوحة الصدارة</h4>
-        <p class="text-muted small mb-0">تعرف على الطلاب الأكثر تميزاً ونشاطاً في المركز.</p>
+        <h4 class="fw-bold mb-1"><i class="fas fa-trophy me-2 text-warning"></i>{{ __('center::messages.blade_0500') }}</h4>
+        <p class="text-muted small mb-0">{{ __('center::messages.blade_0501') }}</p>
     </div>
 
     <div class="row">
@@ -15,10 +15,10 @@
                         <table class="table table-hover align-middle mb-0">
                             <thead class="bg-light">
                                 <tr>
-                                    <th class="border-0 ps-4" style="width: 80px;">الترتيب</th>
-                                    <th class="border-0">الطالب</th>
-                                    <th class="border-0">مجموع النقاط</th>
-                                    <th class="border-0 text-end pe-4">المستوى التقديري</th>
+                                    <th class="border-0 ps-4" style="width: 80px;">{{ __('center::messages.blade_0502') }}</th>
+                                    <th class="border-0">{{ __('center::messages.blade_0503') }}</th>
+                                    <th class="border-0">{{ __('center::messages.blade_0504') }}</th>
+                                    <th class="border-0 text-end pe-4">{{ __('center::messages.blade_0505') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -54,18 +54,18 @@
                                     </td>
                                     <td class="text-end pe-4">
                                         @php
-                                            $level = 'مبتدئ';
+                                            $level = __('center::messages.blade_0516');
                                             $badgeClass = 'bg-secondary';
-                                            if ($user->points >= 1000) { $level = 'أسطوري'; $badgeClass = 'bg-danger'; }
-                                            elseif ($user->points >= 500) { $level = 'خبير'; $badgeClass = 'bg-primary'; }
-                                            elseif ($user->points >= 200) { $level = 'مجتهد'; $badgeClass = 'bg-success'; }
+                                            if ($user->points >= 1000) { $level = __('center::messages.blade_0517'); $badgeClass = 'bg-danger'; }
+                                            elseif ($user->points >= 500) { $level = __('center::messages.blade_0518'); $badgeClass = 'bg-primary'; }
+                                            elseif ($user->points >= 200) { $level = __('center::messages.blade_0519'); $badgeClass = 'bg-success'; }
                                         @endphp
                                         <span class="badge {{ $badgeClass }} rounded-pill px-3">{{ $level }}</span>
                                     </td>
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="4" class="text-center py-5 text-muted">لا يوجد بيانات حالياً.</td>
+                                    <td colspan="4" class="text-center py-5 text-muted">{{ __('center::messages.blade_0506') }}</td>
                                 </tr>
                                 @endforelse
                             </tbody>
@@ -78,27 +78,27 @@
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm rounded-4 bg-primary text-white mb-4 overflow-hidden">
                 <div class="card-body p-4 position-relative" style="z-index: 1;">
-                    <h5 class="fw-bold mb-3">كيف تجمع النقاط؟</h5>
+                    <h5 class="fw-bold mb-3">{{ __('center::messages.blade_0507') }}</h5>
                     <div class="d-flex flex-column gap-3">
                         <div class="d-flex align-items-start gap-3">
                             <i class="fas fa-check-circle mt-1"></i>
                             <div>
-                                <div class="fw-bold">الحضور اليومي</div>
-                                <small class="text-white-50">احصل على 10 نقاط عند حضور كل حصة دراسية.</small>
+                                <div class="fw-bold">{{ __('center::messages.blade_0508') }}</div>
+                                <small class="text-white-50">{{ __('center::messages.blade_0509') }}</small>
                             </div>
                         </div>
                         <div class="d-flex align-items-start gap-3">
                             <i class="fas fa-graduation-cap mt-1"></i>
                             <div>
-                                <div class="fw-bold">اجتياز الامتحانات</div>
-                                <small class="text-white-50">احصل على نقاط تعادل درجتك في كل امتحان تجتازه.</small>
+                                <div class="fw-bold">{{ __('center::messages.blade_0510') }}</div>
+                                <small class="text-white-50">{{ __('center::messages.blade_0511') }}</small>
                             </div>
                         </div>
                         <div class="d-flex align-items-start gap-3">
                             <i class="fas fa-tasks mt-1"></i>
                             <div>
-                                <div class="fw-bold">إتمام المهام</div>
-                                <small class="text-white-50">سيتم إضافة مهام إضافية قريباً لزيادة نقاطك.</small>
+                                <div class="fw-bold">{{ __('center::messages.blade_0512') }}</div>
+                                <small class="text-white-50">{{ __('center::messages.blade_0513') }}</small>
                             </div>
                         </div>
                     </div>
@@ -108,7 +108,7 @@
 
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-header bg-white border-0 pt-4 px-4">
-                    <h6 class="fw-bold mb-0">آخر الإنجازات</h6>
+                    <h6 class="fw-bold mb-0">{{ __('center::messages.blade_0514') }}</h6>
                 </div>
                 <div class="card-body p-4">
                     <div class="d-flex flex-column gap-3">
@@ -121,13 +121,13 @@
                                 {{ strtoupper(substr($log->user->name ?? '?', 0, 1)) }}
                             </div>
                             <div class="flex-grow-1 overflow-hidden">
-                                <div class="small fw-bold text-truncate">{{ $log->user->name ?? 'مستخدم' }}</div>
+                                <div class="small fw-bold text-truncate">{{ $log->user->name ?? __('center::messages.blade_0520') }}</div>
                                 <div class="text-muted" style="font-size: 0.7rem;">{{ $log->reason }}</div>
                             </div>
                             <div class="text-success small fw-bold">+{{ $log->points }}</div>
                         </div>
                         @empty
-                        <p class="small text-muted mb-0">لا توجد إنجازات مسجلة بعد.</p>
+                        <p class="small text-muted mb-0">{{ __('center::messages.blade_0515') }}</p>
                         @endforelse
                     </div>
                 </div>

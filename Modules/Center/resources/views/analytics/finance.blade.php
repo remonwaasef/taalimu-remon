@@ -1,14 +1,13 @@
 @extends('center::layouts.master')
 
-@section('title', 'التقارير المالية')
+@section('title', __('center::messages.blade_0136'))
 
 @section('content')
 <div class="container-fluid">
     <div class="d-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">التقارير المالية</h1>
+        <h1 class="h3 mb-0 text-gray-800">{{ __('center::messages.blade_0125') }}</h1>
         <a href="{{ route('center.analytics.index') }}" class="btn btn-sm btn-outline-secondary">
-            <i class="fas fa-arrow-right"></i> عودة للرئيسية
-        </a>
+            <i class="fas fa-arrow-right"></i>{{ __('center::messages.blade_0126') }}</a>
     </div>
 
     <!-- Financial Summary Cards -->
@@ -18,7 +17,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">إجمالي الإيرادات</div>
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">{{ __('center::messages.blade_0127') }}</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($totalRevenue) }} ج.م</div>
                         </div>
                         <div class="col-auto">
@@ -61,20 +60,20 @@
     <!-- Transactions Table -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">سجل المعاملات</h6>
+            <h6 class="m-0 font-weight-bold text-primary">{{ __('center::messages.blade_0128') }}</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>رقم العملية</th>
-                            <th>الطالب</th>
-                            <th>المبلغ الكلي</th>
-                            <th>المدفوع</th>
-                            <th>المتبقي</th>
-                            <th>الحالة</th>
-                            <th>التاريخ</th>
+                            <th>{{ __('center::messages.blade_0129') }}</th>
+                            <th>{{ __('center::messages.blade_0130') }}</th>
+                            <th>{{ __('center::messages.blade_0131') }}</th>
+                            <th>{{ __('center::messages.blade_0132') }}</th>
+                            <th>{{ __('center::messages.blade_0133') }}</th>
+                            <th>{{ __('center::messages.blade_0134') }}</th>
+                            <th>{{ __('center::messages.blade_0135') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -87,7 +86,7 @@
                                 <td>{{ number_format($sale->total_amount - $sale->paid_amount) }}</td>
                                 <td>
                                     <span class="badge badge-{{ $sale->status == 'paid' ? 'success' : ($sale->status == 'partial' ? 'warning' : 'danger') }}">
-                                        {{ $sale->status == 'paid' ? 'مدفوع' : ($sale->status == 'partial' ? 'جزئي' : 'غير مدفوع') }}
+                                        {{ $sale->status == 'paid' ? __('center::messages.blade_0137') : ($sale->status == 'partial' ? __('center::messages.blade_0138') : __('center::messages.blade_0139')) }}
                                     </span>
                                 </td>
                                 <td>{{ $sale->created_at->format('Y-m-d') }}</td>
@@ -130,7 +129,7 @@
             layout: { padding: { left: 10, right: 25, top: 25, bottom: 0 } },
             scales: {
                 xAxes: [{ gridLines: { display: false, drawBorder: false }, ticks: { maxTicksLimit: 7 } }],
-                yAxes: [{ ticks: { maxTicksLimit: 5, padding: 10, callback: function(value) { return 'ج.م ' + value; } }, gridLines: { color: "rgb(234, 236, 244)", zeroLineColor: "rgb(234, 236, 244)", drawBorder: false, borderDash: [2], zeroLineBorderDash: [2] } }],
+                yAxes: [{ ticks: { maxTicksLimit: 5, padding: 10, callback: function(value) { return __('center::messages.blade_0140') + value; } }, gridLines: { color: "rgb(234, 236, 244)", zeroLineColor: "rgb(234, 236, 244)", drawBorder: false, borderDash: [2], zeroLineBorderDash: [2] } }],
             },
             legend: { display: false },
         }
