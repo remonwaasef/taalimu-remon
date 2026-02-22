@@ -20,10 +20,7 @@ trait ClearsDashboardCache
      */
     public static function clearDashboardCache(): void
     {
-        $tenantId = app('tenant')->id ?? 0;
-        if ($tenantId) {
-            Cache::forget("tenant_{$tenantId}_dashboard_stats_v3");
-            Cache::forget("tenant_{$tenantId}_recent_activities");
-        }
+        \App\Support\TenantCache::forget("dashboard_stats_v3");
+        \App\Support\TenantCache::forget("recent_activities");
     }
 }
