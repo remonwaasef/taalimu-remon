@@ -91,7 +91,7 @@ $tenantRoutes = function () {
     });
 
     // Protected Routes with Subscription Check
-    Route::middleware(['auth', 'subscription', 'force_password_change'])->group(function() {
+    Route::middleware(['auth', 'subscription', 'force_password_change', 'prevent-back-history'])->group(function() {
         // Dashboard
         Route::get('/', [CenterController::class, 'index'])->name('center.dashboard');
         Route::get('/dashboard', [CenterController::class, 'index'])->name('center.dashboard.alt');
