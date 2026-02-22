@@ -6,7 +6,7 @@
         <div class="col-md-6">
             <div class="card shadow-lg border-0 rounded-4">
                 <div class="card-header bg-primary text-white p-4 text-center">
-                    <h4 class="fw-bold mb-1"><i class="bi bi-person-check me-2"></i>تسجيل الحضور</h4>
+                    <h4 class="fw-bold mb-1"><i class="bi bi-person-check me-2"></i>{{ __('center::messages.blade_0216') }}</h4>
                     <p class="mb-0">{{ $schedule->course->title }}</p>
                 </div>
                 <div class="card-body p-5">
@@ -16,8 +16,7 @@
                         </div>
                     @else
                         <div class="alert alert-info text-center mb-4">
-                            <i class="bi bi-info-circle me-1"></i> يرجى تسجيل الدخول بحساب الطالب لتأكيد الحضور.
-                        </div>
+                            <i class="bi bi-info-circle me-1"></i>{{ __('center::messages.blade_0217') }}</div>
                     @endif
 
                     @if($errors->any())
@@ -33,19 +32,18 @@
                         <input type="hidden" name="qr_url" value="{{ $qrUrl ?? request()->fullUrl() }}">
                         
                         <div class="mb-3">
-                            <label for="email" class="form-label">البريد الإلكتروني</label>
+                            <label for="email" class="form-label">{{ __('center::messages.blade_0218') }}</label>
                             <input type="email" class="form-control form-control-lg" id="email" name="email" value="{{ old('email') }}" required autofocus>
                         </div>
 
                         <div class="mb-3">
-                            <label for="password" class="form-label">كلمة المرور</label>
+                            <label for="password" class="form-label">{{ __('center::messages.blade_0219') }}</label>
                             <input type="password" class="form-control form-control-lg" id="password" name="password" required>
                         </div>
 
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">
-                                <i class="bi bi-box-arrow-in-right me-2"></i>تسجيل الدخول وتأكيد الحضور
-                            </button>
+                                <i class="bi bi-box-arrow-in-right me-2"></i>{{ __('center::messages.blade_0220') }}</button>
                         </div>
                     </form>
                 </div>

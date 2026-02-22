@@ -15,14 +15,11 @@
         </div>
         <div class="d-flex gap-2">
             <a href="{{ route('center.curriculum.edit', $course->id) }}" class="btn btn-outline-primary rounded-pill px-4">
-                <i class="fas fa-chalkboard me-2"></i> المحتوى
-            </a>
+                <i class="fas fa-chalkboard me-2"></i>{{ __('center::messages.blade_0452') }}</a>
             <a href="{{ route('center.courses.edit', $course->id) }}" class="btn btn-outline-secondary rounded-pill px-4">
-                <i class="fas fa-edit me-2"></i> تعديل
-            </a>
+                <i class="fas fa-edit me-2"></i>{{ __('center::messages.blade_0453') }}</a>
             <button class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#enrollStudentModal">
-                <i class="fas fa-user-plus me-2"></i> تسجيل طالب
-            </button>
+                <i class="fas fa-user-plus me-2"></i>{{ __('center::messages.blade_0454') }}</button>
         </div>
     </div>
 
@@ -35,7 +32,7 @@
                         <i class="fas fa-users fa-lg"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">الطلاب المسجلين</h6>
+                        <h6 class="text-muted mb-1">{{ __('center::messages.blade_0455') }}</h6>
                         <h3 class="fw-bold mb-0">{{ $course->enrollments->count() }}</h3>
                     </div>
                 </div>
@@ -48,7 +45,7 @@
                         <i class="fas fa-check-circle fa-lg"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">نسبة الإكمال</h6>
+                        <h6 class="text-muted mb-1">{{ __('center::messages.blade_0456') }}</h6>
                         <h3 class="fw-bold mb-0">{{ number_format($course->enrollments->avg('progress'), 1) }}%</h3>
                     </div>
                 </div>
@@ -61,7 +58,7 @@
                         <i class="fas fa-money-bill fa-lg"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">سعر الدورة</h6>
+                        <h6 class="text-muted mb-1">{{ __('center::messages.blade_0457') }}</h6>
                         <h3 class="fw-bold mb-0">{{ number_format($course->price, 2) }} ج.م</h3>
                     </div>
                 </div>
@@ -72,17 +69,17 @@
     <!-- Enrolled Students List -->
     <div class="card border-0 shadow-sm rounded-4">
         <div class="card-header bg-white border-0 py-3">
-            <h5 class="fw-bold mb-0">قائمة الطلاب</h5>
+            <h5 class="fw-bold mb-0">{{ __('center::messages.blade_0458') }}</h5>
         </div>
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
                 <thead class="bg-light">
                     <tr>
-                        <th class="border-0 rounded-start">الطالب</th>
-                        <th class="border-0">تاريخ التسجيل</th>
-                        <th class="border-0">التقدم</th>
-                        <th class="border-0">الحالة</th>
-                        <th class="border-0 rounded-end">إجراءات</th>
+                        <th class="border-0 rounded-start">{{ __('center::messages.blade_0459') }}</th>
+                        <th class="border-0">{{ __('center::messages.blade_0460') }}</th>
+                        <th class="border-0">{{ __('center::messages.blade_0461') }}</th>
+                        <th class="border-0">{{ __('center::messages.blade_0462') }}</th>
+                        <th class="border-0 rounded-end">{{ __('center::messages.blade_0463') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -123,7 +120,7 @@
                         <tr>
                             <td colspan="5" class="text-center py-5 text-muted">
                                 <i class="fas fa-users-slash fa-2x mb-3"></i>
-                                <p class="mb-0">لا يوجد طلاب مسجلين في هذه الدورة.</p>
+                                <p class="mb-0">{{ __('center::messages.blade_0464') }}</p>
                             </td>
                         </tr>
                     @endforelse
@@ -137,7 +134,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content rounded-5 border-0 shadow-lg">
                 <div class="modal-header border-0 pb-0 pt-4 px-4">
-                    <h5 class="modal-title fw-bold fs-4">تسجيل طالب في الدورة</h5>
+                    <h5 class="modal-title fw-bold fs-4">{{ __('center::messages.blade_0465') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
@@ -145,13 +142,11 @@
                     <ul class="nav nav-pills mb-4 bg-light p-1 rounded-pill" id="enrollTabs" role="tablist">
                         <li class="nav-item flex-fill" role="presentation">
                             <button class="nav-link active rounded-pill w-100 fw-bold" id="existing-tab" data-bs-toggle="pill" data-bs-target="#existing-panel" type="button" role="tab">
-                                <i class="fas fa-search me-2"></i> طالب مسجل مسبقاً
-                            </button>
+                                <i class="fas fa-search me-2"></i>{{ __('center::messages.blade_0466') }}</button>
                         </li>
                         <li class="nav-item flex-fill" role="presentation">
                             <button class="nav-link rounded-pill w-100 fw-bold" id="quick-tab" data-bs-toggle="pill" data-bs-target="#quick-panel" type="button" role="tab">
-                                <i class="fas fa-user-plus me-2"></i> تسجيل سريع لجديد
-                            </button>
+                                <i class="fas fa-user-plus me-2"></i>{{ __('center::messages.blade_0467') }}</button>
                         </li>
                     </ul>
 
@@ -161,18 +156,17 @@
                             <form action="{{ route('center.courses.enroll', $course->id) }}" method="POST" class="p-2">
                                 @csrf
                                 <div class="mb-4">
-                                    <label class="form-label fw-bold text-dark mb-2">اختر الطالب من القائمة</label>
+                                    <label class="form-label fw-bold text-dark mb-2">{{ __('center::messages.blade_0468') }}</label>
                                     <select name="student_id" class="form-select border-2" id="studentSelect" required>
-                                        <option value="">ابحث عن طالب بالاسم أو الهاتف...</option>
+                                        <option value="">{{ __('center::messages.blade_0469') }}</option>
                                         @foreach($students as $student)
                                             <option value="{{ $student->id }}">{{ $student->name }} ({{ $student->phone }})</option>
                                         @endforeach
                                     </select>
-                                    <div class="form-text mt-2"><i class="fas fa-info-circle me-1"></i> ابحث عن الطلاب غير المسجلين في هذا الكورس فقط.</div>
+                                    <div class="form-text mt-2"><i class="fas fa-info-circle me-1"></i>{{ __('center::messages.blade_0470') }}</div>
                                 </div>
                                 <div class="d-grid gap-2">
-                                    <button type="submit" class="btn btn-primary rounded-pill py-3 fw-bold fs-5 shadow-sm">
-                                        إتمام التسجيل <i class="fas fa-arrow-left ms-2"></i>
+                                    <button type="submit" class="btn btn-primary rounded-pill py-3 fw-bold fs-5 shadow-sm">{{ __('center::messages.blade_0471') }}<i class="fas fa-arrow-left ms-2"></i>
                                     </button>
                                 </div>
                             </form>
@@ -185,26 +179,26 @@
                                 <div class="row g-3">
                                     <div class="col-md-12">
                                         <div class="form-floating mb-3">
-                                            <input type="text" name="name" class="form-control border-2 rounded-4" id="qName" placeholder="الاسم" required>
-                                            <label for="qName">اسم الطالب بالكامل</label>
+                                            <input type="text" name="name" class="form-control border-2 rounded-4" id="qName" placeholder="{{ __('center::messages.blade_0478') }}" required>
+                                            <label for="qName">{{ __('center::messages.blade_0472') }}</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-floating mb-3">
-                                            <input type="tel" name="phone" class="form-control border-2 rounded-4" id="qPhone" placeholder="الهاتف" required>
-                                            <label for="qPhone">رقم الهاتف</label>
+                                            <input type="tel" name="phone" class="form-control border-2 rounded-4" id="qPhone" placeholder="{{ __('center::messages.blade_0479') }}" required>
+                                            <label for="qPhone">{{ __('center::messages.blade_0473') }}</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-floating mb-3">
-                                            <input type="tel" name="parent_phone" class="form-control border-2 rounded-4" id="qParentPhone" placeholder="هاتف ولي الأمر">
+                                            <input type="tel" name="parent_phone" class="form-control border-2 rounded-4" id="qParentPhone" placeholder="{{ __('center::messages.blade_0480') }}">
                                             <label for="qParentPhone">هاتف ولي الأمر (اختياري)</label>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-floating mb-4">
                                             <select name="grade_id" class="form-select border-2 rounded-4" id="qGrade" required>
-                                                <option value="">اختر الصف الدراسي...</option>
+                                                <option value="">{{ __('center::messages.blade_0474') }}</option>
                                                 @foreach($stages as $stage)
                                                     <optgroup label="📂 {{ $stage->name }}">
                                                         @foreach($stage->grades as $grade)
@@ -213,16 +207,14 @@
                                                     </optgroup>
                                                 @endforeach
                                             </select>
-                                            <label for="qGrade">الصف الدراسي</label>
+                                            <label for="qGrade">{{ __('center::messages.blade_0475') }}</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="alert alert-info border-0 rounded-4 py-3 small mb-4">
-                                    <i class="fas fa-magic me-2"></i> سيقوم النظام بإنشاء حساب للطالب وتلقائياً وتسجيله في هذه الدورة فوراً.
-                                </div>
+                                    <i class="fas fa-magic me-2"></i>{{ __('center::messages.blade_0476') }}</div>
                                 <div class="d-grid gap-2">
-                                    <button type="submit" class="btn btn-success rounded-pill py-3 fw-bold fs-5 shadow-sm">
-                                        إنشاء وتسجيل <i class="fas fa-bolt ms-2"></i>
+                                    <button type="submit" class="btn btn-success rounded-pill py-3 fw-bold fs-5 shadow-sm">{{ __('center::messages.blade_0477') }}<i class="fas fa-bolt ms-2"></i>
                                     </button>
                                 </div>
                             </form>

@@ -4,9 +4,8 @@
 <div class="container-fluid p-0">
     <div class="mb-4">
         <a href="{{ route('center.questions.index') }}" class="text-muted text-decoration-none small">
-            <i class="fas fa-arrow-right me-1"></i> العودة لبنك الأسئلة
-        </a>
-        <h4 class="fw-bold mt-2">إضافة سؤال جديد للبنك</h4>
+            <i class="fas fa-arrow-right me-1"></i>{{ __('center::messages.blade_0528') }}</a>
+        <h4 class="fw-bold mt-2">{{ __('center::messages.blade_0529') }}</h4>
     </div>
 
     <form action="{{ route('center.questions.store') }}" method="POST">
@@ -16,34 +15,33 @@
                 <div class="card border-0 shadow-sm rounded-4 mb-4">
                     <div class="card-body p-4">
                         <div class="mb-4">
-                            <label class="form-label fw-bold">نص السؤال</label>
-                            <textarea name="content" class="form-control rounded-4" rows="4" placeholder="اكتب نص السؤال هنا..." required></textarea>
+                            <label class="form-label fw-bold">{{ __('center::messages.blade_0530') }}</label>
+                            <textarea name="content" class="form-control rounded-4" rows="4" placeholder="{{ __('center::messages.blade_0544') }}" required></textarea>
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label fw-bold">الخيارات</label>
+                            <label class="form-label fw-bold">{{ __('center::messages.blade_0531') }}</label>
                             <div id="optionsContainer">
                                 <div class="option-row mb-3 d-flex gap-3 align-items-center">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="correct_option" value="0" checked>
                                     </div>
-                                    <input type="text" name="options[0][content]" class="form-control rounded-pill" placeholder="الخيار الأول" required>
+                                    <input type="text" name="options[0][content]" class="form-control rounded-pill" placeholder="{{ __('center::messages.blade_0545') }}" required>
                                 </div>
                                 <div class="option-row mb-3 d-flex gap-3 align-items-center">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="correct_option" value="1">
                                     </div>
-                                    <input type="text" name="options[1][content]" class="form-control rounded-pill" placeholder="الخيار الثاني" required>
+                                    <input type="text" name="options[1][content]" class="form-control rounded-pill" placeholder="{{ __('center::messages.blade_0546') }}" required>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 mt-2" onclick="addOption()">
-                                <i class="fas fa-plus me-1"></i> إضافة خيار آخر
-                            </button>
+                                <i class="fas fa-plus me-1"></i>{{ __('center::messages.blade_0532') }}</button>
                         </div>
 
                         <div class="mb-0">
                             <label class="form-label fw-bold">تفسير الإجابة (اختياري)</label>
-                            <textarea name="explanation" class="form-control rounded-4" rows="2" placeholder="اشرح لماذا هذه الإجابة صحيحة..."></textarea>
+                            <textarea name="explanation" class="form-control rounded-4" rows="2" placeholder="{{ __('center::messages.blade_0547') }}"></textarea>
                         </div>
                     </div>
                 </div>
@@ -52,11 +50,11 @@
             <div class="col-lg-4">
                 <div class="card border-0 shadow-sm rounded-4 mb-4">
                     <div class="card-header bg-white border-0 pt-4 px-4">
-                        <h6 class="fw-bold mb-0">إعدادات السؤال</h6>
+                        <h6 class="fw-bold mb-0">{{ __('center::messages.blade_0533') }}</h6>
                     </div>
                     <div class="card-body p-4">
                         <div class="mb-3">
-                            <label class="form-label small fw-bold">التصنيف</label>
+                            <label class="form-label small fw-bold">{{ __('center::messages.blade_0534') }}</label>
                             <select name="category_id" class="form-select rounded-pill">
                                 <option value="">بدون تصنيف (عام)</option>
                                 @foreach($categories as $category)
@@ -66,30 +64,29 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label small fw-bold">صعوبة السؤال</label>
+                            <label class="form-label small fw-bold">{{ __('center::messages.blade_0535') }}</label>
                             <select name="difficulty" class="form-select rounded-pill">
-                                <option value="easy">سهل</option>
-                                <option value="medium" selected>متوسط</option>
-                                <option value="hard">صعب</option>
+                                <option value="easy">{{ __('center::messages.blade_0536') }}</option>
+                                <option value="medium" selected>{{ __('center::messages.blade_0537') }}</option>
+                                <option value="hard">{{ __('center::messages.blade_0538') }}</option>
                             </select>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label small fw-bold">النقاط</label>
+                            <label class="form-label small fw-bold">{{ __('center::messages.blade_0539') }}</label>
                             <input type="number" name="points" class="form-control rounded-pill" value="1" min="1">
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label small fw-bold">نوع السؤال</label>
+                            <label class="form-label small fw-bold">{{ __('center::messages.blade_0540') }}</label>
                             <select name="type" class="form-select rounded-pill" onchange="toggleType(this.value)">
-                                <option value="mcq">اختيار من متعدد</option>
-                                <option value="true_false">صح أو خطأ</option>
+                                <option value="mcq">{{ __('center::messages.blade_0541') }}</option>
+                                <option value="true_false">{{ __('center::messages.blade_0542') }}</option>
                             </select>
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 shadow-sm">
-                            <i class="fas fa-save me-2"></i> حفظ السؤال في البنك
-                        </button>
+                            <i class="fas fa-save me-2"></i>{{ __('center::messages.blade_0543') }}</button>
                     </div>
                 </div>
             </div>
@@ -107,7 +104,7 @@
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="correct_option" value="${optionCount}">
             </div>
-            <input type="text" name="options[${optionCount}][content]" class="form-control rounded-pill" placeholder="خيار جديد" required>
+            <input type="text" name="options[${optionCount}][content]" class="form-control rounded-pill" placeholder="{{ __('center::messages.blade_0548') }}" required>
             <button type="button" class="btn btn-link text-danger p-0" onclick="this.parentElement.remove()">
                 <i class="fas fa-times"></i>
             </button>
@@ -126,13 +123,13 @@
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="correct_option" value="0" checked>
                     </div>
-                    <input type="text" name="options[0][content]" class="form-control rounded-pill" value="صح" readonly>
+                    <input type="text" name="options[0][content]" class="form-control rounded-pill" value="{{ __('center::messages.blade_0549') }}" readonly>
                 </div>
                 <div class="option-row mb-3 d-flex gap-3 align-items-center">
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="correct_option" value="1">
                     </div>
-                    <input type="text" name="options[1][content]" class="form-control rounded-pill" value="خطأ" readonly>
+                    <input type="text" name="options[1][content]" class="form-control rounded-pill" value="{{ __('center::messages.blade_0550') }}" readonly>
                 </div>
             `;
             addBtn.style.display = 'none';

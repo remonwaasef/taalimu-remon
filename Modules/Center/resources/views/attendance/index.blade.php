@@ -2,8 +2,8 @@
 
 @section('content')
     <div class="mb-4">
-        <h2 class="fw-bold text-dark">متابعة الحضور والغياب</h2>
-        <p class="text-muted">إدارة حضور الطلاب بناءً على جدول الحصص اليومي.</p>
+        <h2 class="fw-bold text-dark">{{ __('center::messages.blade_0202') }}</h2>
+        <p class="text-muted">{{ __('center::messages.blade_0203') }}</p>
     </div>
 
     <div class="row g-4">
@@ -20,7 +20,7 @@
                                 <tr>
                                     <th class="border-0 rounded-start">الحصة / الوقت</th>
                                     <th class="border-0">المعلم / القاعة</th>
-                                    <th class="border-0 text-center">الإجراءات</th>
+                                    <th class="border-0 text-center">{{ __('center::messages.blade_0204') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -34,7 +34,7 @@
                                             </small>
                                         </td>
                                         <td>
-                                            <div class="small mb-1"><i class="bi bi-person me-1"></i>{{ $session->instructor->name ?? 'معلم الدورة' }}</div>
+                                            <div class="small mb-1"><i class="bi bi-person me-1"></i>{{ $session->instructor->name ?? __('center::messages.blade_0210') }}</div>
                                             <div class="small text-muted"><i class="bi bi-geo-alt me-1"></i>{{ $session->classroom->name ?? __('center::schedules.classroom') }}</div>
                                         </td>
                                         <td class="text-center">
@@ -45,12 +45,10 @@
                                             <div class="d-flex justify-content-center gap-2">
                                                 @if($isEnded)
                                                     <a href="{{ route('center.attendance.show', $session) }}" class="btn btn-sm btn-outline-danger rounded-pill px-3">
-                                                        <i class="bi bi-person-x me-1"></i> تسجيل الغياب
-                                                    </a>
+                                                        <i class="bi bi-person-x me-1"></i>{{ __('center::messages.blade_0205') }}</a>
                                                 @else
                                                     <a href="{{ route('center.attendance.show', $session) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                                        <i class="bi bi-card-checklist me-1"></i> التحضير اليدوي
-                                                    </a>
+                                                        <i class="bi bi-card-checklist me-1"></i>{{ __('center::messages.blade_0206') }}</a>
                                                     <a href="{{ route('center.attendance.qr', $session) }}" class="btn btn-sm btn-primary rounded-pill px-3">
                                                         <i class="bi bi-qr-code me-1"></i> عرض الـ QR
                                                     </a>
@@ -60,7 +58,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3" class="text-center py-5 text-muted">لا يوجد حصص مجدولة لهذا اليوم</td>
+                                        <td colspan="3" class="text-center py-5 text-muted">{{ __('center::messages.blade_0207') }}</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -77,7 +75,7 @@
         <div class="col-md-4">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-header bg-white border-0 p-4 pb-0">
-                    <h5 class="fw-bold mb-0"><i class="bi bi-ui-checks me-2 text-success"></i>آخر التحضيرات</h5>
+                    <h5 class="fw-bold mb-0"><i class="bi bi-ui-checks me-2 text-success"></i>{{ __('center::messages.blade_0208') }}</h5>
                 </div>
                 <div class="card-body p-4">
                     <div class="list-group list-group-flush">
@@ -96,13 +94,13 @@
                                     </div>
                                     <div class="ms-auto">
                                         <span class="badge bg-{{ $record->status == 'present' ? 'success' : ($record->status == 'late' ? 'warning' : 'danger') }} bg-opacity-10 text-{{ $record->status == 'present' ? 'success' : ($record->status == 'late' ? 'warning' : 'danger') }} rounded-pill" style="font-size: 0.65rem;">
-                                            {{ $record->status == 'present' ? 'حاضر' : ($record->status == 'late' ? 'متأخر' : 'غائب') }}
+                                            {{ $record->status == 'present' ? __('center::messages.blade_0211') : ($record->status == 'late' ? __('center::messages.blade_0212') : __('center::messages.blade_0213')) }}
                                         </span>
                                     </div>
                                 </div>
                             </div>
                         @empty
-                            <div class="text-center py-4 text-muted small">لا يوجد نشاطات مؤخراً</div>
+                            <div class="text-center py-4 text-muted small">{{ __('center::messages.blade_0209') }}</div>
                         @endforelse
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 @extends('center::layouts.master')
 
-@section('title', 'حسابات الطلاب والتحصيل')
+@section('title', __('center::messages.blade_0616'))
 
 @section('content')
 <div class="mb-4 d-flex align-items-center justify-content-between">
@@ -9,8 +9,8 @@
             <i class="fas fa-user-invoice fa-lg"></i>
         </div>
         <div>
-            <h2 class="fw-bold text-dark mb-0">حسابات الطلاب</h2>
-            <p class="text-muted small mb-0">البحث عن أرصدة الطلاب وتحصيل المتأخرات</p>
+            <h2 class="fw-bold text-dark mb-0">{{ __('center::messages.blade_0598') }}</h2>
+            <p class="text-muted small mb-0">{{ __('center::messages.blade_0599') }}</p>
         </div>
     </div>
 </div>
@@ -22,9 +22,9 @@
             <div class="card-body p-4">
                 <div class="row align-items-end g-3">
                     <div class="col-md-8">
-                        <label class="form-label fw-bold text-dark"><i class="fas fa-search me-1"></i> اختر الطالب لعرض حسابه</label>
+                        <label class="form-label fw-bold text-dark"><i class="fas fa-search me-1"></i>{{ __('center::messages.blade_0600') }}</label>
                         <select id="studentSelector" class="form-select form-select-lg rounded-pill shadow-none border @if(app()->getLocale() == 'ar') text-end @endif" onchange="loadStudentAccount(this.value)">
-                            <option value="">-- ابحث بالاسم أو رقم الهاتف --</option>
+                            <option value="">{{ __('center::messages.blade_0601') }}</option>
                             @foreach($students as $student)
                                 <option value="{{ $student->id }}">{{ $student->name }} ({{ $student->phone }})</option>
                             @endforeach
@@ -33,7 +33,7 @@
                     <div class="col-md-4">
                         <div id="quickStats" class="d-none animate__animated animate__fadeIn">
                             <div class="bg-danger bg-opacity-10 rounded-pill p-3 border border-danger border-opacity-25 d-flex justify-content-between align-items-center">
-                                <span class="text-danger fw-bold">إجمالي المديونية:</span>
+                                <span class="text-danger fw-bold">{{ __('center::messages.blade_0602') }}</span>
                                 <h4 id="totalDebtDisplay" class="mb-0 fw-bold text-danger">0.00</h4>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
             <div class="col-lg-7">
                 <div class="card border-0 shadow-sm rounded-4 h-100">
                     <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
-                        <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-book me-2"></i> الكورسات المسجل بها</h5>
+                        <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-book me-2"></i>{{ __('center::messages.blade_0603') }}</h5>
                         <span id="courseCount" class="badge bg-primary rounded-pill px-3">0</span>
                     </div>
                     <div class="card-body p-0">
@@ -58,9 +58,9 @@
                             <table class="table align-middle mb-0">
                                 <thead class="bg-light">
                                     <tr>
-                                        <th class="border-0 ps-4">اسم الكورس</th>
-                                        <th class="border-0">تاريخ التسجيل</th>
-                                        <th class="border-0">الحالة</th>
+                                        <th class="border-0 ps-4">{{ __('center::messages.blade_0604') }}</th>
+                                        <th class="border-0">{{ __('center::messages.blade_0605') }}</th>
+                                        <th class="border-0">{{ __('center::messages.blade_0606') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody id="coursesTableBody">
@@ -76,15 +76,14 @@
             <div class="col-lg-5">
                 <div class="card border-0 shadow-sm rounded-4 h-100">
                     <div class="card-header bg-white border-0 py-3">
-                        <h5 class="fw-bold mb-0 text-danger"><i class="fas fa-exclamation-triangle me-2"></i> المبالغ المستحقة للتحصيل</h5>
+                        <h5 class="fw-bold mb-0 text-danger"><i class="fas fa-exclamation-triangle me-2"></i>{{ __('center::messages.blade_0607') }}</h5>
                     </div>
                     <div class="card-body p-4" id="invoicesList">
                         <!-- Dynamic content -->
                     </div>
                     <div class="card-footer bg-white border-0 py-3 text-center">
                         <a id="fullProfileBtn" href="#" class="btn btn-light rounded-pill px-4 border">
-                            <i class="fas fa-user-circle me-1"></i> عرض السجل الكامل للطالب
-                        </a>
+                            <i class="fas fa-user-circle me-1"></i>{{ __('center::messages.blade_0608') }}</a>
                     </div>
                 </div>
             </div>
@@ -95,8 +94,8 @@
     <div id="emptyState" class="col-lg-12 text-center py-5">
         <div class="bg-white rounded-4 shadow-sm p-5 d-inline-block" style="max-width: 500px;">
             <i class="fas fa-user-check fa-4x text-light mb-4"></i>
-            <h4 class="fw-bold text-dark">جاهز للبحث</h4>
-            <p class="text-muted">قم باختيار طالب من القائمة أعلاه لعرض التفاصيل المالية ومتابعة التحصيل.</p>
+            <h4 class="fw-bold text-dark">{{ __('center::messages.blade_0609') }}</h4>
+            <p class="text-muted">{{ __('center::messages.blade_0610') }}</p>
         </div>
     </div>
 </div>
@@ -141,7 +140,7 @@
                                 </tr>`;
                         });
                     } else {
-                        tableBody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-muted">لا يوجد كورسات حالياً</td></tr>';
+                        tableBody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-muted">{{ __('center::messages.blade_0611') }}</td></tr>';
                     }
 
                     // Update Invoices
@@ -157,12 +156,8 @@
                                         <div class="text-danger fw-bold mt-1">${inv.remaining.toFixed(2)} ${currency}</div>
                                     </div>
                                     <div class="d-flex flex-column gap-2">
-                                        <button class="btn btn-success btn-sm rounded-pill px-3" onclick="collectDebt(${inv.id}, ${inv.remaining}, ${studentId})">
-                                            تحصيل الآن
-                                        </button>
-                                        <a href="/sales/${inv.id}" target="_blank" class="btn btn-outline-light text-dark btn-sm rounded-pill px-3 border small">
-                                            عرض الفاتورة
-                                        </a>
+                                        <button class="btn btn-success btn-sm rounded-pill px-3" onclick="collectDebt(${inv.id}, ${inv.remaining}, ${studentId})">{{ __('center::messages.blade_0612') }}</button>
+                                        <a href="/sales/${inv.id}" target="_blank" class="btn btn-outline-light text-dark btn-sm rounded-pill px-3 border small">{{ __('center::messages.blade_0613') }}</a>
                                     </div>
                                 </div>`;
                         });
@@ -172,8 +167,8 @@
                                 <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px;">
                                     <i class="fas fa-check fa-2x"></i>
                                 </div>
-                                <h6 class="fw-bold text-success">لا توجد مديونيات!</h6>
-                                <p class="text-muted small mb-0">تم سداد جميع المبالغ المستحقة لهذا الطالب.</p>
+                                <h6 class="fw-bold text-success">{{ __('center::messages.blade_0614') }}</h6>
+                                <p class="text-muted small mb-0">{{ __('center::messages.blade_0615') }}</p>
                             </div>`;
                     }
                 }
@@ -182,20 +177,20 @@
 
     function collectDebt(saleId, remaining, studentId) {
         Swal.fire({
-            title: 'تحصيل مبلغ للمديونية',
+            title: __('center::messages.blade_0617'),
             text: 'الفاتورة #' + saleId + ' | المتبقي: ' + remaining.toFixed(2) + ' ' + currency,
             input: 'number',
             inputAttributes: { min: 0.01, max: remaining, step: 0.01 },
             inputValue: remaining,
             showCancelButton: true,
-            confirmButtonText: 'تأكيد التحصيل',
-            cancelButtonText: 'إلغاء',
+            confirmButtonText: __('center::messages.blade_0618'),
+            cancelButtonText: __('center::messages.blade_0619'),
             showLoaderOnConfirm: true,
             preConfirm: (amount) => {
                 const data = {
                     amount: amount,
                     payment_method: 'cash',
-                    notes: 'تحصيل من شاشة حسابات الطلاب',
+                    notes: __('center::messages.blade_0620'),
                     _token: '{{ csrf_token() }}'
                 };
                 return fetch(`/sales/${saleId}/payment`, {
@@ -211,7 +206,7 @@
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire({ icon: 'success', title: 'تم التحصيل بنجاح' });
+                Swal.fire({ icon: 'success', title: __('center::messages.blade_0621') });
                 loadStudentAccount(studentId);
             }
         });

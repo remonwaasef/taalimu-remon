@@ -22,7 +22,7 @@
                 <div class="card h-100 shadow-sm border-0 rounded-4 {{ $tenant->subscribedToPrice($package->stripe_price_id) ? 'border-primary border-2' : '' }}">
                     <div class="card-body p-4">
                         @if($tenant->subscribedToPrice($package->stripe_price_id))
-                            <span class="badge bg-primary rounded-pill mb-3">خطتك الحالية</span>
+                            <span class="badge bg-primary rounded-pill mb-3">{{ __('center::messages.blade_0952') }}</span>
                         @endif
                         <h4 class="fw-bold mb-2">{{ $package->name }}</h4>
                         <div class="mb-3">
@@ -41,11 +41,11 @@
                         </ul>
 
                         @if($tenant->subscribedToPrice($package->stripe_price_id))
-                            <button class="btn btn-outline-primary w-100 rounded-pill disabled" disabled>منشط حالياً</button>
+                            <button class="btn btn-outline-primary w-100 rounded-pill disabled" disabled>{{ __('center::messages.blade_0953') }}</button>
                         @elseif($package->stripe_price_id)
-                            <a href="{{ route('center.subscription.checkout', $package->id) }}" class="btn btn-primary w-100 rounded-pill">ترقية الخطة</a>
+                            <a href="{{ route('center.subscription.checkout', $package->id) }}" class="btn btn-primary w-100 rounded-pill">{{ __('center::messages.blade_0954') }}</a>
                         @else
-                            <button class="btn btn-light w-100 rounded-pill disabled" disabled>غير متاح</button>
+                            <button class="btn btn-light w-100 rounded-pill disabled" disabled>{{ __('center::messages.blade_0955') }}</button>
                         @endif
                     </div>
                 </div>

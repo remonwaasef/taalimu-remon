@@ -3,16 +3,14 @@
 @section('content')
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <div>
-            <h2 class="fw-bold text-dark mb-1">نظام الامتحانات والنتائج</h2>
-            <p class="text-muted mb-0">نظرة عامة على أداء الطلاب وإدارة محتوى الاختبارات.</p>
+            <h2 class="fw-bold text-dark mb-1">{{ __('center::messages.blade_0576') }}</h2>
+            <p class="text-muted mb-0">{{ __('center::messages.blade_0577') }}</p>
         </div>
         <div class="d-flex gap-2">
             <a href="{{ route('center.questions.index') }}" class="btn btn-outline-primary rounded-pill px-4 shadow-sm">
-                <i class="bi bi-database-fill me-2"></i>بنك الأسئلة
-            </a>
-            <a href="{{ route('center.courses.index') }}" class="btn btn-primary rounded-pill px-4 shadow-sm" title="يتم إنشاء الاختبارات من داخل دروس الدورات">
-                <i class="bi bi-plus-circle-fill me-2"></i>إدارة المناهج لإنشاء اختبار
-            </a>
+                <i class="bi bi-database-fill me-2"></i>{{ __('center::messages.blade_0578') }}</a>
+            <a href="{{ route('center.courses.index') }}" class="btn btn-primary rounded-pill px-4 shadow-sm" title="{{ __('center::messages.blade_0591') }}">
+                <i class="bi bi-plus-circle-fill me-2"></i>{{ __('center::messages.blade_0579') }}</a>
         </div>
     </div>
 
@@ -25,7 +23,7 @@
                         <i class="bi bi-journal-text text-primary fs-3"></i>
                     </div>
                     <div class="flex-grow-1 ms-3">
-                        <h6 class="text-muted mb-1">إجمالي الاختبارات</h6>
+                        <h6 class="text-muted mb-1">{{ __('center::messages.blade_0580') }}</h6>
                         <h3 class="fw-bold mb-0 text-dark">{{ number_format($totalQuizzesCount) }}</h3>
                     </div>
                 </div>
@@ -38,7 +36,7 @@
                         <i class="bi bi-people-fill text-success fs-3"></i>
                     </div>
                     <div class="flex-grow-1 ms-3">
-                        <h6 class="text-muted mb-1">محاولات الطلاب</h6>
+                        <h6 class="text-muted mb-1">{{ __('center::messages.blade_0581') }}</h6>
                         <h3 class="fw-bold mb-0 text-dark">{{ number_format($totalAttemptsCount) }}</h3>
                     </div>
                 </div>
@@ -51,7 +49,7 @@
                         <i class="bi bi-trophy-fill text-warning fs-3"></i>
                     </div>
                     <div class="flex-grow-1 ms-3">
-                        <h6 class="text-muted mb-1">متوسط النجاح</h6>
+                        <h6 class="text-muted mb-1">{{ __('center::messages.blade_0582') }}</h6>
                         <h3 class="fw-bold mb-0 text-dark">{{ number_format($avgPassingRate, 1) }}%</h3>
                     </div>
                 </div>
@@ -64,7 +62,7 @@
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm rounded-4 h-100 bg-white">
                 <div class="card-header bg-transparent border-0 p-4 pb-0 d-flex justify-content-between align-items-center">
-                    <h5 class="fw-bold mb-0"><i class="bi bi-journal-check me-2 text-primary"></i>الاختبارات المتوفرة</h5>
+                    <h5 class="fw-bold mb-0"><i class="bi bi-journal-check me-2 text-primary"></i>{{ __('center::messages.blade_0583') }}</h5>
                 </div>
                 <div class="card-body p-4">
                     <div class="table-responsive">
@@ -72,9 +70,9 @@
                             <thead class="bg-light bg-opacity-50">
                                 <tr>
                                     <th class="border-0 rounded-start text-muted fw-semibold">الاختبار / الدورة</th>
-                                    <th class="border-0 text-muted fw-semibold">درجة النجاح</th>
-                                    <th class="border-0 text-muted fw-semibold">الوقت</th>
-                                    <th class="border-0 text-center text-muted fw-semibold">الإجراءات</th>
+                                    <th class="border-0 text-muted fw-semibold">{{ __('center::messages.blade_0584') }}</th>
+                                    <th class="border-0 text-muted fw-semibold">{{ __('center::messages.blade_0585') }}</th>
+                                    <th class="border-0 text-center text-muted fw-semibold">{{ __('center::messages.blade_0586') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -94,15 +92,15 @@
                                         <td>
                                             <small class="text-muted fw-medium">
                                                 <i class="bi bi-clock me-1 text-primary"></i>
-                                                {{ $quiz->duration_minutes ?? 'غير محدود' }} دقيقة
+                                                {{ $quiz->duration_minutes ?? __('center::messages.blade_0594') }} دقيقة
                                             </small>
                                         </td>
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center gap-2">
-                                                <a href="{{ route('center.quizzes.edit', $quiz) }}" class="btn btn-sm btn-outline-primary border-0 rounded-circle" title="تعديل">
+                                                <a href="{{ route('center.quizzes.edit', $quiz) }}" class="btn btn-sm btn-outline-primary border-0 rounded-circle" title="{{ __('center::messages.blade_0592') }}">
                                                     <i class="bi bi-pencil-square fs-5"></i>
                                                 </a>
-                                                <a href="{{ route('center.quizzes.show', $quiz) }}" class="btn btn-sm btn-outline-secondary border-0 rounded-circle" title="معاينة">
+                                                <a href="{{ route('center.quizzes.show', $quiz) }}" class="btn btn-sm btn-outline-secondary border-0 rounded-circle" title="{{ __('center::messages.blade_0593') }}">
                                                     <i class="bi bi-eye fs-5"></i>
                                                 </a>
                                             </div>
@@ -113,8 +111,8 @@
                                         <td colspan="4" class="text-center py-5">
                                             <div class="py-4">
                                                 <i class="bi bi-journal-x fs-1 text-muted opacity-25 mb-3 d-block"></i>
-                                                <p class="text-muted mb-0">لا يوجد اختبارات منشأة بعد</p>
-                                                <a href="{{ route('center.courses.index') }}" class="btn btn-link text-primary mt-2">ابدأ بإنشاء أول اختبار الآن</a>
+                                                <p class="text-muted mb-0">{{ __('center::messages.blade_0587') }}</p>
+                                                <a href="{{ route('center.courses.index') }}" class="btn btn-link text-primary mt-2">{{ __('center::messages.blade_0588') }}</a>
                                             </div>
                                         </td>
                                     </tr>
@@ -130,7 +128,7 @@
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm rounded-4 h-100 bg-white">
                 <div class="card-header bg-transparent border-0 p-4 pb-0">
-                    <h5 class="fw-bold mb-0"><i class="bi bi-lightning-charge-fill me-2 text-warning"></i>آخر النتائج</h5>
+                    <h5 class="fw-bold mb-0"><i class="bi bi-lightning-charge-fill me-2 text-warning"></i>{{ __('center::messages.blade_0589') }}</h5>
                 </div>
                 <div class="card-body p-4">
                     <div class="list-group list-group-flush">
@@ -147,9 +145,9 @@
                                         <div class="text-muted text-truncate" style="font-size: 0.75rem; max-width: 150px;">{{ $attempt->quiz->title }}</div>
                                         <div class="d-flex align-items-center gap-2 mt-1">
                                             <span class="badge bg-{{ $attempt->passed ? 'success' : 'danger' }} bg-opacity-10 text-{{ $attempt->passed ? 'success' : 'danger' }} p-0 px-2" style="font-size: 0.65rem;">
-                                                {{ $attempt->passed ? 'ناجح' : 'راسب' }}
+                                                {{ $attempt->passed ? __('center::messages.blade_0595') : __('center::messages.blade_0596') }}
                                             </span>
-                                            <small class="text-muted" style="font-size: 0.65rem;"><i class="bi bi-clock-history me-1"></i>{{ $attempt->completed_at ? $attempt->completed_at->diffForHumans() : 'جاري' }}</small>
+                                            <small class="text-muted" style="font-size: 0.65rem;"><i class="bi bi-clock-history me-1"></i>{{ $attempt->completed_at ? $attempt->completed_at->diffForHumans() : __('center::messages.blade_0597') }}</small>
                                         </div>
                                     </div>
                                     <div class="ms-auto text-end">
@@ -160,7 +158,7 @@
                         @empty
                             <div class="text-center py-5">
                                 <i class="bi bi-graph-up fs-1 text-muted opacity-25 mb-3 d-block"></i>
-                                <p class="text-muted small mb-0">لا يوجد نتائج طلاب حتى الآن</p>
+                                <p class="text-muted small mb-0">{{ __('center::messages.blade_0590') }}</p>
                             </div>
                         @endforelse
                     </div>

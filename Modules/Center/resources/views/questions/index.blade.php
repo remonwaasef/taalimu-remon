@@ -4,16 +4,14 @@
 <div class="container-fluid p-0">
     <div class="d-flex align-items-center justify-content-between mb-4">
         <div>
-            <h4 class="fw-bold mb-1"><i class="fas fa-database me-2 text-primary"></i> بنك الأسئلة</h4>
-            <p class="text-muted small mb-0">قم بإدارة الأسئلة وإعادة استخدامها في الاختبارات المختلفة.</p>
+            <h4 class="fw-bold mb-1"><i class="fas fa-database me-2 text-primary"></i>{{ __('center::messages.blade_0551') }}</h4>
+            <p class="text-muted small mb-0">{{ __('center::messages.blade_0552') }}</p>
         </div>
         <div class="d-flex gap-2">
             <button class="btn btn-outline-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#categoryModal">
-                <i class="fas fa-tags me-2"></i> التصنيفات
-            </button>
+                <i class="fas fa-tags me-2"></i>{{ __('center::messages.blade_0553') }}</button>
             <a href="{{ route('center.questions.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
-                <i class="fas fa-plus me-2"></i> إضافة سؤال جديد
-            </a>
+                <i class="fas fa-plus me-2"></i>{{ __('center::messages.blade_0554') }}</a>
         </div>
     </div>
 
@@ -25,12 +23,12 @@
                         <table class="table align-middle mb-0">
                             <thead class="bg-light">
                                 <tr>
-                                    <th class="border-0 ps-4">السؤال</th>
-                                    <th class="border-0">التصنيف</th>
-                                    <th class="border-0">الصعوبة</th>
-                                    <th class="border-0">النقاط</th>
-                                    <th class="border-0">النوع</th>
-                                    <th class="border-0 text-end pe-4">الإجراءات</th>
+                                    <th class="border-0 ps-4">{{ __('center::messages.blade_0555') }}</th>
+                                    <th class="border-0">{{ __('center::messages.blade_0556') }}</th>
+                                    <th class="border-0">{{ __('center::messages.blade_0557') }}</th>
+                                    <th class="border-0">{{ __('center::messages.blade_0558') }}</th>
+                                    <th class="border-0">{{ __('center::messages.blade_0559') }}</th>
+                                    <th class="border-0 text-end pe-4">{{ __('center::messages.blade_0560') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -40,7 +38,7 @@
                                         <div class="text-dark fw-semibold text-truncate" style="max-width: 300px;">{{ $question->content }}</div>
                                     </td>
                                     <td>
-                                        <span class="badge bg-light text-dark rounded-pill px-3">{{ $question->category->name ?? 'عام' }}</span>
+                                        <span class="badge bg-light text-dark rounded-pill px-3">{{ $question->category->name ?? __('center::messages.blade_0571') }}</span>
                                     </td>
                                     <td>
                                         @php
@@ -51,29 +49,29 @@
                                             ][$question->difficulty] ?? 'secondary';
                                             
                                             $diffLabel = [
-                                                'easy' => 'سهل',
-                                                'medium' => 'متوسط',
-                                                'hard' => 'صعب'
+                                                'easy' => __('center::messages.blade_0572'),
+                                                'medium' => __('center::messages.blade_0573'),
+                                                'hard' => __('center::messages.blade_0574')
                                             ][$question->difficulty] ?? $question->difficulty;
                                         @endphp
                                         <span class="badge bg-{{ $diffColor }} bg-opacity-10 text-{{ $diffColor }} rounded-pill px-3">
                                             {{ $diffLabel }}
                                         </span>
                                     </td>
-                                    <td><span class="fw-bold text-primary">{{ $question->points }}</span> ن</td>
+                                    <td><span class="fw-bold text-primary">{{ $question->points }}</span>{{ __('center::messages.blade_0561') }}</td>
                                     <td>
                                         <small class="text-muted">
-                                            {{ $question->type == 'mcq' ? 'اختياري' : 'صح/خطأ' }}
+                                            {{ $question->type == 'mcq' ? __('center::messages.blade_0575') : 'صح/خطأ' }}
                                         </small>
                                     </td>
                                     <td class="text-end pe-4">
                                         <div class="d-flex justify-content-end gap-1">
-                                            <a href="{{ route('center.questions.edit', $question) }}" class="btn btn-light btn-sm rounded-circle" title="تعديل">
+                                            <a href="{{ route('center.questions.edit', $question) }}" class="btn btn-light btn-sm rounded-circle" title="{{ __('center::messages.blade_0568') }}">
                                                 <i class="fas fa-edit text-primary"></i>
                                             </a>
-                                            <form action="{{ route('center.questions.destroy', $question) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذا السؤال؟')">
+                                            <form action="{{ route('center.questions.destroy', $question) }}" method="POST" onsubmit="return confirm('{{ __('center::messages.blade_0570') }}')">
                                                 @csrf @method('DELETE')
-                                                <button class="btn btn-light btn-sm rounded-circle" title="حذف">
+                                                <button class="btn btn-light btn-sm rounded-circle" title="{{ __('center::messages.blade_0569') }}">
                                                     <i class="fas fa-trash text-danger"></i>
                                                 </button>
                                             </form>
@@ -84,7 +82,7 @@
                                 <tr>
                                     <td colspan="6" class="text-center py-5">
                                         <img src="{{ asset('assets/img/empty-box.png') }}" class="mb-3" style="width: 80px; opacity: 0.5;">
-                                        <p class="text-muted">لا توجد أسئلة في البنك حالياً.</p>
+                                        <p class="text-muted">{{ __('center::messages.blade_0562') }}</p>
                                     </td>
                                 </tr>
                                 @endforelse
@@ -107,26 +105,26 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow rounded-4">
             <div class="modal-header border-0 pb-0">
-                <h5 class="fw-bold">تصنيفات الأسئلة</h5>
+                <h5 class="fw-bold">{{ __('center::messages.blade_0563') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <form action="{{ route('center.questions.categories.store') }}" method="POST" class="mb-4">
                     @csrf
                     <div class="input-group">
-                        <input type="text" name="name" class="form-control rounded-start-pill" placeholder="اسم التصنيف الجديد..." required>
-                        <button class="btn btn-primary rounded-end-pill px-4" type="submit">إضافة</button>
+                        <input type="text" name="name" class="form-control rounded-start-pill" placeholder="{{ __('center::messages.blade_0567') }}" required>
+                        <button class="btn btn-primary rounded-end-pill px-4" type="submit">{{ __('center::messages.blade_0564') }}</button>
                     </div>
                 </form>
                 
-                <h6 class="fw-bold small text-muted mb-3 text-uppercase">التصنيفات الحالية</h6>
+                <h6 class="fw-bold small text-muted mb-3 text-uppercase">{{ __('center::messages.blade_0565') }}</h6>
                 <div class="d-flex flex-wrap gap-2">
                     @forelse($categories as $category)
                         <span class="badge bg-light text-dark rounded-pill py-2 px-3 border">
                             {{ $category->name }}
                         </span>
                     @empty
-                        <p class="small text-muted">لا توجد تصنيفات حالياً.</p>
+                        <p class="small text-muted">{{ __('center::messages.blade_0566') }}</p>
                     @endforelse
                 </div>
             </div>

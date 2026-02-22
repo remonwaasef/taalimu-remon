@@ -21,21 +21,21 @@
                                 <i class="fas fa-key fs-4"></i>
                             </div>
                             <div>
-                                <h4 class="fw-bold mb-0 text-dark">تم تصفير كلمة المرور</h4>
-                                <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3 mt-1">يجب تزويد الطالب بالبيانات الجديدة</span>
+                                <h4 class="fw-bold mb-0 text-dark">{{ __('center::messages.blade_0839') }}</h4>
+                                <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3 mt-1">{{ __('center::messages.blade_0840') }}</span>
                             </div>
                         </div>
 
                         <div class="row g-4 mt-2">
                             <div class="col-sm-6">
-                                <label class="text-muted small text-uppercase fw-bold d-block mb-1">اسم الطالب</label>
+                                <label class="text-muted small text-uppercase fw-bold d-block mb-1">{{ __('center::messages.blade_0841') }}</label>
                                 <span class="fw-bold fs-5">{{ $student->name }}</span>
                             </div>
                             <div class="col-sm-6">
-                                <label class="text-muted small text-uppercase fw-bold d-block mb-1">كلمة المرور الجديدة</label>
+                                <label class="text-muted small text-uppercase fw-bold d-block mb-1">{{ __('center::messages.blade_0842') }}</label>
                                 <div class="d-flex align-items-center gap-2">
                                     <span class="fs-4 fw-bold text-danger font-monospace">{{ session('generated_password') }}</span>
-                                    <button onclick="copyToClipboard('{{ session('generated_password') }}')" class="btn btn-sm btn-light rounded-circle" title="نسخ">
+                                    <button onclick="copyToClipboard('{{ session('generated_password') }}')" class="btn btn-sm btn-light rounded-circle" title="{{ __('center::messages.blade_0935') }}">
                                         <i class="fas fa-copy text-primary"></i>
                                     </button>
                                 </div>
@@ -44,11 +44,9 @@
 
                         <div class="mt-4 pt-3 border-top d-flex flex-wrap gap-2">
                             <button onclick="copyAllDetails()" class="btn btn-outline-dark rounded-pill px-4">
-                                <i class="fas fa-copy me-2"></i> نسخ جميع البيانات
-                            </button>
+                                <i class="fas fa-copy me-2"></i>{{ __('center::messages.blade_0843') }}</button>
                             <a href="{{ $whatsappUrl }}" target="_blank" class="btn btn-success rounded-pill px-4">
-                                <i class="fab fa-whatsapp me-2"></i> إرسال عبر واتساب
-                            </a>
+                                <i class="fab fa-whatsapp me-2"></i>{{ __('center::messages.blade_0844') }}</a>
                         </div>
                     </div>
 
@@ -83,7 +81,7 @@
                                     {{ substr($student->name, 0, 1) }}
                                 </div>
                             @endif
-                            <div class="position-absolute bottom-0 end-0 bg-success border border-white border-4 rounded-circle p-2 pulse-success" title="نشط"></div>
+                            <div class="position-absolute bottom-0 end-0 bg-success border border-white border-4 rounded-circle p-2 pulse-success" title="{{ __('center::messages.blade_0936') }}"></div>
                         </div>
 
                         <!-- Main Info Section -->
@@ -114,11 +112,9 @@
                                 </div>
                                 <div class="d-flex gap-2">
                                     <a href="https://wa.me/{{ $student->parent_phone ?? $student->guardian?->phone }}" target="_blank" class="btn btn-success rounded-pill px-4 shadow-sm hover-lift fw-bold">
-                                        <i class="fab fa-whatsapp me-2"></i> ولي الأمر
-                                    </a>
+                                        <i class="fab fa-whatsapp me-2"></i>{{ __('center::messages.blade_0845') }}</a>
                                     <a href="{{ route('center.students.edit', $student->id) }}" class="btn btn-white border rounded-pill px-4 shadow-sm hover-lift text-dark fw-bold">
-                                        <i class="fas fa-edit me-2"></i> تعديل البروفايل
-                                    </a>
+                                        <i class="fas fa-edit me-2"></i>{{ __('center::messages.blade_0846') }}</a>
                                 </div>
                             </div>
                             
@@ -131,15 +127,15 @@
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="text-center">
                                                 <div class="fw-bold text-primary fs-5">{{ $stats['attendance_pct'] }}%</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">النسبة</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0847') }}</div>
                                             </div>
                                             <div class="text-center border-start border-end px-2">
                                                 <div class="fw-bold text-success">{{ $stats['attendance_count'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">حضور</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0848') }}</div>
                                             </div>
                                             <div class="text-center">
                                                 <div class="fw-bold text-danger">{{ $stats['absent_count'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">غياب</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0849') }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -152,15 +148,15 @@
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="text-center">
                                                 <div class="fw-bold text-indigo fs-5">{{ $stats['points'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">الرصيد</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0850') }}</div>
                                             </div>
                                             <div class="text-center border-start border-end px-2">
                                                 <div class="fw-bold text-success">{{ $stats['points_earned'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">إضافة</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0851') }}</div>
                                             </div>
                                             <div class="text-center">
                                                 <div class="fw-bold text-danger">{{ $stats['points_spent'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">سحب</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0852') }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -173,15 +169,15 @@
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="text-center">
                                                 <div class="fw-bold text-success fs-5">{{ $stats['avg_quiz_score'] }}%</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">المتوسط</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0853') }}</div>
                                             </div>
                                             <div class="text-center border-start border-end px-2">
                                                 <div class="fw-bold text-dark">{{ $stats['quiz_count'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">عدد</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0854') }}</div>
                                             </div>
                                             <div class="text-center">
                                                 <div class="fw-bold text-primary">{{ $stats['highest_score'] }}%</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">أعلى درجة</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0855') }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -194,15 +190,15 @@
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="text-center">
                                                 <div class="fw-bold text-dark fs-5">{{ $stats['total_sessions'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">إجمالي</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0856') }}</div>
                                             </div>
                                             <div class="text-center border-start border-end px-2">
                                                 <div class="fw-bold text-success">{{ $stats['attendance_count'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">حاضر</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0857') }}</div>
                                             </div>
                                             <div class="text-center">
                                                 <div class="fw-bold text-warning">{{ $stats['remaining_sessions_count'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">باقي</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0858') }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -225,7 +221,7 @@
                 <div class="position-absolute top-0 end-0 p-3 opacity-10">
                     <i class="fas fa-qrcode fs-1"></i>
                 </div>
-                <h6 class="fw-bold text-dark border-bottom pb-3 mb-4">بطاقة التعريف الرقمية</h6>
+                <h6 class="fw-bold text-dark border-bottom pb-3 mb-4">{{ __('center::messages.blade_0859') }}</h6>
                 
                 <div class="qr-display-container bg-light rounded-4 p-4 mb-3 position-relative shadow-inner">
                     <div id="sidebar-student-qrcode" class="d-flex justify-content-center"></div>
@@ -234,7 +230,7 @@
                     </div>
                 </div>
                 
-                <p class="small text-muted mb-4 px-2">استخدم هذا الرمز لتسجيل الحضور السريع أو الدخول المباشر للمنصة.</p>
+                <p class="small text-muted mb-4 px-2">{{ __('center::messages.blade_0860') }}</p>
                 
                 @php
                     $magicLoginUrl = \Illuminate\Support\Facades\URL::signedRoute('center.login.magic', [
@@ -245,50 +241,40 @@
                 
                 <div class="d-grid gap-2">
                     <button onclick="copyToClipboard('{{ $magicLoginUrl }}')" class="btn btn-primary rounded-pill fw-bold shadow-sm">
-                        <i class="fas fa-magic me-2"></i> رابط الدخول السريع
-                    </button>
+                        <i class="fas fa-magic me-2"></i>{{ __('center::messages.blade_0861') }}</button>
                     <button onclick="printIDCard()" class="btn btn-outline-dark rounded-pill fw-bold border-2">
-                        <i class="fas fa-print me-2"></i> طباعة الكارت الملون
-                    </button>
+                        <i class="fas fa-print me-2"></i>{{ __('center::messages.blade_0862') }}</button>
                 </div>
             </div>
 
             <!-- Sidebar Navigation (ScrollSpy Lite) -->
             <div class="card border-0 shadow-sm rounded-5 p-4 mb-4">
-                <h6 class="fw-bold text-dark opacity-50 small text-uppercase mb-4">أقسام الملف</h6>
+                <h6 class="fw-bold text-dark opacity-50 small text-uppercase mb-4">{{ __('center::messages.blade_0863') }}</h6>
                 <div class="nav flex-column gap-2 elite-profile-nav">
                     <button class="nav-link active rounded-pill text-start px-4 py-3 mb-1" data-bs-toggle="pill" data-bs-target="#pills-info">
-                        <i class="fas fa-id-card-alt me-2"></i> المعلومات الأساسية
-                    </button>
+                        <i class="fas fa-id-card-alt me-2"></i>{{ __('center::messages.blade_0864') }}</button>
                     <button class="nav-link rounded-pill text-start px-4 py-3 mb-1" data-bs-toggle="pill" data-bs-target="#pills-academic">
-                        <i class="fas fa-award me-2"></i> الأداء الأكاديمي
-                    </button>
+                        <i class="fas fa-award me-2"></i>{{ __('center::messages.blade_0865') }}</button>
                     <button class="nav-link rounded-pill text-start px-4 py-3 mb-1" data-bs-toggle="pill" data-bs-target="#pills-attendance">
-                        <i class="fas fa-calendar-check me-2"></i> سجل الحضور
-                    </button>
+                        <i class="fas fa-calendar-check me-2"></i>{{ __('center::messages.blade_0866') }}</button>
                     <button class="nav-link rounded-pill text-start px-4 py-3 mb-1" data-bs-toggle="pill" data-bs-target="#pills-courses">
-                        <i class="fas fa-book-open me-2"></i> الدورات والاشتراكات
-                    </button>
+                        <i class="fas fa-book-open me-2"></i>{{ __('center::messages.blade_0867') }}</button>
                     <button class="nav-link rounded-pill text-start px-4 py-3 mb-1" data-bs-toggle="pill" data-bs-target="#pills-sales">
-                        <i class="fas fa-receipt me-2"></i> السجل المالي
-                    </button>
+                        <i class="fas fa-receipt me-2"></i>{{ __('center::messages.blade_0868') }}</button>
                     <button class="nav-link rounded-pill text-start px-4 py-3 mb-1" data-bs-toggle="pill" data-bs-target="#pills-points">
-                        <i class="fas fa-star me-2"></i> النقاط والسلوك
-                    </button>
+                        <i class="fas fa-star me-2"></i>{{ __('center::messages.blade_0869') }}</button>
                     <button class="nav-link rounded-pill text-start px-4 py-3 mb-1" data-bs-toggle="pill" data-bs-target="#pills-bookings">
-                        <i class="fas fa-calendar-plus me-2"></i> الحجوزات
-                    </button>
+                        <i class="fas fa-calendar-plus me-2"></i>{{ __('center::messages.blade_0870') }}</button>
                     <button class="nav-link rounded-pill text-start px-4 py-3" data-bs-toggle="pill" data-bs-target="#pills-activity">
-                        <i class="fas fa-history me-2"></i> سجل النشاطات
-                    </button>
+                        <i class="fas fa-history me-2"></i>{{ __('center::messages.blade_0871') }}</button>
                 </div>
             </div>
 
             <div class="card border-0 shadow-sm rounded-5 p-4">
-                <h6 class="fw-bold text-primary mb-4"><i class="fas fa-users-cog me-2"></i> بيانات التواصل والأسرة</h6>
+                <h6 class="fw-bold text-primary mb-4"><i class="fas fa-users-cog me-2"></i>{{ __('center::messages.blade_0872') }}</h6>
                 
                 <div class="contact-item mb-4">
-                    <small class="text-muted d-block mb-1">هاتف الطالب</small>
+                    <small class="text-muted d-block mb-1">{{ __('center::messages.blade_0873') }}</small>
                     <div class="d-flex align-items-center gap-2">
                         <span class="fw-bold fs-6">{{ $student->phone }}</span>
                         <a href="tel:{{ $student->phone }}" class="btn btn-sm btn-light rounded-circle shadow-sm"><i class="fas fa-phone-alt"></i></a>
@@ -296,7 +282,7 @@
                 </div>
 
                 <div class="contact-item mb-4">
-                    <small class="text-muted d-block mb-1">ولي الأمر ({{ $student->parent_relation ?? 'والد' }})</small>
+                    <small class="text-muted d-block mb-1">ولي الأمر ({{ $student->parent_relation ?? __('center::messages.blade_0937') }})</small>
                     <div class="fw-bold fs-6 mb-1 text-dark">{{ $student->guardian?->name ?? $student->parent_name }}</div>
                     <div class="d-flex align-items-center gap-2">
                         <span class="text-muted small">{{ $student->guardian?->phone ?? $student->parent_phone }}</span>
@@ -306,7 +292,7 @@
 
                 @if($siblings->count() > 0)
                     <div class="pt-3 border-top mt-2">
-                        <h6 class="fw-bold text-dark small mb-3">إخوة مسجلين بالمركز</h6>
+                        <h6 class="fw-bold text-dark small mb-3">{{ __('center::messages.blade_0874') }}</h6>
                         <div class="d-flex flex-column gap-2">
                             @foreach($siblings as $sibling)
                                 <a href="{{ route('center.students.show', $sibling->id) }}" class="sibling-chip d-flex align-items-center gap-3 p-2 bg-light rounded-4 text-decoration-none hover-lift border">
@@ -333,10 +319,9 @@
                 <div class="tab-pane fade show active" id="pills-info">
                     <div class="card border-0 shadow-sm rounded-5 p-4 p-md-5 h-100">
                         <div class="d-flex justify-content-between align-items-center mb-5">
-                            <h4 class="fw-bold mb-0">المعلومات الأساسية</h4>
+                            <h4 class="fw-bold mb-0">{{ __('center::messages.blade_0875') }}</h4>
                             <button type="button" onclick="printIDCard()" class="btn btn-light rounded-pill px-3 fw-bold">
-                                <i class="fas fa-print me-2"></i> طباعة كارت الهوية
-                            </button>
+                                <i class="fas fa-print me-2"></i>{{ __('center::messages.blade_0876') }}</button>
                         </div>
 
                         <div class="row g-4">
@@ -345,9 +330,9 @@
                                     <div class="icon-circle bg-primary bg-opacity-10 text-primary mb-3">
                                         <i class="fas fa-school"></i>
                                     </div>
-                                    <h6 class="fw-bold text-muted small">المدرسة والشعبة</h6>
-                                    <div class="fw-bold text-dark fs-5">{{ $student->school_name ?? 'غير محدد' }}</div>
-                                    <div class="text-primary fw-bold">{{ $student->section_type ?? 'عام' }}</div>
+                                    <h6 class="fw-bold text-muted small">{{ __('center::messages.blade_0877') }}</h6>
+                                    <div class="fw-bold text-dark fs-5">{{ $student->school_name ?? __('center::messages.blade_0938') }}</div>
+                                    <div class="text-primary fw-bold">{{ $student->section_type ?? __('center::messages.blade_0939') }}</div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -355,25 +340,25 @@
                                     <div class="icon-circle bg-danger bg-opacity-10 text-danger mb-3">
                                         <i class="fas fa-map-marker-alt"></i>
                                     </div>
-                                    <h6 class="fw-bold text-muted small">العنوان بالتفصيل</h6>
-                                    <div class="fw-bold text-dark fs-6">{{ $student->address ?? 'لا يوجد عنوان مسجل' }}</div>
+                                    <h6 class="fw-bold text-muted small">{{ __('center::messages.blade_0878') }}</h6>
+                                    <div class="fw-bold text-dark fs-6">{{ $student->address ?? __('center::messages.blade_0940') }}</div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="p-4 rounded-4 bg-white shadow-sm border h-100 text-center">
-                                    <h6 class="text-muted small mb-2">تاريخ الميلاد</h6>
+                                    <h6 class="text-muted small mb-2">{{ __('center::messages.blade_0879') }}</h6>
                                     <div class="fw-bold">{{ $student->birth_date ? $student->birth_date->format('Y/m/d') : '---' }}</div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="p-4 rounded-4 bg-white shadow-sm border h-100 text-center">
-                                    <h6 class="text-muted small mb-2">الرقم القومي</h6>
+                                    <h6 class="text-muted small mb-2">{{ __('center::messages.blade_0880') }}</h6>
                                     <div class="fw-bold">{{ $student->national_id ?? '---' }}</div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="p-4 rounded-4 bg-white shadow-sm border h-100 text-center">
-                                    <h6 class="text-muted small mb-2">تاريخ الانضمام</h6>
+                                    <h6 class="text-muted small mb-2">{{ __('center::messages.blade_0881') }}</h6>
                                     <div class="fw-bold text-success">{{ $student->joined_at ? $student->joined_at->format('Y/m/d') : $student->created_at->format('Y/m/d') }}</div>
                                 </div>
                             </div>
@@ -383,14 +368,13 @@
                             <div class="d-flex align-items-center gap-3">
                                 <i class="fas fa-user-lock text-warning fs-3"></i>
                                 <div>
-                                    <h6 class="fw-bold mb-1 text-warning">حساب الطالب</h6>
-                                    <p class="text-muted mb-0 small">يستخدم الطالب هاتفه كاسم مستخدم لدخول المنصة ومراجعة الدروس والاختبارات.</p>
+                                    <h6 class="fw-bold mb-1 text-warning">{{ __('center::messages.blade_0882') }}</h6>
+                                    <p class="text-muted mb-0 small">{{ __('center::messages.blade_0883') }}</p>
                                 </div>
                                 <form id="resetPasswordForm" action="{{ route('center.students.reset-password', $student->id) }}" method="POST" class="ms-auto">
                                     @csrf
                                     <button type="button" id="resetPasswordBtn" class="btn btn-warning rounded-pill px-4 fw-bold shadow-sm">
-                                        <i class="fas fa-sync-alt me-2"></i> تصفير كلمة المرور
-                                    </button>
+                                        <i class="fas fa-sync-alt me-2"></i>{{ __('center::messages.blade_0884') }}</button>
                                 </form>
                             </div>
                         </div>
@@ -400,11 +384,11 @@
                 <!-- Tab: Academic Performance (Elete add) -->
                 <div class="tab-pane fade" id="pills-academic">
                     <div class="card border-0 shadow-sm rounded-5 p-4 p-md-5">
-                        <h4 class="fw-bold mb-5">الأداء والنتائج</h4>
+                        <h4 class="fw-bold mb-5">{{ __('center::messages.blade_0885') }}</h4>
                         
                         <!-- Quizzes -->
                         <div class="mb-5">
-                            <h6 class="fw-bold text-dark border-start border-4 border-success ps-3 mb-4">آخر الاختبارات</h6>
+                            <h6 class="fw-bold text-dark border-start border-4 border-success ps-3 mb-4">{{ __('center::messages.blade_0886') }}</h6>
                             <div class="row g-3">
                                 @forelse($quiz_attempts as $attempt)
                                     <div class="col-md-6">
@@ -419,22 +403,22 @@
                                         </div>
                                     </div>
                                 @empty
-                                    <div class="col-12 text-center py-4 bg-light rounded-4 text-muted">لم يتم تسجيل اختبارات بعد</div>
+                                    <div class="col-12 text-center py-4 bg-light rounded-4 text-muted">{{ __('center::messages.blade_0887') }}</div>
                                 @endforelse
                             </div>
                         </div>
 
                         <!-- Assignments -->
                         <div>
-                            <h6 class="fw-bold text-dark border-start border-4 border-primary ps-3 mb-4">تسليمات الواجبات</h6>
+                            <h6 class="fw-bold text-dark border-start border-4 border-primary ps-3 mb-4">{{ __('center::messages.blade_0888') }}</h6>
                             <div class="table-responsive">
                                 <table class="table align-middle">
                                     <thead>
                                         <tr class="text-muted small">
-                                            <th>الواجب</th>
-                                            <th>التاريخ</th>
-                                            <th>التقييم</th>
-                                            <th>ملاحظات</th>
+                                            <th>{{ __('center::messages.blade_0889') }}</th>
+                                            <th>{{ __('center::messages.blade_0890') }}</th>
+                                            <th>{{ __('center::messages.blade_0891') }}</th>
+                                            <th>{{ __('center::messages.blade_0892') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -442,11 +426,11 @@
                                             <tr>
                                                 <td class="fw-bold small text-dark">{{ $submission->assignment->title }}</td>
                                                 <td class="small text-muted">{{ $submission->submitted_at->format('Y/m/d') }}</td>
-                                                <td><span class="badge {{ $submission->grade ? 'bg-success' : 'bg-warning' }} bg-opacity-10 text-{{ $submission->grade ? 'success' : 'warning' }} rounded-pill px-3">{{ $submission->grade ?? 'قيد التصحيح' }}</span></td>
+                                                <td><span class="badge {{ $submission->grade ? 'bg-success' : 'bg-warning' }} bg-opacity-10 text-{{ $submission->grade ? 'success' : 'warning' }} rounded-pill px-3">{{ $submission->grade ?? __('center::messages.blade_0941') }}</span></td>
                                                 <td class="small opacity-75">{{ $submission->feedback ?? '---' }}</td>
                                             </tr>
                                         @empty
-                                            <tr><td colspan="4" class="text-center py-4 text-muted small">لا توجد واجبات مسجلة</td></tr>
+                                            <tr><td colspan="4" class="text-center py-4 text-muted small">{{ __('center::messages.blade_0893') }}</td></tr>
                                         @endforelse
                                     </tbody>
                                 </table>
@@ -459,7 +443,7 @@
                 <div class="tab-pane fade" id="pills-attendance">
                     <div class="card border-0 shadow-sm rounded-5 p-4 p-md-5">
                         <div class="d-flex justify-content-between align-items-center mb-5">
-                            <h4 class="fw-bold mb-0">سجل الحضور والغياب</h4>
+                            <h4 class="fw-bold mb-0">{{ __('center::messages.blade_0894') }}</h4>
                             <div class="d-flex gap-2">
                                 <div class="badge bg-success rounded-pill px-3">حاضر: {{ $attendance_logs->where('status', 'present')->count() }}</div>
                                 <div class="badge bg-danger rounded-pill px-3">غائب: {{ $attendance_logs->where('status', 'absent')->count() }}</div>
@@ -470,10 +454,10 @@
                             <table class="table align-middle">
                                 <thead class="bg-light">
                                     <tr>
-                                        <th class="border-0 rounded-start px-4">التاريخ</th>
+                                        <th class="border-0 rounded-start px-4">{{ __('center::messages.blade_0895') }}</th>
                                         <th class="border-0">الحصة / المحتوى</th>
-                                        <th class="border-0">وقت التحضير</th>
-                                        <th class="border-0 rounded-end px-4">الحالة</th>
+                                        <th class="border-0">{{ __('center::messages.blade_0896') }}</th>
+                                        <th class="border-0 rounded-end px-4">{{ __('center::messages.blade_0897') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -487,12 +471,12 @@
                                             <td class="small text-muted">{{ $log->check_in_time ? $log->check_in_time->format('h:i A') : '---' }}</td>
                                             <td class="px-4">
                                                 <span class="badge bg-{{ $log->status == 'present' ? 'success' : ($log->status == 'absent' ? 'danger' : 'warning') }} bg-opacity-10 text-{{ $log->status == 'present' ? 'success' : ($log->status == 'absent' ? 'danger' : 'warning') }} rounded-pill px-3 font-arabic">
-                                                    {{ $log->status == 'present' ? 'حاضر' : ($log->status == 'absent' ? 'غائب' : 'متأخر') }}
+                                                    {{ $log->status == 'present' ? __('center::messages.blade_0942') : ($log->status == 'absent' ? __('center::messages.blade_0943') : __('center::messages.blade_0944')) }}
                                                 </span>
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr><td colspan="4" class="text-center py-5 text-muted">لا يوجد سجل حضور حتى الآن</td></tr>
+                                        <tr><td colspan="4" class="text-center py-5 text-muted">{{ __('center::messages.blade_0898') }}</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>
@@ -503,7 +487,7 @@
                 <!-- Tab: Enrolled Courses -->
                 <div class="tab-pane fade" id="pills-courses">
                     <div class="card border-0 shadow-sm rounded-5 p-4 p-md-5">
-                        <h4 class="fw-bold mb-5">الدورات والمجموعات</h4>
+                        <h4 class="fw-bold mb-5">{{ __('center::messages.blade_0899') }}</h4>
                         <div class="row g-4">
                             @forelse($enrollments as $enrollment)
                                 <div class="col-md-6">
@@ -518,7 +502,7 @@
                                         <p class="text-muted extra-small mb-4">تاريخ الاشتراك: {{ $enrollment->enrolled_at->format('Y/m/d') }}</p>
                                         
                                         <div class="mb-2 d-flex justify-content-between small fw-bold">
-                                            <span>التقدم</span>
+                                            <span>{{ __('center::messages.blade_0900') }}</span>
                                             <span>{{ $enrollment->progress }}%</span>
                                         </div>
                                         <div class="progress rounded-pill bg-light" style="height: 6px;">
@@ -527,7 +511,7 @@
                                     </div>
                                 </div>
                             @empty
-                                <div class="col-12 text-center py-5 bg-light rounded-5 text-muted">غير مشترك في أي دورات حالياً</div>
+                                <div class="col-12 text-center py-5 bg-light rounded-5 text-muted">{{ __('center::messages.blade_0901') }}</div>
                             @endforelse
                         </div>
                     </div>
@@ -536,17 +520,17 @@
                 <!-- Tab: Financial Records -->
                 <div class="tab-pane fade" id="pills-sales">
                     <div class="card border-0 shadow-sm rounded-5 p-4 p-md-5">
-                        <h4 class="fw-bold mb-5">السجل المالي والمصروفات</h4>
+                        <h4 class="fw-bold mb-5">{{ __('center::messages.blade_0902') }}</h4>
                         <div class="table-responsive">
                             <table class="table table-hover align-middle">
                                 <thead>
                                     <tr class="text-muted small">
-                                        <th class="px-3">الرقم</th>
-                                        <th>المبلغ</th>
-                                        <th>المدفوع</th>
-                                        <th>المتبقي</th>
-                                        <th>التاريخ</th>
-                                        <th>الحالة</th>
+                                        <th class="px-3">{{ __('center::messages.blade_0903') }}</th>
+                                        <th>{{ __('center::messages.blade_0904') }}</th>
+                                        <th>{{ __('center::messages.blade_0905') }}</th>
+                                        <th>{{ __('center::messages.blade_0906') }}</th>
+                                        <th>{{ __('center::messages.blade_0907') }}</th>
+                                        <th>{{ __('center::messages.blade_0908') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -564,7 +548,7 @@
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr><td colspan="6" class="text-center py-5 text-muted">لا توجد سجلات مالية</td></tr>
+                                        <tr><td colspan="6" class="text-center py-5 text-muted">{{ __('center::messages.blade_0909') }}</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>
@@ -575,7 +559,7 @@
                 <!-- Tab: Activity Log -->
                 <div class="tab-pane fade" id="pills-activity">
                     <div class="card border-0 shadow-sm rounded-5 p-4 p-md-5">
-                        <h4 class="fw-bold mb-5">تتبع النشاطات</h4>
+                        <h4 class="fw-bold mb-5">{{ __('center::messages.blade_0910') }}</h4>
                         <div class="activities-timeline">
                             @forelse($recent_activity as $activity)
                                 <div class="timeline-item d-flex gap-4 mb-4">
@@ -587,13 +571,12 @@
                                             <h6 class="fw-bold text-dark mb-0">{{ $activity->description }}</h6>
                                             <small class="text-muted extra-small">{{ $activity->created_at->diffForHumans() }}</small>
                                         </div>
-                                        <div class="text-muted small">
-                                            بواسطة: <span class="fw-bold">{{ $activity->causer->name ?? 'النظام' }}</span>
+                                        <div class="text-muted small">{{ __('center::messages.blade_0911') }}<span class="fw-bold">{{ $activity->causer->name ?? __('center::messages.blade_0945') }}</span>
                                         </div>
                                     </div>
                                 </div>
                             @empty
-                                <div class="text-center py-5 text-muted">لا يوجد نشاط مسجل للتتبع</div>
+                                <div class="text-center py-5 text-muted">{{ __('center::messages.blade_0912') }}</div>
                             @endforelse
                         </div>
                     </div>
@@ -603,7 +586,7 @@
                 <div class="tab-pane fade" id="pills-points">
                     <div class="card border-0 shadow-sm rounded-5 p-4 p-md-5">
                         <div class="d-flex justify-content-between align-items-center mb-5">
-                            <h4 class="fw-bold mb-0">سجل النقاط والسلوك</h4>
+                            <h4 class="fw-bold mb-0">{{ __('center::messages.blade_0913') }}</h4>
                             <div class="badge bg-indigo-accent text-white rounded-pill px-4 py-2 fs-6 shadow-sm">
                                 الإجمالي: {{ $stats['points'] }} نقطة
                             </div>
@@ -613,9 +596,9 @@
                             <table class="table align-middle">
                                 <thead>
                                     <tr class="text-muted small">
-                                        <th>النقاط</th>
-                                        <th>السبب</th>
-                                        <th>التاريخ</th>
+                                        <th>{{ __('center::messages.blade_0914') }}</th>
+                                        <th>{{ __('center::messages.blade_0915') }}</th>
+                                        <th>{{ __('center::messages.blade_0916') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -630,7 +613,7 @@
                                             <td class="small text-muted">{{ $log->created_at->format('Y-m-d h:i A') }}</td>
                                         </tr>
                                     @empty
-                                        <tr><td colspan="3" class="text-center py-5 text-muted">لا توجد نقاط مسجلة حالياً</td></tr>
+                                        <tr><td colspan="3" class="text-center py-5 text-muted">{{ __('center::messages.blade_0917') }}</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>
@@ -642,20 +625,19 @@
                 <div class="tab-pane fade" id="pills-bookings">
                     <div class="card border-0 shadow-sm rounded-5 p-4 p-md-5">
                         <div class="d-flex justify-content-between align-items-center mb-5">
-                            <h4 class="fw-bold mb-0">الحجوزات والمواعيد</h4>
+                            <h4 class="fw-bold mb-0">{{ __('center::messages.blade_0918') }}</h4>
                             <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#addBookingModal">
-                                <i class="fas fa-plus me-2"></i> حجز موعد جديد
-                            </button>
+                                <i class="fas fa-plus me-2"></i>{{ __('center::messages.blade_0919') }}</button>
                         </div>
 
                         <div class="table-responsive">
                             <table class="table align-middle">
                                 <thead class="bg-light">
                                     <tr>
-                                        <th class="border-0 rounded-start px-4">الدورة</th>
-                                        <th class="border-0">اليوم والوقت</th>
-                                        <th class="border-0">القاعة</th>
-                                        <th class="border-0 rounded-end px-4">الحالة</th>
+                                        <th class="border-0 rounded-start px-4">{{ __('center::messages.blade_0920') }}</th>
+                                        <th class="border-0">{{ __('center::messages.blade_0921') }}</th>
+                                        <th class="border-0">{{ __('center::messages.blade_0922') }}</th>
+                                        <th class="border-0 rounded-end px-4">{{ __('center::messages.blade_0923') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -674,7 +656,7 @@
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr><td colspan="4" class="text-center py-5 text-muted">لا توجد حجوزات نشطة حالياً</td></tr>
+                                        <tr><td colspan="4" class="text-center py-5 text-muted">{{ __('center::messages.blade_0924') }}</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>
@@ -693,30 +675,30 @@
                     @csrf
                     <input type="hidden" name="student_id" value="{{ $student->id }}">
                     <div class="modal-header border-0 p-4 p-md-5 pb-0">
-                        <h4 class="modal-title fw-bold">حجز موعد جديد للطالب</h4>
+                        <h4 class="modal-title fw-bold">{{ __('center::messages.blade_0925') }}</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body p-4 p-md-5">
                         <div class="mb-4">
                             <label class="form-label fw-bold opacity-75">اختر المجموعة / الموعد</label>
                             <select name="schedule_id" class="form-select rounded-4 p-3 border-light bg-light" required>
-                                <option value="">--- اختر من المواعيد المتاحة ---</option>
+                                <option value="">{{ __('center::messages.blade_0926') }}</option>
                                 @foreach($availableSchedules as $sch)
                                     <option value="{{ $sch->id }}">
                                         {{ $sch->course->title }} | {{ __('center::schedules.' . $sch->day_of_week) }} ({{ $sch->start_time }} - {{ $sch->end_time }})
                                     </option>
                                 @endforeach
                             </select>
-                            <small class="text-muted d-block mt-2"><i class="fas fa-info-circle me-1"></i> يتم عرض المواعيد المفعلة فقط في المركز.</small>
+                            <small class="text-muted d-block mt-2"><i class="fas fa-info-circle me-1"></i>{{ __('center::messages.blade_0927') }}</small>
                         </div>
                         <div class="mb-0">
                             <label class="form-label fw-bold opacity-75">ملاحظات إضافية (اختياري)</label>
-                            <textarea name="notes" class="form-control rounded-4 p-3 border-light bg-light" rows="3" placeholder="أضف أي ملاحظات تتعلق بالحجز..."></textarea>
+                            <textarea name="notes" class="form-control rounded-4 p-3 border-light bg-light" rows="3" placeholder="{{ __('center::messages.blade_0934') }}"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer border-0 p-4 p-md-5 pt-0">
-                        <button type="button" class="btn btn-white border rounded-pill px-4 fw-bold" data-bs-dismiss="modal">إلغاء</button>
-                        <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm">تأكيد الحجز</button>
+                        <button type="button" class="btn btn-white border rounded-pill px-4 fw-bold" data-bs-dismiss="modal">{{ __('center::messages.blade_0928') }}</button>
+                        <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm">{{ __('center::messages.blade_0929') }}</button>
                     </div>
                 </form>
             </div>
@@ -738,8 +720,8 @@
                         @endif
                     </div>
                     <div class="center-name">
-                        <h1>{{ $tenant->name ?? 'اسم المركز التعليمي' }}</h1>
-                        <span>بطاقة هوية طالب</span>
+                        <h1>{{ $tenant->name ?? __('center::messages.blade_0946') }}</h1>
+                        <span>{{ __('center::messages.blade_0930') }}</span>
                     </div>
                 </div>
 
@@ -761,11 +743,11 @@
 
                     <div class="info-grid">
                         <div class="info-item">
-                            <label>كود الطالب</label>
+                            <label>{{ __('center::messages.blade_0931') }}</label>
                             <strong>{{ $student->code }}</strong>
                         </div>
                         <div class="info-item">
-                            <label>العام الدراسي</label>
+                            <label>{{ __('center::messages.blade_0932') }}</label>
                             <strong>{{ date('Y') }} - {{ date('Y')+1 }}</strong>
                         </div>
                     </div>
@@ -778,7 +760,7 @@
 
                 <!-- Footer -->
                 <div class="id-footer">
-                    <p>هذه البطاقة لإثبات هوية الطالب وتستخدم للدخول والحضور</p>
+                    <p>{{ __('center::messages.blade_0933') }}</p>
                 </div>
             </div>
         </div>
@@ -1129,14 +1111,14 @@
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('resetPasswordBtn')?.addEventListener('click', function() {
             Swal.fire({
-                title: 'تصفير كلمة المرور؟',
-                text: 'سيتم إنشاء كلمة مرور عشوائية جديدة للطالب، هل أنت متأكد؟',
+                title: __('center::messages.blade_0947'),
+                text: __('center::messages.blade_0948'),
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#ffc107',
                 cancelButtonColor: '#6c757d',
-                confirmButtonText: 'نعم، تصفير الآن',
-                cancelButtonText: 'إلغاء',
+                confirmButtonText: __('center::messages.blade_0949'),
+                cancelButtonText: __('center::messages.blade_0950'),
                 reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -1161,7 +1143,7 @@
         @if(session('generated_password'))
             const text = `{!! addslashes($msg) !!}`;
             navigator.clipboard.writeText(text).then(function() {
-                alert('تم نسخ جميع البيانات بنجاح');
+                alert(__('center::messages.blade_0951'));
             });
         @endif
     }

@@ -2,7 +2,7 @@
 <html dir="rtl">
 <head>
     <meta charset="utf-8">
-    <title>شهادة إتمام دورة</title>
+    <title>{{ __('center::messages.blade_0246') }}</title>
     <style>
         @font-face {
             font-family: 'Amiri';
@@ -87,15 +87,15 @@
     <div class="certificate-container">
         <div class="certificate-border">
             <div class="header">
-                <h1>شهادة إتمام</h1>
-                <p>تمنح هذه الشهادة لتقْدير المجهود المبذول</p>
+                <h1>{{ __('center::messages.blade_0247') }}</h1>
+                <p>{{ __('center::messages.blade_0248') }}</p>
             </div>
             
             <div class="content">
-                <p>نشهد بأن الطالب:</p>
+                <p>{{ __('center::messages.blade_0249') }}</p>
                 <div class="student-name">{{ $certificate->metadata['student_name'] ?? $student->user->name }}</div>
                 
-                <p>قد اجتاز بنجاح كافة متطلبات الدورة التدريبية بعنوان:</p>
+                <p>{{ __('center::messages.blade_0250') }}</p>
                 <div class="course-title">{{ $certificate->metadata['course_title'] ?? $course->title }}</div>
                 
                 <p>وذلك بتاريخ {{ $certificate->issued_at->format('Y/m/d') }}</p>
@@ -103,16 +103,16 @@
             
             <div class="footer">
                 <div class="footer-cell">
-                    <p>ختم المركز</p>
+                    <p>{{ __('center::messages.blade_0251') }}</p>
                     <div style="height: 60px;"></div>
                 </div>
                 <div class="footer-cell">
                     <div class="qr-placeholder">
-                        <small style="font-size: 10px; display: block; margin-top: 40px;">كود التحقق</small>
+                        <small style="font-size: 10px; display: block; margin-top: 40px;">{{ __('center::messages.blade_0252') }}</small>
                     </div>
                 </div>
                 <div class="footer-cell">
-                    <p>التوقيع</p>
+                    <p>{{ __('center::messages.blade_0253') }}</p>
                     <div style="height: 60px;"></div>
                 </div>
             </div>

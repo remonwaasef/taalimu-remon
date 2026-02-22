@@ -85,7 +85,7 @@
                                 <form action="{{ route('center.expenses.destroy', $expense->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-light border-0 rounded-pill" onclick="return confirm('هل أنت متأكد من الحذف؟')">
+                                    <button type="submit" class="btn btn-sm btn-light border-0 rounded-pill" onclick="return confirm('{{ __('center::messages.blade_0495') }}')">
                                         <i class="fas fa-trash text-danger opacity-75"></i>
                                     </button>
                                 </form>

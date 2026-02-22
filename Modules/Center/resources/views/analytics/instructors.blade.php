@@ -1,28 +1,27 @@
 @extends('center::layouts.master')
 
-@section('title', 'تقارير المدرسين')
+@section('title', __('center::messages.blade_0172'))
 
 @section('content')
 <div class="container-fluid">
     <div class="d-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">تقارير المدرسين</h1>
+        <h1 class="h3 mb-0 text-gray-800">{{ __('center::messages.blade_0166') }}</h1>
         <a href="{{ route('center.analytics.index') }}" class="btn btn-sm btn-outline-secondary">
-            <i class="fas fa-arrow-right"></i> عودة للرئيسية
-        </a>
+            <i class="fas fa-arrow-right"></i>{{ __('center::messages.blade_0167') }}</a>
     </div>
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">أداء المدرسين</h6>
+            <h6 class="m-0 font-weight-bold text-primary">{{ __('center::messages.blade_0168') }}</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>المدرس</th>
-                            <th>عدد الدورات</th>
-                            <th>إجمالي الطلاب</th>
+                            <th>{{ __('center::messages.blade_0169') }}</th>
+                            <th>{{ __('center::messages.blade_0170') }}</th>
+                            <th>{{ __('center::messages.blade_0171') }}</th>
                             <th>التقييم (قريباً)</th>
                         </tr>
                     </thead>

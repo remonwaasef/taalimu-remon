@@ -16,8 +16,7 @@
         <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
             <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-paperclip text-primary me-2"></i>مصادر الكورس (ملفات إضافية)</h5>
             <button class="btn btn-sm btn-primary rounded-pill px-3" data-bs-toggle="collapse" data-bs-target="#resourceForm">
-                <i class="fas fa-plus me-1"></i> إضافة ملف
-            </button>
+                <i class="fas fa-plus me-1"></i>{{ __('center::messages.blade_0481') }}</button>
         </div>
         <div class="collapse" id="resourceForm">
             <div class="card-body bg-light border-top">
@@ -31,7 +30,7 @@
                             <input type="file" name="file" class="form-control" required>
                         </div>
                         <div class="col-md-3">
-                            <button type="submit" class="btn btn-primary w-100">تحميل</button>
+                            <button type="submit" class="btn btn-primary w-100">{{ __('center::messages.blade_0482') }}</button>
                         </div>
                     </div>
                 </form>
@@ -52,14 +51,14 @@
                             <form action="{{ route('center.resources.destroy', $res) }}" method="POST" class="ms-2">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-link text-danger p-0" onclick="return confirm('هل أنت متأكد من حذف هذا الملف؟')">
+                                <button type="submit" class="btn btn-link text-danger p-0" onclick="return confirm('{{ __('center::messages.blade_0485') }}')">
                                     <i class="fas fa-times"></i>
                                 </button>
                             </form>
                         </div>
                     </div>
                 @empty
-                    <div class="col-12 text-center text-muted py-3">لا توجد ملفات مضافة حالياً.</div>
+                    <div class="col-12 text-center text-muted py-3">{{ __('center::messages.blade_0483') }}</div>
                 @endforelse
             </div>
         </div>
@@ -74,7 +73,7 @@
                     <input type="text" name="title" class="form-control rounded-pill" placeholder="عنوان القسم الجديد (مثلاً: الوحدة الأولى)" required>
                 </div>
                 <div class="col-auto">
-                    <button type="submit" class="btn btn-primary rounded-pill px-4">إضافة قسم</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">{{ __('center::messages.blade_0484') }}</button>
                 </div>
             </form>
         </div>

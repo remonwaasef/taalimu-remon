@@ -5,7 +5,7 @@
         <h2 class="fw-bold text-dark">{{ __('center::students.title') }}</h2>
         <div class="d-flex gap-2">
             <a href="{{ route('center.students.export') }}" class="btn btn-outline-success rounded-pill px-4 shadow-sm" id="export-students-btn">
-                <i class="fas fa-file-export me-2"></i> {{ __('center::students.export_file') ?? 'تصدير' }}
+                <i class="fas fa-file-export me-2"></i> {{ __('center::students.export_file') ?? __('center::messages.blade_0838') }}
             </a>
             <a href="{{ route('center.students.import') }}" class="btn btn-outline-primary rounded-pill px-4 shadow-sm">
                 <i class="fas fa-file-import me-2"></i> {{ __('center::students.import_file') }}

@@ -1,17 +1,16 @@
 @extends('center::layouts.master')
 
-@section('title', 'إدارة المستخدمين')
-@section('page-title', 'المستخدمين')
+@section('title', __('center::messages.blade_0990'))
+@section('page-title', __('center::messages.blade_0991'))
 
 @section('content')
 <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 fw-bold">قائمة المستخدمين</h5>
+                <h5 class="mb-0 fw-bold">{{ __('center::messages.blade_0978') }}</h5>
                 <a href="{{ route('center.users.create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus me-1"></i> إضافة مستخدم
-                </a>
+                    <i class="fas fa-plus me-1"></i>{{ __('center::messages.blade_0979') }}</a>
             </div>
             <div class="card-body">
                 @if(session('success'))
@@ -25,11 +24,11 @@
                     <table class="table table-hover align-middle">
                         <thead class="table-light">
                             <tr>
-                                <th>الاسم</th>
-                                <th>البريد الإلكتروني</th>
-                                <th>الدور</th>
-                                <th>تاريخ الانضمام</th>
-                                <th>الإجراءات</th>
+                                <th>{{ __('center::messages.blade_0980') }}</th>
+                                <th>{{ __('center::messages.blade_0981') }}</th>
+                                <th>{{ __('center::messages.blade_0982') }}</th>
+                                <th>{{ __('center::messages.blade_0983') }}</th>
+                                <th>{{ __('center::messages.blade_0984') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -48,11 +47,11 @@
                                 <td>{{ $user->email }}</td>
                                 <td>
                                     @if($user->role == 'center_admin')
-                                        <span class="badge bg-primary">مدير مركز</span>
+                                        <span class="badge bg-primary">{{ __('center::messages.blade_0985') }}</span>
                                     @elseif($user->role == 'secretary')
-                                        <span class="badge bg-info text-dark">سكرتارية</span>
+                                        <span class="badge bg-info text-dark">{{ __('center::messages.blade_0986') }}</span>
                                     @elseif($user->role == 'accountant')
-                                        <span class="badge bg-success">محاسب</span>
+                                        <span class="badge bg-success">{{ __('center::messages.blade_0987') }}</span>
                                     @else
                                         <span class="badge bg-secondary">{{ $user->role }}</span>
                                     @endif
@@ -64,7 +63,7 @@
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         @if(auth()->id() !== $user->id)
-                                        <form action="{{ route('center.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذا المستخدم؟');">
+                                        <form action="{{ route('center.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('{{ __('center::messages.blade_0989') }}');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-outline-danger">
@@ -77,7 +76,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="5" class="text-center py-4 text-muted">لا يوجد مستخدمين مضافين</td>
+                                <td colspan="5" class="text-center py-4 text-muted">{{ __('center::messages.blade_0988') }}</td>
                             </tr>
                             @endforelse
                         </tbody>

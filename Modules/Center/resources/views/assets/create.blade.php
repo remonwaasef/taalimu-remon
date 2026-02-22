@@ -7,7 +7,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="{{ route('center.assets.index') }}" class="text-muted text-decoration-none">{{ __('center::assets.title') }}</a></li>
-                    <li class="breadcrumb-item active text-primary" aria-current="page">{{ isset($asset) ? 'تعديل' : 'إضافة جديد' }}</li>
+                    <li class="breadcrumb-item active text-primary" aria-current="page">{{ isset($asset) ? __('center::messages.blade_0192') : __('center::messages.blade_0193') }}</li>
                 </ol>
             </nav>
         </div>
@@ -93,8 +93,8 @@
                 </div>
 
                 <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-primary px-5 rounded-pill shadow-sm fw-bold">حفظ</button>
-                    <a href="{{ route('center.assets.index') }}" class="btn btn-light px-4 rounded-pill border">إلغاء</a>
+                    <button type="submit" class="btn btn-primary px-5 rounded-pill shadow-sm fw-bold">{{ __('center::messages.blade_0190') }}</button>
+                    <a href="{{ route('center.assets.index') }}" class="btn btn-light px-4 rounded-pill border">{{ __('center::messages.blade_0191') }}</a>
                 </div>
             </form>
         </div>

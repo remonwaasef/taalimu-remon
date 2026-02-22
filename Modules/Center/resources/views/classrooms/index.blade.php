@@ -34,7 +34,7 @@
                                         <div>
                                             <div class="fw-bold text-dark">{{ $classroom->name }}</div>
                                             <span class="badge bg-light text-muted border-0 p-0" style="font-size: 0.7rem;">
-                                                {{ $classroom->type == 'lab' ? 'معمل حاسب' : ($classroom->type == 'virtual' ? 'قاعة افتراضية' : 'قاعة محاضرات') }}
+                                                {{ $classroom->type == 'lab' ? __('center::messages.blade_0305') : ($classroom->type == 'virtual' ? __('center::messages.blade_0306') : __('center::messages.blade_0307')) }}
                                             </span>
                                         </div>
                                     </div>
@@ -47,12 +47,12 @@
                                                 @php
                                                     $icon = 'fa-box';
                                                     $color = 'info';
-                                                    if (Str::contains($asset->name, ['جهاز عرض', 'Projector'])) { $icon = 'fa-video'; $color = 'primary'; }
-                                                    elseif (Str::contains($asset->name, ['تكييف', 'AC'])) { $icon = 'fa-snowflake'; $color = 'info'; }
-                                                    elseif (Str::contains($asset->name, ['شاشة', 'TV'])) { $icon = 'fa-tv'; $color = 'dark'; }
-                                                    elseif (Str::contains($asset->name, ['سبورة'])) { $icon = 'fa-chalkboard'; $color = 'secondary'; }
-                                                    elseif (Str::contains($asset->name, ['كاميرا'])) { $icon = 'fa-video-slash'; $color = 'danger'; }
-                                                    elseif (Str::contains($asset->name, ['صوت'])) { $icon = 'fa-volume-up'; $color = 'warning'; }
+                                                    if (Str::contains($asset->name, [__('center::messages.blade_0308'), 'Projector'])) { $icon = 'fa-video'; $color = 'primary'; }
+                                                    elseif (Str::contains($asset->name, [__('center::messages.blade_0309'), 'AC'])) { $icon = 'fa-snowflake'; $color = 'info'; }
+                                                    elseif (Str::contains($asset->name, [__('center::messages.blade_0310'), 'TV'])) { $icon = 'fa-tv'; $color = 'dark'; }
+                                                    elseif (Str::contains($asset->name, [__('center::messages.blade_0311')])) { $icon = 'fa-chalkboard'; $color = 'secondary'; }
+                                                    elseif (Str::contains($asset->name, [__('center::messages.blade_0312')])) { $icon = 'fa-video-slash'; $color = 'danger'; }
+                                                    elseif (Str::contains($asset->name, [__('center::messages.blade_0313')])) { $icon = 'fa-volume-up'; $color = 'warning'; }
                                                 @endphp
                                                 <span class="badge bg-{{ $color }} bg-opacity-10 text-{{ $color }} border border-{{ $color }} border-opacity-25 py-1 px-2" style="font-size: 0.65rem;" title="{{ $asset->name }}">
                                                     <i class="fas {{ $icon }} me-1"></i> {{ $asset->name }}

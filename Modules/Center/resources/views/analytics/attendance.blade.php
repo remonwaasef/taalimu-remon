@@ -1,14 +1,13 @@
 @extends('center::layouts.master')
 
-@section('title', 'تقارير الحضور')
+@section('title', __('center::messages.blade_0112'))
 
 @section('content')
 <div class="container-fluid">
     <div class="d-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">تقارير الحضور</h1>
+        <h1 class="h3 mb-0 text-gray-800">{{ __('center::messages.blade_0100') }}</h1>
         <a href="{{ route('center.analytics.index') }}" class="btn btn-sm btn-outline-secondary">
-            <i class="fas fa-arrow-right"></i> عودة للرئيسية
-        </a>
+            <i class="fas fa-arrow-right"></i>{{ __('center::messages.blade_0101') }}</a>
     </div>
 
     <!-- Attendance Summary -->
@@ -16,16 +15,16 @@
         <div class="col-xl-12 col-lg-12">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">إحصائيات الحضور العامة</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">{{ __('center::messages.blade_0102') }}</h6>
                 </div>
                 <div class="card-body">
                     <div class="chart-pie pt-4 pb-2">
                         <canvas id="attendanceChart"></canvas>
                     </div>
                     <div class="mt-4 text-center small">
-                        <span class="mr-2"><i class="fas fa-circle text-success"></i> حاضر</span>
-                        <span class="mr-2"><i class="fas fa-circle text-warning"></i> متأخر</span>
-                        <span class="mr-2"><i class="fas fa-circle text-danger"></i> غائب</span>
+                        <span class="mr-2"><i class="fas fa-circle text-success"></i>{{ __('center::messages.blade_0103') }}</span>
+                        <span class="mr-2"><i class="fas fa-circle text-warning"></i>{{ __('center::messages.blade_0104') }}</span>
+                        <span class="mr-2"><i class="fas fa-circle text-danger"></i>{{ __('center::messages.blade_0105') }}</span>
                     </div>
                 </div>
             </div>
@@ -35,18 +34,18 @@
     <!-- Attendance Log -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">سجل الحضور الأخير</h6>
+            <h6 class="m-0 font-weight-bold text-primary">{{ __('center::messages.blade_0106') }}</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>الطالب</th>
-                            <th>الدورة</th>
-                            <th>التاريخ</th>
-                            <th>الحالة</th>
-                            <th>وقت التسجيل</th>
+                            <th>{{ __('center::messages.blade_0107') }}</th>
+                            <th>{{ __('center::messages.blade_0108') }}</th>
+                            <th>{{ __('center::messages.blade_0109') }}</th>
+                            <th>{{ __('center::messages.blade_0110') }}</th>
+                            <th>{{ __('center::messages.blade_0111') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,7 +56,7 @@
                                 <td>{{ $record->session_date->format('Y-m-d') }}</td>
                                 <td>
                                     <span class="badge badge-{{ $record->status == 'present' ? 'success' : ($record->status == 'late' ? 'warning' : 'danger') }}">
-                                        {{ $record->status == 'present' ? 'حاضر' : ($record->status == 'late' ? 'متأخر' : 'غائب') }}
+                                        {{ $record->status == 'present' ? __('center::messages.blade_0113') : ($record->status == 'late' ? __('center::messages.blade_0114') : __('center::messages.blade_0115')) }}
                                     </span>
                                 </td>
                                 <td>{{ $record->check_in_time ? $record->check_in_time->format('h:i A') : '-' }}</td>

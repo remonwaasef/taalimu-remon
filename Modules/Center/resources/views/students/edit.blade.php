@@ -2,10 +2,8 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark">تعديل بيانات الطالب</h2>
-        <a href="{{ route('center.students.index') }}" class="btn btn-outline-secondary rounded-pill px-4">
-            عودة للقائمة
-        </a>
+        <h2 class="fw-bold text-dark">{{ __('center::messages.blade_0798') }}</h2>
+        <a href="{{ route('center.students.index') }}" class="btn btn-outline-secondary rounded-pill px-4">{{ __('center::messages.blade_0799') }}</a>
     </div>
 
     <div class="row justify-content-center">
@@ -18,9 +16,9 @@
                         
                         {{-- 1. Student Info --}}
                         <div class="row mb-4">
-                            <h5 class="text-secondary mb-3"><i class="bi bi-person me-2"></i>البيانات الشخصية</h5>
+                            <h5 class="text-secondary mb-3"><i class="bi bi-person me-2"></i>{{ __('center::messages.blade_0800') }}</h5>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">اسم الطالب</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0801') }}</label>
                                 <input type="text" name="name" value="{{ old('name', $student->name) }}" class="form-control form-control-lg bg-light border-0">
                                 @error('name')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
@@ -34,7 +32,7 @@
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">كود الطالب</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0802') }}</label>
                                 <input type="text" name="code" value="{{ old('code', $student->code) }}" class="form-control form-control-lg bg-light border-0">
                                 @error('code')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
@@ -48,36 +46,36 @@
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">رقم الهاتف</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0803') }}</label>
                                 <input type="tel" name="phone" value="{{ old('phone', $student->phone) }}" class="form-control form-control-lg bg-light border-0" pattern="[0-9\+\-\s\(\)]*" title="أرقام فقط (+ - مسافات)">
                                 @error('phone')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">تاريخ الميلاد</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0804') }}</label>
                                 <input type="date" name="birth_date" value="{{ old('birth_date', $student->birth_date ? $student->birth_date->format('Y-m-d') : '') }}" class="form-control form-control-lg bg-light border-0">
                                 @error('birth_date')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">الجنس</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0805') }}</label>
                                 <select name="gender" class="form-select form-select-lg bg-light border-0">
-                                    <option value="">اختر...</option>
-                                    <option value="male" {{ old('gender', $student->gender) == 'male' ? 'selected' : '' }}>ذكر</option>
-                                    <option value="female" {{ old('gender', $student->gender) == 'female' ? 'selected' : '' }}>أنثى</option>
+                                    <option value="">{{ __('center::messages.blade_0806') }}</option>
+                                    <option value="male" {{ old('gender', $student->gender) == 'male' ? 'selected' : '' }}>{{ __('center::messages.blade_0807') }}</option>
+                                    <option value="female" {{ old('gender', $student->gender) == 'female' ? 'selected' : '' }}>{{ __('center::messages.blade_0808') }}</option>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">العنوان</label>
-                                <input type="text" name="address" value="{{ old('address', $student->address) }}" class="form-control form-control-lg bg-light border-0" placeholder="المنطقة، الشارع...">
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0809') }}</label>
+                                <input type="text" name="address" value="{{ old('address', $student->address) }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0824') }}">
                                 @error('address')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-md-12 mb-3">
-                                <label class="form-label fw-bold">الصورة الشخصية</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0810') }}</label>
                                 @if($student->profile_photo)
                                     <div class="mb-2">
                                         <img src="{{ Storage::url($student->profile_photo) }}" alt="Profile Photo" class="rounded-circle" width="60" height="60">
@@ -94,30 +92,28 @@
 
                         {{-- 2. Parent Info --}}
                         <div class="row mb-4">
-                            <h5 class="text-secondary mb-3"><i class="bi bi-people me-2"></i>بيانات ولي الأمر</h5>
+                            <h5 class="text-secondary mb-3"><i class="bi bi-people me-2"></i>{{ __('center::messages.blade_0811') }}</h5>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">اسم ولي الأمر</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0812') }}</label>
                                 <input type="text" name="parent_name" value="{{ old('parent_name', $student->parent_name) }}" class="form-control form-control-lg bg-light border-0">
                                 @error('parent_name')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">صلة القرابة</label>
-                                <input type="text" name="parent_relation" value="{{ old('parent_relation', $student->parent_relation) }}" class="form-control form-control-lg bg-light border-0" placeholder="الأب، الأم، الأخ...">
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0813') }}</label>
+                                <input type="text" name="parent_relation" value="{{ old('parent_relation', $student->parent_relation) }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0825') }}">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">رقم ولي الأمر</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0814') }}</label>
                                 <div class="input-group">
                                     <input type="tel" name="parent_phone" id="parent_phone" value="{{ old('parent_phone', $student->parent_phone) }}" class="form-control form-control-lg bg-light border-0" pattern="[0-9\+\-\s\(\)]*" title="أرقام فقط (+ - مسافات)">
                                     <span class="input-group-text bg-light border-0 {{ $student->guardian_id ? '' : 'd-none' }}" id="guardian-found-badge">
-                                        <span class="badge bg-success rounded-pill"><i class="bi bi-check-circle-fill"></i> ولي أمر مسجل</span>
+                                        <span class="badge bg-success rounded-pill"><i class="bi bi-check-circle-fill"></i>{{ __('center::messages.blade_0815') }}</span>
                                     </span>
                                 </div>
                                 <div id="guardian-info-alert" class="alert alert-success border-0 rounded-4 small mt-2 d-none">
-                                    <i class="bi bi-info-circle-fill me-1"></i>
-                                    تم العثور على <b><span id="found-guardian-name"></span></b> في النظام. سيتم ربط الطالب بهذا الحساب والاستفادة من نظام الإخوة.
-                                </div>
+                                    <i class="bi bi-info-circle-fill me-1"></i>{{ __('center::messages.blade_0816') }}<b><span id="found-guardian-name"></span></b>{{ __('center::messages.blade_0817') }}</div>
                                 @error('parent_phone')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
@@ -130,7 +126,7 @@
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">وظيفة ولي الأمر</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0818') }}</label>
                                 <input type="text" name="parent_job" value="{{ old('parent_job', $student->parent_job) }}" class="form-control form-control-lg bg-light border-0">
                                 @error('parent_job')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
@@ -142,11 +138,11 @@
 
                         {{-- 3. Academic Info --}}
                         <div class="row mb-4">
-                            <h5 class="text-secondary mb-3"><i class="bi bi-mortarboard me-2"></i>البيانات الدراسية</h5>
+                            <h5 class="text-secondary mb-3"><i class="bi bi-mortarboard me-2"></i>{{ __('center::messages.blade_0819') }}</h5>
                             <div class="col-md-12 mb-3">
-                                <label class="form-label fw-bold">الصف الدراسي</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0820') }}</label>
                                 <select name="grade_id" class="form-select form-select-lg bg-light border-0">
-                                    <option value="">اختر الصف...</option>
+                                    <option value="">{{ __('center::messages.blade_0821') }}</option>
                                     @foreach($stages as $stage)
                                         <optgroup label="📂 {{ $stage->name }}">
                                             @foreach($stage->grades as $grade)
@@ -160,7 +156,7 @@
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">المدرسة</label>
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0822') }}</label>
                                 <input type="text" name="school_name" value="{{ old('school_name', $student->school_name) }}" class="form-control form-control-lg bg-light border-0">
                                 @error('school_name')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
@@ -168,7 +164,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">الشعبة / التخصص</label>
-                                <input type="text" name="section_type" value="{{ old('section_type', $student->section_type) }}" class="form-control form-control-lg bg-light border-0" placeholder="عام، علمي، أدبي...">
+                                <input type="text" name="section_type" value="{{ old('section_type', $student->section_type) }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0826') }}">
                                 @error('section_type')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
@@ -176,7 +172,7 @@
                         </div>
 
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">حفظ التعديلات</button>
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">{{ __('center::messages.blade_0823') }}</button>
                         </div>
                     </form>
                 </div>

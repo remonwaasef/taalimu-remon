@@ -1,13 +1,13 @@
 @extends('center::layouts.master')
 
-@section('title', 'التقارير والإحصائيات')
+@section('title', __('center::messages.blade_0161'))
 
 @section('content')
 <div class="container-fluid">
     <div class="d-flex align-items-center justify-content-between mb-4">
         <div>
-            <h1 class="h3 mb-1 text-gray-800 fw-bold">لوحة المعلومات والتقارير</h1>
-            <p class="text-muted mb-0">نظرة شاملة على أداء المركز التعليمي</p>
+            <h1 class="h3 mb-1 text-gray-800 fw-bold">{{ __('center::messages.blade_0141') }}</h1>
+            <p class="text-muted mb-0">{{ __('center::messages.blade_0142') }}</p>
         </div>
         <div>
             <button class="btn btn-sm btn-primary shadow-sm rounded-pill px-3" onclick="window.print()">
@@ -24,7 +24,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col me-2">
-                            <div class="text-xs fw-bold text-primary text-uppercase mb-1">إجمالي الطلاب</div>
+                            <div class="text-xs fw-bold text-primary text-uppercase mb-1">{{ __('center::messages.blade_0143') }}</div>
                             <div class="h3 mb-0 fw-bold text-gray-800">{{ $totalStudents }}</div>
                         </div>
                         <div class="col-auto">
@@ -41,7 +41,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col me-2">
-                            <div class="text-xs fw-bold text-success text-uppercase mb-1">إجمالي الإيرادات</div>
+                            <div class="text-xs fw-bold text-success text-uppercase mb-1">{{ __('center::messages.blade_0144') }}</div>
                             <div class="h3 mb-0 fw-bold text-gray-800">{{ number_format($totalRevenue) }} ج.م</div>
                         </div>
                         <div class="col-auto">
@@ -58,7 +58,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col me-2">
-                            <div class="text-xs fw-bold text-info text-uppercase mb-1">الدورات النشطة</div>
+                            <div class="text-xs fw-bold text-info text-uppercase mb-1">{{ __('center::messages.blade_0145') }}</div>
                             <div class="h3 mb-0 fw-bold text-gray-800">{{ $totalCourses }}</div>
                         </div>
                         <div class="col-auto">
@@ -75,7 +75,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col me-2">
-                            <div class="text-xs fw-bold text-warning text-uppercase mb-1">مستحقات معلقة</div>
+                            <div class="text-xs fw-bold text-warning text-uppercase mb-1">{{ __('center::messages.blade_0146') }}</div>
                             <div class="h3 mb-0 fw-bold text-gray-800">{{ number_format($totalDue) }} ج.م</div>
                         </div>
                         <div class="col-auto">
@@ -107,16 +107,16 @@
         <div class="col-xl-4 col-lg-5">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white border-0 rounded-top-4">
-                    <h6 class="m-0 fw-bold text-primary">إحصائيات الحضور</h6>
+                    <h6 class="m-0 fw-bold text-primary">{{ __('center::messages.blade_0147') }}</h6>
                 </div>
                 <div class="card-body">
                     <div class="chart-pie pt-2 pb-2" style="height: 250px;">
                         <canvas id="attendanceChart"></canvas>
                     </div>
                     <div class="mt-3 text-center small d-flex justify-content-center gap-3">
-                        <span class="mr-2"><i class="fas fa-circle text-success big-dot"></i> حاضر</span>
-                        <span class="mr-2"><i class="fas fa-circle text-warning big-dot"></i> متأخر</span>
-                        <span class="mr-2"><i class="fas fa-circle text-danger big-dot"></i> غائب</span>
+                        <span class="mr-2"><i class="fas fa-circle text-success big-dot"></i>{{ __('center::messages.blade_0148') }}</span>
+                        <span class="mr-2"><i class="fas fa-circle text-warning big-dot"></i>{{ __('center::messages.blade_0149') }}</span>
+                        <span class="mr-2"><i class="fas fa-circle text-danger big-dot"></i>{{ __('center::messages.blade_0150') }}</span>
                     </div>
                 </div>
             </div>
@@ -129,7 +129,7 @@
         <div class="col-lg-6">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-header py-3 bg-white border-0 rounded-top-4">
-                    <h6 class="m-0 fw-bold text-primary">الدورات الأكثر شعبية</h6>
+                    <h6 class="m-0 fw-bold text-primary">{{ __('center::messages.blade_0151') }}</h6>
                 </div>
                 <div class="card-body">
                     <div class="chart-bar" style="height: 300px;">
@@ -143,7 +143,7 @@
         <div class="col-lg-6">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-header py-3 bg-white border-0 rounded-top-4">
-                    <h6 class="m-0 fw-bold text-primary">نمو عدد الطلاب</h6>
+                    <h6 class="m-0 fw-bold text-primary">{{ __('center::messages.blade_0152') }}</h6>
                 </div>
                 <div class="card-body">
                     <div class="chart-bar" style="height: 300px;">
@@ -157,19 +157,19 @@
     <!-- 4. Recent Sales Table -->
     <div class="card border-0 shadow-sm rounded-4 mb-4">
         <div class="card-header py-3 bg-white border-0 rounded-top-4">
-            <h6 class="m-0 fw-bold text-primary">المعاملات المالية الأخيرة</h6>
+            <h6 class="m-0 fw-bold text-primary">{{ __('center::messages.blade_0153') }}</h6>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table align-middle mb-0 table-hover">
                     <thead class="bg-light">
                         <tr>
-                            <th class="border-0 p-3">رقم العملية</th>
-                            <th class="border-0 p-3">الطالب</th>
-                            <th class="border-0 p-3">القيمة</th>
-                            <th class="border-0 p-3">المدفوع</th>
-                            <th class="border-0 p-3">الحالة</th>
-                            <th class="border-0 p-3">التاريخ</th>
+                            <th class="border-0 p-3">{{ __('center::messages.blade_0154') }}</th>
+                            <th class="border-0 p-3">{{ __('center::messages.blade_0155') }}</th>
+                            <th class="border-0 p-3">{{ __('center::messages.blade_0156') }}</th>
+                            <th class="border-0 p-3">{{ __('center::messages.blade_0157') }}</th>
+                            <th class="border-0 p-3">{{ __('center::messages.blade_0158') }}</th>
+                            <th class="border-0 p-3">{{ __('center::messages.blade_0159') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -181,14 +181,14 @@
                                 <td class="p-3 text-success">{{ number_format($sale->paid_amount) }} ج.م</td>
                                 <td class="p-3">
                                     <span class="badge rounded-pill bg-{{ $sale->status == 'paid' ? 'success' : ($sale->status == 'partial' ? 'warning' : 'danger') }} bg-opacity-10 text-{{ $sale->status == 'paid' ? 'success' : ($sale->status == 'partial' ? 'warning' : 'danger') }} px-3">
-                                        {{ $sale->status == 'paid' ? 'مدفوع' : ($sale->status == 'partial' ? 'جزئي' : 'غير مدفوع') }}
+                                        {{ $sale->status == 'paid' ? __('center::messages.blade_0162') : ($sale->status == 'partial' ? __('center::messages.blade_0163') : __('center::messages.blade_0164')) }}
                                     </span>
                                 </td>
                                 <td class="p-3 text-muted small">{{ $sale->created_at->format('Y-m-d h:i A') }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center py-5 text-muted">لا يوجد معاملات حديثة</td>
+                                <td colspan="6" class="text-center py-5 text-muted">{{ __('center::messages.blade_0160') }}</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -231,7 +231,7 @@
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        callback: function(value) { return 'ج.م ' + value; }
+                        callback: function(value) { return __('center::messages.blade_0165') + value; }
                     }
                 }
             },
