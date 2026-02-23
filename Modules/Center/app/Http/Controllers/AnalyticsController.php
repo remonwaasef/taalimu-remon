@@ -7,6 +7,7 @@ use App\Models\Student;
 use App\Models\Course;
 use App\Models\Instructor;
 use App\Models\Sale;
+use App\Models\Expense;
 use Modules\Center\Models\Attendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -31,6 +32,7 @@ class AnalyticsController extends Controller
                 'totalCourses' => Course::count(),
                 'totalInstructors' => Instructor::count(),
                 'totalRevenue' => Sale::sum('paid_amount'),
+                'totalExpenses' => Expense::sum('amount'),
                 'totalDue' => Sale::sum(\Illuminate\Support\Facades\DB::raw('total_amount - paid_amount')),
             ];
         });
@@ -41,6 +43,8 @@ class AnalyticsController extends Controller
         
         // --- 2. Financials ---
         $totalRevenue = $stats['totalRevenue'];
+        $totalExpenses = $stats['totalExpenses'];
+        $netProfit = $totalRevenue - $totalExpenses;
         $totalDue = $stats['totalDue'];
         
         $monthlyRevenue = $this->analyticsQuery->getMonthlyRevenue(6);
@@ -80,6 +84,8 @@ class AnalyticsController extends Controller
             'totalCourses', 
             'totalInstructors',
             'totalRevenue',
+            'totalExpenses',
+            'netProfit',
             'totalDue',
             'revenueLabels',
             'revenueData',
