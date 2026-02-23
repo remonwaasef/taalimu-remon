@@ -112,6 +112,15 @@ class CourseController extends Controller
         $student = \App\Models\Student::where('tenant_id', app('tenant')->id)
             ->findOrFail($request->student_id);
 
+        // Prevent duplicate enrollment
+        $alreadyEnrolled = Enrollment::where('user_id', $student->user_id)
+            ->where('course_id', $course->id)
+            ->exists();
+
+        if ($alreadyEnrolled) {
+            return back()->with('error', __('center::messages.student_already_enrolled'));
+        }
+
         try {
             // إنشاء فاتورة غير مدفوعة تلقائياً عند التسجيل
             $this->financeService->createSale([
@@ -125,6 +134,7 @@ class CourseController extends Controller
             return back()->with('error', $e->getMessage());
         }
     }
+
 
     public function quickEnroll(Request $request, $id)
     {
