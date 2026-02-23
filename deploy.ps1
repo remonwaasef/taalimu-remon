@@ -13,7 +13,7 @@ Write-Host "--- 2. Pushing to GitHub ---" -ForegroundColor Cyan
 git push origin main
 
 # We use bash -lc to ensure the full environment (composer, npm, etc.) is loaded
-$remoteCmd = "bash -lc 'git config --global --add safe.directory /home/taalimu/htdocs/taalimu.com && cd /home/taalimu/htdocs/taalimu.com && git pull origin main && export COMPOSER_ALLOW_SUPERUSER=1 && composer install --no-dev --optimize-autoloader && npm run build && php artisan migrate --force && php artisan storage:link && php artisan optimize:clear'"
+$remoteCmd = "bash -lc 'git config --global --add safe.directory /home/taalimu/htdocs/taalimu.com && cd /home/taalimu/htdocs/taalimu.com && export GIT_TERMINAL_PROMPT=0 && git pull origin main && export COMPOSER_ALLOW_SUPERUSER=1 && composer install --no-dev --optimize-autoloader && npm run build && php artisan migrate --force && php artisan storage:link && php artisan optimize:clear'"
 
 ssh root@46.202.155.30 $remoteCmd
 
