@@ -311,8 +311,8 @@
                 document.getElementById('dynamicCourseTitle').innerText = courseTitle;
                 
                 // Update forms actions based on course ID
-                let enrollUrl = `/center/courses/${courseId}/enroll`;
-                let quickEnrollUrl = `/center/courses/${courseId}/quick-enroll`;
+                let enrollUrl = `{{ route('center.courses.enroll', '__ID__') }}`.replace('__ID__', courseId);
+                let quickEnrollUrl = `{{ route('center.courses.quick-enroll', '__ID__') }}`.replace('__ID__', courseId);
                 
                 document.getElementById('existingStudentForm').action = enrollUrl;
                 document.getElementById('quickNewStudentForm').action = quickEnrollUrl;
