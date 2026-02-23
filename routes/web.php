@@ -119,7 +119,7 @@ Route::get('lang/{locale}', function ($locale) {
         }
     }
     return redirect()->back();
-})->middleware('throttle:10,1')->name('lang.switch');
+})->middleware('throttle:60,1')->name('lang.switch');
 
 // Debug routes removed for security - uncomment only in development if needed
 // if (app()->environment('local')) { ... }
