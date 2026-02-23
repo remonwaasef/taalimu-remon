@@ -190,11 +190,15 @@ class AuthController extends Controller
     public function magicLogin(Request $request, \App\Models\Student $student)
     {
         if (!$request->hasValidSignature()) {
-            abort(403, 'Invalid or expired login link.');
+            abort(403, 'رابط الدخول غير صالح أو انتهت صلاحيته.');
         }
 
         if ($student->tenant_id !== app('tenant')->id) {
             abort(403, 'Invalid tenant.');
+        }
+
+        if ($request->isMethod('get')) {
+            return view('center::auth.magic_login', compact('student'));
         }
 
         if ($student->user) {
