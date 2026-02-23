@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'impersonation' => [
+        'alert' => 'Vous naviguez actuellement dans le système en tant que :name (Vue Admin)',
+        'stop' => 'Retour au tableau de bord Admin',
+    ],
+    'egp' => 'EGP',
     'sidebar' => [
         'dashboard' => 'Tableau de bord',
         'centers' => 'Centres éducatifs',

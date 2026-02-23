@@ -1,15 +1,15 @@
 @extends('admin::layouts.master')
 
-@section('title', __('admin.sidebar.centers'))
+@section('page-title', __('admin::admin.tenants.title'))
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold text-dark mb-1">{{ __('admin.tenants.title') }}</h2>
-            <p class="text-muted small mb-0">{{ __('admin.tenants.subtitle') }}</p>
+            <h2 class="fw-bold mb-1">{{ __('admin::admin.tenants.title') }}</h2>
+            <p class="text-muted mb-0">{{ __('admin::admin.tenants.subtitle') }}</p>
         </div>
         <a href="{{ route('admin.tenants.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
-            <i class="bi bi-plus-lg me-2"></i> {{ __('admin.tenants.add_new') }}
+            <i class="bi bi-plus-lg me-2"></i> {{ __('admin::admin.tenants.add_new') }}
         </a>
     </div>
 
@@ -20,7 +20,7 @@
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <div class="text-muted x-small fw-bold text-uppercase mb-1">{{ __('admin.tenants.stats.total') }}</div>
+                            <div class="text-muted x-small fw-bold text-uppercase mb-1">{{ __('admin::admin.tenants.stats.total') }}</div>
                             <div class="h3 fw-bold mb-0 text-dark">{{ $stats['total_count'] }}</div>
                         </div>
                         <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
@@ -35,7 +35,7 @@
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <div class="text-muted x-small fw-bold text-uppercase mb-1">{{ __('admin.tenants.stats.active') }}</div>
+                            <div class="text-muted x-small fw-bold text-uppercase mb-1">{{ __('admin::admin.tenants.stats.active') }}</div>
                             <div class="h3 fw-bold mb-0 text-success">{{ $stats['active_count'] }}</div>
                         </div>
                         <div class="icon-box bg-success bg-opacity-10 text-success rounded-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
@@ -50,7 +50,7 @@
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <div class="text-muted x-small fw-bold text-uppercase mb-1">{{ __('admin.tenants.stats.inactive') }}</div>
+                            <div class="text-muted x-small fw-bold text-uppercase mb-1">{{ __('admin::admin.tenants.stats.inactive') }}</div>
                             <div class="h3 fw-bold mb-0 text-warning">{{ $stats['inactive_count'] }}</div>
                         </div>
                         <div class="icon-box bg-warning bg-opacity-10 text-warning rounded-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
@@ -65,7 +65,7 @@
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <div class="text-muted x-small fw-bold text-uppercase mb-1">{{ __('admin.tenants.stats.students') }}</div>
+                            <div class="text-muted x-small fw-bold text-uppercase mb-1">{{ __('admin::admin.tenants.stats.students') }}</div>
                             <div class="h3 fw-bold mb-0 text-dark">{{ number_format($stats['total_students']) }}</div>
                         </div>
                         <div class="icon-box bg-primary text-white rounded-3 shadow-sm" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #4361EE 0%, #4895ef 100%);">
@@ -84,22 +84,22 @@
                 <div class="col-md-4">
                     <div class="input-group">
                         <span class="input-group-text bg-light border-0 ps-3"><i class="bi bi-search text-muted"></i></span>
-                        <input type="text" name="search" class="form-control bg-light border-0 x-small" placeholder="{{ __('admin.tenants.filters.search_placeholder') }}" value="{{ request('search') }}">
+                        <input type="text" name="search" class="form-control" placeholder="{{ __('admin::admin.tenants.filters.search_placeholder') }}" value="{{ request('search') }}">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <select name="status" class="form-select bg-light border-0 x-small" onchange="this.form.submit()">
-                        <option value="">{{ __('admin.tenants.filters.all_statuses') }}</option>
-                        <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>{{ __('admin.tenants.filters.active') }}</option>
-                        <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>{{ __('admin.tenants.filters.inactive') }}</option>
+                        <option value="">{{ __('admin::admin.tenants.filters.all_statuses') }}</option>
+                        <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>{{ __('admin::admin.tenants.filters.active') }}</option>
+                        <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>{{ __('admin::admin.tenants.filters.inactive') }}</option>
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-dark rounded-pill w-100 x-small fw-bold">{{ __('admin.tenants.filters.filter') }}</button>
+                    <button type="submit" class="btn btn-dark rounded-pill w-100 x-small fw-bold">{{ __('admin::admin.tenants.filters.filter') }}</button>
                 </div>
                 @if(request()->anyFilled(['search', 'status']))
                     <div class="col-md-2">
-                        <a href="{{ route('admin.tenants.index') }}" class="btn btn-outline-secondary rounded-pill w-100 x-small border-dashed">{{ __('admin.tenants.filters.reset') }}</a>
+                        <a href="{{ route('admin.tenants.index') }}" class="btn btn-outline-secondary rounded-pill w-100 x-small border-dashed">{{ __('admin::admin.tenants.filters.reset') }}</a>
                     </div>
                 @endif
             </form>
@@ -109,11 +109,11 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="bg-light">
                         <tr class="text-secondary small text-uppercase">
-                            <th class="py-3 ps-4 border-0">{{ __('admin.tenants.table.center_admin') }}</th>
-                            <th class="py-3 border-0">{{ __('admin.tenants.table.domain_activity') }}</th>
-                            <th class="py-3 border-0 text-center">{{ __('admin.tenants.table.students') }}</th>
-                            <th class="py-3 border-0 text-center">{{ __('admin.tenants.table.status') }}</th>
-                            <th class="py-3 pe-4 border-0 text-end">{{ __('admin.tenants.table.actions') }}</th>
+                            <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.center_admin') }}</th>
+                            <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.domain_activity') }}</th>
+                            <th class="px-4 py-3 border-0 text-center">{{ __('admin::admin.tenants.table.students') }}</th>
+                            <th class="px-4 py-3 border-0 text-center">{{ __('admin::admin.tenants.table.status') }}</th>
+                            <th class="px-4 py-3 border-0 text-end">{{ __('admin::admin.tenants.table.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="border-top-0">
@@ -122,8 +122,8 @@
                                 $studentsCount = \App\Models\Student::where('tenant_id', $tenant->id)->count();
                                 $admin = $tenant->users->first();
                                 $statusClass = $tenant->status == 'active' ? 'success' : 'danger';
-                                $statusLabel = $tenant->status == 'active' ? __('admin.tenants.table.active') : __('admin.tenants.table.inactive');
-@endphp
+                                $statusLabel = $tenant->status == 'active' ? __('admin::admin.tenants.table.active') : __('admin::admin.tenants.table.inactive');
+                            @endphp
                             <tr>
                                 <td class="ps-4">
                                     <div class="d-flex align-items-center">
@@ -144,7 +144,7 @@
                                                 {{ $tenant->name }}
                                             </a>
                                             <span class="text-muted x-small">
-                                                <i class="bi bi-person me-1"></i> {{ $admin->name ?? __('admin.tenants.table.not_specified') }}
+                                                <i class="bi bi-person me-1"></i> {{ $admin->name ?? __('admin::admin.tenants.table.not_specified') }}
                                             </span>
                                         </div>
                                     </div>
@@ -154,13 +154,13 @@
                                         <div class="text-muted small mb-1">
                                             <i class="bi bi-link-45deg"></i> {{ $tenant->domain }}
                                         </div>
-                                        <span class="x-small text-muted italic">{{ __('admin.tenants.table.joined_on', ['date' => $tenant->created_at->format('Y/m/d')]) }}</span>
+                                        <div class="text-muted small">{{ __('admin::admin.tenants.table.joined_on', ['date' => $tenant->created_at->format('Y-m-d')]) }}</div>
                                     </div>
                                 </td>
                                 <td class="text-center">
                                     <div class="d-flex flex-column align-items-center">
                                         <span class="h6 mb-0 fw-bold">{{ number_format($studentsCount) }}</span>
-                                        <span class="x-small text-muted">{{ __('admin.tenants.table.student_unit') }}</span>
+                                        <div class="text-muted small">{{ __('admin::admin.tenants.table.student_unit') }}</div>
                                     </div>
                                 </td>
                                 <td class="text-center">
@@ -175,16 +175,16 @@
                                             <i class="bi bi-three-dots-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 p-2" style="min-width: 180px;">
-                                            <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('admin.tenants.show', $tenant->id) }}"><i class="bi bi-eye me-2 text-primary"></i> {{ __('admin.tenants.actions.view_details') }}</a></li>
-                                            <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('admin.tenants.edit', $tenant->id) }}"><i class="bi bi-pencil me-2 text-info"></i> {{ __('admin.tenants.actions.edit_data') }}</a></li>
-                                            <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('admin.tenants.impersonate', $tenant->id) }}"><i class="bi bi-box-arrow-in-right me-2 text-success"></i> {{ __('admin.tenants.actions.impersonate') }}</a></li>
+                                            <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('admin.tenants.show', $tenant->id) }}"><i class="bi bi-eye me-2 text-primary"></i> {{ __('admin::admin.tenants.actions.view_details') }}</a></li>
+                                            <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('admin.tenants.edit', $tenant->id) }}"><i class="bi bi-pencil me-2 text-info"></i> {{ __('admin::admin.tenants.actions.edit_data') }}</a></li>
+                                            <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('admin.tenants.impersonate', $tenant->id) }}"><i class="bi bi-box-arrow-in-right me-2 text-success"></i> {{ __('admin::admin.tenants.actions.impersonate') }}</a></li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
-                                                <form action="{{ route('admin.tenants.destroy', $tenant->id) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('admin.tenants.actions.delete_confirm') }}')">
+                                                <form action="{{ route('admin.tenants.destroy', $tenant->id) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('admin::admin.tenants.actions.delete_confirm') }}')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="dropdown-item rounded-3 text-danger">
-                                                        <i class="bi bi-trash me-2"></i> {{ __('admin.tenants.actions.delete') }}
+                                                        <i class="bi bi-trash me-2"></i> {{ __('admin::admin.tenants.actions.delete') }}
                                                     </button>
                                                 </form>
                                             </li>
@@ -199,9 +199,9 @@
                                         <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 100px; height: 100px;">
                                             <i class="bi bi-search fs-1 opacity-25"></i>
                                         </div>
-                                        <h5 class="fw-bold text-dark">{{ __('admin.tenants.no_results.title') }}</h5>
-                                        <p class="text-muted">{{ __('admin.tenants.no_results.description') }}</p>
-                                        <a href="{{ route('admin.tenants.index') }}" class="btn btn-primary rounded-pill px-4 mt-2">{{ __('admin.tenants.no_results.view_all') }}</a>
+                                        <h5 class="fw-bold text-dark">{{ __('admin::admin.tenants.no_results.title') }}</h5>
+                                        <p class="text-muted">{{ __('admin::admin.tenants.no_results.description') }}</p>
+                                        <a href="{{ route('admin.tenants.index') }}" class="btn btn-primary rounded-pill px-4 mt-2">{{ __('admin::admin.tenants.no_results.view_all') }}</a>
                                     </div>
                                 </td>
                             </tr>
