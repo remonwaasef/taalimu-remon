@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'impersonation' => [
+        'alert' => 'You are now browsing the system as :name (View as Admin)',
+        'stop' => 'Return to Admin Dashboard',
+    ],
+    'egp' => 'EGP',
     'sidebar' => [
         'dashboard' => 'Dashboard',
         'centers' => 'Learning Centers',

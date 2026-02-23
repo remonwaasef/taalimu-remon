@@ -369,10 +369,10 @@
         <div class="alert alert-warning mb-0 rounded-0 border-0 p-3 d-flex justify-content-between align-items-center" style="z-index: 2000; position: relative;">
             <div class="fw-bold">
                 <i class="bi bi-person-exclamation me-2"></i>
-                {!! __('admin.impersonation.alert', ['name' => '<strong>' . auth()->user()->name . '</strong>']) !!}
+                {!! __('admin::admin.impersonation.alert', ['name' => '<strong>' . auth()->user()->name . '</strong>']) !!}
             </div>
             <a href="{{ route('admin.impersonate.stop') }}" class="btn btn-dark btn-sm rounded-pill px-4 fw-bold">
-                <i class="bi bi-box-arrow-right me-1"></i> {{ __('admin.impersonation.stop') }}
+                <i class="bi bi-box-arrow-right me-1"></i> {{ __('admin::admin.impersonation.stop') }}
             </a>
         </div>
     @endif
@@ -396,62 +396,62 @@
             <li class="nav-item">
                 <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <span>📊</span>
-                    {{ __('admin.sidebar.dashboard') }}
+                    <span>{{ __('admin::admin.sidebar.dashboard') }}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ route('admin.tenants.index') }}" class="nav-link {{ request()->routeIs('admin.tenants.*') ? 'active' : '' }}">
                     <span>🏢</span>
-                    {{ __('admin.sidebar.centers') }}
+                    <span>{{ __('admin::admin.sidebar.centers') }}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ route('admin.subscriptions.index') }}" class="nav-link {{ request()->routeIs('admin.subscriptions.*') ? 'active' : '' }}">
                     <span>💰</span>
-                    {{ __('admin.sidebar.subscriptions') }}
+                    <span>{{ __('admin::admin.sidebar.subscriptions') }}</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a href="{{ route('admin.settings.index') }}" class="nav-link {{ request()->routeIs('admin.settings.*') && !str_contains(request()->fullUrl(), 'tab=coupons') ? 'active' : '' }}">
                     <span>⚙️</span>
-                    {{ __('admin.sidebar.settings') }}
+                    <span>{{ __('admin::admin.sidebar.settings') }}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ route('admin.settings.index', ['tab' => 'coupons']) }}" class="nav-link {{ str_contains(request()->fullUrl(), 'tab=coupons') ? 'active' : '' }}">
                     <span>🎟️</span>
-                    {{ __('admin.coupons_discounts') }}
+                    {{ __('admin::admin.coupons_discounts') }}
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ route('admin.tickets.index') }}" class="nav-link {{ request()->routeIs('admin.tickets.*') ? 'active' : '' }}">
                     <span>🎫</span>
-                    {{ __('admin.sidebar.support') }}
+                    <span>{{ __('admin::admin.sidebar.support') }}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ route('admin.activity-logs.index') }}" class="nav-link {{ request()->routeIs('admin.activity-logs.*') ? 'active' : '' }}">
                     <span>📋</span>
-                    {{ __('admin.sidebar.activity_logs') }}
+                    <span>{{ __('admin::admin.sidebar.activity_logs') }}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ route('admin.operation-issues.index') }}" class="nav-link {{ request()->routeIs('admin.operation-issues.*') ? 'active' : '' }}">
                     <span>🔴</span>
-                    {{ __('admin.sidebar.operation_issues') ?? 'مشكلات التشغيل' }}
+                    <span>{{ __('admin::admin.sidebar.operation_issues') }}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ route('admin.roles.index') }}" class="nav-link {{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
                     <span>🛡️</span>
-                    {{ __('admin.sidebar.roles') }}
+                    <span>{{ __('admin::admin.sidebar.roles') }}</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ route('consent.report') }}" class="nav-link {{ request()->routeIs('consent.report') ? 'active' : '' }}">
                     <span>🍪</span>
-                    {{ __('admin.sidebar.cookie_reports') }}
+                    <span>{{ __('admin::admin.sidebar.cookie_reports') }}</span>
                 </a>
             </li>
         </ul>
@@ -462,10 +462,10 @@
                     <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center text-white fw-bold me-2" style="width: 32px; height: 32px;">
                         {{ substr(auth()->user()->name ?? 'Admin', 0, 1) }}
                     </div>
-                    <strong>{{ auth()->user()->name ?? __('admin.sidebar.admin') }}</strong>
+                    <span class="ms-2 fw-bold">{{ auth()->user()->name ?? __('admin::admin.sidebar.admin') }}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                    <li><a class="dropdown-item" href="#">{{ __('admin.sidebar.profile') }}</a></li>
+                    <li><a class="dropdown-item" href="#">{{ __('admin::admin.sidebar.profile') }}</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <form action="{{ route('admin.logout') }}" method="POST" id="admin-logout-form" class="d-none">
