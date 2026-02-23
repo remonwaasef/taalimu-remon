@@ -32,6 +32,9 @@ class AnalyticsController extends Controller
                 'totalCourses' => Course::count(),
                 'totalInstructors' => Instructor::count(),
                 'totalRevenue' => Sale::sum('paid_amount'),
+                'monthlyRevenue' => Sale::whereMonth('created_at', now()->month)
+                    ->whereYear('created_at', now()->year)
+                    ->sum('paid_amount'),
                 'totalExpenses' => Expense::sum('amount'),
                 'totalDue' => Sale::sum(\Illuminate\Support\Facades\DB::raw('total_amount - paid_amount')),
             ];
@@ -43,6 +46,7 @@ class AnalyticsController extends Controller
         
         // --- 2. Financials ---
         $totalRevenue = $stats['totalRevenue'];
+        $monthlyRevenueSum = $stats['monthlyRevenue'];
         $totalExpenses = $stats['totalExpenses'];
         $netProfit = $totalRevenue - $totalExpenses;
         $totalDue = $stats['totalDue'];
@@ -84,6 +88,7 @@ class AnalyticsController extends Controller
             'totalCourses', 
             'totalInstructors',
             'totalRevenue',
+            'monthlyRevenueSum',
             'totalExpenses',
             'netProfit',
             'totalDue',

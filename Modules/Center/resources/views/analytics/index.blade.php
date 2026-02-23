@@ -67,14 +67,14 @@
             </div>
         </div>
 
-        <!-- Row 2: Financial -->
+        <!-- Row 2: Financial (This Month) -->
         <div class="col-xl-4 col-md-6">
             <div class="card border-0 shadow-sm h-100 py-2 rounded-4 border-start border-4 border-success">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col me-2">
-                            <div class="text-xs fw-bold text-success text-uppercase mb-1">{{ __('center::messages.blade_0048') }}</div>
-                            <div class="h3 mb-0 fw-bold text-gray-800">{{ format_price($totalRevenue) }}</div>
+                            <div class="text-xs fw-bold text-success text-uppercase mb-1">إيرادات الشهر الحالي</div>
+                            <div class="h3 mb-0 fw-bold text-gray-800">{{ format_price($monthlyRevenueSum) }}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-sack-dollar fa-2x text-gray-300"></i>
@@ -89,7 +89,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col me-2">
-                            <div class="text-xs fw-bold text-danger text-uppercase mb-1">{{ __('center::messages.total_expenses') ?? 'إجمالي المصروفات' }}</div>
+                            <div class="text-xs fw-bold text-danger text-uppercase mb-1">مصروفات الشهر الحالي</div>
                             <div class="h3 mb-0 fw-bold text-gray-800">{{ format_price($totalExpenses) }}</div>
                         </div>
                         <div class="col-auto">
@@ -105,13 +105,23 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col me-2">
-                            <div class="text-xs fw-bold text-primary text-uppercase mb-1">{{ __('center::messages.net_profit') ?? 'صافي الربح' }}</div>
-                            <div class="h3 mb-0 fw-bold text-{{ $netProfit >= 0 ? 'success' : 'danger' }}">{{ format_price($netProfit) }}</div>
+                            <div class="text-xs fw-bold text-primary text-uppercase mb-1">صافي ربح الشهر</div>
+                            <div class="h3 mb-0 fw-bold text-{{ ($monthlyRevenueSum - $totalExpenses) >= 0 ? 'success' : 'danger' }}">{{ format_price($monthlyRevenueSum - $totalExpenses) }}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-chart-line fa-2x text-gray-300"></i>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Optional: All-Time Stats (Small Row) -->
+        <div class="col-12 mt-2">
+            <div class="card border-0 shadow-sm rounded-4 bg-light border-0">
+                <div class="card-body py-2 px-4 d-flex justify-content-between align-items-center overflow-auto">
+                    <div class="small text-muted"><i class="fas fa-history me-1"></i> إجمالي الإيرادات (كل الوقت): <span class="fw-bold">{{ format_price($totalRevenue) }}</span></div>
+                    <div class="small text-muted"><i class="fas fa-coins me-1"></i> إجمالي الربح (كل الوقت): <span class="fw-bold text-success">{{ format_price($totalRevenue - $totalExpenses) }}</span></div>
                 </div>
             </div>
         </div>

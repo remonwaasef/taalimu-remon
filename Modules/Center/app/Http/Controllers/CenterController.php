@@ -57,8 +57,7 @@ class CenterController extends Controller
             return [
                 'activeStudents' => $activeStudentsCount,
                 'activeCourses' => Course::where('status', 'published')->count(),
-                'monthlyRevenue' => Sale::where('status', 'paid')
-                    ->whereMonth('created_at', now()->month)
+                'monthlyRevenue' => Sale::whereMonth('created_at', now()->month)
                     ->whereYear('created_at', now()->year)
                     ->sum('paid_amount'),
                 'monthlyExpenses' => Expense::whereMonth('date', now()->month)
