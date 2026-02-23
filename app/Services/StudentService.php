@@ -45,6 +45,7 @@ class StudentService
             $user = User::create([
                 'name' => $data->name,
                 'email' => $email,
+                'phone' => $data->phone, // Synchronize phone for authentication
                 'password' => Hash::make($generatedPassword),
                 'role' => 'student',
                 'tenant_id' => app('tenant')->id,
@@ -136,6 +137,7 @@ class StudentService
             $user->update([
                 'name' => $data->name,
                 'email' => $data->email,
+                'phone' => $data->phone, // Synchronize phone on update
             ]);
 
             // 1.5 Handle Guardian
@@ -415,6 +417,7 @@ class StudentService
             $usersToInsert[] = [
                 'name' => $name,
                 'email' => $email,
+                'phone' => $phone, // Synchronize phone during import
                 'password' => $passwordHash,
                 'role' => 'student',
                 'tenant_id' => $tenantId,
