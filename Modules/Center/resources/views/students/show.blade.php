@@ -7,7 +7,7 @@
             $whatsappUrl = "https://wa.me/" . (session('student_phone') ?? $student->phone) . "?text=" . urlencode($msg);
             $mailtoUrl = "mailto:" . (session('student_email') ?? $student->email) . "?subject=تم إعادة تعيين كلمة مرورك&body=" . rawurlencode($msg);
             
-            $qrUrl = \Illuminate\Support\Facades\URL::signedRoute('center.login.magic', ['student' => $student->id, 'tenant' => app('tenant')->domain]);
+            $qrUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute('center.login.magic', now()->addMinutes(15), ['student' => $student->id, 'tenant' => app('tenant')->domain]);
         @endphp
 
         <div class="premium-ticket-container mb-5 animate__animated animate__fadeIn">
@@ -233,7 +233,7 @@
                 <p class="small text-muted mb-4 px-2">{{ __('center::messages.blade_0830') }}</p>
                 
                 @php
-                    $magicLoginUrl = \Illuminate\Support\Facades\URL::signedRoute('center.login.magic', [
+                    $magicLoginUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute('center.login.magic', now()->addMinutes(15), [
                         'student' => $student->id, 
                         'tenant' => app('tenant')->domain
                     ]);
@@ -1111,14 +1111,14 @@
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('resetPasswordBtn')?.addEventListener('click', function() {
             Swal.fire({
-                title: __('center::messages.blade_0918'),
-                text: __('center::messages.blade_0919'),
+                title: "{{ __('center::messages.blade_0918') }}",
+                text: "{{ __('center::messages.blade_0919') }}",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#ffc107',
                 cancelButtonColor: '#6c757d',
-                confirmButtonText: __('center::messages.blade_0920'),
-                cancelButtonText: __('center::messages.blade_0921'),
+                confirmButtonText: "{{ __('center::messages.blade_0920') }}",
+                cancelButtonText: "{{ __('center::messages.blade_0921') }}",
                 reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
