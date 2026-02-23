@@ -11,8 +11,6 @@ class ExpenseController extends Controller
 {
     public function index(Request $request)
     {
-        $this->authorize('viewAny', Expense::class);
-
         $query = Expense::query();
 
         if ($request->has('category') && $request->category != '') {
@@ -35,14 +33,11 @@ class ExpenseController extends Controller
 
     public function create()
     {
-        $this->authorize('create', Expense::class);
         return view('center::expenses.create');
     }
 
     public function store(Request $request)
     {
-        $this->authorize('create', Expense::class);
-
         $validated = $request->validate([
             'category' => 'nullable|string|max:255',
             'amount' => 'nullable|numeric|min:0',
@@ -63,14 +58,11 @@ class ExpenseController extends Controller
 
     public function edit(Expense $expense)
     {
-        $this->authorize('update', $expense);
         return view('center::expenses.edit', compact('expense'));
     }
 
     public function update(Request $request, Expense $expense)
     {
-        $this->authorize('update', $expense);
-
         $validated = $request->validate([
             'category' => 'nullable|string|max:255',
             'amount' => 'nullable|numeric|min:0',
@@ -94,8 +86,6 @@ class ExpenseController extends Controller
 
     public function destroy(Expense $expense)
     {
-        $this->authorize('delete', $expense);
-
         if ($expense->attachment) {
             Storage::disk('public')->delete($expense->attachment);
         }
