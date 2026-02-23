@@ -42,8 +42,9 @@
     <!-- Cart & Checkout -->
     <div class="col-lg-4">
         <div class="card border-0 shadow-sm rounded-4 sticky-top" style="top: 20px;">
-            <div class="card-header bg-white border-0 py-3">
+            <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
                 <h5 class="fw-bold mb-0 text-primary"><i class="fas fa-shopping-cart me-2"></i> {{ __('center::sales.cart') }}</h5>
+                <i class="fas fa-question-circle text-muted" data-bs-toggle="tooltip" title="السلة مخصصة لعمليات البيع الجديدة فقط. المديونيات السابقة يتم سدادها عبر زر 'سداد'"></i>
             </div>
             <div class="card-body p-4">
                 <form id="posForm">
@@ -160,12 +161,16 @@
                     debtEl.innerText = data.total_debt + ' ' + currency;
                     profileLink.href = `/students/${studentId}`;
 
-                    // Subscription Status
-                    if (data.student.status === 'active') {
-                        statusEl.innerText = __('center::messages.blade_0593');
+                    // Subscription Status - check both user status and a fallback active check
+                    const status = data.student.status;
+                    if (status === 'active' || status === 'verified') {
+                        statusEl.innerText = '{{ __('center::sales.status_paid') }} / نشط';
                         statusEl.className = 'badge bg-success bg-opacity-10 text-success rounded-pill px-3';
+                    } else if (status === 'pending' || status === 'new') {
+                        statusEl.innerText = 'حساب جديد / في انتظار التفعيل';
+                        statusEl.className = 'badge bg-warning bg-opacity-10 text-warning rounded-pill px-3';
                     } else {
-                        statusEl.innerText = 'حساب غير نشط/منتهي';
+                        statusEl.innerText = 'حساب غير نشط أو منتهي';
                         statusEl.className = 'badge bg-danger bg-opacity-10 text-danger rounded-pill px-3';
                     }
 
@@ -201,8 +206,8 @@
 
     function quickPay(saleId, remaining, studentId) {
         Swal.fire({
-            title: 'تحصيل دفعة - فاتورة #' + saleId,
-            text: __('center::messages.blade_0594') + remaining.toFixed(2) + ' ' + currency,
+            title: '{{ __('center::messages.blade_0590') }} - فاتورة #' + saleId,
+            text: 'هل أنت متأكد من تحصيل المبلغ المتبقي؟ ' + remaining.toFixed(2) + ' ' + currency,
             input: 'number',
             inputAttributes: {
                 min: 0.01,
@@ -211,17 +216,17 @@
             },
             inputValue: remaining,
             showCancelButton: true,
-            confirmButtonText: __('center::messages.blade_0595'),
-            cancelButtonText: __('center::messages.blade_0596'),
+            confirmButtonText: '{{ __('center::messages.blade_0595') }}',
+            cancelButtonText: '{{ __('center::messages.blade_0596') }}',
             showLoaderOnConfirm: true,
             preConfirm: (amount) => {
                 const data = {
                     amount: amount,
                     payment_method: 'cash', // Default to cash for quick pay
-                    notes: __('center::messages.blade_0597'),
+                    notes: '{{ __('center::messages.blade_0597') }}',
                     _token: '{{ csrf_token() }}'
                 };
-                return fetch(`/sales/${saleId}/payment`, {
+                return fetch(`sales/${saleId}/payment`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify(data)
@@ -325,7 +330,7 @@
         };
 
         Swal.fire({
-            title: __('center::messages.blade_0599'),
+            title: 'جاري الحفظ...',
             didOpen: () => { Swal.showLoading(); }
         });
 
@@ -342,14 +347,14 @@
             if (data.success) {
                 Swal.fire({
                     icon: 'success',
-                    title: __('center::messages.blade_0600'),
-                    text: __('center::messages.blade_0601'),
-                    confirmButtonText: __('center::messages.blade_0602')
+                    title: 'تمت العملية!',
+                    text: 'تم تسجيل عملية البيع بنجاح',
+                    confirmButtonText: 'حسناً'
                 }).then(() => {
                     window.location.href = '{{ route("center.sales.index") }}';
                 });
             } else {
-                Swal.fire({ icon: 'error', text: __('center::messages.blade_0603') + (data.message || __('center::messages.blade_0604')) });
+                Swal.fire({ icon: 'error', text: 'فشل الحفظ: ' + (data.message || 'خطأ غير معروف') });
             }
         })
         .catch(error => {

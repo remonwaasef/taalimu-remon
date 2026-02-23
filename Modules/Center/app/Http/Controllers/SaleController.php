@@ -138,15 +138,15 @@ class SaleController extends Controller
         $totalDebt = $sales->sum('remaining');
         $unpaidSales = $sales->where('remaining', '>', 0)->values();
 
-        // Student User status (for subscription/active check)
-        $userStatus = $student->user?->status ?? 'unknown';
+        // Student status (for clerical check)
+        $studentStatus = $student->status ?? 'unknown';
 
         return response()->json([
             'success' => true,
             'student' => [
                 'name' => $student->name,
                 'phone' => $student->phone,
-                'status' => $userStatus,
+                'status' => $studentStatus,
             ],
             'courses' => $courses,
             'total_debt' => number_format($totalDebt, 2),
