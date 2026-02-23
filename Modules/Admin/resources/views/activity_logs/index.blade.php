@@ -48,9 +48,16 @@
                                     <small>
                                         @foreach($activity->changes['attributes'] ?? [] as $key => $value)
                                             <strong>{{ $key }}:</strong> 
-                                            <span class="text-danger">{{ $activity->changes['old'][$key] ?? 'null' }}</span> 
+                                            @php
+                                                $oldValue = $activity->changes['old'][$key] ?? 'null';
+                                            @endphp
+                                            <span class="text-danger">
+                                                {{ is_array($oldValue) ? json_encode($oldValue, JSON_UNESCAPED_UNICODE) : $oldValue }}
+                                            </span> 
                                             -> 
-                                            <span class="text-success">{{ $value }}</span><br>
+                                            <span class="text-success">
+                                                {{ is_array($value) ? json_encode($value, JSON_UNESCAPED_UNICODE) : $value }}
+                                            </span><br>
                                         @endforeach
                                     </small>
                                 @elseif($activity->event == 'created')
