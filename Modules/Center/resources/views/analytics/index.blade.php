@@ -18,8 +18,8 @@
 
     <!-- 1. Summary Cards -->
     <div class="row g-4 mb-4">
-        <!-- Total Students -->
-        <div class="col-xl-3 col-md-6">
+        <!-- Row 1: Academic & Operational -->
+        <div class="col-xl-4 col-md-6">
             <div class="card border-0 shadow-sm h-100 py-2 rounded-4 border-start border-4 border-primary">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -35,25 +35,7 @@
             </div>
         </div>
 
-        <!-- Total Revenue -->
-        <div class="col-xl-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100 py-2 rounded-4 border-start border-4 border-success">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col me-2">
-                            <div class="text-xs fw-bold text-success text-uppercase mb-1">{{ __('center::messages.blade_0048') }}</div>
-                            <div class="h3 mb-0 fw-bold text-gray-800">{{ format_price($totalRevenue) }}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-sack-dollar fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Courses -->
-        <div class="col-xl-3 col-md-6">
+        <div class="col-xl-4 col-md-6">
             <div class="card border-0 shadow-sm h-100 py-2 rounded-4 border-start border-4 border-info">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -69,8 +51,7 @@
             </div>
         </div>
 
-        <!-- Outstanding Dues -->
-        <div class="col-xl-3 col-md-6">
+        <div class="col-xl-4 col-md-6">
             <div class="card border-0 shadow-sm h-100 py-2 rounded-4 border-start border-4 border-warning">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -80,6 +61,55 @@
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-hand-holding-usd fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 2: Financial -->
+        <div class="col-xl-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100 py-2 rounded-4 border-start border-4 border-success">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs fw-bold text-success text-uppercase mb-1">{{ __('center::messages.blade_0048') }}</div>
+                            <div class="h3 mb-0 fw-bold text-gray-800">{{ format_price($totalRevenue) }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-sack-dollar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100 py-2 rounded-4 border-start border-4 border-danger">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs fw-bold text-danger text-uppercase mb-1">{{ __('center::messages.total_expenses') ?? 'إجمالي المصروفات' }}</div>
+                            <div class="h3 mb-0 fw-bold text-gray-800">{{ format_price($totalExpenses) }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-file-invoice-dollar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100 py-2 rounded-4 border-start border-4 border-primary">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs fw-bold text-primary text-uppercase mb-1">{{ __('center::messages.net_profit') ?? 'صافي الربح' }}</div>
+                            <div class="h3 mb-0 fw-bold text-{{ $netProfit >= 0 ? 'success' : 'danger' }}">{{ format_price($netProfit) }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-chart-line fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
