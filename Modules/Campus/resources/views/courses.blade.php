@@ -1,63 +1,65 @@
 @extends('campus::layouts.master')
 
 @section('content')
-    <div class="row align-items-center mb-5">
-        <div class="col-md-6">
-            <h2 class="fw-bold text-dark mb-2">تصفح الدورات المتاحة</h2>
-            <p class="text-muted mb-0">اكتشف دورات جديدة لتنمية مهاراتك</p>
-        </div>
-        <div class="col-md-6 text-md-end mt-3 mt-md-0">
-            <div class="d-inline-flex gap-2">
-                <a href="{{ route('campus.index') }}" class="btn btn-light rounded-pill px-4">
-                    <i class="bi bi-arrow-right ms-2"></i> العودة لدوراتي
-                </a>
-            </div>
-        </div>
+<div class="row align-items-center mb-5 animate__animated animate__fadeIn">
+    <div class="col-md-6">
+        <h3 class="fw-bold text-dark mb-1">استكشف الدورات</h3>
+        <p class="text-muted small mb-0">اعثر على شغفك الجديد وابدأ رحلة التعلم اليوم</p>
     </div>
+    <div class="col-md-6 text-md-end mt-3 mt-md-0">
+        <a href="{{ route('campus.index') }}" class="btn btn-primary-soft rounded-pill px-4 fw-bold">
+            <i class="fas fa-arrow-right ms-2 small"></i> لوحة التحكم
+        </a>
+    </div>
+</div>
 
-    <div class="row g-4">
-        @forelse($courses as $course)
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm rounded-ultra h-100 course-card overflow-hidden transition">
-                    <div class="position-relative">
-                        <div class="bg-primary bg-gradient d-flex align-items-center justify-content-center text-white" style="height: 180px; background: linear-gradient(135deg, {{ $loop->even ? '#0ea5e9 0%, #2dd4bf' : '#6366f1 0%, #a855f7' }} 100%) !important;">
-                            @if($course->image)
-                                <img src="{{ asset('storage/' . $course->image) }}" class="w-100 h-100 object-fit-cover">
-                            @else
-                                <span class="display-3">{{ $loop->even ? '🧪' : '📐' }}</span>
-                            @endif
+<div class="row g-4 animate__animated animate__fadeInUp">
+    @forelse($courses as $course)
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 course-card-premium overflow-hidden transition-all">
+                <div class="position-relative">
+                    <div class="course-cover-mini position-relative" style="height: 180px;">
+                        @if($course->image)
+                            <img src="{{ asset('storage/' . $course->image) }}" class="w-100 h-100 object-fit-cover">
+                        @else
+                            <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-premium">
+                                <i class="fas fa-microscope display-4 text-white opacity-25"></i>
+                            </div>
+                        @endif
+                        <div class="course-badge-mini">
+                            {{ $course->grade?->name ?? 'عامة' }}
                         </div>
                         <div class="position-absolute bottom-0 end-0 m-3">
-                            <span class="badge bg-white text-dark shadow-sm rounded-pill py-2 px-3">
+                            <span class="badge bg-white text-dark shadow-sm rounded-pill py-2 px-3 fw-bold">
                                 {{ $course->price > 0 ? $course->price . ' ج.م' : 'مجاني' }}
                             </span>
                         </div>
                     </div>
-                    <div class="card-body p-4">
-                        <div class="mb-3">
-                            <span class="badge bg-opacity-10 rounded-pill py-2 px-3 small {{ $loop->even ? 'bg-success text-success' : 'bg-info text-info' }}">
-                                {{ $course->grade?->name ?? 'دورة عامة' }}
-                            </span>
-                        </div>
-                        <h5 class="fw-bold mb-3 text-dark">{{ $course->title }}</h5>
-                        <p class="text-muted small mb-4 line-clamp-2">{{ $course->description }}</p>
-                        
-                        <div class="d-grid gap-2">
-                             <button class="btn btn-outline-primary rounded-pill py-2 fw-bold shadow-sm transition">
-                                 التفاصيل
-                            </button>
-                        </div>
-                    </div>
+                </div>
+
+                <div class="card-body p-4">
+                    <h5 class="fw-bold text-dark mb-2 line-clamp-1" title="{{ $course->title }}">
+                        {{ $course->title }}
+                    </h5>
+                    <p class="text-muted small mb-4 line-clamp-2 opacity-75">{{ $course->description }}</p>
+
+                    <button class="btn btn-primary-soft w-100 rounded-pill py-2 fw-bold transition-all">
+                        عرض التفاصيل
+                        <i class="fas fa-info-circle ms-2 small"></i>
+                    </button>
                 </div>
             </div>
-        @empty
-            <div class="col-12 text-center py-5">
-                <div class="mb-4 display-1 opacity-25">🔍</div>
-                <h4 class="fw-bold text-dark">لا توجد دورات متاحة حالياً</h4>
-                <p class="text-muted mb-4">يرجى التحقق لاحقاً أو التواصل مع الإدارة.</p>
+        </div>
+    @empty
+        <div class="col-12 text-center py-5">
+            <div class="p-5 rounded-5 border-dashed-premium bg-white shadow-sm">
+                <div class="mb-4 fs-1 opacity-25">🔍</div>
+                <h5 class="fw-bold text-dark mb-2">لا توجد دورات متاحة حالياً</h5>
+                <p class="text-muted mb-0 opacity-75">يرجى العودة لاحقاً أو التواصل مع الإدارة للاستفسار</p>
             </div>
-        @endforelse
-    </div>
+        </div>
+    @endforelse
+</div>
 
     <style>
         .line-clamp-2 {
