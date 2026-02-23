@@ -369,10 +369,10 @@
         <div class="alert alert-warning mb-0 rounded-0 border-0 p-3 d-flex justify-content-between align-items-center" style="z-index: 2000; position: relative;">
             <div class="fw-bold">
                 <i class="bi bi-person-exclamation me-2"></i>
-                أنت الآن تتصفح النظام بصفتك <strong>{{ auth()->user()->name }}</strong> (مشاهدة كمسؤول)
+                {!! __('admin.impersonation.alert', ['name' => '<strong>' . auth()->user()->name . '</strong>']) !!}
             </div>
             <a href="{{ route('admin.impersonate.stop') }}" class="btn btn-dark btn-sm rounded-pill px-4 fw-bold">
-                <i class="bi bi-box-arrow-right me-1"></i> العودة للوحة تحكم المشرف
+                <i class="bi bi-box-arrow-right me-1"></i> {{ __('admin.impersonation.stop') }}
             </a>
         </div>
     @endif
