@@ -1,10 +1,10 @@
 @extends('admin::layouts.master')
 
-@section('title', 'الرئيسية')
+@section('title', __('admin.dashboard.title'))
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark">لوحة القيادة</h2>
+        <h2 class="fw-bold text-dark">{{ __('admin.dashboard.title') }}</h2>
         <div class="text-muted">{{ date('Y-m-d') }}</div>
     </div>
 
@@ -17,8 +17,8 @@
                         <i class="bi bi-building fs-4"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">إجمالي المراكز</h6>
-                        <h3 class="fw-bold mb-0">{{ $totalTenants }}</h3>
+                        <h6 class="text-muted mb-1">{{ __('admin.dashboard.stats.total_centers') }}</h6>
+                         <h3 class="fw-bold mb-0">{{ $totalTenants }}</h3>
                     </div>
                     <a href="{{ route('admin.tenants.index') }}" class="stretched-link"></a>
                 </div>
@@ -31,8 +31,8 @@
                         <i class="bi bi-check-circle-fill fs-4"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">المراكز النشطة</h6>
-                        <h3 class="fw-bold mb-0">{{ $activeTenants }}</h3>
+                        <h6 class="text-muted mb-1">{{ __('admin.dashboard.stats.active_centers') }}</h6>
+                         <h3 class="fw-bold mb-0">{{ $activeTenants }}</h3>
                     </div>
                     <a href="{{ route('admin.tenants.index') }}" class="stretched-link"></a>
                 </div>
@@ -45,8 +45,8 @@
                         <i class="bi bi-hourglass-split fs-4"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">اشتراكات تنتهي قريباً</h6>
-                        <h3 class="fw-bold mb-0">{{ $expiringSoon }}</h3>
+                        <h6 class="text-muted mb-1">{{ __('admin.dashboard.stats.expiring_soon') }}</h6>
+                         <h3 class="fw-bold mb-0">{{ $expiringSoon }}</h3>
                     </div>
                     <a href="{{ route('admin.subscriptions.index') }}" class="stretched-link"></a>
                 </div>
@@ -59,8 +59,8 @@
                         <i class="bi bi-people-fill fs-4"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">إجمالي الطلاب</h6>
-                        <h3 class="fw-bold mb-0">{{ $totalStudents }}</h3>
+                        <h6 class="text-muted mb-1">{{ __('admin.dashboard.stats.total_students') }}</h6>
+                         <h3 class="fw-bold mb-0">{{ $totalStudents }}</h3>
                     </div>
                 </div>
             </div>
@@ -76,8 +76,8 @@
                         <i class="bi bi-cash-stack fs-4"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">إجمالي الإيرادات</h6>
-                        <h3 class="fw-bold mb-0">{{ number_format($totalRevenue, 2) }} <small class="fs-6 text-muted">ج.م</small></h3>
+                        <h6 class="text-muted mb-1">{{ __('admin.dashboard.stats.total_revenue') }}</h6>
+                        <h3 class="fw-bold mb-0">{{ number_format($totalRevenue, 2) }} <small class="fs-6 text-muted">{{ __('admin.egp') ?? 'ج.م' }}</small></h3>
                     </div>
                     <!-- Assuming revenue details might be in subscriptions for now -->
                      <a href="{{ route('admin.subscriptions.index') }}" class="stretched-link"></a>
@@ -91,8 +91,8 @@
                         <i class="bi bi-graph-up-arrow fs-4"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">إيرادات هذا الشهر</h6>
-                        <h3 class="fw-bold mb-0">{{ number_format($thisMonthRevenue, 2) }} <small class="fs-6 text-muted">ج.م</small></h3>
+                        <h6 class="text-muted mb-1">{{ __('admin.dashboard.stats.this_month_revenue') }}</h6>
+                        <h3 class="fw-bold mb-0">{{ number_format($thisMonthRevenue, 2) }} <small class="fs-6 text-muted">{{ __('admin.egp') ?? 'ج.م' }}</small></h3>
                     </div>
                      <a href="{{ route('admin.subscriptions.index') }}" class="stretched-link"></a>
                 </div>
@@ -105,8 +105,8 @@
                         <i class="bi bi-ticket-perforated fs-4"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">تذاكر مفتوحة</h6>
-                        <h3 class="fw-bold mb-0">{{ $openTickets }}</h3>
+                        <h6 class="text-muted mb-1">{{ __('admin.dashboard.stats.open_tickets') }}</h6>
+                         <h3 class="fw-bold mb-0">{{ $openTickets }}</h3>
                     </div>
                     <a href="{{ route('admin.tickets.index') }}" class="stretched-link"></a>
                 </div>
@@ -119,8 +119,8 @@
                         <i class="bi bi-life-preserver fs-4"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">إجمالي التذاكر</h6>
-                        <h3 class="fw-bold mb-0">{{ $totalTickets }}</h3>
+                        <h6 class="text-muted mb-1">{{ __('admin.dashboard.stats.total_tickets') }}</h6>
+                         <h3 class="fw-bold mb-0">{{ $totalTickets }}</h3>
                     </div>
                     <a href="{{ route('admin.tickets.index') }}" class="stretched-link"></a>
                 </div>
@@ -131,17 +131,17 @@
     <!-- Recent Tenants -->
     <div class="card border-0 shadow-sm rounded-4">
         <div class="card-header bg-white border-0 py-3 px-4 d-flex justify-content-between align-items-center">
-            <h5 class="fw-bold mb-0">آخر المراكز المسجلة</h5>
-            <a href="{{ route('admin.tenants.index') }}" class="btn btn-sm btn-light rounded-pill">عرض الكل</a>
+            <h5 class="fw-bold mb-0">{{ __('admin.dashboard.recent_tenants') }}</h5>
+            <a href="{{ route('admin.tenants.index') }}" class="btn btn-sm btn-light rounded-pill">{{ __('admin.view_all') ?? 'عرض الكل' }}</a>
         </div>
         <div class="table-responsive">
             <table class="table align-middle mb-0">
                 <thead class="bg-light">
                     <tr>
-                        <th class="px-4 py-3 border-0">اسم المركز</th>
-                        <th class="px-4 py-3 border-0">النطاق</th>
-                        <th class="px-4 py-3 border-0">تاريخ التسجيل</th>
-                        <th class="px-4 py-3 border-0">الحالة</th>
+                        <th class="px-4 py-3 border-0">{{ __('admin.tenants.table.name') ?? 'اسم المركز' }}</th>
+                        <th class="px-4 py-3 border-0">{{ __('admin.tenants.table.domain') ?? 'النطاق' }}</th>
+                        <th class="px-4 py-3 border-0">{{ __('admin.tenants.table.joined_on_title') ?? 'تاريخ التسجيل' }}</th>
+                        <th class="px-4 py-3 border-0">{{ __('admin.tenants.table.status') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -165,7 +165,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="text-center py-5 text-muted">لا يوجد مراكز مسجلة بعد.</td>
+                             <td colspan="4" class="text-center py-5 text-muted">{{ __('admin.dashboard.no_tenants') }}</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -176,18 +176,18 @@
     <!-- Recent Support Tickets -->
     <div class="card border-0 shadow-sm rounded-4 mt-4">
         <div class="card-header bg-white border-0 py-3 px-4 d-flex justify-content-between align-items-center">
-            <h5 class="fw-bold mb-0">آخر تذاكر الدعم</h5>
-            <a href="{{ route('admin.tickets.index') }}" class="btn btn-sm btn-light rounded-pill">عرض الكل</a>
+            <h5 class="fw-bold mb-0">{{ __('admin.dashboard.recent_tickets') }}</h5>
+            <a href="{{ route('admin.tickets.index') }}" class="btn btn-sm btn-light rounded-pill">{{ __('admin.view_all') ?? 'عرض الكل' }}</a>
         </div>
         <div class="table-responsive">
             <table class="table align-middle mb-0">
                 <thead class="bg-light">
                     <tr>
-                        <th class="px-4 py-3 border-0">الموضوع</th>
-                        <th class="px-4 py-3 border-0">المستخدم</th>
-                        <th class="px-4 py-3 border-0">المركز</th>
-                        <th class="px-4 py-3 border-0">التاريخ</th>
-                        <th class="px-4 py-3 border-0">الحالة</th>
+                        <th class="px-4 py-3 border-0">{{ __('admin.tickets.subject') ?? 'الموضوع' }}</th>
+                        <th class="px-4 py-3 border-0">{{ __('admin.tickets.user') ?? 'المستخدم' }}</th>
+                        <th class="px-4 py-3 border-0">{{ __('admin.tickets.center') ?? 'المركز' }}</th>
+                        <th class="px-4 py-3 border-0">{{ __('admin.tickets.date') ?? 'التاريخ' }}</th>
+                        <th class="px-4 py-3 border-0">{{ __('admin.tickets.status') ?? 'الحالة' }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -211,7 +211,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center py-5 text-muted">لا يوجد تذاكر دعم فني.</td>
+                             <td colspan="5" class="text-center py-5 text-muted">{{ __('admin.dashboard.no_tickets') }}</td>
                         </tr>
                     @endforelse
                 </tbody>
