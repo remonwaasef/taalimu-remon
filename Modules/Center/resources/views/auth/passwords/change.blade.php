@@ -1,4 +1,4 @@
-@extends('layouts.landing-new')
+@extends('layouts.auth-minimal')
 
 @section('content')
 <div class="min-h-screen bg-slate-50/50 flex justify-center items-center p-4 lg:p-8" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
