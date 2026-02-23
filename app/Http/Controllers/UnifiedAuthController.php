@@ -21,16 +21,59 @@ class UnifiedAuthController extends Controller
             'password' => ['required'],
         ]);
 
-        $loginField = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
-        $credentials = [
-            $loginField => $request->email,
-            'password' => $request->password,
-        ];
+        $isEmail = filter_var($request->email, FILTER_VALIDATE_EMAIL);
+        $user = null;
 
-        // Try to authenticate
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
+        if ($isEmail) {
+            $credentials = [
+                'email' => $request->email,
+                'password' => $request->password,
+            ];
+            if (Auth::attempt($credentials)) {
+                $user = Auth::user();
+            }
+        } else {
+            // Phone-based login logic
+            $input = $request->email;
+            $cleanPhone = preg_replace('/[^0-9]/', '', $input);
             
+            // 1. Try variations of the phone number in the User table directly
+            $phoneVariations = [
+                $input,
+                $cleanPhone,
+                '0' . $cleanPhone,
+                substr($cleanPhone, 1)
+            ];
+
+            foreach (array_unique($phoneVariations) as $phone) {
+                if (empty($phone)) continue;
+                
+                $potentialUser = User::where('phone', $phone)->first();
+                if ($potentialUser && \Illuminate\Support\Facades\Hash::check($request->password, $potentialUser->password)) {
+                    $user = $potentialUser;
+                    Auth::login($user);
+                    break;
+                }
+            }
+
+            // 2. Fallback: Search in Student table if user not found via synced phone
+            if (!$user) {
+                $student = \App\Models\Student::where(function($q) use ($input, $cleanPhone) {
+                    $q->where('phone', $input)
+                      ->orWhere('phone', $cleanPhone)
+                      ->orWhere('phone', '0' . $cleanPhone)
+                      ->orWhere('phone', substr($cleanPhone, 1));
+                })->first();
+
+                if ($student && $student->user && \Illuminate\Support\Facades\Hash::check($request->password, $student->user->password)) {
+                    $user = $student->user;
+                    Auth::login($user);
+                }
+            }
+        }
+
+        // If authenticated
+        if ($user) {
             // Check if user is super admin (admin role and no tenant_id)
             if ($user->role === 'admin' && is_null($user->tenant_id)) {
                 Auth::logout();
@@ -63,7 +106,6 @@ class UnifiedAuthController extends Controller
             $token = \Illuminate\Support\Str::random(64);
             
             // Store token in cache (valid for 60 seconds)
-            // We removed IP and UA checks to prevent issues with mobile networks and proxies regarding IP changes
             \Illuminate\Support\Facades\Cache::put('login_token_' . $token, [
                 'user_id' => $user->id,
                 'tenant_id' => $tenant->id,
@@ -78,14 +120,6 @@ class UnifiedAuthController extends Controller
             // Redirect to tenant login with token
             $loginUrl = tenant_url('login?token=' . $token, $tenant);
             
-            \Illuminate\Support\Facades\Log::info('Unified Login: Redirecting', [
-                'user_id' => $user->id,
-                'target_url' => $loginUrl,
-                'is_secure' => request()->isSecure(),
-                'app_url' => config('app.url'),
-                'tenant_domain' => config('app.tenant_domain'),
-            ]);
-
             return redirect($loginUrl);
         }
 
