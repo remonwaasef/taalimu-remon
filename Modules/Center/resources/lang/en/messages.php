@@ -989,6 +989,7 @@ return [
     'msg_025' => 'You have reached the maximum number of courses allowed in your plan.',
     'msg_026' => 'Course created successfully.',
     'msg_027' => 'Student registered and invoice created successfully.',
+    'student_already_enrolled' => 'This student is already enrolled in this course.',
     'msg_028' => 'Student created, registered, and invoice created successfully.',
     'msg_029' => 'Course updated successfully.',
     'msg_030' => 'Lesson marked as complete!',

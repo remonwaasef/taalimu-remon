@@ -989,6 +989,7 @@ return [
     'msg_025' => 'Vous avez atteint le nombre d\'inscriptions maximum.',
     'msg_026' => 'Cours créé avec succès.',
     'msg_027' => 'Étudiant inscrit avec succès, facture générée.',
+    'student_already_enrolled' => 'Cet étudiant est déjà inscrit à ce cours.',
     'msg_028' => 'Étudiant et facture créés et associés.',
     'msg_029' => 'Cours mis à jour avec succès.',
     'msg_030' => 'Leçon marquée comme terminée!',
