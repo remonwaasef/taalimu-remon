@@ -226,7 +226,7 @@
                     notes: '{{ __('center::messages.blade_0597') }}',
                     _token: '{{ csrf_token() }}'
                 };
-                return fetch(`sales/${saleId}/payment`, {
+                return fetch(`/sales/${saleId}/payment`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify(data)
@@ -359,7 +359,7 @@
         })
         .catch(error => {
             console.error('Error:', error);
-            Swal.fire({ icon: 'error', text: __('center::messages.blade_0605') });
+            Swal.fire({ icon: 'error', text: 'حدث خطأ غير متوقع، يرجى المحاولة مرة أخرى' });
         });
     }
 </script>
