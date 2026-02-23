@@ -76,64 +76,64 @@
             transform: translateY(-1px);
         }
 
-        .user-badge {
-            background: rgba(99, 102, 241, 0.1);
-            color: var(--primary-color);
-            padding: 0.5rem 1rem;
-            border-radius: 12px;
-            font-weight: 600;
+        .user-badge-premium {
+            background: white;
+            padding: 0.4rem 0.6rem;
+            border-radius: 50px;
+            transition: 0.3s;
         }
-
-        .rounded-ultra { border-radius: 1.25rem; }
+        .user-badge-premium:hover {
+            background: #f1f5f9;
+        }
+        .avatar-sm { width: 32px; height: 32px; font-size: 0.9rem; }
+        .shadow-premium { box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1); }
+        .rounded-4 { border-radius: 1rem !important; }
+        .rounded-5 { border-radius: 1.5rem !important; }
+        .rounded-ultra { border-radius: 2rem !important; }
+        
+        .bg-glass {
+            background: rgba(255, 255, 255, 0.7) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg sticky-top mb-5 py-3">
+    <nav class="navbar navbar-expand-lg sticky-top mb-4 py-3">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{{ route('campus.index') }}">
                 <span class="fs-4">🎓</span>
-                {{ $tenant->name ?? 'EduCentral' }}
+                <span class="fw-bold">{{ $tenant->name ?? 'EduCentral' }}</span>
             </a>
-            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-2">
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('campus.index') ? 'active' : '' }}" href="{{ route('campus.index') }}">
-                            <i class="bi bi-book me-1"></i> دوراتي
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('campus.schedule') ? 'active' : '' }}" href="{{ route('campus.schedule') }}">
-                            <i class="bi bi-calendar-week me-1"></i> الجدول الدراسي
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('campus.attendance') ? 'active' : '' }}" href="{{ route('campus.attendance') }}">
-                            <i class="bi bi-clock-history me-1"></i> سجل الحضور
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('campus.finances') ? 'active' : '' }}" href="{{ route('campus.finances') }}">
-                            <i class="bi bi-cash-stack me-1"></i> ديوني ومدفوعاتي
-                        </a>
-                    </li>
-                </ul>
-                <div class="d-flex align-items-center gap-3">
-                    <a href="{{ route('campus.profile') }}" class="text-decoration-none transition">
-                        <div class="user-badge d-none d-md-flex align-items-center gap-2">
-                            <i class="bi bi-person-circle"></i>
-                            <span>{{ auth()->user()->name ?? 'طالب' }}</span>
+            
+            <div class="ms-auto d-flex align-items-center gap-2">
+                <!-- User Profile Dropdown -->
+                <div class="dropdown">
+                    <button class="btn user-badge-premium d-flex align-items-center gap-2 border-0 shadow-sm transition" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="avatar-sm bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="bi bi-person-fill"></i>
                         </div>
-                    </a>
-                    <form action="{{ route('center.logout') }}" method="POST" class="d-inline">
-                        @csrf
-                        <button type="submit" class="btn btn-logout rounded-pill px-4 fw-bold">
-                            <i class="bi bi-box-arrow-right me-1"></i> خروج
-                        </button>
-                    </form>
+                        <span class="d-none d-md-inline fw-semibold text-dark">{{ auth()->user()->name ?? 'طالب' }}</span>
+                        <i class="bi bi-chevron-down small opacity-50"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 p-2 mt-2 animate__animated animate__fadeIn">
+                        <li>
+                            <a class="dropdown-item rounded-3 py-2 mb-1 {{ request()->routeIs('campus.profile') ? 'active bg-primary bg-opacity-10 text-primary' : '' }}" href="{{ route('campus.profile') }}">
+                                <i class="bi bi-person me-2"></i> ملفي الشخصي
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider opacity-50"></li>
+                        <li>
+                            <form action="{{ route('center.logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="dropdown-item rounded-3 py-2 text-danger">
+                                    <i class="bi bi-box-arrow-right me-2"></i> تسجيل الخروج
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

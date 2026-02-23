@@ -1,4 +1,4 @@
-@extends('center::layouts.master_auth')
+@extends('layouts.landing-new')
 
 @section('title', 'تأكيد الدخول السريع')
 
