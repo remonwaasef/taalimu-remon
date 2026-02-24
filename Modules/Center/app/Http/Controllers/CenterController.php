@@ -41,7 +41,7 @@ class CenterController extends Controller
         // 1. Summary Metrics & Setup Progress (Cached for 15 minutes)
         $tenant = app('tenant');
         $tenantId = $tenant->id;
-        $cacheKey = "dashboard_stats_v3_t{$tenantId}";
+        $cacheKey = "dashboard_stats_v3";
 
         $dashboardData = \App\Support\TenantCache::remember($cacheKey, now()->addMinutes(15), function () use ($tenantId) {
             $activeStudentsCount = Student::where('status', 'active')->count();
@@ -78,7 +78,7 @@ class CenterController extends Controller
         $launchpadProgress = ($completedSteps / 5) * 100;
 
         // 1.1 Fetch Recent Activities (Cached for 5 minutes)
-        $activityCacheKey = "recent_activities_t{$tenantId}";
+        $activityCacheKey = "recent_activities";
         $recentActivities = \App\Support\TenantCache::remember($activityCacheKey, now()->addMinutes(5), function () use ($tenantId) {
             return \Spatie\Activitylog\Models\Activity::where('properties->tenant_id', $tenantId)
                 ->with(['causer', 'subject'])
