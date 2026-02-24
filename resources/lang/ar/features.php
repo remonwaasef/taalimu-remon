@@ -28,4 +28,5 @@ return [
     'custom_domain' => 'اسم نطاق خاص',
     'remove_branding' => 'إزالة حقوق النظام',
     'priority_support' => 'أولوية في الدعم',
+    'student_portal' => 'بوابة الطالب',
 ];
