@@ -38,7 +38,7 @@ class RedirectIfAuthenticated
                 }
                 
                 // Logic for Main Domain
-                if (Auth::user()->role === 'admin') {
+                if (Auth::user()->role === 'super_admin') {
                     return redirect()->route('admin.dashboard');
                 }
 

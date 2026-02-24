@@ -7,6 +7,7 @@ use App\Models\SaleItem;
 use App\Models\Course;
 use App\Models\Student;
 use App\Models\Payment;
+use App\Models\Commission;
 use Illuminate\Support\Facades\DB;
 
 class FinanceService
@@ -32,7 +33,7 @@ class FinanceService
 
             // 1. Fetch actual prices from DB — scoped to current tenant to prevent cross-tenant manipulation
             $courseIds = collect($data['items'])->pluck('id')->toArray();
-            $courses = Course::whereIn('id', $courseIds)
+            $courses = Course::with('instructor')->whereIn('id', $courseIds)
                 ->where('tenant_id', $tenantId)
                 ->get()
                 ->keyBy('id');
@@ -77,7 +78,26 @@ class FinanceService
                 ->firstOrFail();
             foreach ($itemsToCreate as $itemData) {
                 $itemData['sale_id'] = $sale->id;
-                SaleItem::create($itemData);
+                $saleItem = SaleItem::create($itemData);
+
+                // Commission Logic
+                if ($itemData['item_type'] === Course::class) {
+                    $course = $courses->get($itemData['item_id']);
+                    if ($course && $course->instructor && $course->instructor->commission_rate > 0) {
+                        $rate = $course->instructor->commission_rate;
+                        $amount = ($itemData['price'] * $rate) / 100;
+
+                        Commission::create([
+                            'tenant_id' => $tenantId,
+                            'instructor_id' => $course->instructor_id,
+                            'sale_id' => $sale->id,
+                            'sale_item_id' => $saleItem->id,
+                            'amount' => $amount,
+                            'rate' => $rate,
+                            'status' => 'earned', // Auto-earn on sale
+                        ]);
+                    }
+                }
 
                 if ($itemData['item_type'] === Course::class && $student) {
                     $course = $courses->get($itemData['item_id']); // Use cached collection instead of N+1

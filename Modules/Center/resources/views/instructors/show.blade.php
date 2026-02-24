@@ -70,19 +70,24 @@
 
             <!-- Quick Stats -->
             <div class="card border-0 shadow-sm rounded-4">
-                <div class="card-body p-4">
+                <div class="card-body p-4 text-center">
                     <h6 class="fw-bold mb-4">{{ __('center::messages.blade_0447') }}</h6>
-                    <div class="row text-center g-3">
-                        <div class="col-6">
+                    <div class="row g-3">
+                        <div class="col-4">
                             <div class="bg-light rounded-3 p-3">
-                                <h3 class="fw-bold mb-0 text-primary">{{ $instructor->courses_count ?? $instructor->courses()->count() }}</h3>
-                                <small class="text-muted">{{ __('center::messages.blade_0448') }}</small>
+                                <h4 class="fw-bold mb-0 text-primary">{{ $instructor->courses_count }}</h4>
+                                <small class="text-muted d-block mt-1">{{ __('center::messages.blade_0448') }}</small>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="bg-light rounded-3 p-3">
-                                <h3 class="fw-bold mb-0 text-success">{{ $instructor->commission_rate }}%</h3>
-                                <small class="text-muted">{{ __('center::messages.blade_0449') }}</small>
+                        <div class="col-8">
+                            <div class="bg-primary bg-opacity-10 rounded-3 p-3 border border-primary border-opacity-10 position-relative overflow-hidden">
+                                <h4 class="fw-bold mb-0 text-primary">{{ format_price($instructor->total_earned) }}</h4>
+                                <small class="text-muted d-block mt-1">إجمالي المستحقات</small>
+                                @if($instructor->total_earned > 0)
+                                    <button type="button" class="btn btn-primary btn-sm rounded-pill mt-2 w-100" data-bs-toggle="modal" data-bs-target="#payoutModal">
+                                        <i class="fas fa-hand-holding-usd me-1"></i> صرف المستحقات
+                                    </button>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -123,13 +128,121 @@
                 </div>
             </div>
 
-            <!-- Future Feature: Financial Records / History -->
-            <div class="card border-0 shadow-sm rounded-4 bg-light">
-                <div class="card-body p-5 text-center">
-                    <div class="mb-3"><i class="fas fa-file-invoice-dollar fa-3x opacity-25"></i></div>
-                    <h6 class="fw-bold">{{ __('center::messages.blade_0451') }}</h6>
-                    <p class="text-muted small mb-0">{{ __('center::messages.blade_0452') }}</p>
+            <!-- Financial Records / History -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0">{{ __('center::messages.blade_0451') }}</h5>
+                    <div class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{ format_price($instructor->total_earned) }}</div>
                 </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0 table-hover">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="border-0 p-3 h6 small fw-bold">التاريخ</th>
+                                    <th class="border-0 p-3 h6 small fw-bold">الطالب</th>
+                                    <th class="border-0 p-3 h6 small fw-bold text-center">النسبة</th>
+                                    <th class="border-0 p-3 h6 small fw-bold">المبلغ</th>
+                                    <th class="border-0 p-3 h6 small fw-bold">الحالة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($commissions as $commission)
+                                    <tr>
+                                        <td class="p-3 small text-muted">{{ $commission->created_at->format('Y-m-d') }}</td>
+                                        <td class="p-3">
+                                            <div class="fw-bold">{{ $commission->sale->student->name }}</div>
+                                            <div class="small text-muted">فاتورة #{{ $commission->sale_id }}</div>
+                                        </td>
+                                        <td class="p-3 text-center small fw-bold text-primary">{{ $commission->rate }}%</td>
+                                        <td class="p-3 fw-bold text-success">{{ format_price($commission->amount) }}</td>
+                                        <td class="p-3">
+                                            @php
+                                                $cStatusColors = [
+                                                    'earned' => 'success',
+                                                    'pending' => 'warning',
+                                                    'paid' => 'info'
+                                                ];
+                                                $cStat = $cStatusColors[$commission->status] ?? 'secondary';
+                                            @endphp
+                                            <span class="badge rounded-pill bg-{{ $cStat }} bg-opacity-10 text-{{ $cStat }} px-3">
+                                                {{ $commission->status == 'earned' ? 'مستحق' : ($commission->status == 'paid' ? 'مدفوع' : 'معلق') }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center py-5 text-muted">
+                                            <i class="fas fa-receipt fa-3x mb-3 opacity-25"></i>
+                                            <p class="mb-0">لا توجد سجلات مالية بعد.</p>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                @if($commissions->hasPages())
+                    <div class="card-footer bg-white border-0 py-3">
+                        {{ $commissions->links() }}
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Payout Modal -->
+    <div class="modal fade" id="payoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow">
+                <form action="{{ route('center.instructors.payout', $instructor->id) }}" method="POST">
+                    @csrf
+                    <div class="modal-header border-0 p-4 pb-0">
+                        <h5 class="fw-bold mb-0">تسجيل صرف مستحقات</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <div class="mb-4 text-center p-3 bg-light rounded-3">
+                            <small class="text-muted d-block mb-1">المبلغ المتاح للصرف</small>
+                            <h4 class="fw-bold mb-0 text-success">{{ format_price($instructor->total_earned) }}</h4>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">المبلغ المراد صرفه</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 rounded-start-3">EGP</span>
+                                <input type="number" name="amount" step="0.01" class="form-control border-start-0 rounded-end-3" 
+                                    max="{{ $instructor->total_earned }}" min="1" value="{{ $instructor->total_earned }}" required>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <label class="form-label small fw-bold">طريقة الدفع</label>
+                                <select name="payment_method" class="form-select rounded-3" required>
+                                    <option value="cash">نقدي</option>
+                                    <option value="bank_transfer">تحويل بنكي</option>
+                                    <option value="online">أونلاين</option>
+                                    <option value="other">أخرى</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-bold">التاريخ</label>
+                                <input type="date" name="payout_date" class="form-control rounded-3" value="{{ date('Y-m-d') }}" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-0">
+                            <label class="form-label small fw-bold">ملاحظات</label>
+                            <textarea name="notes" class="form-control rounded-3" rows="2" placeholder="اختياري..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 p-4 pt-0">
+                        <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">إلغاء</button>
+                        <button type="submit" class="btn btn-primary rounded-pill px-4">تأكيد عملية الصرف</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
