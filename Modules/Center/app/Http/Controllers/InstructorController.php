@@ -238,6 +238,7 @@ class InstructorController extends Controller
         }
 
         $tenant = app('tenant');
+        $ledger = collect($ledger);
 
         return view('center::instructors.statement', compact('instructor', 'ledger', 'tenant'));
     }
