@@ -30,19 +30,31 @@ class CheckFeature
             return $next($request);
         }
 
-        \Illuminate\Support\Facades\Log::debug('CheckFeature: Checking feature', [
+        $hasFeature = $tenant->hasFeature($featureCode);
+        $subscription = $tenant->activeSubscription();
+
+        \Illuminate\Support\Facades\Log::debug('CheckFeature: Detail Check', [
             'url' => $request->fullUrl(),
-            'tenant_id' => $tenant->id ?? 'N/A', // Use null coalescing for safety
+            'tenant_id' => $tenant->id ?? 'N/A',
             'feature_code' => $featureCode,
-            'has_feature_before_check' => $tenant->hasFeature($featureCode) ? 'yes' : 'no' // Log the result of the check
+            'has_feature' => $hasFeature ? 'yes' : 'no',
+            'has_active_subscription' => $subscription ? 'yes' : 'no',
+            'user_role' => auth()->user()->role ?? 'guest'
         ]);
 
-        if (!$tenant->hasFeature($featureCode)) {
+        if (!$hasFeature) {
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
                     'message' => __('هذه الميزة غير متوفرة في باقتك الحالية.')
                 ], 403);
+            }
+
+            // If it's a student trying to access student portal, don't send them to subscription index
+            if (auth()->check() && auth()->user()->role === 'student' && $featureCode === 'student_portal') {
+                auth()->logout();
+                return redirect()->route('center.login', ['tenant' => $tenant->domain])
+                    ->with('error', __('بوابة الطالب غير مفعلة لهذا المركز حالياً.'));
             }
 
             return redirect()->route('center.subscription.index', ['tenant' => $tenant->domain])
