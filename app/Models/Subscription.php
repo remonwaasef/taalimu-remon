@@ -16,7 +16,7 @@ class Subscription extends CashierSubscription
             if ($subscription->tenant) {
                 try {
                     if (extension_loaded('redis')) {
-                        \Illuminate\Support\Facades\Cache::store('redis')->forget("tenancy:domain:{$subscription->tenant->domain}");
+                        \Illuminate\Support\Facades\Cache::store('redis')->forget("taalimu:tenancy:domain:{$subscription->tenant->domain}");
                     }
                 } catch (\Throwable $e) {}
                 \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$subscription->tenant->domain}");
@@ -27,7 +27,7 @@ class Subscription extends CashierSubscription
             if ($subscription->tenant) {
                 try {
                     if (extension_loaded('redis')) {
-                        \Illuminate\Support\Facades\Cache::store('redis')->forget("tenancy:domain:{$subscription->tenant->domain}");
+                        \Illuminate\Support\Facades\Cache::store('redis')->forget("taalimu:tenancy:domain:{$subscription->tenant->domain}");
                     }
                 } catch (\Throwable $e) {}
                 \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$subscription->tenant->domain}");
