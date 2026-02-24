@@ -122,6 +122,22 @@ class SettingsController extends Controller
         \Illuminate\Support\Facades\Cache::forget('landing_features');
         \Illuminate\Support\Facades\Cache::forget('site_settings');
 
+        // Clear Tenancy Caches to reflect package changes immediately
+        try {
+            if (extension_loaded('redis')) {
+                $redis = \Illuminate\Support\Facades\Redis::connection();
+                $keys = $redis->keys('taalimu:tenancy:domain:*');
+                if (!empty($keys)) {
+                    foreach ($keys as $key) {
+                        // Redis::keys() might return prefixed keys depending on configuration
+                        $redis->del($key);
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to clear tenancy caches: ' . $e->getMessage());
+        }
+
         return redirect()->back()->with('success', 'تم حفظ جميع التعديلات بنجاح');
     }
 
