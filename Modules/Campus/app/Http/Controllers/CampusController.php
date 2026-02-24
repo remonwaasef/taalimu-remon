@@ -210,7 +210,8 @@ class CampusController extends Controller
                     'status' => $e->status,
                     'user_id' => $e->user_id,
                 ]),
-            'all_enrollments_for_this_tenant_count' => \App\Models\Enrollment::where('tenant_id', $tenant->id)->count(),
+            'all_courses' => \App\Models\Course::where('tenant_id', $tenant->id)
+                ->get(['id', 'title', 'status', 'instructor_id']),
             'total_active_courses_count' => \App\Models\Course::where('tenant_id', $tenant->id)->where('status', 'active')->count(),
         ];
 
