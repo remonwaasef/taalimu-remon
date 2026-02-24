@@ -58,8 +58,8 @@ class CampusController extends Controller
         // Get courses the student is already enrolled in
         $enrolledCourseIds = $student->enrollments()->pluck('course_id');
         
-        // Get active courses that the student is NOT enrolled in
-        $courses = \App\Models\Course::where('status', 'active')
+        // Get published courses that the student is NOT enrolled in
+        $courses = \App\Models\Course::where('status', 'published')
             ->whereNotIn('id', $enrolledCourseIds)
             ->latest()
             ->get();
@@ -212,7 +212,7 @@ class CampusController extends Controller
                 ]),
             'all_courses' => \App\Models\Course::where('tenant_id', $tenant->id)
                 ->get(['id', 'title', 'status', 'instructor_id']),
-            'total_active_courses_count' => \App\Models\Course::where('tenant_id', $tenant->id)->where('status', 'active')->count(),
+            'total_active_courses_count' => \App\Models\Course::where('tenant_id', $tenant->id)->where('status', 'published')->count(),
         ];
 
         return response()->json($data);
