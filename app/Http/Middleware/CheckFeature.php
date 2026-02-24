@@ -24,10 +24,22 @@ class CheckFeature
 
         $tenant = app('tenant');
 
+        // Added logging and tenant check
+        if (!$tenant) {
+            Log::warning('CheckFeature: No tenant found in request context, but app is bound to tenant.');
+            return $next($request);
+        }
+
+        Log::debug('CheckFeature: Checking feature', [
+            'tenant_id' => $tenant->id ?? 'N/A', // Use null coalescing for safety
+            'feature_code' => $featureCode,
+            'has_feature_before_check' => $tenant->hasFeature($featureCode) ? 'yes' : 'no' // Log the result of the check
+        ]);
+
         if (!$tenant->hasFeature($featureCode)) {
             if ($request->expectsJson()) {
                 return response()->json([
-                    'success' => false, 
+                    'success' => false,
                     'message' => __('هذه الميزة غير متوفرة في باقتك الحالية.')
                 ], 403);
             }
