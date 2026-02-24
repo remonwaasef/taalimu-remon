@@ -117,64 +117,158 @@
 </div>
 
 <!-- My Courses Section -->
-<div class="mt-4">
+<div class="mt-5">
     <div class="d-flex align-items-center justify-content-between mb-4 px-2">
-        <h5 class="fw-bold text-dark mb-0 border-end border-primary border-4 animate__animated animate__fadeInRight">دوراتي المسجلة 📚</h5>
-        <a href="{{ route('campus.courses.index') }}" class="text-primary text-decoration-none small fw-bold">عرض الكل <i class="fas fa-arrow-left ms-1 small"></i></a>
+        <h5 class="fw-bold text-dark mb-0 border-end border-primary border-4 animate__animated animate__fadeInRight">&nbsp; دوراتي المسجلة 📚</h5>
+        <a href="{{ route('campus.courses.index') }}" class="text-primary text-decoration-none extra-small fw-bold">استكشف المزيد <i class="fas fa-arrow-left ms-1 small"></i></a>
     </div>
 
     <div class="row g-4 animate__animated animate__fadeInUp">
         @forelse($enrollments as $enrollment)
             @php $course = $enrollment->course; @endphp
             <div class="col-md-6 col-lg-4">
-                <div class="card border-0 shadow-sm rounded-4 h-100 course-card-premium overflow-hidden border">
-                    <div class="course-cover-mini position-relative" style="height: 140px; overflow: hidden;">
-                        @if($course->image)
-                            <img src="{{ asset('storage/' . $course->image) }}" class="w-100 h-100 object-fit-cover">
-                        @else
-                            <div class="w-100 h-100 bg-secondary bg-opacity-10 d-flex align-items-center justify-content-center text-secondary">
-                                <i class="fas fa-graduation-cap fs-1 opacity-25"></i>
+                <a href="{{ route('center.courses.player', ['course' => $course->id]) }}" class="text-decoration-none">
+                    <div class="card border-0 shadow-soft rounded-5 h-100 premium-course-card overflow-hidden">
+                        <div class="position-relative overflow-hidden" style="height: 160px;">
+                            @if($course->image)
+                                <img src="{{ asset('storage/' . $course->image) }}" class="w-100 h-100 object-fit-cover card-img-scale">
+                            @else
+                                <div class="w-100 h-100 d-flex align-items-center justify-content-center premium-gradient-bg">
+                                    <i class="fas fa-book-open fs-1 text-white opacity-20"></i>
+                                </div>
+                            @endif
+                            
+                            <div class="position-absolute top-0 end-0 m-3">
+                                <span class="badge glass-badge rounded-pill px-3 py-2 text-white fw-bold shadow-sm">
+                                    {{ $enrollment->status_label ?? 'نشط' }}
+                                </span>
                             </div>
-                        @endif
-                        <div class="course-badge-mini" style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); padding: 4px 10px; border-radius: 50px; font-size: 0.7rem; font-weight: 700; color: var(--bs-primary);">
-                            {{ $enrollment->status_label ?? 'نشط' }}
-                        </div>
-                    </div>
-                    <div class="card-body p-4">
-                        <h6 class="fw-bold text-dark mb-2 line-clamp-1" title="{{ $course->title }}">{{ $course->title }}</h6>
-                        
-                        <!-- Progress -->
-                        <div class="mb-4">
-                            <div class="d-flex justify-content-between extra-small mb-1">
-                                <span class="text-muted small">الإنجاز</span>
-                                <span class="fw-bold text-primary small">{{ $enrollment->progress_percent ?? 0 }}%</span>
-                            </div>
-                            <div class="progress rounded-pill" style="height: 6px;">
-                                <div class="progress-bar bg-primary rounded-pill" style="width: {{ $enrollment->progress_percent ?? 0 }}%"></div>
+
+                            <!-- Floating Play Button on Hover -->
+                            <div class="play-overlay d-flex align-items-center justify-content-center">
+                                <div class="play-btn-circle">
+                                    <i class="fas fa-play text-white ms-1"></i>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="d-grid">
-                            <a href="{{ route('center.courses.player', ['course' => $course->id]) }}" class="btn btn-primary-soft rounded-pill py-2 fw-bold transition-all" style="background: rgba(79,70,229,0.08); color: #4f46e5; border:none;">
-                                متابعة التعلم
-                                <i class="fas fa-play ms-2 extra-small"></i>
-                            </a>
+                        <div class="card-body p-4">
+                            <h6 class="fw-bold text-dark mb-3 line-clamp-1" title="{{ $course->title }}">{{ $course->title }}</h6>
+                            
+                            <!-- Premium Progress Bar -->
+                            <div class="mb-2">
+                                <div class="d-flex justify-content-between extra-small mb-2">
+                                    <span class="text-muted fw-bold">مستوى الإنجاز</span>
+                                    <span class="text-primary fw-bold">{{ $enrollment->progress_percent ?? 0 }}%</span>
+                                </div>
+                                <div class="progress-premium-container">
+                                    <div class="progress-premium-bar" style="width: {{ $enrollment->progress_percent ?? 0 }}%"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
         @empty
             <div class="col-12 text-center py-5">
-                <div class="p-5 rounded-4 border bg-white shadow-sm">
-                    <div class="mb-4 fs-1 opacity-25">📚</div>
+                <div class="empty-state-card p-5 rounded-5 bg-white shadow-sm border border-dashed text-center">
+                    <div class="empty-icon-wrapper mx-auto mb-4">
+                        <i class="fas fa-book-reader display-3 text-primary opacity-20"></i>
+                    </div>
                     <h5 class="fw-bold text-dark mb-2">لا توجد دورات مسجلة</h5>
-                    <p class="text-muted mb-0 small">ابدأ برحلة العلم اليوم وتصفح الدورات المتاحة.</p>
+                    <p class="text-muted small mb-0">ابدأ برحلة العلم اليوم وتصفح الدورات المتاحة.</p>
                     <a href="{{ route('campus.courses.index') }}" class="btn btn-primary rounded-pill px-5 py-2 mt-4 fw-bold shadow-sm">تصفح الدورات</a>
                 </div>
             </div>
         @endforelse
     </div>
 </div>
+
+<style>
+    :root {
+        --premium-primary: #4f46e5;
+        --premium-secondary: #7c3aed;
+    }
+
+    .premium-course-card {
+        background: #fff;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        border: 1px solid rgba(0,0,0,0.03) !important;
+    }
+
+    .premium-course-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .card-img-scale {
+        transition: transform 0.8s ease;
+    }
+
+    .premium-course-card:hover .card-img-scale {
+        transform: scale(1.1);
+    }
+
+    .play-overlay {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(79, 70, 229, 0.4);
+        opacity: 0;
+        backdrop-filter: blur(2px);
+        transition: all 0.3s ease;
+    }
+
+    .premium-course-card:hover .play-overlay {
+        opacity: 1;
+    }
+
+    .play-btn-circle {
+        width: 50px; height: 50px;
+        background: #fff;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        transform: scale(0.5);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        color: var(--premium-primary);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .premium-course-card:hover .play-btn-circle {
+        transform: scale(1);
+    }
+
+    .progress-premium-container {
+        height: 6px;
+        background: #f1f5f9;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .progress-premium-bar {
+        height: 100%;
+        background: linear-gradient(90deg, var(--premium-primary), var(--premium-secondary));
+        border-radius: 10px;
+        transition: width 1s ease;
+    }
+
+    .glass-badge {
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        font-size: 0.65rem;
+    }
+
+    .premium-gradient-bg {
+        background: linear-gradient(135deg, var(--premium-primary) 0%, var(--premium-secondary) 100%);
+    }
+
+    .empty-state-card {
+        border-style: dashed !important;
+        border-width: 2px !important;
+        border-color: #e2e8f0 !important;
+    }
+</style>
 
 <style>
     .service-card:hover .card { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important; }

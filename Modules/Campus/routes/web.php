@@ -25,8 +25,5 @@ Route::domain(config('app.tenant_domain') == 'localhost' ? '{tenant}.localhost' 
         Route::get('/profile', [CampusController::class, 'profile'])->name('profile');
         Route::get('/courses', [CampusController::class, 'courses'])->name('courses.index');
         Route::get('/certificates/{certificate}/download', [CampusController::class, 'downloadCertificate'])->name('certificates.download');
-        
-        // TEMPORARY DIAGNOSTIC ROUTE - REMOVE BEFORE HANDOVER
-        Route::get('/debug-student-data', [CampusController::class, 'debugStudentData'])->name('debug.student');
     });
 });
