@@ -28,7 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\ContentSecurityPolicy::class,
             \App\Http\Middleware\BasicWAF::class,
             \App\Http\Middleware\PaginationLimit::class,
-            'throttle:60,1',
+            'throttle:300,1',
         ]);
 
         $middleware->api(append: [
