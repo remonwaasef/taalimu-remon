@@ -29,6 +29,7 @@ class PackageSeeder extends Seeder
             ['name' => 'الجداول اليومية', 'code' => 'daily_schedules', 'type' => 'boolean', 'category' => 'core'],
             ['name' => 'إدارة الامتحانات', 'code' => 'manage_exams', 'type' => 'boolean', 'category' => 'academic'],
             ['name' => 'صلاحيات متقدمة', 'code' => 'advanced_roles', 'type' => 'boolean', 'category' => 'core'],
+            ['name' => 'بوابة الطالب', 'code' => 'student_portal', 'type' => 'boolean', 'category' => 'core'],
         ];
 
         foreach ($features as $featureData) {
@@ -74,6 +75,7 @@ class PackageSeeder extends Seeder
                     'daily_schedules' => 'true',
                     'manage_exams' => 'true',
                     'advanced_roles' => 'false',
+                    'student_portal' => 'true',
                 ]
             ],
             [
@@ -110,6 +112,7 @@ class PackageSeeder extends Seeder
                     'daily_schedules' => 'true',
                     'manage_exams' => 'true',
                     'advanced_roles' => 'false',
+                    'student_portal' => 'false',
                 ]
             ],
             [
@@ -149,6 +152,7 @@ class PackageSeeder extends Seeder
                     'daily_schedules' => 'true',
                     'manage_exams' => 'true',
                     'advanced_roles' => 'true',
+                    'student_portal' => 'true',
                 ]
             ],
             [
@@ -186,6 +190,7 @@ class PackageSeeder extends Seeder
                     'daily_schedules' => 'true',
                     'manage_exams' => 'true',
                     'advanced_roles' => 'true',
+                    'student_portal' => 'true',
                 ]
             ],
         ];
