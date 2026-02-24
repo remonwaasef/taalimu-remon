@@ -549,6 +549,9 @@
                     <a href="{{ route('center.analytics.index') }}" class="sidebar-sub-link {{ request()->routeIs('center.analytics.index') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::analytics.general') }}
                     </a>
+                    <a href="{{ route('center.analytics.finance') }}" class="sidebar-sub-link {{ request()->routeIs('center.analytics.finance') ? 'active' : '' }}">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.financial_analytics') }}
+                    </a>
                 </div>
             </div>
 
