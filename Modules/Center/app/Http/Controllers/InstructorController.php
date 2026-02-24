@@ -223,7 +223,7 @@ class InstructorController extends Controller
             });
 
         // Merge and sort
-        $ledger = $commissions->concat($payouts)->sortBy('date')->values();
+        $ledger = $commissions->concat($payouts)->sortBy('date')->values()->all();
 
         // Calculate running balance
         $balance = 0;
