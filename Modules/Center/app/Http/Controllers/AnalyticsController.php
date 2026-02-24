@@ -209,9 +209,16 @@ class AnalyticsController extends Controller
             return $this->analyticsQuery->getMonthlyRevenue(12);
         });
 
+        // Recent Data for Sections
+        $recentExpenses = Expense::latest()->take(10)->get();
+        $recentCommissions = \App\Models\Commission::with(['instructor', 'sale'])->latest()->take(10)->get();
+        $recentDiscounts = Sale::where('discount_amount', '>', 0)->with('student')->latest()->take(10)->get();
+        $recentTaxes = Sale::where('tax_amount', '>', 0)->with('student')->latest()->take(10)->get();
+
         return view('center::analytics.finance', compact(
             'totalRevenue', 'totalDue', 'totalDiscounts', 'totalTaxes', 
             'totalExpenses', 'totalCommissions', 'netProfit', 
+            'recentExpenses', 'recentCommissions', 'recentDiscounts', 'recentTaxes',
             'sales', 'monthlyRevenue'
         ));
     }
