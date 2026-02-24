@@ -44,6 +44,7 @@ return [
     'academic_setup' => 'الإعدادات',
     'courses_groups' => 'الدورات',
     'student_accounts' => 'حسابات الطلاب',
+    'financial_analytics' => 'التحليلات المالية',
     'assets' => 'العهد والأصول',
     'school_management' => 'إدارة المدرسة',
 
