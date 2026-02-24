@@ -11,36 +11,102 @@
     </div>
 
     <!-- Financial Summary Cards -->
-    <div class="row">
-        <div class="col-xl-6 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">{{ __('center::messages.blade_0029') }}</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ format_price($totalRevenue) }}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                        </div>
+    <div class="row g-4 mb-4">
+        <!-- Total Revenue -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+                <div class="card-body p-4 position-relative">
+                    <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center position-absolute top-0 end-0 m-4" style="width: 48px; height: 48px;">
+                        <i class="fas fa-dollar-sign fa-lg"></i>
                     </div>
+                    <p class="text-muted fw-bold text-uppercase small mb-1">{{ __('center::messages.blade_0029') }}</p>
+                    <h3 class="fw-bold text-success mb-0">{{ format_price($totalRevenue) }}</h3>
                 </div>
+                <div class="bg-success" style="height: 4px; width: 100%;"></div>
             </div>
         </div>
 
-        <div class="col-xl-6 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">{{ __('center::messages.blade_0030') }}</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ format_price($totalDue) }}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-exclamation-circle fa-2x text-gray-300"></i>
-                        </div>
+        <!-- Net Profit -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+                <div class="card-body p-4 position-relative">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center position-absolute top-0 end-0 m-4" style="width: 48px; height: 48px;">
+                        <i class="fas fa-chart-line fa-lg"></i>
                     </div>
+                    <p class="text-muted fw-bold text-uppercase small mb-1">صافي الربح (Net Profit)</p>
+                    <h3 class="fw-bold text-primary mb-0">{{ format_price($netProfit) }}</h3>
                 </div>
+                <div class="bg-primary" style="height: 4px; width: 100%;"></div>
+            </div>
+        </div>
+
+        <!-- Total Expenses -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+                <div class="card-body p-4 position-relative">
+                    <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center position-absolute top-0 end-0 m-4" style="width: 48px; height: 48px;">
+                        <i class="fas fa-receipt fa-lg"></i>
+                    </div>
+                    <p class="text-muted fw-bold text-uppercase small mb-1">إجمالي المصروفات (Expenses)</p>
+                    <h3 class="fw-bold text-danger mb-0">{{ format_price($totalExpenses) }}</h3>
+                </div>
+                <div class="bg-danger" style="height: 4px; width: 100%;"></div>
+            </div>
+        </div>
+
+        <!-- Instructor Commissions -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+                <div class="card-body p-4 position-relative">
+                    <div class="bg-info bg-opacity-10 text-info rounded-circle d-flex align-items-center justify-content-center position-absolute top-0 end-0 m-4" style="width: 48px; height: 48px;">
+                        <i class="fas fa-chalkboard-teacher fa-lg"></i>
+                    </div>
+                    <p class="text-muted fw-bold text-uppercase small mb-1">عمولات المعلمين (Commissions)</p>
+                    <h3 class="fw-bold text-info mb-0">{{ format_price($totalCommissions) }}</h3>
+                </div>
+                <div class="bg-info" style="height: 4px; width: 100%;"></div>
+            </div>
+        </div>
+
+        <!-- Total Outstanding Due -->
+        <div class="col-xl-4 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+                <div class="card-body p-4 position-relative">
+                    <div class="bg-warning bg-opacity-10 text-warning rounded-circle d-flex align-items-center justify-content-center position-absolute top-0 end-0 m-4" style="width: 48px; height: 48px;">
+                        <i class="fas fa-exclamation-circle fa-lg"></i>
+                    </div>
+                    <p class="text-muted fw-bold text-uppercase small mb-1">{{ __('center::messages.blade_0030') }}</p>
+                    <h3 class="fw-bold text-warning mb-0">{{ format_price($totalDue) }}</h3>
+                </div>
+                <div class="bg-warning" style="height: 4px; width: 100%;"></div>
+            </div>
+        </div>
+
+        <!-- Total Discounts -->
+        <div class="col-xl-4 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+                <div class="card-body p-4 position-relative">
+                    <div class="bg-secondary bg-opacity-10 text-secondary rounded-circle d-flex align-items-center justify-content-center position-absolute top-0 end-0 m-4" style="width: 48px; height: 48px;">
+                        <i class="fas fa-tags fa-lg"></i>
+                    </div>
+                    <p class="text-muted fw-bold text-uppercase small mb-1">الخصومات الممنوحة (Discounts)</p>
+                    <h3 class="fw-bold text-secondary mb-0">{{ format_price($totalDiscounts) }}</h3>
+                </div>
+                <div class="bg-secondary" style="height: 4px; width: 100%;"></div>
+            </div>
+        </div>
+
+        <!-- Total Tax -->
+        <div class="col-xl-4 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+                <div class="card-body p-4 position-relative">
+                    <div class="bg-dark bg-opacity-10 text-dark rounded-circle d-flex align-items-center justify-content-center position-absolute top-0 end-0 m-4" style="width: 48px; height: 48px;">
+                        <i class="fas fa-file-invoice-dollar fa-lg"></i>
+                    </div>
+                    <p class="text-muted fw-bold text-uppercase small mb-1">إجمالي الضرائب (Taxes)</p>
+                    <h3 class="fw-bold text-dark mb-0">{{ format_price($totalTaxes) }}</h3>
+                </div>
+                <div class="bg-dark" style="height: 4px; width: 100%;"></div>
             </div>
         </div>
     </div>

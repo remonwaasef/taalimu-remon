@@ -183,4 +183,62 @@ class InstructorController extends Controller
             return redirect()->back()->with('error', 'خطأ في عملية الصرف: ' . $e->getMessage());
         }
     }
+
+    /**
+     * View instructor financial statement (Ledger).
+     */
+    public function statement($id)
+    {
+        $instructor = Instructor::findOrFail($id);
+        $this->authorize('view', $instructor);
+
+        // Fetch commissions (Credits)
+        $commissions = $instructor->commissions()
+            ->with(['sale.student', 'saleItem.item'])
+            ->get()
+            ->map(function ($c) {
+                return [
+                    'date' => $c->created_at,
+                    'type' => 'commission',
+                    'amount' => $c->amount,
+                    'description' => 'عمولة مبيعات: ' . ($c->sale->student->name ?? 'طالب') . ' - فاتورة #' . $c->sale_id,
+                    'is_credit' => true,
+                    'status' => $c->status,
+                ];
+            });
+
+        // Fetch payouts (Debits)
+        $payouts = $instructor->payouts()
+            ->with('processor')
+            ->get()
+            ->map(function ($p) {
+                return [
+                    'date' => $p->payout_date instanceof \Illuminate\Support\Carbon ? $p->payout_date : \Carbon\Carbon::parse($p->payout_date),
+                    'type' => 'payout',
+                    'amount' => $p->amount,
+                    'description' => 'صرف مستحقات: ' . ($p->payment_method ?? 'نقدي') . ($p->notes ? ' - ' . $p->notes : ''),
+                    'is_credit' => false,
+                    'status' => 'completed',
+                ];
+            });
+
+        // Merge and sort
+        $ledger = $commissions->concat($payouts)->sortBy('date')->values();
+
+        // Calculate running balance
+        $balance = 0;
+        foreach ($ledger as $key => $transaction) {
+            if ($transaction['is_credit']) {
+                $balance += $transaction['amount'];
+            } else {
+                $balance -= $transaction['amount'];
+            }
+            // Add balance to transaction array
+            $ledger[$key]['balance'] = $balance;
+        }
+
+        $tenant = app('tenant');
+
+        return view('center::instructors.statement', compact('instructor', 'ledger', 'tenant'));
+    }
 }

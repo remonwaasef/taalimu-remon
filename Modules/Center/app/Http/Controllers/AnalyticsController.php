@@ -197,11 +197,23 @@ class AnalyticsController extends Controller
         $totalRevenue = Sale::sum('paid_amount');
         $totalDue = Sale::sum(DB::raw('total_amount - paid_amount'));
         
+        // Advanced Metrics
+        $totalDiscounts = Sale::sum('discount_amount');
+        $totalTaxes = Sale::sum('tax_amount');
+        $totalExpenses = Expense::sum('amount');
+        $totalCommissions = \App\Models\Commission::sum('amount');
+        $netProfit = $totalRevenue - ($totalExpenses + $totalCommissions);
+
         $sales = Sale::with('student')->latest()->paginate(20);
         $monthlyRevenue = \App\Support\TenantCache::remember("analytics_monthly_revenue", 600, function () {
             return $this->analyticsQuery->getMonthlyRevenue(12);
         });
-        return view('center::analytics.finance', compact('totalRevenue', 'totalDue', 'sales', 'monthlyRevenue'));
+
+        return view('center::analytics.finance', compact(
+            'totalRevenue', 'totalDue', 'totalDiscounts', 'totalTaxes', 
+            'totalExpenses', 'totalCommissions', 'netProfit', 
+            'sales', 'monthlyRevenue'
+        ));
     }
 
     public function attendance()

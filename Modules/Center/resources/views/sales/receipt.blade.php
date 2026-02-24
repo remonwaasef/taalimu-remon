@@ -132,6 +132,12 @@
                     @endphp
                     {{ $reshaper->reshape($method) }}<br>
                     <strong>{{ $reshaper->reshape(__('center::messages.blade_0620')) }}</strong> {{ number_format($payment->sale->total_amount - $payment->sale->paid_amount, 2) }} {{ $reshaper->reshape(__('center::messages.blade_0621', ['currency' => get_currency_symbol()])) }}
+                    <br>
+                    <span style="font-size: 10px; color: #666;">
+                        <strong>{{ $reshaper->reshape('إجمالي الفاتورة:') }}</strong> {{ number_format($payment->sale->total_amount, 2) }}
+                        @if($payment->sale->discount_amount > 0) | <strong>{{ $reshaper->reshape('الخصم:') }}</strong> {{ number_format($payment->sale->discount_amount, 2) }} @endif
+                        @if($payment->sale->tax_amount > 0) | <strong>{{ $reshaper->reshape('الضريبة:') }}</strong> {{ number_format($payment->sale->tax_amount, 2) }} @endif
+                    </span>
                 </td>
                 <td class="text-center" style="width: 40%;">
                     <p style="margin-bottom: 5px;">{{ $reshaper->reshape(__('center::messages.blade_0622')) }}</p>

@@ -22,6 +22,9 @@ class Sale extends Model
     protected $fillable = [
         'tenant_id',
         'student_id',
+        'subtotal_amount',
+        'discount_amount',
+        'tax_amount',
         'total_amount',
         'paid_amount',
         'status',

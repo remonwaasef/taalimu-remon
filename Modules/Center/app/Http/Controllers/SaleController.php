@@ -71,6 +71,8 @@ class SaleController extends Controller
             'items.*.price' => 'required|numeric|min:0',
             'payment_method' => 'required|string',
             'paid_amount' => 'required|numeric|min:0',
+            'discount_amount' => 'nullable|numeric|min:0',
+            'tax_amount' => 'nullable|numeric|min:0',
         ]);
 
         try {
@@ -206,4 +208,43 @@ class SaleController extends Controller
             return redirect()->back()->with('error', 'خطأ في عملية الاسترداد: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Initiate online checkout for an invoice (Mock implementation).
+     */
+    public function checkout($id)
+    {
+        $tenant = app('tenant');
+        $sale = Sale::where('tenant_id', $tenant->id)->findOrFail($id);
+        
+        // Ensure invoice is not fully paid
+        if ($sale->status === 'paid') {
+            return redirect()->back()->with('info', 'هذه الفاتورة مدفوعة بالكامل.');
+        }
+
+        return view('center::sales.checkout', compact('sale', 'tenant'));
+    }
+
+    /**
+     * Handle successful mock online payment.
+     */
+    public function checkoutSuccess(Request $request, $id)
+    {
+        $tenant = app('tenant');
+        $sale = Sale::where('tenant_id', $tenant->id)->findOrFail($id);
+
+        if ($sale->status === 'paid') {
+            return redirect()->route('center.sales.show', $sale->id)->with('success', 'الفاتورة مدفوعة بالفعل.');
+        }
+
+        // Amount to pay (Remaining)
+        $amountToPay = $sale->total_amount - $sale->paid_amount;
+
+        // Add payment via FinanceService
+        $this->financeService->addPayment($sale, $amountToPay, 'online', 'دفعة إلكترونية مسددة عبر بوابة الدفع');
+
+        return redirect()->route('center.sales.show', $sale->id)
+            ->with('success', 'تم الدفع الإلكتروني بنجاح!');
+    }
 }
+
