@@ -16,12 +16,12 @@
                         <!-- Personal Info -->
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('center::instructors.name') }} *</label>
+                                <label class="form-label fw-bold">{{ __('center::instructors.name') }} <span class="text-danger">*</span></label>
                                 <input type="text" name="name" value="{{ old('name') }}" class="form-control bg-light border-0" required>
                                 @error('name')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('center::instructors.specialization') }} *</label>
+                                <label class="form-label fw-bold">{{ __('center::instructors.specialization') }} <span class="text-danger">*</span></label>
                                 <input type="text" name="specialization" value="{{ old('specialization') }}" class="form-control bg-light border-0" placeholder="{{ __('center::messages.blade_0428') }}" required>
                                 @error('specialization')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
@@ -30,8 +30,8 @@
                         <!-- Status & Administrative -->
                         <div class="row g-3 mb-4">
                             <div class="col-md-4">
-                                <label class="form-label fw-bold">{{ __('center::instructors.status') }} *</label>
-                                <select name="status" class="form-select bg-light border-0">
+                                <label class="form-label fw-bold">{{ __('center::instructors.status') }} <span class="text-danger">*</span></label>
+                                <select name="status" class="form-select bg-light border-0" required>
                                     <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>{{ __('center::instructors.active') }}</option>
                                     <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>{{ __('center::instructors.inactive') }}</option>
                                     <option value="on_hold" {{ old('status') == 'on_hold' ? 'selected' : '' }}>{{ __('center::instructors.on_hold') }}</option>
@@ -60,17 +60,16 @@
                                 <input type="text" name="national_id" value="{{ old('national_id') }}" class="form-control bg-light border-0" placeholder="{{ __('center::messages.blade_0429') }}">
                                 @error('national_id')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
-                            <div class="col-md-3">
-                                <label class="form-label fw-bold">{{ __('center::instructors.commission_rate') }} *</label>
-                                <input type="number" step="0.01" name="commission_rate" value="{{ old('commission_rate', 0) }}" class="form-control bg-light border-0" required>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">{{ __('center::instructors.commission_rate') }} <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" name="commission_rate" value="{{ old('commission_rate', 0) }}" class="form-control bg-light border-0" required>
+                                    <select name="commission_type" class="form-select bg-light border-0" style="max-width: 140px;" required>
+                                        <option value="percentage" {{ old('commission_type') == 'percentage' ? 'selected' : '' }}>نسبة مئوية (%)</option>
+                                        <option value="fixed" {{ old('commission_type') == 'fixed' ? 'selected' : '' }}>مبلغ ثابت</option>
+                                    </select>
+                                </div>
                                 @error('commission_rate')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label fw-bold">النوع *</label>
-                                <select name="commission_type" class="form-select bg-light border-0" required>
-                                    <option value="percentage" {{ old('commission_type') == 'percentage' ? 'selected' : '' }}>نسبة مئوية (%)</option>
-                                    <option value="fixed" {{ old('commission_type') == 'fixed' ? 'selected' : '' }}>مبلغ ثابت</option>
-                                </select>
                                 @error('commission_type')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                         </div>
