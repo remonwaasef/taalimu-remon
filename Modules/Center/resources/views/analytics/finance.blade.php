@@ -49,6 +49,7 @@
                     </div>
                     <p class="text-muted fw-bold text-uppercase small mb-1">إجمالي المصروفات (Expenses)</p>
                     <h3 class="fw-bold text-danger mb-0">{{ format_price($totalExpenses) }}</h3>
+                    <a href="{{ route('center.expenses.index') }}" class="btn btn-link btn-sm text-danger p-0 mt-2">عرض التفاصيل <i class="fas fa-arrow-left ms-1"></i></a>
                 </div>
                 <div class="bg-danger" style="height: 4px; width: 100%;"></div>
             </div>
@@ -63,6 +64,7 @@
                     </div>
                     <p class="text-muted fw-bold text-uppercase small mb-1">عمولات المعلمين (Commissions)</p>
                     <h3 class="fw-bold text-info mb-0">{{ format_price($totalCommissions) }}</h3>
+                    <a href="{{ route('center.analytics.commissions') }}" class="btn btn-link btn-sm text-info p-0 mt-2">عرض التفاصيل <i class="fas fa-arrow-left ms-1"></i></a>
                 </div>
                 <div class="bg-info" style="height: 4px; width: 100%;"></div>
             </div>
@@ -91,6 +93,7 @@
                     </div>
                     <p class="text-muted fw-bold text-uppercase small mb-1">الخصومات الممنوحة (Discounts)</p>
                     <h3 class="fw-bold text-secondary mb-0">{{ format_price($totalDiscounts) }}</h3>
+                    <a href="{{ route('center.analytics.discounts') }}" class="btn btn-link btn-sm text-secondary p-0 mt-2">عرض التفاصيل <i class="fas fa-arrow-left ms-1"></i></a>
                 </div>
                 <div class="bg-secondary" style="height: 4px; width: 100%;"></div>
             </div>
@@ -105,6 +108,7 @@
                     </div>
                     <p class="text-muted fw-bold text-uppercase small mb-1">إجمالي الضرائب (Taxes)</p>
                     <h3 class="fw-bold text-dark mb-0">{{ format_price($totalTaxes) }}</h3>
+                    <a href="{{ route('center.analytics.taxes') }}" class="btn btn-link btn-sm text-dark p-0 mt-2">عرض التفاصيل <i class="fas fa-arrow-left ms-1"></i></a>
                 </div>
                 <div class="bg-dark" style="height: 4px; width: 100%;"></div>
             </div>
