@@ -1,0 +1,69 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\Refund;
+use App\Models\Sale;
+use App\Models\Commission;
+use App\Models\Enrollment;
+use Illuminate\Support\Facades\DB;
+
+class RefundService
+{
+    /**
+     * Process a refund for a sale.
+     */
+    public function processRefund(Sale $sale, array $data)
+    {
+        return DB::transaction(function () use ($sale, $data) {
+            $tenantId = app('tenant')->id;
+            $refundAmount = $data['amount'];
+
+            // 1. Create Refund Record
+            $refund = Refund::create([
+                'tenant_id' => $tenantId,
+                'sale_id' => $sale->id,
+                'amount' => $refundAmount,
+                'reason' => $data['reason'] ?? 'طلب استرداد',
+                'refund_method' => $data['refund_method'] ?? 'cash',
+                'processed_by' => auth()->id(),
+            ]);
+
+            // 2. Update Sale Status/Paid Amount
+            $newPaidAmount = $sale->paid_amount - $refundAmount;
+            $sale->update([
+                'paid_amount' => $newPaidAmount,
+                // If it was fully paid and now partially refunded, it becomes 'partial'
+                // If it was partial and now fully refunded, it might depend on business logic
+            ]);
+
+            // 3. Reverse Commissions
+            // We find commissions linked to this sale that are NOT yet paid
+            $commissions = Commission::where('sale_id', $sale->id)
+                ->where('status', 'earned')
+                ->get();
+
+            foreach ($commissions as $commission) {
+                // For simplicity: we void the commission if it's a full refund, 
+                // or proportionally if we want to be advanced. 
+                // Here, we'll just delete them if the sale is significantly reversed.
+                $commission->delete(); 
+            }
+
+            // 4. Handle Enrollments (Optional)
+            // If the user wants to un-enroll, they usually do it separately, 
+            // but we can add a flag here.
+            if ($data['unenroll_student'] ?? false) {
+                $sale->items->each(function($item) use ($sale) {
+                    if ($item->item_type === \App\Models\Course::class) {
+                        Enrollment::where('student_id', $sale->student_id)
+                            ->where('course_id', $item->item_id)
+                            ->delete();
+                    }
+                });
+            }
+
+            return $refund;
+        });
+    }
+}

@@ -74,8 +74,8 @@ class UnifiedAuthController extends Controller
 
         // If authenticated
         if ($user) {
-            // Check if user is super admin (admin role and no tenant_id)
-            if ($user->role === 'admin' && is_null($user->tenant_id)) {
+            // Check if user is super admin (super_admin role and no tenant_id)
+            if ($user->role === 'super_admin' && is_null($user->tenant_id)) {
                 Auth::logout();
                 return redirect()->route('admin.login')
                     ->with('info', __('messages.msg_001'));

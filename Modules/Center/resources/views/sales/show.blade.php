@@ -193,7 +193,78 @@
                         <p class="text-muted small">{{ __('center::messages.blade_0644') }}</p>
                     </div>
                 @endif
+
+                @if($sale->paid_amount > 0)
+                    <hr class="my-4 opacity-10">
+                    <button type="button" class="btn btn-outline-danger w-100 rounded-pill py-2 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#refundModal">
+                        <i class="fas fa-undo-alt me-2"></i> إجراء استرداد مبلغ (Refund)
+                    </button>
+                @endif
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Refund Modal -->
+<div class="modal fade" id="refundModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <form action="{{ route('center.sales.refund', $sale->id) }}" method="POST">
+                @csrf
+                <div class="modal-header border-0 p-4 pb-0">
+                    <h5 class="fw-bold mb-0">إجراء عملية استرداد (Refund)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="alert alert-warning border-0 rounded-4 small mb-4">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        تحذير: هذه العملية ستقلل من قيمة المبيعات المدفوعة وقد تؤثر على عمولات المدرسين المرتبطة بهذه الفاتورة.
+                    </div>
+
+                    <div class="mb-4 text-center p-3 bg-light rounded-3">
+                        <small class="text-muted d-block mb-1">إجمالي المبلغ القابل للاسترداد</small>
+                        <h4 class="fw-bold mb-0 text-dark">{{ number_format($sale->paid_amount, 2) }} {{ __('center::sales.currency') }}</h4>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">المبلغ المسترد</label>
+                        <div class="input-group">
+                            <input type="number" name="amount" step="0.01" class="form-control rounded-start-3" 
+                                max="{{ $sale->paid_amount }}" min="0.01" value="{{ $sale->paid_amount }}" required>
+                            <span class="input-group-text bg-light border-start-0 rounded-end-3">EGP</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">طريقة الاسترداد</label>
+                        <select name="refund_method" class="form-select rounded-3" required>
+                            <option value="cash">نقدي</option>
+                            <option value="bank_transfer">تحويل بنكي</option>
+                            <option value="online">أونلاين (إرجاع للبطاقة)</option>
+                            <option value="other">أخرى</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">السبب</label>
+                        <textarea name="reason" class="form-control rounded-3" rows="2" placeholder="أدخل سبب الاسترداد..."></textarea>
+                    </div>
+
+                    <div class="form-check form-switch p-0 mt-4">
+                        <div class="bg-light p-3 rounded-4 d-flex align-items-center justify-content-between">
+                            <div>
+                                <label class="form-check-label fw-bold d-block mb-1" for="unenrollSwitch">إلغاء تسجيل الطالب</label>
+                                <small class="text-muted d-block">سيتم حذف الطالب من الدورات التعليمية المرتبطة بهذه الفاتورة.</small>
+                            </div>
+                            <input class="form-check-input ms-0" type="checkbox" name="unenroll_student" value="1" id="unenrollSwitch">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-danger rounded-pill px-4">تأكيد الاسترداد</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

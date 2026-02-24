@@ -98,4 +98,19 @@ class Instructor extends Model
     {
         return $this->hasManyThrough(Enrollment::class, Course::class);
     }
+
+    public function commissions()
+    {
+        return $this->hasMany(Commission::class);
+    }
+
+    public function getTotalEarnedAttribute()
+    {
+        return $this->commissions()->where('status', '!=', 'pending')->sum('amount');
+    }
+
+    public function getPendingEarningsAttribute()
+    {
+        return $this->commissions()->where('status', 'pending')->sum('amount');
+    }
 }

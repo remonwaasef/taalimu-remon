@@ -158,6 +158,7 @@ $tenantRoutes = function () {
             Route::get('instructors/{instructor}/edit', [InstructorController::class, 'edit'])->name('center.instructors.edit');
             Route::put('instructors/{instructor}', [InstructorController::class, 'update'])->name('center.instructors.update');
             Route::post('instructors/{instructor}/toggle-status', [InstructorController::class, 'toggleStatus'])->name('center.instructors.toggle-status');
+            Route::post('instructors/{instructor}/payout', [InstructorController::class, 'payout'])->name('center.instructors.payout');
         });
 
         Route::middleware(['can:delete instructors'])->group(function() {
@@ -276,6 +277,7 @@ $tenantRoutes = function () {
                 Route::get('sales/account', [SaleController::class, 'account'])->name('center.sales.account');
                 Route::get('sales/student-summary/{id}', [SaleController::class, 'getStudentSummary'])->name('center.sales.student-summary');
                 Route::post('sales/{sale}/payment', [SaleController::class, 'addPayment'])->name('center.sales.payment');
+                Route::post('sales/{sale}/refund', [SaleController::class, 'refund'])->name('center.sales.refund');
                 Route::get('payments/{payment}/receipt', [SaleController::class, 'downloadReceipt'])->name('center.payments.receipt');
                 Route::resource('sales', SaleController::class)->names('center.sales');
             });

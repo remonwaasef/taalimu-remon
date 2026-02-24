@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use App\Services\FinanceService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Payment;
+use App\Services\RefundService;
 
 class SaleController extends Controller
 {
@@ -180,5 +181,29 @@ class SaleController extends Controller
             ->setPaper('a5', 'portrait');
 
         return $pdf->download('receipt-' . $payment->id . '.pdf');
+    }
+
+    /**
+     * Process a refund for the sale.
+     */
+    public function refund(Request $request, $id, RefundService $refundService)
+    {
+        $tenant = app('tenant');
+        $sale = Sale::where('tenant_id', $tenant->id)->findOrFail($id);
+        $this->authorize('update', $sale);
+
+        $request->validate([
+            'amount' => 'required|numeric|min:0.01|max:' . $sale->paid_amount,
+            'reason' => 'nullable|string',
+            'refund_method' => 'required|string',
+            'unenroll_student' => 'boolean',
+        ]);
+
+        try {
+            $refundService->processRefund($sale, $request->all());
+            return redirect()->back()->with('success', 'تمت عملية الاسترداد بنجاح وتحديث السجلات.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'خطأ في عملية الاسترداد: ' . $e->getMessage());
+        }
     }
 }

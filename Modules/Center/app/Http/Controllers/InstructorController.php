@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use App\Traits\HandlesFileUploads;
 use App\Http\Requests\Center\StoreInstructorRequest;
 use App\Http\Requests\Center\UpdateInstructorRequest;
+use App\Services\PayoutService;
 
 class InstructorController extends Controller
 {
@@ -93,9 +94,16 @@ class InstructorController extends Controller
      */
     public function show($id)
     {
-        $instructor = Instructor::findOrFail($id);
+        $instructor = Instructor::withCount('courses')->findOrFail($id);
         $this->authorize('view', $instructor);
-        return view('center::instructors.show', compact('instructor'));
+
+        // Load commission history
+        $commissions = $instructor->commissions()
+            ->with(['sale.student', 'saleItem'])
+            ->latest()
+            ->paginate(10);
+
+        return view('center::instructors.show', compact('instructor', 'commissions'));
     }
 
     /**
@@ -151,5 +159,28 @@ class InstructorController extends Controller
         $instructor->delete();
 
         return redirect()->route('center.instructors.index')->with('success', __('center::messages.msg_051'));
+    }
+
+    /**
+     * Process a payout for the instructor.
+     */
+    public function payout(Request $request, $id, PayoutService $payoutService)
+    {
+        $instructor = Instructor::findOrFail($id);
+        $this->authorize('update', $instructor); // Using update perm for financial settlement
+
+        $request->validate([
+            'amount' => 'required|numeric|min:0.01|max:' . ($instructor->total_earned + 0.01),
+            'payment_method' => 'required|in:cash,bank_transfer,online,other',
+            'payout_date' => 'required|date',
+            'notes' => 'nullable|string',
+        ]);
+
+        try {
+            $payoutService->processPayout($instructor, $request->all());
+            return redirect()->back()->with('success', 'تم تسجيل عملية الصرف بنجاح وتحديث السجلات المالية.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'خطأ في عملية الصرف: ' . $e->getMessage());
+        }
     }
 }
