@@ -104,6 +104,11 @@ class Instructor extends Model
         return $this->hasMany(Commission::class);
     }
 
+    public function payouts()
+    {
+        return $this->hasMany(Payout::class);
+    }
+
     public function getTotalEarnedAttribute()
     {
         return $this->commissions()->where('status', '!=', 'pending')->sum('amount');
