@@ -21,8 +21,8 @@
                                 @error('name')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('center::instructors.specialization') }}</label>
-                                <input type="text" name="specialization" value="{{ old('specialization') }}" class="form-control bg-light border-0" placeholder="{{ __('center::messages.blade_0428') }}">
+                                <label class="form-label fw-bold">{{ __('center::instructors.specialization') }} *</label>
+                                <input type="text" name="specialization" value="{{ old('specialization') }}" class="form-control bg-light border-0" placeholder="{{ __('center::messages.blade_0428') }}" required>
                                 @error('specialization')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                         </div>
@@ -60,14 +60,18 @@
                                 <input type="text" name="national_id" value="{{ old('national_id') }}" class="form-control bg-light border-0" placeholder="{{ __('center::messages.blade_0429') }}">
                                 @error('national_id')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('center::instructors.commission_rate') }}</label>
-                                <div class="input-group">
-                                    <input type="number" step="0.01" name="commission_rate" value="{{ old('commission_rate', 0) }}" class="form-control bg-light border-0">
-                                    <span class="input-group-text bg-light border-0">%</span>
-                                </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">{{ __('center::instructors.commission_rate') }} *</label>
+                                <input type="number" step="0.01" name="commission_rate" value="{{ old('commission_rate', 0) }}" class="form-control bg-light border-0" required>
                                 @error('commission_rate')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
-                                <small class="text-muted">{{ __('center::messages.blade_0424') }}</small>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">النوع *</label>
+                                <select name="commission_type" class="form-select bg-light border-0" required>
+                                    <option value="percentage" {{ old('commission_type') == 'percentage' ? 'selected' : '' }}>نسبة مئوية (%)</option>
+                                    <option value="fixed" {{ old('commission_type') == 'fixed' ? 'selected' : '' }}>مبلغ ثابت</option>
+                                </select>
+                                @error('commission_type')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                         </div>
 

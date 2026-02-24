@@ -65,7 +65,8 @@ class InstructorController extends Controller
             'phone' => $request->phone,
             'specialization' => $request->specialization,
             'status' => $request->status ?? 'active',
-            'commission_rate' => $request->commission_rate ?? 0,
+            'commission_rate' => $request->commission_rate,
+            'commission_type' => $request->commission_type,
             'national_id' => $request->national_id,
             'gender' => $request->gender,
             'hiring_date' => $request->hiring_date,
@@ -130,6 +131,7 @@ class InstructorController extends Controller
         $instructor->specialization = $request->specialization;
         $instructor->status = $request->status;
         $instructor->commission_rate = $request->commission_rate;
+        $instructor->commission_type = $request->commission_type;
         $instructor->national_id = $request->national_id;
         $instructor->gender = $request->gender;
         $instructor->hiring_date = $request->hiring_date;

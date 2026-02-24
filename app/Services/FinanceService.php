@@ -92,7 +92,8 @@ class FinanceService
                     $course = $courses->get($itemData['item_id']);
                     if ($course && $course->instructor && $course->instructor->commission_rate > 0) {
                         $rate = $course->instructor->commission_rate;
-                        $amount = ($itemData['price'] * $rate) / 100;
+                        $type = $course->instructor->commission_type ?? 'percentage';
+                        $amount = ($type === 'percentage') ? ($itemData['price'] * $rate) / 100 : $rate;
 
                         Commission::create([
                             'tenant_id' => $tenantId,

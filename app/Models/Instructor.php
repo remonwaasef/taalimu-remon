@@ -59,6 +59,7 @@ class Instructor extends Model
         'specialization',
         'status',
         'commission_rate',
+        'commission_type',
         'national_id',
         'gender',
         'hiring_date',
