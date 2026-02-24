@@ -81,9 +81,9 @@
                         </div>
                         <div class="col-8">
                             <div class="bg-primary bg-opacity-10 rounded-3 p-3 border border-primary border-opacity-10 position-relative overflow-hidden">
-                                <h4 class="fw-bold mb-0 text-primary">{{ format_price($instructor->total_earned) }}</h4>
-                                <small class="text-muted d-block mt-1">إجمالي المستحقات</small>
-                                @if($instructor->total_earned > 0)
+                                <h4 class="fw-bold mb-0 text-primary">{{ format_price($instructor->outstanding_balance) }}</h4>
+                                <small class="text-muted d-block mt-1">الرصيد المتاح للصرف</small>
+                                @if($instructor->outstanding_balance > 0)
                                     <button type="button" class="btn btn-primary btn-sm rounded-pill mt-2 w-100" data-bs-toggle="modal" data-bs-target="#payoutModal">
                                         <i class="fas fa-hand-holding-usd me-1"></i> صرف المستحقات
                                     </button>
@@ -133,7 +133,7 @@
                 <div class="card-header bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
                     <h5 class="fw-bold mb-0">{{ __('center::messages.blade_0451') }}</h5>
                     <div class="d-flex align-items-center gap-2">
-                        <div class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 me-2">{{ format_price($instructor->total_earned) }}</div>
+                        <div class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 me-2">{{ format_price($instructor->outstanding_balance) }}</div>
                         <a href="{{ route('center.instructors.statement', $instructor->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
                             <i class="fas fa-file-invoice-dollar me-1"></i> كشف الحساب
                         </a>
@@ -210,7 +210,7 @@
                     <div class="modal-body p-4">
                         <div class="mb-4 text-center p-3 bg-light rounded-3">
                             <small class="text-muted d-block mb-1">المبلغ المتاح للصرف</small>
-                            <h4 class="fw-bold mb-0 text-success">{{ format_price($instructor->total_earned) }}</h4>
+                            <h4 class="fw-bold mb-0 text-success">{{ format_price($instructor->outstanding_balance) }}</h4>
                         </div>
 
                         <div class="mb-3">
@@ -218,7 +218,7 @@
                             <div class="input-group">
                                 <span class="input-group-text bg-light border-end-0 rounded-start-3">EGP</span>
                                 <input type="number" name="amount" step="0.01" class="form-control border-start-0 rounded-end-3" 
-                                    max="{{ $instructor->total_earned }}" min="1" value="{{ $instructor->total_earned }}" required>
+                                    max="{{ $instructor->outstanding_balance }}" min="1" value="{{ $instructor->outstanding_balance }}" required>
                             </div>
                         </div>
 
