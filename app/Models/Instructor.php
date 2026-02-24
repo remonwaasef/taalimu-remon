@@ -118,4 +118,11 @@ class Instructor extends Model
     {
         return $this->commissions()->where('status', 'pending')->sum('amount');
     }
+
+    public function getOutstandingBalanceAttribute()
+    {
+        $earned = $this->commissions()->where('status', '!=', 'pending')->sum('amount');
+        $payouts = $this->payouts()->sum('amount');
+        return $earned - $payouts;
+    }
 }
