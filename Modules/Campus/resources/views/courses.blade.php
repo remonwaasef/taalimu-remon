@@ -82,7 +82,6 @@
                 <p class="text-muted mx-auto" style="max-width: 400px;">نحن نعمل باستمرار على إضافة دورات جديدة. يرجى العودة لاحقاً لاستكشاف المزيد.</p>
             </div>
         </div>
-    @empty
     @endforelse
 </div>
 
