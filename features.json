@@ -1,1 +1,137 @@
-[{"id":1,"name":"Student Limit","code":"max_students","type":"limit","category":"core","created_at":"2026-01-04T19:18:25.000000Z","updated_at":"2026-01-05T07:30:22.000000Z"},{"id":2,"name":"Max Courses","code":"max_courses","type":"limit","category":"core","created_at":"2026-01-04T19:18:25.000000Z","updated_at":"2026-01-04T19:18:25.000000Z"},{"id":3,"name":"Storage Limit (GB)","code":"storage_limit","type":"limit","category":"core","created_at":"2026-01-04T19:18:25.000000Z","updated_at":"2026-01-04T19:18:25.000000Z"},{"id":4,"name":"API Access","code":"api_access","type":"boolean","category":"smart","created_at":"2026-01-04T19:18:25.000000Z","updated_at":"2026-01-05T07:30:22.000000Z"},{"id":5,"name":"Max Instructors","code":"max_instructors","type":"limit","category":"core","created_at":"2026-01-05T07:04:10.000000Z","updated_at":"2026-01-05T07:04:10.000000Z"},{"id":6,"name":"Max Classrooms","code":"max_classrooms","type":"limit","category":"core","created_at":"2026-01-05T07:04:10.000000Z","updated_at":"2026-01-05T07:04:10.000000Z"},{"id":7,"name":"Advanced Reports","code":"advanced_reports","type":"boolean","category":"core","created_at":"2026-01-05T07:04:10.000000Z","updated_at":"2026-01-05T07:04:10.000000Z"},{"id":8,"name":"Priority Support","code":"priority_support","type":"boolean","category":"core","created_at":"2026-01-05T07:04:10.000000Z","updated_at":"2026-01-05T07:04:10.000000Z"},{"id":9,"name":"Admin Users","code":"max_admins","type":"limit","category":"core","created_at":"2026-01-05T07:30:22.000000Z","updated_at":"2026-01-05T07:30:22.000000Z"},{"id":10,"name":"Multi-branch Support","code":"multi_branch","type":"boolean","category":"core","created_at":"2026-01-05T07:30:22.000000Z","updated_at":"2026-01-05T07:30:22.000000Z"},{"id":11,"name":"Automated WhatsApp Alerts","code":"whatsapp_alerts","type":"boolean","category":"smart","created_at":"2026-01-05T07:30:22.000000Z","updated_at":"2026-01-05T07:30:22.000000Z"},{"id":12,"name":"SMS Alerts","code":"sms_alerts","type":"boolean","category":"smart","created_at":"2026-01-05T07:30:22.000000Z","updated_at":"2026-01-05T07:30:22.000000Z"},{"id":13,"name":"Financial Reports","code":"financial_reports","type":"boolean","category":"analysis","created_at":"2026-01-05T07:30:22.000000Z","updated_at":"2026-01-05T07:30:22.000000Z"},{"id":14,"name":"Technical Support","code":"technical_support","type":"limit","category":"analysis","created_at":"2026-01-05T07:30:22.000000Z","updated_at":"2026-01-05T07:30:22.000000Z"}]
+[
+    {
+        "id": 1,
+        "name": "Student Limit",
+        "code": "max_students",
+        "type": "limit",
+        "category": "core",
+        "created_at": "2026-01-04T19:18:25.000000Z",
+        "updated_at": "2026-01-05T07:30:22.000000Z"
+    },
+    {
+        "id": 2,
+        "name": "Max Courses",
+        "code": "max_courses",
+        "type": "limit",
+        "category": "core",
+        "created_at": "2026-01-04T19:18:25.000000Z",
+        "updated_at": "2026-01-04T19:18:25.000000Z"
+    },
+    {
+        "id": 3,
+        "name": "Storage Limit (GB)",
+        "code": "storage_limit",
+        "type": "limit",
+        "category": "core",
+        "created_at": "2026-01-04T19:18:25.000000Z",
+        "updated_at": "2026-01-04T19:18:25.000000Z"
+    },
+    {
+        "id": 4,
+        "name": "API Access",
+        "code": "api_access",
+        "type": "boolean",
+        "category": "smart",
+        "created_at": "2026-01-04T19:18:25.000000Z",
+        "updated_at": "2026-01-05T07:30:22.000000Z"
+    },
+    {
+        "id": 5,
+        "name": "Max Instructors",
+        "code": "max_instructors",
+        "type": "limit",
+        "category": "core",
+        "created_at": "2026-01-05T07:04:10.000000Z",
+        "updated_at": "2026-01-05T07:04:10.000000Z"
+    },
+    {
+        "id": 6,
+        "name": "Max Classrooms",
+        "code": "max_classrooms",
+        "type": "limit",
+        "category": "core",
+        "created_at": "2026-01-05T07:04:10.000000Z",
+        "updated_at": "2026-01-05T07:04:10.000000Z"
+    },
+    {
+        "id": 7,
+        "name": "Advanced Reports",
+        "code": "advanced_reports",
+        "type": "boolean",
+        "category": "core",
+        "created_at": "2026-01-05T07:04:10.000000Z",
+        "updated_at": "2026-01-05T07:04:10.000000Z"
+    },
+    {
+        "id": 8,
+        "name": "Priority Support",
+        "code": "priority_support",
+        "type": "boolean",
+        "category": "core",
+        "created_at": "2026-01-05T07:04:10.000000Z",
+        "updated_at": "2026-01-05T07:04:10.000000Z"
+    },
+    {
+        "id": 9,
+        "name": "Admin Users",
+        "code": "max_admins",
+        "type": "limit",
+        "category": "core",
+        "created_at": "2026-01-05T07:30:22.000000Z",
+        "updated_at": "2026-01-05T07:30:22.000000Z"
+    },
+    {
+        "id": 10,
+        "name": "Multi-branch Support",
+        "code": "multi_branch",
+        "type": "boolean",
+        "category": "core",
+        "created_at": "2026-01-05T07:30:22.000000Z",
+        "updated_at": "2026-01-05T07:30:22.000000Z"
+    },
+    {
+        "id": 11,
+        "name": "Automated WhatsApp Alerts",
+        "code": "whatsapp_alerts",
+        "type": "boolean",
+        "category": "smart",
+        "created_at": "2026-01-05T07:30:22.000000Z",
+        "updated_at": "2026-01-05T07:30:22.000000Z"
+    },
+    {
+        "id": 12,
+        "name": "SMS Alerts",
+        "code": "sms_alerts",
+        "type": "boolean",
+        "category": "smart",
+        "created_at": "2026-01-05T07:30:22.000000Z",
+        "updated_at": "2026-01-05T07:30:22.000000Z"
+    },
+    {
+        "id": 13,
+        "name": "Financial Reports",
+        "code": "financial_reports",
+        "type": "boolean",
+        "category": "analysis",
+        "created_at": "2026-01-05T07:30:22.000000Z",
+        "updated_at": "2026-01-05T07:30:22.000000Z"
+    },
+    {
+        "id": 14,
+        "name": "Technical Support",
+        "code": "technical_support",
+        "type": "limit",
+        "category": "analysis",
+        "created_at": "2026-01-05T07:30:22.000000Z",
+        "updated_at": "2026-01-05T07:30:22.000000Z"
+    },
+    {
+        "id": 15,
+        "name": "Student Portal",
+        "code": "student_portal",
+        "type": "boolean",
+        "category": "core",
+        "created_at": "2026-02-24T08:00:00.000000Z",
+        "updated_at": "2026-02-24T08:00:00.000000Z"
+    }
+]
