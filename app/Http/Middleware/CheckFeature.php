@@ -31,6 +31,7 @@ class CheckFeature
         }
 
         \Illuminate\Support\Facades\Log::debug('CheckFeature: Checking feature', [
+            'url' => $request->fullUrl(),
             'tenant_id' => $tenant->id ?? 'N/A', // Use null coalescing for safety
             'feature_code' => $featureCode,
             'has_feature_before_check' => $tenant->hasFeature($featureCode) ? 'yes' : 'no' // Log the result of the check
