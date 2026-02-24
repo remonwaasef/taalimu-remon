@@ -129,6 +129,8 @@ $tenantRoutes = function () {
             Route::post('students/{student}/reset-password', [StudentController::class, 'resetPassword'])
                  ->middleware('throttle:password-reset')
                  ->name('center.students.reset-password');
+            Route::post('students/{student}/remind-debt', [StudentController::class, 'remindDebt'])->name('center.students.remind-debt');
+            Route::get('students/{student}/statement', [StudentController::class, 'statement'])->name('center.students.statement');
         });
 
         Route::middleware(['can:delete students'])->group(function() {
@@ -159,6 +161,7 @@ $tenantRoutes = function () {
             Route::put('instructors/{instructor}', [InstructorController::class, 'update'])->name('center.instructors.update');
             Route::post('instructors/{instructor}/toggle-status', [InstructorController::class, 'toggleStatus'])->name('center.instructors.toggle-status');
             Route::post('instructors/{instructor}/payout', [InstructorController::class, 'payout'])->name('center.instructors.payout');
+            Route::get('instructors/{instructor}/statement', [InstructorController::class, 'statement'])->name('center.instructors.statement');
         });
 
         Route::middleware(['can:delete instructors'])->group(function() {
@@ -278,6 +281,8 @@ $tenantRoutes = function () {
                 Route::get('sales/student-summary/{id}', [SaleController::class, 'getStudentSummary'])->name('center.sales.student-summary');
                 Route::post('sales/{sale}/payment', [SaleController::class, 'addPayment'])->name('center.sales.payment');
                 Route::post('sales/{sale}/refund', [SaleController::class, 'refund'])->name('center.sales.refund');
+                Route::get('sales/{sale}/checkout', [SaleController::class, 'checkout'])->name('center.sales.checkout');
+                Route::get('sales/{sale}/checkout/success', [SaleController::class, 'checkoutSuccess'])->name('center.sales.checkout.success');
                 Route::get('payments/{payment}/receipt', [SaleController::class, 'downloadReceipt'])->name('center.payments.receipt');
                 Route::resource('sales', SaleController::class)->names('center.sales');
             });

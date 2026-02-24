@@ -520,7 +520,20 @@
                 <!-- Tab: Financial Records -->
                 <div class="tab-pane fade" id="pills-sales">
                     <div class="card border-0 shadow-sm rounded-5 p-4 p-md-5">
-                        <h4 class="fw-bold mb-5">{{ __('center::messages.blade_0872') }}</h4>
+                        <div class="d-flex justify-content-between align-items-center mb-5">
+                            <h4 class="fw-bold mb-0">{{ __('center::messages.blade_0872') }}</h4>
+                            <div class="d-flex gap-2">
+                                <form action="{{ route('center.students.remind-debt', $student->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-outline-success rounded-pill px-4 fw-bold shadow-sm" onclick="return confirm('هل أنت متأكد من رغبتك في إرسال تذكير سداد عبر الواتساب؟');">
+                                        <i class="fab fa-whatsapp me-2"></i>إرسال تذكير
+                                    </button>
+                                </form>
+                                <a href="{{ route('center.students.statement', $student->id) }}" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">
+                                    <i class="fas fa-file-invoice-dollar me-2"></i>كشف حساب الطالب (Ledger)
+                                </a>
+                            </div>
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-hover align-middle">
                                 <thead>

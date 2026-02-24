@@ -74,4 +74,17 @@ class WhatsAppService
         
         return $this->sendMessageByTenant($tenant, $to, $message);
     }
+
+    /**
+     * Send debt reminder notification.
+     */
+    public function sendDebtReminder($tenant, $student, $amount)
+    {
+        $to = $student->phone;
+        if (!$to) return false;
+
+        $message = "تذكير ودي: يرجى العلم أنه يوجد رصيد مستحق بقيمة {$amount} ".get_currency_symbol()." في حساب الطالب {$student->name}. نرجو منكم المبادرة بالسداد عبر مركزنا أو عبر بوابة الدفع الإلكتروني. شكراً لكم، مركز {$tenant->name}.";
+        
+        return $this->sendMessageByTenant($tenant, $to, $message);
+    }
 }

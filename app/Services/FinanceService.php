@@ -38,7 +38,7 @@ class FinanceService
                 ->get()
                 ->keyBy('id');
 
-            $totalAmount = 0;
+            $subtotalAmount = 0;
             $itemsToCreate = [];
 
             foreach ($data['items'] as $item) {
@@ -48,7 +48,7 @@ class FinanceService
                 }
 
                 $price = $course->price;
-                $totalAmount += $price;
+                $subtotalAmount += $price;
 
                 $itemsToCreate[] = [
                     'item_type' => Course::class,
@@ -58,6 +58,10 @@ class FinanceService
                 ];
             }
 
+            $discountAmount = $data['discount_amount'] ?? 0;
+            $taxAmount = $data['tax_amount'] ?? 0;
+            $totalAmount = $subtotalAmount - $discountAmount + $taxAmount;
+
             // 2. Determine Initial Status
             $status = $this->determineStatus($totalAmount, $data['paid_amount']);
 
@@ -65,6 +69,9 @@ class FinanceService
             $sale = Sale::create([
                 'tenant_id' => $tenantId,
                 'student_id' => $data['student_id'],
+                'subtotal_amount' => $subtotalAmount,
+                'discount_amount' => $discountAmount,
+                'tax_amount' => $taxAmount,
                 'total_amount' => $totalAmount,
                 'paid_amount' => $data['paid_amount'],
                 'status' => $status,

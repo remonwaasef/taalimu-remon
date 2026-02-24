@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Student;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Models\Sale;
+use App\Models\Payment;
+use App\Models\Refund;
 use Illuminate\Http\Response;
 use App\Services\StudentService;
 use App\Queries\StudentQuery;
@@ -154,6 +157,109 @@ class StudentController extends Controller
         return redirect()->back()->with('success', __('center::messages.msg_083'))
             ->with('generated_password', $newPassword)
             ->with('student_name', $student->name);
+    }
+
+    /**
+     * Send debt reminder via WhatsApp.
+     */
+    public function remindDebt($id, \App\Services\WhatsAppService $whatsappService)
+    {
+        $student = Student::where('tenant_id', app('tenant')->id)->findOrFail($id);
+        $this->authorize('update', $student);
+
+        $totalDebt = Sale::where('student_id', $student->id)->sum(\Illuminate\Support\Facades\DB::raw('total_amount - paid_amount'));
+
+        if ($totalDebt <= 0) {
+            return redirect()->back()->with('info', 'الطالب ليس عليه أي مديونيات متأخرة.');
+        }
+
+        $success = $whatsappService->sendDebtReminder(app('tenant'), $student, $totalDebt);
+
+        if ($success) {
+            return redirect()->back()->with('success', 'تم إرسال تذكير السداد عبر الواتساب بنجاح.');
+        } else {
+            return redirect()->back()->with('warning', 'تعذر إرسال التذكير. تأكد من إعداد خدمة الواتساب للمركز وأن للطالب رقم هاتف صحيح.');
+        }
+    }
+
+    /**
+     * View student financial statement (Ledger).
+     */
+    public function statement($id)
+    {
+        $student = Student::findOrFail($id);
+        $this->authorize('view', $student);
+        $tenantId = app('tenant')->id;
+
+        // Fetch Sales (Invoices) - Debits (Money student owes)
+        $sales = Sale::where('student_id', $student->id)
+            ->with('items.item')
+            ->get()
+            ->map(function ($s) {
+                return [
+                    'date' => $s->created_at,
+                    'type' => 'invoice',
+                    'amount' => $s->total_amount,
+                    'description' => 'فاتورة مبيعات #' . $s->id,
+                    'is_credit' => false,
+                    'ref_id' => $s->id,
+                ];
+            });
+
+        // Fetch Payments - Credits (Money student paid)
+        $payments = Payment::whereHas('sale', function ($q) use ($student) {
+                $q->where('student_id', $student->id);
+            })
+            ->with(['receiver'])
+            ->get()
+            ->map(function ($p) {
+                return [
+                    'date' => $p->paid_at ?? $p->created_at,
+                    'type' => 'payment',
+                    'amount' => $p->amount,
+                    'description' => 'دفعة نقدية - الاستلام بواسطة: ' . ($p->receiver->name ?? 'طالب') . ' - فاتورة #' . $p->sale_id,
+                    'is_credit' => true,
+                    'ref_id' => $p->id,
+                ];
+            });
+
+        // Fetch Refunds - Debits (Money returned to student, reversing payment)
+        $refunds = Refund::whereHas('sale', function ($q) use ($student) {
+                $q->where('student_id', $student->id);
+            })
+            ->with('processor')
+            ->get()
+            ->map(function ($r) {
+                return [
+                    'date' => $r->created_at,
+                    'type' => 'refund',
+                    'amount' => $r->amount, // Amount returned
+                    'description' => 'استرداد مالي (Refund) - فاتورة #' . $r->sale_id . ($r->reason ? ' - ' . $r->reason : ''),
+                    'is_credit' => false, // Reduces their credit, essentially increasing debt effectively
+                    'ref_id' => $r->id,
+                ];
+            });
+
+        // Merge and sort
+        $ledger = $sales->concat($payments)->concat($refunds)->sortBy('date')->values();
+
+        // Calculate running balance (Debt)
+        $balance = 0; // Debt amount
+        foreach ($ledger as $key => $transaction) {
+            if ($transaction['is_credit']) {
+                $balance -= $transaction['amount']; // Payment decreases debt
+            } else {
+                $balance += $transaction['amount']; // Invoice or Refund increases debt
+            }
+            $ledger[$key]['balance'] = $balance;
+        }
+
+        $tenant = app('tenant');
+
+        // Current real debt
+        $totalDebt = Sale::where('student_id', $student->id)->sum(\DB::raw('total_amount - paid_amount'));
+
+        return view('center::students.statement', compact('student', 'ledger', 'tenant', 'totalDebt'));
     }
 
     /**

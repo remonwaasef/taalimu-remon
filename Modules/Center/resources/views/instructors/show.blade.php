@@ -132,7 +132,12 @@
             <div class="card border-0 shadow-sm rounded-4 mb-4">
                 <div class="card-header bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
                     <h5 class="fw-bold mb-0">{{ __('center::messages.blade_0451') }}</h5>
-                    <div class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{ format_price($instructor->total_earned) }}</div>
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 me-2">{{ format_price($instructor->total_earned) }}</div>
+                        <a href="{{ route('center.instructors.statement', $instructor->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                            <i class="fas fa-file-invoice-dollar me-1"></i> كشف الحساب
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">

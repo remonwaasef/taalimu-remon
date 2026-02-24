@@ -88,9 +88,30 @@
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-between align-items-center mb-4 p-3 bg-light rounded-4">
-                        <span class="fw-bold text-muted">{{ __('center::sales.amount') }}:</span>
-                        <span id="totalAmount" class="fs-4 fw-bold text-primary">0.00 {{ get_currency_symbol() }}</span>
+                    <div class="mb-3 bg-light rounded-4 p-3 border">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted small">الإجمالي الفرعي (Subtotal):</span>
+                            <span id="subtotalAmountDisp" class="fw-bold">0.00 {{ get_currency_symbol() }}</span>
+                        </div>
+                        <div class="row g-2 mb-2">
+                            <div class="col-6">
+                                <label class="form-label small text-muted mb-1">الخصم (Discount)</label>
+                                <div class="input-group input-group-sm">
+                                    <input type="number" step="0.01" name="discount_amount" id="discount_amount" class="form-control rounded-3 border" value="0.00" onchange="calculateTotal()" onkeyup="calculateTotal()">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small text-muted mb-1">الضريبة (Tax)</label>
+                                <div class="input-group input-group-sm">
+                                    <input type="number" step="0.01" name="tax_amount" id="tax_amount" class="form-control rounded-3 border" value="0.00" onchange="calculateTotal()" onkeyup="calculateTotal()">
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-2 opacity-25">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold text-dark">الإجمالي النهائي (Total):</span>
+                            <span id="totalAmount" class="fs-4 fw-bold text-primary">0.00 {{ get_currency_symbol() }}</span>
+                        </div>
                     </div>
 
                     <div class="mb-3">
@@ -138,6 +159,7 @@
 @push('scripts')
 <script>
     let cart = [];
+    let subtotalAmount = 0;
     const currency = '{{ get_currency_symbol() }}';
 
     function fetchStudentSummary(studentId) {
@@ -301,7 +323,26 @@
             });
         }
 
+        subtotalAmount = total;
+        document.getElementById('subtotalAmountDisp').innerText = subtotalAmount.toFixed(2) + ' ' + currency;
+        calculateTotal();
+    }
+
+    function calculateTotal() {
+        const discountInput = document.getElementById('discount_amount');
+        const taxInput = document.getElementById('tax_amount');
+        const totalEl = document.getElementById('totalAmount');
+        const paidInput = document.getElementById('paid_amount');
+
+        let discount = parseFloat(discountInput.value) || 0;
+        let tax = parseFloat(taxInput.value) || 0;
+
+        let total = subtotalAmount - discount + tax;
+        if (total < 0) total = 0;
+
         totalEl.innerText = total.toFixed(2) + ' ' + currency;
+        
+        // Update paid amount mostly for convenience
         paidInput.value = total.toFixed(2);
     }
 
@@ -309,6 +350,8 @@
         const studentId = document.getElementById('student_id').value;
         const paymentMethod = document.getElementById('payment_method').value;
         const paidAmount = document.getElementById('paid_amount').value;
+        const discountAmount = document.getElementById('discount_amount').value;
+        const taxAmount = document.getElementById('tax_amount').value;
         const notes = document.getElementById('notes').value;
 
         if (!studentId) {
@@ -325,6 +368,8 @@
             items: cart,
             payment_method: paymentMethod,
             paid_amount: paidAmount,
+            discount_amount: discountAmount,
+            tax_amount: taxAmount,
             notes: notes,
             _token: '{{ csrf_token() }}'
         };

@@ -87,11 +87,27 @@
                     <div class="col-md-5">
                         <div class="bg-light rounded-4 p-4">
                             <div class="d-flex justify-content-between mb-2">
-                                <span class="text-muted">{{ __('center::messages.blade_0631') }}</span>
-                                <span>{{ number_format($sale->total_amount, 2) }} {{ __('center::sales.currency') }}</span>
+                                <span class="text-muted">الإجمالي الفرعي:</span>
+                                <span>{{ number_format($sale->subtotal_amount > 0 ? $sale->subtotal_amount : $sale->total_amount, 2) }} {{ __('center::sales.currency') }}</span>
+                            </div>
+                            @if($sale->discount_amount > 0)
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-danger">الخصم (Discount):</span>
+                                <span class="text-danger">-{{ number_format($sale->discount_amount, 2) }} {{ __('center::sales.currency') }}</span>
+                            </div>
+                            @endif
+                            @if($sale->tax_amount > 0)
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">الضريبة (Tax):</span>
+                                <span>+{{ number_format($sale->tax_amount, 2) }} {{ __('center::sales.currency') }}</span>
+                            </div>
+                            @endif
+                            <div class="d-flex justify-content-between mb-2 border-top pt-2 mt-2">
+                                <span class="fw-bold">{{ __('center::messages.blade_0631') }}:</span>
+                                <span class="fw-bold">{{ number_format($sale->total_amount, 2) }} {{ __('center::sales.currency') }}</span>
                             </div>
                             <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
-                                <span class="text-muted">{{ __('center::messages.blade_0632') }}</span>
+                                <span class="text-muted">{{ __('center::messages.blade_0632') }}:</span>
                                 <span class="text-success fw-bold">{{ number_format($sale->paid_amount, 2) }} {{ __('center::sales.currency') }}</span>
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
@@ -181,14 +197,21 @@
                             <textarea name="notes" class="form-control rounded-3 shadow-none border" rows="2" placeholder="{{ __('center::messages.blade_0646') }}"></textarea>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-100 rounded-pill py-3 fw-bold shadow-sm">
-                            <i class="fas fa-plus-circle me-2"></i>{{ __('center::messages.blade_0642') }}</button>
+                        <button type="submit" class="btn btn-success w-100 rounded-pill py-2 fw-bold">
+                            <i class="fas fa-check-circle me-2"></i> {{ __('center::messages.blade_0645') }}
+                        </button>
                     </form>
+
+                    <!-- Electronic Payment Link -->
+                    <div class="mt-4 pt-3 border-top text-center">
+                        <p class="small text-muted mb-2"><i class="fas fa-link me-1"></i> رابط الدفع السريع (Online Pay):</p>
+                        <a href="{{ route('center.sales.checkout', $sale->id) }}" class="btn btn-outline-primary w-100 rounded-pill fs-6 py-2 fw-bold">
+                            <i class="fas fa-credit-card me-2"></i> الدفع باستخدام البطاقة
+                        </a>
+                    </div>
                 @else
-                    <div class="text-center py-4">
-                        <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px;">
-                            <i class="fas fa-check fa-2x"></i>
-                        </div>
+                    <div class="alert alert-success border-0 rounded-4 text-center p-4">
+                        <i class="fas fa-check-circle fa-2x mb-2 d-block mx-auto"></i>
                         <h5 class="fw-bold text-success">{{ __('center::messages.blade_0643') }}</h5>
                         <p class="text-muted small">{{ __('center::messages.blade_0644') }}</p>
                     </div>
