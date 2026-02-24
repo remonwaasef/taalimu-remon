@@ -209,11 +209,11 @@ class AnalyticsController extends Controller
             return $this->analyticsQuery->getMonthlyRevenue(12);
         });
 
-        // Recent Data for Sections
-        $recentExpenses = Expense::latest()->take(10)->get();
-        $recentCommissions = \App\Models\Commission::with(['instructor', 'sale'])->latest()->take(10)->get();
-        $recentDiscounts = Sale::where('discount_amount', '>', 0)->with('student')->latest()->take(10)->get();
-        $recentTaxes = Sale::where('tax_amount', '>', 0)->with('student')->latest()->take(10)->get();
+        // Summary Cards Data
+        $recentExpenses = Expense::latest()->take(5)->get();
+        $recentCommissions = \App\Models\Commission::with(['instructor', 'sale'])->latest()->take(5)->get();
+        $recentDiscounts = Sale::where('discount_amount', '>', 0)->with('student')->latest()->take(5)->get();
+        $recentTaxes = Sale::where('tax_amount', '>', 0)->with('student')->latest()->take(5)->get();
 
         return view('center::analytics.finance', compact(
             'totalRevenue', 'totalDue', 'totalDiscounts', 'totalTaxes', 
@@ -221,6 +221,30 @@ class AnalyticsController extends Controller
             'recentExpenses', 'recentCommissions', 'recentDiscounts', 'recentTaxes',
             'sales', 'monthlyRevenue'
         ));
+    }
+
+    public function commissions()
+    {
+        $this->authorize('viewAny', Sale::class);
+        $commissions = \App\Models\Commission::with(['instructor', 'sale'])->latest()->paginate(20);
+        $totalCommissions = \App\Models\Commission::sum('amount');
+        return view('center::analytics.finance.commissions', compact('commissions', 'totalCommissions'));
+    }
+
+    public function discounts()
+    {
+        $this->authorize('viewAny', Sale::class);
+        $discounts = Sale::where('discount_amount', '>', 0)->with('student')->latest()->paginate(20);
+        $totalDiscounts = Sale::sum('discount_amount');
+        return view('center::analytics.finance.discounts', compact('discounts', 'totalDiscounts'));
+    }
+
+    public function taxes()
+    {
+        $this->authorize('viewAny', Sale::class);
+        $taxes = Sale::where('tax_amount', '>', 0)->with('student')->latest()->paginate(20);
+        $totalTaxes = Sale::sum('tax_amount');
+        return view('center::analytics.finance.taxes', compact('taxes', 'totalTaxes'));
     }
 
     public function attendance()

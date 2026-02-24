@@ -552,6 +552,15 @@
                     <a href="{{ route('center.analytics.finance') }}" class="sidebar-sub-link {{ request()->routeIs('center.analytics.finance') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.financial_analytics') }}
                     </a>
+                    <a href="{{ route('center.analytics.commissions') }}" class="sidebar-sub-link {{ request()->routeIs('center.analytics.commissions') ? 'active' : '' }}">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.financial_commissions') }}
+                    </a>
+                    <a href="{{ route('center.analytics.taxes') }}" class="sidebar-sub-link {{ request()->routeIs('center.analytics.taxes') ? 'active' : '' }}">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.financial_taxes') }}
+                    </a>
+                    <a href="{{ route('center.analytics.discounts') }}" class="sidebar-sub-link {{ request()->routeIs('center.analytics.discounts') ? 'active' : '' }}">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.financial_discounts') }}
+                    </a>
                 </div>
             </div>
 
