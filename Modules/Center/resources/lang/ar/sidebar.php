@@ -45,6 +45,9 @@ return [
     'courses_groups' => 'الدورات',
     'student_accounts' => 'حسابات الطلاب',
     'financial_analytics' => 'التحليلات المالية',
+    'financial_commissions' => 'عمولات المعلمين',
+    'financial_discounts' => 'الخصومات الممنوحة',
+    'financial_taxes' => 'الضرائب المحصلة',
     'assets' => 'العهد والأصول',
     'school_management' => 'إدارة المدرسة',
 
