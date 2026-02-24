@@ -172,4 +172,48 @@ class CampusController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id) {}
+
+    /**
+     * TEMPORARY DIAGNOSTIC METHOD
+     */
+    public function debugStudentData()
+    {
+        $user = auth()->user();
+        $student = $user->student;
+        $tenant = app('tenant');
+        
+        $data = [
+            'auth_user' => [
+                'id' => $user->id,
+                'email' => $user->email,
+                'role' => $user->role,
+                'tenant_id' => $user->tenant_id,
+            ],
+            'student_profile' => $student ? [
+                'id' => $student->id,
+                'user_id' => $student->user_id,
+                'name' => $student->name,
+                'tenant_id' => $student->tenant_id,
+            ] : null,
+            'tenant' => [
+                'id' => $tenant->id,
+                'domain' => $tenant->domain,
+            ],
+            'feature_student_portal' => $tenant->hasFeature('student_portal') ? 'ENABLED' : 'DISABLED',
+            'enrollments' => \App\Models\Enrollment::where('user_id', $user->id)
+                ->with('course:id,title')
+                ->get()
+                ->map(fn($e) => [
+                    'id' => $e->id,
+                    'course_id' => $e->course_id,
+                    'course_title' => $e->course->title ?? 'N/A',
+                    'status' => $e->status,
+                    'user_id' => $e->user_id,
+                ]),
+            'all_enrollments_for_this_tenant_count' => \App\Models\Enrollment::where('tenant_id', $tenant->id)->count(),
+            'total_active_courses_count' => \App\Models\Course::where('tenant_id', $tenant->id)->where('status', 'active')->count(),
+        ];
+
+        return response()->json($data);
+    }
 }
