@@ -299,7 +299,7 @@ $tenantRoutes = function () {
             Route::get('analytics/instructors', [AnalyticsController::class, 'instructors'])->name('center.analytics.instructors');
             Route::get('analytics/courses', [AnalyticsController::class, 'courses'])->name('center.analytics.courses');
             
-            Route::middleware(['feature:financial_reports', 'throttle:10,1'])->group(function() {
+            Route::middleware(['feature:financial_reports', 'throttle:60,1'])->group(function() {
                 Route::get('analytics/finance', [AnalyticsController::class, 'finance'])->name('center.analytics.finance');
                 Route::get('analytics/finance/commissions', [AnalyticsController::class, 'commissions'])->name('center.analytics.commissions');
                 Route::get('analytics/finance/discounts', [AnalyticsController::class, 'discounts'])->name('center.analytics.discounts');
