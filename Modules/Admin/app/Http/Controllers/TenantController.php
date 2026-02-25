@@ -178,8 +178,10 @@ class TenantController extends Controller
      */
     public function stopImpersonating()
     {
+        $centralUrl = config('app.url');
+
         if (!session()->has('impersonator_id')) {
-            return redirect()->route('home');
+            return redirect()->to($centralUrl . '/admin')->with('error', 'لا توجد جلسة انتحال شخصية نشطة.');
         }
 
         $adminId = session()->pull('impersonator_id');
@@ -187,10 +189,10 @@ class TenantController extends Controller
 
         if ($admin) {
             auth()->login($admin);
-            return redirect()->route('admin.dashboard')->with('success', 'تم العودة للوحة تحكم المشرف بنجاح.');
+            return redirect()->to($centralUrl . '/admin/tenants')->with('success', 'تم العودة للوحة تحكم المشرف العام بنجاح.');
         }
 
-        return redirect()->route('home');
+        return redirect()->to($centralUrl);
     }
 
     /**

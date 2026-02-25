@@ -27,7 +27,12 @@ Route::prefix('admin')->name('admin.')->group(function() {
             ->name('login.submit');
     });
 
-    // Protected Routes
+    // Protected Routes (General Auth)
+    Route::middleware(['auth'])->group(function() {
+        Route::get('impersonate/stop', [TenantController::class, 'stopImpersonating'])->name('impersonate.stop');
+    });
+
+    // Protected Routes (Super Admin Only)
     Route::middleware(['auth', 'role:super_admin'])->group(function() {
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
         
@@ -35,7 +40,6 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::resource('tenants', TenantController::class);
         Route::post('tenants/{tenant}/toggle-status', [TenantController::class, 'toggleStatus'])->name('tenants.toggle-status');
         Route::get('tenants/{tenant}/impersonate', [TenantController::class, 'impersonate'])->name('tenants.impersonate');
-        Route::get('impersonate/stop', [TenantController::class, 'stopImpersonating'])->name('impersonate.stop');
         Route::post('tenants/{tenant}/notes', [TenantController::class, 'updateNotes'])->name('tenants.notes');
         Route::post('tenants/{tenant}/reset-password', [TenantController::class, 'resetPassword'])->name('tenants.reset-password');
         
