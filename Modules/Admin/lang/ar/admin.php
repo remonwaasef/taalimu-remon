@@ -6,6 +6,7 @@ return [
         'stop' => 'العودة للوحة تحكم المشرف',
     ],
     'egp' => 'ج.م',
+    'view_all' => 'عرض الكل',
     'sidebar' => [
         'dashboard' => 'الرئيسية',
         'centers' => 'المراكز التعليمية',
@@ -251,7 +252,10 @@ return [
             'students' => 'الطلاب',
             'status' => 'الحالة',
             'actions' => 'إجراءات',
-            'joined_on' => 'انضم في :date',
+            'joined_on' => 'تاريخ الانضمام',
+            'joined_on_format' => 'انضم في :date',
+            'name' => 'اسم المركز',
+            'domain' => 'النطاق',
             'student_unit' => 'طالب',
             'not_specified' => 'غير محدد',
             'active' => 'نشط',
@@ -308,6 +312,13 @@ return [
             'delete' => 'حذف الاشتراك',
             'delete_confirm' => 'هل أنت متأكد من حذف هذا الاشتراك؟',
         ],
+    ],
+    'tickets' => [
+        'subject' => 'الموضوع',
+        'user' => 'المستخدم',
+        'center' => 'المركز',
+        'date' => 'التاريخ',
+        'status' => 'الحالة',
     ],
     'consent_report' => [
         'title' => 'تقارير موافقات ملفات تعريف الارتباط',

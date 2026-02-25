@@ -96,7 +96,7 @@
         
         /* Sidebar Luxury Design */
         .sidebar {
-            min-height: 100vh;
+            height: 100vh;
             width: var(--sidebar-width);
             background: var(--sidebar-bg) !important;
             color: var(--sidebar-text);
@@ -107,6 +107,7 @@
             box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
             border-left: 1px solid var(--sidebar-border);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
         }
         
         .sidebar .border-bottom {
