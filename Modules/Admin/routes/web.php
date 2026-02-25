@@ -5,6 +5,7 @@ use Modules\Admin\Http\Controllers\TenantController;
 use Modules\Admin\Http\Controllers\AuthController;
 use Modules\Admin\Http\Controllers\SettingsController;
 use Modules\Admin\Http\Controllers\OperationIssueController;
+use Modules\Admin\Http\Controllers\AdminUserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -80,6 +81,9 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::delete('coupons/{coupon}', [\Modules\Admin\Http\Controllers\CouponController::class, 'destroy'])->name('coupons.destroy');
         // Roles & Permissions
         Route::resource('roles', \Modules\Admin\Http\Controllers\RoleController::class);
+
+        // Admin Users (central admin team)
+        Route::resource('users', AdminUserController::class)->except(['show']);
 
         // Operation Issues
         Route::prefix('operation-issues')->name('operation-issues.')->group(function() {

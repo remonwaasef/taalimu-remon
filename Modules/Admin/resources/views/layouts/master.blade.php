@@ -444,6 +444,12 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                    <span>👥</span>
+                    <span>فريق الإدارة</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="{{ route('consent.report') }}" class="nav-link {{ request()->routeIs('consent.report') ? 'active' : '' }}">
                     <span>🍪</span>
                     <span>{{ __('admin::admin.sidebar.cookie_reports') }}</span>
