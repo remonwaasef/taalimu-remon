@@ -27,10 +27,13 @@ Route::prefix('admin')->name('admin.')->group(function() {
             ->name('login.submit');
     });
 
-    // Protected Routes (General Auth)
+    // Protected Routes (General Auth - accessible while impersonating)
     Route::middleware(['auth'])->group(function() {
         Route::get('impersonate/stop', [TenantController::class, 'stopImpersonating'])->name('impersonate.stop');
     });
+
+    // Public impersonation return (must be before auth middleware - uses one-time token)
+    Route::get('impersonate/return', [TenantController::class, 'returnFromImpersonation'])->name('impersonate.return');
 
     // Protected Routes (Super Admin Only)
     Route::middleware(['auth', 'role:super_admin'])->group(function() {

@@ -174,7 +174,9 @@ class TenantController extends Controller
     }
 
     /**
-     * Stop impersonating a tenant admin and return to super admin.
+     * Stop impersonating a tenant admin.
+     * Uses a one-time token stored in cache to perform the login on the CENTRAL domain.
+     * This avoids the cross-domain session problem (sessions are per-domain).
      */
     public function stopImpersonating()
     {
@@ -185,14 +187,50 @@ class TenantController extends Controller
         }
 
         $adminId = session()->pull('impersonator_id');
-        $admin = \App\Models\User::find($adminId);
 
-        if ($admin) {
-            auth()->login($admin);
-            return redirect()->to($centralUrl . '/admin/tenants')->with('success', 'تم العودة للوحة تحكم المشرف العام بنجاح.');
+        // Log out the impersonated user from this (tenant) domain's session
+        auth()->logout();
+
+        // Generate a secure one-time token and store it in cache for 2 minutes
+        $token = \Illuminate\Support\Str::random(64);
+        \Illuminate\Support\Facades\Cache::put("impersonation_return:{$token}", $adminId, 120);
+
+        // Redirect to the central domain's return route with the token
+        // The admin will be authenticated THERE, not on the tenant subdomain.
+        return redirect()->to($centralUrl . '/admin/impersonate/return?token=' . $token);
+    }
+
+    /**
+     * Complete the impersonation stop by authenticating the admin on the central domain.
+     * This is called on taalimu.com (central domain), not on the tenant subdomain.
+     */
+    public function returnFromImpersonation(\Illuminate\Http\Request $request)
+    {
+        $token = $request->query('token');
+        $centralUrl = config('app.url');
+
+        if (!$token) {
+            return redirect()->to($centralUrl . '/admin/login')->with('error', 'رمز العودة غير صالح.');
         }
 
-        return redirect()->to($centralUrl);
+        $cacheKey = "impersonation_return:{$token}";
+        $adminId = \Illuminate\Support\Facades\Cache::pull($cacheKey);
+
+        if (!$adminId) {
+            return redirect()->to($centralUrl . '/admin/login')->with('error', 'انتهت صلاحية رمز العودة أو تم استخدامه مسبقاً.');
+        }
+
+        $admin = \App\Models\User::find($adminId);
+
+        if (!$admin) {
+            return redirect()->to($centralUrl . '/admin/login')->with('error', 'المشرف غير موجود.');
+        }
+
+        // Login the admin on the CENTRAL domain's session
+        auth()->login($admin);
+
+        return redirect()->to($centralUrl . '/admin/tenants')
+            ->with('success', 'تم العودة للوحة تحكم المشرف العام بنجاح.');
     }
 
     /**
