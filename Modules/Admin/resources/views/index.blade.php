@@ -127,6 +127,64 @@
             </div>
         </div>
     </div>
+    <!-- Subscription Analytics -->
+    <div class="mb-5">
+        <h5 class="fw-bold mb-4 text-dark d-flex align-items-center">
+            <i class="bi bi-pie-chart-fill me-2 text-primary"></i>
+            تحليل باقات الاشتراك
+        </h5>
+        <div class="row g-4">
+            @foreach($planAnalytics as $plan)
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+                        <div class="card-body p-4 position-relative">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2">
+                                    {{ $plan['name'] }}
+                                </span>
+                                @if($plan['badge'])
+                                    <span class="badge bg-warning text-dark rounded-pill px-2" style="font-size: 0.7rem;">
+                                        {{ $plan['badge'] }}
+                                    </span>
+                                @endif
+                            </div>
+                            
+                            <div class="row g-0 align-items-center">
+                                <div class="col-6 border-end">
+                                    <div class="px-2">
+                                        <div class="text-muted small mb-1">المراكز</div>
+                                        <div class="h4 fw-bold mb-0 text-dark">{{ $plan['centers_count'] }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="px-2 text-end">
+                                        <div class="text-muted small mb-1">صافي الأرباح</div>
+                                        <div class="h4 fw-bold mb-0 text-success">
+                                            {{ number_format($plan['total_profits'], 0) }}
+                                            <span class="small fw-normal text-muted" style="font-size: 0.7rem;">{{ __('admin::admin.egp') }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 pt-3 border-top">
+                                <div class="progress" style="height: 6px;">
+                                    @php
+                                        $percentage = $totalTenants > 0 ? ($plan['centers_count'] / $totalTenants) * 100 : 0;
+                                    @endphp
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $percentage }}%" aria-valuenow="{{ $percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-2">
+                                    <small class="text-muted">نسبة الاستحواذ</small>
+                                    <small class="fw-bold">{{ number_format($percentage, 1) }}%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
 
     <!-- Recent Tenants -->
     <div class="card border-0 shadow-sm rounded-4">

@@ -33,6 +33,34 @@ class AdminController extends Controller
         // Recent Tickets
         $recentTickets = \App\Models\Ticket::with('user', 'tenant')->latest()->take(5)->get();
 
+        // Subscription Analytics
+        $planAnalytics = \App\Models\Package::where('is_active', true)
+            ->withCount(['features'])
+            ->get()
+            ->map(function($package) {
+                $activeSubIds = \App\Models\Subscription::where('status', 'active')
+                    ->where(function($q) use ($package) {
+                        $q->where('stripe_price', $package->stripe_price_id)
+                          ->orWhere('package_id', $package->id);
+                    })
+                    ->pluck('id');
+
+                $centersCount = \App\Models\Tenant::whereHas('subscriptions', function($q) use ($activeSubIds) {
+                    $q->whereIn('id', $activeSubIds)->where('status', 'active');
+                })->count();
+
+                $totalProfits = \App\Models\Invoice::whereIn('subscription_id', $activeSubIds)
+                    ->where('status', 'paid')
+                    ->sum('amount');
+
+                return [
+                    'name' => $package->name,
+                    'centers_count' => $centersCount,
+                    'total_profits' => $totalProfits,
+                    'badge' => $package->badge,
+                ];
+            });
+
         return view('admin::index', compact(
             'totalTenants', 
             'activeTenants', 
@@ -42,7 +70,8 @@ class AdminController extends Controller
             'thisMonthRevenue',
             'openTickets',
             'totalTickets',
-            'recentTickets'
+            'recentTickets',
+            'planAnalytics'
         ));
     }
 
