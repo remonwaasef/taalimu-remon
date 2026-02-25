@@ -25,6 +25,7 @@ use Modules\Center\Http\Controllers\LeaderboardController;
 use Modules\Center\Http\Controllers\QuestionBankController;
 use Modules\Center\Http\Controllers\AssetController;
 use Modules\Center\Http\Controllers\UserController;
+use Modules\Center\Http\Controllers\CoursePlayerController;
 
 /*
 |--------------------------------------------------------------------------
