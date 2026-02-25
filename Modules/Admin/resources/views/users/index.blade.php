@@ -105,7 +105,7 @@
                                            class="btn btn-light btn-sm rounded-pill px-3 border">
                                             <i class="fas fa-edit text-warning me-1"></i> تعديل
                                         </a>
-                                        @if($user->id !== auth()->id() && $user->role !== 'super_admin' || (User::whereNull('tenant_id')->where('role','super_admin')->count() > 1))
+                                        @if($user->id !== auth()->id() && $user->role !== 'super_admin' || (\App\Models\User::whereNull('tenant_id')->where('role','super_admin')->count() > 1))
                                         <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline"
                                               onsubmit="return confirm('هل أنت متأكد من حذف هذا المستخدم؟')">
                                             @csrf
