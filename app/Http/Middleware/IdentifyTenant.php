@@ -81,9 +81,8 @@ class IdentifyTenant
             if (str_ends_with($host, '.' . $mainHost)) {
                 $subdomain = str_replace('.' . $mainHost, '', $host);
             } else {
-                // Fallback for cases where it's not following the standard pattern
-                $parts = explode('.', $host);
-                $subdomain = $parts[0];
+                // No valid subdomain found for the main host
+                return $next($request);
             }
 
             // Avoid identifying common prefixes as tenants

@@ -27,12 +27,11 @@ class RedirectIfAuthenticated
                 $host = $request->getHost();
                 $mainHost = config('app.tenant_domain') ?: parse_url(config('app.url'), PHP_URL_HOST);
 
-                // Check if we are on a tenant subdomain (e.g. ra3y.localhost)
-                if ($host !== $mainHost && $host !== 'www.' . $mainHost && $host !== 'localhost') {
-                    $parts = explode('.', $host);
-                    $subdomain = $parts[0];
+                // Strictly check if it's a subdomain of the main host
+                if (str_ends_with($host, '.' . $mainHost)) {
+                    $subdomain = str_replace('.' . $mainHost, '', $host);
                     
-                    // Avoid identifying common prefixes or the main domain parts as tenants
+                    // Avoid identifying common prefixes as tenants
                     if (!in_array($subdomain, ['www', 'admin', 'api', 'app'])) {
                         $user = Auth::user();
                         if ($user->role === 'student') {
