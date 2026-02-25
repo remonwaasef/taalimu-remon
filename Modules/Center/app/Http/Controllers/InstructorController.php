@@ -87,6 +87,12 @@ class InstructorController extends Controller
             auth()->user()->name // Created By
         ));
 
+        // Smart Onboarding Routing: If this is the first instructor, guide them to create a course
+        $instructorCount = Instructor::where('tenant_id', app('tenant')->id)->count();
+        if ($instructorCount === 1) {
+            return redirect()->route('center.courses.create')->with('success', 'تمت إضافة المدرس بنجاح! 🎉 خطوتك التالية هي إنشاء أول دورة تعليمية لربطها به.');
+        }
+
         return redirect()->route('center.instructors.index')->with('success', __('center::messages.msg_049'));
     }
 
