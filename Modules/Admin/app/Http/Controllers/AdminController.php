@@ -20,11 +20,11 @@ class AdminController extends Controller
                                                 ->count();
         
         // Financial Metrics
-        $totalRevenue = \App\Models\Sale::where('status', 'paid')->sum('paid_amount');
-        $thisMonthRevenue = \App\Models\Sale::where('status', 'paid')
+        $totalRevenue = \App\Models\Invoice::where('status', 'paid')->sum('amount');
+        $thisMonthRevenue = \App\Models\Invoice::where('status', 'paid')
                                             ->whereMonth('created_at', now()->month)
                                             ->whereYear('created_at', now()->year)
-                                            ->sum('paid_amount');
+                                            ->sum('amount');
 
         // Support Metrics
         $openTickets = \App\Models\Ticket::where('status', '!=', 'closed')->count();
