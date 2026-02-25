@@ -8,9 +8,14 @@
             <h2 class="fw-bold mb-1">{{ __('admin::admin.tenants.title') }}</h2>
             <p class="text-muted mb-0">{{ __('admin::admin.tenants.subtitle') }}</p>
         </div>
-        <a href="{{ route('admin.tenants.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
-            <i class="bi bi-plus-lg me-2"></i> {{ __('admin::admin.tenants.add_new') }}
-        </a>
+        <div class="d-flex gap-2">
+            <a href="{{ route('admin.settings.index') }}#plans" class="btn btn-outline-primary rounded-pill px-4 shadow-sm">
+                <i class="bi bi-patch-check me-2"></i> {{ __('admin::admin.subscriptions.plans_pricing') ?? 'الخطط والأسعار' }}
+            </a>
+            <a href="{{ route('admin.tenants.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                <i class="bi bi-plus-lg me-2"></i> {{ __('admin::admin.tenants.add_new') }}
+            </a>
+        </div>
     </div>
 
     <!-- Stats Row -->
@@ -35,8 +40,8 @@
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <div class="text-muted x-small fw-bold text-uppercase mb-1">{{ __('admin::admin.tenants.stats.active') }}</div>
-                            <div class="h3 fw-bold mb-0 text-success">{{ $stats['active_count'] }}</div>
+                            <div class="text-muted x-small fw-bold text-uppercase mb-1">الاشتراكات النشطة</div>
+                            <div class="h3 fw-bold mb-0 text-success">{{ $stats['active_subscriptions'] }}</div>
                         </div>
                         <div class="icon-box bg-success bg-opacity-10 text-success rounded-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
                             <i class="bi bi-check-circle fs-5"></i>
@@ -50,11 +55,11 @@
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <div class="text-muted x-small fw-bold text-uppercase mb-1">{{ __('admin::admin.tenants.stats.inactive') }}</div>
-                            <div class="h3 fw-bold mb-0 text-warning">{{ $stats['inactive_count'] }}</div>
+                            <div class="text-muted x-small fw-bold text-uppercase mb-1">تنتهي قريباً</div>
+                            <div class="h3 fw-bold mb-0 text-warning">{{ $stats['expiring_soon'] }}</div>
                         </div>
                         <div class="icon-box bg-warning bg-opacity-10 text-warning rounded-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
-                            <i class="bi bi-pause-circle fs-5"></i>
+                            <i class="bi bi-hourglass-split fs-5"></i>
                         </div>
                     </div>
                 </div>
@@ -81,24 +86,39 @@
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
         <div class="card-header bg-white border-0 p-4">
             <form action="{{ route('admin.tenants.index') }}" method="GET" class="row g-3">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="input-group">
                         <span class="input-group-text bg-light border-0 ps-3"><i class="bi bi-search text-muted"></i></span>
-                        <input type="text" name="search" class="form-control" placeholder="{{ __('admin::admin.tenants.filters.search_placeholder') }}" value="{{ request('search') }}">
+                        <input type="text" name="search" class="form-control bg-light border-0" placeholder="{{ __('admin::admin.tenants.filters.search_placeholder') }}" value="{{ request('search') }}">
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
+                    <select name="package_id" class="form-select bg-light border-0 x-small" onchange="this.form.submit()">
+                        <option value="">كل الباقات</option>
+                        @foreach($packages as $package)
+                            <option value="{{ $package->id }}" {{ request('package_id') == $package->id ? 'selected' : '' }}>{{ $package->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="subscription_status" class="form-select bg-light border-0 x-small" onchange="this.form.submit()">
+                        <option value="">كل الاشتراكات</option>
+                        <option value="active" {{ request('subscription_status') == 'active' ? 'selected' : '' }}>نشط</option>
+                        <option value="expired" {{ request('subscription_status') == 'expired' ? 'selected' : '' }}>منتهي</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
                     <select name="status" class="form-select bg-light border-0 x-small" onchange="this.form.submit()">
                         <option value="">{{ __('admin::admin.tenants.filters.all_statuses') }}</option>
                         <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>{{ __('admin::admin.tenants.filters.active') }}</option>
                         <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>{{ __('admin::admin.tenants.filters.inactive') }}</option>
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                     <button type="submit" class="btn btn-dark rounded-pill w-100 x-small fw-bold">{{ __('admin::admin.tenants.filters.filter') }}</button>
                 </div>
-                @if(request()->anyFilled(['search', 'status']))
-                    <div class="col-md-2">
+                @if(request()->anyFilled(['search', 'status', 'package_id', 'subscription_status']))
+                    <div class="col-md-1">
                         <a href="{{ route('admin.tenants.index') }}" class="btn btn-outline-secondary rounded-pill w-100 x-small border-dashed">{{ __('admin::admin.tenants.filters.reset') }}</a>
                     </div>
                 @endif
@@ -110,7 +130,7 @@
                     <thead class="bg-light">
                         <tr class="text-secondary small text-uppercase">
                             <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.center_admin') }}</th>
-                            <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.domain_activity') }}</th>
+                            <th class="px-4 py-3 border-0">الاشتراك والفوترة</th>
                             <th class="px-4 py-3 border-0 text-center">{{ __('admin::admin.tenants.table.students') }}</th>
                             <th class="px-4 py-3 border-0 text-center">{{ __('admin::admin.tenants.table.status') }}</th>
                             <th class="px-4 py-3 border-0 text-end">{{ __('admin::admin.tenants.table.actions') }}</th>
@@ -123,6 +143,10 @@
                                 $admin = $tenant->users->first();
                                 $statusClass = $tenant->status == 'active' ? 'success' : 'danger';
                                 $statusLabel = $tenant->status == 'active' ? __('admin::admin.tenants.table.active') : __('admin::admin.tenants.table.inactive');
+                                
+                                $subscription = $tenant->currentSubscription;
+                                $isExpired = $subscription && $subscription->ends_at && $subscription->ends_at->isPast();
+                                $planName = $subscription && $subscription->package ? $subscription->package->name : ($subscription ? $subscription->type_label : 'بدون اشتراك');
                             @endphp
                             <tr>
                                 <td class="ps-4">
@@ -146,16 +170,35 @@
                                             <span class="text-muted x-small">
                                                 <i class="bi bi-person me-1"></i> {{ $admin->name ?? __('admin::admin.tenants.table.not_specified') }}
                                             </span>
+                                            <div class="text-muted x-small mt-1">
+                                                <i class="bi bi-link-45deg"></i> {{ $tenant->domain }}
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="d-flex flex-column">
-                                        <div class="text-muted small mb-1">
-                                            <i class="bi bi-link-45deg"></i> {{ $tenant->domain }}
+                                    @if($subscription)
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center gap-2 mb-1">
+                                                <span class="fw-bold text-dark small">{{ $planName }}</span>
+                                                @if($isExpired)
+                                                    <span class="badge bg-danger bg-opacity-10 text-danger x-small rounded-pill">منتهي</span>
+                                                @else
+                                                    <span class="badge bg-success bg-opacity-10 text-success x-small rounded-pill">نشط</span>
+                                                @endif
+                                            </div>
+                                            <div class="text-muted x-small">
+                                                @if($subscription->ends_at)
+                                                    تجديد: {{ $subscription->ends_at->format('Y-m-d') }}
+                                                @else
+                                                    اشتراك مستمر
+                                                @endif
+                                                - {{ number_format($subscription->total_amount ?: ($subscription->package->price ?? 0), 0) }} {{ __('admin::admin.egp') }}
+                                            </div>
                                         </div>
-                                        <div class="text-muted small">{{ __('admin::admin.tenants.table.joined_on', ['date' => $tenant->created_at->format('Y-m-d')]) }}</div>
-                                    </div>
+                                    @else
+                                        <span class="text-muted small">لا يوجد اشتراك نشط</span>
+                                    @endif
                                 </td>
                                 <td class="text-center">
                                     <div class="d-flex flex-column align-items-center">
@@ -174,9 +217,12 @@
                                         <button class="btn btn-light btn-sm rounded-circle shadow-none" type="button" data-bs-toggle="dropdown">
                                             <i class="bi bi-three-dots-vertical"></i>
                                         </button>
-                                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 p-2" style="min-width: 180px;">
+                                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 p-2" style="min-width: 200px;">
                                             <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('admin.tenants.show', $tenant->id) }}"><i class="bi bi-eye me-2 text-primary"></i> {{ __('admin::admin.tenants.actions.view_details') }}</a></li>
                                             <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('admin.tenants.edit', $tenant->id) }}"><i class="bi bi-pencil me-2 text-info"></i> {{ __('admin::admin.tenants.actions.edit_data') }}</a></li>
+                                            @if($subscription)
+                                                <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('admin.subscriptions.edit', $subscription->id) }}"><i class="bi bi-card-checklist me-2 text-warning"></i> تعديل الاشتراك</a></li>
+                                            @endif
                                             <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('admin.tenants.impersonate', $tenant->id) }}"><i class="bi bi-box-arrow-in-right me-2 text-success"></i> {{ __('admin::admin.tenants.actions.impersonate') }}</a></li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>

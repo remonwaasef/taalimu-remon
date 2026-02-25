@@ -21,6 +21,7 @@ class TenantController extends Controller
         $this->authorize('viewAny', Tenant::class);
         $query = Tenant::query();
 
+        // Basic Filters
         if ($request->filled('search')) {
             $search = \App\Helpers\QueryHelper::escapeLike($request->search);
             $query->where(function($q) use ($search) {
@@ -33,17 +34,48 @@ class TenantController extends Controller
             $query->where('status', $request->status);
         }
 
+        // Subscription Filters
+        if ($request->filled('subscription_status')) {
+            if ($request->subscription_status === 'active') {
+                $query->whereHas('currentSubscription');
+            } elseif ($request->subscription_status === 'expired') {
+                $query->whereDoesntHave('currentSubscription', function($q) {
+                    $q->where('status', 'active')->where(function($sq) {
+                        $sq->whereNull('ends_at')->orWhere('ends_at', '>', now());
+                    });
+                });
+            }
+        }
+
+        if ($request->filled('package_id')) {
+            $query->whereHas('subscriptions', function($q) use ($request) {
+                $q->where('package_id', $request->package_id)->orWhere('stripe_price', $request->package_id);
+            });
+        }
+
         // Statistics
         $stats = [
             'total_count' => Tenant::count(),
             'active_count' => Tenant::where('status', 'active')->count(),
             'inactive_count' => Tenant::where('status', 'inactive')->count(),
             'total_students' => \App\Models\Student::count(),
+            'active_subscriptions' => \App\Models\Subscription::where('status', 'active')
+                ->where(function($q) {
+                    $q->whereNull('ends_at')->orWhere('ends_at', '>', now());
+                })->count(),
+            'expiring_soon' => \App\Models\Subscription::whereNotNull('ends_at')
+                ->whereBetween('ends_at', [now(), now()->addDays(7)])
+                ->count(),
         ];
 
-        $tenants = $query->with('users')->latest()->paginate(10)->withQueryString();
+        $tenants = $query->with(['users', 'currentSubscription.package'])
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
 
-        return view('admin::tenants.index', compact('tenants', 'stats'));
+        $packages = \App\Models\Package::where('is_active', true)->get();
+
+        return view('admin::tenants.index', compact('tenants', 'stats', 'packages'));
     }
 
     /**

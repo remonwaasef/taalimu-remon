@@ -401,15 +401,9 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('admin.tenants.index') }}" class="nav-link {{ request()->routeIs('admin.tenants.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.tenants.index') }}" class="nav-link {{ request()->routeIs('admin.tenants.*') || request()->routeIs('admin.subscriptions.*') ? 'active' : '' }}">
                     <span>🏢</span>
-                    <span>{{ __('admin::admin.sidebar.centers') }}</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('admin.subscriptions.index') }}" class="nav-link {{ request()->routeIs('admin.subscriptions.*') ? 'active' : '' }}">
-                    <span>💰</span>
-                    <span>{{ __('admin::admin.sidebar.subscriptions') }}</span>
+                    <span>إدارة المراكز والاشتراكات</span>
                 </a>
             </li>
 
