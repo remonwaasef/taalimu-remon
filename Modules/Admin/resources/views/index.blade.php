@@ -140,7 +140,7 @@
                     <tr>
                         <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.name') }}</th>
                         <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.domain') }}</th>
-                        <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.joined_on_title') }}</th>
+                        <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.joined_on') }}</th>
                         <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.status') }}</th>
                     </tr>
                 </thead>
