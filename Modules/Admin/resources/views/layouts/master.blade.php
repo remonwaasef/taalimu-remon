@@ -457,29 +457,6 @@
             </li>
         </ul>
 
-        <div class="p-3 border-top mt-auto" style="border-top: 1px solid var(--sidebar-border) !important;">
-            <div class="dropup">
-                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
-                    <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center text-white fw-bold me-2" style="width: 32px; height: 32px;">
-                        {{ substr(auth()->user()->name ?? 'Admin', 0, 1) }}
-                    </div>
-                    <span class="ms-2 fw-bold">{{ auth()->user()->name ?? __('admin::admin.sidebar.admin') }}</span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                    <li><a class="dropdown-item" href="#">{{ __('admin::admin.sidebar.profile') }}</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                        <form action="{{ route('admin.logout') }}" method="POST" id="admin-logout-form" class="d-none">
-                            @csrf
-                        </form>
-                        <a class="dropdown-item text-danger" href="{{ route('admin.logout') }}" 
-                           onclick="event.preventDefault(); document.getElementById('admin-logout-form').submit();">
-                            <i class="bi bi-box-arrow-right me-2"></i> {{ __('admin.sidebar.logout') }}
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
     </aside>
 
     <!-- Main Content -->
@@ -522,6 +499,35 @@
                 </div>
 
                 <!-- Quick Search or Notification could go here -->
+
+                <!-- User Dropdown in Header -->
+                <div class="dropdown user-dropdown">
+                    <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle py-1 px-2 rounded-pill hover-bg-light" id="dropdownUserHeader" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center text-white fw-bold shadow-sm" style="width: 35px; height: 35px; background: var(--gradient-primary) !important;">
+                            {{ substr(auth()->user()->name ?? 'Admin', 0, 1) }}
+                        </div>
+                        <span class="ms-2 fw-bold d-none d-md-inline">{{ auth()->user()->name ?? __('admin::admin.sidebar.admin') }}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-2 mt-2 rounded-4" aria-labelledby="dropdownUserHeader">
+                        <li class="px-3 py-2 border-bottom mb-2 d-md-none">
+                            <div class="fw-bold">{{ auth()->user()->name }}</div>
+                            <div class="text-muted small">{{ auth()->user()->email }}</div>
+                        </li>
+                        <li><a class="dropdown-item py-2 px-3 rounded-3 mx-2 w-auto" href="#">
+                            <i class="bi bi-person me-2"></i> {{ __('admin::admin.sidebar.profile') }}
+                        </a></li>
+                        <li><hr class="dropdown-divider mx-2"></li>
+                        <li>
+                            <form action="{{ route('admin.logout') }}" method="POST" id="admin-logout-form-header" class="d-none">
+                                @csrf
+                            </form>
+                            <a class="dropdown-item text-danger py-2 px-3 rounded-3 mx-2 w-auto" href="{{ route('admin.logout') }}" 
+                               onclick="event.preventDefault(); document.getElementById('admin-logout-form-header').submit();">
+                                <i class="bi bi-box-arrow-right me-2"></i> {{ __('admin.sidebar.logout') }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </nav>
 
