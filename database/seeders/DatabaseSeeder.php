@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesAndPermissionsSeeder::class,
             \Database\Seeders\CenterRolesSeeder::class, // Ensure Center Roles are seeded
+            \Modules\Admin\Database\Seeders\AdminDatabaseSeeder::class, // Admin Panel Specific Roles
             SuperAdminSeeder::class,
             PackageSeeder::class,
             FullSystemDemoSeeder::class,
