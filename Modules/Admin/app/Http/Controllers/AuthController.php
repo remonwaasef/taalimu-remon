@@ -23,8 +23,8 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            // Check if user is admin
-            if (auth()->user()->role !== 'super_admin') {
+            // Check if user is admin (Super Admin)
+            if (!in_array(auth()->user()->role, ['super_admin', 'admin'])) {
                 Auth::logout();
                 return back()->withErrors([
                     'email' => 'You do not have access to this area.',
