@@ -78,6 +78,12 @@ class CourseController extends Controller
 
         $this->courseService->createCourse(CourseData::fromArray($data));
 
+        // Smart Onboarding Routing: If this is the first course, guide them to register a student
+        $courseCount = Course::where('tenant_id', app('tenant')->id)->count();
+        if ($courseCount === 1) {
+            return redirect()->route('center.students.create')->with('success', 'عمل رائع! تم إنشاء دورتك الأولى. الآن، دعنا نُسجل أول طالب للبدء.');
+        }
+
         return redirect()->route('center.courses.index')->with('success', __('center::messages.msg_026'));
     }
 

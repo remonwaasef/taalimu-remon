@@ -87,6 +87,12 @@ class StudentController extends Controller
         session()->flash('student_phone', $result['student']->phone);
         session()->flash('student_email', $result['student']->email);
 
+        // Smart Onboarding Routing: If this is the first student, guide them back to the dashboard
+        $studentCount = Student::where('tenant_id', app('tenant')->id)->count();
+        if ($studentCount === 1) {
+            return redirect()->route('center.dashboard')->with('success', 'مرحباً بك! اكتمل الإعداد الأساسي لمركزك بنجاح. يمكنك الآن البدء بتسجيل الحضور وتحصيل الرسوم.');
+        }
+
         return redirect()->route('center.students.index', ['tenant' => app('tenant')->domain])->with('success', __('center::messages.msg_081'));
     }
 
