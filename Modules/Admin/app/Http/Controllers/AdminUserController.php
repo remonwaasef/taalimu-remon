@@ -169,9 +169,16 @@ class AdminUserController extends Controller
 
     /**
      * The roles that are considered admin-level (central, not tenant-specific).
+     * Dynamically fetched from DB: all roles with tenant_id = null, excluding center-only roles.
      */
     protected function adminRoles(): array
     {
-        return ['super_admin', 'support_agent', 'finance_manager', 'content_manager'];
+        // Center-only roles should NOT be assignable to admin panel users
+        $centerOnlyRoles = ['center_admin', 'instructor', 'student', 'secretary', 'accountant', 'staff'];
+
+        return Role::whereNull('tenant_id')
+            ->whereNotIn('name', $centerOnlyRoles)
+            ->pluck('name')
+            ->toArray();
     }
 }
