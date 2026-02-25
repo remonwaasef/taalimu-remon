@@ -458,8 +458,8 @@
         </ul>
 
         <div class="p-3 border-top mt-auto" style="border-top: 1px solid var(--sidebar-border) !important;">
-            <div class="dropdown">
-                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="dropup">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
                     <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center text-white fw-bold me-2" style="width: 32px; height: 32px;">
                         {{ substr(auth()->user()->name ?? 'Admin', 0, 1) }}
                     </div>
@@ -602,24 +602,12 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Initialize all Bootstrap dropdowns after DOM is ready
+        // Use Bootstrap's native event-based initialization. 
+        // No need to manually new bootstrap.Dropdown() if data-bs-toggle is present.
+        // But we add a small fix for Popper positioning in specific containers.
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Bootstrap dropdowns
-            var dropdownElementList = document.querySelectorAll('[data-bs-toggle="dropdown"]');
-            dropdownElementList.forEach(function(dropdownToggleEl) {
-                new bootstrap.Dropdown(dropdownToggleEl);
-            });
-            
-            // Fallback: Manual click handler for lang dropdown
-            var langBtn = document.getElementById('langDropdown');
-            if (langBtn) {
-                langBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    var dropdown = bootstrap.Dropdown.getOrCreateInstance(this);
-                    dropdown.toggle();
-                });
-            }
+            // Dropdowns are auto-initialized by Bootstrap's data-api.
+            // If any specific fix is needed for mobile/sidebar clipping, popper config can be added here globally.
         });
     </script>
     @stack('scripts')
