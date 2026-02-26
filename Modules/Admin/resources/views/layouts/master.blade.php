@@ -606,14 +606,11 @@
             });
         @endif
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Use Bootstrap's native event-based initialization. 
-        // No need to manually new bootstrap.Dropdown() if data-bs-toggle is present.
-        // But we add a small fix for Popper positioning in specific containers.
+        // Bootstrap dropdowns and other components are auto-initialized by the data-api
+        // contained in the Vite-bundled bootstrap JS (app.js).
         document.addEventListener('DOMContentLoaded', function() {
-            // Dropdowns are auto-initialized by Bootstrap's data-api.
-            // If any specific fix is needed for mobile/sidebar clipping, popper config can be added here globally.
+            // Manual fixes for specific UI edge cases can go here
         });
     </script>
     @stack('scripts')
