@@ -74,7 +74,27 @@ class SubscriptionController extends Controller
             return back()->with('error', __('center::messages.msg_087'));
         }
 
-        // Check for Demo Mode or Missing Keys
+        // 1. Handle Free Trial locally (bypass Stripe)
+        if ($package->slug === 'free-trial' || $package->stripe_price_id === 'price_free' || $package->price <= 0) {
+            \App\Models\Subscription::create([
+                'tenant_id' => $tenant->id,
+                'name' => 'default',
+                'stripe_id' => 'sub_local_' . \Illuminate\Support\Str::random(10),
+                'stripe_status' => 'active',
+                'stripe_price' => $package->stripe_price_id ?? 'price_free',
+                'quantity' => 1,
+                'ends_at' => now()->addDays(14),
+                'status' => 'active',
+                'billing_cycle' => 'monthly',
+                'base_price' => 0,
+                'total_amount' => 0,
+                'discount_amount' => 0,
+            ]);
+
+            return redirect()->route('center.subscription.success');
+        }
+
+        // 2. Check for Demo Mode or Missing Keys
         $stripeKey = config('services.stripe.secret');
         $isDemo = config('services.stripe.demo_mode') || empty($stripeKey);
 

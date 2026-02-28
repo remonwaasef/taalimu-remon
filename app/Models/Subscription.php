@@ -15,7 +15,7 @@ class Subscription extends CashierSubscription
         static::saved(function ($subscription) {
             if ($subscription->tenant) {
                 try {
-                    if (extension_loaded('redis')) {
+                    if (extension_loaded('redis') && class_exists('Redis')) {
                         \Illuminate\Support\Facades\Cache::store('redis')->forget("taalimu:tenancy:domain:{$subscription->tenant->domain}");
                     }
                 } catch (\Throwable $e) {}
@@ -26,7 +26,7 @@ class Subscription extends CashierSubscription
         static::deleted(function ($subscription) {
             if ($subscription->tenant) {
                 try {
-                    if (extension_loaded('redis')) {
+                    if (extension_loaded('redis') && class_exists('Redis')) {
                         \Illuminate\Support\Facades\Cache::store('redis')->forget("taalimu:tenancy:domain:{$subscription->tenant->domain}");
                     }
                 } catch (\Throwable $e) {}
