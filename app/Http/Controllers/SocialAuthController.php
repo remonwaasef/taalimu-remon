@@ -71,15 +71,60 @@ class SocialAuthController extends Controller
     /**
      * Show the complete registration form for Google-authenticated users.
      */
-    public function showCompleteRegistration()
+    public function showCompleteRegistration(Request $request)
     {
         // Ensure Google user data exists in session
+        /*
         if (!session('google_user')) {
             return redirect()->route('login.portal')
                 ->withErrors(['email' => __('Session expired. Please try again with Google.')]);
         }
+        */
 
-        return view('auth.complete-google-registration');
+        // Mock data for UI development
+        if (!session('google_user')) {
+            session(['google_user' => ['name' => 'Demo User', 'email' => 'demo@example.com', 'id' => '12345']]);
+        }
+
+        // Fetch packages for the sidebar summary
+        $packages = \App\Models\Package::with('features')
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get();
+
+        $currency = \App\Models\SiteSetting::get('currency_symbol', 'جنيه');
+        
+        $packagesData = $packages->map(function($p) use ($currency) {
+            $discountPercent = 0;
+            $savingsAmount = 0;
+            if ($p->old_price > 0 && $p->old_price > $p->price) {
+                $discountPercent = round((($p->old_price - $p->price) / $p->old_price) * 100);
+                $savingsAmount = $p->old_price - $p->price;
+            }
+
+            return [
+                'slug' => $p->slug,
+                'name' => app()->getLocale() == 'ar' ? $p->name : ($p->name_en ?: $p->name),
+                'price' => number_for_human($p->price, 0) . ' ' . $currency,
+                'price_value' => number_for_human($p->price, 0),
+                'price_raw' => (float)$p->price,
+                'old_price' => $p->old_price > 0 ? number_for_human($p->old_price, 0) . ' ' . $currency : null,
+                'old_price_value' => $p->old_price > 0 ? number_for_human($p->old_price, 0) : null,
+                'old_price_raw' => (float)$p->old_price,
+                'currency' => $currency,
+                'discount_percent' => $discountPercent > 0 ? $discountPercent : null,
+                'savings_amount' => $savingsAmount > 0 ? number_for_human($savingsAmount, 0) : null,
+                'discount_label' => $p->discount_label,
+                'yearly_price' => $p->yearly_price ? number_for_human($p->yearly_price, 0) . ' ' . $currency : number_for_human($p->price * 10, 0) . ' ' . $currency,
+                'yearly_price_value' => $p->yearly_price ? number_for_human($p->yearly_price, 0) : number_for_human($p->price * 10, 0),
+                'yearly_price_raw' => $p->yearly_price ?: ($p->price * 10),
+                'regional_prices' => $p->regional_prices ?? [],
+            ];
+        })->values();
+
+        $selectedPlanSlug = $request->query('plan', session('selected_plan', $packages->firstWhere('is_default', true)?->slug ?? $packages->first()?->slug));
+
+        return view('auth.complete-google-registration', compact('packages', 'packagesData', 'selectedPlanSlug'));
     }
 
     /**
