@@ -5,10 +5,10 @@
     <div class="max-w-xl mx-auto w-full animate-fade-in-up">
         <div class="bg-white border border-slate-100/50 rounded-[2.5rem] shadow-2xl shadow-blue-900/5 overflow-hidden backdrop-blur-xl relative">
             <!-- Decorative glow -->
-            <div class="absolute -top-24 -left-24 w-64 h-64 bg-blue-500/10 blur-[80px] rounded-full pointer-events-none"></div>
+            <div class="absolute -top-24 -left-24 w-64 h-64 bg-brand-secondary/10 blur-[80px] rounded-full pointer-events-none"></div>
             <div class="p-8 lg:p-10">
                 <div class="text-center mb-10 relative z-10">
-                    <h3 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent mb-2 font-arabic tracking-tight">بوابة الدخول الموحدة</h3>
+                    <h3 class="text-3xl font-bold gradient-hero bg-clip-text text-transparent mb-2 font-arabic tracking-tight">بوابة الدخول الموحدة</h3>
                     <p class="text-slate-500 font-arabic">{{ __('auth.login.subtitle') }}</p>
                 </div>
 
@@ -16,7 +16,7 @@
                     <!-- Tenant Login -->
                     <div class="p-8 bg-slate-50/50 rounded-3xl border border-slate-100/50 relative z-10 shadow-sm">
                         <div class="flex items-center mb-6">
-                            <div class="bg-primary/10 text-primary rounded-full flex items-center justify-center w-12 h-12 me-4">
+                            <div class="bg-brand-primary/10 text-brand-primary rounded-full flex items-center justify-center w-12 h-12 me-4">
                                 <span class="text-2xl">🏢</span>
                             </div>
                             <div>
@@ -28,9 +28,9 @@
                         <!-- Tenant List -->
                         <div class="space-y-4">
                             @forelse($tenants as $tenant)
-                                 <a href="{{ tenant_url('login', $tenant) }}" class="flex items-center justify-between w-full px-5 py-4 bg-white border border-slate-100 rounded-2xl hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/5 transition-all group">
+                                 <a href="{{ tenant_url('login', $tenant) }}" class="flex items-center justify-between w-full px-5 py-4 bg-white border border-slate-100 rounded-2xl hover:border-brand-secondary hover:shadow-lg hover:shadow-brand-secondary/5 transition-all group">
                                     <span class="font-bold text-slate-700">{{ $tenant->name }}</span>
-                                    <span class="text-blue-500 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all font-bold">
+                                    <span class="text-brand-secondary opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all font-bold">
                                         <i class="fas fa-arrow-left rtl:rotate-180"></i>
                                     </span>
                                 </a>

@@ -17,7 +17,7 @@
     
     body {
         font-family: var(--font-outfit);
-        background-color: #f8faff; /* Match landing page mesh gradient base */
+        background-color: #F8FAFC;
     }
     
     [lang="ar"] body, .font-arabic {
@@ -35,8 +35,8 @@
 
     .plan-card-compact.selected {
         border-color: var(--brand-secondary);
-        background: hsla(221, 83%, 53%, 0.1); /* Subtle Royal Blue tint */
-        box-shadow: 0 15px 35px -5px hsla(221, 83%, 53%, 0.25);
+        background: hsla(var(--secondary) / 0.1); /* Subtle Royal Blue tint */
+        box-shadow: 0 15px 35px -5px hsla(var(--secondary) / 0.25);
         transform: scale(1.02);
     }
 
@@ -65,7 +65,7 @@
     .input-compact:focus {
         border-color: var(--brand-secondary);
         background: #FFFFFF;
-        box-shadow: 0 0 0 4px hsla(221, 83%, 53%, 0.15);
+        box-shadow: 0 0 0 4px hsla(var(--secondary) / 0.15);
         transform: translateY(-1px);
         outline: none;
     }
@@ -73,7 +73,7 @@
     .btn-submit-compact {
         border-radius: 50px;
         transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 10px 25px -5px hsla(221, 83%, 53%, 0.4);
+        box-shadow: 0 10px 25px -5px hsla(var(--secondary) / 0.4);
         background: var(--brand-gradient);
         background-size: 200% auto;
         color: white;
@@ -333,26 +333,27 @@ document.addEventListener('alpine:init', () => {
     <div class="w-full max-w-4xl bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/5 overflow-hidden flex flex-col lg:flex-row border border-slate-100/50 min-h-[640px] animate-fade-in-up md:backdrop-blur-xl relative" style="max-width: 960px;">
         
         <!-- Left Panel: Elite Compact Plan Selection -->
-        <div class="lg:w-[32%] text-white flex flex-col p-8 lg:p-10 relative overflow-hidden" style="background: linear-gradient(135deg, hsl(263 85% 20%) 0%, hsl(263 70% 43%) 100%);">
+        <div class="lg:w-[32%] text-white flex flex-col p-8 lg:p-10 relative overflow-hidden" 
+             style="background: linear-gradient(135deg, hsl(263 85% 20%) 0%, hsl(var(--primary-purple)) 40%, hsl(var(--secondary)) 100%);">
             <!-- Subtle glow in left panel -->
-            <div class="absolute -top-24 -left-24 w-64 h-64 bg-blue-500/20 blur-[80px] rounded-full pointer-events-none"></div>
+            <div class="absolute -top-24 -left-24 w-64 h-64 bg-white/10 blur-[80px] rounded-full pointer-events-none"></div>
             <div class="flex-1 flex flex-col w-full">
             <div class="space-y-8 flex-1">
                 @if(app()->getLocale() == 'ar')
                 <div class="mb-2">
-                    <span class="text-[10px] text-blue-300 font-bold uppercase tracking-widest">{{ __('auth.register.subtitle') }}</span>
+                    <span class="text-[10px] text-white/50 font-bold uppercase tracking-widest">{{ __('auth.register.subtitle') }}</span>
                 </div>
                 @endif
-                <h2 class="text-2xl lg:text-3xl font-bold mb-4 font-arabic leading-tight">
+                <h2 class="text-2xl lg:text-3xl font-bold mb-4 font-arabic leading-tight text-white">
                     {{ __('auth.register.branding_title') }}
                 </h2>
-                    <p class="text-blue-200/80 text-base font-arabic font-light leading-relaxed">
+                    <p class="text-white/70 text-base font-arabic font-light leading-relaxed">
                         {{ __('auth.register.branding_subtitle') }}
                     </p>
                 </div>
 
                 <div class="space-y-3">
-                    <label class="text-[9px] font-black text-blue-300/70 uppercase tracking-widest px-1 mb-1 block">{{ __('auth.register.select_plan') }}</label>
+                    <label class="text-[9px] font-black text-white/40 uppercase tracking-widest px-1 mb-1 block">{{ __('auth.register.select_plan') }}</label>
                     @foreach($packages as $package)
                     <div @click="selectedPlan = '{{ $package->slug }}'"
                         class="w-full text-center p-6 plan-card-compact cursor-pointer relative group/card mb-6 border transition-all duration-300 overflow-hidden"
@@ -362,7 +363,7 @@ document.addEventListener('alpine:init', () => {
                         
                         <!-- Mini Badge for Type -->
                         <div class="inline-flex mb-3">
-                            <span class="text-[9px] font-black uppercase tracking-[0.25em] text-blue-300/40 px-3 py-1 bg-white/5 rounded-full border border-white/5 group-hover/card:text-blue-200 group-hover/card:bg-blue-500/10 transition-all">
+                            <span class="text-[9px] font-black uppercase tracking-[0.25em] text-white/40 px-3 py-1 bg-white/5 rounded-full border border-white/5 group-hover/card:text-white group-hover/card:bg-white/10 transition-all">
                                 {{ app()->getLocale() == 'ar' ? $package->name : $package->name_en }}
                             </span>
                         </div>
@@ -401,7 +402,7 @@ document.addEventListener('alpine:init', () => {
                             </template>
 
                             <template x-if="localPrice.discount_label">
-                                <div class="mt-4 text-[9px] font-bold text-blue-300/40 uppercase tracking-[0.15em] border-t border-white/5 pt-3 w-full" x-text="localPrice.discount_label"></div>
+                                <div class="mt-4 text-[9px] font-bold text-white/30 uppercase tracking-[0.15em] border-t border-white/5 pt-3 w-full" x-text="localPrice.discount_label"></div>
                             </template>
                         </div>
                         
@@ -430,9 +431,9 @@ document.addEventListener('alpine:init', () => {
                                      $displayVal = $val . $unit;
                                 }
                             @endphp
-                            <div class="flex items-center gap-2 text-[10px] text-blue-100/90 font-arabic font-medium opacity-80 group-hover:opacity-100 transition-opacity">
-                                <div class="flex-shrink-0 w-3 h-3 rounded-full bg-blue-500/20 flex items-center justify-center">
-                                    <svg class="w-2 h-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="flex items-center gap-2 text-[10px] text-white/80 font-arabic font-medium opacity-80 group-hover:opacity-100 transition-opacity">
+                                <div class="flex-shrink-0 w-3 h-3 rounded-full bg-white/10 flex items-center justify-center">
+                                    <svg class="w-2 h-2 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 </div>
@@ -452,7 +453,7 @@ document.addEventListener('alpine:init', () => {
                             </div>
                             @endforeach
                             @if($package->features->count() > 6)
-                            <p class="text-[9px] text-blue-300 font-bold mt-1 pr-5">+ {{ $package->features->count() - 6 }} {{ __('auth.register.more_features') }}</p>
+                            <p class="text-[9px] text-white/40 font-bold mt-1 pr-5">+ {{ $package->features->count() - 6 }} {{ __('auth.register.more_features') }}</p>
                             @endif
                         </div>
                     </div>
@@ -460,7 +461,7 @@ document.addEventListener('alpine:init', () => {
                 </div>
 
                 <div class="mt-auto pt-8 border-t border-white/5 opacity-60">
-                    <p class="text-[10px] text-blue-200 font-arabic">
+                    <p class="text-[10px] text-white/50 font-arabic">
                         {{ __('auth.register.join_leaders') }}
                     </p>
                 </div>
@@ -472,7 +473,7 @@ document.addEventListener('alpine:init', () => {
                 <div class="absolute top-6 {{ app()->getLocale() == 'ar' ? 'left-8' : 'right-8' }} z-10">
                     <span class="text-sm text-slate-500">
                         {{ __('auth.login.no_account_link') }}
-                        <a href="{{ route('login.portal') }}" class="text-blue-600 font-bold hover:text-blue-700 transition-colors ml-1">{{ __('auth.login.title') }}</a>
+                        <a href="{{ route('login.portal') }}" class="text-brand-secondary font-bold hover:opacity-80 transition-all ml-1">{{ __('auth.login.title') }}</a>
                     </span>
                 </div>
 
@@ -487,7 +488,7 @@ document.addEventListener('alpine:init', () => {
                     </div>
 
                     <div class="mb-6">
-                        <a href="{{ route('auth.google') }}" class="w-full flex items-center justify-center gap-3 py-3 px-4 border border-slate-200 rounded-xl shadow-sm text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all group">
+                        <a href="{{ route('auth.google') }}" class="w-full flex items-center justify-center gap-3 py-3 px-4 border border-slate-200 rounded-xl shadow-sm text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all group">
                             <svg class="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -580,7 +581,7 @@ document.addEventListener('alpine:init', () => {
                             <div class="space-y-1">
                                 <div class="flex justify-between items-center px-1">
                                     <label class="label-compact font-arabic">{{ __('auth.register.password') }}</label>
-                                    <button type="button" @click="showPassword = !showPassword" class="text-[10px] font-black text-blue-600 uppercase tracking-tighter">
+                                    <button type="button" @click="showPassword = !showPassword" class="text-[10px] font-black text-brand-secondary uppercase tracking-tighter">
                                         <span x-text="showPassword ? '{{ __('auth.register.hide') }}' : '{{ __('auth.register.show') }}'"></span>
                                     </button>
                                 </div>
@@ -591,7 +592,7 @@ document.addEventListener('alpine:init', () => {
                                             class="w-full h-12 input-compact px-4 pr-11 rtl:pl-11 rtl:pr-4 text-sm font-medium text-slate-900"
                                             placeholder="••••••••" required>
                                         <button type="button" @click="showPassword = !showPassword" 
-                                            class="absolute right-3 rtl:left-3 rtl:right-auto top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-500 transition-colors p-1">
+                                            class="absolute right-3 rtl:left-3 rtl:right-auto top-1/2 -translate-y-1/2 text-slate-400 hover:text-brand-secondary transition-colors p-1">
                                             <i class="bi" :class="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
                                         </button>
                                     </div>
@@ -643,7 +644,7 @@ document.addEventListener('alpine:init', () => {
                             <!-- Coupon Field -->
                             <div class="space-y-2 pt-2">
                                 <template x-if="!showCouponInput && couponStatus !== 'valid'">
-                                    <button type="button" @click="showCouponInput = true" class="text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center gap-2 group font-arabic transition-all">
+                                    <button type="button" @click="showCouponInput = true" class="text-sm font-bold text-brand-secondary hover:opacity-80 flex items-center gap-2 group font-arabic transition-all">
                                         <i class="bi bi-tag-fill group-hover:rotate-12 transition-transform"></i>
                                         {{ __('auth.register.have_coupon') ?? 'هل لديك كود خصم؟' }}
                                     </button>
@@ -657,7 +658,7 @@ document.addEventListener('alpine:init', () => {
                                             placeholder="PROMO20" :class="couponStatus === 'valid' ? 'border-emerald-300 bg-emerald-50' : (couponStatus === 'invalid' ? 'border-red-300 bg-red-50' : '')">
                                         <div class="absolute right-3 top-1/2 -translate-y-1/2">
                                             <template x-if="couponStatus === 'loading'">
-                                                <div class="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                                                <div class="w-4 h-4 border-2 border-brand-secondary border-t-transparent rounded-full animate-spin"></div>
                                             </template>
                                             <template x-if="couponStatus === 'valid'">
                                                 <i class="bi bi-check-circle-fill text-emerald-500"></i>
@@ -712,7 +713,7 @@ document.addEventListener('alpine:init', () => {
                                         </template>
 
                                         <!-- Final Final Price -->
-                                        <div class="flex items-start justify-end transition-all text-blue-600">
+                                        <div class="flex items-start justify-end transition-all text-brand-secondary">
                                             <span class="text-5xl font-black tracking-tighter leading-none" x-text="finalPrice.toLocaleString()"></span>
                                             <div class="flex flex-col ml-1 rtl:mr-1 rtl:ml-0 mt-1">
                                                 <span class="text-[14px] font-bold opacity-40" x-text="currentPriceData.currency"></span>
