@@ -45,8 +45,16 @@
         --radius: 1rem;
         /* 16px as per EduMove cards */
 
+        /* Core Colors */
+        --cyan: 191 100% 45%;
+        --light-bg: 210 20% 98%;
+        --gray-text: 215 16% 47%;
+
         /* Gradients: Edumove prefers solid, but we'll maintain a very subtle one for the hero */
         --gradient-hero: linear-gradient(135deg, hsl(256 97% 55%) 0%, hsl(256 97% 65%) 100%);
+        --gradient-cta: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
+        --gradient-card: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+        --gradient-cyan: linear-gradient(135deg, hsl(191 100% 45%) 0%, hsl(160 100% 40%) 100%);
         --brand-gradient: var(--gradient-hero);
 
         /* Shadows - Edumove uses very subtle shadows or clean borders */
@@ -54,6 +62,8 @@
         --shadow-md: 0 8px 16px rgba(3, 1, 13, 0.08);
         --shadow-lg: 0 16px 32px rgba(3, 1, 13, 0.1);
         --shadow-xl: 0 24px 48px rgba(3, 1, 13, 0.12);
+        --shadow-glow: 0 0 20px rgba(0, 255, 255, 0.2);
+        --shadow-purple-glow: 0 0 30px rgba(122, 77, 252, 0.3);
     }
 
     .dark {
