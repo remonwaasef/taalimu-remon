@@ -18,6 +18,16 @@ document.addEventListener('alpine:init', () => {
         isSubmitting: false,
         userCountry: 'default',
 
+        showPlanModal: false,
+        couponCode: '',
+        showCouponInput: false,
+        couponStatus: 'none',
+        couponMessage: '',
+        discountValue: 0,
+        discountType: 'percentage',
+        discountText: '',
+        isApplyingCoupon: false,
+
         async init() {
             try {
                 const response = await fetch('https://get.geojs.io/v1/ip/country.json');
@@ -54,6 +64,50 @@ document.addEventListener('alpine:init', () => {
 
         get currentPriceData() {
              return this.getPriceData(this.currentPlan);
+        },
+
+        get activePriceRaw() {
+             return this.billingCycle === 'yearly' ? (this.currentPriceData.yearly || 0) : (this.currentPriceData.amount || 0);
+        },
+
+        get couponDiscountAmount() {
+            if (this.couponStatus !== 'valid') return 0;
+            const price = this.activePriceRaw || 0;
+            if (this.discountType === 'percentage') {
+                return (price * (this.discountValue / 100));
+            }
+            return Math.min(this.discountValue, price);
+        },
+
+        get finalPrice() {
+            const price = this.activePriceRaw || 0;
+            return Math.max(0, price - this.couponDiscountAmount);
+        },
+
+        async validateCoupon() {
+            if (!this.couponCode) return;
+            this.isApplyingCoupon = true;
+            this.couponStatus = 'loading';
+            try {
+                const response = await fetch(`/api/coupons/validate?code=${this.couponCode}&plan=${this.selectedPlan}`);
+                const data = await response.json();
+                if (data.valid) {
+                    this.couponStatus = 'valid';
+                    this.couponMessage = data.message;
+                    this.discountText = data.discount_text;
+                    this.discountType = data.type;
+                    this.discountValue = data.value;
+                } else {
+                    this.couponStatus = 'invalid';
+                    this.couponMessage = data.message;
+                    this.discountValue = 0;
+                }
+            } catch (e) {
+                this.couponStatus = 'invalid';
+                this.couponMessage = 'Coupon error';
+            } finally {
+                this.isApplyingCoupon = false;
+            }
         },
 
         generateSlug(text) {
@@ -215,19 +269,97 @@ document.addEventListener('alpine:init', () => {
                     </div>
                 </div>
 
+                <!-- Coupon -->
+                <div class="pt-2">
+                    <button type="button" x-show="!showCouponInput && couponStatus !== 'valid'" @click="showCouponInput = true" 
+                            class="text-sm font-black text-brand-secondary hover:underline flex items-center gap-2 font-arabic transition-all">
+                        <i class="bi bi-tag-fill"></i> <?php echo e(__('auth.register.have_coupon') ?? 'هل لديك كود خصم؟'); ?>
+
+                    </button>
+                    <div x-show="showCouponInput || couponStatus === 'valid'" x-transition class="space-y-1.5">
+                        <label class="text-[11px] font-black text-slate-400 px-1 uppercase"><?php echo e(__('admin.coupon_code')); ?></label>
+                        <div class="relative">
+                            <input type="text" name="coupon_code" x-model="couponCode" @input.debounce.500ms="validateCoupon()"
+                                class="w-full h-12 px-4 bg-slate-50 border-2 border-slate-100 rounded-xl text-sm font-black uppercase focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all"
+                                :class="couponStatus === 'valid' ? 'border-emerald-200 bg-emerald-50' : (couponStatus === 'invalid' ? 'border-red-200 bg-red-50' : '')">
+                            <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                                <template x-if="couponStatus === 'loading'"><div class="w-4 h-4 border-2 border-brand-secondary border-t-transparent rounded-full animate-spin"></div></template>
+                                <template x-if="couponStatus === 'valid'"><i class="bi bi-patch-check-fill text-emerald-500"></i></template>
+                                <template x-if="couponStatus === 'invalid'"><i class="bi bi-x-circle-fill text-red-400"></i></template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Simplified Price Summary Card -->
                 <div class="p-6 rounded-3xl bg-slate-50/80 border border-slate-100 space-y-4">
                     <div class="flex items-center justify-between">
                         <div class="flex flex-col">
-                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1"><?php echo e(__('auth.register.selected_plan')); ?></span>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest"><?php echo e(__('auth.register.selected_plan')); ?></span>
+                                <button type="button" @click="showPlanModal = true" class="text-[10px] font-black text-brand-secondary underline underline-offset-2 hover:opacity-70 transition-opacity uppercase tracking-widest">
+                                    <?php echo e(app()->getLocale() == 'ar' ? 'تغيير' : 'Change'); ?>
+
+                                </button>
+                            </div>
                             <h3 class="text-xl font-black text-slate-900 font-arabic" x-text="currentPlan.name"></h3>
                         </div>
                         <div class="text-right">
+                            <template x-if="couponStatus === 'valid'">
+                                <div class="text-[11px] font-black text-emerald-600 mb-1 animate-fade-in">-<span x-text="couponDiscountAmount.toLocaleString()"></span> <span x-text="currentPriceData.currency"></span></div>
+                            </template>
                             <div class="flex items-baseline gap-1 text-brand-secondary">
-                                <span class="text-3xl font-black tracking-tighter" x-text="currentPriceData.amount.toLocaleString()"></span>
+                                <span class="text-3xl font-black tracking-tighter" x-text="finalPrice.toLocaleString()"></span>
                                 <span class="text-sm font-bold opacity-60" x-text="currentPriceData.currency"></span>
                             </div>
-                            <span class="text-[10px] font-bold text-slate-400">/<?php echo e(__('landing.pricing.month_short') ?? 'شهر'); ?></span>
+                            <span class="text-[10px] font-bold text-slate-400">/<?php echo e(app()->getLocale() == 'ar' ? 'شهر' : 'month'); ?></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plan Selection Modal -->
+                <div x-show="showPlanModal" 
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0"
+                     x-transition:enter-end="opacity-100"
+                     x-transition:leave="transition ease-in duration-200"
+                     x-transition:leave-start="opacity-100"
+                     x-transition:leave-end="opacity-0"
+                     class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
+                     x-cloak>
+                    <div @click.away="showPlanModal = false" 
+                         class="bg-white rounded-[2.5rem] w-full max-w-lg shadow-2xl overflow-hidden animate-scale-in">
+                        <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                            <h3 class="text-xl font-black text-slate-900 font-arabic"><?php echo e(app()->getLocale() == 'ar' ? 'اختر الباقة المناسبة' : 'Select Plan'); ?></h3>
+                            <button type="button" @click="showPlanModal = false" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+                        <div class="p-8 space-y-4 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                            <template x-for="pkg in packages" :key="pkg.slug">
+                                <label class="relative block cursor-pointer group">
+                                    <input type="radio" name="plan_selector" :value="pkg.slug" x-model="selectedPlan" @change="showPlanModal = false" class="peer sr-only">
+                                    <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:border-brand-secondary/30 peer-checked:border-brand-secondary peer-checked:bg-brand-secondary/5 transition-all">
+                                        <div class="flex justify-between items-center">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-5 h-5 rounded-full border-2 border-slate-200 peer-checked:border-brand-secondary flex items-center justify-center transition-all bg-white">
+                                                    <div class="w-2.5 h-2.5 rounded-full bg-brand-secondary scale-0 peer-checked:scale-100 transition-transform"></div>
+                                                </div>
+                                                <span class="font-black text-slate-900 uppercase tracking-tight" x-text="pkg.name"></span>
+                                            </div>
+                                            <div class="text-right">
+                                                <span class="text-lg font-black text-brand-secondary" x-text="pkg.price"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </template>
+                        </div>
+                        <div class="p-6 bg-slate-50 text-center">
+                            <button type="button" @click="showPlanModal = false" class="text-sm font-black text-slate-500 hover:text-slate-700 transition-colors uppercase tracking-widest">
+                                <?php echo e(app()->getLocale() == 'ar' ? 'إغلاق' : 'Close'); ?>
+
+                            </button>
                         </div>
                     </div>
                 </div>
