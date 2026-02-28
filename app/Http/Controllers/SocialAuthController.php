@@ -176,11 +176,16 @@ class SocialAuthController extends Controller
             'billing_cycle' => 'required|in:monthly,yearly',
         ]);
 
-        // Check email uniqueness (safety check)
+        // 1. Check if user already exists (safety check)
         if (User::where('email', $googleData['email'])->exists()) {
-            session()->forget('google_user');
-            return redirect()->route('login.portal')
-                ->withErrors(['email' => __('This email is already registered. Please login instead.')]);
+             $existing = User::where('email', $googleData['email'])->first();
+             // Link if missing
+             if (!$existing->google_id) {
+                 $existing->update(['google_id' => $googleData['id']]);
+             }
+             Auth::login($existing, true);
+             session()->forget('google_user');
+             return redirect()->intended('/dashboard');
         }
 
         try {
@@ -246,7 +251,7 @@ class SocialAuthController extends Controller
 
                 DB::commit();
 
-                // Clear Google session data
+                // Clear Google session data ONLY ON SUCCESS
                 session()->forget('google_user');
 
                 // Login the user
@@ -269,8 +274,10 @@ class SocialAuthController extends Controller
                 // Paid Plan Flow (Redirect to Payment)
                 DB::commit();
 
-                // Clear Google session data but keep user logged in if possible or use hmac
+                // Clear Google session data ONLY ON SUCCESS
                 session()->forget('google_user');
+                
+                // Login the user
                 Auth::login($user, true);
 
                 session([
@@ -286,18 +293,6 @@ class SocialAuthController extends Controller
                 ]);
 
                 // Redirect to payment (demo or stripe)
-                $stripePriceIds = [
-                    'basic' => config('services.stripe.price_basic'),
-                    'pro' => config('services.stripe.price_pro'),
-                ];
-                $stripePriceId = $stripePriceIds[$selectedPlan] ?? null;
-
-                if (config('services.stripe.demo_mode') || !($stripePriceId)) {
-                    return redirect()->route('payment.demo');
-                }
-
-                // If specialized stripe flow is needed here, we can replicate RegistrationController logic
-                // For now, redirecting to demo/checkout flow.
                 return redirect()->route('payment.demo'); 
             }
 
@@ -306,10 +301,12 @@ class SocialAuthController extends Controller
             \Log::error('Google Registration Error: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
                 'session_id' => session()->getId(),
-                'has_google_user' => session()->has('google_user')
+                'has_google_user' => session()->has('google_user'),
+                'input' => $request->all(),
             ]);
-            session()->save(); // Force save session before redirect back
-            return back()->withErrors(['center_name' => __('Registration failed. Please try again.')])->withInput();
+            // WE DO NOT FORGET google_user HERE, so the user can try again!
+            session()->save(); 
+            return back()->withErrors(['center_name' => __('Registration failed: ') . $e->getMessage()])->withInput();
         }
     }
 
