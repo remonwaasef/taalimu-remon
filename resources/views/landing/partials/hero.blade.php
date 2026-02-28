@@ -1,6 +1,6 @@
 <section class="relative min-h-screen pt-20 lg:pt-24 overflow-hidden hero-professional-bg noise-overlay">
-    <!-- Background Elements -->
-    <div class="absolute top-0 right-0 w-full h-full gradient-hero opacity-5 blur-xl"></div>
+    <!-- Background Elements - Simplified -->
+    <div class="absolute inset-0 bg-slate-50/50"></div>
     
     <div 
         dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"
@@ -51,25 +51,25 @@
                     </button>
                 </div>
 
-                <!-- Premium Trust Badges -->
+                <!-- Professional Trust Badges - Simplified -->
                 <div 
-                    class="flex flex-wrap gap-8 justify-center lg:justify-start animate-fade-in py-6 border-y border-border/50 mb-12"
+                    class="flex flex-wrap gap-8 justify-center lg:justify-start animate-fade-in py-6 border-y border-slate-200 mb-12"
                     style="animation-delay: 0.4s;"
                 >
-                    <div class="flex items-center gap-3 text-sm font-bold text-muted-foreground group cursor-default">
-                        <div class="w-10 h-10 rounded-xl bg-cyan/10 flex items-center justify-center text-cyan-600 group-hover:bg-cyan group-hover:text-white transition-colors border border-cyan/20">
+                    <div class="flex items-center gap-3 text-sm font-bold text-slate-500 group cursor-default">
+                        <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 group-hover:bg-primary group-hover:text-white transition-colors border border-slate-200">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
                         </div>
                         {{ __('landing.hero.trust.security') }}
                     </div>
-                    <div class="flex items-center gap-3 text-sm font-bold text-muted-foreground group cursor-default">
-                        <div class="w-10 h-10 rounded-xl bg-light-purple/10 flex items-center justify-center text-purple-600 group-hover:bg-light-purple group-hover:text-white transition-colors border border-light-purple/20">
+                    <div class="flex items-center gap-3 text-sm font-bold text-slate-500 group cursor-default">
+                        <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 group-hover:bg-primary group-hover:text-white transition-colors border border-slate-200">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
                         </div>
                         {{ __('landing.hero.trust.centers') }}
                     </div>
-                    <div class="flex items-center gap-3 text-sm font-bold text-muted-foreground group cursor-default">
-                        <div class="w-10 h-10 rounded-xl bg-success-green/10 flex items-center justify-center text-emerald-600 group-hover:bg-success-green group-hover:text-white transition-colors border border-success-green/20">
+                    <div class="flex items-center gap-3 text-sm font-bold text-slate-500 group cursor-default">
+                        <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 group-hover:bg-primary group-hover:text-white transition-colors border border-slate-200">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
                         </div>
                         {{ __('landing.hero.trust.uptime') }}
@@ -173,9 +173,8 @@
                         >
                     </div>
                     
-                    <!-- Floating Decorative Depth -->
-                    <div class="absolute -top-12 -left-12 w-32 h-32 bg-cyan/10 rounded-full blur-2xl -z-10 animate-pulse"></div>
-                    <div class="absolute -bottom-16 right-0 w-48 h-48 bg-light-purple/5 rounded-full blur-3xl -z-10 animate-pulse" style="animation-delay: 1s;"></div>
+                    <!-- Minimalist Decorative Elements -->
+                    <div class="absolute -top-12 -left-12 w-32 h-32 bg-primary/5 rounded-full blur-2xl -z-10"></div>
                 </div>
             </div>
             </div>

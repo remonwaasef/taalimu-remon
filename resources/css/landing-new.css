@@ -4,71 +4,71 @@
 
 @layer base {
     :root {
-        /* Edumove Vibrant Design System */
-        /* Primary: Vibrant Purple #7A4DFC */
+        /* Edumove Professional Design System - Simplified */
+        /* Primary: Brand Purple #7A4DFC */
         --primary-purple: 256 97% 65%;
         --primary-vibrant: 256 97% 60%;
         --primary-light: 256 97% 96%;
 
-        /* Typography: Deep Navy #03010D */
-        --dark-text: 247 88% 3%;
-        --foreground: 247 88% 3%;
+        /* Typography: Deep Slate #1E293B */
+        --dark-text: 215 25% 15%;
+        --foreground: 215 25% 15%;
 
-        /* Accents */
+        /* Accents - Neutralized */
         --secondary: 256 97% 65%;
-        /* Edumove uses primary for most actions */
         --secondary-vibrant: 256 97% 70%;
 
-        --accent-peach: 12 100% 76%;
-        /* #FF9F87 */
-        --accent-teal: 164 89% 77%;
-        /* #7CEED0 */
+        --accent-peach: 215 25% 27%;
+        /* Neutralized */
+        --accent-teal: 215 25% 27%;
+        /* Neutralized */
         --success-green: 158 84% 39%;
+        /* Keep for success only */
 
         /* Neutrals */
         --background: 0 0% 100%;
-        /* Pure White as per EduMove */
-        --muted: 210 20% 96%;
-        /* #F4F4F4 approx */
+        --muted: 210 40% 98%;
         --muted-foreground: 215 16% 47%;
 
         --card: 0 0% 100%;
-        --card-foreground: 247 88% 3%;
+        --card-foreground: 215 25% 15%;
 
         --primary: 256 97% 65%;
         --primary-foreground: 0 0% 100%;
 
-        --border: 247 10% 90%;
-        --input: 247 10% 90%;
+        --border: 214 32% 91%;
+        --input: 214 32% 91%;
         --ring: 256 97% 65%;
 
-        --radius: 1rem;
-        /* 16px as per EduMove cards */
+        --radius: 1.25rem;
 
-        /* Core Colors */
+        /* Core Colors - Neutralized cyan and analytical-blue */
         --dark-purple: 263 84% 8%;
         --light-purple: 256 97% 96%;
-        --cyan: 191 100% 45%;
+        --cyan: 256 97% 65%;
+        /* Redirect cyan to primary */
         --light-bg: 210 20% 98%;
         --gray-text: 215 16% 47%;
-        --analytical-blue: 213 90% 85%;
-        --outline-green: 158 84% 39%;
+        --analytical-blue: 256 97% 96%;
+        /* Redirect to light purple */
+        --outline-green: 256 97% 65%;
+        /* Redirect to primary */
         --outline-purple: 256 97% 65%;
 
-        /* Gradients: Edumove prefers solid, but we'll maintain a very subtle one for the hero */
-        --gradient-hero: linear-gradient(135deg, hsl(256 97% 55%) 0%, hsl(256 97% 65%) 100%);
-        --gradient-cta: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
-        --gradient-card: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
-        --gradient-cyan: linear-gradient(135deg, hsl(191 100% 45%) 0%, hsl(160 100% 40%) 100%);
-        --brand-gradient: var(--gradient-hero);
+        /* Gradients: simplified to solid or very subtle slate */
+        --gradient-hero: none;
+        --gradient-cta: linear-gradient(135deg, hsl(256 97% 65%) 0%, hsl(256 97% 55%) 100%);
+        --gradient-card: none;
+        --gradient-cyan: none;
+        --brand-gradient: var(--gradient-cta);
 
-        /* Shadows - Edumove uses very subtle shadows or clean borders */
-        --shadow-sm: 0 2px 8px rgba(3, 1, 13, 0.05);
-        --shadow-md: 0 8px 16px rgba(3, 1, 13, 0.08);
-        --shadow-lg: 0 16px 32px rgba(3, 1, 13, 0.1);
-        --shadow-xl: 0 24px 48px rgba(3, 1, 13, 0.12);
-        --shadow-glow: 0 0 20px rgba(0, 255, 255, 0.2);
-        --shadow-purple-glow: 0 0 30px rgba(122, 77, 252, 0.3);
+        /* Shadows - Cleaner/Sharper */
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+        --shadow-glow: none;
+        --shadow-purple-glow: none;
     }
 
     .dark {
@@ -153,32 +153,16 @@
     }
 
     .hero-professional-bg {
-        background-color: #FAFAFA;
-        background-image:
-            radial-gradient(at 100% 0%, hsla(263, 70%, 85%, 0.2) 0px, transparent 60%),
-            radial-gradient(at 0% 100%, hsla(213, 90%, 85%, 0.2) 0px, transparent 60%);
+        background-color: #F8FAFC;
         position: relative;
     }
 
     .hero-professional-bg::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background-image: radial-gradient(hsl(var(--light-purple) / 0.08) 1px, transparent 1px);
-        background-size: 40px 40px;
-        opacity: 0.6;
-        pointer-events: none;
+        display: none;
     }
 
     .mesh-gradient-soft {
         background-color: #F8FAFC;
-        /* Very soft atmospheric background */
-        background-image:
-            radial-gradient(at 0% 0%, hsla(263, 70%, 65%, 0.08) 0px, transparent 60%),
-            radial-gradient(at 100% 10%, hsla(221, 83%, 65%, 0.06) 0px, transparent 60%),
-            radial-gradient(at 90% 90%, hsla(213, 90%, 75%, 0.08) 0px, transparent 60%),
-            radial-gradient(at 10% 90%, hsla(263, 70%, 85%, 0.05) 0px, transparent 60%),
-            radial-gradient(at 50% 50%, hsla(0, 0%, 100%, 0.9) 0px, transparent 80%);
     }
 
     .noise-overlay {
@@ -208,11 +192,7 @@
     }
 
     .gradient-text {
-        background: linear-gradient(135deg, hsl(191 100% 45%) 0%, hsl(160 100% 40%) 100%);
-        /* Slightly darker for clarity */
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: hsl(var(--primary-purple));
     }
 
     .shadow-card {
@@ -280,31 +260,13 @@
     }
 
     .btn-hero-cta::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(120deg,
-                transparent,
-                rgba(255, 255, 255, 0.2),
-                transparent);
-        transition: all 0.6s;
-        z-index: -1;
+        display: none;
     }
 
     .btn-hero-cta:hover {
-        transform: translateY(-2px) scale(1.01);
-        background-position: right center;
-        box-shadow:
-            0 20px 40px -8px rgba(76, 29, 149, 0.3),
-            /* Deeper, softer violet shadow on hover */
-            inset 0 1px 2px rgba(255, 255, 255, 0.4);
-    }
-
-    .btn-hero-cta:hover::before {
-        left: 100%;
+        transform: translateY(-2px);
+        background-color: hsl(var(--primary-vibrant));
+        box-shadow: var(--shadow-lg);
     }
 
     .btn-secondary-cta {

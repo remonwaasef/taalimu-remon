@@ -42,8 +42,8 @@
     <div class="container mx-auto px-4 lg:px-8">
         <!-- Section Header -->
         <div class="text-center mb-12 lg:mb-16">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan/10 border border-cyan/20 mb-6">
-                <span class="text-sm font-medium text-cyan">{{ __('landing.pricing.badge') }}</span>
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 mb-6">
+                <span class="text-sm font-medium text-primary">{{ __('landing.pricing.badge') }}</span>
             </div>
             <h2 class="text-3xl lg:text-4xl font-bold text-foreground mb-4">
                 {!! __('landing.pricing.title') !!}
@@ -89,27 +89,24 @@
                 <div
                     class="relative rounded-2xl p-6 border-2 transition-all duration-300 hover:shadow-2xl animate-fade-in flex flex-col
                     {{ $isFeatured 
-                        ? 'border-light-purple gradient-hero text-primary-foreground scale-105 shadow-purple-glow hover:-translate-y-3 z-10' 
-                        : 'bg-card border-border hover:border-light-purple/30 hover:-translate-y-3 shadow-sm' }}"
+                        ? 'border-primary bg-primary text-primary-foreground scale-105 shadow-xl hover:-translate-y-3 z-10' 
+                        : 'bg-card border-border hover:border-primary/30 hover:-translate-y-3 shadow-sm' }}"
                     style="animation-delay: {{ $delay }}s;"
                 >
                     <!-- Trial Badge -->
                     @if($package->trial_days > 0)
-                        <div class="absolute -top-3 -right-3 w-12 h-12 bg-cyan rounded-full flex flex-col items-center justify-center shadow-lg border-4 border-white z-20">
-                            <span class="text-sm font-black text-dark-text leading-none">{{ $package->trial_days }}</span>
-                            <span class="text-[8px] font-bold text-dark-text/70 uppercase">DAYS</span>
+                        <div class="absolute -top-3 -right-3 w-12 h-12 bg-white rounded-full flex flex-col items-center justify-center shadow-lg border-4 border-primary z-20">
+                            <span class="text-sm font-black text-primary leading-none">{{ $package->trial_days }}</span>
+                            <span class="text-[8px] font-bold text-primary/70 uppercase">DAYS</span>
                         </div>
                     @endif
 
-                        <!-- Feature Badge -->
-                        @if($package->badge || $package->discount_label)
                             <!-- Static fallback or JS updated -->
-                            <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-cyan rounded-full flex items-center gap-2 shadow-lg z-20"
+                            <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-white rounded-full flex items-center gap-2 shadow-lg z-20"
                                  x-show="billingCycle === 'yearly' && (localPrice.discount_label || '{{ $package->discount_label }}')"
                             >
-                                <span class="text-xs font-bold text-dark-text tracking-wide" x-text="localPrice.discount_label || '{{ $package->discount_label ?: $package->badge }}'"></span>
+                                <span class="text-xs font-bold text-primary tracking-wide" x-text="localPrice.discount_label || '{{ $package->discount_label ?: $package->badge }}'"></span>
                             </div>
-                        @endif
 
                         <!-- Header -->
                         <div class="text-center mb-6 pt-2">
@@ -134,7 +131,7 @@
 
                                 <!-- Price Display -->
                                 <div class="flex items-baseline gap-1">
-                                    <span class="text-4xl font-extrabold {{ $isFeatured ? 'text-primary-foreground' : 'gradient-text' }}" 
+                                    <span class="text-4xl font-extrabold {{ $isFeatured ? 'text-primary-foreground' : 'text-primary' }}" 
                                           x-text="billingCycle === 'monthly' ? localPrice.amount : (localPrice.yearly_price || localPrice.amount * 10)">
                                     </span>
                                     <span class="text-xl font-bold {{ $isFeatured ? 'text-primary-foreground' : 'text-foreground' }}" x-text="localPrice.currency"></span>
