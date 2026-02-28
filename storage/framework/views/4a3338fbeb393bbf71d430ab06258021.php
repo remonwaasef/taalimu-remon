@@ -11,15 +11,16 @@
             <!-- Brand/About Column -->
             <div class="col-span-2 lg:col-span-2 space-y-8">
                 <div>
-                    <a href="{{ route('home') }}" class="inline-flex items-center gap-3 group">
+                    <a href="<?php echo e(route('home')); ?>" class="inline-flex items-center gap-3 group">
                         <div class="w-12 h-12 rounded-2xl bg-primary-purple/20 flex items-center justify-center backdrop-blur-md border border-primary-purple/30 group-hover:bg-primary-purple/40 transition-all duration-300 shadow-xl shadow-black/20">
-                            <span class="text-white font-black text-2xl leading-none">{{ substr(\App\Models\SiteSetting::get('site_name', config('app.name')), 0, 1) }}</span>
+                            <span class="text-white font-black text-2xl leading-none"><?php echo e(substr(\App\Models\SiteSetting::get('site_name', config('app.name')), 0, 1)); ?></span>
                         </div>
-                        <span class="text-2xl font-black text-white tracking-tight">{{ \App\Models\SiteSetting::get('site_name', config('app.name')) }}</span>
+                        <span class="text-2xl font-black text-white tracking-tight"><?php echo e(\App\Models\SiteSetting::get('site_name', config('app.name'))); ?></span>
                     </a>
                 </div>
                 <p class="text-gray-text/90 text-base leading-relaxed max-w-sm font-medium">
-                    {{ \App\Models\SiteSetting::get('site_description', __('landing.hero.subtitle')) }}
+                    <?php echo e(\App\Models\SiteSetting::get('site_description', __('landing.hero.subtitle'))); ?>
+
                 </p>
                 
                 <!-- Social Media -->
@@ -41,34 +42,34 @@
 
             <!-- Product Links -->
             <div>
-                <h4 class="text-white font-bold text-lg mb-8">{{ __('landing.footer.product.title') }}</h4>
+                <h4 class="text-white font-bold text-lg mb-8"><?php echo e(__('landing.footer.product.title')); ?></h4>
                 <ul class="space-y-4">
-                    <li><a href="#features" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.product.features') }}</a></li>
-                    <li><a href="#pricing" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.product.pricing') }}</a></li>
-                    <li><a href="#" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.product.integrations') }}</a></li>
-                    <li><a href="#" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.product.updates') }}</a></li>
+                    <li><a href="#features" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.product.features')); ?></a></li>
+                    <li><a href="#pricing" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.product.pricing')); ?></a></li>
+                    <li><a href="#" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.product.integrations')); ?></a></li>
+                    <li><a href="#" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.product.updates')); ?></a></li>
                 </ul>
             </div>
 
             <!-- Support Links -->
             <div>
-                <h4 class="text-white font-bold text-lg mb-8">{{ __('landing.footer.resources.title') }}</h4>
+                <h4 class="text-white font-bold text-lg mb-8"><?php echo e(__('landing.footer.resources.title')); ?></h4>
                 <ul class="space-y-4">
-                    <li><a href="#" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.resources.help') }}</a></li>
-                    <li><a href="#" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.resources.docs') }}</a></li>
-                    <li><a href="#" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.resources.blog') }}</a></li>
-                    <li><a href="#" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.resources.api') }}</a></li>
+                    <li><a href="#" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.resources.help')); ?></a></li>
+                    <li><a href="#" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.resources.docs')); ?></a></li>
+                    <li><a href="#" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.resources.blog')); ?></a></li>
+                    <li><a href="#" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.resources.api')); ?></a></li>
                 </ul>
             </div>
 
             <!-- Legal Links -->
             <div>
-                <h4 class="text-white font-bold text-lg mb-8">{{ __('landing.footer.legal.title') }}</h4>
+                <h4 class="text-white font-bold text-lg mb-8"><?php echo e(__('landing.footer.legal.title')); ?></h4>
                 <ul class="space-y-4">
-                    <li><a href="{{ route('privacy') }}" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.legal.privacy') }}</a></li>
-                    <li><a href="{{ route('terms') }}" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.legal.terms') }}</a></li>
-                    <li><a href="{{ route('cookies') }}" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.legal.cookie') }}</a></li>
-                    <li><button onclick="openCookieSettings()" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium">{{ __('gdpr.banner.settings') }}</button></li>
+                    <li><a href="<?php echo e(route('privacy')); ?>" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.legal.privacy')); ?></a></li>
+                    <li><a href="<?php echo e(route('terms')); ?>" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.legal.terms')); ?></a></li>
+                    <li><a href="<?php echo e(route('cookies')); ?>" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.legal.cookie')); ?></a></li>
+                    <li><button onclick="openCookieSettings()" class="text-white/90 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('gdpr.banner.settings')); ?></button></li>
                 </ul>
             </div>
         </div>
@@ -76,7 +77,8 @@
         <!-- Bottom Footer Section -->
         <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="text-white/60 text-sm font-medium">
-                {{ __('landing.footer.copyright') }}
+                <?php echo e(__('landing.footer.copyright')); ?>
+
             </div>
             
             <!-- System Status -->
@@ -89,3 +91,4 @@
         </div>
     </div>
 </footer>
+<?php /**PATH D:\new project\antigravty\edu\edu\resources\views/landing/partials/footer.blade.php ENDPATH**/ ?>
