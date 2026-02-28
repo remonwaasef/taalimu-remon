@@ -1,56 +1,318 @@
 @extends('center::layouts.master')
 
-@section('title', 'Subscription Plans')
+@section('title', __('center::subscription.page_title'))
+
+@push('styles')
+<style>
+    .subscription-hero {
+        background: linear-gradient(135deg, #3A0CA3 0%, #2A4DFF 100%);
+        border-radius: 1.25rem;
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+    }
+    .subscription-hero::before {
+        content: '';
+        position: absolute;
+        top: -60px; right: -60px;
+        width: 220px; height: 220px;
+        background: rgba(255,255,255,0.06);
+        border-radius: 50%;
+    }
+    .subscription-hero::after {
+        content: '';
+        position: absolute;
+        bottom: -40px; left: -40px;
+        width: 160px; height: 160px;
+        background: rgba(255,255,255,0.04);
+        border-radius: 50%;
+    }
+    .progress-bar-custom {
+        height: 8px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.2);
+        overflow: hidden;
+    }
+    .progress-bar-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #7ecbff, #fff);
+        transition: width 1s ease;
+    }
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 14px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+    .status-active   { background: rgba(34,197,94,0.15); color: #16a34a; }
+    .status-trial    { background: rgba(251,191,36,0.15); color: #d97706; }
+    .status-expired  { background: rgba(239,68,68,0.15);  color: #dc2626; }
+    .plan-card {
+        border: 2px solid #e5e7eb;
+        border-radius: 1rem;
+        transition: all 0.3s ease;
+        background: #fff;
+        cursor: pointer;
+    }
+    .plan-card:hover          { border-color: #3A0CA3; transform: translateY(-4px); box-shadow: 0 12px 30px rgba(58,12,163,0.12); }
+    .plan-card.current-plan   { border-color: #3A0CA3; background: linear-gradient(135deg, #f5f3ff, #eff6ff); }
+    .plan-card.featured-plan  { border-color: #2A4DFF; }
+    .feature-check { color: #16a34a; }
+    .feature-x     { color: #d1d5db; }
+    .info-tile {
+        background: rgba(255,255,255,0.12);
+        border-radius: 0.75rem;
+        padding: 1rem 1.25rem;
+        backdrop-filter: blur(4px);
+    }
+    .pulse-dot {
+        width: 10px; height: 10px;
+        border-radius: 50%;
+        background: #4ade80;
+        animation: pulse-green 2s infinite;
+    }
+    @keyframes pulse-green {
+        0%   { box-shadow: 0 0 0 0 rgba(74,222,128,0.6); }
+        70%  { box-shadow: 0 0 0 8px rgba(74,222,128,0); }
+        100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); }
+    }
+    .contact-card {
+        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+        border-radius: 1rem;
+        color: #fff;
+    }
+</style>
+@endpush
+
+@section('page-title', __('center::subscription.page_title'))
 
 @section('content')
-<div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Subscription Plans</h1>
+<div class="container-fluid px-0">
+
+    {{-- ─── Flash Messages ──────────────────────────────────── --}}
+    @if(session('info'))
+        <div class="alert alert-info alert-dismissible fade show rounded-3 border-0 shadow-sm mb-4" role="alert">
+            <i class="fas fa-info-circle me-2"></i>{{ session('info') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show rounded-3 border-0 shadow-sm mb-4" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    {{-- ─── Hero: Current Subscription Card ───────────────────── --}}
+    <div class="subscription-hero p-4 p-md-5 mb-4 shadow-lg">
+        <div class="row align-items-center g-4 position-relative" style="z-index:1;">
+            <div class="col-md-7">
+                {{-- Status badge --}}
+                @php
+                    $subStatus = $subscription?->stripe_status ?? 'none';
+                    $isActive  = in_array($subStatus, ['active', 'trialing']);
+                @endphp
+                <div class="mb-3">
+                    @if($subStatus === 'trialing')
+                        <span class="status-badge" style="background:rgba(251,191,36,0.25);color:#fde68a;">
+                            <i class="fas fa-hourglass-half fa-xs"></i> تجربة مجانية
+                        </span>
+                    @elseif($isActive)
+                        <span class="badge bg-success bg-opacity-25 text-white px-3 py-2 rounded-pill d-inline-flex align-items-center gap-2">
+                            <span class="pulse-dot"></span> اشتراك نشط
+                        </span>
+                    @else
+                        <span class="badge bg-danger bg-opacity-25 text-white px-3 py-2 rounded-pill">
+                            <i class="fas fa-times-circle fa-xs me-1"></i> منتهي
+                        </span>
+                    @endif
+                </div>
+
+                <h2 class="fw-black mb-1" style="font-size:2rem;">
+                    {{ $currentPackage?->name ?? 'لا يوجد اشتراك' }}
+                </h2>
+                <p class="opacity-80 mb-4">
+                    {{ $currentPackage?->description ?? 'لم يتم تفعيل أي باقة بعد' }}
+                </p>
+
+                {{-- Days Progress --}}
+                @if($daysRemaining !== null)
+                <div class="mb-2 d-flex justify-content-between small opacity-80">
+                    <span>{{ $progressPercent }}% مستخدم</span>
+                    <span>{{ $daysRemaining }} يوم متبقي</span>
+                </div>
+                <div class="progress-bar-custom mb-4">
+                    <div class="progress-bar-fill" style="width: {{ $progressPercent }}%"></div>
+                </div>
+                @endif
+
+                <div class="d-flex flex-wrap gap-3 align-items-center">
+                    @if($subscription?->ends_at)
+                        <div class="info-tile text-center">
+                            <div class="fw-black fs-4">{{ $subscription->ends_at->format('d/m/Y') }}</div>
+                            <div class="small opacity-70">تاريخ الانتهاء</div>
+                        </div>
+                    @endif
+                    <div class="info-tile text-center">
+                        <div class="fw-black fs-4">{{ $subscription?->billing_cycle === 'yearly' ? 'سنوي' : 'شهري' }}</div>
+                        <div class="small opacity-70">دورة الفاتورة</div>
+                    </div>
+                    <div class="info-tile text-center">
+                        <div class="fw-black fs-4">
+                            {{ number_format($subscription?->total_amount ?? 0, 0) }}
+                            <small class="fs-6">{{ $currency }}</small>
+                        </div>
+                        <div class="small opacity-70">المبلغ الإجمالي</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5 text-center d-none d-md-block">
+                <div style="width:180px;height:180px;margin:auto;position:relative;">
+                    @php $remaining = 100 - $progressPercent; @endphp
+                    <svg viewBox="0 0 36 36" class="w-100 h-100" style="transform: rotate(-90deg);">
+                        <circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="3"/>
+                        <circle cx="18" cy="18" r="15.9" fill="none" stroke="#7ecbff" stroke-width="3"
+                                stroke-dasharray="{{ $remaining }} {{ 100 - $remaining }}"
+                                stroke-linecap="round"/>
+                    </svg>
+                    <div class="position-absolute top-50 start-50 translate-middle text-center">
+                        <div class="fw-black" style="font-size:2rem;">{{ $daysRemaining ?? '—' }}</div>
+                        <div class="small opacity-70">يوم متبقي</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    @if(session('info'))
-        <div class="alert alert-info">{{ session('info') }}</div>
-    @endif
-    
-    @if(session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
-    @endif
+    {{-- ─── Section: Available Plans ─────────────────────────── --}}
+    <div class="mb-3 d-flex align-items-center justify-content-between">
+        <h5 class="fw-bold mb-0">
+            <i class="fas fa-layer-group me-2 text-primary"></i>{{ __('center::subscription.available_plans') }}
+        </h5>
+        <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2">
+            {{ $packages->count() }} {{ __('center::subscription.plans_count') }}
+        </span>
+    </div>
 
-    <div class="row g-4">
+    <div class="row g-4 mb-5">
         @foreach($packages as $package)
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm border-0 rounded-4 {{ $tenant->subscribedToPrice($package->stripe_price_id) ? 'border-primary border-2' : '' }}">
-                    <div class="card-body p-4">
-                        @if($tenant->subscribedToPrice($package->stripe_price_id))
-                            <span class="badge bg-primary rounded-pill mb-3">{{ __('center::messages.blade_0923') }}</span>
-                        @endif
-                        <h4 class="fw-bold mb-2">{{ $package->name }}</h4>
-                        <div class="mb-3">
-                            <span class="display-6 fw-black text-primary">{{ number_format($package->price, 0) }}</span>
-                            <span class="text-muted">ر.س / شهرياً</span>
-                        </div>
-                        <p class="text-muted small mb-4">{{ $package->description }}</p>
-                        
-                        <ul class="list-unstyled mb-4">
-                            @foreach($package->display_features ?? [] as $feature)
-                                <li class="mb-2 small">
-                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
-                                    {{ $feature }}
-                                </li>
-                            @endforeach
-                        </ul>
+            @php
+                $isCurrent  = $currentPackage?->id === $package->id;
+                $isFeatured = $package->is_featured;
 
-                        @if($tenant->subscribedToPrice($package->stripe_price_id))
-                            <button class="btn btn-outline-primary w-100 rounded-pill disabled" disabled>{{ __('center::messages.blade_0924') }}</button>
+                $pFeatures = [];
+                foreach ($package->features as $feat) {
+                    $val = $feat->pivot->value;
+                    if ($feat->type === 'boolean' && ($val === 'false' || !$val)) continue;
+                    if ($feat->type === 'limit' && $val === '0') continue;
+
+                    $transKey = 'features.' . $feat->code;
+                    $label    = __($transKey);
+                    if ($label === $transKey) {
+                        $label = app()->getLocale() === 'en' && $feat->name_en ? $feat->name_en : $feat->name;
+                    }
+
+                    if ($val === '-1')              $pFeatures[] = $label . ': غير محدود';
+                    elseif ($feat->type === 'boolean') $pFeatures[] = $label;
+                    else                              $pFeatures[] = $label . ': ' . $val;
+                }
+            @endphp
+
+            <div class="col-md-6 col-lg-{{ $packages->count() <= 3 ? '4' : '3' }}">
+                <div class="plan-card h-100 p-4 d-flex flex-column {{ $isCurrent ? 'current-plan' : '' }} {{ $isFeatured && !$isCurrent ? 'featured-plan' : '' }}">
+
+                    {{-- Plan Header --}}
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            @if($isCurrent)
+                                <span class="badge bg-primary rounded-pill mb-2 px-3 py-1">
+                                    <i class="fas fa-check-circle me-1"></i> باقتك الحالية
+                                </span>
+                            @elseif($isFeatured)
+                                <span class="badge" style="background: linear-gradient(90deg,#3A0CA3,#2A4DFF); color:#fff; border-radius:999px;" class="rounded-pill mb-2 px-3 py-1">
+                                    ⚡ الأشهر
+                                </span>
+                            @endif
+                            <h5 class="fw-black mb-0 mt-1">{{ app()->getLocale() === 'en' && $package->name_en ? $package->name_en : $package->name }}</h5>
+                        </div>
+                        <div class="text-end">
+                            <div class="fw-black text-primary" style="font-size:1.6rem; line-height:1;">
+                                {{ number_format($package->price, 0) }}
+                            </div>
+                            <small class="text-muted">{{ $currency }} / شهرياً</small>
+                        </div>
+                    </div>
+
+                    <p class="text-muted small mb-3">{{ $package->description }}</p>
+
+                    {{-- Features List --}}
+                    <ul class="list-unstyled mb-4 flex-grow-1">
+                        @foreach(array_slice($pFeatures, 0, 8) as $f)
+                            <li class="d-flex align-items-start gap-2 mb-2 small">
+                                <i class="fas fa-check-circle feature-check mt-1 flex-shrink-0"></i>
+                                <span>{{ $f }}</span>
+                            </li>
+                        @endforeach
+                        @if(count($pFeatures) > 8)
+                            <li class="text-muted small text-center mt-2">+ {{ count($pFeatures) - 8 }} ميزة أخرى</li>
+                        @endif
+                    </ul>
+
+                    {{-- CTA Button --}}
+                    <div class="mt-auto">
+                        @if($isCurrent)
+                            <button class="btn btn-light w-100 rounded-pill fw-bold" disabled>
+                                <i class="fas fa-check me-1"></i> باقتك الحالية
+                            </button>
                         @elseif($package->stripe_price_id)
-                            <a href="{{ route('center.subscription.checkout', $package->id) }}" class="btn btn-primary w-100 rounded-pill">{{ __('center::messages.blade_0925') }}</a>
+                            <a href="{{ route('center.subscription.checkout', ['tenant' => $tenant->domain, 'package' => $package->id]) }}"
+                               class="btn btn-primary w-100 rounded-pill fw-bold {{ $isFeatured ? '' : 'btn-outline-primary' }}"
+                               style="{{ $isFeatured ? '' : 'background:transparent; color:#3A0CA3; border-color:#3A0CA3;' }}"
+                               onclick="return confirm('هل تريد الترقية إلى باقة {{ addslashes($package->name) }}؟')">
+                                @if($currentPackage && $package->price > $currentPackage->price)
+                                    <i class="fas fa-arrow-up me-1"></i> ترقية الآن
+                                @elseif($currentPackage && $package->price < $currentPackage->price)
+                                    <i class="fas fa-arrow-down me-1"></i> تخفيض الباقة
+                                @else
+                                    <i class="fas fa-exchange-alt me-1"></i> الاشتراك
+                                @endif
+                            </a>
                         @else
-                            <button class="btn btn-light w-100 rounded-pill disabled" disabled>{{ __('center::messages.blade_0926') }}</button>
+                            <button class="btn btn-light w-100 rounded-pill fw-bold" disabled>
+                                تواصل معنا
+                            </button>
                         @endif
                     </div>
                 </div>
             </div>
         @endforeach
     </div>
+
+    {{-- ─── Section: Contact & Support ────────────────────────── --}}
+    <div class="contact-card p-4 p-md-5">
+        <div class="row align-items-center g-3">
+            <div class="col-md-8">
+                <h4 class="fw-black mb-2">
+                    <i class="fas fa-headset me-2 opacity-75"></i>
+                    هل تحتاج مساعدة في الاشتراك؟
+                </h4>
+                <p class="opacity-70 mb-0">
+                    تواصل مع فريق الدعم لدينا للحصول على عرض مخصص أو للاستفسار عن الباقات.
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{{ route('center.tickets.create', ['tenant' => $tenant->domain]) }}"
+                   class="btn btn-light rounded-pill px-4 fw-bold shadow-sm">
+                    <i class="fas fa-ticket-alt me-2"></i> فتح تذكرة دعم
+                </a>
+            </div>
+        </div>
+    </div>
+
 </div>
 @endsection

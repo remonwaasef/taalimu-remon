@@ -564,7 +564,22 @@
                 </div>
             </div>
 
-            <!-- 5. SETTINGS -->
+            {{-- ─── SUBSCRIPTION ─────────────────────────── --}}
+            <a href="{{ route('center.subscription.index', ['tenant' => $tenant->domain ?? 'center']) }}"
+               class="sidebar-nav-link mb-1 {{ request()->routeIs('center.subscription.*') ? 'active' : '' }}">
+                <span>
+                    <i class="fas fa-credit-card me-2 {{ request()->routeIs('center.subscription.*') ? 'text-warning' : 'opacity-75' }}"></i>
+                    {{ __('center::sidebar.subscription') }}
+                </span>
+                @php
+                    $subEndsAt = app('tenant')->subscriptions?->last()?->ends_at;
+                    $daysLeft  = $subEndsAt ? max(0, now()->diffInDays($subEndsAt, false)) : null;
+                @endphp
+                @if($daysLeft !== null && $daysLeft <= 7)
+                    <span class="badge bg-danger rounded-pill" style="font-size:0.65rem;">{{ $daysLeft }}d</span>
+                @endif
+            </a>
+
             @canany(['manage users', 'manage settings'])
             @php 
                 $isSettingsActive = request()->routeIs('center.assets.*') || 

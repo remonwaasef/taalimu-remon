@@ -50,5 +50,6 @@ return [
     'financial_taxes' => 'الضرائب المحصلة',
     'assets' => 'العهد والأصول',
     'school_management' => 'إدارة المدرسة',
+    'subscription'       => 'اشتراكي',
 
 ];
