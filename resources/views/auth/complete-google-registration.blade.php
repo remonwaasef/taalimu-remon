@@ -8,7 +8,7 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('googleRegistration', (config) => ({
         selectedPlan: config.selectedPlan,
-        billingCycle: 'monthly',
+        billingCycle: config.selectedCycle || 'monthly',
         packages: config.packages,
         centerName: '{{ old('center_name') }}',
         subdomain: '{{ old('subdomain') }}',
@@ -156,6 +156,7 @@ document.addEventListener('alpine:init', () => {
 <div class="min-h-screen bg-slate-50/50 flex justify-center p-4 lg:p-8 mesh-gradient-soft noise-overlay register-page-offset" 
      x-data="googleRegistration({
         selectedPlan: {{ Js::from($selectedPlanSlug) }},
+        selectedCycle: {{ Js::from($selectedCycle) }},
         packages: {{ Js::from($packagesData) }}
      })"
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
@@ -216,6 +217,7 @@ document.addEventListener('alpine:init', () => {
             <form action="{{ route('google.complete-registration') }}" method="POST" class="space-y-6" @submit="handleSubmit($event)">
                 @csrf
                 <input type="hidden" name="plan" x-model="selectedPlan">
+                <input type="hidden" name="billing_cycle" x-model="billingCycle">
 
                 {{-- Center Name --}}
                 <div class="space-y-1.5">
