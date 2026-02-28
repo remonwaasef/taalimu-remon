@@ -4,8 +4,8 @@
 <div class="min-h-screen bg-slate-50/50 flex justify-center items-center p-4 lg:p-8 mesh-gradient-soft noise-overlay">
     <div class="w-full max-w-md bg-white rounded-[32px] shadow-xl shadow-slate-200/60 overflow-hidden border border-slate-100 p-8 text-center">
         <div class="mb-6 flex justify-center">
-            <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center">
-                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-16 h-16 bg-brand-secondary/10 rounded-full flex items-center justify-center">
+                <svg class="w-8 h-8 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                 </svg>
             </div>
@@ -27,7 +27,7 @@
 
         <form method="POST" action="{{ route('verification.send') }}">
             @csrf
-            <button type="submit" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-500/20 transition-all font-arabic">
+            <button type="submit" class="w-full py-3 px-4 bg-brand-secondary hover:opacity-90 text-white font-bold rounded-xl shadow-lg shadow-brand-secondary/20 transition-all font-arabic">
                 {{ __('Resend Verification Email') }}
             </button>
         </form>

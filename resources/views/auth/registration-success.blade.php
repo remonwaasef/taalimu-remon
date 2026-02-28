@@ -32,14 +32,14 @@
         @endphp
 
         <!-- Center Details Card -->
-        <div class="bg-card border-2 border-primary/20 rounded-2xl shadow-2xl p-4 space-y-3 animate-scale-in" style="animation-delay: 0.1s;">
+        <div class="bg-card border-2 border-brand-primary/20 rounded-2xl shadow-2xl p-4 space-y-3 animate-scale-in" style="animation-delay: 0.1s;">
             <!-- Center Name with Icon -->
             <div class="text-center pb-3 border-b-2 border-border">
-                <div class="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-xl">
-                    <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="inline-flex items-center gap-2 bg-brand-primary/10 px-4 py-2 rounded-xl">
+                    <svg class="w-5 h-5 text-brand-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                     </svg>
-                    <h2 class="text-xl font-bold text-primary">
+                    <h2 class="text-xl font-bold text-brand-primary">
                         {{ session('center_name') }}
                     </h2>
                 </div>
@@ -48,23 +48,23 @@
             <!-- Access URL with Icon -->
             <div>
                 <label class="flex items-center gap-2 text-xs font-semibold text-foreground mb-2">
-                    <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
                     </svg>
                     {{ __('auth.registration.your_center_url') }}
                 </label>
-                <div class="flex items-center gap-2 p-3 bg-gradient-to-r from-primary/5 to-accent/5 rounded-xl border-2 border-primary/20">
+                <div class="flex items-center gap-2 p-3 bg-brand-secondary/5 rounded-xl border-2 border-brand-secondary/20">
                     <input 
                         type="text" 
                         readonly 
                         value="{{ $accessUrl }}"
-                        class="flex-1 bg-transparent border-0 text-sm font-mono font-semibold text-primary focus:outline-none select-all"
+                        class="flex-1 bg-transparent border-0 text-sm font-mono font-semibold text-brand-secondary focus:outline-none select-all"
                         id="centerUrl"
                         dir="ltr"
                     >
                     <button 
                         onclick="copyUrl()"
-                        class="px-3 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all shadow-md hover:shadow-lg flex items-center gap-1 font-semibold text-sm"
+                        class="px-3 py-2 bg-brand-secondary text-white rounded-lg hover:opacity-90 transition-all shadow-md hover:shadow-lg flex items-center gap-1 font-semibold text-sm"
                         id="copyBtn"
                     >
                         <i class="fas fa-copy"></i>
@@ -102,13 +102,13 @@
             <div class="pt-1">
                 <a 
                     href="{{ $accessUrl }}"
-                    class="group block w-full text-center py-3 bg-primary text-white font-bold text-base rounded-xl hover:shadow-2xl transition-all transform hover:scale-[1.02]"
+                    class="btn-hero-cta group block w-full text-center py-4 rounded-xl shadow-2xl transition-all transform hover:scale-[1.02]"
                 >
                     <span class="flex items-center justify-center gap-3">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                         </svg>
-                        {{ __('auth.registration.access_center') }}
+                        <span class="text-xl font-black font-arabic">{{ __('auth.registration.access_center') }}</span>
                         <svg class="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                         </svg>

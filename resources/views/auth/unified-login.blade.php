@@ -5,9 +5,9 @@
     <div class="max-w-md w-full space-y-8 animate-fade-in-up">
         <div class="bg-white border border-slate-100/50 rounded-[2.5rem] shadow-2xl shadow-blue-900/5 p-8 lg:p-10 backdrop-blur-xl relative overflow-hidden">
             <!-- Decorative glow -->
-            <div class="absolute -top-24 -right-24 w-64 h-64 bg-violet-500/10 blur-[80px] rounded-full pointer-events-none"></div>
+            <div class="absolute -top-24 -right-24 w-64 h-64 bg-brand-primary/10 blur-[80px] rounded-full pointer-events-none"></div>
             <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold gradient-text mb-2">{{ __('auth.login.title') }}</h2>
+                <h2 class="text-3xl font-bold gradient-hero bg-clip-text text-transparent mb-2">{{ __('auth.login.title') }}</h2>
                 <p class="text-muted-foreground">{{ __('auth.login.subtitle') }}</p>
             </div>
 
@@ -19,7 +19,7 @@
             @endif
 
             @if (session('info'))
-                <div class="bg-blue-500/10 border border-blue-500/20 text-blue-600 rounded-lg p-4 mb-6 flex items-center">
+                <div class="bg-brand-secondary/10 border border-brand-secondary/20 text-brand-secondary rounded-lg p-4 mb-6 flex items-center">
                     <i class="fas fa-info-circle me-3"></i>
                     <span class="text-sm font-medium">{{ session('info') }}</span>
                 </div>
@@ -38,7 +38,7 @@
                                id="email" 
                                name="email" 
                                value="{{ old('email') }}" 
-                               class="block w-full ps-10 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all @error('email') border-red-500 @enderror" 
+                               class="block w-full ps-10 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all @error('email') border-red-500 @enderror" 
                                placeholder="{{ __('auth.login.email_or_phone') }}"
                                required 
                                autofocus>
@@ -57,7 +57,7 @@
                         <input type="password" 
                                id="password" 
                                name="password" 
-                               class="block w-full ps-10 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all @error('password') border-red-500 @enderror" 
+                               class="block w-full ps-10 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all @error('password') border-red-500 @enderror" 
                                placeholder="••••••••"
                                required>
                     </div>
@@ -80,7 +80,7 @@
                     </div>
                 </div>
 
-                <a href="{{ route('auth.google') }}" class="w-full flex items-center justify-center gap-2 py-3 px-4 border border-gray-300 rounded-xl shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                <a href="{{ route('auth.google') }}" class="w-full flex items-center justify-center gap-2 py-3 px-4 border border-gray-300 rounded-xl shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-secondary/20 transition-all">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                         <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>

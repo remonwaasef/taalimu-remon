@@ -1,7 +1,7 @@
 @extends('layouts.landing-new')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex justify-center items-center p-4 lg:p-8">
+<div class="min-h-screen mesh-gradient-soft noise-overlay flex justify-center items-center p-4 lg:p-8">
     <div class="w-full max-w-lg">
         {{-- Google User Info Card --}}
         <div class="bg-white rounded-[1.5rem] shadow-xl shadow-blue-900/5 overflow-hidden border border-white/50 backdrop-blur-xl relative">
@@ -19,13 +19,13 @@
                     </svg>
                 </div>
                 <h2 class="text-2xl font-bold text-white mb-2 font-arabic tracking-tight relative z-10">{{ __('Almost Done!') }}</h2>
-                <p class="text-blue-100/90 text-sm font-arabic font-medium relative z-10">{{ __('Complete your center registration') }}</p>
+                <p class="text-white/70 text-sm font-arabic font-medium relative z-10">{{ __('Complete your center registration') }}</p>
             </div>
 
             {{-- Google Account Info --}}
             <div class="px-8 pt-8 pb-2">
-                <div class="flex items-center gap-4 p-4 bg-slate-50/80 rounded-2xl border border-slate-100/50 shadow-sm transition-all hover:bg-slate-50 hover:shadow-md hover:shadow-blue-900/5 group">
-                    <div class="w-12 h-12 bg-blue-100/60 rounded-full flex items-center justify-center text-blue-600 font-bold text-lg group-hover:scale-105 transition-transform">
+                <div class="flex items-center gap-4 p-4 bg-slate-50/80 rounded-2xl border border-slate-100/50 shadow-sm transition-all hover:bg-slate-50 hover:shadow-md hover:shadow-brand-secondary/5 group">
+                    <div class="w-12 h-12 bg-brand-secondary-light rounded-full flex items-center justify-center text-brand-secondary font-bold text-lg group-hover:scale-105 transition-transform">
                         {{ mb_substr(session('google_user.name', ''), 0, 1) }}
                     </div>
                     <div class="flex-1 min-w-0">

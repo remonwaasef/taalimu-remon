@@ -9,9 +9,16 @@
         /* Deep violet background base #18055E */
         --primary-purple: 263 70% 43%;
         /* Warm Luminous Violet #4C1D95 (Primary) */
+        --primary-light: 263 70% 96%;
+        --primary-vibrant: 263 70% 55%;
         --light-purple: 263 80% 65%;
         /* Lighter violet #8B5CF6 */
-        
+
+        --secondary: 221 83% 53%;
+        /* Bright Royal Blue #2563EB (Secondary) */
+        --secondary-light: 221 83% 96%;
+        --secondary-vibrant: 221 83% 65%;
+
         --cyan: 213 90% 65%;
         /* Soft Azure #5FA5FA */
         --success-green: 158 84% 39%;
@@ -27,7 +34,6 @@
 
         /* Outline/Accent Colors */
         --analytical-blue: 221 83% 53%;
-        /* Bright Royal Blue #2563EB (Accent) */
         --outline-green: 158 84% 39%;
         --outline-purple: 263 80% 85%;
 
@@ -65,23 +71,27 @@
         --input: 215 25% 90%;
         --ring: 263 70% 43%;
 
-        --radius: 1rem; /* Slightly softer, rounder corners globally */
+        --radius: 1rem;
+        /* Slightly softer, rounder corners globally */
 
         /* Gradients - Liquid Softness */
         /* Gradient 1: Deep Violet -> Luminous Violet -> Royal Blue */
-        --gradient-hero: linear-gradient(135deg, #2E1065 0%, #4C1D95 40%, #2563EB 100%);
+        --gradient-hero: linear-gradient(135deg, hsl(263 85% 20%) 0%, hsl(var(--primary-purple)) 40%, hsl(var(--secondary)) 100%);
         /* Gradient 2: Flowing Indigo -> Azure */
         --gradient-cta: linear-gradient(135deg, #1E1B4B 0%, #3730A3 50%, #3B82F6 100%);
         /* Gradient 3: Liquid Chrome Background */
-        --gradient-card: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, #F1F5F9 100%);
+        --gradient-card: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, #F1F5F9 100%);
         /* Gradient 4: Azure to Violet Flow */
         --gradient-cyan: linear-gradient(135deg, #60A5FA 0%, #8B5CF6 100%);
 
         /* Shadows - Diffuse & Floating */
-        --shadow-sm: 0 4px 12px hsl(221 83% 53% / 0.05); /* Very soft blue tint */
-        --shadow-md: 0 8px 24px hsl(263 70% 43% / 0.08); /* Soft violet tint */
+        --shadow-sm: 0 4px 12px hsl(221 83% 53% / 0.05);
+        /* Very soft blue tint */
+        --shadow-md: 0 8px 24px hsl(263 70% 43% / 0.08);
+        /* Soft violet tint */
         --shadow-lg: 0 16px 40px hsl(221 83% 53% / 0.12);
-        --shadow-xl: 0 24px 60px hsl(263 70% 43% / 0.15); /* Large floating shadow */
+        --shadow-xl: 0 24px 60px hsl(263 70% 43% / 0.15);
+        /* Large floating shadow */
         --shadow-glow: 0 0 50px hsl(213 90% 65% / 0.3);
         /* Soft Azure Glow */
         --shadow-purple-glow: 0 0 60px hsl(263 70% 43% / 0.3);
@@ -210,7 +220,8 @@
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
         border: 1px solid rgba(255, 255, 255, 0.7);
-        box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05); /* Floating feel */
+        box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
+        /* Floating feel */
         border-radius: 1.25rem;
     }
 
@@ -286,7 +297,8 @@
         color: white !important;
         font-weight: 700;
         letter-spacing: 0.02em;
-        border-radius: 9999px; /* Pill-shaped for friendliness */
+        border-radius: 9999px;
+        /* Pill-shaped for friendliness */
         overflow: hidden;
         border: none;
         box-shadow:
@@ -316,7 +328,8 @@
         transform: translateY(-2px) scale(1.01);
         background-position: right center;
         box-shadow:
-            0 20px 40px -8px rgba(76, 29, 149, 0.3), /* Deeper, softer violet shadow on hover */
+            0 20px 40px -8px rgba(76, 29, 149, 0.3),
+            /* Deeper, softer violet shadow on hover */
             inset 0 1px 2px rgba(255, 255, 255, 0.4);
     }
 
@@ -340,6 +353,64 @@
         border-color: hsl(var(--light-purple));
         box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.1);
         color: hsl(var(--primary-purple));
+    }
+
+    /* Brand Utility Classes */
+    .text-brand-primary {
+        color: hsl(var(--primary-purple));
+    }
+
+    .text-brand-secondary {
+        color: hsl(var(--secondary));
+    }
+
+    .text-brand-light {
+        color: hsl(var(--primary-light));
+    }
+
+    .bg-brand-primary {
+        background-color: hsl(var(--primary-purple));
+    }
+
+    .bg-brand-secondary {
+        background-color: hsl(var(--secondary));
+    }
+
+    .bg-brand-primary-light {
+        background-color: hsl(var(--primary-light));
+    }
+
+    .bg-brand-secondary-light {
+        background-color: hsl(var(--secondary-light));
+    }
+
+    .border-brand-primary {
+        border-color: hsl(var(--primary-purple));
+    }
+
+    .border-brand-secondary {
+        border-color: hsl(var(--secondary));
+    }
+
+    .border-brand-primary-light {
+        border-color: hsl(var(--primary-light));
+    }
+
+    /* Ring & Shadow overrides */
+    .ring-brand-primary {
+        --tw-ring-color: hsl(var(--primary-purple));
+    }
+
+    .ring-brand-secondary {
+        --tw-ring-color: hsl(var(--secondary));
+    }
+
+    .shadow-brand-secondary {
+        box-shadow: 0 10px 25px -5px hsla(var(--secondary) / 0.2);
+    }
+
+    .shadow-brand-primary {
+        box-shadow: 0 10px 25px -5px hsla(var(--primary-purple) / 0.2);
     }
 }
 
