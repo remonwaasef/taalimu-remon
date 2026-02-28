@@ -74,6 +74,26 @@ class SubscriptionController extends Controller
             return back()->with('error', __('center::messages.msg_087'));
         }
 
+        // Check for Demo Mode or Missing Keys
+        $stripeKey = config('services.stripe.secret');
+        $isDemo = config('services.stripe.demo_mode') || empty($stripeKey);
+
+        if ($isDemo) {
+            \Log::info("Using Demo Mode for subscription checkout", ['tenant_id' => $tenant->id, 'package_id' => $package->id]);
+            
+            // Replicate session data used by PaymentController@demo
+            session([
+                'tenant_id' => $tenant->id,
+                'selected_plan' => $package->slug,
+                'billing_cycle' => 'monthly', // Default or from request if needed
+                'base_price' => $package->price,
+                'total_amount' => $package->price,
+                'registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . auth()->id(), config('app.key')),
+            ]);
+
+            return redirect()->route('payment.demo');
+        }
+
         return $tenant->newSubscription('default', $package->stripe_price_id)
             ->checkout([
                 'success_url' => route('center.subscription.success'),
