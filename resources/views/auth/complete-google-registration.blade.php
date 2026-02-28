@@ -78,61 +78,63 @@ document.addEventListener('alpine:init', () => {
                     </svg>
                 </div>
                 
-                <h2 class="text-3xl font-black text-white mb-3 font-arabic leading-tight relative z-10">{{ __('Almost Done!') }}</h2>
-                <p class="text-white/80 text-sm font-arabic font-medium relative z-10 opacity-90">{{ __('Create your educational platform in seconds') }}</p>
+                <h2 class="text-3xl lg:text-4xl font-black text-white mb-3 font-arabic leading-tight relative z-10">
+                    {{ app()->getLocale() == 'ar' ? 'أهلاً بك! لنكمل تجهيز مركزك' : 'Welcome! Let\'s complete setup' }}
+                </h2>
+                <p class="text-white/90 text-sm lg:text-base font-arabic font-medium relative z-10 opacity-90 drop-shadow-sm">
+                    {{ app()->getLocale() == 'ar' ? 'خطوة أخيرة للبدء في استخدام منصتك التعليمية' : 'One last step to start your educational platform' }}
+                </p>
             </div>
 
             {{-- Verified Account Pill --}}
-            <div class="px-8 -mt-6 relative z-20">
-                <div class="flex items-center gap-4 p-4 bg-white rounded-2xl border border-slate-100 shadow-xl shadow-blue-900/5 group hover:border-brand-secondary/30 transition-all">
-                    <div class="w-12 h-12 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center text-brand-secondary font-black text-xl group-hover:scale-110 transition-transform">
+            <div class="px-8 -mt-8 relative z-20">
+                <div class="flex items-center gap-4 p-5 bg-white/95 backdrop-blur-md rounded-2xl border border-white shadow-2xl shadow-blue-900/10 group hover:border-brand-secondary/30 transition-all transform hover:-translate-y-1">
+                    <div class="w-14 h-14 bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 rounded-full flex items-center justify-center text-brand-secondary font-black text-2xl group-hover:scale-110 transition-transform shadow-inner">
                         {{ mb_substr(session('google_user.name', 'U'), 0, 1) }}
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="font-bold text-slate-900 text-[13px] truncate">{{ session('google_user.name') }}</p>
-                        <p class="text-slate-400 text-[11px] truncate">{{ session('google_user.email') }}</p>
+                        <p class="font-black text-slate-900 text-sm truncate uppercase tracking-tight">{{ session('google_user.name') }}</p>
+                        <p class="text-slate-500 text-xs truncate font-medium opacity-80">{{ session('google_user.email') }}</p>
                     </div>
                     <div class="flex-shrink-0">
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black ring-1 ring-inset ring-emerald-500/10">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[11px] font-black ring-1 ring-inset ring-emerald-500/20 shadow-sm">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                             {{ __('Verified') }}
                         </span>
                     </div>
                 </div>
             </div>
 
-            <div class="px-8 py-10">
+            <div class="px-8 py-12">
                 @if ($errors->any())
-                    <div class="mb-8 p-4 bg-red-50 border border-red-100 text-red-700 rounded-2xl text-[13px] font-arabic shadow-sm">
-                        <div class="flex gap-2">
-                            <i class="bi bi-exclamation-circle-fill"></i>
-                            <div class="space-y-1">
-                                @foreach ($errors->all() as $error)
-                                    <p class="font-bold">{{ $error }}</p>
-                                @endforeach
-                            </div>
+                    <div class="mb-8 p-5 bg-red-50 border border-red-100 text-red-700 rounded-2xl text-[14px] font-arabic shadow-sm flex gap-3 items-start animate-shake">
+                        <i class="bi bi-exclamation-triangle-fill text-xl"></i>
+                        <div class="space-y-1">
+                            @foreach ($errors->all() as $error)
+                                <p class="font-bold">{{ $error }}</p>
+                            @endforeach
                         </div>
                     </div>
                 @endif
 
-                <form action="{{ route('google.complete-registration') }}" method="POST" class="space-y-6" @submit="handleSubmit($event)">
+                <form action="{{ route('google.complete-registration') }}" method="POST" class="space-y-8" @submit="handleSubmit($event)">
                     @csrf
 
                     {{-- Center Name --}}
                     <div class="space-y-2">
-                        <label for="center_name" class="block text-[13px] font-black text-slate-700 font-arabic px-1 uppercase tracking-wider">
+                        <label for="center_name" class="block text-[14px] font-black text-slate-700 font-arabic px-1 uppercase tracking-tight opacity-70">
                             {{ __('auth.register.center_name') }}
                         </label>
                         <div class="relative group">
-                            <div class="absolute inset-y-0 start-0 ps-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-brand-secondary transition-colors">
-                                <i class="bi bi-building text-lg"></i>
+                            <div class="absolute inset-y-0 start-0 ps-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-brand-secondary transition-colors">
+                                <i class="bi bi-building-fill text-xl"></i>
                             </div>
                             <input type="text" 
                                    name="center_name" 
                                    id="center_name"
                                    x-model="centerName"
                                    @input="if(!manuallyEditedSubdomain) { subdomain = generateSlug(centerName); checkSubdomain(); }"
-                                   class="block w-full ps-12 pe-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all font-arabic text-sm font-bold"
+                                   class="block w-full ps-14 pe-5 py-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all font-arabic text-base font-bold shadow-inner"
                                    placeholder="{{ __('auth.register.center_name_placeholder') }}"
                                    required 
                                    autofocus>
@@ -141,61 +143,65 @@ document.addEventListener('alpine:init', () => {
 
                     {{-- Subdomain Field --}}
                     <div class="space-y-2">
-                        <label class="block text-[13px] font-black text-slate-700 font-arabic px-1 uppercase tracking-wider">
+                        <label class="block text-[14px] font-black text-slate-700 font-arabic px-1 uppercase tracking-tight opacity-70">
                             {{ app()->getLocale() == 'ar' ? 'رابط المنصة الخاص بك' : 'Your Platform Link' }}
                         </label>
-                        <div class="relative flex items-center group">
-                            <div class="absolute left-0 rtl:right-0 inset-y-0 flex items-center px-4 pointer-events-none text-slate-400 font-bold text-sm bg-slate-50 border-r rtl:border-r-0 rtl:border-l border-slate-100 rounded-l-2xl rtl:rounded-r-2xl rtl:rounded-l-none">
+                        <div class="relative flex items-center group" dir="ltr">
+                            <!-- Left Side: HTTPS prefix -->
+                            <div class="absolute left-0 inset-y-0 flex items-center px-4 pointer-events-none text-brand-secondary font-black text-sm bg-brand-secondary/5 border-r border-brand-secondary/20 rounded-l-2xl z-10">
                                 https://
                             </div>
+                            
+                            <!-- Input Field -->
                             <input type="text" 
                                    name="subdomain" 
                                    x-model="subdomain"
                                    @input="manuallyEditedSubdomain = true; subdomain = cleanSlug(subdomain);"
                                    @input.debounce.500ms="checkSubdomain()"
-                                   class="block w-full ps-24 rtl:pr-24 rtl:pl-44 px-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all font-sans text-sm font-bold ltr"
-                                   dir="ltr"
-                                   placeholder="my-center" 
+                                   class="block w-full pl-[90px] pr-[120px] py-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all font-sans text-base font-bold text-left shadow-inner"
+                                   placeholder="center-name" 
                                    required>
-                            <div class="absolute right-0 rtl:left-0 inset-y-0 flex items-center pr-4 rtl:pl-4 pointer-events-none text-slate-400 font-bold text-sm">
-                                .taalimu.com
-                            </div>
-
-                            <!-- Availability Indicators -->
-                            <div class="absolute -right-10 rtl:-left-10 top-1/2 -translate-y-1/2">
-                                <template x-if="subdomainStatus === 'loading'">
-                                    <div class="w-6 h-6 border-4 border-brand-secondary border-t-transparent rounded-full animate-spin"></div>
-                                </template>
-                                <template x-if="subdomainStatus === 'valid'">
-                                    <div class="w-7 h-7 bg-emerald-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                                        <i class="bi bi-check-lg"></i>
-                                    </div>
-                                </template>
-                                <template x-if="subdomainStatus === 'invalid'">
-                                    <div class="w-7 h-7 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-red-500/20">
-                                        <i class="bi bi-x-lg"></i>
-                                    </div>
-                                </template>
+                                   
+                            <!-- Right Side: Domain suffix & Indicator -->
+                            <div class="absolute right-0 inset-y-0 flex items-center pr-4 pointer-events-none text-slate-400 font-bold text-sm z-10 gap-3">
+                                <span class="opacity-60">.taalimu.com</span>
+                                
+                                <!-- Availability Indicators -->
+                                <div class="flex items-center justify-center w-6 h-6">
+                                    <template x-if="subdomainStatus === 'loading'">
+                                        <div class="w-5 h-5 border-3 border-brand-secondary border-t-transparent rounded-full animate-spin"></div>
+                                    </template>
+                                    <template x-if="subdomainStatus === 'valid'">
+                                        <div class="w-6 h-6 bg-emerald-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/20 animate-scale-in">
+                                            <i class="bi bi-check-lg text-sm"></i>
+                                        </div>
+                                    </template>
+                                    <template x-if="subdomainStatus === 'invalid'">
+                                        <div class="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-red-500/20 animate-shake">
+                                            <i class="bi bi-x-lg text-sm"></i>
+                                        </div>
+                                    </template>
+                                </div>
                             </div>
                         </div>
                         <template x-if="subdomainMessage">
-                            <p class="text-[11px] font-bold px-2" :class="subdomainStatus === 'valid' ? 'text-emerald-600' : 'text-red-500'" x-text="subdomainMessage"></p>
+                            <p class="text-[12px] font-bold px-2 animate-fade-in" :class="subdomainStatus === 'valid' ? 'text-emerald-600' : 'text-red-500'" x-text="subdomainMessage"></p>
                         </template>
                     </div>
 
                     {{-- Phone Field --}}
                     <div class="space-y-2">
-                        <label for="phone" class="block text-[13px] font-black text-slate-700 font-arabic px-1 uppercase tracking-wider">
+                        <label for="phone" class="block text-[14px] font-black text-slate-700 font-arabic px-1 uppercase tracking-tight opacity-70">
                             {{ __('auth.register.phone') }}
                         </label>
                         <div class="relative group">
-                            <div class="absolute inset-y-0 start-0 ps-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-brand-secondary transition-colors">
-                                <i class="bi bi-phone text-lg"></i>
+                            <div class="absolute inset-y-0 start-0 ps-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-brand-secondary transition-colors">
+                                <i class="bi bi-telephone-fill text-xl"></i>
                             </div>
                             <input type="text" 
                                    name="phone" 
                                    id="phone"
-                                   class="block w-full ps-12 pe-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all text-sm font-bold"
+                                   class="block w-full ps-14 pe-5 py-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all text-base font-bold shadow-inner"
                                    placeholder="010xxxxxxx"
                                    value="{{ old('phone') }}"
                                    required>
@@ -203,26 +209,26 @@ document.addEventListener('alpine:init', () => {
                     </div>
 
                     {{-- Submit Button --}}
-                    <div class="pt-4">
+                    <div class="pt-6">
                         <button type="submit" 
                                 :disabled="isSubmitting || subdomainStatus === 'invalid'"
-                                class="btn-hero-cta w-full py-5 px-8 rounded-2xl font-arabic flex items-center justify-center gap-3 text-lg font-black shadow-xl shadow-brand-secondary/20 hover:shadow-brand-secondary/40 hover:-translate-y-1 transition-all disabled:opacity-50 disabled:grayscale disabled:pointer-events-none">
-                            <span x-show="!isSubmitting">{{ __('Create My Center') }}</span>
-                            <span x-show="isSubmitting" class="flex items-center gap-2">
-                                <div class="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+                                class="btn-hero-cta w-full py-6 px-10 rounded-[1.5rem] font-arabic flex items-center justify-center gap-4 text-xl font-black shadow-2xl shadow-brand-secondary/20 hover:shadow-brand-secondary/40 hover:-translate-y-1.5 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale disabled:pointer-events-none group">
+                            <span x-show="!isSubmitting">{{ __('Start Your Journey Now') }}</span>
+                            <span x-show="isSubmitting" class="flex items-center gap-3">
+                                <div class="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
                                 {{ __('Processing...') }}
                             </span>
-                            <i x-show="!isSubmitting" class="bi bi-arrow-right-short text-2xl group-hover:translate-x-1 rtl:rotate-180 transition-transform"></i>
+                            <i x-show="!isSubmitting" class="bi bi-rocket-takeoff text-2xl group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
                         </button>
                     </div>
                 </form>
 
-                <div class="mt-8 pt-8 border-t border-slate-50 text-center">
-                    <p class="text-[11px] text-slate-400 font-arabic leading-relaxed">
+                <div class="mt-10 pt-10 border-t border-slate-50 text-center">
+                    <p class="text-[12px] text-slate-400 font-arabic font-medium leading-relaxed opacity-60">
                         {{ __('By continuing, you agree to our') }}
-                        <a href="{{ route('terms') }}" class="text-brand-secondary font-bold hover:underline">{{ __('Terms') }}</a>
+                        <a href="{{ route('terms') }}" class="text-brand-secondary font-black hover:underline hover:opacity-100 transition-opacity">{{ __('Terms') }}</a>
                         {{ __('and') }}
-                        <a href="{{ route('privacy') }}" class="text-brand-secondary font-bold hover:underline">{{ __('Privacy Policy') }}</a>
+                        <a href="{{ route('privacy') }}" class="text-brand-secondary font-black hover:underline hover:opacity-100 transition-opacity">{{ __('Privacy Policy') }}</a>
                     </p>
                 </div>
             </div>
@@ -230,3 +236,4 @@ document.addEventListener('alpine:init', () => {
     </div>
 </div>
 @endsection
+
