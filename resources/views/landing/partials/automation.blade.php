@@ -24,8 +24,7 @@
             
             <!-- Step 1 -->
             <div
-                class="relative text-center group animate-fade-in"
-                style="animation-delay: 0s;"
+                class="relative text-center group animate-fade-in delay-0"
             >
                 <!-- Step Circle -->
                 <div class="relative mx-auto mb-8">
@@ -66,8 +65,7 @@
 
             <!-- Step 2 -->
             <div
-                class="relative text-center group animate-fade-in"
-                style="animation-delay: 0.15s;"
+                class="relative text-center group animate-fade-in delay-15"
             >
                 <!-- Step Circle -->
                 <div class="relative mx-auto mb-8">
@@ -108,8 +106,7 @@
 
             <!-- Step 3 -->
             <div
-                class="relative text-center group animate-fade-in"
-                style="animation-delay: 0.3s;"
+                class="relative text-center group animate-fade-in delay-3"
             >
                 <!-- Step Circle -->
                 <div class="relative mx-auto mb-8">
@@ -146,7 +143,8 @@
 
         <!-- Result Box -->
         <div class="mt-16 lg:mt-20 max-w-2xl mx-auto">
-            <div class="relative rounded-3xl p-8 lg:p-10 text-center overflow-hidden border border-white/10 shadow-2xl" style="background: linear-gradient(135deg, hsl(var(--primary-purple)) 0%, hsl(var(--primary-vibrant)) 100%);">
+            <div class="relative rounded-3xl p-8 lg:p-10 text-center overflow-hidden border border-white/10 shadow-2xl result-box-gradient">
+
                 <!-- Decorative elements - Simplified -->
                 <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
                 <div class="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>

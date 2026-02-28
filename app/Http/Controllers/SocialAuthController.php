@@ -18,8 +18,16 @@ class SocialAuthController extends Controller
     /**
      * Redirect the user to the Google authentication page.
      */
-    public function redirectToGoogle()
+    public function redirectToGoogle(Request $request)
     {
+        // Save plan selection before redirecting to Google OAuth
+        if ($request->has('plan')) {
+            session(['selected_plan' => $request->plan]);
+        }
+        if ($request->has('cycle')) {
+            session(['selected_cycle' => $request->cycle]);
+        }
+
         return Socialite::driver('google')->redirect();
     }
 
@@ -53,13 +61,21 @@ class SocialAuthController extends Controller
             // 3. New user → Store Google data in session & redirect to complete registration
             session([
                 'google_user' => [
-                    'id' => $googleUser->id,
-                    'name' => $googleUser->name,
+                    'id'    => $googleUser->id,
+                    'name'  => $googleUser->name,
                     'email' => $googleUser->email,
                 ]
             ]);
 
-            return redirect()->route('google.complete-registration');
+            // Build redirect URL with plan/cycle persisted from session
+            $planParam  = session('selected_plan', '');
+            $cycleParam = session('selected_cycle', 'monthly');
+            $query = http_build_query(array_filter([
+                'plan'  => $planParam,
+                'cycle' => $cycleParam,
+            ]));
+
+            return redirect()->route('google.complete-registration') . ($query ? '?' . $query : '');
 
         } catch (\Exception $e) {
             \Log::error('Google Login Error: ' . $e->getMessage());

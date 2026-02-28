@@ -1,7 +1,7 @@
 @props(['name', 'options', 'label' => 'Filter'])
 
 <div class="dropdown">
-    <button class="btn btn-light shadow-sm rounded-pill px-4 dropdown-toggle d-flex align-items-center justify-content-between" 
+    <button class="btn btn-light shadow-sm rounded-pill px-4 dropdown-toggle d-flex align-items-center justify-content-between ui-filter-select" 
             type="button" 
             data-bs-toggle="dropdown" 
             aria-expanded="false"

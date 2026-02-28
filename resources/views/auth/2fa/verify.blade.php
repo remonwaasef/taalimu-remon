@@ -3,7 +3,7 @@
 @section('title', __('Security: 2FA Verification'))
 
 @section('content')
-<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+<div class="row justify-content-center align-items-center tfa-container">
     <div class="col-md-5">
         <div class="card shadow border-0">
             <div class="card-header bg-dark text-white py-3">
@@ -11,7 +11,7 @@
             </div>
             <div class="card-body p-5 text-center">
                 <div class="mb-4">
-                    <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                    <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mb-3 tfa-icon">
                         <i class="fas fa-lock fa-2x text-primary"></i>
                     </div>
                     <h6>{{ __('Authentication Required') }}</h6>

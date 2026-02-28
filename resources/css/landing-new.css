@@ -577,3 +577,67 @@
 ::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--light-purple));
 }
+
+/* =====================================================
+   Utility Classes (Extracted from Inline Styles)
+   ===================================================== */
+
+/* Animation Delay Utilities */
+.delay-0 {
+    animation-delay: 0s;
+}
+
+.delay-1 {
+    animation-delay: 0.1s;
+}
+
+.delay-15 {
+    animation-delay: 0.15s;
+}
+
+.delay-2 {
+    animation-delay: 0.2s;
+}
+
+.delay-3 {
+    animation-delay: 0.3s;
+}
+
+.delay-4 {
+    animation-delay: 0.4s;
+}
+
+.delay-5 {
+    animation-delay: 0.5s;
+}
+
+/* Auth Page Layout Offset (accounts for fixed header) */
+.register-page-offset {
+    padding-top: 120px;
+}
+
+/* Automation Section - Result Box Gradient */
+.result-box-gradient {
+    background: linear-gradient(135deg, hsl(var(--primary-purple)) 0%, hsl(var(--primary-vibrant)) 100%);
+}
+
+/* UI Components - Search & Filter */
+.ui-search-input {
+    background-color: var(--color-light);
+    height: 48px;
+}
+
+.ui-filter-select {
+    height: 48px;
+    min-width: 150px;
+}
+
+/* 2FA Pages Layout */
+.tfa-container {
+    min-height: 80vh;
+}
+
+.tfa-icon {
+    width: 80px;
+    height: 80px;
+}

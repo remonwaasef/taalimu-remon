@@ -14,8 +14,7 @@
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             <!-- Revenue Lost -->
             <div
-                class="group relative bg-card rounded-2xl p-8 border border-border hover:border-light-purple/30 transition-all duration-300 hover:shadow-card-hover animate-fade-in"
-                style="animation-delay: 0s;"
+                class="group relative bg-card rounded-2xl p-8 border border-border hover:border-light-purple/30 transition-all duration-300 hover:shadow-card-hover animate-fade-in delay-0"
             >
                 <!-- Icon -->
                 <div class="w-16 h-16 rounded-2xl bg-primary/5 border-primary/10 border flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -43,8 +42,7 @@
 
             <!-- Time Wasted -->
             <div
-                class="group relative bg-card rounded-2xl p-8 border border-border hover:border-light-purple/30 transition-all duration-300 hover:shadow-card-hover animate-fade-in"
-                style="animation-delay: 0.1s;"
+                class="group relative bg-card rounded-2xl p-8 border border-border hover:border-light-purple/30 transition-all duration-300 hover:shadow-card-hover animate-fade-in delay-1"
             >
                 <!-- Icon -->
                 <div class="w-16 h-16 rounded-2xl bg-primary/5 border-primary/10 border flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -72,8 +70,7 @@
 
             <!-- Visibility -->
             <div
-                class="group relative bg-card rounded-2xl p-8 border border-border hover:border-light-purple/30 transition-all duration-300 hover:shadow-card-hover animate-fade-in"
-                style="animation-delay: 0.2s;"
+                class="group relative bg-card rounded-2xl p-8 border border-border hover:border-light-purple/30 transition-all duration-300 hover:shadow-card-hover animate-fade-in delay-2"
             >
                 <!-- Icon -->
                 <div class="w-16 h-16 rounded-2xl bg-primary/5 border-primary/10 border flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -101,8 +98,7 @@
 
             <!-- Scheduling Chaos -->
             <div
-                class="group relative bg-card rounded-2xl p-8 border border-border hover:border-light-purple/30 transition-all duration-300 hover:shadow-card-hover animate-fade-in"
-                style="animation-delay: 0.3s;"
+                class="group relative bg-card rounded-2xl p-8 border border-border hover:border-light-purple/30 transition-all duration-300 hover:shadow-card-hover animate-fade-in delay-3"
             >
                 <!-- Icon -->
                 <div class="w-16 h-16 rounded-2xl bg-primary/5 border-primary/10 border flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">

@@ -153,8 +153,7 @@ document.addEventListener('alpine:init', () => {
 });
 </script>
 
-<div class="min-h-screen bg-slate-50/50 flex justify-center p-4 lg:p-8 mesh-gradient-soft noise-overlay" 
-     style="padding-top: 120px;"
+<div class="min-h-screen bg-slate-50/50 flex justify-center p-4 lg:p-8 mesh-gradient-soft noise-overlay register-page-offset" 
      x-data="googleRegistration({
         selectedPlan: {{ Js::from($selectedPlanSlug) }},
         packages: {{ Js::from($packagesData) }}
