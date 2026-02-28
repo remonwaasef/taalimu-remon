@@ -108,214 +108,157 @@ document.addEventListener('alpine:init', () => {
      })"
      dir="<?php echo e(app()->getLocale() == 'ar' ? 'rtl' : 'ltr'); ?>">
     
-    <!-- Main Centered Card Container (Dual Panel) -->
-    <div class="w-full max-w-4xl bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/5 overflow-hidden flex flex-col lg:flex-row border border-slate-100/50 min-h-[640px] animate-fade-in-up md:backdrop-blur-xl relative" style="max-width: 960px;">
+    <!-- Main Centered Card Container (Simplified Single Column) -->
+    <div class="w-full max-w-xl bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100/50 animate-fade-in-up md:backdrop-blur-xl relative">
         
-        <!-- Left Panel: Plan Selection (Sidebar) -->
-        <div class="hidden lg:flex lg:w-[32%] text-white flex-col p-8 lg:p-10 relative overflow-hidden" 
-             style="background: linear-gradient(135deg, hsl(263 85% 20%) 0%, hsl(var(--primary-purple)) 40%, hsl(var(--secondary)) 100%);">
-            <div class="absolute -top-24 -left-24 w-64 h-64 bg-white/10 blur-[80px] rounded-full pointer-events-none"></div>
+        <!-- Header & Account Info -->
+        <div class="bg-white p-8 lg:p-12 pb-0">
             
-            <div class="space-y-8 flex-1">
-                <h2 class="text-2xl lg:text-3xl font-bold mb-4 font-arabic leading-tight text-white">
-                    <?php echo e(__('Your Educational Platform is Ready!')); ?>
+            <div class="mb-10 animate-fade-in">
+                <div class="flex items-center gap-4 p-5 bg-slate-50 border border-slate-100 rounded-[2rem] shadow-sm group hover:border-brand-secondary/30 transition-all">
+                    <div class="w-14 h-14 bg-white border-2 border-brand-secondary/10 rounded-full flex items-center justify-center text-brand-secondary font-black text-2xl group-hover:scale-110 transition-transform shadow-sm">
+                        <?php echo e(mb_substr(session('google_user.name', 'U'), 0, 1)); ?>
 
-                </h2>
-                <p class="text-white/70 text-base font-arabic font-light leading-relaxed">
-                    <?php echo e(__('Complete these simple steps to start your free trial and explore all the powerful management tools.')); ?>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-black text-slate-900 text-sm truncate uppercase tracking-tight"><?php echo e(session('google_user.name', 'User')); ?></p>
+                        <p class="text-slate-500 text-xs truncate font-medium opacity-80"><?php echo e(session('google_user.email')); ?></p>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[11px] font-black ring-1 ring-inset ring-emerald-500/20 shadow-sm">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <?php echo e(app()->getLocale() == 'ar' ? 'حساب موثق' : 'Verified Account'); ?>
 
-                </p>
-
-                <div class="space-y-4 pt-6">
-                    <label class="text-[9px] font-black text-white/40 uppercase tracking-widest px-1 mb-1 block"><?php echo e(__('auth.register.select_plan')); ?></label>
-                    <template x-for="pkg in packages" :key="pkg.slug">
-                        <div @click="selectedPlan = pkg.slug"
-                            class="w-full p-6 rounded-2xl plan-card-compact cursor-pointer relative group/card mb-4 border transition-all duration-300 overflow-hidden"
-                            :class="selectedPlan === pkg.slug ? 'selected' : 'border-white/5 hover:border-white/20 bg-white/[0.02]'">
-                            
-                            <div class="inline-flex mb-3">
-                                <span class="text-[9px] font-black uppercase tracking-[0.25em] text-white/40 px-3 py-1 bg-white/5 rounded-full border border-white/5" x-text="pkg.name"></span>
-                            </div>
-
-                            <div class="flex items-start justify-center" x-data="{ pData: {} }" x-effect="pData = getPriceData(pkg)">
-                                <span class="text-4xl font-black text-white tracking-tighter leading-none" x-text="pData.amount.toLocaleString()"></span>
-                                <div class="flex flex-col ml-1 rtl:mr-1 rtl:ml-0 mt-1">
-                                    <span class="text-[12px] font-bold text-white/50" x-text="pData.currency"></span>
-                                    <span class="text-[9px] font-bold text-white/40">/<?php echo e(__('landing.pricing.month_short') ?? 'شهر'); ?></span>
-                                </div>
-                            </div>
-                        </div>
-                    </template>
+                        </span>
+                    </div>
                 </div>
             </div>
 
-            <div class="mt-auto pt-8 border-t border-white/5 opacity-60">
-                <p class="text-[10px] text-white/50 font-arabic">
-                    <?php echo e(__('Join 5,000+ educational centers leading the digital future.')); ?>
+            <!-- Contextual Header -->
+            <div class="mb-8 text-center">
+                <h1 class="text-3xl lg:text-4xl font-black text-slate-900 mb-4 font-arabic leading-tight">
+                    <?php echo e(app()->isLocale('ar') ? 'تأكيد الحساب' : 'Confirm Account'); ?>
+
+                </h1>
+                <p class="text-slate-500 text-base font-arabic font-medium opacity-80 max-w-[320px] mx-auto">
+                    <?php echo e(app()->isLocale('ar') ? 'خطوة واحدة لنبدأ في تجهيز منصتك التعليمية' : 'One last step to complete your platform setup'); ?>
 
                 </p>
             </div>
         </div>
 
-        <!-- Right Panel: Google Registration Form -->
-        <div class="lg:w-[68%] bg-white flex flex-col p-8 lg:p-12 relative">
-            <div class="max-w-[440px] mx-auto w-full pt-4">
+        <!-- Form Content -->
+        <div class="p-8 lg:p-12 pt-0">
+            <?php if($errors->any()): ?>
+                <div class="bg-red-50 border-2 border-red-50 rounded-3xl p-6 mb-8 animate-shake">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 text-red-600">
+                            <i class="bi bi-exclamation-triangle-fill text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-black text-red-900 font-arabic mb-1"><?php echo e(__('auth.register.registration_error')); ?></h3>
+                            <ul class="text-[13px] text-red-700 font-arabic opacity-90 space-y-0.5">
+                                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> <li>• <?php echo e($error); ?></li> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <form action="<?php echo e(route('google.complete-registration')); ?>" method="POST" class="space-y-6" @submit="handleSubmit($event)">
+                <?php echo csrf_field(); ?>
+                <input type="hidden" name="plan" x-model="selectedPlan">
+
                 
+                <div class="space-y-1.5">
+                    <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide"><?php echo e(__('auth.register.center_name')); ?></label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 start-0 ps-5 flex items-center pointer-events-none text-slate-300 group-focus-within:text-brand-secondary transition-colors"><i class="bi bi-building"></i></div>
+                        <input type="text" name="center_name" x-model="centerName"
+                            @input="if(!manuallyEditedSubdomain) { subdomain = generateSlug(centerName); checkSubdomain(); }"
+                            class="w-full h-14 ps-12 pe-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold font-arabic focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
+                            placeholder="<?php echo e(__('auth.register.center_name_placeholder')); ?>" required autofocus>
+                    </div>
+                </div>
+
                 
-                <div class="mb-10 animate-fade-in">
-                    <div class="flex items-center gap-4 p-5 bg-slate-50 border border-slate-100 rounded-[2rem] shadow-sm group hover:border-brand-secondary/30 transition-all">
-                        <div class="w-14 h-14 bg-white border-2 border-brand-secondary/10 rounded-full flex items-center justify-center text-brand-secondary font-black text-2xl group-hover:scale-110 transition-transform shadow-sm">
-                            <?php echo e(mb_substr(session('google_user.name', 'U'), 0, 1)); ?>
-
+                <div class="space-y-1.5">
+                    <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide"><?php echo e(app()->isLocale('ar') ? 'رابط المنصة' : 'Platform Link'); ?></label>
+                    <div class="relative flex items-center w-full group" dir="ltr">
+                        <div class="absolute left-0 inset-y-0 flex items-center px-4 pointer-events-none text-brand-secondary font-black text-xs bg-brand-secondary/5 border-r border-brand-secondary/10 rounded-l-2xl">https://</div>
+                        <input type="text" name="subdomain" x-model="subdomain"
+                            @input="manuallyEditedSubdomain = true; subdomain = cleanSlug(subdomain);"
+                            @input.debounce.500ms="checkSubdomain()"
+                            class="w-full h-14 pl-[80px] pr-[115px] bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold font-sans focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
+                            placeholder="center-name" required>
+                        <div class="absolute right-0 inset-y-0 flex items-center pr-4 pointer-events-none text-slate-400 font-bold text-xs gap-3">
+                            <span>.taalimu.com</span>
+                            <div class="flex items-center justify-center w-5 h-5">
+                                <template x-if="subdomainStatus === 'loading'"><div class="w-4 h-4 border-2 border-brand-secondary border-t-transparent rounded-full animate-spin"></div></template>
+                                <template x-if="subdomainStatus === 'valid'"><i class="bi bi-check-circle-fill text-emerald-500 text-lg"></i></template>
+                                <template x-if="subdomainStatus === 'invalid'"><i class="bi bi-x-circle-fill text-red-500 text-lg"></i></template>
+                            </div>
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="font-black text-slate-900 text-sm truncate uppercase tracking-tight"><?php echo e(session('google_user.name')); ?></p>
-                            <p class="text-slate-500 text-xs truncate font-medium opacity-80"><?php echo e(session('google_user.email')); ?></p>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[11px] font-black ring-1 ring-inset ring-emerald-500/20 shadow-sm">
-                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                <?php echo e(__('Verified')); ?>
+                    </div>
+                    <p x-show="subdomainMessage" :class="subdomainStatus === 'valid' ? 'text-emerald-600' : 'text-red-500'" 
+                       class="text-[11px] font-bold px-2 mt-1 animate-fade-in" x-text="subdomainMessage"></p>
+                </div>
 
-                            </span>
+                
+                <div class="space-y-1.5">
+                    <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide"><?php echo e(__('auth.register.phone')); ?></label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 start-0 ps-5 flex items-center pointer-events-none text-slate-300 group-focus-within:text-brand-secondary transition-colors"><i class="bi bi-telephone"></i></div>
+                        <input type="text" name="phone" value="<?php echo e(old('phone')); ?>"
+                            class="w-full h-14 ps-12 pe-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
+                            placeholder="010xxxxxxx" required>
+                    </div>
+                </div>
+
+                <!-- Simplified Price Summary Card -->
+                <div class="p-6 rounded-3xl bg-slate-50/80 border border-slate-100 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex flex-col">
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1"><?php echo e(__('auth.register.selected_plan')); ?></span>
+                            <h3 class="text-xl font-black text-slate-900 font-arabic" x-text="currentPlan.name"></h3>
+                        </div>
+                        <div class="text-right">
+                            <div class="flex items-baseline gap-1 text-brand-secondary">
+                                <span class="text-3xl font-black tracking-tighter" x-text="currentPriceData.amount.toLocaleString()"></span>
+                                <span class="text-sm font-bold opacity-60" x-text="currentPriceData.currency"></span>
+                            </div>
+                            <span class="text-[10px] font-bold text-slate-400">/<?php echo e(__('landing.pricing.month_short') ?? 'شهر'); ?></span>
                         </div>
                     </div>
                 </div>
 
-                <!-- STEP HEADINGS -->
-                <div class="mb-8">
-                    <h1 class="text-2xl lg:text-4xl font-black text-slate-900 mb-3 font-arabic leading-tight">
-                        <?php echo e(app()->getLocale() == 'ar' ? 'أهلاً بك! لنكمل تجهيز مركزك' : 'Welcome! Let\'s complete setup'); ?>
+                
+                <div class="pt-6">
+                    <button type="submit" :disabled="isSubmitting || subdomainStatus === 'invalid'"
+                            class="w-full h-16 rounded-full flex items-center justify-center gap-4 group bg-brand-secondary text-white shadow-2xl shadow-brand-secondary/20 hover:shadow-brand-secondary/40 hover:-translate-y-1 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale">
+                        <span x-show="!isSubmitting" class="text-xl font-black font-arabic"><?php echo e(__('auth.register.cta_main')); ?></span>
+                        <span x-show="isSubmitting" class="flex items-center gap-3">
+                            <div class="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                            <?php echo e(__('auth.register.processing') ?? 'جاري المعالجة...'); ?>
 
-                    </h1>
-                    <p class="text-slate-500 text-sm lg:text-base font-arabic font-medium opacity-80">
-                        <?php echo e(app()->getLocale() == 'ar' ? 'خطوة أخيرة للبدء في استخدام منصتك التعليمية' : 'One last step to start your educational platform'); ?>
-
-                    </p>
+                        </span>
+                        <i x-show="!isSubmitting" class="bi bi-rocket-takeoff text-2xl group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+                    </button>
                 </div>
+            </form>
 
-                <?php if($errors->any()): ?>
-                    <div class="mb-6 p-4 bg-red-50 border border-red-100 text-red-700 rounded-2xl text-[13px] font-arabic shadow-sm animate-shake">
-                        <ul class="space-y-1 font-bold">
-                            <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <li><?php echo e($error); ?></li>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </ul>
-                    </div>
-                <?php endif; ?>
+            <div class="mt-8 text-center">
+                <p class="text-[11px] text-slate-400 font-arabic leading-relaxed">
+                    <?php echo e(__('auth.register.terms_prefix')); ?>
 
-                <form action="<?php echo e(route('google.complete-registration')); ?>" method="POST" class="space-y-6" @submit="handleSubmit($event)">
-                    <?php echo csrf_field(); ?>
-                    <input type="hidden" name="plan" x-model="selectedPlan">
-
-                    
-                    <div class="space-y-1">
-                        <label for="center_name" class="label-compact px-1 font-arabic opacity-70">
-                            <?php echo e(__('auth.register.center_name')); ?>
-
-                        </label>
-                        <div class="relative group">
-                            <div class="absolute inset-y-0 start-0 ps-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-brand-secondary transition-colors">
-                                <i class="bi bi-building-fill text-xl"></i>
-                            </div>
-                            <input type="text" name="center_name" id="center_name" x-model="centerName"
-                                   @input="if(!manuallyEditedSubdomain) { subdomain = generateSlug(centerName); checkSubdomain(); }"
-                                   class="block w-full h-14 ps-14 pe-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all font-arabic text-base font-bold shadow-inner"
-                                   placeholder="<?php echo e(__('auth.register.center_name_placeholder')); ?>" required autofocus>
-                        </div>
-                    </div>
-
-                    
-                    <div class="space-y-1">
-                        <label class="label-compact px-1 font-arabic opacity-70">
-                            <?php echo e(app()->getLocale() == 'ar' ? 'رابط المنصة الخاص بك' : 'Your Platform Link'); ?>
-
-                        </label>
-                        <div class="relative flex items-center group" dir="ltr">
-                            <!-- Left Side: HTTPS prefix -->
-                            <div class="absolute left-0 inset-y-0 flex items-center px-4 pointer-events-none text-brand-secondary font-black text-sm bg-brand-secondary/5 border-r border-brand-secondary/20 rounded-l-2xl z-10">
-                                https://
-                            </div>
-                            
-                            <!-- Input Field -->
-                            <input type="text" name="subdomain" x-model="subdomain"
-                                   @input="manuallyEditedSubdomain = true; subdomain = cleanSlug(subdomain);"
-                                   @input.debounce.500ms="checkSubdomain()"
-                                   class="block w-full h-14 pl-[90px] pr-[120px] bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all font-sans text-base font-bold text-left shadow-inner"
-                                   placeholder="center-name" required>
-                                   
-                            <!-- Right Side: Domain suffix & Indicator -->
-                            <div class="absolute right-0 inset-y-0 flex items-center pr-4 pointer-events-none text-slate-400 font-bold text-sm z-10 gap-3">
-                                <span class="opacity-60">.taalimu.com</span>
-                                
-                                <div class="flex items-center justify-center w-6 h-6">
-                                    <template x-if="subdomainStatus === 'loading'">
-                                        <div class="w-5 h-5 border-3 border-brand-secondary border-t-transparent rounded-full animate-spin"></div>
-                                    </template>
-                                    <template x-if="subdomainStatus === 'valid'">
-                                        <div class="w-6 h-6 bg-emerald-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/20 animate-scale-in">
-                                            <i class="bi bi-check-lg text-sm"></i>
-                                        </div>
-                                    </template>
-                                    <template x-if="subdomainStatus === 'invalid'">
-                                        <div class="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-red-500/20 animate-shake">
-                                            <i class="bi bi-x-lg text-sm"></i>
-                                        </div>
-                                    </template>
-                                </div>
-                            </div>
-                        </div>
-                        <template x-if="subdomainMessage">
-                            <p class="text-[12px] font-bold px-2 animate-fade-in" :class="subdomainStatus === 'valid' ? 'text-emerald-600' : 'text-red-500'" x-text="subdomainMessage"></p>
-                        </template>
-                    </div>
-
-                    
-                    <div class="space-y-1">
-                        <label for="phone" class="label-compact px-1 font-arabic opacity-70">
-                            <?php echo e(__('auth.register.phone')); ?>
-
-                        </label>
-                        <div class="relative group">
-                            <div class="absolute inset-y-0 start-0 ps-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-brand-secondary transition-colors">
-                                <i class="bi bi-telephone-fill text-xl"></i>
-                            </div>
-                            <input type="text" name="phone" id="phone" value="<?php echo e(old('phone')); ?>"
-                                   class="block w-full h-14 ps-14 pe-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all text-base font-bold shadow-inner"
-                                   placeholder="010xxxxxxx" required>
-                        </div>
-                    </div>
-
-                    
-                    <div class="pt-6">
-                        <button type="submit" :disabled="isSubmitting || subdomainStatus === 'invalid'"
-                                class="btn-hero-cta w-full h-16 rounded-full font-arabic flex items-center justify-center gap-4 text-xl font-black shadow-2xl shadow-brand-secondary/20 hover:shadow-brand-secondary/40 hover:-translate-y-1.5 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale disabled:pointer-events-none group">
-                            <span x-show="!isSubmitting"><?php echo e(__('Start Your Journey Now')); ?></span>
-                            <span x-show="isSubmitting" class="flex items-center gap-3">
-                                <div class="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-                                <?php echo e(__('Processing...')); ?>
-
-                            </span>
-                            <i x-show="!isSubmitting" class="bi bi-rocket-takeoff text-2xl group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
-                        </button>
-                    </div>
-                </form>
-
-                <div class="mt-8 pt-8 border-t border-slate-50 text-center">
-                    <p class="text-[12px] text-slate-400 font-arabic font-medium opacity-60">
-                        <?php echo e(__('By continuing, you agree to our')); ?>
-
-                        <a href="<?php echo e(route('terms')); ?>" class="text-brand-secondary font-black hover:underline"><?php echo e(__('Terms')); ?></a>
-                        <?php echo e(__('and')); ?>
-
-                        <a href="<?php echo e(route('privacy')); ?>" class="text-brand-secondary font-black hover:underline"><?php echo e(__('Privacy Policy')); ?></a>
-                    </p>
-                </div>
+                    <a href="<?php echo e(route('terms')); ?>" class="text-slate-900 font-black hover:underline underline-offset-4"><?php echo e(__('auth.register.terms_of_service')); ?></a> 
+                    <?php echo e(__('auth.register.and')); ?> 
+                    <a href="<?php echo e(route('privacy')); ?>" class="text-slate-900 font-black hover:underline underline-offset-4"><?php echo e(__('auth.register.privacy_policy')); ?></a>
+                </p>
             </div>
         </div>
     </div>
 </div>
 <?php $__env->stopSection(); ?>
-
 
 <?php echo $__env->make('layouts.landing-new', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\new project\antigravty\edu\edu\resources\views/auth/complete-google-registration.blade.php ENDPATH**/ ?>
