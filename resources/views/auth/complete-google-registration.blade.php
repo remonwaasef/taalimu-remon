@@ -68,7 +68,7 @@
                             <input type="text" 
                                    name="center_name" 
                                    id="center_name"
-                                   class="block w-full ps-11 pe-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-arabic text-sm"
+                                   class="block w-full ps-11 pe-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-arabic text-sm"
                                    placeholder="{{ __('auth.register.center_name_placeholder') }}"
                                    value="{{ old('center_name') }}"
                                    required 
@@ -90,7 +90,7 @@
                             <input type="text" 
                                    name="phone" 
                                    id="phone"
-                                   class="block w-full ps-11 pe-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm"
+                                   class="block w-full ps-11 pe-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm"
                                    placeholder="010xxxxxxx"
                                    value="{{ old('phone') }}"
                                    required>
@@ -111,9 +111,9 @@
 
                 <p class="text-center text-xs text-slate-400 mt-4 font-arabic">
                     {{ __('By continuing, you agree to our') }}
-                    <a href="{{ route('terms') }}" class="text-blue-500 hover:underline">{{ __('Terms') }}</a>
+                    <a href="{{ route('terms') }}" class="text-primary hover:underline">{{ __('Terms') }}</a>
                     {{ __('and') }}
-                    <a href="{{ route('privacy') }}" class="text-blue-500 hover:underline">{{ __('Privacy Policy') }}</a>
+                    <a href="{{ route('privacy') }}" class="text-primary hover:underline">{{ __('Privacy Policy') }}</a>
                 </p>
             </div>
         </div>

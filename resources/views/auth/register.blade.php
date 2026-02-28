@@ -526,7 +526,7 @@ document.addEventListener('alpine:init', () => {
                         <!-- Selected Indicator (Ticket-Style) -->
                         <div class="mt-10 mb-8 p-6 rounded-[32px] bg-white border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.05)] transition-all duration-300 group/summary">
                             <div class="flex flex-col items-center md:items-start text-center md:text-start">
-                                <span class="text-[11px] font-bold text-primary-purple/40 uppercase tracking-[0.2em] mb-2">{{ __('auth.register.selected_plan') }}</span>
+                                <span class="text-[11px] font-bold uppercase tracking-[0.2em] mb-2" style="color: rgba(122, 77, 252, 0.4);">{{ __('auth.register.selected_plan') }}</span>
                                 <h3 class="text-xl font-black text-slate-900 font-arabic leading-none" x-text="currentPlan.name || '{{ __('auth.register.please_select_plan') ?? 'يرجى اختيار باقة' }}'"></h3>
                             </div>
                             
