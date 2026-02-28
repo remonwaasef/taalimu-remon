@@ -399,23 +399,23 @@ document.addEventListener('alpine:init', () => {
 
                     <!-- STEP HEADINGS -->
                     <div class="mb-8" x-show="currentStep === 1">
-                        <h1 class="text-2xl lg:text-3xl font-bold text-slate-900 mb-2 font-arabic tracking-tight">
-                            <?php echo e(app()->getLocale() == 'ar' ? 'ابدأ بإعداد مركزك' : 'Start setting up your center'); ?>
+                        <h1 class="text-2xl lg:text-4xl font-black text-slate-900 mb-3 font-arabic leading-tight">
+                            <?php echo e(app()->getLocale() == 'ar' ? 'أهلاً بك! لنبدأ تجهيز مركزك' : 'Welcome! Let\'s setup your center'); ?>
 
                         </h1>
-                        <p class="text-slate-500 text-sm font-arabic font-light">
-                            <?php echo e(app()->getLocale() == 'ar' ? 'اختر اسماً مميزاً لمركزك ورابطاً خاصاً بك' : 'Choose a unique name for your center and your own link'); ?>
+                        <p class="text-slate-500 text-sm lg:text-base font-arabic font-medium opacity-80">
+                            <?php echo e(app()->getLocale() == 'ar' ? 'اختر اسماً ورابطاً مميزاً للمنصة الخاصة بك' : 'Choose a unique name and link for your platform'); ?>
 
                         </p>
                     </div>
 
                     <div class="mb-8" x-show="currentStep === 2" x-cloak style="display: none;">
-                        <h1 class="text-2xl lg:text-3xl font-bold text-slate-900 mb-2 font-arabic tracking-tight">
-                            <?php echo e(app()->getLocale() == 'ar' ? 'أنشئ حسابك' : 'Create your account'); ?>
+                        <h1 class="text-2xl lg:text-4xl font-black text-slate-900 mb-3 font-arabic leading-tight">
+                            <?php echo e(app()->getLocale() == 'ar' ? 'خطوة أخيرة لتأكيد حسابك' : 'Final step to confirm your account'); ?>
 
                         </h1>
-                        <p class="text-slate-500 text-sm font-arabic font-light">
-                            <?php echo e(app()->getLocale() == 'ar' ? 'أدخل بياناتك الشخصية لإدارة مركزك التعليمي' : 'Enter your personal details to manage your educational center'); ?>
+                        <p class="text-slate-500 text-sm lg:text-base font-arabic font-medium opacity-80">
+                            <?php echo e(app()->getLocale() == 'ar' ? 'أدخل بياناتك الشخصية للبدء فوراً' : 'Enter your personal details to get started immediately'); ?>
 
                         </p>
                     </div>
@@ -496,32 +496,38 @@ unset($__errorArgs, $__bag); ?>
 
                             <div class="space-y-1">
                                 <label class="label-compact px-1 font-arabic"><?php echo e(app()->getLocale() == 'ar' ? 'رابط المنصة الخاص بك (Subdomain)' : 'Your Platform Link (Subdomain)'); ?></label>
-                                <div class="relative flex items-center">
-                                    <div class="absolute left-0 rtl:right-0 inset-y-0 flex items-center px-3 pointer-events-none text-slate-400 font-medium text-sm bg-slate-50 border-r rtl:border-r-0 rtl:border-l border-slate-200 rounded-l-xl rtl:rounded-r-xl rtl:rounded-l-none">
+                                <div class="relative flex items-center w-full group" dir="ltr">
+                                    <!-- HTTPS Prefix -->
+                                    <div class="absolute left-0 inset-y-0 flex items-center px-3 pointer-events-none text-slate-400 font-medium text-sm bg-slate-50 border-r border-slate-200 rounded-l-xl z-10">
                                         https://
                                     </div>
+                                    
+                                    <!-- Input Field -->
                                     <input type="text" name="subdomain" x-model="subdomain"
                                         @input="manuallyEditedSubdomain = true; subdomain = cleanSlug(subdomain);"
                                         @input.debounce.500ms="checkSubdomain()"
-                                        class="w-full h-12 input-compact pl-20 rtl:pr-20 rtl:pl-28 px-4 text-sm font-medium font-sans text-slate-900 ltr"
-                                        dir="ltr"
+                                        class="w-full h-12 input-compact pl-[75px] pr-[110px] py-4 text-sm font-medium font-sans text-slate-900 text-left transition-all"
                                         placeholder="my-center" 
                                         :required="currentStep === 1">
-                                    <div class="absolute right-0 rtl:left-0 inset-y-0 flex items-center pr-3 rtl:pl-3 pointer-events-none text-slate-400 font-medium text-sm">
-                                        .taalimu.com
-                                    </div>
-                                    
-                                    <!-- Valid icon -->
-                                    <div x-show="subdomainStatus === 'valid'" class="absolute -right-8 rtl:-left-8 top-1/2 -translate-y-1/2 text-success-green">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-                                    </div>
-                                    <!-- Invalid icon -->
-                                    <div x-show="subdomainStatus === 'invalid'" class="absolute -right-8 rtl:-left-8 top-1/2 -translate-y-1/2 text-red-500">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-                                    </div>
-                                    <!-- Loading icon -->
-                                    <div x-show="subdomainStatus === 'loading'" class="absolute -right-8 rtl:-left-8 top-1/2 -translate-y-1/2 text-cyan">
-                                        <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                        
+                                    <!-- Domain Suffix -->
+                                    <div class="absolute right-0 inset-y-0 flex items-center pr-3 pointer-events-none text-slate-400 font-medium text-sm z-10 gap-2">
+                                        <span>.taalimu.com</span>
+                                        <!-- Validation Icons inside suffix space -->
+                                        <div class="flex items-center justify-center w-5 h-5 ml-1">
+                                            <!-- Valid icon -->
+                                            <div x-show="subdomainStatus === 'valid'" class="text-success-green">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                                            </div>
+                                            <!-- Invalid icon -->
+                                            <div x-show="subdomainStatus === 'invalid'" class="text-red-500">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                                            </div>
+                                            <!-- Loading icon -->
+                                            <div x-show="subdomainStatus === 'loading'" class="text-brand-secondary">
+                                                <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <p x-show="subdomainMessage" 
