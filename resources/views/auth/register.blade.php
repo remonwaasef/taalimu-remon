@@ -15,6 +15,10 @@ document.addEventListener('alpine:init', () => {
         centerName: config.centerName,
         subdomain: config.subdomain,
         manuallyEditedSubdomain: config.manuallyEditedSubdomain,
+        name: '{{ old('name', request('name')) }}',
+        email: '{{ old('email', request('email')) }}',
+        phone: '{{ old('phone', request('phone')) }}',
+        currentStep: 1,
         showPassword: false,
         password: '',
         password_confirmation: '',
@@ -161,6 +165,30 @@ document.addEventListener('alpine:init', () => {
             } catch (e) {
                 this.subdomainStatus = 'idle';
             }
+        },
+
+        nextStep() {
+            // Basic manual validation for Step 1
+            if (!this.name || !this.email || !this.phone || !this.password || !this.password_confirmation) {
+                alert('{{ app()->getLocale() == 'ar' ? 'يرجى تعبئة جميع الحقول الشخصية' : 'Please fill all personal fields' }}');
+                return;
+            }
+            if (!this.isPasswordMatch) {
+                return;
+            }
+            // Basic email regex validation
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!re.test(this.email)) {
+                alert('{{ app()->getLocale() == 'ar' ? 'البريد الإلكتروني غير صحيح' : 'Invalid email format' }}');
+                return;
+            }
+            this.currentStep = 2;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
+        
+        prevStep() {
+            this.currentStep = 1;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         },
 
         get couponDiscountAmount() {
@@ -355,7 +383,18 @@ document.addEventListener('alpine:init', () => {
                         </div>
                     </div>
                     
-                    <div class="mb-8">
+                    <!-- Multi-Step Indicator -->
+                    <div class="mb-8 relative" x-cloak>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-[10px] font-bold uppercase tracking-widest transition-colors" :class="currentStep === 1 ? 'text-brand-secondary' : 'text-slate-400'">{{ app()->getLocale() == 'ar' ? 'البيانات الشخصية' : 'Personal Details' }}</span>
+                            <span class="text-[10px] font-bold uppercase tracking-widest transition-colors" :class="currentStep === 2 ? 'text-brand-secondary' : 'text-slate-400'">{{ app()->getLocale() == 'ar' ? 'بيانات المركز' : 'Center Info' }}</span>
+                        </div>
+                        <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-brand-secondary transition-all duration-500 ease-in-out" :style="`width: ${currentStep === 1 ? '50%' : '100%'}`"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-8" x-show="currentStep === 1">
                         <h1 class="text-2xl lg:text-3xl font-bold text-slate-900 mb-2 font-arabic tracking-tight">
                             {{ __('auth.register.title') }}
                         </h1>
@@ -364,7 +403,16 @@ document.addEventListener('alpine:init', () => {
                         </p>
                     </div>
 
-                    <div class="mb-6">
+                    <div class="mb-8" x-show="currentStep === 2" x-cloak style="display: none;">
+                        <h1 class="text-2xl lg:text-3xl font-bold text-slate-900 mb-2 font-arabic tracking-tight">
+                            {{ app()->getLocale() == 'ar' ? 'الخطوة الأخيرة' : 'Final Step' }}
+                        </h1>
+                        <p class="text-slate-500 text-sm font-arabic font-light">
+                            {{ app()->getLocale() == 'ar' ? 'قم بتسمية منصتك التعليمية وراجع الفاتورة' : 'Name your educational platform and review the summary' }}
+                        </p>
+                    </div>
+
+                    <div class="mb-6" x-show="currentStep === 1">
                         <a href="{{ route('auth.google') }}" class="w-full flex items-center justify-center gap-3 py-3 px-4 border border-slate-200 rounded-full shadow-sm text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all group">
                             <svg class="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -418,78 +466,28 @@ document.addEventListener('alpine:init', () => {
                         <input type="hidden" name="billing_cycle" x-model="billingCycle">
                         <input type="hidden" name="country_code" x-model="userCountry">
 
-                        <div class="space-y-4">
-                            <div class="space-y-1">
-                                <label class="label-compact px-1 font-arabic">{{ __('auth.register.center_name') }}</label>
-                                <input type="text" name="center_name" x-model="centerName"
-                                    @input="if(!manuallyEditedSubdomain) { subdomain = generateSlug(centerName); checkSubdomain(); }"
-                                    class="w-full h-12 input-compact px-4 text-sm font-medium font-arabic text-slate-900"
-                                    placeholder="{{ __('auth.register.center_name_placeholder') }}" 
-                                    value="{{ request('center_name') }}"
-                                    required>
-                                @error('center_name') <p class="text-red-500 text-[10px] font-bold mt-1 px-1">{{ $message }}</p> @enderror
-                            </div>
-
-                            <div class="space-y-1">
-                                <label class="label-compact px-1 font-arabic">{{ app()->getLocale() == 'ar' ? 'رابط المنصة الخاص بك (Subdomain)' : 'Your Platform Link (Subdomain)' }}</label>
-                                <div class="relative flex items-center">
-                                    <div class="absolute left-0 rtl:right-0 inset-y-0 flex items-center px-3 pointer-events-none text-slate-400 font-medium text-sm bg-slate-50 border-r rtl:border-r-0 rtl:border-l border-slate-200 rounded-l-xl rtl:rounded-r-xl rtl:rounded-l-none">
-                                        https://
-                                    </div>
-                                    <input type="text" name="subdomain" x-model="subdomain"
-                                        @input="manuallyEditedSubdomain = true; subdomain = cleanSlug(subdomain);"
-                                        @input.debounce.500ms="checkSubdomain()"
-                                        class="w-full h-12 input-compact pl-20 rtl:pr-20 rtl:pl-28 px-4 text-sm font-medium font-sans text-slate-900 ltr"
-                                        dir="ltr"
-                                        placeholder="my-center" 
-                                        value="{{ old('subdomain') }}"
-                                        required>
-                                    <div class="absolute right-0 rtl:left-0 inset-y-0 flex items-center pr-3 rtl:pl-3 pointer-events-none text-slate-400 font-medium text-sm">
-                                        .taalimu.com
-                                    </div>
-                                    
-                                    <!-- Valid icon -->
-                                    <div x-show="subdomainStatus === 'valid'" class="absolute -right-8 rtl:-left-8 top-1/2 -translate-y-1/2 text-success-green">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-                                    </div>
-                                    <!-- Invalid icon -->
-                                    <div x-show="subdomainStatus === 'invalid'" class="absolute -right-8 rtl:-left-8 top-1/2 -translate-y-1/2 text-red-500">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-                                    </div>
-                                    <!-- Loading icon -->
-                                    <div x-show="subdomainStatus === 'loading'" class="absolute -right-8 rtl:-left-8 top-1/2 -translate-y-1/2 text-cyan">
-                                        <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                    </div>
-                                </div>
-                                <p x-show="subdomainMessage" 
-                                   :class="subdomainStatus === 'valid' ? 'text-success-green' : (subdomainStatus === 'invalid' ? 'text-red-500' : 'text-slate-500')"
-                                   class="text-[10px] font-bold mt-1 px-1 transition-all" 
-                                   x-text="subdomainMessage"></p>
-                                @error('subdomain') <p class="text-red-500 text-[10px] font-bold mt-1 px-1">{{ $message }}</p> @enderror
-                            </div>
-
-
-
+                        <!-- STEP 1: Personal Details -->
+                        <div x-show="currentStep === 1" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-4">
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div class="space-y-1">
                                     <label class="label-compact px-1 font-arabic">{{ __('auth.register.full_name') }}</label>
-                                    <input type="text" name="name" 
+                                    <input type="text" name="name" x-model="name"
                                         class="w-full h-12 input-compact px-4 text-sm font-medium font-arabic text-slate-900"
-                                        required value="{{ old('name', request('name')) }}">
+                                        :required="currentStep === 1">
                                 </div>
                                 <div class="space-y-1">
                                     <label class="label-compact px-1 font-arabic">{{ __('auth.register.email') }}</label>
-                                    <input type="email" name="email" 
+                                    <input type="email" name="email" x-model="email"
                                         class="w-full h-12 input-compact px-4 text-sm font-medium text-slate-900"
                                         placeholder="mail@example.com"
-                                        required value="{{ old('email', request('email')) }}">
+                                        :required="currentStep === 1">
                                 </div>
                                 <div class="space-y-1">
                                     <label class="label-compact px-1 font-arabic">{{ __('auth.register.phone') }}</label>
-                                    <input type="text" name="phone" 
+                                    <input type="text" name="phone" x-model="phone"
                                         class="w-full h-12 input-compact px-4 text-sm font-medium text-slate-900"
                                         placeholder="010xxxxxxx"
-                                        required value="{{ old('phone', request('phone')) }}">
+                                        :required="currentStep === 1">
                                 </div>
                             </div>
 
@@ -505,7 +503,7 @@ document.addEventListener('alpine:init', () => {
                                     <div class="relative group/pass">
                                         <input :type="showPassword ? 'text' : 'password'" type="password" name="password" x-model="password"
                                             class="w-full h-12 input-compact px-4 pr-11 rtl:pl-11 rtl:pr-4 text-sm font-medium text-slate-900"
-                                            placeholder="••••••••" required>
+                                            placeholder="••••••••" :required="currentStep === 1">
                                         <button type="button" @click="showPassword = !showPassword" 
                                             class="absolute right-3 rtl:left-3 rtl:right-auto top-1/2 -translate-y-1/2 text-slate-400 hover:text-brand-secondary transition-colors p-1">
                                             <i class="bi" :class="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
@@ -515,7 +513,7 @@ document.addEventListener('alpine:init', () => {
                                         <input :type="showPassword ? 'text' : 'password'" type="password" name="password_confirmation" x-model="password_confirmation"
                                             class="w-full h-12 input-compact px-4 pr-11 rtl:pl-11 rtl:pr-4 text-sm font-medium text-slate-900"
                                             :class="password_confirmation.length > 0 && !isPasswordMatch ? 'border-red-300 bg-red-50 shadow-[0_0_0_4px_rgba(239,68,68,0.1)]' : ''"
-                                            placeholder="{{ __('auth.register.confirm_password') }}" required>
+                                            placeholder="{{ __('auth.register.confirm_password') }}" :required="currentStep === 1">
                                     </div>
                                 </div>
 
@@ -555,6 +553,68 @@ document.addEventListener('alpine:init', () => {
                                     </div>
                                 </div>
                             </div>
+                            
+                            <div class="pt-6">
+                                <button type="button" @click="nextStep()"
+                                    class="w-full h-14 rounded-full flex items-center justify-center gap-3 group transition-all duration-300 bg-brand-secondary text-white font-bold hover:shadow-[0_10px_25px_-5px_rgba(122,77,252,0.4)] hover:-translate-y-1">
+                                    <span class="text-lg font-black font-arabic">{{ app()->getLocale() == 'ar' ? 'التالي' : 'Next' }}</span>
+                                    <svg class="w-5 h-5 transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1 group-hover:scale-110 transition-all rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- STEP 2: Center Details & Summary -->
+                        <div x-show="currentStep === 2" x-cloak style="display: none;" x-transition:enter="transition ease-out duration-300 delay-100" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-4">
+                            <div class="space-y-1">
+                                <label class="label-compact px-1 font-arabic">{{ __('auth.register.center_name') }}</label>
+                                <input type="text" name="center_name" x-model="centerName"
+                                    @input="if(!manuallyEditedSubdomain) { subdomain = generateSlug(centerName); checkSubdomain(); }"
+                                    class="w-full h-12 input-compact px-4 text-sm font-medium font-arabic text-slate-900"
+                                    placeholder="{{ __('auth.register.center_name_placeholder') }}" 
+                                    :required="currentStep === 2">
+                                @error('center_name') <p class="text-red-500 text-[10px] font-bold mt-1 px-1">{{ $message }}</p> @enderror
+                            </div>
+
+                            <div class="space-y-1">
+                                <label class="label-compact px-1 font-arabic">{{ app()->getLocale() == 'ar' ? 'رابط المنصة الخاص بك (Subdomain)' : 'Your Platform Link (Subdomain)' }}</label>
+                                <div class="relative flex items-center">
+                                    <div class="absolute left-0 rtl:right-0 inset-y-0 flex items-center px-3 pointer-events-none text-slate-400 font-medium text-sm bg-slate-50 border-r rtl:border-r-0 rtl:border-l border-slate-200 rounded-l-xl rtl:rounded-r-xl rtl:rounded-l-none">
+                                        https://
+                                    </div>
+                                    <input type="text" name="subdomain" x-model="subdomain"
+                                        @input="manuallyEditedSubdomain = true; subdomain = cleanSlug(subdomain);"
+                                        @input.debounce.500ms="checkSubdomain()"
+                                        class="w-full h-12 input-compact pl-20 rtl:pr-20 rtl:pl-28 px-4 text-sm font-medium font-sans text-slate-900 ltr"
+                                        dir="ltr"
+                                        placeholder="my-center" 
+                                        :required="currentStep === 2">
+                                    <div class="absolute right-0 rtl:left-0 inset-y-0 flex items-center pr-3 rtl:pl-3 pointer-events-none text-slate-400 font-medium text-sm">
+                                        .taalimu.com
+                                    </div>
+                                    
+                                    <!-- Valid icon -->
+                                    <div x-show="subdomainStatus === 'valid'" class="absolute -right-8 rtl:-left-8 top-1/2 -translate-y-1/2 text-success-green">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                                    </div>
+                                    <!-- Invalid icon -->
+                                    <div x-show="subdomainStatus === 'invalid'" class="absolute -right-8 rtl:-left-8 top-1/2 -translate-y-1/2 text-red-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                                    </div>
+                                    <!-- Loading icon -->
+                                    <div x-show="subdomainStatus === 'loading'" class="absolute -right-8 rtl:-left-8 top-1/2 -translate-y-1/2 text-cyan">
+                                        <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                    </div>
+                                </div>
+                                <p x-show="subdomainMessage" 
+                                   :class="subdomainStatus === 'valid' ? 'text-success-green' : (subdomainStatus === 'invalid' ? 'text-red-500' : 'text-slate-500')"
+                                   class="text-[10px] font-bold mt-1 px-1 transition-all" 
+                                   x-text="subdomainMessage"></p>
+                                @error('subdomain') <p class="text-red-500 text-[10px] font-bold mt-1 px-1">{{ $message }}</p> @enderror
+                            </div>
+
+
 
                             <!-- Coupon Field -->
                             <div class="space-y-2 pt-2">
@@ -648,17 +708,23 @@ document.addEventListener('alpine:init', () => {
                             </div>
                         </div>
 
-                        <div class="pt-2">
+                        <div x-show="currentStep === 2" class="pt-2 flex flex-col sm:flex-row gap-3">
+                            <button type="button" @click="prevStep()" class="btn-hero-secondary w-full sm:w-1/3 h-16 rounded-full flex items-center justify-center gap-3 group transition-all duration-300 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold border-0">
+                                <svg class="w-5 h-5 transform group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                                <span class="text-lg font-black font-arabic">{{ app()->getLocale() == 'ar' ? 'رجوع' : 'Back' }}</span>
+                            </button>
+
                             <button type="submit" 
                                 :disabled="password.length > 0 && !isPasswordMatch"
-                                class="btn-hero-cta w-full h-16 rounded-full flex items-center justify-center gap-3 group transition-all duration-300">
+                                class="btn-hero-cta w-full sm:w-2/3 h-16 rounded-full flex items-center justify-center gap-3 group transition-all duration-300 shadow-[0_10px_40px_-10px_rgba(25,183,165,0.4)]">
                                 <span class="text-xl font-black font-arabic">{{ __('auth.register.cta_main') }}</span>
                                 <svg class="w-6 h-6 transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1 group-hover:scale-110 transition-all rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                                 </svg>
                             </button>
-                            
-                            <p class="mt-6 text-center text-[11px] text-slate-400 font-arabic leading-relaxed">
+                        </div>
                                 {{ __('auth.register.terms_prefix') }}
                                 <a href="#" class="text-slate-900 font-bold hover:underline">{{ __('auth.register.terms_of_service') }}</a> 
                                 {{ __('auth.register.and') }} 
