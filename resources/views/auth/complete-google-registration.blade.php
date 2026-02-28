@@ -4,7 +4,7 @@
 <div class="min-h-screen mesh-gradient-soft noise-overlay flex justify-center items-center p-4 lg:p-8">
     <div class="w-full max-w-lg">
         {{-- Google User Info Card --}}
-        <div class="bg-white rounded-[1.5rem] shadow-xl shadow-blue-900/5 overflow-hidden border border-white/50 backdrop-blur-xl relative">
+        <div class="bg-white rounded-2xl shadow-xl shadow-blue-900/5 overflow-hidden border border-white/50 backdrop-blur-xl relative">
             {{-- Header --}}
             <div class="gradient-hero px-8 py-8 text-center relative overflow-hidden">
                 {{-- Decorative light glow in header --}}
@@ -100,7 +100,7 @@
                     {{-- Submit --}}
                     <div class="pt-4">
                         <button type="submit" 
-                                class="btn-hero-cta w-full py-4 px-6 font-arabic flex items-center justify-center gap-3 text-[15px]">
+                                class="btn-hero-cta w-full py-4 px-6 rounded-full font-arabic flex items-center justify-center gap-3 text-[15px]">
                             <span>{{ __('Create My Center') }}</span>
                             <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>

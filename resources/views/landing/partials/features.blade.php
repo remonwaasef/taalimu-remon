@@ -94,7 +94,7 @@
                     <!-- Hover indicator -->
                     <div class="mt-6 flex items-center gap-2 {{ $data['text_color'] }} opacity-0 group-hover:opacity-100 transition-opacity">
                         <span class="text-sm font-medium">{{ __('landing.features.learn_more') }}</span>
-                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg class="w-4 h-4 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform rtl:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
                     </div>

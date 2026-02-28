@@ -12,29 +12,29 @@
             <div class="col-span-2 lg:col-span-2 space-y-8">
                 <div>
                     <a href="<?php echo e(route('home')); ?>" class="inline-flex items-center gap-3 group">
-                        <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/10 group-hover:bg-white/20 transition-all duration-300 shadow-xl shadow-black/20">
+                        <div class="w-12 h-12 rounded-2xl bg-primary-purple/20 flex items-center justify-center backdrop-blur-md border border-primary-purple/30 group-hover:bg-primary-purple/40 transition-all duration-300 shadow-xl shadow-black/20">
                             <span class="text-white font-black text-2xl leading-none"><?php echo e(substr(\App\Models\SiteSetting::get('site_name', config('app.name')), 0, 1)); ?></span>
                         </div>
                         <span class="text-2xl font-black text-white tracking-tight"><?php echo e(\App\Models\SiteSetting::get('site_name', config('app.name'))); ?></span>
                     </a>
                 </div>
-                <p class="text-gray-text/60 text-base leading-relaxed max-w-sm font-medium">
+                <p class="text-gray-text/90 text-base leading-relaxed max-w-sm font-medium">
                     <?php echo e(\App\Models\SiteSetting::get('site_description', __('landing.hero.subtitle'))); ?>
 
                 </p>
                 
                 <!-- Social Media -->
                 <div class="flex items-center gap-5">
-                    <a href="#" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gray-text/40 hover:bg-cyan hover:text-dark-purple transition-all duration-300 border border-white/5 group">
+                    <a href="#" class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white/70 hover:bg-cyan hover:text-dark-purple transition-all duration-300 border border-white/10 group">
                         <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8V9c-4-.531-7-2-9-4 0 0-4 9 5 13-2 1-5 1.5-7 1 4 4 10 4 15 1 5-3 5-15 4-16.01 1-.49 1.98-.689 3-.99z"/></svg>
                     </a>
-                    <a href="#" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gray-text/40 hover:bg-cyan hover:text-dark-purple transition-all duration-300 border border-white/5 group">
+                    <a href="#" class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white/70 hover:bg-cyan hover:text-dark-purple transition-all duration-300 border border-white/10 group">
                         <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
                     </a>
-                    <a href="#" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gray-text/40 hover:bg-cyan hover:text-dark-purple transition-all duration-300 border border-white/5 group">
+                    <a href="#" class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white/70 hover:bg-cyan hover:text-dark-purple transition-all duration-300 border border-white/10 group">
                         <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
                     </a>
-                    <a href="#" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gray-text/40 hover:bg-cyan hover:text-dark-purple transition-all duration-300 border border-white/5 group">
+                    <a href="#" class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white/70 hover:bg-cyan hover:text-dark-purple transition-all duration-300 border border-white/10 group">
                         <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01"/></svg>
                     </a>
                 </div>
@@ -44,10 +44,10 @@
             <div>
                 <h4 class="text-white font-bold text-lg mb-8"><?php echo e(__('landing.footer.product.title')); ?></h4>
                 <ul class="space-y-4">
-                    <li><a href="#features" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.product.features')); ?></a></li>
-                    <li><a href="#pricing" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.product.pricing')); ?></a></li>
-                    <li><a href="#" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.product.integrations')); ?></a></li>
-                    <li><a href="#" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.product.updates')); ?></a></li>
+                    <li><a href="#features" class="text-white/70 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.product.features')); ?></a></li>
+                    <li><a href="#pricing" class="text-white/70 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.product.pricing')); ?></a></li>
+                    <li><a href="#" class="text-white/70 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.product.integrations')); ?></a></li>
+                    <li><a href="#" class="text-white/70 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.product.updates')); ?></a></li>
                 </ul>
             </div>
 
@@ -55,10 +55,10 @@
             <div>
                 <h4 class="text-white font-bold text-lg mb-8"><?php echo e(__('landing.footer.resources.title')); ?></h4>
                 <ul class="space-y-4">
-                    <li><a href="#" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.resources.help')); ?></a></li>
-                    <li><a href="#" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.resources.docs')); ?></a></li>
-                    <li><a href="#" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.resources.blog')); ?></a></li>
-                    <li><a href="#" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.resources.api')); ?></a></li>
+                    <li><a href="#" class="text-white/70 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.resources.help')); ?></a></li>
+                    <li><a href="#" class="text-white/70 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.resources.docs')); ?></a></li>
+                    <li><a href="#" class="text-white/70 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.resources.blog')); ?></a></li>
+                    <li><a href="#" class="text-white/70 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.resources.api')); ?></a></li>
                 </ul>
             </div>
 
@@ -66,17 +66,17 @@
             <div>
                 <h4 class="text-white font-bold text-lg mb-8"><?php echo e(__('landing.footer.legal.title')); ?></h4>
                 <ul class="space-y-4">
-                    <li><a href="<?php echo e(route('privacy')); ?>" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.legal.privacy')); ?></a></li>
-                    <li><a href="<?php echo e(route('terms')); ?>" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.legal.terms')); ?></a></li>
-                    <li><a href="<?php echo e(route('cookies')); ?>" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.legal.cookie')); ?></a></li>
-                    <li><button onclick="openCookieSettings()" class="text-gray-text/50 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('gdpr.banner.settings')); ?></button></li>
+                    <li><a href="<?php echo e(route('privacy')); ?>" class="text-white/70 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.legal.privacy')); ?></a></li>
+                    <li><a href="<?php echo e(route('terms')); ?>" class="text-white/70 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.legal.terms')); ?></a></li>
+                    <li><a href="<?php echo e(route('cookies')); ?>" class="text-white/70 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('landing.footer.legal.cookie')); ?></a></li>
+                    <li><button onclick="openCookieSettings()" class="text-white/70 hover:text-cyan transition-colors duration-300 text-sm font-medium"><?php echo e(__('gdpr.banner.settings')); ?></button></li>
                 </ul>
             </div>
         </div>
 
         <!-- Bottom Footer Section -->
-        <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="text-gray-text/40 text-sm font-medium">
+        <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-white/60 text-sm font-medium">
                 <?php echo e(__('landing.footer.copyright')); ?>
 
             </div>
