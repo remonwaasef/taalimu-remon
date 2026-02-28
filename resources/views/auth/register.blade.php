@@ -139,6 +139,30 @@ document.addEventListener('alpine:init', () => {
             }
         },
 
+        subdomainStatus: 'idle', // idle, loading, valid, invalid
+        subdomainMessage: '',
+        
+        async checkSubdomain() {
+            if (!this.subdomain) {
+                this.subdomainStatus = 'idle';
+                this.subdomainMessage = '';
+                return;
+            }
+            
+            // Auto clean
+            this.subdomain = this.cleanSlug(this.subdomain);
+            
+            this.subdomainStatus = 'loading';
+            try {
+                const response = await fetch(`/api/validate-subdomain?subdomain=${this.subdomain}`);
+                const data = await response.json();
+                this.subdomainStatus = data.available ? 'valid' : 'invalid';
+                this.subdomainMessage = data.message;
+            } catch (e) {
+                this.subdomainStatus = 'idle';
+            }
+        },
+
         get couponDiscountAmount() {
             if (this.couponStatus !== 'valid') return 0;
             const price = this.activePriceRaw || 0;
@@ -173,7 +197,7 @@ document.addEventListener('alpine:init', () => {
     <div class="w-full max-w-4xl bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/5 overflow-hidden flex flex-col lg:flex-row border border-slate-100/50 min-h-[640px] animate-fade-in-up md:backdrop-blur-xl relative" style="max-width: 960px;">
         
         <!-- Left Panel: Elite Compact Plan Selection -->
-        <div class="lg:w-[32%] text-white flex flex-col p-8 lg:p-10 relative overflow-hidden" 
+        <div class="hidden lg:flex lg:w-[32%] text-white flex-col p-8 lg:p-10 relative overflow-hidden" 
              style="background: linear-gradient(135deg, hsl(263 85% 20%) 0%, hsl(var(--primary-purple)) 40%, hsl(var(--secondary)) 100%);">
             <!-- Subtle glow in left panel -->
             <div class="absolute -top-24 -left-24 w-64 h-64 bg-white/10 blur-[80px] rounded-full pointer-events-none"></div>
@@ -318,6 +342,19 @@ document.addEventListener('alpine:init', () => {
                 </div>
 
                 <div class="max-w-[440px] mx-auto pt-10">
+                    
+                    <!-- Mobile Sticky Selected Plan Summary -->
+                    <div class="lg:hidden w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 mb-6 shadow-sm flex items-center justify-between">
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">{{ __('auth.register.select_plan') }}</span>
+                            <span class="text-sm font-black text-brand-secondary mt-1" x-text="currentPlan.name"></span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-lg font-black text-slate-900" x-text="activePriceValue"></span>
+                            <span class="text-xs font-bold text-slate-500" x-text="currentPriceData.currency"></span>
+                        </div>
+                    </div>
+                    
                     <div class="mb-8">
                         <h1 class="text-2xl lg:text-3xl font-bold text-slate-900 mb-2 font-arabic tracking-tight">
                             {{ __('auth.register.title') }}
@@ -385,12 +422,50 @@ document.addEventListener('alpine:init', () => {
                             <div class="space-y-1">
                                 <label class="label-compact px-1 font-arabic">{{ __('auth.register.center_name') }}</label>
                                 <input type="text" name="center_name" x-model="centerName"
-                                    @input="if(!manuallyEditedSubdomain) { subdomain = generateSlug(centerName); }"
+                                    @input="if(!manuallyEditedSubdomain) { subdomain = generateSlug(centerName); checkSubdomain(); }"
                                     class="w-full h-12 input-compact px-4 text-sm font-medium font-arabic text-slate-900"
                                     placeholder="{{ __('auth.register.center_name_placeholder') }}" 
                                     value="{{ request('center_name') }}"
                                     required>
                                 @error('center_name') <p class="text-red-500 text-[10px] font-bold mt-1 px-1">{{ $message }}</p> @enderror
+                            </div>
+
+                            <div class="space-y-1">
+                                <label class="label-compact px-1 font-arabic">{{ app()->getLocale() == 'ar' ? 'رابط المنصة الخاص بك (Subdomain)' : 'Your Platform Link (Subdomain)' }}</label>
+                                <div class="relative flex items-center">
+                                    <div class="absolute left-0 rtl:right-0 inset-y-0 flex items-center px-3 pointer-events-none text-slate-400 font-medium text-sm bg-slate-50 border-r rtl:border-r-0 rtl:border-l border-slate-200 rounded-l-xl rtl:rounded-r-xl rtl:rounded-l-none">
+                                        https://
+                                    </div>
+                                    <input type="text" name="subdomain" x-model="subdomain"
+                                        @input="manuallyEditedSubdomain = true; subdomain = cleanSlug(subdomain);"
+                                        @input.debounce.500ms="checkSubdomain()"
+                                        class="w-full h-12 input-compact pl-20 rtl:pr-20 rtl:pl-28 px-4 text-sm font-medium font-sans text-slate-900 ltr"
+                                        dir="ltr"
+                                        placeholder="my-center" 
+                                        value="{{ old('subdomain') }}"
+                                        required>
+                                    <div class="absolute right-0 rtl:left-0 inset-y-0 flex items-center pr-3 rtl:pl-3 pointer-events-none text-slate-400 font-medium text-sm">
+                                        .taalimu.com
+                                    </div>
+                                    
+                                    <!-- Valid icon -->
+                                    <div x-show="subdomainStatus === 'valid'" class="absolute -right-8 rtl:-left-8 top-1/2 -translate-y-1/2 text-success-green">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                                    </div>
+                                    <!-- Invalid icon -->
+                                    <div x-show="subdomainStatus === 'invalid'" class="absolute -right-8 rtl:-left-8 top-1/2 -translate-y-1/2 text-red-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                                    </div>
+                                    <!-- Loading icon -->
+                                    <div x-show="subdomainStatus === 'loading'" class="absolute -right-8 rtl:-left-8 top-1/2 -translate-y-1/2 text-cyan">
+                                        <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                    </div>
+                                </div>
+                                <p x-show="subdomainMessage" 
+                                   :class="subdomainStatus === 'valid' ? 'text-success-green' : (subdomainStatus === 'invalid' ? 'text-red-500' : 'text-slate-500')"
+                                   class="text-[10px] font-bold mt-1 px-1 transition-all" 
+                                   x-text="subdomainMessage"></p>
+                                @error('subdomain') <p class="text-red-500 text-[10px] font-bold mt-1 px-1">{{ $message }}</p> @enderror
                             </div>
 
 

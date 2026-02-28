@@ -96,6 +96,11 @@ Route::get('/registration-success', function() {
     Route::get('/api/coupons/validate', [App\Http\Controllers\CouponApiController::class, 'validateCoupon'])
         ->middleware('throttle:coupons')
         ->name('api.coupons.validate');
+        
+    // Subdomain Validation API
+    Route::get('/api/validate-subdomain', [App\Http\Controllers\SubdomainController::class, 'validateSubdomain'])
+        ->middleware('throttle:60,1')
+        ->name('api.subdomain.validate');
     Route::get('/login', [App\Http\Controllers\UnifiedAuthController::class, 'showLoginForm'])->name('login.portal');
     Route::post('/login', [App\Http\Controllers\UnifiedAuthController::class, 'login'])
         ->middleware('throttle:login') // Uses the 'login' rate limiter defined in AppServiceProvider
