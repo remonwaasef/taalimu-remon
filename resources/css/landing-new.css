@@ -4,108 +4,56 @@
 
 @layer base {
     :root {
-        /* Soft, Vibrant Power Palette */
-        --dark-purple: 263 85% 20%;
-        /* Deep violet background base #18055E */
-        --primary-purple: 263 70% 43%;
-        /* Warm Luminous Violet #4C1D95 (Primary) */
-        --primary-light: 263 70% 96%;
-        --primary-vibrant: 263 70% 55%;
-        --light-purple: 263 80% 65%;
-        /* Lighter violet #8B5CF6 */
+        /* Edumove Vibrant Design System */
+        /* Primary: Vibrant Purple #7A4DFC */
+        --primary-purple: 256 97% 65%;
+        --primary-vibrant: 256 97% 60%;
+        --primary-light: 256 97% 96%;
 
-        --secondary: 221 83% 53%;
-        /* Bright Royal Blue #2563EB (Secondary) */
-        --secondary-light: 221 83% 96%;
-        --secondary-vibrant: 221 83% 65%;
+        /* Typography: Deep Navy #03010D */
+        --dark-text: 247 88% 3%;
+        --foreground: 247 88% 3%;
 
-        --cyan: 213 90% 65%;
-        /* Soft Azure #5FA5FA */
+        /* Accents */
+        --secondary: 256 97% 65%;
+        /* Edumove uses primary for most actions */
+        --secondary-vibrant: 256 97% 70%;
+
+        --accent-peach: 12 100% 76%;
+        /* #FF9F87 */
+        --accent-teal: 164 89% 77%;
+        /* #7CEED0 */
         --success-green: 158 84% 39%;
-        /* Fresh Mint Green */
 
-        /* Secondary Colors */
-        --light-bg: 214 32% 96%;
-        /* Liquid Chrome #F1F5F9 */
-        --gray-text: 215 16% 85%;
-        /* Soft blue-gray */
-        --dark-text: 222 47% 11%;
-        /* Deep navy-black */
-
-        /* Outline/Accent Colors */
-        --analytical-blue: 221 83% 53%;
-        --outline-green: 158 84% 39%;
-        --outline-purple: 263 80% 85%;
-
-        /* Semantic tokens */
-        --background: 214 32% 98%;
-        /* Very light cool gray #F8FAFC */
-        --foreground: 222 47% 11%;
-        /* Deep Navy Text */
-
-        --card: 0 0% 100%;
-        --card-foreground: 222 47% 11%;
-
-        --popover: 0 0% 100%;
-        --popover-foreground: 222 47% 11%;
-
-        --primary: 263 70% 43%;
-        /* Warm Luminous Violet */
-        --primary-foreground: 0 0% 100%;
-
-        --secondary: 221 83% 53%;
-        /* Bright Royal Blue */
-        --secondary-foreground: 0 0% 100%;
-
-        --muted: 214 32% 96%;
+        /* Neutrals */
+        --background: 0 0% 100%;
+        /* Pure White as per EduMove */
+        --muted: 210 20% 96%;
+        /* #F4F4F4 approx */
         --muted-foreground: 215 16% 47%;
 
-        --accent: 213 90% 65%;
-        /* Soft Azure */
-        --accent-foreground: 0 0% 100%;
+        --card: 0 0% 100%;
+        --card-foreground: 247 88% 3%;
 
-        --destructive: 0 84% 60%;
-        --destructive-foreground: 0 0% 100%;
+        --primary: 256 97% 65%;
+        --primary-foreground: 0 0% 100%;
 
-        --border: 215 25% 90%;
-        --input: 215 25% 90%;
-        --ring: 263 70% 43%;
+        --border: 247 10% 90%;
+        --input: 247 10% 90%;
+        --ring: 256 97% 65%;
 
         --radius: 1rem;
-        /* Slightly softer, rounder corners globally */
+        /* 16px as per EduMove cards */
 
-        /* Gradients - Liquid Softness */
-        /* Gradient 1: Deep Violet -> Luminous Violet -> Royal Blue */
-        --gradient-hero: linear-gradient(135deg, hsl(263 85% 20%) 0%, hsl(var(--primary-purple)) 40%, hsl(var(--secondary)) 100%);
-        /* Gradient 2: Flowing Indigo -> Azure */
-        --gradient-cta: linear-gradient(135deg, #1E1B4B 0%, #3730A3 50%, #3B82F6 100%);
-        /* Gradient 3: Liquid Chrome Background */
-        --gradient-card: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, #F1F5F9 100%);
-        /* Gradient 4: Azure to Violet Flow */
-        --gradient-cyan: linear-gradient(135deg, #60A5FA 0%, #8B5CF6 100%);
+        /* Gradients: Edumove prefers solid, but we'll maintain a very subtle one for the hero */
+        --gradient-hero: linear-gradient(135deg, hsl(256 97% 55%) 0%, hsl(256 97% 65%) 100%);
+        --brand-gradient: var(--gradient-hero);
 
-        /* Shadows - Diffuse & Floating */
-        --shadow-sm: 0 4px 12px hsl(221 83% 53% / 0.05);
-        /* Very soft blue tint */
-        --shadow-md: 0 8px 24px hsl(263 70% 43% / 0.08);
-        /* Soft violet tint */
-        --shadow-lg: 0 16px 40px hsl(221 83% 53% / 0.12);
-        --shadow-xl: 0 24px 60px hsl(263 70% 43% / 0.15);
-        /* Large floating shadow */
-        --shadow-glow: 0 0 50px hsl(213 90% 65% / 0.3);
-        /* Soft Azure Glow */
-        --shadow-purple-glow: 0 0 60px hsl(263 70% 43% / 0.3);
-        /* Soft Violet Glow */
-
-        /* Sidebar (keeping defaults) */
-        --sidebar-background: 0 0% 98%;
-        --sidebar-foreground: 240 5.3% 26.1%;
-        --sidebar-primary: 240 5.9% 10%;
-        --sidebar-primary-foreground: 0 0% 98%;
-        --sidebar-accent: 240 4.8% 95.9%;
-        --sidebar-accent-foreground: 240 5.9% 10%;
-        --sidebar-border: 220 13% 91%;
-        --sidebar-ring: 217.2 91.2% 59.8%;
+        /* Shadows - Edumove uses very subtle shadows or clean borders */
+        --shadow-sm: 0 2px 8px rgba(3, 1, 13, 0.05);
+        --shadow-md: 0 8px 16px rgba(3, 1, 13, 0.08);
+        --shadow-lg: 0 16px 32px rgba(3, 1, 13, 0.1);
+        --shadow-xl: 0 24px 48px rgba(3, 1, 13, 0.12);
     }
 
     .dark {
@@ -148,16 +96,27 @@
     body {
         background-color: hsl(var(--background));
         color: hsl(var(--foreground));
-        font-family: 'Inter', 'Cairo', sans-serif;
+        font-family: 'Outfit', 'Cairo', sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
     }
 
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-weight: 800;
+        /* EduMove uses very bold headers */
+        color: hsl(var(--dark-text));
+    }
+
     /* Arabic text styling */
     [dir="rtl"],
     .rtl {
-        font-family: 'Cairo', 'Inter', sans-serif;
+        font-family: 'Cairo', 'Outfit', sans-serif;
     }
 }
 
@@ -291,22 +250,18 @@
 
     .btn-hero-cta {
         position: relative;
-        background: linear-gradient(135deg, #4C1D95 0%, #2563EB 60%, #60A5FA 100%);
-        /* Vibrant Violet -> True Royal Blue -> Soft Azure */
-        background-size: 200% auto;
+        background: hsl(var(--primary-purple));
         color: white !important;
         font-weight: 700;
-        letter-spacing: 0.02em;
-        border-radius: 9999px;
-        /* Pill-shaped for friendliness */
+        letter-spacing: 0.01em;
+        border-radius: 50px;
+        /* EduMove Pill shape */
         overflow: hidden;
         border: none;
-        box-shadow:
-            0 12px 30px -5px rgba(37, 99, 235, 0.25),
-            /* Soft floating shadow */
-            inset 0 1px 2px rgba(255, 255, 255, 0.3);
-        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         z-index: 1;
+        padding: 14px 28px;
     }
 
     .btn-hero-cta::before {
@@ -506,17 +461,18 @@
     /* Registration Page Specific Styles */
     .plan-card-compact {
         transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 24px;
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(8px);
+        border: 1px solid rgba(3, 1, 13, 0.1);
+        /* Subtle Edumove border */
+        border-radius: var(--radius);
+        /* 16px */
+        background: #FFFFFF;
         margin-bottom: 12px;
     }
 
     .plan-card-compact.selected {
-        border-color: var(--brand-secondary);
-        background: hsla(var(--secondary) / 0.1);
-        box-shadow: 0 15px 35px -5px hsla(var(--secondary) / 0.25);
+        border-color: hsl(var(--primary-purple));
+        background: hsla(var(--primary-purple) / 0.05);
+        box-shadow: var(--shadow-md);
         transform: scale(1.02);
     }
 
@@ -552,19 +508,18 @@
 
     .btn-submit-compact {
         border-radius: 50px;
-        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 10px 25px -5px hsla(var(--secondary) / 0.4);
-        background: var(--brand-gradient);
-        background-size: 200% auto;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: var(--shadow-md);
+        background: hsl(var(--primary-purple));
         color: white;
         border: none;
-        font-weight: 800;
+        font-weight: 700;
     }
 
     .btn-submit-compact:hover {
-        background-position: right center;
+        background: hsl(var(--primary-vibrant));
         transform: translateY(-2px);
-        box-shadow: 0 15px 25px -5px rgba(37, 99, 235, 0.5);
+        box-shadow: var(--shadow-lg);
     }
 
     .bulb-section {
@@ -595,8 +550,8 @@
     .bulb.active-number,
     .bulb.active-symbol,
     .bulb.active-match {
-        background-color: #10B981;
-        box-shadow: 0 0 12px rgba(16, 185, 129, 0.6), 0 0 4px rgba(16, 185, 129, 0.4);
+        background-color: hsl(var(--accent-teal));
+        box-shadow: 0 0 12px hsla(var(--accent-teal) / 0.6);
     }
 
     .bulb-text {
