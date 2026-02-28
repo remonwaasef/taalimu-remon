@@ -158,6 +158,12 @@ class SocialAuthController extends Controller
     {
         $googleData = session('google_user');
         
+        \Log::info('Google Complete Registration Start', [
+            'session_id' => session()->getId(),
+            'has_google_user' => !empty($googleData),
+            'google_email' => $googleData['email'] ?? 'N/A'
+        ]);
+
         if (!$googleData) {
             return redirect()->route('login.portal')
                 ->withErrors(['email' => __('Session expired. Please try again with Google.')]);
@@ -182,6 +188,36 @@ class SocialAuthController extends Controller
 
             // Auto-generate subdomain
             $subdomain = $this->generateSubdomain($request->center_name);
+
+            // 1. Create Tenant
+            $tenant = Tenant::create([
+                'name' => $request->center_name,
+                'email' => $googleData['email'],
+                'phone' => $request->phone,
+                'domain' => $subdomain,
+                'database_name' => 'edu_central',
+                'status' => 'active',
+            ]);
+
+            // 2. Create User (no password needed for Google users)
+            $user = new User([
+                'name' => $googleData['name'],
+                'email' => $googleData['email'],
+                'phone' => $request->phone,
+                'password' => Hash::make(Str::random(32)), // Random password, user logs in via Google
+                'google_id' => $googleData['id'],
+                'email_verified_at' => now(), // Trust Google verification
+                'locale' => session('locale', 'ar'),
+            ]);
+            $user->tenant_id = $tenant->id;
+            $user->role = 'center_admin';
+            $user->save();
+
+            event(new Registered($user));
+
+            // Set Spatie Team Context
+            app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
+            $user->assignRole('center_admin');
 
             // 3. Handle Subscription logic
             $selectedPlan = $request->input('plan', 'free-trial');
@@ -267,7 +303,12 @@ class SocialAuthController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('Google Registration Error: ' . $e->getMessage());
+            \Log::error('Google Registration Error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'session_id' => session()->getId(),
+                'has_google_user' => session()->has('google_user')
+            ]);
+            session()->save(); // Force save session before redirect back
             return back()->withErrors(['center_name' => __('Registration failed. Please try again.')])->withInput();
         }
     }
