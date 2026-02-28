@@ -90,15 +90,24 @@ class Subscription extends CashierSubscription
             return Package::where('slug', 'free-trial')->first();
         }
 
-        // Fallback for configuration mismatches: price_starter -> basic
-        if ($this->stripe_price === 'price_starter') {
-            return Package::where('slug', 'basic')->first();
-        }
-        if ($this->stripe_price === 'price_growth') {
-            return Package::where('slug', 'pro')->first();
+        // Robust Fallback for configuration mismatches or old data
+        // price_starter -> basic
+        // price_growth -> pro
+        // price_enterprise -> enterprise
+        $mappings = [
+            'price_starter' => 'basic',
+            'price_growth' => 'pro',
+            'price_enterprise' => 'enterprise',
+            'starter' => 'basic', // some old data might use plain slug
+            'growth' => 'pro',
+        ];
+
+        if (isset($mappings[$this->stripe_price])) {
+            return Package::where('slug', $mappings[$this->stripe_price])->first();
         }
 
-        return null;
+        // Final attempt: check if stripe_price itself is a slug
+        return Package::where('slug', $this->stripe_price)->first();
     }
 
     /**
@@ -106,29 +115,9 @@ class Subscription extends CashierSubscription
      */
     public function getTypeLabelAttribute(): string
     {
-        // Try to find the package by stripe_price_id
-        $package = Package::where('stripe_price_id', $this->stripe_price)->first();
-        
+        $package = $this->resolved_package;
         if ($package) {
-            return $package->name;
-        }
-
-        // Fallback for demo/special prices
-        $price = $this->stripe_price;
-
-        // Free Plan
-        if ($price === 'price_free') {
-            return 'مجاني';
-        }
-
-        // Basic Plan (Real or Demo)
-        if ($price === config('services.stripe.price_basic') || $price === 'price_demo_basic') {
-            return 'أساسي';
-        }
-
-        // Pro Plan (Real or Demo)
-        if ($price === config('services.stripe.price_pro') || $price === 'price_demo_pro') {
-            return 'احترافي';
+            return app()->getLocale() == 'ar' ? $package->name : ($package->name_en ?: $package->name);
         }
 
         return 'مخصص';

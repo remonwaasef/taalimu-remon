@@ -134,8 +134,9 @@ class SocialAuthController extends Controller
         })->values();
 
         $selectedPlanSlug = $request->query('plan', session('selected_plan', $packages->firstWhere('is_default', true)?->slug ?? $packages->first()?->slug));
+        $selectedCycle = $request->query('cycle', session('selected_cycle', 'monthly'));
 
-        return view('auth.complete-google-registration', compact('packages', 'packagesData', 'selectedPlanSlug'));
+        return view('auth.complete-google-registration', compact('packages', 'packagesData', 'selectedPlanSlug', 'selectedCycle'));
     }
 
     /**
@@ -153,6 +154,8 @@ class SocialAuthController extends Controller
         $request->validate([
             'center_name' => 'required|string|max:255',
             'phone' => 'required|string|max:20|unique:users,phone',
+            'plan' => 'required|exists:packages,slug',
+            'billing_cycle' => 'required|in:monthly,yearly',
         ]);
 
         // Check email uniqueness (safety check)
@@ -168,80 +171,87 @@ class SocialAuthController extends Controller
             // Auto-generate subdomain
             $subdomain = $this->generateSubdomain($request->center_name);
 
-            // Get free-trial package
-            $package = \App\Models\Package::where('slug', 'free-trial')->first();
-            $basePrice = $package ? $package->price : 0;
+            // 3. Handle Subscription logic
+            $selectedPlan = $request->input('plan', 'free-trial');
+            $billingCycle = $request->input('billing_cycle', 'monthly');
+            $package = \App\Models\Package::where('slug', $selectedPlan)->first();
+            $basePrice = $package ? ($billingCycle === 'yearly' ? ($package->yearly_price ?: $package->price * 10) : $package->price) : 0;
 
-            // 1. Create Tenant
-            $tenant = Tenant::create([
-                'name' => $request->center_name,
-                'email' => $googleData['email'],
-                'phone' => $request->phone,
-                'domain' => $subdomain,
-                'database_name' => 'edu_central',
-                'status' => 'active',
-            ]);
+            if ($selectedPlan === 'free-trial') {
+                \App\Models\Subscription::create([
+                    'tenant_id' => $tenant->id,
+                    'name' => 'default',
+                    'stripe_id' => 'sub_google_' . Str::random(10),
+                    'stripe_status' => 'active',
+                    'stripe_price' => 'price_free',
+                    'quantity' => 1,
+                    'ends_at' => now()->addDays(14),
+                    'status' => 'active',
+                    'billing_cycle' => $billingCycle,
+                    'base_price' => $basePrice,
+                    'total_amount' => $basePrice,
+                    'discount_amount' => 0,
+                ]);
 
-            // 2. Create User (no password needed for Google users)
-            $user = new User([
-                'name' => $googleData['name'],
-                'email' => $googleData['email'],
-                'phone' => $request->phone,
-                'password' => Hash::make(Str::random(32)), // Random password, user logs in via Google
-                'google_id' => $googleData['id'],
-                'email_verified_at' => now(), // Trust Google verification
-                'locale' => session('locale', 'ar'),
-            ]);
-            $user->tenant_id = $tenant->id;
-            $user->role = 'center_admin';
-            $user->save();
+                // Send Telegram Notification
+                $telegram->sendRegistrationAlert($tenant, $user, '(Google Login - Free Trial)');
 
-            event(new Registered($user));
+                DB::commit();
 
-            // Set Spatie Team Context
-            app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
-            $user->assignRole('center_admin');
+                // Clear Google session data
+                session()->forget('google_user');
 
-            // 3. Create Free Trial Subscription
-            \App\Models\Subscription::create([
-                'tenant_id' => $tenant->id,
-                'name' => 'default',
-                'stripe_id' => 'sub_google_' . Str::random(10),
-                'stripe_status' => 'active',
-                'stripe_price' => 'price_free',
-                'quantity' => 1,
-                'ends_at' => now()->addDays(14),
-                'status' => 'active',
-                'billing_cycle' => 'monthly',
-                'base_price' => $basePrice,
-                'total_amount' => $basePrice,
-                'discount_amount' => 0,
-            ]);
+                // Login the user
+                Auth::login($user, true);
 
-            // Send Telegram Notification
-            $telegram->sendRegistrationAlert($tenant, $user, '(Google Login)');
+                // Set session data for success page
+                session([
+                    'registration_success' => true,
+                    'tenant_domain' => $subdomain,
+                    'admin_email' => $googleData['email'],
+                    'center_name' => $request->center_name,
+                    'billing_cycle' => $billingCycle,
+                    'base_price' => $basePrice,
+                    'total_amount' => $basePrice,
+                    'registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . $user->id, config('app.key')),
+                ]);
 
-            DB::commit();
+                return redirect()->route('registration.success');
+            } else {
+                // Paid Plan Flow (Redirect to Payment)
+                DB::commit();
 
-            // Clear Google session data
-            session()->forget('google_user');
+                // Clear Google session data but keep user logged in if possible or use hmac
+                session()->forget('google_user');
+                Auth::login($user, true);
 
-            // Login the user
-            Auth::login($user, true);
+                session([
+                    'tenant_domain' => $subdomain,
+                    'admin_email' => $googleData['email'],
+                    'center_name' => $request->center_name,
+                    'tenant_id' => $tenant->id,
+                    'selected_plan' => $selectedPlan,
+                    'billing_cycle' => $billingCycle,
+                    'base_price' => $basePrice,
+                    'total_amount' => $basePrice,
+                    'registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . $user->id, config('app.key')),
+                ]);
 
-            // Set session data for success page
-            session([
-                'registration_success' => true,
-                'tenant_domain' => $subdomain,
-                'admin_email' => $googleData['email'],
-                'center_name' => $request->center_name,
-                'billing_cycle' => 'monthly',
-                'base_price' => $basePrice,
-                'total_amount' => $basePrice,
-                'registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . $user->id, config('app.key')),
-            ]);
+                // Redirect to payment (demo or stripe)
+                $stripePriceIds = [
+                    'basic' => config('services.stripe.price_basic'),
+                    'pro' => config('services.stripe.price_pro'),
+                ];
+                $stripePriceId = $stripePriceIds[$selectedPlan] ?? null;
 
-            return redirect()->route('registration.success');
+                if (config('services.stripe.demo_mode') || !($stripePriceId)) {
+                    return redirect()->route('payment.demo');
+                }
+
+                // If specialized stripe flow is needed here, we can replicate RegistrationController logic
+                // For now, redirecting to demo/checkout flow.
+                return redirect()->route('payment.demo'); 
+            }
 
         } catch (\Exception $e) {
             DB::rollBack();
