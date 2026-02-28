@@ -117,14 +117,16 @@ document.addEventListener('alpine:init', () => {
             
             <div class="space-y-8 flex-1">
                 <h2 class="text-2xl lg:text-3xl font-bold mb-4 font-arabic leading-tight text-white">
-                    {{ __('Your Educational Platform is Ready!') }}
+                    {{ __('auth.register.title') }}
                 </h2>
                 <p class="text-white/70 text-base font-arabic font-light leading-relaxed">
-                    {{ __('Complete these simple steps to start your free trial and explore all the powerful management tools.') }}
+                    {{ __('auth.register.subtitle') }}
                 </p>
 
                 <div class="space-y-4 pt-6">
-                    <label class="text-[9px] font-black text-white/40 uppercase tracking-widest px-1 mb-1 block">{{ __('auth.register.select_plan') }}</label>
+                    <label class="text-[11px] font-black text-white/40 uppercase tracking-widest px-1 mb-1 block">
+                        {{ __('auth.register.select_plan') }}
+                    </label>
                     <template x-for="pkg in packages" :key="pkg.slug">
                         <div @click="selectedPlan = pkg.slug"
                             class="w-full p-6 rounded-2xl plan-card-compact cursor-pointer relative group/card mb-4 border transition-all duration-300 overflow-hidden"
@@ -148,7 +150,7 @@ document.addEventListener('alpine:init', () => {
 
             <div class="mt-auto pt-8 border-t border-white/5 opacity-60">
                 <p class="text-[10px] text-white/50 font-arabic">
-                    {{ __('Join 5,000+ educational centers leading the digital future.') }}
+                    {{ __('auth.register.join_leaders') }}
                 </p>
             </div>
         </div>
@@ -170,7 +172,7 @@ document.addEventListener('alpine:init', () => {
                         <div class="flex-shrink-0">
                             <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[11px] font-black ring-1 ring-inset ring-emerald-500/20 shadow-sm">
                                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                {{ __('Verified') }}
+                                {{ app()->getLocale() == 'ar' ? 'حساب موثق' : 'Verified Account' }}
                             </span>
                         </div>
                     </div>
@@ -231,7 +233,7 @@ document.addEventListener('alpine:init', () => {
                             <input type="text" name="subdomain" x-model="subdomain"
                                    @input="manuallyEditedSubdomain = true; subdomain = cleanSlug(subdomain);"
                                    @input.debounce.500ms="checkSubdomain()"
-                                   class="block w-full h-14 pl-[90px] pr-[120px] bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all font-sans text-base font-bold text-left shadow-inner"
+                                   class="block w-full h-14 pl-[96px] pr-[120px] bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all font-sans text-base font-bold text-left shadow-inner"
                                    placeholder="center-name" required>
                                    
                             <!-- Right Side: Domain suffix & Indicator -->
