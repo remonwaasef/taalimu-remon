@@ -188,6 +188,8 @@ document.addEventListener('alpine:init', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         },
 
+        showPlanModal: false,
+
         get couponDiscountAmount() {
             if (this.couponStatus !== 'valid') return 0;
             const price = this.activePriceRaw || 0;
@@ -412,7 +414,13 @@ document.addEventListener('alpine:init', () => {
                     <div class="p-6 rounded-3xl bg-slate-50/80 border border-slate-100 space-y-4">
                         <div class="flex items-center justify-between">
                             <div class="flex flex-col">
-                                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1"><?php echo e(__('auth.register.selected_plan')); ?></span>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest"><?php echo e(__('auth.register.selected_plan')); ?></span>
+                                    <button type="button" @click="showPlanModal = true" class="text-[10px] font-black text-brand-secondary underline underline-offset-2 hover:opacity-70 transition-opacity uppercase tracking-widest">
+                                        <?php echo e(app()->getLocale() == 'ar' ? 'تغيير' : 'Change'); ?>
+
+                                    </button>
+                                </div>
                                 <h3 class="text-xl font-black text-slate-900 font-arabic" x-text="currentPlan.name"></h3>
                             </div>
                             <div class="text-right">
@@ -423,6 +431,54 @@ document.addEventListener('alpine:init', () => {
                                     <span class="text-3xl font-black tracking-tighter" x-text="finalPrice.toLocaleString()"></span>
                                     <span class="text-sm font-bold opacity-60" x-text="currentPriceData.currency"></span>
                                 </div>
+                                <span class="text-[10px] font-bold text-slate-400">/<span x-text="billingCycle === 'yearly' ? (<?php echo e(Js::from(app()->getLocale() == 'ar' ? 'سنة' : 'year')); ?>) : (<?php echo e(Js::from(app()->getLocale() == 'ar' ? 'شهر' : 'month')); ?>)"></span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Plan Selection Modal -->
+                    <div x-show="showPlanModal" 
+                         x-transition:enter="transition ease-out duration-300"
+                         x-transition:enter-start="opacity-0"
+                         x-transition:enter-end="opacity-100"
+                         x-transition:leave="transition ease-in duration-200"
+                         x-transition:leave-start="opacity-100"
+                         x-transition:leave-end="opacity-0"
+                         class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
+                         x-cloak>
+                        <div @click.away="showPlanModal = false" 
+                             class="bg-white rounded-[2.5rem] w-full max-w-lg shadow-2xl overflow-hidden animate-scale-in">
+                            <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                                <h3 class="text-xl font-black text-slate-900 font-arabic"><?php echo e(app()->getLocale() == 'ar' ? 'اختر الباقة المناسبة' : 'Select Plan'); ?></h3>
+                                <button type="button" @click="showPlanModal = false" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors">
+                                    <i class="bi bi-x-lg"></i>
+                                </button>
+                            </div>
+                            <div class="p-8 space-y-4 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                                <template x-for="pkg in packages" :key="pkg.slug">
+                                    <label class="relative block cursor-pointer group">
+                                        <input type="radio" name="plan_selector" :value="pkg.slug" x-model="selectedPlan" @change="showPlanModal = false" class="peer sr-only">
+                                        <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:border-brand-secondary/30 peer-checked:border-brand-secondary peer-checked:bg-brand-secondary/5 transition-all">
+                                            <div class="flex justify-between items-center">
+                                                <div class="flex items-center gap-3">
+                                                    <div class="w-5 h-5 rounded-full border-2 border-slate-200 peer-checked:border-brand-secondary flex items-center justify-center transition-all bg-white">
+                                                        <div class="w-2.5 h-2.5 rounded-full bg-brand-secondary scale-0 peer-checked:scale-100 transition-transform"></div>
+                                                    </div>
+                                                    <span class="font-black text-slate-900 uppercase tracking-tight" x-text="pkg.name"></span>
+                                                </div>
+                                                <div class="text-right">
+                                                    <span class="text-lg font-black text-brand-secondary" x-text="pkg.price"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </template>
+                            </div>
+                            <div class="p-6 bg-slate-50 text-center">
+                                <button type="button" @click="showPlanModal = false" class="text-sm font-black text-slate-500 hover:text-slate-700 transition-colors uppercase tracking-widest">
+                                    <?php echo e(app()->getLocale() == 'ar' ? 'إغلاق' : 'Close'); ?>
+
+                                </button>
                             </div>
                         </div>
                     </div>
