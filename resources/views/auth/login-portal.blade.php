@@ -1,19 +1,21 @@
 @extends('layouts.landing-new')
 
 @section('content')
-<div class="container mx-auto px-4 pb-20 lg:pb-32" style="padding-top: 140px;">
-    <div class="max-w-xl mx-auto">
-        <div class="bg-card border border-border rounded-2xl shadow-xl overflow-hidden">
+<div class="min-h-screen flex items-center justify-center py-20 px-4 sm:px-6 lg:px-8 bg-slate-50/50 mesh-gradient-soft noise-overlay">
+    <div class="max-w-xl mx-auto w-full animate-fade-in-up">
+        <div class="bg-white border border-slate-100/50 rounded-[2.5rem] shadow-2xl shadow-blue-900/5 overflow-hidden backdrop-blur-xl relative">
+            <!-- Decorative glow -->
+            <div class="absolute -top-24 -left-24 w-64 h-64 bg-blue-500/10 blur-[80px] rounded-full pointer-events-none"></div>
             <div class="p-8 lg:p-10">
-                <div class="text-center mb-10">
-                    <h3 class="text-2xl font-bold text-primary mb-2">بوابة الدخول الموحدة</h3>
-                    <p class="text-muted-foreground">اختر طريقة الدخول المناسبة لك</p>
+                <div class="text-center mb-10 relative z-10">
+                    <h3 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent mb-2 font-arabic tracking-tight">بوابة الدخول الموحدة</h3>
+                    <p class="text-slate-500 font-arabic">{{ __('auth.login.subtitle') }}</p>
                 </div>
 
                 <div class="space-y-6">
                     <!-- Tenant Login -->
-                    <div class="p-6 bg-muted/30 rounded-xl border border-border">
-                        <div class="flex items-center mb-4">
+                    <div class="p-8 bg-slate-50/50 rounded-3xl border border-slate-100/50 relative z-10 shadow-sm">
+                        <div class="flex items-center mb-6">
                             <div class="bg-primary/10 text-primary rounded-full flex items-center justify-center w-12 h-12 me-4">
                                 <span class="text-2xl">🏢</span>
                             </div>
@@ -24,28 +26,33 @@
                         </div>
                         
                         <!-- Tenant List -->
-                        <div class="space-y-3">
+                        <div class="space-y-4">
                             @forelse($tenants as $tenant)
-                                 <a href="{{ tenant_url('login', $tenant) }}" class="flex items-center justify-between w-full px-4 py-3 bg-background border border-border rounded-lg hover:border-primary hover:text-primary transition-colors group">
-                                    <span class="font-medium">{{ $tenant->name }}</span>
-                                    <span class="text-muted-foreground group-hover:text-primary transition-colors">→</span>
+                                 <a href="{{ tenant_url('login', $tenant) }}" class="flex items-center justify-between w-full px-5 py-4 bg-white border border-slate-100 rounded-2xl hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/5 transition-all group">
+                                    <span class="font-bold text-slate-700">{{ $tenant->name }}</span>
+                                    <span class="text-blue-500 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all font-bold">
+                                        <i class="fas fa-arrow-left rtl:rotate-180"></i>
+                                    </span>
                                 </a>
                             @empty
-                                <p class="text-muted-foreground text-center text-sm py-2">لا توجد مراكز مسجلة بعد</p>
+                                <p class="text-slate-400 text-center text-sm py-4 font-arabic">لا توجد مراكز مسجلة بعد</p>
                             @endforelse
                         </div>
                     </div>
 
                     <!-- Admin Login -->
-                    <a href="{{ route('admin.login') }}" class="block group">
-                        <div class="p-6 bg-muted/30 rounded-xl border border-border group-hover:border-primary transition-colors">
+                    <a href="{{ route('admin.login') }}" class="block group relative z-10">
+                        <div class="p-8 bg-slate-50/50 rounded-3xl border border-slate-100/50 group-hover:border-yellow-500/50 group-hover:bg-white group-hover:shadow-lg group-hover:shadow-yellow-500/5 transition-all">
                             <div class="flex items-center">
-                                <div class="bg-yellow-500/10 text-yellow-600 rounded-full flex items-center justify-center w-12 h-12 me-4">
+                                <div class="bg-yellow-500/10 text-yellow-600 rounded-2xl flex items-center justify-center w-14 h-14 me-4 shadow-inner">
                                     <span class="text-2xl">🛡️</span>
                                 </div>
-                                <div>
-                                    <h5 class="font-bold text-foreground mb-1">دخول المشرف العام</h5>
-                                    <p class="text-sm text-muted-foreground">لوحة تحكم إدارة النظام</p>
+                                <div class="flex-1">
+                                    <h5 class="font-bold text-slate-800 mb-1 font-arabic">{{ __('auth.login.admin_login') }}</h5>
+                                    <p class="text-sm text-slate-500 font-arabic">لوحة تحكم إدارة النظام</p>
+                                </div>
+                                <div class="text-yellow-500 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all">
+                                    <i class="fas fa-arrow-left rtl:rotate-180"></i>
                                 </div>
                             </div>
                         </div>

@@ -1,9 +1,11 @@
 @extends('layouts.landing-new')
 
 @section('content')
-<div class="min-h-screen flex items-center justify-center py-20 px-4 sm:px-6 lg:px-8 bg-background">
-    <div class="max-w-md w-full space-y-8">
-        <div class="bg-card border border-border rounded-2xl shadow-xl p-8">
+<div class="min-h-screen flex items-center justify-center py-20 px-4 sm:px-6 lg:px-8 bg-slate-50/50 mesh-gradient-soft noise-overlay">
+    <div class="max-w-md w-full space-y-8 animate-fade-in-up">
+        <div class="bg-white border border-slate-100/50 rounded-[2.5rem] shadow-2xl shadow-blue-900/5 p-8 lg:p-10 backdrop-blur-xl relative overflow-hidden">
+            <!-- Decorative glow -->
+            <div class="absolute -top-24 -right-24 w-64 h-64 bg-violet-500/10 blur-[80px] rounded-full pointer-events-none"></div>
             <div class="text-center mb-8">
                 <h2 class="text-3xl font-bold gradient-text mb-2">{{ __('auth.login.title') }}</h2>
                 <p class="text-muted-foreground">{{ __('auth.login.subtitle') }}</p>
@@ -36,7 +38,7 @@
                                id="email" 
                                name="email" 
                                value="{{ old('email') }}" 
-                               class="block w-full ps-10 py-3 bg-muted/30 border border-border rounded-xl text-foreground focus:ring-2 focus:ring-primary focus:border-primary transition-colors @error('email') border-red-500 @enderror" 
+                               class="block w-full ps-10 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all @error('email') border-red-500 @enderror" 
                                placeholder="{{ __('auth.login.email_or_phone') }}"
                                required 
                                autofocus>
@@ -55,7 +57,7 @@
                         <input type="password" 
                                id="password" 
                                name="password" 
-                               class="block w-full ps-10 py-3 bg-muted/30 border border-border rounded-xl text-foreground focus:ring-2 focus:ring-primary focus:border-primary transition-colors @error('password') border-red-500 @enderror" 
+                               class="block w-full ps-10 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all @error('password') border-red-500 @enderror" 
                                placeholder="••••••••"
                                required>
                     </div>
@@ -64,9 +66,9 @@
                     @enderror
                 </div>
 
-                <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors">
+                <button type="submit" class="btn-hero-cta w-full flex justify-center py-4 px-4 rounded-2xl shadow-lg text-base font-bold transition-all">
                     {{ __('auth.login.login_button') }} 
-                    <i class="fas fa-arrow-left ms-2 rtl:rotate-180 transform transition-transform"></i>
+                    <i class="fas fa-arrow-left ms-2 rtl:rotate-180 transform transition-transform group-hover:-translate-x-1"></i>
                 </button>
 
                 <div class="relative my-6">
