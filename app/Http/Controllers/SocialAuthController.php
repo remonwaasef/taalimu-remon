@@ -75,7 +75,9 @@ class SocialAuthController extends Controller
                 'cycle' => $cycleParam,
             ]));
 
-            return redirect()->route('google.complete-registration') . ($query ? '?' . $query : '');
+            $redirectUrl = route('google.complete-registration') . ($query ? '?' . $query : '');
+
+            return redirect($redirectUrl);
 
         } catch (\Exception $e) {
             \Log::error('Google Login Error: ' . $e->getMessage());
