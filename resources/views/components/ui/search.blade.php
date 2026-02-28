@@ -5,9 +5,8 @@
         type="text" 
         name="search" 
         value="{{ request('search') }}" 
-        class="form-control ps-5 rounded-pill border-0 shadow-sm" 
+        class="form-control ps-5 rounded-pill border-0 shadow-sm ui-search-input" 
         placeholder="{{ $placeholder }}"
-        style="background-color: var(--color-light); height: 48px;"
     >
     <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">

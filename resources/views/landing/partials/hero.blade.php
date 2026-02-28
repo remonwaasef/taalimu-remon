@@ -21,8 +21,7 @@
                 <!-- Headline -->
                 <h1 
                     dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}" 
-                    class="font-cairo text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-black text-foreground leading-[1.2] mb-8 animate-fade-in tracking-tight"
-                    style="animation-delay: 0.1s;"
+                    class="font-cairo text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-black text-foreground leading-[1.2] mb-8 animate-fade-in tracking-tight delay-1"
                 >
                     {!! __('landing.hero.title') !!}
                 </h1>
@@ -30,16 +29,14 @@
                 <!-- Subheadline -->
                 <p 
                     dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"
-                    class="text-xl md:text-2xl text-muted-foreground/80 mb-10 max-w-xl mx-auto lg:mx-0 animate-fade-in font-medium leading-[1.6] md:leading-relaxed"
-                    style="animation-delay: 0.2s;"
+                    class="text-xl md:text-2xl text-muted-foreground/80 mb-10 max-w-xl mx-auto lg:mx-0 animate-fade-in font-medium leading-[1.6] md:leading-relaxed delay-2"
                 >
                     {{ \App\Models\SiteSetting::get('site_description', __('landing.hero.subtitle')) }}
                 </p>
 
                 <!-- Premium CTA Buttons -->
                 <div 
-                    class="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start mb-12 animate-fade-in"
-                    style="animation-delay: 0.3s;"
+                    class="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start mb-12 animate-fade-in delay-3"
                 >
                     <a href="{{ route('register') }}" class="inline-flex items-center justify-center rounded-full text-xl md:text-2xl font-black h-16 md:h-20 px-12 md:px-16 group transition-all btn-hero-cta">
                         {{ __('landing.hero.cta_primary') }}
@@ -53,8 +50,7 @@
 
                 <!-- Professional Trust Badges - Simplified -->
                 <div 
-                    class="flex flex-wrap gap-8 justify-center lg:justify-start animate-fade-in py-6 border-y border-slate-200 mb-12"
-                    style="animation-delay: 0.4s;"
+                    class="flex flex-wrap gap-8 justify-center lg:justify-start animate-fade-in py-6 border-y border-slate-200 mb-12 delay-4"
                 >
                     <div class="flex items-center gap-3 text-sm font-bold text-slate-500 group cursor-default">
                         <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 group-hover:bg-primary group-hover:text-white transition-colors border border-slate-200">
@@ -78,8 +74,7 @@
 
                 <!-- High Impact Stats -->
                 <div 
-                    class="grid grid-cols-3 gap-6 animate-fade-in"
-                    style="animation-delay: 0.5s;"
+                    class="grid grid-cols-3 gap-6 animate-fade-in delay-5"
                 >
                     <div class="text-center lg:text-start p-4 rounded-2xl bg-white/70 border border-white/60 shadow-sm backdrop-blur-sm">
                         <div class="text-3xl lg:text-4xl font-black gradient-text mb-1">38%</div>
@@ -99,8 +94,7 @@
             <!-- Right Content - Hybrid Mockup -->
             <div class="w-full lg:w-[55%] relative flex items-center justify-center lg:justify-end">
                 <div 
-                    class="relative z-10 w-full max-w-[750px] animate-fade-in-right animate-float-slow transform-gpu backface-hidden"
-                    style="animation-delay: 0.2s;"
+                    class="relative z-10 w-full max-w-[750px] animate-fade-in-right animate-float-slow transform-gpu backface-hidden delay-2"
                 >
                     <!-- Localized Floating WhatsApp Notification -->
                     <div 

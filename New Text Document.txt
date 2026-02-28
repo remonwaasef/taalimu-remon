@@ -8,3 +8,11 @@
 
 
  Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force; ./deploy.ps1
+
+
+seo
+ما تبقى للمستقبل (يدوي):
+
+📝 إنشاء مدونة لكلمات مفتاحية طويلة الذيل
+⚡ تحسين Core Web Vitals على Google Search Console
+🏷️ إضافة Google Search Console/Bing Webmaster verification tags

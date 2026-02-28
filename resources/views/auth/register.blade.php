@@ -207,8 +207,7 @@ document.addEventListener('alpine:init', () => {
 })
 </script>
 
-<div class="min-h-screen bg-slate-50/50 flex justify-center p-4 lg:p-8 mesh-gradient-soft noise-overlay" 
-     style="padding-top: 120px;"
+<div class="min-h-screen bg-slate-50/50 flex justify-center p-4 lg:p-8 mesh-gradient-soft noise-overlay register-page-offset" 
      x-data="registrationForm({
         selectedPlan: {{ Js::from(request('plan', $packages->firstWhere('is_default', true)?->slug ?? $packages->first()?->slug ?? '')) }},
         billingCycle: {{ Js::from(request('cycle', 'monthly')) }},
@@ -263,7 +262,7 @@ document.addEventListener('alpine:init', () => {
 
             <!-- Google Shortcut (Only Step 1) -->
             <div class="mb-10" x-show="currentStep === 1">
-                <a href="{{ route('auth.google') }}" class="w-full flex items-center justify-center gap-4 py-4 px-6 border-2 border-slate-100 rounded-3xl shadow-sm text-base font-black text-slate-700 bg-white hover:bg-slate-50 hover:border-brand-secondary/20 transition-all group">
+                <a :href="'{{ route('auth.google') }}?plan=' + selectedPlan + '&cycle=' + billingCycle" class="w-full flex items-center justify-center gap-4 py-4 px-6 border-2 border-slate-100 rounded-3xl shadow-sm text-base font-black text-slate-700 bg-white hover:bg-slate-50 hover:border-brand-secondary/20 transition-all group">
                     <svg class="w-6 h-6 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                         <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>

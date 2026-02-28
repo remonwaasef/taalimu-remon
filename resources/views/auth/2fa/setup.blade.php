@@ -3,7 +3,7 @@
 @section('title', __('Security: 2FA Setup'))
 
 @section('content')
-<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+<div class="row justify-content-center align-items-center tfa-container">
     <div class="col-md-6">
         <div class="card shadow border-0">
             <div class="card-header bg-primary text-white py-3">

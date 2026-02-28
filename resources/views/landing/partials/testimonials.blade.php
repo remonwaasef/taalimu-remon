@@ -22,8 +22,7 @@
         <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
             <!-- Testimonial 1 -->
             <div
-                class="group relative bg-card rounded-2xl p-6 lg:p-8 border-2 border-light-purple/20 hover:border-light-purple/40 transition-all duration-300 hover:shadow-card-hover animate-fade-in"
-                style="animation-delay: 0s;"
+                class="group relative bg-card rounded-2xl p-6 lg:p-8 border-2 border-light-purple/20 hover:border-light-purple/40 transition-all duration-300 hover:shadow-card-hover animate-fade-in delay-0"
             >
                 <!-- Quote Icon -->
                 <div class="absolute -top-4 left-6 w-10 h-10 rounded-xl gradient-hero flex items-center justify-center shadow-md">
@@ -68,8 +67,7 @@
 
             <!-- Testimonial 2 -->
             <div
-                class="group relative bg-card rounded-2xl p-6 lg:p-8 border-2 border-light-purple/20 hover:border-light-purple/40 transition-all duration-300 hover:shadow-card-hover animate-fade-in"
-                style="animation-delay: 0.1s;"
+                class="group relative bg-card rounded-2xl p-6 lg:p-8 border-2 border-light-purple/20 hover:border-light-purple/40 transition-all duration-300 hover:shadow-card-hover animate-fade-in delay-1"
             >
                 <!-- Quote Icon -->
                 <div class="absolute -top-4 left-6 w-10 h-10 rounded-xl gradient-hero flex items-center justify-center shadow-md">
@@ -114,8 +112,7 @@
 
             <!-- Testimonial 3 -->
             <div
-                class="group relative bg-card rounded-2xl p-6 lg:p-8 border-2 border-light-purple/20 hover:border-light-purple/40 transition-all duration-300 hover:shadow-card-hover animate-fade-in"
-                style="animation-delay: 0.2s;"
+                class="group relative bg-card rounded-2xl p-6 lg:p-8 border-2 border-light-purple/20 hover:border-light-purple/40 transition-all duration-300 hover:shadow-card-hover animate-fade-in delay-2"
             >
                 <!-- Quote Icon -->
                 <div class="absolute -top-4 left-6 w-10 h-10 rounded-xl gradient-hero flex items-center justify-center shadow-md">
