@@ -1,13 +1,13 @@
 <section class="py-16 lg:py-24 relative overflow-hidden">
-    <!-- Background decorations -->
-    <div class="absolute top-1/2 left-0 w-72 h-72 bg-cyan/5 rounded-full blur-3xl -translate-y-1/2"></div>
-    <div class="absolute top-1/2 right-0 w-72 h-72 bg-light-purple/5 rounded-full blur-3xl -translate-y-1/2"></div>
+    <!-- Background decorations - Simplified -->
+    <div class="absolute top-1/2 left-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl -translate-y-1/2"></div>
+    <div class="absolute top-1/2 right-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl -translate-y-1/2"></div>
     
     <div class="container relative mx-auto px-4 lg:px-8">
         <!-- Section Header -->
         <div class="text-center mb-12 lg:mb-20">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan/10 border border-cyan/20 mb-6">
-                <span class="text-sm font-medium text-cyan">{{ __('landing.automation.badge') }}</span>
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/20 mb-6">
+                <span class="text-sm font-medium text-primary">{{ __('landing.automation.badge') }}</span>
             </div>
             <h2 class="text-3xl lg:text-4xl font-bold text-foreground mb-4">
                 {{ __('landing.automation.title_prefix') }} <span class="gradient-text">{{ \App\Models\SiteSetting::get('site_name', __('landing.automation.title_highlight')) }}</span>
@@ -19,8 +19,8 @@
 
         <!-- Steps -->
         <div class="grid md:grid-cols-3 gap-8 lg:gap-12 relative">
-            <!-- Connection Lines (Desktop) -->
-            <div class="hidden md:block absolute top-24 left-1/3 right-1/3 h-0.5 bg-gradient-to-r from-cyan via-light-purple to-success-green"></div>
+            <!-- Connection Lines (Desktop) - Simplified -->
+            <div class="hidden md:block absolute top-24 left-1/3 right-1/3 h-0.5 bg-slate-200"></div>
             
             <!-- Step 1 -->
             <div
@@ -38,8 +38,8 @@
                     </div>
                     
                     <!-- Step number -->
-                    <div class="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-cyan flex items-center justify-center shadow-md">
-                        <span class="text-sm font-bold text-dark-text">01</span>
+                    <div class="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-md">
+                        <span class="text-sm font-bold text-white">01</span>
                     </div>
                 </div>
 
@@ -80,8 +80,8 @@
                     </div>
                     
                     <!-- Step number -->
-                    <div class="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-cyan flex items-center justify-center shadow-md">
-                        <span class="text-sm font-bold text-dark-text">02</span>
+                    <div class="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-md">
+                        <span class="text-sm font-bold text-white">02</span>
                     </div>
                 </div>
 
@@ -122,8 +122,8 @@
                     </div>
                     
                     <!-- Step number -->
-                    <div class="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-cyan flex items-center justify-center shadow-md">
-                        <span class="text-sm font-bold text-dark-text">03</span>
+                    <div class="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-md">
+                        <span class="text-sm font-bold text-white">03</span>
                     </div>
                 </div>
 
@@ -146,10 +146,10 @@
 
         <!-- Result Box -->
         <div class="mt-16 lg:mt-20 max-w-2xl mx-auto">
-            <div class="relative rounded-3xl p-8 lg:p-10 text-center overflow-hidden border border-white/10 shadow-2xl" style="background: linear-gradient(135deg, #172554 0%, #1e40af 50%, #1d4ed8 100%);">
-                <!-- Decorative elements -->
-                <div class="absolute top-0 right-0 w-32 h-32 bg-cyan/10 rounded-full blur-2xl"></div>
-                <div class="absolute bottom-0 left-0 w-32 h-32 bg-success-green/10 rounded-full blur-2xl"></div>
+            <div class="relative rounded-3xl p-8 lg:p-10 text-center overflow-hidden border border-white/10 shadow-2xl" style="background: linear-gradient(135deg, hsl(var(--primary-purple)) 0%, hsl(var(--primary-vibrant)) 100%);">
+                <!-- Decorative elements - Simplified -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+                <div class="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
                 
                 <div class="relative">
                     <div class="text-7xl lg:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-blue-100 to-blue-200 mb-2 drop-shadow-lg">
