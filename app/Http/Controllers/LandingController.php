@@ -14,8 +14,12 @@ class LandingController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
+        // SEO: Allow manual locale override via URL parameter
+        if ($request->has('hl') && in_array($request->hl, ['en', 'ar', 'fr'])) {
+            app()->setLocale($request->hl);
+        }
         // Fetch packages directly (No Cache) to ensure real-time price updates
         $packages = Package::with('features')
                 ->where('is_active', true)

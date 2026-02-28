@@ -5,8 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
-    <title><?php echo e(\App\Models\SiteSetting::get('site_name', config('app.name'))); ?></title>
-    <meta name="description" content="<?php echo e(\App\Models\SiteSetting::get('site_description', __('landing.hero.subtitle'))); ?>">
+    <?php echo SEO::generate(); ?>
+
+    
+    <!-- Multilingual SEO -->
+    <link rel="alternate" hreflang="ar" href="<?php echo e(url()->current()); ?>?hl=ar" />
+    <link rel="alternate" hreflang="en" href="<?php echo e(url()->current()); ?>?hl=en" />
+    <link rel="alternate" hreflang="fr" href="<?php echo e(url()->current()); ?>?hl=fr" />
+    <link rel="alternate" hreflang="x-default" href="<?php echo e(url()->current()); ?>" />
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Taalimu",
+      "url": "https://taalimu.com",
+      "logo": "https://taalimu.com/images/logo.png",
+      "description": "<?php echo e(__('landing.hero.subtitle')); ?>",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web",
+      "offer": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
 
     <!-- Fonts - Optimized Loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

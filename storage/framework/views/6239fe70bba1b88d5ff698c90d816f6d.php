@@ -70,7 +70,7 @@ unset($__defined_vars, $__key, $__value); ?>
     </div>
 </div>
 
-<?php if (! $__env->hasRenderedOnce('903fd0d2-8b9b-494a-8beb-b92a0699ba1a')): $__env->markAsRenderedOnce('903fd0d2-8b9b-494a-8beb-b92a0699ba1a'); ?>
+<?php if (! $__env->hasRenderedOnce('662f229e-8588-4f5f-adc8-d9dbaddb5bc8')): $__env->markAsRenderedOnce('662f229e-8588-4f5f-adc8-d9dbaddb5bc8'); ?>
 <?php $__env->startPush('scripts'); ?>
 <script>
     function pwaInstall() {
