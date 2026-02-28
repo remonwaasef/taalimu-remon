@@ -87,7 +87,7 @@
                 @endphp
 
                 <div
-                    class="relative rounded-[40px] p-6 border-2 transition-all duration-300 hover:shadow-2xl animate-fade-in flex flex-col
+                    class="relative rounded-2xl p-6 border-2 transition-all duration-300 hover:shadow-2xl animate-fade-in flex flex-col
                     {{ $isFeatured 
                         ? 'border-light-purple gradient-hero text-primary-foreground scale-105 shadow-purple-glow hover:-translate-y-3 z-10' 
                         : 'bg-card border-border hover:border-light-purple/30 hover:-translate-y-3 shadow-sm' }}"
