@@ -228,8 +228,8 @@ document.addEventListener('alpine:init', () => {
                                       x-text="billingCycle === 'yearly' ? localPrice.yearly.toLocaleString() : localPrice.amount.toLocaleString()">
                                 </span>
                                 <div class="flex flex-col ml-1 rtl:mr-1 rtl:ml-0 mt-1">
-                                    <span class="text-[14px] font-bold text-white/30" x-text="localPrice.currency"></span>
-                                    <span class="text-[10px] font-bold text-white/50" x-text="billingCycle === 'yearly' ? '{{ __('landing.pricing.per_year') ?? '/سنوي' }}' : '{{ __('landing.pricing.per_month') ?? '/شهري' }}'"></span>
+                                    <span class="text-[14px] font-bold text-white/50" x-text="localPrice.currency"></span>
+                                    <span class="text-[10px] font-bold text-white/40" x-text="billingCycle === 'yearly' ? '{{ __('landing.pricing.per_year') ?? '/سنوي' }}' : '{{ __('landing.pricing.per_month') ?? '/شهري' }}'"></span>
                                 </div>
                             </div>
                             <!-- Monthly Equivalent for Yearly -->
@@ -526,7 +526,7 @@ document.addEventListener('alpine:init', () => {
                         <!-- Selected Indicator (Ticket-Style) -->
                         <div class="mt-10 mb-8 p-6 rounded-[32px] bg-white border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.05)] transition-all duration-300 group/summary">
                             <div class="flex flex-col items-center md:items-start text-center md:text-start">
-                                <span class="text-[11px] font-black text-blue-500/40 uppercase tracking-[0.2em] mb-2">{{ __('auth.register.selected_plan') }}</span>
+                                <span class="text-[11px] font-bold text-primary-purple/40 uppercase tracking-[0.2em] mb-2">{{ __('auth.register.selected_plan') }}</span>
                                 <h3 class="text-xl font-black text-slate-900 font-arabic leading-none" x-text="currentPlan.name || '{{ __('auth.register.please_select_plan') ?? 'يرجى اختيار باقة' }}'"></h3>
                             </div>
                             
