@@ -74,16 +74,9 @@ class SocialAuthController extends Controller
     public function showCompleteRegistration(Request $request)
     {
         // Ensure Google user data exists in session
-        /*
         if (!session('google_user')) {
             return redirect()->route('login.portal')
                 ->withErrors(['email' => __('Session expired. Please try again with Google.')]);
-        }
-        */
-
-        // Mock data for UI development
-        if (!session('google_user')) {
-            session(['google_user' => ['name' => 'Demo User', 'email' => 'demo@example.com', 'id' => '12345']]);
         }
 
         // Fetch packages for the sidebar summary
