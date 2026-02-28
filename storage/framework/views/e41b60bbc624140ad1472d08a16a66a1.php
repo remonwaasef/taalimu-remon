@@ -7,13 +7,15 @@
         <!-- Section Header -->
         <div class="text-center mb-12 lg:mb-16">
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-                <span class="text-sm font-medium text-primary">{{ __('landing.comparison.badge') }}</span>
+                <span class="text-sm font-medium text-primary"><?php echo e(__('landing.comparison.badge')); ?></span>
             </div>
             <h2 class="text-3xl lg:text-4xl font-bold text-foreground mb-4 text-center mx-auto">
-                {!! str_replace('Edu', \App\Models\SiteSetting::get('site_name', 'Edu'), __('landing.comparison.title')) !!}
+                <?php echo str_replace('Edu', \App\Models\SiteSetting::get('site_name', 'Edu'), __('landing.comparison.title')); ?>
+
             </h2>
             <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
-                {{ __('landing.comparison.subtitle') }}
+                <?php echo e(__('landing.comparison.subtitle')); ?>
+
             </p>
         </div>
 
@@ -25,21 +27,23 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 9-6 6"/><path d="m9 9 6 6"/><circle cx="12" cy="12" r="10"/></svg>
                     </div>
                     <h3 class="text-2xl font-bold text-foreground">
-                        {{ __('landing.comparison.manual.title') }}
+                        <?php echo e(__('landing.comparison.manual.title')); ?>
+
                     </h3>
                 </div>
 
                 <ul class="space-y-6">
-                    @foreach(__('landing.comparison.manual.items') as $item)
+                    <?php $__currentLoopData = __('landing.comparison.manual.items'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <li class="flex items-start gap-4 group/item">
                             <div class="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-destructive/5 flex items-center justify-center text-destructive/40 group-hover/item:text-destructive transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                             </div>
                             <span class="text-muted-foreground leading-relaxed">
-                                {{ $item }}
+                                <?php echo e($item); ?>
+
                             </span>
                         </li>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </ul>
             </div>
 
@@ -53,27 +57,29 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                     </div>
                     <h3 class="text-2xl font-bold text-foreground">
-                        {{ str_replace('Edu', \App\Models\SiteSetting::get('site_name', 'Edu'), __('landing.comparison.edu.title')) }}
+                        <?php echo e(str_replace('Edu', \App\Models\SiteSetting::get('site_name', 'Edu'), __('landing.comparison.edu.title'))); ?>
+
                     </h3>
                 </div>
 
                 <ul class="space-y-6 relative z-10">
-                    @foreach(__('landing.comparison.edu.items') as $item)
+                    <?php $__currentLoopData = __('landing.comparison.edu.items'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <li class="flex items-start gap-4 group/item">
                             <div class="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-cyan/10 flex items-center justify-center text-cyan group-hover/item:scale-110 transition-transform">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3"><polyline points="20 6 9 17 4 12"/></svg>
                             </div>
                             <span class="text-foreground font-medium leading-relaxed">
-                                {{ $item }}
+                                <?php echo e($item); ?>
+
                             </span>
                         </li>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </ul>
 
                 <!-- CTA Subtle Trigger -->
                 <div class="mt-10 pt-8 border-t border-border/10">
                     <a href="#pricing" class="inline-flex items-center gap-2 text-cyan font-bold hover:gap-3 transition-all">
-                        <span>{{ __('landing.hero.cta_primary') }}</span>
+                        <span><?php echo e(__('landing.hero.cta_primary')); ?></span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                     </a>
                 </div>
@@ -81,3 +87,4 @@
         </div>
     </div>
 </section>
+<?php /**PATH D:\new project\antigravty\edu\edu\resources\views/landing/partials/comparison.blade.php ENDPATH**/ ?>
