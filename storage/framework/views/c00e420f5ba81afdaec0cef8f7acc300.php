@@ -1,6 +1,6 @@
-@extends('layouts.landing-new')
 
-@section('content')
+
+<?php $__env->startSection('content'); ?>
 <!-- Import Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
@@ -293,7 +293,7 @@ document.addEventListener('alpine:init', () => {
                 }
             } catch (e) {
                 this.couponStatus = 'invalid';
-                this.couponMessage = '{{ __('auth.coupon_error') }}';
+                this.couponMessage = '<?php echo e(__('auth.coupon_error')); ?>';
             } finally {
                 this.isApplyingCoupon = false;
             }
@@ -319,15 +319,15 @@ document.addEventListener('alpine:init', () => {
 <div class="min-h-screen bg-slate-50/50 flex justify-center p-4 lg:p-8 mesh-gradient-soft noise-overlay" 
      style="padding-top: 120px;"
      x-data="registrationForm({
-        selectedPlan: {{ Js::from(request('plan', $packages->firstWhere('is_default', true)?->slug ?? $packages->first()?->slug ?? '')) }},
-        billingCycle: {{ Js::from(request('cycle', 'monthly')) }},
-        packages: {{ Js::from($packagesData) }},
-        centerName: {{ Js::from(old('center_name')) }},
-        subdomain: {{ Js::from(old('subdomain')) }},
-        manuallyEditedSubdomain: {{ old('subdomain') ? 'true' : 'false' }},
+        selectedPlan: <?php echo e(Js::from(request('plan', $packages->firstWhere('is_default', true)?->slug ?? $packages->first()?->slug ?? ''))); ?>,
+        billingCycle: <?php echo e(Js::from(request('cycle', 'monthly'))); ?>,
+        packages: <?php echo e(Js::from($packagesData)); ?>,
+        centerName: <?php echo e(Js::from(old('center_name'))); ?>,
+        subdomain: <?php echo e(Js::from(old('subdomain'))); ?>,
+        manuallyEditedSubdomain: <?php echo e(old('subdomain') ? 'true' : 'false'); ?>,
         userCountry: ''
      })"
-     dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
+     dir="<?php echo e(app()->getLocale() == 'ar' ? 'rtl' : 'ltr'); ?>">
     
     <!-- Main Centered Card Container -->
     <div class="w-full max-w-4xl bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/5 overflow-hidden flex flex-col lg:flex-row border border-slate-100/50 min-h-[640px] animate-fade-in-up md:backdrop-blur-xl relative" style="max-width: 960px;">
@@ -338,32 +338,35 @@ document.addEventListener('alpine:init', () => {
             <div class="absolute -top-24 -left-24 w-64 h-64 bg-blue-500/20 blur-[80px] rounded-full pointer-events-none"></div>
             <div class="flex-1 flex flex-col w-full">
             <div class="space-y-8 flex-1">
-                @if(app()->getLocale() == 'ar')
+                <?php if(app()->getLocale() == 'ar'): ?>
                 <div class="mb-2">
-                    <span class="text-[10px] text-blue-300 font-bold uppercase tracking-widest">{{ __('auth.register.subtitle') }}</span>
+                    <span class="text-[10px] text-blue-300 font-bold uppercase tracking-widest"><?php echo e(__('auth.register.subtitle')); ?></span>
                 </div>
-                @endif
+                <?php endif; ?>
                 <h2 class="text-2xl lg:text-3xl font-bold mb-4 font-arabic leading-tight">
-                    {{ __('auth.register.branding_title') }}
+                    <?php echo e(__('auth.register.branding_title')); ?>
+
                 </h2>
                     <p class="text-blue-200/80 text-base font-arabic font-light leading-relaxed">
-                        {{ __('auth.register.branding_subtitle') }}
+                        <?php echo e(__('auth.register.branding_subtitle')); ?>
+
                     </p>
                 </div>
 
                 <div class="space-y-3">
-                    <label class="text-[9px] font-black text-blue-300/70 uppercase tracking-widest px-1 mb-1 block">{{ __('auth.register.select_plan') }}</label>
-                    @foreach($packages as $package)
-                    <div @click="selectedPlan = '{{ $package->slug }}'"
+                    <label class="text-[9px] font-black text-blue-300/70 uppercase tracking-widest px-1 mb-1 block"><?php echo e(__('auth.register.select_plan')); ?></label>
+                    <?php $__currentLoopData = $packages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $package): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <div @click="selectedPlan = '<?php echo e($package->slug); ?>'"
                         class="w-full text-center p-6 plan-card-compact cursor-pointer relative group/card mb-6 border transition-all duration-300 overflow-hidden"
-                        :class="selectedPlan === '{{ $package->slug }}' ? 'selected' : 'border-white/5 hover:border-white/20 bg-white/[0.02]'"
-                        x-data="{ localPkg: packages.find(p => p.slug === '{{ $package->slug }}') }"
+                        :class="selectedPlan === '<?php echo e($package->slug); ?>' ? 'selected' : 'border-white/5 hover:border-white/20 bg-white/[0.02]'"
+                        x-data="{ localPkg: packages.find(p => p.slug === '<?php echo e($package->slug); ?>') }"
                     >
                         
                         <!-- Mini Badge for Type -->
                         <div class="inline-flex mb-3">
                             <span class="text-[9px] font-black uppercase tracking-[0.25em] text-blue-300/40 px-3 py-1 bg-white/5 rounded-full border border-white/5 group-hover/card:text-blue-200 group-hover/card:bg-blue-500/10 transition-all">
-                                {{ app()->getLocale() == 'ar' ? $package->name : $package->name_en }}
+                                <?php echo e(app()->getLocale() == 'ar' ? $package->name : $package->name_en); ?>
+
                             </span>
                         </div>
 
@@ -376,7 +379,7 @@ document.addEventListener('alpine:init', () => {
                                         </del>
                                         <span class="w-1.5 h-4 bg-white/10 rounded-full"></span>
                                         <span class="text-[16px] font-black text-emerald-400 uppercase tracking-tighter">
-                                            {{ __('auth.register.save') }} 
+                                            <?php echo e(__('auth.register.save')); ?> 
                                             <span x-text="billingCycle === 'yearly' ? ((localPrice.old * 12) - localPrice.yearly).toLocaleString() : (localPrice.old - localPrice.amount).toLocaleString()"></span>
                                         </span>
                                     </div>
@@ -388,15 +391,15 @@ document.addEventListener('alpine:init', () => {
                                 </span>
                                 <div class="flex flex-col ml-1 rtl:mr-1 rtl:ml-0 mt-1">
                                     <span class="text-[14px] font-bold text-white/30" x-text="localPrice.currency"></span>
-                                    <span class="text-[10px] font-bold text-white/50" x-text="billingCycle === 'yearly' ? '{{ __('landing.pricing.per_year') ?? '/سنوي' }}' : '{{ __('landing.pricing.per_month') ?? '/شهري' }}'"></span>
+                                    <span class="text-[10px] font-bold text-white/50" x-text="billingCycle === 'yearly' ? '<?php echo e(__('landing.pricing.per_year') ?? '/سنوي'); ?>' : '<?php echo e(__('landing.pricing.per_month') ?? '/شهري'); ?>'"></span>
                                 </div>
                             </div>
                             <!-- Monthly Equivalent for Yearly -->
                             <template x-if="billingCycle === 'yearly'">
                                 <div class="mt-1 text-[11px] text-white/40 font-bold">
-                                    ({{ __('landing.pricing.equivalent_to') ?? 'ما يعادل' }} 
+                                    (<?php echo e(__('landing.pricing.equivalent_to') ?? 'ما يعادل'); ?> 
                                     <span x-text="Math.round(localPrice.yearly / 12).toLocaleString()"></span>
-                                    <span x-text="localPrice.currency"></span>/{{ __('landing.pricing.month_short') ?? 'شهر' }})
+                                    <span x-text="localPrice.currency"></span>/<?php echo e(__('landing.pricing.month_short') ?? 'شهر'); ?>)
                                 </div>
                             </template>
 
@@ -406,7 +409,7 @@ document.addEventListener('alpine:init', () => {
                         </div>
                         
                         <div class="space-y-1.5 mt-3">
-                            @php
+                            <?php
                                 $features = $package->features->filter(function($feature) {
                                     $val = $feature->pivot->value;
                                     // Skip disabled boolean features or 0 limits
@@ -414,9 +417,9 @@ document.addEventListener('alpine:init', () => {
                                     if ($feature->type === 'limit' && ($val === '0' || $val === 0 || !$val)) return false;
                                     return true;
                                 })->take(6);
-                            @endphp
-                            @foreach($features as $feature)
-                            @php
+                            ?>
+                            <?php $__currentLoopData = $features; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $feature): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php
                                 $val = $feature->pivot->value;
                                 $displayVal = $val;
                                 if ($val === '-1') {
@@ -429,7 +432,7 @@ document.addEventListener('alpine:init', () => {
                                      if ($feature->code === 'max_instructors') $unit = ' ' . (__('admin.instructors') ?? 'مدرس');
                                      $displayVal = $val . $unit;
                                 }
-                            @endphp
+                            ?>
                             <div class="flex items-center gap-2 text-[10px] text-blue-100/90 font-arabic font-medium opacity-80 group-hover:opacity-100 transition-opacity">
                                 <div class="flex-shrink-0 w-3 h-3 rounded-full bg-blue-500/20 flex items-center justify-center">
                                     <svg class="w-2 h-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -437,31 +440,33 @@ document.addEventListener('alpine:init', () => {
                                     </svg>
                                 </div>
                                 <span>
-                                    @php
+                                    <?php
                                         $valKey = 'features.' . $feature->code;
                                         $translatedName = __($valKey);
                                         if ($translatedName === $valKey) {
                                             $translatedName = app()->getLocale() === 'en' && $feature->name_en ? $feature->name_en : $feature->name;
                                         }
-                                    @endphp
-                                    {{ $translatedName }}
-                                    @if($displayVal)
-                                        <span class="opacity-70">({{ $displayVal }})</span>
-                                    @endif
+                                    ?>
+                                    <?php echo e($translatedName); ?>
+
+                                    <?php if($displayVal): ?>
+                                        <span class="opacity-70">(<?php echo e($displayVal); ?>)</span>
+                                    <?php endif; ?>
                                 </span>
                             </div>
-                            @endforeach
-                            @if($package->features->count() > 6)
-                            <p class="text-[9px] text-blue-300 font-bold mt-1 pr-5">+ {{ $package->features->count() - 6 }} {{ __('auth.register.more_features') }}</p>
-                            @endif
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php if($package->features->count() > 6): ?>
+                            <p class="text-[9px] text-blue-300 font-bold mt-1 pr-5">+ <?php echo e($package->features->count() - 6); ?> <?php echo e(__('auth.register.more_features')); ?></p>
+                            <?php endif; ?>
                         </div>
                     </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
 
                 <div class="mt-auto pt-8 border-t border-white/5 opacity-60">
                     <p class="text-[10px] text-blue-200 font-arabic">
-                        {{ __('auth.register.join_leaders') }}
+                        <?php echo e(__('auth.register.join_leaders')); ?>
+
                     </p>
                 </div>
             </div>
@@ -469,50 +474,53 @@ document.addEventListener('alpine:init', () => {
 
             <!-- Right Panel: Compact Registration Form -->
             <div class="lg:w-[68%] bg-white flex flex-col p-8 lg:p-12 relative">
-                <div class="absolute top-6 {{ app()->getLocale() == 'ar' ? 'left-8' : 'right-8' }} z-10">
+                <div class="absolute top-6 <?php echo e(app()->getLocale() == 'ar' ? 'left-8' : 'right-8'); ?> z-10">
                     <span class="text-sm text-slate-500">
-                        {{ __('auth.login.no_account_link') }}
-                        <a href="{{ route('login.portal') }}" class="text-blue-600 font-bold hover:text-blue-700 transition-colors ml-1">{{ __('auth.login.title') }}</a>
+                        <?php echo e(__('auth.login.no_account_link')); ?>
+
+                        <a href="<?php echo e(route('login.portal')); ?>" class="text-blue-600 font-bold hover:text-blue-700 transition-colors ml-1"><?php echo e(__('auth.login.title')); ?></a>
                     </span>
                 </div>
 
                 <div class="max-w-[440px] mx-auto pt-10">
                     <div class="mb-8">
                         <h1 class="text-2xl lg:text-3xl font-bold text-slate-900 mb-2 font-arabic tracking-tight">
-                            {{ __('auth.register.title') }}
+                            <?php echo e(__('auth.register.title')); ?>
+
                         </h1>
                         <p class="text-slate-500 text-sm font-arabic font-light">
-                            {{ __('auth.register.subtitle') }}
+                            <?php echo e(__('auth.register.subtitle')); ?>
+
                         </p>
                     </div>
 
                     <div class="mb-6">
-                        <a href="{{ route('auth.google') }}" class="w-full flex items-center justify-center gap-3 py-3 px-4 border border-slate-200 rounded-xl shadow-sm text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all group">
+                        <a href="<?php echo e(route('auth.google')); ?>" class="w-full flex items-center justify-center gap-3 py-3 px-4 border border-slate-200 rounded-xl shadow-sm text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all group">
                             <svg class="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                             </svg>
-                            <span>{{ __('Sign up with Google') }}</span>
+                            <span><?php echo e(__('Sign up with Google')); ?></span>
                         </a>
                         <div class="relative my-4">
                             <div class="absolute inset-0 flex items-center">
                                 <div class="w-full border-t border-slate-200"></div>
                             </div>
                             <div class="relative flex justify-center text-xs uppercase">
-                                <span class="bg-white px-2 text-slate-400 font-bold tracking-wider">{{ __('auth.register.or') ?? 'OR' }}</span>
+                                <span class="bg-white px-2 text-slate-400 font-bold tracking-wider"><?php echo e(__('auth.register.or') ?? 'OR'); ?></span>
                             </div>
                         </div>
                     </div>
-                    <form action="{{ route('register.submit') }}" method="POST" class="space-y-4">
-                        @csrf
-                        @if(request('google_id'))
-                            <input type="hidden" name="google_id" value="{{ request('google_id') }}">
-                        @endif
+                    <form action="<?php echo e(route('register.submit')); ?>" method="POST" class="space-y-4">
+                        <?php echo csrf_field(); ?>
+                        <?php if(request('google_id')): ?>
+                            <input type="hidden" name="google_id" value="<?php echo e(request('google_id')); ?>">
+                        <?php endif; ?>
                         
                         <!-- Global Error Alert -->
-                        @if ($errors->any())
+                        <?php if($errors->any()): ?>
                             <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
                                 <div class="flex items-start">
                                     <div class="flex-shrink-0">
@@ -522,19 +530,20 @@ document.addEventListener('alpine:init', () => {
                                     </div>
                                     <div class="ml-3 rtl:mr-3 rtl:ml-0">
                                         <h3 class="text-sm font-medium text-red-800 font-arabic">
-                                            {{ __('auth.register.registration_error') }}
+                                            <?php echo e(__('auth.register.registration_error')); ?>
+
                                         </h3>
                                         <div class="mt-2 text-sm text-red-700 font-arabic">
                                             <ul class="list-disc pl-5 rtl:pr-5 rtl:pl-0 space-y-1">
-                                                @foreach ($errors->all() as $error)
-                                                    <li>{{ $error }}</li>
-                                                @endforeach
+                                                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <li><?php echo e($error); ?></li>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        @endif
+                        <?php endif; ?>
 
                         <input type="hidden" name="plan" x-model="selectedPlan">
                         <input type="hidden" name="billing_cycle" x-model="billingCycle">
@@ -542,46 +551,53 @@ document.addEventListener('alpine:init', () => {
 
                         <div class="space-y-4">
                             <div class="space-y-1">
-                                <label class="label-compact px-1 font-arabic">{{ __('auth.register.center_name') }}</label>
+                                <label class="label-compact px-1 font-arabic"><?php echo e(__('auth.register.center_name')); ?></label>
                                 <input type="text" name="center_name" x-model="centerName"
                                     @input="if(!manuallyEditedSubdomain) { subdomain = generateSlug(centerName); }"
                                     class="w-full h-12 input-compact px-4 text-sm font-medium font-arabic text-slate-900"
-                                    placeholder="{{ __('auth.register.center_name_placeholder') }}" 
-                                    value="{{ request('center_name') }}"
+                                    placeholder="<?php echo e(__('auth.register.center_name_placeholder')); ?>" 
+                                    value="<?php echo e(request('center_name')); ?>"
                                     required>
-                                @error('center_name') <p class="text-red-500 text-[10px] font-bold mt-1 px-1">{{ $message }}</p> @enderror
+                                <?php $__errorArgs = ['center_name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <p class="text-red-500 text-[10px] font-bold mt-1 px-1"><?php echo e($message); ?></p> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
 
 
 
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div class="space-y-1">
-                                    <label class="label-compact px-1 font-arabic">{{ __('auth.register.full_name') }}</label>
+                                    <label class="label-compact px-1 font-arabic"><?php echo e(__('auth.register.full_name')); ?></label>
                                     <input type="text" name="name" 
                                         class="w-full h-12 input-compact px-4 text-sm font-medium font-arabic text-slate-900"
-                                        required value="{{ old('name', request('name')) }}">
+                                        required value="<?php echo e(old('name', request('name'))); ?>">
                                 </div>
                                 <div class="space-y-1">
-                                    <label class="label-compact px-1 font-arabic">{{ __('auth.register.email') }}</label>
+                                    <label class="label-compact px-1 font-arabic"><?php echo e(__('auth.register.email')); ?></label>
                                     <input type="email" name="email" 
                                         class="w-full h-12 input-compact px-4 text-sm font-medium text-slate-900"
                                         placeholder="mail@example.com"
-                                        required value="{{ old('email', request('email')) }}">
+                                        required value="<?php echo e(old('email', request('email'))); ?>">
                                 </div>
                                 <div class="space-y-1">
-                                    <label class="label-compact px-1 font-arabic">{{ __('auth.register.phone') }}</label>
+                                    <label class="label-compact px-1 font-arabic"><?php echo e(__('auth.register.phone')); ?></label>
                                     <input type="text" name="phone" 
                                         class="w-full h-12 input-compact px-4 text-sm font-medium text-slate-900"
                                         placeholder="010xxxxxxx"
-                                        required value="{{ old('phone', request('phone')) }}">
+                                        required value="<?php echo e(old('phone', request('phone'))); ?>">
                                 </div>
                             </div>
 
                             <div class="space-y-1">
                                 <div class="flex justify-between items-center px-1">
-                                    <label class="label-compact font-arabic">{{ __('auth.register.password') }}</label>
+                                    <label class="label-compact font-arabic"><?php echo e(__('auth.register.password')); ?></label>
                                     <button type="button" @click="showPassword = !showPassword" class="text-[10px] font-black text-blue-600 uppercase tracking-tighter">
-                                        <span x-text="showPassword ? '{{ __('auth.register.hide') }}' : '{{ __('auth.register.show') }}'"></span>
+                                        <span x-text="showPassword ? '<?php echo e(__('auth.register.hide')); ?>' : '<?php echo e(__('auth.register.show')); ?>'"></span>
                                     </button>
                                 </div>
                                 <!-- Password Fields with Toggle -->
@@ -599,7 +615,7 @@ document.addEventListener('alpine:init', () => {
                                         <input :type="showPassword ? 'text' : 'password'" type="password" name="password_confirmation" x-model="password_confirmation"
                                             class="w-full h-12 input-compact px-4 pr-11 rtl:pl-11 rtl:pr-4 text-sm font-medium text-slate-900"
                                             :class="password_confirmation.length > 0 && !isPasswordMatch ? 'border-red-300 bg-red-50 shadow-[0_0_0_4px_rgba(239,68,68,0.1)]' : ''"
-                                            placeholder="{{ __('auth.register.confirm_password') }}" required>
+                                            placeholder="<?php echo e(__('auth.register.confirm_password')); ?>" required>
                                     </div>
                                 </div>
 
@@ -609,32 +625,32 @@ document.addEventListener('alpine:init', () => {
                                         <!-- Length -->
                                         <div class="bulb-container pr-2" :class="passwordCriteria.length ? 'active' : ''">
                                             <div class="bulb" :class="passwordCriteria.length ? 'active-length' : ''"></div>
-                                            <span class="bulb-text font-arabic">{{ __('auth.register.password_criteria.chars') }}</span>
+                                            <span class="bulb-text font-arabic"><?php echo e(__('auth.register.password_criteria.chars')); ?></span>
                                         </div>
                                         <!-- Uppercase -->
                                         <div class="bulb-container pr-2" :class="passwordCriteria.upper ? 'active' : ''">
                                             <div class="bulb" :class="passwordCriteria.upper ? 'active-upper' : ''"></div>
-                                            <span class="bulb-text font-arabic">{{ __('auth.register.password_criteria.upper') }}</span>
+                                            <span class="bulb-text font-arabic"><?php echo e(__('auth.register.password_criteria.upper')); ?></span>
                                         </div>
                                         <!-- Lowercase -->
                                         <div class="bulb-container pr-2" :class="passwordCriteria.lower ? 'active' : ''">
                                             <div class="bulb" :class="passwordCriteria.lower ? 'active-lower' : ''"></div>
-                                            <span class="bulb-text font-arabic">{{ __('auth.register.password_criteria.lower') }}</span>
+                                            <span class="bulb-text font-arabic"><?php echo e(__('auth.register.password_criteria.lower')); ?></span>
                                         </div>
                                         <!-- Number -->
                                         <div class="bulb-container pr-2" :class="passwordCriteria.number ? 'active' : ''">
                                             <div class="bulb" :class="passwordCriteria.number ? 'active-number' : ''"></div>
-                                            <span class="bulb-text font-arabic">{{ __('auth.register.password_criteria.numbers') }}</span>
+                                            <span class="bulb-text font-arabic"><?php echo e(__('auth.register.password_criteria.numbers')); ?></span>
                                         </div>
                                         <!-- Symbol -->
                                         <div class="bulb-container" :class="passwordCriteria.symbol ? 'active' : ''">
                                             <div class="bulb" :class="passwordCriteria.symbol ? 'active-symbol' : ''"></div>
-                                            <span class="bulb-text font-arabic">{{ __('auth.register.password_criteria.symbols') }}</span>
+                                            <span class="bulb-text font-arabic"><?php echo e(__('auth.register.password_criteria.symbols')); ?></span>
                                         </div>
                                         <!-- Match -->
                                         <div class="bulb-container" :class="isPasswordMatch ? 'active' : ''">
                                             <div class="bulb" :class="isPasswordMatch ? 'active-match' : ''"></div>
-                                            <span class="bulb-text font-arabic">{{ __('auth.register.password_criteria.match') ?? 'تطابق' }}</span>
+                                            <span class="bulb-text font-arabic"><?php echo e(__('auth.register.password_criteria.match') ?? 'تطابق'); ?></span>
                                         </div>
                                     </div>
                                 </div>
@@ -645,12 +661,13 @@ document.addEventListener('alpine:init', () => {
                                 <template x-if="!showCouponInput && couponStatus !== 'valid'">
                                     <button type="button" @click="showCouponInput = true" class="text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center gap-2 group font-arabic transition-all">
                                         <i class="bi bi-tag-fill group-hover:rotate-12 transition-transform"></i>
-                                        {{ __('auth.register.have_coupon') ?? 'هل لديك كود خصم؟' }}
+                                        <?php echo e(__('auth.register.have_coupon') ?? 'هل لديك كود خصم؟'); ?>
+
                                     </button>
                                 </template>
 
                                 <div x-show="showCouponInput || couponStatus === 'valid'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-1">
-                                    <label class="label-compact px-1 font-arabic">{{ __('admin.coupon_code') }}</label>
+                                    <label class="label-compact px-1 font-arabic"><?php echo e(__('admin.coupon_code')); ?></label>
                                     <div class="relative">
                                         <input type="text" name="coupon_code" x-model="couponCode" @input.debounce.500ms="validateCoupon()"
                                             class="w-full h-12 input-compact px-4 text-sm font-medium text-slate-900 uppercase"
@@ -674,7 +691,7 @@ document.addEventListener('alpine:init', () => {
                                     </template>
                                     <template x-if="couponStatus === 'valid'">
                                         <div class="mt-2 p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center justify-between">
-                                            <span class="text-[10px] font-bold text-emerald-700 font-arabic">{{ __('auth.register.discount_applied') }} (<span x-text="couponCode"></span>)</span>
+                                            <span class="text-[10px] font-bold text-emerald-700 font-arabic"><?php echo e(__('auth.register.discount_applied')); ?> (<span x-text="couponCode"></span>)</span>
                                             <span class="text-xs font-black text-emerald-700" x-text="discountText"></span>
                                         </div>
                                     </template>
@@ -685,8 +702,8 @@ document.addEventListener('alpine:init', () => {
                         <!-- Selected Indicator (Ticket-Style) -->
                         <div class="mt-10 mb-8 p-6 rounded-[32px] bg-white border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.05)] transition-all duration-300 group/summary">
                             <div class="flex flex-col items-center md:items-start text-center md:text-start">
-                                <span class="text-[11px] font-black text-blue-500/40 uppercase tracking-[0.2em] mb-2">{{ __('auth.register.selected_plan') }}</span>
-                                <h3 class="text-xl font-black text-slate-900 font-arabic leading-none" x-text="currentPlan.name || '{{ __('auth.register.please_select_plan') ?? 'يرجى اختيار باقة' }}'"></h3>
+                                <span class="text-[11px] font-black text-blue-500/40 uppercase tracking-[0.2em] mb-2"><?php echo e(__('auth.register.selected_plan')); ?></span>
+                                <h3 class="text-xl font-black text-slate-900 font-arabic leading-none" x-text="currentPlan.name || '<?php echo e(__('auth.register.please_select_plan') ?? 'يرجى اختيار باقة'); ?>'"></h3>
                             </div>
                             
                             <div class="flex flex-col items-center md:items-end">
@@ -706,7 +723,7 @@ document.addEventListener('alpine:init', () => {
                                             <div class="flex flex-col items-center md:items-end mb-2">
                                                 <div class="text-xs font-bold text-slate-400 line-through" x-text="activePriceValue + ' ' + currentPriceData.currency"></div>
                                                 <div class="text-[10px] font-black text-emerald-600 uppercase tracking-tight">
-                                                    {{ __('auth.register.discount_applied') }}: -<span x-text="couponDiscountAmount.toLocaleString() + ' ' + currentPriceData.currency"></span>
+                                                    <?php echo e(__('auth.register.discount_applied')); ?>: -<span x-text="couponDiscountAmount.toLocaleString() + ' ' + currentPriceData.currency"></span>
                                                 </div>
                                             </div>
                                         </template>
@@ -716,15 +733,15 @@ document.addEventListener('alpine:init', () => {
                                             <span class="text-5xl font-black tracking-tighter leading-none" x-text="finalPrice.toLocaleString()"></span>
                                             <div class="flex flex-col ml-1 rtl:mr-1 rtl:ml-0 mt-1">
                                                 <span class="text-[14px] font-bold opacity-40" x-text="currentPriceData.currency"></span>
-                                                <span class="text-[10px] font-bold opacity-40 -mt-1" x-text="billingCycle === 'yearly' ? '{{ __('landing.pricing.per_year') ?? '/سنوياً' }}' : '{{ __('landing.pricing.per_month') ?? '/شهرياً' }}'"></span>
+                                                <span class="text-[10px] font-bold opacity-40 -mt-1" x-text="billingCycle === 'yearly' ? '<?php echo e(__('landing.pricing.per_year') ?? '/سنوياً'); ?>' : '<?php echo e(__('landing.pricing.per_month') ?? '/شهرياً'); ?>'"></span>
                                             </div>
                                         </div>
                                         <!-- Monthly Equivalent note for Yearly in Summary -->
                                         <template x-if="billingCycle === 'yearly'">
                                             <div class="text-[10px] font-bold text-slate-400 mt-1 text-end">
-                                                ({{ __('landing.pricing.equivalent_to') ?? 'ما يعادل' }} 
+                                                (<?php echo e(__('landing.pricing.equivalent_to') ?? 'ما يعادل'); ?> 
                                                 <span x-text="Math.round(finalPrice / 12).toLocaleString()"></span>
-                                                <span x-text="currentPriceData.currency"></span>/{{ __('landing.pricing.month_short') ?? 'شهر' }})
+                                                <span x-text="currentPriceData.currency"></span>/<?php echo e(__('landing.pricing.month_short') ?? 'شهر'); ?>)
                                             </div>
                                         </template>
                                     </div>
@@ -736,17 +753,18 @@ document.addEventListener('alpine:init', () => {
                             <button type="submit" 
                                 :disabled="password.length > 0 && !isPasswordMatch"
                                 class="btn-hero-cta w-full h-16 rounded-[24px] flex items-center justify-center gap-3 group transition-all duration-300">
-                                <span class="text-xl font-black font-arabic">{{ __('auth.register.cta_main') }}</span>
+                                <span class="text-xl font-black font-arabic"><?php echo e(__('auth.register.cta_main')); ?></span>
                                 <svg class="w-6 h-6 transform group-hover:translate-x-1 group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                                 </svg>
                             </button>
                             
                             <p class="mt-6 text-center text-[11px] text-slate-400 font-arabic leading-relaxed">
-                                {{ __('auth.register.terms_prefix') }}
-                                <a href="#" class="text-slate-900 font-bold hover:underline">{{ __('auth.register.terms_of_service') }}</a> 
-                                {{ __('auth.register.and') }} 
-                                <a href="#" class="text-slate-900 font-bold hover:underline">{{ __('auth.register.privacy_policy') }}</a>
+                                <?php echo e(__('auth.register.terms_prefix')); ?>
+
+                                <a href="#" class="text-slate-900 font-bold hover:underline"><?php echo e(__('auth.register.terms_of_service')); ?></a> 
+                                <?php echo e(__('auth.register.and')); ?> 
+                                <a href="#" class="text-slate-900 font-bold hover:underline"><?php echo e(__('auth.register.privacy_policy')); ?></a>
                             </p>
                         </div>
                     </form>
@@ -755,4 +773,6 @@ document.addEventListener('alpine:init', () => {
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.landing-new', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\new project\antigravty\edu\edu\resources\views/auth/register.blade.php ENDPATH**/ ?>

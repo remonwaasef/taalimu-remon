@@ -4,86 +4,88 @@
 
 @layer base {
     :root {
-        /* Power Palette Primary Colors */
-        --dark-purple: 258 86% 34%;
-        /* Deep Indigo #3A0CA3 */
-        --primary-purple: 230 100% 58%;
-        /* Royal Blue #2A4DFF - Replaces primary purple conceptually */
-        --light-purple: 229 83% 60%;
-        /* Lighter Blue #4361EE */
-        --cyan: 165 75% 63%;
-        /* Aqua #5BE7C4 */
-        --success-green: 160 100% 45%;
+        /* Soft, Vibrant Power Palette */
+        --dark-purple: 263 85% 20%;
+        /* Deep violet background base #18055E */
+        --primary-purple: 263 70% 43%;
+        /* Warm Luminous Violet #4C1D95 (Primary) */
+        --light-purple: 263 80% 65%;
+        /* Lighter violet #8B5CF6 */
+        
+        --cyan: 213 90% 65%;
+        /* Soft Azure #5FA5FA */
+        --success-green: 158 84% 39%;
+        /* Fresh Mint Green */
 
         /* Secondary Colors */
-        --light-bg: 216 33% 98%;
-        /* Off-white #F7F9FC */
-        --gray-text: 220 13% 91%;
-        /* Gray #E5E7EB */
-        --dark-text: 240 18% 13%;
-        /* Dark Text #1C1C28 */
+        --light-bg: 214 32% 96%;
+        /* Liquid Chrome #F1F5F9 */
+        --gray-text: 215 16% 85%;
+        /* Soft blue-gray */
+        --dark-text: 222 47% 11%;
+        /* Deep navy-black */
 
-        /* Outline Colors */
-        --analytical-blue: 220 100% 82%;
-        /* Sky Blue #A5C3FF */
-        --outline-green: 162 100% 38%;
-        --outline-purple: 230 100% 88%;
+        /* Outline/Accent Colors */
+        --analytical-blue: 221 83% 53%;
+        /* Bright Royal Blue #2563EB (Accent) */
+        --outline-green: 158 84% 39%;
+        --outline-purple: 263 80% 85%;
 
         /* Semantic tokens */
-        --background: 216 33% 98%;
-        /* Off-white #F7F9FC */
-        --foreground: 240 18% 13%;
-        /* Dark Text #1C1C28 */
+        --background: 214 32% 98%;
+        /* Very light cool gray #F8FAFC */
+        --foreground: 222 47% 11%;
+        /* Deep Navy Text */
 
         --card: 0 0% 100%;
-        --card-foreground: 240 18% 13%;
+        --card-foreground: 222 47% 11%;
 
         --popover: 0 0% 100%;
-        --popover-foreground: 240 18% 13%;
+        --popover-foreground: 222 47% 11%;
 
-        --primary: 230 100% 58%;
-        /* Royal Blue */
+        --primary: 263 70% 43%;
+        /* Warm Luminous Violet */
         --primary-foreground: 0 0% 100%;
 
-        --secondary: 258 86% 34%;
-        /* Deep Indigo */
+        --secondary: 221 83% 53%;
+        /* Bright Royal Blue */
         --secondary-foreground: 0 0% 100%;
 
-        --muted: 216 33% 96%;
-        --muted-foreground: 240 6% 46%;
+        --muted: 214 32% 96%;
+        --muted-foreground: 215 16% 47%;
 
-        --accent: 165 75% 63%;
-        /* Aqua */
-        --accent-foreground: 240 18% 13%;
+        --accent: 213 90% 65%;
+        /* Soft Azure */
+        --accent-foreground: 0 0% 100%;
 
         --destructive: 0 84% 60%;
         --destructive-foreground: 0 0% 100%;
 
-        --border: 220 13% 90%;
-        --input: 220 13% 90%;
-        --ring: 230 100% 58%;
+        --border: 215 25% 90%;
+        --input: 215 25% 90%;
+        --ring: 263 70% 43%;
 
-        --radius: 0.75rem;
+        --radius: 1rem; /* Slightly softer, rounder corners globally */
 
-        /* Gradients - Power Palette */
-        /* Gradient 1: Deep Indigo -> Royal Blue */
-        --gradient-hero: linear-gradient(135deg, #3A0CA3 0%, #2A4DFF 100%);
-        /* Gradient 2: Premium Indigo -> Deep Purple */
-        --gradient-cta: linear-gradient(135deg, #1E1B4B 0%, #312E81 100%);
-        /* Gradient 3: Soft Stats Background */
-        --gradient-card: linear-gradient(135deg, #E3F2FF 0%, #F8FBFF 100%);
-        /* Gradient 4: Aqua Accent */
-        --gradient-cyan: linear-gradient(135deg, #5BE7C4 0%, #2A4DFF 100%);
+        /* Gradients - Liquid Softness */
+        /* Gradient 1: Deep Violet -> Luminous Violet -> Royal Blue */
+        --gradient-hero: linear-gradient(135deg, #2E1065 0%, #4C1D95 40%, #2563EB 100%);
+        /* Gradient 2: Flowing Indigo -> Azure */
+        --gradient-cta: linear-gradient(135deg, #1E1B4B 0%, #3730A3 50%, #3B82F6 100%);
+        /* Gradient 3: Liquid Chrome Background */
+        --gradient-card: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, #F1F5F9 100%);
+        /* Gradient 4: Azure to Violet Flow */
+        --gradient-cyan: linear-gradient(135deg, #60A5FA 0%, #8B5CF6 100%);
 
-        /* Shadows - Power Palette (Royal Blue Base) */
-        --shadow-sm: 0 2px 8px hsl(230 100% 58% / 0.12);
-        --shadow-md: 0 4px 16px hsl(230 100% 58% / 0.15);
-        --shadow-lg: 0 8px 32px hsl(230 100% 58% / 0.2);
-        --shadow-xl: 0 16px 48px hsl(230 100% 58% / 0.25);
-        --shadow-glow: 0 0 40px hsl(165 75% 63% / 0.45);
-        /* Aqua Glow */
-        --shadow-purple-glow: 0 0 60px hsl(230 100% 58% / 0.5);
-        /* Royal Blue Glow */
+        /* Shadows - Diffuse & Floating */
+        --shadow-sm: 0 4px 12px hsl(221 83% 53% / 0.05); /* Very soft blue tint */
+        --shadow-md: 0 8px 24px hsl(263 70% 43% / 0.08); /* Soft violet tint */
+        --shadow-lg: 0 16px 40px hsl(221 83% 53% / 0.12);
+        --shadow-xl: 0 24px 60px hsl(263 70% 43% / 0.15); /* Large floating shadow */
+        --shadow-glow: 0 0 50px hsl(213 90% 65% / 0.3);
+        /* Soft Azure Glow */
+        --shadow-purple-glow: 0 0 60px hsl(263 70% 43% / 0.3);
+        /* Soft Violet Glow */
 
         /* Sidebar (keeping defaults) */
         --sidebar-background: 0 0% 98%;
@@ -167,10 +169,10 @@
     }
 
     .hero-professional-bg {
-        background-color: #FDFDFF;
+        background-color: #FAFAFA;
         background-image:
-            radial-gradient(at 100% 0%, hsla(230, 100%, 65%, 0.03) 0px, transparent 50%),
-            radial-gradient(at 0% 100%, hsla(165, 85%, 63%, 0.03) 0px, transparent 50%);
+            radial-gradient(at 100% 0%, hsla(263, 70%, 85%, 0.2) 0px, transparent 60%),
+            radial-gradient(at 0% 100%, hsla(213, 90%, 85%, 0.2) 0px, transparent 60%);
         position: relative;
     }
 
@@ -178,22 +180,21 @@
         content: '';
         position: absolute;
         inset: 0;
-        background-image: radial-gradient(hsl(var(--primary-purple) / 0.07) 1px, transparent 1px);
+        background-image: radial-gradient(hsl(var(--light-purple) / 0.08) 1px, transparent 1px);
         background-size: 40px 40px;
-        opacity: 0.5;
+        opacity: 0.6;
         pointer-events: none;
     }
 
     .mesh-gradient-soft {
         background-color: #F8FAFC;
-        /* Cleaner white-blue base */
+        /* Very soft atmospheric background */
         background-image:
-            /* Much softer opacities for less distraction */
-            radial-gradient(at 0% 0%, hsla(258, 86%, 40%, 0.15) 0px, transparent 50%),
-            radial-gradient(at 90% 10%, hsla(230, 100%, 65%, 0.12) 0px, transparent 50%),
-            radial-gradient(at 90% 90%, hsla(165, 85%, 63%, 0.08) 0px, transparent 50%),
-            radial-gradient(at 10% 90%, hsla(220, 100%, 85%, 0.1) 0px, transparent 50%),
-            radial-gradient(at 50% 50%, hsla(0, 0%, 100%, 0.95) 0px, transparent 70%);
+            radial-gradient(at 0% 0%, hsla(263, 70%, 65%, 0.08) 0px, transparent 60%),
+            radial-gradient(at 100% 10%, hsla(221, 83%, 65%, 0.06) 0px, transparent 60%),
+            radial-gradient(at 90% 90%, hsla(213, 90%, 75%, 0.08) 0px, transparent 60%),
+            radial-gradient(at 10% 90%, hsla(263, 70%, 85%, 0.05) 0px, transparent 60%),
+            radial-gradient(at 50% 50%, hsla(0, 0%, 100%, 0.9) 0px, transparent 80%);
     }
 
     .noise-overlay {
@@ -205,12 +206,12 @@
     }
 
     .glass-card {
-        background: rgba(255, 255, 255, 0.96);
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-        border: 1px solid rgba(255, 255, 255, 0.8);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        transform: none;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05); /* Floating feel */
+        border-radius: 1.25rem;
     }
 
     .glass-card-dark {
@@ -279,19 +280,20 @@
 
     .btn-hero-cta {
         position: relative;
-        background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #60a5fa 100%);
-        /* Deep Blue -> Royal Blue -> Light Blue */
+        background: linear-gradient(135deg, #4C1D95 0%, #2563EB 60%, #60A5FA 100%);
+        /* Vibrant Violet -> True Royal Blue -> Soft Azure */
         background-size: 200% auto;
         color: white !important;
-        font-weight: 800;
-        letter-spacing: -0.01em;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        border-radius: 9999px; /* Pill-shaped for friendliness */
         overflow: hidden;
+        border: none;
         box-shadow:
-            0 10px 25px -3px rgba(37, 99, 235, 0.4),
-            /* Blue shadow */
-            0 4px 6px -4px rgba(37, 99, 235, 0.4),
-            inset 0 1px 1px rgba(255, 255, 255, 0.2);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            0 12px 30px -5px rgba(37, 99, 235, 0.25),
+            /* Soft floating shadow */
+            inset 0 1px 2px rgba(255, 255, 255, 0.3);
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         z-index: 1;
     }
 
@@ -304,18 +306,17 @@
         height: 100%;
         background: linear-gradient(120deg,
                 transparent,
-                rgba(255, 255, 255, 0.3),
+                rgba(255, 255, 255, 0.2),
                 transparent);
         transition: all 0.6s;
         z-index: -1;
     }
 
     .btn-hero-cta:hover {
-        transform: translateY(-4px) scale(1.02);
+        transform: translateY(-2px) scale(1.01);
         background-position: right center;
         box-shadow:
-            0 20px 30px -5px rgba(37, 99, 235, 0.5),
-            0 8px 10px -6px rgba(37, 99, 235, 0.5),
+            0 20px 40px -8px rgba(76, 29, 149, 0.3), /* Deeper, softer violet shadow on hover */
             inset 0 1px 2px rgba(255, 255, 255, 0.4);
     }
 
