@@ -46,9 +46,14 @@
         /* 16px as per EduMove cards */
 
         /* Core Colors */
+        --dark-purple: 263 84% 8%;
+        --light-purple: 256 97% 96%;
         --cyan: 191 100% 45%;
         --light-bg: 210 20% 98%;
         --gray-text: 215 16% 47%;
+        --analytical-blue: 213 90% 85%;
+        --outline-green: 158 84% 39%;
+        --outline-purple: 256 97% 65%;
 
         /* Gradients: Edumove prefers solid, but we'll maintain a very subtle one for the hero */
         --gradient-hero: linear-gradient(135deg, hsl(256 97% 55%) 0%, hsl(256 97% 65%) 100%);
