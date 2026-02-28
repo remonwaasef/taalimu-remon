@@ -461,25 +461,25 @@
     /* Registration Page Specific Styles */
     .plan-card-compact {
         transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        border: 1px solid rgba(3, 1, 13, 0.1);
-        /* Subtle Edumove border */
+        border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: var(--radius);
         /* 16px */
-        background: #FFFFFF;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(8px);
         margin-bottom: 12px;
     }
 
     .plan-card-compact.selected {
-        border-color: hsl(var(--primary-purple));
-        background: hsla(var(--primary-purple) / 0.05);
-        box-shadow: var(--shadow-md);
+        border-color: #FFFFFF;
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
         transform: scale(1.02);
     }
 
     .plan-card-compact:hover:not(.selected) {
-        border-color: rgba(255, 255, 255, 0.2);
-        background: rgba(255, 255, 255, 0.08);
-        transform: translateY(-3px);
+        border-color: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
     }
 
     .label-compact {
