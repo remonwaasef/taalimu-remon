@@ -77,6 +77,14 @@ class SocialAuthController extends Controller
 
             $redirectUrl = route('google.complete-registration') . ($query ? '?' . $query : '');
 
+            \Log::info('Google Callback Success', [
+                'session_id' => session()->getId(),
+                'google_user' => session('google_user'),
+                'redirect_to' => $redirectUrl
+            ]);
+
+            session()->save();
+
             return redirect($redirectUrl);
 
         } catch (\Exception $e) {
@@ -93,6 +101,10 @@ class SocialAuthController extends Controller
     {
         // Ensure Google user data exists in session
         if (!session('google_user')) {
+            \Log::warning('Google Complete Registration Session Missing', [
+                'session_id' => session()->getId(),
+                'all' => session()->all()
+            ]);
             return redirect()->route('login.portal')
                 ->withErrors(['email' => __('Session expired. Please try again with Google.')]);
         }
