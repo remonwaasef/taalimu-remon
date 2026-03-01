@@ -173,4 +173,16 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Primary Admin Email
+    |--------------------------------------------------------------------------
+    |
+    | This email address is used for critical system notifications and
+    | security alerts. It identifies the primary super admin.
+    |
+    */
+
+    'admin_email' => env('ADMIN_EMAIL', 'admin@taalimu.com'),
+
 ];

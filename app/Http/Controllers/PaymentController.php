@@ -34,6 +34,18 @@ class PaymentController extends Controller
             // Notify Admin
             $tenant = Tenant::find(session('tenant_id'));
             $user = \App\Models\User::where('tenant_id', $tenant->id)->where('role', 'center_admin')->first();
+            
+            // Check for coupon in session (if it was used during checkout)
+            if (session('applied_coupon_id')) {
+                $coupon = \App\Models\Coupon::find(session('applied_coupon_id'));
+                if ($coupon) {
+                   $coupon->incrementUsage();
+                   try {
+                       app(\App\Services\TelegramService::class)->sendCouponAlert($tenant, $coupon, session('discount_amount', 0));
+                   } catch (\Throwable $e) {}
+                }
+            }
+
             $telegram->sendRegistrationAlert($tenant, $user, '******** (Password set during registration)');
 
             return redirect()->route('registration.success');

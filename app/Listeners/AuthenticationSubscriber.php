@@ -25,11 +25,17 @@ class AuthenticationSubscriber
             ])
             ->log('Successful Login');
 
-        // Notify Admin for Super Admin login
-        if ($event->user->role === 'super_admin' || $event->user->email === config('app.admin_email', 'admin@taalimu.com')) {
+        // Notify Admin for Super Admin or System Admin login
+        $isAdmin = $event->user->role === 'super_admin' || 
+                   $event->user->role === 'admin' || 
+                   $event->user->email === config('app.admin_email', 'admin@taalimu.com');
+
+        if ($isAdmin) {
             try {
                 app(\App\Services\TelegramService::class)->sendLoginAlert($event->user, request()->ip());
-            } catch (\Throwable $e) {}
+            } catch (\Throwable $e) {
+                \Log::error("Telegram Login Alert Failed: " . $e->getMessage());
+            }
         }
     }
 
