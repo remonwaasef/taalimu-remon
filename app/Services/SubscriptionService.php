@@ -82,7 +82,7 @@ class SubscriptionService
 
         // Use Atomic Counter if enabled, otherwise fallback to heavy count
         if (extension_loaded('redis')) {
-            $usage = \Illuminate\Support\Facades\Cache::store('redis')->get($cacheKey);
+            $usage = \Illuminate\Support\Facades\Cache::get($cacheKey);
             if ($usage !== null) {
                 return (int) $usage;
             }
@@ -114,7 +114,7 @@ class SubscriptionService
         $cacheKey = "tenant_{$tenant->id}_usage_{$featureCode}";
         try {
             if (extension_loaded('redis')) {
-                \Illuminate\Support\Facades\Cache::store('redis')->increment($cacheKey);
+                \Illuminate\Support\Facades\Cache::increment($cacheKey);
             } else {
                 \Illuminate\Support\Facades\Cache::forget($cacheKey);
             }
@@ -129,9 +129,9 @@ class SubscriptionService
         $cacheKey = "tenant_{$tenant->id}_usage_{$featureCode}";
         try {
             if (extension_loaded('redis')) {
-                $current = \Illuminate\Support\Facades\Cache::store('redis')->get($cacheKey);
+                $current = \Illuminate\Support\Facades\Cache::get($cacheKey);
                 if ($current && (int)$current > 0) {
-                    \Illuminate\Support\Facades\Cache::store('redis')->decrement($cacheKey);
+                    \Illuminate\Support\Facades\Cache::decrement($cacheKey);
                 }
             } else {
                 \Illuminate\Support\Facades\Cache::forget($cacheKey);

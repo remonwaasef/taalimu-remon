@@ -124,7 +124,7 @@ class SettingsController extends Controller
 
         // Clear Tenancy Caches to reflect package changes immediately
         try {
-            if (extension_loaded('redis')) {
+            if (extension_loaded('redis') && class_exists('Redis')) {
                 $redis = \Illuminate\Support\Facades\Redis::connection();
                 $keys = $redis->keys('taalimu:tenancy:domain:*');
                 if (!empty($keys)) {
