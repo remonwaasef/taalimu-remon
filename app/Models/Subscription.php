@@ -14,23 +14,20 @@ class Subscription extends CashierSubscription
 
         static::saved(function ($subscription) {
             if ($subscription->tenant) {
+                // Clear tenant cache both from default and potential redis if exists
                 try {
-                    if (extension_loaded('redis') && class_exists('Redis')) {
-                        \Illuminate\Support\Facades\Cache::store('redis')->forget("taalimu:tenancy:domain:{$subscription->tenant->domain}");
-                    }
+                    \Illuminate\Support\Facades\Cache::forget("taalimu:tenancy:domain:{$subscription->tenant->domain}");
+                    \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$subscription->tenant->domain}");
                 } catch (\Throwable $e) {}
-                \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$subscription->tenant->domain}");
             }
         });
 
         static::deleted(function ($subscription) {
             if ($subscription->tenant) {
                 try {
-                    if (extension_loaded('redis') && class_exists('Redis')) {
-                        \Illuminate\Support\Facades\Cache::store('redis')->forget("taalimu:tenancy:domain:{$subscription->tenant->domain}");
-                    }
+                    \Illuminate\Support\Facades\Cache::forget("taalimu:tenancy:domain:{$subscription->tenant->domain}");
+                    \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$subscription->tenant->domain}");
                 } catch (\Throwable $e) {}
-                \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$subscription->tenant->domain}");
             }
         });
     }
