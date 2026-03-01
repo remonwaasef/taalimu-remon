@@ -124,6 +124,10 @@ class PaymentController extends Controller
                     $coupon = \App\Models\Coupon::find(session('applied_coupon_id'));
                     if ($coupon) {
                        $coupon->incrementUsage();
+                       // Notify Admin
+                       try {
+                           app(\App\Services\TelegramService::class)->sendCouponAlert($tenant, $coupon, session('discount_amount', 0));
+                       } catch (\Throwable $e) {}
                     }
                 }
             } else {
@@ -148,6 +152,10 @@ class PaymentController extends Controller
                     $coupon = \App\Models\Coupon::find(session('applied_coupon_id'));
                     if ($coupon) {
                        $coupon->incrementUsage();
+                       // Notify Admin
+                       try {
+                           app(\App\Services\TelegramService::class)->sendCouponAlert($tenant, $coupon, session('discount_amount', 0));
+                       } catch (\Throwable $e) {}
                     }
                 }
             }

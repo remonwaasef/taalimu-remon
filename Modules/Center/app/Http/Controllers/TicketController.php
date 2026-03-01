@@ -11,10 +11,12 @@ use Illuminate\Support\Facades\Auth;
 class TicketController extends Controller
 {
     protected $ticketService;
+    protected $telegram;
 
-    public function __construct(\App\Services\TicketService $ticketService)
+    public function __construct(\App\Services\TicketService $ticketService, \App\Services\TelegramService $telegram)
     {
         $this->ticketService = $ticketService;
+        $this->telegram = $telegram;
     }
 
     public function index()
@@ -51,6 +53,9 @@ class TicketController extends Controller
             'tenant_id' => $tenant->id
         ]));
 
+        // Notify Admin
+        $this->telegram->sendTicketAlert($tenant, $ticket, true);
+
         return redirect()->route('center.tickets.show', ['tenant' => $tenant->domain, 'ticket' => $ticket->id])
             ->with('success', __('center::messages.msg_089'));
     }
@@ -76,6 +81,10 @@ class TicketController extends Controller
         ]);
 
         $this->ticketService->reply($ticket, $request->message);
+
+        // Notify Admin
+        $tenant = app('tenant');
+        $this->telegram->sendTicketAlert($tenant, $ticket, false);
 
         return back()->with('success', __('center::messages.msg_090'));
     }
