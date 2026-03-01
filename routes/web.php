@@ -54,7 +54,7 @@ Route::get('/registration-success', function() {
     // Demo Payment Routes (for testing without Stripe)
     Route::get('/payment/demo', [App\Http\Controllers\PaymentController::class, 'demo'])->name('payment.demo');
     Route::get('/payment/demo/success', [App\Http\Controllers\PaymentController::class, 'demoSuccess'])
-        ->middleware('throttle:3,60')
+        ->middleware('throttle:60,1')
         ->name('payment.demo.success');
 
     Route::view('/offline', 'offline');
