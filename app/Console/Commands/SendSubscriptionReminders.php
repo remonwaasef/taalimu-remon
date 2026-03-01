@@ -36,6 +36,7 @@ class SendSubscriptionReminders extends Command
             $tenant = $sub->tenant;
             if (!$tenant) continue;
 
+            // Notify Admin via Telegram
             $message = "<b>⏳ تنبيه: اقتراب انتهاء اشتراك (بعد 3 أيام)</b>\n\n";
             $message .= "<b>🏢 المركز:</b> {$tenant->name}\n";
             $message .= "<b>📦 الباقة:</b> {$sub->type_label}\n";
@@ -44,6 +45,15 @@ class SendSubscriptionReminders extends Command
             $message .= "يرجى التواصل مع العميل للتأكد من الرغبة في التجديد.";
 
             app(\App\Services\TelegramService::class)->sendAdminNotification($message);
+
+            // Notify Center Admin via Email & Database
+            $admin = \App\Models\User::where('tenant_id', $tenant->id)
+                ->where('role', 'center_admin')
+                ->first();
+
+            if ($admin) {
+                $admin->notify(new \App\Notifications\SubscriptionReminderNotification($sub));
+            }
         }
 
         $this->info('Sent ' . $subscriptions->count() . ' subscription reminders.');
