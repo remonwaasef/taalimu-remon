@@ -124,7 +124,33 @@ class PaymentController extends Controller
                        $coupon->incrementUsage();
                     }
                 }
+            } else {
+                // Update existing subscription
+                $priceSlug = session('selected_plan', 'pro');
+                $existingSub->update([
+                    'stripe_price' => 'price_demo_' . $priceSlug,
+                    'ends_at' => session('billing_cycle') === 'yearly' ? now()->addYear() : now()->addDays(30),
+                    'billing_cycle' => session('billing_cycle', 'monthly'),
+                    'coupon_id' => session('applied_coupon_id'),
+                    'coupon_code' => session('applied_coupon_code'),
+                    'discount_amount' => session('discount_amount', 0),
+                    'total_amount' => session('total_amount', 0),
+                    'base_price' => session('base_price', 0),
+                ]);
+
+                // Increment usage if coupon was used
+                if (session('applied_coupon_id')) {
+                    $coupon = \App\Models\Coupon::find(session('applied_coupon_id'));
+                    if ($coupon) {
+                       $coupon->incrementUsage();
+                    }
+                }
             }
+        }
+
+        if (session('is_subscription_change')) {
+            session()->forget('is_subscription_change');
+            return redirect()->route('center.subscription.success');
         }
 
         session(['registration_success' => true]);
