@@ -150,7 +150,7 @@ class PaymentController extends Controller
 
         if (session('is_subscription_change')) {
             session()->forget('is_subscription_change');
-            return redirect()->route('center.subscription.success');
+            return redirect()->route('center.subscription.success', ['tenant' => $tenant->domain]);
         }
 
         session(['registration_success' => true]);

@@ -91,7 +91,7 @@ class SubscriptionController extends Controller
                 'discount_amount' => 0,
             ]);
 
-            return redirect()->route('center.subscription.success');
+            return redirect()->route('center.subscription.success', ['tenant' => $tenant->domain]);
         }
 
         // 2. Check for Demo Mode or Missing Keys
@@ -118,8 +118,8 @@ class SubscriptionController extends Controller
         try {
             return $tenant->newSubscription('default', $package->stripe_price_id)
                 ->checkout([
-                    'success_url' => route('center.subscription.success'),
-                    'cancel_url'  => route('center.subscription.index'),
+                    'success_url' => route('center.subscription.success', ['tenant' => $tenant->domain]),
+                    'cancel_url'  => route('center.subscription.index', ['tenant' => $tenant->domain]),
                 ]);
         } catch (\Stripe\Exception\InvalidRequestException $e) {
             if (str_contains($e->getMessage(), 'No such price')) {
@@ -156,7 +156,7 @@ class SubscriptionController extends Controller
      */
     public function cancel()
     {
-        return redirect()->route('center.subscription.index')
+        return redirect()->route('center.subscription.index', ['tenant' => app('tenant')->domain])
             ->with('info', __('center::messages.msg_088'));
     }
 }
