@@ -131,8 +131,10 @@ class PaymentController extends Controller
                 $package = \App\Models\Package::where('slug', $planIdentifier)->orWhere('id', $planIdentifier)->first();
                 $priceSlug = $package ? $package->slug : $planIdentifier;
                 
+                // Manually assign stripe_price to bypass any Cashier protections
+                $existingSub->stripe_price = 'price_demo_' . $priceSlug;
+                
                 $existingSub->update([
-                    'stripe_price' => 'price_demo_' . $priceSlug,
                     'ends_at' => session('billing_cycle') === 'yearly' ? now()->addYear() : now()->addDays(30),
                     'billing_cycle' => session('billing_cycle', 'monthly'),
                     'coupon_id' => session('applied_coupon_id'),
