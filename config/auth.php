@@ -61,7 +61,7 @@ return [
 
     'providers' => [
         'users' => [
-            'driver' => (extension_loaded('redis') && app()->bound('redis')) ? 'cached' : 'eloquent',
+            'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
 
