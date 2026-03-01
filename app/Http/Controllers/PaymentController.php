@@ -94,6 +94,7 @@ class PaymentController extends Controller
                 ->where(function($q) {
                     $q->whereNull('ends_at')->orWhere('ends_at', '>', now());
                 })
+                ->latest()
                 ->first();
 
             if (!$existingSub) {
@@ -130,11 +131,9 @@ class PaymentController extends Controller
                 $planIdentifier = session('selected_plan', 'pro');
                 $package = \App\Models\Package::where('slug', $planIdentifier)->orWhere('id', $planIdentifier)->first();
                 $priceSlug = $package ? $package->slug : $planIdentifier;
-                
-                // Manually assign stripe_price to bypass any Cashier protections
-                $existingSub->stripe_price = 'price_demo_' . $priceSlug;
-                
-                $existingSub->update([
+
+                $existingSub->forceFill([
+                    'stripe_price' => 'price_demo_' . $priceSlug,
                     'ends_at' => session('billing_cycle') === 'yearly' ? now()->addYear() : now()->addDays(30),
                     'billing_cycle' => session('billing_cycle', 'monthly'),
                     'coupon_id' => session('applied_coupon_id'),
@@ -142,7 +141,7 @@ class PaymentController extends Controller
                     'discount_amount' => session('discount_amount', 0),
                     'total_amount' => session('total_amount', 0),
                     'base_price' => session('base_price', 0),
-                ]);
+                ])->save();
 
                 // Increment usage if coupon was used
                 if (session('applied_coupon_id')) {
