@@ -37,12 +37,25 @@ class SiteSetting extends Model
      */
     public static function set($key, $value, $group = 'general')
     {
+        $oldSetting = self::where('key', $key)->first();
+        $oldValue = $oldSetting ? $oldSetting->value : null;
+
         $setting = self::updateOrCreate(
             ['key' => $key],
             ['value' => $value, 'group' => $group]
         );
         
         \Illuminate\Support\Facades\Cache::forget("setting_{$key}");
+
+        // Security Alert for sensitive keys
+        $sensitiveKeys = ['stripe_secret', 'stripe_key', 'stripe_webhook_secret', 'admin_email', 'maintenance_mode', 'currency_symbol'];
+        if ($oldValue !== $value && (in_array($key, $sensitiveKeys) || $group === 'payment' || $group === 'security')) {
+            try {
+                if (auth()->check()) {
+                    app(\App\Services\TelegramService::class)->sendSettingChangeAlert(auth()->user(), $key, $oldValue, $value);
+                }
+            } catch (\Throwable $e) {}
+        }
         
         return $setting;
     }

@@ -118,7 +118,40 @@ class SubscriptionService
             } else {
                 \Illuminate\Support\Facades\Cache::forget($cacheKey);
             }
+
+            // check for 90% limit warning
+            $this->checkThresholdWarning($tenant, $featureCode);
+
         } catch (\Throwable $e) {}
+    }
+
+    /**
+     * Check if usage reached 90% threshold and notify admin.
+     */
+    protected function checkThresholdWarning(Tenant $tenant, string $featureCode)
+    {
+        $subscription = $tenant->activeSubscription();
+        if (!$subscription) return;
+
+        $package = $subscription->resolved_package;
+        if (!$package) return;
+
+        $packageFeature = $package->features()->where('code', $featureCode)->first();
+        if (!$packageFeature) return;
+
+        $limit = (int) ($packageFeature->pivot ? $packageFeature->pivot->value : $packageFeature->value);
+        if ($limit <= 0) return; // Unlimited or invalid
+
+        $usage = $this->getUsage($tenant, $featureCode);
+        
+        if ($usage >= ($limit * 0.9)) {
+            // Use cache to prevent spamming (once per day per resource)
+            $alertKey = "tenant_{$tenant->id}_alert_sent_{$featureCode}_" . now()->format('Y-m-d');
+            if (!\Illuminate\Support\Facades\Cache::has($alertKey)) {
+                app(\App\Services\TelegramService::class)->sendResourceLimitWarning($tenant, $featureCode, $usage, $limit);
+                \Illuminate\Support\Facades\Cache::put($alertKey, true, now()->addDay());
+            }
+        }
     }
 
     /**

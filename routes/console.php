@@ -14,5 +14,11 @@ Schedule::command('finance:remind-debts')->dailyAt('10:00');
 // Telegram Subscription Reminders (Daily)
 Schedule::command('app:send-subscription-reminders')->dailyAt('09:00');
 
+// Telegram Daily Platform Report (Daily at end of day)
+Schedule::command('app:send-daily-telegram-report')->dailyAt('23:55');
+
 // Telegram Weekly Platform Report (Every Sunday)
 Schedule::command('app:send-weekly-telegram-report')->weeklyOn(0, '08:00');
+
+// Telegram Inactivity Check (Daily)
+Schedule::command('app:check-inactive-tenants')->dailyAt('11:00');
