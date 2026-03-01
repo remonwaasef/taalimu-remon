@@ -98,16 +98,19 @@ class SubscriptionController extends Controller
         $stripeKey = config('services.stripe.secret');
         $isDemo = config('services.stripe.demo_mode') || empty($stripeKey);
 
+        $billingCycle = $request->query('cycle', 'monthly');
+        $cyclePrice = $billingCycle === 'yearly' ? $package->yearly_price : $package->price;
+
         if ($isDemo) {
-            \Log::info("Using Demo Mode for subscription checkout", ['tenant_id' => $tenant->id, 'package_id' => $package->id]);
+            \Log::info("Using Demo Mode for subscription checkout", ['tenant_id' => $tenant->id, 'package_id' => $package->id, 'cycle' => $billingCycle]);
             
             // Replicate session data used by PaymentController@demo
             session([
                 'tenant_id' => $tenant->id,
                 'selected_plan' => $package->slug,
-                'billing_cycle' => 'monthly', // Default or from request if needed
-                'base_price' => $package->price,
-                'total_amount' => $package->price,
+                'billing_cycle' => $billingCycle,
+                'base_price' => $cyclePrice,
+                'total_amount' => $cyclePrice,
                 'registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . auth()->id(), config('app.key')),
                 'is_subscription_change' => true,
             ]);
@@ -129,9 +132,9 @@ class SubscriptionController extends Controller
                 session([
                     'tenant_id' => $tenant->id,
                     'selected_plan' => $package->slug,
-                    'billing_cycle' => 'monthly',
-                    'base_price' => $package->price,
-                    'total_amount' => $package->price,
+                    'billing_cycle' => $billingCycle,
+                    'base_price' => $cyclePrice,
+                    'total_amount' => $cyclePrice,
                     'registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . auth()->id(), config('app.key')),
                     'is_subscription_change' => true,
                     'error_flash' => "تنبيه: محرك الدفع (Stripe) لم يجد كود السعر '{$package->stripe_price_id}'. تم تحويلك لوضع التجربة."
