@@ -31,9 +31,9 @@ class SubscriptionController extends Controller
         $progressPercent = 0;
 
         if ($subscription && $subscription->ends_at) {
-            $daysRemaining   = max(0, now()->diffInDays($subscription->ends_at, false));
+            $daysRemaining   = max(0, intval(ceil(now()->diffInDays($subscription->ends_at, false))));
             $daysTotal       = $subscription->created_at
-                ? $subscription->created_at->diffInDays($subscription->ends_at)
+                ? intval(ceil($subscription->created_at->diffInDays($subscription->ends_at)))
                 : 30;
             $daysTotal       = max(1, $daysTotal);
             $progressPercent = min(100, round((($daysTotal - $daysRemaining) / $daysTotal) * 100));
