@@ -109,6 +109,7 @@ class SubscriptionController extends Controller
                 'base_price' => $package->price,
                 'total_amount' => $package->price,
                 'registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . auth()->id(), config('app.key')),
+                'is_subscription_change' => true,
             ]);
 
             return redirect()->route('payment.demo');
@@ -132,6 +133,7 @@ class SubscriptionController extends Controller
                     'base_price' => $package->price,
                     'total_amount' => $package->price,
                     'registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . auth()->id(), config('app.key')),
+                    'is_subscription_change' => true,
                     'error_flash' => "تنبيه: محرك الدفع (Stripe) لم يجد كود السعر '{$package->stripe_price_id}'. تم تحويلك لوضع التجربة."
                 ]);
 
