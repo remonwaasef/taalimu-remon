@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Tenant;
 use App\Services\TelegramService;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
@@ -165,8 +166,10 @@ class PaymentController extends Controller
             session()->forget('is_subscription_change');
 
             // Notify Admin for Upgrade/Change
-            $user = Auth::user();
             try {
+                $user = Auth::user();
+                $userName = $user ? $user->name : 'مستخدم غير مسجل';
+                
                 $sub = \App\Models\Subscription::where('tenant_id', $tenant->id)->latest()->first();
                 $packageName = $sub ? $sub->type_label : 'غير محدد';
                 $endsAt = ($sub && $sub->ends_at) ? $sub->ends_at->format('Y-m-d') : 'غير محدد';
@@ -174,7 +177,7 @@ class PaymentController extends Controller
                 
                 $msg = "<b>🔄 ترقية / تغيير اشتراك!</b>\n\n";
                 $msg .= "<b>🏢 المركز:</b> {$tenant->name}\n";
-                $msg .= "<b>👤 المستخدم:</b> {$user->name}\n";
+                $msg .= "<b>👤 المستخدم:</b> {$userName}\n";
                 $msg .= "<b>📦 الباقة الجديدة:</b> {$packageName}\n";
                 $msg .= "<b>💰 المبلغ المدفوع:</b> {$amount}\n";
                 $msg .= "<b>⏳ تاريخ الانتهاء الجديد:</b> {$endsAt}\n\n";
