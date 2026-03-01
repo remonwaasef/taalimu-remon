@@ -166,4 +166,48 @@ class TelegramService
 
         return $this->sendAdminNotification($message);
     }
+
+    /**
+     * Send an alert when a center reaches resource limits.
+     */
+    public function sendResourceLimitWarning($tenant, $resource, $usage, $limit)
+    {
+        $percent = ($limit > 0) ? round(($usage / $limit) * 100, 1) : 0;
+        $message = "<b>⚠️ تنبيه: اقتراب استهلاك كامل الموارد ({$percent}%)</b>\n\n";
+        $message .= "<b>🏢 المركز:</b> {$tenant->name}\n";
+        $message .= "<b>📊 المورد:</b> <code>{$resource}</code>\n";
+        $message .= "<b>📈 الاستهلاك:</b> {$usage} / {$limit}\n\n";
+        $message .= "ينصح بالتواصل مع المركز لتشجيعه على الترقية.";
+
+        return $this->sendAdminNotification($message);
+    }
+
+    /**
+     * Send churning/inactivity alerts.
+     */
+    public function sendChurnWarning($tenant, $reason)
+    {
+        $message = "<b>📉 تنبيه: ركود / احتمال مغادرة مركز</b>\n\n";
+        $message .= "<b>🏢 المركز:</b> {$tenant->name}\n";
+        $message .= "<b>📧 البريد:</b> {$tenant->email}\n";
+        $message .= "<b>🔔 السبب:</b> <code>{$reason}</code>\n\n";
+        $message .= "يرجى محاولة التواصل مع العميل لتقديم الدعم.";
+
+        return $this->sendAdminNotification($message);
+    }
+
+    /**
+     * Send alert for sensitive setting changes.
+     */
+    public function sendSettingChangeAlert($user, $key, $oldValue, $newValue)
+    {
+        $message = "<b>⚙️ تنبيه: تغيير في إعدادات النظام الحساسة</b>\n\n";
+        $message .= "<b>👤 بواسطة:</b> {$user->name}\n";
+        $message .= "<b>🔑 الإعداد:</b> <code>{$key}</code>\n";
+        $message .= "<b>⬅️ القيمة السابقة:</b> <code>" . (is_array($oldValue) ? json_encode($oldValue) : $oldValue) . "</code>\n";
+        $message .= "<b>➡️ القيمة الجديدة:</b> <code>" . (is_array($newValue) ? json_encode($newValue) : $newValue) . "</code>\n\n";
+        $message .= "#SecurityAudit";
+
+        return $this->sendAdminNotification($message);
+    }
 }
