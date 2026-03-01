@@ -210,20 +210,4 @@ class TelegramService
 
         return $this->sendAdminNotification($message);
     }
-
-    /**
-     * Send an alert for new coupon creation.
-     */
-    public function sendNewCouponAlert($user, $coupon)
-    {
-        $message = "<b>🎁 تم إنشاء كوبون جديد</b>\n\n";
-        $message .= "<b>👤 بواسطة:</b> {$user->name}\n";
-        $message .= "<b>🏷️ الكوبون:</b> <code>{$coupon->code}</code>\n";
-        $message .= "<b>📋 الاسم:</b> {$coupon->name}\n";
-        $message .= "<b>💰 القيمة:</b> " . ($coupon->type === 'percentage' ? "{$coupon->value}%" : "{$coupon->value} " . \App\Models\SiteSetting::get('currency_symbol', 'جنيه')) . "\n";
-        $message .= "<b>📅 ينتهي في:</b> " . ($coupon->expires_at ? $coupon->expires_at->format('Y-m-d') : 'غير محدد') . "\n";
-        $message .= "#CouponCreated";
-
-        return $this->sendAdminNotification($message);
-    }
 }
