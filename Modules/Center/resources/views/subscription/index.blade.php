@@ -85,6 +85,43 @@
         border-radius: 1rem;
         color: #fff;
     }
+    /* Toggle Switch Styles */
+    .billing-toggle {
+        display: inline-flex;
+        background: #f1f5f9;
+        border-radius: 999px;
+        padding: 4px;
+        position: relative;
+    }
+    .billing-toggle label {
+        cursor: pointer;
+        padding: 8px 20px;
+        font-weight: 600;
+        border-radius: 999px;
+        transition: all 0.3s ease;
+        z-index: 1;
+        font-size: 0.9rem;
+    }
+    .billing-toggle input[type="radio"] {
+        display: none;
+    }
+    .billing-toggle input[type="radio"]:checked + label {
+        color: #fff;
+    }
+    .toggle-slider {
+        position: absolute;
+        top: 4px;
+        bottom: 4px;
+        left: 4px;
+        width: calc(50% - 4px);
+        background: #3A0CA3;
+        border-radius: 999px;
+        transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        z-index: 0;
+    }
+    #billing-yearly:checked ~ .toggle-slider {
+        transform: translateX(100%);
+    }
 </style>
 @endpush
 
@@ -190,13 +227,25 @@
     </div>
 
     {{-- ─── Section: Available Plans ─────────────────────────── --}}
-    <div class="mb-3 d-flex align-items-center justify-content-between">
-        <h5 class="fw-bold mb-0">
-            <i class="fas fa-layer-group me-2 text-primary"></i>{{ __('center::subscription.available_plans') }}
-        </h5>
-        <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2">
-            {{ $packages->count() }} {{ __('center::subscription.plans_count') }}
-        </span>
+    <div class="mb-4 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+        <div class="d-flex align-items-center">
+            <h5 class="fw-bold mb-0">
+                <i class="fas fa-layer-group me-2 text-primary"></i>{{ __('center::subscription.available_plans') }}
+            </h5>
+            <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 ms-3">
+                {{ $packages->count() }} {{ __('center::subscription.plans_count') }}
+            </span>
+        </div>
+        
+        <div class="billing-toggle">
+            <input type="radio" id="billing-monthly" name="billing_cycle" value="monthly" checked>
+            <label for="billing-monthly">شهرياً</label>
+            
+            <input type="radio" id="billing-yearly" name="billing_cycle" value="yearly">
+            <label for="billing-yearly">سنوياً <span class="badge bg-success ms-1" style="font-size: 0.70rem;">توفير</span></label>
+            
+            <div class="toggle-slider" style="direction: ltr;"></div>
+        </div>
     </div>
 
     <div class="row g-4 mb-5">
@@ -241,10 +290,10 @@
                             <h5 class="fw-black mb-0 mt-1">{{ app()->getLocale() === 'en' && $package->name_en ? $package->name_en : $package->name }}</h5>
                         </div>
                         <div class="text-end">
-                            <div class="fw-black text-primary" style="font-size:1.6rem; line-height:1;">
+                            <div class="fw-black text-primary plan-price-display" style="font-size:1.6rem; line-height:1;" data-monthly="{{ $package->price }}" data-yearly="{{ $package->yearly_price ?: ($package->price * 12) }}">
                                 {{ number_format($package->price, 0) }}
                             </div>
-                            <small class="text-muted">{{ $currency }} / شهرياً</small>
+                            <small class="text-muted"><span class="plan-currency">{{ $currency }}</span> / <span class="plan-cycle-text">شهرياً</span></small>
                         </div>
                     </div>
 
@@ -270,10 +319,12 @@
                                 <i class="fas fa-check me-1"></i> باقتك الحالية
                             </button>
                         @elseif($package->stripe_price_id)
-                            <a href="{{ route('center.subscription.checkout', ['tenant' => $tenant->domain, 'package' => $package->id]) }}"
-                               class="btn btn-primary w-100 rounded-pill fw-bold {{ $isFeatured ? '' : 'btn-outline-primary' }}"
+                            <a href="{{ route('center.subscription.checkout', ['tenant' => $tenant->domain, 'package' => $package->id]) }}?cycle=monthly"
+                               class="btn btn-primary w-100 rounded-pill fw-bold plan-checkout-btn {{ $isFeatured ? '' : 'btn-outline-primary' }}"
+                               data-base-url="{{ route('center.subscription.checkout', ['tenant' => $tenant->domain, 'package' => $package->id]) }}"
+                               data-name="{{ addslashes($package->name) }}"
                                style="{{ $isFeatured ? '' : 'background:transparent; color:#3A0CA3; border-color:#3A0CA3;' }}"
-                               onclick="return confirm('هل تريد الترقية إلى باقة {{ addslashes($package->name) }}؟')">
+                               onclick="return confirm('هل تريد الترقية إلى باقة ' + this.getAttribute('data-name') + '؟')">
                                 @if($currentPackage && $package->price > $currentPackage->price)
                                     <i class="fas fa-arrow-up me-1"></i> ترقية الآن
                                 @elseif($currentPackage && $package->price < $currentPackage->price)
@@ -315,4 +366,53 @@
     </div>
 
 </div>
+</div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const radios = document.querySelectorAll('input[name="billing_cycle"]');
+    const priceDisplays = document.querySelectorAll('.plan-price-display');
+    const cycleTexts = document.querySelectorAll('.plan-cycle-text');
+    const checkoutBtns = document.querySelectorAll('.plan-checkout-btn');
+
+    function updatePricing(cycle) {
+        priceDisplays.forEach(display => {
+            const price = parseFloat(display.getAttribute('data-' + cycle));
+            // Format number with commas
+            display.textContent = price.toLocaleString('en-US', { maximumFractionDigits: 0 });
+        });
+
+        cycleTexts.forEach(text => {
+            text.textContent = cycle === 'yearly' ? 'سنوياً' : 'شهرياً';
+        });
+
+        checkoutBtns.forEach(btn => {
+            const baseUrl = btn.getAttribute('data-base-url');
+            btn.href = baseUrl + '?cycle=' + cycle;
+        });
+    }
+
+    radios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            updatePricing(this.value);
+            
+            // Fix slider direction for RTL
+            const slider = document.querySelector('.toggle-slider');
+            if(this.value === 'yearly') {
+                slider.style.transform = 'translateX(-100%)';
+            } else {
+                slider.style.transform = 'translateX(0)';
+            }
+        });
+    });
+    
+    // Initial RTL slider fix
+    const checked = document.querySelector('input[name="billing_cycle"]:checked');
+    if (checked && checked.value === 'yearly') {
+        document.querySelector('.toggle-slider').style.transform = 'translateX(-100%)';
+    }
+});
+</script>
+@endpush
