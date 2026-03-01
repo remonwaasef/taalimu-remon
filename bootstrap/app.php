@@ -87,13 +87,22 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Auto-capture all exceptions in tenant context
-        $exceptions->report(function (\Throwable $e) {
+        $exceptions->report(function (\Throwable $e) use ($exceptions) {
             if (app()->bound('tenant') && app('tenant')) {
                 try {
                     app(\App\Services\IssueLogger::class)->logException($e, request());
                 } catch (\Throwable $logError) {
                     // Prevent infinite loops - just log to file
                     \Illuminate\Support\Facades\Log::error('Failed to log issue: ' . $logError->getMessage());
+                }
+            }
+
+            // Telegram Alert for critical errors
+            if ($exceptions->shouldReport($e)) {
+                try {
+                    app(\App\Services\TelegramService::class)->sendExceptionAlert($e, request()->fullUrl(), auth()->user());
+                } catch (\Throwable $telError) {
+                    \Illuminate\Support\Facades\Log::error('Telegram notification failed: ' . $telError->getMessage());
                 }
             }
         });

@@ -24,6 +24,13 @@ class AuthenticationSubscriber
                 'user_agent' => request()->userAgent(),
             ])
             ->log('Successful Login');
+
+        // Notify Admin for Super Admin login
+        if ($event->user->role === 'super_admin' || $event->user->email === config('app.admin_email', 'admin@taalimu.com')) {
+            try {
+                app(\App\Services\TelegramService::class)->sendLoginAlert($event->user, request()->ip());
+            } catch (\Throwable $e) {}
+        }
     }
 
     /**
@@ -55,6 +62,14 @@ class AuthenticationSubscriber
                 'user_agent' => request()->userAgent(),
             ])
             ->log('Login Attempt Failed');
+
+        // Notify Admin on Telegram for suspicious activity
+        $email = $event->credentials['email'] ?? 'unknown';
+        if (str_contains($email, 'admin')) {
+            try {
+                app(\App\Services\TelegramService::class)->sendAdminNotification("<b>🚨 فشل تسجيل دخول حساب إداري!</b>\n\n<b>البريد:</b> <code>{$email}</code>\n<b>IP:</b> <code>" . request()->ip() . "</code>");
+            } catch (\Throwable $e) {}
+        }
     }
 
     /**
@@ -62,13 +77,19 @@ class AuthenticationSubscriber
      */
     public function handleUserLockout($event): void
     {
+        $email = $event->request->email ?? 'unknown';
         activity('auth')
             ->withProperties([
-                'email' => $event->request->email ?? 'unknown',
+                'email' => $email,
                 'ip' => request()->ip(),
                 'user_agent' => request()->userAgent(),
             ])
             ->log('User Account Locked Out');
+
+        // Notify Admin on Telegram
+        try {
+            app(\App\Services\TelegramService::class)->sendAdminNotification("<b>🚫 تم قفل حساب مستخدم (Lockout)</b>\n\n<b>البريد:</b> <code>{$email}</code>\n<b>IP:</b> <code>" . request()->ip() . "</code>");
+        } catch (\Throwable $e) {}
     }
 
     /**
