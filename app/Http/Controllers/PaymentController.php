@@ -97,8 +97,9 @@ class PaymentController extends Controller
                 ->first();
 
             if (!$existingSub) {
-                $priceSlug = session('selected_plan', 'pro');
-                // Ensure slug is consistent with Package model ('basic' instead of 'starter' if that's what's used)
+                $planIdentifier = session('selected_plan', 'pro');
+                $package = \App\Models\Package::where('slug', $planIdentifier)->orWhere('id', $planIdentifier)->first();
+                $priceSlug = $package ? $package->slug : $planIdentifier;
                 
                 \App\Models\Subscription::create([
                     'tenant_id' => $tenant->id,
@@ -126,7 +127,10 @@ class PaymentController extends Controller
                 }
             } else {
                 // Update existing subscription
-                $priceSlug = session('selected_plan', 'pro');
+                $planIdentifier = session('selected_plan', 'pro');
+                $package = \App\Models\Package::where('slug', $planIdentifier)->orWhere('id', $planIdentifier)->first();
+                $priceSlug = $package ? $package->slug : $planIdentifier;
+                
                 $existingSub->update([
                     'stripe_price' => 'price_demo_' . $priceSlug,
                     'ends_at' => session('billing_cycle') === 'yearly' ? now()->addYear() : now()->addDays(30),
