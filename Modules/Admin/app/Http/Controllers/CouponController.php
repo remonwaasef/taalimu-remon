@@ -33,7 +33,15 @@ class CouponController extends Controller
         $validated['is_active'] = $request->has('is_active');
         $validated['package_id'] = $validated['package_id'] ?: null;
 
-        Coupon::create($validated);
+        $coupon = Coupon::create($validated);
+
+        // Notify Admin on Telegram
+        try {
+            $coupon->load('package');
+            app(\App\Services\TelegramService::class)->sendCouponCreatedAlert(auth()->user(), $coupon);
+        } catch (\Throwable $e) {
+            \Log::error("Failed to send coupon creation alert: " . $e->getMessage());
+        }
 
         return redirect()->back()->with('success', 'تم إنشاء الكوبون بنجاح!');
     }
