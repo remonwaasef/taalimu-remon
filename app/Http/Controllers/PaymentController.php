@@ -163,6 +163,28 @@ class PaymentController extends Controller
 
         if (session('is_subscription_change')) {
             session()->forget('is_subscription_change');
+
+            // Notify Admin for Upgrade/Change
+            $user = Auth::user();
+            try {
+                $sub = \App\Models\Subscription::where('tenant_id', $tenant->id)->latest()->first();
+                $packageName = $sub ? $sub->type_label : 'غير محدد';
+                $endsAt = ($sub && $sub->ends_at) ? $sub->ends_at->format('Y-m-d') : 'غير محدد';
+                $amount = session('total_amount', 0) . ' ' . \App\Models\SiteSetting::get('currency_symbol', 'جنيه');
+                
+                $msg = "<b>🔄 ترقية / تغيير اشتراك!</b>\n\n";
+                $msg .= "<b>🏢 المركز:</b> {$tenant->name}\n";
+                $msg .= "<b>👤 المستخدم:</b> {$user->name}\n";
+                $msg .= "<b>📦 الباقة الجديدة:</b> {$packageName}\n";
+                $msg .= "<b>💰 المبلغ المدفوع:</b> {$amount}\n";
+                $msg .= "<b>⏳ تاريخ الانتهاء الجديد:</b> {$endsAt}\n\n";
+                $msg .= "#SubscriptionUpgrade";
+                
+                app(\App\Services\TelegramService::class)->sendAdminNotification($msg);
+            } catch (\Throwable $e) {
+                \Log::error("Failed to send upgrade notification: " . $e->getMessage());
+            }
+
             return redirect()->route('center.subscription.success', ['tenant' => $tenant->domain]);
         }
 

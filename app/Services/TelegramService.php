@@ -140,6 +140,20 @@ class TelegramService
     }
 
     /**
+     * Send an alert for failed payments or renewals.
+     */
+    public function sendFailedPaymentAlert($tenant, $reason = 'فشل عملية الدفع')
+    {
+        $message = "<b>❌ فشل في عملية الدفع / التجديد!</b>\n\n";
+        $message .= "<b>🏢 المركز:</b> {$tenant->name}\n";
+        $message .= "<b>📧 البريد:</b> {$tenant->email}\n";
+        $message .= "<b>⚠️ السبب:</b> <code>{$reason}</code>\n\n";
+        $message .= "يرجى مراجعة حالة سجل الدفع للتأكد.";
+
+        return $this->sendAdminNotification($message);
+    }
+
+    /**
      * Send summary report alerts.
      */
     public function sendSummaryReport($title, $data)
