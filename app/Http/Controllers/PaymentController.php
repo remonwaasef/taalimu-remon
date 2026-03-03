@@ -42,6 +42,37 @@ class PaymentController extends Controller
         return redirect()->route('home');
     }
 
+    public function paypalSuccess(Request $request, \App\Services\PayPalService $paypal, TelegramService $telegram)
+    {
+        $subscriptionId = $request->get('subscription_id');
+
+        if ($subscriptionId) {
+            $details = $paypal->getSubscriptionDetails($subscriptionId);
+
+            if ($details && in_array($details['status'], ['ACTIVE', 'APPROVED'])) {
+                // Mark registration as successful for the view
+                session(['registration_success' => true]);
+
+                // Update subscription record if it exists (it should have been created in RegistrationController)
+                $subscription = \App\Models\Subscription::where('paypal_id', $subscriptionId)->first();
+                if ($subscription) {
+                    $subscription->update([
+                        'paypal_status' => strtolower($details['status']),
+                        'status' => 'active',
+                    ]);
+                    
+                    $tenant = $subscription->tenant;
+                    $user = \App\Models\User::where('tenant_id', $tenant->id)->where('role', 'center_admin')->first();
+                    $telegram->sendRegistrationAlert($tenant, $user, '******** (PayPal Payment)');
+                }
+
+                return redirect()->route('registration.success');
+            }
+        }
+
+        return redirect()->route('home')->withErrors(['error' => 'فشل التحقق من اشتراك PayPal.']);
+    }
+
     public function cancel()
     {
         return view('auth.payment-cancel');

@@ -97,14 +97,14 @@ return Application::configure(basePath: dirname(__DIR__))
                 }
             }
 
-            // Telegram Alert for critical errors
-            if ($exceptions->shouldReport($e)) {
+            // Telegram Alert for critical errors - disabled shouldReport check as it's undefined
+            // if ($exceptions->shouldReport($e)) {
                 try {
                     app(\App\Services\TelegramService::class)->sendExceptionAlert($e, request()->fullUrl(), auth()->user());
                 } catch (\Throwable $telError) {
                     \Illuminate\Support\Facades\Log::error('Telegram notification failed: ' . $telError->getMessage());
                 }
-            }
+            // }
         });
 
         $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, $request) {

@@ -123,6 +123,7 @@ class RegistrationController extends Controller
             'billing_cycle' => 'required|in:monthly,yearly',
             'coupon_code' => 'nullable|string|exists:coupons,code',
             'country_code' => 'nullable|string|max:2',
+            'payment_gateway' => 'required|in:stripe,paypal',
         ]);
 
         try {
@@ -236,6 +237,46 @@ class RegistrationController extends Controller
                 ]);
 
                 return redirect()->route('registration.success');
+
+            } else if ($request->payment_gateway === 'paypal') {
+                // PayPal Paid Plan Flow
+                DB::commit();
+
+                $paypalId = $package->paypal_plan_id;
+                if (!$paypalId) {
+                     // Fallback/Error if no PayPal plan ID configured
+                     \Log::warning("PayPal Plan ID not found for package: {$request->plan}");
+                     return back()->withErrors(['error' => 'الدفع عبر PayPal غير متاح لهذه الباقة حالياً.'])->withInput();
+                }
+
+                $paypal = app(\App\Services\PayPalService::class);
+                $resp = $paypal->createSubscription($paypalId, [
+                    'name' => $request->name,
+                    'email' => $request->email,
+                ], route('payment.paypal.success'), route('payment.cancel'));
+
+                if ($resp && isset($resp['links'])) {
+                    $approveLink = collect($resp['links'])->where('rel', 'approve')->first()['href'];
+                    
+                    // Create pending subscription record
+                    \App\Models\Subscription::create([
+                        'tenant_id' => $tenant->id,
+                        'name' => 'default',
+                        'paypal_id' => $resp['id'],
+                        'paypal_status' => 'pending',
+                        'paypal_plan_id' => $paypalId,
+                        'status' => 'trialing', // Pending activation
+                        'gateway' => 'paypal',
+                        'billing_cycle' => $request->billing_cycle,
+                        'base_price' => $basePrice,
+                        'total_amount' => ($basePrice - $discountAmount),
+                        'discount_amount' => $discountAmount,
+                    ]);
+
+                    return redirect()->away($approveLink);
+                }
+
+                return back()->withErrors(['error' => 'حدث خطأ أثناء الاتصال بـ PayPal.'])->withInput();
 
             } else {
                 // Paid Plan Flow

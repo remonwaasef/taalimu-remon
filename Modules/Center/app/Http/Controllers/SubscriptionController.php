@@ -119,6 +119,44 @@ class SubscriptionController extends Controller
         }
 
         try {
+            $gateway = $request->input('payment_gateway', 'stripe');
+
+            if ($gateway === 'paypal') {
+                $paypalId = $package->paypal_plan_id;
+                if (!$paypalId) {
+                    return back()->with('error', 'PayPal is not configured for this package.');
+                }
+
+                $paypal = app(\App\Services\PayPalService::class);
+                $resp = $paypal->createSubscription($paypalId, [
+                    'name' => auth()->user()->name,
+                    'email' => auth()->user()->email,
+                ], route('payment.paypal.success'), route('center.subscription.index', ['tenant' => $tenant->domain]));
+
+                if ($resp && isset($resp['links'])) {
+                    $approveLink = collect($resp['links'])->where('rel', 'approve')->first()['href'];
+
+                    // Update or Create Subscription
+                    $tenant->subscriptions()->updateOrCreate(
+                        ['name' => 'default'],
+                        [
+                            'paypal_id' => $resp['id'],
+                            'paypal_status' => 'pending',
+                            'paypal_plan_id' => $paypalId,
+                            'gateway' => 'paypal',
+                            'billing_cycle' => $billingCycle,
+                            'base_price' => $cyclePrice,
+                            'total_amount' => $cyclePrice,
+                            'status' => 'trialing',
+                        ]
+                    );
+
+                    return redirect()->away($approveLink);
+                }
+
+                return back()->with('error', 'Failed to connect to PayPal.');
+            }
+
             return $tenant->newSubscription('default', $package->stripe_price_id)
                 ->checkout([
                     'success_url' => route('center.subscription.success', ['tenant' => $tenant->domain]),
