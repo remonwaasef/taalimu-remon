@@ -239,10 +239,10 @@
         
         <div class="billing-toggle">
             <input type="radio" id="billing-monthly" name="billing_cycle" value="monthly" checked>
-            <label for="billing-monthly">شهرياً</label>
+            <label for="billing-monthly">لحجز (ترم)</label>
             
             <input type="radio" id="billing-yearly" name="billing_cycle" value="yearly">
-            <label for="billing-yearly">سنوياً <span class="badge bg-success ms-1" style="font-size: 0.70rem;">توفير</span></label>
+            <label for="billing-yearly">لحجز (سنة) <span class="badge bg-success ms-1" style="font-size: 0.70rem;">توفير</span></label>
             
             <div class="toggle-slider" style="direction: ltr;"></div>
         </div>
@@ -293,7 +293,7 @@
                             <div class="fw-black text-primary plan-price-display" style="font-size:1.6rem; line-height:1;" data-monthly="{{ $package->price }}" data-yearly="{{ $package->yearly_price ?: ($package->price * 12) }}">
                                 {{ number_format($package->price, 0) }}
                             </div>
-                            <small class="text-muted"><span class="plan-currency">{{ $currency }}</span> / <span class="plan-cycle-text">شهرياً</span></small>
+                            <small class="text-muted"><span class="plan-currency">{{ $currency }}</span> / <span class="plan-cycle-text">للترم</span></small>
                         </div>
                     </div>
 
@@ -382,7 +382,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         cycleTexts.forEach(text => {
-            text.textContent = cycle === 'yearly' ? 'سنوياً' : 'شهرياً';
+            text.textContent = cycle === 'yearly' ? 'للسنة' : 'للترم';
         });
 
         checkoutBtns.forEach(btn => {
