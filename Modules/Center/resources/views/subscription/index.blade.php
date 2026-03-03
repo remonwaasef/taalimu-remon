@@ -97,13 +97,14 @@
     }
     .billing-toggle label {
         cursor: pointer;
-        padding: 10px 28px;
+        padding: 10px 32px;
         font-weight: 800;
         border-radius: 999px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 1;
         font-size: 1.05rem;
-        color: #64748b; /* Muted color for inactive state */
+        color: #64748b;
+        position: relative;
     }
     .billing-toggle input[type="radio"]:checked + label {
         color: #fff !important;
@@ -115,7 +116,7 @@
         position: absolute;
         top: 5px;
         bottom: 5px;
-        left: 5px;
+        right: 5px; /* Base position on the right for RTL */
         width: calc(50% - 5px);
         background: #3A0CA3;
         border-radius: 999px;
@@ -124,7 +125,16 @@
         box-shadow: 0 4px 12px rgba(58, 12, 163, 0.3);
     }
     #billing-yearly:checked ~ .toggle-slider {
-        transform: translateX(100%);
+        transform: translateX(-100%); /* Move left for yearly in RTL */
+    }
+    .save-badge {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.7rem;
+        padding: 3px 8px;
+        white-space: nowrap;
     }
 </style>
 @endpush
@@ -246,7 +256,10 @@
             <label for="billing-monthly">اشتراك ترم</label>
             
             <input type="radio" id="billing-yearly" name="billing_cycle" value="yearly">
-            <label for="billing-yearly">اشتراك سنة <span class="badge bg-success ms-1" style="font-size: 0.75rem;">توفير</span></label>
+            <label for="billing-yearly">
+                اشتراك سنة 
+                <span class="badge bg-success save-badge">توفير</span>
+            </label>
             
             <div class="toggle-slider" style="direction: ltr;"></div>
         </div>
