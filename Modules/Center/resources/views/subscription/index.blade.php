@@ -301,15 +301,12 @@
 
                     {{-- Features List --}}
                     <ul class="list-unstyled mb-4 flex-grow-1">
-                        @foreach(array_slice($pFeatures, 0, 8) as $f)
+                        @foreach($pFeatures as $f)
                             <li class="d-flex align-items-start gap-2 mb-2 small">
                                 <i class="fas fa-check-circle feature-check mt-1 flex-shrink-0"></i>
                                 <span>{{ $f }}</span>
                             </li>
                         @endforeach
-                        @if(count($pFeatures) > 8)
-                            <li class="text-muted small text-center mt-2">+ {{ count($pFeatures) - 8 }} ميزة أخرى</li>
-                        @endif
                     </ul>
 
                     {{-- CTA Button --}}
