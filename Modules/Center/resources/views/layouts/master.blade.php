@@ -527,15 +527,20 @@
             </div>
             @endif
 
-            <!-- 4. FINANCE -->
-            @php $isFinanceActive = request()->routeIs('center.sales.*') || request()->routeIs('center.expenses.*') || request()->routeIs('center.analytics.*'); @endphp
+            @php 
+                $hasFinancialReports = $tenant->hasFeature('financial_reports');
+                $hasAdvancedReports = $tenant->hasFeature('advanced_reports');
+                $isFinanceActive = request()->routeIs('center.sales.*') || request()->routeIs('center.expenses.*') || request()->routeIs('center.analytics.*'); 
+            @endphp
+
+            @if($hasFinancialReports || $hasAdvancedReports)
             <a href="#financeCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 {{ $isFinanceActive ? 'sidebar-section-active' : '' }}" role="button" aria-expanded="{{ $isFinanceActive ? 'true' : 'false' }}">
                 <span><i class="fas fa-chart-line me-2 {{ $isFinanceActive ? 'text-success' : 'opacity-75' }}"></i> {{ __('center::sidebar.financial') }}</span>
                 <i class="fas fa-chevron-down fa-xs opacity-50"></i>
             </a>
             <div class="collapse {{ $isFinanceActive ? 'show' : '' }}" id="financeCollapse">
                 <div class="sidebar-submenu">
-                    @if($tenant->hasFeature('financial_reports'))
+                    @if($hasFinancialReports)
                     <a href="{{ route('center.sales.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.sales.index') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.sales') }}
                     </a>
@@ -546,6 +551,8 @@
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.expenses') }}
                     </a>
                     @endif
+
+                    @if($hasAdvancedReports)
                     <a href="{{ route('center.analytics.index') }}" class="sidebar-sub-link {{ request()->routeIs('center.analytics.index') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::analytics.general') }}
                     </a>
@@ -561,8 +568,10 @@
                     <a href="{{ route('center.analytics.discounts') }}" class="sidebar-sub-link {{ request()->routeIs('center.analytics.discounts') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.financial_discounts') }}
                     </a>
+                    @endif
                 </div>
             </div>
+            @endif
 
             {{-- ─── SUBSCRIPTION ─────────────────────────── --}}
             <a href="{{ route('center.subscription.index', ['tenant' => $tenant->domain ?? 'center']) }}"
@@ -618,6 +627,11 @@
                     @if($tenant->hasFeature('advanced_roles'))
                     <a href="{{ route('center.roles.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.roles.*') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.permissions') }}
+                    </a>
+                    @endif
+                    @if($tenant->hasFeature('multi_branch'))
+                    <a href="{{ route('center.branches.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.branches.*') ? 'active' : '' }}">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.branches') }}
                     </a>
                     @endif
                     <a href="{{ route('center.tickets.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.tickets.*') ? 'active' : '' }}">
