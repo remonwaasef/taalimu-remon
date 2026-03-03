@@ -166,4 +166,12 @@ class Tenant extends Model
     {
         return app(\App\Services\SubscriptionService::class)->checkLimit($this, $featureCode);
     }
+
+    /**
+     * Get the value of a feature (ignoring usage).
+     */
+    public function getFeatureValue(string $featureCode)
+    {
+        return app(\App\Services\SubscriptionService::class)->getFeatureValue($this, $featureCode);
+    }
 }
