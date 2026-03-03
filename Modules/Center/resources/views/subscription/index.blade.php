@@ -95,12 +95,12 @@
     }
     .billing-toggle label {
         cursor: pointer;
-        padding: 8px 20px;
-        font-weight: 600;
+        padding: 10px 24px;
+        font-weight: 800;
         border-radius: 999px;
         transition: all 0.3s ease;
         z-index: 1;
-        font-size: 0.9rem;
+        font-size: 1rem;
     }
     .billing-toggle input[type="radio"] {
         display: none;
@@ -239,10 +239,10 @@
         
         <div class="billing-toggle">
             <input type="radio" id="billing-monthly" name="billing_cycle" value="monthly" checked>
-            <label for="billing-monthly">لحجز (ترم)</label>
+            <label for="billing-monthly">اشتراك ترم</label>
             
             <input type="radio" id="billing-yearly" name="billing_cycle" value="yearly">
-            <label for="billing-yearly">لحجز (سنة) <span class="badge bg-success ms-1" style="font-size: 0.70rem;">توفير</span></label>
+            <label for="billing-yearly">اشتراك سنة <span class="badge bg-success ms-1" style="font-size: 0.75rem;">توفير</span></label>
             
             <div class="toggle-slider" style="direction: ltr;"></div>
         </div>
