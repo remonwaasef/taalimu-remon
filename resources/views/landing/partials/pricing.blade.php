@@ -138,7 +138,7 @@
                                 </div>
 
                                 <div class="text-xs {{ $isFeatured ? 'text-primary-foreground/80' : 'text-muted-foreground' }}">
-                                    <span x-text="billingCycle === 'monthly' ? '/ month' : '/ year'"></span>
+                                    <span x-text="billingCycle === 'monthly' ? '/ ترم' : '/ سنة'"></span>
                                 </div>
                             </div>
                         
