@@ -74,6 +74,30 @@ class SubscriptionService
     }
 
     /**
+     * Get the raw value of a feature from the package (ignoring current usage).
+     * Useful for UI visibility logic.
+     */
+    public function getFeatureValue(Tenant $tenant, string $featureCode)
+    {
+        $subscription = $tenant->activeSubscription();
+        if (!$subscription) return false;
+
+        $package = $subscription->resolved_package;
+        if (!$package) return false;
+
+        $packageFeature = $package->features()->where('code', $featureCode)->first();
+        if (!$packageFeature) return false;
+
+        $limit = $packageFeature->pivot ? $packageFeature->pivot->value : $packageFeature->value;
+
+        if ($packageFeature->type === 'boolean') {
+            return filter_var($limit, FILTER_VALIDATE_BOOLEAN);
+        }
+
+        return $limit;
+    }
+
+    /**
      * Get current usage for a feature (Atomic Optimization).
      */
     protected function getUsage(Tenant $tenant, string $featureCode): int
