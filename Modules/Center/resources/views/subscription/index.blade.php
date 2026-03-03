@@ -85,39 +85,43 @@
         border-radius: 1rem;
         color: #fff;
     }
-    /* Toggle Switch Styles */
+    /* Redesigned Toggle Styles */
     .billing-toggle {
         display: inline-flex;
         background: #f1f5f9;
+        border: 1px solid #e2e8f0;
         border-radius: 999px;
-        padding: 4px;
+        padding: 5px;
         position: relative;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
     }
     .billing-toggle label {
         cursor: pointer;
-        padding: 10px 24px;
+        padding: 10px 28px;
         font-weight: 800;
         border-radius: 999px;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 1;
-        font-size: 1rem;
+        font-size: 1.05rem;
+        color: #64748b; /* Muted color for inactive state */
+    }
+    .billing-toggle input[type="radio"]:checked + label {
+        color: #fff !important;
     }
     .billing-toggle input[type="radio"] {
         display: none;
     }
-    .billing-toggle input[type="radio"]:checked + label {
-        color: #fff;
-    }
     .toggle-slider {
         position: absolute;
-        top: 4px;
-        bottom: 4px;
-        left: 4px;
-        width: calc(50% - 4px);
+        top: 5px;
+        bottom: 5px;
+        left: 5px;
+        width: calc(50% - 5px);
         background: #3A0CA3;
         border-radius: 999px;
         transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
         z-index: 0;
+        box-shadow: 0 4px 12px rgba(58, 12, 163, 0.3);
     }
     #billing-yearly:checked ~ .toggle-slider {
         transform: translateX(100%);
