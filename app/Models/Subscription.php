@@ -36,9 +36,13 @@ class Subscription extends CashierSubscription
         'tenant_id',
         'name',
         'stripe_id',
+        'paypal_id',
         'stripe_status',
+        'paypal_status',
         'stripe_price',
+        'paypal_plan_id',
         'quantity',
+        'gateway',
         'trial_ends_at',
         'ends_at',
         'status', // Custom field
@@ -60,7 +64,11 @@ class Subscription extends CashierSubscription
      */
     public function package()
     {
-        // Custom logic to handle demo price IDs and fallbacks
+        // Branch based on gateway
+        if ($this->gateway === 'paypal') {
+            return $this->belongsTo(Package::class, 'paypal_plan_id', 'paypal_plan_id');
+        }
+        
         $relation = $this->belongsTo(Package::class, 'stripe_price', 'stripe_price_id');
         
         // If we're eager loading, we can't easily fallback here, 
@@ -77,7 +85,7 @@ class Subscription extends CashierSubscription
         if ($package) return $package;
 
         // Fallback for demo price IDs: price_demo_{slug}
-        if (str_starts_with($this->stripe_price, 'price_demo_')) {
+        if ($this->gateway === 'stripe' && str_starts_with($this->stripe_price, 'price_demo_')) {
             $slug = str_replace('price_demo_', '', $this->stripe_price);
             return Package::where('slug', $slug)->first();
         }

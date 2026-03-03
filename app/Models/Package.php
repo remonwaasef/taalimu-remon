@@ -18,6 +18,7 @@ class Package extends Model
         'description',
         'description_en',
         'stripe_price_id',
+        'paypal_plan_id',
         'display_features',
         'badge',
         'is_active',

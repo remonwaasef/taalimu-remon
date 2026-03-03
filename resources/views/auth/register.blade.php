@@ -427,6 +427,31 @@ document.addEventListener('alpine:init', () => {
                         </div>
                     </div>
 
+                    <!-- Payment Gateway Selection -->
+                    <div class="space-y-3" x-show="selectedPlan !== 'free-trial'">
+                        <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">
+                            {{ app()->getLocale() == 'ar' ? 'طريقة الدفع' : 'Payment Method' }}
+                        </label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Stripe -->
+                            <label class="relative cursor-pointer group">
+                                <input type="radio" name="payment_gateway" value="stripe" checked class="peer sr-only">
+                                <div class="flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-slate-100 bg-slate-50/30 peer-checked:border-brand-secondary peer-checked:bg-white transition-all hover:border-slate-200">
+                                    <i class="bi bi-credit-card-2-back text-2xl mb-2 text-slate-400 peer-checked:text-brand-secondary"></i>
+                                    <span class="text-xs font-black text-slate-600 peer-checked:text-slate-900">{{ app()->getLocale() == 'ar' ? 'بطاقة بنكية' : 'Credit Card' }}</span>
+                                </div>
+                            </label>
+                            <!-- PayPal -->
+                            <label class="relative cursor-pointer group">
+                                <input type="radio" name="payment_gateway" value="paypal" class="peer sr-only">
+                                <div class="flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-slate-100 bg-slate-50/30 peer-checked:border-brand-secondary peer-checked:bg-white transition-all hover:border-slate-200">
+                                    <i class="bi bi-paypal text-2xl mb-2 text-slate-400 peer-checked:text-brand-secondary"></i>
+                                    <span class="text-xs font-black text-slate-600 peer-checked:text-slate-900">PayPal</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
                     <!-- Plan Selection Modal -->
                     <div x-show="showPlanModal" 
                          x-transition:enter="transition ease-out duration-300"

@@ -124,8 +124,8 @@
         z-index: 0;
         box-shadow: 0 4px 12px rgba(58, 12, 163, 0.3);
     }
-    #billing-yearly:checked ~ .toggle-slider {
-        transform: translateX(-100%); /* Move left for yearly in RTL */
+    .billing-toggle input[type="radio"]:nth-of-type(2):checked ~ .toggle-slider {
+        transform: translateX(-100%); /* General rule for 2nd option in RTL */
     }
     .save-badge {
         position: absolute;
@@ -260,6 +260,16 @@
                 اشتراك سنة 
                 <span class="badge bg-success save-badge">توفير</span>
             </label>
+            
+            <div class="toggle-slider" style="direction: ltr;"></div>
+        </div>
+
+        <div class="billing-toggle ms-md-3">
+            <input type="radio" id="gateway-stripe" name="payment_gateway" value="stripe" checked>
+            <label for="gateway-stripe"><i class="bi bi-credit-card me-1"></i> بطاقة</label>
+            
+            <input type="radio" id="gateway-paypal" name="payment_gateway" value="paypal">
+            <label for="gateway-paypal"><i class="bi bi-paypal me-1"></i> PayPal</label>
             
             <div class="toggle-slider" style="direction: ltr;"></div>
         </div>
@@ -422,6 +432,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // Update links on gateway change
+    const gatewayRadios = document.querySelectorAll('input[name="payment_gateway"]');
+    gatewayRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            const gateway = this.value;
+            const checkoutBtns = document.querySelectorAll('.plan-checkout-btn');
+            
+            checkoutBtns.forEach(btn => {
+                let url = new URL(btn.href);
+                url.searchParams.set('payment_gateway', gateway);
+                btn.href = url.toString();
+            });
+        });
+    });
+
     // Initial RTL slider fix
     const checked = document.querySelector('input[name="billing_cycle"]:checked');
     if (checked && checked.value === 'yearly') {
