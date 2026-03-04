@@ -15,20 +15,30 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Priority: 1. Database (if authenticated), 2. Session, 3. Default
+        // Priority: 1. Database (if authenticated), 2. Session, 3. GeoIP Fallback, 4. Default
         $locale = null;
         
         if (auth()->check() && auth()->user()->locale) {
             $locale = auth()->user()->locale;
         } else {
-            $locale = Session::get('locale', 'ar');
+            $locale = Session::get('locale');
+            
+            // If No session locale, try Geo-IP detection
+            if (!$locale && config('app.env') !== 'testing') {
+                $geoIP = app(\App\Services\GeoIPService::class);
+                $countryCode = $geoIP->getCountryCode($request->ip());
+                $locale = $geoIP->getLocaleFromCountry($countryCode);
+                
+                // Store in session so we don't hit the API on every click
+                Session::put('locale', $locale);
+            }
         }
 
         // Supported locales
         $supportedLocales = ['ar', 'en', 'fr'];
 
-        // Validate locale
-        if (!in_array($locale, $supportedLocales)) {
+        // Final Fallback and Validation
+        if (!$locale || !in_array($locale, $supportedLocales)) {
             $locale = 'ar';
         }
 
