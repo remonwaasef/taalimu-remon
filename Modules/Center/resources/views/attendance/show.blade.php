@@ -17,7 +17,7 @@
                 <div class="card-header bg-white border-0 p-4 pb-0 d-flex justify-content-between align-items-center">
                     <div>
                         <h5 class="fw-bold mb-1"><i class="bi bi-people me-2"></i>{{ __('center::messages.blade_0132') }}</h5>
-                        <p class="text-muted small mb-0">الحصة: {{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }} - القاعة: {{ $schedule->classroom->name ?? __('center::schedules.classroom') }}</p>
+                        <p class="text-muted small mb-0">{{ __('center::attendance.session_at', ['time' => \Carbon\Carbon::parse($schedule->start_time)->format('h:i A')]) }} - القاعة: {{ $schedule->classroom->name ?? __('center::schedules.classroom') }}</p>
                     </div>
                     <div class="text-end d-flex align-items-center gap-2">
                         <!-- Scan Button -->
@@ -139,7 +139,7 @@
                 <div id="scan-result" class="position-absolute bottom-0 start-0 w-100 p-3 bg-white bg-opacity-90 text-dark fw-bold d-none">{{ __('center::messages.blade_0146') }}</div>
             </div>
             <div class="modal-footer border-0 bg-light justify-content-center">
-                <small class="text-muted">وجه الكاميرا نحو رمز QR في بطاقة الطالب</small>
+                <small class="text-muted">{{ __('center::attendance.facing_camera_hint') }}</small>
             </div>
         </div>
     </div>
@@ -180,7 +180,7 @@
             return;
         }
 
-        showResult('رمز QR غير صالح. تأكد من مسح بطاقة الطالب.', 'danger');
+        showResult("{{ __('center::attendance.qr_invalid') }}", 'danger');
         setTimeout(startScanner, 3000);
     }
 
@@ -227,7 +227,7 @@
     }
 
     function markAttendance(studentId, studentCode) {
-        showResult('<div class="spinner-border spinner-border-sm me-2"></div> جاري تسجيل الحضور...', 'primary');
+        showResult('<div class="spinner-border spinner-border-sm me-2"></div> ' + "{{ __('center::attendance.marking_attendance') }}", 'primary');
         
         const payload = {
             course_id: '{{ $schedule->course_id }}',
@@ -268,7 +268,7 @@
         })
         .catch(error => {
             console.error('[QR] Network error:', error);
-            showResult('❌ حدث خطأ في الاتصال بالسيرفر', 'danger');
+            showResult("❌ {{ __('center::attendance.server_connection_error') }}", 'danger');
             setTimeout(startScanner, 3000);
         });
     }

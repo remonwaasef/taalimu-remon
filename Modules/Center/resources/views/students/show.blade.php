@@ -58,7 +58,7 @@
                         <div class="qr-container bg-white p-2 rounded-3 shadow-sm mb-3">
                             <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode($qrUrl) }}" alt="QR Code" style="width: 140px; height: 140px;">
                         </div>
-                        <p class="small text-muted mb-0">سكان للدخول المباشر (Magic Login)</p>
+                        <p class="small text-muted mb-0">{{ __('center::students.magic_login_tip') }}</p>
                     </div>
                 </div>
             </div>
@@ -110,8 +110,12 @@
                                         @endif
                                     </div>
                                 </div>
+                                @php
+                                    $reminderMsg = __('center::students.debt_reminder_msg', ['name' => $student->name]);
+                                    $whatsappUrl = "https://wa.me/" . ($student->guardian?->phone ?? $student->parent_phone) . "?text=" . urlencode($reminderMsg);
+                                @endphp
                                 <div class="d-flex gap-2">
-                                    <a href="https://wa.me/{{ $student->parent_phone ?? $student->guardian?->phone }}" target="_blank" class="btn btn-success rounded-pill px-4 shadow-sm hover-lift fw-bold">
+                                    <a href="{{ $whatsappUrl }}" target="_blank" class="btn btn-success rounded-pill px-4 shadow-sm hover-lift fw-bold">
                                         <i class="fab fa-whatsapp me-2"></i>{{ __('center::messages.blade_0815') }}</a>
                                     <a href="{{ route('center.students.edit', $student->id) }}" class="btn btn-white border rounded-pill px-4 shadow-sm hover-lift text-dark fw-bold">
                                         <i class="fas fa-edit me-2"></i>{{ __('center::messages.blade_0816') }}</a>
@@ -123,19 +127,19 @@
                                 <!-- Attendance Card -->
                                 <div class="col-6 col-lg-3">
                                     <div class="stats-item bg-white shadow-sm rounded-4 p-3 border-start border-4 border-primary h-100">
-                                        <div class="text-muted small mb-2">الحضور (٪ / حاضر / غائب)</div>
+                                        <div class="text-muted small mb-2">{{ __('center::students.attendance_stats_header') }}</div>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="text-center">
                                                 <div class="fw-bold text-primary fs-5">{{ $stats['attendance_pct'] }}%</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0817') }}</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.attendance_pct') }}</div>
                                             </div>
                                             <div class="text-center border-start border-end px-2">
                                                 <div class="fw-bold text-success">{{ $stats['attendance_count'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0818') }}</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.present') }}</div>
                                             </div>
                                             <div class="text-center">
                                                 <div class="fw-bold text-danger">{{ $stats['absent_count'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0819') }}</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.absent') }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -144,19 +148,19 @@
                                 <!-- Points Card -->
                                 <div class="col-6 col-lg-3">
                                     <div class="stats-item bg-white shadow-sm rounded-4 p-3 border-start border-4 border-indigo h-100">
-                                        <div class="text-muted small mb-2">نقاط التميز (صافي / كسب / خصم)</div>
+                                        <div class="text-muted small mb-2">{{ __('center::students.points_stats_header') }}</div>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="text-center">
                                                 <div class="fw-bold text-indigo fs-5">{{ $stats['points'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0820') }}</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.net') }}</div>
                                             </div>
                                             <div class="text-center border-start border-end px-2">
                                                 <div class="fw-bold text-success">{{ $stats['points_earned'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0821') }}</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.earned') }}</div>
                                             </div>
                                             <div class="text-center">
                                                 <div class="fw-bold text-danger">{{ $stats['points_spent'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0822') }}</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.spent') }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -165,19 +169,19 @@
                                 <!-- Quiz Stats Card -->
                                 <div class="col-6 col-lg-3">
                                     <div class="stats-item bg-white shadow-sm rounded-4 p-3 border-start border-4 border-success h-100">
-                                        <div class="text-muted small mb-2">الاختبارات (متوسط / عدد / أعلى)</div>
+                                        <div class="text-muted small mb-2">{{ __('center::students.quizzes_stats_header') }}</div>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="text-center">
                                                 <div class="fw-bold text-success fs-5">{{ $stats['avg_quiz_score'] }}%</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0823') }}</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.avg') }}</div>
                                             </div>
                                             <div class="text-center border-start border-end px-2">
                                                 <div class="fw-bold text-dark">{{ $stats['quiz_count'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0824') }}</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.count_stat') }}</div>
                                             </div>
                                             <div class="text-center">
                                                 <div class="fw-bold text-primary">{{ $stats['highest_score'] }}%</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0825') }}</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.highest') }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -186,19 +190,19 @@
                                 <!-- Sessions Card -->
                                 <div class="col-6 col-lg-3">
                                     <div class="stats-item bg-white shadow-sm rounded-4 p-3 border-start border-4 border-warning h-100">
-                                        <div class="text-muted small mb-2">الحصص (إجمالي / حاضر / باقي)</div>
+                                        <div class="text-muted small mb-2">{{ __('center::students.sessions_stats_header') }}</div>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="text-center">
                                                 <div class="fw-bold text-dark fs-5">{{ $stats['total_sessions'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0826') }}</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.total') }}</div>
                                             </div>
                                             <div class="text-center border-start border-end px-2">
                                                 <div class="fw-bold text-success">{{ $stats['attendance_count'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0827') }}</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.present') }}</div>
                                             </div>
                                             <div class="text-center">
                                                 <div class="fw-bold text-warning">{{ $stats['remaining_sessions_count'] }}</div>
-                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::messages.blade_0828') }}</div>
+                                                <div style="font-size: 0.65rem;" class="text-muted">{{ __('center::students.remaining') }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -282,7 +286,7 @@
                 </div>
 
                 <div class="contact-item mb-4">
-                    <small class="text-muted d-block mb-1">ولي الأمر ({{ $student->parent_relation ?? __('center::messages.blade_0908') }})</small>
+                    <small class="text-muted d-block mb-1">{{ __('center::students.guardian_relation', ['relation' => $student->parent_relation ?? __('center::messages.blade_0908')]) }}</small>
                     <div class="fw-bold fs-6 mb-1 text-dark">{{ $student->guardian?->name ?? $student->parent_name }}</div>
                     <div class="d-flex align-items-center gap-2">
                         <span class="text-muted small">{{ $student->guardian?->phone ?? $student->parent_phone }}</span>
@@ -445,8 +449,8 @@
                         <div class="d-flex justify-content-between align-items-center mb-5">
                             <h4 class="fw-bold mb-0">{{ __('center::messages.blade_0864') }}</h4>
                             <div class="d-flex gap-2">
-                                <div class="badge bg-success rounded-pill px-3">حاضر: {{ $attendance_logs->where('status', 'present')->count() }}</div>
-                                <div class="badge bg-danger rounded-pill px-3">غائب: {{ $attendance_logs->where('status', 'absent')->count() }}</div>
+                                <div class="badge bg-success rounded-pill px-3">{{ __('center::students.present') }}: {{ $attendance_logs->where('status', 'present')->count() }}</div>
+                                <div class="badge bg-danger rounded-pill px-3">{{ __('center::students.absent') }}: {{ $attendance_logs->where('status', 'absent')->count() }}</div>
                             </div>
                         </div>
 
@@ -455,7 +459,7 @@
                                 <thead class="bg-light">
                                     <tr>
                                         <th class="border-0 rounded-start px-4">{{ __('center::messages.blade_0865') }}</th>
-                                        <th class="border-0">الحصة / المحتوى</th>
+                                        <th class="border-0">{{ __('center::students.session_content') }}</th>
                                         <th class="border-0">{{ __('center::messages.blade_0866') }}</th>
                                         <th class="border-0 rounded-end px-4">{{ __('center::messages.blade_0867') }}</th>
                                     </tr>
@@ -499,7 +503,7 @@
                                             <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{ $enrollment->status }}</span>
                                         </div>
                                         <h5 class="fw-bold text-dark mb-1">{{ $enrollment->course->title }}</h5>
-                                        <p class="text-muted extra-small mb-4">تاريخ الاشتراك: {{ $enrollment->enrolled_at->format('Y/m/d') }}</p>
+                                        <p class="text-muted extra-small mb-4">{{ __('center::students.enrollment_date') }}: {{ $enrollment->enrolled_at->format('Y/m/d') }}</p>
                                         
                                         <div class="mb-2 d-flex justify-content-between small fw-bold">
                                             <span>{{ __('center::messages.blade_0870') }}</span>
@@ -525,12 +529,12 @@
                             <div class="d-flex gap-2">
                                 <form action="{{ route('center.students.remind-debt', $student->id) }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="btn btn-outline-success rounded-pill px-4 fw-bold shadow-sm" onclick="return confirm('هل أنت متأكد من رغبتك في إرسال تذكير سداد عبر الواتساب؟');">
-                                        <i class="fab fa-whatsapp me-2"></i>إرسال تذكير
+                                    <button type="submit" class="btn btn-outline-success rounded-pill px-4 fw-bold shadow-sm" onclick="return confirm('{{ __('center::students.whatsapp_reminder_confirm') }}');">
+                                        <i class="fab fa-whatsapp me-2"></i>{{ __('center::students.send_reminder') }}
                                     </button>
                                 </form>
                                 <a href="{{ route('center.students.statement', $student->id) }}" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">
-                                    <i class="fas fa-file-invoice-dollar me-2"></i>كشف حساب الطالب (Ledger)
+                                    <i class="fas fa-file-invoice-dollar me-2"></i>{{ __('center::students.student_ledger') }}
                                 </a>
                             </div>
                         </div>
@@ -601,7 +605,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-5">
                             <h4 class="fw-bold mb-0">{{ __('center::messages.blade_0883') }}</h4>
                             <div class="badge bg-indigo-accent text-white rounded-pill px-4 py-2 fs-6 shadow-sm">
-                                الإجمالي: {{ $stats['points'] }} نقطة
+                                {{ __('center::students.points_total', ['points' => $stats['points']]) }}
                             </div>
                         </div>
 
@@ -693,7 +697,7 @@
                     </div>
                     <div class="modal-body p-4 p-md-5">
                         <div class="mb-4">
-                            <label class="form-label fw-bold opacity-75">اختر المجموعة / الموعد</label>
+                            <label class="form-label fw-bold opacity-75">{{ __('center::students.select_schedule') }}</label>
                             <select name="schedule_id" class="form-select rounded-4 p-3 border-light bg-light" required>
                                 <option value="">{{ __('center::messages.blade_0896') }}</option>
                                 @foreach($availableSchedules as $sch)

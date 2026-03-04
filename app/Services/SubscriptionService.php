@@ -11,6 +11,19 @@ use Carbon\Carbon;
 class SubscriptionService
 {
     /**
+     * Flag to silence resource limit warnings temporarily.
+     */
+    public static $isSilenced = false;
+
+    /**
+     * Silences or unsilences resource limit warnings.
+     */
+    public static function silence(bool $value = true)
+    {
+        self::$isSilenced = $value;
+    }
+
+    /**
      * Subscribe a tenant to a package.
      */
     public function subscribe(Tenant $tenant, Package $package): Subscription
@@ -154,6 +167,10 @@ class SubscriptionService
      */
     protected function checkThresholdWarning(Tenant $tenant, string $featureCode)
     {
+        if (self::$isSilenced) {
+            return;
+        }
+
         $subscription = $tenant->activeSubscription();
         if (!$subscription) return;
 

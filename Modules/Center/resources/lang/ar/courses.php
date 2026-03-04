@@ -23,4 +23,11 @@ return [
     'view' => 'عرض',
     'enroll_student' => 'تسجيل طالب في الدورة',
     'delete_confirm' => 'هل أنت متأكد من حذف هذه الدورة؟',
+    'validation_title_required' => 'عنوان الكورس مطلوب.',
+    'validation_instructor_required' => 'يجب اختيار مدرس.',
+    'validation_schedules_required' => 'يجب إضافة جدول واحد على الأقل.',
+    'validation_day_required' => 'يوم الجدولة مطلوب.',
+    'validation_start_time_required' => 'وقت البدء مطلوب.',
+    'validation_end_time_after' => 'وقت النهاية يجب أن يكون بعد وقت البدء.',
+    'validation_classroom_required' => 'يجب اختيار القاعة.',
 ];

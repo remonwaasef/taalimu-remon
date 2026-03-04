@@ -1,6 +1,12 @@
 <?php
 
 return [
+    'back' => 'Back',
+    'first_instructor_onboarding' => 'Great job! The first instructor has been added. Now, let\'s create your first training course.',
+    'first_course_onboarding' => 'Great job! Your first course has been created. Now, let\'s register the first student to get started.',
+    'schedule_info_1' => 'The system will automatically prevent any conflict in booking the same classroom at the same time.',
+    'schedule_info_2' => 'The availability of the instructor at this time will also be verified before saving.',
+    'schedule_info_3' => 'This schedule will be automatically linked to the attendance section to facilitate student registration.',
     'blade_0001' => 'Attendance reports',
     'blade_0002' => 'Back to the main page',
     'blade_0003' => 'General attendance statistics',

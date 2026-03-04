@@ -18,4 +18,9 @@ return [
     'students_count' => '{0} Étudiant|{1} 1 Étudiant|[2,*] :count Étudiants',
     'add_asset' => 'Ajouter un équipement',
     'assets_count' => 'Équipements',
+    'id_label' => 'ID: #',
+    'accent_color_hint_title' => 'Astuce',
+    'accent_color_hint_text' => 'Vous aide à distinguer rapidement la salle lors de la consultation de l\'emploi du temps général du centre en mode "liste des salles".',
+    'weekly_sessions_count' => '{0} séances hebdomadaires|{1} 1 séance hebdomadaire|[2,*] :count séances hebdomadaires',
+    'assets_with_count' => 'Engagements et Actifs (:count)',
 ];

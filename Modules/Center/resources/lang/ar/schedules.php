@@ -14,4 +14,12 @@ return [
     'classroom' => 'القاعة',
     'classroom_conflict' => 'يوجد تعارض في المواعيد للقاعة مع دورة: :course',
     'instructor_conflict' => 'يوجد تعارض في المواعيد للمعلم مع دورة: :course',
+    'classroom_conflict_detailed' => '❌ <b>تعارض في القاعة:</b> القاعة ":classroom" مشغولة حالياً في دورة ":course" بالفترة من :start إلى :end.',
+    'instructor_conflict_detailed' => '❌ <b>تعارض في المدرس:</b> المدرس ":instructor" لديه حصة أخرى في دورة ":course" بالفترة من :start إلى :end.',
+    'schedule_available' => 'الموعد متاح',
+    'schedule_conflict_short' => 'يوجد تعارض في الموعد',
+    'saving' => 'جاري الحفظ...',
+    'registering' => 'جاري التسجيل...',
+    'schedules_count' => 'مواعيد',
+    'item_number' => 'موعد #',
 ];

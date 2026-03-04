@@ -109,7 +109,7 @@
                             <div class="schedule-item card bg-light border-0 mb-3">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between mb-2">
-                                        <h6 class="fw-bold text-primary">{{ __('center::messages.blade_0284') }}</h6>
+                                        <h6 class="fw-bold text-primary">{{ __('center::schedules.item_number') }} ${index + 1}</h6>
                                         <button type="button" class="btn-close remove-schedule"></button>
                                     </div>
                                     <div class="row g-3">
@@ -242,7 +242,7 @@
                     scheduleItem.querySelector('.card-body').appendChild(indicator);
                 } else {
                     indicator.className += ' alert alert-success py-2';
-                    indicator.innerHTML = '<i class="fas fa-check-circle me-1"></i> الموعد متاح';
+                    indicator.innerHTML = '<i class="fas fa-check-circle me-1"></i> ' + "{{ __('center::schedules.schedule_available') }}";
                     scheduleItem.querySelector('.card-body').appendChild(indicator);
                     
                     // Auto-remove success message after 3 seconds

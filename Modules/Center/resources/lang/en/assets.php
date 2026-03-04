@@ -24,4 +24,6 @@ return [
     'broken' => 'Broken',
     'lost' => 'Lost',
     'none' => 'Not Specified',
+    'pieces_count' => '{0} pieces|{1} 1 piece|[2,*] :count pieces',
+    'add_to_classroom' => '+ Add asset to classroom',
 ];

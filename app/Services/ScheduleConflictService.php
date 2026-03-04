@@ -85,7 +85,12 @@ class ScheduleConflictService
             $startTimeFormatted = Carbon::parse($conflicting->start_time)->format('h:i A');
             $endTimeFormatted = Carbon::parse($conflicting->end_time)->format('h:i A');
             
-            return "❌ <b>تعارض في القاعة:</b> القاعة \"{$classroomName}\" مشغولة حالياً في دورة \"{$courseName}\" بالفترة من {$startTimeFormatted} إلى {$endTimeFormatted}.";
+            return __('center::schedules.classroom_conflict_detailed', [
+                'classroom' => $classroomName,
+                'course' => $courseName,
+                'start' => $startTimeFormatted,
+                'end' => $endTimeFormatted
+            ]);
         }
 
         return null;
@@ -123,7 +128,12 @@ class ScheduleConflictService
             $startTimeFormatted = Carbon::parse($conflicting->start_time)->format('h:i A');
             $endTimeFormatted = Carbon::parse($conflicting->end_time)->format('h:i A');
             
-            return "❌ <b>تعارض في المدرس:</b> المدرس \"{$instructorName}\" لديه حصة أخرى في دورة \"{$courseName}\" بالفترة من {$startTimeFormatted} إلى {$endTimeFormatted}.";
+            return __('center::schedules.instructor_conflict_detailed', [
+                'instructor' => $instructorName,
+                'course' => $courseName,
+                'start' => $startTimeFormatted,
+                'end' => $endTimeFormatted
+            ]);
         }
 
         return null;

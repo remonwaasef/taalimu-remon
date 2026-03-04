@@ -12,6 +12,7 @@ use App\DTOs\CourseData;
 use App\DTOs\StudentData;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Services\SubscriptionService;
 
 class DemoDataService
 {
@@ -28,7 +29,9 @@ class DemoDataService
 
     public function seedForTenant($tenant)
     {
-        return DB::transaction(function () use ($tenant) {
+        SubscriptionService::silence(true);
+        try {
+            return DB::transaction(function () use ($tenant) {
             // 1. Create Academic Structure if not exists
             $stage = Stage::firstOrCreate(
                 ['tenant_id' => $tenant->id, 'name' => 'المرحلة الثانوية'],
@@ -115,5 +118,60 @@ class DemoDataService
 
             return true;
         });
+        } finally {
+            SubscriptionService::silence(false);
+        }
+    }
+
+    public function removeDemoDataForTenant($tenant)
+    {
+        SubscriptionService::silence(true);
+        try {
+            return DB::transaction(function () use ($tenant) {
+                // 1. Delete Demo Students (Users & Profiles)
+                $demoUsers = User::where('tenant_id', $tenant->id)
+                    ->where('role', 'student')
+                    ->where(function ($q) {
+                        $q->where('email', 'like', '%.demo%@%')
+                          ->orWhere('email', 'like', 'std%.demo%@%');
+                    })->get();
+
+                foreach ($demoUsers as $user) {
+                    // This cascades to student profile via StudentService or foreign keys
+                    // But to be safe, delete related records directly if not cascaded
+                    if ($user->student) {
+                        $user->student->sales()->delete();
+                        $user->student->enrollments()->delete();
+                        \Modules\Center\Models\Attendance::where('student_id', $user->student->id)->delete();
+                        $user->student->delete();
+                    }
+                    \App\Models\PointLog::where('user_id', $user->id)->delete();
+                    $user->delete();
+                }
+
+                // 2. Delete Demo Instructors
+                $demoInstructors = Instructor::where('tenant_id', $tenant->id)
+                    ->where('email', 'like', '%.demo@%')->get();
+
+                foreach ($demoInstructors as $instructor) {
+                    $instructor->courses()->chunk(50, function($courses) {
+                       foreach($courses as $course) {
+                           $course->schedules()->delete();
+                           $course->delete();
+                       }
+                    });
+                    $instructor->delete();
+                }
+
+                return true;
+            });
+        } finally {
+            SubscriptionService::silence(false);
+            
+            // Recalculate usage aggressively or simply forget cache so it recounting
+            \Illuminate\Support\Facades\Cache::forget("tenant_{$tenant->id}_usage_max_students");
+            \Illuminate\Support\Facades\Cache::forget("tenant_{$tenant->id}_usage_max_instructors");
+            \Illuminate\Support\Facades\Cache::forget("tenant_{$tenant->id}_usage_max_courses");
+        }
     }
 }

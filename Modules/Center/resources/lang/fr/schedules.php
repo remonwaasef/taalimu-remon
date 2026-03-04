@@ -14,4 +14,12 @@ return [
     'classroom' => 'Salle de classe',
     'classroom_conflict' => 'Conflit d\'horaire pour la salle avec le cours : :course',
     'instructor_conflict' => 'Conflit d\'horaire pour l\'instructeur avec le cours : :course',
+    'classroom_conflict_detailed' => '❌ <b>Conflit de salle :</b> La salle ":classroom" est actuellement occupée dans le cours ":course" de :start à :end.',
+    'instructor_conflict_detailed' => '❌ <b>Conflit d\'instructeur :</b> L\'instructeur ":instructor" a une autre séance dans le cours ":course" de :start à :end.',
+    'schedule_available' => 'Horaire disponible',
+    'schedule_conflict_short' => 'Conflit d\'horaire existant',
+    'saving' => 'Enregistrement...',
+    'registering' => 'Inscription...',
+    'schedules_count' => 'horaires',
+    'item_number' => 'Horaire #',
 ];

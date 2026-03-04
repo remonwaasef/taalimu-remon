@@ -100,6 +100,10 @@ return [
         'title' => 'Bienvenue :name! 🚀',
         'subtitle' => 'Complétez ces étapes',
         'progress' => 'Progression',
+        'explore_demo' => 'Explorer des données de démonstration',
+        'explore_demo_desc' => 'Ajouter des données fictives (étudiants, cours, ventes) pour explorer le fonctionnement de la plateforme et ses rapports.',
+        'reset_demo' => 'Réinitialiser les données de démo',
+        'reset_demo_desc' => 'Supprimer toutes les données de démonstration ajoutées pour nettoyer votre espace.',
         'action' => 'Commencer',
         'steps' => [
             'education_system' => [

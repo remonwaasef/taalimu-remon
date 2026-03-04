@@ -26,17 +26,33 @@
     <div class="card-body p-4 position-relative">
         <div class="row align-items-center mb-4">
             <div class="col-lg-7">
-                <div class="d-flex align-items-center gap-3">
+                <div class="d-flex flex-wrap align-items-center gap-3">
                     <h5 class="fw-bold mb-1 text-dark">🚀 {{ __('center::dashboard.launchpad.title', ['name' => auth()->user()->name]) }}</h5>
-                    <form action="{{ route('center.demo.seed') }}" method="POST" id="demoDataForm">
-                        @csrf
-                        <button type="submit" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 border-dotted" 
-                                style="border-style: dashed !important; font-size: 0.7rem;"
-                                data-bs-toggle="tooltip" 
-                                title="{{ __('center::dashboard.launchpad.explore_demo_desc') }}">
-                            <i class="fas fa-magic me-1"></i> {{ __('center::dashboard.launchpad.explore_demo') }}
-                        </button>
-                    </form>
+                    @php
+                        $hasDemoData = \App\Models\Instructor::where('tenant_id', app('tenant')->id)->where('email', 'like', '%.demo@%')->exists();
+                    @endphp
+
+                    @if($hasDemoData)
+                        <form action="{{ route('center.demo.reset') }}" method="POST" id="demoDataResetForm" onsubmit="return confirm('{{ __('center::messages.blade_0483') }}');">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1 border-dotted" 
+                                    style="border-style: dashed !important; font-size: 0.7rem;"
+                                    data-bs-toggle="tooltip" 
+                                    title="{{ __('center::dashboard.launchpad.reset_demo_desc') }}">
+                                <i class="fas fa-trash-alt me-1"></i> {{ __('center::dashboard.launchpad.reset_demo') }}
+                            </button>
+                        </form>
+                    @else
+                        <form action="{{ route('center.demo.seed') }}" method="POST" id="demoDataForm">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 border-dotted" 
+                                    style="border-style: dashed !important; font-size: 0.7rem;"
+                                    data-bs-toggle="tooltip" 
+                                    title="{{ __('center::dashboard.launchpad.explore_demo_desc') }}">
+                                <i class="fas fa-magic me-1"></i> {{ __('center::dashboard.launchpad.explore_demo') }}
+                            </button>
+                        </form>
+                    @endif
                 </div>
                 <p class="text-muted small mb-0">{{ __('center::dashboard.launchpad.subtitle') }}</p>
             </div>

@@ -24,4 +24,6 @@ return [
     'broken' => 'Endommagé',
     'lost' => 'Perdu',
     'none' => 'Non Spécifié',
+    'pieces_count' => '{0} article|{1} 1 article|[2,*] :count articles',
+    'add_to_classroom' => '+ Ajouter un actif à la salle',
 ];

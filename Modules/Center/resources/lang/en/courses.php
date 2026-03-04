@@ -23,4 +23,11 @@ return [
     'delete_confirm' => 'Are you sure you want to delete this course?',
     'schedules' => 'Schedules',
     'enroll_student' => 'Enroll Student',
+    'validation_title_required' => 'Course title is required.',
+    'validation_instructor_required' => 'Please select an instructor.',
+    'validation_schedules_required' => 'At least one schedule must be added.',
+    'validation_day_required' => 'Scheduling day is required.',
+    'validation_start_time_required' => 'Start time is required.',
+    'validation_end_time_after' => 'End time must be after start time.',
+    'validation_classroom_required' => 'Please select a classroom.',
 ];
