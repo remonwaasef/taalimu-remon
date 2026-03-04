@@ -122,16 +122,17 @@ class SubscriptionController extends Controller
             $gateway = $request->input('payment_gateway', 'stripe');
 
             if ($gateway === 'paypal') {
-                $paypalId = $package->paypal_plan_id;
-                if (!$paypalId) {
-                    return back()->with('error', 'PayPal is not configured for this package.');
+                // Determine Currency and Amount (PayPal doesn't support EGP)
+                // Use 'default' (USD) for PayPal to ensure compatibility
+                $currency = 'USD';
+                $amount = $package->regional_prices['default']['amount'] ?? 49;
+
+                if ($billingCycle === 'yearly') {
+                    $amount = $package->regional_prices['default']['yearly_price'] ?? ($amount * 2);
                 }
 
                 $paypal = app(\App\Services\PayPalService::class);
-                $resp = $paypal->createSubscription($paypalId, [
-                    'name' => auth()->user()->name,
-                    'email' => auth()->user()->email,
-                ], route('payment.paypal.success'), route('center.subscription.index', ['tenant' => $tenant->domain]));
+                $resp = $paypal->createOrder($amount, $currency, route('payment.paypal.success'), route('center.subscription.index', ['tenant' => $tenant->domain]));
 
                 if ($resp && isset($resp['links'])) {
                     $approveLink = collect($resp['links'])->where('rel', 'approve')->first()['href'];
@@ -140,16 +141,23 @@ class SubscriptionController extends Controller
                     $tenant->subscriptions()->updateOrCreate(
                         ['name' => 'default'],
                         [
-                            'paypal_id' => $resp['id'],
-                            'paypal_status' => 'pending',
-                            'paypal_plan_id' => $paypalId,
+                            'paypal_id' => $resp['id'], // Store Order ID
+                            'paypal_status' => 'CREATED',
                             'gateway' => 'paypal',
                             'billing_cycle' => $billingCycle,
                             'base_price' => $cyclePrice,
                             'total_amount' => $cyclePrice,
                             'status' => 'trialing',
+                            'ends_at' => null,
                         ]
                     );
+
+                    // Ensure session has necessary info for success handler
+                    session([
+                        'selected_plan' => $package->slug,
+                        'is_subscription_change' => true,
+                        'tenant_id' => $tenant->id,
+                    ]);
 
                     return redirect()->away($approveLink);
                 }

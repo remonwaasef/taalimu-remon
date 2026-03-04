@@ -44,33 +44,44 @@ class PaymentController extends Controller
 
     public function paypalSuccess(Request $request, \App\Services\PayPalService $paypal, TelegramService $telegram)
     {
-        $subscriptionId = $request->get('subscription_id');
+        $orderId = $request->get('token'); // PayPal uses 'token' for Order ID in redirect
 
-        if ($subscriptionId) {
-            $details = $paypal->getSubscriptionDetails($subscriptionId);
+        if ($orderId) {
+            $details = $paypal->captureOrder($orderId);
 
-            if ($details && in_array($details['status'], ['ACTIVE', 'APPROVED'])) {
+            if ($details && $details['status'] === 'COMPLETED') {
                 // Mark registration as successful for the view
                 session(['registration_success' => true]);
 
-                // Update subscription record if it exists (it should have been created in RegistrationController)
-                $subscription = \App\Models\Subscription::where('paypal_id', $subscriptionId)->first();
+                // Update subscription record
+                $subscription = \App\Models\Subscription::where('paypal_id', $orderId)->first();
                 if ($subscription) {
+                    $tenant = $subscription->tenant;
+                    
+                    // Logic to find package and set ends_at
+                    $package = \App\Models\Package::where('slug', session('selected_plan', 'pro'))->first();
+                    $days = 150; // Default Term
+                    if ($subscription->billing_cycle === 'yearly') {
+                        $days = 365;
+                    } elseif ($package) {
+                        $days = $package->duration_in_days;
+                    }
+
                     $subscription->update([
-                        'paypal_status' => strtolower($details['status']),
+                        'paypal_status' => 'COMPLETED',
                         'status' => 'active',
+                        'ends_at' => now()->addDays($days),
                     ]);
                     
-                    $tenant = $subscription->tenant;
                     $user = \App\Models\User::where('tenant_id', $tenant->id)->where('role', 'center_admin')->first();
-                    $telegram->sendRegistrationAlert($tenant, $user, '******** (PayPal Payment)');
+                    $telegram->sendRegistrationAlert($tenant, $user, '******** (PayPal Order)');
                 }
 
                 return redirect()->route('registration.success');
             }
         }
 
-        return redirect()->route('home')->withErrors(['error' => 'فشل التحقق من اشتراك PayPal.']);
+        return redirect()->route('home')->withErrors(['error' => 'فشل التحقق من عملية دفع PayPal.']);
     }
 
     public function cancel()
