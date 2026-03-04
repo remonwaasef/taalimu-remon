@@ -239,21 +239,32 @@ class RegistrationController extends Controller
                 return redirect()->route('registration.success');
 
             } else if ($request->payment_gateway === 'paypal') {
-                // PayPal Paid Plan Flow
+                // PayPal Paid Plan Flow (One-time Payment for Term)
                 DB::commit();
 
-                $paypalId = $package->paypal_plan_id;
-                if (!$paypalId) {
-                     // Fallback/Error if no PayPal plan ID configured
-                     \Log::warning("PayPal Plan ID not found for package: {$request->plan}");
-                     return back()->withErrors(['error' => 'الدفع عبر PayPal غير متاح لهذه الباقة حالياً.'])->withInput();
+                // Currency Detection for PayPal (Must be USD/EUR etc - no EGP)
+                $countryCode = $request->input('country_code');
+                $currency = 'USD';
+                $amount = $package->regional_prices['default']['amount'] ?? 49;
+
+                if ($request->billing_cycle === 'yearly') {
+                    $amount = $package->regional_prices['default']['yearly_price'] ?? ($amount * 2);
+                }
+
+                if ($countryCode && isset($package->regional_prices[$countryCode])) {
+                    $rPrice = $package->regional_prices[$countryCode];
+                    $rCurrency = $rPrice['currency'] ?? 'USD';
+                    
+                    // PayPal supported currencies check (Simplified)
+                    $supportedByPaypal = ['USD', 'EUR', 'GBP', 'CAD', 'AUD', 'JPY'];
+                    if (in_array(strtoupper($rCurrency), $supportedByPaypal)) {
+                        $currency = $rCurrency;
+                        $amount = $request->billing_cycle === 'yearly' ? ($rPrice['yearly_price'] ?? 0) : ($rPrice['amount'] ?? 0);
+                    }
                 }
 
                 $paypal = app(\App\Services\PayPalService::class);
-                $resp = $paypal->createSubscription($paypalId, [
-                    'name' => $request->name,
-                    'email' => $request->email,
-                ], route('payment.paypal.success'), route('payment.cancel'));
+                $resp = $paypal->createOrder($amount, $currency, route('payment.paypal.success'), route('payment.cancel'));
 
                 if ($resp && isset($resp['links'])) {
                     $approveLink = collect($resp['links'])->where('rel', 'approve')->first()['href'];
@@ -262,15 +273,15 @@ class RegistrationController extends Controller
                     \App\Models\Subscription::create([
                         'tenant_id' => $tenant->id,
                         'name' => 'default',
-                        'paypal_id' => $resp['id'],
-                        'paypal_status' => 'pending',
-                        'paypal_plan_id' => $paypalId,
-                        'status' => 'trialing', // Pending activation
+                        'paypal_id' => $resp['id'], // Store Order ID
+                        'paypal_status' => 'CREATED',
+                        'status' => 'trialing', // Pending payment
                         'gateway' => 'paypal',
                         'billing_cycle' => $request->billing_cycle,
                         'base_price' => $basePrice,
                         'total_amount' => ($basePrice - $discountAmount),
                         'discount_amount' => $discountAmount,
+                        'ends_at' => null, // Will be set on success
                     ]);
 
                     return redirect()->away($approveLink);

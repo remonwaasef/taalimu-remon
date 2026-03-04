@@ -97,10 +97,68 @@ class PayPalService
         }
     }
 
+    public function createOrder($amount, $currency, $returnUrl, $cancelUrl)
+    {
+        try {
+            $token = $this->getAccessToken();
+
+            $response = $this->client->post('/v2/checkout/orders', [
+                'headers' => [
+                    'Authorization' => "Bearer {$token}",
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => [
+                    'intent' => 'CAPTURE',
+                    'purchase_units' => [
+                        [
+                            'amount' => [
+                                'currency_code' => $currency,
+                                'value' => (string) $amount,
+                            ],
+                        ],
+                    ],
+                    'application_context' => [
+                        'brand_name' => config('app.name'),
+                        'landing_page' => 'BILLING',
+                        'user_action' => 'PAY_NOW',
+                        'return_url' => $returnUrl,
+                        'cancel_url' => $cancelUrl,
+                    ],
+                ],
+            ]);
+
+            return json_decode($response->getBody(), true);
+        } catch (\Exception $e) {
+            Log::error('PayPal Order Creation Error: ' . $e->getMessage());
+            if (method_exists($e, 'getResponse') && $e->getResponse()) {
+                Log::error('PayPal Error Response: ' . $e->getResponse()->getBody()->getContents());
+            }
+            return null;
+        }
+    }
+
+    public function captureOrder($orderId)
+    {
+        try {
+            $token = $this->getAccessToken();
+
+            $response = $this->client->post("/v2/checkout/orders/{$orderId}/capture", [
+                'headers' => [
+                    'Authorization' => "Bearer {$token}",
+                    'Content-Type' => 'application/json',
+                ],
+            ]);
+
+            return json_decode($response->getBody(), true);
+        } catch (\Exception $e) {
+            Log::error('PayPal Order Capture Error: ' . $e->getMessage());
+            return null;
+        }
+    }
+
     public function verifyWebhook($headers, $body)
     {
-        // Simple verification for now, ideally use PayPal's webhook verification API
-        // This usually requires sending the headers and body back to PayPal for verification
+        // Simple verification for now
         return true; 
     }
 }
