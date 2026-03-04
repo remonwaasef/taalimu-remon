@@ -62,8 +62,8 @@
                                 <label class="form-label fw-bold">{{ __('center::instructors.commission_rate') }} <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <select name="commission_type" class="form-select bg-light border-0" style="max-width: 140px; border-radius: 0 10px 10px 0 !important;" required>
-                                        <option value="percentage" {{ old('commission_type', $instructor->commission_type) == 'percentage' ? 'selected' : '' }}>% نسبة</option>
-                                        <option value="fixed" {{ old('commission_type', $instructor->commission_type) == 'fixed' ? 'selected' : '' }}>مبلغ ثابت</option>
+                                        <option value="percentage" {{ old('commission_type', $instructor->commission_type) == 'percentage' ? 'selected' : '' }}>{{ __('center::instructors.commission_percentage') }}</option>
+                                        <option value="fixed" {{ old('commission_type', $instructor->commission_type) == 'fixed' ? 'selected' : '' }}>{{ __('center::instructors.commission_fixed') }}</option>
                                     </select>
                                     <input type="number" step="0.01" name="commission_rate" value="{{ old('commission_rate', $instructor->commission_rate) }}" class="form-control bg-light border-0" placeholder="0.00" style="border-radius: 10px 0 0 10px !important;" required>
                                 </div>

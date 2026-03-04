@@ -46,4 +46,9 @@ return [
     'student_deleted' => 'Student deleted successfully',
     'assets' => 'Assets & Inventory',
     'school_management' => 'School Management',
+    'subscription' => 'My Subscription',
+    'financial_analytics' => 'Financial Analytics',
+    'financial_commissions' => 'Instructors Commissions',
+    'financial_discounts' => 'Discounts Granted',
+    'financial_taxes' => 'Taxes Collected',
 ];

@@ -46,4 +46,9 @@ return [
     'student_deleted' => 'Étudiant supprimé',
     'assets' => 'Équipements',
     'school_management' => 'Gestion Scolaire',
+    'subscription' => 'Mon Abonnement',
+    'financial_analytics' => 'Analyses Financières',
+    'financial_commissions' => 'Commissions des Enseignants',
+    'financial_discounts' => 'Remises Accordées',
+    'financial_taxes' => 'Taxes Perçues',
 ];

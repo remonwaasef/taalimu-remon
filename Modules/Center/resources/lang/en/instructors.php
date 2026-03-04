@@ -25,4 +25,6 @@ return [
     'phone' => 'Phone Number',
     'bio' => 'Biography',
     'show' => 'Show Details',
+    'commission_percentage' => 'Percentage %',
+    'commission_fixed' => 'Fixed Amount',
 ];
