@@ -25,4 +25,6 @@ return [
     'edit' => 'تعديل',
     'delete' => 'حذف',
     'no_instructors' => 'لا يوجد مدرسين مسجلين.',
+    'commission_percentage' => 'نسبة %',
+    'commission_fixed' => 'مبلغ ثابت',
 ];

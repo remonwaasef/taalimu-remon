@@ -26,4 +26,6 @@ return [
     'courses_count' => 'Cours',
     'show' => 'Afficher',
     'delete' => 'Supprimer',
+    'commission_percentage' => 'Pourcentage %',
+    'commission_fixed' => 'Montant Fixe',
 ];
