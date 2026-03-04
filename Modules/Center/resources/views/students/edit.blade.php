@@ -163,7 +163,7 @@
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">الشعبة / التخصص</label>
+                                <label class="form-label fw-bold">{{ __('center::students.section_type_edit_label') }}</label>
                                 <input type="text" name="section_type" value="{{ old('section_type', $student->section_type) }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0795') }}">
                                 @error('section_type')
                                     <div class="text-danger small mt-1">{{ $message }}</div>

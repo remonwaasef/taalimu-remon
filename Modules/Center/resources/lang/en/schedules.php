@@ -14,4 +14,12 @@ return [
     'classroom' => 'Classroom',
     'classroom_conflict' => 'Schedule conflict for classroom with course: :course',
     'instructor_conflict' => 'Schedule conflict for instructor with course: :course',
+    'classroom_conflict_detailed' => '❌ <b>Classroom Conflict:</b> Classroom ":classroom" is currently occupied in course ":course" from :start to :end.',
+    'instructor_conflict_detailed' => '❌ <b>Instructor Conflict:</b> Instructor ":instructor" has another session in course ":course" from :start to :end.',
+    'schedule_available' => 'Schedule available',
+    'schedule_conflict_short' => 'Schedule conflict exists',
+    'saving' => 'Saving...',
+    'registering' => 'Registering...',
+    'schedules_count' => 'schedules',
+    'item_number' => 'Schedule #',
 ];

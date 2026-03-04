@@ -98,6 +98,7 @@ $tenantRoutes = function () {
         Route::get('/', [CenterController::class, 'index'])->name('center.dashboard');
         Route::get('/dashboard', [CenterController::class, 'index'])->name('center.dashboard.alt');
         Route::post('/demo/seed', [\Modules\Center\Http\Controllers\DemoDataController::class, 'seed'])->name('center.demo.seed');
+        Route::post('/demo/reset', [\Modules\Center\Http\Controllers\DemoDataController::class, 'destroy'])->name('center.demo.reset');
 
         // User Profile
         Route::get('profile', [UserController::class, 'profile'])->name('center.profile');

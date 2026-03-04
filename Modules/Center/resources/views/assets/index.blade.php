@@ -17,11 +17,11 @@
                 <h6 class="fw-bold text-dark mb-0">
                     <i class="fas fa-door-open me-2 text-primary"></i> 
                     {{ $classroomName == '---' ? __('center::messages.blade_0110') : $classroomName }}
-                    <span class="badge bg-white text-primary border rounded-pill ms-2 fw-normal" style="font-size: 0.75rem;">{{ $items->count() }} قطعة</span>
+                    <span class="badge bg-white text-primary border rounded-pill ms-2 fw-normal" style="font-size: 0.75rem;">{{ trans_choice('center::assets.pieces_count', $items->count()) }}</span>
                 </h6>
                 @if($classroomName != '---')
                     @php $cid = $items->first()->classroom_id; @endphp
-                    <a href="{{ route('center.assets.create', ['classroom_id' => $cid]) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3" style="font-size: 0.75rem;">+ إضافة عهدة للقاعة</a>
+                    <a href="{{ route('center.assets.create', ['classroom_id' => $cid]) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3" style="font-size: 0.75rem;">{{ __('center::assets.add_to_classroom') }}</a>
                 @endif
             </div>
             <div class="card-body p-0">

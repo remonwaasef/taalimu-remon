@@ -81,8 +81,8 @@ class InstructorController extends Controller
             
         \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\GeneralNotification(
             'instructor_registered', // Translation key
-            "تم تسجيل مدرس جديد: {$request->name}",
-            route('center.instructors.index'), // Link to instructors list (or show page if available)
+            __('center::instructors.new_instructor_registered', ['name' => $request->name]),
+            route('center.instructors.index'), // Link to instructors list
             'fas fa-chalkboard-teacher',
             auth()->user()->name // Created By
         ));
@@ -90,7 +90,7 @@ class InstructorController extends Controller
         // Smart Onboarding Routing: If this is the first instructor, guide them to create a course
         $instructorCount = Instructor::where('tenant_id', app('tenant')->id)->count();
         if ($instructorCount === 1) {
-            return redirect()->route('center.courses.create')->with('success', 'تمت إضافة المدرس بنجاح! 🎉 خطوتك التالية هي إنشاء أول دورة تعليمية لربطها به.');
+            return redirect()->route('center.courses.create')->with('success', __('center::messages.first_instructor_onboarding'));
         }
 
         return redirect()->route('center.instructors.index')->with('success', __('center::messages.msg_049'));
@@ -186,9 +186,9 @@ class InstructorController extends Controller
 
         try {
             $payoutService->processPayout($instructor, $request->all());
-            return redirect()->back()->with('success', 'تم تسجيل عملية الصرف بنجاح وتحديث السجلات المالية.');
+            return redirect()->back()->with('success', __('center::instructors.payout_success'));
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'خطأ في عملية الصرف: ' . $e->getMessage());
+            return redirect()->back()->with('error', __('center::instructors.payout_error', ['message' => $e->getMessage()]));
         }
     }
 
@@ -209,7 +209,10 @@ class InstructorController extends Controller
                     'date' => $c->created_at,
                     'type' => 'commission',
                     'amount' => $c->amount,
-                    'description' => 'عمولة مبيعات: ' . ($c->sale->student->name ?? 'طالب') . ' - فاتورة #' . $c->sale_id,
+                    'description' => __('center::instructors.commission_sales', [
+                        'student' => $c->sale->student->name ?? __('center::instructors.table_student'),
+                        'invoice' => $c->sale_id
+                    ]),
                     'is_credit' => true,
                     'status' => $c->status,
                 ];
@@ -224,7 +227,7 @@ class InstructorController extends Controller
                     'date' => $p->payout_date instanceof \Illuminate\Support\Carbon ? $p->payout_date : \Carbon\Carbon::parse($p->payout_date),
                     'type' => 'payout',
                     'amount' => $p->amount,
-                    'description' => 'صرف مستحقات: ' . ($p->payment_method ?? 'نقدي') . ($p->notes ? ' - ' . $p->notes : ''),
+                    'description' => __('center::instructors.payout') . ': ' . (__('center::instructors.' . $p->payment_method) ?? $p->payment_method) . ($p->notes ? ' - ' . $p->notes : ''),
                     'is_credit' => false,
                     'status' => 'completed',
                 ];

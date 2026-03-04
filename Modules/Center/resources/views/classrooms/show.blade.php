@@ -43,7 +43,7 @@
                             </div>
                             <div>
                                 <small class="text-muted d-block">{{ __('center::messages.blade_0234') }}</small>
-                                <span class="fw-bold text-dark">{{ $classroom->capacity ?? __('center::messages.blade_0255') }} طالب</span>
+                                <span class="fw-bold text-dark">{{ trans_choice('center::classrooms.students_count', $classroom->capacity ?? 0) }}</span>
                             </div>
                         </div>
 
@@ -53,7 +53,7 @@
                             </div>
                             <div>
                                 <small class="text-muted d-block">{{ __('center::messages.blade_0235') }}</small>
-                                <span class="fw-bold text-dark">{{ $classroom->schedules->count() }} حصة أسبوعية</span>
+                                <span class="fw-bold text-dark">{{ trans_choice('center::classrooms.weekly_sessions_count', $classroom->schedules->count()) }}</span>
                             </div>
                         </div>
 
@@ -82,7 +82,7 @@
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link border-0 fw-bold text-dark position-relative py-3" id="assetsTab" data-bs-toggle="tab" data-bs-target="#assetsContent" type="button" role="tab" aria-controls="assetsContent" aria-selected="false">
-                                <i class="fas fa-box me-2 text-primary"></i> العُهد والأصول ({{ $classroom->assets->count() }})
+                                <i class="fas fa-box me-2 text-primary"></i> {{ __('center::classrooms.assets_with_count', ['count' => $classroom->assets->count()]) }}
                             </button>
                         </li>
                     </ul>

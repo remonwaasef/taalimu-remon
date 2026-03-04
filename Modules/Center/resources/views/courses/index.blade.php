@@ -62,7 +62,7 @@
                                         <div class="{{ ($loop->remaining < 2 && $courses->count() > 2) ? 'dropup' : 'dropdown' }}">
                                             <button class="btn btn-light btn-sm rounded-pill border shadow-sm dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="far fa-calendar-alt text-primary"></i>
-                                                <span class="fw-bold">{{ $course->schedules->count() }} مواعيد</span>
+                                                <span class="fw-bold">{{ $course->schedules->count() }} {{ __('center::schedules.schedules_count') }}</span>
                                             </button>
                                             <div class="dropdown-menu border-0 shadow-lg p-2 rounded-4" style="min-width: 250px;">
                                                 <h6 class="dropdown-header text-primary fw-bold mb-2">{{ __('center::messages.blade_0337') }}</h6>
@@ -170,7 +170,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content rounded-5 border-0 shadow-lg">
                 <div class="modal-header border-0 pb-0 pt-4 px-4 bg-light bg-opacity-50">
-                    <h5 class="modal-title fw-bold fs-4">{{ __('center::messages.blade_0338') }}<span id="dynamicCourseTitle" class="text-primary"></span></h5>
+                    <h5 class="modal-title fw-bold fs-4">{{ __('center::courses.enroll_student') }}: <span id="dynamicCourseTitle" class="text-primary"></span></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4 bg-light bg-opacity-50 border-bottom">
@@ -295,14 +295,14 @@
                 document.getElementById('quickNewStudentForm').addEventListener('submit', function() {
                     let btn = document.getElementById('quickEnrollSubmitBtn');
                     btn.disabled = true;
-                    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> جاري الحفظ...';
+                    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> {{ __('center::schedules.saving') }}';
                 });
                 
                 // Also add loading to existing form
                 document.getElementById('existingStudentForm').addEventListener('submit', function() {
                     let btn = this.querySelector('button[type="submit"]');
                     btn.disabled = true;
-                    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> جاري التسجيل...';
+                    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> {{ __('center::schedules.registering') }}';
                 });
             });
 

@@ -28,7 +28,7 @@
             <div class="card border-0 shadow-lg rounded-4 overflow-hidden h-100">
                 <div class="card-header bg-white border-0 p-4 pb-0 d-flex justify-content-between align-items-center">
                     <h5 class="fw-bold text-dark mb-0">{{ __('center::messages.blade_0206') }}</h5>
-                    <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2">معرف: #{{ $classroom->id }}</span>
+                    <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2">{{ __('center::classrooms.id_label') }}{{ $classroom->id }}</span>
                 </div>
                 <div class="card-body p-4">
                     <form action="{{ route('center.classrooms.update', $classroom) }}" method="POST">
@@ -54,7 +54,7 @@
                                     <select class="form-select rounded-3" id="typeSelect" name="type">
                                         <option value="hall" {{ old('type', $classroom->type) == 'hall' ? 'selected' : '' }}>{{ __('center::messages.blade_0209') }}</option>
                                         <option value="lab" {{ old('type', $classroom->type) == 'lab' ? 'selected' : '' }}>{{ __('center::messages.blade_0210') }}</option>
-                                        <option value="virtual" {{ old('type', $classroom->type) == 'virtual' ? 'selected' : '' }}>قاعة افتراضية (Zoom/Meet)</option>
+                                        <option value="virtual" {{ old('type', $classroom->type) == 'virtual' ? 'selected' : '' }}>{{ __('center::messages.blade_0253') }}</option>
                                     </select>
                                     <label for="typeSelect">{{ __('center::messages.blade_0211') }}</label>
                                 </div>
@@ -90,7 +90,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h6 class="fw-bold mb-0 text-dark">
                                 <i class="fas fa-tools me-2 text-info"></i>{{ __('center::messages.blade_0216') }}</h6>
-                            <a href="{{ route('center.assets.create', ['classroom_id' => $classroom->id]) }}" class="btn btn-sm btn-info text-white rounded-pill px-3">+ إضافة</a>
+                            <a href="{{ route('center.assets.create', ['classroom_id' => $classroom->id]) }}" class="btn btn-sm btn-info text-white rounded-pill px-3">{{ __('center::messages.blade_0096') }}</a>
                         </div>
                         
                         @if($classroom->assets->count() > 0)
@@ -116,9 +116,8 @@
                 <!-- Info Alert -->
                 <div class="card border-0 bg-primary bg-opacity-10 rounded-4">
                     <div class="card-body p-4">
-                        <h6 class="fw-bold text-primary mb-2">💡 تلميح</h6>
-                        <p class="small text-dark mb-0 opacity-75">{{ __('center::messages.blade_0218') }}<strong>{{ __('center::messages.blade_0219') }}</strong> يساعدك في تمييز القاعة بسرعة عند استعراض الجدول العام للمركز بطريقة "قائمة القاعات".
-                        </p>
+                        <h6 class="fw-bold text-primary mb-2">💡 {{ __('center::classrooms.accent_color_hint_title') }}</h6>
+                        <p class="small text-dark mb-0 opacity-75">{{ __('center::classrooms.accent_color_hint_text') }}</p>
                     </div>
                 </div>
             </div>

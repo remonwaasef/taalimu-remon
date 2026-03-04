@@ -76,12 +76,16 @@ class CourseController extends Controller
         
         $data['image'] = $this->handleFileUpload($request, 'image', null, 'courses');
 
-        $this->courseService->createCourse(CourseData::fromArray($data));
+        try {
+            $this->courseService->createCourse(CourseData::fromArray($data));
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with('error', $e->getMessage());
+        }
 
         // Smart Onboarding Routing: If this is the first course, guide them to register a student
         $courseCount = Course::where('tenant_id', app('tenant')->id)->count();
         if ($courseCount === 1) {
-            return redirect()->route('center.students.create')->with('success', 'عمل رائع! تم إنشاء دورتك الأولى. الآن، دعنا نُسجل أول طالب للبدء.');
+            return redirect()->route('center.students.create')->with('success', __('center::messages.first_course_onboarding'));
         }
 
         return redirect()->route('center.courses.index')->with('success', __('center::messages.msg_026'));
@@ -214,7 +218,7 @@ class CourseController extends Controller
             \Log::info('CourseController@update: Update successful for course ID ' . $id);
         } catch (\Throwable $e) {
             \Log::error('CourseController@update: EXCEPTION', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
-            return redirect()->back()->withInput()->withErrors(['error' => 'حدث خطأ أثناء التحديث: ' . $e->getMessage()]);
+            return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
 
         return redirect()->route('center.courses.index')->with('success', __('center::messages.msg_029'));

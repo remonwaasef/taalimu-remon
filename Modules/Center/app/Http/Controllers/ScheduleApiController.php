@@ -45,14 +45,14 @@ class ScheduleApiController extends Controller
         if (empty($conflicts)) {
             return response()->json([
                 'status' => 'available',
-                'message' => '✅ الموعد متاح',
+                'message' => '✅ ' . __('center::schedules.schedule_available'),
                 'conflicts' => [],
             ]);
         }
 
         return response()->json([
             'status' => 'conflict',
-            'message' => '❌ يوجد تعارض في الموعد',
+            'message' => '❌ ' . __('center::schedules.schedule_conflict_short'),
             'conflicts' => $conflicts,
         ]);
     }

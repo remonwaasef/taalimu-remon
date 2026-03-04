@@ -33,13 +33,13 @@ class UpdateCourseRequest extends FormRequest
     public function messages()
     {
         return [
-            'title.required' => 'عنوان الكورس مطلوب.',
-            'instructor_id.required' => 'يجب اختيار مدرس.',
-            'schedules.required' => 'يجب إضافة جدول واحد على الأقل.',
-            'schedules.*.day_of_week.required' => 'يوم الجدولة مطلوب.',
-            'schedules.*.start_time.required' => 'وقت البدء مطلوب.',
-            'schedules.*.end_time.after' => 'وقت النهاية يجب أن يكون بعد وقت البدء.',
-            'schedules.*.classroom_id.required' => 'يجب اختيار القاعة.',
+            'title.required' => __('center::courses.validation_title_required'),
+            'instructor_id.required' => __('center::courses.validation_instructor_required'),
+            'schedules.required' => __('center::courses.validation_schedules_required'),
+            'schedules.*.day_of_week.required' => __('center::courses.validation_day_required'),
+            'schedules.*.start_time.required' => __('center::courses.validation_start_time_required'),
+            'schedules.*.end_time.after' => __('center::courses.validation_end_time_after'),
+            'schedules.*.classroom_id.required' => __('center::courses.validation_classroom_required'),
         ];
     }
 }

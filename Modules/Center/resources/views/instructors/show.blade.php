@@ -8,7 +8,7 @@
                 <i class="fas fa-edit me-2"></i> {{ __('center::instructors.edit') }}
             </a>
             <a href="{{ route('center.instructors.index') }}" class="btn btn-outline-secondary rounded-pill px-4">
-                {{ __('center::index.back') }}
+                {{ __('center::messages.back') }}
             </a>
         </div>
     </div>
@@ -82,10 +82,10 @@
                         <div class="col-8">
                             <div class="bg-primary bg-opacity-10 rounded-3 p-3 border border-primary border-opacity-10 position-relative overflow-hidden">
                                 <h4 class="fw-bold mb-0 text-primary">{{ format_price($instructor->outstanding_balance) }}</h4>
-                                <small class="text-muted d-block mt-1">الرصيد المتاح للصرف</small>
+                                <small class="text-muted d-block mt-1">{{ __('center::instructors.available_balance') }}</small>
                                 @if($instructor->outstanding_balance > 0)
                                     <button type="button" class="btn btn-primary btn-sm rounded-pill mt-2 w-100" data-bs-toggle="modal" data-bs-target="#payoutModal">
-                                        <i class="fas fa-hand-holding-usd me-1"></i> صرف المستحقات
+                                        <i class="fas fa-hand-holding-usd me-1"></i> {{ __('center::instructors.payout') }}
                                     </button>
                                 @endif
                             </div>
@@ -117,7 +117,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="text-muted small d-block mb-1">{{ __('center::instructors.commission_rate') }}</label>
-                            <span class="fw-bold text-success">{{ $instructor->commission_rate }}% من مبيعات الدورات</span>
+                            <span class="fw-bold text-success">{{ __('center::instructors.commission_from_sales', ['rate' => $instructor->commission_rate]) }}</span>
                         </div>
                         <div class="col-12">
                             <hr class="opacity-10 my-2">
@@ -135,7 +135,7 @@
                     <div class="d-flex align-items-center gap-2">
                         <div class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 me-2">{{ format_price($instructor->outstanding_balance) }}</div>
                         <a href="{{ route('center.instructors.statement', $instructor->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                            <i class="fas fa-file-invoice-dollar me-1"></i> كشف الحساب
+                            <i class="fas fa-file-invoice-dollar me-1"></i> {{ __('center::instructors.account_statement') }}
                         </a>
                     </div>
                 </div>
@@ -144,11 +144,11 @@
                         <table class="table align-middle mb-0 table-hover">
                             <thead class="bg-light">
                                 <tr>
-                                    <th class="border-0 p-3 h6 small fw-bold">التاريخ</th>
-                                    <th class="border-0 p-3 h6 small fw-bold">الطالب</th>
-                                    <th class="border-0 p-3 h6 small fw-bold text-center">النسبة</th>
-                                    <th class="border-0 p-3 h6 small fw-bold">المبلغ</th>
-                                    <th class="border-0 p-3 h6 small fw-bold">الحالة</th>
+                                    <th class="border-0 p-3 h6 small fw-bold">{{ __('center::instructors.table_date') }}</th>
+                                    <th class="border-0 p-3 h6 small fw-bold">{{ __('center::instructors.table_student') }}</th>
+                                    <th class="border-0 p-3 h6 small fw-bold text-center">{{ __('center::instructors.table_rate') }}</th>
+                                    <th class="border-0 p-3 h6 small fw-bold">{{ __('center::instructors.table_amount') }}</th>
+                                    <th class="border-0 p-3 h6 small fw-bold">{{ __('center::instructors.table_status') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -171,7 +171,7 @@
                                                 $cStat = $cStatusColors[$commission->status] ?? 'secondary';
                                             @endphp
                                             <span class="badge rounded-pill bg-{{ $cStat }} bg-opacity-10 text-{{ $cStat }} px-3">
-                                                {{ $commission->status == 'earned' ? 'مستحق' : ($commission->status == 'paid' ? 'مدفوع' : 'معلق') }}
+                                                {{ __('center::instructors.' . $commission->status) }}
                                             </span>
                                         </td>
                                     </tr>
@@ -179,7 +179,7 @@
                                     <tr>
                                         <td colspan="5" class="text-center py-5 text-muted">
                                             <i class="fas fa-receipt fa-3x mb-3 opacity-25"></i>
-                                            <p class="mb-0">لا توجد سجلات مالية بعد.</p>
+                                            <p class="mb-0">{{ __('center::instructors.no_financial_records') }}</p>
                                         </td>
                                     </tr>
                                 @endforelse
@@ -204,17 +204,17 @@
                 <form action="{{ route('center.instructors.payout', $instructor->id) }}" method="POST">
                     @csrf
                     <div class="modal-header border-0 p-4 pb-0">
-                        <h5 class="fw-bold mb-0">تسجيل صرف مستحقات</h5>
+                        <h5 class="fw-bold mb-0">{{ __('center::instructors.register_payout') }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body p-4">
                         <div class="mb-4 text-center p-3 bg-light rounded-3">
-                            <small class="text-muted d-block mb-1">المبلغ المتاح للصرف</small>
+                            <small class="text-muted d-block mb-1">{{ __('center::instructors.available_for_payout') }}</small>
                             <h4 class="fw-bold mb-0 text-success">{{ format_price($instructor->outstanding_balance) }}</h4>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label small fw-bold">المبلغ المراد صرفه</label>
+                            <label class="form-label small fw-bold">{{ __('center::instructors.amount_to_payout') }}</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light border-end-0 rounded-start-3">EGP</span>
                                 <input type="number" name="amount" step="0.01" class="form-control border-start-0 rounded-end-3" 
@@ -224,28 +224,28 @@
 
                         <div class="row g-3 mb-3">
                             <div class="col-6">
-                                <label class="form-label small fw-bold">طريقة الدفع</label>
+                                <label class="form-label small fw-bold">{{ __('center::instructors.payment_method') }}</label>
                                 <select name="payment_method" class="form-select rounded-3" required>
-                                    <option value="cash">نقدي</option>
-                                    <option value="bank_transfer">تحويل بنكي</option>
-                                    <option value="online">أونلاين</option>
-                                    <option value="other">أخرى</option>
+                                    <option value="cash">{{ __('center::instructors.cash') }}</option>
+                                    <option value="bank_transfer">{{ __('center::instructors.bank_transfer') }}</option>
+                                    <option value="online">{{ __('center::instructors.online') }}</option>
+                                    <option value="other">{{ __('center::instructors.other') }}</option>
                                 </select>
                             </div>
                             <div class="col-6">
-                                <label class="form-label small fw-bold">التاريخ</label>
+                                <label class="form-label small fw-bold">{{ __('center::instructors.table_date') }}</label>
                                 <input type="date" name="payout_date" class="form-control rounded-3" value="{{ date('Y-m-d') }}" required>
                             </div>
                         </div>
 
                         <div class="mb-0">
-                            <label class="form-label small fw-bold">ملاحظات</label>
-                            <textarea name="notes" class="form-control rounded-3" rows="2" placeholder="اختياري..."></textarea>
+                            <label class="form-label small fw-bold">{{ __('center::instructors.notes') }}</label>
+                            <textarea name="notes" class="form-control rounded-3" rows="2" placeholder="{{ __('center::instructors.optional') }}"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer border-0 p-4 pt-0">
-                        <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">إلغاء</button>
-                        <button type="submit" class="btn btn-primary rounded-pill px-4">تأكيد عملية الصرف</button>
+                        <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">{{ __('center::instructors.cancel') }}</button>
+                        <button type="submit" class="btn btn-primary rounded-pill px-4">{{ __('center::instructors.confirm_payout') }}</button>
                     </div>
                 </form>
             </div>

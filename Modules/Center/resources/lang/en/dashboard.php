@@ -83,6 +83,10 @@ return [
     'launchpad' => [
         'title' => 'Welcome :name! Let\'s get your center ready 🚀',
         'subtitle' => 'Complete these simple steps to start your educational journey',
+        'explore_demo' => 'Explore Demo Data',
+        'explore_demo_desc' => 'Add mock data (students, courses, sales) to explore how the platform and reports work.',
+        'reset_demo' => 'Reset Demo Data',
+        'reset_demo_desc' => 'Delete all demo data added to clean up your space.',
         'progress' => 'Setup Progress',
         'action' => 'Start Now',
         'steps' => [

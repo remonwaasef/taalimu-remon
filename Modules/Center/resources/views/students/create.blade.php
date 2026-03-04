@@ -248,7 +248,7 @@
                         <div class="col-md-6">
                             <div class="form-floating elite-input-group">
                                 <input type="text" name="section_type" value="{{ old('section_type') }}" class="form-control" id="secInput" placeholder="{{ __('center::messages.blade_0763') }}">
-                                <label for="secInput">الشعبة (علمي/أدبي)</label>
+                                <label for="secInput">{{ __('center::students.section_type_label') }}</label>
                                 @error('section_type') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>

@@ -1,6 +1,12 @@
 <?php
 
 return [
+    'back' => 'Retour',
+    'first_instructor_onboarding' => 'Excellent travail ! Le premier instructeur a été ajouté. Maintenant, créons votre premier cours de formation.',
+    'first_course_onboarding' => 'Excellent travail ! Votre premier cours a été créé. Maintenant, inscrivons le premier étudiant pour commencer.',
+    'schedule_info_1' => 'Le système empêchera automatiquement tout conflit dans la réservation de la même salle au même moment.',
+    'schedule_info_2' => 'La disponibilité de l\'enseignant à ce moment sera également vérifiée avant l\'enregistrement.',
+    'schedule_info_3' => 'Cet horaire sera automatiquement lié à la section présence et absence pour faciliter l\'appel des étudiants.',
     'blade_0001' => 'Rapports de présence',
     'blade_0002' => 'Retour à la page principale',
     'blade_0003' => 'Statistiques générales de fréquentation',

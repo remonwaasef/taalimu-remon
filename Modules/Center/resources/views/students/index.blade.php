@@ -59,9 +59,14 @@
 
                         <div class="mt-4 pt-3 border-top d-flex flex-wrap gap-2">
                             @php
-                                $msg = "مرحباً " . session('student_name') . "،\nيسعدنا انضمامك إلينا! 🎉\n\nبيانات الدخول الخاصة بك:\nرابط المنصة: " . url('/login') . "\nالبريد: " . session('student_email') . "\nكلمة المرور: " . session('generated_password') . "\n\nنصيحة: سيُطلب منك تغيير كلمة المرور عند أول دخول للأمان.";
+                                $msg = __('center::students.welcome_whatsapp_msg', [
+                                    'name' => session('student_name'),
+                                    'url' => url('/login'),
+                                    'email' => session('student_email'),
+                                    'password' => session('generated_password')
+                                ]);
                                 $whatsappUrl = "https://wa.me/" . session('student_phone') . "?text=" . urlencode($msg);
-                                $mailtoUrl = "mailto:" . session('student_email') . "?subject=تم إنشاء حسابك بنجاح&body=" . rawurlencode($msg);
+                                $mailtoUrl = "mailto:" . session('student_email') . "?subject=" . urlencode(__('center::messages.blade_0744')) . "&body=" . rawurlencode($msg);
                             @endphp
 
                             <button onclick="copyAllDetails()" class="btn btn-outline-dark rounded-pill px-4">

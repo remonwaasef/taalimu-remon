@@ -144,7 +144,7 @@
                 
                 if (original !== clean) {
                     this.value = clean;
-                    showWarning(this, 'أرقام فقط (0-9)');
+                    showWarning(this, "{{ __('center::instructors.validation_numbers_only') }}");
                 }
             });
         });
@@ -158,7 +158,7 @@
                 
                 if (original !== clean) {
                     this.value = clean;
-                    showWarning(this, 'حروف فقط (أ-ي, A-Z)');
+                    showWarning(this, "{{ __('center::instructors.validation_letters_only') }}");
                 }
             });
         }
@@ -173,7 +173,7 @@
                 
                 if (original !== clean) {
                     this.value = clean;
-                    showWarning(this, __('center::messages.blade_0442'));
+                    showWarning(this, "{{ __('center::instructors.validation_specialization') }}");
                 }
             });
         }

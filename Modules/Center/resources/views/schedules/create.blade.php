@@ -46,7 +46,7 @@
                                     <option value="">{{ __('center::messages.blade_0653') }}</option>
                                     @foreach($classrooms as $classroom)
                                         <option value="{{ $classroom->id }}" {{ old('classroom_id', $schedule->classroom_id ?? '') == $classroom->id ? 'selected' : '' }}>
-                                            {{ $classroom->name }} (سعة: {{ $classroom->capacity ?? '∞' }})
+                                            {{ $classroom->name }} ({{ __('center::schedules.capacity') }}: {{ $classroom->capacity ?? '∞' }})
                                         </option>
                                     @endforeach
                                 </select>
@@ -123,9 +123,9 @@
                 <div class="card-body p-4">
                     <h5 class="fw-bold mb-3"><i class="bi bi-info-circle me-2"></i>{{ __('center::messages.blade_0663') }}</h5>
                     <ul class="list-unstyled mb-0">
-                        <li class="mb-2 small">• سيقوم النظام تلقائياً بمنع أي تعارض في حجز نفس القاعة في نفس الوقت.</li>
-                        <li class="mb-2 small">• سيتم التأكد أيضاً من تفرغ المعلم في هذا الوقت قبل الحفظ.</li>
-                        <li class="small">• هذا الجدول سيرتبط تلقائياً بقسم الحضور والغياب لتسهيل تحضير الطلاب.</li>
+                        <li class="mb-2 small">• {{ __('center::messages.schedule_info_1') }}</li>
+                        <li class="mb-2 small">• {{ __('center::messages.schedule_info_2') }}</li>
+                        <li class="small">• {{ __('center::messages.schedule_info_3') }}</li>
                     </ul>
                 </div>
             </div>

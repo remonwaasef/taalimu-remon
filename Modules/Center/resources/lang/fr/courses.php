@@ -31,4 +31,11 @@ return [
     'view' => 'Voir',
     'enroll_student' => 'Inscrire l\'étudiant',
     'delete_confirm' => 'Êtes-vous sûr de vouloir supprimer ce cours ?',
+    'validation_title_required' => 'Le titre du cours est requis.',
+    'validation_instructor_required' => 'Veuillez sélectionner un instructeur.',
+    'validation_schedules_required' => 'Au moins un horaire doit être ajouté.',
+    'validation_day_required' => 'Le jour de planification est requis.',
+    'validation_start_time_required' => 'L\'heure de début est requise.',
+    'validation_end_time_after' => 'L\'heure de fin doit être après l\'heure de début.',
+    'validation_classroom_required' => 'Veuillez sélectionner une salle de classe.',
 ];

@@ -45,7 +45,7 @@
                             <th class="border-0 rounded-start">{{ __('center::instructors.name') }}</th>
                             <th class="border-0">{{ __('center::instructors.specialization') }}</th>
                             <th class="border-0">{{ __('center::instructors.status') }}</th>
-                            <th class="border-0">{{ __('center::messages.blade_0445') }}</th>
+                            <th class="border-0">{{ __('center::instructors.phone') }}</th>
                             <th class="border-0">{{ __('center::instructors.courses_count') }}</th>
                             <th class="border-0 rounded-end">{{ __('center::instructors.actions') }}</th>
                         </tr>
@@ -71,7 +71,7 @@
                                         <div>
                                             <a href="{{ route('center.instructors.show', $instructor->id) }}" class="fw-bold text-dark text-decoration-none hover-primary">{{ $instructor->name }}</a>
                                             @if($instructor->hiring_date)
-                                                <small class="text-muted" style="font-size: 0.7rem;">تعين في: {{ $instructor->hiring_date->format('Y/m/d') }}</small>
+                                                <small class="text-muted" style="font-size: 0.7rem;">{{ __('center::instructors.hired_on') }} {{ $instructor->hiring_date->format('Y/m/d') }}</small>
                                             @endif
                                         </div>
                                     </div>
