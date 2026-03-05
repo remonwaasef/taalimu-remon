@@ -1061,7 +1061,15 @@ return [
     'msg_090' => 'Réponse envoyée.',
 
     // WhatsApp Notifications
-    'whatsapp_attendance_notify' => 'Mise à jour du centre : L\'étudiant :student_name vient d\'assister à la session :course_name à :tenant_name.',
-    'whatsapp_payment_notify' => 'Un paiement de :amount :currency a été reçu de l\'étudiant :student_name. Solde restant : :remaining :currency. Merci, :tenant_name.',
-    'whatsapp_debt_reminder' => 'Rappel amical : Veuillez noter qu\'il y a un solde impayé de :amount :currency pour l\'étudiant :student_name. Nous vous invitons à procéder au paiement via notre centre ou portail en ligne. Merci, :tenant_name.',
+    'whatsapp_attendance_notify' => 'Départ du centre : L\'élève :student_name vient d\'assister au cours :course_name au centre :tenant_name.',
+    'whatsapp_payment_notify' => 'Paiement reçu : :amount :currency de l\'élève :student_name. Solde restant : :remaining :currency. Merci, centre :tenant_name.',
+    'whatsapp_debt_reminder' => 'Rappel amical : Il y a un solde impayé de :amount :currency sur le compte de l\'élève :student_name. Veuillez procéder au paiement via notre centre ou via le portail en ligne. Merci, centre :tenant_name.',
+    'blade_1070' => 'Sessions d\'aujourd\'hui',
+    'blade_1071' => 'Session / Temps',
+    'blade_1072' => 'Enseignant / Salle',
+    'blade_1073' => 'Voir le QR',
+    'blade_1074' => 'Enregistrement des présences :',
+    'blade_1075' => 'Salle :',
+    'blade_1076' => 'min',
+    'blade_1077' => 'Échec du démarrage de la caméra.',
 ];

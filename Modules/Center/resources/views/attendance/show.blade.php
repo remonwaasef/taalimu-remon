@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="mb-4">
-        <h2 class="fw-bold text-dark">تسجيل الحضور: {{ $schedule->course->title }}</h2>
+        <h2 class="fw-bold text-dark">{{ __('center::messages.blade_1074') }} {{ $schedule->course->title }}</h2>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('center.attendance.index') }}">{{ __('center::messages.blade_0130') }}</a></li>
@@ -17,7 +17,7 @@
                 <div class="card-header bg-white border-0 p-4 pb-0 d-flex justify-content-between align-items-center">
                     <div>
                         <h5 class="fw-bold mb-1"><i class="bi bi-people me-2"></i>{{ __('center::messages.blade_0132') }}</h5>
-                        <p class="text-muted small mb-0">{{ __('center::attendance.session_at', ['time' => \Carbon\Carbon::parse($schedule->start_time)->format('h:i A')]) }} - القاعة: {{ $schedule->classroom->name ?? __('center::schedules.classroom') }}</p>
+                        <p class="text-muted small mb-0">{{ __('center::attendance.session_at', ['time' => \Carbon\Carbon::parse($schedule->start_time)->format('h:i A')]) }} - {{ __('center::messages.blade_1075') }} {{ $schedule->classroom->name ?? __('center::schedules.classroom') }}</p>
                     </div>
                     <div class="text-end d-flex align-items-center gap-2">
                         <!-- Scan Button -->
@@ -66,7 +66,7 @@
                                             @if($attendance)
                                                 <span class="badge bg-{{ $attendance->status == 'present' ? 'success' : ($attendance->status == 'late' ? 'warning' : 'danger') }} bg-opacity-10 text-{{ $attendance->status == 'present' ? 'success' : ($attendance->status == 'late' ? 'warning' : 'danger') }} rounded-pill px-3">
                                                     @if($attendance->status == 'late')
-                                                        {{ $attendance->late_label ?? __('center::messages.blade_0148') }} ({{ $attendance->late_minutes }} د)
+                                                    {{ $attendance->late_label ?? __('center::messages.blade_0148') }} ({{ $attendance->late_minutes }} {{ __('center::messages.blade_1076') }})
                                                     @else
                                                         {{ $attendance->status == 'present' ? __('center::messages.blade_0149') : __('center::messages.blade_0150') }}
                                                     @endif
@@ -207,7 +207,7 @@
             console.error('[QR] Camera error:', err);
             readerEl.innerHTML = '<div class="alert alert-danger m-3">' +
                 '<i class="bi bi-camera-video-off me-2"></i>' +
-                'فشل في تشغيل الكاميرا.<br>' +
+                '{{ __('center::messages.blade_1077') }}<br>' +
                 '<small class="text-muted">{{ __('center::messages.blade_0147') }}<br>• استخدام HTTPS<br>• السماح بالوصول للكاميرا من إعدادات المتصفح</small>' +
                 '</div>';
         });

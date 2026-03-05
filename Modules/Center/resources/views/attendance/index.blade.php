@@ -11,15 +11,15 @@
         <div class="col-md-8">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-header bg-white border-0 p-4 pb-0">
-                    <h5 class="fw-bold mb-0"><i class="bi bi-clock-history me-2 text-primary"></i>حصص اليوم ({{ now()->format('Y-m-d') }})</h5>
+                    <h5 class="fw-bold mb-0"><i class="bi bi-clock-history me-2 text-primary"></i>{{ __('center::messages.blade_1070') }} ({{ now()->format('Y-m-d') }})</h5>
                 </div>
                 <div class="card-body p-4">
                     <div class="table-responsive">
                         <table class="table align-middle">
                             <thead class="bg-light">
                                 <tr>
-                                    <th class="border-0 rounded-start">الحصة / الوقت</th>
-                                    <th class="border-0">المعلم / القاعة</th>
+                                    <th class="border-0 rounded-start">{{ __('center::messages.blade_1071') }}</th>
+                                    <th class="border-0">{{ __('center::messages.blade_1072') }}</th>
                                     <th class="border-0 text-center">{{ __('center::messages.blade_0113') }}</th>
                                 </tr>
                             </thead>
@@ -50,7 +50,7 @@
                                                     <a href="{{ route('center.attendance.show', $session) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
                                                         <i class="bi bi-card-checklist me-1"></i>{{ __('center::messages.blade_0115') }}</a>
                                                     <a href="{{ route('center.attendance.qr', $session) }}" class="btn btn-sm btn-primary rounded-pill px-3">
-                                                        <i class="bi bi-qr-code me-1"></i> عرض الـ QR
+                                                        <i class="bi bi-qr-code me-1"></i> {{ __('center::messages.blade_1073') }}
                                                     </a>
                                                 @endif
                                             </div>
