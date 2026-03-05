@@ -335,10 +335,25 @@
                             </h5>
                         </div>
                         <div class="text-end">
+                            @if($package->old_price && $package->old_price > $package->price)
+                                <div class="text-muted small plan-old-price" style="text-decoration: line-through; opacity: 0.6;" data-monthly="{{ $package->old_price }}" data-yearly="{{ $package->old_price * 12 }}">
+                                    {{ number_format($package->old_price, 0) }} <span class="plan-currency">{{ $currency }}</span>
+                                </div>
+                            @endif
                             <div class="fw-black text-primary plan-price-display" style="font-size:1.6rem; line-height:1;" data-monthly="{{ $package->price }}" data-yearly="{{ $package->yearly_price ?: ($package->price * 12) }}">
                                 {{ number_format($package->price, 0) }}
                             </div>
                             <small class="text-muted"><span class="plan-currency">{{ $currency }}</span> / <span class="plan-cycle-text">{{ __('center::subscription.billing_term_cycle') }}</span></small>
+                            @if($package->old_price && $package->old_price > $package->price)
+                                @php
+                                    $discountPercent = round((($package->old_price - $package->price) / $package->old_price) * 100);
+                                @endphp
+                                <div class="mt-1">
+                                    <span class="badge bg-success bg-opacity-15 text-success rounded-pill px-2 py-1" style="font-size: 0.7rem;">
+                                        {{ __('center::subscription.save_badge') }}
+                                    </span>
+                                </div>
+                            @endif
                         </div>
                     </div>
 
@@ -430,6 +445,17 @@ document.addEventListener('DOMContentLoaded', function() {
         priceDisplays.forEach(display => {
             const price = parseFloat(display.getAttribute('data-' + cycle));
             display.textContent = price.toLocaleString('en-US', { maximumFractionDigits: 0 });
+        });
+
+        // Update old prices (strikethrough)
+        const oldPriceDisplays = document.querySelectorAll('.plan-old-price');
+        oldPriceDisplays.forEach(display => {
+            const oldPrice = parseFloat(display.getAttribute('data-' + cycle));
+            if (oldPrice) {
+                const currencySpan = display.querySelector('.plan-currency');
+                const currencyText = currencySpan ? currencySpan.textContent : '';
+                display.innerHTML = oldPrice.toLocaleString('en-US', { maximumFractionDigits: 0 }) + ' <span class="plan-currency">' + currencyText + '</span>';
+            }
         });
 
         cycleTexts.forEach(text => {
