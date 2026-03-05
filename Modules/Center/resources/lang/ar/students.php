@@ -119,4 +119,14 @@ return [
     'section_type_edit_label' => 'الشعبة / التخصص',
     'welcome_whatsapp_msg' => "مرحباً :name،\nيسعدنا انضمامك إلينا! 🎉\n\nبيانات الدخول الخاصة بك:\nرابط المنصة: :url\nالبريد: :email\nكلمة المرور: :password\n\nنصيحة: سيُطلب منك تغيير كلمة المرور عند أول دخول للأمان.",
     'debt_reminder_msg' => 'مرحباً، يرجى سداد المصروفات المستحقة للطالب: :name',
+    'export_file' => 'تصدير ملف',
+    
+    // WhatsApp Quick Actions
+    'wa_student' => 'واتساب للطالب',
+    'wa_guardian' => 'واتساب لولي الأمر',
+    'wa_general_msg' => 'رسالة عامة',
+    'wa_payment_reminder' => 'تذكير بالدفع',
+    'wa_attendance_alert' => 'تنبيه غياب',
+    'wa_student_attendance_msg' => 'مرحباً، نذكركم بأهمية حضور المواعيد المقررة والمواظبة عليها. شكراً لتفهمكم.',
+    'wa_guardian_attendance_msg' => 'مرحباً ولي أمر الطالب :name، نود إحاطتكم علماً بغياب الطالب اليوم. نرجو المتابعة.',
 ];
