@@ -324,8 +324,8 @@
         <div class="col-12">
             <div class="card border-0 shadow-sm rounded-5 overflow-hidden mb-4">
                 <div class="card-header bg-white border-bottom p-0">
-                    <div class="profile-tabs-wrapper" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
-                        <ul class="nav nav-pills profile-horizontal-tabs d-flex flex-nowrap gap-1 p-2 mb-0" id="profileTabs" role="tablist" style="min-width: max-content;">
+                    <div class="profile-tabs-wrapper">
+                        <ul class="nav nav-pills profile-horizontal-tabs d-flex flex-wrap justify-content-center gap-2 p-2 mb-0" id="profileTabs" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active rounded-pill px-3 py-2 fw-bold text-nowrap" data-bs-toggle="pill" data-bs-target="#pills-info" type="button" role="tab">
                                     <i class="fas fa-id-card-alt me-1"></i><span class="d-none d-md-inline">{{ __('center::messages.blade_0834') }}</span><span class="d-md-none">{{ __('center::messages.blade_0834') }}</span></button>
