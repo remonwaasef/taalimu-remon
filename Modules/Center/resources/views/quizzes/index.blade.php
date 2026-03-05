@@ -69,7 +69,7 @@
                         <table class="table table-hover align-middle mb-0">
                             <thead class="bg-light bg-opacity-50">
                                 <tr>
-                                    <th class="border-0 rounded-start text-muted fw-semibold">الاختبار / الدورة</th>
+                                    <th class="border-0 rounded-start text-muted fw-semibold">{{ __('center::messages.blade_1078') }}</th>
                                     <th class="border-0 text-muted fw-semibold">{{ __('center::messages.blade_0544') }}</th>
                                     <th class="border-0 text-muted fw-semibold">{{ __('center::messages.blade_0545') }}</th>
                                     <th class="border-0 text-center text-muted fw-semibold">{{ __('center::messages.blade_0546') }}</th>
@@ -92,7 +92,7 @@
                                         <td>
                                             <small class="text-muted fw-medium">
                                                 <i class="bi bi-clock me-1 text-primary"></i>
-                                                {{ $quiz->duration_minutes ?? __('center::messages.blade_0554') }} دقيقة
+                                                {{ $quiz->duration_minutes ?? __('center::messages.blade_0554') }} {{ __('center::messages.blade_1079') }}
                                             </small>
                                         </td>
                                         <td class="text-center">

@@ -410,7 +410,7 @@
                                         <div class="row g-3">
                                             <div class="col-md-6">
                                                 <label class="form-label fw-bold small text-muted">{{ __('center::settings.whatsapp.instance_id') }}</label>
-                                                <input type="text" name="settings[whatsapp][instance_id]" class="form-control" value="{{ $tenant->settings['whatsapp']['instance_id'] ?? '' }}" placeholder="مثل: instance12345">
+                                                <input type="text" name="settings[whatsapp][instance_id]" class="form-control" value="{{ $tenant->settings['whatsapp']['instance_id'] ?? '' }}" placeholder="{{ __('center::settings.whatsapp.instance_id_placeholder') }}">
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label fw-bold small text-muted">{{ __('center::settings.whatsapp.token') }}</label>

@@ -78,6 +78,7 @@ return [
         'desc' => 'Enable automatic notifications for parents and students.',
         'enabled' => 'Enable WhatsApp Service',
         'instance_id' => 'Instance ID',
+        'instance_id_placeholder' => 'e.g.: instance12345',
         'token' => 'Token (API Key)',
         'info_title' => 'What messages will be sent?',
         'attendance_msg' => 'Attendance Notification: When a student is marked as present, parents receive: \"Student [Name] arrived...\".',

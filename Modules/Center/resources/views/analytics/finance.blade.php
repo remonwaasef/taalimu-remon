@@ -7,7 +7,7 @@
     <div class="d-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">{{ __('center::messages.blade_0027') }}</h1>
         <a href="{{ route('center.analytics.index') }}" class="btn btn-sm btn-outline-secondary">
-            <i class="fas fa-arrow-right"></i>{{ __('center::messages.blade_0028') }}</a>
+            <i class="fas fa-arrow-right me-2"></i>{{ __('center::analytics.back_to_finance') }}</a>
     </div>
 
     <!-- Financial Summary Cards -->
@@ -33,7 +33,7 @@
                     <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center position-absolute top-0 end-0 m-4" style="width: 48px; height: 48px;">
                         <i class="fas fa-chart-line fa-lg"></i>
                     </div>
-                    <p class="text-muted fw-bold text-uppercase small mb-1">صافي الربح (Net Profit)</p>
+                    <p class="text-muted fw-bold text-uppercase small mb-1">{{ __('center::analytics.net_profit') }}</p>
                     <h3 class="fw-bold text-primary mb-0">{{ format_price($netProfit) }}</h3>
                 </div>
                 <div class="bg-primary" style="height: 4px; width: 100%;"></div>
@@ -47,9 +47,9 @@
                     <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center position-absolute top-0 end-0 m-4" style="width: 48px; height: 48px;">
                         <i class="fas fa-receipt fa-lg"></i>
                     </div>
-                    <p class="text-muted fw-bold text-uppercase small mb-1">إجمالي المصروفات (Expenses)</p>
+                    <p class="text-muted fw-bold text-uppercase small mb-1">{{ __('center::analytics.total_expenses') }}</p>
                     <h3 class="fw-bold text-danger mb-0">{{ format_price($totalExpenses) }}</h3>
-                    <a href="{{ route('center.expenses.index') }}" class="btn btn-link btn-sm text-danger p-0 mt-2">عرض التفاصيل <i class="fas fa-arrow-left ms-1"></i></a>
+                    <a href="{{ route('center.expenses.index') }}" class="btn btn-link btn-sm text-danger p-0 mt-2">{{ __('center::analytics.view_details') }} <i class="fas fa-arrow-left ms-1"></i></a>
                 </div>
                 <div class="bg-danger" style="height: 4px; width: 100%;"></div>
             </div>
@@ -62,9 +62,9 @@
                     <div class="bg-info bg-opacity-10 text-info rounded-circle d-flex align-items-center justify-content-center position-absolute top-0 end-0 m-4" style="width: 48px; height: 48px;">
                         <i class="fas fa-chalkboard-teacher fa-lg"></i>
                     </div>
-                    <p class="text-muted fw-bold text-uppercase small mb-1">عمولات المعلمين (Commissions)</p>
+                    <p class="text-muted fw-bold text-uppercase small mb-1">{{ __('center::analytics.teacher_commissions') }}</p>
                     <h3 class="fw-bold text-info mb-0">{{ format_price($totalCommissions) }}</h3>
-                    <a href="{{ route('center.analytics.commissions') }}" class="btn btn-link btn-sm text-info p-0 mt-2">عرض التفاصيل <i class="fas fa-arrow-left ms-1"></i></a>
+                    <a href="{{ route('center.analytics.commissions') }}" class="btn btn-link btn-sm text-info p-0 mt-2">{{ __('center::analytics.view_details') }} <i class="fas fa-arrow-left ms-1"></i></a>
                 </div>
                 <div class="bg-info" style="height: 4px; width: 100%;"></div>
             </div>
@@ -91,9 +91,9 @@
                     <div class="bg-secondary bg-opacity-10 text-secondary rounded-circle d-flex align-items-center justify-content-center position-absolute top-0 end-0 m-4" style="width: 48px; height: 48px;">
                         <i class="fas fa-tags fa-lg"></i>
                     </div>
-                    <p class="text-muted fw-bold text-uppercase small mb-1">الخصومات الممنوحة (Discounts)</p>
+                    <p class="text-muted fw-bold text-uppercase small mb-1">{{ __('center::analytics.discounts_granted') }}</p>
                     <h3 class="fw-bold text-secondary mb-0">{{ format_price($totalDiscounts) }}</h3>
-                    <a href="{{ route('center.analytics.discounts') }}" class="btn btn-link btn-sm text-secondary p-0 mt-2">عرض التفاصيل <i class="fas fa-arrow-left ms-1"></i></a>
+                    <a href="{{ route('center.analytics.discounts') }}" class="btn btn-link btn-sm text-secondary p-0 mt-2">{{ __('center::analytics.view_details') }} <i class="fas fa-arrow-left ms-1"></i></a>
                 </div>
                 <div class="bg-secondary" style="height: 4px; width: 100%;"></div>
             </div>
@@ -106,9 +106,9 @@
                     <div class="bg-dark bg-opacity-10 text-dark rounded-circle d-flex align-items-center justify-content-center position-absolute top-0 end-0 m-4" style="width: 48px; height: 48px;">
                         <i class="fas fa-file-invoice-dollar fa-lg"></i>
                     </div>
-                    <p class="text-muted fw-bold text-uppercase small mb-1">إجمالي الضرائب (Taxes)</p>
+                    <p class="text-muted fw-bold text-uppercase small mb-1">{{ __('center::analytics.total_taxes') }}</p>
                     <h3 class="fw-bold text-dark mb-0">{{ format_price($totalTaxes) }}</h3>
-                    <a href="{{ route('center.analytics.taxes') }}" class="btn btn-link btn-sm text-dark p-0 mt-2">عرض التفاصيل <i class="fas fa-arrow-left ms-1"></i></a>
+                    <a href="{{ route('center.analytics.taxes') }}" class="btn btn-link btn-sm text-dark p-0 mt-2">{{ __('center::analytics.view_details') }} <i class="fas fa-arrow-left ms-1"></i></a>
                 </div>
                 <div class="bg-dark" style="height: 4px; width: 100%;"></div>
             </div>
@@ -137,12 +137,12 @@
                 <table class="table table-bordered" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>{{ __('center::messages.blade_0033') }}</th>
-                            <th>{{ __('center::messages.blade_0034') }}</th>
+                            <th>{{ __('center::analytics.transaction_number') }}</th>
+                            <th>{{ __('center::analytics.invoice_student') }}</th>
                             <th>{{ __('center::messages.blade_0035') }}</th>
                             <th>{{ __('center::messages.blade_0036') }}</th>
                             <th>{{ __('center::messages.blade_0037') }}</th>
-                            <th>{{ __('center::messages.blade_0038') }}</th>
+                            <th>{{ __('center::analytics.status') }}</th>
                             <th>{{ __('center::messages.blade_0039') }}</th>
                         </tr>
                     </thead>
