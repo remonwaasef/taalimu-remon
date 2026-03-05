@@ -53,28 +53,49 @@ class PaymentController extends Controller
                 // Mark registration as successful for the view
                 session(['registration_success' => true]);
 
-                // Update subscription record
-                $subscription = \App\Models\Subscription::where('paypal_id', $orderId)->first();
-                if ($subscription) {
-                    $tenant = $subscription->tenant;
-                    
-                    // Logic to find package and set ends_at
-                    $package = \App\Models\Package::where('slug', session('selected_plan', 'pro'))->first();
+                // Get tenant from session or auth
+                $tenantId = session('tenant_id');
+                $tenant = $tenantId ? \App\Models\Tenant::find($tenantId) : null;
+
+                if ($tenant) {
+                    $planSlug = session('selected_plan', 'pro');
+                    $package = \App\Models\Package::where('slug', $planSlug)->first();
+                    $billingCycle = session('billing_cycle', 'monthly');
+
                     $days = 150; // Default Term
-                    if ($subscription->billing_cycle === 'yearly') {
+                    if ($billingCycle === 'yearly') {
                         $days = 365;
                     } elseif ($package) {
                         $days = $package->duration_in_days;
                     }
 
-                    $subscription->update([
-                        'paypal_status' => 'COMPLETED',
-                        'status' => 'active',
-                        'ends_at' => now()->addDays($days),
-                    ]);
+                    // Create or update the subscription NOW (payment is confirmed)
+                    $tenant->subscriptions()->updateOrCreate(
+                        ['name' => 'default'],
+                        [
+                            'paypal_id' => $orderId,
+                            'paypal_status' => 'COMPLETED',
+                            'gateway' => 'paypal',
+                            'stripe_id' => 'sub_paypal_' . \Illuminate\Support\Str::random(10),
+                            'stripe_status' => 'active',
+                            'stripe_price' => 'price_paypal_' . ($package->slug ?? 'unknown'),
+                            'quantity' => 1,
+                            'billing_cycle' => $billingCycle,
+                            'base_price' => session('base_price', 0),
+                            'total_amount' => session('total_amount', 0),
+                            'discount_amount' => 0,
+                            'status' => 'active',
+                            'ends_at' => now()->addDays($days),
+                        ]
+                    );
                     
                     $user = \App\Models\User::where('tenant_id', $tenant->id)->where('role', 'center_admin')->first();
                     $telegram->sendRegistrationAlert($tenant, $user, '******** (PayPal Order)');
+                }
+
+                if (session('is_subscription_change')) {
+                    session()->forget('is_subscription_change');
+                    return redirect()->route('center.subscription.success', ['tenant' => $tenant->domain]);
                 }
 
                 return redirect()->route('registration.success');

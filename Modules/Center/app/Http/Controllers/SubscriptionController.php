@@ -137,26 +137,16 @@ class SubscriptionController extends Controller
                 if ($resp && isset($resp['links'])) {
                     $approveLink = collect($resp['links'])->where('rel', 'approve')->first()['href'];
 
-                    // Update or Create Subscription
-                    $tenant->subscriptions()->updateOrCreate(
-                        ['name' => 'default'],
-                        [
-                            'paypal_id' => $resp['id'], // Store Order ID
-                            'paypal_status' => 'CREATED',
-                            'gateway' => 'paypal',
-                            'billing_cycle' => $billingCycle,
-                            'base_price' => $cyclePrice,
-                            'total_amount' => $cyclePrice,
-                            'status' => 'trialing',
-                            'ends_at' => null,
-                        ]
-                    );
-
-                    // Ensure session has necessary info for success handler
+                    // Store PayPal order info in session ONLY — do NOT touch existing subscription
+                    // The subscription will be created/updated ONLY upon successful payment capture
                     session([
                         'selected_plan' => $package->slug,
                         'is_subscription_change' => true,
                         'tenant_id' => $tenant->id,
+                        'paypal_order_id' => $resp['id'],
+                        'billing_cycle' => $billingCycle,
+                        'base_price' => $cyclePrice,
+                        'total_amount' => $cyclePrice,
                     ]);
 
                     return redirect()->away($approveLink);
