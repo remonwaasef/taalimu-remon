@@ -234,106 +234,138 @@
             </div>
         </div>
 
-        <!-- Sidebar: Personal & Family -->
-        <div class="col-lg-4">
-            <!-- QR Code Card (Always Visible) -->
-            <div class="card border-0 shadow-elite rounded-5 p-4 mb-4 text-center overflow-hidden position-relative">
-                <div class="position-absolute top-0 end-0 p-3 opacity-10">
-                    <i class="fas fa-qrcode fs-1"></i>
-                </div>
-                <h6 class="fw-bold text-dark border-bottom pb-3 mb-4">{{ __('center::messages.blade_0829') }}</h6>
-                
-                <div class="qr-display-container bg-light rounded-4 p-4 mb-3 position-relative shadow-inner">
-                    <div id="sidebar-student-qrcode" class="d-flex justify-content-center"></div>
-                    <div class="mt-3">
-                        <code class="text-primary fw-bold fs-5">#{{ $student->code }}</code>
-                    </div>
-                </div>
-                
-                <p class="small text-muted mb-4 px-2">{{ __('center::messages.blade_0830') }}</p>
-                
-                @php
-                    $magicLoginUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute('center.login.magic', now()->addMinutes(15), [
-                        'student' => $student->id, 
-                        'tenant' => app('tenant')->domain
-                    ]);
-                @endphp
-                
-                <div class="d-grid gap-2">
-                    <button onclick="copyToClipboard('{{ $magicLoginUrl }}')" class="btn btn-primary rounded-pill fw-bold shadow-sm">
-                        <i class="fas fa-magic me-2"></i>{{ __('center::messages.blade_0831') }}</button>
-                    <button onclick="printIDCard()" class="btn btn-outline-dark rounded-pill fw-bold border-2">
-                        <i class="fas fa-print me-2"></i>{{ __('center::messages.blade_0832') }}</button>
-                </div>
-            </div>
-
-            <!-- Sidebar Navigation (ScrollSpy Lite) -->
-            <div class="card border-0 shadow-sm rounded-5 p-4 mb-4">
-                <h6 class="fw-bold text-dark opacity-50 small text-uppercase mb-4">{{ __('center::messages.blade_0833') }}</h6>
-                <div class="nav flex-column gap-2 elite-profile-nav">
-                    <button class="nav-link active rounded-pill text-start px-4 py-3 mb-1" data-bs-toggle="pill" data-bs-target="#pills-info">
-                        <i class="fas fa-id-card-alt me-2"></i>{{ __('center::messages.blade_0834') }}</button>
-                    <button class="nav-link rounded-pill text-start px-4 py-3 mb-1" data-bs-toggle="pill" data-bs-target="#pills-academic">
-                        <i class="fas fa-award me-2"></i>{{ __('center::messages.blade_0835') }}</button>
-                    <button class="nav-link rounded-pill text-start px-4 py-3 mb-1" data-bs-toggle="pill" data-bs-target="#pills-attendance">
-                        <i class="fas fa-calendar-check me-2"></i>{{ __('center::messages.blade_0836') }}</button>
-                    <button class="nav-link rounded-pill text-start px-4 py-3 mb-1" data-bs-toggle="pill" data-bs-target="#pills-courses">
-                        <i class="fas fa-book-open me-2"></i>{{ __('center::messages.blade_0837') }}</button>
-                    <button class="nav-link rounded-pill text-start px-4 py-3 mb-1" data-bs-toggle="pill" data-bs-target="#pills-sales">
-                        <i class="fas fa-receipt me-2"></i>{{ __('center::messages.blade_0838') }}</button>
-                    <button class="nav-link rounded-pill text-start px-4 py-3 mb-1" data-bs-toggle="pill" data-bs-target="#pills-points">
-                        <i class="fas fa-star me-2"></i>{{ __('center::messages.blade_0839') }}</button>
-                    <button class="nav-link rounded-pill text-start px-4 py-3 mb-1" data-bs-toggle="pill" data-bs-target="#pills-bookings">
-                        <i class="fas fa-calendar-plus me-2"></i>{{ __('center::messages.blade_0840') }}</button>
-                    <button class="nav-link rounded-pill text-start px-4 py-3" data-bs-toggle="pill" data-bs-target="#pills-activity">
-                        <i class="fas fa-history me-2"></i>{{ __('center::messages.blade_0841') }}</button>
-                </div>
-            </div>
-
-            <div class="card border-0 shadow-sm rounded-5 p-4">
-                <h6 class="fw-bold text-primary mb-4"><i class="fas fa-users-cog me-2"></i>{{ __('center::messages.blade_0842') }}</h6>
-                
-                <div class="contact-item mb-4">
-                    <small class="text-muted d-block mb-1">{{ __('center::messages.blade_0843') }}</small>
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="fw-bold fs-6">{{ $student->phone }}</span>
-                        <a href="tel:{{ $student->phone }}" class="btn btn-sm btn-light rounded-circle shadow-sm"><i class="fas fa-phone-alt"></i></a>
-                    </div>
-                </div>
-
-                <div class="contact-item mb-4">
-                    <small class="text-muted d-block mb-1">{{ __('center::students.guardian_relation', ['relation' => $student->parent_relation ?? __('center::messages.blade_0908')]) }}</small>
-                    <div class="fw-bold fs-6 mb-1 text-dark">{{ $student->guardian?->name ?? $student->parent_name }}</div>
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="text-muted small">{{ $student->guardian?->phone ?? $student->parent_phone }}</span>
-                        <a href="https://wa.me/{{ sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone) }}" class="btn btn-sm btn-light text-success rounded-circle shadow-sm"><i class="fab fa-whatsapp"></i></a>
-                    </div>
-                </div>
-
-                @if($siblings->count() > 0)
-                    <div class="pt-3 border-top mt-2">
-                        <h6 class="fw-bold text-dark small mb-3">{{ __('center::messages.blade_0844') }}</h6>
-                        <div class="d-flex flex-column gap-2">
-                            @foreach($siblings as $sibling)
-                                <a href="{{ route('center.students.show', $sibling->id) }}" class="sibling-chip d-flex align-items-center gap-3 p-2 bg-light rounded-4 text-decoration-none hover-lift border">
-                                    <div class="bg-white rounded-circle p-2 shadow-sm text-primary">
-                                        <i class="fas fa-user-graduate small"></i>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div class="fw-bold text-dark small mb-0">{{ $sibling->name }}</div>
-                                        <small class="text-muted extra-small">{{ $sibling->grade->name ?? '-' }}</small>
-                                    </div>
-                                    <i class="fas fa-chevron-left text-muted opacity-25"></i>
-                                </a>
-                            @endforeach
+        <!-- Sidebar Cards: QR + Contact as Horizontal Row -->
+        <div class="col-12">
+            <div class="row g-4 mb-4">
+                <!-- QR Code Card -->
+                <div class="col-md-5 col-lg-4">
+                    <div class="card border-0 shadow-elite rounded-5 p-4 text-center overflow-hidden position-relative h-100">
+                        <div class="position-absolute top-0 end-0 p-3 opacity-10">
+                            <i class="fas fa-qrcode fs-1"></i>
+                        </div>
+                        <h6 class="fw-bold text-dark border-bottom pb-3 mb-3">{{ __('center::messages.blade_0829') }}</h6>
+                        
+                        <div class="qr-display-container bg-light rounded-4 p-3 mb-3 position-relative shadow-inner">
+                            <div id="sidebar-student-qrcode" class="d-flex justify-content-center"></div>
+                            <div class="mt-2">
+                                <code class="text-primary fw-bold fs-5">#{{ $student->code }}</code>
+                            </div>
+                        </div>
+                        
+                        <p class="small text-muted mb-3 px-2">{{ __('center::messages.blade_0830') }}</p>
+                        
+                        @php
+                            $magicLoginUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute('center.login.magic', now()->addMinutes(15), [
+                                'student' => $student->id, 
+                                'tenant' => app('tenant')->domain
+                            ]);
+                        @endphp
+                        
+                        <div class="d-grid gap-2">
+                            <button onclick="copyToClipboard('{{ $magicLoginUrl }}')" class="btn btn-primary rounded-pill fw-bold shadow-sm btn-sm">
+                                <i class="fas fa-magic me-2"></i>{{ __('center::messages.blade_0831') }}</button>
+                            <button onclick="printIDCard()" class="btn btn-outline-dark rounded-pill fw-bold border-2 btn-sm">
+                                <i class="fas fa-print me-2"></i>{{ __('center::messages.blade_0832') }}</button>
                         </div>
                     </div>
-                @endif
+                </div>
+
+                <!-- Contact & Family Card -->
+                <div class="col-md-7 col-lg-8">
+                    <div class="card border-0 shadow-sm rounded-5 p-4 h-100">
+                        <h6 class="fw-bold text-primary mb-4"><i class="fas fa-users-cog me-2"></i>{{ __('center::messages.blade_0842') }}</h6>
+                        
+                        <div class="row g-4">
+                            <div class="col-sm-6">
+                                <div class="contact-item">
+                                    <small class="text-muted d-block mb-1">{{ __('center::messages.blade_0843') }}</small>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="fw-bold fs-6">{{ $student->phone }}</span>
+                                        <a href="tel:{{ $student->phone }}" class="btn btn-sm btn-light rounded-circle shadow-sm"><i class="fas fa-phone-alt"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="contact-item">
+                                    <small class="text-muted d-block mb-1">{{ __('center::students.guardian_relation', ['relation' => $student->parent_relation ?? __('center::messages.blade_0908')]) }}</small>
+                                    <div class="fw-bold fs-6 mb-1 text-dark">{{ $student->guardian?->name ?? $student->parent_name }}</div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="text-muted small">{{ $student->guardian?->phone ?? $student->parent_phone }}</span>
+                                        <a href="https://wa.me/{{ sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone) }}" class="btn btn-sm btn-light text-success rounded-circle shadow-sm"><i class="fab fa-whatsapp"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if($siblings->count() > 0)
+                            <div class="pt-3 border-top mt-3">
+                                <h6 class="fw-bold text-dark small mb-3">{{ __('center::messages.blade_0844') }}</h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach($siblings as $sibling)
+                                        <a href="{{ route('center.students.show', $sibling->id) }}" class="sibling-chip d-flex align-items-center gap-2 p-2 bg-light rounded-4 text-decoration-none hover-lift border" style="min-width: 180px;">
+                                            <div class="bg-white rounded-circle p-2 shadow-sm text-primary">
+                                                <i class="fas fa-user-graduate small"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <div class="fw-bold text-dark small mb-0">{{ $sibling->name }}</div>
+                                                <small class="text-muted extra-small">{{ $sibling->grade->name ?? '-' }}</small>
+                                            </div>
+                                        </a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Main Content Area -->
-        <div class="col-lg-8">
+        <!-- Horizontal Tabs Navigation -->
+        <div class="col-12">
+            <div class="card border-0 shadow-sm rounded-5 overflow-hidden mb-4">
+                <div class="card-header bg-white border-bottom p-0">
+                    <div class="profile-tabs-wrapper" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                        <ul class="nav nav-pills profile-horizontal-tabs d-flex flex-nowrap gap-1 p-2 mb-0" id="profileTabs" role="tablist" style="min-width: max-content;">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active rounded-pill px-3 py-2 fw-bold text-nowrap" data-bs-toggle="pill" data-bs-target="#pills-info" type="button" role="tab">
+                                    <i class="fas fa-id-card-alt me-1"></i><span class="d-none d-md-inline">{{ __('center::messages.blade_0834') }}</span><span class="d-md-none">{{ __('center::messages.blade_0834') }}</span></button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link rounded-pill px-3 py-2 fw-bold text-nowrap" data-bs-toggle="pill" data-bs-target="#pills-academic" type="button" role="tab">
+                                    <i class="fas fa-award me-1"></i><span class="d-none d-md-inline">{{ __('center::messages.blade_0835') }}</span><span class="d-md-none">{{ __('center::messages.blade_0835') }}</span></button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link rounded-pill px-3 py-2 fw-bold text-nowrap" data-bs-toggle="pill" data-bs-target="#pills-attendance" type="button" role="tab">
+                                    <i class="fas fa-calendar-check me-1"></i><span class="d-none d-md-inline">{{ __('center::messages.blade_0836') }}</span><span class="d-md-none">{{ __('center::messages.blade_0836') }}</span></button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link rounded-pill px-3 py-2 fw-bold text-nowrap" data-bs-toggle="pill" data-bs-target="#pills-courses" type="button" role="tab">
+                                    <i class="fas fa-book-open me-1"></i><span class="d-none d-md-inline">{{ __('center::messages.blade_0837') }}</span><span class="d-md-none">{{ __('center::messages.blade_0837') }}</span></button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link rounded-pill px-3 py-2 fw-bold text-nowrap" data-bs-toggle="pill" data-bs-target="#pills-sales" type="button" role="tab">
+                                    <i class="fas fa-receipt me-1"></i><span class="d-none d-md-inline">{{ __('center::messages.blade_0838') }}</span><span class="d-md-none">{{ __('center::messages.blade_0838') }}</span></button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link rounded-pill px-3 py-2 fw-bold text-nowrap" data-bs-toggle="pill" data-bs-target="#pills-points" type="button" role="tab">
+                                    <i class="fas fa-star me-1"></i><span class="d-none d-md-inline">{{ __('center::messages.blade_0839') }}</span><span class="d-md-none">{{ __('center::messages.blade_0839') }}</span></button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link rounded-pill px-3 py-2 fw-bold text-nowrap" data-bs-toggle="pill" data-bs-target="#pills-bookings" type="button" role="tab">
+                                    <i class="fas fa-calendar-plus me-1"></i><span class="d-none d-md-inline">{{ __('center::messages.blade_0840') }}</span><span class="d-md-none">{{ __('center::messages.blade_0840') }}</span></button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link rounded-pill px-3 py-2 fw-bold text-nowrap" data-bs-toggle="pill" data-bs-target="#pills-activity" type="button" role="tab">
+                                    <i class="fas fa-history me-1"></i><span class="d-none d-md-inline">{{ __('center::messages.blade_0841') }}</span><span class="d-md-none">{{ __('center::messages.blade_0841') }}</span></button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area (Full Width) -->
+        <div class="col-12">
             <div class="tab-content">
                 <!-- Tab: Basic Info -->
                 <div class="tab-pane fade show active" id="pills-info">
