@@ -185,16 +185,15 @@
 
                 <h2 class="fw-black mb-1" style="font-size:2rem;">
                     @php
-                        $currName = $currentPackage?->name;
-                        $transCurrName = $currName ? __('center::subscription.plans.' . $currName) : null;
-                        if ($transCurrName === 'center::subscription.plans.' . $currName) {
-                            $transCurrName = (app()->getLocale() === 'en' && $currentPackage?->name_en) ? $currentPackage->name_en : $currName;
+                        $transCurrName = $currentPackage ? __('center::subscription.plans.' . $currentPackage->slug) : null;
+                        if ($transCurrName === 'center::subscription.plans.' . ($currentPackage->slug ?? '')) {
+                            $transCurrName = (app()->getLocale() === 'en' && $currentPackage?->name_en) ? $currentPackage->name_en : $currentPackage?->name;
                         }
                     @endphp
                     {{ $transCurrName ?? __('center::subscription.no_subscription') }}
                 </h2>
                 <p class="opacity-80 mb-4">
-                    {{ $currentPackage?->description ?? __('center::subscription.no_package_activated') }}
+                    {{ (app()->getLocale() === 'en' && $currentPackage?->description_en) ? $currentPackage->description_en : ($currentPackage?->description ?? __('center::subscription.no_package_activated')) }}
                 </p>
 
                 {{-- Days Progress --}}
@@ -323,10 +322,9 @@
                             @endif
                             <h5 class="fw-black mb-0 mt-1">
                                 @php
-                                    $pkgName = app()->getLocale() === 'en' && $package->name_en ? $package->name_en : $package->name;
-                                    $transPkgName = __('center::subscription.plans.' . $package->name);
-                                    if ($transPkgName === 'center::subscription.plans.' . $package->name) {
-                                        $transPkgName = $pkgName;
+                                    $transPkgName = __('center::subscription.plans.' . $package->slug);
+                                    if ($transPkgName === 'center::subscription.plans.' . $package->slug) {
+                                        $transPkgName = app()->getLocale() === 'en' && $package->name_en ? $package->name_en : $package->name;
                                     }
                                 @endphp
                                 {{ $transPkgName }}
@@ -340,7 +338,9 @@
                         </div>
                     </div>
 
-                    <p class="text-muted small mb-3">{{ $package->description }}</p>
+                    <p class="text-muted small mb-3">
+                        {{ app()->getLocale() === 'en' && $package->description_en ? $package->description_en : $package->description }}
+                    </p>
 
                     {{-- Features List --}}
                     <ul class="list-unstyled mb-4 flex-grow-1">
