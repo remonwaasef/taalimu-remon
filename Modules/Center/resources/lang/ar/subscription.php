@@ -27,7 +27,7 @@ return [
     'used_percentage' => 'مستخدم',
     'billing_term'    => 'اشتراك ترم',
     'billing_year'    => 'اشتراك سنة',
-    'save_badge'      => 'توفير',
+    'save_badge'      => 'وفر 17%',
     'card_payment'    => 'بطاقة',
     'recommended'     => 'الأكثر شهرة',
     'unlimited'       => 'غير محدود',

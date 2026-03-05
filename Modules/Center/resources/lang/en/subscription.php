@@ -27,7 +27,7 @@ return [
     'used_percentage' => 'Used',
     'billing_term'    => 'Term Subscription',
     'billing_year'    => 'Yearly Subscription',
-    'save_badge'      => 'Save',
+    'save_badge'      => 'Save 17%',
     'card_payment'    => 'Card',
     'recommended'     => 'Most Popular',
     'unlimited'       => 'Unlimited',
