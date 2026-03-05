@@ -51,4 +51,5 @@ return [
     'financial_commissions' => 'Commissions des Enseignants',
     'financial_discounts' => 'Remises Accordées',
     'financial_taxes' => 'Taxes Perçues',
+    'list' => 'Liste',
 ];

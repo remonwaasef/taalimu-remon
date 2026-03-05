@@ -524,7 +524,7 @@
                 <div class="sidebar-submenu">
                     @if($canStudents)
                     <a href="{{ route('center.students.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.students.*') ? 'active' : '' }}">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.students') }} (القائمة)
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.students') }} ({{ __('center::sidebar.list') }})
                     </a>
                     @endif
                     @if($canAttendance)

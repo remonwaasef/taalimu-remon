@@ -51,5 +51,6 @@ return [
     'assets' => 'العهد والأصول',
     'school_management' => 'إدارة المدرسة',
     'subscription'       => 'اشتراكي',
+    'list' => 'القائمة',
 
 ];

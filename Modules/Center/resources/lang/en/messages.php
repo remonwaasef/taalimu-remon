@@ -1061,7 +1061,15 @@ return [
     'msg_090' => 'Reply sent.',
 
     // WhatsApp Notifications
-    'whatsapp_attendance_notify' => 'Center Update: Student :student_name just attended the :course_name session at :tenant_name.',
-    'whatsapp_payment_notify' => 'A payment of :amount :currency has been received from student :student_name. Remaining balance: :remaining :currency. Thank you, :tenant_name.',
-    'whatsapp_debt_reminder' => 'Friendly Reminder: Please note that there is an outstanding balance of :amount :currency for student :student_name. We request prompt payment via our center or online portal. Thank you, :tenant_name.',
+    'whatsapp_attendance_notify' => 'Departure from the center: Student :student_name has just attended :course_name at :tenant_name center.',
+    'whatsapp_payment_notify' => 'Payment received: :amount :currency from student :student_name. Remaining balance: :remaining :currency. Thank you, :tenant_name center.',
+    'whatsapp_debt_reminder' => 'Friendly reminder: There is an outstanding balance of :amount :currency in the account of student :student_name. Please proceed with payment through our center or the online gateway. Thank you, :tenant_name center.',
+    'blade_1070' => 'Today\'s Sessions',
+    'blade_1071' => 'Session / Time',
+    'blade_1072' => 'Teacher / Classroom',
+    'blade_1073' => 'View QR',
+    'blade_1074' => 'Attendance Recording:',
+    'blade_1075' => 'Classroom:',
+    'blade_1076' => 'min',
+    'blade_1077' => 'Failed to start camera.',
 ];

@@ -51,4 +51,5 @@ return [
     'financial_commissions' => 'Instructors Commissions',
     'financial_discounts' => 'Discounts Granted',
     'financial_taxes' => 'Taxes Collected',
+    'list' => 'List',
 ];
