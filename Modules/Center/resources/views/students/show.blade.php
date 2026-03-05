@@ -1,10 +1,24 @@
 @extends('center::layouts.master')
 
+@php
+    // Helper to sanitize phone numbers for wa.me links
+    // Strips spaces, dashes, parentheses, and leading '+'
+    function sanitizePhoneForWhatsApp($phone) {
+        if (!$phone) return '';
+        $phone = preg_replace('/[^0-9]/', '', $phone); // Keep digits only
+        // If phone starts with '0' (local format), prepend Egypt country code
+        if (str_starts_with($phone, '0')) {
+            $phone = '2' . $phone; // Egypt: 0xx -> 20xx
+        }
+        return $phone;
+    }
+@endphp
+
 @section('content')
     @if(session('generated_password'))
         @php
             $msg = "مرحباً " . session('student_name') . "،\nيسعدنا انضمامك إلينا! 🎉\n\nبيانات الدخول الخاصة بك:\nرابط المنصة: " . url('/login') . "\nاسم المستخدم: " . (session('student_phone') ?? $student->phone) . "\nكلمة المرور: " . session('generated_password') . "\n\nنصيحة: سيُطلب منك تغيير كلمة المرور عند أول دخول للأمان.";
-            $whatsappUrl = "https://wa.me/" . (session('student_phone') ?? $student->phone) . "?text=" . urlencode($msg);
+            $whatsappUrl = "https://wa.me/" . sanitizePhoneForWhatsApp(session('student_phone') ?? $student->phone) . "?text=" . urlencode($msg);
             $mailtoUrl = "mailto:" . (session('student_email') ?? $student->email) . "?subject=تم إعادة تعيين كلمة مرورك&body=" . rawurlencode($msg);
             
             $qrUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute('center.login.magic', now()->addMinutes(15), ['student' => $student->id, 'tenant' => app('tenant')->domain]);
@@ -112,7 +126,7 @@
                                 </div>
                                 @php
                                     $reminderMsg = __('center::students.debt_reminder_msg', ['name' => $student->name]);
-                                    $whatsappUrl = "https://wa.me/" . ($student->guardian?->phone ?? $student->parent_phone) . "?text=" . urlencode($reminderMsg);
+                                    $whatsappUrl = "https://wa.me/" . sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone) . "?text=" . urlencode($reminderMsg);
                                 @endphp
                                 <div class="d-flex gap-2">
                                     <a href="{{ $whatsappUrl }}" target="_blank" class="btn btn-success rounded-pill px-4 shadow-sm hover-lift fw-bold">
@@ -290,7 +304,7 @@
                     <div class="fw-bold fs-6 mb-1 text-dark">{{ $student->guardian?->name ?? $student->parent_name }}</div>
                     <div class="d-flex align-items-center gap-2">
                         <span class="text-muted small">{{ $student->guardian?->phone ?? $student->parent_phone }}</span>
-                        <a href="https://wa.me/{{ $student->guardian?->phone ?? $student->parent_phone }}" class="btn btn-sm btn-light text-success rounded-circle shadow-sm"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://wa.me/{{ sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone) }}" class="btn btn-sm btn-light text-success rounded-circle shadow-sm"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
 

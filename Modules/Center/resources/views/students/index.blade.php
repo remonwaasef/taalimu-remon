@@ -1,5 +1,18 @@
 @extends('center::layouts.master')
 
+@php
+    if (!function_exists('sanitizePhoneForWhatsApp')) {
+        function sanitizePhoneForWhatsApp($phone) {
+            if (!$phone) return '';
+            $phone = preg_replace('/[^0-9]/', '', $phone);
+            if (str_starts_with($phone, '0')) {
+                $phone = '2' . $phone;
+            }
+            return $phone;
+        }
+    }
+@endphp
+
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold text-dark">{{ __('center::students.title') }}</h2>
@@ -65,7 +78,7 @@
                                     'email' => session('student_email'),
                                     'password' => session('generated_password')
                                 ]);
-                                $whatsappUrl = "https://wa.me/" . session('student_phone') . "?text=" . urlencode($msg);
+                                $whatsappUrl = "https://wa.me/" . sanitizePhoneForWhatsApp(session('student_phone')) . "?text=" . urlencode($msg);
                                 $mailtoUrl = "mailto:" . session('student_email') . "?subject=" . urlencode(__('center::messages.blade_0744')) . "&body=" . rawurlencode($msg);
                             @endphp
 
