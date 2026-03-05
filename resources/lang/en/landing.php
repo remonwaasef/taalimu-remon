@@ -144,11 +144,13 @@ return [
         'yearly' => 'Yearly',
         'save_20' => 'Save 20%',
         'unlimited' => 'Unlimited',
+        'students_count_label' => 'Students',
+        'admins_count_label' => 'Admins',
         'bottom_note' => 'Prices are in your local currency where available. VAT may apply.',
         'cta_paid' => 'Subscribe Now',
         'cta_free' => 'Start Free Trial',
         'plans' => [
-            'free' => [
+            'free-trial' => [
                 'name' => 'Free Trial',
                 'price' => 'Free',
                 'description' => 'Perfect for testing the system and exploring features',
@@ -162,7 +164,7 @@ return [
                 ],
             ],
             'basic' => [
-                'name' => 'Basic',
+                'name' => 'Starter',
                 'price' => '199 SAR',
                 'description' => 'For startups and small centers',
                 'cta' => 'Subscribe Now',
@@ -177,7 +179,7 @@ return [
                 'badge' => 'Most Popular',
             ],
             'pro' => [
-                'name' => 'Professional',
+                'name' => 'Growth',
                 'price' => '399 SAR',
                 'description' => 'For growing and large centers',
                 'cta' => 'Subscribe Now',
@@ -193,6 +195,18 @@ return [
                 ],
                 'best_value' => 'Best Value',
                 'badge' => 'For Businesses',
+            ],
+            'enterprise' => [
+                'name' => 'Institution',
+                'price' => '950 SAR',
+                'description' => 'For large chains and organizations.',
+                'cta' => 'Contact Us',
+                'features' => [
+                    0 => 'Unlimited branches',
+                    1 => 'Custom branding',
+                    2 => 'Dedicated server',
+                    3 => 'Managed tech support',
+                ],
             ],
         ],
         'comparison' => [

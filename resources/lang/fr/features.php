@@ -39,4 +39,8 @@ return [
     'marketing_tools' => 'Outils Marketing',
     'custom_domain' => 'Domaine Personnalisé',
     'remove_branding' => 'Supprimer la Marque',
+    'student_portal' => 'Portail Étudiant',
+    'email' => 'E-mail',
+    'priority' => 'Priorité',
+    'account_manager' => 'Gestionnaire de compte',
 ];

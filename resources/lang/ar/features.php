@@ -29,4 +29,7 @@ return [
     'remove_branding' => 'إزالة حقوق النظام',
     'priority_support' => 'أولوية في الدعم',
     'student_portal' => 'بوابة الطالب',
+    'email' => 'بريد إلكتروني',
+    'priority' => 'أولوية',
+    'account_manager' => 'مدير حساب',
 ];

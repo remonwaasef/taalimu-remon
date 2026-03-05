@@ -82,7 +82,14 @@
                 @php
                     $isFeatured = $package->is_featured;
                     $delay = $index * 0.1;
-                    $displayName = app()->getLocale() === 'en' && $package->name_en ? $package->name_en : $package->name;
+                    
+                    // Use local landing translations first
+                    $transPkgName = __('landing.pricing.plans.' . $package->slug . '.name');
+                    if ($transPkgName === 'landing.pricing.plans.' . $package->slug . '.name') {
+                        // Fallback to English from DB or direct name
+                        $transPkgName = (app()->getLocale() === 'en' && $package->name_en) ? $package->name_en : $package->name;
+                    }
+                    
                     $regionalPrices = $package->regional_prices ?? []; 
                 @endphp
 
@@ -111,7 +118,7 @@
                         <!-- Header -->
                         <div class="text-center mb-6 pt-2">
                             <h3 class="text-xl font-bold mb-2 {{ $isFeatured ? 'text-primary-foreground' : 'text-foreground' }}">
-                                {{ $displayName }}
+                                {{ $transPkgName }}
                             </h3>
                         
                             <!-- Dynamic Pricing -->
@@ -143,7 +150,13 @@
                             </div>
                         
                         <p class="text-xs mt-3 opacity-80 {{ $isFeatured ? 'text-primary-foreground' : 'text-muted-foreground' }}">
-                            {{ app()->getLocale() === 'en' && $package->description_en ? $package->description_en : $package->description }}
+                            @php
+                                $pkgDesc = __('landing.pricing.plans.' . $package->slug . '.description');
+                                if ($pkgDesc === 'landing.pricing.plans.' . $package->slug . '.description') {
+                                    $pkgDesc = (app()->getLocale() === 'en' && $package->description_en) ? $package->description_en : $package->description;
+                                }
+                            @endphp
+                            {{ $pkgDesc }}
                         </p>
                     </div>
 
@@ -170,7 +183,24 @@
                                 } elseif ($feat->type === 'boolean') {
                                     $pFeatures[] = $label;
                                 } else {
-                                    $pFeatures[] = $label . ': ' . $val;
+                                    // Localize specific values like "Email" if they are hardcoded in Arabic in DB
+                                    $valDisplay = $val;
+                                    $normalizedVal = trim($val);
+                                    if ($normalizedVal === 'إيميل') {
+                                        $valDisplay = __('features.email');
+                                        if ($valDisplay === 'features.email') $valDisplay = 'Email';
+                                    } elseif ($normalizedVal === 'أولوية') {
+                                        $valDisplay = __('features.priority');
+                                        if ($valDisplay === 'features.priority') $valDisplay = 'Priority';
+                                    } elseif ($normalizedVal === 'مدير حساب') {
+                                        $valDisplay = __('features.account_manager');
+                                        if ($valDisplay === 'features.account_manager') $valDisplay = 'Account Manager';
+                                    } elseif ($normalizedVal === 'unlimited') {
+                                        $valDisplay = __('features.unlimited');
+                                        if ($valDisplay === 'features.unlimited') $valDisplay = 'Unlimited';
+                                    }
+                                    
+                                    $pFeatures[] = $label . ': ' . $valDisplay;
                                 }
                             }
                         @endphp
