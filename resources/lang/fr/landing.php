@@ -139,8 +139,10 @@ return [
         'bottom_note' => 'Les prix sont dans votre devise locale lorsque disponible. La TVA peut s\'appliquer.',
         'cta_paid' => 'S\'abonner Maintenant',
         'cta_free' => 'Commencer l\'Essai Gratuit',
+        'students_count_label' => 'Étudiants',
+        'admins_count_label' => 'Admins',
         'plans' => [
-            'free' => [
+            'free-trial' => [
                 'name' => 'Essai Gratuit',
                 'price' => 'Gratuit',
                 'description' => 'Parfait pour tester le système et explorer les fonctionnalités',
@@ -154,7 +156,7 @@ return [
                 ],
             ],
             'basic' => [
-                'name' => 'Basique',
+                'name' => 'Débutant',
                 'price' => '199 SAR',
                 'description' => 'Pour les startups et petits centres',
                 'cta' => 'S\'Abonner',
@@ -169,7 +171,7 @@ return [
                 'badge' => 'Populaire',
             ],
             'pro' => [
-                'name' => 'Professionnel',
+                'name' => 'Croissance',
                 'price' => '399 SAR',
                 'description' => 'Pour les centres en croissance et grands',
                 'cta' => 'S\'Abonner',
@@ -185,6 +187,18 @@ return [
                 ],
                 'badge' => 'Pour les Entreprises',
                 'best_value' => 'Meilleur Choix',
+            ],
+            'enterprise' => [
+                'name' => 'Entreprise',
+                'price' => '950 SAR',
+                'description' => 'Pour les grandes chaînes et organisations.',
+                'cta' => 'Contactez-nous',
+                'features' => [
+                    0 => 'Succursales illimitées',
+                    1 => 'Marque personnalisée',
+                    2 => 'Serveur dédié',
+                    3 => 'Support technique géré',
+                ],
             ],
         ],
         'cta_note' => 'Commencez maintenant - Aucune carte de crédit requise',

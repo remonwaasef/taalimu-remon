@@ -31,4 +31,7 @@ return [
     'whatsapp_alerts' => 'Automated WhatsApp Alerts',
     'multi_branch' => 'Multi-branch Support',
     'student_portal' => 'Student Portal',
+    'email' => 'Email',
+    'priority' => 'Priority',
+    'account_manager' => 'Account Manager',
 ];
