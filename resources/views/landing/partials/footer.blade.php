@@ -19,7 +19,7 @@
                     </a>
                 </div>
                 <p class="text-gray-text/90 text-base leading-relaxed max-w-sm font-medium">
-                    {{ \App\Models\SiteSetting::get('site_description', __('landing.hero.subtitle')) }}
+                    {{ \App\Models\SiteSetting::get('site_description_' . app()->getLocale(), __('landing.hero.subtitle')) }}
                 </p>
                 
                 <!-- Social Media -->

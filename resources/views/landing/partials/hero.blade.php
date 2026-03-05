@@ -31,7 +31,7 @@
                     dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"
                     class="text-xl md:text-2xl text-muted-foreground/80 mb-10 max-w-xl mx-auto lg:mx-0 animate-fade-in font-medium leading-[1.6] md:leading-relaxed delay-2"
                 >
-                    {{ \App\Models\SiteSetting::get('site_description', __('landing.hero.subtitle')) }}
+                    {{ \App\Models\SiteSetting::get('site_description_' . app()->getLocale(), __('landing.hero.subtitle')) }}
                 </p>
 
                 <!-- Premium CTA Buttons -->

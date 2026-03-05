@@ -144,7 +144,9 @@ return [
         'save_20' => 'وفر 17%',
         'days' => 'يوم',
         'unlimited' => 'غير محدود',
-        'bottom_note' => 'جميع الأسعار تشمل ضريبة القيمة المضافة. لا توجد رسوم خفية.',
+        'bottom_note' => 'الأسعار بعملتك المحلية حيثما توفرت. قد تطبق ضريبة القيمة المضافة.',
+        'cta_paid' => 'اشترك الآن',
+        'cta_free' => 'ابدأ التجربة المجانية',
         'plans' => [
             'free' => [
                 'name' => 'تجربة مجانية',
@@ -389,7 +391,7 @@ return [
     ],
     'comparison' => [
         'badge' => 'المقارنة',
-        'title' => 'لماذا نظام <span class="text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan">Edu</span> هو الخيار الأفضل؟',
+        'title' => 'لماذا نظام <span class="text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan">' . config('app.name') . '</span> هو الخيار الأفضل؟',
         'subtitle' => 'قارن بنفسك بين عناء الإدارة التقليدية وبين الكفاءة التي ستحصل عليها مع نظامنا المتطور.',
         'manual' => [
             'title' => 'الإدارة التقليدية (الورقية)',
@@ -403,7 +405,7 @@ return [
             ],
         ],
         'edu' => [
-            'title' => 'نظام Edu المتكامل',
+            'title' => 'نظام ' . config('app.name') . ' المتكامل',
             'items' => [
                 'تسجيل حضور ذكي وسريع بلمسة واحدة.',
                 'تتبع آلي للمستحقات وتنبيهات فورية للمتأخرات.',

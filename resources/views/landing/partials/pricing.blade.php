@@ -97,7 +97,7 @@
                     @if($package->trial_days > 0)
                         <div class="absolute -top-3 -right-3 w-12 h-12 bg-white rounded-full flex flex-col items-center justify-center shadow-lg border-4 border-primary z-20">
                             <span class="text-sm font-black text-primary leading-none">{{ $package->trial_days }}</span>
-                            <span class="text-[8px] font-bold text-primary/70 uppercase">DAYS</span>
+                            <span class="text-[8px] font-bold text-primary/70 uppercase">{{ __('landing.pricing.days') }}</span>
                         </div>
                     @endif
 
@@ -138,7 +138,7 @@
                                 </div>
 
                                 <div class="text-xs {{ $isFeatured ? 'text-primary-foreground/80' : 'text-muted-foreground' }}">
-                                    <span x-text="billingCycle === 'monthly' ? '/ ترم' : '/ سنة'"></span>
+                                    <span x-text="billingCycle === 'monthly' ? '{{ __('landing.pricing.per_month') }}' : '{{ __('landing.pricing.per_year') }}'"></span>
                                 </div>
                             </div>
                         
@@ -200,7 +200,7 @@
         </div>
         
         <p class="text-center text-xs text-muted-foreground mt-8 mb-16">
-            Prices are in your local currency where available. VAT may apply.
+            {{ __('landing.pricing.bottom_note') }}
         </p>
     </div>
 </section>

@@ -40,7 +40,9 @@ class SettingsController extends Controller
         $settings = [
             'site_name',
             'admin_email',
-            'site_description',
+            'site_description_ar',
+            'site_description_en',
+            'site_description_fr',
             'primary_color',
             'secondary_color',
             'session_lifetime',

@@ -57,7 +57,11 @@ class WhatsAppService
         $to = $student->phone; // Assuming student phone is the parent's contact
         if (!$to) return false;
 
-        $message = "تحرك من المركز: الطالب {$student->name} حضر الآن حصة {$course->title} في مركز {$tenant->name}.";
+        $message = __('center::messages.whatsapp_attendance_notify', [
+            'student_name' => $student->name,
+            'course_name' => $course->title,
+            'tenant_name' => $tenant->name
+        ]);
         
         return $this->sendMessageByTenant($tenant, $to, $message);
     }
@@ -70,7 +74,13 @@ class WhatsAppService
         $to = $student->phone;
         if (!$to) return false;
 
-        $message = "تم استلام دفعة مالية بقيمة {$amount} ج.م من الطالب {$student->name}. المتبقي في الحساب: {$remaining} ج.م. شكراً لكم، مركز {$tenant->name}.";
+        $message = __('center::messages.whatsapp_payment_notify', [
+            'amount' => $amount,
+            'currency' => get_currency_symbol(),
+            'student_name' => $student->name,
+            'remaining' => $remaining,
+            'tenant_name' => $tenant->name
+        ]);
         
         return $this->sendMessageByTenant($tenant, $to, $message);
     }
@@ -83,7 +93,12 @@ class WhatsAppService
         $to = $student->phone;
         if (!$to) return false;
 
-        $message = "تذكير ودي: يرجى العلم أنه يوجد رصيد مستحق بقيمة {$amount} ".get_currency_symbol()." في حساب الطالب {$student->name}. نرجو منكم المبادرة بالسداد عبر مركزنا أو عبر بوابة الدفع الإلكتروني. شكراً لكم، مركز {$tenant->name}.";
+        $message = __('center::messages.whatsapp_debt_reminder', [
+            'amount' => $amount,
+            'currency' => get_currency_symbol(),
+            'student_name' => $student->name,
+            'tenant_name' => $tenant->name
+        ]);
         
         return $this->sendMessageByTenant($tenant, $to, $message);
     }

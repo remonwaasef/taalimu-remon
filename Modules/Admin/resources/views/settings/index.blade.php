@@ -67,8 +67,16 @@
                                 <input type="email" class="form-control rounded-4 shadow-sm border-light" name="admin_email" value="{{ \App\Models\SiteSetting::get('admin_email', 'admin@educentral.com') }}">
                             </div>
                             <div class="col-12">
-                                <label class="form-label fw-bold">{{ __('admin::admin.site_description') }}</label>
-                                <textarea class="form-control rounded-4 shadow-sm border-light" name="site_description" rows="3">{{ \App\Models\SiteSetting::get('site_description', __('admin::admin.site_description_placeholder')) }}</textarea>
+                                <label class="form-label fw-bold">{{ __('admin::admin.site_description') }} (العربية)</label>
+                                <textarea class="form-control rounded-4 shadow-sm border-light mb-3" name="site_description_ar" rows="2" dir="rtl">{{ \App\Models\SiteSetting::get('site_description_ar', \App\Models\SiteSetting::get('site_description', __('landing.hero.subtitle', [], 'ar'))) }}</textarea>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-bold">{{ __('admin::admin.site_description') }} (English)</label>
+                                <textarea class="form-control rounded-4 shadow-sm border-light mb-3" name="site_description_en" rows="2" dir="ltr">{{ \App\Models\SiteSetting::get('site_description_en', __('landing.hero.subtitle', [], 'en')) }}</textarea>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-bold">{{ __('admin::admin.site_description') }} (Français)</label>
+                                <textarea class="form-control rounded-4 shadow-sm border-light" name="site_description_fr" rows="2" dir="ltr">{{ \App\Models\SiteSetting::get('site_description_fr', __('landing.hero.subtitle', [], 'fr')) }}</textarea>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('admin::admin.currency_symbol') }}</label>

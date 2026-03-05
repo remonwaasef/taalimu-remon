@@ -8,8 +8,11 @@
             <h2 class="text-3xl lg:text-4xl font-bold text-foreground mb-4">
                 {{ __('landing.faq.title_prefix') }} <span class="gradient-text">{{ __('landing.faq.title_highlight') }}</span>
             </h2>
+            @php
+                $siteName = \App\Models\SiteSetting::get('site_name', config('app.name'));
+            @endphp
             <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
-                {{ __('landing.faq.subtitle') }}
+                {{ str_replace(config('app.name'), $siteName, __('landing.faq.subtitle')) }}
             </p>
         </div>
 
@@ -17,7 +20,6 @@
         <div class="max-w-3xl mx-auto space-y-4" x-data="{ active: null }">
             @for ($index = 0; $index < 8; $index++)
                 @php
-                    $siteName = \App\Models\SiteSetting::get('site_name', config('app.name'));
                     $question = str_replace(config('app.name'), $siteName, __("landing.faq.items.$index.question"));
                     $answer = str_replace(config('app.name'), $siteName, __("landing.faq.items.$index.answer"));
                     // Skip if translation key is not found
