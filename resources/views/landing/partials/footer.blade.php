@@ -76,7 +76,7 @@
         <!-- Bottom Footer Section -->
         <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="text-white/60 text-sm font-medium">
-                {{ __('landing.footer.copyright') }}
+                {{ str_replace(config('app.name'), \App\Models\SiteSetting::get('site_name', config('app.name')), __('landing.footer.copyright')) }}
             </div>
             
             <!-- System Status -->

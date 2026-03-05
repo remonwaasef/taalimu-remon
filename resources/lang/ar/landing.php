@@ -70,7 +70,7 @@ return [
     'automation' => [
         'badge' => 'عملية بسيطة من 3 خطوات',
         'title_prefix' => 'كيف يعمل',
-        'title_highlight' => \App\Models\SiteSetting::get('site_name', config('app.name')),
+        'title_highlight' => config('app.name'),
         'subtitle' => 'ابدأ في دقائق، وليس أيام. عمليتنا المبسطة تجعل الأتمتة سهلة للغاية.',
         'step1' => [
             'title' => 'أضف الطلاب',
@@ -264,7 +264,7 @@ return [
         'badge' => 'موثوق به من قبل 10,000+ مركز',
         'title_prefix' => 'نتائج حقيقية من',
         'title_highlight' => 'مراكز حقيقية',
-        'subtitle' => 'شاهد كيف تحول المراكز التعليمية في المنطقة عملياتها مع ' . \App\Models\SiteSetting::get('site_name', config('app.name')) . '.',
+        'subtitle' => 'شاهد كيف تحول المراكز التعليمية في المنطقة عملياتها مع ' . config('app.name') . '.',
         'items' => [
             [
                 'quote' => 'استعدنا 38% من الإيرادات الإضافية في أول شهرين فقط. تذكيرات واتساب غيّرت قواعد اللعبة في معدلات التحصيل لدينا.',
@@ -299,23 +299,23 @@ return [
         'badge' => 'هل لديك أسئلة؟',
         'title_prefix' => 'الأسئلة',
         'title_highlight' => 'الشائعة',
-        'subtitle' => 'كل ما تحتاج معرفته عن ' . \App\Models\SiteSetting::get('site_name', config('app.name')) . '. لم تجد الإجابة؟ تواصل مع فريق الدعم.',
+        'subtitle' => 'كل ما تحتاج معرفته عن ' . config('app.name') . '. لم تجد الإجابة؟ تواصل مع فريق الدعم.',
         'items' => [
             [
-                'question' => 'كم من الوقت يستغرق البدء مع ' . \App\Models\SiteSetting::get('site_name', config('app.name')) . '؟',
+                'question' => 'كم من الوقت يستغرق البدء مع ' . config('app.name') . '؟',
                 'answer' => 'يمكنك البدء في أقل من 15 دقيقة. ببساطة سجّل، استورد بيانات الطلاب (ندعم Excel/CSV)، واضبط إشعارات واتساب. معالج الإعداد يرشدك في كل خطوة.',
             ],
             [
-                'question' => 'هل بياناتي آمنة مع ' . \App\Models\SiteSetting::get('site_name', config('app.name')) . '؟',
+                'question' => 'هل بياناتي آمنة مع ' . config('app.name') . '؟',
                 'answer' => 'بالتأكيد. نستخدم تشفير بمستوى البنوك (AES-256) لجميع البيانات، نلتزم بقوانين GDPR وحماية البيانات المحلية، ونخزن البيانات في مراكز آمنة في المنطقة. كما أننا متوافقون مع PCI-DSS لمعالجة المدفوعات.',
             ],
             [
-                'question' => 'هل يعمل ' . \App\Models\SiteSetting::get('site_name', config('app.name')) . ' مع واجهة واتساب للأعمال؟',
+                'question' => 'هل يعمل ' . config('app.name') . ' مع واجهة واتساب للأعمال؟',
                 'answer' => 'نعم! نحن مزود حلول معتمد لواتساب للأعمال. هذا يعني أن رسائلك تُرسل عبر حسابات أعمال موثقة، مما يضمن معدل توصيل عالي والالتزام بسياسات واتساب.',
             ],
             [
-                'question' => 'هل يمكنني استخدام ' . \App\Models\SiteSetting::get('site_name', config('app.name')) . ' بالعربية؟',
-                'answer' => 'نعم، يوفر ' . \App\Models\SiteSetting::get('site_name', config('app.name')) . ' دعماً كاملاً للغة العربية (RTL) مع واجهات عربية وفرنسية أصلية. جميع لوحات التحكم والتقارير والاتصالات يمكن أن تكون بالعربية، وندعم الأرقام والتواريخ العربية.',
+                'question' => 'هل يمكنني استخدام ' . config('app.name') . ' بالعربية؟',
+                'answer' => 'نعم، يوفر ' . config('app.name') . ' دعماً كاملاً للغة العربية (RTL) مع واجهات عربية وفرنسية أصلية. جميع لوحات التحكم والتقارير والاتصالات يمكن أن تكون بالعربية، وندعم الأرقام والتواريخ العربية.',
             ],
             [
                 'question' => 'ما طرق الدفع المدعومة؟',
@@ -359,7 +359,7 @@ return [
         ],
         'contact' => 'تواصل معنا',
         'rights' => 'جميع الحقوق محفوظة © 2024',
-        'copyright' => 'جميع الحقوق محفوظة © 2024 ' . \App\Models\SiteSetting::get('site_name', config('app.name')) . '.',
+        'copyright' => 'جميع الحقوق محفوظة © 2024 ' . config('app.name') . '.',
         'payment_methods' => 'طرق الدفع الآمنة',
         'product' => [
             'title' => 'المنتج',
@@ -391,7 +391,7 @@ return [
     ],
     'comparison' => [
         'badge' => 'المقارنة',
-        'title' => 'لماذا نظام <span class="gradient-text">' . \App\Models\SiteSetting::get('site_name', config('app.name')) . '</span> هو الخيار الأفضل؟',
+        'title' => 'لماذا نظام <span class="gradient-text">' . config('app.name') . '</span> هو الخيار الأفضل؟',
         'subtitle' => 'قارن بنفسك بين عناء الإدارة التقليدية وبين الكفاءة التي ستحصل عليها مع نظامنا المتطور.',
         'manual' => [
             'title' => 'الإدارة التقليدية (الورقية)',
@@ -405,7 +405,7 @@ return [
             ],
         ],
         'edu' => [
-            'title' => 'نظام ' . \App\Models\SiteSetting::get('site_name', config('app.name')) . ' المتكامل',
+            'title' => 'نظام ' . config('app.name') . ' المتكامل',
             'items' => [
                 'تسجيل حضور ذكي وسريع بلمسة واحدة.',
                 'تتبع آلي للمستحقات وتنبيهات فورية للمتأخرات.',
