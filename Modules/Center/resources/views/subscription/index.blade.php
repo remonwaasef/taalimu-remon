@@ -94,17 +94,20 @@
         padding: 5px;
         position: relative;
         box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        direction: ltr !important; /* Force LTR for the toggle container to keep logic simple */
     }
     .billing-toggle label {
         cursor: pointer;
-        padding: 10px 32px;
+        padding: 10px 24px;
         font-weight: 800;
         border-radius: 999px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 1;
-        font-size: 1.05rem;
+        font-size: 0.95rem;
         color: #64748b;
         position: relative;
+        min-width: 120px;
+        text-align: center;
     }
     .billing-toggle input[type="radio"]:checked + label {
         color: #fff !important;
@@ -116,7 +119,7 @@
         position: absolute;
         top: 5px;
         bottom: 5px;
-        right: 5px; /* Base position on the right for RTL */
+        left: 5px; 
         width: calc(50% - 5px);
         background: #3A0CA3;
         border-radius: 999px;
@@ -124,8 +127,9 @@
         z-index: 0;
         box-shadow: 0 4px 12px rgba(58, 12, 163, 0.3);
     }
+    /* Simple JS-driven or CSS-driven transform */
     .billing-toggle input[type="radio"]:nth-of-type(2):checked ~ .toggle-slider {
-        transform: translateX(-100%); /* General rule for 2nd option in RTL */
+        transform: translateX(100%);
     }
     .save-badge {
         position: absolute;
@@ -425,7 +429,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function updatePricing(cycle) {
         priceDisplays.forEach(display => {
             const price = parseFloat(display.getAttribute('data-' + cycle));
-            // Format number with commas
             display.textContent = price.toLocaleString('en-US', { maximumFractionDigits: 0 });
         });
 
@@ -435,21 +438,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         checkoutBtns.forEach(btn => {
             const baseUrl = btn.getAttribute('data-base-url');
-            btn.href = baseUrl + '?cycle=' + cycle;
+            let url = new URL(btn.href);
+            url.searchParams.set('cycle', cycle);
+            btn.href = url.toString();
         });
     }
 
     radios.forEach(radio => {
         radio.addEventListener('change', function() {
             updatePricing(this.value);
-            
-            // Fix slider direction for RTL
-            const slider = document.querySelector('.toggle-slider');
-            if(this.value === 'yearly') {
-                slider.style.transform = 'translateX(-100%)';
-            } else {
-                slider.style.transform = 'translateX(0)';
-            }
         });
     });
     
@@ -467,12 +464,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
-
-    // Initial RTL slider fix
-    const checked = document.querySelector('input[name="billing_cycle"]:checked');
-    if (checked && checked.value === 'yearly') {
-        document.querySelector('.toggle-slider').style.transform = 'translateX(-100%)';
-    }
 });
 </script>
 @endpush
