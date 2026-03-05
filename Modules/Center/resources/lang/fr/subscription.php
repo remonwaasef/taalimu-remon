@@ -27,7 +27,7 @@ return [
     'used_percentage' => 'Utilisé',
     'billing_term'    => 'Abonnement au Trimestre',
     'billing_year'    => 'Abonnement Annuel',
-    'save_badge'      => 'Économiser',
+    'save_badge'      => 'Économisez 17%',
     'card_payment'    => 'Carte',
     'recommended'     => 'Le Plus Populaire',
     'unlimited'       => 'Illimité',
