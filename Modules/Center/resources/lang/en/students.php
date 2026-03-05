@@ -119,4 +119,12 @@ return [
     'welcome_whatsapp_msg' => "Hello :name,\nWe are happy to have you with us! 🎉\n\nYour login details:\nPlatform link: :url\nEmail: :email\nPassword: :password\n\nTip: You will be asked to change your password upon your first login for security.",
     'debt_reminder_msg' => 'Hello, please settle the outstanding fees for the student: :name',
     'export_file' => 'Export File',
+    // WhatsApp Quick Actions
+    'wa_student' => 'WhatsApp to Student',
+    'wa_guardian' => 'WhatsApp to Guardian',
+    'wa_general_msg' => 'General Msg',
+    'wa_payment_reminder' => 'Payment Reminder',
+    'wa_attendance_alert' => 'Attendance Alert',
+    'wa_student_attendance_msg' => 'Hello, we remind you of the importance of attending scheduled sessions regularly. Thank you.',
+    'wa_guardian_attendance_msg' => 'Hello guardian of :name, we would like to inform you of the student\'s absence today. Please follow up.',
 ];

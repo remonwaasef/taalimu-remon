@@ -281,7 +281,41 @@
                                     <small class="text-muted d-block mb-1">{{ __('center::messages.blade_0843') }}</small>
                                     <div class="d-flex align-items-center gap-2">
                                         <span class="fw-bold fs-6">{{ $student->phone }}</span>
-                                        <a href="tel:{{ $student->phone }}" class="btn btn-sm btn-light rounded-circle shadow-sm"><i class="fas fa-phone-alt"></i></a>
+                                        <a href="tel:{{ $student->phone }}" class="btn btn-sm btn-light rounded-circle shadow-sm" title="اتصال"><i class="fas fa-phone-alt"></i></a>
+                                        
+                                        <!-- WhatsApp Dropdown (Student) -->
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-light text-success rounded-circle shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="{{ __('center::students.wa_student') }}">
+                                                <i class="fab fa-whatsapp"></i>
+                                            </button>
+                                            <ul class="dropdown-menu shadow-sm border-0 rounded-4">
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center gap-2" href="https://wa.me/{{ sanitizePhoneForWhatsApp($student->phone) }}" target="_blank">
+                                                        <i class="fas fa-comment text-muted"></i> {{ __('center::students.wa_general_msg') }}
+                                                    </a>
+                                                </li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                @php
+                                                    $paymentMsg = __('center::students.debt_reminder_msg', ['name' => $student->name]);
+                                                    $paymentUrl = "https://wa.me/" . sanitizePhoneForWhatsApp($student->phone) . "?text=" . urlencode($paymentMsg);
+                                                @endphp
+                                                <li>
+                                                    <a class="dropdown-item text-danger d-flex align-items-center gap-2" href="{{ $paymentUrl }}" target="_blank">
+                                                        <i class="fas fa-file-invoice-dollar"></i> {{ __('center::students.wa_payment_reminder') }}
+                                                    </a>
+                                                </li>
+                                                @php
+                                                    $attendanceMsg = __('center::students.wa_student_attendance_msg');
+                                                    $attendanceUrl = "https://wa.me/" . sanitizePhoneForWhatsApp($student->phone) . "?text=" . urlencode($attendanceMsg);
+                                                @endphp
+                                                <li>
+                                                    <a class="dropdown-item text-warning d-flex align-items-center gap-2" href="{{ $attendanceUrl }}" target="_blank">
+                                                        <i class="fas fa-user-clock"></i> {{ __('center::students.wa_attendance_alert') }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -291,7 +325,41 @@
                                     <div class="fw-bold fs-6 mb-1 text-dark">{{ $student->guardian?->name ?? $student->parent_name }}</div>
                                     <div class="d-flex align-items-center gap-2">
                                         <span class="text-muted small">{{ $student->guardian?->phone ?? $student->parent_phone }}</span>
-                                        <a href="https://wa.me/{{ sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone) }}" class="btn btn-sm btn-light text-success rounded-circle shadow-sm"><i class="fab fa-whatsapp"></i></a>
+                                        <a href="tel:{{ $student->guardian?->phone ?? $student->parent_phone }}" class="btn btn-sm btn-light rounded-circle shadow-sm" title="اتصال"><i class="fas fa-phone-alt"></i></a>
+                                        
+                                        <!-- WhatsApp Dropdown (Guardian) -->
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-light text-success rounded-circle shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="{{ __('center::students.wa_guardian') }}">
+                                                <i class="fab fa-whatsapp"></i>
+                                            </button>
+                                            <ul class="dropdown-menu shadow-sm border-0 rounded-4">
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center gap-2" href="https://wa.me/{{ sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone) }}" target="_blank">
+                                                        <i class="fas fa-comment text-muted"></i> {{ __('center::students.wa_general_msg') }}
+                                                    </a>
+                                                </li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                @php
+                                                    $parentPaymentMsg = __('center::students.debt_reminder_msg', ['name' => $student->name]);
+                                                    $parentPaymentUrl = "https://wa.me/" . sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone) . "?text=" . urlencode($parentPaymentMsg);
+                                                @endphp
+                                                <li>
+                                                    <a class="dropdown-item text-danger d-flex align-items-center gap-2" href="{{ $parentPaymentUrl }}" target="_blank">
+                                                        <i class="fas fa-file-invoice-dollar"></i> {{ __('center::students.wa_payment_reminder') }}
+                                                    </a>
+                                                </li>
+                                                @php
+                                                    $parentAttendanceMsg = __('center::students.wa_guardian_attendance_msg', ['name' => $student->name]);
+                                                    $parentAttendanceUrl = "https://wa.me/" . sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone) . "?text=" . urlencode($parentAttendanceMsg);
+                                                @endphp
+                                                <li>
+                                                    <a class="dropdown-item text-warning d-flex align-items-center gap-2" href="{{ $parentAttendanceUrl }}" target="_blank">
+                                                        <i class="fas fa-user-clock"></i> {{ __('center::students.wa_attendance_alert') }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
