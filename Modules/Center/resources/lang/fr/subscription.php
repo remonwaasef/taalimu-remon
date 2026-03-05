@@ -36,4 +36,10 @@ return [
     'billing_year_cycle' => 'par an',
     'help_title'      => 'Besoin d\'aide pour votre abonnement ?',
     'help_desc'       => 'Contactez notre équipe de support pour un devis personnalisé ou pour vous renseigner sur les plans',
+    'plans' => [
+        'Free Trial' => 'Essai Gratuit',
+        'Starter'    => 'Débutant',
+        'Growth'     => 'Croissance',
+        'Enterprise' => 'Entreprise',
+    ],
 ];
