@@ -144,7 +144,9 @@ return [
         'yearly' => 'Yearly',
         'save_20' => 'Save 20%',
         'unlimited' => 'Unlimited',
-        'bottom_note' => 'All prices include VAT. No hidden fees.',
+        'bottom_note' => 'Prices are in your local currency where available. VAT may apply.',
+        'cta_paid' => 'Subscribe Now',
+        'cta_free' => 'Start Free Trial',
         'plans' => [
             'free' => [
                 'name' => 'Free Trial',
@@ -396,7 +398,7 @@ return [
     ],
     'comparison' => [
         'badge' => 'Comparison',
-        'title' => 'Why <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan\">Edu System</span> is the Best Choice?',
+        'title' => 'Why <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan\">' . config('app.name') . '</span> is the Best Choice?',
         'subtitle' => 'Compare the struggle of traditional management with the efficiency of our advanced system.',
         'manual' => [
             'title' => 'Traditional Management (Paper/Excel)',
@@ -410,7 +412,7 @@ return [
             ],
         ],
         'edu' => [
-            'title' => 'Integrated Edu System',
+            'title' => 'Integrated ' . config('app.name') . ' System',
             'items' => [
                 0 => 'Smart and fast attendance recording with one touch.',
                 1 => 'Automatic fee tracking and instant overdue alerts.',

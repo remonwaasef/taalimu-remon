@@ -1059,4 +1059,9 @@ return [
     'msg_088' => 'Abonnement annulé.',
     'msg_089' => 'Ticket créé avec succès.',
     'msg_090' => 'Réponse envoyée.',
+
+    // WhatsApp Notifications
+    'whatsapp_attendance_notify' => 'Mise à jour du centre : L\'étudiant :student_name vient d\'assister à la session :course_name à :tenant_name.',
+    'whatsapp_payment_notify' => 'Un paiement de :amount :currency a été reçu de l\'étudiant :student_name. Solde restant : :remaining :currency. Merci, :tenant_name.',
+    'whatsapp_debt_reminder' => 'Rappel amical : Veuillez noter qu\'il y a un solde impayé de :amount :currency pour l\'étudiant :student_name. Nous vous invitons à procéder au paiement via notre centre ou portail en ligne. Merci, :tenant_name.',
 ];

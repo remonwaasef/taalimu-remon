@@ -136,7 +136,9 @@ return [
         'most_popular' => 'Le Plus Populaire',
         'per_14_days' => '/ 14 Jours',
         'per_month' => '/ Mois',
-        'bottom_note' => 'Tous les prix incluent la TVA. Pas de frais cachés.',
+        'bottom_note' => 'Les prix sont dans votre devise locale lorsque disponible. La TVA peut s\'appliquer.',
+        'cta_paid' => 'S\'abonner Maintenant',
+        'cta_free' => 'Commencer l\'Essai Gratuit',
         'plans' => [
             'free' => [
                 'name' => 'Essai Gratuit',
@@ -396,7 +398,7 @@ return [
     ],
     'comparison' => [
         'badge' => 'Comparaison',
-        'title' => 'Pourquoi <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan\">Edu System</span> est le Meilleur Choix ?',
+        'title' => 'Pourquoi <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan\">' . config('app.name') . '</span> est le Meilleur Choix ?',
         'subtitle' => 'Comparez la difficulté de la gestion traditionnelle avec l\'efficacité de notre système avancé.',
         'manual' => [
             'title' => 'Gestion Traditionnelle (Papier/Excel)',
@@ -410,7 +412,7 @@ return [
             ],
         ],
         'edu' => [
-            'title' => 'Système Edu Intégré',
+            'title' => 'Système ' . config('app.name') . ' Intégré',
             'items' => [
                 0 => 'Enregistrement intelligent des présences en un seul clic.',
                 1 => 'Suivi automatique des frais et alertes instantanées.',

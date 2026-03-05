@@ -1061,4 +1061,9 @@ return [
     'msg_090' => 'تم إرسال الرد.',
     'total_expenses' => 'إجمالي المصروفات',
     'net_profit' => 'صافي الربح',
+
+    // WhatsApp Notifications
+    'whatsapp_attendance_notify' => 'تحرك من المركز: الطالب :student_name حضر الآن حصة :course_name في مركز :tenant_name.',
+    'whatsapp_payment_notify' => 'تم استلام دفعة مالية بقيمة :amount :currency من الطالب :student_name. المتبقي في الحساب: :remaining :currency. شكراً لكم، مركز :tenant_name.',
+    'whatsapp_debt_reminder' => 'تذكير ودي: يرجى العلم أنه يوجد رصيد مستحق بقيمة :amount :currency في حساب الطالب :student_name. نرجو منكم المبادرة بالسداد عبر مركزنا أو عبر بوابة الدفع الإلكتروني. شكراً لكم، مركز :tenant_name.',
 ];

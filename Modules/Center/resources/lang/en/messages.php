@@ -1059,4 +1059,9 @@ return [
     'msg_088' => 'Subscription process cancelled.',
     'msg_089' => 'Ticket created successfully.',
     'msg_090' => 'Reply sent.',
+
+    // WhatsApp Notifications
+    'whatsapp_attendance_notify' => 'Center Update: Student :student_name just attended the :course_name session at :tenant_name.',
+    'whatsapp_payment_notify' => 'A payment of :amount :currency has been received from student :student_name. Remaining balance: :remaining :currency. Thank you, :tenant_name.',
+    'whatsapp_debt_reminder' => 'Friendly Reminder: Please note that there is an outstanding balance of :amount :currency for student :student_name. We request prompt payment via our center or online portal. Thank you, :tenant_name.',
 ];
