@@ -20,7 +20,7 @@ return [
     ],
     'hero' => [
         'badge' => 'حوّل مركزك التعليمي إلى مؤسسة ذكية متكاملة',
-        'title' => 'أدر مركزك التعليمي <span class="text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan">بذكاء</span>',
+        'title' => 'أدر مركزك التعليمي <span class="gradient-text">بذكاء</span>',
         'subtitle' => 'نظام متكامل لإدارة المراكز التعليمية يشمل (الطلاب – الحضور – الرسوم – الرسائل – الجداول – التقارير).',
         'cta_primary' => 'ابدأ التجربة المجانية الآن',
         'cta_secondary' => 'شاهد العرض',
@@ -91,7 +91,7 @@ return [
     ],
     'features' => [
         'badge' => 'الميزات',
-        'title' => 'كل ما تحتاجه <span class="text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan">للنجاح</span>',
+        'title' => 'كل ما تحتاجه <span class="gradient-text">للنجاح</span>',
         'subtitle' => 'مجموعة متكاملة من الأدوات المصممة خصيصاً لتلبية احتياجات مركزك التعليمي',
         'learn_more' => 'اعرف المزيد',
         'items' => [
@@ -131,7 +131,7 @@ return [
     ],
     'pricing' => [
         'badge' => 'الأسعار',
-        'title' => 'خطط أسعار <span class="text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan">مرنة</span>',
+        'title' => 'خطط أسعار <span class="gradient-text">مرنة</span>',
         'subtitle' => 'اختر الخطة التي تناسب حجم واحتياجات مركزك التعليمي',
         'most_popular' => 'الأكثر طلباً',
         'per_14_days' => '/ 14 يوم',
@@ -391,7 +391,7 @@ return [
     ],
     'comparison' => [
         'badge' => 'المقارنة',
-        'title' => 'لماذا نظام <span class="text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan">' . config('app.name') . '</span> هو الخيار الأفضل؟',
+        'title' => 'لماذا نظام <span class="gradient-text">' . config('app.name') . '</span> هو الخيار الأفضل؟',
         'subtitle' => 'قارن بنفسك بين عناء الإدارة التقليدية وبين الكفاءة التي ستحصل عليها مع نظامنا المتطور.',
         'manual' => [
             'title' => 'الإدارة التقليدية (الورقية)',

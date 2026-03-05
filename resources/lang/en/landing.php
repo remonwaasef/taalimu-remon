@@ -20,7 +20,7 @@ return [
     ],
     'hero' => [
         'badge' => 'Transform your educational center into a complete smart institution',
-        'title' => 'Manage Your Center <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan\">Smartly</span>',
+        'title' => 'Manage Your Center <span class=\"gradient-text\">Smartly</span>',
         'subtitle' => 'An integrated system for managing educational centers including (Students – Attendance – Fees – Messaging – Schedules – Reports).',
         'cta_primary' => 'Start Free Trial',
         'cta_secondary' => 'Watch Demo',
@@ -91,7 +91,7 @@ return [
     ],
     'features' => [
         'badge' => 'Features',
-        'title' => 'Everything You Need to <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan\">Succeed</span>',
+        'title' => 'Everything You Need to <span class=\"gradient-text\">Succeed</span>',
         'subtitle' => 'A complete suite of tools designed specifically for your educational center needs',
         'learn_more' => 'Learn More',
         'items' => [
@@ -131,7 +131,7 @@ return [
     ],
     'pricing' => [
         'badge' => 'Pricing',
-        'title' => 'Flexible <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan\">Pricing Plans</span>',
+        'title' => 'Flexible <span class=\"gradient-text\">Pricing Plans</span>',
         'subtitle' => 'Choose the plan that fits your educational center size and needs',
         'most_popular' => 'Most Popular',
         'per_14_days' => '/ 14 Days',
@@ -398,7 +398,7 @@ return [
     ],
     'comparison' => [
         'badge' => 'Comparison',
-        'title' => 'Why <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan\">' . config('app.name') . '</span> is the Best Choice?',
+        'title' => 'Why <span class=\"gradient-text\">' . config('app.name') . '</span> is the Best Choice?',
         'subtitle' => 'Compare the struggle of traditional management with the efficiency of our advanced system.',
         'manual' => [
             'title' => 'Traditional Management (Paper/Excel)',
