@@ -416,6 +416,32 @@
                                                 <label class="form-label fw-bold small text-muted">{{ __('center::settings.whatsapp.token') }}</label>
                                                 <input type="text" name="settings[whatsapp][token]" class="form-control" value="{{ $tenant->settings['whatsapp']['token'] ?? '' }}" placeholder="{{ __('center::messages.blade_0707') }}">
                                             </div>
+                                            <div class="col-md-6 mt-3">
+                                                <label class="form-label fw-bold small text-muted"><i class="fas fa-globe me-1"></i> كود الدولة الافتراضي (للأرقام المحلية)</label>
+                                                <select name="settings[default_country_code]" class="form-select">
+                                                    @php $cc = $tenant->settings['default_country_code'] ?? '20'; @endphp
+                                                    <option value="20"  {{ $cc == '20'  ? 'selected' : '' }}>🇪🇬 مصر (+20)</option>
+                                                    <option value="966" {{ $cc == '966' ? 'selected' : '' }}>🇸🇦 السعودية (+966)</option>
+                                                    <option value="971" {{ $cc == '971' ? 'selected' : '' }}>🇦🇪 الإمارات (+971)</option>
+                                                    <option value="965" {{ $cc == '965' ? 'selected' : '' }}>🇰🇼 الكويت (+965)</option>
+                                                    <option value="974" {{ $cc == '974' ? 'selected' : '' }}>🇶🇦 قطر (+974)</option>
+                                                    <option value="973" {{ $cc == '973' ? 'selected' : '' }}>🇧🇭 البحرين (+973)</option>
+                                                    <option value="968" {{ $cc == '968' ? 'selected' : '' }}>🇴🇲 عمان (+968)</option>
+                                                    <option value="962" {{ $cc == '962' ? 'selected' : '' }}>🇯🇴 الأردن (+962)</option>
+                                                    <option value="961" {{ $cc == '961' ? 'selected' : '' }}>🇱🇧 لبنان (+961)</option>
+                                                    <option value="964" {{ $cc == '964' ? 'selected' : '' }}>🇮🇶 العراق (+964)</option>
+                                                    <option value="218" {{ $cc == '218' ? 'selected' : '' }}>🇱🇾 ليبيا (+218)</option>
+                                                    <option value="216" {{ $cc == '216' ? 'selected' : '' }}>🇹🇳 تونس (+216)</option>
+                                                    <option value="213" {{ $cc == '213' ? 'selected' : '' }}>🇩🇿 الجزائر (+213)</option>
+                                                    <option value="212" {{ $cc == '212' ? 'selected' : '' }}>🇲🇦 المغرب (+212)</option>
+                                                    <option value="249" {{ $cc == '249' ? 'selected' : '' }}>🇸🇩 السودان (+249)</option>
+                                                    <option value="33"  {{ $cc == '33'  ? 'selected' : '' }}>🇫🇷 فرنسا (+33)</option>
+                                                    <option value="44"  {{ $cc == '44'  ? 'selected' : '' }}>🇬🇧 بريطانيا (+44)</option>
+                                                    <option value="1"   {{ $cc == '1'   ? 'selected' : '' }}>🇺🇸 أمريكا (+1)</option>
+                                                    <option value="90"  {{ $cc == '90'  ? 'selected' : '' }}>🇹🇷 تركيا (+90)</option>
+                                                </select>
+                                                <small class="text-muted">يُستخدم عند إرسال رسائل واتساب لأرقام محلية تبدأ بـ 0</small>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

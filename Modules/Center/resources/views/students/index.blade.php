@@ -6,7 +6,8 @@
             if (!$phone) return '';
             $phone = preg_replace('/[^0-9]/', '', $phone);
             if (str_starts_with($phone, '0')) {
-                $phone = '2' . $phone;
+                $countryCode = app('tenant')->settings['default_country_code'] ?? '20';
+                $phone = $countryCode . substr($phone, 1);
             }
             return $phone;
         }
