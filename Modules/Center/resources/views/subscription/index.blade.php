@@ -184,7 +184,14 @@
                 </div>
 
                 <h2 class="fw-black mb-1" style="font-size:2rem;">
-                    {{ $currentPackage?->name ?? __('center::subscription.no_subscription') }}
+                    @php
+                        $currName = $currentPackage?->name;
+                        $transCurrName = $currName ? __('center::subscription.plans.' . $currName) : null;
+                        if ($transCurrName === 'center::subscription.plans.' . $currName) {
+                            $transCurrName = (app()->getLocale() === 'en' && $currentPackage?->name_en) ? $currentPackage->name_en : $currName;
+                        }
+                    @endphp
+                    {{ $transCurrName ?? __('center::subscription.no_subscription') }}
                 </h2>
                 <p class="opacity-80 mb-4">
                     {{ $currentPackage?->description ?? __('center::subscription.no_package_activated') }}
@@ -314,7 +321,16 @@
                                     ⚡ {{ __('center::subscription.recommended') }}
                                 </span>
                             @endif
-                            <h5 class="fw-black mb-0 mt-1">{{ app()->getLocale() === 'en' && $package->name_en ? $package->name_en : $package->name }}</h5>
+                            <h5 class="fw-black mb-0 mt-1">
+                                @php
+                                    $pkgName = app()->getLocale() === 'en' && $package->name_en ? $package->name_en : $package->name;
+                                    $transPkgName = __('center::subscription.plans.' . $package->name);
+                                    if ($transPkgName === 'center::subscription.plans.' . $package->name) {
+                                        $transPkgName = $pkgName;
+                                    }
+                                @endphp
+                                {{ $transPkgName }}
+                            </h5>
                         </div>
                         <div class="text-end">
                             <div class="fw-black text-primary plan-price-display" style="font-size:1.6rem; line-height:1;" data-monthly="{{ $package->price }}" data-yearly="{{ $package->yearly_price ?: ($package->price * 12) }}">

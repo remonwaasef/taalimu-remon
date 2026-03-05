@@ -36,4 +36,10 @@ return [
     'billing_year_cycle' => 'per year',
     'help_title'      => 'Need help with your subscription?',
     'help_desc'       => 'Contact our support team for a custom quote or to inquire about plans',
+    'plans' => [
+        'Free Trial' => 'Free Trial',
+        'Starter'    => 'Starter',
+        'Growth'     => 'Growth',
+        'Enterprise' => 'Enterprise',
+    ],
 ];
