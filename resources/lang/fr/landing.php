@@ -398,7 +398,7 @@ return [
     ],
     'comparison' => [
         'badge' => 'Comparaison',
-        'title' => 'Pourquoi <span class=\"gradient-text\">' . config('app.name') . '</span> est le Meilleur Choix ?',
+        'title' => 'Pourquoi <span class=\"gradient-text\">' . \App\Models\SiteSetting::get('site_name', config('app.name')) . '</span> est le Meilleur Choix ?',
         'subtitle' => 'Comparez la difficulté de la gestion traditionnelle avec l\'efficacité de notre système avancé.',
         'manual' => [
             'title' => 'Gestion Traditionnelle (Papier/Excel)',
@@ -412,7 +412,7 @@ return [
             ],
         ],
         'edu' => [
-            'title' => 'Système ' . config('app.name') . ' Intégré',
+            'title' => 'Système ' . \App\Models\SiteSetting::get('site_name', config('app.name')) . ' Intégré',
             'items' => [
                 0 => 'Enregistrement intelligent des présences en un seul clic.',
                 1 => 'Suivi automatique des frais et alertes instantanées.',

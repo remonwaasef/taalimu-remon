@@ -398,7 +398,7 @@ return [
     ],
     'comparison' => [
         'badge' => 'Comparison',
-        'title' => 'Why <span class=\"gradient-text\">' . config('app.name') . '</span> is the Best Choice?',
+        'title' => 'Why <span class=\"gradient-text\">' . \App\Models\SiteSetting::get('site_name', config('app.name')) . '</span> is the Best Choice?',
         'subtitle' => 'Compare the struggle of traditional management with the efficiency of our advanced system.',
         'manual' => [
             'title' => 'Traditional Management (Paper/Excel)',
@@ -412,7 +412,7 @@ return [
             ],
         ],
         'edu' => [
-            'title' => 'Integrated ' . config('app.name') . ' System',
+            'title' => 'Integrated ' . \App\Models\SiteSetting::get('site_name', config('app.name')) . ' System',
             'items' => [
                 0 => 'Smart and fast attendance recording with one touch.',
                 1 => 'Automatic fee tracking and instant overdue alerts.',
