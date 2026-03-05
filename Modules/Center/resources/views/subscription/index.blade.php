@@ -170,31 +170,31 @@
                 <div class="mb-3">
                     @if($subStatus === 'trialing')
                         <span class="status-badge" style="background:rgba(251,191,36,0.25);color:#fde68a;">
-                            <i class="fas fa-hourglass-half fa-xs"></i> تجربة مجانية
+                            <i class="fas fa-hourglass-half fa-xs"></i> {{ __('center::subscription.trial_badge') }}
                         </span>
                     @elseif($isActive)
                         <span class="badge bg-success bg-opacity-25 text-white px-3 py-2 rounded-pill d-inline-flex align-items-center gap-2">
-                            <span class="pulse-dot"></span> اشتراك نشط
+                            <span class="pulse-dot"></span> {{ __('center::subscription.active_badge') }}
                         </span>
                     @else
                         <span class="badge bg-danger bg-opacity-25 text-white px-3 py-2 rounded-pill">
-                            <i class="fas fa-times-circle fa-xs me-1"></i> منتهي
+                            <i class="fas fa-times-circle fa-xs me-1"></i> {{ __('center::subscription.expired') }}
                         </span>
                     @endif
                 </div>
 
                 <h2 class="fw-black mb-1" style="font-size:2rem;">
-                    {{ $currentPackage?->name ?? 'لا يوجد اشتراك' }}
+                    {{ $currentPackage?->name ?? __('center::subscription.no_subscription') }}
                 </h2>
                 <p class="opacity-80 mb-4">
-                    {{ $currentPackage?->description ?? 'لم يتم تفعيل أي باقة بعد' }}
+                    {{ $currentPackage?->description ?? __('center::subscription.no_package_activated') }}
                 </p>
 
                 {{-- Days Progress --}}
                 @if($daysRemaining !== null)
                 <div class="mb-2 d-flex justify-content-between small opacity-80">
-                    <span>{{ $progressPercent }}% مستخدم</span>
-                    <span>{{ $daysRemaining }} يوم متبقي</span>
+                    <span>{{ $progressPercent }}% {{ __('center::subscription.used_percentage') }}</span>
+                    <span>{{ $daysRemaining }} {{ trans_choice('center::subscription.days_remaining', $daysRemaining) }}</span>
                 </div>
                 <div class="progress-bar-custom mb-4">
                     <div class="progress-bar-fill" style="width: {{ $progressPercent }}%"></div>
@@ -205,19 +205,19 @@
                     @if($subscription?->ends_at)
                         <div class="info-tile text-center">
                             <div class="fw-black fs-4">{{ $subscription->ends_at->format('d/m/Y') }}</div>
-                            <div class="small opacity-70">تاريخ الانتهاء</div>
+                            <div class="small opacity-70">{{ __('center::subscription.expiry_date') }}</div>
                         </div>
                     @endif
                     <div class="info-tile text-center">
-                        <div class="fw-black fs-4">{{ $subscription?->billing_cycle === 'yearly' ? 'سنوي' : 'شهري' }}</div>
-                        <div class="small opacity-70">دورة الفاتورة</div>
+                        <div class="fw-black fs-4">{{ $subscription?->billing_cycle === 'yearly' ? __('center::subscription.yearly') : __('center::subscription.monthly') }}</div>
+                        <div class="small opacity-70">{{ __('center::subscription.billing_cycle') }}</div>
                     </div>
                     <div class="info-tile text-center">
                         <div class="fw-black fs-4">
                             {{ number_format($subscription?->total_amount ?? 0, 0) }}
                             <small class="fs-6">{{ $currency }}</small>
                         </div>
-                        <div class="small opacity-70">المبلغ الإجمالي</div>
+                        <div class="small opacity-70">{{ __('center::subscription.total_amount') }}</div>
                     </div>
                 </div>
             </div>
@@ -233,7 +233,7 @@
                     </svg>
                     <div class="position-absolute top-50 start-50 translate-middle text-center">
                         <div class="fw-black" style="font-size:2rem;">{{ $daysRemaining ?? '—' }}</div>
-                        <div class="small opacity-70">يوم متبقي</div>
+                        <div class="small opacity-70">{{ trans_choice('center::subscription.days_remaining', $daysRemaining ?? 0) }}</div>
                     </div>
                 </div>
             </div>
@@ -247,18 +247,18 @@
                 <i class="fas fa-layer-group me-2 text-primary"></i>{{ __('center::subscription.available_plans') }}
             </h5>
             <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 ms-3">
-                {{ $packages->count() }} {{ __('center::subscription.plans_count') }}
+                {{ $packages->count() }} {{ trans_choice('center::subscription.plans_count', $packages->count()) }}
             </span>
         </div>
         
         <div class="billing-toggle">
             <input type="radio" id="billing-monthly" name="billing_cycle" value="monthly" checked>
-            <label for="billing-monthly">اشتراك ترم</label>
+            <label for="billing-monthly">{{ __('center::subscription.billing_term') }}</label>
             
             <input type="radio" id="billing-yearly" name="billing_cycle" value="yearly">
             <label for="billing-yearly">
-                اشتراك سنة 
-                <span class="badge bg-success save-badge">توفير</span>
+                {{ __('center::subscription.billing_year') }} 
+                <span class="badge bg-success save-badge">{{ __('center::subscription.save_badge') }}</span>
             </label>
             
             <div class="toggle-slider" style="direction: ltr;"></div>
@@ -266,7 +266,7 @@
 
         <div class="billing-toggle ms-md-3">
             <input type="radio" id="gateway-stripe" name="payment_gateway" value="stripe" checked>
-            <label for="gateway-stripe"><i class="bi bi-credit-card me-1"></i> بطاقة</label>
+            <label for="gateway-stripe"><i class="bi bi-credit-card me-1"></i> {{ __('center::subscription.card_payment') }}</label>
             
             <input type="radio" id="gateway-paypal" name="payment_gateway" value="paypal">
             <label for="gateway-paypal"><i class="bi bi-paypal me-1"></i> PayPal</label>
@@ -293,7 +293,7 @@
                         $label = app()->getLocale() === 'en' && $feat->name_en ? $feat->name_en : $feat->name;
                     }
 
-                    if ($val === '-1')              $pFeatures[] = $label . ': غير محدود';
+                    if ($val === '-1')              $pFeatures[] = $label . ': ' . __('center::subscription.unlimited');
                     elseif ($feat->type === 'boolean') $pFeatures[] = $label;
                     else                              $pFeatures[] = $label . ': ' . $val;
                 }
@@ -307,11 +307,11 @@
                         <div>
                             @if($isCurrent)
                                 <span class="badge bg-primary rounded-pill mb-2 px-3 py-1">
-                                    <i class="fas fa-check-circle me-1"></i> باقتك الحالية
+                                    <i class="fas fa-check-circle me-1"></i> {{ __('center::subscription.current_plan') }}
                                 </span>
                             @elseif($isFeatured)
                                 <span class="badge" style="background: linear-gradient(90deg,#3A0CA3,#2A4DFF); color:#fff; border-radius:999px;" class="rounded-pill mb-2 px-3 py-1">
-                                    ⚡ الأشهر
+                                    ⚡ {{ __('center::subscription.recommended') }}
                                 </span>
                             @endif
                             <h5 class="fw-black mb-0 mt-1">{{ app()->getLocale() === 'en' && $package->name_en ? $package->name_en : $package->name }}</h5>
@@ -320,7 +320,7 @@
                             <div class="fw-black text-primary plan-price-display" style="font-size:1.6rem; line-height:1;" data-monthly="{{ $package->price }}" data-yearly="{{ $package->yearly_price ?: ($package->price * 12) }}">
                                 {{ number_format($package->price, 0) }}
                             </div>
-                            <small class="text-muted"><span class="plan-currency">{{ $currency }}</span> / <span class="plan-cycle-text">للترم</span></small>
+                            <small class="text-muted"><span class="plan-currency">{{ $currency }}</span> / <span class="plan-cycle-text">{{ __('center::subscription.billing_term_cycle') }}</span></small>
                         </div>
                     </div>
 
@@ -340,7 +340,7 @@
                     <div class="mt-auto">
                         @if($isCurrent)
                             <button class="btn btn-light w-100 rounded-pill fw-bold" disabled>
-                                <i class="fas fa-check me-1"></i> باقتك الحالية
+                                <i class="fas fa-check me-1"></i> {{ __('center::subscription.current_plan') }}
                             </button>
                         @elseif($package->stripe_price_id)
                             <a href="{{ route('center.subscription.checkout', ['tenant' => $tenant->domain, 'package' => $package->id]) }}?cycle=monthly"
@@ -348,18 +348,18 @@
                                data-base-url="{{ route('center.subscription.checkout', ['tenant' => $tenant->domain, 'package' => $package->id]) }}"
                                data-name="{{ addslashes($package->name) }}"
                                style="{{ $isFeatured ? '' : 'background:transparent; color:#3A0CA3; border-color:#3A0CA3;' }}"
-                               onclick="return confirm('هل تريد الترقية إلى باقة ' + this.getAttribute('data-name') + '؟')">
+                               onclick="return confirm('{{ __('center::subscription.confirm_upgrade', ['name' => addslashes($package->name)]) }}')">
                                 @if($currentPackage && $package->price > $currentPackage->price)
-                                    <i class="fas fa-arrow-up me-1"></i> ترقية الآن
+                                    <i class="fas fa-arrow-up me-1"></i> {{ __('center::subscription.upgrade_now') }}
                                 @elseif($currentPackage && $package->price < $currentPackage->price)
-                                    <i class="fas fa-arrow-down me-1"></i> تخفيض الباقة
+                                    <i class="fas fa-arrow-down me-1"></i> {{ __('center::subscription.downgrade') }}
                                 @else
-                                    <i class="fas fa-exchange-alt me-1"></i> الاشتراك
+                                    <i class="fas fa-exchange-alt me-1"></i> {{ __('center::subscription.subscribe') }}
                                 @endif
                             </a>
                         @else
                             <button class="btn btn-light w-100 rounded-pill fw-bold" disabled>
-                                تواصل معنا
+                                {{ __('center::subscription.contact_support') }}
                             </button>
                         @endif
                     </div>
@@ -374,16 +374,16 @@
             <div class="col-md-8">
                 <h4 class="fw-black mb-2">
                     <i class="fas fa-headset me-2 opacity-75"></i>
-                    هل تحتاج مساعدة في الاشتراك؟
+                    {{ __('center::subscription.help_title') }}
                 </h4>
                 <p class="opacity-70 mb-0">
-                    تواصل مع فريق الدعم لدينا للحصول على عرض مخصص أو للاستفسار عن الباقات.
+                    {{ __('center::subscription.help_desc') }}
                 </p>
             </div>
             <div class="col-md-4 text-md-end">
                 <a href="{{ route('center.tickets.create', ['tenant' => $tenant->domain]) }}"
                    class="btn btn-light rounded-pill px-4 fw-bold shadow-sm">
-                    <i class="fas fa-ticket-alt me-2"></i> فتح تذكرة دعم
+                    <i class="fas fa-ticket-alt me-2"></i> {{ __('center::subscription.open_ticket') }}
                 </a>
             </div>
         </div>
@@ -401,6 +401,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const cycleTexts = document.querySelectorAll('.plan-cycle-text');
     const checkoutBtns = document.querySelectorAll('.plan-checkout-btn');
 
+    const trans = {
+        yearly: '{{ __('center::subscription.billing_year_cycle') }}',
+        monthly: '{{ __('center::subscription.billing_term_cycle') }}'
+    };
+
     function updatePricing(cycle) {
         priceDisplays.forEach(display => {
             const price = parseFloat(display.getAttribute('data-' + cycle));
@@ -409,7 +414,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         cycleTexts.forEach(text => {
-            text.textContent = cycle === 'yearly' ? 'للسنة' : 'للترم';
+            text.textContent = trans[cycle];
         });
 
         checkoutBtns.forEach(btn => {

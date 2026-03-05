@@ -44,7 +44,7 @@
         <div class="card border-0 shadow-sm rounded-4 sticky-top" style="top: 20px;">
             <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
                 <h5 class="fw-bold mb-0 text-primary"><i class="fas fa-shopping-cart me-2"></i> {{ __('center::sales.cart') }}</h5>
-                <i class="fas fa-question-circle text-muted" data-bs-toggle="tooltip" title="السلة مخصصة لعمليات البيع الجديدة فقط. المديونيات السابقة يتم سدادها عبر زر 'سداد'"></i>
+                <i class="fas fa-question-circle text-muted" data-bs-toggle="tooltip" title="{{ __('center::sales.cart_help') }}"></i>
             </div>
             <div class="card-body p-4">
                 <form id="posForm">
@@ -90,18 +90,18 @@
 
                     <div class="mb-3 bg-light rounded-4 p-3 border">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="text-muted small">الإجمالي الفرعي (Subtotal):</span>
+                            <span class="text-muted small">{{ __('center::sales.subtotal') }}:</span>
                             <span id="subtotalAmountDisp" class="fw-bold">0.00 {{ get_currency_symbol() }}</span>
                         </div>
                         <div class="row g-2 mb-2">
                             <div class="col-6">
-                                <label class="form-label small text-muted mb-1">الخصم (Discount)</label>
+                                <label class="form-label small text-muted mb-1">{{ __('center::sales.discount') }}</label>
                                 <div class="input-group input-group-sm">
                                     <input type="number" step="0.01" name="discount_amount" id="discount_amount" class="form-control rounded-3 border" value="0.00" onchange="calculateTotal()" onkeyup="calculateTotal()">
                                 </div>
                             </div>
                             <div class="col-6">
-                                <label class="form-label small text-muted mb-1">الضريبة (Tax)</label>
+                                <label class="form-label small text-muted mb-1">{{ __('center::sales.tax') }}</label>
                                 <div class="input-group input-group-sm">
                                     <input type="number" step="0.01" name="tax_amount" id="tax_amount" class="form-control rounded-3 border" value="0.00" onchange="calculateTotal()" onkeyup="calculateTotal()">
                                 </div>
@@ -109,7 +109,7 @@
                         </div>
                         <hr class="my-2 opacity-25">
                         <div class="d-flex justify-content-between align-items-center">
-                            <span class="fw-bold text-dark">الإجمالي النهائي (Total):</span>
+                            <span class="fw-bold text-dark">{{ __('center::sales.total') }}:</span>
                             <span id="totalAmount" class="fs-4 fw-bold text-primary">0.00 {{ get_currency_symbol() }}</span>
                         </div>
                     </div>
@@ -186,13 +186,13 @@
                     // Subscription Status - check both user status and a fallback active check
                     const status = data.student.status;
                     if (status === 'active' || status === 'verified') {
-                        statusEl.innerText = '{{ __('center::sales.status_paid') }} / نشط';
+                        statusEl.innerText = '{{ __('center::sales.status_paid') }} / {{ __('center::sales.status_active') }}';
                         statusEl.className = 'badge bg-success bg-opacity-10 text-success rounded-pill px-3';
                     } else if (status === 'pending' || status === 'new') {
-                        statusEl.innerText = 'حساب جديد / في انتظار التفعيل';
+                        statusEl.innerText = '{{ __('center::sales.status_new_pending') }}';
                         statusEl.className = 'badge bg-warning bg-opacity-10 text-warning rounded-pill px-3';
                     } else {
-                        statusEl.innerText = 'حساب غير نشط أو منتهي';
+                        statusEl.innerText = '{{ __('center::sales.status_inactive_expired') }}';
                         statusEl.className = 'badge bg-danger bg-opacity-10 text-danger rounded-pill px-3';
                     }
 
@@ -375,7 +375,7 @@
         };
 
         Swal.fire({
-            title: 'جاري الحفظ...',
+            title: '{{ __('center::sales.saving') }}',
             didOpen: () => { Swal.showLoading(); }
         });
 
@@ -392,9 +392,9 @@
             if (data.success) {
                 Swal.fire({
                     icon: 'success',
-                    title: 'تمت العملية!',
-                    text: 'تم تسجيل عملية البيع بنجاح',
-                    confirmButtonText: 'حسناً'
+                    title: '{{ __('center::messages.blade_0598') }}',
+                    text: '{{ __('center::sales.sale_recorded_success') }}',
+                    confirmButtonText: '{{ __('center::messages.blade_0599') }}'
                 }).then(() => {
                     window.location.href = '{{ route("center.sales.index") }}';
                 });
