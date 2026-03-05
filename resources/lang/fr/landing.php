@@ -20,7 +20,7 @@ return [
     ],
     'hero' => [
         'badge' => 'Transformez votre centre éducatif en une institution intelligente complète',
-        'title' => 'Gérez Votre Centre <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan\">Intelligemment</span>',
+        'title' => 'Gérez Votre Centre <span class=\"gradient-text\">Intelligemment</span>',
         'subtitle' => 'Un système intégré pour la gestion des centres éducatifs, comprenant (Étudiants – Présence – Frais – Messagerie – Horaires – Rapports).',
         'cta_primary' => 'Essayer Gratuitement',
         'cta_secondary' => 'Voir la Démo',
@@ -91,7 +91,7 @@ return [
     ],
     'features' => [
         'badge' => 'Fonctionnalités',
-        'title' => 'Tout ce Dont Vous Avez Besoin pour <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan\">Réussir</span>',
+        'title' => 'Tout ce Dont Vous Avez Besoin pour <span class=\"gradient-text\">Réussir</span>',
         'subtitle' => 'Une suite complète d\'outils conçus spécifiquement pour les besoins de votre centre éducatif',
         'learn_more' => 'En Savoir Plus',
         'items' => [
@@ -131,7 +131,7 @@ return [
     ],
     'pricing' => [
         'badge' => 'Tarifs',
-        'title' => 'Plans Tarifaires <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan\">Flexibles</span>',
+        'title' => 'Plans Tarifaires <span class=\"gradient-text\">Flexibles</span>',
         'subtitle' => 'Choisissez le plan qui correspond à la taille et aux besoins de votre centre éducatif',
         'most_popular' => 'Le Plus Populaire',
         'per_14_days' => '/ 14 Jours',
@@ -398,7 +398,7 @@ return [
     ],
     'comparison' => [
         'badge' => 'Comparaison',
-        'title' => 'Pourquoi <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-light-purple to-cyan\">' . config('app.name') . '</span> est le Meilleur Choix ?',
+        'title' => 'Pourquoi <span class=\"gradient-text\">' . config('app.name') . '</span> est le Meilleur Choix ?',
         'subtitle' => 'Comparez la difficulté de la gestion traditionnelle avec l\'efficacité de notre système avancé.',
         'manual' => [
             'title' => 'Gestion Traditionnelle (Papier/Excel)',
