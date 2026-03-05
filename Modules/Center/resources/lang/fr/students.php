@@ -125,6 +125,8 @@ return [
     'wa_general_msg' => 'Message général',
     'wa_payment_reminder' => 'Rappel de paiement',
     'wa_attendance_alert' => 'Alerte d\'absence',
-    'wa_student_attendance_msg' => 'Bonjour, nous vous rappelons l\'importance d\'assister régulièrement aux sessions programmées. Merci.',
-    'wa_guardian_attendance_msg' => 'Bonjour tuteur de :name, nous tenons à vous informer de l\'absence de l\'étudiant aujourd\'hui. Merci de faire le suivi.',
+    'wa_student_attendance_msg' => 'Bonjour notre champion(ne) :name 👋, vous nous avez manqué en classe aujourd\'hui ! Nous espérons que vous allez bien et nous avons hâte de vous retrouver à la prochaine session. Bon courage ! 📚✨',
+    'wa_guardian_attendance_msg' => 'Bonjour cher tuteur de notre star :name 🌟, nous tenons à vous informer que l\'étudiant était absent du cours d\'aujourd\'hui. Merci de faire le suivi. Ensemble pour la réussite ! 🤝',
+    'wa_student_payment_msg' => 'Bonjour :name ✨, ceci est un rappel amical pour régler les frais impayés afin que votre parcours d\'apprentissage avec nous se poursuive sans interruption. Merci pour votre coopération ! 💳',
+    'wa_guardian_payment_msg' => 'Bonjour tuteur de :name 🌸, merci de régler les frais impayés pour assurer la continuité de l\'excellence de l\'étudiant avec nous. Nous apprécions grandement votre coopération constante ! 🙏',
 ];

@@ -296,7 +296,7 @@
                                                 </li>
                                                 <li><hr class="dropdown-divider"></li>
                                                 @php
-                                                    $paymentMsg = __('center::students.debt_reminder_msg', ['name' => $student->name]);
+                                                    $paymentMsg = __('center::students.wa_student_payment_msg', ['name' => $student->name]);
                                                     $paymentUrl = "https://wa.me/" . sanitizePhoneForWhatsApp($student->phone) . "?text=" . urlencode($paymentMsg);
                                                 @endphp
                                                 <li>
@@ -305,7 +305,7 @@
                                                     </a>
                                                 </li>
                                                 @php
-                                                    $attendanceMsg = __('center::students.wa_student_attendance_msg');
+                                                    $attendanceMsg = __('center::students.wa_student_attendance_msg', ['name' => $student->name]);
                                                     $attendanceUrl = "https://wa.me/" . sanitizePhoneForWhatsApp($student->phone) . "?text=" . urlencode($attendanceMsg);
                                                 @endphp
                                                 <li>
@@ -340,7 +340,7 @@
                                                 </li>
                                                 <li><hr class="dropdown-divider"></li>
                                                 @php
-                                                    $parentPaymentMsg = __('center::students.debt_reminder_msg', ['name' => $student->name]);
+                                                    $parentPaymentMsg = __('center::students.wa_guardian_payment_msg', ['name' => $student->name]);
                                                     $parentPaymentUrl = "https://wa.me/" . sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone) . "?text=" . urlencode($parentPaymentMsg);
                                                 @endphp
                                                 <li>
