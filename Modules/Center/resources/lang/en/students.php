@@ -125,6 +125,8 @@ return [
     'wa_general_msg' => 'General Msg',
     'wa_payment_reminder' => 'Payment Reminder',
     'wa_attendance_alert' => 'Attendance Alert',
-    'wa_student_attendance_msg' => 'Hello, we remind you of the importance of attending scheduled sessions regularly. Thank you.',
-    'wa_guardian_attendance_msg' => 'Hello guardian of :name, we would like to inform you of the student\'s absence today. Please follow up.',
+    'wa_student_attendance_msg' => 'Hello our champion :name 👋, we missed you today in class! We hope you are doing well, and we look forward to seeing you at the next session to catch up. Best of luck! 📚✨',
+    'wa_guardian_attendance_msg' => 'Welcome dear guardian of our star :name 🌟, we would like to inform you that the student was absent from today\'s class. Kindly follow up on their progress. Together for success! 🤝',
+    'wa_student_payment_msg' => 'Hello :name ✨, this is a gentle reminder to settle the outstanding fees to ensure your educational journey with us continues uninterrupted. Thank you for your cooperation! 💳',
+    'wa_guardian_payment_msg' => 'Welcome guardian of :name 🌸, kindly review and settle the outstanding fees to ensure the student\'s continued excellence with us. We deeply appreciate your constant cooperation! 🙏',
 ];
