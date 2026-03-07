@@ -121,13 +121,16 @@
 <div class="container-fluid py-4">
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
+        @php 
+            $isTutorRole = auth()->user()->hasRole('tutor') || auth()->user()->role === 'tutor';
+        @endphp
         <div>
             <h3 class="fw-bold text-dark mb-1">
-                {{ __('center::dashboard.center_dashboard') }} 
+                {{ $isTutorRole ? __('center::dashboard.tutor_dashboard') : __('center::dashboard.center_dashboard') }} 
             </h3>
             <p class="text-muted small mb-0">
                 <span class="pulse"></span> 
-                {{ __('center::dashboard.center_status') }}: <span class="text-success fw-semibold">{{ __('center::dashboard.healthy') }}</span>
+                {{ $isTutorRole ? __('حالة الأستاذ') : __('center::dashboard.center_status') }}: <span class="text-success fw-semibold">{{ __('center::dashboard.healthy') }}</span>
             </p>
         </div>
         
