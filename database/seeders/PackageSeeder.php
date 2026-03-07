@@ -125,8 +125,8 @@ class PackageSeeder extends Seeder
                 'old_price' => 4200.00,
                 'duration_in_days' => 150,
                 'badge' => 'الأكثر طلباً',
-                'description' => 'للمراكز التعليمية المتنامية.',
-                'description_en' => 'Best for growing centers.',
+                'description' => 'للمدرسين المحترفين والمجموعات الكبيرة.',
+                'description_en' => 'Best for professional tutors and large groups.',
                 'is_featured' => true,
                 'discount_label' => 'وفر 20%',
                 'regional_prices' => [
