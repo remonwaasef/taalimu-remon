@@ -22,7 +22,7 @@ class CenterController extends Controller
     public function index()
     {
         $user = auth()->user();
-        if ($user->role !== 'center_admin' && !$user->hasAnyRole(['admin', 'center_admin', 'instructor'])) {
+        if ($user->role !== 'center_admin' && !$user->hasAnyRole(['admin', 'center_admin', 'instructor', 'tutor'])) {
             if (request()->expectsJson()) {
                 return response()->json(['message' => 'Unauthorized role'], 403);
             }
