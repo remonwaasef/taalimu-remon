@@ -203,6 +203,18 @@ class RolesAndPermissionsSeeder extends Seeder
             'view courses',
             'view schedule',
         ]);
+        
+        // 8. Tutor - Simplified management for individual tutors
+        $tutor = Role::firstOrCreate(['name' => 'tutor', 'guard_name' => 'web', 'tenant_id' => null]);
+        $tutor->syncPermissions(array_merge(
+            $studentPermissions,
+            $coursePermissions,
+            $salesPermissions,
+            $schedulePermissions,
+            $attendancePermissions,
+            $reportPermissions,
+            ['manage settings']
+        ));
     }
 
     /**
@@ -212,7 +224,7 @@ class RolesAndPermissionsSeeder extends Seeder
     {
         $globalRoleNames = [
             'super_admin', 'center_admin', 'instructor', 'student', 
-            'secretary', 'accountant', 'staff'
+            'secretary', 'accountant', 'staff', 'tutor'
         ];
 
         // حذف الأدوار المكررة (التي لديها tenant_id غير null)

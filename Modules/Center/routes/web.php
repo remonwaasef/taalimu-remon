@@ -57,6 +57,10 @@ $tenantRoutes = function () {
         Route::post('password/change', [AuthController::class, 'changePassword'])->name('center.password.change.submit');
     });
 
+    // Student Self-Registration via Group Link
+    Route::get('join/{uuid}', [\Modules\Center\Http\Controllers\StudentRegistrationController::class, 'showRegistrationForm'])->name('center.groups.join');
+    Route::post('join/{uuid}', [\Modules\Center\Http\Controllers\StudentRegistrationController::class, 'register'])->name('center.groups.join.submit');
+
     // QR Attendance Mark - Public route (protected by signed URL, NOT by auth middleware)
     // Students scan this from their phone and may not be logged in
     Route::get('attendance/mark/{schedule}', [AttendanceController::class, 'markByQr'])
@@ -323,6 +327,8 @@ $tenantRoutes = function () {
             
             // QR Attendance (showQr is for teachers only, markByQr moved to public routes above)
             Route::get('attendance/qr/{schedule}', [AttendanceController::class, 'showQr'])->name('center.attendance.qr');
+            Route::get('attendance/scanner', [AttendanceController::class, 'scanner'])->name('center.attendance.scanner');
+            Route::post('attendance/scanner/process', [AttendanceController::class, 'processScan'])->name('center.attendance.processScan');
             Route::post('attendance/bulk-absent/{schedule}', [AttendanceController::class, 'bulkAbsent'])->name('center.attendance.bulkAbsent');
         });
 
