@@ -183,8 +183,8 @@ class RegistrationController extends Controller
             app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
 
             // Assign Roles based on the selected package
-            // Automatically assign 'Tutor' role if the package implies it's for a single tutor
-            if (str_contains(strtolower($request->plan), 'tutor') || str_contains(strtolower($request->plan), 'teacher') || $request->plan === 'basic') {
+            // 'enterprise' is for Centers, everything else is for Tutors
+            if ($request->plan !== 'enterprise') {
                 // Ensure the Tutor role exists for this tenant
                 \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'tutor', 'guard_name' => 'web', 'tenant_id' => $tenant->id]);
                 $user->assignRole('tutor');
