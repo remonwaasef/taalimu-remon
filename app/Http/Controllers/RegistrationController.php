@@ -184,7 +184,7 @@ class RegistrationController extends Controller
 
             // Assign Roles based on the selected package
             // Automatically assign 'Tutor' role if the package implies it's for a single tutor
-            if (str_contains(strtolower($request->plan), 'tutor') || str_contains(strtolower($request->plan), 'teacher')) {
+            if (str_contains(strtolower($request->plan), 'tutor') || str_contains(strtolower($request->plan), 'teacher') || $request->plan === 'basic') {
                 // Ensure the Tutor role exists for this tenant
                 \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'tutor', 'guard_name' => 'web', 'tenant_id' => $tenant->id]);
                 $user->assignRole('tutor');
