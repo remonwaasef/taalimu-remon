@@ -473,7 +473,7 @@
                                       request()->routeIs('center.courses.*') || 
                                       request()->routeIs('center.schedules.*');
                 
-                $isTutor = auth()->check() && auth()->user()->hasRole('tutor');
+                $isTutor = auth()->check() && (auth()->user()->hasRole('tutor') || auth()->user()->role === 'tutor');
                 $showSchoolMgmt = !$isTutor && ($canInstructors || $canCourses || $canClassrooms || $canSchedules);
             @endphp
             

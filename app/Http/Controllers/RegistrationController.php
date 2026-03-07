@@ -174,7 +174,7 @@ class RegistrationController extends Controller
                 'locale' => session('locale', 'ar'),
             ]);
             $user->tenant_id = $tenant->id;
-            $user->role = 'center_admin';
+            $user->role = $request->plan === 'enterprise' ? 'center_admin' : 'tutor';
             $user->save();
             
             event(new Registered($user));
