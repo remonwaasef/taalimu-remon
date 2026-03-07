@@ -11,6 +11,7 @@ use Modules\Center\Models\Attendance;
 use Illuminate\Support\Facades\URL;
 use Carbon\Carbon;
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 
 class AttendanceController extends Controller
@@ -271,5 +272,89 @@ class AttendanceController extends Controller
         }
 
         return view('center::attendance.success', ['message' => $successMsg]);
+    }
+    /**
+     * Show the QR Scanner interface for Teachers/Tutors.
+     */
+    public function scanner()
+    {
+        $this->authorize('viewAny', Attendance::class);
+        return view('center::attendance.scanner');
+    }
+
+    /**
+     * Process a scanned student QR identifier.
+     */
+    public function processScan(Request $request)
+    {
+        $this->authorize('create', Attendance::class);
+        $request->validate([
+            'qr_identifier' => 'required|string',
+            'schedule_id' => 'nullable|exists:schedules,id',
+        ]);
+
+        $user = User::where('tenant_id', app('tenant')->id)
+            ->where('qr_identifier', $request->qr_identifier)
+            ->first();
+
+        if (!$user || !$user->student) {
+            return response()->json(['success' => false, 'message' => 'لم يتم العثور على طالب بهذا الرمز.'], 404);
+        }
+
+        $student = $user->student;
+        $tenant = app('tenant');
+
+        // Financial Check (Simplified for now)
+        $totalDebt = \App\Models\Sale::where('student_id', $student->id)->sum(\DB::raw('total_amount - paid_amount'));
+        
+        // Find today's session if schedule_id not provided
+        $scheduleId = $request->schedule_id;
+        if (!$scheduleId) {
+            $schedule = Schedule::where('tenant_id', $tenant->id)
+                ->where('day_of_week', now()->dayOfWeek)
+                ->where('start_time', '<=', now()->format('H:i:s'))
+                ->where('end_time', '>=', now()->format('H:i:s'))
+                ->first();
+            
+            if ($schedule) {
+                $scheduleId = $schedule->id;
+            }
+        }
+
+        $attendanceRecorded = false;
+        $message = "تم التعرف على الطالب: {$student->name}";
+
+        if ($scheduleId) {
+            if (!$this->attendanceService->hasAttendedToday($student->id, $scheduleId)) {
+                $schedule = Schedule::find($scheduleId);
+                $lateData = $this->attendanceService->determineStatus($schedule);
+                
+                $this->attendanceService->markAttendance([
+                    'tenant_id' => $tenant->id,
+                    'student_id' => $student->id,
+                    'course_id' => $schedule->course_id,
+                    'schedule_id' => $schedule->id,
+                    'session_date' => today(),
+                    'status' => $lateData['status'],
+                ]);
+                $attendanceRecorded = true;
+                $message = "تم تسجيل حضور الطالب: {$student->name}";
+            } else {
+                $message = "الطالب {$student->name} مسجل حضوره بالفعل اليوم.";
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+            'student' => [
+                'id' => $student->id,
+                'name' => $student->name,
+                'phone' => $student->phone,
+                'debt' => $totalDebt,
+                'debt_formatted' => number_format($totalDebt, 2) . ' ' . $tenant->currency,
+            ],
+            'attendance_recorded' => $attendanceRecorded
+        ]);
     }
 }

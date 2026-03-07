@@ -29,12 +29,15 @@ class SaleController extends Controller
     {
         $this->authorize('viewAny', Sale::class);
         $tenant = app('tenant');
-        $sales = Sale::where('tenant_id', $tenant->id)
-            ->with('student')
-            ->latest()
-            ->paginate(10);
-            
-        return view('center::sales.index', compact('sales', 'tenant'));
+        
+        $query = Sale::where('tenant_id', $tenant->id);
+        
+        $totalReceived = (clone $query)->sum('paid_amount');
+        $totalDue = (clone $query)->selectRaw('SUM(total_amount - paid_amount) as due')->value('due') ?? 0;
+        
+        $sales = $query->with('student')->latest()->paginate(10);
+        
+        return view('center::sales.index', compact('sales', 'tenant', 'totalReceived', 'totalDue'));
     }
 
     public function account()
