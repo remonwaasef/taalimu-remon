@@ -38,15 +38,6 @@ class StudentPortalController extends Controller
             ->take(10)
             ->get();
 
-        $options = new QROptions([
-            'outputType' => QRCode::OUTPUT_MARKUP_SVG,
-            'eccLevel'   => QRCode::ECC_L,
-            'addQuietzone' => true,
-        ]);
-        
-        $qrCode = (new QRCode($options))->render($user->qr_identifier);
-        $qrCode = 'data:image/svg+xml;utf8,' . rawurlencode($qrCode);
-
-        return view('instructor::student_portal', compact('student', 'user', 'attendances', 'sales', 'qrCode'));
+        return view('instructor::student_portal', compact('student', 'user', 'attendances', 'sales'));
     }
 }

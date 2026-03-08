@@ -29,11 +29,23 @@ class StudentRegistrationController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
-            'parent_phone' => 'nullable|string|max:20',
+            'parent_phone' => 'required|string|max:20', // Now mandatory for security
         ]);
 
-        // check if user already exists by phone
+        // 1. Check by personal phone number
         $user = User::where('phone', $request->phone)->first();
+
+        // 2. Cross-check by Name + Parent Phone to prevent bypass
+        if (!$user) {
+            $existingStudent = Student::where('name', $request->name)
+                ->where('parent_phone', $request->parent_phone)
+                ->where('tenant_id', $course->tenant_id)
+                ->first();
+            
+            if ($existingStudent) {
+                $user = $existingStudent->user;
+            }
+        }
 
         if (!$user) {
             $user = User::create([
