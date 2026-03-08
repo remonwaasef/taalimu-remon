@@ -59,8 +59,21 @@ class Course extends Model
         'price',
         'sessions_count',
         'image',
+        'registration_token',
         'status',
     ];
+
+    /**
+     * Get the public registration URL for this course/group
+     */
+    public function getRegistrationUrl()
+    {
+        if (!$this->registration_token) {
+            return null;
+        }
+
+        return route('group.register', ['token' => $this->registration_token]);
+    }
 
     public function instructor()
     {
