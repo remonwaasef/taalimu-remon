@@ -366,7 +366,7 @@
                 @endif
                 <div class="overflow-hidden">
                     <h5 class="fw-bold text-white mb-0 lh-1 text-truncate" style="font-size: 1rem;">{{ $tenant->name ?? __('sidebar.center_name') }}</h5>
-                    <small class="text-muted" style="font-size: 0.7rem;">{{ auth()->user()->tenant && auth()->user()->tenant->type === 'instructor' ? __('center::dashboard.tutor_dashboard') : __('center::sidebar.panel') }}</small>
+                    <small class="text-muted" style="font-size: 0.7rem;">{{ __('center::sidebar.panel') }}</small>
                 </div>
             </div>
             <button type="button" class="btn btn-link text-white p-0 d-lg-none" id="sidebarClose">
@@ -473,8 +473,9 @@
                                       request()->routeIs('center.courses.*') || 
                                       request()->routeIs('center.schedules.*');
                 
-                // Independent Tutors and Centers both need to manage courses, classrooms, etc.
-                $showSchoolMgmt = ($canInstructors || $canCourses || $canClassrooms || $canSchedules);
+                // If Instructor mode, we only show courses/schedules if they exist (usually hidden as they are in instructor module)
+                // But for now, we follow the user request: if they are a center, they see full center mgmt.
+                $showSchoolMgmt = ($canInstructors || $canCourses || $canClassrooms || $canSchedules) && ($tenant->type !== 'instructor');
             @endphp
             
             @if($showSchoolMgmt)

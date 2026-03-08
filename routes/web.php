@@ -34,8 +34,8 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
         if ($user && $user->tenant_id) {
             $tenant = \App\Models\Tenant::find($user->tenant_id);
             if ($tenant) {
-                // Redirect sub-instructors to the instructor dashboard
-                if ($user->role === 'instructor') {
+                // Redirect instructors to the instructor dashboard
+                if ($user->role === 'instructor' || $tenant->type === 'instructor') {
                     return redirect()->away(tenant_url('instructor', $tenant));
                 }
                 return redirect()->away(tenant_url('dashboard', $tenant));

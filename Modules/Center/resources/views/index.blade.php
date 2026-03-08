@@ -123,11 +123,11 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h3 class="fw-bold text-dark mb-1">
-                {{ auth()->user()->tenant && auth()->user()->tenant->type === 'instructor' ? __('center::dashboard.tutor_dashboard') : __('center::dashboard.center_dashboard') }} 
+                {{ __('center::dashboard.center_dashboard') }} 
             </h3>
             <p class="text-muted small mb-0">
                 <span class="pulse"></span> 
-                {{ auth()->user()->tenant && auth()->user()->tenant->type === 'instructor' ? __('center::dashboard.tutor_status') : __('center::dashboard.center_status') }}: <span class="text-success fw-semibold">{{ __('center::dashboard.healthy') }}</span>
+                {{ __('center::dashboard.center_status') }}: <span class="text-success fw-semibold">{{ __('center::dashboard.healthy') }}</span>
             </p>
         </div>
         
