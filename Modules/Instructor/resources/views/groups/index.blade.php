@@ -10,9 +10,9 @@
             <p class="text-muted small">إدارة المجموعات، روابط التسجيل، وعمليات التحضير</p>
         </div>
         <div class="col-auto">
-            <button class="btn btn-primary rounded-pill px-4 shadow-sm" onclick="alert('سيكون متاحاً في المرحلة القادمة')">
+            <a href="{{ route('instructor.groups.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
                 <i class="fas fa-plus me-2"></i> إنشاء مجموعة جديدة
-            </button>
+            </a>
         </div>
     </div>
 
