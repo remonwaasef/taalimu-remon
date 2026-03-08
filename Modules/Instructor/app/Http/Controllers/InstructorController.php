@@ -205,6 +205,45 @@ class InstructorController extends Controller
     }
 
     /**
+     * Show the form for creating a new group
+     */
+    public function createGroup()
+    {
+        return view('instructor::groups.create');
+    }
+
+    /**
+     * Store a newly created group in storage
+     */
+    public function storeGroup(Request $request)
+    {
+        $instructor = auth()->user()->instructor;
+        
+        if (!$instructor) {
+            return back()->with('error', 'يجب أن تكون مسجلاً كمعلم لإنشاء مجموعة.');
+        }
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'sessions_count' => 'required|integer|min:1',
+        ]);
+
+        $course = Course::create([
+            'tenant_id' => $instructor->tenant_id,
+            'instructor_id' => $instructor->id,
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'price' => $validated['price'],
+            'sessions_count' => $validated['sessions_count'],
+            'status' => 'active',
+        ]);
+
+        return redirect()->route('instructor.groups.list')->with('success', "تم إنشاء المجموعة '{$course->title}' بنجاح.");
+    }
+
+    /**
      * Quickly mark a student as paid for a specific amount
      */
     public function markPaid(Request $request)
