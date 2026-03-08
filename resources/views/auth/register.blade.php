@@ -220,11 +220,11 @@ document.addEventListener('alpine:init', () => {
      })"
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
     
-    <!-- Main Split-Screen Container -->
-    <div class="w-full max-w-6xl bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100/50 flex flex-col lg:flex-row min-h-[85vh] animate-fade-in-up md:backdrop-blur-xl relative">
+    <!-- Main Centered Card Container (Simplified Single Column) -->
+    <div class="w-full max-w-xl bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100/50 animate-fade-in-up md:backdrop-blur-xl relative">
         
-        <!-- 1. Form Column -->
-        <div class="w-full lg:w-[60%] flex flex-col p-8 lg:p-12 pb-8 lg:pb-12 xl:px-16 overflow-y-auto">
+        <!-- Minimalist Progress & Header -->
+        <div class="bg-white p-8 lg:p-12 pb-0">
             <!-- Multi-Step Indicator -->
             <div class="mb-10 relative" x-cloak>
                 <div class="flex justify-between mb-3 px-1">
@@ -450,8 +450,8 @@ document.addEventListener('alpine:init', () => {
                     </div>
 
                     <!-- Simplified Price Summary Card -->
-                    <div class="p-6 rounded-3xl bg-slate-50/80 border border-slate-100 space-y-4">
-                        <div class="flex items-center justify-between">
+                    <div class="p-6 rounded-3xl bg-slate-50/80 border border-slate-100 relative overflow-hidden">
+                        <div class="flex items-center justify-between mb-4">
                             <div class="flex flex-col">
                                 <div class="flex items-center gap-2 mb-1">
                                     <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ __('auth.register.selected_plan') }}</span>
@@ -470,6 +470,18 @@ document.addEventListener('alpine:init', () => {
                                     <span class="text-sm font-bold opacity-60" x-text="currentPriceData.currency"></span>
                                 </div>
                                 <span class="text-[10px] font-bold text-slate-400">/<span x-text="billingCycle === 'yearly' ? ({{ Js::from(app()->getLocale() == 'ar' ? 'سنة' : 'year') }}) : ({{ Js::from(app()->getLocale() == 'ar' ? 'شهر' : 'month') }})"></span></span>
+                            </div>
+                        </div>
+
+                        <!-- Conversion Boost: Reassurance -->
+                        <div class="pt-4 border-t border-slate-200/60 flex items-center justify-between gap-4">
+                            <div class="flex items-center gap-1.5 text-slate-500">
+                                <i class="bi bi-shield-check text-emerald-500 text-base"></i>
+                                <span class="text-[11px] font-bold font-arabic">{{ app()->getLocale() == 'ar' ? 'دفع آمن 100%' : '100% Secure Payment' }}</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 text-slate-500">
+                                <i class="bi bi-arrow-repeat text-brand-secondary text-base"></i>
+                                <span class="text-[11px] font-bold font-arabic">{{ app()->getLocale() == 'ar' ? 'إلغاء في أي وقت' : 'Cancel Anytime' }}</span>
                             </div>
                         </div>
                     </div>
@@ -550,9 +562,24 @@ document.addEventListener('alpine:init', () => {
                             {{ app()->isLocale('ar') ? 'رجوع' : 'Back' }}
                         </button>
                         <button type="submit" :disabled="password.length > 0 && !isPasswordMatch"
-                                class="flex-[2] h-16 rounded-full font-black text-xl text-white bg-brand-secondary shadow-xl shadow-brand-secondary/20 hover:shadow-brand-secondary/40 hover:-translate-y-1 transition-all disabled:opacity-50 disabled:grayscale">
-                            {{ __('auth.register.cta_main') }}
+                                class="flex-[2] h-16 rounded-full font-black text-xl text-white bg-brand-secondary shadow-xl shadow-brand-secondary/20 hover:shadow-brand-secondary/40 hover:-translate-y-1 transition-all disabled:opacity-50 disabled:grayscale relative overflow-hidden group">
+                            <!-- Button Shine Effect -->
+                            <div class="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-white opacity-20 group-hover:animate-[shine_1s] group-hover:left-full transition-all duration-700 ease-in-out"></div>
+                            <span class="relative z-10">{{ __('auth.register.cta_main') }}</span>
                         </button>
+                    </div>
+
+                    <!-- Conversion Boost: Guarantee & Support -->
+                    <div class="mt-6 flex flex-col items-center gap-3">
+                        <div class="flex items-center justify-center gap-2 text-slate-600 bg-emerald-50/50 px-4 py-2.5 rounded-xl border border-emerald-100/50 w-full">
+                            <i class="bi bi-shield-fill-check text-emerald-500 text-lg"></i>
+                            <p class="text-[12px] font-bold font-arabic">{{ app()->getLocale() == 'ar' ? 'ضمان استرجاع الأموال خلال 14 يوماً. بدون رسوم خفية.' : '14-Day Money-Back Guarantee. No Hidden Fees.' }}</p>
+                        </div>
+                        <div class="flex items-center gap-1.5 text-slate-400 text-[11px] font-bold">
+                            <i class="bi bi-headset"></i>
+                            <span>{{ app()->getLocale() == 'ar' ? 'تحتاج إلى مساعدة؟' : 'Need help?' }}</span>
+                            <a href="#" class="text-brand-secondary hover:underline">{{ app()->getLocale() == 'ar' ? 'تواصل مع الدعم الفني' : 'Contact Support' }}</a>
+                        </div>
                     </div>
                 </div>
 
@@ -565,95 +592,14 @@ document.addEventListener('alpine:init', () => {
                     </p>
                 </div>
             </form>
-            
-            <!-- Footer Link -->
-            <div class="mt-8 pt-8 border-t border-slate-100 text-center">
-                <span class="text-sm text-slate-500 font-arabic font-bold">
-                    {{ __('auth.login.no_account_link') }}
-                    <a href="{{ route('login.portal') }}" class="text-brand-secondary font-black hover:underline ml-2">{{ __('auth.login.title') }}</a>
-                </span>
-            </div>
         </div>
 
-        <!-- 2. Feature Showcase Column (Desktop Only) -->
-        <div class="hidden lg:flex lg:w-[40%] bg-gradient-to-br from-brand-secondary via-blue-700 to-indigo-900 relative items-center justify-center p-12 text-center text-white overflow-hidden">
-            <!-- Decorative Elements -->
-            <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-            <div class="absolute bottom-0 left-0 w-96 h-96 bg-fuchsia-500/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
-            <div class="absolute inset-0 opacity-[0.03] mix-blend-overlay" style="background-image: url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'3\'/%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'3\'/%3E%3C/g%3E%3C/svg%3E');"></div>
-
-            <div class="relative z-10 w-full max-w-sm mx-auto h-full flex flex-col justify-center">
-                
-                <!-- Center Showcase -->
-                <div x-show="accountType === 'center'" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-8 animate-fade-in">
-                    <div class="w-24 h-24 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 mx-auto flex items-center justify-center shadow-2xl">
-                        <i class="fas fa-university text-4xl text-white drop-shadow-md"></i>
-                    </div>
-                    <div class="space-y-3">
-                        <h2 class="text-3xl font-black font-arabic">{{ app()->getLocale() == 'ar' ? 'إدارة ذكية لمركزك' : 'Smart Center Management' }}</h2>
-                        <p class="text-white/80 font-arabic text-sm leading-relaxed">{{ app()->getLocale() == 'ar' ? 'نظام متكامل يغنيك عن عشرات البرامج، أدر طلابك، فروعك، ومبيعاتك من شاشة واحدة.' : 'An integrated system replacing dozens of apps. Manage students, branches, and sales.' }}</p>
-                    </div>
-                    
-                    <div class="space-y-3 pt-4 text-right rtl:text-right ltr:text-left" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
-                        <div class="flex items-center gap-4 bg-white/5 p-4 rounded-3xl border border-white/10 backdrop-blur-sm">
-                            <div class="w-12 h-12 rounded-2xl bg-emerald-400/20 flex items-center justify-center text-emerald-400 shrink-0 shadow-inner"><i class="bi bi-shop"></i></div>
-                            <div class="flex-1 font-arabic">
-                                <span class="block font-black text-[15px] text-white">{{ app()->getLocale() == 'ar' ? 'نقاط بيع وتسجيل' : 'POS & Registration' }}</span>
-                                <span class="text-xs text-white/60 font-bold block mt-0.5">{{ app()->getLocale() == 'ar' ? 'إدارة الاشتراكات وإيصالات الدفع' : 'Manage subscriptions & receipts' }}</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4 bg-white/5 p-4 rounded-3xl border border-white/10 backdrop-blur-sm mt-3">
-                            <div class="w-12 h-12 rounded-2xl bg-blue-400/20 flex items-center justify-center text-blue-400 shrink-0 shadow-inner"><i class="bi bi-people"></i></div>
-                            <div class="flex-1 font-arabic">
-                                <span class="block font-black text-[15px] text-white">{{ app()->getLocale() == 'ar' ? 'شؤون الموظفين' : 'HR Management' }}</span>
-                                <span class="text-xs text-white/60 font-bold block mt-0.5">{{ app()->getLocale() == 'ar' ? 'صلاحيات وتقارير الحضور والانصراف' : 'Permissions & attendance reports' }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Instructor Showcase -->
-                <div x-show="accountType === 'instructor'" x-cloak x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-8 animate-fade-in">
-                    <div class="w-24 h-24 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 mx-auto flex items-center justify-center shadow-2xl">
-                        <i class="fas fa-chalkboard-teacher text-4xl text-white drop-shadow-md"></i>
-                    </div>
-                    <div class="space-y-3">
-                        <h2 class="text-3xl font-black font-arabic">{{ app()->getLocale() == 'ar' ? 'منصة مستقلة باسمك' : 'Your Platform' }}</h2>
-                        <p class="text-white/80 font-arabic text-sm leading-relaxed">{{ app()->getLocale() == 'ar' ? 'ارتقِ بتجربة طلابك، قدم كورسات محمية، وبث مباشر بضغطة زر وبدون تعقيد.' : 'Elevate your students experience. Offer encrypted courses and live streams.' }}</p>
-                    </div>
-                    
-                    <div class="space-y-3 pt-4 text-right rtl:text-right ltr:text-left" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
-                        <div class="flex items-center gap-4 bg-white/5 p-4 rounded-3xl border border-white/10 backdrop-blur-sm">
-                            <div class="w-12 h-12 rounded-2xl bg-purple-400/20 flex items-center justify-center text-purple-400 shrink-0 shadow-inner"><i class="bi bi-camera-video"></i></div>
-                            <div class="flex-1 font-arabic">
-                                <span class="block font-black text-[15px] text-white">{{ app()->getLocale() == 'ar' ? 'كورسات وبث مباشر' : 'Video & Live Classes' }}</span>
-                                <span class="text-xs text-white/60 font-bold block mt-0.5">{{ app()->getLocale() == 'ar' ? 'تشفير قوي للفيديوهات والمحتوى' : 'Strong encryption for content' }}</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4 bg-white/5 p-4 rounded-3xl border border-white/10 backdrop-blur-sm mt-3">
-                            <div class="w-12 h-12 rounded-2xl bg-amber-400/20 flex items-center justify-center text-amber-400 shrink-0 shadow-inner"><i class="bi bi-file-earmark-check"></i></div>
-                            <div class="flex-1 font-arabic">
-                                <span class="block font-black text-[15px] text-white">{{ app()->getLocale() == 'ar' ? 'اختبارات إلكترونية' : 'Digital Quizzes' }}</span>
-                                <span class="text-xs text-white/60 font-bold block mt-0.5">{{ app()->getLocale() == 'ar' ? 'تصحيح آلي وبنوك أسئلة ذكية' : 'Auto-grading & question banks' }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Trust Badges -->
-                <div class="mt-12 pt-8 border-t border-white/10 flex items-center justify-center gap-5">
-                    <div class="flex -space-x-3 rtl:space-x-reverse">
-                        <img src="https://i.pravatar.cc/100?img=1" class="w-10 h-10 rounded-full border-2 border-brand-secondary/50 shadow-lg object-cover">
-                        <img src="https://i.pravatar.cc/100?img=3" class="w-10 h-10 rounded-full border-2 border-brand-secondary/50 shadow-lg object-cover">
-                        <img src="https://i.pravatar.cc/100?img=5" class="w-10 h-10 rounded-full border-2 border-brand-secondary/50 shadow-lg object-cover">
-                        <div class="w-10 h-10 rounded-full border-2 border-brand-secondary/50 bg-white/10 backdrop-blur-md flex items-center justify-center text-xs font-black text-white shadow-lg">+5k</div>
-                    </div>
-                    <div class="text-right rtl:text-right ltr:text-left text-xs font-arabic text-white/80 leading-snug">
-                        {{ app()->getLocale() == 'ar' ? 'انضم لآلاف المعلمين' : 'Join thousands of tutors' }}<br>
-                        <span class="font-bold text-white text-[13px]">{{ app()->getLocale() == 'ar' ? 'في صناعة المستقبل' : 'in shaping the future' }}</span>
-                    </div>
-                </div>
-            </div>
+        <!-- Footer Link -->
+        <div class="p-8 bg-slate-50/50 border-t border-slate-100 text-center">
+            <span class="text-sm text-slate-500 font-arabic font-bold">
+                {{ __('auth.login.no_account_link') }}
+                <a href="{{ route('login.portal') }}" class="text-brand-secondary font-black hover:underline ml-2">{{ __('auth.login.title') }}</a>
+            </span>
         </div>
     </div>
 </div>
