@@ -1,5 +1,6 @@
 {
     "Admin": true,
     "Center": true,
-    "Campus": true
+    "Campus": true,
+    "Instructor": true
 }

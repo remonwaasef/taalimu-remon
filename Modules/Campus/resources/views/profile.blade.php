@@ -16,12 +16,7 @@
                 </div>
                 <h4 class="fw-bold mb-1">{{ $student->name }}</h4>
                 <p class="text-muted small mb-4">{{ $student->grade_level_name }}</p>
-                <div class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2 mb-4">طالب نشط</div>
-                
-                <div class="mt-2 p-3 bg-white shadow-sm rounded-4 border">
-                    <img src="{{ $qrcode }}" class="img-fluid" alt="QR Code" style="max-width: 150px;">
-                    <p class="small text-muted mt-2 mb-0">كود الحضور الشخصي</p>
-                </div>
+                <div class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">طالب نشط</div>
             </div>
         </div>
 

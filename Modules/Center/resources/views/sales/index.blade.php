@@ -10,37 +10,6 @@
     </a>
 </div>
 
-@if(auth()->user()->hasRole('tutor'))
-<div class="row g-4 mb-4">
-    <div class="col-12 col-md-6">
-        <div class="card border-0 shadow-sm rounded-4 bg-success bg-opacity-10">
-            <div class="card-body p-4 d-flex align-items-center">
-                <div class="bg-success text-white rounded-circle p-3 me-3">
-                    <i class="fas fa-hand-holding-usd fa-lg"></i>
-                </div>
-                <div>
-                    <h6 class="text-success fw-bold mb-1">إجمالي المستلم (المحصل)</h6>
-                    <h3 class="fw-black text-dark mb-0">{{ number_format($totalReceived, 2) }} <small class="fs-6 opacity-50">{{ $tenant->currency ?? 'EGP' }}</small></h3>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-md-6">
-        <div class="card border-0 shadow-sm rounded-4 bg-danger bg-opacity-10">
-            <div class="card-body p-4 d-flex align-items-center">
-                <div class="bg-danger text-white rounded-circle p-3 me-3">
-                    <i class="fas fa-exclamation-circle fa-lg"></i>
-                </div>
-                <div>
-                    <h6 class="text-danger fw-bold mb-1">إجمالي المستحق (المديونيات)</h6>
-                    <h3 class="fw-black text-dark mb-0">{{ number_format($totalDue, 2) }} <small class="fs-6 opacity-50">{{ $tenant->currency ?? 'EGP' }}</small></h3>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endif
-
 <div class="card border-0 shadow-sm rounded-4">
     <div class="card-body p-0">
         <div class="table-responsive">

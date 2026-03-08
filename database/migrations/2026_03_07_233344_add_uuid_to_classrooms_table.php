@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('classrooms', function (Blueprint $table) {
-            $table->uuid('invite_uuid')->nullable()->unique()->after('id');
-            $table->boolean('is_registration_open')->default(true)->after('invite_uuid');
+            //
         });
     }
 
@@ -23,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('classrooms', function (Blueprint $table) {
-            $table->dropColumn(['invite_uuid', 'is_registration_open']);
+            //
         });
     }
 };

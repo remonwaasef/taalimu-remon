@@ -15,12 +15,6 @@ class Classroom extends Model
     {
         parent::boot();
 
-        static::creating(function ($classroom) {
-            if (!$classroom->invite_uuid) {
-                $classroom->invite_uuid = (string) \Illuminate\Support\Str::uuid();
-            }
-        });
-
         static::created(function ($classroom) {
             if ($classroom->tenant_id) {
                 $tenant = app()->bound('tenant') ? app('tenant') : Tenant::find($classroom->tenant_id);
@@ -48,8 +42,6 @@ class Classroom extends Model
         'color',
         'is_active',
         'facilities_summary',
-        'invite_uuid',
-        'is_registration_open',
     ];
 
     protected $casts = [

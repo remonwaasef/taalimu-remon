@@ -11,8 +11,6 @@ use App\Models\Sale;
 use App\Models\Expense;
 use App\Models\QuizAttempt;
 use App\Models\User;
-use App\Models\Schedule;
-use App\Models\Stage;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -24,23 +22,7 @@ class CenterController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $tenant = app('tenant');
-
-        // Self-Healing: If user is on a Tutor plan but has CenterAdmin role, fix it immediately
-        $subscription = $tenant->subscriptions()->latest()->first();
-        $isEnterprise = ($subscription && str_contains($subscription->stripe_price ?? '', 'enterprise')) || ($subscription && str_contains($subscription->name ?? '', 'enterprise'));
-        
-        if (!$isEnterprise && $user->role !== 'tutor') {
-            $user->role = 'tutor';
-            $user->save();
-            // Sync Spatie role as well
-            if (!$user->hasRole('tutor')) {
-                \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'tutor', 'guard_name' => 'web', 'tenant_id' => $tenant->id]);
-                $user->assignRole('tutor');
-            }
-        }
-
-        if ($user->role !== 'center_admin' && !$user->hasAnyRole(['admin', 'center_admin', 'instructor', 'tutor'])) {
+        if ($user->role !== 'center_admin' && !$user->hasAnyRole(['admin', 'center_admin', 'instructor'])) {
             if (request()->expectsJson()) {
                 return response()->json(['message' => 'Unauthorized role'], 403);
             }
@@ -72,9 +54,6 @@ class CenterController extends Controller
                 'attendance' => \Modules\Center\Models\Attendance::where('tenant_id', $tenantId)->exists(),
             ];
 
-            $dayOfWeek = now()->isoFormat('dddd'); // Assuming day names like 'Monday'
-            // Map ISO to what's likely used if needed, or just use dayOfWeek
-            
             return [
                 'activeStudents' => $activeStudentsCount,
                 'activeCourses' => Course::where('status', 'published')->count(),
@@ -84,9 +63,6 @@ class CenterController extends Controller
                 'monthlyExpenses' => Expense::whereMonth('date', now()->month)
                     ->whereYear('date', now()->year)
                     ->sum('amount'),
-                'todaysSessions' => Schedule::where('tenant_id', $tenantId)
-                    ->where('day_of_week', now()->dayOfWeek === 0 ? 7 : now()->dayOfWeek) // Laravel 0=Sun, often DB 1=Mon...7=Sun or Name
-                    ->count(),
                 'launchpadSteps' => $launchpadSteps,
             ];
         });
@@ -95,12 +71,11 @@ class CenterController extends Controller
         $activeCourses = $dashboardData['activeCourses'];
         $monthlyRevenue = $dashboardData['monthlyRevenue'];
         $monthlyExpenses = $dashboardData['monthlyExpenses'];
-        $todaysSessions = $dashboardData['todaysSessions'] ?? 0;
         $launchpadSteps = $dashboardData['launchpadSteps'];
         $netProfit = $monthlyRevenue - $monthlyExpenses;
         
         $completedSteps = count(array_filter($launchpadSteps));
-        $launchpadProgress = ($completedSteps / (auth()->user()->role === 'tutor' ? 4 : 5)) * 100;
+        $launchpadProgress = ($completedSteps / 5) * 100;
 
         // 1.1 Fetch Recent Activities (Cached for 5 minutes)
         $activityCacheKey = "recent_activities";
@@ -122,7 +97,6 @@ class CenterController extends Controller
             'activeCourses',
             'monthlyRevenue',
             'monthlyExpenses',
-            'todaysSessions',
             'netProfit',
             'recentActivities',
             'atRiskStudents',
