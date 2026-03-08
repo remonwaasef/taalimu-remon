@@ -17,6 +17,7 @@ document.addEventListener('alpine:init', () => {
         subdomainMessage: '',
         isSubmitting: false,
         userCountry: 'default',
+        accountType: config.accountType || 'center',
 
         showPlanModal: false,
         couponCode: '',
@@ -157,6 +158,7 @@ document.addEventListener('alpine:init', () => {
      x-data="googleRegistration({
         selectedPlan: {{ Js::from($selectedPlanSlug) }},
         selectedCycle: {{ Js::from($selectedCycle) }},
+        accountType: {{ Js::from($accountType) }},
         packages: {{ Js::from($packagesData) }}
      })"
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
@@ -217,11 +219,14 @@ document.addEventListener('alpine:init', () => {
             <form action="{{ route('google.complete-registration') }}" method="POST" class="space-y-6" @submit="handleSubmit($event)">
                 @csrf
                 <input type="hidden" name="plan" x-model="selectedPlan">
+                <input type="hidden" name="account_type" x-model="accountType">
                 <input type="hidden" name="billing_cycle" x-model="billingCycle">
 
                 {{-- Center Name --}}
                 <div class="space-y-1.5">
-                    <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.center_name') }}</label>
+                    <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">
+                        <span x-text="accountType === 'center' ? '{{ __('auth.register.center_name') }}' : ({{ Js::from(app()->isLocale('ar') ? 'اسم المدرس / المنصة' : 'Teacher / Platform Name') }})"></span>
+                    </label>
                     <div class="relative group">
                         <div class="absolute inset-y-0 start-0 ps-5 flex items-center pointer-events-none text-slate-300 group-focus-within:text-brand-secondary transition-colors"><i class="bi bi-building"></i></div>
                         <input type="text" name="center_name" x-model="centerName"

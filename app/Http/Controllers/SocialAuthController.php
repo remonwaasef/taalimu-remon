@@ -27,6 +27,9 @@ class SocialAuthController extends Controller
         if ($request->has('cycle')) {
             session(['selected_cycle' => $request->cycle]);
         }
+        if ($request->has('account_type')) {
+            session(['account_type' => $request->account_type]);
+        }
 
         return Socialite::driver('google')->redirect();
     }
@@ -43,6 +46,12 @@ class SocialAuthController extends Controller
             $user = User::where('google_id', $googleUser->id)->first();
             if ($user) {
                 Auth::login($user, true);
+                
+                // Redirect based on role or tenant type
+                if ($user->role === 'instructor' || ($user->tenant && $user->tenant->type === 'instructor')) {
+                    return redirect()->route('instructor.dashboard', ['tenant' => $user->tenant->domain]);
+                }
+                
                 return redirect()->intended('/dashboard');
             }
 
@@ -55,6 +64,11 @@ class SocialAuthController extends Controller
                 ])->save();
                 
                 Auth::login($existingUser, true);
+                
+                if ($existingUser->role === 'instructor' || ($existingUser->tenant && $existingUser->tenant->type === 'instructor')) {
+                    return redirect()->route('instructor.dashboard', ['tenant' => $existingUser->tenant->domain]);
+                }
+
                 return redirect()->intended('/dashboard');
             }
 
@@ -70,9 +84,11 @@ class SocialAuthController extends Controller
             // Build redirect URL with plan/cycle persisted from session
             $planParam  = session('selected_plan', '');
             $cycleParam = session('selected_cycle', 'monthly');
+            $accountTypeParam = session('account_type', 'center');
             $query = http_build_query(array_filter([
                 'plan'  => $planParam,
                 'cycle' => $cycleParam,
+                'account_type' => $accountTypeParam,
             ]));
 
             $redirectUrl = route('google.complete-registration') . ($query ? '?' . $query : '');
@@ -147,8 +163,9 @@ class SocialAuthController extends Controller
 
         $selectedPlanSlug = $request->query('plan', session('selected_plan', $packages->firstWhere('is_default', true)?->slug ?? $packages->first()?->slug));
         $selectedCycle = $request->query('cycle', session('selected_cycle', 'monthly'));
+        $accountType = $request->query('account_type', session('account_type', 'center'));
 
-        return view('auth.complete-google-registration', compact('packages', 'packagesData', 'selectedPlanSlug', 'selectedCycle'));
+        return view('auth.complete-google-registration', compact('packages', 'packagesData', 'selectedPlanSlug', 'selectedCycle', 'accountType'));
     }
 
     /**
@@ -168,8 +185,9 @@ class SocialAuthController extends Controller
             return redirect()->route('login.portal')
                 ->withErrors(['email' => __('Session expired. Please try again with Google.')]);
         }
-
+        
         $request->validate([
+            'account_type' => 'required|in:center,instructor',
             'center_name' => 'required|string|max:255',
             'phone' => 'required|string|max:20|unique:users,phone',
             'plan' => 'required|exists:packages,slug',
@@ -200,6 +218,7 @@ class SocialAuthController extends Controller
                 'email' => $googleData['email'],
                 'phone' => $request->phone,
                 'domain' => $subdomain,
+                'type' => $request->account_type,
                 'database_name' => 'edu_central',
                 'status' => 'active',
             ]);
@@ -215,14 +234,14 @@ class SocialAuthController extends Controller
                 'locale' => session('locale', 'ar'),
             ]);
             $user->tenant_id = $tenant->id;
-            $user->role = 'center_admin';
+            $user->role = $request->account_type === 'instructor' ? 'instructor' : 'center_admin';
             $user->save();
 
             event(new Registered($user));
 
             // Set Spatie Team Context
             app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
-            $user->assignRole('center_admin');
+            $user->assignRole($user->role);
 
             // 3. Handle Subscription logic
             $selectedPlan = $request->input('plan', 'free-trial');
