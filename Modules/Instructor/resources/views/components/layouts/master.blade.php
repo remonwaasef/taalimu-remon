@@ -117,16 +117,16 @@
             <a href="{{ route('instructor.dashboard') }}" class="nav-link {{ request()->routeIs('instructor.dashboard') ? 'active' : '' }}">
                 <i class="fas fa-home"></i> <span>الرئيسية</span>
             </a>
-            <a href="#" class="nav-link">
+            <a href="{{ route('instructor.students.list') }}" class="nav-link {{ request()->routeIs('instructor.students.list') ? 'active' : '' }}">
                 <i class="fas fa-user-graduate"></i> <span>الطلاب</span>
             </a>
-            <a href="#" class="nav-link">
+            <a href="{{ route('instructor.dashboard') }}#groups-section" class="nav-link">
                 <i class="fas fa-users"></i> <span>المجموعات</span>
             </a>
             <a href="{{ route('instructor.billing') }}" class="nav-link {{ request()->routeIs('instructor.billing') ? 'active' : '' }}">
                 <i class="fas fa-wallet"></i> <span>الحسابات</span>
             </a>
-            <a href="#" class="nav-link">
+            <a href="#" class="nav-link" onclick="alert('سيكون متاحاً في المرحلة القادمة')">
                 <i class="fab fa-whatsapp"></i> <span>الواتساب</span>
             </a>
             
