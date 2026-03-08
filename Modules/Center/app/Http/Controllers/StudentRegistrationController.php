@@ -83,10 +83,13 @@ class StudentRegistrationController extends Controller
 
     public function success(User $user)
     {
+        // Get the latest enrollment to show the group/instructor info
+        $enrollment = $user->enrollments()->with('course.instructor')->latest()->first();
+        $course = $enrollment ? $enrollment->course : null;
+
         // Use a reliable external QR generator that works across all mobile browsers
-        // This avoids issues with raw SVG injection or data URI encoding
         $qrCode = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" . urlencode($user->qr_identifier);
         
-        return view('center::groups.registration_success', compact('user', 'qrCode'));
+        return view('center::groups.registration_success', compact('user', 'qrCode', 'course'));
     }
 }

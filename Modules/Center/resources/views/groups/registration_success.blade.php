@@ -264,6 +264,8 @@
             const qrCanvas = qrContainer.querySelector('canvas');
             const studentName = "{{ $user->name }}";
             const studentId = "{{ $user->qr_identifier }}";
+            const courseTitle = "{{ $course->title ?? '' }}";
+            const instructorName = "{{ $course->instructor->name ?? '' }}";
             const fileName = `QR_${studentId}.png`;
 
             if (!qrCanvas) {
@@ -277,7 +279,7 @@
             
             const padding = 20;
             const qrSize = 400; // Increase for better quality
-            const textHeight = 80;
+            const textHeight = 140; // Increased to fit more lines
             const totalWidth = qrSize + (padding * 2);
             const totalHeight = qrSize + textHeight + (padding * 2);
 
@@ -297,9 +299,23 @@
             ctx.textAlign = 'center';
             ctx.fillText(studentName, totalWidth / 2, padding + qrSize + 30);
             
+            ctx.font = '18px Arial, sans-serif';
+            ctx.fillStyle = '#64748b'; // Gray text for group
+            let currentY = padding + qrSize + 60;
+            
+            if (courseTitle) {
+                ctx.fillText(`المجموعة: ${courseTitle}`, totalWidth / 2, currentY);
+                currentY += 25;
+            }
+            
+            if (instructorName) {
+                ctx.fillText(`المدرس: ${instructorName}`, totalWidth / 2, currentY);
+                currentY += 25;
+            }
+            
             ctx.font = '20px monospace';
             ctx.fillStyle = '#4f46e5'; // Primary color
-            ctx.fillText(`#${studentId}`, totalWidth / 2, padding + qrSize + 65);
+            ctx.fillText(`#${studentId}`, totalWidth / 2, currentY + 10);
 
             // Trigger Download
             const dataUrl = canvas.toDataURL("image/png");
