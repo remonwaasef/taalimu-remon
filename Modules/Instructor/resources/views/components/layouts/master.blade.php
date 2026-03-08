@@ -120,7 +120,7 @@
             <a href="{{ route('instructor.students.list') }}" class="nav-link {{ request()->routeIs('instructor.students.list') ? 'active' : '' }}">
                 <i class="fas fa-user-graduate"></i> <span>الطلاب</span>
             </a>
-            <a href="{{ route('instructor.dashboard') }}#groups-section" class="nav-link">
+            <a href="{{ route('instructor.groups.list') }}" class="nav-link {{ request()->routeIs('instructor.groups.list') ? 'active' : '' }}">
                 <i class="fas fa-users"></i> <span>المجموعات</span>
             </a>
             <a href="{{ route('instructor.billing') }}" class="nav-link {{ request()->routeIs('instructor.billing') ? 'active' : '' }}">

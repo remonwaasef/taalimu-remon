@@ -106,18 +106,18 @@
             <div class="card p-4 border-0 bg-white h-100">
                 <h5 class="fw-bold mb-4">روابط سريعة</h5>
                 <div class="d-grid gap-3">
-                    <button class="btn btn-light text-start p-3 rounded-4 border-0 shadow-none d-flex align-items-center gap-3">
+                    <a href="{{ route('instructor.students.list') }}" class="btn btn-light text-start p-3 rounded-4 border-0 shadow-none d-flex align-items-center gap-3">
                         <div class="bg-primary bg-opacity-10 rounded-3 p-2 text-primary">
                             <i class="fas fa-plus"></i>
                         </div>
                         <span>إضافة طالب جديد</span>
-                    </button>
-                    <button class="btn btn-light text-start p-3 rounded-4 border-0 shadow-none d-flex align-items-center gap-3">
+                    </a>
+                    <a href="{{ route('instructor.groups.list') }}" class="btn btn-light text-start p-3 rounded-4 border-0 shadow-none d-flex align-items-center gap-3">
                         <div class="bg-success bg-opacity-10 rounded-3 p-2 text-success">
                             <i class="fas fa-layer-group"></i>
                         </div>
                         <span>إنشاء مجموعة جديدة</span>
-                    </button>
+                    </a>
                     <button class="btn btn-light text-start p-3 rounded-4 border-0 shadow-none d-flex align-items-center gap-3" onclick="alert('سيكون متاحاً في المرحلة القادمة')">
                         <div class="bg-info bg-opacity-10 rounded-3 p-2 text-info">
                             <i class="fas fa-qrcode"></i>
