@@ -47,8 +47,8 @@ class SocialAuthController extends Controller
             if ($user) {
                 Auth::login($user, true);
                 
-                // Redirect based on role
-                if ($user->role === 'instructor') {
+                // Redirect based on role or tenant type
+                if ($user->role === 'instructor' || ($user->tenant && $user->tenant->type === 'instructor')) {
                     return redirect()->route('instructor.dashboard', ['tenant' => $user->tenant->domain]);
                 }
                 
@@ -65,7 +65,7 @@ class SocialAuthController extends Controller
                 
                 Auth::login($existingUser, true);
                 
-                if ($existingUser->role === 'instructor') {
+                if ($existingUser->role === 'instructor' || ($existingUser->tenant && $existingUser->tenant->type === 'instructor')) {
                     return redirect()->route('instructor.dashboard', ['tenant' => $existingUser->tenant->domain]);
                 }
 
@@ -234,14 +234,14 @@ class SocialAuthController extends Controller
                 'locale' => session('locale', 'ar'),
             ]);
             $user->tenant_id = $tenant->id;
-            $user->role = 'center_admin';
+            $user->role = $request->account_type === 'instructor' ? 'instructor' : 'center_admin';
             $user->save();
 
             event(new Registered($user));
 
             // Set Spatie Team Context
             app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
-            $user->assignRole('center_admin');
+            $user->assignRole($user->role);
 
             // 3. Handle Subscription logic
             $selectedPlan = $request->input('plan', 'free-trial');

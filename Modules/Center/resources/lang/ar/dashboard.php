@@ -15,8 +15,6 @@ return [
     'projected' => 'المتوقع',
     'center_status' => 'حالة المركز',
     'center_dashboard' => 'لوحة تحكم المركز',
-    'tutor_dashboard' => 'لوحة تحكم المعلم',
-    'tutor_status' => 'حالة الواجهة',
     'system_status' => 'حالة النظام',
     'healthy' => 'مستقرة',
     'real_time_monitoring' => 'المراقبة الحية نشطة',

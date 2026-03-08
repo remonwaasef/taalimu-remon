@@ -22,6 +22,11 @@ class CenterController extends Controller
     public function index()
     {
         $user = auth()->user();
+        
+        // Redirect instructors to their specific dashboard
+        if ($user && ($user->role === 'instructor' || ($user->tenant && $user->tenant->type === 'instructor'))) {
+            return redirect()->route('instructor.dashboard', ['tenant' => $user->tenant->domain]);
+        }
 
         if ($user->role !== 'center_admin' && !$user->hasAnyRole(['admin', 'center_admin', 'instructor'])) {
             if (request()->expectsJson()) {
@@ -42,9 +47,9 @@ class CenterController extends Controller
         // 1. Summary Metrics & Setup Progress (Cached for 15 minutes)
         $tenant = app('tenant');
         $tenantId = $tenant->id;
-        $cacheKey = "dashboard_stats_v4";
+        $cacheKey = "dashboard_stats_v3";
 
-        $dashboardData = \App\Support\TenantCache::remember($cacheKey, now()->addMinutes(15), function () use ($tenantId, $tenant) {
+        $dashboardData = \App\Support\TenantCache::remember($cacheKey, now()->addMinutes(15), function () use ($tenantId) {
             $activeStudentsCount = Student::where('status', 'active')->count();
             
             $launchpadSteps = [
@@ -54,11 +59,6 @@ class CenterController extends Controller
                 'student' => $activeStudentsCount > 0,
                 'attendance' => \Modules\Center\Models\Attendance::where('tenant_id', $tenantId)->exists(),
             ];
-
-            // Independent Tutors don't need to add another instructor
-            if ($tenant->type === 'instructor') {
-                unset($launchpadSteps['instructor']);
-            }
 
             return [
                 'activeStudents' => $activeStudentsCount,
@@ -81,8 +81,7 @@ class CenterController extends Controller
         $netProfit = $monthlyRevenue - $monthlyExpenses;
         
         $completedSteps = count(array_filter($launchpadSteps));
-        $totalSteps = count($launchpadSteps);
-        $launchpadProgress = $totalSteps > 0 ? ($completedSteps / $totalSteps) * 100 : 100;
+        $launchpadProgress = ($completedSteps / 5) * 100;
 
         // 1.1 Fetch Recent Activities (Cached for 5 minutes)
         $activityCacheKey = "recent_activities";
