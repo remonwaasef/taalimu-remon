@@ -30,6 +30,12 @@ class User extends Authenticatable implements MustVerifyEmail
             );
         }
 
+        static::creating(function ($user) {
+            if ($user->role === 'student' && empty($user->qr_identifier)) {
+                $user->qr_identifier = \Illuminate\Support\Str::random(12);
+            }
+        });
+
         static::created(function ($user) {
             if ($user->role === 'student' && $user->tenant_id) {
                 $tenant = app()->bound('tenant') ? app('tenant') : Tenant::find($user->tenant_id);

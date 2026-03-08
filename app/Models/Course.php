@@ -18,6 +18,12 @@ class Course extends Model
     {
         parent::boot();
 
+        static::creating(function ($course) {
+            if (empty($course->registration_token)) {
+                $course->registration_token = \Illuminate\Support\Str::random(16);
+            }
+        });
+
         static::created(function ($course) {
             if ($course->tenant_id) {
                 $tenant = app()->bound('tenant') ? app('tenant') : Tenant::find($course->tenant_id);
