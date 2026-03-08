@@ -42,7 +42,7 @@ class StudentRegistrationController extends Controller
                 'phone' => $request->phone,
                 'password' => Hash::make($request->phone), // Default password is phone
                 'role' => 'student',
-                'qr_identifier' => Str::random(8),
+                'qr_identifier' => Str::random(12),
                 'tenant_id' => $course->tenant_id,
             ]);
 
@@ -56,6 +56,11 @@ class StudentRegistrationController extends Controller
                 'parent_phone' => $request->parent_phone,
                 'status' => 'active',
             ]);
+        } else {
+            // Ensure existing user has a qr_identifier if they are a student
+            if ($user->role === 'student' && empty($user->qr_identifier)) {
+                $user->update(['qr_identifier' => Str::random(12)]);
+            }
         }
 
         // Enroll in the course if not already enrolled
@@ -78,16 +83,9 @@ class StudentRegistrationController extends Controller
 
     public function success(User $user)
     {
-        $options = new QROptions([
-            'outputType' => QRCode::OUTPUT_MARKUP_SVG,
-            'eccLevel'   => QRCode::ECC_L,
-            'addQuietzone' => true,
-        ]);
-        
-        $qrCode = (new QRCode($options))->render($user->qr_identifier);
-        
-        // Convert SVG to Data URL (utf8) for 100% reliable rendering
-        $qrCode = 'data:image/svg+xml;utf8,' . rawurlencode($qrCode);
+        // Use a reliable external QR generator that works across all mobile browsers
+        // This avoids issues with raw SVG injection or data URI encoding
+        $qrCode = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" . urlencode($user->qr_identifier);
         
         return view('center::groups.registration_success', compact('user', 'qrCode'));
     }
