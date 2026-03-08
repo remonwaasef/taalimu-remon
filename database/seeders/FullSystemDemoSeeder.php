@@ -87,6 +87,21 @@ class FullSystemDemoSeeder extends Seeder
                 'bio' => 'مدرس خبير في الرياضيات لأكثر من 10 سنوات.'
             ]
         );
+        $userInst1 = User::updateOrCreate(
+            ['email' => $inst1->email],
+            [
+                'name' => $inst1->name,
+                'password' => Hash::make('password'),
+                'role' => 'instructor',
+                'tenant_id' => $tenant->id,
+                'instructor_id' => $inst1->id,
+                'qr_identifier' => \Illuminate\Support\Str::random(12),
+            ]
+        );
+        // Fetch Global Role Object to ensure we link to the correct ID
+        $instructorRole = \Spatie\Permission\Models\Role::where('name', 'instructor')->whereNull('tenant_id')->first();
+        $userInst1->assignRole($instructorRole);
+        $inst1->update(['user_id' => $userInst1->id]);
 
         $inst2 = Instructor::updateOrCreate(
             ['email' => 'instructor2@demo.com', 'tenant_id' => $tenant->id],
@@ -96,6 +111,21 @@ class FullSystemDemoSeeder extends Seeder
                 'bio' => 'متخصصة في تبسيط العلوم للطلاب.'
             ]
         );
+        $userInst2 = User::updateOrCreate(
+            ['email' => $inst2->email],
+            [
+                'name' => $inst2->name,
+                'password' => Hash::make('password'),
+                'role' => 'instructor',
+                'tenant_id' => $tenant->id,
+                'instructor_id' => $inst2->id,
+                'qr_identifier' => \Illuminate\Support\Str::random(12),
+            ]
+        );
+        // Fetch Global Role Object to ensure we link to the correct ID
+        $instructorRole = \Spatie\Permission\Models\Role::where('name', 'instructor')->whereNull('tenant_id')->first();
+        $userInst2->assignRole($instructorRole);
+        $inst2->update(['user_id' => $userInst2->id]);
 
         // 4. Create Students (Records)
         $students = [];
@@ -123,6 +153,7 @@ class FullSystemDemoSeeder extends Seeder
                 'instructor_id' => $inst1->id,
                 'description' => 'شرح وافٍ لمنهج الرياضيات بالكامل مع حل تدريبات مكثفة.',
                 'price' => 500.00,
+                'registration_token' => \Illuminate\Support\Str::random(16),
                 'status' => 'published',
             ]
         );
@@ -133,6 +164,7 @@ class FullSystemDemoSeeder extends Seeder
                 'instructor_id' => $inst2->id,
                 'description' => 'تبسيط مفاهيم الميكانيكا والطاقة لطلاب المرحلة الثانوية.',
                 'price' => 350.00,
+                'registration_token' => \Illuminate\Support\Str::random(16),
                 'status' => 'published',
             ]
         );
@@ -238,6 +270,7 @@ class FullSystemDemoSeeder extends Seeder
                     'password' => Hash::make('password'),
                     'role' => 'student',
                     'tenant_id' => $tenant->id,
+                    'qr_identifier' => \Illuminate\Support\Str::random(12),
                 ]
             );
             // Fetch Global Role Object to ensure we link to the correct ID
