@@ -209,7 +209,7 @@
             <p>مرحباً بك يا <strong>{{ $user->name }}</strong>. لقد تم تسجيلك في المجموعة بنجاح. يرجى الاحتفاظ بكود الحضور أدناه.</p>
 
             <div class="qr-wrapper shadow-sm">
-                {!! $qrCode !!}
+                <img src="{{ $qrCode }}" alt="QR Code" class="img-fluid">
             </div>
 
             <div class="info-alert">
