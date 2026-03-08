@@ -187,7 +187,7 @@
                 <div class="portal-card p-4 text-center">
                     <h6 class="fw-bold mb-3">كود الحضور الشخصي</h6>
                     <div class="qr-wrapper shadow-sm">
-                        <img src="{{ $qrCode }}" alt="QR Code" class="img-fluid">
+                        <img src="{!! $qrCode !!}" alt="QR Code" class="img-fluid">
                     </div>
                     <p class="small text-muted mb-4 px-3">يرجى الاحتفاظ بهذا الكود لإثبات حضورك عند الدخول للقاعة.</p>
                     <button onclick="window.print()" class="btn-action btn-print w-100">

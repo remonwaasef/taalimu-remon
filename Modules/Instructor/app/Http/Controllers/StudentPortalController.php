@@ -45,7 +45,7 @@ class StudentPortalController extends Controller
         ]);
         
         $qrCode = (new QRCode($options))->render($user->qr_identifier);
-        $qrCode = 'data:image/svg+xml;base64,' . base64_encode($qrCode);
+        $qrCode = 'data:image/svg+xml;utf8,' . rawurlencode($qrCode);
 
         return view('instructor::student_portal', compact('student', 'user', 'attendances', 'sales', 'qrCode'));
     }
