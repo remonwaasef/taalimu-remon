@@ -42,9 +42,9 @@ class CenterController extends Controller
         // 1. Summary Metrics & Setup Progress (Cached for 15 minutes)
         $tenant = app('tenant');
         $tenantId = $tenant->id;
-        $cacheKey = "dashboard_stats_v3";
+        $cacheKey = "dashboard_stats_v4";
 
-        $dashboardData = \App\Support\TenantCache::remember($cacheKey, now()->addMinutes(15), function () use ($tenantId) {
+        $dashboardData = \App\Support\TenantCache::remember($cacheKey, now()->addMinutes(15), function () use ($tenantId, $tenant) {
             $activeStudentsCount = Student::where('status', 'active')->count();
             
             $launchpadSteps = [
@@ -54,6 +54,11 @@ class CenterController extends Controller
                 'student' => $activeStudentsCount > 0,
                 'attendance' => \Modules\Center\Models\Attendance::where('tenant_id', $tenantId)->exists(),
             ];
+
+            // Independent Tutors don't need to add another instructor
+            if ($tenant->type === 'instructor') {
+                unset($launchpadSteps['instructor']);
+            }
 
             return [
                 'activeStudents' => $activeStudentsCount,
@@ -76,7 +81,8 @@ class CenterController extends Controller
         $netProfit = $monthlyRevenue - $monthlyExpenses;
         
         $completedSteps = count(array_filter($launchpadSteps));
-        $launchpadProgress = ($completedSteps / 5) * 100;
+        $totalSteps = count($launchpadSteps);
+        $launchpadProgress = $totalSteps > 0 ? ($completedSteps / $totalSteps) * 100 : 100;
 
         // 1.1 Fetch Recent Activities (Cached for 5 minutes)
         $activityCacheKey = "recent_activities";

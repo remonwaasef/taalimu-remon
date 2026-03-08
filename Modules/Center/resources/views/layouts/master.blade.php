@@ -473,9 +473,8 @@
                                       request()->routeIs('center.courses.*') || 
                                       request()->routeIs('center.schedules.*');
                 
-                // If Instructor mode, we only show courses/schedules if they exist (usually hidden as they are in instructor module)
-                // But for now, we follow the user request: if they are a center, they see full center mgmt.
-                $showSchoolMgmt = ($canInstructors || $canCourses || $canClassrooms || $canSchedules) && ($tenant->type !== 'instructor');
+                // Independent Tutors and Centers both need to manage courses, classrooms, etc.
+                $showSchoolMgmt = ($canInstructors || $canCourses || $canClassrooms || $canSchedules);
             @endphp
             
             @if($showSchoolMgmt)
