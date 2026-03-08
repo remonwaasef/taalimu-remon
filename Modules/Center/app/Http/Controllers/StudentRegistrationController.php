@@ -42,7 +42,7 @@ class StudentRegistrationController extends Controller
                 'phone' => $request->phone,
                 'password' => Hash::make($request->phone), // Default password is phone
                 'role' => 'student',
-                'qr_identifier' => Str::random(12),
+                'qr_identifier' => Str::random(8),
                 'tenant_id' => $course->tenant_id,
             ]);
 
