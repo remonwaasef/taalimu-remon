@@ -38,6 +38,10 @@ class StudentPortalController extends Controller
             ->take(10)
             ->get();
 
-        return view('instructor::student_portal', compact('student', 'user', 'attendances', 'sales'));
+        // Get latest enrollment for QR details
+        $enrollment = $user->enrollments()->with('course.instructor')->latest()->first();
+        $course = $enrollment ? $enrollment->course : null;
+
+        return view('instructor::student_portal', compact('student', 'user', 'attendances', 'sales', 'course'));
     }
 }
