@@ -10,7 +10,8 @@ use App\Models\Enrollment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 
 class StudentRegistrationController extends Controller
 {
@@ -77,6 +78,14 @@ class StudentRegistrationController extends Controller
 
     public function success(User $user)
     {
-        return view('center::groups.registration_success', compact('user'));
+        $options = new QROptions([
+            'outputType' => QRCode::OUTPUT_MARKUP_SVG,
+            'eccLevel'   => QRCode::ECC_L,
+            'addQuietzone' => true,
+        ]);
+        
+        $qrCode = (new QRCode($options))->render($user->qr_identifier);
+        
+        return view('center::groups.registration_success', compact('user', 'qrCode'));
     }
 }

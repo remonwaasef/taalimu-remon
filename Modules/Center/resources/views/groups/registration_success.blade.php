@@ -66,7 +66,7 @@
         <p class="text-muted">مرحباً بك يا <strong>{{ $user->name }}</strong>. هذا هو كود الحضور الخاص بك، يرجى الاحتفاظ بصورة منه لإظهاره عند الدخول.</p>
 
         <div class="qr-container">
-            {!! QrCode::size(200)->generate($user->qr_identifier) !!}
+            {!! $qrCode !!}
         </div>
 
         <div class="alert alert-info small text-start">

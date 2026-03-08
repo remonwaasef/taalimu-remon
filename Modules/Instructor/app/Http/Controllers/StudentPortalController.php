@@ -8,6 +8,8 @@ use App\Models\Student;
 use Modules\Center\Models\Attendance;
 use App\Models\Sale;
 use Illuminate\Http\Request;
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 
 class StudentPortalController extends Controller
 {
@@ -36,6 +38,14 @@ class StudentPortalController extends Controller
             ->take(10)
             ->get();
 
-        return view('instructor::student_portal', compact('student', 'user', 'attendances', 'sales'));
+        $options = new QROptions([
+            'outputType' => QRCode::OUTPUT_MARKUP_SVG,
+            'eccLevel'   => QRCode::ECC_L,
+            'addQuietzone' => true,
+        ]);
+        
+        $qrCode = (new QRCode($options))->render($user->qr_identifier);
+
+        return view('instructor::student_portal', compact('student', 'user', 'attendances', 'sales', 'qrCode'));
     }
 }
