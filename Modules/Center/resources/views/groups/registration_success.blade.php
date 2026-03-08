@@ -208,8 +208,11 @@
             <h3>تم تسجيلك بنجاح!</h3>
             <p>مرحباً بك يا <strong>{{ $user->name }}</strong>. لقد تم تسجيلك في المجموعة بنجاح. يرجى الاحتفاظ بكود الحضور أدناه.</p>
 
-            <div class="qr-wrapper shadow-sm">
-                <img src="{!! $qrCode !!}" alt="QR Code" class="img-fluid">
+            <div class="qr-wrapper shadow-sm bg-white p-3 rounded-4 mb-4">
+                <img src="{{ $qrCode }}" alt="QR Code" class="img-fluid" style="width: 200px; height: 200px;">
+                <div class="mt-3">
+                    <code class="text-primary fw-bold fs-5">#{{ $user->qr_identifier }}</code>
+                </div>
             </div>
 
             <div class="info-alert">
