@@ -86,6 +86,9 @@ class StudentRegistrationController extends Controller
         
         $qrCode = (new QRCode($options))->render($user->qr_identifier);
         
+        // Convert SVG to Data URL for 100% reliable rendering
+        $qrCode = 'data:image/svg+xml;base64,' . base64_encode($qrCode);
+        
         return view('center::groups.registration_success', compact('user', 'qrCode'));
     }
 }
