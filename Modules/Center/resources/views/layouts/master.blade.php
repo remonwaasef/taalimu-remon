@@ -366,7 +366,7 @@
                 @endif
                 <div class="overflow-hidden">
                     <h5 class="fw-bold text-white mb-0 lh-1 text-truncate" style="font-size: 1rem;">{{ $tenant->name ?? __('sidebar.center_name') }}</h5>
-                    <small class="text-muted" style="font-size: 0.7rem;">{{ __('center::sidebar.panel') }}</small>
+                    <small class="text-muted" style="font-size: 0.7rem;">{{ auth()->user()->tenant && auth()->user()->tenant->type === 'instructor' ? __('center::dashboard.tutor_dashboard') : __('center::sidebar.panel') }}</small>
                 </div>
             </div>
             <button type="button" class="btn btn-link text-white p-0 d-lg-none" id="sidebarClose">
