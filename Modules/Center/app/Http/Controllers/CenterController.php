@@ -22,11 +22,6 @@ class CenterController extends Controller
     public function index()
     {
         $user = auth()->user();
-        
-        // Redirect instructors to their specific dashboard
-        if ($user && ($user->role === 'instructor' || ($user->tenant && $user->tenant->type === 'instructor'))) {
-            return redirect()->route('instructor.dashboard', ['tenant' => $user->tenant->domain]);
-        }
 
         if ($user->role !== 'center_admin' && !$user->hasAnyRole(['admin', 'center_admin', 'instructor'])) {
             if (request()->expectsJson()) {

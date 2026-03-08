@@ -176,14 +176,14 @@ class RegistrationController extends Controller
                 'locale' => session('locale', 'ar'),
             ]);
             $user->tenant_id = $tenant->id;
-            $user->role = $request->account_type === 'instructor' ? 'instructor' : 'center_admin';
+            $user->role = 'center_admin';
             $user->save();
             
             event(new Registered($user));
             
             // Set Spatie Team Context
             app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
-            $user->assignRole($user->role);
+            $user->assignRole('center_admin');
 
             // 3. Handle Subscription based on selected plan
             $stripePriceIds = [
