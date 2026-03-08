@@ -37,6 +37,7 @@ class StudentRegistrationController extends Controller
         if (!$user) {
             $user = User::create([
                 'name' => $request->name,
+                'email' => $request->phone . '@' . ($course->tenant->domain ?? 'taalimu') . '.com',
                 'phone' => $request->phone,
                 'password' => Hash::make($request->phone), // Default password is phone
                 'role' => 'student',
