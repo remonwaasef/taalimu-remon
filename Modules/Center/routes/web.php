@@ -57,6 +57,11 @@ $tenantRoutes = function () {
         Route::post('password/change', [AuthController::class, 'changePassword'])->name('center.password.change.submit');
     });
 
+    // Student Self-Registration via Token (Public)
+    Route::get('register/group/{token}', [\Modules\Center\Http\Controllers\StudentRegistrationController::class, 'index'])->name('group.register');
+    Route::post('register/group/{token}', [\Modules\Center\Http\Controllers\StudentRegistrationController::class, 'store'])->name('group.register.submit');
+    Route::get('register/success/{user}', [\Modules\Center\Http\Controllers\StudentRegistrationController::class, 'success'])->name('group.registration.success');
+
     // QR Attendance Mark - Public route (protected by signed URL, NOT by auth middleware)
     // Students scan this from their phone and may not be logged in
     Route::get('attendance/mark/{schedule}', [AttendanceController::class, 'markByQr'])

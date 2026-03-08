@@ -94,6 +94,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'points',
         'tenant_id',
         'instructor_id',
+        'qr_identifier',
         'must_change_password',
         'locale',
         'google_id',

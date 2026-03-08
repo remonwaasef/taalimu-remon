@@ -6,9 +6,15 @@ use Modules\Instructor\Http\Controllers\InstructorController;
 $instructorRoutes = function () {
     Route::middleware(['auth', 'verified'])->prefix('instructor')->group(function () {
         Route::get('/', [InstructorController::class, 'index'])->name('instructor.dashboard');
+        Route::get('/scanner/{course}', [InstructorController::class, 'scanner'])->name('instructor.scanner');
+        Route::post('/scan/{course}', [InstructorController::class, 'scan'])->name('instructor.scan');
+        Route::get('/billing', [InstructorController::class, 'billing'])->name('instructor.billing');
+        Route::post('/mark-paid', [InstructorController::class, 'markPaid'])->name('instructor.mark-paid');
         Route::resource('students', InstructorController::class)->names('instructor.students');
-        // We will add more specific controllers later
     });
+
+    // Public Student Portal (Accessible via QR Link)
+    Route::get('/s/{identifier}', [\Modules\Instructor\Http\Controllers\StudentPortalController::class, 'index'])->name('student.portal');
 };
 
 // Register routes based on tenancy mode (Supporting both path and subdomain)

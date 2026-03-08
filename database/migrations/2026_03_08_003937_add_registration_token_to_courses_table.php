@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('qr_identifier')->nullable()->unique()->after('id');
+        Schema::table('courses', function (Blueprint $table) {
+            $table->string('registration_token')->nullable()->unique()->after('id');
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('courses', function (Blueprint $table) {
             //
         });
     }

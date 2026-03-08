@@ -114,7 +114,7 @@
         </div>
 
         <nav class="mt-4">
-            <a href="#" class="nav-link active">
+            <a href="{{ route('instructor.dashboard') }}" class="nav-link {{ request()->routeIs('instructor.dashboard') ? 'active' : '' }}">
                 <i class="fas fa-home"></i> <span>الرئيسية</span>
             </a>
             <a href="#" class="nav-link">
@@ -123,10 +123,7 @@
             <a href="#" class="nav-link">
                 <i class="fas fa-users"></i> <span>المجموعات</span>
             </a>
-            <a href="#" class="nav-link">
-                <i class="fas fa-qrcode"></i> <span>ماسح الغياب</span>
-            </a>
-            <a href="#" class="nav-link">
+            <a href="{{ route('instructor.billing') }}" class="nav-link {{ request()->routeIs('instructor.billing') ? 'active' : '' }}">
                 <i class="fas fa-wallet"></i> <span>الحسابات</span>
             </a>
             <a href="#" class="nav-link">
