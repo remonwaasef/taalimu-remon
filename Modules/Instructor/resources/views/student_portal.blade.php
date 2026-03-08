@@ -167,6 +167,8 @@
             }
         }
     </style>
+    <!-- qrcode.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 
@@ -186,11 +188,11 @@
             <div class="col-lg-4">
                 <div class="portal-card p-4 text-center">
                     <h6 class="fw-bold mb-3">كود الحضور الشخصي</h6>
-                    <div class="qr-wrapper shadow-sm">
-                        <img src="{!! $qrCode !!}" alt="QR Code" class="img-fluid">
+                    <div class="qr-wrapper shadow-sm mx-auto">
+                        <div id="qrcode-container" class="d-flex justify-content-center"></div>
                     </div>
                     <p class="small text-muted mb-4 px-3">يرجى الاحتفاظ بهذا الكود لإثبات حضورك عند الدخول للقاعة.</p>
-                    <button onclick="window.print()" class="btn-action btn-print w-100">
+                    <button onclick="downloadQR()" class="btn-action btn-print w-100">
                         <i class="fas fa-download"></i> تحميل كود QR
                     </button>
                 </div>
@@ -292,5 +294,71 @@
         </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const qrContainer = document.getElementById('qrcode-container');
+            const qrData = "{{ $user->qr_identifier }}";
+            
+            if (qrContainer && qrData) {
+                new QRCode(qrContainer, {
+                    text: qrData,
+                    width: 180,
+                    height: 180,
+                    colorDark : "#000000",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+            }
+        });
+
+        function downloadQR() {
+            const qrContainer = document.getElementById('qrcode-container');
+            const qrCanvas = qrContainer.querySelector('canvas');
+            const studentName = "{{ $student->name }}";
+            const studentId = "{{ $user->qr_identifier }}";
+            const fileName = `QR_${studentId}.png`;
+
+            if (!qrCanvas) {
+                alert("عذراً، تعذر تحميل الكود. حاول مرة أخرى.");
+                return;
+            }
+
+            // Create a composite canvas
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            const padding = 20;
+            const qrSize = 400; 
+            const textHeight = 80;
+            const totalWidth = qrSize + (padding * 2);
+            const totalHeight = qrSize + textHeight + (padding * 2);
+
+            canvas.width = totalWidth;
+            canvas.height = totalHeight;
+
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.drawImage(qrCanvas, padding, padding, qrSize, qrSize);
+
+            ctx.fillStyle = '#000000';
+            ctx.font = 'bold 24px Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(studentName, totalWidth / 2, padding + qrSize + 30);
+            
+            ctx.font = '20px monospace';
+            ctx.fillStyle = '#4f46e5';
+            ctx.fillText(`#${studentId}`, totalWidth / 2, padding + qrSize + 65);
+
+            const dataUrl = canvas.toDataURL("image/png");
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = dataUrl;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    </script>
 </body>
 </html>
