@@ -70,6 +70,9 @@ class CenterController extends Controller
                 'attendance' => \Modules\Center\Models\Attendance::where('tenant_id', $tenantId)->exists(),
             ];
 
+            $dayOfWeek = now()->isoFormat('dddd'); // Assuming day names like 'Monday'
+            // Map ISO to what's likely used if needed, or just use dayOfWeek
+            
             return [
                 'activeStudents' => $activeStudentsCount,
                 'activeCourses' => Course::where('status', 'published')->count(),
@@ -79,6 +82,9 @@ class CenterController extends Controller
                 'monthlyExpenses' => Expense::whereMonth('date', now()->month)
                     ->whereYear('date', now()->year)
                     ->sum('amount'),
+                'todaysSessions' => Schedule::where('tenant_id', $tenantId)
+                    ->where('day_of_week', now()->dayOfWeek === 0 ? 7 : now()->dayOfWeek) // Laravel 0=Sun, often DB 1=Mon...7=Sun or Name
+                    ->count(),
                 'launchpadSteps' => $launchpadSteps,
             ];
         });
@@ -87,11 +93,12 @@ class CenterController extends Controller
         $activeCourses = $dashboardData['activeCourses'];
         $monthlyRevenue = $dashboardData['monthlyRevenue'];
         $monthlyExpenses = $dashboardData['monthlyExpenses'];
+        $todaysSessions = $dashboardData['todaysSessions'] ?? 0;
         $launchpadSteps = $dashboardData['launchpadSteps'];
         $netProfit = $monthlyRevenue - $monthlyExpenses;
         
         $completedSteps = count(array_filter($launchpadSteps));
-        $launchpadProgress = ($completedSteps / 5) * 100;
+        $launchpadProgress = ($completedSteps / (auth()->user()->role === 'tutor' ? 4 : 5)) * 100;
 
         // 1.1 Fetch Recent Activities (Cached for 5 minutes)
         $activityCacheKey = "recent_activities";
@@ -113,6 +120,7 @@ class CenterController extends Controller
             'activeCourses',
             'monthlyRevenue',
             'monthlyExpenses',
+            'todaysSessions',
             'netProfit',
             'recentActivities',
             'atRiskStudents',

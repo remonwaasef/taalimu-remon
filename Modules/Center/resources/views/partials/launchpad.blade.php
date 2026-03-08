@@ -1,16 +1,25 @@
 @php
+    $isTutorRole = auth()->user()->hasRole('tutor') || auth()->user()->role === 'tutor';
     $steps = [
         'education_system' => ['icon' => 'fa-map-signs', 'color' => 'primary', 'route' => 'center.settings.index'],
-        'instructor' => ['icon' => 'fa-user-tie', 'color' => 'info', 'route' => 'center.instructors.create'],
         'course' => ['icon' => 'fa-book-open', 'color' => 'warning', 'route' => 'center.courses.create'],
         'student' => ['icon' => 'fa-user-graduate', 'color' => 'success', 'route' => 'center.students.create'],
         'attendance' => ['icon' => 'fa-clipboard-check', 'color' => 'danger', 'route' => 'center.attendance.index'],
     ];
+    
+    // Centers (Non-Tutors) keep the instructor step
+    if(!$isTutorRole) {
+        $steps = array_merge(
+            array_slice($steps, 0, 1),
+            ['instructor' => ['icon' => 'fa-user-tie', 'color' => 'info', 'route' => 'center.instructors.create']],
+            array_slice($steps, 1)
+        );
+    }
 
     // Find first incomplete step to highlight it
     $highlightStep = null;
     foreach($launchpadSteps as $key => $isDone) {
-        if(!$isDone) {
+        if(!$isDone && isset($steps[$key])) {
             $highlightStep = $key;
             break;
         }
@@ -27,7 +36,7 @@
         <div class="row align-items-center mb-4">
             <div class="col-lg-7">
                 <div class="d-flex flex-wrap align-items-center gap-3">
-                    <h5 class="fw-bold mb-1 text-dark">🚀 {{ __('center::dashboard.launchpad.title', ['name' => auth()->user()->name]) }}</h5>
+                    <h5 class="fw-bold mb-1 text-dark">🚀 {{ $isTutorRole ? __('center::dashboard.launchpad.tutor_title', ['name' => auth()->user()->name]) : __('center::dashboard.launchpad.title', ['name' => auth()->user()->name]) }}</h5>
                     @php
                         $hasDemoData = \App\Models\Instructor::where('tenant_id', app('tenant')->id)->where('email', 'like', '%.demo@%')->exists();
                     @endphp
@@ -54,7 +63,7 @@
                         </form>
                     @endif
                 </div>
-                <p class="text-muted small mb-0">{{ __('center::dashboard.launchpad.subtitle') }}</p>
+                <p class="text-muted small mb-0">{{ $isTutorRole ? __('center::dashboard.launchpad.tutor_subtitle') : __('center::dashboard.launchpad.subtitle') }}</p>
             </div>
             <div class="col-lg-5">
                 <div class="mt-3 mt-lg-0">

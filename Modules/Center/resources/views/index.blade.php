@@ -192,7 +192,7 @@
 
             <!-- Key Daily Metrics -->
             <div class="row g-4 mb-4">
-                <div class="col-xl-6">
+                <div class="col-xl-3 col-md-6">
                     <div class="card glass-card border-0 rounded-4 h-100">
                         <div class="card-body p-4 d-flex align-items-center">
                             <div class="stat-icon bg-opacity-10 bg-primary text-primary mb-0 me-3">
@@ -200,20 +200,46 @@
                             </div>
                             <div>
                                 <h6 class="text-muted small fw-bold text-uppercase mb-1">{{ __('center::dashboard.active_students') }}</h6>
-                                <h2 class="fw-bold mb-0">{{ number_format($activeStudents) }}</h2>
+                                <h2 class="fw-bold mb-0 text-dark">{{ number_format($activeStudents) }}</h2>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-6">
+                <div class="col-xl-3 col-md-6">
+                    <div class="card glass-card border-0 rounded-4 h-100">
+                        <div class="card-body p-4 d-flex align-items-center">
+                            <div class="stat-icon bg-opacity-10 bg-warning text-warning mb-0 me-3">
+                                <i class="fas fa-book-open fa-lg"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-muted small fw-bold text-uppercase mb-1">{{ __('center::dashboard.active_courses') }}</h6>
+                                <h2 class="fw-bold mb-0 text-dark">{{ number_format($activeCourses) }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
                     <div class="card glass-card border-0 rounded-4 h-100">
                         <div class="card-body p-4 d-flex align-items-center">
                             <div class="stat-icon bg-opacity-10 bg-success text-success mb-0 me-3">
+                                <i class="fas fa-coins fa-lg"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-muted small fw-bold text-uppercase mb-1">{{ __('center::dashboard.monthly_revenue') }}</h6>
+                                <h2 class="fw-bold mb-0 text-dark">{{ number_format($monthlyRevenue) }} <small class="text-muted" style="font-size: 0.6em;">{{ __('center::dashboard.currency') }}</small></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card glass-card border-0 rounded-4 h-100">
+                        <div class="card-body p-4 d-flex align-items-center">
+                            <div class="stat-icon bg-opacity-10 bg-info text-info mb-0 me-3">
                                 <i class="fas fa-calendar-check fa-lg"></i>
                             </div>
                             <div>
                                 <h6 class="text-muted small fw-bold text-uppercase mb-1">{{ __('center::dashboard.todays_sessions') }}</h6>
-                                <h2 class="fw-bold mb-0">--</h2> <!-- Placeholder for Today's sessions count layout -->
+                                <h2 class="fw-bold mb-0 text-dark">{{ number_format($todaysSessions) }}</h2>
                                 <small class="text-muted">{{ __('center::dashboard.scheduled_session') }}</small>
                             </div>
                         </div>
