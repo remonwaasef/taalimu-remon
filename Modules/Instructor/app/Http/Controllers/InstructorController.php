@@ -20,7 +20,7 @@ class InstructorController extends Controller
      */
     public function index()
     {
-        $instructor = auth()->user()->instructor;
+        $instructor = $this->resolveInstructor();
         
         if (!$instructor) {
             // Fallback for demo or admin
@@ -193,7 +193,7 @@ class InstructorController extends Controller
      */
     public function groups()
     {
-        $instructor = auth()->user()->instructor;
+        $instructor = $this->resolveInstructor();
 
         if (!$instructor) {
             $courses = Course::withCount('enrollments')->get();
@@ -217,7 +217,7 @@ class InstructorController extends Controller
      */
     public function storeGroup(Request $request)
     {
-        $instructor = auth()->user()->instructor;
+        $instructor = $this->resolveInstructor();
         
         if (!$instructor) {
             return back()->with('error', 'يجب أن تكون مسجلاً كمعلم لإنشاء مجموعة.');
@@ -293,5 +293,35 @@ class InstructorController extends Controller
         ]);
 
         return back()->with('success', "تم تسجيل استلام {$request->amount} ج.م من الطالب {$student->name}");
+    }
+
+    /**
+     * Helper to resolve the instructor profile for the current user,
+     * creating it if it doesn't exist for authorized users.
+     */
+    protected function resolveInstructor()
+    {
+        $user = auth()->user();
+        if (!$user) return null;
+
+        $instructor = $user->instructor;
+
+        if (!$instructor) {
+            // Check if the user is authorized to have an instructor profile
+            // (e.g., they have the 'instructor' or 'center_admin' role)
+            if ($user->hasRole(['instructor', 'center_admin'])) {
+                $instructor = \App\Models\Instructor::create([
+                    'tenant_id' => $user->tenant_id,
+                    'user_id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'phone' => $user->phone,
+                    'status' => 'active',
+                ]);
+                \Log::info("Auto-created instructor profile for user: {$user->id}");
+            }
+        }
+
+        return $instructor;
     }
 }

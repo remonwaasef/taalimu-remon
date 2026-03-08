@@ -179,6 +179,18 @@ class RegistrationController extends Controller
             $user->role = $request->account_type === 'instructor' ? 'instructor' : 'center_admin';
             $user->save();
             
+            // 2.1 Create Instructor Profile if applicable
+            // For 'instructor' account type, this is mandatory.
+            // For 'center' account type, we create a primary instructor profile for the owner by default.
+            \App\Models\Instructor::create([
+                'tenant_id' => $tenant->id,
+                'user_id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->phone,
+                'status' => 'active',
+            ]);
+            
             event(new Registered($user));
             
             // Set Spatie Team Context
