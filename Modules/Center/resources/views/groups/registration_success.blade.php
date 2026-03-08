@@ -227,7 +227,7 @@
                     <i class="fas fa-rocket"></i> دخول بوابة الطالب
                 </a>
                 
-                <button onclick="window.print()" class="btn-download">
+                <button onclick="downloadQR()" class="btn-download">
                     <i class="fas fa-download"></i> حفظ كود الدخول
                 </button>
             </div>
@@ -239,6 +239,32 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function downloadQR() {
+            const qrImageUrl = "{{ $qrCode }}";
+            const fileName = "QR_Code_{{ $user->phone }}.png";
+            
+            // To bypass CORS or direct opening, we fetch and create a blob
+            fetch(qrImageUrl)
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                })
+                .catch(() => {
+                    // Fallback: Try opening in a new tab if fetch fails
+                    window.open(qrImageUrl, '_blank');
+                });
+        }
+    </script>
 
 </body>
 </html>
