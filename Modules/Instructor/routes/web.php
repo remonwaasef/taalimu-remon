@@ -38,5 +38,6 @@ if ($mode === 'path' || $mode === 'subdomain') {
     }
 
     Route::domain($domain == 'localhost' ? '{tenant}.localhost' : '{tenant}.' . $domain)
+        ->middleware([\App\Http\Middleware\IdentifyTenant::class])
         ->group($instructorRoutes);
 }

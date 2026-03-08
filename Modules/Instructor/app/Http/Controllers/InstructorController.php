@@ -223,24 +223,41 @@ class InstructorController extends Controller
             return back()->with('error', 'يجب أن تكون مسجلاً كمعلم لإنشاء مجموعة.');
         }
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'sessions_count' => 'required|integer|min:1',
-        ]);
+        try {
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'price' => 'required|numeric|min:0',
+                'sessions_count' => 'required|integer|min:1',
+            ]);
 
-        $course = Course::create([
-            'tenant_id' => $instructor->tenant_id,
-            'instructor_id' => $instructor->id,
-            'title' => $validated['title'],
-            'description' => $validated['description'],
-            'price' => $validated['price'],
-            'sessions_count' => $validated['sessions_count'],
-            'status' => 'active',
-        ]);
+            \Log::info('Attempting to create course for instructor: ' . $instructor->id, [
+                'validated' => $validated,
+                'tenant_bound' => app()->bound('tenant'),
+                'current_tenant_id' => app()->bound('tenant') ? app('tenant')->id : 'none',
+                'instructor_tenant_id' => $instructor->tenant_id
+            ]);
 
-        return redirect()->route('instructor.groups.list')->with('success', "تم إنشاء المجموعة '{$course->title}' بنجاح.");
+            $course = Course::create([
+                'tenant_id' => $instructor->tenant_id,
+                'instructor_id' => $instructor->id,
+                'title' => $validated['title'],
+                'description' => $validated['description'] ?? '',
+                'price' => $validated['price'],
+                'sessions_count' => $validated['sessions_count'],
+                'status' => 'active',
+            ]);
+
+            \Log::info('Course created successfully: ' . $course->id);
+
+            return redirect()->route('instructor.groups.list')->with('success', "تم إنشاء المجموعة '{$course->title}' بنجاح.");
+        } catch (\Exception $e) {
+            \Log::error('Failed to create course: ' . $e->getMessage(), [
+                'instructor_id' => $instructor->id,
+                'trace' => $e->getTraceAsString()
+            ]);
+            return back()->withInput()->with('error', 'حدث خطأ أثناء محاولة حفظ المجموعة: ' . $e->getMessage());
+        }
     }
 
     /**
