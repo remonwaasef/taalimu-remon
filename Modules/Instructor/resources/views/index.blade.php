@@ -49,7 +49,7 @@
 
     <!-- Quick Actions & Today's Schedule -->
     <div class="row g-4">
-        <div class="col-lg-8">
+        <div class="col-lg-8" id="groups-section">
             <div class="card p-4 border-0 bg-white min-vh-50">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h5 class="fw-bold mb-0">المجموعات وإدارة التسجيل</h5>

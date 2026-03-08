@@ -10,6 +10,7 @@ $instructorRoutes = function () {
         Route::post('/scan/{course}', [InstructorController::class, 'scan'])->name('instructor.scan');
         Route::get('/billing', [InstructorController::class, 'billing'])->name('instructor.billing');
         Route::post('/mark-paid', [InstructorController::class, 'markPaid'])->name('instructor.mark-paid');
+        Route::get('/students-list', [InstructorController::class, 'students'])->name('instructor.students.list');
         Route::resource('students', InstructorController::class)->names('instructor.students');
     });
 

@@ -169,6 +169,26 @@ class InstructorController extends Controller
     }
 
     /**
+     * Display a list of students enrolled in instructor's courses
+     */
+    public function students()
+    {
+        $instructor = auth()->user()->instructor;
+
+        if (!$instructor) {
+            $students = Student::with(['user', 'enrollments.course'])->take(20)->get();
+        } else {
+            $students = Student::whereHas('enrollments', function($q) use ($instructor) {
+                $q->whereIn('course_id', $instructor->courses->pluck('id'));
+            })->with(['user', 'enrollments.course' => function($q) use ($instructor) {
+                $q->where('instructor_id', $instructor->id);
+            }])->get();
+        }
+
+        return view('instructor::students.index', compact('students'));
+    }
+
+    /**
      * Quickly mark a student as paid for a specific amount
      */
     public function markPaid(Request $request)
