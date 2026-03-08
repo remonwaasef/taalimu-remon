@@ -208,8 +208,8 @@
             <h3>تم تسجيلك بنجاح!</h3>
             <p>مرحباً بك يا <strong>{{ $user->name }}</strong>. لقد تم تسجيلك في المجموعة بنجاح. يرجى الاحتفاظ بكود الحضور أدناه.</p>
 
-            <div class="qr-wrapper shadow-sm bg-white p-3 rounded-4 mb-4">
-                <img src="{{ $qrCode }}" alt="QR Code" class="img-fluid" style="width: 200px; height: 200px;">
+            <div class="qr-wrapper shadow-sm bg-white p-3 rounded-4 mb-4 text-center">
+                <div id="qrcode-container" class="d-flex justify-content-center"></div>
                 <div class="mt-3">
                     <code class="text-primary fw-bold fs-5">#{{ $user->qr_identifier }}</code>
                 </div>
@@ -240,29 +240,49 @@
         </div>
     </div>
 
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const qrContainer = document.getElementById('qrcode-container');
+            const identifier = "{{ $user->qr_identifier }}";
+            
+            if (typeof QRCode !== 'undefined' && qrContainer) {
+                new QRCode(qrContainer, {
+                    text: identifier,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+            }
+        });
+
         function downloadQR() {
-            const qrImageUrl = "{{ $qrCode }}";
+            const qrContainer = document.getElementById('qrcode-container');
+            const img = qrContainer.querySelector('img');
+            const canvas = qrContainer.querySelector('canvas');
             const fileName = "QR_Code_{{ $user->phone }}.png";
             
-            // To bypass CORS or direct opening, we fetch and create a blob
-            fetch(qrImageUrl)
-                .then(response => response.blob())
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = url;
-                    a.download = fileName;
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                    document.body.removeChild(a);
-                })
-                .catch(() => {
-                    // Fallback: Try opening in a new tab if fetch fails
-                    window.open(qrImageUrl, '_blank');
-                });
+            let dataUrl = '';
+            if (img && img.src && img.src.startsWith('data:')) {
+                dataUrl = img.src;
+            } else if (canvas) {
+                dataUrl = canvas.toDataURL("image/png");
+            }
+
+            if (dataUrl) {
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = dataUrl;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } else {
+                alert("عذراً، تعذر تحميل الكود. حاول مرة أخرى.");
+            }
         }
     </script>
 
