@@ -76,6 +76,9 @@
 
         <div class="row g-4 justify-content-center">
             @foreach($steps as $key => $data)
+                @if(!array_key_exists($key, $launchpadSteps))
+                    @continue
+                @endif
                 @php
                     $isCompleted = $launchpadSteps[$key] ?? false;
                     $isCurrent = ($key === $highlightStep);
