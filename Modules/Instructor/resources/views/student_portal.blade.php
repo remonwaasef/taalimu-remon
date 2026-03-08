@@ -60,8 +60,8 @@
             <div class="col-lg-4">
                 <div class="portal-card text-center p-4">
                     <h6 class="fw-bold mb-3">كود الحضور (QR)</h6>
-                    <div class="qr-small shadow-sm mb-3">
-                        {!! QrCode::size(150)->generate($user->qr_identifier) !!}
+                    <div class="qr-container shadow-sm mb-3">
+                        {!! $qrCode !!}
                     </div>
                     <p class="small text-muted mb-4 text-center">أظهر هذا الكود للمدرس عند الدخول لتسجيل حضورك</p>
                     <button onclick="window.print()" class="btn btn-outline-primary rounded-pill w-100 mb-2">
