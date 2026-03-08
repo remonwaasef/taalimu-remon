@@ -261,28 +261,55 @@
 
         function downloadQR() {
             const qrContainer = document.getElementById('qrcode-container');
-            const img = qrContainer.querySelector('img');
-            const canvas = qrContainer.querySelector('canvas');
-            const fileName = "QR_Code_{{ $user->phone }}.png";
-            
-            let dataUrl = '';
-            if (img && img.src && img.src.startsWith('data:')) {
-                dataUrl = img.src;
-            } else if (canvas) {
-                dataUrl = canvas.toDataURL("image/png");
+            const qrCanvas = qrContainer.querySelector('canvas');
+            const studentName = "{{ $user->name }}";
+            const studentId = "{{ $user->qr_identifier }}";
+            const fileName = `QR_${studentId}.png`;
+
+            if (!qrCanvas) {
+                alert("عذراً، تعذر تحميل الكود. حاول مرة أخرى.");
+                return;
             }
 
-            if (dataUrl) {
-                const a = document.createElement('a');
-                a.style.display = 'none';
-                a.href = dataUrl;
-                a.download = fileName;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            } else {
-                alert("عذراً، تعذر تحميل الكود. حاول مرة أخرى.");
-            }
+            // Create a composite canvas to combine QR and Text
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            const padding = 20;
+            const qrSize = 400; // Increase for better quality
+            const textHeight = 80;
+            const totalWidth = qrSize + (padding * 2);
+            const totalHeight = qrSize + textHeight + (padding * 2);
+
+            canvas.width = totalWidth;
+            canvas.height = totalHeight;
+
+            // Fill background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw QR Code
+            ctx.drawImage(qrCanvas, padding, padding, qrSize, qrSize);
+
+            // Draw Student Info
+            ctx.fillStyle = '#000000';
+            ctx.font = 'bold 24px Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(studentName, totalWidth / 2, padding + qrSize + 30);
+            
+            ctx.font = '20px monospace';
+            ctx.fillStyle = '#4f46e5'; // Primary color
+            ctx.fillText(`#${studentId}`, totalWidth / 2, padding + qrSize + 65);
+
+            // Trigger Download
+            const dataUrl = canvas.toDataURL("image/png");
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = dataUrl;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
     </script>
 
