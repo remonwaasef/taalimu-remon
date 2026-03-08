@@ -32,6 +32,7 @@ document.addEventListener('alpine:init', () => {
         discountText: '',
         isApplyingCoupon: false,
         userCountry: 'default',
+        accountType: 'center',
 
         async init() {
             // Default select first plan if requested plan is invalid or missing
@@ -280,6 +281,35 @@ document.addEventListener('alpine:init', () => {
 
         <!-- Form Content -->
         <div class="p-8 lg:p-12 pt-0">
+            <!-- Account Type Selection (Always Step 1 before generic data) -->
+            <div x-show="currentStep === 1" class="mb-10">
+                <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide block mb-3 text-center">
+                    {{ app()->isLocale('ar') ? 'اختر نوع الحساب' : 'Select Account Type' }}
+                </label>
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Instructor Option -->
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" value="instructor" x-model="accountType" class="peer sr-only">
+                        <div class="flex flex-col items-center justify-center p-5 rounded-3xl border-2 border-slate-100 bg-slate-50/30 peer-checked:border-brand-secondary peer-checked:bg-brand-secondary/5 transition-all hover:border-slate-200">
+                            <div class="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-chalkboard-teacher text-2xl text-slate-400 peer-checked:text-brand-secondary"></i>
+                            </div>
+                            <span class="text-xs font-black text-slate-600 peer-checked:text-brand-secondary uppercase">{{ app()->isLocale('ar') ? 'مدرس مستقل' : 'Independent Tutor' }}</span>
+                        </div>
+                    </label>
+                    <!-- Center Option -->
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" value="center" x-model="accountType" class="peer sr-only">
+                        <div class="flex flex-col items-center justify-center p-5 rounded-3xl border-2 border-slate-100 bg-slate-50/30 peer-checked:border-brand-secondary peer-checked:bg-brand-secondary/5 transition-all hover:border-slate-200">
+                            <div class="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-university text-2xl text-slate-400 peer-checked:text-brand-secondary"></i>
+                            </div>
+                            <span class="text-xs font-black text-slate-600 peer-checked:text-brand-secondary uppercase">{{ app()->isLocale('ar') ? 'مركز تعليمي' : 'Educational Center' }}</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
             <form action="{{ route('register.submit') }}" method="POST" class="space-y-6">
                 @csrf
                 @if(request('google_id'))
@@ -303,13 +333,16 @@ document.addEventListener('alpine:init', () => {
                 @endif
 
                 <input type="hidden" name="plan" x-model="selectedPlan">
+                <input type="hidden" name="account_type" x-model="accountType">
                 <input type="hidden" name="billing_cycle" x-model="billingCycle">
                 <input type="hidden" name="country_code" x-model="userCountry">
 
                 <!-- STEP 1: Center Details -->
                 <div x-show="currentStep === 1" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-6">
                     <div class="space-y-1.5">
-                        <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.center_name') }}</label>
+                        <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">
+                            <span x-text="accountType === 'center' ? '{{ __('auth.register.center_name') }}' : ({{ Js::from(app()->isLocale('ar') ? 'اسم المدرس / المنصة' : 'Teacher / Platform Name') }})"></span>
+                        </label>
                         <div class="relative group">
                             <div class="absolute inset-y-0 start-0 ps-5 flex items-center pointer-events-none text-slate-300 group-focus-within:text-brand-secondary transition-colors"><i class="bi bi-building"></i></div>
                             <input type="text" name="center_name" x-model="centerName"

@@ -461,14 +461,6 @@
                 <span><i class="fas fa-home me-2"></i> {{ __('center::sidebar.dashboard') }}</span>
             </a>
 
-            <!-- SWITCH TO INSTRUCTOR MODULE -->
-            <div class="px-2 mb-4">
-                <a href="{{ route('instructor.dashboard', ['tenant' => $tenant->domain ?? 'center']) }}" class="btn btn-primary w-100 rounded-pill shadow-sm d-flex align-items-center justify-content-center gap-2 py-2" style="background: linear-gradient(135deg, #FF0080 0%, #7928CA 100%); border: none;">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                    <span class="small fw-bold">واجهة المدرس (جديد)</span>
-                </a>
-            </div>
-
             <!-- SCHOOL MANAGEMENT (Collapsible Section) -->
             @php 
                 $canInstructors = $tenant->getFeatureValue('max_instructors') != '0' && $tenant->getFeatureValue('max_instructors') !== false;
@@ -481,7 +473,9 @@
                                       request()->routeIs('center.courses.*') || 
                                       request()->routeIs('center.schedules.*');
                 
-                $showSchoolMgmt = $canInstructors || $canCourses || $canClassrooms || $canSchedules;
+                // If Instructor mode, we only show courses/schedules if they exist (usually hidden as they are in instructor module)
+                // But for now, we follow the user request: if they are a center, they see full center mgmt.
+                $showSchoolMgmt = ($canInstructors || $canCourses || $canClassrooms || $canSchedules) && ($tenant->type !== 'instructor');
             @endphp
             
             @if($showSchoolMgmt)

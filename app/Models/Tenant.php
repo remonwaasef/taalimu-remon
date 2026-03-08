@@ -89,6 +89,7 @@ class Tenant extends Model
         'linkedin_url',
         'domain',
         'database_name',
+        'type',
         'status',
         'settings',
         'timezone',

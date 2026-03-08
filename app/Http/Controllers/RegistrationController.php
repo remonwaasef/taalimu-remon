@@ -106,6 +106,7 @@ class RegistrationController extends Controller
     public function register(Request $request, TelegramService $telegram)
     {
         $request->validate([
+            'account_type' => 'required|in:center,instructor',
             'center_name' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
@@ -161,6 +162,7 @@ class RegistrationController extends Controller
                 'email' => $request->email,
                 'phone' => $request->phone, 
                 'domain' => $subdomain,
+                'type' => $request->account_type,
                 'database_name' => 'edu_central', // Shared DB for now
                 'status' => 'active', 
             ]);
