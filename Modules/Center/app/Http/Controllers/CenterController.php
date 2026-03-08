@@ -11,6 +11,8 @@ use App\Models\Sale;
 use App\Models\Expense;
 use App\Models\QuizAttempt;
 use App\Models\User;
+use App\Models\Schedule;
+use App\Models\Stage;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
