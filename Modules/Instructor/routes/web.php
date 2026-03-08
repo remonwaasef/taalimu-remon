@@ -11,6 +11,7 @@ $instructorRoutes = function () {
         Route::get('/billing', [InstructorController::class, 'billing'])->name('instructor.billing');
         Route::post('/mark-paid', [InstructorController::class, 'markPaid'])->name('instructor.mark-paid');
         Route::get('/students-list', [InstructorController::class, 'students'])->name('instructor.students.list');
+        Route::get('/groups-list', [InstructorController::class, 'groups'])->name('instructor.groups.list');
         Route::resource('students', InstructorController::class)->names('instructor.students');
     });
 

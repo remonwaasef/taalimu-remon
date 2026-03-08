@@ -189,6 +189,22 @@ class InstructorController extends Controller
     }
 
     /**
+     * Display a list of groups (courses) for the instructor
+     */
+    public function groups()
+    {
+        $instructor = auth()->user()->instructor;
+
+        if (!$instructor) {
+            $courses = Course::withCount('enrollments')->get();
+        } else {
+            $courses = $instructor->courses()->withCount('enrollments')->get();
+        }
+
+        return view('instructor::groups.index', compact('courses'));
+    }
+
+    /**
      * Quickly mark a student as paid for a specific amount
      */
     public function markPaid(Request $request)
