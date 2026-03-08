@@ -508,7 +508,7 @@
             </div>
             @endif
 
-            <!-- 2. STUDENTS (Includes Attendance) -->
+            <!-- 2. STUDENTS -->
             @php 
                 $canStudents = $tenant->getFeatureValue('max_students') != '0' && $tenant->getFeatureValue('max_students') !== false;
                 $canAttendance = $tenant->getFeatureValue('attendance_tracking');
@@ -517,24 +517,30 @@
             @endphp
 
             @if($showStudents)
-            <a href="#studentsCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 {{ $isStudentsActive ? 'sidebar-section-active' : '' }}" role="button" aria-expanded="{{ $isStudentsActive ? 'true' : 'false' }}">
-                <span><i class="fas fa-user-graduate me-2 {{ $isStudentsActive ? 'text-info' : 'opacity-75' }}"></i> {{ __('center::sidebar.students') }}</span>
-                <i class="fas fa-chevron-down fa-xs opacity-50"></i>
-            </a>
-            <div class="collapse {{ $isStudentsActive ? 'show' : '' }}" id="studentsCollapse">
-                <div class="sidebar-submenu">
-                    @if($canStudents)
-                    <a href="{{ route('center.students.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.students.*') ? 'active' : '' }}">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.students') }} ({{ __('center::sidebar.list') }})
-                    </a>
-                    @endif
-                    @if($canAttendance)
-                    <a href="{{ route('center.attendance.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.attendance.*') ? 'active' : '' }}">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.attendance') }}
-                    </a>
-                    @endif
+                @if($isTutor)
+                <a href="{{ route('center.students.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-nav-link mb-1 {{ request()->routeIs('center.students.*') ? 'active' : '' }}">
+                    <span><i class="fas fa-user-graduate me-2 {{ request()->routeIs('center.students.*') ? 'text-info' : 'opacity-75' }}"></i> {{ __('center::sidebar.students') }}</span>
+                </a>
+                @else
+                <a href="#studentsCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 {{ $isStudentsActive ? 'sidebar-section-active' : '' }}" role="button" aria-expanded="{{ $isStudentsActive ? 'true' : 'false' }}">
+                    <span><i class="fas fa-user-graduate me-2 {{ $isStudentsActive ? 'text-info' : 'opacity-75' }}"></i> {{ __('center::sidebar.students') }}</span>
+                    <i class="fas fa-chevron-down fa-xs opacity-50"></i>
+                </a>
+                <div class="collapse {{ $isStudentsActive ? 'show' : '' }}" id="studentsCollapse">
+                    <div class="sidebar-submenu">
+                        @if($canStudents)
+                        <a href="{{ route('center.students.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.students.*') ? 'active' : '' }}">
+                            <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.students') }} ({{ __('center::sidebar.list') }})
+                        </a>
+                        @endif
+                        @if($canAttendance)
+                        <a href="{{ route('center.attendance.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.attendance.*') ? 'active' : '' }}">
+                            <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.attendance') }}
+                        </a>
+                        @endif
+                    </div>
                 </div>
-            </div>
+                @endif
             @endif
             
             <!-- TUTOR GROUPS -->
@@ -639,10 +645,16 @@
                                     request()->routeIs('center.roles.*') || 
                                     request()->routeIs('center.tickets.*'); 
             @endphp
-            <a href="#settingsCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 {{ $isSettingsActive ? 'sidebar-section-active' : '' }}" role="button" aria-expanded="{{ $isSettingsActive ? 'true' : 'false' }}">
-                <span><i class="fas fa-cogs me-2 {{ $isSettingsActive ? 'text-secondary' : 'opacity-75' }}"></i> {{ __('center::sidebar.settings') }}</span>
-                <i class="fas fa-chevron-down fa-xs opacity-50"></i>
-            </a>
+            @if($isTutor)
+                <a href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'general']) }}" class="sidebar-nav-link mb-1 {{ $isSettingsActive ? 'active' : '' }}">
+                    <span><i class="fas fa-cogs me-2 {{ $isSettingsActive ? 'text-secondary' : 'opacity-75' }}"></i> {{ __('center::sidebar.settings') }}</span>
+                </a>
+            @else
+                <a href="#settingsCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 {{ $isSettingsActive ? 'sidebar-section-active' : '' }}" role="button" aria-expanded="{{ $isSettingsActive ? 'true' : 'false' }}">
+                    <span><i class="fas fa-cogs me-2 {{ $isSettingsActive ? 'text-secondary' : 'opacity-75' }}"></i> {{ __('center::sidebar.settings') }}</span>
+                    <i class="fas fa-chevron-down fa-xs opacity-50"></i>
+                </a>
+            @endif
             <div class="collapse {{ $isSettingsActive ? 'show' : '' }}" id="settingsCollapse">
                 <div class="sidebar-submenu">
                     <a href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'general']) }}" class="sidebar-sub-link {{ request()->routeIs('center.settings.index') && (request('tab') == 'general' || !request('tab')) ? 'active' : '' }}">
