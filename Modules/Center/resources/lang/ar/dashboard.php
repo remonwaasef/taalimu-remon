@@ -15,7 +15,6 @@ return [
     'projected' => 'المتوقع',
     'center_status' => 'حالة المركز',
     'center_dashboard' => 'لوحة تحكم المركز',
-    'tutor_dashboard' => 'لوحة تحكم الأستاذ',
     'system_status' => 'حالة النظام',
     'healthy' => 'مستقرة',
     'real_time_monitoring' => 'المراقبة الحية نشطة',
@@ -83,9 +82,7 @@ return [
     ],
     'launchpad' => [
         'title' => 'أهلاً بك يا :name! دعنا نجهز مركزك للانطلاق 🚀',
-        'tutor_title' => 'أهلاً يا أستاذ :name! دعنا نجهز حصصك للانطلاق 🚀',
         'subtitle' => 'أكمل هذه الخطوات البسيطة لبدء رحلتك التعليمية',
-        'tutor_subtitle' => 'أكمل هذه الخطوات لبدء إدارة دروسك بذكاء',
         'progress' => 'نسبة الإعداد',
         'action' => 'ابدأ الآن',
         'steps' => [

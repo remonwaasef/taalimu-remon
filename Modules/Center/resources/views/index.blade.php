@@ -121,16 +121,13 @@
 <div class="container-fluid py-4">
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        @php 
-            $isTutorRole = auth()->user()->hasRole('tutor') || auth()->user()->role === 'tutor';
-        @endphp
         <div>
             <h3 class="fw-bold text-dark mb-1">
-                {{ $isTutorRole ? __('center::dashboard.tutor_dashboard') : __('center::dashboard.center_dashboard') }} 
+                {{ __('center::dashboard.center_dashboard') }} 
             </h3>
             <p class="text-muted small mb-0">
                 <span class="pulse"></span> 
-                {{ $isTutorRole ? __('حالة الأستاذ') : __('center::dashboard.center_status') }}: <span class="text-success fw-semibold">{{ __('center::dashboard.healthy') }}</span>
+                {{ __('center::dashboard.center_status') }}: <span class="text-success fw-semibold">{{ __('center::dashboard.healthy') }}</span>
             </p>
         </div>
         
@@ -192,7 +189,7 @@
 
             <!-- Key Daily Metrics -->
             <div class="row g-4 mb-4">
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-6">
                     <div class="card glass-card border-0 rounded-4 h-100">
                         <div class="card-body p-4 d-flex align-items-center">
                             <div class="stat-icon bg-opacity-10 bg-primary text-primary mb-0 me-3">
@@ -200,46 +197,20 @@
                             </div>
                             <div>
                                 <h6 class="text-muted small fw-bold text-uppercase mb-1">{{ __('center::dashboard.active_students') }}</h6>
-                                <h2 class="fw-bold mb-0 text-dark">{{ number_format($activeStudents) }}</h2>
+                                <h2 class="fw-bold mb-0">{{ number_format($activeStudents) }}</h2>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-md-6">
-                    <div class="card glass-card border-0 rounded-4 h-100">
-                        <div class="card-body p-4 d-flex align-items-center">
-                            <div class="stat-icon bg-opacity-10 bg-warning text-warning mb-0 me-3">
-                                <i class="fas fa-book-open fa-lg"></i>
-                            </div>
-                            <div>
-                                <h6 class="text-muted small fw-bold text-uppercase mb-1">{{ __('center::dashboard.active_courses') }}</h6>
-                                <h2 class="fw-bold mb-0 text-dark">{{ number_format($activeCourses) }}</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-6">
                     <div class="card glass-card border-0 rounded-4 h-100">
                         <div class="card-body p-4 d-flex align-items-center">
                             <div class="stat-icon bg-opacity-10 bg-success text-success mb-0 me-3">
-                                <i class="fas fa-coins fa-lg"></i>
-                            </div>
-                            <div>
-                                <h6 class="text-muted small fw-bold text-uppercase mb-1">{{ __('center::dashboard.monthly_revenue') }}</h6>
-                                <h2 class="fw-bold mb-0 text-dark">{{ number_format($monthlyRevenue) }} <small class="text-muted" style="font-size: 0.6em;">{{ __('center::dashboard.currency') }}</small></h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6">
-                    <div class="card glass-card border-0 rounded-4 h-100">
-                        <div class="card-body p-4 d-flex align-items-center">
-                            <div class="stat-icon bg-opacity-10 bg-info text-info mb-0 me-3">
                                 <i class="fas fa-calendar-check fa-lg"></i>
                             </div>
                             <div>
                                 <h6 class="text-muted small fw-bold text-uppercase mb-1">{{ __('center::dashboard.todays_sessions') }}</h6>
-                                <h2 class="fw-bold mb-0 text-dark">{{ number_format($todaysSessions) }}</h2>
+                                <h2 class="fw-bold mb-0">--</h2> <!-- Placeholder for Today's sessions count layout -->
                                 <small class="text-muted">{{ __('center::dashboard.scheduled_session') }}</small>
                             </div>
                         </div>

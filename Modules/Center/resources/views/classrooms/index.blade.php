@@ -76,13 +76,6 @@
                                         </button>
                                         <ul class="dropdown-menu border-0 shadow">
                                             <li><a class="dropdown-item" href="{{ route('center.classrooms.show', $classroom) }}"><i class="fas fa-eye me-2 text-primary"></i> {{ __('center::classrooms.view_schedule') }}</a></li>
-                                            @if(auth()->user()->hasRole('tutor'))
-                                            <li>
-                                                <a class="dropdown-item" href="javascript:void(0)" onclick="copyInviteLink('{{ route('center.groups.join', ['tenant' => app('tenant')->domain, 'uuid' => $classroom->invite_uuid]) }}')">
-                                                    <i class="fas fa-link me-2 text-success"></i> {{ __('نسخ رابط التسجيل') }}
-                                                </a>
-                                            </li>
-                                            @endif
                                             <li><a class="dropdown-item" href="{{ route('center.assets.create', ['classroom_id' => $classroom->id]) }}"><i class="fas fa-plus me-2 text-info"></i> {{ __('center::classrooms.add_asset') }}</a></li>
                                             <li><a class="dropdown-item" href="{{ route('center.classrooms.edit', $classroom) }}"><i class="fas fa-edit me-2 text-warning"></i> {{ __('center::classrooms.edit') }}</a></li>
                                             <li><hr class="dropdown-divider"></li>
@@ -112,24 +105,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-        function copyInviteLink(link) {
-            navigator.clipboard.writeText(link).then(() => {
-                const toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                });
-                toast.fire({
-                    icon: 'success',
-                    title: 'تم نسخ رابط التسجيل بنجاح'
-                });
-            }).catch(err => {
-                console.error('Could not copy text: ', err);
-            });
-        }
-    </script>
 @endsection

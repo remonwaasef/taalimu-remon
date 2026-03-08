@@ -18,7 +18,6 @@ return [
     'developed_by' => 'تم التطوير بواسطة',
     'classrooms' => 'القاعات الدراسية',
     'schedules' => 'جدول الحصص',
-    'groups' => 'المجموعات',
     'attendance' => 'متابعة الحضور',
     'exams_results' => 'الامتحانات والنتائج',
     'questions_bank' => 'بنك الأسئلة',

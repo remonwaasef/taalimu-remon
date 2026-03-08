@@ -119,13 +119,8 @@ class CampusController extends Controller
 
     public function profile()
     {
-        $user = auth()->user();
-        $student = $user->student;
-        
-        // Generate QR code Data URI
-        $qrcode = (new \chillerlan\QRCode\QRCode)->render($user->qr_identifier);
-        
-        return view('campus::profile', compact('student', 'qrcode'));
+        $student = auth()->user()->student;
+        return view('campus::profile', compact('student'));
     }
 
     /**

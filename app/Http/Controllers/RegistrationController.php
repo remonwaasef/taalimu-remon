@@ -174,7 +174,7 @@ class RegistrationController extends Controller
                 'locale' => session('locale', 'ar'),
             ]);
             $user->tenant_id = $tenant->id;
-            $user->role = $request->plan === 'enterprise' ? 'center_admin' : 'tutor';
+            $user->role = 'center_admin';
             $user->save();
             
             event(new Registered($user));
@@ -182,15 +182,7 @@ class RegistrationController extends Controller
             // Set Spatie Team Context
             app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
 
-            // Assign Roles based on the selected package
-            // 'enterprise' is for Centers, everything else is for Tutors
-            if ($request->plan !== 'enterprise') {
-                // Ensure the Tutor role exists for this tenant
-                \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'tutor', 'guard_name' => 'web', 'tenant_id' => $tenant->id]);
-                $user->assignRole('tutor');
-            } else {
-                $user->assignRole('center_admin');
-            }
+            $user->assignRole('center_admin');
 
             // 3. Handle Subscription based on selected plan
             $stripePriceIds = [
