@@ -261,9 +261,55 @@ document.addEventListener('alpine:init', () => {
                 </div>
             </div>
 
-            <!-- Google Shortcut (Only Step 1) -->
-            <div class="mb-10" x-show="currentStep === 1">
-                <a :href="'{{ route('auth.google') }}?plan=' + selectedPlan + '&cycle=' + billingCycle" class="w-full flex items-center justify-center gap-4 py-4 px-6 border-2 border-slate-100 rounded-3xl shadow-sm text-base font-black text-slate-700 bg-white hover:bg-slate-50 hover:border-brand-secondary/20 transition-all group">
+            <!-- Account Type Selection (Premium Position) -->
+            <div x-show="currentStep === 1" class="mb-12">
+                <label class="text-[14px] font-black text-slate-500 px-1 font-arabic uppercase tracking-wider block mb-6 text-center opacity-70">
+                    {{ app()->isLocale('ar') ? 'ابدأ كـ ...' : 'Start as ...' }}
+                </label>
+                <div class="grid grid-cols-2 gap-6 px-2">
+                    <!-- Instructor Option (Premium) -->
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" value="instructor" x-model="accountType" class="peer sr-only">
+                        <div class="relative flex flex-col items-center justify-center p-6 rounded-[2rem] border-2 border-slate-100 bg-white transition-all duration-500 hover:border-brand-secondary/30 hover:shadow-xl hover:shadow-brand-secondary/10 peer-checked:border-brand-secondary peer-checked:ring-4 peer-checked:ring-brand-secondary/5 overflow-hidden group">
+                            <!-- Background Accent -->
+                            <div class="absolute top-0 right-0 w-24 h-24 bg-brand-secondary/5 rounded-full -mr-12 -mt-12 transition-transform duration-700 group-hover:scale-150"></div>
+                            
+                            <div class="w-16 h-16 bg-gradient-to-br from-brand-secondary to-blue-600 rounded-2xl shadow-lg shadow-brand-secondary/20 flex items-center justify-center mb-4 transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 peer-checked:scale-110">
+                                <i class="fas fa-chalkboard-teacher text-3xl text-white"></i>
+                            </div>
+                            <span class="text-sm font-black text-slate-800 peer-checked:text-brand-secondary transition-colors">{{ app()->isLocale('ar') ? 'مدرس مستقل' : 'Independent Tutor' }}</span>
+                            
+                            <!-- Success Dot -->
+                            <div class="absolute top-4 right-4 opacity-0 scale-0 peer-checked:opacity-100 peer-checked:scale-100 transition-all duration-300">
+                                <div class="w-3 h-3 bg-brand-secondary rounded-full ring-4 ring-brand-secondary/20"></div>
+                            </div>
+                        </div>
+                    </label>
+
+                    <!-- Center Option (Premium) -->
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" value="center" x-model="accountType" class="peer sr-only">
+                        <div class="relative flex flex-col items-center justify-center p-6 rounded-[2rem] border-2 border-slate-100 bg-white transition-all duration-500 hover:border-brand-secondary/30 hover:shadow-xl hover:shadow-brand-secondary/10 peer-checked:border-brand-secondary peer-checked:ring-4 peer-checked:ring-brand-secondary/5 overflow-hidden group">
+                            <!-- Background Accent -->
+                            <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full -mr-12 -mt-12 transition-transform duration-700 group-hover:scale-150"></div>
+                            
+                            <div class="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-800 rounded-2xl shadow-lg shadow-blue-600/20 flex items-center justify-center mb-4 transition-all duration-500 group-hover:-rotate-6 group-hover:scale-110 peer-checked:scale-110">
+                                <i class="fas fa-university text-3xl text-white"></i>
+                            </div>
+                            <span class="text-sm font-black text-slate-800 peer-checked:text-brand-secondary transition-colors">{{ app()->isLocale('ar') ? 'مركز تعليمي' : 'Educational Center' }}</span>
+                            
+                            <!-- Success Dot -->
+                            <div class="absolute top-4 right-4 opacity-0 scale-0 peer-checked:opacity-100 peer-checked:scale-100 transition-all duration-300">
+                                <div class="w-3 h-3 bg-brand-secondary rounded-full ring-4 ring-brand-secondary/20"></div>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Google Shortcut (Now below selection) -->
+            <div class="mb-12" x-show="currentStep === 1">
+                <a :href="'{{ route('auth.google') }}?plan=' + selectedPlan + '&cycle=' + billingCycle + '&account_type=' + accountType" class="w-full flex items-center justify-center gap-4 py-4.5 px-6 border-2 border-slate-100 rounded-[1.5rem] shadow-sm text-base font-black text-slate-700 bg-white hover:bg-slate-50 hover:border-brand-secondary/20 transition-all group">
                     <svg class="w-6 h-6 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                         <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -272,41 +318,9 @@ document.addEventListener('alpine:init', () => {
                     </svg>
                     <span>{{ __('Sign up with Google') }}</span>
                 </a>
-                <div class="relative my-8 px-8">
-                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-100"></div></div>
-                    <div class="relative flex justify-center text-[10px] uppercase"><span class="bg-white px-4 text-slate-300 font-black tracking-[0.2em]">{{ __('auth.register.or') ?? 'OR' }}</span></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Form Content -->
-        <div class="p-8 lg:p-12 pt-0">
-            <!-- Account Type Selection (Always Step 1 before generic data) -->
-            <div x-show="currentStep === 1" class="mb-10">
-                <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide block mb-3 text-center">
-                    {{ app()->isLocale('ar') ? 'اختر نوع الحساب' : 'Select Account Type' }}
-                </label>
-                <div class="grid grid-cols-2 gap-4">
-                    <!-- Instructor Option -->
-                    <label class="relative cursor-pointer group">
-                        <input type="radio" value="instructor" x-model="accountType" class="peer sr-only">
-                        <div class="flex flex-col items-center justify-center p-5 rounded-3xl border-2 border-slate-100 bg-slate-50/30 peer-checked:border-brand-secondary peer-checked:bg-brand-secondary/5 transition-all hover:border-slate-200">
-                            <div class="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-chalkboard-teacher text-2xl text-slate-400 peer-checked:text-brand-secondary"></i>
-                            </div>
-                            <span class="text-xs font-black text-slate-600 peer-checked:text-brand-secondary uppercase">{{ app()->isLocale('ar') ? 'مدرس مستقل' : 'Independent Tutor' }}</span>
-                        </div>
-                    </label>
-                    <!-- Center Option -->
-                    <label class="relative cursor-pointer group">
-                        <input type="radio" value="center" x-model="accountType" class="peer sr-only">
-                        <div class="flex flex-col items-center justify-center p-5 rounded-3xl border-2 border-slate-100 bg-slate-50/30 peer-checked:border-brand-secondary peer-checked:bg-brand-secondary/5 transition-all hover:border-slate-200">
-                            <div class="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-university text-2xl text-slate-400 peer-checked:text-brand-secondary"></i>
-                            </div>
-                            <span class="text-xs font-black text-slate-600 peer-checked:text-brand-secondary uppercase">{{ app()->isLocale('ar') ? 'مركز تعليمي' : 'Educational Center' }}</span>
-                        </div>
-                    </label>
+                <div class="relative my-10 px-8">
+                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-100/80"></div></div>
+                    <div class="relative flex justify-center text-[11px] uppercase"><span class="bg-white px-5 text-slate-300 font-bold tracking-[0.3em]">{{ __('auth.register.or') ?? 'OR' }}</span></div>
                 </div>
             </div>
 
