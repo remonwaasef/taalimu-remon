@@ -1,4 +1,4 @@
-@extends('instructor::layouts.master')
+@extends('instructor::components.layouts.master')
 
 @section('content')
 <div class="container-fluid">
