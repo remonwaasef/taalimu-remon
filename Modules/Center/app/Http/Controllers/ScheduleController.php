@@ -18,19 +18,34 @@ class ScheduleController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Schedule::class);
-        $schedules = Schedule::with(['course', 'classroom', 'instructor', 'bookings'])->latest()->paginate(10);
+        $user = auth()->user();
+        
+        $query = Schedule::with(['course', 'classroom', 'instructor', 'bookings'])->latest();
+
+        if ($user->hasRole('instructor') && !$user->hasRole('center_admin')) {
+            $query->where('instructor_id', $user->instructor->id ?? 0);
+        }
+
+        $schedules = $query->paginate(10);
         return view('center::schedules.index', compact('schedules'));
     }
 
-    /**
-     * Get form data for create and edit views.
-     */
     protected function getFormData(): array
     {
+        $user = auth()->user();
+        $coursesQuery = Course::select('id', 'title', 'instructor_id');
+        $instructorsQuery = Instructor::select('id', 'name', 'email');
+
+        if ($user->hasRole('instructor') && !$user->hasRole('center_admin')) {
+            $instructorId = $user->instructor->id ?? 0;
+            $coursesQuery->where('instructor_id', $instructorId);
+            $instructorsQuery->where('id', $instructorId);
+        }
+
         return [
-            'courses' => Course::select('id', 'title', 'instructor_id')->get(),
+            'courses' => $coursesQuery->get(),
             'classrooms' => Classroom::select('id', 'name', 'capacity')->get(),
-            'instructors' => Instructor::select('id', 'name', 'email')->get(),
+            'instructors' => $instructorsQuery->get(),
         ];
     }
 

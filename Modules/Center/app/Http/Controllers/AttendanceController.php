@@ -28,22 +28,26 @@ class AttendanceController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Attendance::class);
+        $user = auth()->user();
         $dayOfWeek = now()->dayOfWeek;
 
-        // Get unique schedules per course (avoid duplicates for same course, day, and time)
-        $todaySessions = Schedule::with(['course', 'classroom', 'instructor'])
+        $query = Schedule::with(['course', 'classroom', 'instructor'])
             ->where('day_of_week', $dayOfWeek)
-            ->whereNotNull('course_id')
-            ->select('schedules.*')
+            ->whereNotNull('course_id');
+
+        // Filter by instructor if they are not center_admin
+        if ($user->hasRole('instructor') && !$user->hasRole('center_admin')) {
+            $query->where('instructor_id', $user->instructor->id ?? 0);
+        }
+
+        $todaySessions = $query->select('schedules.*')
             ->distinct()
             ->orderBy('start_time')
             ->get()
-            // Group by course_id and time slot to avoid duplicates
             ->unique(function ($schedule) {
                 return $schedule->course_id . '-' . $schedule->start_time . '-' . $schedule->end_time;
             });
 
-        // Convert to paginator manually for view compatibility
         $todaySessions = new \Illuminate\Pagination\LengthAwarePaginator(
             $todaySessions->forPage(request()->get('page', 1), 10),
             $todaySessions->count(),
@@ -52,10 +56,15 @@ class AttendanceController extends Controller
             ['path' => request()->url()]
         );
 
-        $recentAttendance = Attendance::with(['student', 'course', 'schedule'])
-            ->latest()
-            ->take(10)
-            ->get();
+        $attendanceQuery = Attendance::with(['student', 'course', 'schedule'])->latest();
+
+        if ($user->hasRole('instructor') && !$user->hasRole('center_admin')) {
+            $attendanceQuery->whereHas('course', function($q) use ($user) {
+                $q->where('instructor_id', $user->instructor->id ?? 0);
+            });
+        }
+
+        $recentAttendance = $attendanceQuery->take(10)->get();
 
         return view('center::attendance.index', compact('todaySessions', 'recentAttendance'));
     }
@@ -90,6 +99,16 @@ class AttendanceController extends Controller
             'session_date' => 'required|date|before_or_equal:today',
             'status' => 'required|in:present,absent,late,excused'
         ]);
+
+        $user = auth()->user();
+        if ($user->hasRole('instructor') && !$user->hasRole('center_admin')) {
+            $course = Course::findOrFail($validated['course_id']);
+            if ($course->instructor_id !== ($user->instructor->id ?? 0)) {
+                return $request->expectsJson()
+                    ? response()->json(['success' => false, 'message' => 'غير مصرح لك بتسجيل الحضور لهذه المجموعة.'], 403)
+                    : back()->with('error', 'غير مصرح لك بتسجيل الحضور لهذه المجموعة.');
+            }
+        }
 
         $studentId = $request->student_id;
 
