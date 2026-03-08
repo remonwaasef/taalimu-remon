@@ -22,6 +22,22 @@ class CenterController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $tenant = app('tenant');
+
+        // Self-Healing: If user is on a Tutor plan but has CenterAdmin role, fix it immediately
+        $subscription = $tenant->subscriptions()->latest()->first();
+        $isEnterprise = ($subscription && str_contains($subscription->stripe_price ?? '', 'enterprise')) || ($subscription && str_contains($subscription->name ?? '', 'enterprise'));
+        
+        if (!$isEnterprise && $user->role !== 'tutor') {
+            $user->role = 'tutor';
+            $user->save();
+            // Sync Spatie role as well
+            if (!$user->hasRole('tutor')) {
+                \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'tutor', 'guard_name' => 'web', 'tenant_id' => $tenant->id]);
+                $user->assignRole('tutor');
+            }
+        }
+
         if ($user->role !== 'center_admin' && !$user->hasAnyRole(['admin', 'center_admin', 'instructor', 'tutor'])) {
             if (request()->expectsJson()) {
                 return response()->json(['message' => 'Unauthorized role'], 403);
