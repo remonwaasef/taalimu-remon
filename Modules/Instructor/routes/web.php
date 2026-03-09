@@ -26,6 +26,7 @@ $instructorRoutes = function () {
 
         // Instructor Attendance
         Route::get('/attendance', [InstructorController::class, 'attendance'])->name('instructor.attendance.index');
+        Route::get('/attendance/schedule/{schedule}', [InstructorController::class, 'attendanceShow'])->name('instructor.attendance.show');
     });
 
     // Public Student Portal (Accessible via QR Link)
