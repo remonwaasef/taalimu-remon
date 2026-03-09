@@ -42,10 +42,10 @@
                                             @endphp
                                             <div class="d-flex justify-content-center gap-2">
                                                 @if($isEnded)
-                                                    <a href="{{ route('center.attendance.show', $session) }}" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                                                    <a href="{{ route('instructor.attendance.show', $session) }}" class="btn btn-sm btn-outline-danger rounded-pill px-3">
                                                         <i class="bi bi-person-x me-1"></i>مراجعة الحضور</a>
                                                 @else
-                                                    <a href="{{ route('center.attendance.show', $session) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                                    <a href="{{ route('instructor.attendance.show', $session) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
                                                         <i class="bi bi-card-checklist me-1"></i>تحضير يدوي</a>
                                                     <a href="{{ route('instructor.scanner', $session->course) }}" class="btn btn-sm btn-primary rounded-pill px-3">
                                                         <i class="bi bi-qr-code me-1"></i> مسح QR

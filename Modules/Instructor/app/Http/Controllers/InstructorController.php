@@ -435,6 +435,23 @@ class InstructorController extends Controller
         return view('instructor::attendance.index', compact('todaySessions', 'recentAttendance'));
     }
 
+    public function attendanceShow(Schedule $schedule)
+    {
+        $instructor = $this->resolveInstructor();
+        if ($instructor && $schedule->instructor_id !== $instructor->id) {
+            abort(403);
+        }
+
+        $schedule->load('course.enrollments.user.student', 'classroom');
+        
+        $attendances = Attendance::where('schedule_id', $schedule->id)
+            ->whereDate('session_date', today())
+            ->get()
+            ->keyBy('student_id');
+
+        return view('instructor::attendance.show', compact('schedule', 'attendances'));
+    }
+
     /**
      * Helper to resolve the instructor profile for the current user,
      * creating it if it doesn't exist for authorized users.
