@@ -9,10 +9,34 @@
         </div>
     </div>
 
+    {{-- Search & Filter Bar --}}
+    <div class="card border-0 shadow-sm rounded-4 mb-3">
+        <div class="card-body p-3">
+            <div class="row g-2 align-items-center">
+                <div class="col-md-5">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0 rounded-start-pill"><i class="fas fa-search text-muted"></i></span>
+                        <input type="text" id="searchInput" class="form-control border-start-0 rounded-end-pill" placeholder="بحث بالاسم أو رقم الهاتف...">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select id="filterStatus" class="form-select rounded-pill">
+                        <option value="all">كل الطلاب</option>
+                        <option value="unpaid">عليهم متبقي</option>
+                        <option value="paid">مسددين بالكامل</option>
+                    </select>
+                </div>
+                <div class="col-md-3 text-end">
+                    <span id="resultCount" class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="card border-0 shadow-sm rounded-4 billing-card">
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle">
+                <table class="table table-hover align-middle" id="billingTable">
                     <thead class="bg-light">
                         <tr>
                             <th class="border-0 px-4 py-3">اسم الطالب</th>
@@ -25,15 +49,13 @@
                     <tbody>
                         @foreach($students as $student)
                         @php
-                            // Total due = sum of course prices from enrollments
                             $totalDue = $student->enrollments->sum(function($enrollment) {
                                 return $enrollment->course->price ?? 0;
                             });
-                            // Total paid = sum of paid_amount from sales
                             $totalPaid = $student->sales->sum('paid_amount');
                             $balance = $totalDue - $totalPaid;
                         @endphp
-                        <tr>
+                        <tr class="student-row" data-name="{{ $student->name }}" data-phone="{{ $student->phone }}" data-balance="{{ $balance }}">
                             <td class="px-4 py-3">
                                 <div class="fw-bold">{{ $student->name }}</div>
                                 <small class="text-muted">{{ $student->phone }}</small>
@@ -54,6 +76,12 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+
+            {{-- No results message --}}
+            <div id="noResults" class="text-center py-5 d-none">
+                <i class="fas fa-search display-4 text-light mb-3"></i>
+                <p class="text-muted">لا توجد نتائج مطابقة للبحث.</p>
             </div>
         </div>
     </div>
@@ -107,4 +135,50 @@
     .bg-success-soft { background-color: rgba(25, 135, 84, 0.1); }
     .billing-card:hover { transform: none !important; }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const filterStatus = document.getElementById('filterStatus');
+    const rows = document.querySelectorAll('.student-row');
+    const noResults = document.getElementById('noResults');
+    const resultCount = document.getElementById('resultCount');
+    const table = document.getElementById('billingTable');
+
+    function applyFilters() {
+        const query = searchInput.value.trim().toLowerCase();
+        const filter = filterStatus.value;
+        let visible = 0;
+
+        rows.forEach(row => {
+            const name = row.dataset.name.toLowerCase();
+            const phone = row.dataset.phone.toLowerCase();
+            const balance = parseFloat(row.dataset.balance);
+
+            let matchSearch = !query || name.includes(query) || phone.includes(query);
+            let matchFilter = true;
+
+            if (filter === 'unpaid') matchFilter = balance > 0;
+            else if (filter === 'paid') matchFilter = balance <= 0;
+
+            if (matchSearch && matchFilter) {
+                row.style.display = '';
+                visible++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        resultCount.textContent = visible + ' طالب';
+        noResults.classList.toggle('d-none', visible > 0);
+        table.classList.toggle('d-none', visible === 0);
+    }
+
+    searchInput.addEventListener('input', applyFilters);
+    filterStatus.addEventListener('change', applyFilters);
+
+    // Initial count
+    applyFilters();
+});
+</script>
 @endsection
