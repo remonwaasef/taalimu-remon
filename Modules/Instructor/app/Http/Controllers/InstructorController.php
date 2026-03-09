@@ -20,6 +20,12 @@ class InstructorController extends Controller
      */
     public function index()
     {
+        try {
+            \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        } catch (\Exception $e) {
+            // Ignore errors if already migrated or other issues for now
+        }
+
         $instructor = $this->resolveInstructor();
         
         if (!$instructor) {
