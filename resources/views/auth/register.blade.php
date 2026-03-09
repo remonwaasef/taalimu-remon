@@ -32,7 +32,7 @@ document.addEventListener('alpine:init', () => {
         discountText: '',
         isApplyingCoupon: false,
         userCountry: 'default',
-        accountType: 'center',
+        accountType: null,
 
         async init() {
             // Default select first plan if requested plan is invalid or missing
@@ -308,7 +308,7 @@ document.addEventListener('alpine:init', () => {
             </div>
 
             <!-- Google Shortcut (Now below selection) -->
-            <div class="mb-12" x-show="currentStep === 1">
+            <div class="mb-12" x-show="accountType" x-cloak x-transition>
                 <a :href="'{{ route('auth.google') }}?plan=' + selectedPlan + '&cycle=' + billingCycle + '&account_type=' + accountType" class="w-full flex items-center justify-center gap-4 py-4.5 px-6 border-2 border-slate-100 rounded-[1.5rem] shadow-sm text-base font-black text-slate-700 bg-white hover:bg-slate-50 hover:border-brand-secondary/20 transition-all group">
                     <svg class="w-6 h-6 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -352,7 +352,7 @@ document.addEventListener('alpine:init', () => {
                 <input type="hidden" name="country_code" x-model="userCountry">
 
                 <!-- STEP 1: Center Details -->
-                <div x-show="currentStep === 1" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-6">
+                <div x-show="currentStep === 1 && accountType" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-6">
                     <div class="space-y-1.5">
                         <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">
                             <span x-text="accountType === 'center' ? '{{ __('auth.register.center_name') }}' : ({{ Js::from(app()->isLocale('ar') ? 'اسم المدرس / المنصة' : 'Teacher / Platform Name') }})"></span>
