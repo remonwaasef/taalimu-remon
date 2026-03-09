@@ -15,6 +15,17 @@ $instructorRoutes = function () {
         Route::get('/groups/create', [InstructorController::class, 'createGroup'])->name('instructor.groups.create');
         Route::post('/groups', [InstructorController::class, 'storeGroup'])->name('instructor.groups.store');
         Route::resource('students', InstructorController::class)->names('instructor.students');
+
+        // Instructor Schedule Management
+        Route::get('/schedules', [InstructorController::class, 'schedules'])->name('instructor.schedules.index');
+        Route::get('/schedules/create', [InstructorController::class, 'createSchedule'])->name('instructor.schedules.create');
+        Route::post('/schedules', [InstructorController::class, 'storeSchedule'])->name('instructor.schedules.store');
+        Route::get('/schedules/{schedule}/edit', [InstructorController::class, 'editSchedule'])->name('instructor.schedules.edit');
+        Route::put('/schedules/{schedule}', [InstructorController::class, 'updateSchedule'])->name('instructor.schedules.update');
+        Route::delete('/schedules/{schedule}', [InstructorController::class, 'destroySchedule'])->name('instructor.schedules.destroy');
+
+        // Instructor Attendance
+        Route::get('/attendance', [InstructorController::class, 'attendance'])->name('instructor.attendance.index');
     });
 
     // Public Student Portal (Accessible via QR Link)

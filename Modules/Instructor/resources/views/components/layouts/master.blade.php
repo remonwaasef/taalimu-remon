@@ -123,10 +123,10 @@
             <a href="{{ route('instructor.groups.list') }}" class="nav-link {{ request()->routeIs('instructor.groups.list') ? 'active' : '' }}">
                 <i class="fas fa-users"></i> <span>المجموعات</span>
             </a>
-            <a href="{{ route('center.schedules.index') }}" class="nav-link {{ request()->routeIs('center.schedules.*') ? 'active' : '' }}">
+            <a href="{{ route('instructor.schedules.index') }}" class="nav-link {{ request()->routeIs('instructor.schedules.*') ? 'active' : '' }}">
                 <i class="fas fa-calendar-alt"></i> <span>المواعيد والجداول</span>
             </a>
-            <a href="{{ route('center.attendance.index') }}" class="nav-link {{ request()->routeIs('center.attendance.*') ? 'active' : '' }}">
+            <a href="{{ route('instructor.attendance.index') }}" class="nav-link {{ request()->routeIs('instructor.attendance.*') ? 'active' : '' }}">
                 <i class="fas fa-clipboard-check"></i> <span>الحضور والغياب</span>
             </a>
             <a href="{{ route('instructor.billing') }}" class="nav-link {{ request()->routeIs('instructor.billing') ? 'active' : '' }}">

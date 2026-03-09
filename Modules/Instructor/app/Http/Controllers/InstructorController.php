@@ -295,6 +295,146 @@ class InstructorController extends Controller
         return back()->with('success', "تم تسجيل استلام {$request->amount} ج.م من الطالب {$student->name}");
     }
 
+    // ─── Schedule Management ───
+
+    public function schedules()
+    {
+        $instructor = $this->resolveInstructor();
+        $query = Schedule::with(['course', 'classroom', 'instructor', 'bookings'])->latest();
+        
+        if ($instructor) {
+            $query->where('instructor_id', $instructor->id);
+        }
+
+        $schedules = $query->get();
+        return view('instructor::schedules.index', compact('schedules'));
+    }
+
+    public function createSchedule()
+    {
+        $instructor = $this->resolveInstructor();
+        $courses = $instructor ? $instructor->courses()->select('id', 'title', 'instructor_id')->get() : Course::select('id', 'title', 'instructor_id')->get();
+        $classrooms = \App\Models\Classroom::select('id', 'name', 'capacity')->get();
+        
+        return view('instructor::schedules.create', compact('courses', 'classrooms'));
+    }
+
+    public function storeSchedule(Request $request)
+    {
+        $instructor = $this->resolveInstructor();
+        if (!$instructor) {
+            return back()->with('error', 'يجب أن تكون مسجلاً كمعلم.');
+        }
+
+        $validated = $request->validate([
+            'course_id' => 'required|exists:courses,id',
+            'classroom_id' => 'nullable|exists:classrooms,id',
+            'day_of_week' => 'required|integer|between:0,6',
+            'start_time' => 'required',
+            'end_time' => 'required|after:start_time',
+            'max_students' => 'nullable|integer|min:1',
+        ]);
+
+        $validated['instructor_id'] = $instructor->id;
+
+        // Verify course belongs to instructor
+        $course = Course::findOrFail($validated['course_id']);
+        if ($course->instructor_id !== $instructor->id) {
+            return back()->withInput()->with('error', 'لا يمكنك إنشاء حصة لمجموعة لا تخصك.');
+        }
+
+        Schedule::create($validated);
+
+        return redirect()->route('instructor.schedules.index')
+            ->with('success', 'تم إنشاء موعد الحصة بنجاح.');
+    }
+
+    public function editSchedule(Schedule $schedule)
+    {
+        $instructor = $this->resolveInstructor();
+        if ($instructor && $schedule->instructor_id !== $instructor->id) {
+            abort(403);
+        }
+
+        $courses = $instructor ? $instructor->courses()->select('id', 'title', 'instructor_id')->get() : Course::select('id', 'title', 'instructor_id')->get();
+        $classrooms = \App\Models\Classroom::select('id', 'name', 'capacity')->get();
+
+        return view('instructor::schedules.edit', compact('schedule', 'courses', 'classrooms'));
+    }
+
+    public function updateSchedule(Request $request, Schedule $schedule)
+    {
+        $instructor = $this->resolveInstructor();
+        if ($instructor && $schedule->instructor_id !== $instructor->id) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'course_id' => 'required|exists:courses,id',
+            'classroom_id' => 'nullable|exists:classrooms,id',
+            'day_of_week' => 'required|integer|between:0,6',
+            'start_time' => 'required',
+            'end_time' => 'required|after:start_time',
+            'max_students' => 'nullable|integer|min:1',
+        ]);
+
+        $validated['instructor_id'] = $instructor->id;
+        $schedule->update($validated);
+
+        return redirect()->route('instructor.schedules.index')
+            ->with('success', 'تم تعديل موعد الحصة بنجاح.');
+    }
+
+    public function destroySchedule(Schedule $schedule)
+    {
+        $instructor = $this->resolveInstructor();
+        if ($instructor && $schedule->instructor_id !== $instructor->id) {
+            abort(403);
+        }
+
+        $schedule->delete();
+
+        return redirect()->route('instructor.schedules.index')
+            ->with('success', 'تم حذف موعد الحصة بنجاح.');
+    }
+
+    // ─── Attendance ───
+
+    public function attendance()
+    {
+        $instructor = $this->resolveInstructor();
+        $dayOfWeek = now()->dayOfWeek;
+
+        $query = Schedule::with(['course', 'classroom', 'instructor'])
+            ->where('day_of_week', $dayOfWeek)
+            ->whereNotNull('course_id');
+
+        if ($instructor) {
+            $query->where('instructor_id', $instructor->id);
+        }
+
+        $todaySessions = $query->orderBy('start_time')->get()
+            ->unique(fn ($s) => $s->course_id . '-' . $s->start_time . '-' . $s->end_time);
+
+        $todaySessions = new \Illuminate\Pagination\LengthAwarePaginator(
+            $todaySessions->forPage(request()->get('page', 1), 10),
+            $todaySessions->count(),
+            10,
+            request()->get('page', 1),
+            ['path' => request()->url()]
+        );
+
+        $attendanceQuery = \Modules\Center\Models\Attendance::with(['student', 'course', 'schedule'])->latest();
+
+        if ($instructor) {
+            $attendanceQuery->whereHas('course', fn($q) => $q->where('instructor_id', $instructor->id));
+        }
+
+        $recentAttendance = $attendanceQuery->take(10)->get();
+
+        return view('instructor::attendance.index', compact('todaySessions', 'recentAttendance'));
+    }
+
     /**
      * Helper to resolve the instructor profile for the current user,
      * creating it if it doesn't exist for authorized users.
@@ -325,3 +465,4 @@ class InstructorController extends Controller
         return $instructor;
     }
 }
+
