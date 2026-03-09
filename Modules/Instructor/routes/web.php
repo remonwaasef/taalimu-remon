@@ -14,6 +14,8 @@ $instructorRoutes = function () {
         Route::get('/groups-list', [InstructorController::class, 'groups'])->name('instructor.groups.list');
         Route::get('/groups/create', [InstructorController::class, 'createGroup'])->name('instructor.groups.create');
         Route::post('/groups', [InstructorController::class, 'storeGroup'])->name('instructor.groups.store');
+        Route::get('/groups/{course}/edit', [InstructorController::class, 'editGroup'])->name('instructor.groups.edit');
+        Route::put('/groups/{course}', [InstructorController::class, 'updateGroup'])->name('instructor.groups.update');
         Route::resource('students', InstructorController::class)->names('instructor.students');
 
         // Instructor Schedule Management
