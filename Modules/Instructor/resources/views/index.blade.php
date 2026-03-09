@@ -40,7 +40,7 @@
                     </div>
                     <div>
                         <h6 class="text-muted mb-1">إيرادات الشهر</h6>
-                        <h3 class="fw-bold mb-0">-- <small>ج.م</small></h3>
+                        <h3 class="fw-bold mb-0">{{ number_format($monthlyRevenue, 2) }} <small>ج.م</small></h3>
                     </div>
                 </div>
             </div>

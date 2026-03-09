@@ -9,15 +9,39 @@
             <h3 class="fw-bold mb-0">إدارة الطلاب</h3>
             <p class="text-muted small">عرض جميع الطلاب المسجلين في مجموعاتك</p>
         </div>
-        <div class="col-auto">
-            <div class="dropdown">
-                <button class="btn btn-white bg-white shadow-sm rounded-pill px-4 dropdown-toggle border-0" type="button" data-bs-toggle="dropdown">
-                    <i class="fas fa-filter me-2 text-primary"></i> فلترة حسب المجموعة
-                </button>
-                <ul class="dropdown-menu border-0 shadow-sm rounded-3">
-                    <li><a class="dropdown-item" href="#">الكل</a></li>
-                    <!-- Future: Dynamic Course Filter -->
-                </ul>
+    </div>
+
+    {{-- Search & Group Filter Bar --}}
+    <div class="card border-0 shadow-sm rounded-4 mb-3">
+        <div class="card-body p-3">
+            <div class="row g-2 align-items-center">
+                <div class="col-md-5">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0 rounded-start-pill"><i class="fas fa-search text-muted"></i></span>
+                        <input type="text" id="studentSearchInput" class="form-control border-start-0 rounded-end-pill" placeholder="بحث بالاسم أو رقم الهاتف...">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select id="groupFilter" class="form-select rounded-pill">
+                        <option value="all">كل المجموعات</option>
+                        @php
+                            $uniqueCourses = collect();
+                            foreach($students as $student) {
+                                foreach($student->enrollments as $enrollment) {
+                                    if($enrollment->course) {
+                                        $uniqueCourses->put($enrollment->course->id, $enrollment->course->title);
+                                    }
+                                }
+                            }
+                        @endphp
+                        @foreach($uniqueCourses as $id => $title)
+                            <option value="{{ $id }}">{{ $title }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-3 text-end">
+                    <span id="studentResultCount" class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2"></span>
+                </div>
             </div>
         </div>
     </div>
@@ -25,7 +49,7 @@
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+                <table class="table table-hover align-middle mb-0" id="studentsTable">
                     <thead class="bg-light">
                         <tr>
                             <th class="border-0 px-4 py-3">الطالب</th>
@@ -37,7 +61,10 @@
                     </thead>
                     <tbody>
                         @forelse($students as $student)
-                        <tr>
+                        @php
+                            $courseIds = $student->enrollments->pluck('course_id')->filter()->toArray();
+                        @endphp
+                        <tr class="student-row" data-name="{{ $student->name }}" data-phone="{{ $student->phone }}" data-groups="{{ json_encode($courseIds) }}">
                             <td class="px-4 py-3">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="avatar bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
@@ -51,7 +78,9 @@
                             </td>
                             <td>
                                 @foreach($student->enrollments as $enrollment)
-                                    <span class="badge bg-light text-dark fw-normal rounded-pill border">{{ $enrollment->course->title ?? 'N/A' }}</span>
+                                    @if($enrollment->course)
+                                        <span class="badge bg-light text-dark fw-normal rounded-pill border">{{ $enrollment->course->title }}</span>
+                                    @endif
                                 @endforeach
                             </td>
                             <td>
@@ -60,17 +89,17 @@
                             <td>{{ $student->created_at?->format('Y-m-d') ?? '--' }}</td>
                             <td class="text-center">
                                 <div class="btn-group">
-                                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $student->phone) }}" target="_blank" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-success">
+                                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $student->phone) }}" target="_blank" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-success" title="WhatsApp">
                                         <i class="fab fa-whatsapp"></i>
                                     </a>
-                                    <button class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-primary">
+                                    <a href="{{ route('instructor.attendance.index') }}" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-primary" title="عرض السجل">
                                         <i class="fas fa-eye"></i>
-                                    </button>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
                         @empty
-                        <tr>
+                        <tr id="emptyRow">
                             <td colspan="5" class="text-center py-5">
                                 <img src="https://illustrations.popsy.co/gray/fogg-searching.png" alt="No data" style="width: 150px;" class="mb-3 opacity-50">
                                 <h6 class="text-muted">لا يوجد طلاب مسجلين حالياً</h6>
@@ -80,7 +109,63 @@
                     </tbody>
                 </table>
             </div>
+
+            <div id="noStudentsResults" class="text-center py-5 d-none">
+                <i class="fas fa-user-slash display-4 text-light mb-3"></i>
+                <p class="text-muted">لا توجد نتائج مطابقة للبحث.</p>
+            </div>
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('studentSearchInput');
+    const groupFilter = document.getElementById('groupFilter');
+    const rows = document.querySelectorAll('.student-row');
+    const noResults = document.getElementById('noStudentsResults');
+    const resultCount = document.getElementById('studentResultCount');
+    const table = document.getElementById('studentsTable');
+
+    function applyStudentFilters() {
+        const query = searchInput.value.trim().toLowerCase();
+        const filterGroupId = groupFilter.value;
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+            const name = row.dataset.name.toLowerCase();
+            const phone = row.dataset.phone.toLowerCase();
+            const groups = JSON.parse(row.dataset.groups);
+
+            let matchSearch = !query || name.includes(query) || phone.includes(query);
+            let matchGroup = filterGroupId === 'all' || groups.includes(parseInt(filterGroupId));
+
+            if (matchSearch && matchGroup) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        if (resultCount) resultCount.textContent = visibleCount + ' طالب';
+        
+        if (noResults) {
+            noResults.classList.toggle('d-none', visibleCount > 0 || rows.length === 0);
+        }
+        
+        if (table) {
+            const tbody = table.querySelector('tbody');
+            const hasData = rows.length > 0;
+            table.classList.toggle('d-none', visibleCount === 0 && hasData);
+        }
+    }
+
+    if (searchInput) searchInput.addEventListener('input', applyStudentFilters);
+    if (groupFilter) groupFilter.addEventListener('change', applyStudentFilters);
+
+    // Initial count
+    applyStudentFilters();
+});
+</script>
 @endsection

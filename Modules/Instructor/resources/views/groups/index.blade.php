@@ -16,10 +16,27 @@
         </div>
     </div>
 
+    {{-- Search Bar --}}
+    <div class="card border-0 shadow-sm rounded-4 mb-3">
+        <div class="card-body p-3">
+            <div class="row g-2 align-items-center">
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0 rounded-start-pill"><i class="fas fa-search text-muted"></i></span>
+                        <input type="text" id="groupSearchInput" class="form-control border-start-0 rounded-end-pill" placeholder="بحث باسم المجموعة...">
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <span id="groupResultCount" class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0 text-center">
+                <table class="table table-hover align-middle mb-0 text-center" id="groupsTable">
                     <thead class="bg-light">
                         <tr>
                             <th class="border-0 px-4 py-3 text-start">المجموعة</th>
@@ -31,7 +48,7 @@
                     </thead>
                     <tbody>
                         @forelse($courses as $course)
-                        <tr>
+                        <tr class="group-row" data-title="{{ $course->title }}">
                             <td class="px-4 py-3 text-start">
                                 <div class="fw-bold">{{ $course->title }}</div>
                                 <div class="text-muted small">كود: {{ $course->code ?? 'N/A' }}</div>
@@ -62,13 +79,12 @@
                                     <ul class="dropdown-menu border-0 shadow-sm rounded-3">
                                         <li><a class="dropdown-item" href="{{ route('instructor.scanner', $course->id) }}"><i class="fas fa-qrcode me-2 text-primary"></i> تحضير (QR Scanner)</a></li>
                                         <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2 text-muted"></i> تعديل</a></li>
-                                        <li><a class="dropdown-item" href="#" onclick="alert('سيتم توليد رابط جديد قريباً')"><i class="fas fa-link me-2 text-muted"></i> توليد رابط جديد</a></li>
                                     </ul>
                                 </div>
                             </td>
                         </tr>
                         @empty
-                        <tr>
+                        <tr id="emptyRow">
                             <td colspan="5" class="text-center py-5">
                                 <img src="https://illustrations.popsy.co/gray/fogg-searching.png" alt="No data" style="width: 150px;" class="mb-3 opacity-50">
                                 <h6 class="text-muted">لا يوجد مجموعات حالية</h6>
@@ -77,6 +93,11 @@
                         @endforelse
                     </tbody>
                 </table>
+            </div>
+
+            <div id="noGroupsResults" class="text-center py-5 d-none">
+                <i class="fas fa-search-minus display-4 text-light mb-3"></i>
+                <p class="text-muted">لا توجد مجموعات مطابقة للبحث.</p>
             </div>
         </div>
     </div>
@@ -91,6 +112,36 @@ function copyLink(id) {
     navigator.clipboard.writeText(copyText.value);
     alert("تم نسخ الرابط!");
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('groupSearchInput');
+    const rows = document.querySelectorAll('.group-row');
+    const noResults = document.getElementById('noGroupsResults');
+    const resultCount = document.getElementById('groupResultCount');
+    const table = document.getElementById('groupsTable');
+
+    function applyGroupFilters() {
+        const query = searchInput.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+            const title = row.dataset.title.toLowerCase();
+            if (!query || title.includes(query)) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        if (resultCount) resultCount.textContent = visibleCount + ' مجموعة';
+        if (noResults) noResults.classList.toggle('d-none', visibleCount > 0 || rows.length === 0);
+        if (table) table.classList.toggle('d-none', visibleCount === 0 && rows.length > 0);
+    }
+
+    if (searchInput) searchInput.addEventListener('input', applyGroupFilters);
+    applyGroupFilters();
+});
 </script>
 @endpush
 @endsection

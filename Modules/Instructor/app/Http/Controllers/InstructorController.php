@@ -26,14 +26,23 @@ class InstructorController extends Controller
             // Fallback for demo or admin
             $courses = Course::take(5)->get();
             $studentsCount = Student::count();
+            $monthlyRevenue = Sale::whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->sum('paid_amount');
         } else {
             $courses = $instructor->courses()->withCount('enrollments')->get();
             $studentsCount = Student::whereHas('enrollments', function($q) use ($instructor) {
                 $q->whereIn('course_id', $instructor->courses->pluck('id'));
             })->count();
+            
+            $monthlyRevenue = Sale::whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->whereHas('student.enrollments', function($q) use ($instructor) {
+                    $q->whereIn('course_id', $instructor->courses->pluck('id'));
+                })->sum('paid_amount');
         }
 
-        return view('instructor::index', compact('courses', 'studentsCount'));
+        return view('instructor::index', compact('courses', 'studentsCount', 'monthlyRevenue'));
     }
 
     /**
