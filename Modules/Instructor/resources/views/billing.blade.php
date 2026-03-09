@@ -25,7 +25,11 @@
                     <tbody>
                         @foreach($students as $student)
                         @php
-                            $totalDue = $student->sales->sum('total_amount');
+                            // Total due = sum of course prices from enrollments
+                            $totalDue = $student->enrollments->sum(function($enrollment) {
+                                return $enrollment->course->price ?? 0;
+                            });
+                            // Total paid = sum of paid_amount from sales
                             $totalPaid = $student->sales->sum('paid_amount');
                             $balance = $totalDue - $totalPaid;
                         @endphp
@@ -55,10 +59,12 @@
     </div>
 </div>
 
-{{-- Modals moved OUTSIDE the table to prevent DOM conflicts --}}
+{{-- Modals OUTSIDE the table --}}
 @foreach($students as $student)
 @php
-    $totalDue = $student->sales->sum('total_amount');
+    $totalDue = $student->enrollments->sum(function($enrollment) {
+        return $enrollment->course->price ?? 0;
+    });
     $totalPaid = $student->sales->sum('paid_amount');
     $balance = $totalDue - $totalPaid;
 @endphp
@@ -76,6 +82,7 @@
                     <div class="text-center mb-4">
                         <h6 class="text-muted">تحصيل من الطالب</h6>
                         <h5 class="fw-bold">{{ $student->name }}</h5>
+                        <p class="text-muted small">المتبقي: <span class="text-danger fw-bold">{{ number_format($balance, 2) }} ج.م</span></p>
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-bold">المبلغ المستلم (ج.م)</label>
@@ -98,7 +105,6 @@
 <style>
     .bg-danger-soft { background-color: rgba(220, 53, 69, 0.1); }
     .bg-success-soft { background-color: rgba(25, 135, 84, 0.1); }
-    /* Prevent the card hover transform from shifting the modal's parent */
     .billing-card:hover { transform: none !important; }
 </style>
 @endsection

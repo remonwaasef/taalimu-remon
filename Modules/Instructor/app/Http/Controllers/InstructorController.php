@@ -158,11 +158,11 @@ class InstructorController extends Controller
         $instructor = auth()->user()->instructor;
         
         if (!$instructor) {
-            $students = Student::with(['user', 'sales'])->take(10)->get();
+            $students = Student::with(['user', 'sales', 'enrollments.course'])->take(10)->get();
         } else {
             $students = Student::whereHas('enrollments', function($q) use ($instructor) {
                 $q->whereIn('course_id', $instructor->courses->pluck('id'));
-            })->with(['user', 'sales'])->get();
+            })->with(['user', 'sales', 'enrollments.course'])->get();
         }
 
         return view('instructor::billing', compact('students'));
