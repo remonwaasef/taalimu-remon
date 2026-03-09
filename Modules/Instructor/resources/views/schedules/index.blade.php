@@ -75,7 +75,7 @@
                                                 <h5 class="fw-bold text-dark mb-1 course-title">{{ $schedule->course->title }}</h5>
                                             </div>
                                             <div class="dropdown">
-                                                <button class="btn btn-link text-muted p-0" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport">
+                                                <button class="btn btn-link text-muted p-0" type="button" data-bs-toggle="dropdown">
                                                     <i class="fas fa-ellipsis-v"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm">

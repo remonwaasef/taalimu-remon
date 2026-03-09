@@ -55,7 +55,7 @@
                     <h5 class="fw-bold mb-0">المجموعات وإدارة التسجيل</h5>
                 </div>
                 
-                <div class="table-responsive">
+                <div class="table-responsive" style="min-height: 300px;">
                     <table class="table table-hover align-middle text-center">
                         <thead class="bg-light">
                             <tr>
@@ -84,7 +84,7 @@
                                 </td>
                                 <td>
                                     <div class="dropdown">
-                                        <button class="btn btn-light btn-sm rounded-circle" data-bs-toggle="dropdown" data-bs-boundary="viewport">
+                                        <button class="btn btn-light btn-sm rounded-circle" data-bs-toggle="dropdown">
                                             <i class="fas fa-ellipsis-v"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-3">
