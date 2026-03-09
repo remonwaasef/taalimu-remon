@@ -280,7 +280,18 @@ class InstructorController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        $student = Student::findOrFail($request->student_id);
+        $student = Student::with(['enrollments.course', 'sales'])->findOrFail($request->student_id);
+
+        // Calculate balance
+        $totalDue = $student->enrollments->sum(function($enrollment) {
+            return $enrollment->course->price ?? 0;
+        });
+        $totalPaid = $student->sales->sum('paid_amount');
+        $balance = $totalDue - $totalPaid;
+
+        if ($request->amount > $balance) {
+            return back()->with('error', "خطأ: المبلغ المدخل ({$request->amount}) أكبر من المتبقي على الطالب ({$balance})");
+        }
 
         $sale = Sale::create([
             'tenant_id' => $student->tenant_id,

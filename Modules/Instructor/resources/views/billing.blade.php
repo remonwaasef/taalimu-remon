@@ -68,8 +68,11 @@
                                 </span>
                             </td>
                             <td class="text-center">
-                                <button class="btn btn-primary btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#payModal{{ $student->id }}">
-                                    <i class="fas fa-hand-holding-usd me-1"></i> تحصيل مبلغ
+                                <button class="btn btn-primary btn-sm rounded-pill px-3" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#payModal{{ $student->id }}"
+                                    {{ $balance <= 0 ? 'disabled' : '' }}>
+                                    <i class="fas fa-hand-holding-usd me-1"></i> {{ $balance <= 0 ? 'تم السداد' : 'تحصيل مبلغ' }}
                                 </button>
                             </td>
                         </tr>
@@ -114,7 +117,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-bold">المبلغ المستلم (ج.م)</label>
-                        <input type="number" name="amount" class="form-control rounded-3" step="0.01" required value="{{ $balance > 0 ? $balance : '' }}">
+                        <input type="number" name="amount" class="form-control rounded-3" step="0.01" required value="{{ $balance > 0 ? $balance : '' }}" max="{{ $balance }}">
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-bold">ملاحظات</label>
