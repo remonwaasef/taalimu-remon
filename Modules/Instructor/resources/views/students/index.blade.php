@@ -71,7 +71,11 @@
                                         <i class="fas fa-user"></i>
                                     </div>
                                     <div>
-                                        <div class="fw-bold">{{ $student->name }}</div>
+                                        <div class="fw-bold">
+                                            <a href="{{ route('instructor.students.show', $student->id) }}" class="text-decoration-none text-dark hover-primary-link">
+                                                {{ $student->name }}
+                                            </a>
+                                        </div>
                                         <div class="text-muted small">{{ $student->phone }}</div>
                                     </div>
                                 </div>
@@ -92,8 +96,8 @@
                                     <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $student->phone) }}" target="_blank" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-success" title="WhatsApp">
                                         <i class="fab fa-whatsapp"></i>
                                     </a>
-                                    <a href="{{ route('instructor.attendance.index') }}" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-primary" title="عرض السجل">
-                                        <i class="fas fa-eye"></i>
+                                    <a href="{{ route('instructor.students.show', $student->id) }}" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-primary" title="عرض الملف التفصيلي">
+                                        <i class="fas fa-id-card"></i>
                                     </a>
                                 </div>
                             </td>
@@ -168,4 +172,11 @@ document.addEventListener('DOMContentLoaded', function() {
     applyStudentFilters();
 });
 </script>
+
+<style>
+    .hover-primary-link:hover {
+        color: var(--primary-color) !important;
+        text-decoration: underline !important;
+    }
+</style>
 @endsection

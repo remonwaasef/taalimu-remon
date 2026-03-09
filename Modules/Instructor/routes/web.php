@@ -16,6 +16,11 @@ $instructorRoutes = function () {
         Route::post('/groups', [InstructorController::class, 'storeGroup'])->name('instructor.groups.store');
         Route::get('/groups/{course}/edit', [InstructorController::class, 'editGroup'])->name('instructor.groups.edit');
         Route::put('/groups/{course}', [InstructorController::class, 'updateGroup'])->name('instructor.groups.update');
+        Route::post('/groups/{course}/rotate-link', [InstructorController::class, 'rotateGroupLink'])->name('instructor.groups.rotate-link');
+        Route::post('/groups/{course}/duplicate', [InstructorController::class, 'duplicateGroup'])->name('instructor.groups.duplicate');
+        Route::delete('/groups/{course}', [InstructorController::class, 'destroyGroup'])->name('instructor.groups.destroy');
+        
+        Route::get('/students/{student}', [InstructorController::class, 'showStudent'])->name('instructor.students.show');
         Route::resource('students', InstructorController::class)->names('instructor.students');
 
         // Instructor Schedule Management

@@ -68,12 +68,23 @@
                                 </span>
                             </td>
                             <td class="text-center">
-                                <button class="btn btn-primary btn-sm rounded-pill px-3" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#payModal{{ $student->id }}"
-                                    {{ $balance <= 0 ? 'disabled' : '' }}>
-                                    <i class="fas fa-hand-holding-usd me-1"></i> {{ $balance <= 0 ? 'تم السداد' : 'تحصيل مبلغ' }}
-                                </button>
+                                <div class="btn-group">
+                                    <button class="btn btn-primary btn-sm rounded-start-pill px-3" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#payModal{{ $student->id }}"
+                                        {{ $balance <= 0 ? 'disabled' : '' }}>
+                                        <i class="fas fa-hand-holding-usd me-1"></i> {{ $balance <= 0 ? 'تم السداد' : 'تحصيل' }}
+                                    </button>
+                                    @if($balance > 0)
+                                        @php
+                                            $msg = "تحية طيبة، نود تذكيركم بأن الطالب {$student->name} لديه مديونية متبقية قدرها " . number_format($balance, 2) . " ج.م لمجموعات المدرس " . (auth()->user()->name ?? 'المعلم') . ". يرجى السداد في أقرب وقت. شكراً لكم.";
+                                        @endphp
+                                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $student->phone) }}?text={{ urlencode($msg) }}" 
+                                           target="_blank" class="btn btn-success btn-sm rounded-end-pill px-2" title="تذكير واتساب">
+                                            <i class="fab fa-whatsapp"></i>
+                                        </a>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                         @endforeach

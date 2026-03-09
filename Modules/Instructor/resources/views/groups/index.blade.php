@@ -78,7 +78,31 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-3">
                                         <li><a class="dropdown-item" href="{{ route('instructor.scanner', $course->id) }}"><i class="fas fa-qrcode me-2 text-primary"></i> تحضير (QR Scanner)</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('instructor.groups.edit', $course->id) }}"><i class="fas fa-edit me-2 text-muted"></i> تعديل</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('instructor.groups.edit', $course->id) }}"><i class="fas fa-edit me-2 text-muted"></i> تعديل البيانات</a></li>
+                                        <li>
+                                            <form action="{{ route('instructor.groups.duplicate', $course->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="dropdown-item"><i class="fas fa-copy me-2 text-muted"></i> تكرار المجموعة</button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form action="{{ route('instructor.groups.rotate-link', $course->id) }}" method="POST" id="rotateForm_{{ $course->id }}">
+                                                @csrf
+                                                <button type="button" class="dropdown-item" onclick="if(confirm('هل أنت متأكد من تغيير رابط التسجيل؟ الروابط القديمة لن تعمل.')) document.getElementById('rotateForm_{{ $course->id }}').submit();">
+                                                    <i class="fas fa-sync me-2 text-muted"></i> توليد رابط جديد
+                                                </button>
+                                            </form>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <form action="{{ route('instructor.groups.destroy', $course->id) }}" method="POST" id="deleteForm_{{ $course->id }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="dropdown-item text-danger" onclick="if(confirm('هل أنت متأكد من حذف هذه المجموعة؟ سيتم إخفاؤها من النظام.')) document.getElementById('deleteForm_{{ $course->id }}').submit();">
+                                                    <i class="fas fa-trash me-2"></i> حذف المجموعة
+                                                </button>
+                                            </form>
+                                        </li>
                                     </ul>
                                 </div>
                             </td>

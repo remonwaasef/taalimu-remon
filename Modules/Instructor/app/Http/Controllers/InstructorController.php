@@ -41,8 +41,22 @@ class InstructorController extends Controller
                     $q->whereIn('course_id', $instructor->courses->pluck('id'));
                 })->sum('paid_amount');
         }
+        
+        // Attendance Analytics (Last 7 Days)
+        $attendanceData = [];
+        $days = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            $days[] = $date->translatedFormat('D');
+            
+            $query = Attendance::whereDate('session_date', $date->toDateString());
+            if ($instructor) {
+                $query->whereIn('course_id', $instructor->courses->pluck('id'));
+            }
+            $attendanceData[] = $query->count();
+        }
 
-        return view('instructor::index', compact('courses', 'studentsCount', 'monthlyRevenue'));
+        return view('instructor::index', compact('courses', 'studentsCount', 'monthlyRevenue', 'attendanceData', 'days'));
     }
 
     /**
@@ -151,10 +165,14 @@ class InstructorController extends Controller
             'status' => 'present',
         ]);
 
+        $msg = "تم تسجيل حضور الطالب {$student->name} اليوم في مجموعة '{$course->title}' بنجاح.";
+        $whatsappUrl = "https://wa.me/" . preg_replace('/[^0-9]/', '', $student->phone) . "?text=" . urlencode($msg);
+
         return response()->json([
             'success' => true,
             'student_name' => $student->name,
             'remaining_sessions' => $enrollment->fresh()->remaining_sessions,
+            'whatsapp_url' => $whatsappUrl,
             'message' => 'تم تسجيل الحضور بنجاح!'
         ]);
     }
@@ -348,6 +366,91 @@ class InstructorController extends Controller
         ]);
 
         return back()->with('success', "تم تسجيل استلام {$request->amount} ج.م من الطالب {$student->name}");
+    }
+
+    /**
+     * Rotate the registration link for a group
+     */
+    public function rotateGroupLink(Course $course)
+    {
+        $instructor = $this->resolveInstructor();
+        if ($instructor && $course->instructor_id !== $instructor->id) {
+            abort(403);
+        }
+
+        $course->update([
+            'registration_token' => \Illuminate\Support\Str::random(16)
+        ]);
+
+        return back()->with('success', "تم توليد رابط جديد للمجموعة '{$course->title}' بنجاح.");
+    }
+
+    /**
+     * Duplicate a group
+     */
+    public function duplicateGroup(Course $course)
+    {
+        $instructor = $this->resolveInstructor();
+        if ($instructor && $course->instructor_id !== $instructor->id) {
+            abort(403);
+        }
+
+        $newCourse = $course->replicate();
+        $newCourse->title = $course->title . ' - نسخة';
+        $newCourse->registration_token = \Illuminate\Support\Str::random(16);
+        $newCourse->save();
+
+        return redirect()->route('instructor.groups.list')->with('success', "تم تكرار المجموعة بنجاح باسم '{$newCourse->title}'.");
+    }
+
+    /**
+     * Remove the specified group from storage (Soft Delete)
+     */
+    public function destroyGroup(Course $course)
+    {
+        $instructor = $this->resolveInstructor();
+        if ($instructor && $course->instructor_id !== $instructor->id) {
+            abort(403);
+        }
+
+        $course->delete();
+
+        return redirect()->route('instructor.groups.list')->with('success', "تم حذف المجموعة '{$course->title}' بنجاح.");
+    }
+
+    /**
+     * Show detailed profile for a student
+     */
+    public function showStudent(Student $student)
+    {
+        $instructor = $this->resolveInstructor();
+        
+        // Ensure student is enrolled in at least one of instructor's courses
+        if ($instructor) {
+            $isEnrolled = Enrollment::where('user_id', $student->user_id)
+                ->whereIn('course_id', $instructor->courses->pluck('id'))
+                ->exists();
+            if (!$isEnrolled) {
+                abort(403);
+            }
+        }
+
+        $student->load(['user', 'enrollments.course', 'sales' => function($q) {
+            $q->latest();
+        }]);
+
+        // Get attendance for this student in instructor's courses
+        $attendanceQuery = Attendance::where('student_id', $student->id)
+            ->with(['course', 'schedule'])
+            ->latest();
+
+        if ($instructor) {
+            $attendanceQuery->whereIn('course_id', $instructor->courses->pluck('id'));
+        }
+
+        $attendances = $attendanceQuery->get();
+
+        return view('instructor::students.show', compact('student', 'attendances'));
     }
 
     // ─── Schedule Management ───

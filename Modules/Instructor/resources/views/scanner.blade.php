@@ -103,7 +103,7 @@
                 const statusMsg = data.already_marked ? "مسجل مسبقاً" : "تم التحضير";
                 
                 showStatus(`${studentName} - ${statusMsg}`, data.already_marked ? "warning" : "success");
-                addRecentScan(studentName, data.remaining_sessions, data.already_marked);
+                addRecentScan(studentName, data.remaining_sessions, data.already_marked, data.whatsapp_url);
             } else {
                 document.getElementById('beep-fail').play();
                 showStatus(data.message, "danger");
@@ -134,7 +134,7 @@
         }, 2000);
     }
 
-    function addRecentScan(name, balance, already) {
+    function addRecentScan(name, balance, already, whatsappUrl) {
         const list = document.getElementById('recent-scans');
         const emptyMsg = list.querySelector('.text-center');
         if (emptyMsg) emptyMsg.remove();
@@ -147,9 +147,14 @@
                     <h6 class="mb-0 fw-bold">${name}</h6>
                     <small class="text-muted">المتبقي: ${balance ?? '--'} حصة</small>
                 </div>
-                <span class="badge ${already ? 'bg-warning' : 'bg-success'} rounded-pill">
-                    ${already ? 'مسجل مسبقاً' : 'نشط'}
-                </span>
+                <div class="d-flex gap-2">
+                    <a href="${whatsappUrl}" target="_blank" class="btn btn-sm btn-success rounded-pill px-3">
+                        <i class="fab fa-whatsapp"></i> إخطار
+                    </a>
+                    <span class="badge ${already ? 'bg-warning' : 'bg-success'} rounded-pill d-flex align-items-center">
+                        ${already ? 'مسجل مسبقاً' : (already === false ? 'نشط' : '--')}
+                    </span>
+                </div>
             </div>
         `;
         list.prepend(item);
