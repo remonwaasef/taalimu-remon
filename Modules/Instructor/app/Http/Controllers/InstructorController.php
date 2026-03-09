@@ -270,6 +270,41 @@ class InstructorController extends Controller
     }
 
     /**
+     * Show the form for editing the specified group
+     */
+    public function editGroup(Course $course)
+    {
+        $instructor = $this->resolveInstructor();
+        if ($instructor && $course->instructor_id !== $instructor->id) {
+            abort(403);
+        }
+
+        return view('instructor::groups.edit', compact('course'));
+    }
+
+    /**
+     * Update the specified group in storage
+     */
+    public function updateGroup(Request $request, Course $course)
+    {
+        $instructor = $this->resolveInstructor();
+        if ($instructor && $course->instructor_id !== $instructor->id) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'sessions_count' => 'required|integer|min:1',
+        ]);
+
+        $course->update($validated);
+
+        return redirect()->route('instructor.groups.list')->with('success', "تم تحديث بيانات المجموعة '{$course->title}' بنجاح.");
+    }
+
+    /**
      * Quickly mark a student as paid for a specific amount
      */
     public function markPaid(Request $request)

@@ -89,7 +89,7 @@
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-3">
                                             <li><a class="dropdown-item" href="{{ route('instructor.scanner', $course->id) }}"><i class="fas fa-qrcode me-2 text-primary"></i> تحضير (QR Scanner)</a></li>
-                                            <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2 text-muted"></i> تعديل</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('instructor.groups.edit', $course->id) }}"><i class="fas fa-edit me-2 text-muted"></i> تعديل</a></li>
                                             <li><a class="dropdown-item" href="#"><i class="fas fa-link me-2 text-muted"></i> توليد رابط جديد</a></li>
                                         </ul>
                                     </div>
