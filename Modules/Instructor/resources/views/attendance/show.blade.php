@@ -1,4 +1,5 @@
 <x-instructor::layouts.master>
+@section('page-title', 'تفاصيل الحضور')
 @section('content')
     <div class="mb-4">
         <h2 class="fw-bold text-dark">تسجيل الحضور: {{ $schedule->course->title }}</h2>
