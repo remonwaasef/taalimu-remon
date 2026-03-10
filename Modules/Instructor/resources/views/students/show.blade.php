@@ -25,9 +25,16 @@
                     <p class="text-muted mb-4">{{ $student->user->email ?? $student->email }}</p>
                     
                     <div class="d-flex justify-content-center gap-2 mb-4">
-                        <a href="https://wa.me/{{ $student->phone }}" target="_blank" class="btn btn-success rounded-pill px-4">
-                            <i class="fab fa-whatsapp me-2"></i> واتساب
+                        @php
+                            $portalUrl = route('student.portal', $student->user->qr_identifier ?? 'invalid');
+                            $shareMsg = "مرحباً {$student->name}، يمكنك متابعة حضورك وحساباتك عبر رابط بوابتك التعليمية: {$portalUrl}";
+                        @endphp
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $student->phone) }}?text={{ urlencode($shareMsg) }}" target="_blank" class="btn btn-success rounded-pill px-4">
+                            <i class="fab fa-whatsapp me-2"></i> بوابة الطالب
                         </a>
+                        <button onclick="copyPortalLink('{{ $portalUrl }}')" class="btn btn-light rounded-pill px-3" title="نسخ رابط البوابة">
+                            <i class="fas fa-link"></i>
+                        </button>
                         <a href="tel:{{ $student->phone }}" class="btn btn-light rounded-pill px-3">
                             <i class="fas fa-phone"></i>
                         </a>
@@ -233,4 +240,13 @@
         border-bottom: 2px solid var(--primary-color) !important;
     }
 </style>
+<script>
+    function copyPortalLink(url) {
+        navigator.clipboard.writeText(url).then(() => {
+            alert('تم نسخ رابط بوابة الطالب بنجاح!');
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+        });
+    }
+</script>
 @endsection
