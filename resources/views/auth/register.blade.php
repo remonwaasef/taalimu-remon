@@ -242,7 +242,7 @@ document.addEventListener('alpine:init', () => {
             </div>
 
             <!-- Contextual Header -->
-            <div class="mb-8 text-center transition-all duration-700" :class="!accountType ? 'transform scale-110 mt-12 mb-16' : ''">
+            <div class="mb-8 text-center transition-all duration-700 ease-in-out" :class="!accountType ? 'transform scale-125 translate-y-[15vh]' : ''">
                 <div x-show="currentStep === 1">
                     <h1 class="text-3xl lg:text-4xl font-black text-slate-900 mb-4 font-arabic leading-tight">
                         {{ app()->isLocale('ar') ? 'ابدأ رحلتك التعليمية' : 'Start Your Journey' }}
@@ -262,22 +262,22 @@ document.addEventListener('alpine:init', () => {
             </div>
 
             <!-- Account Type Selection (Premium Position) -->
-            <div x-show="currentStep === 1" class="mb-12 transition-all duration-700 ease-in-out" :class="!accountType ? 'transform scale-110 mb-20' : ''">
-                <label class="text-[14px] font-black text-slate-500 px-1 font-arabic uppercase tracking-wider block mb-6 text-center opacity-70 transition-all duration-700" :class="!accountType ? 'text-lg text-slate-700 opacity-100' : ''">
+            <div x-show="currentStep === 1" class="mb-12 transition-all duration-700 ease-in-out relative z-10" :class="!accountType ? 'transform scale-125 translate-y-[15vh] pb-32' : ''">
+                <label class="text-[14px] font-black text-slate-500 px-1 font-arabic uppercase tracking-wider block mb-6 text-center opacity-70 transition-all duration-700" :class="!accountType ? 'text-xl text-slate-800 opacity-100 font-black mb-8' : ''">
                     {{ app()->isLocale('ar') ? 'ابدأ كـ ...' : 'Start as ...' }}
                 </label>
                 <div class="grid grid-cols-2 gap-6 px-2">
                     <!-- Instructor Option (Premium) -->
                     <label class="relative cursor-pointer group">
                         <input type="radio" value="instructor" x-model="accountType" class="peer sr-only">
-                        <div class="relative flex flex-col items-center justify-center p-6 rounded-[2rem] border-2 border-slate-100 bg-white transition-all duration-500 hover:border-brand-secondary/30 hover:shadow-xl hover:shadow-brand-secondary/10 peer-checked:border-brand-secondary peer-checked:ring-4 peer-checked:ring-brand-secondary/5 overflow-hidden group">
+                        <div class="relative flex flex-col items-center justify-center p-6 rounded-[2rem] border-2 border-slate-100 bg-white transition-all duration-500 hover:border-brand-secondary/30 hover:shadow-xl hover:shadow-brand-secondary/10 peer-checked:border-brand-secondary peer-checked:ring-4 peer-checked:ring-brand-secondary/5 overflow-hidden group shadow-md" :class="!accountType ? 'p-8' : 'p-6'">
                             <!-- Background Accent -->
                             <div class="absolute top-0 right-0 w-24 h-24 bg-brand-secondary/5 rounded-full -mr-12 -mt-12 transition-transform duration-700 group-hover:scale-150"></div>
                             
-                            <div class="w-16 h-16 bg-gradient-to-br from-brand-secondary to-blue-600 rounded-2xl shadow-lg shadow-brand-secondary/20 flex items-center justify-center mb-4 transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 peer-checked:scale-110">
-                                <i class="fas fa-chalkboard-teacher text-3xl text-white"></i>
+                            <div class="w-16 h-16 bg-gradient-to-br from-brand-secondary to-blue-600 rounded-2xl shadow-lg shadow-brand-secondary/20 flex items-center justify-center mb-4 transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 peer-checked:scale-110" :class="!accountType ? 'w-20 h-20 mb-6' : 'w-16 h-16 mb-4'">
+                                <i class="fas fa-chalkboard-teacher text-white transition-all duration-500" :class="!accountType ? 'text-4xl' : 'text-3xl'"></i>
                             </div>
-                            <span class="text-sm font-black text-slate-800 peer-checked:text-brand-secondary transition-colors">{{ app()->isLocale('ar') ? 'مدرس مستقل' : 'Independent Tutor' }}</span>
+                            <span class="font-black text-slate-800 peer-checked:text-brand-secondary transition-all" :class="!accountType ? 'text-lg' : 'text-sm'">{{ app()->isLocale('ar') ? 'مدرس مستقل' : 'Independent Tutor' }}</span>
                             
                             <!-- Success Dot -->
                             <div class="absolute top-4 right-4 opacity-0 scale-0 peer-checked:opacity-100 peer-checked:scale-100 transition-all duration-300">
@@ -289,14 +289,14 @@ document.addEventListener('alpine:init', () => {
                     <!-- Center Option (Premium) -->
                     <label class="relative cursor-pointer group">
                         <input type="radio" value="center" x-model="accountType" class="peer sr-only">
-                        <div class="relative flex flex-col items-center justify-center p-6 rounded-[2rem] border-2 border-slate-100 bg-white transition-all duration-500 hover:border-brand-secondary/30 hover:shadow-xl hover:shadow-brand-secondary/10 peer-checked:border-brand-secondary peer-checked:ring-4 peer-checked:ring-brand-secondary/5 overflow-hidden group">
+                        <div class="relative flex flex-col items-center justify-center p-6 rounded-[2rem] border-2 border-slate-100 bg-white transition-all duration-500 hover:border-brand-secondary/30 hover:shadow-xl hover:shadow-brand-secondary/10 peer-checked:border-brand-secondary peer-checked:ring-4 peer-checked:ring-brand-secondary/5 overflow-hidden group shadow-md" :class="!accountType ? 'p-8' : 'p-6'">
                             <!-- Background Accent -->
                             <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full -mr-12 -mt-12 transition-transform duration-700 group-hover:scale-150"></div>
                             
-                            <div class="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-800 rounded-2xl shadow-lg shadow-blue-600/20 flex items-center justify-center mb-4 transition-all duration-500 group-hover:-rotate-6 group-hover:scale-110 peer-checked:scale-110">
-                                <i class="fas fa-university text-3xl text-white"></i>
+                            <div class="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-800 rounded-2xl shadow-lg shadow-blue-600/20 flex items-center justify-center mb-4 transition-all duration-500 group-hover:-rotate-6 group-hover:scale-110 peer-checked:scale-110" :class="!accountType ? 'w-20 h-20 mb-6' : 'w-16 h-16 mb-4'">
+                                <i class="fas fa-university text-white transition-all duration-500" :class="!accountType ? 'text-4xl' : 'text-3xl'"></i>
                             </div>
-                            <span class="text-sm font-black text-slate-800 peer-checked:text-brand-secondary transition-colors">{{ app()->isLocale('ar') ? 'مركز تعليمي' : 'Educational Center' }}</span>
+                            <span class="font-black text-slate-800 peer-checked:text-brand-secondary transition-all" :class="!accountType ? 'text-lg' : 'text-sm'">{{ app()->isLocale('ar') ? 'مركز تعليمي' : 'Educational Center' }}</span>
                             
                             <!-- Success Dot -->
                             <div class="absolute top-4 right-4 opacity-0 scale-0 peer-checked:opacity-100 peer-checked:scale-100 transition-all duration-300">
