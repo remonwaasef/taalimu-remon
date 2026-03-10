@@ -48,22 +48,70 @@
             height: 100vh;
             position: fixed;
             top: 0;
-            z-index: 1030;
+            z-index: 1050;
             transition: all 0.3s ease;
             box-shadow: 4px 0 24px rgba(0,0,0,0.1);
         }
 
-        [dir="rtl"] .sidebar { right: 0; }
-        [dir="ltr"] .sidebar { left: 0; }
+        [dir="rtl"] .sidebar { right: 0; transform: translateX(0); }
+        [dir="ltr"] .sidebar { left: 0; transform: translateX(0); }
+
+        /* Mobile Sidebar state */
+        @media (max-width: 991.98px) {
+            [dir="rtl"] .sidebar { right: 0; transform: translateX(100%); }
+            [dir="ltr"] .sidebar { left: 0; transform: translateX(-100%); }
+            
+            .sidebar.active { transform: translateX(0) !important; }
+        }
 
         .main-content {
             transition: all 0.3s ease;
             padding: 2rem;
+            min-height: 100vh;
         }
 
         @media (min-width: 992px) {
             [dir="rtl"] .main-content { margin-right: var(--sidebar-width); }
             [dir="ltr"] .main-content { margin-left: var(--sidebar-width); }
+        }
+
+        @media (max-width: 991.98px) {
+            .main-content { padding: 1rem; padding-top: 5rem; }
+        }
+
+        /* Mobile Backdrop */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1040;
+        }
+        .sidebar-overlay.active { display: block; }
+
+        /* Mobile Toggle Button */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            z-index: 1060;
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: none;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.25rem;
+        }
+
+        @media (max-width: 991.98px) {
+            .mobile-toggle { display: flex; }
+            [dir="rtl"] .mobile-toggle { right: 1rem; }
+            [dir="ltr"] .mobile-toggle { left: 1rem; }
         }
 
         /* Simplified Nav Styles */
@@ -146,6 +194,14 @@
             </div>
         </nav>
     </aside>
+    
+    <!-- Mobile Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Mobile Toggle Button -->
+    <button class="mobile-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
 
     <!-- Main Content -->
     <main class="main-content">
@@ -182,6 +238,23 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.getElementById('sidebarToggle');
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+
+            if (toggleBtn && sidebar && overlay) {
+                const toggleSidebar = () => {
+                    sidebar.classList.toggle('active');
+                    overlay.classList.toggle('active');
+                };
+
+                toggleBtn.addEventListener('click', toggleSidebar);
+                overlay.addEventListener('click', toggleSidebar);
+            }
+        });
+    </script>
     @stack('scripts')
 </body>
 </html>
