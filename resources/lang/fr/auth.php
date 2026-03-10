@@ -61,6 +61,7 @@ return [
             'technical_support' => 'Support technique dédié',
             'api_access' => 'Accès API',
         ],
+        'google_signup' => 'S\'inscrire avec Google',
     ],
     'login' => [
         'title' => 'Connexion',
