@@ -222,6 +222,86 @@ class InstructorController extends Controller
     }
 
     /**
+     * Show the form for manually creating a student
+     */
+    public function createStudent()
+    {
+        $instructor = $this->resolveInstructor();
+        $courses = $instructor ? $instructor->courses : Course::all();
+        
+        return view('instructor::students.create', compact('courses'));
+    }
+
+    /**
+     * Store a manually created student and enroll them
+     */
+    public function storeStudent(Request $request)
+    {
+        $instructor = $this->resolveInstructor();
+        if (!$instructor) {
+            return back()->with('error', 'يجب أن تكون مسجلاً كمعلم لإضافة طالب.');
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'parent_phone' => 'required|string|max:20',
+            'course_id' => 'required|exists:courses,id',
+        ]);
+
+        try {
+            \DB::beginTransaction();
+
+            // 1. Check if user already exists by phone
+            $user = \App\Models\User::where('phone', $validated['phone'])->first();
+
+            if (!$user) {
+                $user = \App\Models\User::create([
+                    'tenant_id' => $instructor->tenant_id,
+                    'name' => $validated['name'],
+                    'email' => $validated['phone'] . '@' . (app('tenant')->domain ?? 'taalimu') . '.com',
+                    'phone' => $validated['phone'],
+                    'password' => \Illuminate\Support\Facades\Hash::make($validated['phone']),
+                    'role' => 'student',
+                    'qr_identifier' => \Illuminate\Support\Str::random(12),
+                ]);
+                $user->assignRole('student');
+
+                Student::create([
+                    'tenant_id' => $instructor->tenant_id,
+                    'user_id' => $user->id,
+                    'name' => $validated['name'],
+                    'phone' => $validated['phone'],
+                    'parent_phone' => $validated['parent_phone'],
+                    'status' => 'active',
+                ]);
+            }
+
+            // 2. Enroll in course
+            $isEnrolled = Enrollment::where('user_id', $user->id)
+                ->where('course_id', $validated['course_id'])
+                ->exists();
+
+            if (!$isEnrolled) {
+                Enrollment::create([
+                    'tenant_id' => $instructor->tenant_id,
+                    'user_id' => $user->id,
+                    'course_id' => $validated['course_id'],
+                    'status' => 'active',
+                    'enrolled_at' => now(),
+                ]);
+            }
+
+            \DB::commit();
+            return redirect()->route('instructor.students.list')->with('success', "تم إضافة الطالب '{$validated['name']}' وتسجيلة في المجموعة بنجاح.");
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            \Log::error('Manual student registration failed: ' . $e->getMessage());
+            return back()->withInput()->with('error', 'حدث خطأ أثناء إضافة الطالب: ' . $e->getMessage());
+        }
+    }
+
+    /**
      * Display a list of groups (courses) for the instructor
      */
     public function groups()
