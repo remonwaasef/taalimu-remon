@@ -28,8 +28,13 @@
                         @php
                             $portalUrl = route('student.portal', $student->user->qr_identifier ?? 'invalid');
                             $shareMsg = "مرحباً {$student->name}، يمكنك متابعة حضورك وحساباتك عبر رابط بوابتك التعليمية: {$portalUrl}";
+                            // Format phone: remove any non-digits, and if starts with 0, replace with 20
+                            $cleanPhone = preg_replace('/[^0-9]/', '', $student->phone);
+                            if (str_starts_with($cleanPhone, '0')) {
+                                $cleanPhone = '20' . substr($cleanPhone, 1);
+                            }
                         @endphp
-                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $student->phone) }}?text={{ urlencode($shareMsg) }}" target="_blank" class="btn btn-success rounded-pill px-4">
+                        <a href="https://api.whatsapp.com/send?phone={{ $cleanPhone }}&text={{ urlencode($shareMsg) }}" target="_blank" class="btn btn-success rounded-pill px-4">
                             <i class="fab fa-whatsapp me-2"></i> بوابة الطالب
                         </a>
                         <button onclick="copyPortalLink('{{ $portalUrl }}')" class="btn btn-light rounded-pill px-3" title="نسخ رابط البوابة">
@@ -122,8 +127,12 @@
                         </div>
                         @php
                             $msg = "تحية طيبة، نود تذكيركم بأن الطالب {$student->name} لديه مديونية متبقية قدرها " . number_format($balance, 2) . " ج.م لمجموعات المدرس " . (auth()->user()->name ?? 'المعلم') . ". يرجى السداد في أقرب وقت. شكراً لكم.";
+                            $cleanPhone = preg_replace('/[^0-9]/', '', $student->phone);
+                            if (str_starts_with($cleanPhone, '0')) {
+                                $cleanPhone = '20' . substr($cleanPhone, 1);
+                            }
                         @endphp
-                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $student->phone) }}?text={{ urlencode($msg) }}" target="_blank" class="btn btn-warning rounded-pill px-4 fw-bold">
+                        <a href="https://api.whatsapp.com/send?phone={{ $cleanPhone }}&text={{ urlencode($msg) }}" target="_blank" class="btn btn-warning rounded-pill px-4 fw-bold">
                             <i class="fab fa-whatsapp me-2"></i> إرسال تذكير
                         </a>
                     </div>

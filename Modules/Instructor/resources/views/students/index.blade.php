@@ -98,7 +98,13 @@
                             <td>{{ $student->created_at?->format('Y-m-d') ?? '--' }}</td>
                             <td class="text-center">
                                 <div class="btn-group">
-                                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $student->phone) }}" target="_blank" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-success" title="WhatsApp">
+                                    @php
+                                        $cleanPhone = preg_replace('/[^0-9]/', '', $student->phone);
+                                        if (str_starts_with($cleanPhone, '0')) {
+                                            $cleanPhone = '20' . substr($cleanPhone, 1);
+                                        }
+                                    @endphp
+                                    <a href="https://api.whatsapp.com/send?phone={{ $cleanPhone }}" target="_blank" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-success" title="WhatsApp">
                                         <i class="fab fa-whatsapp"></i>
                                     </a>
                                     <a href="{{ route('instructor.students.show', $student->id) }}" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-primary" title="عرض الملف التفصيلي">
