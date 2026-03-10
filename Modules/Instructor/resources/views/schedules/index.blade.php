@@ -6,7 +6,7 @@
             <h2 class="fw-bold text-dark mb-1">جدول الحصص</h2>
             <p class="text-muted mb-0">نظرة عامة على جدول الحصص الأسبوعي لمجموعاتك.</p>
         </div>
-        <a href="{{ route('instructor.schedules.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
+        <a href="{{ route('instructor.schedules.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm border-0 fw-bold" style="background: var(--primary-color);">
             <i class="fas fa-plus me-2"></i> إضافة موعد حصة
         </a>
     </div>
@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 text-end">
-                    <span id="scheduleResultCount" class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2"></span>
+                    <span id="scheduleResultCount" class="badge rounded-pill px-3 py-2" style="background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);"></span>
                 </div>
             </div>
         </div>
@@ -47,7 +47,7 @@
             @if($groupedSchedules->has($dayIndex))
                 <div class="col-12 day-section" data-day="{{ $dayIndex }}">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="p-2 rounded-3 bg-{{ $dayInfo['color'] }} bg-opacity-10 text-{{ $dayInfo['color'] }} me-3">
+                        <div class="p-2 rounded-3 me-3" style="background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);">
                             <i class="fas fa-calendar-day fa-lg"></i>
                         </div>
                         <h4 class="fw-bold mb-0">{{ $dayInfo['name'] }}</h4>
@@ -67,7 +67,7 @@
                                     <div class="card-body p-4">
                                         <div class="d-flex justify-content-between align-items-start mb-3">
                                             <div>
-                                                <span class="badge bg-light text-primary rounded-pill mb-2 px-3 py-2">
+                                                <span class="badge bg-light rounded-pill mb-2 px-3 py-2" style="color: var(--primary-color);">
                                                     <i class="far fa-clock me-1"></i>
                                                     {{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }} - 
                                                     {{ \Carbon\Carbon::parse($schedule->end_time)->format('h:i A') }}

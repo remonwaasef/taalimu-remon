@@ -38,7 +38,35 @@
             font-family: 'Cairo', sans-serif; 
             background-color: var(--bg-light);
             color: #1e293b;
-            min-height: 100 VH;
+            min-height: 100vh;
+        }
+
+        /* Global Primary Overrides */
+        .btn-primary {
+            background-color: var(--primary-color) !important;
+            border-color: var(--primary-color) !important;
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-light) !important;
+            border-color: var(--primary-light) !important;
+        }
+        .btn-outline-primary {
+            color: var(--primary-color) !important;
+            border-color: var(--primary-color) !important;
+        }
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color) !important;
+            color: white !important;
+        }
+        .text-primary {
+            color: var(--primary-color) !important;
+        }
+        .bg-primary {
+            background-color: var(--primary-color) !important;
+        }
+        .text-bg-primary {
+            background-color: var(--primary-color) !important;
+            color: white !important;
         }
 
         /* Sidebar Styles */

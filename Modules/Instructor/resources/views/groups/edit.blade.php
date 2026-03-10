@@ -52,11 +52,11 @@
                             </div>
 
                             <div class="col-12 mt-5">
-                                <div class="d-flex gap-3">
-                                    <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 fw-bold shadow-sm">
+                                <div class="d-flex gap-3 mt-4">
+                                    <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 fw-bold shadow-sm border-0">
                                         <i class="fas fa-save me-2"></i> حفظ التغييرات
                                     </button>
-                                    <a href="{{ route('instructor.groups.list') }}" class="btn btn-light rounded-pill px-4 py-2 text-muted">إلغاء</a>
+                                    <a href="{{ route('instructor.groups.list') }}" class="btn btn-light rounded-pill px-4 py-2 text-muted fw-bold">إلغاء</a>
                                 </div>
                             </div>
                         </div>
