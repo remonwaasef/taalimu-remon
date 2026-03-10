@@ -208,7 +208,7 @@ document.addEventListener('alpine:init', () => {
 })
 </script>
 
-<div class="min-h-screen bg-slate-50/50 flex justify-center p-4 lg:p-8 mesh-gradient-soft noise-overlay register-page-offset" 
+<div class="min-h-screen bg-[#0f172a] flex justify-center p-4 lg:p-8 relative overflow-hidden register-page-offset" 
      x-data="registrationForm({
         selectedPlan: {{ Js::from(request('plan', $packages->firstWhere('is_default', true)?->slug ?? $packages->first()?->slug ?? '')) }},
         billingCycle: {{ Js::from(request('cycle', 'monthly')) }},
@@ -220,11 +220,18 @@ document.addEventListener('alpine:init', () => {
      })"
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
     
-    <!-- Main Centered Card Container (Simplified Single Column) -->
-    <div class="w-full max-w-xl bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100/50 animate-fade-in-up md:backdrop-blur-xl relative">
+    <!-- Dynamic Animated Background -->
+    <div class="fixed inset-0 z-0">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-600/20 rounded-full blur-[120px] animate-pulse"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/20 rounded-full blur-[120px] animate-pulse" style="animation-delay: 2s;"></div>
+        <div class="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-indigo-600/10 rounded-full blur-[100px] animate-pulse" style="animation-delay: 4s;"></div>
+    </div>
+
+    <!-- Main Centered Card Container (Glassmorphism) -->
+    <div class="w-full max-w-xl bg-white/10 backdrop-blur-2xl rounded-[3rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] overflow-hidden border border-white/20 animate-fade-in-up relative z-10">
         
         <!-- Minimalist Progress & Header -->
-        <div class="bg-white p-8 lg:p-12 pb-0">
+        <div class="p-8 lg:p-12 pb-0">
             <!-- Multi-Step Indicator -->
             <div class="mb-10 relative" x-cloak>
                 <div class="flex justify-between mb-3 px-1">
@@ -235,81 +242,81 @@ document.addEventListener('alpine:init', () => {
                         {{ app()->isLocale('ar') ? 'البيانات الشخصية' : 'Personal Details' }}
                     </span>
                 </div>
-                <div class="h-1.5 w-full bg-slate-50 rounded-full overflow-hidden border border-slate-100/50">
-                    <div class="h-full bg-brand-secondary shadow-[0_0_15px_rgba(122,77,252,0.3)] transition-all duration-700 ease-out" 
+                <div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden border border-white/10">
+                    <div class="h-full bg-gradient-to-r from-brand-secondary to-blue-400 shadow-[0_0_20px_rgba(122,77,252,0.5)] transition-all duration-700 ease-out" 
                          :style="`width: ${currentStep === 1 ? '50%' : '100%'}`"></div>
                 </div>
             </div>
 
             <!-- Contextual Header -->
-            <div class="mb-8 text-center">
+            <div class="mb-10 text-center">
                 <div x-show="currentStep === 1">
-                    <h1 class="text-3xl lg:text-4xl font-black text-slate-900 mb-4 font-arabic leading-tight">
+                    <h1 class="text-3xl lg:text-4xl font-black text-white mb-4 font-arabic leading-tight">
                         {{ app()->isLocale('ar') ? 'ابدأ رحلتك التعليمية' : 'Start Your Journey' }}
                     </h1>
-                    <p class="text-slate-500 text-base font-arabic font-medium opacity-80 max-w-[320px] mx-auto">
+                    <p class="text-white/60 text-base font-arabic font-medium max-w-[320px] mx-auto">
                         {{ app()->isLocale('ar') ? 'خطوات بسيطة لامتلاك منصتك التعليمية المتكاملة' : 'Simple steps to own your integrated platform' }}
                     </p>
                 </div>
                 <div x-show="currentStep === 2" x-cloak>
-                    <h1 class="text-3xl lg:text-4xl font-black text-slate-900 mb-4 font-arabic leading-tight">
+                    <h1 class="text-3xl lg:text-4xl font-black text-white mb-4 font-arabic leading-tight">
                         {{ app()->isLocale('ar') ? 'تأكيد الهوية' : 'Confirm Identity' }}
                     </h1>
-                    <p class="text-slate-500 text-base font-arabic font-medium opacity-80">
+                    <p class="text-white/60 text-base font-arabic font-medium">
                         {{ app()->isLocale('ar') ? 'أدخل بياناتك الشخصية للبدء فوراً' : 'Enter personal details to get started' }}
                     </p>
                 </div>
             </div>
 
-            <!-- Account Type Selection (Premium Position) -->
+            <!-- Account Type Selection (Glassy Premium) -->
             <div x-show="currentStep === 1" class="mb-12">
-                <label class="text-[14px] font-black text-slate-500 px-1 font-arabic uppercase tracking-wider block mb-6 text-center opacity-70">
+                <label class="text-[14px] font-black text-white/40 px-1 font-arabic uppercase tracking-wider block mb-8 text-center">
                     {{ app()->isLocale('ar') ? 'ابدأ كـ ...' : 'Start as ...' }}
                 </label>
                 <div class="grid grid-cols-2 gap-6 px-2">
-                    <!-- Instructor Option (Premium) -->
+                    <!-- Instructor Option -->
                     <label class="relative cursor-pointer group">
                         <input type="radio" value="instructor" x-model="accountType" class="peer sr-only">
-                        <div class="relative flex flex-col items-center justify-center p-6 rounded-[2rem] border-2 border-slate-100 bg-white transition-all duration-500 hover:border-brand-secondary/30 hover:shadow-xl hover:shadow-brand-secondary/10 peer-checked:border-brand-secondary peer-checked:ring-4 peer-checked:ring-brand-secondary/5 overflow-hidden group">
-                            <!-- Background Accent -->
-                            <div class="absolute top-0 right-0 w-24 h-24 bg-brand-secondary/5 rounded-full -mr-12 -mt-12 transition-transform duration-700 group-hover:scale-150"></div>
+                        <div class="relative flex flex-col items-center justify-center p-8 rounded-[2.5rem] border border-white/10 bg-white/5 backdrop-blur-md transition-all duration-500 hover:bg-white/10 hover:border-brand-secondary/50 hover:shadow-[0_20px_40px_rgba(122,77,252,0.2)] peer-checked:bg-brand-secondary/20 peer-checked:border-brand-secondary peer-checked:shadow-[0_0_30px_rgba(122,77,252,0.3)] overflow-hidden scale-100 peer-checked:scale-105">
                             
-                            <div class="w-16 h-16 bg-gradient-to-br from-brand-secondary to-blue-600 rounded-2xl shadow-lg shadow-brand-secondary/20 flex items-center justify-center mb-4 transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 peer-checked:scale-110">
-                                <i class="fas fa-chalkboard-teacher text-3xl text-white"></i>
+                            <div class="w-20 h-20 bg-gradient-to-br from-brand-secondary to-purple-600 rounded-[1.8rem] shadow-xl shadow-brand-secondary/30 flex items-center justify-center mb-6 transition-all duration-500 group-hover:rotate-6 group-hover:scale-110">
+                                <i class="fas fa-chalkboard-teacher text-4xl text-white"></i>
                             </div>
-                            <span class="text-sm font-black text-slate-800 peer-checked:text-brand-secondary transition-colors">{{ app()->isLocale('ar') ? 'مدرس مستقل' : 'Independent Tutor' }}</span>
+                            <span class="text-base font-black text-white/90 group-hover:text-white transition-colors">{{ app()->isLocale('ar') ? 'مدرس مستقل' : 'Independent Tutor' }}</span>
                             
-                            <!-- Success Dot -->
-                            <div class="absolute top-4 right-4 opacity-0 scale-0 peer-checked:opacity-100 peer-checked:scale-100 transition-all duration-300">
-                                <div class="w-3 h-3 bg-brand-secondary rounded-full ring-4 ring-brand-secondary/20"></div>
+                            <!-- Checkmark Indicator -->
+                            <div class="absolute top-5 right-5 opacity-0 scale-50 peer-checked:opacity-100 peer-checked:scale-100 transition-all duration-300">
+                                <div class="w-6 h-6 bg-brand-secondary rounded-full flex items-center justify-center ring-4 ring-brand-secondary/20">
+                                    <i class="bi bi-check-lg text-white text-xs"></i>
+                                </div>
                             </div>
                         </div>
                     </label>
 
-                    <!-- Center Option (Premium) -->
+                    <!-- Center Option -->
                     <label class="relative cursor-pointer group">
                         <input type="radio" value="center" x-model="accountType" class="peer sr-only">
-                        <div class="relative flex flex-col items-center justify-center p-6 rounded-[2rem] border-2 border-slate-100 bg-white transition-all duration-500 hover:border-brand-secondary/30 hover:shadow-xl hover:shadow-brand-secondary/10 peer-checked:border-brand-secondary peer-checked:ring-4 peer-checked:ring-brand-secondary/5 overflow-hidden group">
-                            <!-- Background Accent -->
-                            <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full -mr-12 -mt-12 transition-transform duration-700 group-hover:scale-150"></div>
+                        <div class="relative flex flex-col items-center justify-center p-8 rounded-[2.5rem] border border-white/10 bg-white/5 backdrop-blur-md transition-all duration-500 hover:bg-white/10 hover:border-blue-500/50 hover:shadow-[0_20px_40px_rgba(59,130,246,0.2)] peer-checked:bg-blue-500/20 peer-checked:border-blue-500 peer-checked:shadow-[0_0_30px_rgba(59,130,246,0.3)] overflow-hidden scale-100 peer-checked:scale-105">
                             
-                            <div class="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-800 rounded-2xl shadow-lg shadow-blue-600/20 flex items-center justify-center mb-4 transition-all duration-500 group-hover:-rotate-6 group-hover:scale-110 peer-checked:scale-110">
-                                <i class="fas fa-university text-3xl text-white"></i>
+                            <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-700 rounded-[1.8rem] shadow-xl shadow-blue-500/30 flex items-center justify-center mb-6 transition-all duration-500 group-hover:-rotate-6 group-hover:scale-110">
+                                <i class="fas fa-university text-4xl text-white"></i>
                             </div>
-                            <span class="text-sm font-black text-slate-800 peer-checked:text-brand-secondary transition-colors">{{ app()->isLocale('ar') ? 'مركز تعليمي' : 'Educational Center' }}</span>
+                            <span class="text-base font-black text-white/90 group-hover:text-white transition-colors">{{ app()->isLocale('ar') ? 'مركز تعليمي' : 'Educational Center' }}</span>
                             
-                            <!-- Success Dot -->
-                            <div class="absolute top-4 right-4 opacity-0 scale-0 peer-checked:opacity-100 peer-checked:scale-100 transition-all duration-300">
-                                <div class="w-3 h-3 bg-brand-secondary rounded-full ring-4 ring-brand-secondary/20"></div>
+                            <!-- Checkmark Indicator -->
+                            <div class="absolute top-5 right-5 opacity-0 scale-50 peer-checked:opacity-100 peer-checked:scale-100 transition-all duration-300">
+                                <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center ring-4 ring-blue-500/20">
+                                    <i class="bi bi-check-lg text-white text-xs"></i>
+                                </div>
                             </div>
                         </div>
                     </label>
                 </div>
             </div>
 
-            <!-- Google Shortcut (Now below selection) -->
+            <!-- Google Shortcut (Glassy) -->
             <div class="mb-12">
-                <a :href="'{{ route('auth.google') }}?plan=' + selectedPlan + '&cycle=' + billingCycle + '&account_type=' + (accountType || 'center')" class="w-full flex items-center justify-center gap-4 py-4.5 px-6 border-2 border-slate-100 rounded-[1.5rem] shadow-sm text-base font-black text-slate-700 bg-white hover:bg-slate-50 hover:border-brand-secondary/20 transition-all group">
+                <a :href="'{{ route('auth.google') }}?plan=' + selectedPlan + '&cycle=' + billingCycle + '&account_type=' + (accountType || 'center')" class="w-full flex items-center justify-center gap-4 py-5 px-6 border border-white/10 rounded-2xl shadow-lg text-base font-black text-white bg-white/5 hover:bg-white/10 hover:border-white/20 transition-all group backdrop-blur-sm">
                     <svg class="w-6 h-6 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                         <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -318,9 +325,9 @@ document.addEventListener('alpine:init', () => {
                     </svg>
                     <span>{{ __('Sign up with Google') }}</span>
                 </a>
-                <div class="relative my-10 px-8">
-                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-100/80"></div></div>
-                    <div class="relative flex justify-center text-[11px] uppercase"><span class="bg-white px-5 text-slate-300 font-bold tracking-[0.3em]">{{ __('auth.register.or') ?? 'OR' }}</span></div>
+                <div class="relative my-12 px-8">
+                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/5"></div></div>
+                    <div class="relative flex justify-center text-[11px] uppercase"><span class="bg-[#1e293b] px-5 text-white/30 font-bold tracking-[0.3em]">{{ __('auth.register.or') ?? 'OR' }}</span></div>
                 </div>
             </div>
 
@@ -352,79 +359,79 @@ document.addEventListener('alpine:init', () => {
                 <input type="hidden" name="country_code" x-model="userCountry">
 
                 <!-- STEP 1: Center Details -->
-                <div x-show="currentStep === 1 && accountType" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-6">
-                    <div class="space-y-1.5">
-                        <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">
+                <div x-show="currentStep === 1 && accountType" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-8">
+                    <div class="space-y-2">
+                        <label class="text-[13px] font-black text-white/50 px-1 font-arabic uppercase tracking-wide">
                             <span x-text="accountType === 'center' ? '{{ __('auth.register.center_name') }}' : ({{ Js::from(app()->isLocale('ar') ? 'اسم المدرس / المنصة' : 'Teacher / Platform Name') }})"></span>
                         </label>
                         <div class="relative group">
-                            <div class="absolute inset-y-0 start-0 ps-5 flex items-center pointer-events-none text-slate-300 group-focus-within:text-brand-secondary transition-colors"><i class="bi bi-building"></i></div>
+                            <div class="absolute inset-y-0 start-0 ps-5 flex items-center pointer-events-none text-white/30 group-focus-within:text-brand-secondary transition-colors"><i class="bi bi-building"></i></div>
                             <input type="text" name="center_name" x-model="centerName"
                                 @input="if(!manuallyEditedSubdomain) { subdomain = generateSlug(centerName); checkSubdomain(); }"
-                                class="w-full h-14 ps-12 pe-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold font-arabic focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
+                                class="w-full h-15 ps-12 pe-5 bg-white/5 border border-white/10 rounded-2xl text-base font-bold font-arabic text-white focus:outline-none focus:bg-white/10 focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all"
                                 placeholder="{{ __('auth.register.center_name_placeholder') }}" :required="currentStep === 1">
                         </div>
                     </div>
 
-                    <div class="space-y-1.5">
-                        <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ app()->isLocale('ar') ? 'رابط المنصة' : 'Platform Link' }}</label>
+                    <div class="space-y-2">
+                        <label class="text-[13px] font-black text-white/50 px-1 font-arabic uppercase tracking-wide">{{ app()->isLocale('ar') ? 'رابط المنصة' : 'Platform Link' }}</label>
                         <div class="relative flex items-center w-full group" dir="ltr">
-                            <div class="absolute left-0 inset-y-0 flex items-center px-4 pointer-events-none text-brand-secondary font-black text-xs bg-brand-secondary/5 border-r border-brand-secondary/10 rounded-l-2xl">https://</div>
+                            <div class="absolute left-0 inset-y-0 flex items-center px-4 pointer-events-none text-brand-secondary font-black text-xs bg-brand-secondary/10 border-r border-white/5 rounded-l-2xl">https://</div>
                             <input type="text" name="subdomain" x-model="subdomain"
                                 @input="manuallyEditedSubdomain = true; subdomain = cleanSlug(subdomain);"
                                 @input.debounce.500ms="checkSubdomain()"
-                                class="w-full h-14 pl-[80px] pr-[115px] bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold font-sans focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
+                                class="w-full h-15 pl-[80px] pr-[115px] bg-white/5 border border-white/10 rounded-2xl text-base font-bold font-sans text-white focus:outline-none focus:bg-white/10 focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all"
                                 placeholder="center-name" :required="currentStep === 1">
-                            <div class="absolute right-0 inset-y-0 flex items-center pr-4 pointer-events-none text-slate-400 font-bold text-xs gap-3">
+                            <div class="absolute right-0 inset-y-0 flex items-center pr-4 pointer-events-none text-white/40 font-bold text-xs gap-3">
                                 <span>.taalimu.com</span>
                                 <div class="flex items-center justify-center w-5 h-5">
                                     <template x-if="subdomainStatus === 'loading'"><div class="w-4 h-4 border-2 border-brand-secondary border-t-transparent rounded-full animate-spin"></div></template>
-                                    <template x-if="subdomainStatus === 'valid'"><i class="bi bi-check-circle-fill text-emerald-500 text-lg"></i></template>
-                                    <template x-if="subdomainStatus === 'invalid'"><i class="bi bi-x-circle-fill text-red-500 text-lg"></i></template>
+                                    <template x-if="subdomainStatus === 'valid'"><i class="bi bi-check-circle-fill text-emerald-400 text-lg"></i></template>
+                                    <template x-if="subdomainStatus === 'invalid'"><i class="bi bi-x-circle-fill text-red-400 text-lg"></i></template>
                                 </div>
                             </div>
                         </div>
-                        <p x-show="subdomainMessage" :class="subdomainStatus === 'valid' ? 'text-emerald-600' : 'text-red-500'" 
+                        <p x-show="subdomainMessage" :class="subdomainStatus === 'valid' ? 'text-emerald-400' : 'text-red-400'" 
                            class="text-[11px] font-bold px-2 mt-1 animate-fade-in" x-text="subdomainMessage"></p>
                     </div>
 
                     <div class="pt-6">
                         <button type="button" @click="nextStep()"
-                            class="w-full h-16 rounded-full flex items-center justify-center gap-4 group bg-brand-secondary text-white shadow-2xl shadow-brand-secondary/20 hover:shadow-brand-secondary/40 hover:-translate-y-1 active:scale-95 transition-all">
+                            class="w-full h-16 rounded-full flex items-center justify-center gap-4 group bg-brand-secondary text-white shadow-[0_10px_30px_rgba(122,77,252,0.4)] hover:shadow-[0_15px_40px_rgba(122,77,252,0.6)] hover:-translate-y-1 active:scale-95 transition-all">
                             <span class="text-xl font-black font-arabic">{{ app()->isLocale('ar') ? 'استمرار' : 'Continue' }}</span>
                             <i class="bi bi-arrow-right-short text-3xl group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- STEP 2: Personal Details -->
+                <!-- STEP 2: Personal Details (Glassy) -->
                 <div x-show="currentStep === 2" x-cloak style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-6">
-                    <div class="space-y-1.5">
-                        <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.full_name') }}</label>
-                        <input type="text" name="name" x-model="name" class="w-full h-14 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" :required="currentStep === 2">
+                    <div class="space-y-2">
+                        <label class="text-[13px] font-black text-white/50 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.full_name') }}</label>
+                        <input type="text" name="name" x-model="name" class="w-full h-15 px-5 bg-white/5 border border-white/10 rounded-2xl text-base font-bold text-white focus:outline-none focus:bg-white/10 focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all" :required="currentStep === 2">
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="space-y-1.5">
-                            <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.email') }}</label>
-                            <input type="email" name="email" x-model="email" class="w-full h-14 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" placeholder="mail@example.com" :required="currentStep === 2">
+                        <div class="space-y-2">
+                            <label class="text-[13px] font-black text-white/50 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.email') }}</label>
+                            <input type="email" name="email" x-model="email" class="w-full h-15 px-5 bg-white/5 border border-white/10 rounded-2xl text-base font-bold text-white focus:outline-none focus:bg-white/10 focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all" placeholder="mail@example.com" :required="currentStep === 2">
                         </div>
-                        <div class="space-y-1.5">
-                            <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.phone') }}</label>
-                            <input type="text" name="phone" x-model="phone" class="w-full h-14 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" placeholder="010xxxxxxx" :required="currentStep === 2">
+                        <div class="space-y-2">
+                            <label class="text-[13px] font-black text-white/50 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.phone') }}</label>
+                            <input type="text" name="phone" x-model="phone" class="w-full h-15 px-5 bg-white/5 border border-white/10 rounded-2xl text-base font-bold text-white focus:outline-none focus:bg-white/10 focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all" placeholder="010xxxxxxx" :required="currentStep === 2">
                         </div>
                     </div>
 
-                    <div class="space-y-1.5">
+                    <div class="space-y-2">
                         <div class="flex justify-between items-center px-1">
-                            <label class="text-[13px] font-black text-slate-400 font-arabic uppercase tracking-wide">{{ __('auth.register.password') }}</label>
+                            <label class="text-[13px] font-black text-white/50 font-arabic uppercase tracking-wide">{{ __('auth.register.password') }}</label>
                             <button type="button" @click="showPassword = !showPassword" class="text-[11px] font-black text-brand-secondary uppercase tracking-widest hover:opacity-70 transition-opacity">
                                 <span x-text="showPassword ? '{{ __('auth.register.hide') }}' : '{{ __('auth.register.show') }}'"></span>
                             </button>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <input :type="showPassword ? 'text' : 'password'" name="password" x-model="password" class="w-full h-14 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" placeholder="••••••••" :required="currentStep === 2">
-                            <input :type="showPassword ? 'text' : 'password'" name="password_confirmation" x-model="password_confirmation" class="w-full h-14 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" :class="password_confirmation.length > 0 && !isPasswordMatch ? 'border-red-300 bg-red-50' : ''" placeholder="{{ __('auth.register.confirm_password') }}" :required="currentStep === 2">
+                            <input :type="showPassword ? 'text' : 'password'" name="password" x-model="password" class="w-full h-15 px-5 bg-white/5 border border-white/10 rounded-2xl text-base font-bold text-white focus:outline-none focus:bg-white/10 focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all" placeholder="••••••••" :required="currentStep === 2">
+                            <input :type="showPassword ? 'text' : 'password'" name="password_confirmation" x-model="password_confirmation" class="w-full h-15 px-5 bg-white/5 border border-white/10 rounded-2xl text-base font-bold text-white focus:outline-none focus:bg-white/10 focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all" :class="password_confirmation.length > 0 && !isPasswordMatch ? 'border-red-400 bg-red-400/10' : ''" placeholder="{{ __('auth.register.confirm_password') }}" :required="currentStep === 2">
                         </div>
                     </div>
 
@@ -449,37 +456,37 @@ document.addEventListener('alpine:init', () => {
                         </div>
                     </div>
 
-                    <!-- Simplified Price Summary Card -->
-                    <div class="p-6 rounded-3xl bg-slate-50/80 border border-slate-100 relative overflow-hidden">
-                        <div class="flex items-center justify-between mb-4">
+                    <!-- Simplified Price Summary Card (Glassy) -->
+                    <div class="p-8 rounded-3xl bg-white/5 border border-white/10 relative overflow-hidden backdrop-blur-sm">
+                        <div class="flex items-center justify-between mb-6">
                             <div class="flex flex-col">
                                 <div class="flex items-center gap-2 mb-1">
-                                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ __('auth.register.selected_plan') }}</span>
-                                    <button type="button" @click="showPlanModal = true" class="text-[10px] font-black text-brand-secondary underline underline-offset-2 hover:opacity-70 transition-opacity uppercase tracking-widest">
+                                    <span class="text-[10px] font-black text-white/40 uppercase tracking-widest">{{ __('auth.register.selected_plan') }}</span>
+                                    <button type="button" @click="showPlanModal = true" class="text-[10px] font-black text-brand-secondary underline underline-offset-4 hover:opacity-70 transition-opacity uppercase tracking-widest">
                                         {{ app()->getLocale() == 'ar' ? 'تغيير' : 'Change' }}
                                     </button>
                                 </div>
-                                <h3 class="text-xl font-black text-slate-900 font-arabic" x-text="currentPlan.name"></h3>
+                                <h3 class="text-xl font-black text-white font-arabic" x-text="currentPlan.name"></h3>
                             </div>
                             <div class="text-right">
                                 <template x-if="couponStatus === 'valid'">
-                                    <div class="text-[11px] font-black text-emerald-600 mb-1 animate-fade-in">-<span x-text="couponDiscountAmount.toLocaleString()"></span> <span x-text="currentPriceData.currency"></span></div>
+                                    <div class="text-[11px] font-black text-emerald-400 mb-1 animate-fade-in">-<span x-text="couponDiscountAmount.toLocaleString()"></span> <span x-text="currentPriceData.currency"></span></div>
                                 </template>
-                                <div class="flex items-baseline gap-1 text-brand-secondary">
+                                <div class="flex items-baseline gap-1 text-white">
                                     <span class="text-3xl font-black tracking-tighter" x-text="finalPrice.toLocaleString()"></span>
-                                    <span class="text-sm font-bold opacity-60" x-text="currentPriceData.currency"></span>
+                                    <span class="text-sm font-bold opacity-40" x-text="currentPriceData.currency"></span>
                                 </div>
-                                <span class="text-[10px] font-bold text-slate-400">/<span x-text="billingCycle === 'yearly' ? ({{ Js::from(app()->getLocale() == 'ar' ? 'سنة' : 'year') }}) : ({{ Js::from(app()->getLocale() == 'ar' ? 'شهر' : 'month') }})"></span></span>
+                                <span class="text-[10px] font-bold text-white/40">/<span x-text="billingCycle === 'yearly' ? ({{ Js::from(app()->getLocale() == 'ar' ? 'سنة' : 'year') }}) : ({{ Js::from(app()->getLocale() == 'ar' ? 'شهر' : 'month') }})"></span></span>
                             </div>
                         </div>
 
                         <!-- Conversion Boost: Reassurance -->
-                        <div class="pt-4 border-t border-slate-200/60 flex items-center justify-between gap-4">
-                            <div class="flex items-center gap-1.5 text-slate-500">
-                                <i class="bi bi-shield-check text-emerald-500 text-base"></i>
+                        <div class="pt-6 border-t border-white/5 flex items-center justify-between gap-4">
+                            <div class="flex items-center gap-2 text-white/50">
+                                <i class="bi bi-shield-check text-emerald-400 text-base"></i>
                                 <span class="text-[11px] font-bold font-arabic">{{ app()->getLocale() == 'ar' ? 'دفع آمن 100%' : '100% Secure Payment' }}</span>
                             </div>
-                            <div class="flex items-center gap-1.5 text-slate-500">
+                            <div class="flex items-center gap-2 text-white/50">
                                 <i class="bi bi-arrow-repeat text-brand-secondary text-base"></i>
                                 <span class="text-[11px] font-bold font-arabic">{{ app()->getLocale() == 'ar' ? 'إلغاء في أي وقت' : 'Cancel Anytime' }}</span>
                             </div>
@@ -557,12 +564,12 @@ document.addEventListener('alpine:init', () => {
                         </div>
                     </div>
 
-                    <div class="pt-6 flex flex-col sm:flex-row gap-4">
-                        <button type="button" @click="prevStep()" class="flex-1 h-16 rounded-full font-black text-slate-500 bg-slate-50 hover:bg-slate-100 transition-all border-2 border-slate-100">
+                    <div class="pt-8 flex flex-col sm:flex-row gap-4">
+                        <button type="button" @click="prevStep()" class="flex-1 h-16 rounded-full font-black text-white/60 bg-white/5 hover:bg-white/10 transition-all border border-white/10">
                             {{ app()->isLocale('ar') ? 'رجوع' : 'Back' }}
                         </button>
                         <button type="submit" :disabled="password.length > 0 && !isPasswordMatch"
-                                class="flex-[2] h-16 rounded-full font-black text-xl text-white bg-brand-secondary shadow-xl shadow-brand-secondary/20 hover:shadow-brand-secondary/40 hover:-translate-y-1 transition-all disabled:opacity-50 disabled:grayscale relative overflow-hidden group">
+                                class="flex-[2] h-16 rounded-full font-black text-xl text-white bg-brand-secondary shadow-[0_10px_30px_rgba(122,77,252,0.4)] hover:shadow-[0_15px_40px_rgba(122,77,252,0.6)] hover:-translate-y-1 transition-all disabled:opacity-50 disabled:grayscale relative overflow-hidden group">
                             <!-- Button Shine Effect -->
                             <div class="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-white opacity-20 group-hover:animate-[shine_1s] group-hover:left-full transition-all duration-700 ease-in-out"></div>
                             <span class="relative z-10">{{ __('auth.register.cta_main') }}</span>
@@ -570,35 +577,35 @@ document.addEventListener('alpine:init', () => {
                     </div>
 
                     <!-- Conversion Boost: Guarantee & Support -->
-                    <div class="mt-6 flex flex-col items-center gap-3">
-                        <div class="flex items-center justify-center gap-2 text-slate-600 bg-emerald-50/50 px-4 py-2.5 rounded-xl border border-emerald-100/50 w-full">
-                            <i class="bi bi-shield-fill-check text-emerald-500 text-lg"></i>
-                            <p class="text-[12px] font-bold font-arabic">{{ app()->getLocale() == 'ar' ? 'ضمان استرجاع الأموال خلال 14 يوماً. بدون رسوم خفية.' : '14-Day Money-Back Guarantee. No Hidden Fees.' }}</p>
+                    <div class="mt-8 flex flex-col items-center gap-4">
+                        <div class="flex items-center justify-center gap-3 text-white/70 bg-emerald-400/10 px-6 py-4 rounded-2xl border border-emerald-400/20 w-full backdrop-blur-sm">
+                            <i class="bi bi-shield-fill-check text-emerald-400 text-xl"></i>
+                            <p class="text-[13px] font-bold font-arabic">{{ app()->getLocale() == 'ar' ? 'ضمان استرجاع الأموال خلال 14 يوماً. بدون رسوم خفية.' : '14-Day Money-Back Guarantee. No Hidden Fees.' }}</p>
                         </div>
-                        <div class="flex items-center gap-1.5 text-slate-400 text-[11px] font-bold">
+                        <div class="flex items-center gap-2 text-white/30 text-[12px] font-bold">
                             <i class="bi bi-headset"></i>
                             <span>{{ app()->getLocale() == 'ar' ? 'تحتاج إلى مساعدة؟' : 'Need help?' }}</span>
-                            <a href="#" class="text-brand-secondary hover:underline">{{ app()->getLocale() == 'ar' ? 'تواصل مع الدعم الفني' : 'Contact Support' }}</a>
+                            <a href="#" class="text-brand-secondary hover:text-brand-secondary/80 transition-colors">{{ app()->getLocale() == 'ar' ? 'تواصل مع الدعم الفني' : 'Contact Support' }}</a>
                         </div>
                     </div>
                 </div>
 
-                <div class="mt-8 text-center">
-                    <p class="text-[11px] text-slate-400 font-arabic leading-relaxed">
+                <div class="mt-10 text-center">
+                    <p class="text-[11px] text-white/30 font-arabic leading-relaxed">
                         {{ __('auth.register.terms_prefix') }}
-                        <a href="{{ route('terms') }}" class="text-slate-900 font-black hover:underline underline-offset-4">{{ __('auth.register.terms_of_service') }}</a> 
+                        <a href="{{ route('terms') }}" class="text-white/60 font-black hover:text-white transition-colors underline-offset-4">{{ __('auth.register.terms_of_service') }}</a> 
                         {{ __('auth.register.and') }} 
-                        <a href="{{ route('privacy') }}" class="text-slate-900 font-black hover:underline underline-offset-4">{{ __('auth.register.privacy_policy') }}</a>
+                        <a href="{{ route('privacy') }}" class="text-white/60 font-black hover:text-white transition-colors underline-offset-4">{{ __('auth.register.privacy_policy') }}</a>
                     </p>
                 </div>
             </form>
         </div>
 
-        <!-- Footer Link -->
-        <div class="p-8 bg-slate-50/50 border-t border-slate-100 text-center">
-            <span class="text-sm text-slate-500 font-arabic font-bold">
+        <!-- Footer Link (Glassy) -->
+        <div class="p-10 bg-white/5 border-t border-white/10 text-center backdrop-blur-sm">
+            <span class="text-sm text-white/50 font-arabic font-bold">
                 {{ __('auth.login.no_account_link') }}
-                <a href="{{ route('login.portal') }}" class="text-brand-secondary font-black hover:underline ml-2">{{ __('auth.login.title') }}</a>
+                <a href="{{ route('login.portal') }}" class="text-brand-secondary font-black hover:text-brand-secondary/80 transition-colors ml-2">{{ __('auth.login.title') }}</a>
             </span>
         </div>
     </div>
