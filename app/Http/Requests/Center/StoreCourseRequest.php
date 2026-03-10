@@ -30,6 +30,18 @@ class StoreCourseRequest extends FormRequest
         ];
     }
 
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $sessionsCount = (int) $this->input('sessions_count', 0);
+            $schedulesCount = is_array($this->input('schedules')) ? count($this->input('schedules')) : 0;
+
+            if ($sessionsCount > 0 && $schedulesCount !== $sessionsCount) {
+                $validator->errors()->add('schedules', __('center::courses.validation_schedules_count_mismatch', ['count' => $sessionsCount]));
+            }
+        });
+    }
+
     public function messages()
     {
         return [
