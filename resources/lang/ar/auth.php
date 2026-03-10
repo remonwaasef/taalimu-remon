@@ -76,6 +76,7 @@ return [
             'technical_support' => 'دعم فني مخصص',
             'api_access' => 'ربط خارجي (API Access)',
         ],
+        'google_signup' => 'التسجيل باستخدام Google',
     ],
     
     // Login Page  
