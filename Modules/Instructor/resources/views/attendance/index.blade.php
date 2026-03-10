@@ -1,4 +1,5 @@
 <x-instructor::layouts.master>
+@section('page-title', 'الحضور والغياب')
 @section('content')
     <div class="mb-4">
         <h2 class="fw-bold text-dark">الحضور والغياب</h2>

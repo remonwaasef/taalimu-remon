@@ -235,7 +235,7 @@
     <main class="main-content">
         <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
-                <h3 class="fw-bold mb-0">@yield('page-title', 'أهلاً بك يا دكتور')</h3>
+                <h3 class="fw-bold mb-0">@yield('page-title', 'مرحباً بك')</h3>
                 <p class="text-muted small mb-0">{{ now()->translatedFormat('l, d F Y') }}</p>
             </div>
             <div class="dropdown">

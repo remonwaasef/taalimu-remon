@@ -1,5 +1,6 @@
 @extends('instructor::components.layouts.master')
 
+@section('page-title', 'إدارة الحسابات والمدفوعات')
 @section('content')
 <div class="container-fluid">
     <div class="row mb-4">
