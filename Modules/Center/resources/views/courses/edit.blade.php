@@ -112,41 +112,41 @@
                             </div>
                             
                             <div id="schedules-container">
-                                @foreach($course->schedules as $index => $schedule)
+                                 @foreach($course->schedules as $index => $schedule)
                                     <div class="schedule-item card bg-light border-0 mb-3">
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between mb-2">
-                                                <h6 class="fw-bold text-primary">{{ __('center::schedules.item_number') }} {{ $index + 1 }}</h6>
+                                                <h6 class="fw-bold text-primary">{{ __('center::schedules.item_number') }} <span class="schedule-index">{{ $index + 1 }}</span></h6>
                                                 <button type="button" class="btn-close remove-schedule"></button>
                                             </div>
                                             <div class="row g-3">
                                                 <div class="col-md-3">
-                                                    <label class="small text-muted mb-1">{{ __('center::messages.blade_0311') }}</label>
+                                                    <label class="small text-muted mb-1">{{ __('center::schedules.day') }}</label>
                                                     <select name="schedules[{{ $index }}][day_of_week]" class="form-select border-0">
-                                                        <option value="saturday" {{ $schedule->day_of_week === 6 ? 'selected' : '' }}>{{ __('center::messages.blade_0312') }}</option>
-                                                        <option value="sunday" {{ $schedule->day_of_week === 0 ? 'selected' : '' }}>{{ __('center::messages.blade_0313') }}</option>
-                                                        <option value="monday" {{ $schedule->day_of_week === 1 ? 'selected' : '' }}>{{ __('center::messages.blade_0314') }}</option>
-                                                        <option value="tuesday" {{ $schedule->day_of_week === 2 ? 'selected' : '' }}>{{ __('center::messages.blade_0315') }}</option>
-                                                        <option value="wednesday" {{ $schedule->day_of_week === 3 ? 'selected' : '' }}>{{ __('center::messages.blade_0316') }}</option>
-                                                        <option value="thursday" {{ $schedule->day_of_week === 4 ? 'selected' : '' }}>{{ __('center::messages.blade_0317') }}</option>
-                                                        <option value="friday" {{ $schedule->day_of_week === 5 ? 'selected' : '' }}>{{ __('center::messages.blade_0318') }}</option>
+                                                        <option value="saturday" {{ $schedule->day_of_week === 6 ? 'selected' : '' }}>{{ __('center::schedules.saturday') }}</option>
+                                                        <option value="sunday" {{ $schedule->day_of_week === 0 ? 'selected' : '' }}>{{ __('center::schedules.sunday') }}</option>
+                                                        <option value="monday" {{ $schedule->day_of_week === 1 ? 'selected' : '' }}>{{ __('center::schedules.monday') }}</option>
+                                                        <option value="tuesday" {{ $schedule->day_of_week === 2 ? 'selected' : '' }}>{{ __('center::schedules.tuesday') }}</option>
+                                                        <option value="wednesday" {{ $schedule->day_of_week === 3 ? 'selected' : '' }}>{{ __('center::schedules.wednesday') }}</option>
+                                                        <option value="thursday" {{ $schedule->day_of_week === 4 ? 'selected' : '' }}>{{ __('center::schedules.thursday') }}</option>
+                                                        <option value="friday" {{ $schedule->day_of_week === 5 ? 'selected' : '' }}>{{ __('center::schedules.friday') }}</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <label class="small text-muted mb-1">{{ __('center::messages.blade_0319') }}</label>
+                                                    <label class="small text-muted mb-1">{{ __('center::schedules.classroom') }}</label>
                                                     <select name="schedules[{{ $index }}][classroom_id]" class="form-select border-0">
-                                                        <option value="">{{ __('center::messages.blade_0320') }}</option>
+                                                        <option value="">{{ __('center::schedules.choose_classroom') }}</option>
                                                         @foreach($classrooms as $classroom)
                                                             <option value="{{ $classroom->id }}" {{ $schedule->classroom_id == $classroom->id ? 'selected' : '' }}>{{ $classroom->name }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <label class="small text-muted mb-1">{{ __('center::messages.blade_0321') }}</label>
+                                                    <label class="small text-muted mb-1">{{ __('center::schedules.from') }}</label>
                                                     <input type="time" name="schedules[{{ $index }}][start_time]" value="{{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }}" class="form-control border-0">
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <label class="small text-muted mb-1">{{ __('center::messages.blade_0322') }}</label>
+                                                    <label class="small text-muted mb-1">{{ __('center::schedules.to') }}</label>
                                                     <input type="time" name="schedules[{{ $index }}][end_time]" value="{{ \Carbon\Carbon::parse($schedule->end_time)->format('H:i') }}" class="form-control border-0">
                                                 </div>
                                             </div>
@@ -165,32 +165,32 @@
                                     </div>
                                     <div class="row g-3">
                                         <div class="col-md-3">
-                                            <label class="small text-muted mb-1">{{ __('center::messages.blade_0324') }}</label>
+                                            <label class="small text-muted mb-1">{{ __('center::schedules.day') }}</label>
                                             <select name="schedules[INDEX][day_of_week]" class="form-select border-0">
-                                                <option value="saturday">{{ __('center::messages.blade_0325') }}</option>
-                                                <option value="sunday">{{ __('center::messages.blade_0326') }}</option>
-                                                <option value="monday">{{ __('center::messages.blade_0327') }}</option>
-                                                <option value="tuesday">{{ __('center::messages.blade_0328') }}</option>
-                                                <option value="wednesday">{{ __('center::messages.blade_0329') }}</option>
-                                                <option value="thursday">{{ __('center::messages.blade_0330') }}</option>
-                                                <option value="friday">{{ __('center::messages.blade_0331') }}</option>
+                                                <option value="saturday">{{ __('center::schedules.saturday') }}</option>
+                                                <option value="sunday">{{ __('center::schedules.sunday') }}</option>
+                                                <option value="monday">{{ __('center::schedules.monday') }}</option>
+                                                <option value="tuesday">{{ __('center::schedules.tuesday') }}</option>
+                                                <option value="wednesday">{{ __('center::schedules.wednesday') }}</option>
+                                                <option value="thursday">{{ __('center::schedules.thursday') }}</option>
+                                                <option value="friday">{{ __('center::schedules.friday') }}</option>
                                             </select>
                                         </div>
                                         <div class="col-md-3">
-                                            <label class="small text-muted mb-1">{{ __('center::messages.blade_0332') }}</label>
+                                            <label class="small text-muted mb-1">{{ __('center::schedules.classroom') }}</label>
                                             <select name="schedules[INDEX][classroom_id]" class="form-select border-0">
-                                                <option value="">{{ __('center::messages.blade_0333') }}</option>
+                                                <option value="">{{ __('center::schedules.choose_classroom') }}</option>
                                                 @foreach($classrooms as $classroom)
                                                     <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="col-md-3">
-                                            <label class="small text-muted mb-1">{{ __('center::messages.blade_0334') }}</label>
+                                            <label class="small text-muted mb-1">{{ __('center::schedules.from') }}</label>
                                             <input type="time" name="schedules[INDEX][start_time]" class="form-control border-0">
                                         </div>
                                         <div class="col-md-3">
-                                            <label class="small text-muted mb-1">{{ __('center::messages.blade_0335') }}</label>
+                                            <label class="small text-muted mb-1">{{ __('center::schedules.to') }}</label>
                                             <input type="time" name="schedules[INDEX][end_time]" class="form-control border-0">
                                         </div>
                                     </div>
@@ -221,9 +221,6 @@
         const scheduleCountInfo = document.getElementById('schedule-count-info');
         const scheduleCountText = document.getElementById('schedule-count-text');
         
-        // Initialize count based on existing PHP items
-        let scheduleCount = {{ $course->schedules->count() }};
-
         // === Sessions-Schedules Link Functions ===
         function getRequiredSchedules() {
             return parseInt(sessionsCountInput.value) || 0;
@@ -236,59 +233,135 @@
         function updateScheduleCountUI() {
             const required = getRequiredSchedules();
             const current = getCurrentScheduleCount();
-
-            if (required <= 0) {
-                // No constraint
-                scheduleCountInfo.style.display = 'none';
-                addButton.style.display = '';
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('btn-secondary');
-                submitBtn.classList.add('btn-primary');
-                return;
+            
+            let countValid = true;
+            if (required > 0) {
+                if (current !== required) countValid = false;
             }
 
-            scheduleCountInfo.style.display = 'block';
+            const validation = validateAllSchedules();
+            
+            if (required <= 0) {
+                scheduleCountInfo.style.display = validation.isComplete && !validation.hasConflicts ? 'none' : 'block';
+                addButton.style.display = '';
+            } else {
+                scheduleCountInfo.style.display = 'block';
+            }
 
-            if (current < required) {
+            if (required > 0 && current < required) {
                 scheduleCountInfo.className = 'alert alert-warning py-2 mb-3';
                 scheduleCountText.textContent = "{{ __('center::courses.schedules_count_info', ['required' => '__REQ__', 'current' => '__CUR__']) }}"
                     .replace('__REQ__', required)
                     .replace('__CUR__', current);
                 addButton.style.display = '';
-                submitBtn.disabled = true;
-                submitBtn.classList.remove('btn-primary');
-                submitBtn.classList.add('btn-secondary');
-            } else if (current === required) {
-                scheduleCountInfo.className = 'alert alert-success py-2 mb-3';
-                scheduleCountText.textContent = "{{ __('center::courses.schedules_count_complete') }}";
-                addButton.style.display = 'none';
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('btn-secondary');
-                submitBtn.classList.add('btn-primary');
-            } else {
+            } else if (required > 0 && current > required) {
                 scheduleCountInfo.className = 'alert alert-danger py-2 mb-3';
                 scheduleCountText.textContent = "{{ __('center::courses.schedules_count_info', ['required' => '__REQ__', 'current' => '__CUR__']) }}"
                     .replace('__REQ__', required)
                     .replace('__CUR__', current);
                 addButton.style.display = 'none';
-                submitBtn.disabled = true;
+            } else if (!validation.isComplete) {
+                scheduleCountInfo.className = 'alert alert-warning py-2 mb-3';
+                scheduleCountText.textContent = "{{ __('center::schedules.incomplete_schedules') }}";
+                addButton.style.display = (required > 0) ? 'none' : '';
+            } else if (validation.hasConflicts) {
+                scheduleCountInfo.className = 'alert alert-danger py-2 mb-3';
+                scheduleCountText.textContent = "{{ __('center::schedules.conflict_error') }}";
+                addButton.style.display = (required > 0) ? 'none' : '';
+            } else if (required > 0 && current === required) {
+                scheduleCountInfo.className = 'alert alert-success py-2 mb-3';
+                scheduleCountText.textContent = "{{ __('center::courses.schedules_count_complete') }}";
+                addButton.style.display = 'none';
+            } else {
+                scheduleCountInfo.style.display = 'none';
+            }
+
+            const canSubmit = countValid && validation.isComplete && !validation.hasConflicts;
+            submitBtn.disabled = !canSubmit;
+            if (canSubmit) {
+                submitBtn.classList.remove('btn-secondary');
+                submitBtn.classList.add('btn-primary');
+            } else {
                 submitBtn.classList.remove('btn-primary');
                 submitBtn.classList.add('btn-secondary');
             }
         }
 
-        // Listen for sessions_count change
+        function validateAllSchedules() {
+            const items = container.querySelectorAll('.schedule-item');
+            let isComplete = true;
+            let hasConflicts = false;
+            const data = [];
+
+            items.forEach((item, index) => {
+                const dayField = item.querySelector('select[name*="day_of_week"]');
+                const classroomField = item.querySelector('select[name*="classroom_id"]');
+                const startField = item.querySelector('input[name*="start_time"]');
+                const endField = item.querySelector('input[name*="end_time"]');
+
+                const day = dayField ? dayField.value : '';
+                const classroom = classroomField ? classroomField.value : '';
+                const start = startField ? startField.value : '';
+                const end = endField ? endField.value : '';
+
+                if (!day || !classroom || !start || !end) {
+                    isComplete = false;
+                }
+                
+                const internalWarning = item.querySelector('.internal-conflict-warning');
+                if (internalWarning) internalWarning.remove();
+
+                data.push({ item, index, day, classroom, start, end });
+            });
+
+            for (let i = 0; i < data.length; i++) {
+                for (let j = i + 1; j < data.length; j++) {
+                    const a = data[i];
+                    const b = data[j];
+
+                    if (a.day && a.classroom && a.start && a.end && 
+                        a.day === b.day && a.classroom === b.classroom && 
+                        ((a.start >= b.start && a.start < b.end) || (b.start >= a.start && b.start < a.end))) {
+                        
+                        hasConflicts = true;
+                        showInternalConflict(a.item, b.index + 1);
+                        showInternalConflict(b.item, a.index + 1);
+                    }
+                }
+            }
+
+            return { isComplete, hasConflicts: hasConflicts || !!container.querySelector('.alert-danger.conflict-indicator') };
+        }
+
+        function showInternalConflict(item, otherIndex) {
+            if (item.querySelector('.internal-conflict-warning')) return;
+            const warning = document.createElement('div');
+            warning.className = 'internal-conflict-warning alert alert-danger py-1 mt-2 small';
+            warning.innerHTML = `<i class="fas fa-exclamation-triangle me-1"></i> {{ __('center::schedules.internal_conflict', ['index' => '__INDEX__']) }}`.replace('__INDEX__', otherIndex);
+            item.querySelector('.card-body').appendChild(warning);
+        }
+
+        function reindexSchedules() {
+            container.querySelectorAll('.schedule-item').forEach((item, index) => {
+                const numberSpan = item.querySelector('.schedule-index');
+                if (numberSpan) numberSpan.textContent = index + 1;
+                
+                const inputs = item.querySelectorAll('select, input');
+                inputs.forEach(input => {
+                    input.name = input.name.replace(/\[\d+\]|\[INDEX\]/g, `[${index}]`);
+                });
+            });
+        }
+
         sessionsCountInput.addEventListener('input', function() {
             const required = getRequiredSchedules();
-            const current = getCurrentScheduleCount();
+            let current = getCurrentScheduleCount();
 
-            // Auto-add schedules if we need more
             if (required > current) {
                 for (let i = current; i < required; i++) {
                     addScheduleItem();
                 }
             }
-            // Auto-remove extra schedules from the end
             if (required > 0 && required < current) {
                 const items = container.querySelectorAll('.schedule-item');
                 for (let i = items.length - 1; i >= required; i--) {
@@ -299,12 +372,10 @@
             updateScheduleCountUI();
         });
 
-        // Add Schedule
         function addScheduleItem() {
             const clone = template.content.cloneNode(true);
-            const index = scheduleCount++;
+            const index = getCurrentScheduleCount();
             
-            // Update names with index
             const inputs = clone.querySelectorAll('select, input');
             inputs.forEach(input => {
                 input.name = input.name.replace('INDEX', index);
@@ -312,42 +383,37 @@
 
             container.appendChild(clone);
             
-            // Set the schedule number
             const newItem = container.lastElementChild;
-            newItem.querySelector('.schedule-index').textContent = index + 1;
+            const indexSpan = newItem.querySelector('.schedule-index');
+            if (indexSpan) indexSpan.textContent = index + 1;
             
-            // Attach conflict checking to new schedule item
             attachConflictChecker(newItem);
+            updateScheduleCountUI();
         }
 
         addButton.addEventListener('click', function() {
-            const required = getRequiredSchedules();
-            const current = getCurrentScheduleCount();
-
-            // Don't allow adding more than required
-            if (required > 0 && current >= required) {
-                return;
-            }
-
+            if (getRequiredSchedules() > 0 && getCurrentScheduleCount() >= getRequiredSchedules()) return;
             addScheduleItem();
-            updateScheduleCountUI();
         });
 
-        // Remove Schedule
         container.addEventListener('click', function(e) {
             if (e.target.classList.contains('remove-schedule')) {
                 e.target.closest('.schedule-item').remove();
+                reindexSchedules();
                 updateScheduleCountUI();
             }
         });
 
-        // Real-time Conflict Checking
         function attachConflictChecker(scheduleItem) {
             const selects = scheduleItem.querySelectorAll('select');
             const inputs = scheduleItem.querySelectorAll('input[type="time"]');
             
             [...selects, ...inputs].forEach(el => {
-                el.addEventListener('change', () => checkScheduleConflict(scheduleItem));
+                el.addEventListener('change', () => {
+                    checkScheduleConflict(scheduleItem).then(() => {
+                        updateScheduleCountUI();
+                    });
+                });
             });
         }
 
@@ -357,12 +423,10 @@
             const startTime = scheduleItem.querySelector('input[name*="start_time"]');
             const endTime = scheduleItem.querySelector('input[name*="end_time"]');
             
-            // Remove existing conflict indicator
             const existingIndicator = scheduleItem.querySelector('.conflict-indicator');
             if (existingIndicator) existingIndicator.remove();
             
-            // Only check if all required fields are filled
-            if (!daySelect.value || !startTime.value || !endTime.value) return;
+            if (!daySelect.value || !classroomSelect.value || !startTime.value || !endTime.value) return;
             
             try {
                 const response = await fetch('{{ route("center.schedules.check-conflict") }}', {
@@ -382,32 +446,25 @@
                 });
                 
                 const data = await response.json();
-                
-                // Create indicator element
                 const indicator = document.createElement('div');
-                indicator.className = 'conflict-indicator mt-2';
+                indicator.className = 'conflict-indicator mt-2 alert py-2';
                 
                 if (data.status === 'conflict') {
-                    indicator.className += ' alert alert-danger py-2';
+                    indicator.classList.add('alert-danger');
                     indicator.innerHTML = data.conflicts.map(c => `<div>${c}</div>`).join('');
-                    scheduleItem.querySelector('.card-body').appendChild(indicator);
                 } else {
-                    indicator.className += ' alert alert-success py-2';
+                    indicator.classList.add('alert-success');
                     indicator.innerHTML = '<i class="fas fa-check-circle me-1"></i> ' + "{{ __('center::schedules.schedule_available') }}";
-                    scheduleItem.querySelector('.card-body').appendChild(indicator);
-                    
-                    // Auto-remove success message after 3 seconds
-                    setTimeout(() => indicator.remove(), 3000);
+                    setTimeout(() => { if (indicator.parentNode) indicator.remove(); updateScheduleCountUI(); }, 3000);
                 }
+                scheduleItem.querySelector('.card-body').appendChild(indicator);
             } catch (error) {
                 console.error('Error checking conflict:', error);
             }
         }
 
-        // Attach conflict checker to existing schedule items
         document.querySelectorAll('.schedule-item').forEach(attachConflictChecker);
 
-        // Listen for instructor changes to re-check all schedules
         instructorSelect.addEventListener('change', () => {
             document.querySelectorAll('.schedule-item').forEach(checkScheduleConflict);
         });

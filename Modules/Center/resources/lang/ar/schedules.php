@@ -26,4 +26,7 @@ return [
     'from' => 'من',
     'to' => 'إلى',
     'choose_classroom' => 'اختر القاعة...',
+    'internal_conflict' => 'تعارض داخلي مع الموعد #:index',
+    'conflict_error' => 'يوجد تعارض في المواعيد المضافة - يرجى المراجعة',
+    'incomplete_schedules' => 'يرجى إكمال جميع بيانات المواعيد',
 ];

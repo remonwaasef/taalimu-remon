@@ -26,4 +26,7 @@ return [
     'from' => 'From',
     'to' => 'To',
     'choose_classroom' => 'Choose Classroom...',
+    'internal_conflict' => 'Internal conflict with schedule #:index',
+    'conflict_error' => 'Conflict in added schedules - please review',
+    'incomplete_schedules' => 'Please complete all schedule data',
 ];
