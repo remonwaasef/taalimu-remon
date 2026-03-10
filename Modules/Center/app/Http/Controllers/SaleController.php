@@ -112,7 +112,7 @@ class SaleController extends Controller
     {
         $tenant = app('tenant');
         $sale = Sale::where('tenant_id', $tenant->id)
-            ->with(['student', 'items.item'])
+            ->with(['student', 'items.item', 'payments.receiver', 'refunds.processor'])
             ->findOrFail($id);
 
         $this->authorize('view', $sale);

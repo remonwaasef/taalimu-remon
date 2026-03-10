@@ -51,4 +51,24 @@ class Sale extends Model
     {
         return $this->hasMany(Payment::class);
     }
+
+    public function refunds()
+    {
+        return $this->hasMany(Refund::class);
+    }
+
+    public function determineStatus(): string
+    {
+        if ($this->paid_amount >= $this->total_amount) {
+            return 'paid';
+        } elseif ($this->paid_amount > 0) {
+            return 'partial';
+        }
+        return 'pending';
+    }
+
+    public function updateStatus(): bool
+    {
+        return $this->update(['status' => $this->determineStatus()]);
+    }
 }
