@@ -22,4 +22,8 @@ return [
     'registering' => 'Registering...',
     'schedules_count' => 'schedules',
     'item_number' => 'Schedule #',
+    'day' => 'Day',
+    'from' => 'From',
+    'to' => 'To',
+    'choose_classroom' => 'Choose Classroom...',
 ];
