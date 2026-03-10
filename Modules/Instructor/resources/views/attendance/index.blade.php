@@ -10,7 +10,7 @@
         <div class="col-md-8">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-header bg-white border-0 p-4 pb-0">
-                    <h5 class="fw-bold mb-0"><i class="bi bi-clock-history me-2 text-primary"></i>حصص اليوم ({{ now()->format('Y-m-d') }})</h5>
+                    <h5 class="fw-bold mb-0"><i class="bi bi-clock-history me-2" style="color: var(--primary-color);"></i>حصص اليوم ({{ now()->format('Y-m-d') }})</h5>
                 </div>
                 <div class="card-body p-4">
                     <div class="table-responsive">
@@ -27,7 +27,7 @@
                                     <tr>
                                         <td>
                                             <div class="fw-bold">{{ $session->course->title }}</div>
-                                            <small class="badge bg-primary bg-opacity-10 text-primary">
+                                            <small class="badge rounded-pill" style="background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);">
                                                 {{ \Carbon\Carbon::parse($session->start_time)->format('h:i A') }} - 
                                                 {{ \Carbon\Carbon::parse($session->end_time)->format('h:i A') }}
                                             </small>
@@ -45,9 +45,9 @@
                                                     <a href="{{ route('instructor.attendance.show', $session) }}" class="btn btn-sm btn-outline-danger rounded-pill px-3">
                                                         <i class="bi bi-person-x me-1"></i>مراجعة الحضور</a>
                                                 @else
-                                                    <a href="{{ route('instructor.attendance.show', $session) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3" style="color: var(--primary-color); border-color: var(--primary-color);">
+                                                    <a href="{{ route('instructor.attendance.show', $session) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 border-0" style="background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);">
                                                         <i class="bi bi-card-checklist me-1"></i>تحضير يدوي</a>
-                                                    <a href="{{ route('instructor.scanner', $session->course) }}" class="btn btn-sm btn-primary rounded-pill px-3 border-0" style="background: var(--primary-color);">
+                                                    <a href="{{ route('instructor.scanner', $session->course) }}" class="btn btn-primary btn-sm rounded-pill px-3 border-0 shadow-sm" style="background: var(--primary-color);">
                                                         <i class="bi bi-qr-code me-1"></i> مسح QR
                                                     </a>
                                                 @endif

@@ -91,9 +91,9 @@
                             </div>
                         </div>
 
-                        <div class="d-flex gap-2 pb-5">
-                            <button type="submit" class="btn btn-primary px-4 rounded-pill">حفظ التعديلات</button>
-                            <a href="{{ route('instructor.schedules.index') }}" class="btn btn-light px-4 rounded-pill">إلغاء</a>
+                        <div class="d-flex gap-2 pb-5 mt-4">
+                            <button type="submit" class="btn btn-primary px-5 py-2 fw-bold text-white shadow-sm rounded-pill border-0">حفظ التعديلات</button>
+                            <a href="{{ route('instructor.schedules.index') }}" class="btn btn-light px-4 py-2 fw-bold text-muted rounded-pill">إلغاء</a>
                         </div>
                     </form>
                 </div>
@@ -101,13 +101,13 @@
         </div>
         
         <div class="col-md-4">
-            <div class="card border-0 shadow-sm rounded-4 bg-primary text-white">
+            <div class="card border-0 shadow-sm rounded-4 text-white" style="background: var(--primary-gradient);">
                 <div class="card-body p-4">
                     <h5 class="fw-bold mb-3"><i class="bi bi-info-circle me-2"></i>ملاحظات</h5>
-                    <ul class="list-unstyled mb-0">
-                        <li class="mb-2 small">• سيقوم النظام تلقائياً بمنع أي تعارض في حجز نفس القاعة في نفس الوقت.</li>
-                        <li class="mb-2 small">• سيتم التأكد أيضاً من تفرغك في هذا الوقت قبل الحفظ.</li>
-                        <li class="small">• هذا الجدول سيرتبط تلقائياً بقسم الحضور والغياب لتسهيل تحضير الطلاب.</li>
+                    <ul class="list-unstyled mb-0 lh-lg">
+                        <li class="mb-2 small">✓ سيقوم النظام تلقائياً بمنع أي تعارض في حجز نفس القاعة في نفس الوقت.</li>
+                        <li class="mb-2 small">✓ سيتم التأكد أيضاً من تفرغك في هذا الوقت قبل الحفظ.</li>
+                        <li class="small">✓ هذا الجدول سيرتبط تلقائياً بقسم الحضور والغياب لتسهيل تحضير الطلاب.</li>
                     </ul>
                 </div>
             </div>

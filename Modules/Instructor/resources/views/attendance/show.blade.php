@@ -34,7 +34,7 @@
                                     <i class="bi bi-person-x-fill me-1"></i>تسجيل الباقي غياب</button>
                             </form>
                         @endif
-                        <span class="badge bg-primary px-3 rounded-pill">{{ today()->format('Y-m-d') }}</span>
+                        <span class="badge px-3 rounded-pill fw-bold" style="background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);">{{ today()->format('Y-m-d') }}</span>
                     </div>
                 </div>
                 <div class="card-body p-4">
@@ -60,7 +60,7 @@
                                             <div class="fw-bold">{{ $student->name }}</div>
                                             <small class="text-muted">{{ $enrollment->user->email }}</small>
                                         </td>
-                                        <td><code class="text-primary fw-bold">#{{ $student->id }}</code></td>
+                                        <td><code style="color: var(--primary-color); font-weight: bold; background-color: rgba(58, 12, 163, 0.05); padding: 2px 6px; rounded: 4px;">#{{ $student->id }}</code></td>
                                         <td class="text-center">
                                             @if($attendance)
                                                 <span class="badge bg-{{ $attendance->status == 'present' ? 'success' : ($attendance->status == 'late' ? 'warning' : 'danger') }} bg-opacity-10 text-{{ $attendance->status == 'present' ? 'success' : ($attendance->status == 'late' ? 'warning' : 'danger') }} rounded-pill px-3">

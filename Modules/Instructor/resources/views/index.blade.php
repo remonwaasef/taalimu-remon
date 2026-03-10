@@ -7,13 +7,13 @@
     <!-- Statistics Cards -->
     <div class="row g-4 mb-5">
         <div class="col-md-4">
-            <div class="card p-4 border-0 bg-white">
+            <div class="card p-4 border-0 bg-white shadow-sm rounded-4">
                 <div class="d-flex align-items-center gap-3">
-                    <div class="rounded-circle bg-primary bg-opacity-10 p-3">
-                        <i class="fas fa-user-graduate text-primary fs-4"></i>
+                    <div class="rounded-circle p-3" style="background-color: rgba(58, 12, 163, 0.1);">
+                        <i class="fas fa-user-graduate fs-4" style="color: var(--primary-color);"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">إجمالي الطلاب</h6>
+                        <h6 class="text-muted mb-1 small">إجمالي الطلاب</h6>
                         <h3 class="fw-bold mb-0">{{ $studentsCount }}</h3>
                     </div>
                 </div>
@@ -33,14 +33,14 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card p-4 border-0 bg-white">
+            <div class="card p-4 border-0 bg-white shadow-sm rounded-4">
                 <div class="d-flex align-items-center gap-3">
                     <div class="rounded-circle bg-warning bg-opacity-10 p-3">
                         <i class="fas fa-wallet text-warning fs-4"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">إيرادات الشهر</h6>
-                        <h3 class="fw-bold mb-0">{{ number_format($monthlyRevenue, 2) }} <small>ج.م</small></h3>
+                        <h6 class="text-muted mb-1 small">إيرادات الشهر</h6>
+                        <h3 class="fw-bold mb-0">{{ number_format($monthlyRevenue, 2) }} <small class="fs-6">ج.م</small></h3>
                     </div>
                 </div>
             </div>
@@ -50,10 +50,10 @@
     <!-- Analytics & Quick Actions -->
     <div class="row g-4 mb-5">
         <div class="col-lg-8">
-            <div class="card p-4 border-0 bg-white h-100">
+            <div class="card p-4 border-0 bg-white h-100 shadow-sm rounded-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h5 class="fw-bold mb-0">تحليلات الحضور الأسبوعية</h5>
-                    <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3">آخر 7 أيام</span>
+                    <span class="badge rounded-pill px-3 py-2" style="background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);">آخر 7 أيام</span>
                 </div>
                 <div style="height: 300px;">
                     <canvas id="attendanceChart"></canvas>
@@ -65,11 +65,11 @@
             <div class="card p-4 border-0 bg-white h-100">
                 <h5 class="fw-bold mb-4">روابط سريعة</h5>
                 <div class="d-grid gap-3">
-                    <a href="{{ route('instructor.students.list') }}" class="btn btn-light text-start p-3 rounded-4 border-0 shadow-none d-flex align-items-center gap-3">
-                        <div class="bg-primary bg-opacity-10 rounded-3 p-2 text-primary">
+                    <a href="{{ route('instructor.students.list') }}" class="btn btn-light text-start p-3 rounded-4 border-0 shadow-none d-flex align-items-center gap-3 transition-all hover-translate">
+                        <div class="rounded-3 p-2" style="background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);">
                             <i class="fas fa-plus"></i>
                         </div>
-                        <span>إضافة طالب جديد</span>
+                        <span class="fw-bold small">إضافة طالب جديد</span>
                     </a>
                     <a href="{{ route('instructor.groups.list') }}" class="btn btn-light text-start p-3 rounded-4 border-0 shadow-none d-flex align-items-center gap-3">
                         <div class="bg-success bg-opacity-10 rounded-3 p-2 text-success">

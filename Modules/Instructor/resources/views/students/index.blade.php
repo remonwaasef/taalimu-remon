@@ -45,7 +45,7 @@
                     </select>
                 </div>
                 <div class="col-md-3 text-end">
-                    <span id="studentResultCount" class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2"></span>
+                    <span id="studentResultCount" class="badge rounded-pill px-3 py-2" style="background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);"></span>
                 </div>
             </div>
         </div>
@@ -72,12 +72,12 @@
                         <tr class="student-row" data-name="{{ $student->name }}" data-phone="{{ $student->phone }}" data-groups="{{ json_encode($courseIds) }}">
                             <td class="px-4 py-3">
                                 <div class="d-flex align-items-center gap-3">
-                                    <div class="avatar bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                    <div class="avatar rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);">
                                         <i class="fas fa-user"></i>
                                     </div>
                                     <div>
                                         <div class="fw-bold">
-                                            <a href="{{ route('instructor.students.show', $student->id) }}" class="text-decoration-none text-dark hover-primary-link">
+                                            <a href="{{ route('instructor.students.show', $student->id) }}" class="text-decoration-none text-dark" style="color: var(--primary-color) !important;">
                                                 {{ $student->name }}
                                             </a>
                                         </div>

@@ -16,7 +16,7 @@
                                 <span class="badge bg-light text-dark border user-select-all fs-6 font-monospace">{{ $student->user->qr_identifier }}</span>
                             </div>
                         @else
-                            <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                            <div class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 100px; height: 100px; background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);">
                                 <i class="fas fa-user-graduate fa-3x"></i>
                             </div>
                         @endif
@@ -57,7 +57,7 @@
         <div class="col-lg-8">
             <div class="row g-4 mb-4">
                 <div class="col-md-4">
-                    <div class="card border-0 shadow-sm rounded-4 bg-primary text-white">
+                    <div class="card border-0 shadow-sm rounded-4 text-white" style="background: var(--primary-gradient);">
                         <div class="card-body p-4">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <div class="bg-white bg-opacity-20 p-2 rounded-3">
@@ -92,7 +92,7 @@
                         $totalPaid = $student->sales->sum('paid_amount');
                         $balance = $totalDue - $totalPaid;
                     @endphp
-                    <div class="card border-0 shadow-sm rounded-4 {{ $balance > 0 ? 'bg-danger' : 'bg-dark' }} text-white">
+                    <div class="card border-0 shadow-sm rounded-4 text-white {{ $balance > 0 ? 'bg-danger' : 'bg-dark' }}">
                         <div class="card-body p-4">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <div class="bg-white bg-opacity-20 p-2 rounded-3">

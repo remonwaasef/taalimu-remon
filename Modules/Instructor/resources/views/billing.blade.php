@@ -27,7 +27,7 @@
                     </select>
                 </div>
                 <div class="col-md-3 text-end">
-                    <span id="resultCount" class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2"></span>
+                    <span id="resultCount" class="badge rounded-pill px-3 py-2" style="background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);"></span>
                 </div>
             </div>
         </div>
@@ -136,7 +136,7 @@
                     </div>
                 </div>
                 <div class="modal-footer border-0 pt-0 pb-4">
-                    <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold">تأكيد عملية التحصيل</button>
+                    <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold border-0 shadow-sm" style="background: var(--primary-color);">تأكيد عملية التحصيل</button>
                 </div>
             </form>
         </div>
