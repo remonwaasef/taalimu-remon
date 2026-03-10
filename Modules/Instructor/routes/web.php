@@ -23,7 +23,6 @@ $instructorRoutes = function () {
         Route::get('/students-create', [InstructorController::class, 'createStudent'])->name('instructor.students.create');
         Route::post('/students-store', [InstructorController::class, 'storeStudent'])->name('instructor.students.store');
         Route::get('/students/{student}', [InstructorController::class, 'showStudent'])->name('instructor.students.show');
-        Route::resource('students', InstructorController::class)->names('instructor.students');
 
         // Instructor Schedule Management
         Route::get('/schedules', [InstructorController::class, 'schedules'])->name('instructor.schedules.index');
