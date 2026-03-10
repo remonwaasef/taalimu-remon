@@ -22,7 +22,7 @@
                     @foreach($courses as $course)
                     <div class="col-md-4">
                         <div class="card h-100 border shadow-none rounded-4 course-card hover-lift" 
-                             onclick="addToCart({{ $course->id }}, '{{ $course->title }}', {{ $course->price }})"
+                             onclick="addToCart({{ $course->id }}, '{{ $course->title }}', {{ $course->price }}, {{ $course->sessions_count ?? 0 }})"
                              style="cursor: pointer; transition: all 0.2s;">
                             <div class="card-body p-3">
                                 <div class="bg-primary bg-opacity-10 text-primary rounded-3 p-2 mb-3 d-inline-block">
@@ -30,6 +30,12 @@
                                 </div>
                                 <h6 class="fw-bold mb-2 text-dark">{{ $course->title }}</h6>
                                 <div class="text-primary fw-bold">{{ number_format($course->price, 2) }} {{ get_currency_symbol() }}</div>
+                                @if($course->sessions_count > 0)
+                                <div class="text-muted small mt-1">
+                                    <i class="fas fa-layer-group me-1"></i> {{ $course->sessions_count }} حصة
+                                    <span class="text-success">({{ number_format($course->price / $course->sessions_count, 2) }} {{ get_currency_symbol() }} / حصة)</span>
+                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -114,6 +120,37 @@
                         </div>
                     </div>
 
+                    <!-- Installment Mode Toggle -->
+                    <div id="installmentSection" class="mb-3 d-none">
+                        <div class="bg-warning bg-opacity-10 border border-warning border-opacity-25 rounded-4 p-3">
+                            <div class="form-check form-switch d-flex align-items-center justify-content-between p-0 mb-2">
+                                <div>
+                                    <label class="form-check-label fw-bold small text-dark" for="installmentToggle">
+                                        <i class="fas fa-calendar-alt me-1 text-warning"></i> تقسيط على الحصص
+                                    </label>
+                                </div>
+                                <input class="form-check-input ms-0" type="checkbox" id="installmentToggle" onchange="toggleInstallment()">
+                            </div>
+                            <div id="installmentDetails" class="d-none">
+                                <div class="bg-white rounded-3 p-2 small">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span class="text-muted">عدد الحصص:</span>
+                                        <span id="installmentSessions" class="fw-bold">-</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span class="text-muted">قسط الحصة الواحدة:</span>
+                                        <span id="installmentPerSession" class="fw-bold text-success">-</span>
+                                    </div>
+                                    <hr class="my-1 opacity-25">
+                                    <div class="d-flex justify-content-between">
+                                        <span class="text-muted">المتبقي بعد الدفعة الأولى:</span>
+                                        <span id="installmentRemaining" class="fw-bold text-danger">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="mb-3">
                         <label class="form-label fw-bold">{{ __('center::sales.payment_method') }}</label>
                         <select name="payment_method" id="payment_method" class="form-select rounded-3 shadow-none border">
@@ -160,6 +197,7 @@
 <script>
     let cart = [];
     let subtotalAmount = 0;
+    let installmentMode = false;
     const currency = '{{ get_currency_symbol() }}';
 
     function fetchStudentSummary(studentId) {
@@ -183,7 +221,6 @@
                     debtEl.innerText = data.total_debt + ' ' + currency;
                     profileLink.href = `/students/${studentId}`;
 
-                    // Subscription Status - check both user status and a fallback active check
                     const status = data.student.status;
                     if (status === 'active' || status === 'verified') {
                         statusEl.innerText = '{{ __('center::sales.status_paid') }} / {{ __('center::sales.status_active') }}';
@@ -196,7 +233,6 @@
                         statusEl.className = 'badge bg-danger bg-opacity-10 text-danger rounded-pill px-3';
                     }
 
-                    // Courses
                     coursesDiv.innerHTML = '<div class="fw-bold mb-1 small text-dark"><i class="fas fa-book me-1"></i>{{ __('center::messages.blade_0587') }}</div>';
                     if (data.courses.length > 0) {
                         data.courses.forEach(c => {
@@ -206,7 +242,6 @@
                         coursesDiv.innerHTML += '<div class="ms-2">{{ __('center::messages.blade_0588') }}</div>';
                     }
 
-                    // Unpaid Invoices
                     invoicesDiv.innerHTML = '<div class="fw-bold mb-1 small text-danger"><i class="fas fa-exclamation-circle me-1"></i>{{ __('center::messages.blade_0589') }}</div>';
                     if (data.unpaid_invoices.length > 0) {
                         data.unpaid_invoices.forEach(inv => {
@@ -244,7 +279,7 @@
             preConfirm: (amount) => {
                 const data = {
                     amount: amount,
-                    payment_method: 'cash', // Default to cash for quick pay
+                    payment_method: 'cash',
                     notes: '{{ __('center::messages.blade_0597') }}',
                     _token: '{{ csrf_token() }}'
                 };
@@ -264,13 +299,13 @@
             allowOutsideClick: () => !Swal.isLoading()
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire({ icon: 'success', title: __('center::messages.blade_0598') });
-                fetchStudentSummary(studentId); // Refresh summary
+                Swal.fire({ icon: 'success', title: '{{ __('center::messages.blade_0598') }}' });
+                fetchStudentSummary(studentId);
             }
         });
     }
 
-    function addToCart(id, title, price) {
+    function addToCart(id, title, price, sessionsCount) {
         const existing = cart.find(item => item.id === id);
         if (existing) {
             Swal.fire({
@@ -284,7 +319,7 @@
             return;
         }
 
-        cart.push({ id, title, price });
+        cart.push({ id, title, price, sessionsCount: sessionsCount || 0 });
         renderCart();
     }
 
@@ -293,11 +328,48 @@
         renderCart();
     }
 
+    function getTotalSessions() {
+        let totalSessions = 0;
+        cart.forEach(item => {
+            if (item.sessionsCount > 0) totalSessions += item.sessionsCount;
+        });
+        return totalSessions;
+    }
+
+    function hasSessionCourses() {
+        return cart.some(item => item.sessionsCount > 0);
+    }
+
+    function toggleInstallment() {
+        installmentMode = document.getElementById('installmentToggle').checked;
+        document.getElementById('installmentDetails').classList.toggle('d-none', !installmentMode);
+        calculateTotal();
+    }
+
+    function updateInstallmentInfo(total) {
+        const section = document.getElementById('installmentSection');
+        if (hasSessionCourses()) {
+            section.classList.remove('d-none');
+        } else {
+            section.classList.add('d-none');
+            installmentMode = false;
+            document.getElementById('installmentToggle').checked = false;
+            document.getElementById('installmentDetails').classList.add('d-none');
+            return;
+        }
+
+        if (installmentMode && total > 0) {
+            const totalSessions = getTotalSessions();
+            const perSession = total / totalSessions;
+            document.getElementById('installmentSessions').innerText = totalSessions + ' حصة';
+            document.getElementById('installmentPerSession').innerText = perSession.toFixed(2) + ' ' + currency;
+            document.getElementById('installmentRemaining').innerText = (total - perSession).toFixed(2) + ' ' + currency;
+        }
+    }
+
     function renderCart() {
         const container = document.getElementById('cartItems');
         const emptyMsg = document.getElementById('emptyCartMsg');
-        const totalEl = document.getElementById('totalAmount');
-        const paidInput = document.getElementById('paid_amount');
 
         container.innerHTML = '';
         let total = 0;
@@ -309,11 +381,17 @@
             emptyMsg.style.display = 'none';
             cart.forEach((item, index) => {
                 total += item.price;
+                let sessionInfo = '';
+                if (item.sessionsCount > 0) {
+                    const perSession = (item.price / item.sessionsCount).toFixed(2);
+                    sessionInfo = `<div class="text-muted" style="font-size: 0.7rem;"><i class="fas fa-layer-group me-1"></i>${item.sessionsCount} حصة (${perSession} ${currency}/حصة)</div>`;
+                }
                 container.innerHTML += `
                     <div class="d-flex justify-content-between align-items-center mb-3 bg-white p-2 rounded-3 border">
                         <div class="ps-2">
                             <h6 class="mb-0 fw-bold small">${item.title}</h6>
                             <span class="text-primary fw-bold small">${item.price.toFixed(2)} ${currency}</span>
+                            ${sessionInfo}
                         </div>
                         <button type="button" class="btn btn-sm btn-light text-danger rounded-circle p-2" onclick="removeFromCart(${index})">
                             <i class="fas fa-trash fa-xs"></i>
@@ -341,9 +419,18 @@
         if (total < 0) total = 0;
 
         totalEl.innerText = total.toFixed(2) + ' ' + currency;
-        
-        // Update paid amount mostly for convenience
-        paidInput.value = total.toFixed(2);
+
+        // Update installment info
+        updateInstallmentInfo(total);
+
+        // Set paid amount based on installment mode
+        if (installmentMode && hasSessionCourses() && total > 0) {
+            const totalSessions = getTotalSessions();
+            const perSession = total / totalSessions;
+            paidInput.value = perSession.toFixed(2);
+        } else {
+            paidInput.value = total.toFixed(2);
+        }
     }
 
     function submitSale() {
