@@ -22,4 +22,8 @@ return [
     'registering' => 'جاري التسجيل...',
     'schedules_count' => 'مواعيد',
     'item_number' => 'موعد #',
+    'day' => 'اليوم',
+    'from' => 'من',
+    'to' => 'إلى',
+    'choose_classroom' => 'اختر القاعة...',
 ];

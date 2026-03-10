@@ -115,7 +115,7 @@
                             <div class="schedule-item card bg-light border-0 mb-3">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between mb-2">
-                                        <h6 class="fw-bold text-primary">{{ __('center::schedules.item_number') }} ${index + 1}</h6>
+                                        <h6 class="fw-bold text-primary">{{ __('center::schedules.item_number') }} <span class="schedule-index"></span></h6>
                                         <button type="button" class="btn-close remove-schedule"></button>
                                     </div>
                                     <div class="row g-3">
@@ -267,8 +267,11 @@
 
             container.appendChild(clone);
             
-            // Attach conflict checking to new schedule item
+            // Set the schedule number
             const newItem = container.lastElementChild;
+            newItem.querySelector('.schedule-index').textContent = index + 1;
+            
+            // Attach conflict checking to new schedule item
             attachConflictChecker(newItem);
         }
 
