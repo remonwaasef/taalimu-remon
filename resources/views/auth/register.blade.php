@@ -270,21 +270,33 @@ document.addEventListener('alpine:init', () => {
                     <!-- Instructor Option (Premium) -->
                     <label class="relative cursor-pointer group">
                         <input type="radio" value="instructor" x-model="accountType" class="peer sr-only">
-                        <div class="relative flex flex-col items-center justify-center p-6 rounded-[2rem] border-2 border-slate-100 bg-white transition-all duration-500 hover:border-blue-600/30 hover:shadow-xl hover:shadow-blue-600/10 peer-checked:border-blue-600 peer-checked:ring-4 peer-checked:ring-blue-600/10 overflow-hidden group shadow-md" :class="!accountType ? 'p-8' : 'p-6'">
+                        <div class="relative flex flex-col items-center justify-center p-6 rounded-[2rem] border-2 bg-white transition-all duration-500 hover:shadow-xl overflow-hidden group shadow-md"
+                             :class="[
+                                !accountType ? 'p-8 border-slate-100 hover:border-blue-600/30' : 'p-6',
+                                accountType === 'instructor' ? 'border-blue-600 ring-4 ring-blue-600/10 shadow-blue-600/10' : (accountType ? 'border-slate-100 opacity-60' : '')
+                             ]">
                             <!-- Background Accent -->
-                            <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full -mr-12 -mt-12 transition-transform duration-700 group-hover:scale-150"></div>
+                            <div class="absolute top-0 right-0 w-24 h-24 rounded-full -mr-12 -mt-12 transition-transform duration-700 group-hover:scale-150"
+                                 :class="accountType === 'instructor' || !accountType ? 'bg-blue-500/5' : 'bg-slate-100'"></div>
                             
                             <!-- Icon Container -->
-                            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 peer-checked:scale-110 shadow-lg"
-                                 :class="accountType === 'instructor' ? 'bg-gradient-to-br from-blue-500 to-blue-700 text-white shadow-blue-600/30' : (accountType ? 'bg-slate-100 text-slate-400' : 'bg-slate-200/60 text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-500 shadow-slate-200/50')"
+                            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 shadow-lg"
+                                 :class="[
+                                    accountType === 'instructor' ? 'bg-gradient-to-br from-blue-500 to-blue-700 text-white shadow-blue-600/30 scale-110' : (accountType ? 'bg-slate-100 text-slate-400' : 'bg-slate-200/60 text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-500 shadow-slate-200/50')
+                                 ]"
                                  :style="!accountType ? 'width: 5rem; height: 5rem; margin-bottom: 1.5rem;' : ''">
                                 <i class="fas fa-chalkboard-teacher transition-all duration-500" :class="!accountType ? 'text-4xl' : 'text-3xl'"></i>
                             </div>
-                            <span class="font-black text-slate-800 peer-checked:text-brand-secondary transition-all" :class="!accountType ? 'text-lg' : 'text-sm'">{{ app()->isLocale('ar') ? 'مدرس مستقل' : 'Independent Tutor' }}</span>
+                            <span class="font-black transition-all" 
+                                  :class="[
+                                     !accountType ? 'text-lg text-slate-800' : 'text-sm',
+                                     accountType === 'instructor' ? 'text-blue-600' : 'text-slate-500'
+                                  ]">{{ app()->isLocale('ar') ? 'مدرس مستقل' : 'Independent Tutor' }}</span>
                             
                             <!-- Success Dot -->
-                            <div class="absolute top-4 right-4 opacity-0 scale-0 peer-checked:opacity-100 peer-checked:scale-100 transition-all duration-300">
-                                <div class="w-3 h-3 bg-brand-secondary rounded-full ring-4 ring-brand-secondary/20"></div>
+                            <div class="absolute top-4 right-4 opacity-0 scale-0 transition-all duration-300"
+                                 :class="accountType === 'instructor' ? 'opacity-100 scale-100' : ''">
+                                <div class="w-3 h-3 bg-blue-600 rounded-full ring-4 ring-blue-600/20"></div>
                             </div>
                         </div>
                     </label>
@@ -292,20 +304,32 @@ document.addEventListener('alpine:init', () => {
                     <!-- Center Option (Premium) -->
                     <label class="relative cursor-pointer group">
                         <input type="radio" value="center" x-model="accountType" class="peer sr-only">
-                        <div class="relative flex flex-col items-center justify-center p-6 rounded-[2rem] border-2 border-slate-100 bg-white transition-all duration-500 hover:border-brand-secondary/30 hover:shadow-xl hover:shadow-brand-secondary/10 peer-checked:border-brand-secondary peer-checked:ring-4 peer-checked:ring-brand-secondary/5 overflow-hidden group shadow-md" :class="!accountType ? 'p-8' : 'p-6'">
+                        <div class="relative flex flex-col items-center justify-center p-6 rounded-[2rem] border-2 bg-white transition-all duration-500 hover:shadow-xl overflow-hidden group shadow-md"
+                             :class="[
+                                !accountType ? 'p-8 border-slate-100 hover:border-brand-secondary/30' : 'p-6',
+                                accountType === 'center' ? 'border-brand-secondary ring-4 ring-brand-secondary/10 shadow-brand-secondary/10' : (accountType ? 'border-slate-100 opacity-60' : '')
+                             ]">
                             <!-- Background Accent -->
-                            <div class="absolute top-0 right-0 w-24 h-24 bg-brand-secondary/5 rounded-full -mr-12 -mt-12 transition-transform duration-700 group-hover:scale-150"></div>
+                            <div class="absolute top-0 right-0 w-24 h-24 rounded-full -mr-12 -mt-12 transition-transform duration-700 group-hover:scale-150"
+                                 :class="accountType === 'center' || !accountType ? 'bg-brand-secondary/5' : 'bg-slate-100'"></div>
                             
                             <!-- Icon Container -->
-                            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-500 group-hover:-rotate-6 group-hover:scale-110 peer-checked:scale-110 shadow-lg"
-                                 :class="accountType === 'center' ? 'bg-gradient-to-br from-brand-secondary to-blue-700 text-white shadow-brand-secondary/30' : (accountType ? 'bg-slate-100 text-slate-400' : 'bg-slate-200/60 text-slate-400 group-hover:bg-brand-secondary/10 group-hover:text-brand-secondary shadow-slate-200/50')"
+                            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-500 group-hover:-rotate-6 group-hover:scale-110 shadow-lg"
+                                 :class="[
+                                    accountType === 'center' ? 'bg-gradient-to-br from-brand-secondary to-blue-700 text-white shadow-brand-secondary/30 scale-110' : (accountType ? 'bg-slate-100 text-slate-400' : 'bg-slate-200/60 text-slate-400 group-hover:bg-brand-secondary/10 group-hover:text-brand-secondary shadow-slate-200/50')
+                                 ]"
                                  :style="!accountType ? 'width: 5rem; height: 5rem; margin-bottom: 1.5rem;' : ''">
                                 <i class="fas fa-university transition-all duration-500" :class="!accountType ? 'text-4xl' : 'text-3xl'"></i>
                             </div>
-                            <span class="font-black text-slate-800 peer-checked:text-brand-secondary transition-all" :class="!accountType ? 'text-lg' : 'text-sm'">{{ app()->isLocale('ar') ? 'مركز تعليمي' : 'Educational Center' }}</span>
+                            <span class="font-black transition-all" 
+                                  :class="[
+                                     !accountType ? 'text-lg text-slate-800' : 'text-sm',
+                                     accountType === 'center' ? 'text-brand-secondary' : 'text-slate-500'
+                                  ]">{{ app()->isLocale('ar') ? 'مركز تعليمي' : 'Educational Center' }}</span>
                             
                             <!-- Success Dot -->
-                            <div class="absolute top-4 right-4 opacity-0 scale-0 peer-checked:opacity-100 peer-checked:scale-100 transition-all duration-300">
+                            <div class="absolute top-4 right-4 opacity-0 scale-0 transition-all duration-300"
+                                 :class="accountType === 'center' ? 'opacity-100 scale-100' : ''">
                                 <div class="w-3 h-3 bg-brand-secondary rounded-full ring-4 ring-brand-secondary/20"></div>
                             </div>
                         </div>
