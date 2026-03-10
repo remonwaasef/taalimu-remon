@@ -79,8 +79,12 @@
                                     @if($balance > 0)
                                         @php
                                             $msg = "تحية طيبة، نود تذكيركم بأن الطالب {$student->name} لديه مديونية متبقية قدرها " . number_format($balance, 2) . " ج.م لمجموعات المدرس " . (auth()->user()->name ?? 'المعلم') . ". يرجى السداد في أقرب وقت. شكراً لكم.";
+                                            $cleanPhone = preg_replace('/[^0-9]/', '', $student->phone);
+                                            if (str_starts_with($cleanPhone, '0')) {
+                                                $cleanPhone = '20' . substr($cleanPhone, 1);
+                                            }
                                         @endphp
-                                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $student->phone) }}?text={{ urlencode($msg) }}" 
+                                        <a href="https://api.whatsapp.com/send?phone={{ $cleanPhone }}&text={{ urlencode($msg) }}" 
                                            target="_blank" class="btn btn-success btn-sm rounded-end-pill px-2" title="تذكير واتساب">
                                             <i class="fab fa-whatsapp"></i>
                                         </a>
