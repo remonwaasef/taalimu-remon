@@ -37,6 +37,31 @@ class SaleController extends Controller
         return view('center::sales.index', compact('sales', 'tenant'));
     }
 
+    public function overdue()
+    {
+        $this->authorize('viewAny', Sale::class);
+        $tenant = app('tenant');
+        
+        // Fetch students who have at least one sale with a remaining balance
+        $students = Student::where('tenant_id', $tenant->id)
+            ->whereHas('sales', function($query) {
+                $query->whereRaw('paid_amount < total_amount');
+            })
+            ->with(['sales' => function($query) {
+                $query->whereRaw('paid_amount < total_amount');
+            }])
+            ->get()
+            ->map(function($student) {
+                $student->total_debt = $student->sales->sum(function($sale) {
+                    return $sale->total_amount - $sale->paid_amount;
+                });
+                return $student;
+            })
+            ->sortByDesc('total_debt');
+
+        return view('center::sales.overdue', compact('students', 'tenant'));
+    }
+
     public function account()
     {
         $this->authorize('viewAny', Sale::class);
