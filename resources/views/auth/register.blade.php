@@ -267,37 +267,37 @@ document.addEventListener('alpine:init', () => {
                     {{ app()->isLocale('ar') ? 'ابدأ كـ ...' : 'Start as ...' }}
                 </label>
                 <div class="grid grid-cols-2 gap-6 px-2">
-                    <!-- Instructor Option (Premium) -->
+                    <!-- Instructor Option -->
                     <label class="relative cursor-pointer group">
                         <input type="radio" value="instructor" x-model="accountType" class="peer sr-only">
                         <div class="relative flex flex-col items-center justify-center p-6 rounded-[2rem] border-2 bg-white transition-all duration-500 hover:shadow-xl overflow-hidden group shadow-md"
                              :class="[
-                                !accountType ? 'p-8 border-slate-100 hover:border-blue-600/30' : 'p-6',
-                                accountType === 'instructor' ? 'border-blue-600 ring-4 ring-blue-600/10 shadow-blue-600/10' : (accountType ? 'border-slate-100 opacity-60' : '')
+                                !accountType ? 'p-8 border-slate-100 hover:border-brand-secondary/30' : 'p-6',
+                                accountType === 'instructor' ? 'border-brand-secondary ring-4 ring-brand-secondary/10 shadow-brand-secondary/10' : (accountType ? 'border-slate-100 opacity-60' : '')
                              ]">
                             <!-- Background Accent -->
                             <div class="absolute top-0 right-0 w-24 h-24 rounded-full -mr-12 -mt-12 transition-transform duration-700 group-hover:scale-150"
-                                 :class="accountType === 'instructor' || !accountType ? 'bg-blue-500/5' : 'bg-slate-100'"></div>
+                                 :class="accountType === 'instructor' || !accountType ? 'bg-brand-secondary/5' : 'bg-slate-100'"></div>
                             
                             <!-- Icon Container -->
                             <div class="rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:rotate-6 shadow-lg"
                                  :class="accountType === 'instructor' 
-                                            ? 'bg-gradient-to-br from-blue-500 to-blue-700 text-white shadow-blue-600/30 w-16 h-16 mb-4 scale-110' 
+                                            ? 'bg-gradient-to-br from-brand-secondary to-purple-700 text-white shadow-brand-secondary/30 w-16 h-16 mb-4 scale-110' 
                                             : (!accountType 
                                                 ? 'bg-slate-100 text-slate-400 w-[5rem] h-[5rem] mb-6' 
-                                                : 'bg-slate-100 text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-500 shadow-slate-200/50 w-16 h-16 mb-4')">
+                                                : 'bg-slate-100 text-slate-400 group-hover:bg-brand-secondary/10 group-hover:text-brand-secondary shadow-slate-200/50 w-16 h-16 mb-4')">
                                 <i class="fas fa-chalkboard-teacher transition-all duration-500" :class="!accountType ? 'text-4xl' : 'text-3xl'"></i>
                             </div>
                             <span class="font-black transition-all" 
                                   :class="[
                                      !accountType ? 'text-lg text-slate-800' : 'text-sm',
-                                     accountType === 'instructor' ? 'text-blue-600' : 'text-slate-500'
+                                     accountType === 'instructor' ? 'text-brand-secondary' : 'text-slate-500'
                                   ]">{{ app()->isLocale('ar') ? 'مدرس مستقل' : 'Independent Tutor' }}</span>
                             
                             <!-- Success Dot -->
                             <div class="absolute top-4 right-4 opacity-0 scale-0 transition-all duration-300"
                                  :class="accountType === 'instructor' ? 'opacity-100 scale-100' : ''">
-                                <div class="w-3 h-3 bg-blue-600 rounded-full ring-4 ring-blue-600/20"></div>
+                                <div class="w-3 h-3 bg-brand-secondary rounded-full ring-4 ring-brand-secondary/20"></div>
                             </div>
                         </div>
                     </label>
@@ -317,7 +317,7 @@ document.addEventListener('alpine:init', () => {
                             <!-- Icon Container -->
                             <div class="rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:-rotate-6 shadow-lg"
                                  :class="accountType === 'center' 
-                                            ? 'bg-gradient-to-br from-brand-secondary to-blue-700 text-white shadow-brand-secondary/30 w-16 h-16 mb-4 scale-110' 
+                                            ? 'bg-gradient-to-br from-brand-secondary to-purple-700 text-white shadow-brand-secondary/30 w-16 h-16 mb-4 scale-110' 
                                             : (!accountType 
                                                 ? 'bg-slate-100 text-slate-400 w-[5rem] h-[5rem] mb-6' 
                                                 : 'bg-slate-100 text-slate-400 group-hover:bg-brand-secondary/10 group-hover:text-brand-secondary shadow-slate-200/50 w-16 h-16 mb-4')">
