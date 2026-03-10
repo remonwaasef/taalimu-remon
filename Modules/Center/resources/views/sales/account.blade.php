@@ -211,6 +211,16 @@
             }
         });
     }
+
+    // Auto-load student if ID provided in URL
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const studentId = urlParams.get('student_id');
+        if (studentId) {
+            document.getElementById('studentSelector').value = studentId;
+            loadStudentAccount(studentId);
+        }
+    });
 </script>
 
 <style>

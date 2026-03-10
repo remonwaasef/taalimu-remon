@@ -697,7 +697,7 @@
                     $overdueCount = $tenant->getOverdueStudentsCount();
                 @endphp
                 <div class="dropdown">
-                    <a href="{{ route('center.sales.account', ['tenant' => $tenant->domain ?? 'center']) }}" class="btn btn-white bg-white border shadow-sm rounded-pill px-3 position-relative" title="{{ __('center::messages.blade_0558') }}">
+                    <a href="{{ route('center.sales.overdue', ['tenant' => $tenant->domain ?? 'center']) }}" class="btn btn-white bg-white border shadow-sm rounded-pill px-3 position-relative" title="{{ __('center::messages.blade_0558') }}">
                         <i class="fas fa-wallet text-danger"></i>
                         @if($overdueCount > 0)
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger animate__animated animate__pulse animate__infinite" style="font-size: 0.6rem;">

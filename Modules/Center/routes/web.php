@@ -285,6 +285,7 @@ $tenantRoutes = function () {
         // Sales & Expenses
         Route::middleware(['feature:financial_reports'])->group(function() {
             Route::middleware(['can:view sales'])->group(function() {
+                Route::get('sales/overdue', [SaleController::class, 'overdue'])->name('center.sales.overdue');
                 Route::get('sales/account', [SaleController::class, 'account'])->name('center.sales.account');
                 Route::get('sales/student-summary/{id}', [SaleController::class, 'getStudentSummary'])->name('center.sales.student-summary');
                 Route::post('sales/{sale}/payment', [SaleController::class, 'addPayment'])->name('center.sales.payment');
