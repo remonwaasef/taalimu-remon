@@ -226,7 +226,7 @@ document.addEventListener('alpine:init', () => {
         <!-- Minimalist Progress & Header -->
         <div class="bg-white p-8 lg:p-12 pb-0">
             <!-- Multi-Step Indicator -->
-            <div class="mb-10 relative" x-cloak>
+            <div class="mb-10 relative transition-all duration-500" x-cloak :class="!accountType ? 'blur-[5px] opacity-40 pointer-events-none select-none' : ''">
                 <div class="flex justify-between mb-3 px-1">
                     <span class="text-[11px] font-black uppercase tracking-[0.2em] transition-colors" :class="currentStep === 1 ? 'text-brand-secondary' : 'text-slate-300'">
                         {{ app()->isLocale('ar') ? 'بيانات المركز' : 'Center Info' }}
@@ -307,6 +307,9 @@ document.addEventListener('alpine:init', () => {
                 </div>
             </div>
 
+            <!-- Content below account type selection -> blurred until selected -->
+            <div class="transition-all duration-500" :class="!accountType ? 'blur-[5px] opacity-40 pointer-events-none select-none' : ''">
+                
             <!-- Google Shortcut (Now below selection) -->
             <div class="mb-12">
                 <a :href="'{{ route('auth.google') }}?plan=' + selectedPlan + '&cycle=' + billingCycle + '&account_type=' + (accountType || 'center')" class="w-full flex items-center justify-center gap-4 py-4.5 px-6 border-2 border-slate-100 rounded-[1.5rem] shadow-sm text-base font-black text-slate-700 bg-white hover:bg-slate-50 hover:border-brand-secondary/20 transition-all group">
@@ -352,7 +355,7 @@ document.addEventListener('alpine:init', () => {
                 <input type="hidden" name="country_code" x-model="userCountry">
 
                 <!-- STEP 1: Center Details -->
-                <div x-show="currentStep === 1 && accountType" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-6">
+                <div x-show="currentStep === 1" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-6">
                     <div class="space-y-1.5">
                         <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">
                             <span x-text="accountType === 'center' ? '{{ __('auth.register.center_name') }}' : ({{ Js::from(app()->isLocale('ar') ? 'اسم المدرس / المنصة' : 'Teacher / Platform Name') }})"></span>
@@ -592,10 +595,11 @@ document.addEventListener('alpine:init', () => {
                     </p>
                 </div>
             </form>
+            </div> <!-- End Blurred Wrapper -->
         </div>
 
         <!-- Footer Link -->
-        <div class="p-8 bg-slate-50/50 border-t border-slate-100 text-center">
+        <div class="p-8 bg-slate-50/50 border-t border-slate-100 text-center transition-all duration-500" :class="!accountType ? 'blur-[5px] opacity-40 pointer-events-none select-none' : ''">
             <span class="text-sm text-slate-500 font-arabic font-bold">
                 {{ __('auth.login.no_account_link') }}
                 <a href="{{ route('login.portal') }}" class="text-brand-secondary font-black hover:underline ml-2">{{ __('auth.login.title') }}</a>
