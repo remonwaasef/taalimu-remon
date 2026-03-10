@@ -242,7 +242,7 @@ document.addEventListener('alpine:init', () => {
             </div>
 
             <!-- Contextual Header -->
-            <div class="mb-8 text-center transition-all duration-700 ease-in-out" :class="!accountType ? 'transform scale-125 translate-y-[15vh]' : ''">
+            <div class="mb-8 text-center transition-all duration-700 ease-in-out" :class="!accountType ? 'transform scale-125 translate-y-[10vh] mb-20' : ''">
                 <div x-show="currentStep === 1">
                     <h1 class="text-3xl lg:text-4xl font-black text-slate-900 mb-4 font-arabic leading-tight">
                         {{ app()->isLocale('ar') ? 'ابدأ رحلتك التعليمية' : 'Start Your Journey' }}
@@ -262,8 +262,8 @@ document.addEventListener('alpine:init', () => {
             </div>
 
             <!-- Account Type Selection (Premium Position) -->
-            <div x-show="currentStep === 1" class="mb-12 transition-all duration-700 ease-in-out relative z-10" :class="!accountType ? 'transform scale-125 translate-y-[15vh] pb-32 mt-8' : ''">
-                <label class="text-[14px] font-black text-slate-500 px-1 font-arabic uppercase tracking-wider block mb-6 text-center opacity-70 transition-all duration-700" :class="!accountType ? 'text-xl text-slate-800 opacity-100 font-black mb-12' : ''">
+            <div x-show="currentStep === 1" class="mb-12 transition-all duration-700 ease-in-out relative z-10" :class="!accountType ? 'transform scale-125 translate-y-[10vh] pb-32 mt-16 pt-8' : ''">
+                <label class="text-[14px] font-black text-slate-500 px-1 font-arabic uppercase tracking-wider block mb-6 text-center opacity-70 transition-all duration-700" :class="!accountType ? 'text-xl text-slate-800 opacity-100 font-black mb-16' : ''">
                     {{ app()->isLocale('ar') ? 'ابدأ كـ ...' : 'Start as ...' }}
                 </label>
                 <div class="grid grid-cols-2 gap-6 px-2">
