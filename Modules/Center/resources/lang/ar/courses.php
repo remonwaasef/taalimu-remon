@@ -30,4 +30,7 @@ return [
     'validation_start_time_required' => 'وقت البدء مطلوب.',
     'validation_end_time_after' => 'وقت النهاية يجب أن يكون بعد وقت البدء.',
     'validation_classroom_required' => 'يجب اختيار القاعة.',
+    'validation_schedules_count_mismatch' => 'عدد المواعيد يجب أن يساوي عدد الحصص (:count).',
+    'schedules_count_info' => 'يجب إضافة :required موعد (تم إضافة :current)',
+    'schedules_count_complete' => 'تم إضافة جميع المواعيد المطلوبة ✓',
 ];

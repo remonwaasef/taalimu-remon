@@ -30,4 +30,7 @@ return [
     'validation_start_time_required' => 'Start time is required.',
     'validation_end_time_after' => 'End time must be after start time.',
     'validation_classroom_required' => 'Please select a classroom.',
+    'validation_schedules_count_mismatch' => 'Number of schedules must equal the sessions count (:count).',
+    'schedules_count_info' => 'You must add :required schedules (added :current so far)',
+    'schedules_count_complete' => 'All required schedules have been added ✓',
 ];

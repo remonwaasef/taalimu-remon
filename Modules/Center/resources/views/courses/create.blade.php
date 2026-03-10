@@ -100,6 +100,12 @@
                                     <i class="fas fa-plus"></i>{{ __('center::messages.blade_0283') }}</button>
                             </label>
                             
+                            <!-- Schedule Count Info Bar -->
+                            <div id="schedule-count-info" class="alert py-2 mb-3" style="display:none;">
+                                <i class="fas fa-info-circle me-1"></i>
+                                <span id="schedule-count-text"></span>
+                            </div>
+                            
                             <div id="schedules-container">
                                 <!-- Dynamic Schedules will be added here -->
                             </div>
@@ -148,7 +154,7 @@
                         </template>
 
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">{{ __('center::messages.blade_0297') }}</button>
+                            <button type="submit" id="submit-btn" class="btn btn-primary btn-lg rounded-pill shadow-sm">{{ __('center::messages.blade_0297') }}</button>
                         </div>
                     </form>
                 </div>
@@ -164,10 +170,92 @@
         const addButton = document.getElementById('add-schedule-btn');
         const template = document.getElementById('schedule-template');
         const instructorSelect = document.querySelector('select[name="instructor_id"]');
+        const sessionsCountInput = document.querySelector('input[name="sessions_count"]');
+        const submitBtn = document.getElementById('submit-btn');
+        const scheduleCountInfo = document.getElementById('schedule-count-info');
+        const scheduleCountText = document.getElementById('schedule-count-text');
         let scheduleCount = 0;
 
+        // === Sessions-Schedules Link Functions ===
+        function getRequiredSchedules() {
+            return parseInt(sessionsCountInput.value) || 0;
+        }
+
+        function getCurrentScheduleCount() {
+            return container.querySelectorAll('.schedule-item').length;
+        }
+
+        function updateScheduleCountUI() {
+            const required = getRequiredSchedules();
+            const current = getCurrentScheduleCount();
+
+            if (required <= 0) {
+                // No constraint
+                scheduleCountInfo.style.display = 'none';
+                addButton.style.display = '';
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('btn-secondary');
+                submitBtn.classList.add('btn-primary');
+                return;
+            }
+
+            scheduleCountInfo.style.display = 'block';
+
+            if (current < required) {
+                // Need more schedules
+                scheduleCountInfo.className = 'alert alert-warning py-2 mb-3';
+                scheduleCountText.textContent = "{{ __('center::courses.schedules_count_info', ['required' => '__REQ__', 'current' => '__CUR__']) }}"
+                    .replace('__REQ__', required)
+                    .replace('__CUR__', current);
+                addButton.style.display = '';
+                submitBtn.disabled = true;
+                submitBtn.classList.remove('btn-primary');
+                submitBtn.classList.add('btn-secondary');
+            } else if (current === required) {
+                // Perfect match
+                scheduleCountInfo.className = 'alert alert-success py-2 mb-3';
+                scheduleCountText.textContent = "{{ __('center::courses.schedules_count_complete') }}";
+                addButton.style.display = 'none';
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('btn-secondary');
+                submitBtn.classList.add('btn-primary');
+            } else {
+                // Too many (shouldn't happen but handle gracefully)
+                scheduleCountInfo.className = 'alert alert-danger py-2 mb-3';
+                scheduleCountText.textContent = "{{ __('center::courses.schedules_count_info', ['required' => '__REQ__', 'current' => '__CUR__']) }}"
+                    .replace('__REQ__', required)
+                    .replace('__CUR__', current);
+                addButton.style.display = 'none';
+                submitBtn.disabled = true;
+                submitBtn.classList.remove('btn-primary');
+                submitBtn.classList.add('btn-secondary');
+            }
+        }
+
+        // Listen for sessions_count change
+        sessionsCountInput.addEventListener('input', function() {
+            const required = getRequiredSchedules();
+            const current = getCurrentScheduleCount();
+
+            // Auto-add schedules if we need more
+            if (required > current) {
+                for (let i = current; i < required; i++) {
+                    addScheduleItem();
+                }
+            }
+            // Auto-remove extra empty schedules from the end
+            if (required > 0 && required < current) {
+                const items = container.querySelectorAll('.schedule-item');
+                for (let i = items.length - 1; i >= required; i--) {
+                    items[i].remove();
+                }
+            }
+
+            updateScheduleCountUI();
+        });
+
         // Add Schedule
-        addButton.addEventListener('click', function() {
+        function addScheduleItem() {
             const clone = template.content.cloneNode(true);
             const index = scheduleCount++;
             
@@ -182,12 +270,26 @@
             // Attach conflict checking to new schedule item
             const newItem = container.lastElementChild;
             attachConflictChecker(newItem);
+        }
+
+        addButton.addEventListener('click', function() {
+            const required = getRequiredSchedules();
+            const current = getCurrentScheduleCount();
+
+            // Don't allow adding more than required
+            if (required > 0 && current >= required) {
+                return;
+            }
+
+            addScheduleItem();
+            updateScheduleCountUI();
         });
 
         // Remove Schedule
         container.addEventListener('click', function(e) {
             if (e.target.classList.contains('remove-schedule')) {
                 e.target.closest('.schedule-item').remove();
+                updateScheduleCountUI();
             }
         });
 
@@ -260,6 +362,9 @@
         instructorSelect.addEventListener('change', () => {
             document.querySelectorAll('.schedule-item').forEach(checkScheduleConflict);
         });
+
+        // Initial UI update
+        updateScheduleCountUI();
     });
 </script>
 @endpush
