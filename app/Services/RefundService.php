@@ -33,9 +33,8 @@ class RefundService
             $newPaidAmount = $sale->paid_amount - $refundAmount;
             $sale->update([
                 'paid_amount' => $newPaidAmount,
-                // If it was fully paid and now partially refunded, it becomes 'partial'
-                // If it was partial and now fully refunded, it might depend on business logic
             ]);
+            $sale->updateStatus();
 
             // 3. Reverse Commissions
             // We find commissions linked to this sale that are NOT yet paid

@@ -138,7 +138,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($sale->payments as $payment)
+                        @foreach($sale->payments as $payment)
                         <tr>
                             <td class="ps-4">{{ $payment->paid_at ? $payment->paid_at->format('Y/m/d H:i') : $payment->created_at->format('Y/m/d H:i') }}</td>
                             <td class="fw-bold text-success">+{{ number_format($payment->amount, 2) }} {{ __('center::sales.currency') }}</td>
@@ -151,11 +151,24 @@
                                 </a>
                             </td>
                         </tr>
-                        @empty
+                        @endforeach
+
+                        @foreach($sale->refunds as $refund)
+                        <tr>
+                            <td class="ps-4 text-muted">{{ $refund->created_at->format('Y/m/d H:i') }}</td>
+                            <td class="fw-bold text-danger">-{{ number_format($refund->amount, 2) }} {{ __('center::sales.currency') }}</td>
+                            <td><span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">استرداد (Refund)</span></td>
+                            <td><small class="text-muted"><i class="fas fa-user-shield me-1"></i> {{ $refund->processor->name ?? '-' }}</small></td>
+                            <td><small class="text-danger">{{ $refund->reason }}</small></td>
+                            <td class="text-end pe-4"></td>
+                        </tr>
+                        @endforeach
+
+                        @if($sale->payments->isEmpty() && $sale->refunds->isEmpty())
                         <tr>
                             <td colspan="5" class="text-center py-4 text-muted">{{ __('center::messages.blade_0639') }}</td>
                         </tr>
-                        @endforelse
+                        @endif
                     </tbody>
                 </table>
             </div>
