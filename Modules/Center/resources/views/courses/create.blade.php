@@ -258,7 +258,7 @@
                 const start = item.querySelector('input[name*="start_time"]').value;
                 const end = item.querySelector('input[name*="end_time"]').value;
 
-                if (!day || !classroom || !start || !end) {
+                if (!day || !start || !end) {
                     isComplete = false;
                 }
                 

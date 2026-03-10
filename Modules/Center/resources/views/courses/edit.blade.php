@@ -304,7 +304,7 @@
                 const start = startField ? startField.value : '';
                 const end = endField ? endField.value : '';
 
-                if (!day || !classroom || !start || !end) {
+                if (!day || !start || !end) {
                     isComplete = false;
                 }
                 
