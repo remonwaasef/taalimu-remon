@@ -10,7 +10,7 @@
             <p class="text-muted small">عرض جميع الطلاب المسجلين في مجموعاتك</p>
         </div>
         <div class="col-auto">
-            <a href="{{ route('instructor.students.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
+            <a href="{{ route('instructor.students.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm fw-bold border-0" style="background: var(--primary-color);">
                 <i class="fas fa-user-plus me-2"></i> إضافة طالب جديد
             </a>
         </div>
