@@ -10,7 +10,7 @@
             <p class="text-muted small">إدارة المجموعات، روابط التسجيل، وعمليات التحضير</p>
         </div>
         <div class="col-auto">
-            <a href="{{ route('instructor.groups.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
+            <a href="{{ route('instructor.groups.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm border-0 fw-bold" style="background: var(--primary-color);">
                 <i class="fas fa-plus me-2"></i> إنشاء مجموعة جديدة
             </a>
         </div>
@@ -50,17 +50,31 @@
                         @forelse($courses as $course)
                         <tr class="group-row" data-title="{{ $course->title }}">
                             <td class="px-4 py-3 text-start">
-                                <div class="fw-bold">{{ $course->title }}</div>
-                                <div class="text-muted small">كود: {{ $course->code ?? 'N/A' }}</div>
+                                <div class="fw-bold fs-5" style="color: var(--primary-color);">{{ $course->title }}</div>
+                                <div class="text-muted small mb-2">كود: {{ $course->code ?? 'N/A' }}</div>
+                                <div class="d-flex flex-wrap gap-1">
+                                    @forelse($course->schedules as $schedule)
+                                        @php
+                                            $days = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+                                        @endphp
+                                        <span class="badge border border-primary text-primary rounded-pill fw-normal" style="color: var(--primary-color) !important; border-color: var(--primary-color) !important; background: transparent;">
+                                            <i class="bi bi-calendar-event me-1"></i>
+                                            {{ $days[$schedule->day_of_week] }} 
+                                            ({{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }} - {{ \Carbon\Carbon::parse($schedule->end_time)->format('h:i A') }})
+                                        </span>
+                                    @empty
+                                        <span class="badge bg-light text-muted border rounded-pill fw-normal">لم يتم تحديد مواعيد</span>
+                                    @endforelse
+                                </div>
                             </td>
                             <td>
-                                <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3">{{ $course->enrollments_count ?? 0 }} طالب</span>
+                                <span class="badge bg-opacity-10 rounded-pill px-3" style="background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);">{{ $course->enrollments_count ?? 0 }} طالب</span>
                             </td>
                             <td>
                                 @if($course->registration_token)
-                                    <div class="input-group input-group-sm rounded-pill overflow-hidden" style="max-width: 250px; margin: 0 auto;">
-                                        <input type="text" class="form-control border-0 bg-light" value="{{ $course->getRegistrationUrl() }}" readonly id="link_{{ $course->id }}">
-                                        <button class="btn btn-primary px-3" onclick="copyLink('link_{{ $course->id }}')">
+                                    <div class="input-group input-group-sm rounded-pill overflow-hidden" style="max-width: 250px; margin: 0 auto; border: 1px solid var(--primary-color);">
+                                        <input type="text" class="form-control border-0 bg-light text-center" value="{{ $course->getRegistrationUrl() }}" readonly id="link_{{ $course->id }}">
+                                        <button class="btn btn-primary px-3 border-0" style="background: var(--primary-color);" onclick="copyLink('link_{{ $course->id }}')">
                                             <i class="fas fa-copy"></i>
                                         </button>
                                     </div>
@@ -73,12 +87,12 @@
                             </td>
                             <td>
                                 <div class="dropdown">
-                                    <button class="btn btn-light btn-sm rounded-circle" data-bs-toggle="dropdown">
+                                    <button class="btn btn-light btn-sm rounded-circle" data-bs-toggle="dropdown" style="color: var(--primary-color);">
                                         <i class="fas fa-ellipsis-v"></i>
                                     </button>
-                                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-3">
-                                        <li><a class="dropdown-item" href="{{ route('instructor.scanner', $course->id) }}"><i class="fas fa-qrcode me-2 text-primary"></i> تحضير (QR Scanner)</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('instructor.groups.edit', $course->id) }}"><i class="fas fa-edit me-2 text-muted"></i> تعديل البيانات</a></li>
+                                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow rounded-4 p-2">
+                                        <li><a class="dropdown-item rounded-3" href="{{ route('instructor.scanner', $course->id) }}"><i class="fas fa-qrcode me-2" style="color: var(--primary-color);"></i> تحضير (QR Scanner)</a></li>
+                                        <li><a class="dropdown-item rounded-3" href="{{ route('instructor.groups.edit', $course->id) }}"><i class="fas fa-edit me-2 text-muted"></i> تعديل البيانات</a></li>
                                         <li>
                                             <form action="{{ route('instructor.groups.duplicate', $course->id) }}" method="POST">
                                                 @csrf
