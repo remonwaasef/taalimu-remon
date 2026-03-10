@@ -20,6 +20,8 @@ $instructorRoutes = function () {
         Route::post('/groups/{course}/duplicate', [InstructorController::class, 'duplicateGroup'])->name('instructor.groups.duplicate');
         Route::delete('/groups/{course}', [InstructorController::class, 'destroyGroup'])->name('instructor.groups.destroy');
         
+        Route::get('/students-create', [InstructorController::class, 'createStudent'])->name('instructor.students.create');
+        Route::post('/students-store', [InstructorController::class, 'storeStudent'])->name('instructor.students.store');
         Route::get('/students/{student}', [InstructorController::class, 'showStudent'])->name('instructor.students.show');
         Route::resource('students', InstructorController::class)->names('instructor.students');
 
