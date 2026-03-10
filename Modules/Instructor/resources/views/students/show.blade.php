@@ -10,9 +10,16 @@
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body p-4 text-center">
                     <div class="mb-4">
-                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
-                            <i class="fas fa-user-graduate fa-3x"></i>
-                        </div>
+                        @if($student->user && $student->user->qr_identifier)
+                            <div class="d-flex flex-column align-items-center">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode($student->user->qr_identifier) }}" alt="QR Code" class="img-fluid rounded-4 shadow-sm mb-2" style="max-width: 150px;">
+                                <span class="badge bg-light text-dark border user-select-all fs-6 font-monospace">{{ $student->user->qr_identifier }}</span>
+                            </div>
+                        @else
+                            <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                                <i class="fas fa-user-graduate fa-3x"></i>
+                            </div>
+                        @endif
                     </div>
                     <h3 class="fw-bold mb-1">{{ $student->name }}</h3>
                     <p class="text-muted mb-4">{{ $student->user->email ?? $student->email }}</p>
