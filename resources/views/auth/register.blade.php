@@ -281,11 +281,11 @@ document.addEventListener('alpine:init', () => {
                             
                             <!-- Icon Container -->
                             <div class="rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:rotate-6 shadow-lg"
-                                 :class="accountType === 'instructor' 
-                                            ? 'bg-gradient-to-br from-brand-secondary to-purple-700 text-white shadow-brand-secondary/30 w-16 h-16 mb-4 scale-110' 
-                                            : (!accountType 
-                                                ? 'bg-slate-100 text-slate-400 w-[5rem] h-[5rem] mb-6' 
-                                                : 'bg-slate-100 text-slate-400 group-hover:bg-brand-secondary/10 group-hover:text-brand-secondary shadow-slate-200/50 w-16 h-16 mb-4')">
+                                 :class="{
+                                    'bg-brand-secondary text-white shadow-brand-secondary/40 w-16 h-16 mb-4 scale-110': accountType === 'instructor',
+                                    'bg-slate-100 text-slate-400 w-[5rem] h-[5rem] mb-6': !accountType,
+                                    'bg-slate-100 text-slate-400 group-hover:bg-brand-secondary/10 group-hover:text-brand-secondary shadow-slate-200/50 w-16 h-16 mb-4': accountType && accountType !== 'instructor'
+                                 }">
                                 <i class="fas fa-chalkboard-teacher transition-all duration-500" :class="!accountType ? 'text-4xl' : 'text-3xl'"></i>
                             </div>
                             <span class="font-black transition-all" 
@@ -316,11 +316,11 @@ document.addEventListener('alpine:init', () => {
                             
                             <!-- Icon Container -->
                             <div class="rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:-rotate-6 shadow-lg"
-                                 :class="accountType === 'center' 
-                                            ? 'bg-gradient-to-br from-brand-secondary to-purple-700 text-white shadow-brand-secondary/30 w-16 h-16 mb-4 scale-110' 
-                                            : (!accountType 
-                                                ? 'bg-slate-100 text-slate-400 w-[5rem] h-[5rem] mb-6' 
-                                                : 'bg-slate-100 text-slate-400 group-hover:bg-brand-secondary/10 group-hover:text-brand-secondary shadow-slate-200/50 w-16 h-16 mb-4')">
+                                 :class="{
+                                    'bg-brand-secondary text-white shadow-brand-secondary/40 w-16 h-16 mb-4 scale-110': accountType === 'center',
+                                    'bg-slate-100 text-slate-400 w-[5rem] h-[5rem] mb-6': !accountType,
+                                    'bg-slate-100 text-slate-400 group-hover:bg-brand-secondary/10 group-hover:text-brand-secondary shadow-slate-200/50 w-16 h-16 mb-4': accountType && accountType !== 'center'
+                                 }">
                                 <i class="fas fa-university transition-all duration-500" :class="!accountType ? 'text-4xl' : 'text-3xl'"></i>
                             </div>
                             <span class="font-black transition-all" 
