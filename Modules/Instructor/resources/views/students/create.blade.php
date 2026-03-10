@@ -20,8 +20,8 @@
                             <div class="col-12">
                                 <label class="form-label fw-bold">اسم الطالب</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-light border-0"><i class="fas fa-user text-muted"></i></span>
-                                    <input type="text" name="name" class="form-control bg-light border-0" placeholder="مثال: أحمد محمد علي" required value="{{ old('name') }}">
+                                    <span class="input-group-text bg-light border-0"><i class="fas fa-user" style="color: var(--primary-color);"></i></span>
+                                    <input type="text" name="name" class="form-control bg-light border-0 focus-ring-primary" placeholder="مثال: أحمد محمد علي" required value="{{ old('name') }}">
                                 </div>
                             </div>
 
@@ -29,8 +29,8 @@
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">رقم هاتف الطالب</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-light border-0"><i class="fas fa-phone text-muted"></i></span>
-                                    <input type="tel" name="phone" class="form-control bg-light border-0" placeholder="01XXXXXXXXX" required value="{{ old('phone') }}">
+                                    <span class="input-group-text bg-light border-0"><i class="fas fa-phone" style="color: var(--primary-color);"></i></span>
+                                    <input type="tel" name="phone" class="form-control bg-light border-0 focus-ring-primary" placeholder="01XXXXXXXXX" required value="{{ old('phone') }}">
                                 </div>
                                 <small class="text-muted mt-1 d-block">سيستخدم هذا الرقم كاسم مستخدم وكلمة مرور أولية.</small>
                             </div>
@@ -39,8 +39,8 @@
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">رقم هاتف ولي الأمر</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-light border-0"><i class="fas fa-users text-muted"></i></span>
-                                    <input type="tel" name="parent_phone" class="form-control bg-light border-0" placeholder="01XXXXXXXXX" required value="{{ old('parent_phone') }}">
+                                    <span class="input-group-text bg-light border-0"><i class="fas fa-users" style="color: var(--primary-color);"></i></span>
+                                    <input type="tel" name="parent_phone" class="form-control bg-light border-0 focus-ring-primary" placeholder="01XXXXXXXXX" required value="{{ old('parent_phone') }}">
                                 </div>
                             </div>
 
@@ -48,8 +48,8 @@
                             <div class="col-12">
                                 <label class="form-label fw-bold">المجموعة المستهدفة</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-light border-0"><i class="fas fa-layer-group text-muted"></i></span>
-                                    <select name="course_id" class="form-select bg-light border-0" required>
+                                    <span class="input-group-text bg-light border-0"><i class="fas fa-layer-group" style="color: var(--primary-color);"></i></span>
+                                    <select name="course_id" class="form-select bg-light border-0 focus-ring-primary" required>
                                         <option value="" disabled selected>اختر المجموعة لتسجيل الطالب بها...</option>
                                         @foreach($courses as $course)
                                             <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
@@ -62,7 +62,7 @@
 
                             <!-- Actions -->
                             <div class="col-12 mt-5">
-                                <button type="submit" class="btn btn-primary w-100 rounded-pill py-3 fw-bold">
+                                <button type="submit" class="btn btn-primary w-100 rounded-pill py-3 fw-bold border-0" style="background: var(--primary-color); box-shadow: 0 4px 12px rgba(58, 12, 163, 0.2);">
                                     <i class="fas fa-user-plus me-2"></i> حفظ وتسجيل الطالب
                                 </button>
                                 <a href="{{ route('instructor.students.list') }}" class="btn btn-light w-100 rounded-pill py-3 mt-2 text-muted fw-bold border-0">
@@ -77,3 +77,13 @@
     </div>
 </div>
 @endsection
+
+@push('styles')
+<style>
+    .focus-ring-primary:focus {
+        border-color: var(--primary-color) !important;
+        box-shadow: 0 0 0 0.25rem rgba(58, 12, 163, 0.1) !important;
+        background-color: white !important;
+    }
+</style>
+@endpush
