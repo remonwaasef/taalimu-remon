@@ -280,11 +280,11 @@ document.addEventListener('alpine:init', () => {
                                  :class="accountType === 'instructor' || !accountType ? 'bg-blue-500/5' : 'bg-slate-100'"></div>
                             
                             <!-- Icon Container -->
-                            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 shadow-lg"
+                            <div class="rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 shadow-lg"
                                  :class="[
-                                    accountType === 'instructor' ? 'bg-gradient-to-br from-blue-500 to-blue-700 text-white shadow-blue-600/30 scale-110' : (accountType ? 'bg-slate-100 text-slate-400' : 'bg-slate-200/60 text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-500 shadow-slate-200/50')
-                                 ]"
-                                 :style="!accountType ? 'width: 5rem; height: 5rem; margin-bottom: 1.5rem;' : ''">
+                                    accountType === 'instructor' ? 'bg-gradient-to-br from-blue-500 to-blue-700 text-white shadow-blue-600/30' : 'bg-slate-100 text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-500 shadow-slate-200/50',
+                                    !accountType ? 'w-[5rem] h-[5rem] mb-6' : 'w-16 h-16 mb-4 scale-110'
+                                 ]">
                                 <i class="fas fa-chalkboard-teacher transition-all duration-500" :class="!accountType ? 'text-4xl' : 'text-3xl'"></i>
                             </div>
                             <span class="font-black transition-all" 
@@ -314,11 +314,11 @@ document.addEventListener('alpine:init', () => {
                                  :class="accountType === 'center' || !accountType ? 'bg-brand-secondary/5' : 'bg-slate-100'"></div>
                             
                             <!-- Icon Container -->
-                            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-500 group-hover:-rotate-6 group-hover:scale-110 shadow-lg"
+                            <div class="rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:-rotate-6 group-hover:scale-110 shadow-lg"
                                  :class="[
-                                    accountType === 'center' ? 'bg-gradient-to-br from-brand-secondary to-blue-700 text-white shadow-brand-secondary/30 scale-110' : (accountType ? 'bg-slate-100 text-slate-400' : 'bg-slate-200/60 text-slate-400 group-hover:bg-brand-secondary/10 group-hover:text-brand-secondary shadow-slate-200/50')
-                                 ]"
-                                 :style="!accountType ? 'width: 5rem; height: 5rem; margin-bottom: 1.5rem;' : ''">
+                                    accountType === 'center' ? 'bg-gradient-to-br from-brand-secondary to-blue-700 text-white shadow-brand-secondary/30' : 'bg-slate-100 text-slate-400 group-hover:bg-brand-secondary/10 group-hover:text-brand-secondary shadow-slate-200/50',
+                                    !accountType ? 'w-[5rem] h-[5rem] mb-6' : 'w-16 h-16 mb-4 scale-110'
+                                 ]">
                                 <i class="fas fa-university transition-all duration-500" :class="!accountType ? 'text-4xl' : 'text-3xl'"></i>
                             </div>
                             <span class="font-black transition-all" 
