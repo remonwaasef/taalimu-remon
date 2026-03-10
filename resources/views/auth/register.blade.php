@@ -270,12 +270,15 @@ document.addEventListener('alpine:init', () => {
                     <!-- Instructor Option (Premium) -->
                     <label class="relative cursor-pointer group">
                         <input type="radio" value="instructor" x-model="accountType" class="peer sr-only">
-                        <div class="relative flex flex-col items-center justify-center p-6 rounded-[2rem] border-2 border-slate-100 bg-white transition-all duration-500 hover:border-brand-secondary/30 hover:shadow-xl hover:shadow-brand-secondary/10 peer-checked:border-brand-secondary peer-checked:ring-4 peer-checked:ring-brand-secondary/5 overflow-hidden group shadow-md" :class="!accountType ? 'p-8' : 'p-6'">
+                        <div class="relative flex flex-col items-center justify-center p-6 rounded-[2rem] border-2 border-slate-100 bg-white transition-all duration-500 hover:border-blue-600/30 hover:shadow-xl hover:shadow-blue-600/10 peer-checked:border-blue-600 peer-checked:ring-4 peer-checked:ring-blue-600/10 overflow-hidden group shadow-md" :class="!accountType ? 'p-8' : 'p-6'">
                             <!-- Background Accent -->
-                            <div class="absolute top-0 right-0 w-24 h-24 bg-brand-secondary/5 rounded-full -mr-12 -mt-12 transition-transform duration-700 group-hover:scale-150"></div>
+                            <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full -mr-12 -mt-12 transition-transform duration-700 group-hover:scale-150"></div>
                             
-                            <div class="w-16 h-16 bg-gradient-to-br from-brand-secondary to-blue-600 rounded-2xl shadow-lg shadow-brand-secondary/20 flex items-center justify-center mb-4 transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 peer-checked:scale-110" :class="!accountType ? 'w-20 h-20 mb-6' : 'w-16 h-16 mb-4'">
-                                <i class="fas fa-chalkboard-teacher text-white transition-all duration-500" :class="!accountType ? 'text-4xl' : 'text-3xl'"></i>
+                            <!-- Icon Container -->
+                            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 peer-checked:scale-110 shadow-lg"
+                                 :class="accountType === 'instructor' ? 'bg-gradient-to-br from-blue-500 to-blue-700 text-white shadow-blue-600/30' : 'bg-slate-100 text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-500 shadow-slate-200/50'"
+                                 :style="!accountType ? 'width: 5rem; height: 5rem; margin-bottom: 1.5rem;' : ''">
+                                <i class="fas fa-chalkboard-teacher transition-all duration-500" :class="!accountType ? 'text-4xl' : 'text-3xl'"></i>
                             </div>
                             <span class="font-black text-slate-800 peer-checked:text-brand-secondary transition-all" :class="!accountType ? 'text-lg' : 'text-sm'">{{ app()->isLocale('ar') ? 'مدرس مستقل' : 'Independent Tutor' }}</span>
                             
@@ -291,10 +294,13 @@ document.addEventListener('alpine:init', () => {
                         <input type="radio" value="center" x-model="accountType" class="peer sr-only">
                         <div class="relative flex flex-col items-center justify-center p-6 rounded-[2rem] border-2 border-slate-100 bg-white transition-all duration-500 hover:border-brand-secondary/30 hover:shadow-xl hover:shadow-brand-secondary/10 peer-checked:border-brand-secondary peer-checked:ring-4 peer-checked:ring-brand-secondary/5 overflow-hidden group shadow-md" :class="!accountType ? 'p-8' : 'p-6'">
                             <!-- Background Accent -->
-                            <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full -mr-12 -mt-12 transition-transform duration-700 group-hover:scale-150"></div>
+                            <div class="absolute top-0 right-0 w-24 h-24 bg-brand-secondary/5 rounded-full -mr-12 -mt-12 transition-transform duration-700 group-hover:scale-150"></div>
                             
-                            <div class="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-800 rounded-2xl shadow-lg shadow-blue-600/20 flex items-center justify-center mb-4 transition-all duration-500 group-hover:-rotate-6 group-hover:scale-110 peer-checked:scale-110" :class="!accountType ? 'w-20 h-20 mb-6' : 'w-16 h-16 mb-4'">
-                                <i class="fas fa-university text-white transition-all duration-500" :class="!accountType ? 'text-4xl' : 'text-3xl'"></i>
+                            <!-- Icon Container -->
+                            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-500 group-hover:-rotate-6 group-hover:scale-110 peer-checked:scale-110 shadow-lg"
+                                 :class="accountType === 'center' ? 'bg-gradient-to-br from-brand-secondary to-purple-700 text-white shadow-brand-secondary/30' : 'bg-slate-100 text-slate-400 group-hover:bg-brand-secondary/10 group-hover:text-brand-secondary shadow-slate-200/50'"
+                                 :style="!accountType ? 'width: 5rem; height: 5rem; margin-bottom: 1.5rem;' : ''">
+                                <i class="fas fa-university transition-all duration-500" :class="!accountType ? 'text-4xl' : 'text-3xl'"></i>
                             </div>
                             <span class="font-black text-slate-800 peer-checked:text-brand-secondary transition-all" :class="!accountType ? 'text-lg' : 'text-sm'">{{ app()->isLocale('ar') ? 'مركز تعليمي' : 'Educational Center' }}</span>
                             
