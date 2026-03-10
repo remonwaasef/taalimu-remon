@@ -275,8 +275,8 @@
                     const a = data[i];
                     const b = data[j];
 
-                    if (a.day && a.classroom && a.start && a.end && 
-                        a.day === b.day && a.classroom === b.classroom && 
+                    if (a.day && a.start && a.end && 
+                        a.day === b.day && 
                         ((a.start >= b.start && a.start < b.end) || (b.start >= a.start && b.start < a.end))) {
                         
                         hasConflicts = true;
@@ -385,7 +385,7 @@
             const existingIndicator = scheduleItem.querySelector('.conflict-indicator');
             if (existingIndicator) existingIndicator.remove();
             
-            if (!daySelect.value || !classroomSelect.value || !startTime.value || !endTime.value) return;
+            if (!daySelect.value || !startTime.value || !endTime.value) return;
             
             try {
                 const response = await fetch('{{ route("center.schedules.check-conflict") }}', {
