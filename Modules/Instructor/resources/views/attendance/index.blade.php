@@ -47,10 +47,10 @@
                                                 @else
                                                     <a href="{{ route('instructor.attendance.show', $session) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3" style="color: var(--primary-color); border-color: var(--primary-color);">
                                                         <i class="bi bi-card-checklist me-1"></i>تحضير يدوي</a>
+                                                    <a href="{{ route('instructor.scanner', $session->course) }}" class="btn btn-sm btn-primary rounded-pill px-3 border-0" style="background: var(--primary-color);">
+                                                        <i class="bi bi-qr-code me-1"></i> مسح QR
+                                                    </a>
                                                 @endif
-                                                <a href="{{ route('instructor.scanner', $session->course) }}" class="btn btn-sm btn-primary rounded-pill px-3 border-0" style="background: var(--primary-color);">
-                                                    <i class="bi bi-qr-code me-1"></i> مسح QR
-                                                </a>
                                             </div>
                                         </td>
                                     </tr>
