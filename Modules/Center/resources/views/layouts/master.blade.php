@@ -692,6 +692,22 @@
             <div class="d-flex align-items-center gap-2">
                 <!-- Notifications Dropdown -->
                 @auth
+                @can('view sales')
+                @php
+                    $overdueCount = $tenant->getOverdueStudentsCount();
+                @endphp
+                <div class="dropdown">
+                    <a href="{{ route('center.sales.account', ['tenant' => $tenant->domain ?? 'center']) }}" class="btn btn-white bg-white border shadow-sm rounded-pill px-3 position-relative" title="{{ __('center::messages.blade_0558') }}">
+                        <i class="fas fa-wallet text-danger"></i>
+                        @if($overdueCount > 0)
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger animate__animated animate__pulse animate__infinite" style="font-size: 0.6rem;">
+                                {{ $overdueCount }}
+                            </span>
+                        @endif
+                    </a>
+                </div>
+                @endcan
+
                 <div class="dropdown">
                     <button class="btn btn-white bg-white border shadow-sm rounded-pill px-3 dropdown-toggle no-caret position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell text-primary"></i>

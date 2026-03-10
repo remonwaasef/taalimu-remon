@@ -161,6 +161,25 @@ class Tenant extends Model
     }
 
     /**
+     * Get the sales for the tenant.
+     */
+    public function sales()
+    {
+        return $this->hasMany(Sale::class);
+    }
+
+    /**
+     * Get the count of unique students with overdue payments.
+     */
+    public function getOverdueStudentsCount(): int
+    {
+        return $this->sales()
+            ->whereRaw('paid_amount < total_amount')
+            ->distinct('student_id')
+            ->count('student_id');
+    }
+
+    /**
      * Check if tenant has access to a feature.
      */
     public function hasFeature(string $featureCode): bool
