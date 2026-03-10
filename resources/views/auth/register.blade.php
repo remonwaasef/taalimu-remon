@@ -262,8 +262,8 @@ document.addEventListener('alpine:init', () => {
             </div>
 
             <!-- Account Type Selection (Premium Position) -->
-            <div x-show="currentStep === 1" class="mb-12 transition-all duration-700 ease-in-out relative z-10" :class="!accountType ? 'transform scale-125 translate-y-[15vh] pb-32' : ''">
-                <label class="text-[14px] font-black text-slate-500 px-1 font-arabic uppercase tracking-wider block mb-6 text-center opacity-70 transition-all duration-700" :class="!accountType ? 'text-xl text-slate-800 opacity-100 font-black mb-8' : ''">
+            <div x-show="currentStep === 1" class="mb-12 transition-all duration-700 ease-in-out relative z-10" :class="!accountType ? 'transform scale-125 translate-y-[15vh] pb-32 mt-8' : ''">
+                <label class="text-[14px] font-black text-slate-500 px-1 font-arabic uppercase tracking-wider block mb-6 text-center opacity-70 transition-all duration-700" :class="!accountType ? 'text-xl text-slate-800 opacity-100 font-black mb-12' : ''">
                     {{ app()->isLocale('ar') ? 'ابدأ كـ ...' : 'Start as ...' }}
                 </label>
                 <div class="grid grid-cols-2 gap-6 px-2">
