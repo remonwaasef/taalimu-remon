@@ -251,14 +251,15 @@ class StudentController extends Controller
 
         // Calculate running balance (Debt)
         $balance = 0; // Debt amount
-        foreach ($ledger as $key => $transaction) {
+        $ledger = $ledger->map(function ($transaction) use (&$balance) {
             if ($transaction['is_credit']) {
                 $balance -= $transaction['amount']; // Payment decreases debt
             } else {
                 $balance += $transaction['amount']; // Invoice or Refund increases debt
             }
-            $ledger[$key]['balance'] = $balance;
-        }
+            $transaction['balance'] = $balance;
+            return $transaction;
+        });
 
         $tenant = app('tenant');
 
