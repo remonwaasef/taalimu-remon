@@ -309,9 +309,9 @@ class InstructorController extends Controller
         $instructor = $this->resolveInstructor();
 
         if (!$instructor) {
-            $courses = Course::withCount('enrollments')->get();
+            $courses = Course::withCount('enrollments')->with('schedules')->get();
         } else {
-            $courses = $instructor->courses()->withCount('enrollments')->get();
+            $courses = $instructor->courses()->withCount('enrollments')->with('schedules')->get();
         }
 
         return view('instructor::groups.index', compact('courses'));
