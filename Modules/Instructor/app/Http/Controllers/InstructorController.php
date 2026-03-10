@@ -587,6 +587,25 @@ class InstructorController extends Controller
             return back()->withInput()->with('error', 'لا يمكنك إنشاء حصة لمجموعة لا تخصك.');
         }
 
+        // Conflict Detection
+        $conflictQuery = Schedule::where('day_of_week', $validated['day_of_week'])
+            ->where('start_time', '<', $validated['end_time'])
+            ->where('end_time', '>', $validated['start_time']);
+
+        // Check Instructor Conflict
+        $instructorConflict = clone $conflictQuery;
+        if ($instructorConflict->where('instructor_id', $instructor->id)->exists()) {
+            return back()->withInput()->with('error', 'يوجد تعارض في المواعيد! لديك حصة أخرى مسجلة في نفس هذا الوقت.');
+        }
+
+        // Check Classroom Conflict (if classroom is selected)
+        if (!empty($validated['classroom_id'])) {
+            $classroomConflict = clone $conflictQuery;
+            if ($classroomConflict->where('classroom_id', $validated['classroom_id'])->exists()) {
+                return back()->withInput()->with('error', 'يوجد تعارض في المواعيد! القاعة المختارة محجوزة بالفعل لمجموعة أخرى في نفس الوقت.');
+            }
+        }
+
         Schedule::create($validated);
 
         return redirect()->route('instructor.schedules.index')
@@ -623,6 +642,27 @@ class InstructorController extends Controller
         ]);
 
         $validated['instructor_id'] = $instructor->id;
+
+        // Conflict Detection (excluding the current schedule)
+        $conflictQuery = Schedule::where('id', '!=', $schedule->id)
+            ->where('day_of_week', $validated['day_of_week'])
+            ->where('start_time', '<', $validated['end_time'])
+            ->where('end_time', '>', $validated['start_time']);
+
+        // Check Instructor Conflict
+        $instructorConflict = clone $conflictQuery;
+        if ($instructorConflict->where('instructor_id', $instructor->id)->exists()) {
+            return back()->withInput()->with('error', 'يوجد تعارض في المواعيد! لديك حصة أخرى مسجلة في نفس هذا الوقت.');
+        }
+
+        // Check Classroom Conflict (if classroom is selected)
+        if (!empty($validated['classroom_id'])) {
+            $classroomConflict = clone $conflictQuery;
+            if ($classroomConflict->where('classroom_id', $validated['classroom_id'])->exists()) {
+                return back()->withInput()->with('error', 'يوجد تعارض في المواعيد! القاعة المختارة محجوزة بالفعل لمجموعة أخرى في نفس الوقت.');
+            }
+        }
+
         $schedule->update($validated);
 
         return redirect()->route('instructor.schedules.index')
