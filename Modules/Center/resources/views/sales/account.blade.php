@@ -177,20 +177,20 @@
 
     function collectDebt(saleId, remaining, studentId) {
         Swal.fire({
-            title: __('center::messages.blade_0577'),
+            title: '{{ __('center::messages.blade_0577') }}',
             text: 'الفاتورة #' + saleId + ' | المتبقي: ' + remaining.toFixed(2) + ' ' + currency,
             input: 'number',
             inputAttributes: { min: 0.01, max: remaining, step: 0.01 },
             inputValue: remaining,
             showCancelButton: true,
-            confirmButtonText: __('center::messages.blade_0578'),
-            cancelButtonText: __('center::messages.blade_0579'),
+            confirmButtonText: '{{ __('center::messages.blade_0578') }}',
+            cancelButtonText: '{{ __('center::messages.blade_0579') }}',
             showLoaderOnConfirm: true,
             preConfirm: (amount) => {
                 const data = {
                     amount: amount,
                     payment_method: 'cash',
-                    notes: __('center::messages.blade_0580'),
+                    notes: '{{ __('center::messages.blade_0580') }}',
                     _token: '{{ csrf_token() }}'
                 };
                 return fetch(`/sales/${saleId}/payment`, {
@@ -206,7 +206,7 @@
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire({ icon: 'success', title: __('center::messages.blade_0581') });
+                Swal.fire({ icon: 'success', title: '{{ __('center::messages.blade_0581') }}' });
                 loadStudentAccount(studentId);
             }
         });
