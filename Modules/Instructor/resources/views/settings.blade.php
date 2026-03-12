@@ -264,7 +264,7 @@
                                                             @endif
                                                         </div>
                                                     @else
-                                                        <a href="https://wa.me/201271948834?text=أرغب%20في%20الاشتراك%20في%20باقة%20{{ urlencode($pkg->name) }}" target="_blank" class="btn btn-outline-primary rounded-pill w-100 fw-bold py-2">اختر الخطة</a>
+                                                        <a href="{{ route('center.subscription.checkout', ['package' => $pkg->id, 'tenant' => $tenant->domain ?? $tenant->id]) }}" class="btn btn-outline-primary rounded-pill w-100 fw-bold py-2">اشتراك الآن</a>
                                                     @endif
                                                 </div>
                                             </div>
