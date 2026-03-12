@@ -81,9 +81,8 @@ class AttendanceService
                     }
                 }
 
-                // Dispatch Jobs for better performance
-                \App\Jobs\SendWhatsAppNotification::dispatch($tenant, $student, $schedule->course)
-                    ->onQueue('notifications');
+                // Dispatch Sync for immediate reliability (avoids queue worker dependency)
+                \App\Jobs\SendWhatsAppNotification::dispatchSync($tenant, $student, $schedule->course);
                 
                 // Award points for attendance (maybe reduction for late?)
                 if ($student->user) {
