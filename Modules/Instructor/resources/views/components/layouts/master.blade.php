@@ -208,7 +208,7 @@
             <a href="{{ route('instructor.billing') }}" class="nav-link {{ request()->routeIs('instructor.billing') ? 'active' : '' }}">
                 <i class="fas fa-wallet"></i> <span>الحسابات</span>
             </a>
-            <a href="#" class="nav-link" onclick="alert('سيكون متاحاً في المرحلة القادمة')">
+            <a href="{{ route('instructor.whatsapp.settings') }}" class="nav-link {{ request()->routeIs('instructor.whatsapp.*') ? 'active' : '' }}">
                 <i class="fab fa-whatsapp"></i> <span>الواتساب</span>
             </a>
             
