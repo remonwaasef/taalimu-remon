@@ -290,7 +290,7 @@ class SocialAuthController extends Controller
 
                 return redirect()->route('registration.success');
             } else {
-                // Paid Plan Flow (Redirect to Payment)
+                // Paid Plan Flow (Modular Payment Gateway)
                 DB::commit();
 
                 // Clear Google session data ONLY ON SUCCESS
@@ -311,8 +311,15 @@ class SocialAuthController extends Controller
                     'registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . $user->id, config('app.key')),
                 ]);
 
-                // Redirect to payment (demo or stripe)
-                return redirect()->route('payment.demo'); 
+                // Determine Gateway (default to stripe or catch from request if added to form)
+                $gatewayName = $request->input('payment_gateway', 'stripe');
+                $gateway = \App\Services\PaymentFactory::make($gatewayName);
+                
+                $redirectUrl = $gateway->createCheckoutSession($tenant, $package, $billingCycle, [
+                    'total_amount' => $basePrice,
+                ]);
+
+                return redirect()->away($redirectUrl);
             }
 
         } catch (\Exception $e) {

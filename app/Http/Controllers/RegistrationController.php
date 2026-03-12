@@ -124,7 +124,7 @@ class RegistrationController extends Controller
             'billing_cycle' => 'required|in:monthly,yearly',
             'coupon_code' => 'nullable|string|exists:coupons,code',
             'country_code' => 'nullable|string|max:2',
-            'payment_gateway' => 'required|in:stripe,paypal',
+            'payment_gateway' => 'required|in:stripe,paypal,test',
         ]);
 
         try {
@@ -197,116 +197,10 @@ class RegistrationController extends Controller
             app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
             $user->assignRole($user->role);
 
-            // 3. Handle Subscription based on selected plan
-            $stripePriceIds = [
-                'basic' => config('services.stripe.price_basic'),
-                'pro' => config('services.stripe.price_pro'),
-            ];
-
-            $stripePriceId = $stripePriceIds[$request->plan] ?? null;
-
-            // Calculate discount amount for storage
-            if ($coupon) {
-                 // We need to know the price to calculate amount. 
-                 // For now, let's just store the coupon details.
-                 // Ideally we fetch price from package but simplifying for now.
-                 $coupon->incrementUsage();
-            }
-
-            if ($request->plan === 'free-trial') {
-                 \App\Models\Subscription::create([
-                    'tenant_id' => $tenant->id,
-                    'name' => 'default',
-                    'stripe_id' => 'sub_free_' . \Illuminate\Support\Str::random(10),
-                    'stripe_status' => 'active',
-                    'stripe_price' => 'price_free',
-                    'quantity' => 1,
-                    'ends_at' => $request->billing_cycle === 'yearly' ? now()->addYear() : now()->addDays(14),
-                    'status' => 'active',
-                    'billing_cycle' => $request->billing_cycle,
-                    'coupon_id' => $coupon ? $coupon->id : null,
-                    'coupon_code' => $coupon ? $coupon->code : null,
-                    'base_price' => $basePrice,
-                    'total_amount' => $basePrice,
-                    'discount_amount' => 0,
-                ]);
-
-                // Send Telegram Notification to Admin (never send raw password)
-                $telegram->sendRegistrationAlert($tenant, $user, '********');
-
-                // Set session integrity token to prevent demo payment bypass
-                session(['registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . $user->id, config('app.key'))]);
-
+                // 3. Handle Subscription based on selected plan (Dynamic Gateway)
                 DB::commit();
 
-                session([
-                    'registration_success' => true,
-                    'tenant_domain' => $subdomain,
-                    'admin_email' => $request->email,
-                    'center_name' => $request->center_name,
-                    'billing_cycle' => $request->billing_cycle,
-                    'base_price' => $basePrice,
-                    'total_amount' => $basePrice,
-                ]);
-
-                return redirect()->route('registration.success');
-
-            } else if ($request->payment_gateway === 'paypal') {
-                // PayPal Paid Plan Flow (One-time Payment for Term)
-                DB::commit();
-
-                // Currency Detection for PayPal (Must be USD/EUR etc - no EGP)
-                $countryCode = $request->input('country_code');
-                $currency = 'USD';
-                $amount = $package->regional_prices['default']['amount'] ?? 49;
-
-                if ($request->billing_cycle === 'yearly') {
-                    $amount = $package->regional_prices['default']['yearly_price'] ?? ($amount * 2);
-                }
-
-                if ($countryCode && isset($package->regional_prices[$countryCode])) {
-                    $rPrice = $package->regional_prices[$countryCode];
-                    $rCurrency = $rPrice['currency'] ?? 'USD';
-                    
-                    // PayPal supported currencies check (Simplified)
-                    $supportedByPaypal = ['USD', 'EUR', 'GBP', 'CAD', 'AUD', 'JPY'];
-                    if (in_array(strtoupper($rCurrency), $supportedByPaypal)) {
-                        $currency = $rCurrency;
-                        $amount = $request->billing_cycle === 'yearly' ? ($rPrice['yearly_price'] ?? 0) : ($rPrice['amount'] ?? 0);
-                    }
-                }
-
-                $paypal = app(\App\Services\PayPalService::class);
-                $resp = $paypal->createOrder($amount, $currency, route('payment.paypal.success'), route('payment.cancel'));
-
-                if ($resp && isset($resp['links'])) {
-                    $approveLink = collect($resp['links'])->where('rel', 'approve')->first()['href'];
-                    
-                    // Create pending subscription record
-                    \App\Models\Subscription::create([
-                        'tenant_id' => $tenant->id,
-                        'name' => 'default',
-                        'paypal_id' => $resp['id'], // Store Order ID
-                        'paypal_status' => 'CREATED',
-                        'status' => 'trialing', // Pending payment
-                        'gateway' => 'paypal',
-                        'billing_cycle' => $request->billing_cycle,
-                        'base_price' => $basePrice,
-                        'total_amount' => ($basePrice - $discountAmount),
-                        'discount_amount' => $discountAmount,
-                        'ends_at' => null, // Will be set on success
-                    ]);
-
-                    return redirect()->away($approveLink);
-                }
-
-                return back()->withErrors(['error' => 'حدث خطأ أثناء الاتصال بـ PayPal.'])->withInput();
-
-            } else {
-                // Paid Plan Flow
-                DB::commit();
-
-                // Set session integrity token to prevent demo payment bypass
+                // Set session integrity token to prevent payment bypass
                 session(['registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . $user->id, config('app.key'))]);
                 
                 session([
@@ -320,85 +214,20 @@ class RegistrationController extends Controller
                     'applied_coupon_code' => $coupon ? $coupon->code : null,
                     'discount_amount' => $discountAmount,
                     'base_price' => $basePrice,
-                    'total_amount' => $package ? ($basePrice - $discountAmount) : 0,
+                    'total_amount' => ($basePrice - $discountAmount),
                 ]);
 
-                $isDemo = config('services.stripe.demo_mode') || 
-                         (app()->environment(['local', 'testing']) && !$stripePriceId);
-
-                if ($isDemo) {
-                    return redirect()->route('payment.demo');
-                }
-
-                if (!$stripePriceId) {
-                    \Log::warning("Stripe Price ID not found for plan: {$request->plan}. Falling back to demo mode for safety.");
-                    return redirect()->route('payment.demo');
-                }
-
-                $tenant->createOrGetStripeCustomer([
-                    'name' => $tenant->name,
-                    'email' => $user->email,
+                // Modular Payment Gateway Logic
+                $gateway = \App\Services\PaymentFactory::make($request->payment_gateway);
+                
+                $redirectUrl = $gateway->createCheckoutSession($tenant, $package, $request->billing_cycle, [
+                    'coupon_id' => $coupon ? $coupon->id : null,
+                    'coupon_code' => $coupon ? $coupon->code : null,
+                    'discount_amount' => $discountAmount,
+                    'total_amount' => ($basePrice - $discountAmount),
                 ]);
 
-                // Regional Pricing Logic
-                $countryCode = $request->input('country_code');
-                // Fallback to server side detection if missing
-                if (!$countryCode) {
-                    try {
-                        // Simple check, can be replaced with proper service
-                        $ip = $request->ip();
-                        // $countryCode = GeoIP::getLocation($ip)->iso_code; // If package was installed
-                    } catch (\Exception $e) {}
-                }
-
-                $regionalPriceData = null;
-                if ($countryCode && isset($package->regional_prices[$countryCode])) {
-                    $rPrice = $package->regional_prices[$countryCode];
-                    $amount = $request->billing_cycle === 'yearly' ? ($rPrice['yearly_price'] ?? 0) : ($rPrice['amount'] ?? 0);
-                    $currency = $rPrice['currency'] ?? 'USD';
-                    
-                    if ($amount > 0) {
-                        $regionalPriceData = [
-                            'price_data' => [
-                                'currency' => strtolower($currency),
-                                'product_data' => [
-                                    'name' => $package->name . ' (' . ucfirst($request->billing_cycle) . ')',
-                                    'description' => "Subscription to {$package->name} plan",
-                                ],
-                                'unit_amount' => (int)($amount * 100), // Stripe expects cents
-                                'recurring' => [
-                                    'interval' => $request->billing_cycle === 'yearly' ? 'year' : 'month',
-                                ],
-                            ],
-                            'quantity' => 1,
-                        ];
-                    }
-                }
-                
-                // Note: Not passing coupon to Stripe here as it requires Stripe Coupon ID.
-                $checkoutBuilder = $tenant->newSubscription('default', $regionalPriceData ? 'price_adhoc' : $stripePriceId);
-                
-                // If using ad-hoc price, we use checkout() with line_items override basically, 
-                // but Laravel Cashier's newSubscription() expects a price ID usually. 
-                // However, we can use checkout() directly with custom options.
-                
-                $checkoutOptions = [
-                    'success_url' => route('payment.success') . '?session_id={CHECKOUT_SESSION_ID}',
-                    'cancel_url' => route('payment.cancel'),
-                ];
-
-                if ($regionalPriceData) {
-                    // For ad-hoc price, we don't pass a price ID to newSubscription, or we pass a dummy and override in checkout.
-                    // Actually, the cleanest way with Cashier for ad-hoc is to perform a Checkout Session manually or use ->checkout([ line_items => ... ])
-                    // But ->newSubscription requires a price. 
-                    
-                    // Workaround: Use allowPromotionCodes = false if using adhoc to avoid conflicts or handle coupons manually.
-                    // We will override line_items.
-                    $checkoutOptions['line_items'] = [$regionalPriceData];
-                }
-
-                return $checkoutBuilder->checkout($checkoutOptions);
-            }
+                return redirect()->away($redirectUrl);
 
         } catch (\Exception $e) {
             DB::rollBack();
