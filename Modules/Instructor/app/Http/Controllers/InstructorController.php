@@ -820,7 +820,8 @@ class InstructorController extends Controller
     {
         $request->validate([
             'instance_id' => 'required|string',
-            'token' => 'required|string'
+            'token' => 'required|string',
+            'country_code' => 'required|string'
         ]);
 
         $tenant = \App\Models\Tenant::findOrFail(app('tenant')->id);
@@ -829,7 +830,8 @@ class InstructorController extends Controller
         $settings['whatsapp'] = [
             'enabled' => $request->has('enabled'),
             'instance_id' => $request->instance_id,
-            'token' => $request->token
+            'token' => $request->token,
+            'country_code' => $request->country_code
         ];
 
         $tenant->settings = $settings;

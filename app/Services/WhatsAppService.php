@@ -22,10 +22,17 @@ class WhatsAppService
 
         $token = $settings['token'] ?? null;
         $instanceId = $settings['instance_id'] ?? null;
+        $countryCode = $settings['country_code'] ?? '20';
 
         if (!$token || !$instanceId) {
             Log::warning("WhatsApp credentials missing for tenant: " . $tenant->id);
             return false;
+        }
+
+        // Format phone number: remove any non-digit characters and ensure country code
+        $to = preg_replace('/[^0-9]/', '', $to);
+        if ($countryCode && !str_starts_with($to, $countryCode)) {
+            $to = $countryCode . ltrim($to, '0');
         }
 
         // Example for UltraMsg API

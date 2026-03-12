@@ -29,7 +29,16 @@
                         </div>
 
                         <div class="row g-4 mb-4">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold small text-muted">كود الدولة الافتراضي</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0"><i class="fas fa-globe text-muted"></i></span>
+                                    <input type="text" name="country_code" class="form-control bg-light border-0 focus-ring-primary" value="{{ $settings['country_code'] ?? '20' }}" placeholder="مثال: 20" required>
+                                </div>
+                                <div class="form-text mt-1 small">سيتم إضافة هذا الكود تلقائياً لأرقام الهواتف (مثلاً 20 لمصر).</div>
+                            </div>
+
+                            <div class="col-md-4">
                                 <label class="form-label fw-bold small text-muted">ID النسخة (Instance ID)</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light border-0"><i class="fas fa-id-card text-muted"></i></span>
@@ -37,7 +46,7 @@
                                 </div>
                             </div>
                             
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label class="form-label fw-bold small text-muted">الرمز السري (Token)</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light border-0"><i class="fas fa-key text-muted"></i></span>
