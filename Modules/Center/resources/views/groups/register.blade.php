@@ -211,7 +211,7 @@
                 <div class="mb-4">
                     <label for="phone" class="form-label">رقم الهاتف (واتساب)</label>
                     <div class="input-group-custom">
-                        <input type="tel" class="form-control" id="phone" name="phone" required placeholder="01xxxxxxxxx">
+                        <input type="tel" class="form-control" id="phone" name="phone" required minlength="11" maxlength="11" pattern="[0-9]{11}" title="يجب أن يكون رقم الهاتف مكون من 11 رقم" placeholder="01xxxxxxxxx">
                         <i class="fas fa-phone"></i>
                     </div>
                 </div>
@@ -227,7 +227,7 @@
                 <div class="mb-4">
                     <label for="parent_phone" class="form-label">رقم هاتف ولي الأمر</label>
                     <div class="input-group-custom">
-                        <input type="tel" class="form-control" id="parent_phone" name="parent_phone" required placeholder="01xxxxxxxxx">
+                        <input type="tel" class="form-control" id="parent_phone" name="parent_phone" required minlength="11" maxlength="11" pattern="[0-9]{11}" title="يجب أن يكون رقم الهاتف مكون من 11 رقم" placeholder="01xxxxxxxxx">
                         <i class="fas fa-user-friends"></i>
                     </div>
                 </div>

@@ -28,8 +28,8 @@ class StudentRegistrationController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
-            'parent_phone' => 'required|string|max:20',
+            'phone' => 'required|string|digits:11',
+            'parent_phone' => 'required|string|digits:11',
             'email' => 'nullable|email|max:255',
         ]);
 
