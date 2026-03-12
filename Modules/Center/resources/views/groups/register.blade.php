@@ -214,6 +214,7 @@
                         <input type="tel" class="form-control" id="phone" name="phone" required minlength="11" maxlength="11" pattern="[0-9]{11}" title="يجب أن يكون رقم الهاتف مكون من 11 رقم" placeholder="01xxxxxxxxx">
                         <i class="fas fa-phone"></i>
                     </div>
+                    <div id="phone-feedback" class="mt-1 small"></div>
                 </div>
 
                 <div class="mb-4">
@@ -243,5 +244,40 @@
         </div>
     </div>
 
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const phoneInput = document.getElementById('phone');
+            const feedback = document.getElementById('phone-feedback');
+
+            if (phoneInput) {
+                phoneInput.addEventListener('input', function() {
+                    const phone = this.value;
+                    if (phone.length === 11) {
+                        feedback.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> جارِ التحقق...';
+                        feedback.className = 'mt-1 small text-primary';
+
+                        fetch(`{{ route('instructor.students.check-phone') }}?phone=${phone}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'exists') {
+                                    feedback.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i> هذا الرقم مسجل بالفعل مسبقاً.';
+                                    feedback.className = 'mt-1 small text-danger fw-bold fadeIn';
+                                } else if (data.status === 'available') {
+                                    feedback.innerHTML = '<i class="fas fa-check-circle me-1"></i> رقم هاتف متاح للتسجيل.';
+                                    feedback.className = 'mt-1 small text-success fw-bold fadeIn';
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error checking phone:', error);
+                                feedback.innerHTML = '';
+                            });
+                    } else {
+                        feedback.innerHTML = '';
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
