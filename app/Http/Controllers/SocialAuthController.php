@@ -72,14 +72,18 @@ class SocialAuthController extends Controller
                 return redirect()->intended('/dashboard');
             }
 
-            // 3. New user → Store Google data in session & redirect to complete registration
-            session([
-                'google_user' => [
-                    'id'    => $googleUser->id,
-                    'name'  => $googleUser->name,
-                    'email' => $googleUser->email,
-                ]
-            ]);
+            // 3. New user → Pass Google data via encrypted token (session-independent)
+            $googleData = [
+                'id'    => $googleUser->id,
+                'name'  => $googleUser->name,
+                'email' => $googleUser->email,
+            ];
+            
+            // Encrypt the Google user data into a URL-safe token
+            $token = encrypt(json_encode($googleData));
+
+            // Also store in session as a fallback
+            session(['google_user' => $googleData]);
 
             // Build redirect URL with plan/cycle persisted from session
             $planParam  = session('selected_plan', '');
@@ -89,14 +93,15 @@ class SocialAuthController extends Controller
                 'plan'  => $planParam,
                 'cycle' => $cycleParam,
                 'account_type' => $accountTypeParam,
+                'token' => $token,
             ]));
 
             $redirectUrl = route('google.complete-registration') . ($query ? '?' . $query : '');
 
             \Log::info('Google Callback Success', [
                 'session_id' => session()->getId(),
-                'google_user' => session('google_user'),
-                'redirect_to' => $redirectUrl
+                'google_email' => $googleUser->email,
+                'has_token' => !empty($token),
             ]);
 
             session()->save();
@@ -104,7 +109,9 @@ class SocialAuthController extends Controller
             return redirect($redirectUrl);
 
         } catch (\Exception $e) {
-            \Log::error('Google Login Error: ' . $e->getMessage());
+            \Log::error('Google Login Error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
             return redirect()->route('login.portal')
                 ->withErrors(['email' => __('Unable to login with Google. Please try again.')]);
         }
@@ -115,11 +122,30 @@ class SocialAuthController extends Controller
      */
     public function showCompleteRegistration(Request $request)
     {
-        // Ensure Google user data exists in session
-        if (!session('google_user')) {
-            \Log::warning('Google Complete Registration Session Missing', [
+        // Try to get Google user data: first from session, then from encrypted token
+        $googleData = session('google_user');
+        
+        if (!$googleData && $request->has('token')) {
+            try {
+                $googleData = json_decode(decrypt($request->query('token')), true);
+                if ($googleData && isset($googleData['id'], $googleData['email'])) {
+                    // Restore it into session for the POST form submission
+                    session(['google_user' => $googleData]);
+                    session()->save();
+                    \Log::info('Google user data restored from encrypted token', ['email' => $googleData['email']]);
+                } else {
+                    $googleData = null;
+                }
+            } catch (\Exception $e) {
+                \Log::warning('Failed to decrypt Google token', ['error' => $e->getMessage()]);
+                $googleData = null;
+            }
+        }
+
+        if (!$googleData) {
+            \Log::warning('Google Complete Registration - No data available', [
                 'session_id' => session()->getId(),
-                'all' => session()->all()
+                'has_token' => $request->has('token'),
             ]);
             return redirect()->route('login.portal')
                 ->withErrors(['email' => __('Session expired. Please try again with Google.')]);
