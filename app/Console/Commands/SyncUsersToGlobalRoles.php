@@ -27,11 +27,9 @@ class SyncUsersToGlobalRoles extends Command
 
         $this->info("Found {$globalRoles->count()} global roles.");
 
-        // Get all users with tenant_id
-        $users = User::all();
         $updated = 0;
 
-        foreach ($users as $user) {
+        foreach (User::cursor() as $user) {
             // Get current role assignments
             $currentAssignments = DB::table('model_has_roles')
                 ->where('model_id', $user->id)

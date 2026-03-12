@@ -32,9 +32,7 @@ class RemindDebtsCommand extends Command
     {
         $this->info('Starting automated debt reminders...');
 
-        $tenants = Tenant::all();
-
-        foreach ($tenants as $tenant) {
+        foreach (Tenant::cursor() as $tenant) {
             $this->info("Processing tenant: {$tenant->name}");
 
             // Find students with debt from invoices older than 3 days
