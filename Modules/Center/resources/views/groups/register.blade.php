@@ -217,6 +217,14 @@
                 </div>
 
                 <div class="mb-4">
+                    <label for="email" class="form-label">البريد الإلكتروني (اختياري)</label>
+                    <div class="input-group-custom">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="example@mail.com">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                </div>
+
+                <div class="mb-4">
                     <label for="parent_phone" class="form-label">رقم هاتف ولي الأمر</label>
                     <div class="input-group-custom">
                         <input type="tel" class="form-control" id="parent_phone" name="parent_phone" required placeholder="01xxxxxxxxx">
