@@ -16,6 +16,52 @@
         </div>
     </div>
 
+    {{-- Top Metrics Section --}}
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100 p-3" style="border-right: 4px solid var(--primary-color) !important;">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle p-3" style="background: rgba(58, 12, 163, 0.1); color: var(--primary-color);">
+                        <i class="fas fa-users-viewfinder fa-xl"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-0">إجمالي الطلاب</h6>
+                        <h4 class="fw-bold mb-0 text-dark">{{ $students->count() }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100 p-3" style="border-right: 4px solid #4CC9F0 !important;">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle p-3" style="background: rgba(76, 201, 240, 0.1); color: #4CC9F0;">
+                        <i class="fas fa-layer-group fa-xl"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-0">المسجلين الآن</h6>
+                        <h4 class="fw-bold mb-0 text-dark">{{ $students->sum(fn($s) => $s->enrollments->count()) }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @php
+            $todayEnrollments = $students->filter(fn($s) => $s->created_at?->isToday())->count();
+        @endphp
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100 p-3" style="border-right: 4px solid #4CAF50 !important;">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle p-3" style="background: rgba(76, 175, 80, 0.1); color: #4CAF50;">
+                        <i class="fas fa-user-plus fa-xl"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-0">مسجلين اليوم</h6>
+                        <h4 class="fw-bold mb-0 text-dark">{{ $todayEnrollments }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- Search & Group Filter Bar --}}
     <div class="card border-0 shadow-sm rounded-4 mb-3">
         <div class="card-body p-3">
@@ -58,7 +104,8 @@
                     <thead class="bg-light">
                         <tr>
                             <th class="border-0 px-4 py-3">الطالب</th>
-                            <th class="border-0">المجموعات المسجل بها</th>
+                            <th class="border-0">ولي الأمر</th>
+                            <th class="border-0">المجموعات</th>
                             <th class="border-0">الحالة</th>
                             <th class="border-0">تاريخ التسجيل</th>
                             <th class="border-0 text-center">الإجراءات</th>
@@ -81,9 +128,17 @@
                                                 {{ $student->name }}
                                             </a>
                                         </div>
-                                        <div class="text-muted small">{{ $student->phone }}</div>
+                                        <div class="text-muted small"><i class="fas fa-mobile-alt me-1"></i> {{ $student->phone }}</div>
                                     </div>
                                 </div>
+                            </td>
+                            <td>
+                                @if($student->parent_phone)
+                                    <div class="small fw-bold text-muted">{{ $student->parent_phone }}</div>
+                                    <div class="x-small text-muted opacity-50">هاتف ولي الأمر</div>
+                                @else
+                                    <span class="text-muted small">--</span>
+                                @endif
                             </td>
                             <td>
                                 @foreach($student->enrollments as $enrollment)
@@ -99,23 +154,30 @@
                             <td class="text-center">
                                 <div class="btn-group">
                                     @php
-                                        $cleanPhone = preg_replace('/[^0-9]/', '', $student->phone);
-                                        if (str_starts_with($cleanPhone, '0')) {
-                                            $cleanPhone = '20' . substr($cleanPhone, 1);
+                                        $phoneForWa = preg_replace('/[^0-9]/', '', ($student->parent_phone ?: $student->phone));
+                                        if (str_starts_with($phoneForWa, '0')) {
+                                            $phoneForWa = '20' . substr($phoneForWa, 1);
                                         }
+                                        $qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" . urlencode($student->user->qr_identifier);
                                     @endphp
-                                    <a href="https://api.whatsapp.com/send?phone={{ $cleanPhone }}" target="_blank" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-success" title="WhatsApp">
-                                        <i class="fab fa-whatsapp"></i>
+                                    <a href="https://api.whatsapp.com/send?phone={{ $phoneForWa }}" target="_blank" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-success shadow-sm" title="مراسلة ولي الأمر">
+                                        <i class="fab fa-whatsapp fa-lg"></i>
                                     </a>
-                                    <a href="{{ route('instructor.students.show', $student->id) }}" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-primary" title="عرض الملف التفصيلي">
-                                        <i class="fas fa-id-card"></i>
+                                    <button type="button" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-dark shadow-sm show-qr-btn" 
+                                            data-name="{{ $student->name }}" 
+                                            data-qr="{{ $qrUrl }}"
+                                            title="عرض كود الـ QR">
+                                        <i class="fas fa-qrcode fa-lg"></i>
+                                    </button>
+                                    <a href="{{ route('instructor.students.show', $student->id) }}" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-primary shadow-sm" title="الملف التفصيلي">
+                                        <i class="fas fa-id-card fa-lg"></i>
                                     </a>
                                 </div>
                             </td>
                         </tr>
                         @empty
                         <tr id="emptyRow">
-                            <td colspan="5" class="text-center py-5">
+                            <td colspan="6" class="text-center py-5">
                                 <img src="https://illustrations.popsy.co/gray/fogg-searching.png" alt="No data" style="width: 150px;" class="mb-3 opacity-50">
                                 <h6 class="text-muted">لا يوجد طلاب مسجلين حالياً</h6>
                             </td>
@@ -128,6 +190,22 @@
             <div id="noStudentsResults" class="text-center py-5 d-none">
                 <i class="fas fa-user-slash display-4 text-light mb-3"></i>
                 <p class="text-muted">لا توجد نتائج مطابقة للبحث.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- QR Modal --}}
+<div class="modal fade" id="qrModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <div class="modal-body text-center p-4">
+                <h5 class="fw-bold mb-3" id="qrModalName">اسم الطالب</h5>
+                <div class="bg-light p-3 rounded-4 mb-3 d-inline-block shadow-inner">
+                    <img id="qrModalImg" src="" alt="QR" style="width: 200px; height: 200px;">
+                </div>
+                <p class="text-muted small mb-0">امسح الكود لتسجيل الحضور</p>
+                <button type="button" class="btn btn-primary w-100 rounded-pill mt-4 border-0" data-bs-dismiss="modal" style="background: var(--primary-color);">إغلاق</button>
             </div>
         </div>
     </div>
