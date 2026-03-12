@@ -144,7 +144,8 @@ class PaymentController extends Controller
         }
 
         // Security: Validate session integrity to prevent bypass
-        $expectedHmac = hash_hmac('sha256', session('tenant_id') . '|' . \App\Models\User::where('tenant_id', session('tenant_id'))->where('role', 'center_admin')->value('id'), config('app.key'));
+        $userId = auth()->check() ? auth()->id() : \App\Models\User::where('tenant_id', session('tenant_id'))->where('role', 'center_admin')->value('id');
+        $expectedHmac = hash_hmac('sha256', session('tenant_id') . '|' . $userId, config('app.key'));
         if (!hash_equals($expectedHmac, session('registration_hmac', ''))) {
             \Log::warning('Demo payment bypass attempt detected', ['ip' => request()->ip()]);
             return redirect()->route('register')->withErrors(['error' => 'جلسة غير صالحة. يرجى التسجيل مرة أخرى.']);
