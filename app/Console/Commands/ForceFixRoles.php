@@ -40,8 +40,8 @@ class ForceFixRoles extends Command
         app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 
         // 3. Loop through all users and ensure their Spatie role matches their table 'role'
-        $users = User::all();
-        $this->info("Step 2: Syncing roles for {$users->count()} users...");
+        $usersCount = User::count();
+        $this->info("Step 2: Syncing roles for {$usersCount} users...");
 
         // Map legacy/common role names to the ones in our seeder
         $roleMapping = [
@@ -51,7 +51,7 @@ class ForceFixRoles extends Command
         ];
 
         $fixedCount = 0;
-        foreach ($users as $user) {
+        foreach (User::cursor() as $user) {
             if (!$user->role) {
                 continue;
             }

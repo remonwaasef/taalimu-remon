@@ -21,10 +21,9 @@ class AssignRolesToUsers extends Command
         // Set team ID to null for global roles
         setPermissionsTeamId(null);
 
-        $users = User::all();
         $count = 0;
 
-        foreach ($users as $user) {
+        foreach (User::cursor() as $user) {
             $roleName = $user->role;
             
             if (empty($roleName)) {
