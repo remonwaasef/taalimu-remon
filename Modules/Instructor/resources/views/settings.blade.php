@@ -223,7 +223,7 @@
                                             <h6 class="fw-bold mb-0">هل تحتاج لترقية باقتك؟</h6>
                                             <p class="small text-muted mb-0">إذا كنت ترغب في رفع حدود الاستهلاك أو إضافة مميزات جديدة، يرجى التواصل مع الدعم الفني.</p>
                                         </div>
-                                        <a href="https://wa.me/201016624364" target="_blank" class="btn btn-outline-primary rounded-pill ms-auto px-4 btn-sm">تواصل معنا</a>
+                                        <a href="https://wa.me/201271948834" target="_blank" class="btn btn-outline-primary rounded-pill ms-auto px-4 btn-sm">تواصل معنا</a>
                                     </div>
                                 </div>
                             @else
@@ -233,7 +233,7 @@
                                     </div>
                                     <h5 class="fw-bold">لا يوجد اشتراك نشط حالياً</h5>
                                     <p class="text-muted">يرجى التواصل مع الإدارة لتفعيل اشتراكك والبدء في استخدام كافة خدمات المنصة.</p>
-                                    <a href="https://wa.me/201016624364" target="_blank" class="btn btn-primary rounded-pill px-5 mt-3 shadow-sm">طلب تفعيل اشتراك</a>
+                                    <a href="https://wa.me/201271948834" target="_blank" class="btn btn-primary rounded-pill px-5 mt-3 shadow-sm">طلب تفعيل اشتراك</a>
                                 </div>
                             @endif
                         </div>
