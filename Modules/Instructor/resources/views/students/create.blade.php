@@ -30,9 +30,18 @@
                                 <label class="form-label fw-bold">رقم هاتف الطالب</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light border-0"><i class="fas fa-phone" style="color: var(--primary-color);"></i></span>
-                                    <input type="tel" name="phone" class="form-control bg-light border-0 focus-ring-primary" placeholder="01XXXXXXXXX" required value="{{ old('phone') }}">
+                                    <input type="tel" name="phone" class="form-control bg-light border-0 focus-ring-primary" placeholder="01XXXXXXXXX" required minlength="11" maxlength="11" pattern="[0-9]{11}" title="يجب أن يكون رقم الهاتف مكون من 11 رقم" value="{{ old('phone') }}">
                                 </div>
                                 <small class="text-muted mt-1 d-block">سيستخدم هذا الرقم كاسم مستخدم وكلمة مرور أولية.</small>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">البريد الإلكتروني (اختياري)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0"><i class="fas fa-envelope" style="color: var(--primary-color);"></i></span>
+                                    <input type="email" name="email" class="form-control bg-light border-0 focus-ring-primary" placeholder="example@mail.com" value="{{ old('email') }}">
+                                </div>
                             </div>
 
                             <!-- Parent Phone -->
@@ -40,7 +49,7 @@
                                 <label class="form-label fw-bold">رقم هاتف ولي الأمر</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light border-0"><i class="fas fa-users" style="color: var(--primary-color);"></i></span>
-                                    <input type="tel" name="parent_phone" class="form-control bg-light border-0 focus-ring-primary" placeholder="01XXXXXXXXX" required value="{{ old('parent_phone') }}">
+                                    <input type="tel" name="parent_phone" class="form-control bg-light border-0 focus-ring-primary" placeholder="01XXXXXXXXX" required minlength="11" maxlength="11" pattern="[0-9]{11}" title="يجب أن يكون رقم الهاتف مكون من 11 رقم" value="{{ old('parent_phone') }}">
                                 </div>
                             </div>
 

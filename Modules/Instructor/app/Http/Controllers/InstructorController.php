@@ -245,8 +245,9 @@ class InstructorController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
-            'parent_phone' => 'required|string|max:20',
+            'phone' => 'required|string|digits:11',
+            'parent_phone' => 'required|string|digits:11',
+            'email' => 'nullable|email|max:255',
             'course_id' => 'required|exists:courses,id',
         ]);
 
@@ -257,10 +258,17 @@ class InstructorController extends Controller
             $user = \App\Models\User::where('phone', $validated['phone'])->first();
 
             if (!$user) {
+                $email = $validated['email'] ?: ($validated['phone'] . '@' . (app('tenant')->domain ?? 'taalimu') . '.com');
+                
+                // Safety check for generated email collisions
+                if (\App\Models\User::where('email', $email)->exists() && !$validated['email']) {
+                    $email = $validated['phone'] . '_' . \Illuminate\Support\Str::random(4) . '@' . (app('tenant')->domain ?? 'taalimu') . '.com';
+                }
+
                 $user = \App\Models\User::create([
                     'tenant_id' => $instructor->tenant_id,
                     'name' => $validated['name'],
-                    'email' => $validated['phone'] . '@' . (app('tenant')->domain ?? 'taalimu') . '.com',
+                    'email' => $email,
                     'phone' => $validated['phone'],
                     'password' => \Illuminate\Support\Facades\Hash::make($validated['phone']),
                     'role' => 'student',
