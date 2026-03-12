@@ -74,111 +74,23 @@ class SubscriptionController extends Controller
             return back()->with('error', __('center::messages.msg_087'));
         }
 
-        // 1. Handle Free Trial locally (bypass Stripe)
-        if ($package->slug === 'free-trial' || $package->stripe_price_id === 'price_free' || $package->price <= 0) {
-            \App\Models\Subscription::create([
-                'tenant_id' => $tenant->id,
-                'name' => 'default',
-                'stripe_id' => 'sub_local_' . \Illuminate\Support\Str::random(10),
-                'stripe_status' => 'active',
-                'stripe_price' => $package->stripe_price_id ?? 'price_free',
-                'quantity' => 1,
-                'ends_at' => now()->addDays(14),
-                'status' => 'active',
-                'billing_cycle' => 'monthly',
-                'base_price' => 0,
-                'total_amount' => 0,
-                'discount_amount' => 0,
-            ]);
-
-            return redirect()->route('center.subscription.success', ['tenant' => $tenant->domain]);
-        }
-
-        // 2. Check for Demo Mode or Missing Keys
-        $stripeKey = config('services.stripe.secret');
-        $isDemo = config('services.stripe.demo_mode') || empty($stripeKey);
-
+        // Modular Payment Gateway Logic
         $billingCycle = $request->query('cycle', 'monthly');
-        $cyclePrice = $billingCycle === 'yearly' ? $package->yearly_price : $package->price;
-
-        if ($isDemo) {
-            \Log::info("Using Demo Mode for subscription checkout", ['tenant_id' => $tenant->id, 'package_id' => $package->id, 'cycle' => $billingCycle]);
-            
-            // Replicate session data used by PaymentController@demo
-            session([
-                'tenant_id' => $tenant->id,
-                'selected_plan' => $package->slug,
-                'billing_cycle' => $billingCycle,
-                'base_price' => $cyclePrice,
-                'total_amount' => $cyclePrice,
-                'registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . auth()->id(), config('app.key')),
-                'is_subscription_change' => true,
-            ]);
-
-            return redirect()->route('payment.demo');
-        }
+        $gatewayName = $request->input('payment_gateway', 'stripe');
 
         try {
-            $gateway = $request->input('payment_gateway', 'stripe');
+            $gateway = \App\Services\PaymentFactory::make($gatewayName);
+            
+            $redirectUrl = $gateway->createCheckoutSession($tenant, $package, $billingCycle, [
+                'success_url' => route('center.subscription.success', ['tenant' => $tenant->domain]),
+                'cancel_url'  => route('center.subscription.index', ['tenant' => $tenant->domain]),
+                'is_upgrade'  => true,
+            ]);
 
-            if ($gateway === 'paypal') {
-                // Determine Currency and Amount (PayPal doesn't support EGP)
-                // Use 'default' (USD) for PayPal to ensure compatibility
-                $currency = 'USD';
-                $amount = $package->regional_prices['default']['amount'] ?? 49;
-
-                if ($billingCycle === 'yearly') {
-                    $amount = $package->regional_prices['default']['yearly_price'] ?? ($amount * 2);
-                }
-
-                $paypal = app(\App\Services\PayPalService::class);
-                $resp = $paypal->createOrder($amount, $currency, route('payment.paypal.success'), route('center.subscription.index', ['tenant' => $tenant->domain]));
-
-                if ($resp && isset($resp['links'])) {
-                    $approveLink = collect($resp['links'])->where('rel', 'approve')->first()['href'];
-
-                    // Store PayPal order info in session ONLY — do NOT touch existing subscription
-                    // The subscription will be created/updated ONLY upon successful payment capture
-                    session([
-                        'selected_plan' => $package->slug,
-                        'is_subscription_change' => true,
-                        'tenant_id' => $tenant->id,
-                        'paypal_order_id' => $resp['id'],
-                        'billing_cycle' => $billingCycle,
-                        'base_price' => $cyclePrice,
-                        'total_amount' => $cyclePrice,
-                    ]);
-
-                    return redirect()->away($approveLink);
-                }
-
-                return back()->with('error', 'Failed to connect to PayPal.');
-            }
-
-            return $tenant->newSubscription('default', $package->stripe_price_id)
-                ->checkout([
-                    'success_url' => route('center.subscription.success', ['tenant' => $tenant->domain]),
-                    'cancel_url'  => route('center.subscription.index', ['tenant' => $tenant->domain]),
-                ]);
-        } catch (\Stripe\Exception\InvalidRequestException $e) {
-            if (str_contains($e->getMessage(), 'No such price')) {
-                \Log::warning("Stripe Price ID '{$package->stripe_price_id}' not found. Falling back to Demo Mode.", ['exception' => $e->getMessage()]);
-
-                // Fallback to Demo Mode logic
-                session([
-                    'tenant_id' => $tenant->id,
-                    'selected_plan' => $package->slug,
-                    'billing_cycle' => $billingCycle,
-                    'base_price' => $cyclePrice,
-                    'total_amount' => $cyclePrice,
-                    'registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . auth()->id(), config('app.key')),
-                    'is_subscription_change' => true,
-                    'error_flash' => "تنبيه: محرك الدفع (Stripe) لم يجد كود السعر '{$package->stripe_price_id}'. تم تحويلك لوضع التجربة."
-                ]);
-
-                return redirect()->route('payment.demo');
-            }
-            throw $e;
+            return redirect()->away($redirectUrl);
+        } catch (\Exception $e) {
+            \Log::error("Subscription checkout error: " . $e->getMessage());
+            return back()->with('error', 'حدث خطأ أثناء معالجة عملية الدفع.');
         }
     }
 
