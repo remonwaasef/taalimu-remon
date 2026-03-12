@@ -226,16 +226,53 @@
                                         <a href="https://wa.me/201271948834" target="_blank" class="btn btn-outline-primary rounded-pill ms-auto px-4 btn-sm">تواصل معنا</a>
                                     </div>
                                 </div>
-                            @else
-                                <div class="text-center py-5">
-                                    <div class="mb-4">
-                                        <i class="fas fa-credit-card fa-4x text-light"></i>
-                                    </div>
-                                    <h5 class="fw-bold">لا يوجد اشتراك نشط حالياً</h5>
-                                    <p class="text-muted">يرجى التواصل مع الإدارة لتفعيل اشتراكك والبدء في استخدام كافة خدمات المنصة.</p>
-                                    <a href="https://wa.me/201271948834" target="_blank" class="btn btn-primary rounded-pill px-5 mt-3 shadow-sm">طلب تفعيل اشتراك</a>
+
                                 </div>
                             @endif
+
+                            <div class="mt-5">
+                                <h5 class="fw-bold mb-4"><i class="fas fa-layer-group me-2 text-primary"></i> الخطط والترقيات المتاحة</h5>
+                                <div class="row g-4">
+                                    @foreach($packages as $pkg)
+                                        @php
+                                            $isCurrent = $package && $package->id == $pkg->id;
+                                        @endphp
+                                        <div class="col-md-4">
+                                            <div class="card border rounded-4 shadow-sm h-100 {{ $pkg->is_featured ? 'border-primary' : '' }} position-relative overflow-hidden">
+                                                @if($pkg->is_featured)
+                                                    <div class="bg-primary text-white text-center py-1 position-absolute w-100" style="top: 0; left: 0; font-size: 10px; font-weight: bold; transform: rotate(0deg); z-index: 10;">
+                                                        الموصى به
+                                                    </div>
+                                                @endif
+                                                <div class="card-body p-4 pt-5">
+                                                    <h5 class="fw-bold mb-1">{{ $pkg->name }}</h5>
+                                                    <div class="mb-3">
+                                                        <span class="fs-2 fw-bold text-primary">{{ number_format($pkg->price) }}</span>
+                                                        <small class="text-muted">جنيه / شهرياً</small>
+                                                    </div>
+                                                    
+                                                    <ul class="list-unstyled mb-4">
+                                                        @if($pkg->display_features)
+                                                            @foreach($pkg->display_features as $feature)
+                                                                <li class="small mb-2 d-flex align-items-center gap-2">
+                                                                    <i class="fas fa-check-circle text-success" style="font-size: 12px;"></i>
+                                                                    {{ $feature }}
+                                                                </li>
+                                                            @endforeach
+                                                        @endif
+                                                    </ul>
+
+                                                    @if($isCurrent)
+                                                        <button class="btn btn-light rounded-pill w-100 disabled fw-bold border">خطتك الحالية</button>
+                                                    @else
+                                                        <a href="https://wa.me/201271948834?text=أرغب%20في%20الاشتراك%20في%20باقة%20{{ urlencode($pkg->name) }}" target="_blank" class="btn btn-outline-primary rounded-pill w-100 fw-bold">اختر الخطة</a>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
