@@ -13,30 +13,42 @@ class StripeGateway implements PaymentGatewayInterface
     {
         $priceId = $package->stripe_price_id;
         
-        // Handle Demo Mode
-        if (config('services.stripe.demo_mode') || empty(config('services.stripe.secret')) || empty($priceId)) {
+        // Check if price ID looks like a real Stripe price (starts with 'price_1')
+        $isRealPriceId = $priceId && str_starts_with($priceId, 'price_1');
+        
+        // Handle Demo Mode: explicit demo flag, missing keys, or placeholder price IDs
+        if (config('services.stripe.demo_mode') || empty(config('services.stripe.secret')) || !$isRealPriceId) {
+            \Log::info("Stripe using Demo Mode", [
+                'reason' => !$isRealPriceId ? "Price ID '{$priceId}' is not a real Stripe price" : 'Demo mode enabled',
+                'package' => $package->slug,
+            ]);
             return $this->handleDemoRedirect($tenant, $package, $billingCycle, $options);
         }
 
-        $tenant->createOrGetStripeCustomer([
-            'name' => $tenant->name,
-            'email' => $tenant->email,
-        ]);
+        try {
+            $tenant->createOrGetStripeCustomer([
+                'name' => $tenant->name,
+                'email' => $tenant->email,
+            ]);
 
-        $checkoutOptions = [
-            'success_url' => ($options['success_url'] ?? route('payment.success')) . '?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => $options['cancel_url'] ?? route('payment.cancel'),
-        ];
+            $checkoutOptions = [
+                'success_url' => ($options['success_url'] ?? route('payment.success')) . '?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => $options['cancel_url'] ?? route('payment.cancel'),
+            ];
 
-        // Regional Pricing Support
-        if (!empty($options['line_items'])) {
-            $checkoutOptions['line_items'] = $options['line_items'];
-            return $tenant->checkout(null, $checkoutOptions)->url;
+            // Regional Pricing Support
+            if (!empty($options['line_items'])) {
+                $checkoutOptions['line_items'] = $options['line_items'];
+                return $tenant->checkout(null, $checkoutOptions)->url;
+            }
+
+            return $tenant->newSubscription('default', $priceId)
+                ->checkout($checkoutOptions)
+                ->url;
+        } catch (\Exception $e) {
+            \Log::warning("Stripe checkout failed, falling back to Demo Mode: " . $e->getMessage());
+            return $this->handleDemoRedirect($tenant, $package, $billingCycle, $options);
         }
-
-        return $tenant->newSubscription('default', $priceId)
-            ->checkout($checkoutOptions)
-            ->url;
     }
 
     protected function handleDemoRedirect($tenant, $package, $billingCycle, $options)
