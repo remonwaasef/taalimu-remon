@@ -855,6 +855,45 @@ class InstructorController extends Controller
     }
 
     /**
+     * Display the consolidated settings dashboard
+     */
+    public function settings()
+    {
+        $tenant = app('tenant');
+        $settings = $tenant->settings['whatsapp'] ?? [];
+        return view('instructor::settings', compact('tenant', 'settings'));
+    }
+
+    /**
+     * Update general center information
+     */
+    public function updateGeneralSettings(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500',
+            'description' => 'nullable|string|max:1000',
+            'logo' => 'nullable|image|max:2048'
+        ]);
+
+        $tenant = \App\Models\Tenant::findOrFail(app('tenant')->id);
+        
+        $tenant->name = $request->name;
+        $tenant->phone = $request->phone;
+        $tenant->address = $request->address;
+        $tenant->description = $request->description;
+
+        if ($request->hasFile('logo')) {
+            $tenant->logo = $request->file('logo')->store("{$tenant->id}/logos", 'public');
+        }
+
+        $tenant->save();
+
+        return redirect()->route('instructor.settings')->with('success', 'تم تحديث البيانات العامة للمركز بنجاح.');
+    }
+
+    /**
      * Show WhatsApp (UltraMsg) settings page
      */
     public function whatsappSettings()

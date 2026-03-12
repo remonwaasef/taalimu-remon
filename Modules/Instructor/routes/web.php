@@ -25,6 +25,10 @@ $instructorRoutes = function () {
         Route::get('/students/{student}', [InstructorController::class, 'showStudent'])->name('instructor.students.show');
         Route::delete('/students/{student}', [InstructorController::class, 'destroyStudent'])->name('instructor.students.destroy');
         
+        // Settings Dashboard
+        Route::get('/settings', [InstructorController::class, 'settings'])->name('instructor.settings');
+        Route::post('/settings/update-general', [InstructorController::class, 'updateGeneralSettings'])->name('instructor.settings.update-general');
+        
         // WhatsApp Settings
         Route::get('/whatsapp', [InstructorController::class, 'whatsappSettings'])->name('instructor.whatsapp.settings');
         Route::post('/whatsapp/update', [InstructorController::class, 'updateWhatsAppSettings'])->name('instructor.whatsapp.update');
