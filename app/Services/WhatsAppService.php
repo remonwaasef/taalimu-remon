@@ -61,15 +61,25 @@ class WhatsAppService
      */
     public function sendAttendanceNotification($tenant, $student, $course)
     {
-        // Prioritize parent phone for notifications
         $to = $student->parent_phone ?: $student->phone;
         if (!$to) return false;
 
-        $message = __('center::messages.whatsapp_attendance_notify', [
-            'student_name' => $student->name,
-            'course_name' => $course->title,
-            'tenant_name' => $tenant->name
-        ]);
+        $settings = $tenant->settings['whatsapp'] ?? [];
+        $template = $settings['attendance_template'] ?? null;
+
+        if ($template) {
+            $message = strtr($template, [
+                ':student_name' => $student->name,
+                ':course_name' => $course->title,
+                ':tenant_name' => $tenant->name
+            ]);
+        } else {
+            $message = __('center::messages.whatsapp_attendance_notify', [
+                'student_name' => $student->name,
+                'course_name' => $course->title,
+                'tenant_name' => $tenant->name
+            ]);
+        }
         
         return $this->sendMessageByTenant($tenant, $to, $message);
     }
@@ -79,17 +89,29 @@ class WhatsAppService
      */
     public function sendPaymentNotification($tenant, $student, $amount, $remaining)
     {
-        // Prioritize parent phone for notifications
         $to = $student->parent_phone ?: $student->phone;
         if (!$to) return false;
 
-        $message = __('center::messages.whatsapp_payment_notify', [
-            'amount' => $amount,
-            'currency' => get_currency_symbol(),
-            'student_name' => $student->name,
-            'remaining' => $remaining,
-            'tenant_name' => $tenant->name
-        ]);
+        $settings = $tenant->settings['whatsapp'] ?? [];
+        $template = $settings['payment_template'] ?? null;
+
+        if ($template) {
+            $message = strtr($template, [
+                ':amount' => $amount,
+                ':currency' => get_currency_symbol(),
+                ':student_name' => $student->name,
+                ':remaining' => $remaining,
+                ':tenant_name' => $tenant->name
+            ]);
+        } else {
+            $message = __('center::messages.whatsapp_payment_notify', [
+                'amount' => $amount,
+                'currency' => get_currency_symbol(),
+                'student_name' => $student->name,
+                'remaining' => $remaining,
+                'tenant_name' => $tenant->name
+            ]);
+        }
         
         return $this->sendMessageByTenant($tenant, $to, $message);
     }
@@ -99,16 +121,27 @@ class WhatsAppService
      */
     public function sendDebtReminder($tenant, $student, $amount)
     {
-        // Prioritize parent phone for notifications
         $to = $student->parent_phone ?: $student->phone;
         if (!$to) return false;
 
-        $message = __('center::messages.whatsapp_debt_reminder', [
-            'amount' => $amount,
-            'currency' => get_currency_symbol(),
-            'student_name' => $student->name,
-            'tenant_name' => $tenant->name
-        ]);
+        $settings = $tenant->settings['whatsapp'] ?? [];
+        $template = $settings['debt_template'] ?? null;
+
+        if ($template) {
+            $message = strtr($template, [
+                ':amount' => $amount,
+                ':currency' => get_currency_symbol(),
+                ':student_name' => $student->name,
+                ':tenant_name' => $tenant->name
+            ]);
+        } else {
+            $message = __('center::messages.whatsapp_debt_reminder', [
+                'amount' => $amount,
+                'currency' => get_currency_symbol(),
+                'student_name' => $student->name,
+                'tenant_name' => $tenant->name
+            ]);
+        }
         
         return $this->sendMessageByTenant($tenant, $to, $message);
     }
