@@ -13,8 +13,12 @@
                     </div>
                     <h2 class="h4 text-gray-900 mb-4">Subscription Successful!</h2>
                     <p class="mb-4">Thank you for subscribing. Your plan is now active.</p>
-                    <a href="{{ route('center.dashboard') }}" class="btn btn-primary">
-                        Go to Dashboard
+                    @php
+                        $user = auth()->user();
+                        $dashboardRoute = ($user && $user->role === 'instructor') ? route('instructor.dashboard', ['tenant' => app('tenant')->domain]) : route('center.dashboard');
+                    @endphp
+                    <a href="{{ $dashboardRoute }}" class="btn btn-primary">
+                        الذهاب للوحة التحكم
                     </a>
                 </div>
             </div>
