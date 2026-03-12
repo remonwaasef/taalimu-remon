@@ -252,14 +252,24 @@
                                                     </div>
                                                     
                                                     <ul class="list-unstyled mb-4">
-                                                        @if($pkg->display_features)
-                                                            @foreach($pkg->display_features as $feature)
-                                                                <li class="small mb-2 d-flex align-items-center gap-2">
-                                                                    <i class="fas fa-check-circle text-success" style="font-size: 12px;"></i>
-                                                                    {{ $feature }}
-                                                                </li>
-                                                            @endforeach
-                                                        @endif
+                                                        @foreach($pkg->features as $feature)
+                                                            @php
+                                                                $val = $feature->pivot->value;
+                                                                $displayVal = $val;
+                                                                if($val == '-1' || $val == 'unlimited') $displayVal = 'غير محدود';
+                                                                
+                                                                $icon = 'fa-check-circle text-success';
+                                                                if($feature->type == 'boolean') {
+                                                                    $displayVal = filter_var($val, FILTER_VALIDATE_BOOLEAN) ? 'متاح' : 'غير متاح';
+                                                                    $icon = filter_var($val, FILTER_VALIDATE_BOOLEAN) ? 'fa-check-circle text-success' : 'fa-times-circle text-danger';
+                                                                }
+                                                            @endphp
+                                                            <li class="small mb-2 d-flex align-items-center gap-2">
+                                                                <i class="fas {{ $icon }}" style="font-size: 12px;"></i>
+                                                                <span class="text-muted">{{ $feature->name }}:</span>
+                                                                <span class="fw-bold">{{ $displayVal }}</span>
+                                                            </li>
+                                                        @endforeach
                                                     </ul>
 
                                                     @if($isCurrent)
