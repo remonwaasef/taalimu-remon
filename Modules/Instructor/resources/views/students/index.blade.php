@@ -254,6 +254,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // QR Modal Logic
+    const qrModalEl = document.getElementById('qrModal');
+    const qrModal = qrModalEl ? new bootstrap.Modal(qrModalEl) : null;
+    const qrModalImg = document.getElementById('qrModalImg');
+    const qrModalName = document.getElementById('qrModalName');
+
+    document.querySelectorAll('.show-qr-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (qrModal) {
+                qrModalName.textContent = this.dataset.name;
+                qrModalImg.src = this.dataset.qr;
+                qrModal.show();
+            }
+        });
+    });
+
     if (searchInput) searchInput.addEventListener('input', applyStudentFilters);
     if (groupFilter) groupFilter.addEventListener('change', applyStudentFilters);
 
