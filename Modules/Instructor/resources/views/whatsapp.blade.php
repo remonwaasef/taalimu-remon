@@ -55,6 +55,46 @@
                             </div>
                         </div>
 
+                        <hr class="my-4 opacity-50">
+
+                        <h6 class="fw-bold mb-3"><i class="fas fa-comment-alt me-2 text-primary"></i> قوالب الرسائل (Message Templates)</h6>
+                        
+                        <div class="row g-4">
+                            <div class="col-md-12">
+                                <div class="alert alert-info border-0 shadow-none rounded-3 py-2 px-3 mb-3">
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <i class="fas fa-info-circle"></i>
+                                        <div class="small">
+                                            المتغيرات المتاحة: 
+                                            <code class="mx-1">:student_name</code> (اسم الطالب) ، 
+                                            <code class="mx-1">:course_name</code> (اسم المجموعة) ، 
+                                            <code class="mx-1">:tenant_name</code> (اسم المركز) ،
+                                            <code class="mx-1">:amount</code> (المبلغ) ،
+                                            <code class="mx-1">:remaining</code> (المتبقي).
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold small text-muted">رسالة تسجيل الحضور</label>
+                                <textarea name="attendance_template" class="form-control bg-light border-0 rounded-3 text-start" rows="4" placeholder="اترك فارغاً لاستخدام النص الافتراضي">{{ $settings['attendance_template'] ?? '' }}</textarea>
+                                <div class="form-text x-small mt-1 text-muted">تُرسل عند تحضير الطالب.</div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold small text-muted">رسالة تأكيد الدفع</label>
+                                <textarea name="payment_template" class="form-control bg-light border-0 rounded-3 text-start" rows="4" placeholder="اترك فارغاً لاستخدام النص الافتراضي">{{ $settings['payment_template'] ?? '' }}</textarea>
+                                <div class="form-text x-small mt-1 text-muted">تُرسل عند تحصيل اشتراك.</div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold small text-muted">رسالة التذكير بالمديونية</label>
+                                <textarea name="debt_template" class="form-control bg-light border-0 rounded-3 text-start" rows="4" placeholder="اترك فارغاً لاستخدام النص الافتراضي">{{ $settings['debt_template'] ?? '' }}</textarea>
+                                <div class="form-text x-small mt-1 text-muted">تُرسل للتذكير بالمبالغ المتأخرة.</div>
+                            </div>
+                        </div>
+
                         <div class="alert alert-info border-0 rounded-4 bg-opacity-10 py-3">
                             <h6 class="fw-bold fs-6"><i class="fas fa-lightbulb me-2 text-primary"></i> خطوات الربط سريعة جداً:</h6>
                             <ul class="small mb-0 mt-2 text-secondary">
