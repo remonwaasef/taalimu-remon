@@ -861,7 +861,8 @@ class InstructorController extends Controller
     {
         $tenant = app('tenant');
         $settings = $tenant->settings['whatsapp'] ?? [];
-        return view('instructor::settings', compact('tenant', 'settings'));
+        $packages = \App\Models\Package::where('is_active', true)->orderBy('sort_order')->get();
+        return view('instructor::settings', compact('tenant', 'settings', 'packages'));
     }
 
     /**
