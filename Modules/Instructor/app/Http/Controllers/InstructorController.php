@@ -171,8 +171,9 @@ class InstructorController extends Controller
             'status' => 'present',
         ]);
 
-        $msg = "تم تسجيل حضور الطالب {$student->name} اليوم في مجموعة '{$course->title}' بنجاح.";
-        $whatsappUrl = "https://wa.me/" . preg_replace('/[^0-9]/', '', $student->phone) . "?text=" . urlencode($msg);
+        $msg = "تحرك من المركز: الطالب {$student->name} حضر الآن حصة '{$course->title}' في مركز " . app('tenant')->name . ".";
+        $phoneToNotify = $student->parent_phone ?: $student->phone;
+        $whatsappUrl = "https://wa.me/" . preg_replace('/[^0-9]/', '', $phoneToNotify) . "?text=" . urlencode($msg);
 
         return response()->json([
             'success' => true,

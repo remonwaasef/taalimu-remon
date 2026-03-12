@@ -54,7 +54,8 @@ class WhatsAppService
      */
     public function sendAttendanceNotification($tenant, $student, $course)
     {
-        $to = $student->phone; // Assuming student phone is the parent's contact
+        // Prioritize parent phone for notifications
+        $to = $student->parent_phone ?: $student->phone;
         if (!$to) return false;
 
         $message = __('center::messages.whatsapp_attendance_notify', [
@@ -71,7 +72,8 @@ class WhatsAppService
      */
     public function sendPaymentNotification($tenant, $student, $amount, $remaining)
     {
-        $to = $student->phone;
+        // Prioritize parent phone for notifications
+        $to = $student->parent_phone ?: $student->phone;
         if (!$to) return false;
 
         $message = __('center::messages.whatsapp_payment_notify', [
@@ -90,7 +92,8 @@ class WhatsAppService
      */
     public function sendDebtReminder($tenant, $student, $amount)
     {
-        $to = $student->phone;
+        // Prioritize parent phone for notifications
+        $to = $student->parent_phone ?: $student->phone;
         if (!$to) return false;
 
         $message = __('center::messages.whatsapp_debt_reminder', [
