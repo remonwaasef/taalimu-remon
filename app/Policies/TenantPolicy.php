@@ -55,8 +55,8 @@ class TenantPolicy
             return true;
         }
 
-        // Center admins can update their own tenant
-        return $user->hasAnyRole(['center_admin', 'admin']) && (int)$user->tenant_id === (int)$tenant->id;
+        // Center and Instructor admins can update their own tenant
+        return $user->hasAnyRole(['center_admin', 'admin', 'instructor']) && (int)$user->tenant_id === (int)$tenant->id;
     }
 
     /**
