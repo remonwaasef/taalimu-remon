@@ -23,6 +23,12 @@ $instructorRoutes = function () {
         Route::get('/students-create', [InstructorController::class, 'createStudent'])->name('instructor.students.create');
         Route::post('/students-store', [InstructorController::class, 'storeStudent'])->name('instructor.students.store');
         Route::get('/students/{student}', [InstructorController::class, 'showStudent'])->name('instructor.students.show');
+    });
+
+    // Public Phone Check
+    Route::get('/instructor/check-phone', [InstructorController::class, 'checkPhone'])->name('instructor.students.check-phone');
+
+    Route::middleware(['auth', 'verified'])->prefix('instructor')->group(function () {
 
         // Instructor Schedule Management
         Route::get('/schedules', [InstructorController::class, 'schedules'])->name('instructor.schedules.index');

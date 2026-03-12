@@ -30,8 +30,9 @@
                                 <label class="form-label fw-bold">رقم هاتف الطالب</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light border-0"><i class="fas fa-phone" style="color: var(--primary-color);"></i></span>
-                                    <input type="tel" name="phone" class="form-control bg-light border-0 focus-ring-primary" placeholder="01XXXXXXXXX" required minlength="11" maxlength="11" pattern="[0-9]{11}" title="يجب أن يكون رقم الهاتف مكون من 11 رقم" value="{{ old('phone') }}">
+                                    <input type="tel" name="phone" id="phone_input" class="form-control bg-light border-0 focus-ring-primary" placeholder="01XXXXXXXXX" required minlength="11" maxlength="11" pattern="[0-9]{11}" title="يجب أن يكون رقم الهاتف مكون من 11 رقم" value="{{ old('phone') }}">
                                 </div>
+                                <div id="phone-feedback" class="mt-1 small"></div>
                                 <small class="text-muted mt-1 d-block">سيستخدم هذا الرقم كاسم مستخدم وكلمة مرور أولية.</small>
                             </div>
 
@@ -85,7 +86,41 @@
         </div>
     </div>
 </div>
-@endsection
+@stop
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const phoneInput = document.getElementById('phone_input');
+    const feedback = document.getElementById('phone-feedback');
+
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function() {
+            const phone = this.value;
+            if (phone.length === 11) {
+                feedback.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> جارِ التحقق...';
+                feedback.className = 'mt-1 small text-primary';
+
+                fetch(`{{ route('instructor.students.check-phone') }}?phone=${phone}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'exists') {
+                            const studentName = data.name ? `باسم (${data.name})` : '';
+                            feedback.innerHTML = `<i class="fas fa-exclamation-triangle me-1"></i> هذا الرقم مسجل بالفعل ${studentName}.`;
+                            feedback.className = 'mt-1 small text-danger fw-bold';
+                        } else if (data.status === 'available') {
+                            feedback.innerHTML = '<i class="fas fa-check-circle me-1"></i> رقم هاتف متاح.';
+                            feedback.className = 'mt-1 small text-success fw-bold';
+                        }
+                    });
+            } else {
+                feedback.innerHTML = '';
+            }
+        });
+    }
+});
+</script>
+@endpush
 
 @push('styles')
 <style>

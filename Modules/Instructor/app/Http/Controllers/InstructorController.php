@@ -774,5 +774,28 @@ class InstructorController extends Controller
 
         return $instructor;
     }
+
+    /**
+     * Check if a phone number already exists in the system (AJAX)
+     */
+    public function checkPhone(Request $request)
+    {
+        $phone = $request->get('phone');
+        if (!$phone || strlen($phone) < 11) {
+            return response()->json(['status' => 'invalid']);
+        }
+
+        $user = \App\Models\User::where('phone', $phone)->first();
+
+        if ($user) {
+            return response()->json([
+                'status' => 'exists',
+                'name' => auth()->check() ? $user->name : null, // Privacy safeguard
+                'role' => $user->role
+            ]);
+        }
+
+        return response()->json(['status' => 'available']);
+    }
 }
 
