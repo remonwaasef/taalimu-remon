@@ -173,7 +173,13 @@
                                             if($f['code'] == 'max_courses') $usage = \App\Models\Course::where('tenant_id', $tenant->id)->count();
                                             if($f['code'] == 'max_instructors') $usage = \App\Models\Instructor::where('tenant_id', $tenant->id)->count();
                                             
-                                            $percent = $limit > 0 ? min(100, ($usage / $limit) * 100) : ($limit == -1 ? 0 : 100);
+                                            $isUnlimited = $limit === 'unlimited' || $limit == -1;
+                                            $percent = 0;
+                                            if (!$isUnlimited && is_numeric($limit) && $limit > 0) {
+                                                $percent = min(100, ($usage / (float)$limit) * 100);
+                                            } elseif (!$isUnlimited) {
+                                                $percent = 100;
+                                            }
                                             $color = $percent > 90 ? 'danger' : ($percent > 70 ? 'warning' : 'success');
                                         @endphp
                                         <div class="col-md-4">
@@ -185,7 +191,7 @@
                                                         </div>
                                                         <span class="small fw-bold">{{ $f['label'] }}</span>
                                                     </div>
-                                                    <span class="x-small text-muted fw-bold">{{ $usage }} / {{ $limit == -1 ? '∞' : $limit }}</span>
+                                                    <span class="x-small text-muted fw-bold">{{ $usage }} / {{ $isUnlimited ? '∞' : $limit }}</span>
                                                 </div>
                                                 <div class="progress rounded-pill shadow-none mb-1" style="height: 6px; background: #f1f5f9;">
                                                     <div class="progress-bar bg-{{ $color }} rounded-pill" role="progressbar" style="width: {{ $percent }}%"></div>
