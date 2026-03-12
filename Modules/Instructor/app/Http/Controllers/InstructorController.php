@@ -797,5 +797,45 @@ class InstructorController extends Controller
 
         return response()->json(['status' => 'available']);
     }
+
+    /**
+     * Show WhatsApp (UltraMsg) settings page
+     */
+    public function whatsappSettings()
+    {
+        $tenant = app('tenant');
+        $settings = $tenant->settings['whatsapp'] ?? [
+            'enabled' => false,
+            'instance_id' => '',
+            'token' => ''
+        ];
+        
+        return view('instructor::whatsapp', compact('settings'));
+    }
+
+    /**
+     * Update WhatsApp settings
+     */
+    public function updateWhatsAppSettings(Request $request)
+    {
+        $request->validate([
+            'instance_id' => 'required|string',
+            'token' => 'required|string'
+        ]);
+
+        $tenant = \App\Models\Tenant::findOrFail(app('tenant')->id);
+        $settings = $tenant->settings ?? [];
+        
+        $settings['whatsapp'] = [
+            'enabled' => $request->has('enabled'),
+            'instance_id' => $request->instance_id,
+            'token' => $request->token
+        ];
+
+        $tenant->settings = $settings;
+        $tenant->save();
+
+        return back()->with('success', 'تم تحديث إعدادات الواتساب بنجاح.');
+    }
 }
 
