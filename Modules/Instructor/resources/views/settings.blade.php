@@ -143,114 +143,98 @@
                                 $service = app(\App\Services\SubscriptionService::class);
                             @endphp
 
-                            @if($subscription && $package)
+                            {{-- 1. Consumption Overview (Status) --}}
+                            <div class="bg-light rounded-4 p-4 border mb-5">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <h6 class="fw-bold mb-0 text-primary"><i class="fas fa-chart-pie me-2"></i> نظرة عامة على استهلاك الموارد</h6>
+                                    @if($subscription)
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="badge bg-success py-2 px-3 rounded-pill shadow-sm"><i class="fas fa-check-circle me-1"></i> اشتراك نشط</span>
+                                            @if($subscription->ends_at)
+                                                <small class="text-muted fw-bold x-small">ينتهي في: {{ $subscription->ends_at->format('Y/m/d') }}</small>
+                                            @endif
+                                        </div>
+                                    @endif
+                                </div>
                                 <div class="row g-4">
-                                    <div class="col-md-5">
-                                        <div class="card bg-primary text-white border-0 rounded-4 shadow-sm h-100 position-relative overflow-hidden">
-                                            <div class="card-body p-4 position-relative z-1">
-                                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                                    <span class="badge bg-white text-primary rounded-pill px-3 py-2 fw-bold">الخطة الحالية</span>
-                                                    @if($subscription->ends_at)
-                                                        <small class="opacity-75">تنتهي في: {{ $subscription->ends_at->format('Y/m/d') }}</small>
-                                                    @endif
+                                    @php
+                                        $features = [
+                                            ['code' => 'max_students', 'label' => 'الطلاب', 'icon' => 'fa-user-graduate'],
+                                            ['code' => 'max_courses', 'label' => 'المجموعات', 'icon' => 'fa-users'],
+                                            ['code' => 'max_instructors', 'label' => 'المساعدين', 'icon' => 'fa-chalkboard-teacher'],
+                                        ];
+                                    @endphp
+
+                                    @foreach($features as $f)
+                                        @php
+                                            $limit = $service->getFeatureValue($tenant, $f['code']);
+                                            $usage = 0;
+                                            if($f['code'] == 'max_students') $usage = $tenant->users()->where('role', 'student')->count();
+                                            if($f['code'] == 'max_courses') $usage = \App\Models\Course::where('tenant_id', $tenant->id)->count();
+                                            if($f['code'] == 'max_instructors') $usage = \App\Models\Instructor::where('tenant_id', $tenant->id)->count();
+                                            
+                                            $percent = $limit > 0 ? min(100, ($usage / $limit) * 100) : ($limit == -1 ? 0 : 100);
+                                            $color = $percent > 90 ? 'danger' : ($percent > 70 ? 'warning' : 'success');
+                                        @endphp
+                                        <div class="col-md-4">
+                                            <div class="bg-white rounded-4 p-3 border shadow-sm h-100">
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">
+                                                            <i class="fas {{ $f['icon'] }} x-small"></i>
+                                                        </div>
+                                                        <span class="small fw-bold">{{ $f['label'] }}</span>
+                                                    </div>
+                                                    <span class="x-small text-muted fw-bold">{{ $usage }} / {{ $limit == -1 ? '∞' : $limit }}</span>
                                                 </div>
-                                                <h2 class="fw-bold mb-1">{{ $package->name }}</h2>
-                                                <p class="opacity-75 small mb-4">{{ $package->description }}</p>
-                                                
-                                                <div class="d-flex align-items-center gap-3 mt-auto">
-                                                    @if($subscription->status === 'active')
-                                                        <span class="badge bg-success border border-white border-opacity-25 py-2 px-3 rounded-pill"><i class="fas fa-check-circle me-1"></i> اشتراك نشط</span>
-                                                    @else
-                                                        <span class="badge bg-warning text-dark py-2 px-3 rounded-pill">بحاجة للتجديد</span>
-                                                    @endif
+                                                <div class="progress rounded-pill shadow-none mb-1" style="height: 6px; background: #f1f5f9;">
+                                                    <div class="progress-bar bg-{{ $color }} rounded-pill" role="progressbar" style="width: {{ $percent }}%"></div>
+                                                </div>
+                                                <div class="text-start">
+                                                    <span class="x-small text-{{ $color }} fw-bold">{{ round($percent) }}%</span>
                                                 </div>
                                             </div>
-                                            <i class="fas fa-crown position-absolute bottom-0 end-0 opacity-10 m-n3" style="font-size: 150px;"></i>
                                         </div>
-                                    </div>
+                                    @endforeach
+                                </div>
+                            </div>
 
-                                    <div class="col-md-7">
-                                        <h6 class="fw-bold mb-3"><i class="fas fa-chart-pie me-2 text-primary"></i> إحصائيات الاستهلاك</h6>
-                                        <div class="row g-3">
-                                            @php
-                                                $features = [
-                                                    ['code' => 'max_students', 'label' => 'الطلاب', 'icon' => 'fa-user-graduate'],
-                                                    ['code' => 'max_courses', 'label' => 'المجموعات', 'icon' => 'fa-users'],
-                                                    ['code' => 'max_instructors', 'label' => 'المساعدين', 'icon' => 'fa-chalkboard-teacher'],
-                                                ];
-                                            @endphp
-
-                                            @foreach($features as $f)
-                                                @php
-                                                    $limit = $service->getFeatureValue($tenant, $f['code']);
-                                                    $usage = 0;
-                                                    if($f['code'] == 'max_students') $usage = $tenant->users()->where('role', 'student')->count();
-                                                    if($f['code'] == 'max_courses') $usage = \App\Models\Course::where('tenant_id', $tenant->id)->count();
-                                                    if($f['code'] == 'max_instructors') $usage = \App\Models\Instructor::where('tenant_id', $tenant->id)->count();
-                                                    
-                                                    $percent = $limit > 0 ? min(100, ($usage / $limit) * 100) : ($limit == -1 ? 0 : 100);
-                                                    $color = $percent > 90 ? 'danger' : ($percent > 70 ? 'warning' : 'success');
-                                                @endphp
-                                                <div class="col-md-12">
-                                                    <div class="bg-light rounded-4 p-3 border">
-                                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                                            <div class="d-flex align-items-center gap-2">
-                                                                <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                                                                    <i class="fas {{ $f['icon'] }} text-primary small"></i>
-                                                                </div>
-                                                                <span class="fw-bold small">{{ $f['label'] }}</span>
-                                                            </div>
-                                                            <span class="small text-muted fw-bold">
-                                                                {{ $usage }} / {{ $limit == -1 ? '∞' : $limit }}
-                                                            </span>
-                                                        </div>
-                                                        <div class="progress rounded-pill shadow-none border" style="height: 8px;">
-                                                            <div class="progress-bar bg-{{ $color }} rounded-pill" role="progressbar" style="width: {{ $percent }}%"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        </div>
+                            {{-- 2. Plans Comparison Grid --}}
+                            <div>
+                                <div class="d-flex align-items-center gap-2 mb-4">
+                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                        <i class="fas fa-layer-group small"></i>
                                     </div>
+                                    <h5 class="fw-bold mb-0">الخطط والترقيات المتاحة</h5>
                                 </div>
                                 
-                                <div class="alert alert-light border rounded-4 mt-4 p-3">
-                                    <div class="d-flex gap-3 align-items-center">
-                                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; flex-shrink: 0;">
-                                            <i class="fas fa-headset fs-5"></i>
-                                        </div>
-                                        <div>
-                                            <h6 class="fw-bold mb-0">هل تحتاج لترقية باقتك؟</h6>
-                                            <p class="small text-muted mb-0">إذا كنت ترغب في رفع حدود الاستهلاك أو إضافة مميزات جديدة، يرجى التواصل مع الدعم الفني.</p>
-                                        </div>
-                                        <a href="https://wa.me/201271948834" target="_blank" class="btn btn-outline-primary rounded-pill ms-auto px-4 btn-sm">تواصل معنا</a>
-                                    </div>
-                                </div>
-
-                                </div>
-                            @endif
-
-                            <div class="mt-5">
-                                <h5 class="fw-bold mb-4"><i class="fas fa-layer-group me-2 text-primary"></i> الخطط والترقيات المتاحة</h5>
                                 <div class="row g-4">
                                     @foreach($packages as $pkg)
                                         @php
                                             $isCurrent = $package && $package->id == $pkg->id;
                                         @endphp
                                         <div class="col-md-4">
-                                            <div class="card border rounded-4 shadow-sm h-100 {{ $pkg->is_featured ? 'border-primary' : '' }} position-relative overflow-hidden">
-                                                @if($pkg->is_featured)
-                                                    <div class="bg-primary text-white text-center py-1 position-absolute w-100" style="top: 0; left: 0; font-size: 10px; font-weight: bold; transform: rotate(0deg); z-index: 10;">
+                                            <div class="card border rounded-4 shadow-sm h-100 {{ $isCurrent ? 'border-primary border-2' : ($pkg->is_featured ? 'border-primary' : '') }} position-relative overflow-hidden transition-all hover-shadow">
+                                                
+                                                @if($isCurrent)
+                                                    <div class="bg-primary text-white text-center py-2 fw-bold" style="font-size: 11px;">
+                                                        <i class="fas fa-star me-1"></i> باقتك الحالية
+                                                    </div>
+                                                @elseif($pkg->is_featured)
+                                                    <div class="bg-secondary text-white text-center py-1 position-absolute w-100" style="top: 0; left: 0; font-size: 10px; font-weight: bold; z-index: 10;">
                                                         الموصى به
                                                     </div>
                                                 @endif
-                                                <div class="card-body p-4 pt-5">
-                                                    <h5 class="fw-bold mb-1">{{ $pkg->name }}</h5>
-                                                    <div class="mb-3">
+
+                                                <div class="card-body p-4 {{ $isCurrent ? 'pt-4' : 'pt-5' }}">
+                                                    <h5 class="fw-bold mb-2">{{ $pkg->name }}</h5>
+                                                    <div class="mb-4">
                                                         <span class="fs-2 fw-bold text-primary">{{ number_format($pkg->price) }}</span>
                                                         <small class="text-muted">جنيه / شهرياً</small>
                                                     </div>
                                                     
+                                                    <hr class="opacity-25 mb-4">
+
                                                     <ul class="list-unstyled mb-4">
                                                         @foreach($pkg->features as $feature)
                                                             @php
@@ -273,9 +257,14 @@
                                                     </ul>
 
                                                     @if($isCurrent)
-                                                        <button class="btn btn-light rounded-pill w-100 disabled fw-bold border">خطتك الحالية</button>
+                                                        <div class="alert alert-primary bg-opacity-10 border-0 mb-0 py-3 text-center rounded-4">
+                                                            <span class="fw-bold small text-primary"><i class="fas fa-check-circle me-1"></i> باقة مفعلة</span>
+                                                            @if($subscription->ends_at)
+                                                                <div class="x-small text-muted mt-1">تنتهي: {{ $subscription->ends_at->format('Y/m/d') }}</div>
+                                                            @endif
+                                                        </div>
                                                     @else
-                                                        <a href="https://wa.me/201271948834?text=أرغب%20في%20الاشتراك%20في%20باقة%20{{ urlencode($pkg->name) }}" target="_blank" class="btn btn-outline-primary rounded-pill w-100 fw-bold">اختر الخطة</a>
+                                                        <a href="https://wa.me/201271948834?text=أرغب%20في%20الاشتراك%20في%20باقة%20{{ urlencode($pkg->name) }}" target="_blank" class="btn btn-outline-primary rounded-pill w-100 fw-bold py-2">اختر الخطة</a>
                                                     @endif
                                                 </div>
                                             </div>
