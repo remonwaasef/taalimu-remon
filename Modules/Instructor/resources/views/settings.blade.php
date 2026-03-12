@@ -19,6 +19,11 @@
                                 <i class="fab fa-whatsapp me-2"></i> إعدادات الواتساب
                             </button>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link py-3 fw-bold border-0 rounded-0" id="subscription-tab" data-bs-toggle="tab" data-bs-target="#subscription" type="button" role="tab">
+                                <i class="fas fa-credit-card me-2"></i> اشتراك المنصة
+                            </button>
+                        </li>
                     </ul>
                 </div>
                 <div class="card-body p-4">
@@ -130,6 +135,108 @@
                             </form>
                         </div>
 
+                        {{-- Tab 3: Subscription Information --}}
+                        <div class="tab-pane fade" id="subscription" role="tabpanel">
+                            @php
+                                $subscription = $tenant->activeSubscription();
+                                $package = $subscription ? $subscription->resolved_package : null;
+                                $service = app(\App\Services\SubscriptionService::class);
+                            @endphp
+
+                            @if($subscription && $package)
+                                <div class="row g-4">
+                                    <div class="col-md-5">
+                                        <div class="card bg-primary text-white border-0 rounded-4 shadow-sm h-100 position-relative overflow-hidden">
+                                            <div class="card-body p-4 position-relative z-1">
+                                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                                    <span class="badge bg-white text-primary rounded-pill px-3 py-2 fw-bold">الخطة الحالية</span>
+                                                    @if($subscription->ends_at)
+                                                        <small class="opacity-75">تنتهي في: {{ $subscription->ends_at->format('Y/m/d') }}</small>
+                                                    @endif
+                                                </div>
+                                                <h2 class="fw-bold mb-1">{{ $package->name }}</h2>
+                                                <p class="opacity-75 small mb-4">{{ $package->description }}</p>
+                                                
+                                                <div class="d-flex align-items-center gap-3 mt-auto">
+                                                    @if($subscription->status === 'active')
+                                                        <span class="badge bg-success border border-white border-opacity-25 py-2 px-3 rounded-pill"><i class="fas fa-check-circle me-1"></i> اشتراك نشط</span>
+                                                    @else
+                                                        <span class="badge bg-warning text-dark py-2 px-3 rounded-pill">بحاجة للتجديد</span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <i class="fas fa-crown position-absolute bottom-0 end-0 opacity-10 m-n3" style="font-size: 150px;"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-7">
+                                        <h6 class="fw-bold mb-3"><i class="fas fa-chart-pie me-2 text-primary"></i> إحصائيات الاستهلاك</h6>
+                                        <div class="row g-3">
+                                            @php
+                                                $features = [
+                                                    ['code' => 'max_students', 'label' => 'الطلاب', 'icon' => 'fa-user-graduate'],
+                                                    ['code' => 'max_courses', 'label' => 'المجموعات', 'icon' => 'fa-users'],
+                                                    ['code' => 'max_instructors', 'label' => 'المساعدين', 'icon' => 'fa-chalkboard-teacher'],
+                                                ];
+                                            @endphp
+
+                                            @foreach($features as $f)
+                                                @php
+                                                    $limit = $service->getFeatureValue($tenant, $f['code']);
+                                                    $usage = 0;
+                                                    if($f['code'] == 'max_students') $usage = $tenant->users()->where('role', 'student')->count();
+                                                    if($f['code'] == 'max_courses') $usage = \App\Models\Course::where('tenant_id', $tenant->id)->count();
+                                                    if($f['code'] == 'max_instructors') $usage = \App\Models\Instructor::where('tenant_id', $tenant->id)->count();
+                                                    
+                                                    $percent = $limit > 0 ? min(100, ($usage / $limit) * 100) : ($limit == -1 ? 0 : 100);
+                                                    $color = $percent > 90 ? 'danger' : ($percent > 70 ? 'warning' : 'success');
+                                                @endphp
+                                                <div class="col-md-12">
+                                                    <div class="bg-light rounded-4 p-3 border">
+                                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                                                    <i class="fas {{ $f['icon'] }} text-primary small"></i>
+                                                                </div>
+                                                                <span class="fw-bold small">{{ $f['label'] }}</span>
+                                                            </div>
+                                                            <span class="small text-muted fw-bold">
+                                                                {{ $usage }} / {{ $limit == -1 ? '∞' : $limit }}
+                                                            </span>
+                                                        </div>
+                                                        <div class="progress rounded-pill shadow-none border" style="height: 8px;">
+                                                            <div class="progress-bar bg-{{ $color }} rounded-pill" role="progressbar" style="width: {{ $percent }}%"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="alert alert-light border rounded-4 mt-4 p-3">
+                                    <div class="d-flex gap-3 align-items-center">
+                                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; flex-shrink: 0;">
+                                            <i class="fas fa-headset fs-5"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-bold mb-0">هل تحتاج لترقية باقتك؟</h6>
+                                            <p class="small text-muted mb-0">إذا كنت ترغب في رفع حدود الاستهلاك أو إضافة مميزات جديدة، يرجى التواصل مع الدعم الفني.</p>
+                                        </div>
+                                        <a href="https://wa.me/201016624364" target="_blank" class="btn btn-outline-primary rounded-pill ms-auto px-4 btn-sm">تواصل معنا</a>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="text-center py-5">
+                                    <div class="mb-4">
+                                        <i class="fas fa-credit-card fa-4x text-light"></i>
+                                    </div>
+                                    <h5 class="fw-bold">لا يوجد اشتراك نشط حالياً</h5>
+                                    <p class="text-muted">يرجى التواصل مع الإدارة لتفعيل اشتراكك والبدء في استخدام كافة خدمات المنصة.</p>
+                                    <a href="https://wa.me/201016624364" target="_blank" class="btn btn-primary rounded-pill px-5 mt-3 shadow-sm">طلب تفعيل اشتراك</a>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
