@@ -311,6 +311,62 @@ class InstructorController extends Controller
     }
 
     /**
+     * Remove the specified student from storage.
+     */
+    public function destroyStudent(Student $student)
+    {
+        $instructor = $this->resolveInstructor();
+        
+        // Ownership check: If instructor exists, verify student is in one of their courses
+        if ($instructor) {
+            $isAssociated = Enrollment::where('user_id', $student->user_id)
+                ->whereIn('course_id', $instructor->courses->pluck('id'))
+                ->exists();
+            
+            if (!$isAssociated) {
+                abort(403, 'غير مسموح لك بحذف هذا الطالب.');
+            }
+        }
+
+        try {
+            \DB::beginTransaction();
+            
+            $studentName = $student->name;
+            $userId = $student->user_id;
+
+            // Delete Enrollments first
+            Enrollment::where('user_id', $userId)->delete();
+            
+            // Delete Attendance records
+            \Modules\Center\Models\Attendance::where('student_id', $student->id)->delete();
+
+            // Delete Sales and Payments if they are linked to this student
+            // CAUTION: Some systems prefer keeping financial records. 
+            // For now, we delete to keep it simple as requested by "Delete Student".
+            Payment::whereHas('sale', function($q) use ($student) {
+                $q->where('student_id', $student->id);
+            })->delete();
+            Sale::where('student_id', $student->id)->delete();
+
+            // Delete Student record
+            $student->delete();
+
+            // Delete User record if it's only a student (check roles if needed)
+            $user = \App\Models\User::find($userId);
+            if ($user && $user->roles()->count() <= 1) { // Only has student role
+                $user->delete();
+            }
+
+            \DB::commit();
+            return redirect()->route('instructor.students.list')->with('success', "تم حذف الطالب '{$studentName}' وجميع بياناته بنجاح.");
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            \Log::error('Student deletion failed: ' . $e->getMessage());
+            return back()->with('error', 'حدث خطأ أثناء محاولة حذف الطالب: ' . $e->getMessage());
+        }
+    }
+
+    /**
      * Display a list of groups (courses) for the instructor
      */
     public function groups()

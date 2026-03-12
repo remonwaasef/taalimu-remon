@@ -23,6 +23,7 @@ $instructorRoutes = function () {
         Route::get('/students-create', [InstructorController::class, 'createStudent'])->name('instructor.students.create');
         Route::post('/students-store', [InstructorController::class, 'storeStudent'])->name('instructor.students.store');
         Route::get('/students/{student}', [InstructorController::class, 'showStudent'])->name('instructor.students.show');
+        Route::delete('/students/{student}', [InstructorController::class, 'destroyStudent'])->name('instructor.students.destroy');
         
         // WhatsApp Settings
         Route::get('/whatsapp', [InstructorController::class, 'whatsappSettings'])->name('instructor.whatsapp.settings');

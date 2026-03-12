@@ -172,6 +172,13 @@
                                     <a href="{{ route('instructor.students.show', $student->id) }}" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-primary shadow-sm" title="الملف التفصيلي">
                                         <i class="fas fa-id-card fa-lg"></i>
                                     </a>
+                                    <form action="{{ route('instructor.students.destroy', $student->id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('هل أنت متأكد من حذف هذا الطالب نهائياً؟ سيتم حذف جميع سجلات الحضور والغياب والمدفوعات الخاصة به.')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-danger shadow-sm" title="حذف الطالب">
+                                            <i class="fas fa-trash-alt fa-lg"></i>
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
