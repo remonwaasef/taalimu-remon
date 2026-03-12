@@ -208,8 +208,8 @@
             <a href="{{ route('instructor.billing') }}" class="nav-link {{ request()->routeIs('instructor.billing') ? 'active' : '' }}">
                 <i class="fas fa-wallet"></i> <span>الحسابات</span>
             </a>
-            <a href="{{ route('instructor.whatsapp.settings') }}" class="nav-link {{ request()->routeIs('instructor.whatsapp.*') ? 'active' : '' }}">
-                <i class="fab fa-whatsapp"></i> <span>الواتساب</span>
+            <a href="{{ route('instructor.settings') }}" class="nav-link {{ request()->routeIs('instructor.settings') || request()->routeIs('instructor.whatsapp.*') ? 'active' : '' }}">
+                <i class="fas fa-cog"></i> <span>الإعدادات</span>
             </a>
             
             <div class="mt-5 p-3">
