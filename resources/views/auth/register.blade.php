@@ -220,6 +220,7 @@ document.addEventListener('alpine:init', () => {
         centerName: {{ Js::from(old('center_name')) }},
         subdomain: {{ Js::from(old('subdomain')) }},
         manuallyEditedSubdomain: {{ old('subdomain') ? 'true' : 'false' }},
+        accountType: {{ Js::from($accountType) }},
         userCountry: ''
      })"
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">

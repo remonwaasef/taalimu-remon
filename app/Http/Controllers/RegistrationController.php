@@ -50,9 +50,14 @@ class RegistrationController extends Controller
                 'yearly_price_raw' => $p->yearly_price ?: ($p->price * 10),
                 'regional_prices' => $p->regional_prices ?? [],
             ];
-        })->values(); // Ensure it's a sequential array for Alpine.js
+        })->values();
 
-        return view('auth.register', compact('packages', 'packagesData'));
+        $accountType = request('account_type');
+        if (!in_array($accountType, ['center', 'instructor'])) {
+            $accountType = null;
+        }
+
+        return view('auth.register', compact('packages', 'packagesData', 'accountType'));
     }
 
     /**
