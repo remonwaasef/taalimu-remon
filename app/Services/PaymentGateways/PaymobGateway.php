@@ -16,7 +16,7 @@ class PaymobGateway implements PaymentGatewayInterface
     protected $cardIntegrationId;
     protected $walletIntegrationId;
     protected $iframeId;
-    protected $baseUrl = 'https://egypt.paymob.com/api';
+    protected $baseUrl = 'https://accept.paymob.com/api';
 
     public function __construct()
     {
@@ -42,7 +42,7 @@ class PaymobGateway implements PaymentGatewayInterface
             $paymentToken = $this->getPaymentKey($authToken, $orderId, $amountInCents, $tenant, $package);
 
             // 4. Return Redirect URL (assuming Card integration for now)
-            return "https://egypt.paymob.com/api/acceptance/iframes/{$this->iframeId}?payment_token={$paymentToken}";
+            return "https://accept.paymob.com/api/acceptance/iframes/{$this->iframeId}?payment_token={$paymentToken}";
 
         } catch (\Exception $e) {
             Log::error('Paymob Checkout Error: ' . $e->getMessage());
