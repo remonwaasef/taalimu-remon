@@ -338,7 +338,7 @@ class SocialAuthController extends Controller
                 ]);
 
                 // Determine Gateway (default to stripe or catch from request if added to form)
-                $gatewayName = $request->input('payment_gateway', 'stripe');
+                $gatewayName = $request->input('payment_gateway', 'paymob');
                 $gateway = \App\Services\PaymentFactory::make($gatewayName);
                 
                 $redirectUrl = $gateway->createCheckoutSession($tenant, $package, $billingCycle, [

@@ -11,35 +11,7 @@ class PaymentController extends Controller
 {
     public function success(Request $request, TelegramService $telegram)
     {
-        $sessionId = $request->get('session_id');
-
-        if ($sessionId) {
-            try {
-                // Security fix: Verify session with Stripe
-                \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-                $session = \Stripe\Checkout\Session::retrieve($sessionId);
-
-                if ($session->payment_status !== 'paid') {
-                     \Log::warning("Payment verification failed for session: " . $sessionId);
-                     return redirect()->route('home')->withErrors(['error' => 'لم يتم إكمال عملية الدفع بنجاح.']);
-                }
-            } catch (\Exception $e) {
-                \Log::error("Stripe verification error: " . $e->getMessage());
-                return redirect()->route('home');
-            }
-
-            // Mark registration as successful for the view
-            session(['registration_success' => true]);
-
-            // Notify Admin
-            $tenant = Tenant::find(session('tenant_id'));
-            $user = \App\Models\User::where('tenant_id', $tenant->id)->where('role', 'center_admin')->first();
-            $telegram->sendRegistrationAlert($tenant, $user, '******** (Password set during registration)');
-
-            return redirect()->route('registration.success');
-        }
-
-        return redirect()->route('home');
+        return redirect()->route('home')->withErrors(['error' => 'Stripe is no longer supported. Please use Paymob.']);
     }
 
     public function paypalSuccess(Request $request, \App\Services\PayPalService $paypal, TelegramService $telegram)
@@ -108,10 +80,6 @@ class PaymentController extends Controller
     public function paymobCallback(Request $request, TelegramService $telegram)
     {
         $gateway = \App\Services\PaymentFactory::make('paymob');
-        
-        // Paymob sends everything in the query string for the GET callback
-        // We use the same verification logic as handleCallback but tailored for GET params if needed
-        // Or we can rely on the transaction status parameter for the initial redirect UI
         
         $success = $request->get('success') === 'true';
         $transactionId = $request->get('id');
