@@ -36,8 +36,7 @@ The following files were identified as legacy and unused, and have been deleted:
 
 ### 4. Account Type Selection (Teacher vs Center)
 -   **Hero Section**: Added distinct "Register as Teacher" and "Register as Center" buttons for immediate clarity.
--   **Pricing Section**: Added a switcher to toggle registration links between the two types.
--   **Dynamic Registration**: Form labels and field prompts update dynamically based on the selection.
+-   **Pricing Section**: Removed the redundant account type switcher to simplify the UI; users now choose their path in the Hero section or at the start of registration.
 -   **Admin Visibility**: Added "Type" badges to the tenant list and detail header to distinguish between "Teacher" (مدرس) and "Center" (مركز).
 
 ### 5. Advanced Admin Analytics
@@ -48,7 +47,8 @@ The following files were identified as legacy and unused, and have been deleted:
 
 ### 6. Bug Fixes
 -   **SQL Ambiguity Fix**: Resolved an `Integrity constraint violation: 1052` error on the Admin Tenants page.
--   **Google Flow Fix**: Resolved "billing cycle is invalid" error during Google registration by adding `term` support to the validation and UI logic.
+-   **Google Flow Fix**: Resolved "billing cycle is invalid" error during Google registration.
+-   **Billing Mismatch Fix**: Resolved an issue where monthly subscriptions were incorrectly calculated or duration-assigned as "Term" subscriptions due to price mismatch and session inconsistencies in `PaymobGateway`.
 
 ## Verification Results
 

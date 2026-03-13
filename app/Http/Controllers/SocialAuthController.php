@@ -25,7 +25,7 @@ class SocialAuthController extends Controller
             session(['selected_plan' => $request->plan]);
         }
         if ($request->has('cycle')) {
-            session(['selected_cycle' => $request->cycle]);
+            session(['billing_cycle' => $request->cycle]);
         }
         if ($request->has('account_type')) {
             session(['account_type' => $request->account_type]);
@@ -191,7 +191,7 @@ class SocialAuthController extends Controller
         })->values();
 
         $selectedPlanSlug = $request->query('plan', session('selected_plan', $packages->firstWhere('is_default', true)?->slug ?? $packages->first()?->slug));
-        $selectedCycle = $request->query('cycle', session('selected_cycle', 'monthly'));
+        $selectedCycle = $request->query('cycle', session('billing_cycle', 'monthly'));
         $accountType = $request->query('account_type', session('account_type', 'center'));
 
         return view('auth.complete-google-registration', compact('packages', 'packagesData', 'selectedPlanSlug', 'selectedCycle', 'accountType'));
