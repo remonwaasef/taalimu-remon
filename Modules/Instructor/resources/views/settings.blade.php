@@ -205,13 +205,33 @@
                                 </div>
                             </div>
 
-                            {{-- 2. Plans Comparison Grid --}}
-                            <div>
-                                <div class="d-flex align-items-center gap-2 mb-4">
-                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                                        <i class="fas fa-layer-group small"></i>
+                            <div x-data="{ billingCycle: 'monthly' }">
+                                <div class="d-flex align-items-center justify-content-between mb-4">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                            <i class="fas fa-layer-group small"></i>
+                                        </div>
+                                        <h5 class="fw-bold mb-0">الخطط والترقيات المتاحة</h5>
                                     </div>
-                                    <h5 class="fw-bold mb-0">الخطط والترقيات المتاحة</h5>
+
+                                    <!-- Cycle Switcher -->
+                                    <div class="bg-light p-1 rounded-pill d-flex shadow-sm" style="width: 280px;">
+                                        <button type="button" @click="billingCycle = 'monthly'" 
+                                                class="btn btn-sm flex-grow-1 rounded-pill font-bold transition-all"
+                                                :class="billingCycle === 'monthly' ? 'btn-primary shadow-sm' : 'btn-link text-muted text-decoration-none'">
+                                            شهري
+                                        </button>
+                                        <button type="button" @click="billingCycle = 'term'" 
+                                                class="btn btn-sm flex-grow-1 rounded-pill font-bold transition-all"
+                                                :class="billingCycle === 'term' ? 'btn-primary shadow-sm' : 'btn-link text-muted text-decoration-none'">
+                                            ترم
+                                        </button>
+                                        <button type="button" @click="billingCycle = 'yearly'" 
+                                                class="btn btn-sm flex-grow-1 rounded-pill font-bold transition-all"
+                                                :class="billingCycle === 'yearly' ? 'btn-primary shadow-sm' : 'btn-link text-muted text-decoration-none'">
+                                            سنوي
+                                        </button>
+                                    </div>
                                 </div>
                                 
                                 <div class="row g-4">
@@ -235,20 +255,26 @@
                                                 <div class="card-body p-4 {{ $isCurrent ? 'pt-4' : 'pt-5' }}">
                                                     <h5 class="fw-bold mb-2">{{ $pkg->name }}</h5>
                                                      <div class="mb-4">
-                                                        <div class="d-flex align-items-baseline gap-1">
-                                                            <span class="fs-4 fw-bold text-primary">{{ number_format($pkg->price) }}</span>
-                                                            <small class="text-muted x-small">ج.م / شهري</small>
+                                                        <div x-show="billingCycle === 'monthly'" class="animate-fade-in">
+                                                            <div class="d-flex align-items-baseline gap-1">
+                                                                <span class="fs-4 fw-bold text-primary">{{ number_format($pkg->price) }}</span>
+                                                                <small class="text-muted x-small">ج.م / شهري</small>
+                                                            </div>
                                                         </div>
                                                         @if($pkg->term_price)
-                                                        <div class="d-flex align-items-baseline gap-1 opacity-75">
-                                                            <span class="fw-bold text-dark">{{ number_format($pkg->term_price) }}</span>
-                                                            <small class="text-muted x-small">ج.م / تيرم (150 يوم)</small>
+                                                        <div x-show="billingCycle === 'term'" class="animate-fade-in" style="display: none;">
+                                                            <div class="d-flex align-items-baseline gap-1">
+                                                                <span class="fs-4 fw-bold text-primary">{{ number_format($pkg->term_price) }}</span>
+                                                                <small class="text-muted x-small">ج.م / تيرم (150 يوم)</small>
+                                                            </div>
                                                         </div>
                                                         @endif
                                                         @if($pkg->yearly_price)
-                                                        <div class="d-flex align-items-baseline gap-1 opacity-75">
-                                                            <span class="fw-bold text-dark">{{ number_format($pkg->yearly_price) }}</span>
-                                                            <small class="text-muted x-small">ج.م / سنوي</small>
+                                                        <div x-show="billingCycle === 'yearly'" class="animate-fade-in" style="display: none;">
+                                                            <div class="d-flex align-items-baseline gap-1">
+                                                                <span class="fs-4 fw-bold text-primary">{{ number_format($pkg->yearly_price) }}</span>
+                                                                <small class="text-muted x-small">ج.م / سنوي</small>
+                                                            </div>
                                                         </div>
                                                         @endif
                                                      </div>
@@ -284,13 +310,14 @@
                                                             @endif
                                                         </div>
                                                     @else
-                                                        <a href="{{ route('center.subscription.checkout', ['package' => $pkg->id, 'tenant' => $tenant->domain ?? $tenant->id]) }}" class="btn btn-outline-primary rounded-pill w-100 fw-bold py-2">اشتراك الآن</a>
+                                                        <a :href="'{{ route('center.subscription.checkout', ['package' => $pkg->id, 'tenant' => $tenant->domain ?? $tenant->id]) }}?cycle=' + billingCycle" class="btn btn-outline-primary rounded-pill w-100 fw-bold py-2">اشتراك الآن</a>
                                                     @endif
                                                 </div>
                                             </div>
                                         </div>
                                     @endforeach
                                 </div>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -301,6 +328,13 @@
 </div>
 
 <style>
+    .animate-fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
     .nav-tabs .nav-link {
         color: #64748b;
         background: #f8fafc;
