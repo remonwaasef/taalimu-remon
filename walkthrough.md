@@ -34,3 +34,28 @@ The following files were identified as legacy and unused, and have been deleted:
 -   Implemented robust `x-init` logic to force client-side plan selection based on URL parameters, bypassing server-side cache.
 -   Updated `RegistrationController` to use the selected plan when creating the tenant's initial subscription.
 
+### 4. Account Type Selection (Teacher vs Center)
+-   Added a clear selection for **Independent Teacher** vs. **Educational Center** on the landing page and registration form.
+-   Updated the landing page pricing and CTA sections with dual registration links.
+-   Modified `register.blade.php` to dynamically update field labels (e.g., "Full Name" vs. "Center Name") and step prompts based on the chosen type.
+-   Ensured the backend (`RegistrationController`) correctly assigns the role (`instructor` or `center_admin`) and creates the necessary profile records.
+
+### 5. Advanced Admin Analytics
+-   Added **Life-Time Value (LTV)** calculation and display for tenants.
+-   Implemented **Engagement Score** and **Last Activity** tracking.
+-   Enhanced the tenant list and detail views with performance progress bars and financial health cards.
+
+### 6. Bug Fixes
+-   **SQL Ambiguity Fix**: Resolved an `Integrity constraint violation: 1052` error on the Admin Tenants page by qualifying `created_at` columns in subqueries involving joins. This ensures the "Last Activity" metric loads correctly without database errors.
+
+## Verification Results
+
+### Registration Flow
+-   **Direct Link**: `/register?account_type=instructor` correctly pre-selects "Teacher".
+-   **Dynamic UI**: Labels update correctly when switching between types.
+-   **Submission**: Registration completes with the correct role assignment in the database.
+
+### Admin Dashboard
+-   **Tenant List**: LTV and Last Activity are visible and correctly formatted.
+-   **Tenant Details**: Growth and Financial cards display accurate real-time data.
+

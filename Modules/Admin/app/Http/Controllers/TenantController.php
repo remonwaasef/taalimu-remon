@@ -72,14 +72,14 @@ class TenantController extends Controller
             ->withSum(['invoices as ltv' => function($query) {
                 $query->where('status', 'paid');
             }], 'amount')
-            ->addSelect(['last_activity_at' => \Spatie\Activitylog\Models\Activity::select('created_at')
+            ->addSelect(['last_activity_at' => \Spatie\Activitylog\Models\Activity::select('activity_log.created_at')
                 ->join('users', 'activity_log.causer_id', '=', 'users.id')
                 ->whereColumn('users.tenant_id', 'tenants.id')
                 ->where('activity_log.causer_type', \App\Models\User::class)
-                ->latest()
+                ->orderBy('activity_log.created_at', 'desc')
                 ->limit(1)
             ])
-            ->latest()
+            ->orderBy('tenants.created_at', 'desc')
             ->paginate(20)
             ->withQueryString();
 

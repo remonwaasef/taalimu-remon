@@ -1,6 +1,7 @@
 <section id="pricing" class="py-16 lg:py-24 bg-muted/30" 
          x-data="{ 
             billingCycle: 'term',
+            accountType: 'center',
             userCountry: 'default',
             currencySymbol: '{{ \App\Models\SiteSetting::get('currency_symbol', '$') }}',
             exchangeRates: { 'USD': 1, 'EGP': 1, 'SAR': 1, 'AED': 1, 'EUR': 1 },
@@ -80,6 +81,28 @@
                         <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 text-[10px] font-black uppercase tracking-wider border border-emerald-500/20">
                             {{ __('landing.pricing.save_20') ?? 'SAVE 17%' }}
                         </span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Account Type Switcher (Added for Clarity) -->
+            <div class="flex justify-center mb-12">
+                <div class="inline-flex items-center gap-1 p-1 bg-primary/5 rounded-2xl border border-primary/10">
+                    <button 
+                        @click="accountType = 'center'"
+                        class="px-6 py-2 rounded-xl text-xs font-black transition-all"
+                        :class="accountType === 'center' ? 'bg-primary text-white shadow-lg' : 'text-primary/60 hover:text-primary'"
+                    >
+                        <i class="fas fa-university me-2"></i>
+                        {{ app()->isLocale('ar') ? 'مركز تعليمي' : 'Educational Center' }}
+                    </button>
+                    <button 
+                        @click="accountType = 'instructor'"
+                        class="px-6 py-2 rounded-xl text-xs font-black transition-all"
+                        :class="accountType === 'instructor' ? 'bg-primary text-white shadow-lg' : 'text-primary/60 hover:text-primary'"
+                    >
+                        <i class="fas fa-chalkboard-teacher me-2"></i>
+                        {{ app()->isLocale('ar') ? 'مدرس مستقل' : 'Independent Teacher' }}
                     </button>
                 </div>
             </div>
@@ -227,7 +250,7 @@
                     </ul>
 
                     <div class="mt-auto">
-                        <a :href="'{{ route('register') }}?plan={{ $package->slug }}&cycle=' + billingCycle"
+                        <a :href="'{{ route('register') }}?plan={{ $package->slug }}&cycle=' + billingCycle + '&account_type=' + accountType"
                            class="inline-flex items-center justify-center rounded-full text-sm font-bold h-10 px-6 w-full group transition-all
                            {{ $isFeatured 
                                ? 'bg-white text-primary hover:bg-white/90 shadow-lg' 
