@@ -88,7 +88,7 @@ class SubscriptionController extends Controller
         $request->validate([
             'status' => 'required|in:active,inactive,expired',
             'package_id' => 'nullable|exists:packages,id',
-            'billing_cycle' => 'required|in:monthly,yearly',
+            'billing_cycle' => 'required|in:monthly,term,yearly',
             'base_price' => 'required|numeric|min:0',
             'total_amount' => 'required|numeric|min:0',
             'ends_at' => 'nullable|date',

@@ -155,7 +155,15 @@
                                             <span class="fw-bold text-dark small">{{ $type }}</span>
                                             @if($subscription->billing_cycle)
                                                 <span class="badge bg-secondary bg-opacity-10 text-secondary x-small rounded-pill">
-                                                <div class="text-muted x-small">{{ $subscription->billing_cycle == 'yearly' ? __('admin::admin.subscriptions.table.yearly') : __('admin::admin.subscriptions.table.monthly') }}</div>
+                                                <div class="text-muted x-small">
+                                                    @if($subscription->billing_cycle == 'yearly')
+                                                        {{ __('admin::admin.subscriptions.table.yearly') ?? 'سنوي' }}
+                                                    @elseif($subscription->billing_cycle == 'term')
+                                                        {{ __('admin::admin.subscriptions.table.term') ?? 'ترم' }}
+                                                    @else
+                                                        {{ __('admin::admin.subscriptions.table.monthly') ?? 'شهري' }}
+                                                    @endif
+                                                </div>
                                                 </span>
                                             @endif
                                         </div>

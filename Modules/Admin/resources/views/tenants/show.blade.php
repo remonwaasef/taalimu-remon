@@ -204,8 +204,8 @@
                     <div class="flex-grow-1">
                         <div class="text-muted x-small fw-bold text-uppercase tracking-wider">الباقة الحالية</div>
                         <div class="d-flex align-items-center justify-content-between">
-                            <span class="stat-value fs-4 text-dark">{{ $tenant->subscriptions->last()?->type_label ?? 'مجاني' }}</span>
-                            @if($sub = $tenant->subscriptions->last())
+                            <span class="stat-value fs-4 text-dark">{{ $sub->package->name ?? ($sub->type_label ?? 'مخصص') }}</span>
+                            @if($sub)
                                 @php
                                     $isExpired = $sub->ends_at && $sub->ends_at->isPast();
                                     $isLifetime = !$sub->ends_at;
@@ -214,6 +214,11 @@
                                     {{ $isExpired ? 'منتهي' : ($isLifetime ? 'مستمر' : 'نشط') }}
                                 </span>
                             @endif
+                        </div>
+                        <div class="x-small text-muted mb-1">
+                            <i class="bi bi-arrow-repeat me-1"></i>
+                            {{ $sub->billing_cycle === 'yearly' ? 'اشتراك سنوي' : ($sub->billing_cycle === 'term' ? 'اشتراك ترم' : 'اشتراك شهري') }}
+                            - <span class="fw-bold text-primary">{{ number_format($sub->total_amount, 0) }} ج.م</span>
                         </div>
                     </div>
                 </div>
@@ -571,7 +576,13 @@
                                     </td>
                                     <td>
                                         <span class="badge bg-light text-dark rounded-pill border px-3">
-                                            {{ $subHist->billing_cycle == 'yearly' ? 'سنوي' : 'شهري' }}
+                                            @if($subHist->billing_cycle == 'yearly')
+                                                سنوي
+                                            @elseif($subHist->billing_cycle == 'term')
+                                                ترم
+                                            @else
+                                                شهري
+                                            @endif
                                         </span>
                                     </td>
                                     <td>
