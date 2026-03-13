@@ -38,14 +38,14 @@
                 <div 
                     class="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start mb-12 animate-fade-in delay-3"
                 >
-                    <a href="{{ route('register') }}" class="inline-flex items-center justify-center rounded-full text-xl md:text-2xl font-black h-16 md:h-20 px-12 md:px-16 group transition-all btn-hero-cta">
-                        {{ __('landing.hero.cta_primary') }}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" class="ms-3 w-7 h-7 group-hover:translate-x-2 rtl:group-hover:-translate-x-2 transition-transform"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    <a href="{{ route('register') }}?account_type=center" class="inline-flex items-center justify-center rounded-full text-lg font-black h-16 md:h-20 px-10 md:px-12 group transition-all btn-hero-cta">
+                        <i class="fas fa-university me-3"></i>
+                        {{ app()->isLocale('ar') ? 'سجل كمركز تعليمي' : 'Register as Center' }}
                     </a>
-                    <button class="inline-flex items-center justify-center rounded-full font-bold h-16 px-10 text-lg btn-secondary-cta">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="me-2 opacity-70"><path d="M8 5.14v14l11-7-11-7z"/></svg>
-                        {{ __('landing.hero.cta_secondary') }}
-                    </button>
+                    <a href="{{ route('register') }}?account_type=instructor" class="inline-flex items-center justify-center rounded-full text-lg font-black h-16 md:h-20 px-10 md:px-12 group transition-all btn-hero-cta-secondary border-2 border-primary-purple/20 text-primary-purple hover:bg-primary-purple/5">
+                        <i class="fas fa-chalkboard-teacher me-3"></i>
+                        {{ app()->isLocale('ar') ? 'سجل كمدرس مستقل' : 'Register as Teacher' }}
+                    </a>
                 </div>
 
                 <!-- Professional Trust Badges - Simplified -->

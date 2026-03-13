@@ -113,7 +113,18 @@
                                 </div>
                             @endif
                             <div>
-                                <h1 class="fw-bold mb-2 text-white" style="letter-spacing: -0.5px;">{{ $tenant->name }}</h1>
+                                <div class="d-flex align-items-center gap-3 mb-2">
+                                    <h1 class="fw-bold mb-0 text-white" style="letter-spacing: -0.5px;">{{ $tenant->name }}</h1>
+                                    @if($tenant->type === 'instructor')
+                                        <span class="badge bg-white bg-opacity-20 text-white rounded-pill px-3 py-1 border border-white border-opacity-30 small backdrop-blur">
+                                            <i class="bi bi-person-badge me-1"></i> مدرس مستقل
+                                        </span>
+                                    @else
+                                        <span class="badge bg-white bg-opacity-20 text-white rounded-pill px-3 py-1 border border-white border-opacity-30 small backdrop-blur">
+                                            <i class="bi bi-building me-1"></i> مركز تعليمي
+                                        </span>
+                                    @endif
+                                </div>
                                 <div class="d-flex flex-wrap align-items-center gap-3 text-white text-opacity-90">
                                     <span class="d-flex align-items-center gap-1 bg-white bg-opacity-10 px-3 py-1 rounded-pill small backdrop-blur">
                                         <i class="bi bi-clock"></i> 
