@@ -131,6 +131,7 @@
                         <tr class="text-secondary small text-uppercase">
                             <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.center_admin') }}</th>
                             <th class="px-4 py-3 border-0">الاشتراك والفوترة</th>
+                            <th class="px-4 py-3 border-0 text-center">الأداء والتفاعل</th>
                             <th class="px-4 py-3 border-0 text-center">{{ __('admin::admin.tenants.table.students') }}</th>
                             <th class="px-4 py-3 border-0 text-center">{{ __('admin::admin.tenants.table.status') }}</th>
                             <th class="px-4 py-3 border-0 text-end">{{ __('admin::admin.tenants.table.actions') }}</th>
@@ -206,14 +207,43 @@
                                                         اشتراك مستمر
                                                     @endif
                                                 </span>
-                                                <span class="fw-bold text-primary">
-                                                    {{ number_format($subscription->total_amount ?: ($subscription->package->price ?? 0), 0) }} {{ __('admin::admin.egp') }}
-                                                </span>
                                             </div>
                                         </div>
                                     @else
                                         <span class="text-muted small">لا يوجد اشتراك نشط</span>
                                     @endif
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex flex-column align-items-center gap-2">
+                                        <div class="d-flex flex-column align-items-center">
+                                            <div class="x-small text-muted mb-1">القيمة الكلية (LTV)</div>
+                                            <span class="fw-bold text-success">{{ number_format($tenant->ltv ?: 0, 0) }} ج.م</span>
+                                        </div>
+                                        
+                                        @if($subscription && $subscription->ends_at && !$isExpired)
+                                            @php
+                                                $totalDays = max(1, $subscription->created_at->diffInDays($subscription->ends_at));
+                                                $remainingDays = now()->diffInDays($subscription->ends_at, false);
+                                                $percent = min(100, max(0, ($remainingDays / $totalDays) * 100));
+                                                $barColor = $percent < 20 ? 'danger' : ($percent < 50 ? 'warning' : 'primary');
+                                            @endphp
+                                            <div class="w-75">
+                                                <div class="progress" style="height: 4px; background-color: rgba(0,0,0,0.05);">
+                                                    <div class="progress-bar bg-{{ $barColor }}" role="progressbar" style="width: {{ 100 - $percent }}%"></div>
+                                                </div>
+                                                <div class="x-small text-muted mt-1" style="font-size: 0.65rem;">متبقي {{ (int)$remainingDays }} يوم</div>
+                                            </div>
+                                        @endif
+
+                                        @if($tenant->last_activity_at)
+                                            <div class="x-small text-muted mt-1 border-top pt-1 w-100">
+                                                <i class="bi bi-lightning-charge text-warning"></i>
+                                                {{ \Illuminate\Support\Carbon::parse($tenant->last_activity_at)->diffForHumans() }}
+                                            </div>
+                                        @else
+                                            <div class="x-small text-muted mt-1 border-top pt-1 w-100">لا نشاط مؤخراً</div>
+                                        @endif
+                                    </div>
                                 </td>
                                 <td class="text-center">
                                     <div class="d-flex flex-column align-items-center">
@@ -255,7 +285,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="py-5 text-center">
+                                <td colspan="6" class="py-5 text-center">
                                     <div class="py-5">
                                         <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 100px; height: 100px;">
                                             <i class="bi bi-search fs-1 opacity-25"></i>

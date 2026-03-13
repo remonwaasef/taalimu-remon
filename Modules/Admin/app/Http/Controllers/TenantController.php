@@ -69,6 +69,16 @@ class TenantController extends Controller
         ];
 
         $tenants = $query->with(['users', 'currentSubscription.package'])
+            ->withSum(['invoices as ltv' => function($query) {
+                $query->where('status', 'paid');
+            }], 'amount')
+            ->addSelect(['last_activity_at' => \Spatie\Activitylog\Models\Activity::select('created_at')
+                ->join('users', 'activity_log.causer_id', '=', 'users.id')
+                ->whereColumn('users.tenant_id', 'tenants.id')
+                ->where('activity_log.causer_type', \App\Models\User::class)
+                ->latest()
+                ->limit(1)
+            ])
             ->latest()
             ->paginate(20)
             ->withQueryString();

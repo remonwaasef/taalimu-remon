@@ -169,6 +169,22 @@ class Tenant extends Model
     }
 
     /**
+     * Get the invoices for the tenant.
+     */
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    /**
+     * Get the calculated LTV (Life-Time Value).
+     */
+    public function getLtvAttribute()
+    {
+        return $this->invoices()->where('status', 'paid')->sum('amount');
+    }
+
+    /**
      * Get the count of unique students with overdue payments.
      */
     public function getOverdueStudentsCount(): int
