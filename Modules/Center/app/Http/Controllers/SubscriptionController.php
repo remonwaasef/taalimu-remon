@@ -70,7 +70,7 @@ class SubscriptionController extends Controller
         $package = Package::findOrFail($packageId);
         $tenant  = app('tenant');
 
-        if (!$package->stripe_price_id) {
+        if ($package->price <= 0 && $package->yearly_price <= 0) {
             return back()->with('error', __('center::messages.msg_087'));
         }
 

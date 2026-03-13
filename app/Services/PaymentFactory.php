@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use App\Interfaces\PaymentGatewayInterface;
-use App\Services\PaymentGateways\StripeGateway;
-use App\Services\PaymentGateways\PayPalGateway;
 use Exception;
 
 class PaymentFactory
@@ -19,8 +17,6 @@ class PaymentFactory
     public static function make(string $gateway): PaymentGatewayInterface
     {
         switch (strtolower($gateway)) {
-            case 'stripe':
-                return new \App\Services\PaymentGateways\StripeGateway();
             case 'paypal':
                 return new \App\Services\PaymentGateways\PayPalGateway(app(PayPalService::class));
             case 'paymob':
