@@ -3,8 +3,6 @@
 use Illuminate\Support\Facades\Route;
 
 // Main domain routes (without tenant subdomain)
-// Main domain routes
-// Main domain routes
 Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain', 'localhost'))->group(function () {
     Route::get('/', [App\Http\Controllers\LandingController::class, 'index'])->name('home');
 
@@ -44,7 +42,7 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
         return redirect()->route('login.portal');
     })->middleware(['auth', 'verified'])->name('dashboard');
     
-Route::get('/registration-success', function() {
+    Route::get('/registration-success', function() {
         if (!session('registration_success')) {
             return redirect()->route('register');
         }
@@ -137,7 +135,3 @@ Route::get('lang/{locale}', function ($locale) {
     }
     return redirect()->back();
 })->middleware('throttle:60,1')->name('lang.switch');
-
-// Debug routes removed for security - uncomment only in development if needed
-// if (app()->environment('local')) { ... }
-

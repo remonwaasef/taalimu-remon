@@ -53,16 +53,6 @@ $instructorRoutes = function () {
 
     });
 
-    // Temporary Migration Route
-    Route::get('/run-migration', function() {
-        try {
-            \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-            return '<pre>' . \Illuminate\Support\Facades\Artisan::output() . '</pre>';
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    });
-
     // Public Student Portal (Accessible via QR Link)
     Route::get('/s/{identifier}', [\Modules\Instructor\Http\Controllers\StudentPortalController::class, 'index'])->name('student.portal');
 };

@@ -859,6 +859,43 @@ class InstructorController extends Controller
      */
     public function settings()
     {
+        // One-time price correction logic - Fixes Monthly/Term price swap
+        try {
+            $basic = \App\Models\Package::where('slug', 'basic')->first();
+            if ($basic && ($basic->price > 1000 || $basic->term_price === null)) { 
+                $updates = [
+                    'basic' => [
+                        'price' => 450, 'term_price' => 1450, 'yearly_price' => 2500,
+                        'regional_prices' => [
+                            'EG' => ['amount' => 450, 'currency' => 'EGP', 'term_price' => 1450, 'yearly_price' => 2500],
+                            'default' => ['amount' => 15, 'currency' => 'USD', 'term_price' => 49, 'yearly_price' => 85]
+                        ]
+                    ],
+                    'pro' => [
+                        'price' => 950, 'term_price' => 3450, 'yearly_price' => 6000,
+                        'regional_prices' => [
+                            'EG' => ['amount' => 950, 'currency' => 'EGP', 'term_price' => 3450, 'yearly_price' => 6000],
+                            'default' => ['amount' => 30, 'currency' => 'USD', 'term_price' => 99, 'yearly_price' => 170]
+                        ]
+                    ],
+                    'enterprise' => [
+                        'price' => 1950, 'term_price' => 6950, 'yearly_price' => 12000,
+                        'regional_prices' => [
+                            'EG' => ['amount' => 1950, 'currency' => 'EGP', 'term_price' => 6950, 'yearly_price' => 12000],
+                            'default' => ['amount' => 60, 'currency' => 'USD', 'term_price' => 199, 'yearly_price' => 340]
+                        ]
+                    ],
+                ];
+
+                foreach ($updates as $slug => $data) {
+                    \App\Models\Package::where('slug', $slug)->update($data);
+                }
+                \Illuminate\Support\Facades\Cache::forget('subscription_packages_full');
+            }
+        } catch (\Exception $e) {
+            \Log::error('Settings Price Fix Failed: ' . $e->getMessage());
+        }
+
         $tenant = app('tenant');
         $settings = $tenant->settings['whatsapp'] ?? [];
         $packages = \App\Models\Package::with('features')->where('is_active', true)->orderBy('sort_order')->get();
