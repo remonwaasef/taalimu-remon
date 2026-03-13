@@ -45,10 +45,56 @@ class PaymobWebhookController extends Controller
             
             Log::info("Paymob Subscription Updated for Trans ID: {$transactionId}");
         } else {
-            // If subscription doesn't exist yet (webhook arrived before redirect), 
-            // we could potentially create it here if we have enough context 
-            // (e.g., from custom_data or metadata in Paymob order)
-            Log::info("Paymob Webhook: Subscription not found for Trans ID: {$transactionId}. It might be created during redirect.");
+            // Restore context from merchant_order_id
+            $merchantOrderId = $result['merchant_order_id'] ?? null;
+
+            if ($merchantOrderId && str_starts_with($merchantOrderId, 'tx_')) {
+                $parts = explode('_', $merchantOrderId);
+                if (count($parts) >= 6) {
+                    $tenantId = $parts[2];
+                    $planSlug = $parts[3];
+                    $billingCycle = $parts[4];
+                    $isChange = $parts[5] === '1';
+
+                    $tenant = Tenant::find($tenantId);
+                    if ($tenant) {
+                        $package = \App\Models\Package::where('slug', $planSlug)->first();
+                        
+                        $totalAmount = ($billingCycle === 'yearly' ? ($package->yearly_price ?? 0) : ($billingCycle === 'term' ? ($package->term_price ?? 0) : ($package->price ?? 0)));
+                        
+                        $days = 30;
+                        if ($billingCycle === 'term') {
+                            $days = 150;
+                        } elseif ($billingCycle === 'yearly') {
+                            $days = 365;
+                        } elseif ($package) {
+                            $days = $package->duration_in_days; 
+                        }
+
+                        $tenant->subscriptions()->updateOrCreate(
+                            ['name' => 'default'],
+                            [
+                                'gateway' => 'paymob',
+                                'stripe_id' => 'sub_paymob_' . $transactionId,
+                                'stripe_status' => 'active',
+                                'stripe_price' => 'price_paymob_' . ($package->slug ?? ($planSlug ?: 'unknown')),
+                                'quantity' => 1,
+                                'billing_cycle' => $billingCycle,
+                                'base_price' => $totalAmount,
+                                'total_amount' => $totalAmount,
+                                'discount_amount' => 0,
+                                'status' => 'active',
+                                'ends_at' => now()->addDays($days),
+                            ]
+                        );
+
+                        Log::info("Paymob Webhook: Subscription created from context restoration for Trans ID: {$transactionId}");
+                        return response()->json(['status' => 'success']);
+                    }
+                }
+            }
+
+            Log::info("Paymob Webhook: Subscription not found and context restoration failed for Trans ID: {$transactionId}.");
         }
 
         return response()->json(['status' => 'success']);

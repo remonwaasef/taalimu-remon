@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Tenant;
 use App\Services\TelegramService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
@@ -84,63 +85,100 @@ class PaymentController extends Controller
 
     public function paymobCallback(Request $request, TelegramService $telegram)
     {
+        /** @var \App\Services\PaymentGateways\PaymobGateway $gateway */
         $gateway = \App\Services\PaymentFactory::make('paymob');
         
+        // 1. Verify Redirect HMAC (Security First)
+        if (!$gateway->verifyRedirectHmac($request->all())) {
+            \Log::warning('Paymob Redirect HMAC Mismatch', ['payload' => $request->except(['hmac'])]);
+            return redirect()->route('home')->withErrors(['error' => 'فشل التحقق من أمان عملية الدفع.']);
+        }
+
         $success = $request->get('success') === 'true';
         $transactionId = $request->get('id');
-        $orderId = $request->get('order');
+        $merchantOrderId = $request->get('merchant_order_id'); // Paymob sometimes sends this in redirect
 
         if ($success && $transactionId) {
-             // Mark registration as successful for the view
-             session(['registration_success' => true]);
-
+             // 2. Context Restoration (Fall back to merchant_order_id if session is lost)
              $tenantId = session('tenant_id');
+             $planSlug = session('selected_plan');
+             $billingCycle = session('billing_cycle', 'monthly');
+             $isChange = session('is_subscription_change', false);
+             $basePrice = session('base_price', 0);
+             $totalAmount = session('total_amount', 0);
+
+             if (!$tenantId && $merchantOrderId && str_starts_with($merchantOrderId, 'tx_')) {
+                 // Format: tx_{time}_{tenant_id}_{package_slug}_{billing_cycle}_{is_change}
+                 $parts = explode('_', $merchantOrderId);
+                 if (count($parts) >= 6) {
+                     $tenantId = $parts[2];
+                     $planSlug = $parts[3];
+                     $billingCycle = $parts[4];
+                     $isChange = $parts[5] === '1';
+                     
+                     \Log::info("Paymob Context Restored from merchant_order_id: {$merchantOrderId}");
+                 }
+             }
+
+             // Last Resort: If we still don't have a planSlug, try to guestimate or look up by transaction?
+             // But usually merchant_order_id restoration is enough.
+
              $tenant = $tenantId ? \App\Models\Tenant::find($tenantId) : null;
 
              if ($tenant) {
-                $planSlug = session('selected_plan', 'pro');
-                $package = \App\Models\Package::where('slug', $planSlug)->first();
-                $billingCycle = session('billing_cycle', 'monthly');
+                 $package = \App\Models\Package::where('slug', $planSlug)->first();
+                 
+                 // If prices were in session but lost, we fallback to package prices
+                 if ($totalAmount <= 0 && $package) {
+                     $totalAmount = ($billingCycle === 'yearly' ? $package->yearly_price : ($billingCycle === 'term' ? $package->term_price : $package->price));
+                     $basePrice = $totalAmount;
+                 }
 
-                $days = 30; // Default Monthly
-                if ($billingCycle === 'term') {
-                    $days = 150;
-                } elseif ($billingCycle === 'yearly') {
-                    $days = 365;
-                } elseif ($package) {
-                    $days = $package->duration_in_days; // Fallback
-                }
+                 $days = 30;
+                 if ($billingCycle === 'term') {
+                     $days = 150;
+                 } elseif ($billingCycle === 'yearly') {
+                     $days = 365;
+                 } elseif ($package) {
+                     $days = $package->duration_in_days; 
+                 }
 
-                $tenant->subscriptions()->updateOrCreate(
-                    ['name' => 'default'],
-                    [
-                        'gateway' => 'paymob',
-                        'stripe_id' => 'sub_paymob_' . $transactionId,
-                        'stripe_status' => 'active',
-                        'stripe_price' => 'price_paymob_' . ($package->slug ?? 'unknown'),
-                        'quantity' => 1,
-                        'billing_cycle' => $billingCycle,
-                        'base_price' => session('base_price', 0),
-                        'total_amount' => session('total_amount', 0),
-                        'discount_amount' => 0,
-                        'status' => 'active',
-                        'ends_at' => now()->addDays($days),
-                    ]
-                );
+                 $tenant->subscriptions()->updateOrCreate(
+                     ['name' => 'default'],
+                     [
+                         'gateway' => 'paymob',
+                         'stripe_id' => 'sub_paymob_' . $transactionId,
+                         'stripe_status' => 'active',
+                         'stripe_price' => 'price_paymob_' . ($package->slug ?? ($planSlug ?: 'unknown')),
+                         'quantity' => 1,
+                         'billing_cycle' => $billingCycle,
+                         'base_price' => $basePrice,
+                         'total_amount' => $totalAmount,
+                         'discount_amount' => 0,
+                         'status' => 'active',
+                         'ends_at' => now()->addDays($days),
+                     ]
+                 );
 
-                $user = \App\Models\User::where('tenant_id', $tenant->id)
-                    ->whereIn('role', ['center_admin', 'instructor'])
-                    ->first();
-                
-                $telegram->sendRegistrationAlert($tenant, $user, "******** (Paymob ID: {$transactionId})");
+                 $user = \App\Models\User::where('tenant_id', $tenant->id)
+                     ->whereIn('role', ['center_admin', 'instructor'])
+                     ->first();
+                 
+                 $telegram->sendRegistrationAlert($tenant, $user, "******** (Paymob ID: {$transactionId})");
+                 
+                 // Enable success state for the view
+                 session(['registration_success' => true]);
+
+                 if ($isChange) {
+                     return redirect()->route('center.subscription.success', ['tenant' => $tenant->domain]);
+                 }
+
+                 return redirect()->route('registration.success');
              }
 
-             if (session('is_subscription_change')) {
-                 session()->forget('is_subscription_change');
-                 return redirect()->route('center.subscription.success', ['tenant' => $tenant->domain]);
-             }
-
-             return redirect()->route('registration.success');
+             // If we confirmed success but couldn't find the tenant, it's a critical error
+             \Log::error("Paymob Payment Success but Tenant not found", ['transaction_id' => $transactionId, 'merchant_order_id' => $merchantOrderId]);
+             return redirect()->route('home')->withErrors(['error' => 'تم الدفع بنجاح ولكن تعذر تحديث بيانات الحساب. يرجى التواصل مع الدعم الفني.']);
         }
 
         return redirect()->route('home')->withErrors(['error' => 'فشل الدفع عبر Paymob أو تم إلغاؤه.']);
