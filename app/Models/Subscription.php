@@ -103,6 +103,9 @@ class Subscription extends CashierSubscription
             'price_starter' => 'basic',
             'price_growth' => 'pro',
             'price_enterprise' => 'enterprise',
+            'price_paymob_basic' => 'basic',
+            'price_paymob_pro' => 'pro',
+            'price_paymob_enterprise' => 'enterprise',
             'starter' => 'basic', // some old data might use plain slug
             'growth' => 'pro',
         ];
