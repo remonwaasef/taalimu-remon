@@ -105,6 +105,69 @@ class PaymentController extends Controller
         return redirect()->route('home')->withErrors(['error' => 'فشل التحقق من عملية دفع PayPal.']);
     }
 
+    public function paymobCallback(Request $request, TelegramService $telegram)
+    {
+        $gateway = \App\Services\PaymentFactory::make('paymob');
+        
+        // Paymob sends everything in the query string for the GET callback
+        // We use the same verification logic as handleCallback but tailored for GET params if needed
+        // Or we can rely on the transaction status parameter for the initial redirect UI
+        
+        $success = $request->get('success') === 'true';
+        $transactionId = $request->get('id');
+        $orderId = $request->get('order');
+
+        if ($success && $transactionId) {
+             // Mark registration as successful for the view
+             session(['registration_success' => true]);
+
+             $tenantId = session('tenant_id');
+             $tenant = $tenantId ? \App\Models\Tenant::find($tenantId) : null;
+
+             if ($tenant) {
+                $planSlug = session('selected_plan', 'pro');
+                $package = \App\Models\Package::where('slug', $planSlug)->first();
+                $billingCycle = session('billing_cycle', 'monthly');
+
+                $days = 150;
+                if ($billingCycle === 'yearly') {
+                    $days = 365;
+                } elseif ($package) {
+                    $days = $package->duration_in_days;
+                }
+
+                $tenant->subscriptions()->updateOrCreate(
+                    ['name' => 'default'],
+                    [
+                        'gateway' => 'paymob',
+                        'stripe_id' => 'sub_paymob_' . $transactionId,
+                        'stripe_status' => 'active',
+                        'stripe_price' => 'price_paymob_' . ($package->slug ?? 'unknown'),
+                        'quantity' => 1,
+                        'billing_cycle' => $billingCycle,
+                        'base_price' => session('base_price', 0),
+                        'total_amount' => session('total_amount', 0),
+                        'discount_amount' => 0,
+                        'status' => 'active',
+                        'ends_at' => now()->addDays($days),
+                    ]
+                );
+
+                $user = \App\Models\User::where('tenant_id', $tenant->id)->where('role', 'center_admin')->first();
+                $telegram->sendRegistrationAlert($tenant, $user, "******** (Paymob ID: {$transactionId})");
+             }
+
+             if (session('is_subscription_change')) {
+                 session()->forget('is_subscription_change');
+                 return redirect()->route('center.subscription.success', ['tenant' => $tenant->domain]);
+             }
+
+             return redirect()->route('registration.success');
+        }
+
+        return redirect()->route('home')->withErrors(['error' => 'فشل الدفع عبر Paymob أو تم إلغاؤه.']);
+    }
+
     public function cancel()
     {
         return view('auth.payment-cancel');

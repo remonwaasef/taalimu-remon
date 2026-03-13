@@ -23,6 +23,8 @@ class PaymentFactory
                 return new \App\Services\PaymentGateways\StripeGateway();
             case 'paypal':
                 return new \App\Services\PaymentGateways\PayPalGateway(app(PayPalService::class));
+            case 'paymob':
+                return new \App\Services\PaymentGateways\PaymobGateway();
             case 'test':
             case 'mock':
                 return new \App\Services\PaymentGateways\MockGateway();

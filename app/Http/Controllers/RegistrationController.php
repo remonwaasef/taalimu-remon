@@ -124,7 +124,7 @@ class RegistrationController extends Controller
             'billing_cycle' => 'required|in:monthly,yearly',
             'coupon_code' => 'nullable|string|exists:coupons,code',
             'country_code' => 'nullable|string|max:2',
-            'payment_gateway' => 'required|in:stripe,paypal,test',
+            'payment_gateway' => 'required|in:paypal,paymob,test',
         ]);
 
         try {
