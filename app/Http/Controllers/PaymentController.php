@@ -61,7 +61,10 @@ class PaymentController extends Controller
                         ]
                     );
                     
-                    $user = \App\Models\User::where('tenant_id', $tenant->id)->where('role', 'center_admin')->first();
+                    $user = \App\Models\User::where('tenant_id', $tenant->id)
+                        ->whereIn('role', ['center_admin', 'instructor'])
+                        ->first();
+                    
                     $telegram->sendRegistrationAlert($tenant, $user, '******** (PayPal Order)');
                 }
 
@@ -121,7 +124,10 @@ class PaymentController extends Controller
                     ]
                 );
 
-                $user = \App\Models\User::where('tenant_id', $tenant->id)->where('role', 'center_admin')->first();
+                $user = \App\Models\User::where('tenant_id', $tenant->id)
+                    ->whereIn('role', ['center_admin', 'instructor'])
+                    ->first();
+                
                 $telegram->sendRegistrationAlert($tenant, $user, "******** (Paymob ID: {$transactionId})");
              }
 
@@ -289,7 +295,10 @@ class PaymentController extends Controller
         session(['registration_success' => true]);
 
         // Notify Admin
-        $user = \App\Models\User::where('tenant_id', $tenant->id)->where('role', 'center_admin')->first();
+        $user = \App\Models\User::where('tenant_id', $tenant->id)
+            ->whereIn('role', ['center_admin', 'instructor'])
+            ->first();
+            
         $telegram->sendRegistrationAlert($tenant, $user, '********');
 
         return redirect()->route('registration.success');
