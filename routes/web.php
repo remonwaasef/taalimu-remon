@@ -121,14 +121,6 @@ Route::get('/registration-success', function() {
     Route::get('auth/google/callback', [App\Http\Controllers\SocialAuthController::class, 'handleGoogleCallback']);
     Route::get('auth/google/complete', [App\Http\Controllers\SocialAuthController::class, 'showCompleteRegistration'])->name('google.complete-registration');
     Route::post('auth/google/complete', [App\Http\Controllers\SocialAuthController::class, 'completeRegistration'])->name('google.complete-registration');
-
-    // Temporary Stripe Setup Route - DELETE AFTER USE
-    Route::get('/setup-stripe-prices', function() {
-        \App\Models\Package::where('slug', 'basic')->update(['stripe_price_id' => 'price_1TAJ0FF1Qx8XSbKrrJ65PIni']);
-        \App\Models\Package::where('slug', 'pro')->update(['stripe_price_id' => 'price_1TAJ5uF1Qx8XSbKrAvkraZtj']);
-        \App\Models\Package::where('slug', 'enterprise')->update(['stripe_price_id' => 'price_1TAJ6dF1Qx8XSbKrz6RRqwS7']);
-        return "Stripe Prices Updated Successfully! Please delete this route from routes/web.php for security.";
-    });
 });
 
 // Global Language Switcher (Accessible from any domain) — rate limited to prevent locale flooding
