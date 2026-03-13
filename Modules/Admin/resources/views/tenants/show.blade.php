@@ -184,12 +184,12 @@
     <div class="col-md-3">
         <div class="premium-card h-100">
             <div class="card-body p-4 d-flex align-items-center gap-3">
-                <div class="icon-box" style="background-color: rgba(42, 77, 255, 0.1); color: #2A4DFF;">
-                    <i class="bi bi-database"></i>
+                <div class="icon-box" style="background-color: rgba(16, 185, 129, 0.1); color: #10b981;">
+                    <i class="bi bi-graph-up-arrow"></i>
                 </div>
                 <div>
-                    <div class="text-muted small fw-medium mb-1">قاعدة البيانات</div>
-                    <div class="stat-value fs-5 text-dark text-truncate" style="max-width: 140px;" title="{{ $tenant->database_name }}">{{ $tenant->database_name ?? 'N/A' }}</div>
+                    <div class="text-muted small fw-medium mb-1">النمو (30 يوم)</div>
+                    <div class="stat-value fs-4 text-success">+{{ $growthData->sum('count') }}</div>
                 </div>
             </div>
         </div>
@@ -345,8 +345,56 @@
         </div>
     </div>
 
-    <!-- Main Content Grid -->
     <div class="col-lg-4">
+        <!-- Financial Health -->
+        <div class="premium-card mb-4 overflow-hidden" style="border-right: 4px solid #10b981 !important; background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h6 class="fw-bold mb-0 text-dark">الصحة المالية (LTV)</h6>
+                    <div class="icon-box bg-success bg-opacity-10 text-success rounded-3" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                        <i class="bi bi-wallet2"></i>
+                    </div>
+                </div>
+                <div class="h4 fw-bold text-success mb-1">{{ number_format($tenant->ltv, 0) }} ج.م</div>
+                <div class="x-small text-muted">إجمالي المبالغ المسددة فعلياً للمنصة</div>
+                
+                <div class="mt-3 pt-3 border-top">
+                    <div class="d-flex justify-content-between x-small mb-1">
+                        <span class="text-muted">متوسط الاشتراك الشهري</span>
+                        <span class="fw-bold text-dark">
+                            @php
+                                $monthsActive = max(1, $tenant->created_at->diffInMonths(now()));
+                                $avgMonthly = $tenant->ltv / $monthsActive;
+                            @endphp
+                            {{ number_format($avgMonthly, 0) }} ج.م
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Engagement Score -->
+        <div class="premium-card mb-4 overflow-hidden" style="border-right: 4px solid #f59e0b !important; background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%);">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h6 class="fw-bold mb-0 text-dark">درجة التفاعل</h6>
+                    <div class="icon-box bg-warning bg-opacity-10 text-warning rounded-3" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                        <i class="bi bi-lightning-charge"></i>
+                    </div>
+                </div>
+                @php
+                    $recentActivityCount = $activities->count();
+                    $score = min(100, $recentActivityCount * 20); 
+                    $engStatus = $score > 70 ? 'مرتفع' : ($score > 30 ? 'متوسط' : 'منخفض');
+                    $engColor = $score > 70 ? 'success' : ($score > 30 ? 'warning' : 'danger');
+                @endphp
+                <div class="h4 fw-bold text-{{ $engColor }} mb-1">{{ $score }}% <small class="fw-normal text-muted fs-6">({{ $engStatus }})</small></div>
+                <div class="progress mt-2" style="height: 6px; background-color: rgba(0,0,0,0.05);">
+                    <div class="progress-bar bg-{{ $engColor }}" role="progressbar" style="width: {{ $score }}%"></div>
+                </div>
+                <div class="x-small text-muted mt-2">بناءً على وتيرة استخدام النظام مؤخراً</div>
+            </div>
+        </div>
         <!-- Contact Info -->
         <div class="premium-card mb-4">
             <div class="card-body p-4">
