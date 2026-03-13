@@ -54,12 +54,13 @@ document.addEventListener('alpine:init', () => {
         },
 
         getPriceData(pkg) {
-             if(!pkg) return { amount: 0, currency: '$', yearly: 0, old: 0, discount_label: '' };
+             if(!pkg) return { amount: 0, currency: '$', term: 0, yearly: 0, old: 0, discount_label: '' };
              
              let prices = pkg.regional_prices || {};
              // Default from PHP data
              let data = {
                  amount: parseFloat(pkg.price_raw),
+                 term: parseFloat(pkg.term_price_raw || (pkg.price_raw * 4)),
                  yearly: parseFloat(pkg.yearly_price_raw),
                  currency: pkg.currency || '$',
                  old: parseFloat(pkg.old_price_raw || 0),
@@ -70,6 +71,7 @@ document.addEventListener('alpine:init', () => {
                  let r = prices[this.userCountry];
                  data.currency = r.currency || data.currency;
                  data.amount = parseFloat(r.amount || data.amount);
+                 data.term = parseFloat(r.term_price || (data.amount * 4));
                  data.yearly = parseFloat(r.yearly_price || (data.amount * 10)); // Default annual logic
                  data.old = parseFloat(r.old_price || 0);
                  data.discount_label = r.discount_label || data.discount_label;
@@ -84,7 +86,9 @@ document.addEventListener('alpine:init', () => {
         get activePriceRaw() {
             const plan = this.currentPlan;
             const priceData = this.getPriceData(plan);
-            return this.billingCycle === 'yearly' ? (priceData.yearly || 0) : (priceData.amount || 0);
+            if (this.billingCycle === 'yearly') return (priceData.yearly || 0);
+            if (this.billingCycle === 'term') return (priceData.term || 0);
+            return (priceData.amount || 0);
         },
         
         get activePriceValue() {
@@ -504,8 +508,31 @@ document.addEventListener('alpine:init', () => {
                                     <span class="text-3xl font-black tracking-tighter" x-text="finalPrice.toLocaleString()"></span>
                                     <span class="text-sm font-bold opacity-60" x-text="currentPriceData.currency"></span>
                                 </div>
-                                <span class="text-[10px] font-bold text-slate-400">/<span x-text="billingCycle === 'yearly' ? ({{ Js::from(app()->getLocale() == 'ar' ? 'سنة' : 'year') }}) : ({{ Js::from(app()->getLocale() == 'ar' ? 'شهر' : 'month') }})"></span></span>
+                                <span class="text-[10px] font-bold text-slate-400">/ 
+                                    <span x-show="billingCycle === 'monthly'">{{ app()->getLocale() == 'ar' ? 'شهر' : 'month' }}</span>
+                                    <span x-show="billingCycle === 'term'">{{ app()->getLocale() == 'ar' ? 'ترم (150 يوم)' : 'term (150 days)' }}</span>
+                                    <span x-show="billingCycle === 'yearly'">{{ app()->getLocale() == 'ar' ? 'سنة' : 'year' }}</span>
+                                </span>
                             </div>
+                        </div>
+
+                        <!-- Billing Cycle Switcher -->
+                        <div class="flex p-1.5 bg-slate-200/50 rounded-2xl mb-6 items-center">
+                            <button type="button" @click="billingCycle = 'monthly'" 
+                                    class="flex-1 py-2 text-[11px] font-black rounded-xl transition-all"
+                                    :class="billingCycle === 'monthly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
+                                {{ app()->getLocale() == 'ar' ? 'شهري' : 'Monthly' }}
+                            </button>
+                            <button type="button" @click="billingCycle = 'term'" 
+                                    class="flex-1 py-2 text-[11px] font-black rounded-xl transition-all"
+                                    :class="billingCycle === 'term' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
+                                {{ app()->getLocale() == 'ar' ? 'ترم (150 يوم)' : 'Term' }}
+                            </button>
+                            <button type="button" @click="billingCycle = 'yearly'" 
+                                    class="flex-1 py-2 text-[11px] font-black rounded-xl transition-all"
+                                    :class="billingCycle === 'yearly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
+                                {{ app()->getLocale() == 'ar' ? 'سنوي' : 'Yearly' }}
+                            </button>
                         </div>
 
                         <!-- Conversion Boost: Reassurance -->

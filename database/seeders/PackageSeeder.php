@@ -83,19 +83,20 @@ class PackageSeeder extends Seeder
                 'name_en' => 'Starter',
                 'slug' => 'basic', // Keeping slug 'basic'
                 'stripe_price_id' => 'price_1TAJ0FF1Qx8XSbKrrJ65PIni',
-                'price' => 1450.00,
-                'yearly_price' => 2500.00,
+                'price' => 450.00, // Monthly
+                'term_price' => 1450.00, // 150 days
+                'yearly_price' => 2500.00, // 365 days
                 'old_price' => 1800.00,
                 'duration_in_days' => 150,
                 'description' => 'للمدرسين المستقلين والمجموعات الصغيرة.',
                 'description_en' => 'Perfect for individual tutors.',
                 'is_featured' => false,
                 'regional_prices' => [
-                    'default' => ['amount' => 49, 'currency' => 'USD', 'yearly_price' => 85, 'old_price' => 60],
-                    'EG' => ['amount' => 1450, 'currency' => 'EGP', 'yearly_price' => 2500, 'old_price' => 1800],
-                    'SA' => ['amount' => 185, 'currency' => 'SAR', 'yearly_price' => 320, 'old_price' => 220],
-                    'AE' => ['amount' => 185, 'currency' => 'AED', 'yearly_price' => 320, 'old_price' => 220],
-                    'FR' => ['amount' => 45, 'currency' => 'EUR', 'yearly_price' => 80, 'old_price' => 55],
+                    'default' => ['amount' => 15, 'currency' => 'USD', 'term_price' => 49, 'yearly_price' => 85, 'old_price' => 60],
+                    'EG' => ['amount' => 450, 'currency' => 'EGP', 'term_price' => 1450, 'yearly_price' => 2500, 'old_price' => 1800],
+                    'SA' => ['amount' => 60, 'currency' => 'SAR', 'term_price' => 185, 'yearly_price' => 320, 'old_price' => 220],
+                    'AE' => ['amount' => 60, 'currency' => 'AED', 'term_price' => 185, 'yearly_price' => 320, 'old_price' => 220],
+                    'FR' => ['amount' => 14, 'currency' => 'EUR', 'term_price' => 45, 'yearly_price' => 80, 'old_price' => 55],
                 ],
                 'features' => [
                     'max_students' => '150',
@@ -120,8 +121,9 @@ class PackageSeeder extends Seeder
                 'name_en' => 'Growth',
                 'slug' => 'pro', // Keeping slug 'pro'
                 'stripe_price_id' => 'price_1TAJ5uF1Qx8XSbKrAvkraZtj',
-                'price' => 3450.00,
-                'yearly_price' => 6000.00,
+                'price' => 950.00, // Monthly
+                'term_price' => 3450.00, // 150 days
+                'yearly_price' => 6000.00, // 365 days
                 'old_price' => 4200.00,
                 'duration_in_days' => 150,
                 'badge' => 'الأكثر طلباً',
@@ -130,11 +132,11 @@ class PackageSeeder extends Seeder
                 'is_featured' => true,
                 'discount_label' => 'وفر 20%',
                 'regional_prices' => [
-                    'default' => ['amount' => 99, 'currency' => 'USD', 'yearly_price' => 170, 'old_price' => 120],
-                    'EG' => ['amount' => 3450, 'currency' => 'EGP', 'yearly_price' => 6000, 'old_price' => 4200],
-                    'SA' => ['amount' => 450, 'currency' => 'SAR', 'yearly_price' => 780, 'old_price' => 550],
-                    'AE' => ['amount' => 450, 'currency' => 'AED', 'yearly_price' => 780, 'old_price' => 550],
-                    'FR' => ['amount' => 95, 'currency' => 'EUR', 'yearly_price' => 165, 'old_price' => 110],
+                    'default' => ['amount' => 30, 'currency' => 'USD', 'term_price' => 99, 'yearly_price' => 170, 'old_price' => 120],
+                    'EG' => ['amount' => 950, 'currency' => 'EGP', 'term_price' => 3450, 'yearly_price' => 6000, 'old_price' => 4200],
+                    'SA' => ['amount' => 120, 'currency' => 'SAR', 'term_price' => 450, 'yearly_price' => 780, 'old_price' => 550],
+                    'AE' => ['amount' => 120, 'currency' => 'AED', 'term_price' => 450, 'yearly_price' => 780, 'old_price' => 550],
+                    'FR' => ['amount' => 28, 'currency' => 'EUR', 'term_price' => 95, 'yearly_price' => 165, 'old_price' => 110],
                 ],
                 'features' => [
                     'max_students' => '500',
@@ -160,19 +162,20 @@ class PackageSeeder extends Seeder
                 'name_en' => 'Institution',
                 'slug' => 'enterprise',
                 'stripe_price_id' => 'price_1TAJ6dF1Qx8XSbKrz6RRqwS7',
-                'price' => 6950.00,
-                'yearly_price' => 12000.00,
+                'price' => 1950.00, // Monthly
+                'term_price' => 6950.00, // 150 days
+                'yearly_price' => 12000.00, // 365 days
                 'old_price' => 8500.00,
                 'duration_in_days' => 150,
                 'description' => 'للرشكات التعليمية الكبرى والفروع.',
                 'description_en' => 'For large chains and organizations.',
                 'is_featured' => false,
                 'regional_prices' => [
-                    'default' => ['amount' => 199, 'currency' => 'USD', 'yearly_price' => 340, 'old_price' => 250],
-                    'EG' => ['amount' => 6950, 'currency' => 'EGP', 'yearly_price' => 12000, 'old_price' => 8500],
-                    'SA' => ['amount' => 950, 'currency' => 'SAR', 'yearly_price' => 1650, 'old_price' => 1200],
-                    'AE' => ['amount' => 950, 'currency' => 'AED', 'yearly_price' => 1650, 'old_price' => 1200],
-                    'FR' => ['amount' => 185, 'currency' => 'EUR', 'yearly_price' => 320, 'old_price' => 230],
+                    'default' => ['amount' => 60, 'currency' => 'USD', 'term_price' => 199, 'yearly_price' => 340, 'old_price' => 250],
+                    'EG' => ['amount' => 1950, 'currency' => 'EGP', 'term_price' => 6950, 'yearly_price' => 12000, 'old_price' => 8500],
+                    'SA' => ['amount' => 250, 'currency' => 'SAR', 'term_price' => 950, 'yearly_price' => 1650, 'old_price' => 1200],
+                    'AE' => ['amount' => 250, 'currency' => 'AED', 'term_price' => 950, 'yearly_price' => 1650, 'old_price' => 1200],
+                    'FR' => ['amount' => 55, 'currency' => 'EUR', 'term_price' => 185, 'yearly_price' => 320, 'old_price' => 230],
                 ],
                 'features' => [
                     'max_students' => '-1',

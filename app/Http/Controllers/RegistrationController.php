@@ -121,7 +121,7 @@ class RegistrationController extends Controller
                     ->uncompromised(),
             ],
             'plan' => 'required|exists:packages,slug',
-            'billing_cycle' => 'required|in:monthly,yearly',
+            'billing_cycle' => 'required|in:monthly,term,yearly',
             'coupon_code' => 'nullable|string|exists:coupons,code',
             'country_code' => 'nullable|string|max:2',
             'payment_gateway' => 'required|in:paypal,paymob,test',
@@ -134,9 +134,13 @@ class RegistrationController extends Controller
             $discountAmount = 0;
             $package = \App\Models\Package::where('slug', $request->plan)->first();
             
-            $basePrice = ($request->billing_cycle === 'yearly') 
-                ? ($package->yearly_price ?: ($package->price * 10)) 
-                : $package->price;
+            if ($request->billing_cycle === 'term') {
+                $basePrice = $package->term_price ?: ($package->price * 4);
+            } elseif ($request->billing_cycle === 'yearly') {
+                $basePrice = $package->yearly_price ?: ($package->price * 10);
+            } else {
+                $basePrice = $package->price;
+            }
 
             if ($request->has('coupon_code') && $request->coupon_code) {
                 $coupon = \App\Models\Coupon::where('code', $request->coupon_code)->first();
