@@ -35,12 +35,13 @@ The following files were identified as legacy and unused, and have been deleted:
 -   Updated `RegistrationController` to use the selected plan when creating the tenant's initial subscription.
 
 ### 4. Account Type Selection (Teacher vs Center)
--   Added a clear selection for **Independent Teacher** vs. **Educational Center** on the landing page and registration form.
--   Updated the landing page pricing and CTA sections with dual registration links.
--   Modified `register.blade.php` to dynamically update field labels (e.g., "Full Name" vs. "Center Name") and step prompts based on the chosen type.
--   Ensured the backend (`RegistrationController`) correctly assigns the role (`instructor` or `center_admin`) and creates the necessary profile records.
+-   **Hero Section**: Added distinct "Register as Teacher" and "Register as Center" buttons for immediate clarity.
+-   **Pricing Section**: Added a switcher to toggle registration links between the two types.
+-   **Dynamic Registration**: Form labels and field prompts update dynamically based on the selection.
+-   **Admin Visibility**: Added "Type" badges to the tenant list and detail header to distinguish between "Teacher" (مدرس) and "Center" (مركز).
 
 ### 5. Advanced Admin Analytics
+...
 -   Added **Life-Time Value (LTV)** calculation and display for tenants.
 -   Implemented **Engagement Score** and **Last Activity** tracking.
 -   Enhanced the tenant list and detail views with performance progress bars and financial health cards.

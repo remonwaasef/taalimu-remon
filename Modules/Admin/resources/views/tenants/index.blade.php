@@ -165,9 +165,16 @@
                                             @endif
                                         </div>
                                         <div>
-                                            <a href="{{ route('admin.tenants.show', $tenant->id) }}" class="fw-bold text-dark text-decoration-none d-block">
-                                                {{ $tenant->name }}
-                                            </a>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <a href="{{ route('admin.tenants.show', $tenant->id) }}" class="fw-bold text-dark text-decoration-none">
+                                                    {{ $tenant->name }}
+                                                </a>
+                                                @if($tenant->type === 'instructor')
+                                                    <span class="badge bg-info bg-opacity-10 text-info x-small rounded-pill" style="font-size: 0.65rem;">مدرس</span>
+                                                @else
+                                                    <span class="badge bg-purple bg-opacity-10 text-purple x-small rounded-pill" style="font-size: 0.65rem;">مركز</span>
+                                                @endif
+                                            </div>
                                             <span class="text-muted x-small">
                                                 <i class="bi bi-person me-1"></i> {{ $admin->name ?? __('admin::admin.tenants.table.not_specified') }}
                                             </span>
