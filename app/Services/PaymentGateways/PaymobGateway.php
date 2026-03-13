@@ -52,12 +52,37 @@ class PaymobGateway implements PaymentGatewayInterface
 
     protected function getAuthToken()
     {
+        // Try raw key first, then try base64-decoded key
+        $apiKey = $this->apiKey;
+        
+        // If the key looks like it's base64-encoded (starts with eyJ), decode it
+        if (str_starts_with($apiKey, 'eyJ')) {
+            // It's already a JWT-style token, use as-is
+        } elseif (str_starts_with($apiKey, 'WlhsS')) {
+            // It's base64-encoded, decode it first
+            $decoded = base64_decode($apiKey);
+            if ($decoded !== false) {
+                $apiKey = $decoded;
+            }
+        }
+
+        Log::info('Paymob Auth Request', [
+            'url' => "{$this->baseUrl}/auth/tokens",
+            'api_key_length' => strlen($apiKey),
+            'api_key_prefix' => substr($apiKey, 0, 10) . '...',
+        ]);
+
         $response = Http::post("{$this->baseUrl}/auth/tokens", [
-            'api_key' => $this->apiKey
+            'api_key' => $apiKey
+        ]);
+
+        Log::info('Paymob Auth Response', [
+            'status' => $response->status(),
+            'body' => substr($response->body(), 0, 500),
         ]);
 
         if ($response->failed()) {
-            throw new \Exception('Paymob Authentication Failed');
+            throw new \Exception('Paymob Authentication Failed: ' . $response->body());
         }
 
         return $response->json()['token'];
