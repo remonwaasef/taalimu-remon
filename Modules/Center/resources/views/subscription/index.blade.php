@@ -85,7 +85,7 @@
         border-radius: 1rem;
         color: #fff;
     }
-    /* Redesigned Toggle Styles */
+    /* Redesigned Toggle Styles - Upgraded to 3 choices */
     .billing-toggle {
         display: inline-flex;
         background: #f1f5f9;
@@ -94,19 +94,19 @@
         padding: 5px;
         position: relative;
         box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-        direction: ltr !important; /* Force LTR for the toggle container to keep logic simple */
+        direction: ltr !important; 
     }
     .billing-toggle label {
         cursor: pointer;
-        padding: 10px 24px;
+        padding: 10px 18px;
         font-weight: 800;
         border-radius: 999px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 1;
-        font-size: 0.95rem;
+        font-size: 0.85rem;
         color: #64748b;
         position: relative;
-        min-width: 120px;
+        min-width: 100px;
         text-align: center;
     }
     .billing-toggle input[type="radio"]:checked + label {
@@ -120,16 +120,18 @@
         top: 5px;
         bottom: 5px;
         left: 5px; 
-        width: calc(50% - 5px);
+        width: calc(33.33% - 5px);
         background: #3A0CA3;
         border-radius: 999px;
         transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
         z-index: 0;
         box-shadow: 0 4px 12px rgba(58, 12, 163, 0.3);
     }
-    /* Simple JS-driven or CSS-driven transform */
     .billing-toggle input[type="radio"]:nth-of-type(2):checked ~ .toggle-slider {
         transform: translateX(100%);
+    }
+    .billing-toggle input[type="radio"]:nth-of-type(3):checked ~ .toggle-slider {
+        transform: translateX(200%);
     }
     .save-badge {
         position: absolute;
@@ -262,10 +264,13 @@
         </div>
         
         <div class="billing-toggle">
-            <input type="radio" id="billing-monthly" name="billing_cycle" value="monthly" checked>
-            <label for="billing-monthly">{{ __('center::subscription.billing_term') }}</label>
+            <input type="radio" id="billing-monthly" name="billing_cycle" value="monthly" {{ $subscription?->billing_cycle === 'monthly' ? 'checked' : '' }}>
+            <label for="billing-monthly">{{ __('center::subscription.billing_monthly') }}</label>
+
+            <input type="radio" id="billing-term" name="billing_cycle" value="term" {{ ($subscription?->billing_cycle === 'term' || !$subscription) ? 'checked' : '' }}>
+            <label for="billing-term">{{ __('center::subscription.billing_term') }}</label>
             
-            <input type="radio" id="billing-yearly" name="billing_cycle" value="yearly">
+            <input type="radio" id="billing-yearly" name="billing_cycle" value="yearly" {{ $subscription?->billing_cycle === 'yearly' ? 'checked' : '' }}>
             <label for="billing-yearly">
                 {{ __('center::subscription.billing_year') }} 
                 <span class="badge bg-success save-badge">{{ __('center::subscription.save_badge') }}</span>
@@ -336,12 +341,18 @@
                         </div>
                         <div class="text-end">
                             @if($package->old_price && $package->old_price > $package->price)
-                                <div class="text-muted small plan-old-price" style="text-decoration: line-through; opacity: 0.6;" data-monthly="{{ $package->old_price }}" data-yearly="{{ $package->old_price * 12 }}">
+                                <div class="text-muted small plan-old-price" style="text-decoration: line-through; opacity: 0.6;" 
+                                     data-monthly="{{ $package->old_price }}" 
+                                     data-term="{{ $package->old_price * 5 }}"
+                                     data-yearly="{{ $package->old_price * 12 }}">
                                     {{ number_format($package->old_price, 0) }} <span class="plan-currency">{{ $currency }}</span>
                                 </div>
                             @endif
-                            <div class="fw-black text-primary plan-price-display" style="font-size:1.6rem; line-height:1;" data-monthly="{{ $package->price }}" data-yearly="{{ $package->yearly_price ?: ($package->price * 12) }}">
-                                {{ number_format($package->price, 0) }}
+                            <div class="fw-black text-primary plan-price-display" style="font-size:1.6rem; line-height:1;" 
+                                 data-monthly="{{ $package->price }}" 
+                                 data-term="{{ $package->term_price ?: ($package->price * 5) }}"
+                                 data-yearly="{{ $package->yearly_price ?: ($package->price * 12) }}">
+                                {{ number_format($package->term_price ?: ($package->price * 5), 0) }}
                             </div>
                             <small class="text-muted"><span class="plan-currency">{{ $currency }}</span> / <span class="plan-cycle-text">{{ __('center::subscription.billing_term_cycle') }}</span></small>
                             @if($package->old_price && $package->old_price > $package->price)
@@ -437,8 +448,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const checkoutBtns = document.querySelectorAll('.plan-checkout-btn');
 
     const trans = {
-        yearly: '{{ __('center::subscription.billing_year_cycle') }}',
-        monthly: '{{ __('center::subscription.billing_term_cycle') }}'
+        monthly: '{{ __('center::subscription.billing_month_cycle') }}',
+        term: '{{ __('center::subscription.billing_term_cycle') }}',
+        yearly: '{{ __('center::subscription.billing_year_cycle') }}'
     };
 
     function updatePricing(cycle) {

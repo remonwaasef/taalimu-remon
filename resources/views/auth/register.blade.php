@@ -604,7 +604,7 @@ document.addEventListener('alpine:init', () => {
                                                     <span class="font-black text-slate-900 uppercase tracking-tight" x-text="pkg.name"></span>
                                                 </div>
                                                 <div class="text-right">
-                                                    <span class="text-lg font-black text-brand-secondary" x-text="pkg.price"></span>
+                                                    <span class="text-lg font-black text-brand-secondary" x-text="billingCycle === 'yearly' ? pkg.yearly_price : (billingCycle === 'term' ? pkg.term_price : pkg.price)"></span>
                                                 </div>
                                             </div>
                                         </div>
