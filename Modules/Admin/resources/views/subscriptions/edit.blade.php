@@ -58,11 +58,15 @@
                             <label class="form-label fw-bold small">دورة الفوترة</label>
                             <div class="d-flex gap-4 p-3 bg-light rounded-3">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="billing_cycle" id="cycleMonthly" value="monthly" {{ $subscription->billing_cycle === 'monthly' ? 'selected' : '' }}>
+                                    <input class="form-check-input" type="radio" name="billing_cycle" id="cycleMonthly" value="monthly" {{ $subscription->billing_cycle === 'monthly' ? 'checked' : '' }}>
                                     <label class="form-check-label" for="cycleMonthly">شهري</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="billing_cycle" id="cycleYearly" value="yearly" {{ $subscription->billing_cycle === 'yearly' ? 'selected' : '' }}>
+                                    <input class="form-check-input" type="radio" name="billing_cycle" id="cycleTerm" value="term" {{ $subscription->billing_cycle === 'term' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="cycleTerm">ترم</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="billing_cycle" id="cycleYearly" value="yearly" {{ $subscription->billing_cycle === 'yearly' ? 'checked' : '' }}>
                                     <label class="form-check-label" for="cycleYearly">سنوي</label>
                                 </div>
                             </div>

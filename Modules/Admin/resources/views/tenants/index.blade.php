@@ -187,13 +187,28 @@
                                                     <span class="badge bg-success bg-opacity-10 text-success x-small rounded-pill">نشط</span>
                                                 @endif
                                             </div>
-                                            <div class="text-muted x-small">
-                                                @if($subscription->ends_at)
-                                                    تجديد: {{ $subscription->ends_at->format('Y-m-d') }}
-                                                @else
-                                                    اشتراك مستمر
-                                                @endif
-                                                - {{ number_format($subscription->total_amount ?: ($subscription->package->price ?? 0), 0) }} {{ __('admin::admin.egp') }}
+                                            <div class="text-muted x-small d-flex flex-column gap-1">
+                                                <span>
+                                                    <i class="bi bi-arrow-repeat me-1"></i>
+                                                    @if($subscription->billing_cycle === 'yearly')
+                                                        {{ __('admin::admin.subscriptions.yearly') ?? 'اشتراك سنوي' }}
+                                                    @elseif($subscription->billing_cycle === 'term')
+                                                        {{ __('admin::admin.subscriptions.term') ?? 'اشتراك ترم' }}
+                                                    @else
+                                                        {{ __('admin::admin.subscriptions.monthly') ?? 'اشتراك شهري' }}
+                                                    @endif
+                                                </span>
+                                                <span>
+                                                    <i class="bi bi-calendar2-event me-1"></i>
+                                                    @if($subscription->ends_at)
+                                                        {{ $isExpired ? 'انتهى في:' : 'ينتهي في:' }} {{ $subscription->ends_at->format('Y-m-d') }}
+                                                    @else
+                                                        اشتراك مستمر
+                                                    @endif
+                                                </span>
+                                                <span class="fw-bold text-primary">
+                                                    {{ number_format($subscription->total_amount ?: ($subscription->package->price ?? 0), 0) }} {{ __('admin::admin.egp') }}
+                                                </span>
                                             </div>
                                         </div>
                                     @else
