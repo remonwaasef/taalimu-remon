@@ -183,6 +183,9 @@ class SocialAuthController extends Controller
                 'yearly_price' => $p->yearly_price ? number_format($p->yearly_price, 0) . ' ' . $currency : number_format($p->price * 10, 0) . ' ' . $currency,
                 'yearly_price_value' => $p->yearly_price ? number_format($p->yearly_price, 0) : number_format($p->price * 10, 0),
                 'yearly_price_raw' => $p->yearly_price ?: ($p->price * 10),
+                'term_price' => $p->term_price ? number_format($p->term_price, 0) . ' ' . $currency : number_format($p->price * 4, 0) . ' ' . $currency,
+                'term_price_value' => $p->term_price ? number_format($p->term_price, 0) : number_format($p->price * 4, 0),
+                'term_price_raw' => $p->term_price ?: ($p->price * 4),
                 'regional_prices' => $p->regional_prices ?? [],
             ];
         })->values();
@@ -217,7 +220,7 @@ class SocialAuthController extends Controller
             'center_name' => 'required|string|max:255',
             'phone' => 'required|string|max:20|unique:users,phone',
             'plan' => 'required|exists:packages,slug',
-            'billing_cycle' => 'required|in:monthly,yearly',
+            'billing_cycle' => 'required|in:monthly,term,yearly',
         ]);
 
         // 1. Check if user already exists (safety check)
@@ -270,12 +273,18 @@ class SocialAuthController extends Controller
             $user->assignRole($user->role);
 
             // 3. Handle Subscription logic
-            $selectedPlan = $request->input('plan', 'free-trial');
             $billingCycle = $request->input('billing_cycle', 'monthly');
-            $package = \App\Models\Package::where('slug', $selectedPlan)->first();
-            $basePrice = $package ? ($billingCycle === 'yearly' ? ($package->yearly_price ?: $package->price * 10) : $package->price) : 0;
+            $package = \App\Models\Package::where('slug', $request->plan)->first();
+            
+            if ($billingCycle === 'term') {
+                $basePrice = $package->term_price ?: ($package->price * 4);
+            } elseif ($billingCycle === 'yearly') {
+                $basePrice = $package->yearly_price ?: ($package->price * 10);
+            } else {
+                $basePrice = $package->price;
+            }
 
-            if ($selectedPlan === 'free-trial') {
+            if ($request->plan === 'free-trial') {
                 \App\Models\Subscription::create([
                     'tenant_id' => $tenant->id,
                     'name' => 'default',
@@ -330,7 +339,7 @@ class SocialAuthController extends Controller
                     'admin_email' => $googleData['email'],
                     'center_name' => $request->center_name,
                     'tenant_id' => $tenant->id,
-                    'selected_plan' => $selectedPlan,
+                    'selected_plan' => $request->plan,
                     'billing_cycle' => $billingCycle,
                     'base_price' => $basePrice,
                     'total_amount' => $basePrice,

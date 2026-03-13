@@ -47,7 +47,8 @@ The following files were identified as legacy and unused, and have been deleted:
 -   Enhanced the tenant list and detail views with performance progress bars and financial health cards.
 
 ### 6. Bug Fixes
--   **SQL Ambiguity Fix**: Resolved an `Integrity constraint violation: 1052` error on the Admin Tenants page by qualifying `created_at` columns in subqueries involving joins. This ensures the "Last Activity" metric loads correctly without database errors.
+-   **SQL Ambiguity Fix**: Resolved an `Integrity constraint violation: 1052` error on the Admin Tenants page.
+-   **Google Flow Fix**: Resolved "billing cycle is invalid" error during Google registration by adding `term` support to the validation and UI logic.
 
 ## Verification Results
 
