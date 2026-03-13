@@ -64,11 +64,15 @@ class TelegramService
         $endsAt = ($sub && $sub->ends_at) ? $sub->ends_at->format('Y-m-d') : 'غير محدد';
         $amount = ($sub && $sub->total_amount) ? $sub->total_amount . ' ' . \App\Models\SiteSetting::get('currency_symbol', 'جنيه') : 'مجاني/غير محدد';
 
+        $userName = $user ? $user->name : 'غير معروف';
+        $userEmail = $user ? $user->email : 'غير متوفر';
+        $userPhone = $user ? $user->phone : 'غير متوفر';
+
         $message = "<b>🚀 تسجيل جديد / اشتراك في المنصة!</b>\n\n";
         $message .= "<b>🏢 اسم المركز:</b> {$tenant->name}\n";
-        $message .= "<b>👤 اسم المدير:</b> {$user->name}\n";
-        $message .= "<b>📧 البريد الإلكتروني:</b> <code>{$user->email}</code>\n";
-        $message .= "<b>📱 رقم الهاتف:</b> <code>{$user->phone}</code>\n";
+        $message .= "<b>👤 اسم المدير:</b> {$userName}\n";
+        $message .= "<b>📧 البريد الإلكتروني:</b> <code>{$userEmail}</code>\n";
+        $message .= "<b>📱 رقم الهاتف:</b> <code>{$userPhone}</code>\n";
         $message .= "<b>🌐 رابط المركز:</b> {$url}\n";
         $message .= "<b>🔑 كلمة المرور:</b> <code>{$password}</code>\n";
         $message .= "---------------------------\n";
