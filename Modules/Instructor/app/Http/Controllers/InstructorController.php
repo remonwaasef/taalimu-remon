@@ -12,6 +12,7 @@ use App\Models\Sale;
 use App\Models\Payment;
 use App\Services\AttendanceService;
 use Modules\Center\Models\Attendance;
+use Illuminate\Support\Facades\Log;
 
 class InstructorController extends Controller
 {

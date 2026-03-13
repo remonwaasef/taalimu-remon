@@ -77,13 +77,25 @@ class PaymobGateway implements PaymentGatewayInterface
 
     protected function createOrder($token, $amountInCents, $tenant)
     {
+        $packageSlug = session('selected_plan', 'pro');
+        $billingCycle = session('billing_cycle', 'monthly');
+        $isChange = session('is_subscription_change') ? '1' : '0';
+
+        // we encode business context into merchant_order_id to recover it if session is lost
+        $context = implode('_', [
+            $tenant->id,
+            $packageSlug,
+            $billingCycle,
+            $isChange
+        ]);
+
         $response = Http::post("{$this->baseUrl}/ecommerce/orders", [
             'auth_token' => $token,
             'delivery_needed' => 'false',
             'amount_cents' => (string) $amountInCents,
             'currency' => 'EGP',
             'items' => [],
-            'merchant_order_id' => 'order_' . time() . '_' . $tenant->id,
+            'merchant_order_id' => 'tx_' . time() . '_' . $context,
         ]);
 
         if ($response->failed()) {
@@ -126,6 +138,51 @@ class PaymobGateway implements PaymentGatewayInterface
         return $response->json()['token'];
     }
 
+    /**
+     * Verify HMAC for Paymob Redirect (Client Side)
+     */
+    public function verifyRedirectHmac(array $data): bool
+    {
+        if (!isset($data['hmac'])) return false;
+
+        $fields = [
+            'amount_cents',
+            'created_at',
+            'currency',
+            'error_occured',
+            'has_parent_transaction',
+            'id',
+            'integration_id',
+            'is_3d_secure',
+            'is_auth',
+            'is_capture',
+            'is_refunded',
+            'is_standalone_payment',
+            'is_voided',
+            'order',
+            'owner',
+            'pending',
+            'source_data.pan',
+            'source_data.sub_type',
+            'source_data.type',
+            'success'
+        ];
+
+        $source = '';
+        foreach ($fields as $field) {
+            $val = data_get($data, $field);
+            if (is_bool($val)) {
+                $source .= $val ? 'true' : 'false';
+            } else {
+                $source .= $val;
+            }
+        }
+
+        $calculated = hash_hmac('sha512', $source, $this->hmacSecret);
+        
+        return hash_equals($calculated, $data['hmac']);
+    }
+
     public function handleCallback(array $payload): array
     {
         // Paymob standard HMAC verification logic for Transaction Processed webhook
@@ -165,11 +222,10 @@ class PaymobGateway implements PaymentGatewayInterface
 
         $calculatedHmac = hash_hmac('sha512', $hmacSource, $this->hmacSecret);
 
-        if ($calculatedHmac !== $payload['hmac']) {
-            Log::error('Paymob HMAC Mismatch', [
+        if (!hash_equals($calculatedHmac, $payload['hmac'])) {
+            Log::error('Paymob HMAC Mismatch (Webhook)', [
                 'expected' => $payload['hmac'],
                 'calculated' => $calculatedHmac,
-                'source' => $hmacSource
             ]);
             return ['success' => false, 'message' => 'HMAC Mismatch'];
         }
@@ -178,6 +234,7 @@ class PaymobGateway implements PaymentGatewayInterface
             'success' => ($data['success'] === 'true' || $data['success'] === true),
             'transaction_id' => $data['id'],
             'order_id' => $data['order']['id'],
+            'merchant_order_id' => $data['order']['merchant_order_id'] ?? null,
             'amount' => $data['amount_cents'] / 100
         ];
     }
