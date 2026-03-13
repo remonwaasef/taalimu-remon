@@ -162,15 +162,15 @@ class PaymobGateway implements PaymentGatewayInterface
             'order',
             'owner',
             'pending',
-            'source_data.pan',
-            'source_data.sub_type',
-            'source_data.type',
+            'source_data_pan',
+            'source_data_sub_type',
+            'source_data_type',
             'success'
         ];
 
         $source = '';
         foreach ($fields as $field) {
-            $val = data_get($data, $field);
+            $val = $data[$field] ?? null;
             if (is_bool($val)) {
                 $source .= $val ? 'true' : 'false';
             } else {

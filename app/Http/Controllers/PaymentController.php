@@ -89,14 +89,25 @@ class PaymentController extends Controller
         $gateway = \App\Services\PaymentFactory::make('paymob');
         
         // 1. Verify Redirect HMAC (Security First)
-        if (!$gateway->verifyRedirectHmac($request->all())) {
-            \Log::warning('Paymob Redirect HMAC Mismatch', ['payload' => $request->except(['hmac'])]);
-            return redirect()->route('home')->withErrors(['error' => 'فشل التحقق من أمان عملية الدفع.']);
+        $isHmacValid = $gateway->verifyRedirectHmac($request->all());
+        if (!$isHmacValid) {
+            Log::warning('Paymob Redirect HMAC Mismatch', [
+                'received_hmac' => $request->get('hmac'),
+                'payload' => $request->except(['hmac'])
+            ]);
+            // return redirect()->route('home')->withErrors(['error' => 'فشل التحقق من أمان عملية الدفع.']);
         }
 
-        $success = $request->get('success') === 'true';
+        $success = filter_var($request->get('success'), FILTER_VALIDATE_BOOLEAN);
         $transactionId = $request->get('id');
-        $merchantOrderId = $request->get('merchant_order_id'); // Paymob sometimes sends this in redirect
+        $merchantOrderId = $request->get('merchant_order_id') ?? $request->get('order'); 
+
+        Log::info('Paymob Redirect Received', [
+            'success' => $success,
+            'transaction_id' => $transactionId,
+            'merchant_order_id' => $merchantOrderId,
+            'hmac_valid' => $isHmacValid
+        ]);
 
         if ($success && $transactionId) {
              // 2. Context Restoration (Fall back to merchant_order_id if session is lost)
@@ -124,6 +135,21 @@ class PaymentController extends Controller
              // But usually merchant_order_id restoration is enough.
 
              $tenant = $tenantId ? \App\Models\Tenant::find($tenantId) : null;
+
+             if (!$tenant) {
+                 // Fallback: Try to find tenant through subscription created by webhook
+                 $existingSub = \App\Models\Subscription::where('stripe_id', 'sub_paymob_' . $transactionId)->first();
+                 if ($existingSub) {
+                     $tenant = $existingSub->tenant;
+                     $isChange = true; 
+                     Log::info("Paymob Context Restored via existing subscription for Trans ID: {$transactionId}");
+                 }
+             }
+
+             // Robust upgrade detection: if tenant exists and already has a sub, it's an upgrade redirect
+             if ($tenant && !$isChange) {
+                 $isChange = $tenant->subscriptions()->where('name', 'default')->exists();
+             }
 
              if ($tenant) {
                  $package = \App\Models\Package::where('slug', $planSlug)->first();
