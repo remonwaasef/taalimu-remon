@@ -76,7 +76,7 @@ class SubscriptionController extends Controller
 
         // Modular Payment Gateway Logic
         $billingCycle = $request->query('cycle', 'monthly');
-        $gatewayName = $request->input('payment_gateway', 'stripe');
+        $gatewayName = $request->input('payment_gateway', 'paymob');
 
         try {
             $gateway = \App\Services\PaymentFactory::make($gatewayName);

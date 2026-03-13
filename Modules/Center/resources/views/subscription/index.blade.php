@@ -275,8 +275,8 @@
         </div>
 
         <div class="billing-toggle ms-md-3">
-            <input type="radio" id="gateway-stripe" name="payment_gateway" value="stripe" checked>
-            <label for="gateway-stripe"><i class="bi bi-credit-card me-1"></i> {{ __('center::subscription.card_payment') }}</label>
+            <input type="radio" id="gateway-paymob" name="payment_gateway" value="paymob" checked>
+            <label for="gateway-paymob"><i class="bi bi-credit-card me-1"></i> {{ __('center::subscription.card_payment') }} (Paymob)</label>
             
             <input type="radio" id="gateway-paypal" name="payment_gateway" value="paypal">
             <label for="gateway-paypal"><i class="bi bi-paypal me-1"></i> PayPal</label>

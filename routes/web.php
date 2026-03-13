@@ -59,6 +59,10 @@ Route::get('/registration-success', function() {
     Route::get('/payment/paypal/success', [App\Http\Controllers\PaymentController::class, 'paypalSuccess'])->name('payment.paypal.success');
     Route::post('/webhooks/paypal', [App\Http\Controllers\PayPalWebhookController::class, 'handle'])->name('webhooks.paypal');
     
+    // Paymob specific routes
+    Route::get('/payment/paymob/callback', [App\Http\Controllers\PaymentController::class, 'paymobCallback'])->name('payment.paymob.callback');
+    Route::post('/webhooks/paymob', [App\Http\Controllers\PaymobWebhookController::class, 'handle'])->name('webhooks.paymob');
+    
     // Demo Payment Routes (for testing without Stripe)
     Route::get('/payment/demo', [App\Http\Controllers\PaymentController::class, 'demo'])->name('payment.demo');
     Route::get('/payment/demo/success', [App\Http\Controllers\PaymentController::class, 'demoSuccess'])
