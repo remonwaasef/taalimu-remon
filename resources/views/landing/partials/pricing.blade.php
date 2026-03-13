@@ -1,6 +1,6 @@
 <section id="pricing" class="py-16 lg:py-24 bg-muted/30" 
          x-data="{ 
-            billingCycle: 'monthly',
+            billingCycle: 'term',
             userCountry: 'default',
             currencySymbol: '{{ \App\Models\SiteSetting::get('currency_symbol', '$') }}',
             exchangeRates: { 'USD': 1, 'EGP': 1, 'SAR': 1, 'AED': 1, 'EUR': 1 },
@@ -61,6 +61,14 @@
                         :class="billingCycle === 'monthly' ? 'bg-white text-primary shadow-md scale-105 ring-1 ring-black/5' : 'text-muted-foreground hover:text-foreground hover:bg-white/50'"
                     >
                         {{ __('landing.pricing.monthly') ?? 'Monthly' }}
+                    </button>
+
+                    <button 
+                        @click="billingCycle = 'term'"
+                        class="px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 flex items-center"
+                        :class="billingCycle === 'term' ? 'bg-white text-primary shadow-md scale-105 ring-1 ring-black/5' : 'text-muted-foreground hover:text-foreground hover:bg-white/50'"
+                    >
+                        {{ __('landing.pricing.term') ?? 'Term' }}
                     </button>
 
                     <button 
@@ -129,23 +137,25 @@
                                  x-effect="localPrice = getPrice({{ $package->price }}, {{ json_encode($regionalPrices) }})">
                             
                                 <!-- Old Price (Strikethrough) -->
-                                <template x-if="localPrice.old_price">
+                                <template x-if="billingCycle === 'monthly' ? localPrice.old_price : (billingCycle === 'term' ? localPrice.term_old_price : localPrice.yearly_old_price)">
                                     <div class="text-sm opacity-60 font-bold {{ $isFeatured ? 'text-white' : 'text-muted-foreground' }} line-through">
                                         <span x-text="localPrice.currency"></span>
-                                        <span x-text="localPrice.old_price"></span>
+                                        <span x-text="billingCycle === 'monthly' ? localPrice.old_price : (billingCycle === 'term' ? localPrice.term_old_price : localPrice.yearly_old_price)"></span>
                                     </div>
                                 </template>
 
                                 <!-- Price Display -->
                                 <div class="flex items-baseline gap-1">
                                     <span class="text-4xl font-extrabold {{ $isFeatured ? 'text-primary-foreground' : 'text-primary' }}" 
-                                          x-text="billingCycle === 'monthly' ? localPrice.amount : (localPrice.yearly_price || localPrice.amount * 10)">
+                                          x-text="billingCycle === 'monthly' ? localPrice.amount : (billingCycle === 'term' ? (localPrice.term_price || localPrice.amount * 4) : (localPrice.yearly_price || localPrice.amount * 10))">
                                     </span>
                                     <span class="text-xl font-bold {{ $isFeatured ? 'text-primary-foreground' : 'text-foreground' }}" x-text="localPrice.currency"></span>
                                 </div>
 
                                 <div class="text-xs {{ $isFeatured ? 'text-primary-foreground/80' : 'text-muted-foreground' }}">
-                                    <span x-text="billingCycle === 'monthly' ? '{{ __('landing.pricing.per_month') }}' : '{{ __('landing.pricing.per_year') }}'"></span>
+                                    <span x-show="billingCycle === 'monthly'">{{ __('landing.pricing.per_month') }}</span>
+                                    <span x-show="billingCycle === 'term'">{{ __('landing.pricing.per_term') }}</span>
+                                    <span x-show="billingCycle === 'yearly'">{{ __('landing.pricing.per_year') }}</span>
                                 </div>
                             </div>
                         
