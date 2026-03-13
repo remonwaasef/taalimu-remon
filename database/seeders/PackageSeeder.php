@@ -82,7 +82,7 @@ class PackageSeeder extends Seeder
                 'name' => 'البداية',
                 'name_en' => 'Starter',
                 'slug' => 'basic', // Keeping slug 'basic'
-                'stripe_price_id' => config('services.stripe.price_basic') ?: 'price_starter',
+                'stripe_price_id' => 'price_1TAJ0FF1Qx8XSbKrrJ65PIni',
                 'price' => 1450.00,
                 'yearly_price' => 2500.00,
                 'old_price' => 1800.00,
@@ -119,7 +119,7 @@ class PackageSeeder extends Seeder
                 'name' => 'النمو',
                 'name_en' => 'Growth',
                 'slug' => 'pro', // Keeping slug 'pro'
-                'stripe_price_id' => config('services.stripe.price_pro') ?: 'price_growth',
+                'stripe_price_id' => 'price_1TAJ5uF1Qx8XSbKrAvkraZtj',
                 'price' => 3450.00,
                 'yearly_price' => 6000.00,
                 'old_price' => 4200.00,
@@ -159,7 +159,7 @@ class PackageSeeder extends Seeder
                 'name' => 'المؤسسة',
                 'name_en' => 'Institution',
                 'slug' => 'enterprise',
-                'stripe_price_id' => 'price_enterprise',
+                'stripe_price_id' => 'price_1TAJ6dF1Qx8XSbKrz6RRqwS7',
                 'price' => 6950.00,
                 'yearly_price' => 12000.00,
                 'old_price' => 8500.00,
