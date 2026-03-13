@@ -35,8 +35,19 @@ class PaymobGateway implements PaymentGatewayInterface
             $authToken = $this->getAuthToken();
 
             // 2. Order Registration
-            $amountInCents = ($options['total_amount'] ?? ($billingCycle === 'yearly' ? $package->yearly_price : $package->price)) * 100;
-            $orderId = $this->createOrder($authToken, $amountInCents, $tenant);
+            if (isset($options['total_amount'])) {
+                $amountInCents = $options['total_amount'] * 100;
+            } else {
+                if ($billingCycle === 'term') {
+                    $amountInCents = ($package->term_price ?: ($package->price * 4)) * 100;
+                } elseif ($billingCycle === 'yearly') {
+                    $amountInCents = ($package->yearly_price ?: ($package->price * 10)) * 100;
+                } else {
+                    $amountInCents = $package->price * 100;
+                }
+            }
+            
+            $orderId = $this->createOrder($authToken, $amountInCents, $tenant, $package, $billingCycle);
 
             // 3. Payment Key Generation
             $paymentToken = $this->getPaymentKey($authToken, $orderId, $amountInCents, $tenant, $package);
@@ -75,10 +86,10 @@ class PaymobGateway implements PaymentGatewayInterface
         return $response->json()['token'];
     }
 
-    protected function createOrder($token, $amountInCents, $tenant)
+    protected function createOrder($token, $amountInCents, $tenant, $package = null, $billingCycle = null)
     {
-        $packageSlug = session('selected_plan', 'pro');
-        $billingCycle = session('billing_cycle', 'monthly');
+        $packageSlug = $package ? $package->slug : session('selected_plan', 'pro');
+        $billingCycle = $billingCycle ?: session('billing_cycle', 'monthly');
         $isChange = session('is_subscription_change') ? '1' : '0';
 
         // we encode business context into merchant_order_id to recover it if session is lost
