@@ -47,6 +47,7 @@ document.addEventListener('alpine:init', () => {
              let data = {
                  amount: parseFloat(pkg.price_raw),
                  yearly: parseFloat(pkg.yearly_price_raw),
+                 term: parseFloat(pkg.term_price_raw || 0),
                  currency: pkg.currency || '$',
                  old: parseFloat(pkg.old_price_raw || 0),
                  discount_label: pkg.discount_label
@@ -57,6 +58,7 @@ document.addEventListener('alpine:init', () => {
                  data.currency = r.currency || data.currency;
                  data.amount = parseFloat(r.amount || data.amount);
                  data.yearly = parseFloat(r.yearly_price || (data.amount * 10));
+                 data.term = parseFloat(r.term_price || (data.amount * 4));
                  data.old = parseFloat(r.old_price || 0);
                  data.discount_label = r.discount_label || data.discount_label;
              }
@@ -68,7 +70,9 @@ document.addEventListener('alpine:init', () => {
         },
 
         get activePriceRaw() {
-             return this.billingCycle === 'yearly' ? (this.currentPriceData.yearly || 0) : (this.currentPriceData.amount || 0);
+             if (this.billingCycle === 'yearly') return (this.currentPriceData.yearly || 0);
+             if (this.billingCycle === 'term') return (this.currentPriceData.term || 0);
+             return (this.currentPriceData.amount || 0);
         },
 
         get couponDiscountAmount() {
@@ -311,7 +315,7 @@ document.addEventListener('alpine:init', () => {
                                 <span class="text-3xl font-black tracking-tighter" x-text="finalPrice.toLocaleString()"></span>
                                 <span class="text-sm font-bold opacity-60" x-text="currentPriceData.currency"></span>
                             </div>
-                            <span class="text-[10px] font-bold text-slate-400">/{{ app()->getLocale() == 'ar' ? 'شهر' : 'month' }}</span>
+                            <span class="text-[10px] font-bold text-slate-400" x-text="'/' + (billingCycle === 'yearly' ? '{{ app()->getLocale() == 'ar' ? 'سنة' : 'year' }}' : (billingCycle === 'term' ? '{{ app()->getLocale() == 'ar' ? 'ترم' : 'term' }}' : '{{ app()->getLocale() == 'ar' ? 'شهر' : 'month' }}'))"></span>
                         </div>
                     </div>
                 </div>
