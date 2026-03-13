@@ -34,11 +34,13 @@ class PaymentController extends Controller
                     $package = \App\Models\Package::where('slug', $planSlug)->first();
                     $billingCycle = session('billing_cycle', 'monthly');
 
-                    $days = 150; // Default Term
-                    if ($billingCycle === 'yearly') {
+                    $days = 30; // Default Monthly
+                    if ($billingCycle === 'term') {
+                        $days = 150;
+                    } elseif ($billingCycle === 'yearly') {
                         $days = 365;
                     } elseif ($package) {
-                        $days = $package->duration_in_days;
+                        $days = $package->duration_in_days; // Fallback to package default
                     }
 
                     // Create or update the subscription NOW (payment is confirmed)
@@ -100,11 +102,13 @@ class PaymentController extends Controller
                 $package = \App\Models\Package::where('slug', $planSlug)->first();
                 $billingCycle = session('billing_cycle', 'monthly');
 
-                $days = 150;
-                if ($billingCycle === 'yearly') {
+                $days = 30; // Default Monthly
+                if ($billingCycle === 'term') {
+                    $days = 150;
+                } elseif ($billingCycle === 'yearly') {
                     $days = 365;
                 } elseif ($package) {
-                    $days = $package->duration_in_days;
+                    $days = $package->duration_in_days; // Fallback
                 }
 
                 $tenant->subscriptions()->updateOrCreate(

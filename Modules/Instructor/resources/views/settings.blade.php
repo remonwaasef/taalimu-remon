@@ -151,7 +151,7 @@
                                         <div class="d-flex align-items-center gap-2">
                                             <span class="badge bg-success py-2 px-3 rounded-pill shadow-sm"><i class="fas fa-check-circle me-1"></i> اشتراك نشط</span>
                                             @if($subscription->ends_at)
-                                                <small class="text-muted fw-bold x-small">ينتهي في: {{ $subscription->ends_at->format('Y/m/d') }}</small>
+                                                <small class="text-muted fw-bold x-small">ينتهي في: {{ $subscription->ends_at->format('d/m/Y') }}</small>
                                             @endif
                                         </div>
                                     @endif
@@ -191,7 +191,7 @@
                                                         </div>
                                                         <span class="small fw-bold">{{ $f['label'] }}</span>
                                                     </div>
-                                                    <span class="x-small text-muted fw-bold">{{ $usage }} / {{ $isUnlimited ? '∞' : $limit }}</span>
+                                                    <span class="x-small text-muted fw-bold" dir="ltr">{{ $usage }} / {{ $isUnlimited ? '∞' : $limit }}</span>
                                                 </div>
                                                 <div class="progress rounded-pill shadow-none mb-1" style="height: 6px; background: #f1f5f9;">
                                                     <div class="progress-bar bg-{{ $color }} rounded-pill" role="progressbar" style="width: {{ $percent }}%"></div>
@@ -234,10 +234,24 @@
 
                                                 <div class="card-body p-4 {{ $isCurrent ? 'pt-4' : 'pt-5' }}">
                                                     <h5 class="fw-bold mb-2">{{ $pkg->name }}</h5>
-                                                    <div class="mb-4">
-                                                        <span class="fs-2 fw-bold text-primary">{{ number_format($pkg->price) }}</span>
-                                                        <small class="text-muted">جنيه / شهرياً</small>
-                                                    </div>
+                                                     <div class="mb-4">
+                                                        <div class="d-flex align-items-baseline gap-1">
+                                                            <span class="fs-4 fw-bold text-primary">{{ number_format($pkg->price) }}</span>
+                                                            <small class="text-muted x-small">ج.م / شهري</small>
+                                                        </div>
+                                                        @if($pkg->term_price)
+                                                        <div class="d-flex align-items-baseline gap-1 opacity-75">
+                                                            <span class="fw-bold text-dark">{{ number_format($pkg->term_price) }}</span>
+                                                            <small class="text-muted x-small">ج.م / تيرم (150 يوم)</small>
+                                                        </div>
+                                                        @endif
+                                                        @if($pkg->yearly_price)
+                                                        <div class="d-flex align-items-baseline gap-1 opacity-75">
+                                                            <span class="fw-bold text-dark">{{ number_format($pkg->yearly_price) }}</span>
+                                                            <small class="text-muted x-small">ج.م / سنوي</small>
+                                                        </div>
+                                                        @endif
+                                                     </div>
                                                     
                                                     <hr class="opacity-25 mb-4">
 
@@ -266,7 +280,7 @@
                                                         <div class="alert alert-primary bg-opacity-10 border-0 mb-0 py-3 text-center rounded-4">
                                                             <span class="fw-bold small text-primary"><i class="fas fa-check-circle me-1"></i> باقة مفعلة</span>
                                                             @if($subscription->ends_at)
-                                                                <div class="x-small text-muted mt-1">تنتهي: {{ $subscription->ends_at->format('Y/m/d') }}</div>
+                                                                 <div class="x-small text-muted mt-1">تنتهي: {{ $subscription->ends_at->format('d/m/Y') }}</div>
                                                             @endif
                                                         </div>
                                                     @else
