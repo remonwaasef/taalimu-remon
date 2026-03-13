@@ -81,6 +81,16 @@ class SubscriptionController extends Controller
         try {
             $gateway = \App\Services\PaymentFactory::make($gatewayName);
             
+            // Set session data for context restoration if redirect loses session
+            session([
+                'tenant_id' => $tenant->id,
+                'selected_plan' => $package->slug,
+                'billing_cycle' => $billingCycle,
+                'is_subscription_change' => true,
+                'total_amount' => ($billingCycle === 'yearly' ? $package->yearly_price : ($billingCycle === 'term' ? $package->term_price : $package->price)),
+                'base_price' => ($billingCycle === 'yearly' ? $package->yearly_price : ($billingCycle === 'term' ? $package->term_price : $package->price)),
+            ]);
+
             $redirectUrl = $gateway->createCheckoutSession($tenant, $package, $billingCycle, [
                 'success_url' => route('center.subscription.success', ['tenant' => $tenant->domain]),
                 'cancel_url'  => route('center.subscription.index', ['tenant' => $tenant->domain]),
