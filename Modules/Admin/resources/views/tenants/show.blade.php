@@ -3,6 +3,9 @@
 @section('title', 'تفاصيل المركز - ' . $tenant->name)
 
 @section('content')
+@php
+    $sub = $tenant->activeSubscription();
+@endphp
 <style>
     /* Premium Design System */
     :root {
