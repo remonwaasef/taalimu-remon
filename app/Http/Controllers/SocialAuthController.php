@@ -87,7 +87,7 @@ class SocialAuthController extends Controller
 
             // Build redirect URL with plan/cycle persisted from session
             $planParam  = session('selected_plan', '');
-            $cycleParam = session('selected_cycle', 'monthly');
+            $cycleParam = session('billing_cycle', 'monthly');
             $accountTypeParam = session('account_type', 'center');
             $query = http_build_query(array_filter([
                 'plan'  => $planParam,
