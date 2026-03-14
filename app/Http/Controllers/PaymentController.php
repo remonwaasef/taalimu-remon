@@ -213,6 +213,38 @@ class PaymentController extends Controller
              return redirect()->route('home')->withErrors(['error' => 'تم الدفع بنجاح ولكن تعذر تحديث بيانات الحساب. يرجى التواصل مع الدعم الفني.']);
         }
 
+        // Payment failed or was cancelled
+        // Try to redirect the user back to where they came from
+        $tenantId = session('tenant_id');
+        $isChange = session('is_subscription_change', false);
+        
+        // Also try merchant_order_id for context
+        if (!$tenantId && $merchantOrderId && str_starts_with($merchantOrderId, 'tx_')) {
+            $parts = explode('_', $merchantOrderId);
+            if (count($parts) >= 6) {
+                $tenantId = $parts[2];
+                $isChange = $parts[5] === '1';
+            }
+        }
+
+        Log::warning('Paymob Payment Failed/Cancelled', [
+            'success' => $success,
+            'transaction_id' => $transactionId,
+            'merchant_order_id' => $merchantOrderId,
+            'tenant_id' => $tenantId,
+            'is_change' => $isChange,
+            'all_params' => $request->all(),
+        ]);
+
+        // If this was a subscription upgrade, redirect back to subscription page
+        if ($isChange && $tenantId) {
+            $tenant = \App\Models\Tenant::find($tenantId);
+            if ($tenant) {
+                return redirect()->route('center.subscription.index', ['tenant' => $tenant->domain])
+                    ->with('error', 'فشل الدفع عبر Paymob أو تم إلغاؤه. يرجى المحاولة مرة أخرى.');
+            }
+        }
+
         return redirect()->route('home')->withErrors(['error' => 'فشل الدفع عبر Paymob أو تم إلغاؤه.']);
     }
 
