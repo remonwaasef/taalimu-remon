@@ -62,13 +62,16 @@ class PaymobWebhookController extends Controller
                         
                         $totalAmount = ($billingCycle === 'yearly' ? ($package->yearly_price ?? 0) : ($billingCycle === 'term' ? ($package->term_price ?? 0) : ($package->price ?? 0)));
                         
-                        $days = 30;
-                        if ($billingCycle === 'term') {
+                        if ($billingCycle === 'monthly') {
+                            $days = 30;
+                        } elseif ($billingCycle === 'term') {
                             $days = 150;
                         } elseif ($billingCycle === 'yearly') {
                             $days = 365;
                         } elseif ($package) {
                             $days = $package->duration_in_days; 
+                        } else {
+                            $days = 30;
                         }
 
                         $tenant->subscriptions()->updateOrCreate(
