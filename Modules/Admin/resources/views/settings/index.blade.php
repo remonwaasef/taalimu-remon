@@ -78,11 +78,16 @@
                                 <label class="form-label fw-bold">{{ __('admin::admin.site_description') }} (Français)</label>
                                 <textarea class="form-control rounded-4 shadow-sm border-light" name="site_description_fr" rows="2" dir="ltr">{{ \App\Models\SiteSetting::get('site_description_fr', __('landing.hero.subtitle', [], 'fr')) }}</textarea>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">مدة باقة الترم (بالأيام)</label>
+                                <input type="number" class="form-control rounded-4 shadow-sm border-light" name="term_duration_days" value="{{ \App\Models\SiteSetting::get('term_duration_days', 150) }}">
+                                <small class="text-muted">الافتراضي: 150 يوم</small>
+                            </div>
+                            <div class="col-md-4">
                                 <label class="form-label fw-bold">{{ __('admin::admin.currency_symbol') }}</label>
                                 <input type="text" class="form-control rounded-4 shadow-sm border-light" name="currency_symbol" value="{{ \App\Models\SiteSetting::get('currency_symbol', 'جنيه') }}">
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label class="form-label fw-bold">{{ __('admin::admin.currency_code') }}</label>
                                 <input type="text" class="form-control rounded-4 shadow-sm border-light" name="currency_code" value="{{ \App\Models\SiteSetting::get('currency_code', 'EGP') }}">
                             </div>

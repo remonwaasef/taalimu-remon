@@ -83,7 +83,8 @@ class PayPalWebhookController extends Controller
                 // Simplification for now
                 $daysToAdd = 30;
                 if ($subscription->billing_cycle === 'term') {
-                    $daysToAdd = 150;
+                    $termDuration = \App\Models\SiteSetting::get('term_duration_days', 150);
+                    $daysToAdd = $termDuration;
                 } elseif ($subscription->billing_cycle === 'yearly') {
                     $daysToAdd = 365;
                 }

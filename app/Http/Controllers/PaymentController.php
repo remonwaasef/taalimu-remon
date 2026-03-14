@@ -38,7 +38,8 @@ class PaymentController extends Controller
                     if ($billingCycle === 'monthly') {
                         $days = 30;
                     } elseif ($billingCycle === 'term') {
-                        $days = 150;
+                        $termDuration = \App\Models\SiteSetting::get('term_duration_days', 150);
+                        $days = $termDuration;
                     } elseif ($billingCycle === 'yearly') {
                         $days = 365;
                     } elseif ($package) {
@@ -184,7 +185,8 @@ class PaymentController extends Controller
                  if ($billingCycle === 'monthly') {
                      $days = 30;
                  } elseif ($billingCycle === 'term') {
-                     $days = 150;
+                     $termDuration = \App\Models\SiteSetting::get('term_duration_days', 150);
+                     $days = $termDuration;
                  } elseif ($billingCycle === 'yearly') {
                      $days = 365;
                  } elseif ($package) {
@@ -352,7 +354,7 @@ class PaymentController extends Controller
                     'stripe_status' => 'active',
                     'stripe_price' => 'price_demo_' . $priceSlug,
                     'quantity' => 1,
-                    'ends_at' => session('billing_cycle') === 'yearly' ? now()->addYear() : (session('billing_cycle') === 'term' ? now()->addDays(150) : now()->addDays(30)),
+                    'ends_at' => session('billing_cycle') === 'yearly' ? now()->addYear() : (session('billing_cycle') === 'term' ? now()->addDays((int)\App\Models\SiteSetting::get('term_duration_days', 150)) : now()->addDays(30)),
                     'status' => 'active',
                     'billing_cycle' => session('billing_cycle', 'monthly'),
                     'coupon_id' => session('applied_coupon_id'),
@@ -364,7 +366,8 @@ class PaymentController extends Controller
 
                 // Log the subscription operation
                 $billingCycle = session('billing_cycle', 'monthly');
-                $daysForLog = $billingCycle === 'yearly' ? 365 : ($billingCycle === 'term' ? 150 : 30);
+                $termDays = (int) \App\Models\SiteSetting::get('term_duration_days', 150);
+                $daysForLog = $billingCycle === 'yearly' ? 365 : ($billingCycle === 'term' ? $termDays : 30);
                 \App\Models\SubscriptionLog::logOperation(
                     $tenant->id,
                     'subscription',
@@ -397,7 +400,7 @@ class PaymentController extends Controller
 
                 $existingSub->forceFill([
                     'stripe_price' => 'price_demo_' . $priceSlug,
-                    'ends_at' => session('billing_cycle') === 'yearly' ? now()->addYear() : (session('billing_cycle') === 'term' ? now()->addDays(150) : now()->addDays(30)),
+                    'ends_at' => session('billing_cycle') === 'yearly' ? now()->addYear() : (session('billing_cycle') === 'term' ? now()->addDays((int)\App\Models\SiteSetting::get('term_duration_days', 150)) : now()->addDays(30)),
                     'billing_cycle' => session('billing_cycle', 'monthly'),
                     'coupon_id' => session('applied_coupon_id'),
                     'coupon_code' => session('applied_coupon_code'),
@@ -408,7 +411,8 @@ class PaymentController extends Controller
 
                 // Log the upgrade operation
                 $billingCycle = session('billing_cycle', 'monthly');
-                $daysForLog = $billingCycle === 'yearly' ? 365 : ($billingCycle === 'term' ? 150 : 30);
+                $termDays = (int) \App\Models\SiteSetting::get('term_duration_days', 150);
+                $daysForLog = $billingCycle === 'yearly' ? 365 : ($billingCycle === 'term' ? $termDays : 30);
                 \App\Models\SubscriptionLog::logOperation(
                     $tenant->id,
                     'upgrade',

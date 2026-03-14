@@ -65,7 +65,8 @@ class PaymobWebhookController extends Controller
                         if ($billingCycle === 'monthly') {
                             $days = 30;
                         } elseif ($billingCycle === 'term') {
-                            $days = 150;
+                            $termDuration = \App\Models\SiteSetting::get('term_duration_days', 150);
+                            $days = $termDuration;
                         } elseif ($billingCycle === 'yearly') {
                             $days = 365;
                         } elseif ($package) {
