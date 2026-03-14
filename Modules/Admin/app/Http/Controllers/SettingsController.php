@@ -31,6 +31,7 @@ class SettingsController extends Controller
         $request->validate([
             'site_name' => 'required|string|max:255',
             'admin_email' => 'required|email|max:255',
+            'term_duration_days' => 'nullable|integer|min:30|max:365',
             'packages.*.name' => 'required|string|max:255',
             'packages.*.price' => 'nullable|numeric|min:0',
             'packages.*.term_price' => 'nullable|numeric|min:0',
@@ -44,6 +45,7 @@ class SettingsController extends Controller
             'site_description_ar',
             'site_description_en',
             'site_description_fr',
+            'term_duration_days',
             'primary_color',
             'secondary_color',
             'session_lifetime',
