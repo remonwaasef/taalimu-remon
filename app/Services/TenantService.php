@@ -88,10 +88,33 @@ class TenantService
      */
     public function getSubscriptionHistory(Tenant $tenant)
     {
-        return $tenant->subscriptions()
+        $history = $tenant->subscriptions()
             ->with('package')
-            ->latest()
+            ->orderBy('created_at', 'asc') // Get in chronological order to calculate types
             ->get();
+            
+        $processedHistory = collect();
+        $previousPackageId = null;
+        
+        foreach ($history as $index => $sub) {
+            $currentPackageId = $sub->stripe_price ?? ($sub->paypal_plan_id ?? 'unknown');
+            
+            if ($index === 0) {
+                $sub->operation_type = 'subscription'; // First one is always initial subscription
+            } else {
+                // If package changed, it's an upgrade/change. If same, it's a renewal.
+                if ($currentPackageId !== $previousPackageId) {
+                    $sub->operation_type = 'upgrade';
+                } else {
+                    $sub->operation_type = 'renewal';
+                }
+            }
+            
+            $previousPackageId = $currentPackageId;
+            $processedHistory->push($sub);
+        }
+        
+        return $processedHistory->reverse(); // Return latest first for the UI
     }
 
     /**

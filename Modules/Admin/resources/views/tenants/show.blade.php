@@ -623,6 +623,7 @@
                         <thead>
                             <tr>
                                 <th class="ps-4">الباقة</th>
+                                <th>النوع</th>
                                 <th>الدورة</th>
                                 <th>المبلغ</th>
                                 <th>تاريخ الاشتراك</th>
@@ -635,6 +636,15 @@
                                     <td class="ps-4">
                                         <div class="fw-bold text-dark">{{ $subHist->package->name ?? 'مخصص' }}</div>
                                         <div class="small text-muted">{{ $subHist->type_label }}</div>
+                                    </td>
+                                    <td>
+                                        @if($subHist->operation_type === 'upgrade')
+                                            <span class="badge bg-purple bg-opacity-10 text-purple rounded-pill px-3 x-small">ترقية</span>
+                                        @elseif($subHist->operation_type === 'renewal')
+                                            <span class="badge bg-info bg-opacity-10 text-info rounded-pill px-3 x-small">تجديد</span>
+                                        @else
+                                            <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 x-small">اشتراك</span>
+                                        @endif
                                     </td>
                                     <td>
                                         <span class="badge bg-light text-dark rounded-pill border px-3">
@@ -662,7 +672,7 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr><td colspan="5" class="text-center py-4 text-muted">لا يوجد سجل اشتراكات</td></tr>
+                                <tr><td colspan="6" class="text-center py-4 text-muted">لا يوجد سجل اشتراكات</td></tr>
                             @endforelse
                         </tbody>
                     </table>
