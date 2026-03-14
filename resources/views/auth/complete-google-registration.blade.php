@@ -332,11 +332,33 @@ document.addEventListener('alpine:init', () => {
                      x-cloak>
                     <div @click.away="showPlanModal = false" 
                          class="bg-white rounded-[2.5rem] w-full max-w-lg shadow-2xl overflow-hidden animate-scale-in">
-                        <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                            <h3 class="text-xl font-black text-slate-900 font-arabic">{{ app()->getLocale() == 'ar' ? 'اختر الباقة المناسبة' : 'Select Plan' }}</h3>
-                            <button type="button" @click="showPlanModal = false" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors">
-                                <i class="bi bi-x-lg"></i>
-                            </button>
+                        <div class="p-8 border-b border-slate-100 bg-slate-50/50">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="text-xl font-black text-slate-900 font-arabic">{{ app()->getLocale() == 'ar' ? 'اختر الباقة المناسبة' : 'Select Plan' }}</h3>
+                                <button type="button" @click="showPlanModal = false" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors">
+                                    <i class="bi bi-x-lg"></i>
+                                </button>
+                            </div>
+                            <!-- Billing Toggle -->
+                            <div class="flex justify-center">
+                                <div class="inline-flex bg-slate-200/50 p-1.5 rounded-2xl border border-slate-200" dir="ltr">
+                                    <button type="button" @click="billingCycle = 'monthly'" 
+                                            class="px-5 py-2 rounded-xl text-[13px] font-black transition-all font-sans uppercase tracking-wide"
+                                            :class="billingCycle === 'monthly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'">
+                                        {{ app()->getLocale() == 'ar' ? 'شهري' : 'Monthly' }}
+                                    </button>
+                                    <button type="button" @click="billingCycle = 'term'" 
+                                            class="px-5 py-2 rounded-xl text-[13px] font-black transition-all font-sans uppercase tracking-wide"
+                                            :class="billingCycle === 'term' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'">
+                                        {{ app()->getLocale() == 'ar' ? 'ترم' : 'Term' }}
+                                    </button>
+                                    <button type="button" @click="billingCycle = 'yearly'" 
+                                            class="px-5 py-2 rounded-xl text-[13px] font-black transition-all font-sans uppercase tracking-wide"
+                                            :class="billingCycle === 'yearly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'">
+                                        {{ app()->getLocale() == 'ar' ? 'سنوي' : 'Yearly' }}
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div class="p-8 space-y-4 max-h-[60vh] overflow-y-auto custom-scrollbar">
                             <template x-for="pkg in packages" :key="pkg.slug">
@@ -351,7 +373,7 @@ document.addEventListener('alpine:init', () => {
                                                 <span class="font-black text-slate-900 uppercase tracking-tight" x-text="pkg.name"></span>
                                             </div>
                                             <div class="text-right">
-                                                <span class="text-lg font-black text-brand-secondary" x-text="pkg.price"></span>
+                                                <span class="text-lg font-black text-brand-secondary" x-text="billingCycle === 'yearly' ? pkg.yearly_price : (billingCycle === 'term' ? pkg.term_price : pkg.price)"></span>
                                             </div>
                                         </div>
                                     </div>
