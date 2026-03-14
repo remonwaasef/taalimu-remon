@@ -33,6 +33,7 @@ class SettingsController extends Controller
             'admin_email' => 'required|email|max:255',
             'packages.*.name' => 'required|string|max:255',
             'packages.*.price' => 'nullable|numeric|min:0',
+            'packages.*.term_price' => 'nullable|numeric|min:0',
             'packages.*.yearly_price' => 'nullable|numeric|min:0',
             'packages.*.old_price' => 'nullable|numeric|min:0',
         ]);
@@ -93,6 +94,7 @@ class SettingsController extends Controller
                     
                     $basePriceData = [
                         'amount' => $data['price'] ?? 0,
+                        'term_price' => $data['term_price'] ?? 0,
                         'yearly_price' => $data['yearly_price'] ?? 0,
                         'old_price' => $data['old_price'] ?? 0,
                         'currency' => $defaultCurrency,

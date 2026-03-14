@@ -47,6 +47,10 @@ class PaymentController extends Controller
                         $days = 30; // Absolute default
                     }
 
+                    // Determine operation type
+                    $existingSub = $tenant->subscriptions()->where('name', 'default')->first();
+                    $operationType = $existingSub ? 'upgrade' : 'subscription';
+
                     // Create or update the subscription NOW (payment is confirmed)
                     $tenant->subscriptions()->updateOrCreate(
                         ['name' => 'default'],
@@ -65,6 +69,20 @@ class PaymentController extends Controller
                             'status' => 'active',
                             'ends_at' => now()->addDays($days),
                         ]
+                    );
+
+                    // Log the subscription operation
+                    \App\Models\SubscriptionLog::logOperation(
+                        $tenant->id,
+                        $operationType,
+                        $package->slug ?? 'unknown',
+                        $package->name ?? 'مخصص',
+                        $billingCycle,
+                        'paypal',
+                        session('total_amount', 0),
+                        $orderId,
+                        now(),
+                        now()->addDays($days)
                     );
                     
                     $user = \App\Models\User::where('tenant_id', $tenant->id)
@@ -175,6 +193,9 @@ class PaymentController extends Controller
                      $days = 30;
                  }
 
+                 // Determine operation type
+                 $operationType = $isChange ? 'upgrade' : 'subscription';
+
                  $tenant->subscriptions()->updateOrCreate(
                      ['name' => 'default'],
                      [
@@ -190,6 +211,20 @@ class PaymentController extends Controller
                          'status' => 'active',
                          'ends_at' => now()->addDays($days),
                      ]
+                 );
+
+                 // Log the subscription operation
+                 \App\Models\SubscriptionLog::logOperation(
+                     $tenant->id,
+                     $operationType,
+                     $package->slug ?? ($planSlug ?: 'unknown'),
+                     $package->name ?? 'مخصص',
+                     $billingCycle,
+                     'paymob',
+                     $totalAmount,
+                     $transactionId,
+                     now(),
+                     now()->addDays($days)
                  );
 
                  $user = \App\Models\User::where('tenant_id', $tenant->id)
@@ -317,7 +352,7 @@ class PaymentController extends Controller
                     'stripe_status' => 'active',
                     'stripe_price' => 'price_demo_' . $priceSlug,
                     'quantity' => 1,
-                    'ends_at' => session('billing_cycle') === 'yearly' ? now()->addYear() : now()->addDays(30),
+                    'ends_at' => session('billing_cycle') === 'yearly' ? now()->addYear() : (session('billing_cycle') === 'term' ? now()->addDays(150) : now()->addDays(30)),
                     'status' => 'active',
                     'billing_cycle' => session('billing_cycle', 'monthly'),
                     'coupon_id' => session('applied_coupon_id'),
@@ -326,6 +361,22 @@ class PaymentController extends Controller
                     'total_amount' => session('total_amount', 0),
                     'base_price' => session('base_price', 0),
                 ]);
+
+                // Log the subscription operation
+                $billingCycle = session('billing_cycle', 'monthly');
+                $daysForLog = $billingCycle === 'yearly' ? 365 : ($billingCycle === 'term' ? 150 : 30);
+                \App\Models\SubscriptionLog::logOperation(
+                    $tenant->id,
+                    'subscription',
+                    $package->slug ?? 'unknown',
+                    $package->name ?? 'مخصص',
+                    $billingCycle,
+                    'demo',
+                    session('total_amount', 0),
+                    null,
+                    now(),
+                    now()->addDays($daysForLog)
+                );
 
                 // Increment usage if coupon was used
                 if (session('applied_coupon_id')) {
@@ -346,7 +397,7 @@ class PaymentController extends Controller
 
                 $existingSub->forceFill([
                     'stripe_price' => 'price_demo_' . $priceSlug,
-                    'ends_at' => session('billing_cycle') === 'yearly' ? now()->addYear() : now()->addDays(30),
+                    'ends_at' => session('billing_cycle') === 'yearly' ? now()->addYear() : (session('billing_cycle') === 'term' ? now()->addDays(150) : now()->addDays(30)),
                     'billing_cycle' => session('billing_cycle', 'monthly'),
                     'coupon_id' => session('applied_coupon_id'),
                     'coupon_code' => session('applied_coupon_code'),
@@ -354,6 +405,22 @@ class PaymentController extends Controller
                     'total_amount' => session('total_amount', 0),
                     'base_price' => session('base_price', 0),
                 ])->save();
+
+                // Log the upgrade operation
+                $billingCycle = session('billing_cycle', 'monthly');
+                $daysForLog = $billingCycle === 'yearly' ? 365 : ($billingCycle === 'term' ? 150 : 30);
+                \App\Models\SubscriptionLog::logOperation(
+                    $tenant->id,
+                    'upgrade',
+                    $package->slug ?? 'unknown',
+                    $package->name ?? 'مخصص',
+                    $billingCycle,
+                    'demo',
+                    session('total_amount', 0),
+                    null,
+                    now(),
+                    now()->addDays($daysForLog)
+                );
 
                 // Increment usage if coupon was used
                 if (session('applied_coupon_id')) {

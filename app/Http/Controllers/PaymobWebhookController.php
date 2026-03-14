@@ -91,6 +91,21 @@ class PaymobWebhookController extends Controller
                             ]
                         );
 
+                        // Log the subscription operation
+                        $operationType = $isChange ? 'upgrade' : 'subscription';
+                        \App\Models\SubscriptionLog::logOperation(
+                            $tenant->id,
+                            $operationType,
+                            $package->slug ?? ($planSlug ?: 'unknown'),
+                            $package->name ?? 'مخصص',
+                            $billingCycle,
+                            'paymob',
+                            $totalAmount,
+                            $transactionId,
+                            now(),
+                            now()->addDays($days)
+                        );
+
                         Log::info("Paymob Webhook: Subscription created from context restoration for Trans ID: {$transactionId}");
                         return response()->json(['status' => 'success']);
                     }
