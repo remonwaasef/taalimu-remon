@@ -81,8 +81,15 @@ class PayPalWebhookController extends Controller
             if ($subscription) {
                 // Update ends_at based on payment period
                 // Simplification for now
+                $daysToAdd = 30;
+                if ($subscription->billing_cycle === 'term') {
+                    $daysToAdd = 150;
+                } elseif ($subscription->billing_cycle === 'yearly') {
+                    $daysToAdd = 365;
+                }
+                
                 $subscription->update([
-                    'ends_at' => $subscription->billing_cycle === 'yearly' ? now()->addYear() : now()->addMonth(),
+                    'ends_at' => now()->addDays($daysToAdd),
                 ]);
             }
         }

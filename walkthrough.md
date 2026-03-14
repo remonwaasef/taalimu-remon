@@ -49,6 +49,7 @@ The following files were identified as legacy and unused, and have been deleted:
 -   **SQL Ambiguity Fix**: Resolved an `Integrity constraint violation: 1052` error on the Admin Tenants page.
 -   **Google Flow Fix**: Resolved "billing cycle is invalid" error during Google registration.
 -   **Billing Mismatch Fix**: Resolved an issue where monthly subscriptions were incorrectly calculated or duration-assigned as "Term" subscriptions due to price mismatch and session inconsistencies in `PaymobGateway`.
+-   **Duration Override Bug**: Fixed a persistent logic error in `PaymentController`, `PaymobWebhookController`, and `PayPalWebhookController` where the `monthly` billing cycle would incorrectly fall back to the package's default `duration_in_days` (150 days) instead of 30 days. All gateways now explicitly handle `monthly` (30 days), `term` (150 days), and `yearly` (365 days) unconditionally.
 
 ## Verification Results
 
