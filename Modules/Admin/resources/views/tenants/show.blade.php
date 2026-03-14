@@ -634,8 +634,8 @@
                             @forelse($subscriptionHistory as $subHist)
                                 <tr>
                                     <td class="ps-4">
-                                        <div class="fw-bold text-dark">{{ $subHist->package->name ?? 'مخصص' }}</div>
-                                        <div class="small text-muted">{{ $subHist->type_label }}</div>
+                                        <div class="fw-bold text-dark">{{ $subHist->package_name ?? 'مخصص' }}</div>
+                                        <div class="small text-muted">{{ $subHist->package_slug ?? '' }}</div>
                                     </td>
                                     <td>
                                         @if($subHist->operation_type === 'upgrade')
@@ -658,13 +658,16 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <span class="fw-bold text-primary">{{ number_format($subHist->total_amount, 2) }}</span>
+                                        <span class="fw-bold text-primary">{{ number_format($subHist->amount ?? $subHist->total_amount ?? 0, 2) }}</span>
                                     </td>
                                     <td class="small text-muted">
                                         {{ $subHist->created_at->format('Y/m/d') }}
                                     </td>
                                     <td class="pe-4">
-                                        @if($subHist->status == 'active' && (!$subHist->ends_at || $subHist->ends_at->isFuture()))
+                                        @php
+                                            $logIsExpired = $subHist->ends_at && $subHist->ends_at->isPast();
+                                        @endphp
+                                        @if(($subHist->status ?? 'active') == 'active' && !$logIsExpired)
                                             <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">نشط</span>
                                         @else
                                             <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">منتهي</span>

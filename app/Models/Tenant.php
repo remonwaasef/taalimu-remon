@@ -133,6 +133,14 @@ class Tenant extends Model
     }
 
     /**
+     * Get the subscription operation logs for the tenant.
+     */
+    public function subscriptionLogs()
+    {
+        return $this->hasMany(SubscriptionLog::class);
+    }
+
+    /**
      * Get the active subscription for the tenant.
      */
     public function activeSubscription()

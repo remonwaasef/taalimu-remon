@@ -192,15 +192,19 @@
                                                 <label class="form-label small fw-bold text-primary mb-0"><i class="bi bi-tag"></i> {{ __('admin::admin.base_price') }}</label>
                                             </div>
                                             <div class="row g-2">
-                                                <div class="col-4">
+                                                <div class="col-3">
                                                     <label class="small text-muted mb-0">{{ __('admin::admin.price_monthly') }}</label>
                                                     <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][price]" value="{{ $package->price }}">
                                                 </div>
-                                                <div class="col-4">
+                                                <div class="col-3">
+                                                    <label class="small text-muted mb-0">سعر الترم</label>
+                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][term_price]" value="{{ $package->term_price }}">
+                                                </div>
+                                                <div class="col-3">
                                                     <label class="small text-muted mb-0">{{ __('admin::admin.price_yearly') }}</label>
                                                     <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][yearly_price]" value="{{ $package->yearly_price }}">
                                                 </div>
-                                                <div class="col-4">
+                                                <div class="col-3">
                                                     <label class="small text-muted mb-0">{{ __('admin::admin.old_price') }}</label>
                                                     <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][old_price]" value="{{ $package->old_price }}">
                                                 </div>
@@ -228,11 +232,15 @@
                                                         <div class="accordion-body p-3">
                                                             <div class="row g-2">
                                                                 <input type="hidden" name="packages[{{ $package->id }}][regional_prices][EG][currency]" value="EGP">
-                                                                <div class="col-6">
+                                                                <div class="col-4">
                                                                     <label class="small text-muted mb-0">{{ __('admin::admin.price_monthly') }}</label>
                                                                     <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][EG][amount]" value="{{ $regional['EG']['amount'] ?? '' }}">
                                                                 </div>
-                                                                <div class="col-6">
+                                                                <div class="col-4">
+                                                                    <label class="small text-muted mb-0">سعر الترم</label>
+                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][EG][term_price]" value="{{ $regional['EG']['term_price'] ?? '' }}">
+                                                                </div>
+                                                                <div class="col-4">
                                                                     <label class="small text-muted mb-0">{{ __('admin.price_yearly') }}</label>
                                                                     <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][EG][yearly_price]" value="{{ $regional['EG']['yearly_price'] ?? '' }}">
                                                                 </div>
@@ -260,11 +268,15 @@
                                                         <div class="accordion-body p-3">
                                                             <div class="row g-2">
                                                                 <input type="hidden" name="packages[{{ $package->id }}][regional_prices][SA][currency]" value="SAR">
-                                                                <div class="col-6">
+                                                                <div class="col-4">
                                                                     <label class="small text-muted mb-0">{{ __('admin.price_monthly') }}</label>
                                                                     <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][SA][amount]" value="{{ $regional['SA']['amount'] ?? '' }}">
                                                                 </div>
-                                                                <div class="col-6">
+                                                                <div class="col-4">
+                                                                    <label class="small text-muted mb-0">سعر الترم</label>
+                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][SA][term_price]" value="{{ $regional['SA']['term_price'] ?? '' }}">
+                                                                </div>
+                                                                <div class="col-4">
                                                                     <label class="small text-muted mb-0">{{ __('admin.price_yearly') }}</label>
                                                                     <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][SA][yearly_price]" value="{{ $regional['SA']['yearly_price'] ?? '' }}">
                                                                 </div>
@@ -292,11 +304,15 @@
                                                         <div class="accordion-body p-3">
                                                             <div class="row g-2">
                                                                 <input type="hidden" name="packages[{{ $package->id }}][regional_prices][AE][currency]" value="AED">
-                                                                <div class="col-6">
+                                                                <div class="col-4">
                                                                     <label class="small text-muted mb-0">{{ __('admin.price_monthly') }}</label>
                                                                     <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][AE][amount]" value="{{ $regional['AE']['amount'] ?? '' }}">
                                                                 </div>
-                                                                <div class="col-6">
+                                                                <div class="col-4">
+                                                                    <label class="small text-muted mb-0">سعر الترم</label>
+                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][AE][term_price]" value="{{ $regional['AE']['term_price'] ?? '' }}">
+                                                                </div>
+                                                                <div class="col-4">
                                                                     <label class="small text-muted mb-0">{{ __('admin.price_yearly') }}</label>
                                                                     <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][AE][yearly_price]" value="{{ $regional['AE']['yearly_price'] ?? '' }}">
                                                                 </div>
@@ -324,11 +340,15 @@
                                                         <div class="accordion-body p-3">
                                                             <div class="row g-2">
                                                                 <input type="hidden" name="packages[{{ $package->id }}][regional_prices][FR][currency]" value="EUR">
-                                                                <div class="col-6">
+                                                                <div class="col-4">
                                                                     <label class="small text-muted mb-0">{{ __('admin.price_monthly') }}</label>
                                                                     <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][FR][amount]" value="{{ $regional['FR']['amount'] ?? '' }}">
                                                                 </div>
-                                                                <div class="col-6">
+                                                                <div class="col-4">
+                                                                    <label class="small text-muted mb-0">سعر الترم</label>
+                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][FR][term_price]" value="{{ $regional['FR']['term_price'] ?? '' }}">
+                                                                </div>
+                                                                <div class="col-4">
                                                                     <label class="small text-muted mb-0">{{ __('admin.price_yearly') }}</label>
                                                                     <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][FR][yearly_price]" value="{{ $regional['FR']['yearly_price'] ?? '' }}">
                                                                 </div>
@@ -355,11 +375,15 @@
                                                         <div class="accordion-body p-3">
                                                             <div class="row g-2">
                                                                 <input type="hidden" name="packages[{{ $package->id }}][regional_prices][US][currency]" value="USD">
-                                                                <div class="col-6">
+                                                                <div class="col-4">
                                                                     <label class="small text-muted mb-0">{{ __('admin.price_monthly') }}</label>
                                                                     <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][US][amount]" value="{{ $regional['US']['amount'] ?? '' }}">
                                                                 </div>
-                                                                <div class="col-6">
+                                                                <div class="col-4">
+                                                                    <label class="small text-muted mb-0">سعر الترم</label>
+                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][US][term_price]" value="{{ $regional['US']['term_price'] ?? '' }}">
+                                                                </div>
+                                                                <div class="col-4">
                                                                     <label class="small text-muted mb-0">{{ __('admin.price_yearly') }}</label>
                                                                     <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][US][yearly_price]" value="{{ $regional['US']['yearly_price'] ?? '' }}">
                                                                 </div>

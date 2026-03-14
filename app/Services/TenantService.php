@@ -88,33 +88,49 @@ class TenantService
      */
     public function getSubscriptionHistory(Tenant $tenant)
     {
-        $history = $tenant->subscriptions()
-            ->with('package')
-            ->orderBy('created_at', 'asc') // Get in chronological order to calculate types
+        // Use subscription_logs table if available
+        $logs = $tenant->subscriptionLogs()
+            ->orderBy('created_at', 'desc')
             ->get();
-            
-        $processedHistory = collect();
-        $previousPackageId = null;
         
-        foreach ($history as $index => $sub) {
-            $currentPackageId = $sub->stripe_price ?? ($sub->paypal_plan_id ?? 'unknown');
-            
-            if ($index === 0) {
-                $sub->operation_type = 'subscription'; // First one is always initial subscription
-            } else {
-                // If package changed, it's an upgrade/change. If same, it's a renewal.
-                if ($currentPackageId !== $previousPackageId) {
-                    $sub->operation_type = 'upgrade';
-                } else {
-                    $sub->operation_type = 'renewal';
+        // Fallback: if no logs exist yet, create an entry from the current active subscription
+        if ($logs->isEmpty()) {
+            $currentSub = $tenant->activeSubscription();
+            if ($currentSub) {
+                $package = $currentSub->resolved_package;
+                try {
+                    $log = \App\Models\SubscriptionLog::logOperation(
+                        $tenant->id,
+                        'subscription',
+                        $package->slug ?? 'unknown',
+                        $package->name ?? 'مخصص',
+                        $currentSub->billing_cycle ?? 'monthly',
+                        $currentSub->gateway ?? 'unknown',
+                        $currentSub->total_amount ?? 0,
+                        $currentSub->stripe_id ?? null,
+                        $currentSub->created_at,
+                        $currentSub->ends_at
+                    );
+                    $logs = collect([$log]);
+                } catch (\Throwable $e) {
+                    // If subscription_logs table doesn't exist yet, fall back to old logic
+                    $logs = $tenant->subscriptions()
+                        ->with('package')
+                        ->orderBy('created_at', 'desc')
+                        ->get()
+                        ->map(function ($sub) {
+                            $sub->operation_type = 'subscription';
+                            $sub->package_name = $sub->package->name ?? 'مخصص';
+                            $sub->package_slug = $sub->package->slug ?? 'unknown';
+                            $sub->amount = $sub->total_amount ?? 0;
+                            $sub->transaction_id = $sub->stripe_id;
+                            return $sub;
+                        });
                 }
             }
-            
-            $previousPackageId = $currentPackageId;
-            $processedHistory->push($sub);
         }
         
-        return $processedHistory->reverse(); // Return latest first for the UI
+        return $logs;
     }
 
     /**
