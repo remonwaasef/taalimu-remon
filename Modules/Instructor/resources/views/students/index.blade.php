@@ -9,7 +9,10 @@
             <h3 class="fw-bold mb-0">إدارة الطلاب</h3>
             <p class="text-muted small">عرض جميع الطلاب المسجلين في مجموعاتك</p>
         </div>
-        <div class="col-auto">
+        <div class="col-auto d-flex gap-2">
+            <a href="{{ route('instructor.students.export') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm fw-bold border-2">
+                <i class="fas fa-file-export me-2"></i> تصدير Excel
+            </a>
             <a href="{{ route('instructor.students.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm fw-bold border-0" style="background: var(--primary-color);">
                 <i class="fas fa-user-plus me-2"></i> إضافة طالب جديد
             </a>
@@ -47,6 +50,22 @@
         @php
             $todayEnrollments = $students->filter(fn($s) => $s->created_at?->isToday())->count();
         @endphp
+        <div class="col-md-3">
+            @php
+                $totalRevenue = Sale::whereIn('student_id', $students->pluck('id'))->sum('paid_amount');
+            @endphp
+            <div class="card border-0 shadow-sm rounded-4 h-100 p-3" style="border-right: 4px solid #9C27B0 !important;">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle p-3" style="background: rgba(156, 39, 176, 0.1); color: #9C27B0;">
+                        <i class="fas fa-hand-holding-dollar fa-xl"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-0">إجمالي المحصل</h6>
+                        <h4 class="fw-bold mb-0 text-dark">{{ number_format($totalRevenue, 0) }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="col-md-3">
             <div class="card border-0 shadow-sm rounded-4 h-100 p-3" style="border-right: 4px solid #4CAF50 !important;">
                 <div class="d-flex align-items-center gap-3">
@@ -103,11 +122,17 @@
                 <table class="table table-hover align-middle mb-0" id="studentsTable">
                     <thead class="bg-light">
                         <tr>
-                            <th class="border-0 px-4 py-3">الطالب</th>
+                            <th class="border-0 px-4 py-3" style="width: 40px;">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="selectAllStudents">
+                                </div>
+                            </th>
+                            <th class="border-0 py-3">الطالب</th>
                             <th class="border-0">ولي الأمر</th>
                             <th class="border-0">المجموعات</th>
+                            <th class="border-0 text-center">نسبة الحضور</th>
+                            <th class="border-0">المالية</th>
                             <th class="border-0">الحالة</th>
-                            <th class="border-0">تاريخ التسجيل</th>
                             <th class="border-0 text-center">الإجراءات</th>
                         </tr>
                     </thead>
@@ -117,10 +142,15 @@
                             $courseIds = $student->enrollments->pluck('course_id')->filter()->toArray();
                         @endphp
                         <tr class="student-row" data-name="{{ $student->name }}" data-phone="{{ $student->phone }}" data-groups="{{ json_encode($courseIds) }}">
-                            <td class="px-4 py-3">
+                            <td class="px-4">
+                                <div class="form-check">
+                                    <input class="form-check-input student-checkbox" type="checkbox" value="{{ $student->id }}">
+                                </div>
+                            </td>
+                            <td class="py-3">
                                 <div class="d-flex align-items-center gap-3">
-                                    <div class="avatar rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);">
-                                        <i class="fas fa-user"></i>
+                                    <div class="avatar rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 40px; height: 40px; background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);">
+                                        {{ mb_substr($student->name, 0, 1) }}
                                     </div>
                                     <div>
                                         <div class="fw-bold">
@@ -148,9 +178,53 @@
                                 @endforeach
                             </td>
                             <td>
-                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">نشط</span>
+                                @php
+                                    $totalDue = $student->enrollments->sum(function($e) {
+                                        return $e->course->price ?? 0;
+                                    });
+                                    $totalPaid = $student->sales->sum('paid_amount');
+                                    $balance = $totalDue - $totalPaid;
+
+                                    // Attendance Rate
+                                    // Total targeted sessions for this student
+                                    $totalSessions = $student->enrollments->sum(fn($e) => $e->course->sessions_count ?? 0);
+                                    $attendedSessions = \Modules\Center\Models\Attendance::where('student_id', $student->id)
+                                        ->where('status', 'present')
+                                        ->count();
+                                    $attendanceRate = $totalSessions > 0 ? round(($attendedSessions / $totalSessions) * 100) : 0;
+                                @endphp
+                                
+                                <div class="text-center">
+                                    <div class="progress rounded-pill shadow-sm mb-1" style="height: 6px; width: 60px; margin: 0 auto;">
+                                        <div class="progress-bar" role="progressbar" 
+                                             style="width: {{ $attendanceRate }}%; background: {{ $attendanceRate > 70 ? '#4CAF50' : ($attendanceRate > 40 ? '#FF9800' : '#F44336') }};" 
+                                             aria-valuenow="{{ $attendanceRate }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <span class="small fw-black {{ $attendanceRate > 70 ? 'text-success' : ($attendanceRate > 40 ? 'text-warning' : 'text-danger') }}">{{ $attendanceRate }}%</span>
+                                </div>
                             </td>
-                            <td>{{ $student->created_at?->format('Y-m-d') ?? '--' }}</td>
+                            <td>
+                                @if($balance <= 0)
+                                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">
+                                        <i class="fas fa-check-circle me-1"></i> مدفوع
+                                    </span>
+                                @elseif($totalPaid > 0)
+                                    <div class="d-flex flex-column">
+                                        <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3 py-1 mb-1">
+                                            متبقي {{ number_format($balance, 0) }}
+                                        </span>
+                                        <span class="x-small text-muted text-center">من أصل {{ number_format($totalDue, 0) }}</span>
+                                    </div>
+                                @else
+                                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2">
+                                        مطلوب {{ number_format($balance, 0) }}
+                                    </span>
+                                @endif
+                            </td>
+                            <td>
+                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">نشط</span>
+                                <div class="x-small text-muted mt-1">{{ $student->created_at?->format('Y-m-d') }}</div>
+                            </td>
                             <td class="text-center">
                                 <div class="btn-group">
                                     @php
@@ -184,7 +258,7 @@
                         </tr>
                         @empty
                         <tr id="emptyRow">
-                            <td colspan="6" class="text-center py-5">
+                            <td colspan="8" class="text-center py-5">
                                 <img src="https://illustrations.popsy.co/gray/fogg-searching.png" alt="No data" style="width: 150px;" class="mb-3 opacity-50">
                                 <h6 class="text-muted">لا يوجد طلاب مسجلين حالياً</h6>
                             </td>
