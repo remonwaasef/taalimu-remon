@@ -153,8 +153,23 @@ document.addEventListener('alpine:init', () => {
                 return;
             }
             this.isSubmitting = true;
+        },
+
+        handlePageShow(event) {
+            // Reset isSubmitting when page is shown (handles browser Back button)
+            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                this.isSubmitting = false;
+            }
         }
     }))
+});
+
+// Global listener for bfcache (back-forward cache)
+window.addEventListener('pageshow', (event) => {
+    // Dispatch custom event to Alpine components if needed, 
+    // but here we can just target our data if we had a reference.
+    // However, the best way is to do it inside the component if possible or just reset all
+    window.dispatchEvent(new CustomEvent('reset-submission-state', { detail: { persisted: event.persisted } }));
 });
 </script>
 
@@ -165,6 +180,7 @@ document.addEventListener('alpine:init', () => {
         accountType: {{ Js::from($accountType) }},
         packages: {{ Js::from($packagesData) }}
      })"
+     @reset-submission-state.window="isSubmitting = false"
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
     
     <!-- Main Centered Card Container (Simplified Single Column) -->
@@ -395,7 +411,7 @@ document.addEventListener('alpine:init', () => {
                         <span x-show="!isSubmitting" class="text-xl font-black font-arabic">{{ __('auth.register.cta_main') }}</span>
                         <span x-show="isSubmitting" class="flex items-center gap-3">
                             <div class="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-                            {{ __('auth.register.processing') ?? 'جاري المعالجة...' }}
+                            {{ trans('auth.register.processing') ?: (app()->isLocale('ar') ? 'جاري المعالجة...' : 'Processing...') }}
                         </span>
                         <i x-show="!isSubmitting" class="bi bi-rocket-takeoff text-2xl group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
                     </button>

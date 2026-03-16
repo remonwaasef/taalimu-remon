@@ -211,16 +211,70 @@ class InstructorController extends Controller
         $instructor = auth()->user()->instructor;
 
         if (!$instructor) {
-            $students = Student::with(['user', 'enrollments.course'])->take(20)->get();
+            $students = Student::with(['user', 'enrollments.course', 'sales'])->take(20)->get();
         } else {
             $students = Student::whereHas('enrollments', function($q) use ($instructor) {
                 $q->whereIn('course_id', $instructor->courses->pluck('id'));
             })->with(['user', 'enrollments.course' => function($q) use ($instructor) {
                 $q->where('instructor_id', $instructor->id);
+            }, 'sales' => function($q) use ($instructor) {
+                // Optionally filter sales if needed, but usually we want total student balance
             }])->get();
         }
 
+        // Add attendance counts if needed, but for better performance we might calculate it per row or use a subquery
+        // For now, let's ensure students have what's needed for the view logic
+        
         return view('instructor::students.index', compact('students'));
+    }
+
+    /**
+     * Export students to CSV
+     */
+    public function exportStudents()
+    {
+        $instructor = auth()->user()->instructor;
+        
+        if (!$instructor) {
+            $students = Student::with(['enrollments.course'])->get();
+        } else {
+            $students = Student::whereHas('enrollments', function($q) use ($instructor) {
+                $q->whereIn('course_id', $instructor->courses->pluck('id'));
+            })->with(['enrollments.course'])->get();
+        }
+
+        $filename = "students_export_" . date('Y-m-d') . ".csv";
+        $headers = [
+            "Content-type"        => "text/csv; charset=UTF-8",
+            "Content-Disposition" => "attachment; filename=$filename",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        ];
+
+        $columns = ['Name', 'Phone', 'Parent Phone', 'Groups', 'Registration Date', 'Status'];
+
+        $callback = function() use($students, $columns) {
+            $file = fopen('php://output', 'w');
+            // Add UTF-8 BOM for Excel Arabic support
+            fputs($file, "\xEF\xBB\xBF");
+            fputcsv($file, $columns);
+
+            foreach ($students as $student) {
+                $row['Name']    = $student->name;
+                $row['Phone']    = $student->phone;
+                $row['Parent Phone']  = $student->parent_phone;
+                $row['Groups']  = $student->enrollments->pluck('course.title')->implode(', ');
+                $row['Registration Date']  = $student->created_at->format('Y-m-d');
+                $row['Status']  = $student->status;
+
+                fputcsv($file, [$row['Name'], $row['Phone'], $row['Parent Phone'], $row['Groups'], $row['Registration Date'], $row['Status']]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
     /**
