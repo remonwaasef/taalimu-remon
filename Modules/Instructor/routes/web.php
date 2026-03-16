@@ -24,6 +24,10 @@ $instructorRoutes = function () {
         Route::get('/students-create', [InstructorController::class, 'createStudent'])->name('instructor.students.create');
         Route::post('/students-store', [InstructorController::class, 'storeStudent'])->name('instructor.students.store');
         Route::get('/students/{student}', [InstructorController::class, 'showStudent'])->name('instructor.students.show');
+        Route::post('/students/import', [InstructorController::class, 'importStudents'])->name('instructor.students.import');
+        Route::post('/students/{student}/toggle-status', [InstructorController::class, 'toggleStudentStatus'])->name('instructor.students.toggle-status');
+        Route::post('/students/{student}/update-notes', [InstructorController::class, 'updateStudentNotes'])->name('instructor.students.update-notes');
+        Route::post('/students/{student}/transfer', [InstructorController::class, 'transferStudent'])->name('instructor.students.transfer');
         Route::delete('/students/{student}', [InstructorController::class, 'destroyStudent'])->name('instructor.students.destroy');
         
         // Settings Dashboard

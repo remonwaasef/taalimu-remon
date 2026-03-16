@@ -10,6 +10,9 @@
             <p class="text-muted small">عرض جميع الطلاب المسجلين في مجموعاتك</p>
         </div>
         <div class="col-auto d-flex gap-2">
+            <button type="button" class="btn btn-outline-primary rounded-pill px-4 shadow-sm fw-bold border-2" data-bs-toggle="modal" data-bs-target="#importModal">
+                <i class="fas fa-file-import me-2"></i> استيراد طلاب
+            </button>
             <a href="{{ route('instructor.students.export') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm fw-bold border-2">
                 <i class="fas fa-file-export me-2"></i> تصدير Excel
             </a>
@@ -78,6 +81,20 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    {{-- Bulk Actions Bar (Hidden by default) --}}
+    <div id="bulkActionsBar" class="card border-0 shadow-sm rounded-4 mb-3 d-none animate__animated animate__fadeInUp" style="background: var(--primary-color); color: white;">
+        <div class="card-body p-3 d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-3">
+                <span class="fw-bold"><span id="selectedCount">0</span> طالب محدد</span>
+                <div class="vr mx-2 opacity-50"></div>
+                <button type="button" id="bulkWhatsAppBtn" class="btn btn-light btn-sm rounded-pill px-3">
+                    <i class="fab fa-whatsapp me-1"></i> مراسلة جماعية
+                </button>
+            </div>
+            <button type="button" id="cancelSelection" class="btn btn-link text-white text-decoration-none p-0">إلغاء</button>
         </div>
     </div>
 
@@ -232,27 +249,63 @@
                                         if (str_starts_with($phoneForWa, '0')) {
                                             $phoneForWa = '20' . substr($phoneForWa, 1);
                                         }
-                                        $qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" . urlencode($student->user->qr_identifier);
+                                        $qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" . urlencode($student->user->qr_identifier ?? '');
+                                        $portalUrl = route('student.portal', ['identifier' => $student->user->qr_identifier ?? '']);
                                     @endphp
                                     <a href="https://api.whatsapp.com/send?phone={{ $phoneForWa }}" target="_blank" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-success shadow-sm" title="مراسلة ولي الأمر">
                                         <i class="fab fa-whatsapp fa-lg"></i>
                                     </a>
-                                    <button type="button" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-dark shadow-sm show-qr-btn" 
-                                            data-name="{{ $student->name }}" 
-                                            data-qr="{{ $qrUrl }}"
-                                            title="عرض كود الـ QR">
-                                        <i class="fas fa-qrcode fa-lg"></i>
-                                    </button>
-                                    <a href="{{ route('instructor.students.show', $student->id) }}" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-primary shadow-sm" title="الملف التفصيلي">
-                                        <i class="fas fa-id-card fa-lg"></i>
-                                    </a>
-                                    <form action="{{ route('instructor.students.destroy', $student->id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('هل أنت متأكد من حذف هذا الطالب نهائياً؟ سيتم حذف جميع سجلات الحضور والغياب والمدفوعات الخاصة به.')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-danger shadow-sm" title="حذف الطالب">
-                                            <i class="fas fa-trash-alt fa-lg"></i>
+                                    
+                                    {{-- Management Dropdown --}}
+                                    <div class="dropdown d-inline-block">
+                                        <button class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-dark shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v fa-lg"></i>
                                         </button>
-                                    </form>
+                                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 overflow-hidden">
+                                            <li>
+                                                <button type="button" class="dropdown-item py-2 show-qr-btn" data-name="{{ $student->name }}" data-qr="{{ $qrUrl }}" data-portal="{{ $portalUrl }}">
+                                                    <i class="fas fa-qrcode me-2 text-primary"></i> كود الـ QR والمنصة
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button type="button" class="dropdown-item py-2 transfer-student-btn" data-id="{{ $student->id }}" data-name="{{ $student->name }}" data-groups="{{ json_encode($student->enrollments->pluck('course_id')) }}">
+                                                    <i class="fas fa-exchange-alt me-2 text-info"></i> نقل لمجموعة أخرى
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button type="button" class="dropdown-item py-2 edit-notes-btn" data-id="{{ $student->id }}" data-notes="{{ $student->notes }}">
+                                                    <i class="fas fa-file-signature me-2 text-warning"></i> ملاحظات خاصة
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <form action="{{ route('instructor.students.toggle-status', $student->id) }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="dropdown-item py-2">
+                                                        @if($student->status === 'active')
+                                                            <i class="fas fa-snowflake me-2 text-secondary"></i> تجميد الحساب
+                                                        @else
+                                                            <i class="fas fa-play me-2 text-success"></i> تنشيط الحساب
+                                                        @endif
+                                                    </button>
+                                                </form>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <a href="{{ route('instructor.students.show', $student->id) }}" class="dropdown-item py-2 text-primary">
+                                                    <i class="fas fa-id-card me-2"></i> الملف التفصيلي
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <form action="{{ route('instructor.students.destroy', $student->id) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذا الطالب نهائياً؟')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="dropdown-item py-2 text-danger">
+                                                        <i class="fas fa-trash-alt me-2"></i> حذف الطالب
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
@@ -276,18 +329,124 @@
     </div>
 </div>
 
-{{-- QR Modal --}}
+{{-- QR & Portal Modal --}}
 <div class="modal fade" id="qrModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-dialog modal-md modal-dialog-centered">
         <div class="modal-content border-0 rounded-4 shadow">
             <div class="modal-body text-center p-4">
                 <h5 class="fw-bold mb-3" id="qrModalName">اسم الطالب</h5>
                 <div class="bg-light p-3 rounded-4 mb-3 d-inline-block shadow-inner">
-                    <img id="qrModalImg" src="" alt="QR" style="width: 200px; height: 200px;">
+                    <img id="qrModalImg" src="" alt="QR" style="width: 180px; height: 180px;">
                 </div>
-                <p class="text-muted small mb-0">امسح الكود لتسجيل الحضور</p>
-                <button type="button" class="btn btn-primary w-100 rounded-pill mt-4 border-0" data-bs-dismiss="modal" style="background: var(--primary-color);">إغلاق</button>
+                
+                <div class="mb-3">
+                    <label class="form-label small text-muted">رابط بوابة ولي الأمر / الطالب</label>
+                    <div class="input-group">
+                        <input type="text" id="portalUrlInput" class="form-control text-ltr" readonly>
+                        <button class="btn btn-outline-primary" type="button" id="copyPortalBtn">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="d-flex gap-2">
+                    <a href="" id="openPortalBtn" target="_blank" class="btn btn-primary flex-grow-1 rounded-pill border-0" style="background: var(--primary-color);">فتح البوابة</a>
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">إغلاق</button>
+                </div>
             </div>
+        </div>
+    </div>
+</div>
+
+{{-- Import Modal --}}
+<div class="modal fade" id="importModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <form action="{{ route('instructor.students.import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="fw-bold">استيراد طلاب من ملف Excel/CSV</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="alert alert-info small border-0 rounded-3">
+                        <i class="fas fa-info-circle me-2"></i> يجب أن يحتوي الملف على الأعمدة بالترتيب: (الاسم، الهاتف، هاتف ولي الأمر). الهاتف هو الحقل الأساسي للتعرف على الطالب.
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">اختر المجموعة</label>
+                        <select name="course_id" class="form-select rounded-pill" required>
+                            @foreach($uniqueCourses as $id => $title)
+                                <option value="{{ $id }}">{{ $title }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">ملف الـ CSV</label>
+                        <input type="file" name="csv_file" class="form-control" accept=".csv, .txt" required>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="submit" class="btn btn-primary w-100 rounded-pill border-0" style="background: var(--primary-color);">بدء الاستيراد</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- Transfer Modal --}}
+<div class="modal fade" id="transferModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <form id="transferForm" method="POST">
+                @csrf
+                <div class="modal-body p-4 text-center">
+                    <div class="rounded-circle bg-info bg-opacity-10 text-info p-3 mb-3 d-inline-block">
+                        <i class="fas fa-exchange-alt fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold" id="transferStudentName">نقل طالب</h5>
+                    <p class="text-muted small mb-4">اختر المجموعة الجديدة التي ترغب في نقل الطالب إليها</p>
+                    
+                    <input type="hidden" name="from_course_id" id="fromCourseId">
+                    
+                    <div class="mb-4 text-start">
+                        <label class="form-label fw-bold">المجموعة الجديدة</label>
+                        <select name="to_course_id" class="form-select rounded-pill" required>
+                            @foreach($uniqueCourses as $id => $title)
+                                <option value="{{ $id }}">{{ $title }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-info text-white flex-grow-1 rounded-pill">تأكيد النقل</button>
+                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">إلغاء</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- Notes Modal --}}
+<div class="modal fade" id="notesModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <form id="notesForm" method="POST">
+                @csrf
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="fw-bold">ملاحظات خاصة عن الطالب</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <textarea name="notes" id="studentNotesText" class="form-control rounded-4 shadow-inner" rows="5" placeholder="اكتب ملاحظاتك عن مستوى الطالب أو تنبيهات خاصة به..."></textarea>
+                    <p class="x-small text-muted mt-2"><i class="fas fa-lock me-1"></i> هذه الملاحظات خاصة بك ولا يراها الطالب أو ولي الأمر.</p>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="submit" class="btn btn-primary w-100 rounded-pill border-0" style="background: var(--primary-color);">حفظ الملاحظات</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -300,6 +459,79 @@ document.addEventListener('DOMContentLoaded', function() {
     const noResults = document.getElementById('noStudentsResults');
     const resultCount = document.getElementById('studentResultCount');
     const table = document.getElementById('studentsTable');
+
+    const bulkBar = document.getElementById('bulkActionsBar');
+    const selectedCountSpan = document.getElementById('selectedCount');
+    const selectAllCheckbox = document.getElementById('selectAllStudents');
+    const studentCheckboxes = document.querySelectorAll('.student-checkbox');
+    const bulkWhatsAppBtn = document.getElementById('bulkWhatsAppBtn');
+    const cancelSelectionBtn = document.getElementById('cancelSelection');
+
+    function updateBulkBar() {
+        const checked = document.querySelectorAll('.student-checkbox:checked');
+        const count = checked.length;
+        
+        if (count > 0) {
+            bulkBar.classList.remove('d-none');
+            selectedCountSpan.textContent = count;
+        } else {
+            bulkBar.classList.add('d-none');
+        }
+        
+        if (selectAllCheckbox) {
+            selectAllCheckbox.checked = count === studentCheckboxes.length && count > 0;
+        }
+    }
+
+    if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', function() {
+            const isChecked = this.checked;
+            studentCheckboxes.forEach(cb => {
+                const row = cb.closest('tr');
+                if (row.style.display !== 'none') {
+                    cb.checked = isChecked;
+                }
+            });
+            updateBulkBar();
+        });
+    }
+
+    studentCheckboxes.forEach(cb => {
+        cb.addEventListener('change', updateBulkBar);
+    });
+
+    if (cancelSelectionBtn) {
+        cancelSelectionBtn.addEventListener('click', function() {
+            studentCheckboxes.forEach(cb => cb.checked = false);
+            if (selectAllCheckbox) selectAllCheckbox.checked = false;
+            updateBulkBar();
+        });
+    }
+
+    if (bulkWhatsAppBtn) {
+        bulkWhatsAppBtn.addEventListener('click', function() {
+            const selectedPhones = [];
+            document.querySelectorAll('.student-checkbox:checked').forEach(cb => {
+                const row = cb.closest('tr');
+                const phone = row.dataset.phone;
+                if (phone) {
+                    let cleanPhone = phone.replace(/[^0-9]/g, '');
+                    if (cleanPhone.startsWith('0')) cleanPhone = '20' + cleanPhone.substring(1);
+                    selectedPhones.push(cleanPhone);
+                }
+            });
+
+            if (selectedPhones.length > 0) {
+                // WhatsApp bulk is limited by URL length, so we usually open one by one or use a tool.
+                // For now, we'll open the first one and alert if multiple.
+                const first = selectedPhones[0];
+                window.open(`https://api.whatsapp.com/send?phone=${first}`, '_blank');
+                if (selectedPhones.length > 1) {
+                    alert('سيتم فتح الطالب الأول. للمراسلة الجماعية الاحترافية، يوصى بربط خدمة WhatsApp API.');
+                }
+            }
+        });
+    }
 
     function applyStudentFilters() {
         const query = searchInput.value.trim().toLowerCase();
@@ -319,35 +551,84 @@ document.addEventListener('DOMContentLoaded', function() {
                 visibleCount++;
             } else {
                 row.style.display = 'none';
+                const cb = row.querySelector('.student-checkbox');
+                if (cb) cb.checked = false;
             }
         });
 
+        updateBulkBar();
         if (resultCount) resultCount.textContent = visibleCount + ' طالب';
         
         if (noResults) {
             noResults.classList.toggle('d-none', visibleCount > 0 || rows.length === 0);
         }
-        
-        if (table) {
-            const tbody = table.querySelector('tbody');
-            const hasData = rows.length > 0;
-            table.classList.toggle('d-none', visibleCount === 0 && hasData);
-        }
     }
 
-    // QR Modal Logic
+    // QR & Portal Modal Logic
     const qrModalEl = document.getElementById('qrModal');
     const qrModal = qrModalEl ? new bootstrap.Modal(qrModalEl) : null;
     const qrModalImg = document.getElementById('qrModalImg');
     const qrModalName = document.getElementById('qrModalName');
+    const portalUrlInput = document.getElementById('portalUrlInput');
+    const openPortalBtn = document.getElementById('openPortalBtn');
+    const copyPortalBtn = document.getElementById('copyPortalBtn');
 
     document.querySelectorAll('.show-qr-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             if (qrModal) {
                 qrModalName.textContent = this.dataset.name;
                 qrModalImg.src = this.dataset.qr;
+                portalUrlInput.value = this.dataset.portal;
+                openPortalBtn.href = this.dataset.portal;
                 qrModal.show();
             }
+        });
+    });
+
+    if (copyPortalBtn) {
+        copyPortalBtn.addEventListener('click', function() {
+            portalUrlInput.select();
+            document.execCommand('copy');
+            const originalIcon = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-check"></i>';
+            this.classList.replace('btn-outline-primary', 'btn-success');
+            setTimeout(() => {
+                this.innerHTML = originalIcon;
+                this.classList.replace('btn-success', 'btn-outline-primary');
+            }, 2000);
+        });
+    }
+
+    // Transfer Modal
+    const transferModalEl = document.getElementById('transferModal');
+    const transferModal = transferModalEl ? new bootstrap.Modal(transferModalEl) : null;
+    const transferForm = document.getElementById('transferForm');
+    const transferStudentName = document.getElementById('transferStudentName');
+    const fromCourseIdInput = document.getElementById('fromCourseId');
+
+    document.querySelectorAll('.transfer-student-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const groups = JSON.parse(this.dataset.groups);
+            transferStudentName.textContent = 'نقل الطالب: ' + this.dataset.name;
+            transferForm.action = `/instructor/students/${id}/transfer`;
+            fromCourseIdInput.value = groups[0] || ''; // Pick first group as from
+            transferModal.show();
+        });
+    });
+
+    // Notes Modal
+    const notesModalEl = document.getElementById('notesModal');
+    const notesModal = notesModalEl ? new bootstrap.Modal(notesModalEl) : null;
+    const notesForm = document.getElementById('notesForm');
+    const studentNotesText = document.getElementById('studentNotesText');
+
+    document.querySelectorAll('.edit-notes-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            studentNotesText.value = this.dataset.notes || '';
+            notesForm.action = `/instructor/students/${id}/update-notes`;
+            notesModal.show();
         });
     });
 
