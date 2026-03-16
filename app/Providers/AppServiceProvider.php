@@ -37,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
         \Illuminate\Support\Facades\Event::subscribe(\App\Listeners\AuthenticationSubscriber::class);
 
         // Prevent N+1 queries in development
-        // Model::preventLazyLoading(! app()->isProduction());
+        Model::preventLazyLoading(! app()->isProduction());
 
         // Global Session/Cookie compatibility for multi-subdomain
         // Set this in boot() to ensure it's ready BEFORE StartSession middleware runs
