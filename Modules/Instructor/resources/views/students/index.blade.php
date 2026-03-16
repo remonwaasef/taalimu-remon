@@ -52,7 +52,7 @@
         @endphp
         <div class="col-md-3">
             @php
-                $totalRevenue = Sale::whereIn('student_id', $students->pluck('id'))->sum('paid_amount');
+                $totalRevenue = \App\Models\Sale::whereIn('student_id', $students->pluck('id'))->sum('paid_amount');
             @endphp
             <div class="card border-0 shadow-sm rounded-4 h-100 p-3" style="border-right: 4px solid #9C27B0 !important;">
                 <div class="d-flex align-items-center gap-3">
