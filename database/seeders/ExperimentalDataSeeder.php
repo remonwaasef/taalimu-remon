@@ -77,16 +77,20 @@ class ExperimentalDataSeeder extends Seeder
                     'password' => Hash::make('password'),
                     'role' => 'instructor', // Changed from center_admin
                     'tenant_id' => $tenant->id,
+                    'email_verified_at' => now(), // Bypass verification
                 ]
             );
             
-            if (method_exists($user, 'assignRole')) {
+            if (method_exists($user, 'syncRoles')) {
                 $instructorRole = \Spatie\Permission\Models\Role::where('name', 'instructor')->whereNull('tenant_id')->first();
                 if ($instructorRole) {
-                    $user->assignRole($instructorRole);
+                    $user->syncRoles([$instructorRole->name]);
                 } else {
-                    $user->assignRole('instructor');
+                    $user->syncRoles(['instructor']);
                 }
+                
+                // Force update the 'role' column immediately for verification
+                $user->update(['role' => 'instructor']);
             }
 
             // 4. Create Instructor Record
@@ -135,6 +139,7 @@ class ExperimentalDataSeeder extends Seeder
                             'role' => 'student',
                             'tenant_id' => $tenant->id,
                             'qr_identifier' => Str::random(12),
+                            'email_verified_at' => now(), // Bypass verification
                         ]
                     );
 

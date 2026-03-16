@@ -12,7 +12,7 @@ $kernel->bootstrap();
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 
-echo "<h1>Experimental Data Seeder Runner (v2 - Independent Teachers)</h1>";
+echo "<h1>Experimental Data Seeder Runner (v3 - Final)</h1>";
 
 try {
     echo "Attempting to run ExperimentalDataSeeder...<br>";
@@ -43,10 +43,18 @@ try {
     $teacher1 = DB::table('users')->where('email', 'teacher1@example.com')->first();
     if ($teacher1) {
         $tenant = DB::table('tenants')->where('id', $teacher1->tenant_id)->first();
-        echo "✅ teacher1@example.com found (User ID: " . $teacher1->id . ", Role: " . $teacher1->role . ")<br>";
+        echo "✅ teacher1@example.com found (User ID: " . ($teacher1->id ?? 'N/A') . ", Role: " . ($teacher1->role ?? 'N/A') . ")<br>";
+        echo "✅ Email Verified: " . ($teacher1->email_verified_at ? 'Yes' : 'No') . "<br>";
         if ($tenant) {
-            echo "✅ Tenant Domain: " . $tenant->domain . " (Type: " . $tenant->type . ", Name: " . $tenant->name . ")<br>";
+            echo "✅ Tenant Domain: " . ($tenant->domain ?? 'N/A') . " (Type: " . ($tenant->type ?? 'N/A') . ", Name: " . ($tenant->name ?? 'N/A') . ")<br>";
         }
+        
+        // Clear caches
+        \Illuminate\Support\Facades\Cache::forget("user_cache_{$teacher1->id}");
+        if ($tenant) {
+            \Illuminate\Support\Facades\Cache::forget("taalimu:tenancy:domain:{$tenant->domain}");
+        }
+        echo "Caches cleared.<br>";
     } else {
         echo "❌ teacher1@example.com NOT found in database.<br>";
     }
