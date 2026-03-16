@@ -40,12 +40,13 @@ class ExperimentalDataSeeder extends Seeder
         ];
 
         foreach ($instructorsData as $data) {
-            // 1. Create Tenant
+            // 1. Create Tenant (Type: instructor)
             $tenant = Tenant::updateOrCreate(
                 ['domain' => $data['domain']],
                 [
-                    'name' => 'مركز ' . $data['name'],
+                    'name' => $data['name'],
                     'status' => 'active',
+                    'type' => 'instructor', // CRITICAL: Identify as an independent instructor
                 ]
             );
 
@@ -55,7 +56,7 @@ class ExperimentalDataSeeder extends Seeder
                 app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
             }
 
-            // 2. Create Active Subscription
+            // 2. Create Active Subscription 
             Subscription::updateOrCreate(
                 ['tenant_id' => $tenant->id, 'name' => 'default'],
                 [
@@ -64,22 +65,28 @@ class ExperimentalDataSeeder extends Seeder
                     'quantity' => 1,
                     'status' => 'active',
                     'ends_at' => now()->addYear(),
+                    'stripe_price' => 'price_basic', // Starter plan for independent teachers
                 ]
             );
 
-            // 3. Create Instructor User
+            // 3. Create Instructor User (Role: instructor)
             $user = User::updateOrCreate(
                 ['email' => $data['email']],
                 [
                     'name' => $data['name'],
                     'password' => Hash::make('password'),
-                    'role' => 'center_admin', // As an independent teacher, he/she is the admin
+                    'role' => 'instructor', // Changed from center_admin
                     'tenant_id' => $tenant->id,
                 ]
             );
             
             if (method_exists($user, 'assignRole')) {
-                $user->assignRole('center_admin');
+                $instructorRole = \Spatie\Permission\Models\Role::where('name', 'instructor')->whereNull('tenant_id')->first();
+                if ($instructorRole) {
+                    $user->assignRole($instructorRole);
+                } else {
+                    $user->assignRole('instructor');
+                }
             }
 
             // 4. Create Instructor Record
@@ -89,6 +96,7 @@ class ExperimentalDataSeeder extends Seeder
                     'user_id' => $user->id,
                     'name' => $data['name'],
                     'specialization' => $data['specialization'],
+                    'status' => 'active',
                 ]
             );
             $user->update(['instructor_id' => $instructor->id]);

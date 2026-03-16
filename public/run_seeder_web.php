@@ -12,7 +12,7 @@ $kernel->bootstrap();
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 
-echo "<h1>Experimental Data Seeder Runner</h1>";
+echo "<h1>Experimental Data Seeder Runner (v2 - Independent Teachers)</h1>";
 
 try {
     echo "Attempting to run ExperimentalDataSeeder...<br>";
@@ -21,7 +21,6 @@ try {
     if (!class_exists('Database\Seeders\ExperimentalDataSeeder')) {
         echo "Error: ExperimentalDataSeeder class not found. Make sure you saved the file in database/seeders/ExperimentalDataSeeder.php<br>";
         
-        // Try to include it manually just in case
         $path = __DIR__ . '/../database/seeders/ExperimentalDataSeeder.php';
         if (file_exists($path)) {
             echo "Found file at $path. Loading manually...<br>";
@@ -43,7 +42,11 @@ try {
     echo "<h2>Verification:</h2>";
     $teacher1 = DB::table('users')->where('email', 'teacher1@example.com')->first();
     if ($teacher1) {
-        echo "✅ teacher1@example.com found with user_id: " . $teacher1->id . "<br>";
+        $tenant = DB::table('tenants')->where('id', $teacher1->tenant_id)->first();
+        echo "✅ teacher1@example.com found (User ID: " . $teacher1->id . ", Role: " . $teacher1->role . ")<br>";
+        if ($tenant) {
+            echo "✅ Tenant Domain: " . $tenant->domain . " (Type: " . $tenant->type . ", Name: " . $tenant->name . ")<br>";
+        }
     } else {
         echo "❌ teacher1@example.com NOT found in database.<br>";
     }
