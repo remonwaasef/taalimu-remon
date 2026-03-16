@@ -81,17 +81,18 @@ class ExperimentalDataSeeder extends Seeder
                 ]
             );
             
-            if (method_exists($user, 'syncRoles')) {
-                $instructorRole = \Spatie\Permission\Models\Role::where('name', 'instructor')->whereNull('tenant_id')->first();
-                if ($instructorRole) {
-                    $user->syncRoles([$instructorRole->name]);
-                } else {
-                    $user->syncRoles(['instructor']);
-                }
-                
-                // Force update the 'role' column immediately for verification
-                $user->update(['role' => 'instructor']);
+            // Assign Role (Forceful to bypass observers and handle team context)
+            \Illuminate\Support\Facades\DB::table('model_has_roles')->where('model_id', $user->id)->delete();
+            $role = \App\Models\Role::where('name', 'instructor')->whereNull('tenant_id')->first();
+            if ($role) {
+                \Illuminate\Support\Facades\DB::table('model_has_roles')->insert([
+                    'role_id' => $role->id,
+                    'model_type' => User::class,
+                    'model_id' => $user->id,
+                    'tenant_id' => $tenant->id,
+                ]);
             }
+            $user->updateQuietly(['role' => 'instructor']);
 
             // 4. Create Instructor Record
             $instructor = Instructor::updateOrCreate(
@@ -143,9 +144,18 @@ class ExperimentalDataSeeder extends Seeder
                         ]
                     );
 
-                    if (method_exists($studentUser, 'assignRole')) {
-                        $studentUser->assignRole('student');
+                    // Assign Role (Forceful)
+                    \Illuminate\Support\Facades\DB::table('model_has_roles')->where('model_id', $studentUser->id)->delete();
+                    $sRole = \App\Models\Role::where('name', 'student')->whereNull('tenant_id')->first();
+                    if ($sRole) {
+                        \Illuminate\Support\Facades\DB::table('model_has_roles')->insert([
+                            'role_id' => $sRole->id,
+                            'model_type' => User::class,
+                            'model_id' => $studentUser->id,
+                            'tenant_id' => $tenant->id,
+                        ]);
                     }
+                    $studentUser->updateQuietly(['role' => 'student']);
 
                     $student = Student::updateOrCreate(
                         ['email' => $studentEmail, 'tenant_id' => $tenant->id],

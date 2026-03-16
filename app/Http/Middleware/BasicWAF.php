@@ -29,10 +29,31 @@ class BasicWAF
     ];
 
     /**
+     * The URIs that should be excluded from WAF filtering.
+     *
+     * @var array<int, string>
+     */
+    protected $except = [
+        'auth/google/*',
+        'login*',
+        'register*',
+        'payment/*',
+        'webhooks/*',
+        'stripe/*',
+    ];
+
+    /**
      * Handle an incoming request.
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Skip for excluded routes
+        foreach ($this->except as $except) {
+            if ($request->is($except)) {
+                return $next($request);
+            }
+        }
+
         // Check all input for suspicious patterns (recursively)
         $inputs = array_merge(
             $request->all(),
