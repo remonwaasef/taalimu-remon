@@ -278,6 +278,145 @@ class InstructorController extends Controller
     }
 
     /**
+     * Import students from CSV
+     */
+    public function importStudents(Request $request)
+    {
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt|max:2048',
+            'course_id' => 'required|exists:courses,id'
+        ]);
+
+        $instructor = auth()->user()->instructor;
+        $course = \App\Models\Course::findOrFail($request->course_id);
+
+        if ($course->instructor_id !== $instructor->id) {
+            return back()->with('error', 'غير مسموح لك بالإضافة لهذه المجموعة');
+        }
+
+        $file = $request->file('csv_file');
+        $handle = fopen($file->getRealPath(), 'r');
+        
+        // Skip header
+        fgetcsv($handle);
+
+        $imported = 0;
+        $errors = 0;
+
+        while (($data = fgetcsv($handle)) !== FALSE) {
+            try {
+                // simple mapping: 0: name, 1: phone, 2: parent_phone
+                $name = $data[0] ?? null;
+                $phone = $data[1] ?? null;
+                $parent_phone = $data[2] ?? null;
+
+                if (!$name || !$phone) continue;
+
+                $student = Student::firstOrCreate(
+                    ['phone' => $phone, 'tenant_id' => $instructor->tenant_id],
+                    [
+                        'name' => $name,
+                        'parent_phone' => $parent_phone,
+                    ]
+                );
+
+                // Enroll student
+                \App\Models\Enrollment::firstOrCreate([
+                    'user_id' => $student->user_id ?: $this->getOrCreateUserForStudent($student),
+                    'course_id' => $course->id,
+                    'tenant_id' => $instructor->tenant_id,
+                ]);
+
+                $imported++;
+            } catch (\Exception $e) {
+                $errors++;
+            }
+        }
+        fclose($handle);
+
+        return back()->with('success', "تم استيراد $imported طالب بنجاح" . ($errors ? " ($errors أخطاء)" : ""));
+    }
+
+    private function getOrCreateUserForStudent($student)
+    {
+        if ($student->user_id) return $student->user_id;
+        
+        // Check if user exists by phone
+        $user = \App\Models\User::where('phone', $student->phone)->first();
+        if (!$user) {
+            $user = \App\Models\User::create([
+                'name' => $student->name,
+                'phone' => $student->phone,
+                'email' => $student->phone . '@edu.com',
+                'password' => bcrypt('password'), // temporary
+                'role' => 'student',
+                'tenant_id' => $student->tenant_id,
+            ]);
+        }
+        
+        $student->update(['user_id' => $user->id]);
+        return $user->id;
+    }
+
+    /**
+     * Toggle student status (Active/Frozen)
+     */
+    public function toggleStudentStatus(Student $student)
+    {
+        $this->authorizeInstructor($student);
+
+        $student->update([
+            'status' => $student->status === 'active' ? 'frozen' : 'active'
+        ]);
+
+        return back()->with('success', 'تم تحديث حالة الطالب بنجاح');
+    }
+
+    /**
+     * Update student private notes
+     */
+    public function updateStudentNotes(Request $request, Student $student)
+    {
+        $this->authorizeInstructor($student);
+
+        $student->update([
+            'notes' => $request->notes
+        ]);
+
+        return back()->with('success', 'تم حفظ الملاحظات');
+    }
+
+    /**
+     * Transfer student between groups
+     */
+    public function transferStudent(Request $request, Student $student)
+    {
+        $request->validate([
+            'from_course_id' => 'required|exists:courses,id',
+            'to_course_id' => 'required|exists:courses,id',
+        ]);
+
+        $this->authorizeInstructor($student);
+
+        // Update enrollment
+        \App\Models\Enrollment::where('user_id', $student->user_id)
+            ->where('course_id', $request->from_course_id)
+            ->update(['course_id' => $request->to_course_id]);
+
+        return back()->with('success', 'تم نقل الطالب بنجاح');
+    }
+
+    private function authorizeInstructor($student)
+    {
+        $instructor = auth()->user()->instructor;
+        $isRelated = $student->enrollments()->whereIn('course_id', $instructor->courses->pluck('id'))->exists();
+        
+        if (!$isRelated) {
+            abort(403, 'غير مصرح لك بالوصول لهذا الطالب');
+        }
+    }
+
+    /**
      * Show the form for manually creating a student
      */
     public function createStudent()
