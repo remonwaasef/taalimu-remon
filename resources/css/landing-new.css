@@ -5,14 +5,14 @@
 @layer base {
     :root {
         /* Edusion Light Theme - Professional & Airy */
-        /* Primary: Royal Blue #1F45C7 (hsl 225 73% 45%) */
-        --primary-purple: 225 73% 45%;
-        --primary-vibrant: 225 73% 50%;
-        --primary-light: 225 73% 98%;
+        /* Primary: Academy Blue #162963 (hsl 224 64% 24%) */
+        --primary-purple: 224 64% 24%;
+        --primary-vibrant: 224 64% 30%;
+        --primary-light: 224 64% 98%;
 
-        /* Typography: Royal Blue applied to headings */
-        --dark-text: 225 73% 45%;
-        --foreground: 225 73% 45%;
+        /* Typography: Academy Blue applied to headings */
+        --dark-text: 224 64% 24%;
+        --foreground: 224 64% 24%;
 
         /* Accents - Vibrant Green from reference image */
         --secondary: 158 82% 47%; /* Vibrant #22C55E type green */
@@ -27,25 +27,25 @@
         --muted-foreground: 215 25% 30%;
 
         --card: 0 0% 100%;
-        --card-foreground: 225 73% 45%;
+        --card-foreground: 224 64% 24%;
 
-        --primary: 225 73% 45%;
+        --primary: 224 64% 24%;
         --primary-foreground: 0 0% 100%;
 
         --border: 214 32% 91%;
         --input: 214 32% 91%;
-        --ring: 225 73% 45%;
+        --ring: 224 64% 24%;
         --radius: 1.25rem;
 
         /* Core Colors Mapping */
-        --dark-purple: 225 73% 45%;
-        --light-purple: 225 73% 98%;
+        --dark-purple: 224 64% 24%;
+        --light-purple: 224 64% 98%;
         --cyan: 158 82% 47%;
         --light-bg: 0 0% 100%;
         --gray-text: 215 16% 47%;
-        --analytical-blue: 225 73% 98%;
+        --analytical-blue: 224 64% 98%;
         --outline-green: 158 82% 47%;
-        --outline-purple: 225 73% 45%;
+        --outline-purple: 224 64% 24%;
 
         /* Gradients: Subtle mesh for light theme */
         --gradient-hero: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
