@@ -22,7 +22,7 @@
         <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
             <!-- Testimonial 1 -->
             <div
-                class="group relative bg-card rounded-2xl p-6 lg:p-8 border-2 border-light-purple/20 hover:border-light-purple/40 transition-all duration-300 hover:shadow-card-hover animate-fade-in delay-0"
+                class="group relative bg-card rounded-2xl p-6 lg:p-8 border-2 border-border hover:border-primary/20 transition-all duration-300 hover:shadow-card-hover animate-fade-in delay-0"
             >
                 <!-- Quote Icon -->
                 <div class="absolute -top-4 left-6 w-10 h-10 rounded-xl gradient-hero flex items-center justify-center shadow-md">
@@ -54,24 +54,24 @@
 
                 <!-- Author -->
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full gradient-hero flex items-center justify-center text-primary-foreground font-bold">
+                    <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold">
                         A
                     </div>
                     <div>
-                        <div class="font-semibold text-foreground">{{ __('landing.testimonials.items.0.author_name') }}</div>
+                        <div class="font-semibold text-primary">{{ __('landing.testimonials.items.0.author_name') }}</div>
                         <div class="text-sm text-muted-foreground">{{ __('landing.testimonials.items.0.author_role') }}, {{ __('landing.testimonials.items.0.author_company') }}</div>
-                        <div class="text-xs text-light-purple">{{ __('landing.testimonials.items.0.author_location') }}</div>
+                        <div class="text-xs text-secondary font-bold">{{ __('landing.testimonials.items.0.author_location') }}</div>
                     </div>
                 </div>
             </div>
 
             <!-- Testimonial 2 -->
             <div
-                class="group relative bg-card rounded-2xl p-6 lg:p-8 border-2 border-light-purple/20 hover:border-light-purple/40 transition-all duration-300 hover:shadow-card-hover animate-fade-in delay-1"
+                class="group relative bg-card rounded-2xl p-6 lg:p-8 border-2 border-border hover:border-primary/20 transition-all duration-300 hover:shadow-card-hover animate-fade-in delay-1"
             >
                 <!-- Quote Icon -->
-                <div class="absolute -top-4 left-6 w-10 h-10 rounded-xl gradient-hero flex items-center justify-center shadow-md">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-primary-foreground"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/></svg>
+                <div class="absolute -top-4 left-6 w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-white"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/></svg>
                 </div>
 
                 <!-- Rating -->
@@ -99,24 +99,24 @@
 
                 <!-- Author -->
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full gradient-hero flex items-center justify-center text-primary-foreground font-bold">
+                    <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold">
                         F
                     </div>
                     <div>
-                        <div class="font-semibold text-foreground">{{ __('landing.testimonials.items.1.author_name') }}</div>
+                        <div class="font-semibold text-primary">{{ __('landing.testimonials.items.1.author_name') }}</div>
                         <div class="text-sm text-muted-foreground">{{ __('landing.testimonials.items.1.author_role') }}, {{ __('landing.testimonials.items.1.author_company') }}</div>
-                        <div class="text-xs text-light-purple">{{ __('landing.testimonials.items.1.author_location') }}</div>
+                        <div class="text-xs text-secondary font-bold">{{ __('landing.testimonials.items.1.author_location') }}</div>
                     </div>
                 </div>
             </div>
 
             <!-- Testimonial 3 -->
             <div
-                class="group relative bg-card rounded-2xl p-6 lg:p-8 border-2 border-light-purple/20 hover:border-light-purple/40 transition-all duration-300 hover:shadow-card-hover animate-fade-in delay-2"
+                class="group relative bg-card rounded-2xl p-6 lg:p-8 border-2 border-border hover:border-primary/20 transition-all duration-300 hover:shadow-card-hover animate-fade-in delay-2"
             >
                 <!-- Quote Icon -->
-                <div class="absolute -top-4 left-6 w-10 h-10 rounded-xl gradient-hero flex items-center justify-center shadow-md">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-primary-foreground"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/></svg>
+                <div class="absolute -top-4 left-6 w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-white"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/></svg>
                 </div>
 
                 <!-- Rating -->
@@ -144,13 +144,13 @@
 
                 <!-- Author -->
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full gradient-hero flex items-center justify-center text-primary-foreground font-bold">
+                    <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold">
                         M
                     </div>
                     <div>
-                        <div class="font-semibold text-foreground">{{ __('landing.testimonials.items.2.author_name') }}</div>
+                        <div class="font-semibold text-primary">{{ __('landing.testimonials.items.2.author_name') }}</div>
                         <div class="text-sm text-muted-foreground">{{ __('landing.testimonials.items.2.author_role') }}, {{ __('landing.testimonials.items.2.author_company') }}</div>
-                        <div class="text-xs text-light-purple">{{ __('landing.testimonials.items.2.author_location') }}</div>
+                        <div class="text-xs text-secondary font-bold">{{ __('landing.testimonials.items.2.author_location') }}</div>
                     </div>
                 </div>
             </div>
