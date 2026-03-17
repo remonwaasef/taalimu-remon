@@ -1,51 +1,58 @@
 @extends('instructor::components.layouts.master')
 
 @section('page-title', 'إدارة الحسابات والمدفوعات')
+
 @section('content')
 <div class="container-fluid">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h3 class="fw-bold">إدارة الحسابات والمدفوعات</h3>
-            <p class="text-muted">متابعة تحصيل الرسوم من الطلاب بشكل مبسط</p>
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-6">
+            <h3 class="fw-bold mb-1">{{ __('instructor::billing.title') }}</h3>
+            <p class="text-muted mb-0">{{ __('instructor::billing.subtitle') }}</p>
+        </div>
+        <div class="col-md-6 text-md-end mt-3 mt-md-0">
+            <div id="resultCount" class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2">
+                {{ $students->count() }} طالب
+            </div>
         </div>
     </div>
 
     {{-- Search & Filter Bar --}}
-    <div class="card border-0 shadow-sm rounded-4 mb-3">
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
         <div class="card-body p-3">
             <div class="row g-2 align-items-center">
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <div class="input-group">
-                        <span class="input-group-text bg-white border-end-0 rounded-start-pill"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" id="searchInput" class="form-control border-start-0 rounded-end-pill" placeholder="بحث بالاسم أو رقم الهاتف...">
+                        <span class="input-group-text bg-light border-0 rounded-start-pill px-3"><i class="fas fa-search text-muted"></i></span>
+                        <input type="text" id="searchInput" class="form-control bg-light border-0 rounded-end-pill py-2" placeholder="بحث باسم الطالب أو رقم الهاتف...">
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <select id="filterStatus" class="form-select rounded-pill">
+                    <select id="filterStatus" class="form-select bg-light border-0 rounded-pill py-2">
                         <option value="all">كل الطلاب</option>
                         <option value="unpaid">عليهم متبقي</option>
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h3 class="fw-bold mb-0">{{ __('instructor::billing.title') }}</h3>
-            <p class="text-muted small mb-0">{{ __('instructor::billing.subtitle') }}</p>
-        </div>
-        
-        <div class="btn-group rounded-pill overflow-hidden shadow-sm border-0">
-            <button type="button" class="btn btn-white bg-white px-4 border-0 active" onclick="filterTable('all')">{{ __('instructor::billing.all_students') }}</button>
-            <button type="button" class="btn btn-white bg-white px-4 border-0" onclick="filterTable('unpaid')">{{ __('instructor::billing.unpaid') }}</button>
-            <button type="button" class="btn btn-white bg-white px-4 border-0" onclick="filterTable('paid')">{{ __('instructor::billing.fully_paid') }}</button>
+                        <option value="paid">تم التحصيل بالكامل</option>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
 
     @if($students->isEmpty())
         <div class="stats-card p-5 text-center">
             <div class="mb-4">
-                <i class="fas fa-search fs-1 text-muted opacity-25"></i>
+                <i class="fas fa-users fs-1 text-muted opacity-25"></i>
             </div>
-            <h5 class="text-muted">{{ __('instructor::billing.no_results') }}</h5>
+            <h5 class="text-muted">لا يوجد طلاب مسجلين حالياً</h5>
         </div>
     @else
-        <div class="stats-card p-0 overflow-hidden">
+        <div id="noResults" class="stats-card p-5 text-center d-none">
+            <div class="mb-4">
+                <i class="fas fa-search fs-1 text-muted opacity-25"></i>
+            </div>
+            <h5 class="text-muted">لا توجد نتائج تطابق بحثك</h5>
+        </div>
+
+        <div class="stats-card p-0 overflow-hidden shadow-sm border-0" id="billingTableContainer">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0" id="billingTable">
                     <thead class="bg-light">
@@ -60,15 +67,19 @@
                     <tbody>
                         @foreach($students as $student)
                             @php
-                                $totalDue = $student->courses->sum('price');
-                                $totalPaid = $student->sales->sum('amount');
+                                $totalDue = $student->enrollments->sum(function($e) { return $e->course->price ?? 0; });
+                                $totalPaid = $student->sales->sum('paid_amount');
                                 $balance = $totalDue - $totalPaid;
                                 $status = $balance > 0 ? 'unpaid' : 'paid';
                             @endphp
-                            <tr data-status="{{ $status }}">
+                            <tr class="student-row" 
+                                data-name="{{ $student->name }}" 
+                                data-phone="{{ $student->phone }}" 
+                                data-balance="{{ $balance }}"
+                                data-status="{{ $status }}">
                                 <td class="px-4 py-3">
                                     <div class="fw-bold text-dark">{{ $student->name }}</div>
-                                    <small class="text-muted">{{ $student->courses->pluck('title')->implode(', ') }}</small>
+                                    <small class="text-muted">{{ $student->enrollments->pluck('course.title')->filter()->implode(', ') }}</small>
                                 </td>
                                 <td>{{ number_format($totalDue) }} {{ __('instructor::dashboard.currency') }}</td>
                                 <td>{{ number_format($totalPaid) }} {{ __('instructor::dashboard.currency') }}</td>
@@ -93,11 +104,15 @@
                                                     'balance' => $balance,
                                                     'instructor' => auth()->user()->name
                                                 ]);
-                                                $whatsappUri = "https://api.whatsapp.com/send?phone=" . (str_starts_with($student->phone, '0') ? '2' . $student->phone : $student->phone) . "&text=" . urlencode($reminderMsg);
+                                                $phone = $student->phone;
+                                                if (str_starts_with($phone, '0')) $phone = '2' . $phone;
+                                                $whatsappUri = "https://api.whatsapp.com/send?phone=" . preg_replace('/[^0-9]/', '', $phone) . "&text=" . urlencode($reminderMsg);
                                             @endphp
                                             <a href="{{ $whatsappUri }}" target="_blank" class="btn btn-success btn-sm rounded-pill px-3">
                                                 <i class="fab fa-whatsapp me-1"></i> {{ __('instructor::billing.whatsapp_reminder') }}
                                             </a>
+                                        @else
+                                            <span class="text-success small fw-medium"><i class="fas fa-check-circle me-1"></i> تم التحصيل</span>
                                         @endif
                                     </div>
                                 </td>
@@ -143,19 +158,19 @@
                     </div>
                 </div>
                 <div class="modal-footer border-0 pt-0 p-4">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">{{ __('instructor::dashboard.actions') }}</button>
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">إلغاء</button>
                     <button type="submit" class="btn btn-primary rounded-pill px-4">{{ __('instructor::billing.confirm_collection') }}</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-@endforeach
 
 <style>
     .bg-danger-soft { background-color: rgba(220, 53, 69, 0.1); }
     .bg-success-soft { background-color: rgba(25, 135, 84, 0.1); }
-    .billing-card:hover { transform: none !important; }
+    .stats-card { background: #fff; border-radius: 1.25rem; }
+    #billingTable thead th { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.025em; }
 </style>
 
 <script>
@@ -165,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const rows = document.querySelectorAll('.student-row');
     const noResults = document.getElementById('noResults');
     const resultCount = document.getElementById('resultCount');
-    const table = document.getElementById('billingTable');
+    const tableContainer = document.getElementById('billingTableContainer');
 
     function applyFilters() {
         const query = searchInput.value.trim().toLowerCase();
@@ -175,13 +190,10 @@ document.addEventListener('DOMContentLoaded', function() {
         rows.forEach(row => {
             const name = row.dataset.name.toLowerCase();
             const phone = row.dataset.phone.toLowerCase();
-            const balance = parseFloat(row.dataset.balance);
+            const status = row.dataset.status;
 
-            let matchSearch = !query || name.includes(query) || phone.includes(query);
-            let matchFilter = true;
-
-            if (filter === 'unpaid') matchFilter = balance > 0;
-            else if (filter === 'paid') matchFilter = balance <= 0;
+            const matchSearch = !query || name.includes(query) || phone.includes(query);
+            const matchFilter = filter === 'all' || status === filter;
 
             if (matchSearch && matchFilter) {
                 row.style.display = '';
@@ -191,16 +203,30 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        resultCount.textContent = visible + ' طالب';
-        noResults.classList.toggle('d-none', visible > 0);
-        table.classList.toggle('d-none', visible === 0);
+        if (resultCount) resultCount.textContent = visible + ' طالب';
+        if (noResults) noResults.classList.toggle('d-none', visible > 0);
+        if (tableContainer) tableContainer.classList.toggle('d-none', visible === 0);
     }
 
-    searchInput.addEventListener('input', applyFilters);
-    filterStatus.addEventListener('change', applyFilters);
+    if (searchInput) searchInput.addEventListener('input', applyFilters);
+    if (filterStatus) filterStatus.addEventListener('change', applyFilters);
 
-    // Initial count
-    applyFilters();
+    // Modal data handling
+    const collectModal = document.getElementById('collectModal');
+    if (collectModal) {
+        collectModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const id = button.getAttribute('data-id');
+            const name = button.getAttribute('data-name');
+            const balance = button.getAttribute('data-balance');
+
+            document.getElementById('modal_student_id').value = id;
+            document.getElementById('modal_student_name').textContent = name;
+            document.getElementById('modal_amount').value = balance;
+            document.getElementById('modal_amount').max = balance;
+            document.getElementById('modal_balance_hint').textContent = 'المبلغ المتبقي حالياً: ' + new Intl.NumberFormat().format(balance);
+        });
+    }
 });
 </script>
 @endsection
