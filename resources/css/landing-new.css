@@ -4,25 +4,25 @@
 
 @layer base {
     :root {
-        /* Edumove Blue & Green Academic System */
-        /* Primary: Academic Dark Blue #0F172A */
+        /* Edusion Light Theme - Professional & Airy */
+        /* Primary: Dark Professional Blue #0F172A */
         --primary-purple: 222 47% 11%;
         --primary-vibrant: 222 47% 15%;
         --primary-light: 210 40% 98%;
 
-        /* Typography: High Contrast */
+        /* Typography: High Contrast Dark Blue applied to headings */
         --dark-text: 222 47% 11%;
-        --foreground: 222 47% 11%;
+        --foreground: 222 47% 15%;
 
-        /* Accents - Strategic Green */
-        --secondary: 158 84% 39%; /* Accent Green */
-        --secondary-vibrant: 158 84% 45%;
+        /* Accents - Vibrant Green from reference image */
+        --secondary: 158 82% 47%; /* Vibrant #22C55E type green */
+        --secondary-vibrant: 158 82% 52%;
 
-        --accent-peach: 215 25% 27%;
-        --accent-teal: 158 84% 39%;
-        --success-green: 158 84% 39%;
+        --accent-peach: 25 95% 66%;
+        --accent-teal: 158 82% 47%;
+        --success-green: 158 82% 47%;
 
-        /* Neutrals (30% White/Light) */
+        /* Neutrals (60% White Dominance) */
         --background: 0 0% 100%;
         --muted: 210 40% 98%;
         --muted-foreground: 215 16% 47%;
@@ -35,26 +35,26 @@
 
         --border: 214 32% 91%;
         --input: 214 32% 91%;
-        --ring: 158 84% 39%;
+        --ring: 158 82% 47%;
 
         --radius: 1.25rem;
 
         /* Core Colors Mapping */
-        --dark-purple: 222 47% 8%;
+        --dark-purple: 222 47% 11%;
         --light-purple: 210 40% 98%;
-        --cyan: 158 84% 39%;
-        --light-bg: 210 20% 98%;
+        --cyan: 158 82% 47%;
+        --light-bg: 0 0% 100%;
         --gray-text: 215 16% 47%;
-        --analytical-blue: 215 25% 17%;
-        --outline-green: 158 84% 39%;
+        --analytical-blue: 210 40% 98%;
+        --outline-green: 158 82% 47%;
         --outline-purple: 222 47% 11%;
 
-        /* Gradients: Dark Blue focus */
-        --gradient-hero: linear-gradient(135deg, hsl(222 47% 11%) 0%, hsl(222 47% 18%) 100%);
-        --gradient-cta: linear-gradient(135deg, hsl(222 47% 11%) 0%, hsl(222 47% 25%) 100%);
+        /* Gradients: Subtle mesh for light theme */
+        --gradient-hero: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
+        --gradient-cta: linear-gradient(135deg, #F8FAFC 0%, #FFFFFF 100%);
         --gradient-card: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
-        --gradient-cyan: linear-gradient(135deg, hsl(222 47% 11%) 0%, hsl(158 84% 39%) 100%);
-        --brand-gradient: var(--gradient-hero);
+        --gradient-cyan: linear-gradient(135deg, hsl(158 82% 47%) 0%, hsl(158 82% 52%) 100%);
+        --brand-gradient: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
 
         /* Shadows - Cleaner/Sharper */
         --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -168,11 +168,11 @@
     }
 
     .glass-card {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.7);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
         /* Floating feel */
         border-radius: 1.25rem;
     }
@@ -186,7 +186,7 @@
     }
 
     .gradient-text {
-        background: linear-gradient(135deg, hsl(158 84% 39%) 0%, hsl(158 84% 50%) 100%);
+        background: linear-gradient(135deg, hsl(158 82% 47%) 0%, hsl(158 82% 55%) 100%);
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
@@ -242,7 +242,7 @@
 
     .btn-hero-cta {
         position: relative;
-        background: hsl(158 84% 39%);
+        background: hsl(158 82% 47%);
         color: white !important;
         font-weight: 700;
         letter-spacing: 0.01em;
