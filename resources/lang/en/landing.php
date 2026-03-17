@@ -9,6 +9,7 @@ return [
         'faq' => 'FAQ',
         'login' => 'Login',
         'start_free' => 'Start Free',
+        'badge_short' => 'Smart Education Management',
     ],
     'nav' => [
         'features' => 'Features',
