@@ -1,4 +1,4 @@
-<section id="testimonials" class="py-16 lg:py-24 relative overflow-hidden bg-slate-50/30 border-y border-border/40">
+<section id="testimonials" class="py-16 lg:py-24 relative overflow-hidden">
     <!-- Background decorations -->
     <div class="absolute top-0 left-1/4 w-96 h-96 bg-light-purple/5 rounded-full blur-3xl"></div>
     <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan/5 rounded-full blur-3xl"></div>
