@@ -65,7 +65,9 @@
                     <h5 class="fw-bold mb-0">{{ __('instructor::dashboard.attendance_analytics') }}</h5>
                     <span class="badge bg-light text-primary rounded-pill px-3">{{ __('instructor::dashboard.last_7_days') }}</span>
                 </div>
-                <canvas id="attendanceChart" height="280"></canvas>
+                <div style="position: relative; height: 280px; width: 100%;">
+                    <canvas id="attendanceChart"></canvas>
+                </div>
             </div>
         </div>
         <div class="col-lg-4">
