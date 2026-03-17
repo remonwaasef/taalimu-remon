@@ -13,7 +13,7 @@
     <div class="hidden md:block">
         <button 
             @click="installApp()"
-            class="flex items-center gap-3 py-3 px-5 gradient-hero text-white font-bold rounded-{{ app()->getLocale() == 'ar' ? 'r' : 'l' }}-3xl shadow-xl shadow-blue-500/20 hover:scale-105 active:scale-95 transition-all duration-300 group border-y border-{{ app()->getLocale() == 'ar' ? 'r' : 'l' }} border-white/20 backdrop-blur-sm"
+            class="flex items-center gap-3 py-3 px-5 bg-primary text-white font-bold rounded-{{ app()->getLocale() == 'ar' ? 'r' : 'l' }}-3xl shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all duration-300 group border-y border-{{ app()->getLocale() == 'ar' ? 'r' : 'l' }} border-white/20 backdrop-blur-sm"
         >
             <div class="p-2 bg-white/20 rounded-lg group-hover:bg-white/30 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -31,7 +31,7 @@
     <div class="md:hidden p-4">
         <button 
             @click="installApp()"
-            class="w-14 h-14 flex items-center justify-center gradient-hero text-white rounded-[1.25rem] shadow-xl shadow-blue-500/20 active:scale-90 transition-all border border-white/20"
+            class="w-14 h-14 flex items-center justify-center bg-primary text-white rounded-[1.25rem] shadow-xl shadow-primary/20 active:scale-90 transition-all border border-white/20"
         >
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/>
