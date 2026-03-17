@@ -25,7 +25,7 @@
         /* Neutrals (60% White Dominance) */
         --background: 0 0% 100%;
         --muted: 210 40% 98%;
-        --muted-foreground: 215 16% 47%;
+        --muted-foreground: 222 47% 35%; /* Darkened for better contrast on white */
 
         --card: 0 0% 100%;
         --card-foreground: 222 47% 11%;

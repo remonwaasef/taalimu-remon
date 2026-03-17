@@ -29,7 +29,7 @@
                 <!-- Subheadline -->
                 <p 
                     dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"
-                    class="text-xl md:text-2xl text-slate-200/90 mb-10 max-w-xl mx-auto lg:mx-0 animate-fade-in font-medium leading-[1.6] md:leading-relaxed delay-2"
+                    class="text-xl md:text-2xl text-muted-foreground mb-10 max-w-xl mx-auto lg:mx-0 animate-fade-in font-medium leading-[1.6] md:leading-relaxed delay-2"
                 >
                     {{ \App\Models\SiteSetting::get('site_description_' . app()->getLocale(), __('landing.hero.subtitle')) }}
                 </p>
@@ -50,22 +50,22 @@
 
                 <!-- Professional Trust Badges - Simplified -->
                 <div 
-                    class="flex flex-wrap gap-8 justify-center lg:justify-start animate-fade-in py-6 border-y border-white/10 mb-12 delay-4"
+                    class="flex flex-wrap gap-8 justify-center lg:justify-start animate-fade-in py-6 border-y border-border mb-12 delay-4"
                 >
-                    <div class="flex items-center gap-3 text-sm font-bold text-slate-300 group cursor-default">
-                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white group-hover:bg-primary group-hover:text-white transition-colors border border-white/10">
+                    <div class="flex items-center gap-3 text-sm font-bold text-muted-foreground group cursor-default">
+                        <div class="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors border border-primary/10">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1-1z"/></svg>
                         </div>
                         {{ __('landing.hero.trust.security') }}
                     </div>
-                    <div class="flex items-center gap-3 text-sm font-bold text-slate-300 group cursor-default">
-                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white group-hover:bg-primary group-hover:text-white transition-colors border border-white/10">
+                    <div class="flex items-center gap-3 text-sm font-bold text-muted-foreground group cursor-default">
+                        <div class="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors border border-primary/10">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
                         </div>
                         {{ __('landing.hero.trust.centers') }}
                     </div>
-                    <div class="flex items-center gap-3 text-sm font-bold text-slate-300 group cursor-default">
-                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white group-hover:bg-primary group-hover:text-white transition-colors border border-white/10">
+                    <div class="flex items-center gap-3 text-sm font-bold text-muted-foreground group cursor-default">
+                        <div class="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors border border-primary/10">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
                         </div>
                         {{ __('landing.hero.trust.uptime') }}
