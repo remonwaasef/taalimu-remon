@@ -188,8 +188,18 @@ function copyLink(id) {
     copyText.setSelectionRange(0, 99999);
     navigator.clipboard.writeText(copyText.value);
     
-    // Optional: Show a toast or alert
-    alert("تم نسخ الرابط!");
+    // Change button icon to checkmark temporarily
+    var btn = copyText.nextElementSibling;
+    var originalHTML = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-check"></i>';
+    btn.classList.add('btn-success');
+    btn.classList.remove('btn-primary');
+    
+    setTimeout(function() {
+        btn.innerHTML = originalHTML;
+        btn.classList.remove('btn-success');
+        btn.classList.add('btn-primary');
+    }, 2000);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
