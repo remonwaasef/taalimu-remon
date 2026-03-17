@@ -1,6 +1,6 @@
-<section class="bg-white py-16 lg:py-24 relative overflow-hidden">
+<section class="bg-white py-12 lg:py-16 relative overflow-hidden">
     <div class="container mx-auto px-4 lg:px-8">
-        <div class="relative bg-primary/5 rounded-[40px] p-8 lg:p-16 text-center overflow-hidden border border-primary/10">
+        <div class="relative bg-primary/5 rounded-[32px] p-6 lg:p-12 text-center overflow-hidden border border-primary/10">
             <!-- Background decorations -->
             <!-- Background decorations - Simplified -->
             <div class="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
@@ -18,42 +18,42 @@
                 </div>
 
                 <!-- Headline -->
-                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-4 max-w-3xl mx-auto leading-tight">
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-primary mb-3 max-w-3xl mx-auto leading-tight">
                     {{ __('landing.cta.title') }}
                 </h2>
 
                 <!-- Subheadline -->
-                <p class="text-lg lg:text-xl text-muted-foreground/80 mb-8 max-w-2xl mx-auto">
+                <p class="text-base lg:text-lg text-muted-foreground/80 mb-6 max-w-2xl mx-auto">
                     {{ __('landing.cta.subtitle') }}
                 </p>
 
                 <!-- Stats - Simplified -->
-                <div class="flex flex-wrap justify-center gap-8 lg:gap-16 mb-10">
+                <div class="flex flex-wrap justify-center gap-6 lg:gap-12 mb-8">
                     <div class="text-center">
-                        <div class="text-3xl lg:text-4xl font-bold text-primary">{{ __('landing.cta.stats.revenue_value') }}</div>
-                        <div class="text-sm text-muted-foreground">{{ __('landing.cta.stats.revenue') }}</div>
+                        <div class="text-2xl lg:text-3xl font-bold text-primary">{{ __('landing.cta.stats.revenue_value') }}</div>
+                        <div class="text-xs text-muted-foreground">{{ __('landing.cta.stats.revenue') }}</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-3xl lg:text-4xl font-bold text-primary">{{ __('landing.cta.stats.time_value') }}</div>
-                        <div class="text-sm text-muted-foreground">{{ __('landing.cta.stats.time') }}</div>
+                        <div class="text-2xl lg:text-3xl font-bold text-primary">{{ __('landing.cta.stats.time_value') }}</div>
+                        <div class="text-xs text-muted-foreground">{{ __('landing.cta.stats.time') }}</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-3xl lg:text-4xl font-bold text-primary">{{ __('landing.cta.stats.trial_value') }}</div>
-                        <div class="text-sm text-muted-foreground">{{ __('landing.cta.stats.trial') }}</div>
+                        <div class="text-2xl lg:text-3xl font-bold text-primary">{{ __('landing.cta.stats.trial_value') }}</div>
+                        <div class="text-xs text-muted-foreground">{{ __('landing.cta.stats.trial') }}</div>
                     </div>
                 </div>
 
                 <!-- CTA Buttons -->
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="{{ route('register') }}?account_type=center" class="inline-flex items-center justify-center rounded-full text-lg font-bold transition-all bg-secondary text-white shadow-lg hover:bg-secondary/90 hover:scale-105 hover:-translate-y-1 h-16 px-10 group whitespace-nowrap">
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <a href="{{ route('register') }}?account_type=center" class="inline-flex items-center justify-center rounded-full text-base font-bold transition-all bg-secondary text-white shadow-lg hover:bg-secondary/90 hover:scale-105 hover:-translate-y-1 h-12 px-8 group whitespace-nowrap">
                         <i class="fas fa-university me-3"></i>
                         {{ app()->isLocale('ar') ? 'ابدأ كمركز تعليمي' : 'Start as Center' }}
                     </a>
-                    <a href="{{ route('register') }}?account_type=instructor" class="inline-flex items-center justify-center rounded-full text-lg font-bold transition-all bg-white text-primary shadow-lg border border-primary/10 hover:scale-105 hover:-translate-y-1 h-16 px-10 group whitespace-nowrap">
+                    <a href="{{ route('register') }}?account_type=instructor" class="inline-flex items-center justify-center rounded-full text-base font-bold transition-all bg-white text-primary shadow-lg border border-primary/10 hover:scale-105 hover:-translate-y-1 h-12 px-8 group whitespace-nowrap">
                         <i class="fas fa-chalkboard-teacher me-3"></i>
                         {{ app()->isLocale('ar') ? 'ابدأ كمدرس مستقل' : 'Start as Teacher' }}
                     </a>
-                    <button class="inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border bg-transparent shadow-sm h-14 px-8 text-lg border-primary/10 text-primary hover:bg-primary/5 hover:text-primary">
+                    <button class="inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border bg-transparent shadow-sm h-12 px-6 text-base border-primary/10 text-primary hover:bg-primary/5 hover:text-primary">
                         {{ __('landing.cta.cta_secondary') }}
                     </button>
                 </div>
