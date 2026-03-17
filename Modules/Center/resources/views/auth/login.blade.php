@@ -8,7 +8,8 @@
     :root {
         --font-outfit: 'Outfit', sans-serif;
         --font-cairo: 'Cairo', sans-serif;
-        --brand-indigo: #4F46E5;
+        --brand-indigo: #162963;
+        --brand-indigo-hover: #1e3a8a;
         --panel-dark: #0F172A;
         --bg-field: #F8FAFC;
     }
@@ -32,7 +33,7 @@
     .input-compact:focus {
         border-color: var(--brand-indigo);
         background: #FFFFFF;
-        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.08);
+        box-shadow: 0 0 0 4px rgba(22, 41, 99, 0.08);
         transform: translateY(-1px);
         outline: none;
     }
@@ -40,7 +41,7 @@
     .btn-submit-compact {
         border-radius: 50px;
         transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+        box-shadow: 0 4px 12px rgba(22, 41, 99, 0.2);
         background-color: var(--brand-indigo);
         color: white;
         border: none;
@@ -48,8 +49,8 @@
 
     .btn-submit-compact:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
-        background-color: #4338CA;
+        box-shadow: 0 8px 20px rgba(22, 41, 99, 0.3);
+        background-color: var(--brand-indigo-hover);
     }
 
     .btn-submit-compact:active {
@@ -73,7 +74,7 @@
         
         <!-- Header -->
         <div class="text-center mb-8">
-            <div class="d-inline-flex justify-center items-center rounded-full bg-indigo-50 text-indigo-600 w-20 h-20 mb-4 mx-auto text-3xl font-bold shadow-sm">
+            <div class="d-inline-flex justify-center items-center rounded-full w-20 h-20 mb-4 mx-auto text-3xl font-bold shadow-sm" style="background: rgba(22, 41, 99, 0.08); color: #162963;">
                 {{ substr($tenant->name ?? 'C', 0, 1) }}
             </div>
             <h1 class="text-2xl font-bold text-slate-900 mb-2 font-arabic tracking-tight">
@@ -117,7 +118,7 @@
             <div class="space-y-1.5">
                 <div class="flex justify-between items-center px-1">
                     <label class="text-[11px] font-bold text-slate-500 font-arabic uppercase tracking-wider">{{ __('auth.login.password') }}</label>
-                    <button type="button" @click="showPassword = !showPassword" class="text-[9px] font-black text-indigo-500 hover:text-indigo-600 transition-colors uppercase tracking-widest">
+                    <button type="button" @click="showPassword = !showPassword" class="text-[9px] font-black transition-colors uppercase tracking-widest" style="color: #162963;">
                         <span x-text="showPassword ? ({{ app()->getLocale() == 'ar' ? '\'إخفاء\'' : '\'HIDE\'' }}) : ({{ app()->getLocale() == 'ar' ? '\'إظهار\'' : '\'SHOW\'' }})"></span>
                     </button>
                 </div>
@@ -160,7 +161,7 @@
         </a>
 
         <div class="mt-8 pt-6 border-t border-slate-100 flex justify-center">
-            <a href="{{ route('home') }}" class="group flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-indigo-600 transition-colors">
+            <a href="{{ route('home') }}" class="group flex items-center gap-2 text-xs font-semibold text-slate-400 transition-colors" style="--tw-text-opacity: 1;" onmouseover="this.style.color='#162963'" onmouseout="this.style.color=''>
                 <svg class="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                 </svg>
