@@ -42,18 +42,18 @@
     
     <style>
         :root {
-            /* Power Palette - Aligning with Admin and Landing */
-            --primary-color: #3A0CA3;       /* Deep Indigo */
-            --primary-light: #2A4DFF;      /* Royal Blue */
-            --primary-gradient: linear-gradient(135deg, #3A0CA3 0%, #2A4DFF 100%);
+            /* Power Palette - Academic Blue Theme */
+            --primary-color: #162963;       /* Academic Blue */
+            --primary-light: #1e3a8a;      /* Royal Blue */
+            --primary-gradient: linear-gradient(135deg, #162963 0%, #1e3a8a 100%);
             
             /* Sidebar - Luxurious Dark Aesthetic */
             --sidebar-width: 280px;
-            --sidebar-bg: #0a0a0c;          /* Deep Obsidian */
+            --sidebar-bg: #0f172a;          /* Slate 900 */
             --sidebar-text: #e2e8f0;
             --sidebar-text-muted: #94a3b8;
-            --sidebar-hover-bg: rgba(255, 255, 255, 0.03);
-            --sidebar-active-bg: rgba(67, 97, 238, 0.1);
+            --sidebar-hover-bg: rgba(255, 255, 255, 0.05);
+            --sidebar-active-bg: rgba(22, 41, 99, 0.2);
             --sidebar-border: rgba(255, 255, 255, 0.05);
             
             /* UI Elements & Spacing */
@@ -253,7 +253,7 @@
         .sidebar .nav-link.active {
             background-color: var(--sidebar-active-bg);
             color: white;
-            box-shadow: inset 0 0 10px rgba(67, 97, 238, 0.05);
+            box-shadow: inset 0 0 10px rgba(22, 41, 99, 0.1);
             border: none !important;
         }
 
@@ -359,14 +359,20 @@
     <!-- Sidebar -->
     @auth
     <aside class="sidebar" id="sidebar">
-        <div class="p-4 border-bottom d-flex align-items-center justify-content-between gap-3" style="border-bottom-color: var(--sidebar-border) !important;">
-            <div class="d-flex align-items-center gap-3">
+        <div class="p-3 d-flex align-items-center justify-content-center" style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+            <div class="text-center">
                 @if($tenant->logo)
-                    <img src="{{ asset('storage/' . $tenant->logo) }}" class="rounded-circle shadow-sm" style="width: 40px; height: 40px; object-fit: contain; background: white; padding: 2px;">
+                    <div class="mb-2">
+                        <img src="{{ asset('storage/' . $tenant->logo) }}" class="rounded-3 shadow-sm p-1" style="max-height: 45px; max-width: 100%; height: auto; background: white;">
+                    </div>
+                @else
+                    <div class="mb-2 mx-auto bg-white rounded-circle d-flex align-items-center justify-content-center text-primary fw-bold" style="width: 45px; height: 45px; font-size: 1.2rem;">
+                        {{ substr($tenant->name ?? 'T', 0, 1) }}
+                    </div>
                 @endif
-                <div class="overflow-hidden">
-                    <h5 class="fw-bold text-white mb-0 lh-1 text-truncate" style="font-size: 1rem;">{{ $tenant->name ?? __('sidebar.center_name') }}</h5>
-                    <small class="text-muted" style="font-size: 0.7rem;">{{ __('center::sidebar.panel') }}</small>
+                <div class="px-2">
+                    <h6 class="fw-bold text-white mb-0 text-truncate" style="font-size: 0.9rem;">{{ $tenant->name ?? __('sidebar.center_name') }}</h6>
+                    <small class="text-muted" style="font-size: 0.7rem; opacity: 0.6;">{{ __('center::sidebar.panel') }}</small>
                 </div>
             </div>
             <button type="button" class="btn btn-link text-white p-0 d-lg-none" id="sidebarClose">
@@ -394,9 +400,9 @@
                 background: rgba(255, 255, 255, 0.1);
             }
             .sidebar-nav-link.active {
-                background: #435ebe; /* Primary Theme Color */
+                background: var(--primary-color); /* Primary Theme Color */
                 color: white;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             }
             .sidebar-nav-link.active i {
                 color: white !important;

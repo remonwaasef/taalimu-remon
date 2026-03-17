@@ -3,21 +3,21 @@
 @section('content')
 <style>
     :root {
-        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-        --danger-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        --info-gradient: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
-        --glass-bg: rgba(255, 255, 255, 0.7);
-        --glass-border: rgba(255, 255, 255, 0.3);
+        --primary-gradient: linear-gradient(135deg, #162963 0%, #1e3a8a 100%);
+        --success-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        --danger-gradient: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        --info-gradient: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);
+        --glass-bg: rgba(255, 255, 255, 0.85);
+        --glass-border: rgba(255, 255, 255, 0.5);
     }
 
     .glass-card {
         background: var(--glass-bg);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         border: 1px solid var(--glass-border);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 20px rgba(22, 41, 99, 0.05);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .glass-card:hover {
@@ -288,15 +288,6 @@
                     </div>
                 </div>
 
-                <div class="col-xl-4 col-md-6">
-                    <div class="card glass-card border-0 rounded-4 h-100">
-                        <div class="card-body p-4">
-                            <div class="stat-icon" style="background: rgba(240, 147, 251, 0.1); color: #f093fb;">
-                                <i class="fas fa-wallet fa-lg"></i>
-                            </div>
-                            <h6 class="text-muted small fw-bold text-uppercase mb-1">{{ __('center::dashboard.monthly_expenses') }}</h6>
-                            <h2 class="fw-bold mb-0">{{ number_format($monthlyExpenses, 2) }}</h2>
-                            <div class="mt-2 small">
                                 <span class="text-danger fw-semibold"><i class="fas fa-arrow-up me-1"></i> 2.1%</span> 
                                 <span class="text-muted ms-1">{{ __('center::dashboard.currency') }}</span>
                             </div>
@@ -305,7 +296,7 @@
                 </div>
 
                 <div class="col-xl-4 col-md-6">
-                    <div class="card glass-card border-0 rounded-4 h-100 bg-primary text-white">
+                    <div class="card glass-card border-0 rounded-4 h-100 text-white" style="background: var(--primary-gradient);">
                         <div class="card-body p-4">
                             <div class="stat-icon bg-white bg-opacity-20 text-white">
                                 <i class="fas fa-chart-line fa-lg"></i>
@@ -315,7 +306,6 @@
                             <div class="mt-2 small">
                                 <span class="text-white text-opacity-90"><i class="fas fa-piggy-bank me-1"></i> {{ __('center::dashboard.projected') }}: +5%</span>
                             </div>
-
                         </div>
                     </div>
                 </div>
