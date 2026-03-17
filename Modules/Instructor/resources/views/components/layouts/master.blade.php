@@ -82,19 +82,23 @@
             top: 0;
             z-index: 1050;
             transition: all 0.3s ease;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
         [dir="rtl"] .sidebar { right: 0; border-left: 1px solid rgba(255,255,255,0.05); }
         [dir="ltr"] .sidebar { left: 0; border-right: 1px solid rgba(255,255,255,0.05); }
 
         .sidebar-brand {
-            padding: 2.5rem 1.5rem;
+            padding: 1.5rem;
             text-align: center;
         }
         .sidebar-brand img {
             max-width: 160px;
             height: auto;
-            filter: brightness(0) invert(1); /* Make logo white for dark sidebar */
+            background: rgba(255,255,255,0.1);
+            padding: 8px 16px;
+            border-radius: 12px;
         }
 
         .main-content {
