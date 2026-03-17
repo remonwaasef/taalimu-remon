@@ -10,18 +10,18 @@
             <!-- Left Content -->
             <div class="w-full lg:w-[45%] text-center lg:text-start">
                 <!-- Premium Badge -->
-                <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/40 backdrop-blur-md border border-white/40 mb-10 animate-fade-in shadow-sm relative z-20">
+                <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-primary/5 backdrop-blur-md border border-primary/10 mb-10 animate-fade-in shadow-sm relative z-20">
                     <span class="relative flex h-3 w-3">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-success-green opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-3 w-3 bg-success-green"></span>
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
                     </span>
-                    <span class="text-sm font-bold text-primary-purple tracking-wide">{{ __('landing.hero.badge') }}</span>
+                    <span class="text-sm font-bold text-primary tracking-wide">{{ __('landing.hero.badge') }}</span>
                 </div>
 
                 <!-- Headline -->
                 <h1 
                     dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}" 
-                    class="font-cairo text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-black text-white leading-[1.2] mb-8 animate-fade-in tracking-tight delay-1"
+                    class="font-cairo text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-black text-primary leading-[1.2] mb-8 animate-fade-in tracking-tight delay-1"
                 >
                     {!! __('landing.hero.title') !!}
                 </h1>
@@ -42,7 +42,7 @@
                         <i class="fas fa-university me-3"></i>
                         {{ app()->isLocale('ar') ? 'سجل كمركز تعليمي' : 'Register as Center' }}
                     </a>
-                    <a href="{{ route('register') }}?account_type=instructor" class="inline-flex items-center justify-center rounded-full text-lg font-black h-16 md:h-20 px-10 md:px-12 group transition-all border-2 border-white/20 text-white hover:bg-white/10">
+                    <a href="{{ route('register') }}?account_type=instructor" class="inline-flex items-center justify-center rounded-full text-lg font-black h-16 md:h-20 px-10 md:px-12 group transition-all border-2 border-primary/10 text-primary hover:bg-primary/5">
                         <i class="fas fa-chalkboard-teacher me-3"></i>
                         {{ app()->isLocale('ar') ? 'سجل كمدرس مستقل' : 'Register as Teacher' }}
                     </a>
@@ -76,17 +76,17 @@
                 <div 
                     class="grid grid-cols-3 gap-6 animate-fade-in delay-5"
                 >
-                    <div class="text-center lg:text-start p-4 rounded-2xl bg-white/5 border border-white/10 shadow-sm backdrop-blur-sm">
+                    <div class="text-center lg:text-start p-4 rounded-2xl bg-white border border-border shadow-sm">
                         <div class="text-3xl lg:text-4xl font-black gradient-text mb-1">38%</div>
-                        <div class="text-[11px] font-bold text-slate-300 uppercase tracking-widest">{{ __('landing.hero.stats.revenue') }}</div>
+                        <div class="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.revenue') }}</div>
                     </div>
-                    <div class="text-center lg:text-start p-4 rounded-2xl bg-white/5 border border-white/10 shadow-sm backdrop-blur-sm">
+                    <div class="text-center lg:text-start p-4 rounded-2xl bg-white border border-border shadow-sm">
                         <div class="text-3xl lg:text-4xl font-black gradient-text mb-1">15h</div>
-                        <div class="text-[11px] font-bold text-slate-300 uppercase tracking-widest">{{ __('landing.hero.stats.time') }}</div>
+                        <div class="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.time') }}</div>
                     </div>
-                    <div class="text-center lg:text-start p-4 rounded-2xl bg-white/5 border border-white/10 shadow-sm backdrop-blur-sm">
+                    <div class="text-center lg:text-start p-4 rounded-2xl bg-white border border-border shadow-sm">
                         <div class="text-3xl lg:text-4xl font-black gradient-text mb-1">98%</div>
-                        <div class="text-[11px] font-bold text-slate-300 uppercase tracking-widest">{{ __('landing.hero.stats.collection') }}</div>
+                        <div class="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.collection') }}</div>
                     </div>
                 </div>
             </div>
