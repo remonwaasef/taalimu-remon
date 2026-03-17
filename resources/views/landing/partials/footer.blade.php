@@ -11,12 +11,9 @@
             <!-- Brand/About Column -->
             <div class="col-span-2 lg:col-span-2 space-y-8">
                 <!-- Logo -->
-            <a href="{{ route('home') }}" class="flex items-center gap-2">
-                <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-md">
-                    <span class="text-white font-bold text-xl">{{ substr(\App\Models\SiteSetting::get('site_name', config('app.name')), 0, 1) }}</span>
-                </div>
-                <span class="font-bold text-xl text-primary">{{ \App\Models\SiteSetting::get('site_name', config('app.name')) }}</span>
-            </a>
+                <a href="{{ route('home') }}" class="flex items-center gap-2 group">
+                    <img src="{{ asset('images/brand/logo-full.png') }}" alt="{{ config('app.name') }}" class="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
+                </a>
                 <p class="text-muted-foreground text-base leading-relaxed max-w-sm font-medium">
                     {{ \App\Models\SiteSetting::get('site_description_' . app()->getLocale(), __('landing.hero.subtitle')) }}
                 </p>
