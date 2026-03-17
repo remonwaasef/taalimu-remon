@@ -1,4 +1,4 @@
-<section id="faq" class="py-12 lg:py-16 bg-slate-50/50 border-y border-border/40">
+<section id="faq" class="py-12 lg:py-16">
     <div class="container mx-auto px-4 lg:px-8">
         <!-- Section Header -->
         <div class="text-center mb-12 lg:mb-16">

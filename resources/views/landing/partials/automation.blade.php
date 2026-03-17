@@ -1,4 +1,4 @@
-<section class="py-16 lg:py-24 relative overflow-hidden bg-slate-50/80 border-y border-border/40">
+<section class="py-16 lg:py-24 relative overflow-hidden">
     <!-- Background decorations - Simplified -->
     <div class="absolute top-1/2 left-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl -translate-y-1/2"></div>
     <div class="absolute top-1/2 right-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl -translate-y-1/2"></div>
