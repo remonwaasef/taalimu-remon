@@ -12,6 +12,10 @@
     <link rel="alternate" hreflang="en" href="{{ url()->current() }}?hl=en" />
     <link rel="alternate" hreflang="fr" href="{{ url()->current() }}?hl=fr" />
     <link rel="alternate" hreflang="x-default" href="{{ url()->current() }}" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/brand/logo-icon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/brand/logo-icon.png') }}">
 
     <!-- Schema.org JSON-LD -->
     <script type="application/ld+json">
