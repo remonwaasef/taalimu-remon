@@ -1,4 +1,4 @@
-<section id="comparison" class="py-16 lg:py-24 bg-slate-50/50 border-y border-border/40 relative overflow-hidden">
+<section id="comparison" class="py-16 lg:py-24 bg-white relative overflow-hidden">
     <!-- Background Accents -->
     <div class="absolute top-0 right-0 w-1/3 h-1/3 bg-cyan/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2"></div>
     <div class="absolute bottom-0 left-0 w-1/3 h-1/3 bg-light-purple/5 blur-[120px] rounded-full translate-y-1/2 -translate-x-1/2"></div>

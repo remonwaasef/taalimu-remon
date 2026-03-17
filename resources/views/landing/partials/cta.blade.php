@@ -1,65 +1,61 @@
 <section class="bg-white py-12 lg:py-16 relative overflow-hidden">
     <div class="container mx-auto px-4 lg:px-8">
-        <div class="relative bg-primary/5 rounded-[32px] p-6 lg:p-12 text-center overflow-hidden border border-primary/10">
-            <!-- Background decorations -->
-            <!-- Background decorations - Simplified -->
+        <div class="relative bg-primary rounded-[32px] p-6 lg:p-12 text-center overflow-hidden border border-white/10 shadow-2xl">
+            <!-- Background decorations - Enhanced for dark background -->
             <div class="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
-            <div class="absolute bottom-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-0 right-0 w-64 h-64 bg-secondary/10 rounded-full blur-3xl"></div>
             
-            <!-- Grid pattern overlay -->
-            <div class="absolute inset-0 bg-hero-pattern opacity-10"></div>
- 
-            <div class="relative">
-                <!-- Badge - Simplified -->
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 mb-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-primary"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z"/></svg>
-                    <span class="text-sm font-medium text-primary">{{ __('landing.cta.badge') }}</span>
+            <div class="relative z-10">
+                <!-- Badge -->
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 mb-6 backdrop-blur-sm">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+                    </span>
+                    <span class="text-xs font-bold text-white tracking-wider uppercase">{{ __('landing.cta.badge') }}</span>
                 </div>
 
                 <!-- Headline -->
-                <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-primary mb-3 max-w-3xl mx-auto leading-tight">
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3 max-w-3xl mx-auto leading-tight">
                     {{ __('landing.cta.title') }}
                 </h2>
 
                 <!-- Subheadline -->
-                <p class="text-base lg:text-lg text-muted-foreground/80 mb-6 max-w-2xl mx-auto">
+                <p class="text-base lg:text-lg text-white/70 mb-6 max-w-2xl mx-auto">
                     {{ __('landing.cta.subtitle') }}
                 </p>
 
-                <!-- Stats - Simplified -->
+                <!-- Stats - Enhanced for dark background -->
                 <div class="flex flex-wrap justify-center gap-6 lg:gap-12 mb-8">
                     <div class="text-center">
-                        <div class="text-2xl lg:text-3xl font-bold text-primary">{{ __('landing.cta.stats.revenue_value') }}</div>
-                        <div class="text-xs text-muted-foreground">{{ __('landing.cta.stats.revenue') }}</div>
+                        <div class="text-2xl lg:text-3xl font-bold text-white">{{ __('landing.cta.stats.revenue_value') }}</div>
+                        <div class="text-xs text-white/50">{{ __('landing.cta.stats.revenue') }}</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-2xl lg:text-3xl font-bold text-primary">{{ __('landing.cta.stats.time_value') }}</div>
-                        <div class="text-xs text-muted-foreground">{{ __('landing.cta.stats.time') }}</div>
+                        <div class="text-2xl lg:text-3xl font-bold text-white">{{ __('landing.cta.stats.time_value') }}</div>
+                        <div class="text-xs text-white/50">{{ __('landing.cta.stats.time') }}</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-2xl lg:text-3xl font-bold text-primary">{{ __('landing.cta.stats.trial_value') }}</div>
-                        <div class="text-xs text-muted-foreground">{{ __('landing.cta.stats.trial') }}</div>
+                        <div class="text-2xl lg:text-3xl font-bold text-white">{{ __('landing.cta.stats.trial_value') }}</div>
+                        <div class="text-xs text-white/50">{{ __('landing.cta.stats.trial') }}</div>
                     </div>
                 </div>
 
                 <!-- CTA Buttons -->
                 <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                    <a href="{{ route('register') }}?account_type=center" class="inline-flex items-center justify-center rounded-full text-base font-bold transition-all bg-secondary text-white shadow-lg hover:bg-secondary/90 hover:scale-105 hover:-translate-y-1 h-12 px-8 group whitespace-nowrap">
+                    <a href="{{ route('register') }}?account_type=center" class="inline-flex items-center justify-center rounded-full text-base font-bold transition-all bg-secondary text-white shadow-xl hover:bg-secondary/90 hover:scale-105 hover:-translate-y-1 h-12 px-8 group whitespace-nowrap">
                         <i class="fas fa-university me-3"></i>
                         {{ app()->isLocale('ar') ? 'ابدأ كمركز تعليمي' : 'Start as Center' }}
                     </a>
-                    <a href="{{ route('register') }}?account_type=instructor" class="inline-flex items-center justify-center rounded-full text-base font-bold transition-all bg-white text-primary shadow-lg border border-primary/10 hover:scale-105 hover:-translate-y-1 h-12 px-8 group whitespace-nowrap">
+                    <a href="{{ route('register') }}?account_type=instructor" class="inline-flex items-center justify-center rounded-full text-base font-bold transition-all bg-white text-primary shadow-xl hover:scale-105 hover:-translate-y-1 h-12 px-8 group whitespace-nowrap">
                         <i class="fas fa-chalkboard-teacher me-3"></i>
                         {{ app()->isLocale('ar') ? 'ابدأ كمدرس مستقل' : 'Start as Teacher' }}
                     </a>
-                    <button class="inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border bg-transparent shadow-sm h-12 px-6 text-base border-primary/10 text-primary hover:bg-primary/5 hover:text-primary">
-                        {{ __('landing.cta.cta_secondary') }}
-                    </button>
                 </div>
 
-                <!-- Trust note -->
-                <p class="text-sm text-muted-foreground mt-6">
+                <!-- Trust Note -->
+                <p class="mt-6 text-xs text-white/40 flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
                     {{ __('landing.cta.trust_note') }}
                 </p>
             </div>
