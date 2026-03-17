@@ -57,14 +57,15 @@ return [
             'title' => 'Time Wasted',
             'description' => 'per week wasted on manual follow-up',
         ],
-        'visibility' => [
-            'title' => 'Visibility',
-            'description' => 'cash flow visibility for informed decisions',
+        'complaints' => [
+            'title' => 'Parent Complaints',
+            'description' => 'Constant messages and endless questions about fees and results',
         ],
-        'scheduling_chaos' => [
-            'title' => 'Scheduling Chaos',
-            'description' => 'overlapping classes and missed sessions due to manual management',
+        'manual_work' => [
+            'title' => '100% Manual Work',
+            'description' => 'Wasting effort on routine tasks instead of improving teaching content',
         ],
+        'trust_label' => 'Trusted by the best educators and centers',
         'cta' => 'It\'s time to <span class=\"font-bold gradient-text\">stop the bleeding</span> and take control.',
     ],
     'automation' => [
