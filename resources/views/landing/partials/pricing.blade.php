@@ -1,4 +1,4 @@
-<section id="pricing" class="py-16 lg:py-24 bg-white" 
+<section id="pricing" class="py-12 lg:py-16 bg-white" 
          x-data="{ 
              billingCycle: 'monthly',
             userCountry: 'default',
@@ -45,10 +45,10 @@
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 mb-6">
                 <span class="text-sm font-medium text-primary">{{ __('landing.pricing.badge') }}</span>
             </div>
-            <h2 class="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+            <h2 class="text-2xl lg:text-3xl font-bold text-foreground mb-3">
                 {!! __('landing.pricing.title') !!}
             </h2>
-            <p class="text-muted-foreground text-lg max-w-2xl mx-auto mb-8">
+            <p class="text-muted-foreground text-base max-w-2xl mx-auto mb-6">
                 {{ __('landing.pricing.subtitle') }}
             </p>
 

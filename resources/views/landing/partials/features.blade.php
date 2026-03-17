@@ -1,14 +1,14 @@
-<section id="features" class="py-16 lg:py-24 bg-white">
+<section id="features" class="py-12 lg:py-16 bg-white">
     <div class="container mx-auto px-4 lg:px-8">
         <!-- Section Header -->
         <div class="text-center mb-12 lg:mb-16">
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-light-purple/10 border border-light-purple/20 mb-6">
                 <span class="text-sm font-medium text-light-purple">{{ __('landing.features.badge') }}</span>
             </div>
-            <h2 class="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+            <h2 class="text-2xl lg:text-3xl font-bold text-foreground mb-3">
                 {!! __('landing.features.title') !!}
             </h2>
-            <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
+            <p class="text-muted-foreground text-base max-w-2xl mx-auto">
                 {{ __('landing.features.subtitle') }}
             </p>
         </div>

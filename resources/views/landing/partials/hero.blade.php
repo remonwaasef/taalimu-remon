@@ -1,16 +1,16 @@
-<section class="relative min-h-screen pt-20 lg:pt-24 overflow-hidden hero-professional-bg noise-overlay">
+<section class="relative min-h-[90vh] pt-16 lg:pt-20 overflow-hidden hero-professional-bg noise-overlay">
     <!-- Background Elements - Simplified -->
     <div class="absolute inset-0 bg-slate-50/50"></div>
     
     <div 
         dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"
-        class="container relative mx-auto px-4 lg:px-8 py-12 lg:py-20"
+        class="container relative mx-auto px-4 lg:px-8 py-8 lg:py-14"
     >
-        <div class="flex flex-col lg:flex-row gap-20 lg:gap-24 items-center justify-between">
+        <div class="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center justify-between">
             <!-- Left Content -->
             <div class="w-full lg:w-[45%] text-center lg:text-start">
                 <!-- Premium Badge -->
-                <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-primary/5 backdrop-blur-md border border-primary/10 mb-10 animate-fade-in shadow-sm relative z-20">
+                <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-primary/5 backdrop-blur-md border border-primary/10 mb-6 animate-fade-in shadow-sm relative z-20">
                     <span class="relative flex h-3 w-3">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
@@ -21,7 +21,7 @@
                 <!-- Headline -->
                 <h1 
                     dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}" 
-                    class="font-cairo text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-black text-primary leading-[1.2] mb-8 animate-fade-in tracking-tight delay-1"
+                    class="font-cairo text-3xl md:text-4xl lg:text-3xl xl:text-4xl font-black text-primary leading-[1.2] mb-6 animate-fade-in tracking-tight delay-1"
                 >
                     {!! __('landing.hero.title') !!}
                 </h1>
@@ -29,20 +29,20 @@
                 <!-- Subheadline -->
                 <p 
                     dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"
-                    class="text-xl md:text-2xl text-muted-foreground mb-10 max-w-xl mx-auto lg:mx-0 animate-fade-in font-medium leading-[1.6] md:leading-relaxed delay-2"
+                    class="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl mx-auto lg:mx-0 animate-fade-in font-medium leading-[1.6] md:leading-relaxed delay-2"
                 >
                     {{ \App\Models\SiteSetting::get('site_description_' . app()->getLocale(), __('landing.hero.subtitle')) }}
                 </p>
 
                 <!-- Premium CTA Buttons -->
                 <div 
-                    class="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start mb-12 animate-fade-in delay-3"
+                    class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10 animate-fade-in delay-3"
                 >
-                    <a href="{{ route('register') }}?account_type=center" class="inline-flex items-center justify-center rounded-full text-lg font-black h-16 md:h-20 px-10 md:px-12 group transition-all bg-secondary text-white shadow-lg hover:bg-secondary/90 hover:-translate-y-1">
+                    <a href="{{ route('register') }}?account_type=center" class="inline-flex items-center justify-center rounded-full text-base font-black h-12 md:h-14 px-8 md:px-10 group transition-all bg-secondary text-white shadow-lg hover:bg-secondary/90 hover:-translate-y-1">
                         <i class="fas fa-university me-3"></i>
                         {{ app()->isLocale('ar') ? 'سجل كمركز تعليمي' : 'Register as Center' }}
                     </a>
-                    <a href="{{ route('register') }}?account_type=instructor" class="inline-flex items-center justify-center rounded-full text-lg font-black h-16 md:h-20 px-10 md:px-12 group transition-all border-2 border-primary/10 text-primary hover:bg-primary/5">
+                    <a href="{{ route('register') }}?account_type=instructor" class="inline-flex items-center justify-center rounded-full text-base font-black h-12 md:h-14 px-8 md:px-10 group transition-all border-2 border-primary/10 text-primary hover:bg-primary/5">
                         <i class="fas fa-chalkboard-teacher me-3"></i>
                         {{ app()->isLocale('ar') ? 'سجل كمدرس مستقل' : 'Register as Teacher' }}
                     </a>

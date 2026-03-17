@@ -1,11 +1,11 @@
-<section class="py-16 lg:py-24 bg-muted/30">
+<section class="py-12 lg:py-16 bg-muted/30">
     <div class="container mx-auto px-4 lg:px-8">
         <!-- Section Header -->
         <div class="text-center mb-12 lg:mb-16">
-            <h2 class="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+            <h2 class="text-2xl lg:text-3xl font-bold text-foreground mb-3">
                 {{ __('landing.pain_points.title_prefix') }} <span class="gradient-text">{{ __('landing.pain_points.title_highlight') }}</span>{{ __('landing.pain_points.title_suffix') }}
             </h2>
-            <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
+            <p class="text-muted-foreground text-base max-w-2xl mx-auto">
                 {{ __('landing.pain_points.subtitle') }}
             </p>
         </div>

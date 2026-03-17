@@ -3,7 +3,7 @@
     x-data="{ isMenuOpen: false }"
 >
     <div class="container mx-auto px-4 lg:px-8">
-        <div class="flex items-center justify-between h-16 lg:h-20">
+        <div class="flex items-center justify-between h-14 lg:h-16">
             <!-- Logo -->
             <a href="{{ route('home') }}" class="flex items-center gap-2">
                 <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-md">
@@ -13,7 +13,7 @@
             </a>
 
             <!-- Desktop Navigation -->
-            <nav class="hidden lg:flex items-center gap-8">
+            <nav class="hidden lg:flex items-center gap-6">
                 <a href="#features" class="text-muted-foreground hover:text-foreground transition-colors font-medium">{{ __('landing.nav.features') }}</a>
                 <a href="#pricing" class="text-muted-foreground hover:text-foreground transition-colors font-medium">{{ __('landing.nav.pricing') }}</a>
                 <a href="#testimonials" class="text-muted-foreground hover:text-foreground transition-colors font-medium">{{ __('landing.nav.testimonials') }}</a>
