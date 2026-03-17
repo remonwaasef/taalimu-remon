@@ -29,10 +29,10 @@
                 <!-- Step Circle -->
                 <div class="relative mx-auto mb-8">
                     <!-- Outer ring -->
-                    <div class="w-32 h-32 rounded-full border-2 border-dashed border-light-purple/30 flex items-center justify-center mx-auto group-hover:border-cyan/50 transition-colors duration-500">
+                    <div class="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-2 border-dashed border-primary/20 flex items-center justify-center mx-auto group-hover:border-secondary/50 transition-colors duration-500">
                         <!-- Inner circle -->
-                        <div class="w-24 h-24 rounded-full gradient-hero flex items-center justify-center shadow-lg group-hover:shadow-purple-glow transition-shadow duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10 text-primary-foreground"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+                        <div class="w-16 h-16 lg:w-24 lg:h-24 rounded-full bg-primary/5 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 lg:w-10 lg:h-10 text-primary"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
                         </div>
                     </div>
                     
@@ -70,10 +70,10 @@
                 <!-- Step Circle -->
                 <div class="relative mx-auto mb-8">
                     <!-- Outer ring -->
-                    <div class="w-32 h-32 rounded-full border-2 border-dashed border-light-purple/30 flex items-center justify-center mx-auto group-hover:border-cyan/50 transition-colors duration-500">
+                    <div class="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-2 border-dashed border-primary/20 flex items-center justify-center mx-auto group-hover:border-secondary/50 transition-colors duration-500">
                         <!-- Inner circle -->
-                        <div class="w-24 h-24 rounded-full gradient-hero flex items-center justify-center shadow-lg group-hover:shadow-purple-glow transition-shadow duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10 text-primary-foreground"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        <div class="w-16 h-16 lg:w-24 lg:h-24 rounded-full bg-primary/5 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 lg:w-10 lg:h-10 text-primary"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                         </div>
                     </div>
                     
@@ -111,10 +111,10 @@
                 <!-- Step Circle -->
                 <div class="relative mx-auto mb-8">
                     <!-- Outer ring -->
-                    <div class="w-32 h-32 rounded-full border-2 border-dashed border-light-purple/30 flex items-center justify-center mx-auto group-hover:border-cyan/50 transition-colors duration-500">
+                    <div class="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-2 border-dashed border-primary/20 flex items-center justify-center mx-auto group-hover:border-secondary/50 transition-colors duration-500">
                         <!-- Inner circle -->
-                        <div class="w-24 h-24 rounded-full gradient-hero flex items-center justify-center shadow-lg group-hover:shadow-purple-glow transition-shadow duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10 text-primary-foreground"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                        <div class="w-16 h-16 lg:w-24 lg:h-24 rounded-full bg-primary/5 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 lg:w-10 lg:h-10 text-primary"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
                         </div>
                     </div>
                     
