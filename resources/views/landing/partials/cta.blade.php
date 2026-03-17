@@ -9,7 +9,7 @@
             
             <!-- Grid pattern overlay -->
             <div class="absolute inset-0 bg-hero-pattern opacity-10"></div>
-
+ 
             <div class="relative">
                 <!-- Badge - Simplified -->
                 <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 mb-6">
@@ -59,7 +59,7 @@
                 </div>
 
                 <!-- Trust note -->
-                <p class="text-sm text-primary-foreground/60 mt-6">
+                <p class="text-sm text-muted-foreground mt-6">
                     {{ __('landing.cta.trust_note') }}
                 </p>
             </div>
