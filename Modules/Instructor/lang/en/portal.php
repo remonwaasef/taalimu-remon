@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'title' => 'Student Portal - :name',
+    'header' => 'Educational Student Portal',
+    'personal_qr' => 'Personal Attendance Code',
+    'qr_hint' => 'Please keep this code to prove your attendance when entering the hall.',
+    'download_qr' => 'Download QR Code',
+    'financial_summary' => 'Financial Summary',
+    'total_due' => 'Total Due',
+    'total_paid' => 'Total Paid',
+    'balance_required' => 'Remaining Balance',
+    'attendance_record' => 'Recent Attendance Record',
+    'payment_record' => 'Financial Transactions Record',
+    'date' => 'Date',
+    'group' => 'Group',
+    'status' => 'Status',
+    'present' => 'Present',
+    'late' => 'Late',
+    'absent' => 'Absent',
+    'no_attendance' => 'No attendance records yet',
+    'no_payments' => 'No recorded payments',
+    'collected_amount' => 'Collected amount: :amount EGP',
+    'qr_error' => 'Sorry, could not load the code. Try again.',
+];

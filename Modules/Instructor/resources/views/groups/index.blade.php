@@ -1,17 +1,17 @@
 @extends('instructor::components.layouts.master')
 
-@section('page-title', 'إدارة المجموعات')
+@section('page-title', __('instructor::groups.title'))
 
 @section('content')
 <div class="container-fluid">
     <div class="row mb-4 align-items-center">
         <div class="col">
-            <h3 class="fw-bold mb-0">المجموعات الدراسية</h3>
-            <p class="text-muted small">إدارة المجموعات، روابط التسجيل، وعمليات التحضير</p>
+            <h3 class="fw-bold mb-0">{{ __('instructor::groups.study_groups') }}</h3>
+            <p class="text-muted small">{{ __('instructor::groups.subtitle') }}</p>
         </div>
         <div class="col-auto">
             <a href="{{ route('instructor.groups.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm border-0 fw-bold" style="background: var(--primary-color);">
-                <i class="fas fa-plus me-2"></i> إنشاء مجموعة جديدة
+                <i class="fas fa-plus me-2"></i> {{ __('instructor::groups.create_new') }}
             </a>
         </div>
     </div>
@@ -23,7 +23,7 @@
                 <div class="col-md-8">
                     <div class="input-group">
                         <span class="input-group-text bg-white border-end-0 rounded-start-pill"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" id="groupSearchInput" class="form-control border-start-0 rounded-end-pill" placeholder="بحث باسم المجموعة...">
+                        <input type="text" id="groupSearchInput" class="form-control border-start-0 rounded-end-pill" placeholder="{{ __('instructor::groups.search_placeholder') }}">
                     </div>
                 </div>
                 <div class="col-md-4 text-end">
@@ -39,11 +39,11 @@
                 <table class="table table-hover align-middle mb-0 text-center" id="groupsTable">
                     <thead class="bg-light">
                         <tr>
-                            <th class="border-0 px-4 py-3 text-start">المجموعة</th>
-                            <th class="border-0">عدد الطلاب</th>
-                            <th class="border-0">رابط التسجيل</th>
-                            <th class="border-0">الحالة</th>
-                            <th class="border-0">العمليات</th>
+                            <th class="border-0 px-4 py-3 text-start">{{ __('instructor::groups.table_group') }}</th>
+                            <th class="border-0">{{ __('instructor::groups.students_count') }}</th>
+                            <th class="border-0">{{ __('instructor::groups.registration_link') }}</th>
+                            <th class="border-0">{{ __('instructor::groups.status') }}</th>
+                            <th class="border-0">{{ __('instructor::groups.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,11 +51,19 @@
                         <tr class="group-row" data-title="{{ $course->title }}">
                             <td class="px-4 py-3 text-start">
                                 <div class="fw-bold fs-5" style="color: var(--primary-color);">{{ $course->title }}</div>
-                                <div class="text-muted small mb-2">كود: {{ $course->code ?? 'N/A' }}</div>
+                                <div class="text-muted small mb-2">{{ __('instructor::groups.code', ['code' => $course->code ?? 'N/A']) }}</div>
                                 <div class="d-flex flex-wrap gap-1">
                                     @forelse($course->schedules as $schedule)
                                         @php
-                                            $days = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+                                            $days = [
+                                                __('instructor::groups.days.Sunday'),
+                                                __('instructor::groups.days.Monday'),
+                                                __('instructor::groups.days.Tuesday'),
+                                                __('instructor::groups.days.Wednesday'),
+                                                __('instructor::groups.days.Thursday'),
+                                                __('instructor::groups.days.Friday'),
+                                                __('instructor::groups.days.Saturday')
+                                            ];
                                         @endphp
                                         <span class="badge border border-primary text-primary rounded-pill fw-normal" style="color: var(--primary-color) !important; border-color: var(--primary-color) !important; background: transparent;">
                                             <i class="bi bi-calendar-event me-1"></i>
@@ -63,12 +71,12 @@
                                             ({{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }} - {{ \Carbon\Carbon::parse($schedule->end_time)->format('h:i A') }})
                                         </span>
                                     @empty
-                                        <span class="badge bg-light text-muted border rounded-pill fw-normal">لم يتم تحديد مواعيد</span>
+                                        <span class="badge bg-light text-muted border rounded-pill fw-normal">{{ __('instructor::groups.no_schedules') }}</span>
                                     @endforelse
                                 </div>
                             </td>
                             <td>
-                                <span class="badge bg-opacity-10 rounded-pill px-3" style="background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);">{{ $course->enrollments_count ?? 0 }} طالب</span>
+                                <span class="badge bg-opacity-10 rounded-pill px-3" style="background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);">{{ $course->enrollments_count ?? 0 }} {{ __('instructor::groups.student') }}</span>
                             </td>
                             <td>
                                 @if($course->registration_token)
@@ -79,11 +87,11 @@
                                         </button>
                                     </div>
                                 @else
-                                    <span class="text-muted small">لا يوجد رابط</span>
+                                    <span class="text-muted small">{{ __('instructor::groups.no_link') }}</span>
                                 @endif
                             </td>
                             <td>
-                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">نشطة</span>
+                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{ __('instructor::groups.active') }}</span>
                             </td>
                             <td>
                                 <div class="dropdown">
@@ -91,19 +99,19 @@
                                         <i class="fas fa-ellipsis-v"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end border-0 shadow rounded-4 p-2">
-                                        <li><a class="dropdown-item rounded-3" href="{{ route('instructor.scanner', $course->id) }}"><i class="fas fa-qrcode me-2" style="color: var(--primary-color);"></i> تحضير (QR Scanner)</a></li>
-                                        <li><a class="dropdown-item rounded-3" href="{{ route('instructor.groups.edit', $course->id) }}"><i class="fas fa-edit me-2 text-muted"></i> تعديل البيانات</a></li>
+                                        <li><a class="dropdown-item rounded-3" href="{{ route('instructor.scanner', $course->id) }}"><i class="fas fa-qrcode me-2" style="color: var(--primary-color);"></i> {{ __('instructor::groups.qr_scanner') }}</a></li>
+                                        <li><a class="dropdown-item rounded-3" href="{{ route('instructor.groups.edit', $course->id) }}"><i class="fas fa-edit me-2 text-muted"></i> {{ __('instructor::groups.edit_data') }}</a></li>
                                         <li>
                                             <form action="{{ route('instructor.groups.duplicate', $course->id) }}" method="POST">
                                                 @csrf
-                                                <button type="submit" class="dropdown-item"><i class="fas fa-copy me-2 text-muted"></i> تكرار المجموعة</button>
+                                                <button type="submit" class="dropdown-item"><i class="fas fa-copy me-2 text-muted"></i> {{ __('instructor::groups.duplicate_group') }}</button>
                                             </form>
                                         </li>
                                         <li>
                                             <form action="{{ route('instructor.groups.rotate-link', $course->id) }}" method="POST" id="rotateForm_{{ $course->id }}">
                                                 @csrf
-                                                <button type="button" class="dropdown-item" onclick="if(confirm('هل أنت متأكد من تغيير رابط التسجيل؟ الروابط القديمة لن تعمل.')) document.getElementById('rotateForm_{{ $course->id }}').submit();">
-                                                    <i class="fas fa-sync me-2 text-muted"></i> توليد رابط جديد
+                                                <button type="button" class="dropdown-item" onclick="if(confirm('{{ __('instructor::groups.confirm_rotate_link') }}')) document.getElementById('rotateForm_{{ $course->id }}').submit();">
+                                                    <i class="fas fa-sync me-2 text-muted"></i> {{ __('instructor::groups.generate_new_link') }}
                                                 </button>
                                             </form>
                                         </li>
@@ -112,8 +120,8 @@
                                             <form action="{{ route('instructor.groups.destroy', $course->id) }}" method="POST" id="deleteForm_{{ $course->id }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" class="dropdown-item text-danger" onclick="if(confirm('هل أنت متأكد من حذف هذه المجموعة؟ سيتم إخفاؤها من النظام.')) document.getElementById('deleteForm_{{ $course->id }}').submit();">
-                                                    <i class="fas fa-trash me-2"></i> حذف المجموعة
+                                                <button type="button" class="dropdown-item text-danger" onclick="if(confirm('{{ __('instructor::groups.confirm_delete_group') }}')) document.getElementById('deleteForm_{{ $course->id }}').submit();">
+                                                    <i class="fas fa-trash me-2"></i> {{ __('instructor::groups.delete_group') }}
                                                 </button>
                                             </form>
                                         </li>
@@ -125,7 +133,7 @@
                         <tr id="emptyRow">
                             <td colspan="5" class="text-center py-5">
                                 <img src="https://illustrations.popsy.co/gray/fogg-searching.png" alt="No data" style="width: 150px;" class="mb-3 opacity-50">
-                                <h6 class="text-muted">لا يوجد مجموعات حالية</h6>
+                                <h6 class="text-muted">{{ __('instructor::groups.no_groups') }}</h6>
                             </td>
                         </tr>
                         @endforelse
@@ -135,7 +143,7 @@
 
             <div id="noGroupsResults" class="text-center py-5 d-none">
                 <i class="fas fa-search-minus display-4 text-light mb-3"></i>
-                <p class="text-muted">لا توجد مجموعات مطابقة للبحث.</p>
+                <p class="text-muted">{{ __('instructor::groups.no_results') }}</p>
             </div>
         </div>
     </div>
@@ -143,12 +151,11 @@
 
 @push('scripts')
 <script>
-function copyLink(id) {
     var copyText = document.getElementById(id);
     copyText.select();
     copyText.setSelectionRange(0, 99999);
     navigator.clipboard.writeText(copyText.value);
-    alert("تم نسخ الرابط!");
+    alert("{{ __('instructor::groups.link_copied') }}");
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -172,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        if (resultCount) resultCount.textContent = visibleCount + ' مجموعة';
+        if (resultCount) resultCount.textContent = visibleCount + ' {{ __('instructor::groups.student') }}';
         if (noResults) noResults.classList.toggle('d-none', visibleCount > 0 || rows.length === 0);
         if (table) table.classList.toggle('d-none', visibleCount === 0 && rows.length > 0);
     }

@@ -6,8 +6,8 @@
         <div class="col-md-8 text-center">
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
                 <div class="card-header bg-white border-0 py-3">
-                    <h5 class="fw-bold mb-0">مسجل الغياب الذكي - {{ $course->title }}</h5>
-                    <p class="text-muted small mb-0">قم بتوجيه الكاميرا نحو كود الطالب</p>
+                    <h5 class="fw-bold mb-0">{{ __('instructor::scanner.smart_attendance', ['title' => $course->title]) }}</h5>
+                    <p class="text-muted small mb-0">{{ __('instructor::scanner.guide_camera') }}</p>
                 </div>
                 
                 <div class="card-body p-0 position-relative">
@@ -16,7 +16,7 @@
                     <!-- Scanner Overlay -->
                     <div id="scanner-status" class="position-absolute top-50 start-50 translate-middle w-100 p-4 d-none" style="z-index: 10;">
                         <div class="alert alert-success shadow-lg rounded-pill animate__animated animate__pulse">
-                            <i class="fas fa-check-circle me-2"></i> <span id="status-text">تم تسجيل الحضور</span>
+                            <i class="fas fa-check-circle me-2"></i> <span id="status-text">{{ __('instructor::scanner.attendance_marked') }}</span>
                         </div>
                     </div>
                 </div>
@@ -24,31 +24,31 @@
                 <div class="card-footer bg-white border-0 py-4">
                     @if($activeSchedule = $schedule)
                         <div class="alert alert-info small mb-0 rounded-pill">
-                            <i class="fas fa-clock me-2"></i> حصة اليوم: 
+                            <i class="fas fa-clock me-2"></i> {{ __('instructor::scanner.today_session') }} 
                             <strong>{{ \Carbon\Carbon::parse($activeSchedule->start_time)->format('h:i A') }}</strong>
                         </div>
                         <input type="hidden" id="schedule_id" value="{{ $activeSchedule->id }}">
                     @else
                         <div class="alert alert-warning small mb-0 rounded-pill">
-                            <i class="fas fa-exclamation-triangle me-2"></i> لا توجد حصة مسجلة في الجدول لهذا اليوم.
+                            <i class="fas fa-exclamation-triangle me-2"></i> {{ __('instructor::scanner.no_session_today') }}
                         </div>
                     @endif
                     
-                    <button id="toggle-camera" class="btn btn-primary rounded-pill px-4 mt-3">
-                        <i class="fas fa-camera me-2"></i> تشغيل الكاميرا
+                    <button id="toggle-camera" class="btn btn-primary rounded-pill px-4 mt-3" style="background: var(--primary-color);">
+                        <i class="fas fa-camera me-2"></i> {{ __('instructor::scanner.start_camera') }}
                     </button>
-                    <a href="{{ route('instructor.dashboard') }}" class="btn btn-link text-muted mt-3 d-block">العودة للوحة التحكم</a>
+                    <a href="{{ route('instructor.dashboard') }}" class="btn btn-link text-muted mt-3 d-block">{{ __('instructor::dashboard.back_to_dashboard') }}</a>
                 </div>
             </div>
 
             <!-- Recent Scans -->
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-header bg-transparent border-0 pt-4 px-4 text-start">
-                    <h6 class="fw-bold mb-0">آخر المسحات</h6>
+                    <h6 class="fw-bold mb-0">{{ __('instructor::scanner.recent_scans') }}</h6>
                 </div>
                 <div class="card-body p-0">
                     <div id="recent-scans" class="list-group list-group-flush">
-                        <div class="text-center py-4 text-muted small">لا توجد مسحات مؤخراً</div>
+                        <div class="text-center py-4 text-muted small">{{ __('instructor::scanner.no_recent_scans') }}</div>
                     </div>
                 </div>
             </div>
@@ -79,7 +79,7 @@
 
     function processScan(qrIdentifier) {
         if (!scheduleId) {
-            showStatus("لا توجد حصة نشطة لتسجيل الحضور", "danger");
+            showStatus("{{ __('instructor::scanner.no_active_session') }}", "danger");
             isProcessing = false;
             return;
         }
@@ -100,7 +100,7 @@
             if (data.success) {
                 document.getElementById('beep-success').play();
                 const studentName = data.student_name;
-                const statusMsg = data.already_marked ? "مسجل مسبقاً" : "تم التحضير";
+                const statusMsg = data.already_marked ? "{{ __('instructor::scanner.already_marked') }}" : "{{ __('instructor::scanner.marked_success') }}";
                 
                 showStatus(`${studentName} - ${statusMsg}`, data.already_marked ? "warning" : "success");
                 addRecentScan(studentName, data.remaining_sessions, data.already_marked, data.whatsapp_url);
@@ -111,7 +111,7 @@
         })
         .catch(error => {
             console.error('Error:', error);
-            showStatus("حدث خطأ في الاتصال بالسيرفر", "danger");
+            showStatus("{{ __('instructor::scanner.server_error') }}", "danger");
         })
         .finally(() => {
             setTimeout(() => {
@@ -145,14 +145,14 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h6 class="mb-0 fw-bold">${name}</h6>
-                    <small class="text-muted">المتبقي: ${balance ?? '--'} حصة</small>
+                    <small class="text-muted">{{ __('instructor::scanner.remaining_sessions', ['balance' => '${balance ?? "--"}']) }}</small>
                 </div>
                 <div class="d-flex gap-2">
                     <a href="${whatsappUrl}" target="_blank" class="btn btn-sm btn-success rounded-pill px-3">
-                        <i class="fab fa-whatsapp"></i> إخطار
+                        <i class="fab fa-whatsapp"></i> {{ __('instructor::scanner.notify') }}
                     </a>
                     <span class="badge ${already ? 'bg-warning' : 'bg-success'} rounded-pill d-flex align-items-center">
-                        ${already ? 'مسجل مسبقاً' : (already === false ? 'نشط' : '--')}
+                        ${already ? '{{ __('instructor::scanner.already_marked') }}' : (already === false ? '{{ __('instructor::scanner.active') }}' : '--')}
                     </span>
                 </div>
             </div>
@@ -164,7 +164,7 @@
         if (html5QrScanner) {
             html5QrScanner.clear();
             html5QrScanner = null;
-            this.innerHTML = '<i class="fas fa-camera me-2"></i> تشغيل الكاميرا';
+            this.innerHTML = '<i class="fas fa-camera me-2"></i> {{ __('instructor::scanner.start_camera') }}';
         } else {
             html5QrScanner = new Html5QrcodeScanner("reader", { 
                 fps: 10, 
@@ -172,7 +172,7 @@
                 showTorchButtonIfSupported: true
             });
             html5QrScanner.render(onScanSuccess);
-            this.innerHTML = '<i class="fas fa-stop me-2"></i> إيقاف الكاميرا';
+            this.innerHTML = '<i class="fas fa-stop me-2"></i> {{ __('instructor::scanner.stop_camera') }}';
         }
     });
 

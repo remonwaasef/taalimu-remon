@@ -21,7 +21,7 @@
                 <!-- Headline -->
                 <h1 
                     dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}" 
-                    class="font-cairo text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-black text-foreground leading-[1.2] mb-8 animate-fade-in tracking-tight delay-1"
+                    class="font-cairo text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-black text-white leading-[1.2] mb-8 animate-fade-in tracking-tight delay-1"
                 >
                     {!! __('landing.hero.title') !!}
                 </h1>
@@ -29,7 +29,7 @@
                 <!-- Subheadline -->
                 <p 
                     dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"
-                    class="text-xl md:text-2xl text-muted-foreground/80 mb-10 max-w-xl mx-auto lg:mx-0 animate-fade-in font-medium leading-[1.6] md:leading-relaxed delay-2"
+                    class="text-xl md:text-2xl text-slate-200/90 mb-10 max-w-xl mx-auto lg:mx-0 animate-fade-in font-medium leading-[1.6] md:leading-relaxed delay-2"
                 >
                     {{ \App\Models\SiteSetting::get('site_description_' . app()->getLocale(), __('landing.hero.subtitle')) }}
                 </p>
@@ -38,11 +38,11 @@
                 <div 
                     class="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start mb-12 animate-fade-in delay-3"
                 >
-                    <a href="{{ route('register') }}?account_type=center" class="inline-flex items-center justify-center rounded-full text-lg font-black h-16 md:h-20 px-10 md:px-12 group transition-all btn-hero-cta">
+                    <a href="{{ route('register') }}?account_type=center" class="inline-flex items-center justify-center rounded-full text-lg font-black h-16 md:h-20 px-10 md:px-12 group transition-all bg-secondary text-white shadow-lg hover:bg-secondary/90 hover:-translate-y-1">
                         <i class="fas fa-university me-3"></i>
                         {{ app()->isLocale('ar') ? 'سجل كمركز تعليمي' : 'Register as Center' }}
                     </a>
-                    <a href="{{ route('register') }}?account_type=instructor" class="inline-flex items-center justify-center rounded-full text-lg font-black h-16 md:h-20 px-10 md:px-12 group transition-all btn-hero-cta-secondary border-2 border-primary-purple/20 text-primary-purple hover:bg-primary-purple/5">
+                    <a href="{{ route('register') }}?account_type=instructor" class="inline-flex items-center justify-center rounded-full text-lg font-black h-16 md:h-20 px-10 md:px-12 group transition-all border-2 border-white/20 text-white hover:bg-white/10">
                         <i class="fas fa-chalkboard-teacher me-3"></i>
                         {{ app()->isLocale('ar') ? 'سجل كمدرس مستقل' : 'Register as Teacher' }}
                     </a>
@@ -50,22 +50,22 @@
 
                 <!-- Professional Trust Badges - Simplified -->
                 <div 
-                    class="flex flex-wrap gap-8 justify-center lg:justify-start animate-fade-in py-6 border-y border-slate-200 mb-12 delay-4"
+                    class="flex flex-wrap gap-8 justify-center lg:justify-start animate-fade-in py-6 border-y border-white/10 mb-12 delay-4"
                 >
-                    <div class="flex items-center gap-3 text-sm font-bold text-slate-500 group cursor-default">
-                        <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 group-hover:bg-primary group-hover:text-white transition-colors border border-slate-200">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+                    <div class="flex items-center gap-3 text-sm font-bold text-slate-300 group cursor-default">
+                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white group-hover:bg-primary group-hover:text-white transition-colors border border-white/10">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1-1z"/></svg>
                         </div>
                         {{ __('landing.hero.trust.security') }}
                     </div>
-                    <div class="flex items-center gap-3 text-sm font-bold text-slate-500 group cursor-default">
-                        <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 group-hover:bg-primary group-hover:text-white transition-colors border border-slate-200">
+                    <div class="flex items-center gap-3 text-sm font-bold text-slate-300 group cursor-default">
+                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white group-hover:bg-primary group-hover:text-white transition-colors border border-white/10">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
                         </div>
                         {{ __('landing.hero.trust.centers') }}
                     </div>
-                    <div class="flex items-center gap-3 text-sm font-bold text-slate-500 group cursor-default">
-                        <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 group-hover:bg-primary group-hover:text-white transition-colors border border-slate-200">
+                    <div class="flex items-center gap-3 text-sm font-bold text-slate-300 group cursor-default">
+                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white group-hover:bg-primary group-hover:text-white transition-colors border border-white/10">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
                         </div>
                         {{ __('landing.hero.trust.uptime') }}
@@ -76,17 +76,17 @@
                 <div 
                     class="grid grid-cols-3 gap-6 animate-fade-in delay-5"
                 >
-                    <div class="text-center lg:text-start p-4 rounded-2xl bg-white/70 border border-white/60 shadow-sm backdrop-blur-sm">
+                    <div class="text-center lg:text-start p-4 rounded-2xl bg-white/5 border border-white/10 shadow-sm backdrop-blur-sm">
                         <div class="text-3xl lg:text-4xl font-black gradient-text mb-1">38%</div>
-                        <div class="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.revenue') }}</div>
+                        <div class="text-[11px] font-bold text-slate-300 uppercase tracking-widest">{{ __('landing.hero.stats.revenue') }}</div>
                     </div>
-                    <div class="text-center lg:text-start p-4 rounded-2xl bg-white/70 border border-white/60 shadow-sm backdrop-blur-sm">
+                    <div class="text-center lg:text-start p-4 rounded-2xl bg-white/5 border border-white/10 shadow-sm backdrop-blur-sm">
                         <div class="text-3xl lg:text-4xl font-black gradient-text mb-1">15h</div>
-                        <div class="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.time') }}</div>
+                        <div class="text-[11px] font-bold text-slate-300 uppercase tracking-widest">{{ __('landing.hero.stats.time') }}</div>
                     </div>
-                    <div class="text-center lg:text-start p-4 rounded-2xl bg-white/70 border border-white/60 shadow-sm backdrop-blur-sm">
+                    <div class="text-center lg:text-start p-4 rounded-2xl bg-white/5 border border-white/10 shadow-sm backdrop-blur-sm">
                         <div class="text-3xl lg:text-4xl font-black gradient-text mb-1">98%</div>
-                        <div class="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.collection') }}</div>
+                        <div class="text-[11px] font-bold text-slate-300 uppercase tracking-widest">{{ __('landing.hero.stats.collection') }}</div>
                     </div>
                 </div>
             </div>

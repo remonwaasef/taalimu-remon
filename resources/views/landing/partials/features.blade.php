@@ -1,4 +1,4 @@
-<section id="features" class="py-16 lg:py-24 bg-muted/30">
+<section id="features" class="py-16 lg:py-24 bg-white">
     <div class="container mx-auto px-4 lg:px-8">
         <!-- Section Header -->
         <div class="text-center mb-12 lg:mb-16">

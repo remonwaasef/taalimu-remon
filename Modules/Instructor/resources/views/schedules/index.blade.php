@@ -3,11 +3,11 @@
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold text-dark mb-1">جدول الحصص</h2>
-            <p class="text-muted mb-0">نظرة عامة على جدول الحصص الأسبوعي لمجموعاتك.</p>
+            <h2 class="fw-bold text-dark mb-1">{{ __('instructor::schedules.title') }}</h2>
+            <p class="text-muted mb-0">{{ __('instructor::schedules.subtitle') }}</p>
         </div>
         <a href="{{ route('instructor.schedules.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm border-0 fw-bold" style="background: var(--primary-color);">
-            <i class="fas fa-plus me-2"></i> إضافة موعد حصة
+            <i class="fas fa-plus me-2"></i> {{ __('instructor::schedules.add_schedule') }}
         </a>
     </div>
 
@@ -50,7 +50,7 @@
                         <div class="p-2 rounded-3 me-3" style="background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);">
                             <i class="fas fa-calendar-day fa-lg"></i>
                         </div>
-                        <h4 class="fw-bold mb-0">{{ $dayInfo['name'] }}</h4>
+                        <h4 class="fw-bold mb-0">{{ __('instructor::schedules.days.' . $dayIndex) }}</h4>
                         <div class="ms-auto flex-grow-1 mx-3 border-bottom opacity-10"></div>
                         <span class="badge bg-light text-dark rounded-pill day-count">{{ count($groupedSchedules[$dayIndex]) }} حصة</span>
                     </div>
@@ -79,13 +79,13 @@
                                                     <i class="fas fa-ellipsis-v"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm">
-                                                    <li><a class="dropdown-item" href="{{ route('instructor.schedules.edit', $schedule) }}"><i class="fas fa-edit me-2"></i> تعديل</a></li>
+                                                    <li><a class="dropdown-item" href="{{ route('instructor.schedules.edit', $schedule) }}"><i class="fas fa-edit me-2"></i> {{ __('instructor::sidebar.edit') }}</a></li>
                                                     <li><hr class="dropdown-divider"></li>
                                                     <li>
-                                                        <form action="{{ route('instructor.schedules.destroy', $schedule) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من الحذف؟')">
+                                                        <form action="{{ route('instructor.schedules.destroy', $schedule) }}" method="POST" onsubmit="return confirm('{{ __('instructor::messages.confirm_delete') ?? 'Are you sure?' }}')">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button class="dropdown-item text-danger"><i class="fas fa-trash me-2"></i> حذف</button>
+                                                            <button class="dropdown-item text-danger"><i class="fas fa-trash me-2"></i> {{ __('instructor::sidebar.delete') }}</button>
                                                         </form>
                                                     </li>
                                                 </ul>
@@ -95,7 +95,7 @@
                                         <div class="mb-3">
                                             <div class="d-flex align-items-center mb-2">
                                                 <i class="fas fa-door-open text-muted me-2" style="width: 20px;"></i>
-                                                <span class="text-secondary small">{{ $schedule->classroom->name ?? 'قاعة غير محددة' }}</span>
+                                                <span class="text-secondary small">{{ $schedule->classroom->name ?? __('instructor::schedules.hall_not_specified') }}</span>
                                             </div>
                                         </div>
 
@@ -128,10 +128,10 @@
                     <div class="mb-3">
                         <i class="far fa-calendar-times display-1 text-light"></i>
                     </div>
-                    <h4 class="text-muted">لا يوجد مواعيد مضافة في الجدول حالياً.</h4>
+                    <h4 class="text-muted">{{ __('instructor::schedules.no_schedules') }}</h4>
                     <div class="mt-3">
                         <a href="{{ route('instructor.schedules.create') }}" class="btn btn-primary rounded-pill px-4">
-                            أضف أول موعد للحصة الان
+                            {{ __('instructor::schedules.add_schedule') }}
                         </a>
                     </div>
                 </div>

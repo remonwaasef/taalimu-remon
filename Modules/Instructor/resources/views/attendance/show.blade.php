@@ -1,12 +1,12 @@
 <x-instructor::layouts.master>
-@section('page-title', 'تفاصيل الحضور')
+@section('page-title', __('instructor::attendance.review_attendance'))
 @section('content')
     <div class="mb-4">
-        <h2 class="fw-bold text-dark">تسجيل الحضور: {{ $schedule->course->title }}</h2>
+        <h2 class="fw-bold text-dark">{{ __('instructor::attendance.mark_attendance') }}: {{ $schedule->course->title }}</h2>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('instructor.attendance.index') }}">الحضور والغياب</a></li>
-                <li class="breadcrumb-item active">تحضير الطلاب</li>
+                <li class="breadcrumb-item"><a href="{{ route('instructor.attendance.index') }}">{{ __('instructor::attendance.title') }}</a></li>
+                <li class="breadcrumb-item active">{{ __('instructor::attendance.manual_attendance') }}</li>
             </ol>
         </nav>
     </div>
@@ -16,13 +16,16 @@
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-header bg-white border-0 p-4 pb-0 d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="fw-bold mb-1"><i class="bi bi-people me-2"></i>قائمة الطلاب المسجلين</h5>
-                        <p class="text-muted small mb-0">الحصة {{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }} - القاعة {{ $schedule->classroom->name ?? 'غير محددة' }}</p>
+                        <h5 class="fw-bold mb-1"><i class="bi bi-people me-2"></i>{{ __('instructor::attendance.enrolled_students') }}</h5>
+                        <p class="text-muted small mb-0">{{ __('instructor::attendance.session_details', [
+                            'time' => \Carbon\Carbon::parse($schedule->start_time)->format('h:i A'),
+                            'hall' => $schedule->classroom->name ?? __('instructor::attendance.classroom_not_specified')
+                        ]) }}</p>
                     </div>
                     <div class="text-end d-flex align-items-center gap-2">
                         <!-- Scan Button -->
                         <a href="{{ route('instructor.scanner', $schedule->course) }}" class="btn btn-success btn-sm rounded-pill px-3 shadow-sm">
-                            <i class="bi bi-qr-code-scan me-1"></i>مسح بطاقة الطالب</a>
+                            <i class="bi bi-qr-code-scan me-1"></i>{{ __('instructor::attendance.scan_student_card') }}</a>
 
                         @php
                             $isEnded = now()->isAfter(\Carbon\Carbon::parse($schedule->end_time));
@@ -32,7 +35,7 @@
                             <form action="{{ route('center.attendance.bulkAbsent', $schedule) }}" method="POST">
                                 @csrf
                                 <button type="submit" class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm">
-                                    <i class="bi bi-person-x-fill me-1"></i>تسجيل الباقي غياب</button>
+                                    <i class="bi bi-person-x-fill me-1"></i>{{ __('instructor::attendance.mark_remaining_absent') }}</button>
                             </form>
                         @endif
                         <span class="badge px-3 rounded-pill fw-bold" style="background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);">{{ today()->format('Y-m-d') }}</span>
@@ -43,10 +46,10 @@
                         <table class="table align-middle">
                             <thead class="bg-light">
                                 <tr>
-                                    <th class="border-0 rounded-start">الطالب</th>
-                                    <th class="border-0">كود الطالب</th>
-                                    <th class="border-0 text-center">حالة الحضور اليوم</th>
-                                    <th class="border-0 rounded-end text-center">تسجيل الحضور</th>
+                                    <th class="border-0 rounded-start">{{ __('instructor::attendance.student') }}</th>
+                                    <th class="border-0">{{ __('instructor::attendance.student_code') }}</th>
+                                    <th class="border-0 text-center">{{ __('instructor::attendance.today_status') }}</th>
+                                    <th class="border-0 rounded-end text-center">{{ __('instructor::attendance.mark_attendance') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -66,16 +69,18 @@
                                             @if($attendance)
                                                 <span class="badge bg-{{ $attendance->status == 'present' ? 'success' : ($attendance->status == 'late' ? 'warning' : 'danger') }} bg-opacity-10 text-{{ $attendance->status == 'present' ? 'success' : ($attendance->status == 'late' ? 'warning' : 'danger') }} rounded-pill px-3">
                                                     @if($attendance->status == 'late')
-                                                    متأخر ({{ $attendance->late_minutes }} دقيقة)
+                                                        {{ __('instructor::attendance.late_minutes', ['minutes' => $attendance->late_minutes]) }}
+                                                    @elseif($attendance->status == 'present')
+                                                        {{ __('instructor::attendance.present') }}
                                                     @else
-                                                        {{ $attendance->status == 'present' ? 'حاضر' : 'غائب' }}
+                                                        {{ __('instructor::attendance.absent') }}
                                                     @endif
                                                     <small class="d-block text-muted" style="font-size: 0.6rem;">{{ $attendance->check_in_time->format('h:i A') }}</small>
                                                 </span>
                                             @elseif($isEnded)
-                                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">غائب</span>
+                                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">{{ __('instructor::attendance.absent') }}</span>
                                             @else
-                                                <span class="text-muted small">لم يسجل بعد</span>
+                                                <span class="text-muted small">{{ __('instructor::attendance.not_recorded') }}</span>
                                             @endif
                                         </td>
                                         <td class="text-center">
@@ -87,7 +92,7 @@
                                                     <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
                                                     <input type="hidden" name="session_date" value="{{ today()->format('Y-m-d') }}">
                                                     <input type="hidden" name="status" value="present">
-                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'present' ? 'success' : 'outline-success' }} rounded-pill px-3" {{ $isEnded && (!$attendance || $attendance->status !== 'present') ? 'disabled' : '' }}>حاضر</button>
+                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'present' ? 'success' : 'outline-success' }} rounded-pill px-3" {{ $isEnded && (!$attendance || $attendance->status !== 'present') ? 'disabled' : '' }}>{{ __('instructor::attendance.present') }}</button>
                                                 </form>
                                                 
                                                 <form action="{{ route('center.attendance.store') }}" method="POST">
@@ -97,7 +102,7 @@
                                                     <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
                                                     <input type="hidden" name="session_date" value="{{ today()->format('Y-m-d') }}">
                                                     <input type="hidden" name="status" value="late">
-                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'late' ? 'warning' : 'outline-warning' }} rounded-pill px-3" {{ $isEnded && (!$attendance || $attendance->status !== 'late') ? 'disabled' : '' }}>متأخر</button>
+                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'late' ? 'warning' : 'outline-warning' }} rounded-pill px-3" {{ $isEnded && (!$attendance || $attendance->status !== 'late') ? 'disabled' : '' }}>{{ __('instructor::attendance.late') }}</button>
                                                 </form>
 
                                                 <form action="{{ route('center.attendance.store') }}" method="POST">
@@ -107,7 +112,7 @@
                                                     <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
                                                     <input type="hidden" name="session_date" value="{{ today()->format('Y-m-d') }}">
                                                     <input type="hidden" name="status" value="absent">
-                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'absent' ? 'danger' : 'outline-danger' }} rounded-pill px-3">غائب</button>
+                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'absent' ? 'danger' : 'outline-danger' }} rounded-pill px-3">{{ __('instructor::attendance.absent') }}</button>
                                                 </form>
                                             </div>
                                         </td>
@@ -115,7 +120,7 @@
                                     @endif
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="text-center py-5 text-muted">لا يوجد طلاب مسجلين في هذه المجموعة.</td>
+                                        <td colspan="4" class="text-center py-5 text-muted">{{ __('instructor::attendance.no_students_enrolled') }}</td>
                                     </tr>
                                 @endforelse
                             </tbody>

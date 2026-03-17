@@ -1,23 +1,23 @@
 @extends('instructor::components.layouts.master')
 
-@section('page-title', 'قائمة الطلاب')
+@section('page-title', __('instructor::students.title'))
 
 @section('content')
 <div class="container-fluid">
     <div class="row mb-4 align-items-center">
         <div class="col">
-            <h3 class="fw-bold mb-0">إدارة الطلاب</h3>
-            <p class="text-muted small">عرض جميع الطلاب المسجلين في مجموعاتك</p>
+            <h3 class="fw-bold mb-0">{{ __('instructor::students.manage_students') }}</h3>
+            <p class="text-muted small">{{ __('instructor::students.subtitle') }}</p>
         </div>
         <div class="col-auto d-flex gap-2">
             <button type="button" class="btn btn-outline-primary rounded-pill px-4 shadow-sm fw-bold border-2" data-bs-toggle="modal" data-bs-target="#importModal">
-                <i class="fas fa-file-import me-2"></i> استيراد طلاب
+                <i class="fas fa-file-import me-2"></i> {{ __('instructor::students.import') }}
             </button>
             <a href="{{ route('instructor.students.export') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm fw-bold border-2">
-                <i class="fas fa-file-export me-2"></i> تصدير Excel
+                <i class="fas fa-file-export me-2"></i> {{ __('instructor::students.export') }}
             </a>
             <a href="{{ route('instructor.students.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm fw-bold border-0" style="background: var(--primary-color);">
-                <i class="fas fa-user-plus me-2"></i> إضافة طالب جديد
+                <i class="fas fa-user-plus me-2"></i> {{ __('instructor::students.add_new') }}
             </a>
         </div>
     </div>
@@ -31,7 +31,7 @@
                         <i class="fas fa-users-viewfinder fa-xl"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-0">إجمالي الطلاب</h6>
+                        <h6 class="text-muted mb-0">{{ __('instructor::students.total_students') }}</h6>
                         <h4 class="fw-bold mb-0 text-dark">{{ $students->count() }}</h4>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                         <i class="fas fa-layer-group fa-xl"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-0">المسجلين الآن</h6>
+                        <h6 class="text-muted mb-0">{{ __('instructor::students.currently_enrolled') }}</h6>
                         <h4 class="fw-bold mb-0 text-dark">{{ $students->sum(fn($s) => $s->enrollments->count()) }}</h4>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                         <i class="fas fa-hand-holding-dollar fa-xl"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-0">إجمالي المحصل</h6>
+                        <h6 class="text-muted mb-0">{{ __('instructor::students.total_collected') }}</h6>
                         <h4 class="fw-bold mb-0 text-dark">{{ number_format($totalRevenue, 0) }}</h4>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                         <i class="fas fa-user-plus fa-xl"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-0">مسجلين اليوم</h6>
+                        <h6 class="text-muted mb-0">{{ __('instructor::students.registered_today') }}</h6>
                         <h4 class="fw-bold mb-0 text-dark">{{ $todayEnrollments }}</h4>
                     </div>
                 </div>
@@ -88,13 +88,13 @@
     <div id="bulkActionsBar" class="card border-0 shadow-sm rounded-4 mb-3 d-none animate__animated animate__fadeInUp" style="background: var(--primary-color); color: white;">
         <div class="card-body p-3 d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center gap-3">
-                <span class="fw-bold"><span id="selectedCount">0</span> طالب محدد</span>
+                <span class="fw-bold"><span id="selectedCount">0</span> {{ __('instructor::students.student') }}</span>
                 <div class="vr mx-2 opacity-50"></div>
                 <button type="button" id="bulkWhatsAppBtn" class="btn btn-light btn-sm rounded-pill px-3">
-                    <i class="fab fa-whatsapp me-1"></i> مراسلة جماعية
+                    <i class="fab fa-whatsapp me-1"></i> {{ __('instructor::students.bulk_whatsapp') }}
                 </button>
             </div>
-            <button type="button" id="cancelSelection" class="btn btn-link text-white text-decoration-none p-0">إلغاء</button>
+            <button type="button" id="cancelSelection" class="btn btn-link text-white text-decoration-none p-0">{{ __('instructor::students.cancel') }}</button>
         </div>
     </div>
 
@@ -105,12 +105,12 @@
                 <div class="col-md-5">
                     <div class="input-group">
                         <span class="input-group-text bg-white border-end-0 rounded-start-pill"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" id="studentSearchInput" class="form-control border-start-0 rounded-end-pill" placeholder="بحث بالاسم أو رقم الهاتف...">
+                        <input type="text" id="studentSearchInput" class="form-control border-start-0 rounded-end-pill" placeholder="{{ __('instructor::students.search_placeholder') }}">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <select id="groupFilter" class="form-select rounded-pill">
-                        <option value="all">كل المجموعات</option>
+                        <option value="all">{{ __('instructor::students.all_groups') }}</option>
                         @php
                             $uniqueCourses = collect();
                             foreach($students as $student) {
@@ -144,13 +144,13 @@
                                     <input class="form-check-input" type="checkbox" id="selectAllStudents">
                                 </div>
                             </th>
-                            <th class="border-0 py-3">الطالب</th>
-                            <th class="border-0">ولي الأمر</th>
-                            <th class="border-0">المجموعات</th>
-                            <th class="border-0 text-center">نسبة الحضور</th>
-                            <th class="border-0">المالية</th>
-                            <th class="border-0">الحالة</th>
-                            <th class="border-0 text-center">الإجراءات</th>
+                            <th class="border-0 py-3">{{ __('instructor::students.student') }}</th>
+                            <th class="border-0">{{ __('instructor::students.parent') }}</th>
+                            <th class="border-0">{{ __('instructor::students.groups') }}</th>
+                            <th class="border-0 text-center">{{ __('instructor::students.attendance_rate') }}</th>
+                            <th class="border-0">{{ __('instructor::students.financials') }}</th>
+                            <th class="border-0">{{ __('instructor::students.status') }}</th>
+                            <th class="border-0 text-center">{{ __('instructor::students.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -182,7 +182,7 @@
                             <td>
                                 @if($student->parent_phone)
                                     <div class="small fw-bold text-muted">{{ $student->parent_phone }}</div>
-                                    <div class="x-small text-muted opacity-50">هاتف ولي الأمر</div>
+                                    <div class="x-small text-muted opacity-50">{{ __('instructor::students.parent_phone') }}</div>
                                 @else
                                     <span class="text-muted small">--</span>
                                 @endif
@@ -223,24 +223,24 @@
                             <td>
                                 @if($balance <= 0)
                                     <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">
-                                        <i class="fas fa-check-circle me-1"></i> مدفوع
+                                        <i class="fas fa-check-circle me-1"></i> {{ __('instructor::students.paid') }}
                                     </span>
                                 @elseif($totalPaid > 0)
                                     <div class="d-flex flex-column">
                                         <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3 py-1 mb-1">
-                                            متبقي {{ number_format($balance, 0) }}
+                                            {{ __('instructor::students.remaining', ['amount' => number_format($balance, 0)]) }}
                                         </span>
-                                        <span class="x-small text-muted text-center">من أصل {{ number_format($totalDue, 0) }}</span>
+                                        <span class="x-small text-muted text-center">{{ __('instructor::students.total_due', ['amount' => number_format($totalDue, 0)]) }}</span>
                                     </div>
                                 @else
                                     <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2">
-                                        مطلوب {{ number_format($balance, 0) }}
+                                        {{ __('instructor::students.due', ['amount' => number_format($balance, 0)]) }}
                                     </span>
                                 @endif
                             </td>
                             <td>
-                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">نشط</span>
-                                <div class="x-small text-muted mt-1">{{ $student->created_at?->format('Y-m-d') }}</div>
+                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{ __('instructor::students.active') }}</span>
+                                <div class="x-small text-muted mt-1">{{ __('instructor::students.registered_on', ['date' => $student->created_at?->format('Y-m-d')]) }}</div>
                             </td>
                             <td class="text-center">
                                 <div class="btn-group">
@@ -264,17 +264,17 @@
                                         <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 overflow-hidden">
                                             <li>
                                                 <button type="button" class="dropdown-item py-2 show-qr-btn" data-name="{{ $student->name }}" data-qr="{{ $qrUrl }}" data-portal="{{ $portalUrl }}">
-                                                    <i class="fas fa-qrcode me-2 text-primary"></i> كود الـ QR والمنصة
+                                                    <i class="fas fa-qrcode me-2 text-primary"></i> {{ __('instructor::students.qr_and_portal') }}
                                                 </button>
                                             </li>
                                             <li>
                                                 <button type="button" class="dropdown-item py-2 transfer-student-btn" data-id="{{ $student->id }}" data-name="{{ $student->name }}" data-groups="{{ json_encode($student->enrollments->pluck('course_id')) }}">
-                                                    <i class="fas fa-exchange-alt me-2 text-info"></i> نقل لمجموعة أخرى
+                                                    <i class="fas fa-exchange-alt me-2 text-info"></i> {{ __('instructor::students.transfer_to_group') }}
                                                 </button>
                                             </li>
                                             <li>
                                                 <button type="button" class="dropdown-item py-2 edit-notes-btn" data-id="{{ $student->id }}" data-notes="{{ $student->notes }}">
-                                                    <i class="fas fa-file-signature me-2 text-warning"></i> ملاحظات خاصة
+                                                    <i class="fas fa-file-signature me-2 text-warning"></i> {{ __('instructor::students.private_notes') }}
                                                 </button>
                                             </li>
                                             <li>
@@ -282,9 +282,9 @@
                                                     @csrf
                                                     <button type="submit" class="dropdown-item py-2">
                                                         @if($student->status === 'active')
-                                                            <i class="fas fa-snowflake me-2 text-secondary"></i> تجميد الحساب
+                                                            <i class="fas fa-snowflake me-2 text-secondary"></i> {{ __('instructor::students.freeze_account') }}
                                                         @else
-                                                            <i class="fas fa-play me-2 text-success"></i> تنشيط الحساب
+                                                            <i class="fas fa-play me-2 text-success"></i> {{ __('instructor::students.activate_account') }}
                                                         @endif
                                                     </button>
                                                 </form>
@@ -292,15 +292,15 @@
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
                                                 <a href="{{ route('instructor.students.show', $student->id) }}" class="dropdown-item py-2 text-primary">
-                                                    <i class="fas fa-id-card me-2"></i> الملف التفصيلي
+                                                    <i class="fas fa-id-card me-2"></i> {{ __('instructor::students.detailed_profile') }}
                                                 </a>
                                             </li>
                                             <li>
-                                                <form action="{{ route('instructor.students.destroy', $student->id) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذا الطالب نهائياً؟')">
+                                                <form action="{{ route('instructor.students.destroy', $student->id) }}" method="POST" onsubmit="return confirm('{{ __('instructor::students.confirm_delete') }}')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="dropdown-item py-2 text-danger">
-                                                        <i class="fas fa-trash-alt me-2"></i> حذف الطالب
+                                                        <i class="fas fa-trash-alt me-2"></i> {{ __('instructor::students.delete_student') }}
                                                     </button>
                                                 </form>
                                             </li>
@@ -313,7 +313,7 @@
                         <tr id="emptyRow">
                             <td colspan="8" class="text-center py-5">
                                 <img src="https://illustrations.popsy.co/gray/fogg-searching.png" alt="No data" style="width: 150px;" class="mb-3 opacity-50">
-                                <h6 class="text-muted">لا يوجد طلاب مسجلين حالياً</h6>
+                                <h6 class="text-muted">{{ __('instructor::students.no_students') }}</h6>
                             </td>
                         </tr>
                         @endforelse
@@ -323,7 +323,7 @@
 
             <div id="noStudentsResults" class="text-center py-5 d-none">
                 <i class="fas fa-user-slash display-4 text-light mb-3"></i>
-                <p class="text-muted">لا توجد نتائج مطابقة للبحث.</p>
+                <p class="text-muted">{{ __('instructor::students.no_results') }}</p>
             </div>
         </div>
     </div>
@@ -334,13 +334,13 @@
     <div class="modal-dialog modal-md modal-dialog-centered">
         <div class="modal-content border-0 rounded-4 shadow">
             <div class="modal-body text-center p-4">
-                <h5 class="fw-bold mb-3" id="qrModalName">اسم الطالب</h5>
+                <h5 class="fw-bold mb-3" id="qrModalName"></h5>
                 <div class="bg-light p-3 rounded-4 mb-3 d-inline-block shadow-inner">
                     <img id="qrModalImg" src="" alt="QR" style="width: 180px; height: 180px;">
                 </div>
                 
                 <div class="mb-3">
-                    <label class="form-label small text-muted">رابط بوابة ولي الأمر / الطالب</label>
+                    <label class="form-label small text-muted">{{ __('instructor::students.portal_link') }}</label>
                     <div class="input-group">
                         <input type="text" id="portalUrlInput" class="form-control text-ltr" readonly>
                         <button class="btn btn-outline-primary" type="button" id="copyPortalBtn">
@@ -350,8 +350,8 @@
                 </div>
                 
                 <div class="d-flex gap-2">
-                    <a href="" id="openPortalBtn" target="_blank" class="btn btn-primary flex-grow-1 rounded-pill border-0" style="background: var(--primary-color);">فتح البوابة</a>
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">إغلاق</button>
+                    <a href="" id="openPortalBtn" target="_blank" class="btn btn-primary flex-grow-1 rounded-pill border-0" style="background: var(--primary-color);">{{ __('instructor::students.open_portal') }}</a>
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">{{ __('instructor::students.close') }}</button>
                 </div>
             </div>
         </div>
@@ -365,16 +365,16 @@
             <form action="{{ route('instructor.students.import') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-header border-0 pb-0">
-                    <h5 class="fw-bold">استيراد طلاب من ملف Excel/CSV</h5>
+                    <h5 class="fw-bold">{{ __('instructor::students.import_title') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
                     <div class="alert alert-info small border-0 rounded-3">
-                        <i class="fas fa-info-circle me-2"></i> يجب أن يحتوي الملف على الأعمدة بالترتيب: (الاسم، الهاتف، هاتف ولي الأمر). الهاتف هو الحقل الأساسي للتعرف على الطالب.
+                        <i class="fas fa-info-circle me-2"></i> {{ __('instructor::students.import_hint') }}
                     </div>
                     
                     <div class="mb-3">
-                        <label class="form-label fw-bold">اختر المجموعة</label>
+                        <label class="form-label fw-bold">{{ __('instructor::students.select_group') }}</label>
                         <select name="course_id" class="form-select rounded-pill" required>
                             @foreach($uniqueCourses as $id => $title)
                                 <option value="{{ $id }}">{{ $title }}</option>
@@ -383,12 +383,12 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label class="form-label fw-bold">ملف الـ CSV</label>
+                        <label class="form-label fw-bold">{{ __('instructor::students.csv_file') }}</label>
                         <input type="file" name="csv_file" class="form-control" accept=".csv, .txt" required>
                     </div>
                 </div>
                 <div class="modal-footer border-0 pt-0">
-                    <button type="submit" class="btn btn-primary w-100 rounded-pill border-0" style="background: var(--primary-color);">بدء الاستيراد</button>
+                    <button type="submit" class="btn btn-primary w-100 rounded-pill border-0" style="background: var(--primary-color);">{{ __('instructor::students.start_import') }}</button>
                 </div>
             </form>
         </div>
@@ -405,13 +405,13 @@
                     <div class="rounded-circle bg-info bg-opacity-10 text-info p-3 mb-3 d-inline-block">
                         <i class="fas fa-exchange-alt fa-2x"></i>
                     </div>
-                    <h5 class="fw-bold" id="transferStudentName">نقل طالب</h5>
-                    <p class="text-muted small mb-4">اختر المجموعة الجديدة التي ترغب في نقل الطالب إليها</p>
+                    <h5 class="fw-bold" id="transferStudentName">{{ __('instructor::students.transfer_student') }}</h5>
+                    <p class="text-muted small mb-4">{{ __('instructor::students.transfer_hint') }}</p>
                     
                     <input type="hidden" name="from_course_id" id="fromCourseId">
                     
                     <div class="mb-4 text-start">
-                        <label class="form-label fw-bold">المجموعة الجديدة</label>
+                        <label class="form-label fw-bold">{{ __('instructor::students.new_group') }}</label>
                         <select name="to_course_id" class="form-select rounded-pill" required>
                             @foreach($uniqueCourses as $id => $title)
                                 <option value="{{ $id }}">{{ $title }}</option>
@@ -420,8 +420,8 @@
                     </div>
 
                     <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-info text-white flex-grow-1 rounded-pill">تأكيد النقل</button>
-                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">إلغاء</button>
+                        <button type="submit" class="btn btn-info text-white flex-grow-1 rounded-pill">{{ __('instructor::students.confirm_transfer') }}</button>
+                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">{{ __('instructor::students.cancel') }}</button>
                     </div>
                 </div>
             </form>
@@ -436,15 +436,15 @@
             <form id="notesForm" method="POST">
                 @csrf
                 <div class="modal-header border-0 pb-0">
-                    <h5 class="fw-bold">ملاحظات خاصة عن الطالب</h5>
+                    <h5 class="fw-bold">{{ __('instructor::students.notes_title') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <textarea name="notes" id="studentNotesText" class="form-control rounded-4 shadow-inner" rows="5" placeholder="اكتب ملاحظاتك عن مستوى الطالب أو تنبيهات خاصة به..."></textarea>
-                    <p class="x-small text-muted mt-2"><i class="fas fa-lock me-1"></i> هذه الملاحظات خاصة بك ولا يراها الطالب أو ولي الأمر.</p>
+                    <textarea name="notes" id="studentNotesText" class="form-control rounded-4 shadow-inner" rows="5" placeholder="{{ __('instructor::students.notes_placeholder') }}"></textarea>
+                    <p class="x-small text-muted mt-2"><i class="fas fa-lock me-1"></i> {{ __('instructor::students.notes_hint') }}</p>
                 </div>
                 <div class="modal-footer border-0 pt-0">
-                    <button type="submit" class="btn btn-primary w-100 rounded-pill border-0" style="background: var(--primary-color);">حفظ الملاحظات</button>
+                    <button type="submit" class="btn btn-primary w-100 rounded-pill border-0" style="background: var(--primary-color);">{{ __('instructor::students.save_notes') }}</button>
                 </div>
             </form>
         </div>

@@ -45,7 +45,7 @@
 
                 <!-- CTA Buttons -->
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="{{ route('register') }}?account_type=center" class="inline-flex items-center justify-center rounded-full text-lg font-bold transition-all bg-white text-primary shadow-lg hover:bg-slate-50 hover:scale-105 hover:-translate-y-1 h-16 px-10 group whitespace-nowrap">
+                    <a href="{{ route('register') }}?account_type=center" class="inline-flex items-center justify-center rounded-full text-lg font-bold transition-all bg-secondary text-white shadow-lg hover:bg-secondary/90 hover:scale-105 hover:-translate-y-1 h-16 px-10 group whitespace-nowrap">
                         <i class="fas fa-university me-3"></i>
                         {{ app()->isLocale('ar') ? 'ابدأ كمركز تعليمي' : 'Start as Center' }}
                     </a>

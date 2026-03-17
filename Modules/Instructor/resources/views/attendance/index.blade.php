@@ -1,9 +1,9 @@
 <x-instructor::layouts.master>
-@section('page-title', 'الحضور والغياب')
+@section('page-title', __('instructor::attendance.title'))
 @section('content')
     <div class="mb-4">
-        <h2 class="fw-bold text-dark">الحضور والغياب</h2>
-        <p class="text-muted">تسجيل حضور وغياب الطلاب في حصصك اليومية.</p>
+        <h2 class="fw-bold text-dark">{{ __('instructor::attendance.title') }}</h2>
+        <p class="text-muted">{{ __('instructor::attendance.subtitle') }}</p>
     </div>
 
     <div class="row g-4">
@@ -11,16 +11,16 @@
         <div class="col-md-8">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-header bg-white border-0 p-4 pb-0">
-                    <h5 class="fw-bold mb-0"><i class="bi bi-clock-history me-2" style="color: var(--primary-color);"></i>حصص اليوم ({{ now()->format('Y-m-d') }})</h5>
+                    <h5 class="fw-bold mb-0"><i class="bi bi-clock-history me-2" style="color: var(--primary-color);"></i>{{ __('instructor::attendance.today_sessions', ['date' => now()->format('Y-m-d')]) }}</h5>
                 </div>
                 <div class="card-body p-4">
                     <div class="table-responsive">
                         <table class="table align-middle">
                             <thead class="bg-light">
                                 <tr>
-                                    <th class="border-0 rounded-start">المجموعة</th>
-                                    <th class="border-0">التفاصيل</th>
-                                    <th class="border-0 text-center">إجراءات</th>
+                                    <th class="border-0 rounded-start">{{ __('instructor::attendance.group') }}</th>
+                                    <th class="border-0">{{ __('instructor::attendance.details') }}</th>
+                                    <th class="border-0 text-center">{{ __('instructor::attendance.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -34,7 +34,7 @@
                                             </small>
                                         </td>
                                         <td>
-                                            <div class="small text-muted"><i class="bi bi-geo-alt me-1"></i>{{ $session->classroom->name ?? 'قاعة غير محددة' }}</div>
+                                            <div class="small text-muted"><i class="bi bi-geo-alt me-1"></i>{{ $session->classroom->name ?? __('instructor::attendance.classroom_not_specified') }}</div>
                                         </td>
                                         <td class="text-center">
                                             @php
@@ -44,12 +44,12 @@
                                             <div class="d-flex justify-content-center gap-2">
                                                 @if($isEnded)
                                                     <a href="{{ route('instructor.attendance.show', $session) }}" class="btn btn-sm btn-outline-danger rounded-pill px-3">
-                                                        <i class="bi bi-person-x me-1"></i>مراجعة الحضور</a>
+                                                        <i class="bi bi-person-x me-1"></i>{{ __('instructor::attendance.review_attendance') }}</a>
                                                 @else
                                                     <a href="{{ route('instructor.attendance.show', $session) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 border-0" style="background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);">
-                                                        <i class="bi bi-card-checklist me-1"></i>تحضير يدوي</a>
+                                                        <i class="bi bi-card-checklist me-1"></i>{{ __('instructor::attendance.manual_attendance') }}</a>
                                                     <a href="{{ route('instructor.scanner', $session->course) }}" class="btn btn-primary btn-sm rounded-pill px-3 border-0 shadow-sm" style="background: var(--primary-color);">
-                                                        <i class="bi bi-qr-code me-1"></i> مسح QR
+                                                        <i class="bi bi-qr-code me-1"></i> {{ __('instructor::attendance.qr_scan') }}
                                                     </a>
                                                 @endif
                                             </div>
@@ -57,7 +57,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3" class="text-center py-5 text-muted">لا توجد حصص مجدولة لهذا اليوم.</td>
+                                        <td colspan="3" class="text-center py-5 text-muted">{{ __('instructor::attendance.no_sessions_today') }}</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -74,7 +74,7 @@
         <div class="col-md-4">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-header bg-white border-0 p-4 pb-0">
-                    <h5 class="fw-bold mb-0"><i class="bi bi-ui-checks me-2 text-success"></i>آخر التسجيلات</h5>
+                    <h5 class="fw-bold mb-0"><i class="bi bi-ui-checks me-2 text-success"></i>{{ __('instructor::attendance.recent_activity') }}</h5>
                 </div>
                 <div class="card-body p-4">
                     <div class="list-group list-group-flush">
@@ -93,13 +93,19 @@
                                     </div>
                                     <div class="ms-auto">
                                         <span class="badge bg-{{ $record->status == 'present' ? 'success' : ($record->status == 'late' ? 'warning' : 'danger') }} bg-opacity-10 text-{{ $record->status == 'present' ? 'success' : ($record->status == 'late' ? 'warning' : 'danger') }} rounded-pill" style="font-size: 0.65rem;">
-                                            {{ $record->status == 'present' ? 'حاضر' : ($record->status == 'late' ? 'متأخر' : 'غائب') }}
+                                            @if($record->status == 'present')
+                                                {{ __('instructor::attendance.present') }}
+                                            @elseif($record->status == 'late')
+                                                {{ __('instructor::attendance.late') }}
+                                            @else
+                                                {{ __('instructor::attendance.absent') }}
+                                            @endif
                                         </span>
                                     </div>
                                 </div>
                             </div>
                         @empty
-                            <div class="text-center py-4 text-muted small">لا توجد تسجيلات حضور حديثة.</div>
+                            <div class="text-center py-4 text-muted small">{{ __('instructor::attendance.no_recent_records') }}</div>
                         @endforelse
                     </div>
                 </div>

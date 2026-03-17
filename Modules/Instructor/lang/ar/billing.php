@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'title' => 'إدارة الحسابات والمدفوعات',
+    'subtitle' => 'متابعة تحصيل الرسوم من الطلاب بشكل مبسط',
+    'student_name' => 'اسم الطالب',
+    'total_due' => 'إجمالي المطلوب',
+    'total_paid' => 'إجمالي المدفوع',
+    'balance' => 'المتبقي',
+    'actions' => 'الإجراءات',
+    'collect' => 'تحصيل',
+    'paid' => 'تم السداد',
+    'whatsapp_reminder' => 'تذكير واتساب',
+    'no_results' => 'لا توجد نتائج مطابقة للبحث.',
+    'record_payment' => 'تسجيل استلام مبلغ',
+    'collect_from' => 'تحصيل من الطالب',
+    'amount_received' => 'المبلغ المستلم (ج.م)',
+    'notes' => 'ملاحظات',
+    'notes_placeholder' => 'اختياري...',
+    'confirm_collection' => 'تأكيد عملية التحصيل',
+    'all_students' => 'كل الطلاب',
+    'unpaid' => 'عليهم متبقي',
+    'fully_paid' => 'مسددين بالكامل',
+    'student_count' => ':count طالب',
+    'reminder_msg' => 'تحية طيبة، نود تذكيركم بأن الطالب :student لديه مديونية متبقية قدرها :balance ج.م لمجموعات المدرس :instructor. يرجى السداد في أقرب وقت. شكراً لكم.',
+];

@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'title' => 'Billing & Payments Management',
+    'subtitle' => 'Track student fee collection simply',
+    'student_name' => 'Student Name',
+    'total_due' => 'Total Due',
+    'total_paid' => 'Total Paid',
+    'balance' => 'Balance',
+    'actions' => 'Actions',
+    'collect' => 'Collect',
+    'paid' => 'Paid',
+    'whatsapp_reminder' => 'WhatsApp Reminder',
+    'no_results' => 'No matching results found.',
+    'record_payment' => 'Record Payment Receipt',
+    'collect_from' => 'Collect from Student',
+    'amount_received' => 'Amount Received (EGP)',
+    'notes' => 'Notes',
+    'notes_placeholder' => 'Optional...',
+    'confirm_collection' => 'Confirm Collection',
+    'all_students' => 'All Students',
+    'unpaid' => 'Unpaid Balance',
+    'fully_paid' => 'Fully Paid',
+    'student_count' => ':count Students',
+    'reminder_msg' => 'Greetings, we would like to remind you that the student :student has an outstanding balance of :balance EGP for Instructor :instructor\'s groups. Please settle as soon as possible. Thank you.',
+];
