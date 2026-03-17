@@ -18,25 +18,28 @@
             {{-- Feature data remains same, just updated card styling --}}
 @php
     $featuresData = [
-        ['icon' => 'user-friends', 'color' => 'blue', 'delay' => '0'],
-        ['icon' => 'calendar-check', 'color' => 'green', 'delay' => '100'],
-        ['icon' => 'whatsapp', 'color' => 'whatsapp', 'delay' => '200'],
-        ['icon' => 'file-invoice-dollar', 'color' => 'blue', 'delay' => '300'],
-        ['icon' => 'chart-line', 'color' => 'indigo', 'delay' => '400'],
-        ['icon' => 'mobile-alt', 'color' => 'purple', 'delay' => '500'],
-        ['icon' => 'shield-alt', 'color' => 'green', 'delay' => '600'],
-        ['icon' => 'sync', 'color' => 'blue', 'delay' => '700']
+        ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>', 'delay' => '0'],
+        ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="m9 16 3-3 3 3"/><path d="m9 13 3 3 3-3"/></svg>', 'delay' => '100'],
+        ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-11.7 8.38 8.38 0 0 1 3.8.9L21 3z"/></svg>', 'delay' => '200'],
+        ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><path d="M7 15h.01"/><path d="M11 15h.01"/></svg>', 'delay' => '300'],
+        ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>', 'delay' => '400'],
+        ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>', 'delay' => '500'],
+        ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>', 'delay' => '600'],
+        ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>', 'delay' => '700']
     ];
 @endphp
 
             @foreach(__('landing.features.items') as $index => $item)
+                @php $data = $featuresData[$index] ?? $featuresData[0]; @endphp
                 <div
                     class="group bg-white rounded-3xl p-8 border border-white shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 animate-fade-in"
-                    style="animation-delay: {{ $index * 100 }}ms;"
+                    style="animation-delay: {{ $data['delay'] }}ms;"
                 >
                     <!-- Icon -->
-                    <div class="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-{{ $featuresData[$index]['icon'] ?? 'star' }} text-2xl text-primary"></i>
+                    <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <div class="text-primary">
+                            {!! $data['icon'] !!}
+                        </div>
                     </div>
 
                     <!-- Title -->
