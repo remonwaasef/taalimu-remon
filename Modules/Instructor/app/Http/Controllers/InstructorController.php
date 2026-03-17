@@ -33,6 +33,7 @@ class InstructorController extends Controller
             // Fallback for demo or admin
             $courses = Course::take(5)->get();
             $totalStudents = Student::count();
+            $totalCourses = Course::count();
             $monthlyRevenue = Sale::whereMonth('created_at', now()->month)
                 ->whereYear('created_at', now()->year)
                 ->sum('paid_amount');
@@ -41,6 +42,7 @@ class InstructorController extends Controller
             $totalStudents = Student::whereHas('enrollments', function($q) use ($instructor) {
                 $q->whereIn('course_id', $instructor->courses->pluck('id'));
             })->count();
+            $totalCourses = $courses->count();
             
             $monthlyRevenue = Sale::whereMonth('created_at', now()->month)
                 ->whereYear('created_at', now()->year)
@@ -63,7 +65,7 @@ class InstructorController extends Controller
             $attendanceData[] = $query->count();
         }
 
-        return view('instructor::index', compact('courses', 'totalStudents', 'monthlyRevenue', 'attendanceData', 'days'));
+        return view('instructor::index', compact('courses', 'totalStudents', 'totalCourses', 'monthlyRevenue', 'attendanceData', 'days'));
     }
 
     /**
