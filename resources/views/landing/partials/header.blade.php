@@ -5,11 +5,27 @@
     <div class="container mx-auto px-4 lg:px-8">
         <div class="flex items-center justify-between h-14 lg:h-16">
             <!-- Logo -->
-            <a href="{{ route('home') }}" class="flex items-center gap-2">
-                <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-md">
-                    <span class="text-white font-bold text-xl">{{ substr(\App\Models\SiteSetting::get('site_name', config('app.name')), 0, 1) }}</span>
+            <a href="{{ route('home') }}" class="flex items-center gap-3 group">
+                <div class="relative w-11 h-11 lg:w-12 lg:h-12 flex items-center justify-center">
+                    <!-- Premium Background Gradient -->
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary via-primary to-primary/80 rounded-xl shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform duration-300"></div>
+                    
+                    <!-- High-Clarity SVG Logo (Graduation Cap + T) -->
+                    <svg class="relative w-7 h-7 lg:w-8 lg:h-8 text-white drop-shadow-sm" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 10L12 5L2 10L12 15L22 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M6 12V17C6 17 8 19 12 19C16 19 18 17 18 17V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 10V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M10 12H14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                 </div>
-                <span class="font-bold text-xl text-primary">{{ \App\Models\SiteSetting::get('site_name', config('app.name')) }}</span>
+                <div class="flex flex-col">
+                    <span class="font-bold text-xl lg:text-2xl text-primary leading-none tracking-tight">
+                        {{ \App\Models\SiteSetting::get('site_name', config('app.name')) }}
+                    </span>
+                    <span class="text-[10px] font-bold text-secondary uppercase tracking-widest mt-0.5 opacity-80 group-hover:opacity-100 transition-opacity">
+                        {{ __('landing.navbar.badge_short') ?? 'Smart Education' }}
+                    </span>
+                </div>
             </a>
 
             <!-- Desktop Navigation -->
