@@ -1,6 +1,6 @@
 @extends('instructor::components.layouts.master')
 
-@@section('page-title', __('instructor::settings.title'))
+@section('page-title', __('instructor::settings.title'))
 
 @section('content')
 <div class="container-fluid">
@@ -317,15 +317,6 @@
                                         </div>
                                     @endforeach
                                 </div>
-                            </div>
-    <a :href="'{{ route('center.subscription.checkout', ['package' => $pkg->id, 'tenant' => $tenant->domain ?? $tenant->id]) }}?cycle=' + billingCycle" class="btn btn-outline-primary rounded-pill w-100 fw-bold py-2">اشتراك الآن</a>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
                             </div>
                         </div>
                     </div>
