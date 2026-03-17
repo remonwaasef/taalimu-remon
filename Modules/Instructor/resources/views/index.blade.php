@@ -6,39 +6,54 @@
 <div class="container-fluid">
     <div class="row g-4 mb-5">
         <div class="col-md-4">
-            <div class="stats-card p-4 h-100">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="p-3 bg-primary bg-opacity-10 rounded-4">
+            <div class="stats-card p-4 h-100 position-relative overflow-hidden">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <h6 class="text-muted mb-1">{{ __('instructor::dashboard.total_students') }}</h6>
+                        <h2 class="fw-bold mb-0 count-up text-primary">{{ number_format($totalStudents) }}</h2>
+                    </div>
+                    <div class="p-3 rounded-4" style="background: rgba(22, 41, 99, 0.08);">
                         <i class="fas fa-user-graduate text-primary fs-4"></i>
                     </div>
                 </div>
-                <h6 class="text-muted mb-1">{{ __('instructor::dashboard.total_students') }}</h6>
-                <h3 class="fw-bold mb-0 count-up">{{ number_format($totalStudents) }}</h3>
+                <div class="progress mt-3" style="height: 4px; background: rgba(22, 41, 99, 0.05);">
+                    <div class="progress-bar bg-primary" style="width: 70%"></div>
+                </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="stats-card p-4 h-100">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="p-3 bg-success bg-opacity-10 rounded-4">
+            <div class="stats-card p-4 h-100 position-relative overflow-hidden">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <h6 class="text-muted mb-1">{{ __('instructor::dashboard.active_groups') }}</h6>
+                        <h2 class="fw-bold mb-0 count-up text-success">{{ number_format($totalCourses) }}</h2>
+                    </div>
+                    <div class="p-3 rounded-4" style="background: rgba(34, 197, 94, 0.08);">
                         <i class="fas fa-users text-success fs-4"></i>
                     </div>
                 </div>
-                <h6 class="text-muted mb-1">{{ __('instructor::dashboard.active_groups') }}</h6>
-                <h3 class="fw-bold mb-0 count-up">{{ number_format($totalCourses) }}</h3>
+                <div class="progress mt-3" style="height: 4px; background: rgba(34, 197, 94, 0.05);">
+                    <div class="progress-bar bg-success" style="width: 45%"></div>
+                </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="stats-card p-4 h-100">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="p-3 bg-info bg-opacity-10 rounded-4">
+            <div class="stats-card p-4 h-100 position-relative overflow-hidden">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <h6 class="text-muted mb-1">{{ __('instructor::dashboard.monthly_revenue') }}</h6>
+                        <h2 class="fw-bold mb-0">
+                            <span class="count-up text-info">{{ number_format($monthlyRevenue) }}</span>
+                            <small class="fs-6 fw-normal text-muted">{{ __('instructor::dashboard.currency') }}</small>
+                        </h2>
+                    </div>
+                    <div class="p-3 rounded-4" style="background: rgba(13, 202, 240, 0.08);">
                         <i class="fas fa-wallet text-info fs-4"></i>
                     </div>
                 </div>
-                <h6 class="text-muted mb-1">{{ __('instructor::dashboard.monthly_revenue') }}</h6>
-                <h3 class="fw-bold mb-0">
-                    <span class="count-up">{{ number_format($monthlyRevenue) }}</span>
-                    <small class="fs-6 fw-normal text-muted">{{ __('instructor::dashboard.currency') }}</small>
-                </h3>
+                <div class="progress mt-3" style="height: 4px; background: rgba(13, 202, 240, 0.05);">
+                    <div class="progress-bar bg-info" style="width: 60%"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -187,14 +202,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 datasets: [{
                     label: 'عدد الحاضرين',
                     data: {!! json_encode($attendanceData) !!},
-                    borderColor: '#3A0CA3',
-                    backgroundColor: 'rgba(58, 12, 163, 0.05)',
+                    borderColor: '#162963',
+                    backgroundColor: 'rgba(22, 41, 99, 0.08)',
                     fill: true,
                     tension: 0.4,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#3A0CA3',
+                    pointRadius: 5,
+                    pointBackgroundColor: '#162963',
                     borderWidth: 3,
-                    pointHoverRadius: 6
+                    pointHoverRadius: 7,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
                 }]
             },
             options: {
