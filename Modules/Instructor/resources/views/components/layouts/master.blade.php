@@ -26,15 +26,18 @@
     
     <style>
         :root {
-            --primary-color: #3A0CA3;
-            --primary-light: #4361EE;
-            --primary-gradient: linear-gradient(135deg, #3A0CA3 0%, #4361EE 100%);
-            --sidebar-width: 260px;
+            --primary-color: #162963; /* Academic Blue */
+            --primary-light: #1e3a8a;
+            --accent-purple: #3A0CA3;
+            --secondary-green: #22C55E;
+            --sidebar-width: 280px;
             --sidebar-bg: #0f172a;
-            --sidebar-text: #e2e8f0;
-            --bg-light: #f8fafc;
+            --sidebar-text: rgba(255, 255, 255, 0.7);
+            --bg-light: #f1f5f9;
             --radius-lg: 1.25rem;
-            --radius-md: 0.75rem;
+            --radius-md: 0.85rem;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.02);
+            --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.05);
         }
 
         body { 
@@ -46,32 +49,30 @@
 
         /* Global Primary Overrides */
         .btn-primary {
-            background-color: var(--primary-color) !important;
+            background: var(--primary-color) !important;
             border-color: var(--primary-color) !important;
+            border-radius: 50px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s;
         }
         .btn-primary:hover {
-            background-color: var(--primary-light) !important;
-            border-color: var(--primary-light) !important;
+            background: var(--accent-purple) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(22, 41, 99, 0.2);
         }
         .btn-outline-primary {
             color: var(--primary-color) !important;
             border-color: var(--primary-color) !important;
+            border-radius: 50px;
         }
         .btn-outline-primary:hover {
             background-color: var(--primary-color) !important;
             color: white !important;
         }
-        .text-primary {
-            color: var(--primary-color) !important;
-        }
-        .bg-primary {
-            background-color: var(--primary-color) !important;
-        }
-        .text-bg-primary {
-            background-color: var(--primary-color) !important;
-            color: white !important;
-        }
-
+        .text-primary { color: var(--primary-color) !important; }
+        .bg-primary { background-color: var(--primary-color) !important; }
+        
         /* Sidebar Styles */
         .sidebar {
             width: var(--sidebar-width);
@@ -81,23 +82,24 @@
             top: 0;
             z-index: 1050;
             transition: all 0.3s ease;
-            box-shadow: 4px 0 24px rgba(0,0,0,0.1);
         }
 
-        [dir="rtl"] .sidebar { right: 0; transform: translateX(0); }
-        [dir="ltr"] .sidebar { left: 0; transform: translateX(0); }
+        [dir="rtl"] .sidebar { right: 0; border-left: 1px solid rgba(255,255,255,0.05); }
+        [dir="ltr"] .sidebar { left: 0; border-right: 1px solid rgba(255,255,255,0.05); }
 
-        /* Mobile Sidebar state */
-        @media (max-width: 991.98px) {
-            [dir="rtl"] .sidebar { right: 0; transform: translateX(100%); }
-            [dir="ltr"] .sidebar { left: 0; transform: translateX(-100%); }
-            
-            .sidebar.active { transform: translateX(0) !important; }
+        .sidebar-brand {
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+        }
+        .sidebar-brand img {
+            max-width: 160px;
+            height: auto;
+            filter: brightness(0) invert(1); /* Make logo white for dark sidebar */
         }
 
         .main-content {
             transition: all 0.3s ease;
-            padding: 2rem;
+            padding: 2.5rem;
             min-height: 100vh;
         }
 
@@ -106,80 +108,50 @@
             [dir="ltr"] .main-content { margin-left: var(--sidebar-width); }
         }
 
-        @media (max-width: 991.98px) {
-            .main-content { padding: 1rem; padding-top: 5rem; }
-        }
-
-        /* Mobile Backdrop */
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(15, 23, 42, 0.5);
-            backdrop-filter: blur(4px);
-            z-index: 1040;
-        }
-        .sidebar-overlay.active { display: block; }
-
-        /* Mobile Toggle Button */
-        .mobile-toggle {
-            display: none;
-            position: fixed;
-            top: 1rem;
-            z-index: 1060;
-            width: 45px;
-            height: 45px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border: none;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-color);
-            font-size: 1.25rem;
-        }
-
-        @media (max-width: 991.98px) {
-            .mobile-toggle { display: flex; }
-            [dir="rtl"] .mobile-toggle { right: 1rem; }
-            [dir="ltr"] .mobile-toggle { left: 1rem; }
-        }
-
-        /* Simplified Nav Styles */
         .nav-link {
             color: var(--sidebar-text);
-            opacity: 0.7;
-            padding: 0.8rem 1.5rem;
-            margin: 0.2rem 1rem;
+            padding: 0.75rem 1.25rem;
+            margin: 0.3rem 1.25rem;
             border-radius: var(--radius-md);
-            transition: all 0.3s;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             gap: 12px;
+            font-weight: 500;
             text-decoration: none;
         }
 
-        .nav-link:hover, .nav-link.active {
-            opacity: 1;
-            background: rgba(255,255,255,0.1);
+        .nav-link:hover {
+            background: rgba(255,255,255,0.05);
             color: white;
+            opacity: 1;
         }
 
         .nav-link.active {
             background: var(--primary-color);
-            box-shadow: 0 4px 12px rgba(58, 12, 163, 0.3);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 1;
         }
 
-        .nav-link i { font-size: 1.1rem; width: 24px; text-align: center; }
+        .nav-link i { font-size: 1.1rem; width: 24px; opacity: 0.8; }
+        .nav-link.active i { opacity: 1; }
 
         .card {
             border: none;
             border-radius: var(--radius-lg);
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .card:hover { transform: translateY(-5px); }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+
+        .stats-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
     </style>
     @stack('styles')
 </head>
@@ -187,9 +159,9 @@
 
     <!-- Sidebar -->
     <aside class="sidebar">
-        <div class="p-4 text-center border-bottom border-secondary border-opacity-25">
-            <h4 class="text-white fw-bold mb-0">Taalimu</h4>
-            <small class="text-white opacity-50">{{ __('instructor::sidebar.panel_title') }}</small>
+        <div class="sidebar-brand border-bottom border-white border-opacity-10">
+            <img src="{{ asset('images/brand/logo-full.png') }}" alt="Taalimu">
+            <div class="text-white opacity-50 x-small mt-2 fw-bold">{{ __('instructor::sidebar.panel_title') }}</div>
         </div>
 
         <nav class="mt-4">
@@ -218,7 +190,7 @@
             <div class="mt-5 p-3">
                 <form action="{{ route('center.logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="btn btn-outline-danger w-100 rounded-pill">
+                    <button type="submit" class="btn btn-outline-danger w-100 rounded-pill px-4 border-0" style="background: rgba(220, 53, 69, 0.05);">
                         <i class="fas fa-sign-out-alt me-2"></i> {{ __('instructor::sidebar.logout') }}
                     </button>
                 </form>
@@ -228,6 +200,48 @@
     
     <!-- Mobile Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <style>
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1040;
+        }
+        .sidebar-overlay.active { display: block; }
+
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            z-index: 1060;
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: none;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.25rem;
+        }
+
+        @media (max-width: 991.98px) {
+            .mobile-toggle { display: flex; }
+            [dir="rtl"] .mobile-toggle { right: 1rem; }
+            [dir="ltr"] .mobile-toggle { left: 1rem; }
+            
+            [dir="rtl"] .sidebar { transform: translateX(100%); }
+            [dir="ltr"] .sidebar { transform: translateX(-100%); }
+            .sidebar.active { transform: translateX(0) !important; }
+            
+            .main-content { padding: 1.5rem; padding-top: 5rem; }
+        }
+        .x-small { font-size: 0.75rem; }
+    </style>
 
     <!-- Mobile Toggle Button -->
     <button class="mobile-toggle" id="sidebarToggle">
