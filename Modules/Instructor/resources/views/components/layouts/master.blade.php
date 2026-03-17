@@ -188,38 +188,38 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="p-4 text-center border-bottom border-secondary border-opacity-25">
-            <h4 class="text-white fw-bold mb-0">Taalimu Instructor</h4>
-            <small class="text-white opacity-50">لوحة تحكم المعلم</small>
+            <h4 class="text-white fw-bold mb-0">Taalimu</h4>
+            <small class="text-white opacity-50">{{ __('instructor::sidebar.panel_title') }}</small>
         </div>
 
         <nav class="mt-4">
             <a href="{{ route('instructor.dashboard') }}" class="nav-link {{ request()->routeIs('instructor.dashboard') ? 'active' : '' }}">
-                <i class="fas fa-home"></i> <span>الرئيسية</span>
+                <i class="fas fa-home"></i> <span>{{ __('instructor::sidebar.dashboard') }}</span>
             </a>
             <a href="{{ route('instructor.students.list') }}" class="nav-link {{ request()->routeIs('instructor.students.list') ? 'active' : '' }}">
-                <i class="fas fa-user-graduate"></i> <span>الطلاب</span>
+                <i class="fas fa-user-graduate"></i> <span>{{ __('instructor::sidebar.students') }}</span>
             </a>
             <a href="{{ route('instructor.groups.list') }}" class="nav-link {{ request()->routeIs('instructor.groups.list') ? 'active' : '' }}">
-                <i class="fas fa-users"></i> <span>المجموعات</span>
+                <i class="fas fa-users"></i> <span>{{ __('instructor::sidebar.groups') }}</span>
             </a>
             <a href="{{ route('instructor.schedules.index') }}" class="nav-link {{ request()->routeIs('instructor.schedules.*') ? 'active' : '' }}">
-                <i class="fas fa-calendar-alt"></i> <span>المواعيد والجداول</span>
+                <i class="fas fa-calendar-alt"></i> <span>{{ __('instructor::sidebar.schedules') }}</span>
             </a>
             <a href="{{ route('instructor.attendance.index') }}" class="nav-link {{ request()->routeIs('instructor.attendance.*') ? 'active' : '' }}">
-                <i class="fas fa-clipboard-check"></i> <span>الحضور والغياب</span>
+                <i class="fas fa-clipboard-check"></i> <span>{{ __('instructor::sidebar.attendance') }}</span>
             </a>
             <a href="{{ route('instructor.billing') }}" class="nav-link {{ request()->routeIs('instructor.billing') ? 'active' : '' }}">
-                <i class="fas fa-wallet"></i> <span>الحسابات</span>
+                <i class="fas fa-wallet"></i> <span>{{ __('instructor::sidebar.billing') }}</span>
             </a>
             <a href="{{ route('instructor.settings') }}" class="nav-link {{ request()->routeIs('instructor.settings') || request()->routeIs('instructor.whatsapp.*') ? 'active' : '' }}">
-                <i class="fas fa-cog"></i> <span>الإعدادات</span>
+                <i class="fas fa-cog"></i> <span>{{ __('instructor::sidebar.settings') }}</span>
             </a>
             
             <div class="mt-5 p-3">
                 <form action="{{ route('center.logout') }}" method="POST">
                     @csrf
                     <button type="submit" class="btn btn-outline-danger w-100 rounded-pill">
-                        <i class="fas fa-sign-out-alt me-2"></i> خروج
+                        <i class="fas fa-sign-out-alt me-2"></i> {{ __('instructor::sidebar.logout') }}
                     </button>
                 </form>
             </div>
@@ -238,14 +238,30 @@
     <main class="main-content">
         <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
-                <h3 class="fw-bold mb-0">@yield('page-title', 'مرحباً بك')</h3>
+                <h3 class="fw-bold mb-0">@yield('page-title', __('instructor::sidebar.welcome'))</h3>
                 <p class="text-muted small mb-0">{{ now()->translatedFormat('l, d F Y') }}</p>
             </div>
-            <div class="dropdown">
-                <button class="btn btn-white bg-white shadow-sm rounded-pill px-4 dropdown-toggle border-0" type="button" data-bs-toggle="dropdown">
-                    <i class="fas fa-user-circle me-2 text-primary"></i>
-                    {{ auth()->user()->name ?? 'المعلم' }}
-                </button>
+            
+            <div class="d-flex align-items-center gap-3">
+                <!-- Language Switcher -->
+                <div class="dropdown">
+                    <button class="btn btn-white bg-white shadow-sm rounded-pill px-3 dropdown-toggle border-0" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-language me-2 text-primary"></i>
+                        {{ strtoupper(app()->getLocale()) }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-3">
+                        <li><a class="dropdown-item" href="{{ route('instructor.set-locale', 'ar') }}">العربية</a></li>
+                        <li><a class="dropdown-item" href="{{ route('instructor.set-locale', 'en') }}">English</a></li>
+                        <li><a class="dropdown-item" href="{{ route('instructor.set-locale', 'fr') }}">Français</a></li>
+                    </ul>
+                </div>
+
+                <div class="dropdown">
+                    <button class="btn btn-white bg-white shadow-sm rounded-pill px-4 dropdown-toggle border-0" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle me-2 text-primary"></i>
+                        {{ auth()->user()->name ?? __('instructor::sidebar.instructor') }}
+                    </button>
+                </div>
             </div>
         </header>
 

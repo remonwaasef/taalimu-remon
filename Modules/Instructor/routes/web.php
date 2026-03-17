@@ -6,6 +6,7 @@ use Modules\Instructor\Http\Controllers\InstructorController;
 $instructorRoutes = function () {
     Route::middleware(['auth', 'verified'])->prefix('instructor')->group(function () {
         Route::get('/', [InstructorController::class, 'index'])->name('instructor.dashboard');
+        Route::get('/set-locale/{locale}', [InstructorController::class, 'setLocale'])->name('instructor.set-locale');
         Route::get('/scanner/{course}', [InstructorController::class, 'scanner'])->name('instructor.scanner');
         Route::post('/scan/{course}', [InstructorController::class, 'scan'])->name('instructor.scan');
         Route::get('/billing', [InstructorController::class, 'billing'])->name('instructor.billing');

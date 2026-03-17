@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'title' => 'Portail Étudiant - :name',
+    'header' => 'Portail Éducatif de l\'Étudiant',
+    'personal_qr' => 'Code de Présence Personnel',
+    'qr_hint' => 'Veuillez conserver ce code pour prouver votre présence lors de l\'entrée dans la salle.',
+    'download_qr' => 'Télécharger le code QR',
+    'financial_summary' => 'Résumé Financier',
+    'total_due' => 'Total Dû',
+    'total_paid' => 'Total Payé',
+    'balance_required' => 'Solde Restant',
+    'attendance_record' => 'Dernier Registre de Présence',
+    'payment_record' => 'Registre des Transactions Financières',
+    'date' => 'Date',
+    'group' => 'Groupe',
+    'status' => 'Statut',
+    'present' => 'Présent',
+    'late' => 'En retard',
+    'absent' => 'Absent',
+    'no_attendance' => 'Aucun registre de présence pour le moment',
+    'no_payments' => 'Aucun paiement enregistré',
+    'collected_amount' => 'Montant perçu : :amount EGP',
+    'qr_error' => 'Désolé, impossible de charger le code. Réessayez.',
+];

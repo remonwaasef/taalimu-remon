@@ -132,7 +132,7 @@ class InstructorController extends Controller
         if (!$user || !$user->student) {
             return response()->json([
                 'success' => false,
-                'message' => 'كود الطالب غير صحيح أو غير مسجل النظام.'
+                'message' => __('instructor::messages.student_not_found')
             ], 404);
         }
 
@@ -147,7 +147,7 @@ class InstructorController extends Controller
             return response()->json([
                 'success' => false,
                 'student_name' => $student->name,
-                'message' => 'الطالب غير مسجل في هذه المجموعة!'
+                'message' => __('instructor::messages.student_not_enrolled')
             ], 403);
         }
 
@@ -159,7 +159,7 @@ class InstructorController extends Controller
                 'success' => true,
                 'student_name' => $student->name,
                 'already_marked' => true,
-                'message' => 'تم تسجيل حضور الطالب مسبقاً.'
+                'message' => __('instructor::messages.already_attended')
             ]);
         }
 
@@ -172,7 +172,11 @@ class InstructorController extends Controller
             'status' => 'present',
         ]);
 
-        $msg = "تحرك من المركز: الطالب {$student->name} حضر الآن حصة '{$course->title}' في مركز " . app('tenant')->name . ".";
+        $msg = __('instructor::messages.attendance_notification', [
+            'student' => $student->name,
+            'course' => $course->title,
+            'center' => app('tenant')->name
+        ]);
         $phoneToNotify = $student->parent_phone ?: $student->phone;
         $whatsappUrl = "https://wa.me/" . preg_replace('/[^0-9]/', '', $phoneToNotify) . "?text=" . urlencode($msg);
 
@@ -181,7 +185,7 @@ class InstructorController extends Controller
             'student_name' => $student->name,
             'remaining_sessions' => $enrollment->fresh()->remaining_sessions,
             'whatsapp_url' => $whatsappUrl,
-            'message' => 'تم تسجيل الحضور بنجاح!'
+            'message' => __('instructor::messages.scanned_success')
         ]);
     }
 
@@ -252,7 +256,14 @@ class InstructorController extends Controller
             "Expires"             => "0"
         ];
 
-        $columns = ['Name', 'Phone', 'Parent Phone', 'Groups', 'Registration Date', 'Status'];
+        $columns = [
+            __('instructor::messages.csv_name'),
+            __('instructor::messages.csv_phone'),
+            __('instructor::messages.csv_parent_phone'),
+            __('instructor::messages.csv_groups'),
+            __('instructor::messages.csv_registration_date'),
+            __('instructor::messages.csv_status')
+        ];
 
         $callback = function() use($students, $columns) {
             $file = fopen('php://output', 'w');
@@ -291,7 +302,7 @@ class InstructorController extends Controller
         $course = \App\Models\Course::findOrFail($request->course_id);
 
         if ($course->instructor_id !== $instructor->id) {
-            return back()->with('error', 'غير مسموح لك بالإضافة لهذه المجموعة');
+            return back()->with('error', __('instructor::messages.unauthorized'));
         }
 
         $file = $request->file('csv_file');
@@ -334,7 +345,7 @@ class InstructorController extends Controller
         }
         fclose($handle);
 
-        return back()->with('success', "تم استيراد $imported طالب بنجاح" . ($errors ? " ($errors أخطاء)" : ""));
+        return back()->with('success', __('instructor::messages.import_success', ['count' => $imported]) . ($errors ? " " . __('instructor::messages.import_errors', ['count' => $errors]) : ""));
     }
 
     private function getOrCreateUserForStudent($student)
@@ -369,7 +380,7 @@ class InstructorController extends Controller
             'status' => $student->status === 'active' ? 'frozen' : 'active'
         ]);
 
-        return back()->with('success', 'تم تحديث حالة الطالب بنجاح');
+        return back()->with('success', __('instructor::messages.updated'));
     }
 
     /**
@@ -383,7 +394,7 @@ class InstructorController extends Controller
             'notes' => $request->notes
         ]);
 
-        return back()->with('success', 'تم حفظ الملاحظات');
+        return back()->with('success', __('instructor::messages.saved'));
     }
 
     /**
@@ -403,7 +414,7 @@ class InstructorController extends Controller
             ->where('course_id', $request->from_course_id)
             ->update(['course_id' => $request->to_course_id]);
 
-        return back()->with('success', 'تم نقل الطالب بنجاح');
+        return back()->with('success', __('instructor::messages.updated'));
     }
 
     private function authorizeInstructor($student)
@@ -412,7 +423,7 @@ class InstructorController extends Controller
         $isRelated = $student->enrollments()->whereIn('course_id', $instructor->courses->pluck('id'))->exists();
         
         if (!$isRelated) {
-            abort(403, 'غير مصرح لك بالوصول لهذا الطالب');
+            abort(403, __('instructor::messages.unauthorized'));
         }
     }
 
@@ -434,7 +445,7 @@ class InstructorController extends Controller
     {
         $instructor = $this->resolveInstructor();
         if (!$instructor) {
-            return back()->with('error', 'يجب أن تكون مسجلاً كمعلم لإضافة طالب.');
+            return back()->with('error', __('instructor::messages.not_instructor_error'));
         }
 
         $validated = $request->validate([
@@ -496,11 +507,11 @@ class InstructorController extends Controller
             }
 
             \DB::commit();
-            return redirect()->route('instructor.students.list')->with('success', "تم إضافة الطالب '{$validated['name']}' وتسجيلة في المجموعة بنجاح.");
+            return redirect()->route('instructor.students.list')->with('success', __('instructor::messages.student_added', ['name' => $validated['name']]));
         } catch (\Exception $e) {
             \DB::rollBack();
             \Log::error('Manual student registration failed: ' . $e->getMessage());
-            return back()->withInput()->with('error', 'حدث خطأ أثناء إضافة الطالب: ' . $e->getMessage());
+            return back()->withInput()->with('error', __('instructor::messages.error_adding_student', ['message' => $e->getMessage()]));
         }
     }
 
@@ -518,7 +529,7 @@ class InstructorController extends Controller
                 ->exists();
             
             if (!$isAssociated) {
-                abort(403, 'غير مسموح لك بحذف هذا الطالب.');
+                abort(403, __('instructor::messages.unauthorized'));
             }
         }
 
@@ -552,11 +563,11 @@ class InstructorController extends Controller
             }
 
             \DB::commit();
-            return redirect()->route('instructor.students.list')->with('success', "تم حذف الطالب '{$studentName}' وجميع بياناته بنجاح.");
+            return redirect()->route('instructor.students.list')->with('success', __('instructor::messages.student_deleted', ['name' => $studentName]));
         } catch (\Exception $e) {
             \DB::rollBack();
             \Log::error('Student deletion failed: ' . $e->getMessage());
-            return back()->with('error', 'حدث خطأ أثناء محاولة حذف الطالب: ' . $e->getMessage());
+            return back()->with('error', __('instructor::messages.error_deleting_student', ['message' => $e->getMessage()]));
         }
     }
 
@@ -592,7 +603,7 @@ class InstructorController extends Controller
         $instructor = $this->resolveInstructor();
         
         if (!$instructor) {
-            return back()->with('error', 'يجب أن تكون مسجلاً كمعلم لإنشاء مجموعة.');
+            return back()->with('error', __('instructor::messages.not_instructor_error'));
         }
 
         try {
@@ -622,13 +633,13 @@ class InstructorController extends Controller
 
             \Log::info('Course created successfully: ' . $course->id);
 
-            return redirect()->route('instructor.groups.list')->with('success', "تم إنشاء المجموعة '{$course->title}' بنجاح.");
+            return redirect()->route('instructor.groups.list')->with('success', __('instructor::messages.group_created', ['title' => $course->title]));
         } catch (\Exception $e) {
             \Log::error('Failed to create course: ' . $e->getMessage(), [
                 'instructor_id' => $instructor->id,
                 'trace' => $e->getTraceAsString()
             ]);
-            return back()->withInput()->with('error', 'حدث خطأ أثناء محاولة حفظ المجموعة: ' . $e->getMessage());
+            return back()->withInput()->with('error', __('instructor::messages.error_saving_group', ['message' => $e->getMessage()]));
         }
     }
 
@@ -664,7 +675,7 @@ class InstructorController extends Controller
 
         $course->update($validated);
 
-        return redirect()->route('instructor.groups.list')->with('success', "تم تحديث بيانات المجموعة '{$course->title}' بنجاح.");
+        return redirect()->route('instructor.groups.list')->with('success', __('instructor::messages.group_updated', ['title' => $course->title]));
     }
 
     /**
@@ -688,7 +699,7 @@ class InstructorController extends Controller
         $balance = $totalDue - $totalPaid;
 
         if ($request->amount > $balance) {
-            return back()->with('error', "خطأ: المبلغ المدخل ({$request->amount}) أكبر من المتبقي على الطالب ({$balance})");
+            return back()->with('error', __('instructor::messages.collection_error', ['amount' => $request->amount, 'balance' => $balance]));
         }
 
         $sale = Sale::create([
@@ -698,7 +709,7 @@ class InstructorController extends Controller
             'paid_amount' => $request->amount,
             'status' => 'paid',
             'payment_method' => 'cash',
-            'notes' => $request->notes ?? 'تحصيل سريع من واجهة المدرس',
+            'notes' => $request->notes ?? __('instructor::messages.quick_collection_note'),
         ]);
 
         Payment::create([
@@ -710,7 +721,7 @@ class InstructorController extends Controller
             'paid_at' => now(),
         ]);
 
-        return back()->with('success', "تم تسجيل استلام {$request->amount} ج.م من الطالب {$student->name}");
+        return back()->with('success', __('instructor::messages.collection_success', ['amount' => $request->amount, 'student' => $student->name]));
     }
 
     /**
@@ -727,7 +738,7 @@ class InstructorController extends Controller
             'registration_token' => \Illuminate\Support\Str::random(16)
         ]);
 
-        return back()->with('success', "تم توليد رابط جديد للمجموعة '{$course->title}' بنجاح.");
+        return back()->with('success', __('instructor::messages.link_rotated', ['title' => $course->title]));
     }
 
     /**
@@ -741,11 +752,11 @@ class InstructorController extends Controller
         }
 
         $newCourse = $course->replicate();
-        $newCourse->title = $course->title . ' - نسخة';
+        $newCourse->title = $course->title . __('instructor::messages.copy_suffix');
         $newCourse->registration_token = \Illuminate\Support\Str::random(16);
         $newCourse->save();
 
-        return redirect()->route('instructor.groups.list')->with('success', "تم تكرار المجموعة بنجاح باسم '{$newCourse->title}'.");
+        return redirect()->route('instructor.groups.list')->with('success', __('instructor::messages.group_duplicated', ['title' => $newCourse->title]));
     }
 
     /**
@@ -760,7 +771,7 @@ class InstructorController extends Controller
 
         $course->delete();
 
-        return redirect()->route('instructor.groups.list')->with('success', "تم حذف المجموعة '{$course->title}' بنجاح.");
+        return redirect()->route('instructor.groups.list')->with('success', __('instructor::messages.group_deleted', ['title' => $course->title]));
     }
 
     /**
@@ -1170,7 +1181,23 @@ class InstructorController extends Controller
         $tenant->settings = $settings;
         $tenant->save();
 
-        return back()->with('success', 'تم تحديث إعدادات الواتساب بنجاح.');
+        return back()->with('success', __('instructor::messages.saved'));
+    }
+
+    /**
+     * Set the application locale for the session
+     */
+    public function setLocale($locale)
+    {
+        if (in_array($locale, ['ar', 'en', 'fr'])) {
+            session(['locale' => $locale]);
+            
+            if (auth()->check()) {
+                auth()->user()->update(['locale' => $locale]);
+            }
+        }
+        
+        return back();
     }
 }
 

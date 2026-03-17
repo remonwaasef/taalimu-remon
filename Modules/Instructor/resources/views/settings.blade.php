@@ -1,6 +1,6 @@
 @extends('instructor::components.layouts.master')
 
-@section('page-title', 'إعدادات المركز')
+@@section('page-title', __('instructor::settings.title'))
 
 @section('content')
 <div class="container-fluid">
@@ -11,17 +11,17 @@
                     <ul class="nav nav-tabs nav-justified border-bottom-0" id="settingsTabs" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active py-3 fw-bold border-0 rounded-0" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab">
-                                <i class="fas fa-info-circle me-2"></i> البيانات العامة
+                                <i class="fas fa-info-circle me-2"></i> {{ __('instructor::settings.general_data') }}
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link py-3 fw-bold border-0 rounded-0" id="whatsapp-tab" data-bs-toggle="tab" data-bs-target="#whatsapp" type="button" role="tab">
-                                <i class="fab fa-whatsapp me-2"></i> إعدادات الواتساب
+                                <i class="fab fa-whatsapp me-2"></i> {{ __('instructor::settings.whatsapp_settings') }}
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link py-3 fw-bold border-0 rounded-0" id="subscription-tab" data-bs-toggle="tab" data-bs-target="#subscription" type="button" role="tab">
-                                <i class="fas fa-credit-card me-2"></i> اشتراك المنصة
+                                <i class="fas fa-credit-card me-2"></i> {{ __('instructor::settings.platform_subscription') }}
                             </button>
                         </li>
                     </ul>
@@ -36,7 +36,7 @@
                                 <div class="row g-4">
                                     <div class="col-md-3 text-center border-start">
                                         <div class="mb-3">
-                                            <label class="form-label d-block fw-bold text-muted small">شعار المركز</label>
+                                            <label class="form-label d-block fw-bold text-muted small">{{ __('instructor::settings.center_logo') }}</label>
                                             <div class="position-relative d-inline-block">
                                                 <img src="{{ $tenant->logo ? asset('storage/' . $tenant->logo) : 'https://ui-avatars.com/api/?name=' . urlencode($tenant->name) . '&background=3A0CA3&color=fff&size=200' }}" 
                                                      alt="Logo" class="rounded-4 shadow-sm border" style="width: 150px; height: 150px; object-fit: contain; background: #f8fafc;">
@@ -45,26 +45,26 @@
                                                 </label>
                                                 <input type="file" name="logo" id="logoInput" class="d-none" accept="image/*">
                                             </div>
-                                            <div class="form-text x-small mt-2">يفضل استخدام صورة مربعة بحجم 512x512</div>
+                                            <div class="form-text x-small mt-2">{{ __('instructor::settings.logo_hint') }}</div>
                                         </div>
                                     </div>
 
                                     <div class="col-md-9">
                                         <div class="row g-3">
                                             <div class="col-md-6">
-                                                <label class="form-label fw-bold small text-muted">اسم المركز / المدرس</label>
+                                                <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.center_name') }}</label>
                                                 <input type="text" name="name" class="form-control bg-light border-0 rounded-3" value="{{ $tenant->name }}" required>
                                             </div>
                                             <div class="col-md-6">
-                                                <label class="form-label fw-bold small text-muted">رقم الهاتف العام</label>
-                                                <input type="text" name="phone" class="form-control bg-light border-0 rounded-3" value="{{ $tenant->phone }}" placeholder="مثال: 01012345678">
+                                                <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.general_phone') }}</label>
+                                                <input type="text" name="phone" class="form-control bg-light border-0 rounded-3" value="{{ $tenant->phone }}">
                                             </div>
                                             <div class="col-md-12">
-                                                <label class="form-label fw-bold small text-muted">العنوان</label>
-                                                <input type="text" name="address" class="form-control bg-light border-0 rounded-3" value="{{ $tenant->address }}" placeholder="أدخل عنوان المركز بالتفصيل">
+                                                <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.address') }}</label>
+                                                <input type="text" name="address" class="form-control bg-light border-0 rounded-3" value="{{ $tenant->address }}">
                                             </div>
                                             <div class="col-md-12">
-                                                <label class="form-label fw-bold small text-muted">وصف المركز (نبذة قصيرة)</label>
+                                                <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.description') }}</label>
                                                 <textarea name="description" class="form-control bg-light border-0 rounded-3" rows="3">{{ $tenant->description }}</textarea>
                                             </div>
                                         </div>
@@ -73,63 +73,63 @@
 
                                 <div class="text-start mt-4 pt-3 border-top">
                                     <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm">
-                                        <i class="fas fa-save me-2"></i> حفظ التغييرات العامة
+                                        <i class="fas fa-save me-2"></i> {{ __('instructor::settings.save_changes') }}
                                     </button>
                                 </div>
                             </form>
                         </div>
 
-                        {{-- Tab 2: WhatsApp Settings (Reused and Integrated) --}}
+                        {{-- Tab 2: WhatsApp Settings --}}
                         <div class="tab-pane fade" id="whatsapp" role="tabpanel">
                             <form action="{{ route('instructor.whatsapp.update') }}" method="POST">
                                 @csrf
                                 <div class="d-flex align-items-center justify-content-between mb-4">
-                                    <h5 class="fw-bold mb-0 text-success"><i class="fab fa-whatsapp me-2"></i> ربط خدمة WhatsApp (UltraMsg)</h5>
+                                    <h5 class="fw-bold mb-0 text-success"><i class="fab fa-whatsapp me-2"></i> {{ __('instructor::settings.whatsapp_connection') }}</h5>
                                     <div class="form-check form-switch custom-switch">
                                         <input class="form-check-input" type="checkbox" name="enabled" id="whatsappEnabled" {{ ($settings['enabled'] ?? false) ? 'checked' : '' }}>
-                                        <label class="form-check-label fw-bold ms-2" for="whatsappEnabled">تفعيل الخدمة</label>
+                                        <label class="form-check-label fw-bold ms-2" for="whatsappEnabled">{{ __('instructor::settings.enable_service') }}</label>
                                     </div>
                                 </div>
 
                                 <div class="row g-4 mb-4">
                                     <div class="col-md-4">
-                                        <label class="form-label fw-bold small text-muted">كود الدولة الافتراضي</label>
+                                        <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.default_country_code') }}</label>
                                         <div class="input-group">
                                             <span class="input-group-text bg-light border-0"><i class="fas fa-globe text-muted"></i></span>
-                                            <input type="text" name="country_code" class="form-control bg-light border-0" value="{{ $settings['country_code'] ?? '20' }}" placeholder="مثال: 20">
+                                            <input type="text" name="country_code" class="form-control bg-light border-0" value="{{ $settings['country_code'] ?? '20' }}">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="form-label fw-bold small text-muted">ID النسخة (Instance ID)</label>
-                                        <input type="text" name="instance_id" class="form-control bg-light border-0" value="{{ $settings['instance_id'] ?? '' }}" placeholder="instance12345">
+                                        <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.instance_id') }}</label>
+                                        <input type="text" name="instance_id" class="form-control bg-light border-0" value="{{ $settings['instance_id'] ?? '' }}">
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="form-label fw-bold small text-muted">الرمز السري (Token)</label>
-                                        <input type="password" name="token" class="form-control bg-light border-0" value="{{ $settings['token'] ?? '' }}" placeholder="Token">
+                                        <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.token') }}</label>
+                                        <input type="password" name="token" class="form-control bg-light border-0" value="{{ $settings['token'] ?? '' }}">
                                     </div>
                                 </div>
 
                                 <hr class="my-4 opacity-50">
 
-                                <h6 class="fw-bold mb-3"><i class="fas fa-comment-alt me-2 text-primary"></i> قوالب الرسائل</h6>
+                                <h6 class="fw-bold mb-3"><i class="fas fa-comment-alt me-2 text-primary"></i> {{ __('instructor::settings.message_templates') }}</h6>
                                 <div class="row g-3">
                                     <div class="col-md-4">
-                                        <label class="form-label fw-bold small text-muted">رسالة تسجيل الحضور</label>
-                                        <textarea name="attendance_template" class="form-control bg-light border-0" rows="4" placeholder="خالٍ لاستخدام النص الافتراضي">{{ $settings['attendance_template'] ?? '' }}</textarea>
+                                        <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.attendance_msg') }}</label>
+                                        <textarea name="attendance_template" class="form-control bg-light border-0" rows="4">{{ $settings['attendance_template'] ?? '' }}</textarea>
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="form-label fw-bold small text-muted">رسالة تأكيد الدفع</label>
-                                        <textarea name="payment_template" class="form-control bg-light border-0" rows="4" placeholder="خالٍ لاستخدام النص الافتراضي">{{ $settings['payment_template'] ?? '' }}</textarea>
+                                        <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.payment_msg') }}</label>
+                                        <textarea name="payment_template" class="form-control bg-light border-0" rows="4">{{ $settings['payment_template'] ?? '' }}</textarea>
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="form-label fw-bold small text-muted">رسالة التذكير بالمديونية</label>
-                                        <textarea name="debt_template" class="form-control bg-light border-0" rows="4" placeholder="خالٍ لاستخدام النص الافتراضي">{{ $settings['debt_template'] ?? '' }}</textarea>
+                                        <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.debt_msg') }}</label>
+                                        <textarea name="debt_template" class="form-control bg-light border-0" rows="4">{{ $settings['debt_template'] ?? '' }}</textarea>
                                     </div>
                                 </div>
 
                                 <div class="text-start mt-4 pt-3 border-top">
                                     <button type="submit" class="btn btn-success rounded-pill px-5 fw-bold shadow-sm">
-                                        <i class="fas fa-check-circle me-2"></i> حفظ إعدادات الواتساب
+                                        <i class="fas fa-check-circle me-2"></i> {{ __('instructor::settings.save_whatsapp') }}
                                     </button>
                                 </div>
                             </form>
@@ -146,12 +146,12 @@
                             {{-- 1. Consumption Overview (Status) --}}
                             <div class="bg-light rounded-4 p-4 border mb-5">
                                 <div class="d-flex justify-content-between align-items-center mb-4">
-                                    <h6 class="fw-bold mb-0 text-primary"><i class="fas fa-chart-pie me-2"></i> نظرة عامة على استهلاك الموارد</h6>
+                                    <h6 class="fw-bold mb-0 text-primary"><i class="fas fa-chart-pie me-2"></i> {{ __('instructor::settings.resource_consumption') }}</h6>
                                     @if($subscription)
                                         <div class="d-flex align-items-center gap-2">
-                                            <span class="badge bg-success py-2 px-3 rounded-pill shadow-sm"><i class="fas fa-check-circle me-1"></i> اشتراك نشط</span>
+                                            <span class="badge bg-success py-2 px-3 rounded-pill shadow-sm"><i class="fas fa-check-circle me-1"></i> {{ __('instructor::settings.active_subscription') }}</span>
                                             @if($subscription->ends_at)
-                                                <small class="text-muted fw-bold x-small">ينتهي في: {{ $subscription->ends_at->format('d/m/Y') }}</small>
+                                                <small class="text-muted fw-bold x-small">{{ __('instructor::settings.expires_on', ['date' => $subscription->ends_at->format('d/m/Y')]) }}</small>
                                             @endif
                                         </div>
                                     @endif
@@ -159,9 +159,9 @@
                                 <div class="row g-4">
                                     @php
                                         $features = [
-                                            ['code' => 'max_students', 'label' => 'الطلاب', 'icon' => 'fa-user-graduate'],
-                                            ['code' => 'max_courses', 'label' => 'المجموعات', 'icon' => 'fa-users'],
-                                            ['code' => 'max_instructors', 'label' => 'المساعدين', 'icon' => 'fa-chalkboard-teacher'],
+                                            ['code' => 'max_students', 'label' => __('instructor::settings.students'), 'icon' => 'fa-user-graduate'],
+                                            ['code' => 'max_courses', 'label' => __('instructor::settings.groups'), 'icon' => 'fa-users'],
+                                            ['code' => 'max_instructors', 'label' => __('instructor::settings.assistants'), 'icon' => 'fa-chalkboard-teacher'],
                                         ];
                                     @endphp
 
@@ -211,7 +211,7 @@
                                         <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
                                             <i class="fas fa-layer-group small"></i>
                                         </div>
-                                        <h5 class="fw-bold mb-0">الخطط والترقيات المتاحة</h5>
+                                        <h5 class="fw-bold mb-0">{{ __('instructor::settings.plans_and_upgrades') }}</h5>
                                     </div>
 
                                     <!-- Cycle Switcher -->
@@ -219,17 +219,17 @@
                                         <button type="button" @click="billingCycle = 'monthly'" 
                                                 class="btn btn-sm flex-grow-1 rounded-pill font-bold transition-all"
                                                 :class="billingCycle === 'monthly' ? 'btn-primary shadow-sm' : 'btn-link text-muted text-decoration-none'">
-                                            شهري
+                                            {{ __('instructor::settings.monthly') }}
                                         </button>
                                         <button type="button" @click="billingCycle = 'term'" 
                                                 class="btn btn-sm flex-grow-1 rounded-pill font-bold transition-all"
                                                 :class="billingCycle === 'term' ? 'btn-primary shadow-sm' : 'btn-link text-muted text-decoration-none'">
-                                            ترم
+                                            {{ __('instructor::settings.term') }}
                                         </button>
                                         <button type="button" @click="billingCycle = 'yearly'" 
                                                 class="btn btn-sm flex-grow-1 rounded-pill font-bold transition-all"
                                                 :class="billingCycle === 'yearly' ? 'btn-primary shadow-sm' : 'btn-link text-muted text-decoration-none'">
-                                            سنوي
+                                            {{ __('instructor::settings.yearly') }}
                                         </button>
                                     </div>
                                 </div>
@@ -244,11 +244,11 @@
                                                 
                                                 @if($isCurrent)
                                                     <div class="bg-primary text-white text-center py-2 fw-bold" style="font-size: 11px;">
-                                                        <i class="fas fa-star me-1"></i> باقتك الحالية
+                                                        <i class="fas fa-star me-1"></i> {{ __('instructor::settings.current_plan') }}
                                                     </div>
                                                 @elseif($pkg->is_featured)
                                                     <div class="bg-secondary text-white text-center py-1 position-absolute w-100" style="top: 0; left: 0; font-size: 10px; font-weight: bold; z-index: 10;">
-                                                        الموصى به
+                                                        {{ __('instructor::settings.recommended') }}
                                                     </div>
                                                 @endif
 
@@ -258,14 +258,14 @@
                                                         <div x-show="billingCycle === 'monthly'" class="animate-fade-in">
                                                             <div class="d-flex align-items-baseline gap-1">
                                                                 <span class="fs-4 fw-bold text-primary">{{ number_format($pkg->price) }}</span>
-                                                                <small class="text-muted x-small">ج.م / شهري</small>
+                                                                <small class="text-muted x-small">{{ __('instructor::dashboard.currency') }} / {{ __('instructor::settings.monthly') }}</small>
                                                             </div>
                                                         </div>
                                                         @if($pkg->term_price)
                                                         <div x-show="billingCycle === 'term'" class="animate-fade-in" style="display: none;">
                                                             <div class="d-flex align-items-baseline gap-1">
                                                                 <span class="fs-4 fw-bold text-primary">{{ number_format($pkg->term_price) }}</span>
-                                                                <small class="text-muted x-small">ج.م / تيرم (150 يوم)</small>
+                                                                <small class="text-muted x-small">{{ __('instructor::dashboard.currency') }} / {{ __('instructor::settings.term') }}</small>
                                                             </div>
                                                         </div>
                                                         @endif
@@ -273,7 +273,7 @@
                                                         <div x-show="billingCycle === 'yearly'" class="animate-fade-in" style="display: none;">
                                                             <div class="d-flex align-items-baseline gap-1">
                                                                 <span class="fs-4 fw-bold text-primary">{{ number_format($pkg->yearly_price) }}</span>
-                                                                <small class="text-muted x-small">ج.م / سنوي</small>
+                                                                <small class="text-muted x-small">{{ __('instructor::dashboard.currency') }} / {{ __('instructor::settings.yearly') }}</small>
                                                             </div>
                                                         </div>
                                                         @endif
@@ -286,11 +286,11 @@
                                                             @php
                                                                 $val = $feature->pivot->value;
                                                                 $displayVal = $val;
-                                                                if($val == '-1' || $val == 'unlimited') $displayVal = 'غير محدود';
+                                                                if($val == '-1' || $val == 'unlimited') $displayVal = __('instructor::settings.unlimited');
                                                                 
                                                                 $icon = 'fa-check-circle text-success';
                                                                 if($feature->type == 'boolean') {
-                                                                    $displayVal = filter_var($val, FILTER_VALIDATE_BOOLEAN) ? 'متاح' : 'غير متاح';
+                                                                    $displayVal = filter_var($val, FILTER_VALIDATE_BOOLEAN) ? __('instructor::settings.available') : __('instructor::settings.not_available');
                                                                     $icon = filter_var($val, FILTER_VALIDATE_BOOLEAN) ? 'fa-check-circle text-success' : 'fa-times-circle text-danger';
                                                                 }
                                                             @endphp
@@ -304,13 +304,21 @@
 
                                                     @if($isCurrent)
                                                         <div class="alert alert-primary bg-opacity-10 border-0 mb-0 py-3 text-center rounded-4">
-                                                            <span class="fw-bold small text-primary"><i class="fas fa-check-circle me-1"></i> باقة مفعلة</span>
+                                                            <span class="fw-bold small text-primary"><i class="fas fa-check-circle me-1"></i> {{ __('instructor::settings.active_subscription') }}</span>
                                                             @if($subscription->ends_at)
-                                                                 <div class="x-small text-muted mt-1">تنتهي: {{ $subscription->ends_at->format('d/m/Y') }}</div>
+                                                                 <div class="x-small text-muted mt-1">{{ __('instructor::settings.expires_on', ['date' => $subscription->ends_at->format('d/m/Y')]) }}</div>
                                                             @endif
                                                         </div>
                                                     @else
-                                                        <a :href="'{{ route('center.subscription.checkout', ['package' => $pkg->id, 'tenant' => $tenant->domain ?? $tenant->id]) }}?cycle=' + billingCycle" class="btn btn-outline-primary rounded-pill w-100 fw-bold py-2">اشتراك الآن</a>
+                                                        <a :href="'{{ route('center.subscription.checkout', ['package' => $pkg->id, 'tenant' => $tenant->domain ?? $tenant->id]) }}?cycle=' + billingCycle" class="btn btn-outline-primary rounded-pill w-100 fw-bold py-2">{{ __('instructor::settings.subscribe_now') }}</a>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+    <a :href="'{{ route('center.subscription.checkout', ['package' => $pkg->id, 'tenant' => $tenant->domain ?? $tenant->id]) }}?cycle=' + billingCycle" class="btn btn-outline-primary rounded-pill w-100 fw-bold py-2">اشتراك الآن</a>
                                                     @endif
                                                 </div>
                                             </div>

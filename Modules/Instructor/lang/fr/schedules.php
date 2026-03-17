@@ -1,0 +1,31 @@
+<?php
+
+return [
+    'title' => 'Horaires et Emploi du temps',
+    'subtitle' => 'Gérez les horaires des sessions et les salles pour chaque groupe.',
+    'add_schedule' => 'Ajouter un nouvel horaire',
+    'group' => 'Groupe',
+    'day' => 'Jour',
+    'time' => 'Heure',
+    'hall' => 'Salle',
+    'actions' => 'Actions',
+    'no_schedules' => 'Aucun horaire ajouté pour le moment.',
+    'create_title' => 'Ajouter un horaire de session',
+    'edit_title' => 'Modifier l\'horaire de session',
+    'select_group' => 'Sélectionner le groupe',
+    'select_day' => 'Sélectionner le jour',
+    'select_hall' => 'Sélectionner la salle',
+    'start_time' => 'Heure de début',
+    'end_time' => 'Heure de fin',
+    'save_schedule' => 'Enregistrer l\'horaire',
+    'update_schedule' => 'Mettre à jour l\'horaire',
+    'days' => [
+        '0' => 'Dimanche',
+        '1' => 'Lundi',
+        '2' => 'Mardi',
+        '3' => 'Mercredi',
+        '4' => 'Jeudi',
+        '5' => 'Vendredi',
+        '6' => 'Samedi',
+    ],
+];

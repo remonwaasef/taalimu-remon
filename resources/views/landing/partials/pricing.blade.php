@@ -1,4 +1,4 @@
-<section id="pricing" class="py-16 lg:py-24 bg-muted/30" 
+<section id="pricing" class="py-16 lg:py-24 bg-white" 
          x-data="{ 
              billingCycle: 'monthly',
             userCountry: 'default',
@@ -231,8 +231,8 @@
                         <a :href="'{{ route('register') }}?plan={{ $package->slug }}&cycle=' + billingCycle"
                            class="inline-flex items-center justify-center rounded-full text-sm font-bold h-10 px-6 w-full group transition-all
                            {{ $isFeatured 
-                               ? 'bg-white text-primary hover:bg-white/90 shadow-lg' 
-                               : 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg' }}">
+                               ? 'bg-secondary text-white hover:bg-secondary/90 shadow-lg' 
+                               : 'bg-secondary text-white hover:bg-secondary/90 shadow-lg' }}">
                             {{ $package->price == 0 ? __('landing.pricing.cta_free') : __('landing.pricing.cta_paid') }}
                         </a>
                     </div>

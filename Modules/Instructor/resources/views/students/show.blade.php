@@ -1,6 +1,6 @@
 @extends('instructor::components.layouts.master')
 
-@section('page-title', 'ملف الطالب')
+@section('page-title', __('instructor::students.student_profile'))
 
 @section('content')
 <div class="container-fluid">
@@ -27,7 +27,10 @@
                     <div class="d-flex justify-content-center gap-2 mb-4">
                         @php
                             $portalUrl = route('student.portal', $student->user->qr_identifier ?? 'invalid');
-                            $shareMsg = "مرحباً {$student->name}، يمكنك متابعة حضورك وحساباتك عبر رابط بوابتك التعليمية: {$portalUrl}";
+                            $shareMsg = __('instructor::dashboard.student_portal_share_msg', [
+                                'name' => $student->name,
+                                'url' => $portalUrl
+                            ]);
                             // Format phone: remove any non-digits, and if starts with 0, replace with 20
                             $cleanPhone = preg_replace('/[^0-9]/', '', $student->phone);
                             if (str_starts_with($cleanPhone, '0')) {
@@ -35,7 +38,7 @@
                             }
                         @endphp
                         <a href="https://api.whatsapp.com/send?phone={{ $cleanPhone }}&text={{ urlencode($shareMsg) }}" target="_blank" class="btn btn-success rounded-pill px-4">
-                            <i class="fab fa-whatsapp me-2"></i> بوابة الطالب
+                            <i class="fab fa-whatsapp me-2"></i> {{ __('instructor::students.student_portal') ?? 'بوابة الطالب' }}
                         </a>
                         <button onclick="copyPortalLink('{{ $portalUrl }}')" class="btn btn-light rounded-pill px-3" title="نسخ رابط البوابة">
                             <i class="fas fa-link"></i>
@@ -49,16 +52,16 @@
 
                     <div class="text-start">
                         <div class="d-flex justify-content-between mb-3">
-                            <span class="text-muted small">تاريخ الانضمام:</span>
+                            <span class="text-muted small">{{ __('instructor::students.registration_date') ?? 'تاريخ الانضمام' }}:</span>
                             <span class="fw-bold small">{{ $student->created_at->format('Y/m/d') }}</span>
                         </div>
                         <div class="d-flex justify-content-between mb-3">
-                            <span class="text-muted small">رقم الهاتف:</span>
+                            <span class="text-muted small">{{ __('instructor::students.phone') }}:</span>
                             <span class="fw-bold small" dir="ltr">{{ $student->phone }}</span>
                         </div>
                         <div class="d-flex justify-content-between mb-0">
-                            <span class="text-muted small">الحالة:</span>
-                            <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">نشط</span>
+                            <span class="text-muted small">{{ __('instructor::students.status') }}:</span>
+                            <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{ __('instructor::students.active') }}</span>
                         </div>
                     </div>
                 </div>
@@ -75,7 +78,7 @@
                                 <div class="bg-white bg-opacity-20 p-2 rounded-3">
                                     <i class="fas fa-calendar-check fa-lg"></i>
                                 </div>
-                                <span class="badge bg-white bg-opacity-20 rounded-pill">نسبة الحضور</span>
+                                <span class="badge bg-white bg-opacity-20 rounded-pill">{{ __('instructor::students.attendance_rate') }}</span>
                             </div>
                             @php
                                 $attendanceTotal = $attendances->count();
@@ -92,7 +95,7 @@
                                 <div class="bg-white bg-opacity-20 p-2 rounded-3">
                                     <i class="fas fa-money-bill-wave fa-lg"></i>
                                 </div>
-                                <span class="badge bg-white bg-opacity-20 rounded-pill">إجمالي المدفوع</span>
+                                <span class="badge bg-white bg-opacity-20 rounded-pill">{{ __('instructor::students.amount_paid') }}</span>
                             </div>
                             <h2 class="fw-bold mb-0">{{ number_format($student->sales->sum('paid_amount'), 2) }} <small class="fs-6">ج.م</small></h2>
                         </div>
@@ -110,7 +113,7 @@
                                 <div class="bg-white bg-opacity-20 p-2 rounded-3">
                                     <i class="fas fa-exclamation-triangle fa-lg"></i>
                                 </div>
-                                <span class="badge bg-white bg-opacity-20 rounded-pill">المتبقي</span>
+                                <span class="badge bg-white bg-opacity-20 rounded-pill">{{ __('instructor::students.balance') }}</span>
                             </div>
                             <h2 class="fw-bold mb-0">{{ number_format($balance, 2) }} <small class="fs-6">ج.م</small></h2>
                         </div>
@@ -122,18 +125,22 @@
                 <div class="alert alert-warning border-0 rounded-4 shadow-sm mb-4">
                     <div class="d-flex align-items-center justify-content-between p-2">
                         <div>
-                            <h6 class="fw-bold mb-1 text-dark">تذكير بسداد المصروفات</h6>
-                            <p class="text-muted small mb-0">الطالب لديه مديونية متبقية قدرها {{ number_format($balance, 2) }} ج.م</p>
+                            <h6 class="fw-bold mb-1 text-dark">{{ __('instructor::students.payment_reminder_title') ?? 'تذكير بسداد المصروفات' }}</h6>
+                            <p class="text-muted small mb-0">{{ __('instructor::students.balance_due_msg', ['amount' => number_format($balance, 2)]) }}</p>
                         </div>
                         @php
-                            $msg = "تحية طيبة، نود تذكيركم بأن الطالب {$student->name} لديه مديونية متبقية قدرها " . number_format($balance, 2) . " ج.م لمجموعات المدرس " . (auth()->user()->name ?? 'المعلم') . ". يرجى السداد في أقرب وقت. شكراً لكم.";
+                            $msg = __('instructor::dashboard.payment_reminder_msg', [
+                                'name' => $student->name,
+                                'amount' => number_format($balance, 2),
+                                'instructor' => auth()->user()->name ?? 'المعلم'
+                            ]);
                             $cleanPhone = preg_replace('/[^0-9]/', '', $student->phone);
                             if (str_starts_with($cleanPhone, '0')) {
                                 $cleanPhone = '20' . substr($cleanPhone, 1);
                             }
                         @endphp
                         <a href="https://api.whatsapp.com/send?phone={{ $cleanPhone }}&text={{ urlencode($msg) }}" target="_blank" class="btn btn-warning rounded-pill px-4 fw-bold">
-                            <i class="fab fa-whatsapp me-2"></i> إرسال تذكير
+                            <i class="fab fa-whatsapp me-2"></i> {{ __('instructor::students.send_reminder') ?? 'إرسال تذكير' }}
                         </a>
                     </div>
                 </div>
@@ -144,10 +151,10 @@
                 <div class="card-header bg-white border-0 p-0">
                     <ul class="nav nav-tabs nav-fill border-0" id="studentTabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active border-0 py-3 fw-bold" id="attendance-tab" data-bs-toggle="tab" data-bs-target="#attendance-panel" type="button" role="tab">سجل الحضور</button>
+                            <button class="nav-link active border-0 py-3 fw-bold" id="attendance-tab" data-bs-toggle="tab" data-bs-target="#attendance-panel" type="button" role="tab">{{ __('instructor::students.attendance') }}</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link border-0 py-3 fw-bold" id="payments-tab" data-bs-toggle="tab" data-bs-target="#payments-panel" type="button" role="tab">سجل المدفوعات</button>
+                            <button class="nav-link border-0 py-3 fw-bold" id="payments-tab" data-bs-toggle="tab" data-bs-target="#payments-panel" type="button" role="tab">{{ __('instructor::students.payments') }}</button>
                         </li>
                     </ul>
                 </div>
@@ -159,10 +166,10 @@
                                 <table class="table table-hover align-middle mb-0 text-center">
                                     <thead class="bg-light">
                                         <tr>
-                                            <th>التاريخ</th>
-                                            <th>المجموعة</th>
-                                            <th>الموعد</th>
-                                            <th>الحالة</th>
+                                            <th>{{ __('instructor::dashboard.date') }}</th>
+                                            <th>{{ __('instructor::students.groups') }}</th>
+                                            <th>{{ __('instructor::dashboard.time') ?? 'الموعد' }}</th>
+                                            <th>{{ __('instructor::students.status') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -177,9 +184,9 @@
                                                 </td>
                                                 <td>
                                                     @if($attendance->status == 'present')
-                                                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">حاضر</span>
+                                                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{ __('instructor::students.present') }}</span>
                                                     @else
-                                                        <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">غائب</span>
+                                                        <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">{{ __('instructor::students.absent') }}</span>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -199,10 +206,10 @@
                                 <table class="table table-hover align-middle mb-0 text-center">
                                     <thead class="bg-light">
                                         <tr>
-                                            <th>التاريخ</th>
-                                            <th>المبلغ</th>
-                                            <th>طريقة الدفع</th>
-                                            <th>ملاحظات</th>
+                                            <th>{{ __('instructor::dashboard.date') }}</th>
+                                            <th>{{ __('instructor::students.amount') }}</th>
+                                            <th>{{ __('instructor::students.payment_method') }}</th>
+                                            <th>{{ __('instructor::students.notes') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -212,7 +219,7 @@
                                                 <td class="fw-bold">{{ number_format($sale->paid_amount, 2) }} ج.م</td>
                                                 <td>
                                                     <span class="badge bg-info bg-opacity-10 text-info rounded-pill px-3">
-                                                        {{ $sale->payment_method == 'cash' ? 'نقدي' : 'أخرى' }}
+                                                        {{ $sale->payment_method == 'cash' ? __('instructor::students.cash') : __('instructor::students.other') }}
                                                     </span>
                                                 </td>
                                                 <td><small class="text-muted">{{ $sale->notes ?: '-' }}</small></td>
@@ -252,7 +259,7 @@
 <script>
     function copyPortalLink(url) {
         navigator.clipboard.writeText(url).then(() => {
-            alert('تم نسخ رابط بوابة الطالب بنجاح!');
+            alert("{{ __('instructor::dashboard.portal_link_copied') ?? 'تم نسخ رابط بوابة الطالب بنجاح!' }}");
         }).catch(err => {
             console.error('Failed to copy: ', err);
         });

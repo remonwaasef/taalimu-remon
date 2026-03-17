@@ -1,0 +1,31 @@
+<?php
+
+return [
+    'title' => 'Schedules & Timetable',
+    'subtitle' => 'Manage session times and halls for each group.',
+    'add_schedule' => 'Add New Schedule',
+    'group' => 'Group',
+    'day' => 'Day',
+    'time' => 'Time',
+    'hall' => 'Hall',
+    'actions' => 'Actions',
+    'no_schedules' => 'No schedules added yet.',
+    'create_title' => 'Add Session Schedule',
+    'edit_title' => 'Edit Session Schedule',
+    'select_group' => 'Select Group',
+    'select_day' => 'Select Day',
+    'select_hall' => 'Select Hall',
+    'start_time' => 'Start Time',
+    'end_time' => 'End Time',
+    'save_schedule' => 'Save Schedule',
+    'update_schedule' => 'Update Schedule',
+    'days' => [
+        '0' => 'Sunday',
+        '1' => 'Monday',
+        '2' => 'Tuesday',
+        '3' => 'Wednesday',
+        '4' => 'Thursday',
+        '5' => 'Friday',
+        '6' => 'Saturday',
+    ],
+];

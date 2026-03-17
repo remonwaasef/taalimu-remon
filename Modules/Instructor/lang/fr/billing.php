@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'title' => 'Gestion de la facturation et des paiements',
+    'subtitle' => 'Suivez simplement la collecte des frais des étudiants',
+    'student_name' => 'Nom de l\'étudiant',
+    'total_due' => 'Total dû',
+    'total_paid' => 'Total payé',
+    'balance' => 'Solde',
+    'actions' => 'Actions',
+    'collect' => 'Collecter',
+    'paid' => 'Payé',
+    'whatsapp_reminder' => 'Rappel WhatsApp',
+    'no_results' => 'Aucun résultat correspondant trouvé.',
+    'record_payment' => 'Enregistrer la réception du paiement',
+    'collect_from' => 'Collecter auprès de l\'étudiant',
+    'amount_received' => 'Montant reçu (EGP)',
+    'notes' => 'Notes',
+    'notes_placeholder' => 'Optionnel...',
+    'confirm_collection' => 'Confirmer la collecte',
+    'all_students' => 'Tous les étudiants',
+    'unpaid' => 'Solde impayé',
+    'fully_paid' => 'Entièrement payé',
+    'student_count' => ':count Étudiants',
+    'reminder_msg' => 'Salutations, nous aimerions vous rappeler que l\'étudiant :student a un solde impayé de :balance EGP pour les groupes de l\'instructeur :instructor. Veuillez régler dès que possible. Merci.',
+];
