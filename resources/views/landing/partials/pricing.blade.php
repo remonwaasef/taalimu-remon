@@ -1,4 +1,4 @@
-<section id="pricing" class="py-12 lg:py-16 bg-slate-100 border-y border-slate-200" 
+<section id="pricing" class="py-8 lg:py-12 bg-slate-100 border-y border-slate-200" 
          x-data="{ 
              billingCycle: 'monthly',
             userCountry: 'default',
