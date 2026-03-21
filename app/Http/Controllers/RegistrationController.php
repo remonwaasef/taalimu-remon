@@ -49,6 +49,16 @@ class RegistrationController extends Controller
                 'yearly_price_value' => $p->yearly_price ? number_format($p->yearly_price, 0) : number_format($p->price * 10, 0),
                 'yearly_price_raw' => $p->yearly_price ?: ($p->price * 10),
                 'regional_prices' => $p->regional_prices ?? [],
+                'features' => ($p->display_features && is_array($p->display_features) && count($p->display_features) > 0) 
+                    ? $p->display_features 
+                    : $p->features->map(function($f) {
+                        $name = app()->getLocale() == 'ar' ? $f->name : ($f->name_en ?: $f->name);
+                        $value = $f->pivot->value;
+                        if ($value && !in_array(strtolower($value), ['true', '1', 'yes'])) {
+                            return (app()->getLocale() == 'ar' ? ($name . ': ' . $value) : ($name . ': ' . $value));
+                        }
+                        return $name;
+                    })->toArray(),
             ];
         })->values();
 
