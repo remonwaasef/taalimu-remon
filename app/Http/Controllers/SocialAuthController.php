@@ -187,9 +187,16 @@ class SocialAuthController extends Controller
                 'term_price_value' => $p->term_price ? number_format($p->term_price, 0) : number_format($p->price * 4, 0),
                 'term_price_raw' => $p->term_price ?: ($p->price * 4),
                 'regional_prices' => $p->regional_prices ?? [],
-                'features' => $p->display_features && is_array($p->display_features) ? $p->display_features : $p->features->map(function($f) {
-                    return app()->getLocale() == 'ar' ? $f->name : ($f->name_en ?: $f->name);
-                })->toArray(),
+                'features' => ($p->display_features && is_array($p->display_features) && count($p->display_features) > 0) 
+                    ? $p->display_features 
+                    : $p->features->map(function($f) {
+                        $name = app()->getLocale() == 'ar' ? $f->name : ($f->name_en ?: $f->name);
+                        $value = $f->pivot->value;
+                        if ($value && !in_array(strtolower($value), ['true', '1', 'yes'])) {
+                            return (app()->getLocale() == 'ar' ? ($name . ': ' . $value) : ($name . ': ' . $value));
+                        }
+                        return $name;
+                    })->toArray(),
             ];
         })->values();
 
