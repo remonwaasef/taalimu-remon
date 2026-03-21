@@ -12,7 +12,7 @@
             <div class="col-span-2 lg:col-span-2 space-y-8">
                 <!-- Logo -->
                 <a href="{{ route('home') }}" class="flex items-center gap-2.5 group transition-all duration-300">
-                    <img src="{{ asset('images/brand/logo-full.png?v=2') }}" alt="{{ config('app.name') }}" class="h-9 w-auto object-contain transition-transform duration-500 group-hover:scale-110">
+                    <img src="{{ asset('images/brand/logo-full.png?v=2') }}" alt="{{ config('app.name') }}" class="h-9 w-auto object-contain transition-transform duration-500 group-hover:scale-110 mix-blend-multiply">
                     <div class="flex flex-col">
                         <span class="font-bold text-lg text-primary leading-none tracking-tight">
                             {{ \App\Models\SiteSetting::get('site_name', 'Taalimu') }}
