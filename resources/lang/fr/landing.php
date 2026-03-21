@@ -9,6 +9,7 @@ return [
         'faq' => 'FAQ',
         'login' => 'Connexion',
         'start_free' => 'Commencer Gratuitement',
+        'badge_short' => 'Taalimu - Gestion Éducative',
     ],
     'nav' => [
         'features' => 'Fonctionnalités',
