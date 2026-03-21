@@ -183,248 +183,204 @@ window.addEventListener('pageshow', (event) => {
      @reset-submission-state.window="isSubmitting = false"
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
     
-    <!-- Main Centered Card Container (Simplified Single Column) -->
-    <div class="w-full max-w-xl bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100/50 animate-fade-in-up md:backdrop-blur-xl relative">
+    <!-- Main Centered Card Container (Optimized Layout) -->
+    <div class="w-full max-w-4xl bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100/50 animate-fade-in-up md:backdrop-blur-xl relative">
         
-        <!-- Header & Account Info -->
-        <div class="bg-white p-8 lg:p-12 pb-0">
-            {{-- Verified Account Pill --}}
-            <div class="mb-10 animate-fade-in">
-                <div class="flex items-center gap-4 p-5 bg-slate-50 border border-slate-100 rounded-[2rem] shadow-sm group hover:border-brand-secondary/30 transition-all">
-                    <div class="w-14 h-14 bg-white border-2 border-brand-secondary/10 rounded-full flex items-center justify-center text-brand-secondary font-black text-2xl group-hover:scale-110 transition-transform shadow-sm">
-                        {{ mb_substr(session('google_user.name', 'U'), 0, 1) }}
+        <div class="grid grid-cols-1 lg:grid-cols-12">
+            <!-- Left Info Panel (Hidden on Mobile or as Sidebar) -->
+            <div class="lg:col-span-4 bg-slate-50/50 border-e border-slate-100 p-6 lg:p-10 flex flex-col justify-between">
+                <div>
+                    {{-- Verified Account Pill --}}
+                    <div class="mb-8 animate-fade-in">
+                        <div class="flex items-center gap-3 p-3 bg-white border border-slate-100 rounded-2xl shadow-sm group hover:border-brand-secondary/30 transition-all">
+                            <div class="w-10 h-10 bg-slate-50 border border-brand-secondary/10 rounded-full flex items-center justify-center text-brand-secondary font-black text-lg group-hover:scale-110 transition-transform shadow-sm">
+                                {{ mb_substr(session('google_user.name', 'U'), 0, 1) }}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="font-black text-slate-900 text-xs truncate uppercase tracking-tight">{{ session('google_user.name', 'User') }}</p>
+                                <p class="text-slate-500 text-[10px] truncate font-medium opacity-80">{{ session('google_user.email') }}</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="font-black text-slate-900 text-sm truncate uppercase tracking-tight">{{ session('google_user.name', 'User') }}</p>
-                        <p class="text-slate-500 text-xs truncate font-medium opacity-80">{{ session('google_user.email') }}</p>
+
+                    <div class="mb-8">
+                        <h1 class="text-2xl font-black text-slate-900 mb-2 font-arabic leading-tight">
+                            {{ app()->isLocale('ar') ? 'تأكيد الحساب' : 'Confirm Account' }}
+                        </h1>
+                        <p class="text-slate-500 text-xs font-arabic font-medium opacity-80 leading-relaxed">
+                            {{ app()->isLocale('ar') ? 'خطوة واحدة لنبدأ في تجهيز منصتك التعليمية' : 'One last step to complete your platform setup' }}
+                        </p>
                     </div>
-                    <div class="flex-shrink-0">
-                        <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[11px] font-black ring-1 ring-inset ring-emerald-500/20 shadow-sm">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                            {{ app()->getLocale() == 'ar' ? 'حساب موثق' : 'Verified Account' }}
-                        </span>
+
+                    <!-- Price Summary Card (Integrated into Sidebar) -->
+                    <div class="p-5 rounded-2xl bg-white border border-slate-100 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex flex-col">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ __('auth.register.selected_plan') }}</span>
+                                    <button type="button" @click="showPlanModal = true" class="text-[9px] font-black text-brand-secondary underline hover:opacity-70 transition-opacity uppercase tracking-widest">
+                                        {{ app()->getLocale() == 'ar' ? 'تغيير' : 'Change' }}
+                                    </button>
+                                </div>
+                                <h3 class="text-lg font-black text-slate-900 font-arabic" x-text="currentPlan.name"></h3>
+                            </div>
+                        </div>
+
+                        <!-- Price & Switcher -->
+                        <div class="pt-4 border-t border-slate-50">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">{{ app()->getLocale() == 'ar' ? 'الإجمالي' : 'Total' }}</span>
+                                <div class="text-right">
+                                    <template x-if="couponStatus === 'valid'">
+                                        <div class="text-[10px] font-black text-emerald-600 mb-1 animate-fade-in">-<span x-text="couponDiscountAmount.toLocaleString()"></span> <span x-text="currentPriceData.currency"></span></div>
+                                    </template>
+                                    <div class="flex items-baseline gap-1 text-brand-secondary">
+                                        <span class="text-2xl font-black tracking-tighter" x-text="finalPrice.toLocaleString()"></span>
+                                        <span class="text-xs font-bold opacity-60" x-text="currentPriceData.currency"></span>
+                                    </div>
+                                    <span class="text-[9px] font-bold text-slate-400" x-text="'/' + (billingCycle === 'yearly' ? '{{ app()->getLocale() == 'ar' ? 'سنة' : 'year' }}' : (billingCycle === 'term' ? '{{ app()->getLocale() == 'ar' ? 'ترم' : 'term' }}' : '{{ app()->getLocale() == 'ar' ? 'شهر' : 'month' }}'))"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex p-1 bg-slate-100 rounded-xl items-center">
+                                <button type="button" @click="billingCycle = 'monthly'" 
+                                        class="flex-1 py-1.5 text-[9px] font-black rounded-lg transition-all"
+                                        :class="billingCycle === 'monthly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
+                                    {{ app()->getLocale() == 'ar' ? 'شهري' : 'Month' }}
+                                </button>
+                                <button type="button" @click="billingCycle = 'term'" 
+                                        class="flex-1 py-1.5 text-[9px] font-black rounded-lg transition-all"
+                                        :class="billingCycle === 'term' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
+                                    {{ app()->getLocale() == 'ar' ? 'ترم' : 'Term' }}
+                                </button>
+                                <button type="button" @click="billingCycle = 'yearly'" 
+                                        class="flex-1 py-1.5 text-[9px] font-black rounded-lg transition-all"
+                                        :class="billingCycle === 'yearly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
+                                    {{ app()->getLocale() == 'ar' ? 'سنوي' : 'Yearly' }}
+                                </button>
+                            </div>
+                        </div>
                     </div>
+                </div>
+
+                <div class="hidden lg:flex items-center gap-3 text-slate-400 text-[10px] font-bold opacity-60">
+                    <i class="bi bi-shield-check text-emerald-500 text-sm"></i>
+                    <span>{{ app()->getLocale() == 'ar' ? 'جميع البيانات مشفرة وآمنة تماماً' : 'All data is encrypted and secure' }}</span>
                 </div>
             </div>
 
-            <!-- Contextual Header -->
-            <div class="mb-8 text-center">
-                <h1 class="text-3xl lg:text-4xl font-black text-slate-900 mb-4 font-arabic leading-tight">
-                    {{ app()->isLocale('ar') ? 'تأكيد الحساب' : 'Confirm Account' }}
-                </h1>
-                <p class="text-slate-500 text-base font-arabic font-medium opacity-80 max-w-[320px] mx-auto">
-                    {{ app()->isLocale('ar') ? 'خطوة واحدة لنبدأ في تجهيز منصتك التعليمية' : 'One last step to complete your platform setup' }}
-                </p>
-            </div>
-        </div>
-
-        <!-- Form Content -->
-        <div class="p-8 lg:p-12 pt-0">
-            @if ($errors->any())
-                <div class="bg-red-50 border-2 border-red-50 rounded-3xl p-6 mb-8 animate-shake">
-                    <div class="flex items-start gap-4">
-                        <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 text-red-600">
-                            <i class="bi bi-exclamation-triangle-fill text-xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-sm font-black text-red-900 font-arabic mb-1">{{ __('auth.register.registration_error') }}</h3>
-                            <ul class="text-[13px] text-red-700 font-arabic opacity-90 space-y-0.5">
-                                @foreach ($errors->all() as $error) <li>• {{ $error }}</li> @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            @endif
-
-            <form action="{{ route('google.complete-registration') }}" method="POST" class="space-y-6" @submit="handleSubmit($event)">
-                @csrf
-                <input type="hidden" name="plan" x-model="selectedPlan">
-                <input type="hidden" name="account_type" x-model="accountType">
-                <input type="hidden" name="billing_cycle" x-model="billingCycle">
-
-                {{-- Center Name --}}
-                <div class="space-y-1.5">
-                    <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">
-                        <span x-text="accountType === 'center' ? '{{ __('auth.register.center_name') }}' : ({{ Js::from(app()->isLocale('ar') ? 'اسم المدرس / المنصة' : 'Teacher / Platform Name') }})"></span>
-                    </label>
-                    <div class="relative group">
-                        <div class="absolute inset-y-0 start-0 ps-5 flex items-center pointer-events-none text-slate-300 group-focus-within:text-brand-secondary transition-colors"><i class="bi bi-building"></i></div>
-                        <input type="text" name="center_name" x-model="centerName"
-                            @input="if(!manuallyEditedSubdomain) { subdomain = generateSlug(centerName); checkSubdomain(); }"
-                            class="w-full h-14 ps-12 pe-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold font-arabic focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
-                            placeholder="{{ __('auth.register.center_name_placeholder') }}" required autofocus>
-                    </div>
-                </div>
-
-                {{-- Subdomain Field --}}
-                <div class="space-y-1.5">
-                    <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ app()->isLocale('ar') ? 'رابط المنصة' : 'Platform Link' }}</label>
-                    <div class="relative flex items-center w-full group" dir="ltr">
-                        <div class="absolute left-0 inset-y-0 flex items-center px-4 pointer-events-none text-brand-secondary font-black text-xs bg-brand-secondary/5 border-r border-brand-secondary/10 rounded-l-2xl">https://</div>
-                        <input type="text" name="subdomain" x-model="subdomain"
-                            @input="manuallyEditedSubdomain = true; subdomain = cleanSlug(subdomain);"
-                            @input.debounce.500ms="checkSubdomain()"
-                            class="w-full h-14 pl-[80px] pr-[115px] bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold font-sans focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
-                            placeholder="center-name" required>
-                        <div class="absolute right-0 inset-y-0 flex items-center pr-4 pointer-events-none text-slate-400 font-bold text-xs gap-3">
-                            <span>.taalimu.com</span>
-                            <div class="flex items-center justify-center w-5 h-5">
-                                <template x-if="subdomainStatus === 'loading'"><div class="w-4 h-4 border-2 border-brand-secondary border-t-transparent rounded-full animate-spin"></div></template>
-                                <template x-if="subdomainStatus === 'valid'"><i class="bi bi-check-circle-fill text-emerald-500 text-lg"></i></template>
-                                <template x-if="subdomainStatus === 'invalid'"><i class="bi bi-x-circle-fill text-red-500 text-lg"></i></template>
+            <!-- Right Content Panel (Form) -->
+            <div class="lg:col-span-8 p-6 lg:p-10">
+                @if ($errors->any())
+                    <div class="bg-red-50 border-2 border-red-50 rounded-2xl p-4 mb-6 animate-shake">
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 text-red-600">
+                                <i class="bi bi-exclamation-triangle-fill"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xs font-black text-red-900 font-arabic mb-1">{{ __('auth.register.registration_error') }}</h3>
+                                <ul class="text-[11px] text-red-700 font-arabic opacity-90">
+                                    @foreach ($errors->all() as $error) <li>• {{ $error }}</li> @endforeach
+                                </ul>
                             </div>
                         </div>
                     </div>
-                    <p x-show="subdomainMessage" :class="subdomainStatus === 'valid' ? 'text-emerald-600' : 'text-red-500'" 
-                       class="text-[11px] font-bold px-2 mt-1 animate-fade-in" x-text="subdomainMessage"></p>
-                </div>
+                @endif
 
-                {{-- Phone Field --}}
-                <div class="space-y-1.5">
-                    <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.phone') }}</label>
-                    <div class="relative group">
-                        <div class="absolute inset-y-0 start-0 ps-5 flex items-center pointer-events-none text-slate-300 group-focus-within:text-brand-secondary transition-colors"><i class="bi bi-telephone"></i></div>
-                        <input type="text" name="phone" value="{{ old('phone') }}"
-                            class="w-full h-14 ps-12 pe-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
-                            placeholder="010xxxxxxx" required>
-                    </div>
-                </div>
+                <form action="{{ route('google.complete-registration') }}" method="POST" class="space-y-4" @submit="handleSubmit($event)">
+                    @csrf
+                    <input type="hidden" name="plan" x-model="selectedPlan">
+                    <input type="hidden" name="account_type" x-model="accountType">
+                    <input type="hidden" name="billing_cycle" x-model="billingCycle">
 
-                <!-- Coupon -->
-                <div class="pt-2">
-                    <button type="button" x-show="!showCouponInput && couponStatus !== 'valid'" @click="showCouponInput = true" 
-                            class="text-sm font-black text-brand-secondary hover:underline flex items-center gap-2 font-arabic transition-all">
-                        <i class="bi bi-tag-fill"></i> {{ __('auth.register.have_coupon') ?? 'هل لديك كود خصم؟' }}
-                    </button>
-                    <div x-show="showCouponInput || couponStatus === 'valid'" x-transition class="space-y-1.5">
-                        <label class="text-[11px] font-black text-slate-400 px-1 uppercase">{{ __('admin.coupon_code') }}</label>
-                        <div class="relative">
-                            <input type="text" name="coupon_code" x-model="couponCode" @input.debounce.500ms="validateCoupon()"
-                                class="w-full h-12 px-4 bg-slate-50 border-2 border-slate-100 rounded-xl text-sm font-black uppercase focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all"
-                                :class="couponStatus === 'valid' ? 'border-emerald-200 bg-emerald-50' : (couponStatus === 'invalid' ? 'border-red-200 bg-red-50' : '')">
-                            <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                                <template x-if="couponStatus === 'loading'"><div class="w-4 h-4 border-2 border-brand-secondary border-t-transparent rounded-full animate-spin"></div></template>
-                                <template x-if="couponStatus === 'valid'"><i class="bi bi-patch-check-fill text-emerald-500"></i></template>
-                                <template x-if="couponStatus === 'invalid'"><i class="bi bi-x-circle-fill text-red-400"></i></template>
-                            </div>
+                    {{-- Center Name --}}
+                    <div class="space-y-1">
+                        <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">
+                            <span x-text="accountType === 'center' ? '{{ __('auth.register.center_name') }}' : ({{ Js::from(app()->isLocale('ar') ? 'اسم المدرس / المنصة' : 'Teacher / Platform Name') }})"></span>
+                        </label>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 start-0 ps-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-brand-secondary transition-colors"><i class="bi bi-building"></i></div>
+                            <input type="text" name="center_name" x-model="centerName"
+                                @input="if(!manuallyEditedSubdomain) { subdomain = generateSlug(centerName); checkSubdomain(); }"
+                                class="w-full h-11 ps-10 pe-5 bg-slate-50/50 border-2 border-slate-100 rounded-xl text-base font-bold font-arabic focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
+                                placeholder="{{ __('auth.register.center_name_placeholder') }}" required autofocus>
                         </div>
                     </div>
-                </div>
 
-                <!-- Simplified Price Summary Card -->
-                <div class="p-6 rounded-3xl bg-slate-50/80 border border-slate-100 space-y-4">
-                    <div class="flex items-center justify-between">
-                        <div class="flex flex-col">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ __('auth.register.selected_plan') }}</span>
-                                <button type="button" @click="showPlanModal = true" class="text-[10px] font-black text-brand-secondary underline underline-offset-2 hover:opacity-70 transition-opacity uppercase tracking-widest">
-                                    {{ app()->getLocale() == 'ar' ? 'تغيير' : 'Change' }}
-                                </button>
-                            </div>
-                            <h3 class="text-xl font-black text-slate-900 font-arabic" x-text="currentPlan.name"></h3>
-                        </div>
-                        <div class="text-right">
-                            <template x-if="couponStatus === 'valid'">
-                                <div class="text-[11px] font-black text-emerald-600 mb-1 animate-fade-in">-<span x-text="couponDiscountAmount.toLocaleString()"></span> <span x-text="currentPriceData.currency"></span></div>
-                            </template>
-                            <div class="flex items-baseline gap-1 text-brand-secondary">
-                                <span class="text-3xl font-black tracking-tighter" x-text="finalPrice.toLocaleString()"></span>
-                                <span class="text-sm font-bold opacity-60" x-text="currentPriceData.currency"></span>
-                            </div>
-                            <span class="text-[10px] font-bold text-slate-400" x-text="'/' + (billingCycle === 'yearly' ? '{{ app()->getLocale() == 'ar' ? 'سنة' : 'year' }}' : (billingCycle === 'term' ? '{{ app()->getLocale() == 'ar' ? 'ترم' : 'term' }}' : '{{ app()->getLocale() == 'ar' ? 'شهر' : 'month' }}'))"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Plan Selection Modal -->
-                <div x-show="showPlanModal" 
-                     x-transition:enter="transition ease-out duration-300"
-                     x-transition:enter-start="opacity-0"
-                     x-transition:enter-end="opacity-100"
-                     x-transition:leave="transition ease-in duration-200"
-                     x-transition:leave-start="opacity-100"
-                     x-transition:leave-end="opacity-0"
-                     class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
-                     x-cloak>
-                    <div @click.away="showPlanModal = false" 
-                         class="bg-white rounded-[2.5rem] w-full max-w-lg shadow-2xl overflow-hidden animate-scale-in">
-                        <div class="p-8 border-b border-slate-100 bg-slate-50/50">
-                            <div class="flex justify-between items-center mb-6">
-                                <h3 class="text-xl font-black text-slate-900 font-arabic">{{ app()->getLocale() == 'ar' ? 'اختر الباقة المناسبة' : 'Select Plan' }}</h3>
-                                <button type="button" @click="showPlanModal = false" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors">
-                                    <i class="bi bi-x-lg"></i>
-                                </button>
-                            </div>
-                            <!-- Billing Toggle -->
-                            <div class="flex justify-center">
-                                <div class="inline-flex bg-slate-200/50 p-1.5 rounded-2xl border border-slate-200" dir="ltr">
-                                    <button type="button" @click="billingCycle = 'monthly'" 
-                                            class="px-5 py-2 rounded-xl text-[13px] font-black transition-all font-sans uppercase tracking-wide"
-                                            :class="billingCycle === 'monthly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'">
-                                        {{ app()->getLocale() == 'ar' ? 'شهري' : 'Monthly' }}
-                                    </button>
-                                    <button type="button" @click="billingCycle = 'term'" 
-                                            class="px-5 py-2 rounded-xl text-[13px] font-black transition-all font-sans uppercase tracking-wide"
-                                            :class="billingCycle === 'term' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'">
-                                        {{ app()->getLocale() == 'ar' ? 'ترم' : 'Term' }}
-                                    </button>
-                                    <button type="button" @click="billingCycle = 'yearly'" 
-                                            class="px-5 py-2 rounded-xl text-[13px] font-black transition-all font-sans uppercase tracking-wide"
-                                            :class="billingCycle === 'yearly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'">
-                                        {{ app()->getLocale() == 'ar' ? 'سنوي' : 'Yearly' }}
-                                    </button>
+                    {{-- Subdomain Field --}}
+                    <div class="space-y-1">
+                        <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ app()->isLocale('ar') ? 'رابط المنصة' : 'Platform Link' }}</label>
+                        <div class="relative flex items-center w-full group" dir="ltr">
+                            <div class="absolute left-0 inset-y-0 flex items-center px-3 pointer-events-none text-brand-secondary font-black text-[10px] bg-brand-secondary/5 border-r border-brand-secondary/10 rounded-l-xl">https://</div>
+                            <input type="text" name="subdomain" x-model="subdomain"
+                                @input="manuallyEditedSubdomain = true; subdomain = cleanSlug(subdomain);"
+                                @input.debounce.500ms="checkSubdomain()"
+                                class="w-full h-11 pl-[70px] pr-[110px] bg-slate-50/50 border-2 border-slate-100 rounded-xl text-base font-bold font-sans focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
+                                placeholder="center-name" required>
+                            <div class="absolute right-0 inset-y-0 flex items-center pr-3 pointer-events-none text-slate-400 font-bold text-[10px] gap-2">
+                                <span>.taalimu.com</span>
+                                <div class="flex items-center justify-center w-4 h-4">
+                                    <template x-if="subdomainStatus === 'loading'"><div class="w-3 h-3 border-2 border-brand-secondary border-t-transparent rounded-full animate-spin"></div></template>
+                                    <template x-if="subdomainStatus === 'valid'"><i class="bi bi-check-circle-fill text-emerald-500 text-base"></i></template>
+                                    <template x-if="subdomainStatus === 'invalid'"><i class="bi bi-x-circle-fill text-red-500 text-base"></i></template>
                                 </div>
                             </div>
                         </div>
-                        <div class="p-8 space-y-4 max-h-[60vh] overflow-y-auto custom-scrollbar">
-                            <template x-for="pkg in packages" :key="pkg.slug">
-                                <label class="relative block cursor-pointer group">
-                                    <input type="radio" name="plan_selector" :value="pkg.slug" x-model="selectedPlan" @change="showPlanModal = false" class="peer sr-only">
-                                    <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:border-brand-secondary/30 peer-checked:border-brand-secondary peer-checked:bg-brand-secondary/5 transition-all">
-                                        <div class="flex justify-between items-center">
-                                            <div class="flex items-center gap-3">
-                                                <div class="w-5 h-5 rounded-full border-2 border-slate-200 peer-checked:border-brand-secondary flex items-center justify-center transition-all bg-white">
-                                                    <div class="w-2.5 h-2.5 rounded-full bg-brand-secondary scale-0 peer-checked:scale-100 transition-transform"></div>
-                                                </div>
-                                                <span class="font-black text-slate-900 uppercase tracking-tight" x-text="pkg.name"></span>
-                                            </div>
-                                            <div class="text-right">
-                                                <span class="text-lg font-black text-brand-secondary" x-text="billingCycle === 'yearly' ? pkg.yearly_price : (billingCycle === 'term' ? pkg.term_price : pkg.price)"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </label>
-                            </template>
-                        </div>
-                        <div class="p-6 bg-slate-50 text-center">
-                            <button type="button" @click="showPlanModal = false" class="text-sm font-black text-slate-500 hover:text-slate-700 transition-colors uppercase tracking-widest">
-                                {{ app()->getLocale() == 'ar' ? 'إغلاق' : 'Close' }}
-                            </button>
+                        <p x-show="subdomainMessage" :class="subdomainStatus === 'valid' ? 'text-emerald-600' : 'text-red-500'" 
+                           class="text-[10px] font-bold px-2 mt-0.5 animate-fade-in" x-text="subdomainMessage"></p>
+                    </div>
+
+                    {{-- Phone Field --}}
+                    <div class="space-y-1">
+                        <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.phone') }}</label>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 start-0 ps-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-brand-secondary transition-colors"><i class="bi bi-telephone"></i></div>
+                            <input type="text" name="phone" value="{{ old('phone') }}"
+                                class="w-full h-11 ps-10 pe-5 bg-slate-50/50 border-2 border-slate-100 rounded-xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
+                                placeholder="010xxxxxxx" required>
                         </div>
                     </div>
-                </div>
 
-                {{-- Submit Button --}}
-                <div class="pt-6">
-                    <button type="submit" :disabled="isSubmitting || subdomainStatus === 'invalid'"
-                            class="w-full h-16 rounded-full flex items-center justify-center gap-4 group bg-brand-secondary text-white shadow-2xl shadow-brand-secondary/20 hover:shadow-brand-secondary/40 hover:-translate-y-1 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale">
-                        <span x-show="!isSubmitting" class="text-xl font-black font-arabic">{{ __('auth.register.cta_main') }}</span>
-                        <span x-show="isSubmitting" class="flex items-center gap-3">
-                            <div class="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-                            {{ trans('auth.register.processing') ?: (app()->isLocale('ar') ? 'جاري المعالجة...' : 'Processing...') }}
-                        </span>
-                        <i x-show="!isSubmitting" class="bi bi-rocket-takeoff text-2xl group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
-                    </button>
-                </div>
-            </form>
+                    <!-- Coupon (Compact inline) -->
+                    <div class="pt-2">
+                        <button type="button" x-show="!showCouponInput && couponStatus !== 'valid'" @click="showCouponInput = true" 
+                                class="text-[11px] font-black text-brand-secondary hover:underline flex items-center gap-1 font-arabic">
+                            <i class="bi bi-tag-fill"></i> {{ __('auth.register.have_coupon') ?? 'هل لديك كود خصم؟' }}
+                        </button>
+                        <div x-show="showCouponInput || couponStatus === 'valid'" class="relative">
+                            <input type="text" name="coupon_code" x-model="couponCode" @input.debounce.500ms="validateCoupon()"
+                                placeholder="{{ __('admin.coupon_code') }}"
+                                class="w-full h-10 px-4 bg-slate-50 border-2 border-slate-100 rounded-xl text-xs font-black uppercase focus:outline-none focus:border-brand-secondary transition-all"
+                                :class="couponStatus === 'valid' ? 'border-emerald-200 bg-emerald-50' : (couponStatus === 'invalid' ? 'border-red-200 bg-red-50' : '')">
+                            <div class="absolute right-3 top-1/2 -translate-y-1/2">
+                                <template x-if="couponStatus === 'loading'"><div class="w-3 h-3 border-2 border-brand-secondary border-t-transparent rounded-full animate-spin"></div></template>
+                                <template x-if="couponStatus === 'valid'"><i class="bi bi-patch-check-fill text-emerald-500"></i></template>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="mt-8 text-center">
-                <p class="text-[11px] text-slate-400 font-arabic leading-relaxed">
-                    {{ __('auth.register.terms_prefix') }}
-                    <a href="{{ route('terms') }}" class="text-slate-900 font-black hover:underline underline-offset-4">{{ __('auth.register.terms_of_service') }}</a> 
-                    {{ __('auth.register.and') }} 
-                    <a href="{{ route('privacy') }}" class="text-slate-900 font-black hover:underline underline-offset-4">{{ __('auth.register.privacy_policy') }}</a>
-                </p>
+                    {{-- Submit Button --}}
+                    <div class="pt-4">
+                        <button type="submit" :disabled="isSubmitting || subdomainStatus === 'invalid'"
+                                class="w-full h-14 rounded-full flex items-center justify-center gap-3 group bg-brand-secondary text-white shadow-xl shadow-brand-secondary/20 hover:shadow-brand-secondary/40 hover:-translate-y-0.5 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale">
+                            <span x-show="!isSubmitting" class="text-lg font-black font-arabic">{{ __('auth.register.cta_main') }}</span>
+                            <span x-show="isSubmitting" class="flex items-center gap-2">
+                                <div class="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+                                {{ app()->isLocale('ar') ? 'جاري الإكمال...' : 'Completing...' }}
+                            </span>
+                            <i x-show="!isSubmitting" class="bi bi-arrow-right-short text-2xl group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
+
+                    <div class="mt-6 text-center">
+                        <p class="text-[10px] text-slate-400 font-arabic leading-relaxed">
+                            {{ __('auth.register.terms_prefix') }}
+                            <a href="{{ route('terms') }}" class="text-slate-900 font-black hover:underline underline-offset-4">{{ __('auth.register.terms_of_service') }}</a> 
+                            {{ __('auth.register.and') }} 
+                            <a href="{{ route('privacy') }}" class="text-slate-900 font-black hover:underline underline-offset-4">{{ __('auth.register.privacy_policy') }}</a>
+                        </p>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
