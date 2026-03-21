@@ -1,7 +1,7 @@
-<section id="features" class="py-16 lg:py-24 bg-slate-100 border-y border-slate-200">
+<section id="features" class="py-12 lg:py-16 bg-slate-100 border-y border-slate-200">
     <div class="container mx-auto px-4 lg:px-8">
         <!-- Section Header -->
-        <div class="text-center mb-12 lg:mb-16">
+        <div class="text-center mb-8 lg:mb-12">
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
                 <span class="text-sm font-medium text-primary">{{ __('landing.features.badge') }}</span>
             </div>

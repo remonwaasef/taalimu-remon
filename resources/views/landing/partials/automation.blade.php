@@ -1,11 +1,11 @@
-<section class="py-16 lg:py-24 relative overflow-hidden bg-white">
+<section class="py-12 lg:py-16 relative overflow-hidden bg-white">
     <!-- Background decorations - Simplified -->
     <div class="absolute top-1/2 left-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl -translate-y-1/2"></div>
     <div class="absolute top-1/2 right-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl -translate-y-1/2"></div>
     
     <div class="container relative mx-auto px-4 lg:px-8">
         <!-- Section Header -->
-        <div class="text-center mb-12 lg:mb-20">
+        <div class="text-center mb-8 lg:mb-12">
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/20 mb-6">
                 <span class="text-sm font-medium text-primary">{{ __('landing.automation.badge') }}</span>
             </div>
@@ -142,7 +142,7 @@
         </div>
 
         <!-- Result Box -->
-        <div class="mt-16 lg:mt-20 max-w-2xl mx-auto">
+        <div class="mt-12 lg:mt-16 max-w-2xl mx-auto">
             <div class="relative rounded-3xl p-8 lg:p-10 text-center overflow-hidden border border-white/10 shadow-2xl result-box-gradient">
 
                 <!-- Decorative elements - Simplified -->
