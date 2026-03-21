@@ -5,14 +5,16 @@
     <div class="container mx-auto px-4 lg:px-8">
         <div class="flex items-center justify-between h-14 lg:h-16">
             <!-- Logo -->
-            <a href="{{ route('home') }}" class="flex items-center gap-3 group">
-                <img src="{{ asset('images/brand/logo-full.png') }}" alt="{{ config('app.name') }}" class="h-10 lg:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
-                <div class="hidden">
-                    <!-- SEO fallback -->
-                    <span class="font-bold text-xl lg:text-2xl text-primary leading-none tracking-tight">
-                        {{ \App\Models\SiteSetting::get('site_name', config('app.name')) }}
+            <a href="{{ route('home') }}" class="flex items-center gap-2.5 group transition-all duration-300">
+                <div class="relative">
+                    <img src="{{ asset('images/brand/logo-full.png') }}" alt="{{ config('app.name') }}" class="h-9 lg:h-11 w-auto object-contain transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute -inset-1 bg-primary/5 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-bold text-lg lg:text-xl text-primary leading-none tracking-tight group-hover:text-primary/90 transition-colors">
+                        {{ \App\Models\SiteSetting::get('site_name', 'Taalimu') }}
                     </span>
-                    <span class="text-[10px] font-bold text-secondary uppercase tracking-widest mt-0.5 opacity-80 group-hover:opacity-100 transition-opacity">
+                    <span class="text-[9px] font-extrabold text-secondary uppercase tracking-[0.2em] mt-0.5 opacity-70 group-hover:opacity-100 transition-all duration-300">
                         {{ __('landing.navbar.badge_short') ?? 'Smart Education' }}
                     </span>
                 </div>

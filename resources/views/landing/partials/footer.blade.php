@@ -11,8 +11,16 @@
             <!-- Brand/About Column -->
             <div class="col-span-2 lg:col-span-2 space-y-8">
                 <!-- Logo -->
-                <a href="{{ route('home') }}" class="flex items-center gap-2 group">
-                    <img src="{{ asset('images/brand/logo-full.png') }}" alt="{{ config('app.name') }}" class="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
+                <a href="{{ route('home') }}" class="flex items-center gap-2.5 group transition-all duration-300">
+                    <img src="{{ asset('images/brand/logo-full.png') }}" alt="{{ config('app.name') }}" class="h-9 w-auto object-contain transition-transform duration-500 group-hover:scale-110">
+                    <div class="flex flex-col">
+                        <span class="font-bold text-lg text-primary leading-none tracking-tight">
+                            {{ \App\Models\SiteSetting::get('site_name', 'Taalimu') }}
+                        </span>
+                        <span class="text-[8px] font-extrabold text-secondary uppercase tracking-[0.2em] mt-0.5 opacity-70">
+                            {{ __('landing.navbar.badge_short') ?? 'Smart Education' }}
+                        </span>
+                    </div>
                 </a>
                 <p class="text-muted-foreground text-base leading-relaxed max-w-sm font-medium">
                     {{ \App\Models\SiteSetting::get('site_description_' . app()->getLocale(), __('landing.hero.subtitle')) }}
