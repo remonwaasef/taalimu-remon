@@ -9,7 +9,7 @@ return [
         'faq' => 'الأسئلة الشائعة',
         'login' => 'تسجيل الدخول',
         'start_free' => 'ابدأ مجاناً',
-        'badge_short' => 'تعليمو (Taalimu) - إدارة تعليمية ذكية',
+        'badge_short' => 'تعليمي (Taalimu) - إدارة تعليمية ذكية',
     ],
     'nav' => [
         'features' => 'الميزات',
@@ -72,7 +72,7 @@ return [
     'automation' => [
         'badge' => 'عملية بسيطة من 3 خطوات',
         'title_prefix' => 'كيف يعمل',
-        'title_highlight' => 'تعليمو (Taalimu)',
+        'title_highlight' => 'تعليمي (Taalimu)',
         'subtitle' => 'ابدأ في دقائق، وليس أيام. عمليتنا المبسطة تجعل الأتمتة سهلة للغاية.',
         'step1' => [
             'title' => 'أضف الطلاب',
