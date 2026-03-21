@@ -9,7 +9,7 @@ return [
         'faq' => 'FAQ',
         'login' => 'Login',
         'start_free' => 'Start Free',
-        'badge_short' => 'Smart Education Management',
+        'badge_short' => 'Taalimu - Smart Education',
     ],
     'nav' => [
         'features' => 'Features',
