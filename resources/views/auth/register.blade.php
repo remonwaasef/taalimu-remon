@@ -212,7 +212,7 @@ document.addEventListener('alpine:init', () => {
 })
 </script>
 
-<div class="min-h-screen bg-slate-50/50 flex justify-center p-3 lg:p-6 mesh-gradient-soft noise-overlay register-page-offset" 
+<div class="min-h-screen bg-slate-50/50 flex justify-center p-2 lg:p-4 mesh-gradient-soft noise-overlay register-page-offset" 
      x-data="registrationForm({
         selectedPlan: {{ Js::from(request('plan', $packages->firstWhere('is_default', true)?->slug ?? $packages->first()?->slug ?? '')) }},
         billingCycle: {{ Js::from(request('cycle', 'monthly')) }},
@@ -226,17 +226,18 @@ document.addEventListener('alpine:init', () => {
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
     
     <!-- Main Centered Card Container (Simplified Single Column) -->
-    <div class="w-full max-w-xl bg-white rounded-3xl shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100/50 animate-fade-in-up md:backdrop-blur-xl relative">
+    <div class="w-full transition-all duration-500 bg-white rounded-3xl shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100/50 animate-fade-in-up md:backdrop-blur-xl relative"
+         :class="currentStep === 2 ? 'max-w-4xl' : 'max-w-xl'">
         
         <!-- Minimalist Progress & Header -->
-        <div class="bg-white p-6 lg:p-8 pb-0">
+        <div class="bg-white p-4 lg:p-6 pb-0">
             <!-- Multi-Step Indicator -->
             <div class="mb-6 relative transition-all duration-500" x-cloak :class="!accountType ? 'blur-[5px] opacity-40 pointer-events-none select-none' : ''">
-                <div class="flex justify-between mb-2 px-1">
-                    <span class="text-[11px] font-black uppercase tracking-[0.2em] transition-colors" :class="currentStep === 1 ? 'text-brand-secondary' : 'text-slate-300'">
+                <div class="flex justify-between mb-1.5 px-1">
+                    <span class="text-[10px] font-black uppercase tracking-[0.2em] transition-colors" :class="currentStep === 1 ? 'text-brand-secondary' : 'text-slate-300'">
                         {{ app()->isLocale('ar') ? 'بيانات المركز' : 'Center Info' }}
                     </span>
-                    <span class="text-[11px] font-black uppercase tracking-[0.2em] transition-colors" :class="currentStep === 2 ? 'text-brand-secondary' : 'text-slate-300'">
+                    <span class="text-[10px] font-black uppercase tracking-[0.2em] transition-colors" :class="currentStep === 2 ? 'text-brand-secondary' : 'text-slate-300'">
                         {{ app()->isLocale('ar') ? 'البيانات الشخصية' : 'Personal Details' }}
                     </span>
                 </div>
@@ -247,32 +248,32 @@ document.addEventListener('alpine:init', () => {
             </div>
 
             <!-- Contextual Header -->
-            <div class="mb-6 text-center transition-all duration-700 ease-in-out" :class="!accountType ? 'transform scale-110 translate-y-[5vh] mb-12' : ''">
+            <div class="mb-4 text-center transition-all duration-700 ease-in-out" :class="!accountType ? 'transform scale-110 translate-y-[3vh] mb-8' : ''">
                 <div x-show="currentStep === 1">
-                    <h1 class="text-2xl lg:text-3xl font-black text-slate-900 mb-2 font-arabic leading-tight">
+                    <h1 class="text-xl lg:text-2xl font-black text-slate-900 mb-1 font-arabic leading-tight">
                         {{ app()->isLocale('ar') ? 'ابدأ رحلتك التعليمية' : 'Start Your Journey' }}
                     </h1>
-                    <div class="flex items-center justify-center gap-2 mb-3 bg-brand-secondary/5 py-1 px-3 rounded-full w-fit mx-auto">
-                        <i class="bi bi-gift text-brand-secondary text-xs"></i>
-                        <span class="text-[10px] font-black text-brand-secondary uppercase tracking-widest">{{ app()->isLocale('ar') ? 'تجربة مجانية لمدة 14 يوم' : '14-Day Free Trial' }}</span>
+                    <div class="flex items-center justify-center gap-2 mb-2 bg-brand-secondary/5 py-0.5 px-3 rounded-full w-fit mx-auto">
+                        <i class="bi bi-gift text-brand-secondary text-[10px]"></i>
+                        <span class="text-[9px] font-black text-brand-secondary uppercase tracking-widest">{{ app()->isLocale('ar') ? 'تجربة مجانية لمدة 14 يوم' : '14-Day Free Trial' }}</span>
                     </div>
-                    <p class="text-slate-500 text-sm font-arabic font-medium opacity-80 max-w-[320px] mx-auto">
+                    <p class="text-slate-500 text-xs font-arabic font-medium opacity-80 max-w-[280px] mx-auto">
                         {{ app()->isLocale('ar') ? 'خطوات بسيطة لامتلاك منصتك التعليمية المتكاملة' : 'Simple steps to own your integrated platform' }}
                     </p>
                 </div>
                 <div x-show="currentStep === 2" x-cloak>
-                    <h1 class="text-2xl lg:text-3xl font-black text-slate-900 mb-2 font-arabic leading-tight">
+                    <h1 class="text-xl lg:text-2xl font-black text-slate-900 mb-1 font-arabic leading-tight">
                         {{ app()->isLocale('ar') ? 'تأكيد الهوية' : 'Confirm Identity' }}
                     </h1>
-                    <p class="text-slate-500 text-sm font-arabic font-medium opacity-80">
+                    <p class="text-slate-500 text-xs font-arabic font-medium opacity-80">
                         {{ app()->isLocale('ar') ? 'أدخل بياناتك الشخصية للبدء فوراً' : 'Enter personal details to get started' }}
                     </p>
                 </div>
             </div>
 
             <!-- Account Type Selection (Premium Position) -->
-            <div x-show="currentStep === 1" class="mb-8 transition-all duration-700 ease-in-out relative z-10" :class="!accountType ? 'transform scale-110 translate-y-[5vh] pb-16 mt-8 pt-4' : ''">
-                <label class="text-[12px] font-black text-slate-500 px-1 font-arabic uppercase tracking-wider block mb-4 text-center opacity-70 transition-all duration-700" :class="!accountType ? 'text-lg text-slate-800 opacity-100 font-black mb-8' : ''">
+            <div x-show="currentStep === 1" class="mb-4 transition-all duration-700 ease-in-out relative z-10" :class="!accountType ? 'transform scale-110 translate-y-[3vh] pb-12 mt-4' : ''">
+                <label class="text-[11px] font-black text-slate-500 px-1 font-arabic uppercase tracking-wider block mb-3 text-center opacity-70 transition-all duration-700" :class="!accountType ? 'text-base text-slate-800 opacity-100 font-black mb-6' : ''">
                     {{ app()->isLocale('ar') ? 'ابدأ كـ ...' : 'Start as ...' }}
                 </label>
                 <div class="grid grid-cols-2 gap-4 px-2">
@@ -296,11 +297,11 @@ document.addEventListener('alpine:init', () => {
                             <!-- Icon Container -->
                             <div class="rounded-xl flex items-center justify-center transition-all duration-500 group-hover:rotate-6 shadow-lg"
                                  :class="{
-                                    'bg-brand-secondary text-white shadow-brand-secondary/40 w-12 h-12 mb-3 scale-110': accountType === 'instructor',
-                                    'bg-slate-100 text-slate-400 w-16 h-16 mb-4': !accountType,
-                                    'bg-slate-100 text-slate-400 group-hover:bg-brand-secondary/10 group-hover:text-brand-secondary shadow-slate-200/50 w-12 h-12 mb-3': accountType && accountType !== 'instructor'
+                                    'bg-brand-secondary text-white shadow-brand-secondary/40 w-10 h-10 mb-2 scale-110': accountType === 'instructor',
+                                    'bg-slate-100 text-slate-400 w-12 h-12 mb-3': !accountType,
+                                    'bg-slate-100 text-slate-400 group-hover:bg-brand-secondary/10 group-hover:text-brand-secondary shadow-slate-200/50 w-10 h-10 mb-2': accountType && accountType !== 'instructor'
                                  }">
-                                <i class="fas fa-chalkboard-teacher transition-all duration-500" :class="!accountType ? 'text-3xl' : 'text-2xl'"></i>
+                                <i class="fas fa-chalkboard-teacher transition-all duration-500" :class="!accountType ? 'text-2xl' : 'text-xl'"></i>
                             </div>
                             <span class="font-black transition-all" 
                                   :class="[
@@ -336,11 +337,11 @@ document.addEventListener('alpine:init', () => {
                             <!-- Icon Container -->
                             <div class="rounded-xl flex items-center justify-center transition-all duration-500 group-hover:-rotate-6 shadow-lg"
                                  :class="{
-                                    'bg-brand-secondary text-white shadow-brand-secondary/40 w-12 h-12 mb-3 scale-110': accountType === 'center',
-                                    'bg-slate-100 text-slate-400 w-16 h-16 mb-4': !accountType,
-                                    'bg-slate-100 text-slate-400 group-hover:bg-brand-secondary/10 group-hover:text-brand-secondary shadow-slate-200/50 w-12 h-12 mb-3': accountType && accountType !== 'center'
+                                    'bg-brand-secondary text-white shadow-brand-secondary/40 w-10 h-10 mb-2 scale-110': accountType === 'center',
+                                    'bg-slate-100 text-slate-400 w-12 h-12 mb-3': !accountType,
+                                    'bg-slate-100 text-slate-400 group-hover:bg-brand-secondary/10 group-hover:text-brand-secondary shadow-slate-200/50 w-10 h-10 mb-2': accountType && accountType !== 'center'
                                  }">
-                                <i class="fas fa-university transition-all duration-500" :class="!accountType ? 'text-3xl' : 'text-2xl'"></i>
+                                <i class="fas fa-university transition-all duration-500" :class="!accountType ? 'text-2xl' : 'text-xl'"></i>
                             </div>
                             <span class="font-black transition-all" 
                                   :class="[
@@ -362,9 +363,9 @@ document.addEventListener('alpine:init', () => {
             <div class="transition-all duration-500" :class="!accountType ? 'blur-[5px] opacity-40 pointer-events-none select-none' : ''">
                 
             <!-- Google Shortcut (Now below selection) -->
-            <div class="mb-8">
-                <a :href="'{{ route('auth.google') }}?plan=' + selectedPlan + '&cycle=' + billingCycle + '&account_type=' + (accountType || 'center')" class="w-full flex items-center justify-center gap-3 py-3 px-6 border-2 border-slate-200 rounded-2xl shadow-md text-lg font-black text-slate-800 bg-white hover:bg-slate-50 hover:border-blue-500/30 hover:shadow-lg transition-all group">
-                    <svg class="w-6 h-6 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <div class="mb-6">
+                <a :href="'{{ route('auth.google') }}?plan=' + selectedPlan + '&cycle=' + billingCycle + '&account_type=' + (accountType || 'center')" class="w-full flex items-center justify-center gap-2 py-2.5 px-6 border-2 border-slate-200 rounded-2xl shadow-sm text-base font-black text-slate-800 bg-white hover:bg-slate-50 hover:border-blue-500/30 hover:shadow-md transition-all group">
+                    <svg class="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                         <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                         <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
@@ -372,13 +373,13 @@ document.addEventListener('alpine:init', () => {
                     </svg>
                     <span>{{ __('auth.register.google_signup') }}</span>
                 </a>
-                <div class="relative my-6 px-8">
+                <div class="relative my-4 px-8">
                     <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-100/80"></div></div>
-                    <div class="relative flex justify-center text-[11px] uppercase"><span class="bg-white px-5 text-slate-300 font-bold tracking-[0.2em]">{{ trans('auth.register.or') }}</span></div>
+                    <div class="relative flex justify-center text-[10px] uppercase"><span class="bg-white px-5 text-slate-300 font-bold tracking-[0.2em]">{{ trans('auth.register.or') }}</span></div>
                 </div>
             </div>
 
-            <form action="{{ route('register.submit') }}" method="POST" class="space-y-6">
+            <form action="{{ route('register.submit') }}" method="POST" class="space-y-4">
                 @csrf
                 @if(request('google_id'))
                     <input type="hidden" name="google_id" value="{{ request('google_id') }}">
@@ -406,7 +407,7 @@ document.addEventListener('alpine:init', () => {
                 <input type="hidden" name="country_code" x-model="userCountry">
 
                 <!-- STEP 1: Center Details -->
-                <div x-show="currentStep === 1" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-6">
+                <div x-show="currentStep === 1" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-4">
                     <div class="space-y-1.5">
                         <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">
                             <span x-text="accountType === 'center' ? '{{ __('auth.register.center_name') }}' : ({{ Js::from(app()->isLocale('ar') ? 'اسم المدرس / المنصة' : 'Teacher / Platform Name') }})"></span>
@@ -415,7 +416,7 @@ document.addEventListener('alpine:init', () => {
                             <div class="absolute inset-y-0 start-0 ps-5 flex items-center pointer-events-none text-slate-300 group-focus-within:text-brand-secondary transition-colors"><i class="bi bi-building"></i></div>
                             <input type="text" name="center_name" x-model="centerName"
                                 @input="if(!manuallyEditedSubdomain) { subdomain = generateSlug(centerName); checkSubdomain(); }"
-                                class="w-full h-12 ps-12 pe-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold font-arabic focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
+                                class="w-full h-11 ps-12 pe-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold font-arabic focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
                                 placeholder="{{ __('auth.register.center_name_placeholder') }}" :required="currentStep === 1">
                         </div>
                     </div>
@@ -427,7 +428,7 @@ document.addEventListener('alpine:init', () => {
                             <input type="text" name="subdomain" x-model="subdomain"
                                 @input="manuallyEditedSubdomain = true; subdomain = cleanSlug(subdomain);"
                                 @input.debounce.500ms="checkSubdomain()"
-                                class="w-full h-12 pl-[80px] pr-[115px] bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold font-sans focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
+                                class="w-full h-11 pl-[80px] pr-[115px] bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold font-sans focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
                                 placeholder="center-name" :required="currentStep === 1">
                             <div class="absolute right-0 inset-y-0 flex items-center pr-4 pointer-events-none text-slate-400 font-bold text-xs gap-3">
                                 <span>.taalimu.com</span>
@@ -442,204 +443,158 @@ document.addEventListener('alpine:init', () => {
                            class="text-[11px] font-bold px-2 mt-1 animate-fade-in" x-text="subdomainMessage"></p>
                     </div>
 
-                    <div class="pt-4">
+                    <div class="pt-2">
                         <button type="button" @click="nextStep()"
-                            class="w-full h-13 rounded-full flex items-center justify-center gap-3 group bg-brand-secondary text-white shadow-2xl shadow-brand-secondary/20 hover:shadow-brand-secondary/40 hover:-translate-y-1 active:scale-95 transition-all">
-                            <span class="text-lg font-black font-arabic">{{ app()->isLocale('ar') ? 'استمرار' : 'Continue' }}</span>
-                            <i class="bi bi-arrow-right-short text-2xl group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform"></i>
+                            class="w-full h-12 rounded-full flex items-center justify-center gap-3 group bg-brand-secondary text-white shadow-xl shadow-brand-secondary/20 hover:shadow-brand-secondary/30 hover:-translate-y-1 active:scale-95 transition-all">
+                            <span class="text-base font-black font-arabic">{{ app()->isLocale('ar') ? 'استمرار' : 'Continue' }}</span>
+                            <i class="bi bi-arrow-right-short text-xl group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- STEP 2: Personal Details -->
-                <div x-show="currentStep === 2" x-cloak style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-6">
-                    <div class="space-y-1.5">
-                        <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.full_name') }}</label>
-                        <input type="text" name="name" x-model="name" class="w-full h-14 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" :required="currentStep === 2">
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="space-y-1.5">
-                            <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.email') }}</label>
-                            <input type="email" name="email" x-model="email" class="w-full h-14 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" placeholder="mail@example.com" :required="currentStep === 2">
-                        </div>
-                        <div class="space-y-1.5">
-                            <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.phone') }}</label>
-                            <input type="text" name="phone" x-model="phone" class="w-full h-14 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" placeholder="010xxxxxxx" :required="currentStep === 2">
-                        </div>
-                    </div>
+                <!-- STEP 2: Personal Details & Summary -->
+                <div x-show="currentStep === 2" x-cloak style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-8 items-start">
+                        <!-- Left Column: Form -->
+                        <div class="space-y-4">
+                            <div class="space-y-1">
+                                <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.full_name') }}</label>
+                                <input type="text" name="name" x-model="name" class="w-full h-11 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" :required="currentStep === 2">
+                            </div>
 
-                    <div class="space-y-1.5">
-                        <div class="flex justify-between items-center px-1">
-                            <label class="text-[13px] font-black text-slate-400 font-arabic uppercase tracking-wide">{{ __('auth.register.password') }}</label>
-                            <button type="button" @click="showPassword = !showPassword" class="text-[11px] font-black text-brand-secondary uppercase tracking-widest hover:opacity-70 transition-opacity">
-                                <span x-text="showPassword ? '{{ __('auth.register.hide') }}' : '{{ __('auth.register.show') }}'"></span>
-                            </button>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <input :type="showPassword ? 'text' : 'password'" name="password" x-model="password" class="w-full h-14 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" placeholder="••••••••" :required="currentStep === 2">
-                            <input :type="showPassword ? 'text' : 'password'" name="password_confirmation" x-model="password_confirmation" class="w-full h-14 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" :class="password_confirmation.length > 0 && !isPasswordMatch ? 'border-red-300 bg-red-50' : ''" placeholder="{{ __('auth.register.confirm_password') }}" :required="currentStep === 2">
-                        </div>
-                    </div>
-
-                    <!-- Coupon -->
-                    <div class="pt-2">
-                        <button type="button" x-show="!showCouponInput && couponStatus !== 'valid'" @click="showCouponInput = true" 
-                                class="text-sm font-black text-brand-secondary hover:underline flex items-center gap-2 font-arabic transition-all">
-                            <i class="bi bi-tag-fill"></i> {{ __('auth.register.have_coupon') ?? 'هل لديك كود خصم؟' }}
-                        </button>
-                        <div x-show="showCouponInput || couponStatus === 'valid'" x-transition class="space-y-1.5">
-                            <label class="text-[11px] font-black text-slate-400 px-1 uppercase">{{ __('admin.coupon_code') }}</label>
-                            <div class="relative">
-                                <input type="text" name="coupon_code" x-model="couponCode" @input.debounce.500ms="validateCoupon()"
-                                    class="w-full h-12 px-4 bg-slate-50 border-2 border-slate-100 rounded-xl text-sm font-black uppercase focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all"
-                                    :class="couponStatus === 'valid' ? 'border-emerald-200 bg-emerald-50' : (couponStatus === 'invalid' ? 'border-red-200 bg-red-50' : '')">
-                                <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                                    <template x-if="couponStatus === 'loading'"><div class="w-4 h-4 border-2 border-brand-secondary border-t-transparent rounded-full animate-spin"></div></template>
-                                    <template x-if="couponStatus === 'valid'"><i class="bi bi-patch-check-fill text-emerald-500"></i></template>
-                                    <template x-if="couponStatus === 'invalid'"><i class="bi bi-x-circle-fill text-red-400"></i></template>
+                            <div class="space-y-4">
+                                <div class="space-y-1">
+                                    <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.email') }}</label>
+                                    <input type="email" name="email" x-model="email" class="w-full h-11 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" placeholder="mail@example.com" :required="currentStep === 2">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.phone') }}</label>
+                                    <input type="text" name="phone" x-model="phone" class="w-full h-11 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" placeholder="010xxxxxxx" :required="currentStep === 2">
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <!-- Simplified Price Summary Card -->
-                    <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-100 relative overflow-hidden">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex flex-col">
-                                <div class="flex items-center gap-2 mb-1">
-                                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ __('auth.register.selected_plan') }}</span>
-                                    <button type="button" @click="showPlanModal = true" class="text-[10px] font-black text-brand-secondary underline underline-offset-2 hover:opacity-70 transition-opacity uppercase tracking-widest">
-                                        {{ app()->getLocale() == 'ar' ? 'تغيير' : 'Change' }}
+                            <div class="space-y-1">
+                                <div class="flex justify-between items-center px-1">
+                                    <label class="text-[12px] font-black text-slate-400 font-arabic uppercase tracking-wide">{{ __('auth.register.password') }}</label>
+                                    <button type="button" @click="showPassword = !showPassword" class="text-[10px] font-black text-brand-secondary uppercase tracking-widest hover:opacity-70 transition-opacity">
+                                        <span x-text="showPassword ? '{{ __('auth.register.hide') }}' : '{{ __('auth.register.show') }}'"></span>
                                     </button>
                                 </div>
-                                <h3 class="text-xl font-black text-slate-900 font-arabic" x-text="currentPlan.name"></h3>
-                            </div>
-                            <div class="text-right">
-                                <template x-if="couponStatus === 'valid'">
-                                    <div class="text-[11px] font-black text-emerald-600 mb-1 animate-fade-in">-<span x-text="couponDiscountAmount.toLocaleString()"></span> <span x-text="currentPriceData.currency"></span></div>
-                                </template>
-                                <div class="flex items-baseline gap-1 text-brand-secondary">
-                                    <span class="text-3xl font-black tracking-tighter" x-text="finalPrice.toLocaleString()"></span>
-                                    <span class="text-sm font-bold opacity-60" x-text="currentPriceData.currency"></span>
+                                <div class="space-y-3">
+                                    <input :type="showPassword ? 'text' : 'password'" name="password" x-model="password" class="w-full h-11 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" placeholder="••••••••" :required="currentStep === 2">
+                                    <input :type="showPassword ? 'text' : 'password'" name="password_confirmation" x-model="password_confirmation" class="w-full h-11 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" :class="password_confirmation.length > 0 && !isPasswordMatch ? 'border-red-300 bg-red-50' : ''" placeholder="{{ __('auth.register.confirm_password') }}" :required="currentStep === 2">
                                 </div>
-                                <span class="text-[10px] font-bold text-slate-400">/ 
-                                    <span x-show="billingCycle === 'monthly'">{{ app()->getLocale() == 'ar' ? 'شهر' : 'month' }}</span>
-                                    <span x-show="billingCycle === 'term'">{{ app()->getLocale() == 'ar' ? 'ترم (150 يوم)' : 'term (150 days)' }}</span>
-                                    <span x-show="billingCycle === 'yearly'">{{ app()->getLocale() == 'ar' ? 'سنة' : 'year' }}</span>
-                                </span>
                             </div>
                         </div>
 
-                        <!-- Billing Cycle Switcher -->
-                        <div class="flex p-1 bg-slate-200/50 rounded-xl mb-4 items-center">
-                            <button type="button" @click="billingCycle = 'monthly'" 
-                                    class="flex-1 py-2 text-[11px] font-black rounded-xl transition-all"
-                                    :class="billingCycle === 'monthly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
-                                {{ app()->getLocale() == 'ar' ? 'شهري' : 'Monthly' }}
-                            </button>
-                            <button type="button" @click="billingCycle = 'term'" 
-                                    class="flex-1 py-2 text-[11px] font-black rounded-xl transition-all"
-                                    :class="billingCycle === 'term' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
-                                {{ app()->getLocale() == 'ar' ? 'ترم (150 يوم)' : 'Term' }}
-                            </button>
-                            <button type="button" @click="billingCycle = 'yearly'" 
-                                    class="flex-1 py-2 text-[11px] font-black rounded-xl transition-all"
-                                    :class="billingCycle === 'yearly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
-                                {{ app()->getLocale() == 'ar' ? 'سنوي' : 'Yearly' }}
-                            </button>
-                        </div>
-
-                        <!-- Conversion Boost: Reassurance -->
-                        <div class="pt-4 border-t border-slate-200/60 flex items-center justify-between gap-4">
-                            <div class="flex items-center gap-1.5 text-slate-500">
-                                <i class="bi bi-shield-check text-emerald-500 text-base"></i>
-                                <span class="text-[11px] font-bold font-arabic">{{ app()->getLocale() == 'ar' ? 'دفع آمن 100%' : '100% Secure Payment' }}</span>
-                            </div>
-                            <div class="flex items-center gap-1.5 text-slate-500">
-                                <i class="bi bi-arrow-repeat text-brand-secondary text-base"></i>
-                                <span class="text-[11px] font-bold font-arabic">{{ app()->getLocale() == 'ar' ? 'إلغاء في أي وقت' : 'Cancel Anytime' }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Payment Gateway Selection -->
-                    <div class="space-y-3" x-show="selectedPlan !== 'free-trial'">
-                        <label class="text-[13px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">
-                            {{ app()->getLocale() == 'ar' ? 'طريقة الدفع' : 'Payment Method' }}
-                        </label>
-                        <div class="grid grid-cols-1 gap-4">
-                            <!-- Paymob -->
-                            <label class="relative cursor-pointer group">
-                                <input type="radio" name="payment_gateway" value="paymob" checked class="peer sr-only">
-                                <div class="flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-slate-100 bg-slate-50/30 peer-checked:border-brand-secondary peer-checked:bg-white transition-all hover:border-slate-200">
-                                    <i class="bi bi-credit-card-2-back text-2xl mb-2 text-slate-400 peer-checked:text-brand-secondary"></i>
-                                    <span class="text-xs font-black text-slate-600 peer-checked:text-slate-900">{{ app()->getLocale() == 'ar' ? 'بطاقة بنكية / محفظة (Paymob)' : 'Credit Card / Wallet (Paymob)' }}</span>
+                        <!-- Right Column: Summary & Payment -->
+                        <div class="space-y-4">
+                            <!-- Simplified Price Summary Card -->
+                            <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-100 relative overflow-hidden">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex flex-col">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ __('auth.register.selected_plan') }}</span>
+                                            <button type="button" @click="showPlanModal = true" class="text-[9px] font-black text-brand-secondary underline underline-offset-2 hover:opacity-70 transition-opacity uppercase tracking-widest">
+                                                {{ app()->getLocale() == 'ar' ? 'تغيير' : 'Change' }}
+                                            </button>
+                                        </div>
+                                        <h3 class="text-lg font-black text-slate-900 font-arabic" x-text="currentPlan.name"></h3>
+                                    </div>
+                                    <div class="text-right">
+                                        <template x-if="couponStatus === 'valid'">
+                                            <div class="text-[10px] font-black text-emerald-600 mb-1 animate-fade-in">-<span x-text="couponDiscountAmount.toLocaleString()"></span> <span x-text="currentPriceData.currency"></span></div>
+                                        </template>
+                                        <div class="flex items-baseline gap-1 text-brand-secondary">
+                                            <span class="text-2xl font-black tracking-tighter" x-text="finalPrice.toLocaleString()"></span>
+                                            <span class="text-xs font-bold opacity-60" x-text="currentPriceData.currency"></span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </label>
-                            <!-- PayPal -->
-                            <label class="relative cursor-pointer group">
-                                <input type="radio" name="payment_gateway" value="paypal" class="peer sr-only">
-                                <div class="flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-slate-100 bg-slate-50/30 peer-checked:border-brand-secondary peer-checked:bg-white transition-all hover:border-slate-200">
-                                    <i class="bi bi-paypal text-2xl mb-2 text-slate-400 peer-checked:text-brand-secondary"></i>
-                                    <span class="text-xs font-black text-slate-600 peer-checked:text-slate-900">PayPal</span>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
 
-                    <!-- Plan Selection Modal -->
-                    <div x-show="showPlanModal" 
-                         x-transition:enter="transition ease-out duration-300"
-                         x-transition:enter-start="opacity-0"
-                         x-transition:enter-end="opacity-100"
-                         x-transition:leave="transition ease-in duration-200"
-                         x-transition:leave-start="opacity-100"
-                         x-transition:leave-end="opacity-0"
-                         class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
-                         x-cloak>
-                        <div @click.away="showPlanModal = false" 
-                             class="bg-white rounded-[2.5rem] w-full max-w-lg shadow-2xl overflow-hidden animate-scale-in">
-                            <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                                <h3 class="text-xl font-black text-slate-900 font-arabic">{{ app()->getLocale() == 'ar' ? 'اختر الباقة المناسبة' : 'Select Plan' }}</h3>
-                                <button type="button" @click="showPlanModal = false" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors">
-                                    <i class="bi bi-x-lg"></i>
-                                </button>
+                                <!-- Billing Cycle Switcher (More compact) -->
+                                <div class="flex p-1 bg-slate-200/50 rounded-xl mb-3 items-center">
+                                    <button type="button" @click="billingCycle = 'monthly'" 
+                                            class="flex-1 py-1.5 text-[10px] font-black rounded-lg transition-all"
+                                            :class="billingCycle === 'monthly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
+                                        {{ app()->getLocale() == 'ar' ? 'شهري' : 'Monthly' }}
+                                    </button>
+                                    <button type="button" @click="billingCycle = 'term'" 
+                                            class="flex-1 py-1.5 text-[10px] font-black rounded-lg transition-all"
+                                            :class="billingCycle === 'term' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
+                                        {{ app()->getLocale() == 'ar' ? 'ترم' : 'Term' }}
+                                    </button>
+                                    <button type="button" @click="billingCycle = 'yearly'" 
+                                            class="flex-1 py-1.5 text-[10px] font-black rounded-lg transition-all"
+                                            :class="billingCycle === 'yearly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
+                                        {{ app()->getLocale() == 'ar' ? 'سنوي' : 'Yearly' }}
+                                    </button>
+                                </div>
+
+                                <!-- Coupon (Compact inline) -->
+                                <div class="pt-0 border-t border-slate-100 mb-3 pt-2">
+                                    <button type="button" x-show="!showCouponInput && couponStatus !== 'valid'" @click="showCouponInput = true" 
+                                            class="text-[10px] font-black text-brand-secondary hover:underline flex items-center gap-1 font-arabic">
+                                        <i class="bi bi-tag-fill"></i> {{ __('auth.register.have_coupon') ?? 'هل لديك كود خصم؟' }}
+                                    </button>
+                                    <div x-show="showCouponInput || couponStatus === 'valid'" class="relative">
+                                        <input type="text" name="coupon_code" x-model="couponCode" @input.debounce.500ms="validateCoupon()"
+                                            placeholder="{{ __('admin.coupon_code') }}"
+                                            class="w-full h-8 px-3 bg-white border-2 border-slate-100 rounded-lg text-[10px] font-black uppercase focus:outline-none focus:border-brand-secondary transition-all"
+                                            :class="couponStatus === 'valid' ? 'border-emerald-200 bg-emerald-50' : (couponStatus === 'invalid' ? 'border-red-200 bg-red-50' : '')">
+                                        <div class="absolute right-2 top-1/2 -translate-y-1/2">
+                                            <template x-if="couponStatus === 'loading'"><div class="w-3 h-3 border-2 border-brand-secondary border-t-transparent rounded-full animate-spin"></div></template>
+                                            <template x-if="couponStatus === 'valid'"><i class="bi bi-patch-check-fill text-emerald-500 text-xs"></i></template>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Trust Info (Compact) -->
+                                <div class="flex items-center justify-between gap-2 opacity-60">
+                                    <div class="flex items-center gap-1 text-slate-500 text-[9px] font-bold font-arabic">
+                                        <i class="bi bi-shield-check text-emerald-500"></i>
+                                        <span>{{ app()->getLocale() == 'ar' ? 'دفع آمن' : 'Secure' }}</span>
+                                    </div>
+                                    <div class="flex items-center gap-1 text-slate-500 text-[9px] font-bold font-arabic">
+                                        <i class="bi bi-arrow-repeat text-brand-secondary"></i>
+                                        <span>{{ app()->getLocale() == 'ar' ? 'إلغاء مرن' : 'Flexible' }}</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="p-8 space-y-4 max-h-[60vh] overflow-y-auto custom-scrollbar">
-                                <template x-for="pkg in packages" :key="pkg.slug">
-                                    <label class="relative block cursor-pointer group">
-                                        <input type="radio" name="plan_selector" :value="pkg.slug" x-model="selectedPlan" @change="showPlanModal = false" class="peer sr-only">
-                                        <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:border-brand-secondary/30 peer-checked:border-brand-secondary peer-checked:bg-brand-secondary/5 transition-all">
-                                            <div class="flex justify-between items-center">
-                                                <div class="flex items-center gap-3">
-                                                    <div class="w-5 h-5 rounded-full border-2 border-slate-200 peer-checked:border-brand-secondary flex items-center justify-center transition-all bg-white">
-                                                        <div class="w-2.5 h-2.5 rounded-full bg-brand-secondary scale-0 peer-checked:scale-100 transition-transform"></div>
-                                                    </div>
-                                                    <span class="font-black text-slate-900 uppercase tracking-tight" x-text="pkg.name"></span>
-                                                </div>
-                                                <div class="text-right">
-                                                    <span class="text-lg font-black text-brand-secondary" x-text="billingCycle === 'yearly' ? pkg.yearly_price : (billingCycle === 'term' ? pkg.term_price : pkg.price)"></span>
-                                                </div>
-                                            </div>
+
+                            <!-- Payment Gateway Selection -->
+                            <div class="space-y-2" x-show="selectedPlan !== 'free-trial'">
+                                <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">
+                                    {{ app()->getLocale() == 'ar' ? 'طريقة الدفع' : 'Payment' }}
+                                </label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <!-- Paymob -->
+                                    <label class="relative cursor-pointer group">
+                                        <input type="radio" name="payment_gateway" value="paymob" checked class="peer sr-only">
+                                        <div class="flex items-center gap-2 p-2 rounded-xl border-2 border-slate-100 bg-slate-50/30 peer-checked:border-brand-secondary peer-checked:bg-white transition-all">
+                                            <i class="bi bi-credit-card-2-back text-sm text-slate-400 peer-checked:text-brand-secondary"></i>
+                                            <span class="text-[10px] font-black text-slate-600 peer-checked:text-slate-900">Paymob</span>
                                         </div>
                                     </label>
-                                </template>
-                            </div>
-                            <div class="p-6 bg-slate-50 text-center">
-                                <button type="button" @click="showPlanModal = false" class="text-sm font-black text-slate-500 hover:text-slate-700 transition-colors uppercase tracking-widest">
-                                    {{ app()->getLocale() == 'ar' ? 'إغلاق' : 'Close' }}
-                                </button>
+                                    <!-- PayPal -->
+                                    <label class="relative cursor-pointer group">
+                                        <input type="radio" name="payment_gateway" value="paypal" class="peer sr-only">
+                                        <div class="flex items-center gap-2 p-2 rounded-xl border-2 border-slate-100 bg-slate-50/30 peer-checked:border-brand-secondary peer-checked:bg-white transition-all">
+                                            <i class="bi bi-paypal text-sm text-slate-400 peer-checked:text-brand-secondary"></i>
+                                            <span class="text-[10px] font-black text-slate-600 peer-checked:text-slate-900">PayPal</span>
+                                        </div>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="pt-4 flex flex-col sm:flex-row gap-3">
-                        <button type="button" @click="prevStep()" class="flex-1 h-13 rounded-full font-black text-slate-500 bg-slate-50 hover:bg-slate-100 transition-all border-2 border-slate-100">
+                        <button type="button" @click="prevStep()" class="flex-1 h-12 rounded-full font-black text-slate-500 bg-slate-50 hover:bg-slate-100 transition-all border-2 border-slate-100">
                             {{ app()->isLocale('ar') ? 'رجوع' : 'Back' }}
                         </button>
                         <button type="submit" :disabled="password.length > 0 && !isPasswordMatch"
-                                class="flex-[2] h-13 rounded-full font-black text-lg text-white bg-brand-secondary shadow-xl shadow-brand-secondary/20 hover:shadow-brand-secondary/40 hover:-translate-y-1 transition-all disabled:opacity-50 disabled:grayscale relative overflow-hidden group">
+                                class="flex-[2] h-12 rounded-full font-black text-base text-white bg-brand-secondary shadow-lg shadow-brand-secondary/20 hover:shadow-brand-secondary/30 hover:-translate-y-1 transition-all disabled:opacity-50 disabled:grayscale relative overflow-hidden group">
                             <!-- Button Shine Effect -->
                             <div class="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-white opacity-20 group-hover:animate-[shine_1s] group-hover:left-full transition-all duration-700 ease-in-out"></div>
                             <span class="relative z-10">{{ __('auth.register.cta_main') }}</span>
@@ -647,21 +602,16 @@ document.addEventListener('alpine:init', () => {
                     </div>
 
                     <!-- Conversion Boost: Guarantee & Support -->
-                    <div class="mt-6 flex flex-col items-center gap-3">
-                        <div class="flex items-center justify-center gap-2 text-slate-600 bg-emerald-50/50 px-4 py-2.5 rounded-xl border border-emerald-100/50 w-full">
-                            <i class="bi bi-shield-fill-check text-emerald-500 text-lg"></i>
-                            <p class="text-[12px] font-bold font-arabic">{{ app()->getLocale() == 'ar' ? 'ضمان استرجاع الأموال خلال 14 يوماً. بدون رسوم خفية.' : '14-Day Money-Back Guarantee. No Hidden Fees.' }}</p>
-                        </div>
-                        <div class="flex items-center gap-1.5 text-slate-400 text-[11px] font-bold">
-                            <i class="bi bi-headset"></i>
-                            <span>{{ app()->getLocale() == 'ar' ? 'تحتاج إلى مساعدة؟' : 'Need help?' }}</span>
-                            <a href="#" class="text-brand-secondary hover:underline">{{ app()->getLocale() == 'ar' ? 'تواصل مع الدعم الفني' : 'Contact Support' }}</a>
+                    <div class="mt-4 flex flex-col items-center gap-2">
+                        <div class="flex items-center justify-center gap-2 text-slate-600 bg-emerald-50/50 px-4 py-2 rounded-xl border border-emerald-100/50 w-full text-center">
+                            <i class="bi bi-shield-fill-check text-emerald-500 text-base"></i>
+                            <p class="text-[11px] font-bold font-arabic">{{ app()->getLocale() == 'ar' ? 'ضمان استرجاع الأموال خلال 14 يوماً.' : '14-Day Money-Back Guarantee.' }}</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="mt-8 text-center">
-                    <p class="text-[11px] text-slate-400 font-arabic leading-relaxed">
+                <div class="mt-4 text-center">
+                    <p class="text-[10px] text-slate-400 font-arabic leading-relaxed">
                         {{ __('auth.register.terms_prefix') }}
                         <a href="{{ route('terms') }}" class="text-slate-900 font-black hover:underline underline-offset-4">{{ __('auth.register.terms_of_service') }}</a> 
                         {{ __('auth.register.and') }} 
@@ -673,8 +623,8 @@ document.addEventListener('alpine:init', () => {
         </div>
 
         <!-- Footer Link -->
-        <div class="p-8 bg-slate-50/50 border-t border-slate-100 text-center transition-all duration-500" :class="!accountType ? 'blur-[5px] opacity-40 pointer-events-none select-none' : ''">
-            <span class="text-sm text-slate-500 font-arabic font-bold">
+        <div class="p-4 bg-slate-50/50 border-t border-slate-100 text-center transition-all duration-500" :class="!accountType ? 'blur-[5px] opacity-40 pointer-events-none select-none' : ''">
+            <span class="text-xs text-slate-500 font-arabic font-bold">
                 {{ __('auth.login.no_account_link') }}
                 <a href="{{ route('login.portal') }}" class="text-brand-secondary font-black hover:underline ml-2">{{ __('auth.login.title') }}</a>
             </span>
