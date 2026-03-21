@@ -226,13 +226,36 @@ window.addEventListener('pageshow', (event) => {
                             </div>
                         </div>
 
+                        <!-- Mini Features List -->
+                        <div class="space-y-2 py-3 border-y border-slate-50">
+                            <template x-for="feature in currentPlan.features.slice(0, 3)" :key="feature">
+                                <div class="flex items-center gap-2 text-[10px] font-bold text-slate-600 font-arabic">
+                                    <i class="bi bi-check2 text-emerald-500"></i>
+                                    <span x-text="feature"></span>
+                                </div>
+                            </template>
+                        </div>
+
                         <!-- Price & Switcher -->
-                        <div class="pt-4 border-t border-slate-50">
+                        <div class="pt-2">
                             <div class="flex items-center justify-between mb-3">
                                 <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">{{ app()->getLocale() == 'ar' ? 'الإجمالي' : 'Total' }}</span>
                                 <div class="text-right">
-                                    <template x-if="couponStatus === 'valid'">
-                                        <div class="text-[10px] font-black text-emerald-600 mb-1 animate-fade-in">-<span x-text="couponDiscountAmount.toLocaleString()"></span> <span x-text="currentPriceData.currency"></span></div>
+                                    <template x-if="couponStatus === 'valid' || currentPriceData.old_price_raw > finalPrice">
+                                        <div class="flex items-center justify-end gap-2 mb-1 animate-fade-in">
+                                            <span class="text-[10px] font-bold text-slate-300 line-through">
+                                                <span x-text="((couponStatus === 'valid' ? currentPriceData.price_raw : currentPriceData.old_price_raw) || 0).toLocaleString()"></span>
+                                                <span x-text="currentPriceData.currency"></span>
+                                            </span>
+                                            <span class="text-[9px] font-black bg-emerald-50 text-emerald-600 px-1.5 py-0.5 rounded-md">
+                                                <template x-if="couponStatus === 'valid'">
+                                                    <span>- <span x-text="couponDiscountAmount.toLocaleString()"></span></span>
+                                                </template>
+                                                <template x-if="couponStatus !== 'valid' && currentPriceData.old_price_raw > finalPrice">
+                                                    <span>{{ app()->isLocale('ar') ? 'خصم متاح' : 'Discount' }}</span>
+                                                </template>
+                                            </span>
+                                        </div>
                                     </template>
                                     <div class="flex items-baseline gap-1 text-brand-secondary">
                                         <span class="text-2xl font-black tracking-tighter" x-text="finalPrice.toLocaleString()"></span>
@@ -263,7 +286,7 @@ window.addEventListener('pageshow', (event) => {
                     </div>
                 </div>
 
-                <div class="hidden lg:flex items-center gap-3 text-slate-400 text-[10px] font-bold opacity-60">
+                <div class="hidden lg:flex items-center gap-3 text-slate-400 text-[10px] font-bold opacity-40 px-6">
                     <i class="bi bi-shield-check text-emerald-500 text-sm"></i>
                     <span>{{ app()->getLocale() == 'ar' ? 'جميع البيانات مشفرة وآمنة تماماً' : 'All data is encrypted and secure' }}</span>
                 </div>
