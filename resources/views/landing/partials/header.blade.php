@@ -3,12 +3,12 @@
     x-data="{ isMenuOpen: false }"
 >
     <div class="container mx-auto px-4 lg:px-8">
-        <div class="flex items-center justify-between h-14 lg:h-16">
+        <div class="flex items-center justify-between h-12 lg:h-14">
             <!-- Logo -->
             <a href="{{ route('home') }}" class="flex items-center gap-2.5 group transition-all duration-300">
-                <img src="{{ asset('images/brand/logo-full.png?v=3') }}" alt="{{ config('app.name') }}" class="h-9 lg:h-11 w-auto object-contain transition-transform duration-500 group-hover:scale-110 mix-blend-multiply">
+                <img src="{{ asset('images/brand/logo-full.png?v=3') }}" alt="{{ config('app.name') }}" class="h-8 lg:h-10 w-auto object-contain transition-transform duration-500 group-hover:scale-110 mix-blend-multiply">
                 <div class="flex flex-col">
-                    <span class="font-bold text-lg lg:text-xl text-primary leading-none tracking-tight group-hover:text-primary/90 transition-colors">
+                    <span class="font-bold text-base lg:text-lg text-primary leading-none tracking-tight group-hover:text-primary/90 transition-colors">
                         {{ \App\Models\SiteSetting::get('site_name', 'Taalimu') }}
                     </span>
                     <span class="text-[9px] font-extrabold text-secondary uppercase tracking-[0.2em] mt-0.5 opacity-70 group-hover:opacity-100 transition-all duration-300">

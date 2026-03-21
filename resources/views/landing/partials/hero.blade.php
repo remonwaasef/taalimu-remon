@@ -1,10 +1,10 @@
-<section class="relative min-h-[70vh] pt-16 lg:pt-20 overflow-hidden hero-professional-bg noise-overlay">
+<section class="relative min-h-[60vh] pt-12 lg:pt-16 overflow-hidden hero-professional-bg noise-overlay">
     <!-- Background Elements - Simplified -->
     <div class="absolute inset-0 bg-slate-50/50"></div>
     
     <div 
         dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"
-        class="container relative mx-auto px-4 lg:px-8 py-6 lg:py-10"
+        class="container relative mx-auto px-4 lg:px-8 py-4 lg:py-6"
     >
         <div class="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center justify-between">
             <!-- Left Content -->
@@ -21,7 +21,7 @@
                 <!-- Headline -->
                 <h1 
                     dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}" 
-                    class="font-cairo text-3xl md:text-4xl lg:text-3xl xl:text-4xl font-black text-primary leading-[1.2] mb-6 animate-fade-in tracking-tight delay-1"
+                    class="font-cairo text-2xl md:text-3xl lg:text-2xl xl:text-3xl font-black text-primary leading-[1.2] mb-4 animate-fade-in tracking-tight delay-1"
                 >
                     {!! __('landing.hero.title') !!}
                 </h1>
@@ -29,7 +29,7 @@
                 <!-- Subheadline -->
                 <p 
                     dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"
-                    class="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl mx-auto lg:mx-0 animate-fade-in font-medium leading-[1.6] md:leading-relaxed delay-2"
+                    class="text-base md:text-lg text-muted-foreground mb-6 max-w-xl mx-auto lg:mx-0 animate-fade-in font-medium leading-[1.6] md:leading-relaxed delay-2"
                 >
                     {{ \App\Models\SiteSetting::get('site_description_' . app()->getLocale(), __('landing.hero.subtitle')) }}
                 </p>
@@ -38,12 +38,12 @@
                 <div 
                     class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10 animate-fade-in delay-3"
                 >
-                    <a href="{{ route('register') }}?account_type=center" class="inline-flex items-center justify-center rounded-full text-base font-black h-12 md:h-14 px-8 md:px-10 group transition-all bg-secondary text-white shadow-lg hover:bg-secondary/90 hover:-translate-y-1">
-                        <i class="fas fa-university me-3"></i>
+                    <a href="{{ route('register') }}?account_type=center" class="inline-flex items-center justify-center rounded-full text-sm font-black h-10 md:h-12 px-6 md:px-8 group transition-all bg-secondary text-white shadow-lg hover:bg-secondary/90 hover:-translate-y-1">
+                        <i class="fas fa-university me-2 text-xs"></i>
                         {{ app()->isLocale('ar') ? 'سجل كمركز تعليمي' : 'Register as Center' }}
                     </a>
-                    <a href="{{ route('register') }}?account_type=instructor" class="inline-flex items-center justify-center rounded-full text-base font-black h-12 md:h-14 px-8 md:px-10 group transition-all border-2 border-primary/10 text-primary hover:bg-primary/5">
-                        <i class="fas fa-chalkboard-teacher me-3"></i>
+                    <a href="{{ route('register') }}?account_type=instructor" class="inline-flex items-center justify-center rounded-full text-sm font-black h-10 md:h-12 px-6 md:px-8 group transition-all border-2 border-primary/10 text-primary hover:bg-primary/5">
+                        <i class="fas fa-chalkboard-teacher me-2 text-xs"></i>
                         {{ app()->isLocale('ar') ? 'سجل كمدرس مستقل' : 'Register as Teacher' }}
                     </a>
                 </div>
@@ -76,17 +76,17 @@
                 <div 
                     class="grid grid-cols-3 gap-6 animate-fade-in delay-5"
                 >
-                    <div class="text-center lg:text-start p-4 rounded-2xl bg-white border border-border shadow-sm">
-                        <div class="text-3xl lg:text-4xl font-black gradient-text mb-1">38%</div>
-                        <div class="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.revenue') }}</div>
+                    <div class="text-center lg:text-start p-3 rounded-2xl bg-white border border-border shadow-sm">
+                        <div class="text-2xl lg:text-3xl font-black gradient-text mb-0.5">38%</div>
+                        <div class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.revenue') }}</div>
                     </div>
-                    <div class="text-center lg:text-start p-4 rounded-2xl bg-white border border-border shadow-sm">
-                        <div class="text-3xl lg:text-4xl font-black gradient-text mb-1">15h</div>
-                        <div class="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.time') }}</div>
+                    <div class="text-center lg:text-start p-3 rounded-2xl bg-white border border-border shadow-sm">
+                        <div class="text-2xl lg:text-3xl font-black gradient-text mb-0.5">15h</div>
+                        <div class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.time') }}</div>
                     </div>
-                    <div class="text-center lg:text-start p-4 rounded-2xl bg-white border border-border shadow-sm">
-                        <div class="text-3xl lg:text-4xl font-black gradient-text mb-1">98%</div>
-                        <div class="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.collection') }}</div>
+                    <div class="text-center lg:text-start p-3 rounded-2xl bg-white border border-border shadow-sm">
+                        <div class="text-2xl lg:text-3xl font-black gradient-text mb-0.5">98%</div>
+                        <div class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.collection') }}</div>
                     </div>
                 </div>
             </div>
@@ -94,7 +94,7 @@
             <!-- Right Content - Hybrid Mockup -->
             <div class="w-full lg:w-[55%] relative flex items-center justify-center lg:justify-end">
                 <div 
-                    class="relative z-10 w-full max-w-[650px] animate-fade-in-right animate-float-slow transform-gpu backface-hidden delay-2"
+                    class="relative z-10 w-full max-w-[550px] animate-fade-in-right animate-float-slow transform-gpu backface-hidden delay-2"
                 >
                     <!-- Localized Floating WhatsApp Notification -->
                     <div 
