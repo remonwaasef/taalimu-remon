@@ -29,10 +29,10 @@
                 <!-- Step Circle -->
                 <div class="relative mx-auto mb-8">
                     <!-- Outer ring -->
-                    <div class="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-2 border-dashed border-primary/20 flex items-center justify-center mx-auto group-hover:border-secondary/50 transition-colors duration-500">
+                    <div class="w-20 h-20 lg:w-24 lg:h-24 rounded-full border-2 border-dashed border-primary/20 flex items-center justify-center mx-auto group-hover:border-secondary/50 transition-colors duration-500">
                         <!-- Inner circle -->
-                        <div class="w-16 h-16 lg:w-24 lg:h-24 rounded-full bg-primary/5 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 lg:w-10 lg:h-10 text-primary"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+                        <div class="w-14 h-14 lg:w-16 lg:h-16 rounded-full bg-primary/5 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 lg:w-8 lg:h-8 text-primary"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
                         </div>
                     </div>
                     
@@ -43,7 +43,7 @@
                 </div>
 
                 <!-- Content -->
-                <h3 class="text-xl font-semibold text-foreground mb-3">
+                <h3 class="text-lg font-semibold text-foreground mb-2">
                     {{ __('landing.automation.step1.title') }}
                 </h3>
                 <p class="text-muted-foreground max-w-xs mx-auto mb-8">
@@ -51,7 +51,7 @@
                 </p>
 
                 <!-- Visual -->
-                <div class="relative mx-auto max-w-[280px] rounded-2xl overflow-hidden border border-border shadow-2xl group-hover:-translate-y-2 transition-transform duration-500 bg-card">
+                <div class="relative mx-auto max-w-[240px] rounded-xl overflow-hidden border border-border shadow-2xl group-hover:-translate-y-2 transition-transform duration-500 bg-card">
                     <img src="{{ asset('images/automation/step1.webp') }}" alt="{{ __('landing.automation.step1.title') }}" class="w-full h-auto opacity-90 group-hover:opacity-100 transition-opacity" loading="lazy" decoding="async" width="600" height="400">
                     <!-- Glass overlay -->
                     <div class="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none"></div>
@@ -78,8 +78,8 @@
                     </div>
                     
                     <!-- Step number -->
-                    <div class="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-md">
-                        <span class="text-sm font-bold text-white">02</span>
+                <div class="absolute -top-1 -right-1 w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-md">
+                        <span class="text-xs font-bold text-white">02</span>
                     </div>
                 </div>
 
@@ -150,13 +150,13 @@
                 <div class="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
                 
                 <div class="relative">
-                    <div class="text-6xl lg:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-blue-100 to-blue-200 mb-1 drop-shadow-lg">
+                    <div class="text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-blue-100 to-blue-200 mb-1 drop-shadow-lg">
                         98%
                     </div>
-                    <div class="text-xl lg:text-2xl font-semibold text-primary-foreground/90 mb-4">
+                    <div class="text-base lg:text-lg font-semibold text-primary-foreground/90 mb-2">
                         {{ __('landing.automation.result.rate') }}
                     </div>
-                    <p class="text-primary-foreground/70">
+                    <p class="text-primary-foreground/70 text-sm">
                         {{ __('landing.automation.result.text') }}
                     </p>
                 </div>

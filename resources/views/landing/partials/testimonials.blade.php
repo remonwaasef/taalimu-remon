@@ -1,19 +1,19 @@
-<section id="testimonials" class="py-16 lg:py-24 relative overflow-hidden">
+<section id="testimonials" class="py-8 lg:py-12 relative overflow-hidden">
     <!-- Background decorations -->
     <div class="absolute top-0 left-1/4 w-96 h-96 bg-light-purple/5 rounded-full blur-3xl"></div>
     <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan/5 rounded-full blur-3xl"></div>
     
     <div class="container relative mx-auto px-4 lg:px-8">
         <!-- Section Header -->
-        <div class="text-center mb-12 lg:mb-16">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-success-green/10 border border-success-green/20 mb-6">
+        <div class="text-center mb-6 lg:mb-8">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-success-green/10 border border-success-green/20 mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-success-green"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                 <span class="text-sm font-medium text-success-green">{{ __('landing.testimonials.badge') }}</span>
             </div>
-            <h2 class="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+            <h2 class="text-2xl lg:text-3xl font-bold text-foreground mb-3">
                 {{ __('landing.testimonials.title_prefix') }} <span class="gradient-text">{{ __('landing.testimonials.title_highlight') }}</span>
             </h2>
-            <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
+            <p class="text-muted-foreground text-base max-w-2xl mx-auto">
                 {{ str_replace(config('app.name'), \App\Models\SiteSetting::get('site_name', config('app.name')), __('landing.testimonials.subtitle')) }}
             </p>
         </div>

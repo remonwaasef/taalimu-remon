@@ -32,18 +32,18 @@
             @foreach(__('landing.features.items') as $index => $item)
                 @php $data = $featuresData[$index] ?? $featuresData[0]; @endphp
                 <div
-                    class="group bg-white rounded-3xl p-8 border border-white shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 animate-fade-in"
+                    class="group bg-white rounded-2xl p-5 border border-white shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 animate-fade-in"
                     style="animation-delay: {{ $data['delay'] }}ms;"
                 >
                     <!-- Icon -->
-                    <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                         <div class="text-primary">
                             {!! $data['icon'] !!}
                         </div>
                     </div>
 
                     <!-- Title -->
-                    <h3 class="text-xl font-semibold text-foreground mb-3">
+                    <h3 class="text-base font-semibold text-foreground mb-2">
                         {{ $item['title'] }}
                     </h3>
 
@@ -53,7 +53,7 @@
                     </p>
 
                     <!-- Learn More -->
-                    <div class="mt-6 flex items-center gap-2 text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div class="mt-4 flex items-center gap-2 text-primary opacity-0 group-hover:opacity-100 transition-opacity">
                         <span class="text-sm font-bold">{{ __('landing.features.learn_more') }}</span>
                         <svg class="w-4 h-4 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform rtl:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />

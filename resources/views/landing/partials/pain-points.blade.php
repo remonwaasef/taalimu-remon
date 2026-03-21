@@ -1,11 +1,11 @@
-<section class="py-16 lg:py-24 bg-slate-100 border-y border-slate-200">
+<section class="py-8 lg:py-12 bg-slate-100 border-y border-slate-200">
     <div class="container mx-auto px-4 lg:px-8">
         <!-- Section Header -->
-        <div class="text-center mb-12 lg:mb-16">
-            <h2 class="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+        <div class="text-center mb-6 lg:mb-8">
+            <h2 class="text-2xl lg:text-3xl font-bold text-foreground mb-3">
                 {{ __('landing.pain_points.title_prefix') }} <span class="gradient-text">{{ __('landing.pain_points.title_highlight') }}</span>{{ __('landing.pain_points.title_suffix') }}
             </h2>
-            <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
+            <p class="text-muted-foreground text-base max-w-2xl mx-auto">
                 {{ __('landing.pain_points.subtitle') }}
             </p>
         </div>
@@ -14,20 +14,20 @@
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             <!-- Revenue Lost -->
             <div
-                class="group relative bg-white rounded-3xl p-8 border border-white shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-fade-in delay-0"
+                class="group relative bg-white rounded-2xl p-5 border border-white shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-fade-in delay-0"
             >
                 <!-- Icon -->
-                <div class="w-16 h-16 rounded-2xl bg-primary/5 border-primary/10 border flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-primary"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg>
+                <div class="w-12 h-12 rounded-xl bg-primary/5 border-primary/10 border flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-primary"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg>
                 </div>
 
                 <!-- Stat -->
-                <div class="text-5xl lg:text-6xl font-bold text-primary mb-2">
+                <div class="text-3xl lg:text-4xl font-bold text-primary mb-1">
                     35%
                 </div>
 
                 <!-- Title -->
-                <h3 class="text-xl font-semibold text-foreground mb-2">
+                <h3 class="text-base font-semibold text-foreground mb-1">
                     {{ __('landing.pain_points.revenue_lost.title') }}
                 </h3>
 
@@ -39,20 +39,20 @@
 
             <!-- Time Wasted -->
             <div
-                class="group relative bg-white rounded-3xl p-8 border border-white shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-fade-in delay-1"
+                class="group relative bg-white rounded-2xl p-5 border border-white shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-fade-in delay-1"
             >
                 <!-- Icon -->
-                <div class="w-16 h-16 rounded-2xl bg-primary/5 border-primary/10 border flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-primary"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <div class="w-12 h-12 rounded-xl bg-primary/5 border-primary/10 border flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-primary"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 </div>
 
                 <!-- Stat -->
-                <div class="text-5xl lg:text-6xl font-bold text-primary mb-2">
+                <div class="text-3xl lg:text-4xl font-bold text-primary mb-1">
                     12h
                 </div>
 
                 <!-- Title -->
-                <h3 class="text-xl font-semibold text-foreground mb-2">
+                <h3 class="text-base font-semibold text-foreground mb-1">
                     {{ __('landing.pain_points.time_wasted.title') }}
                 </h3>
 
@@ -64,20 +64,20 @@
 
             <!-- Parents Complaints -->
             <div
-                class="group relative bg-white rounded-3xl p-8 border border-white shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-fade-in delay-2"
+                class="group relative bg-white rounded-2xl p-5 border border-white shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-fade-in delay-2"
             >
                 <!-- Icon -->
-                <div class="w-16 h-16 rounded-2xl bg-primary/5 border-primary/10 border flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-primary"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <div class="w-12 h-12 rounded-xl bg-primary/5 border-primary/10 border flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-primary"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                 </div>
 
                 <!-- Stat -->
-                <div class="text-5xl lg:text-6xl font-bold text-primary mb-2">
+                <div class="text-3xl lg:text-4xl font-bold text-primary mb-1">
                     24/7
                 </div>
 
                 <!-- Title -->
-                <h3 class="text-xl font-semibold text-foreground mb-2">
+                <h3 class="text-base font-semibold text-foreground mb-1">
                     {{ __('landing.pain_points.complaints.title') }}
                 </h3>
 
@@ -89,20 +89,20 @@
 
             <!-- Manual Work -->
             <div
-                class="group relative bg-white rounded-3xl p-8 border border-white shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-fade-in delay-3"
+                class="group relative bg-white rounded-2xl p-5 border border-white shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-fade-in delay-3"
             >
                 <!-- Icon -->
-                <div class="w-16 h-16 rounded-2xl bg-primary/5 border-primary/10 border flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-primary"><path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/></svg>
+                <div class="w-12 h-12 rounded-xl bg-primary/5 border-primary/10 border flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-primary"><path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/></svg>
                 </div>
 
                 <!-- Stat -->
-                <div class="text-5xl lg:text-6xl font-bold text-primary mb-2">
+                <div class="text-3xl lg:text-4xl font-bold text-primary mb-1">
                     100%
                 </div>
 
                 <!-- Title -->
-                <h3 class="text-xl font-semibold text-foreground mb-2">
+                <h3 class="text-base font-semibold text-foreground mb-1">
                     {{ __('landing.pain_points.manual_work.title') }}
                 </h3>
 
@@ -114,7 +114,7 @@
         </div>
 
         <!-- Trust Indicator -->
-        <div class="mt-16 text-center animate-fade-in delay-200">
+        <div class="mt-8 text-center animate-fade-in delay-200">
             <p class="text-sm font-semibold text-primary uppercase tracking-widest mb-4">
                 {{ __('landing.pain_points.trust_label') }}
             </p>

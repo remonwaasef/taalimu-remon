@@ -1,11 +1,11 @@
 <section id="faq" class="py-12 lg:py-16">
     <div class="container mx-auto px-4 lg:px-8">
         <!-- Section Header -->
-        <div class="text-center mb-12 lg:mb-16">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-outline-purple/10 border border-outline-purple/20 mb-6">
+        <div class="text-center mb-6 lg:mb-8">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-outline-purple/10 border border-outline-purple/20 mb-4">
                 <span class="text-sm font-medium text-outline-purple">{{ __('landing.faq.badge') }}</span>
             </div>
-            <h2 class="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+            <h2 class="text-2xl lg:text-3xl font-bold text-foreground mb-3">
                 {{ __('landing.faq.title_prefix') }} <span class="gradient-text">{{ __('landing.faq.title_highlight') }}</span>
             </h2>
             @php
