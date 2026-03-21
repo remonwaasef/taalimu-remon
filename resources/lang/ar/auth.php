@@ -77,6 +77,7 @@ return [
             'api_access' => 'ربط خارجي (API Access)',
         ],
         'google_signup' => 'التسجيل باستخدام Google',
+        'or' => 'أو',
         'processing' => 'جاري المعالجة...',
     ],
     

@@ -77,6 +77,7 @@ return [
             'api_access' => 'External API Access',
         ],
         'google_signup' => 'Sign up with Google',
+        'or' => 'OR',
         'processing' => 'Processing...',
     ],
     
