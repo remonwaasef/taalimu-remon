@@ -6,7 +6,7 @@
         <div class="flex items-center justify-between h-14 lg:h-16">
             <!-- Logo -->
             <a href="{{ route('home') }}" class="flex items-center gap-2.5 group transition-all duration-300">
-                <img src="{{ asset('images/brand/logo-full.png?v=2') }}" alt="{{ config('app.name') }}" class="h-9 lg:h-11 w-auto object-contain transition-transform duration-500 group-hover:scale-110 mix-blend-multiply">
+                <img src="{{ asset('images/brand/logo-full.png?v=3') }}" alt="{{ config('app.name') }}" class="h-9 lg:h-11 w-auto object-contain transition-transform duration-500 group-hover:scale-110 mix-blend-multiply">
                 <div class="flex flex-col">
                     <span class="font-bold text-lg lg:text-xl text-primary leading-none tracking-tight group-hover:text-primary/90 transition-colors">
                         {{ \App\Models\SiteSetting::get('site_name', 'Taalimu') }}
