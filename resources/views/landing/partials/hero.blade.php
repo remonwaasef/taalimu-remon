@@ -1,10 +1,10 @@
-<section class="relative min-h-[90vh] pt-16 lg:pt-20 overflow-hidden hero-professional-bg noise-overlay">
+<section class="relative min-h-[70vh] pt-16 lg:pt-20 overflow-hidden hero-professional-bg noise-overlay">
     <!-- Background Elements - Simplified -->
     <div class="absolute inset-0 bg-slate-50/50"></div>
     
     <div 
         dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"
-        class="container relative mx-auto px-4 lg:px-8 py-8 lg:py-14"
+        class="container relative mx-auto px-4 lg:px-8 py-6 lg:py-10"
     >
         <div class="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center justify-between">
             <!-- Left Content -->
@@ -94,7 +94,7 @@
             <!-- Right Content - Hybrid Mockup -->
             <div class="w-full lg:w-[55%] relative flex items-center justify-center lg:justify-end">
                 <div 
-                    class="relative z-10 w-full max-w-[750px] animate-fade-in-right animate-float-slow transform-gpu backface-hidden delay-2"
+                    class="relative z-10 w-full max-w-[650px] animate-fade-in-right animate-float-slow transform-gpu backface-hidden delay-2"
                 >
                     <!-- Localized Floating WhatsApp Notification -->
                     <div 
