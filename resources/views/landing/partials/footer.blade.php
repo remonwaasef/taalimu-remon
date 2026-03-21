@@ -1,4 +1,4 @@
-<footer class="bg-slate-50 relative overflow-hidden pt-20 pb-10 border-t border-border/50">
+<footer class="bg-slate-50 relative overflow-hidden pt-12 pb-8 border-t border-border/50">
     <!-- Decorative Accents -->
     <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"></div>
     <div class="absolute -top-24 -left-24 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
@@ -6,15 +6,15 @@
 
     <div class="container relative mx-auto px-4 lg:px-8">
         <!-- Main Footer Links -->
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 md:gap-12 mb-20">
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 md:gap-10 mb-12">
             
             <!-- Brand/About Column -->
             <div class="col-span-2 lg:col-span-2 space-y-8">
                 <!-- Logo -->
-                <a href="{{ route('home') }}" class="flex items-center gap-2.5 group transition-all duration-300">
-                    <img src="{{ asset('images/brand/logo-full.png?v=3') }}" alt="{{ config('app.name') }}" class="h-9 w-auto object-contain transition-transform duration-500 group-hover:scale-110 mix-blend-multiply">
+                <a href="{{ route('home') }}" class="flex items-center gap-2 group transition-all duration-300">
+                    <img src="{{ asset('images/brand/logo-full.png?v=3') }}" alt="{{ config('app.name') }}" class="h-8 w-auto object-contain transition-transform duration-500 group-hover:scale-110 mix-blend-multiply">
                     <div class="flex flex-col">
-                        <span class="font-bold text-lg text-primary leading-none tracking-tight">
+                        <span class="font-bold text-base text-primary leading-none tracking-tight">
                             {{ \App\Models\SiteSetting::get('site_name', 'Taalimu') }}
                         </span>
                         <span class="text-[8px] font-extrabold text-secondary uppercase tracking-[0.2em] mt-0.5 opacity-70">
@@ -45,8 +45,8 @@
 
             <!-- Product Links -->
             <div>
-                <h4 class="text-primary font-bold text-lg mb-8">{{ __('landing.footer.product.title') }}</h4>
-                <ul class="space-y-4">
+                <h4 class="text-primary font-bold text-base mb-6">{{ __('landing.footer.product.title') }}</h4>
+                <ul class="space-y-3">
                     <li><a href="#features" class="text-muted-foreground hover:text-secondary transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.product.features') }}</a></li>
                     <li><a href="#pricing" class="text-muted-foreground hover:text-secondary transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.product.pricing') }}</a></li>
                     <li><a href="#" class="text-muted-foreground hover:text-secondary transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.product.integrations') }}</a></li>
@@ -56,8 +56,8 @@
 
             <!-- Support Links -->
             <div>
-                <h4 class="text-primary font-bold text-lg mb-8">{{ __('landing.footer.resources.title') }}</h4>
-                <ul class="space-y-4">
+                <h4 class="text-primary font-bold text-base mb-6">{{ __('landing.footer.resources.title') }}</h4>
+                <ul class="space-y-3">
                     <li><a href="#" class="text-muted-foreground hover:text-secondary transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.resources.help') }}</a></li>
                     <li><a href="#" class="text-muted-foreground hover:text-secondary transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.resources.docs') }}</a></li>
                     <li><a href="#" class="text-muted-foreground hover:text-secondary transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.resources.blog') }}</a></li>
@@ -67,8 +67,8 @@
 
             <!-- Legal Links -->
             <div>
-                <h4 class="text-primary font-bold text-lg mb-8">{{ __('landing.footer.legal.title') }}</h4>
-                <ul class="space-y-4">
+                <h4 class="text-primary font-bold text-base mb-6">{{ __('landing.footer.legal.title') }}</h4>
+                <ul class="space-y-3">
                     <li><a href="{{ route('privacy') }}" class="text-muted-foreground hover:text-secondary transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.legal.privacy') }}</a></li>
                     <li><a href="{{ route('terms') }}" class="text-muted-foreground hover:text-secondary transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.legal.terms') }}</a></li>
                     <li><a href="{{ route('cookies') }}" class="text-muted-foreground hover:text-secondary transition-colors duration-300 text-sm font-medium">{{ __('landing.footer.legal.cookie') }}</a></li>
