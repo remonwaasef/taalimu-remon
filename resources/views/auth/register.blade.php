@@ -515,7 +515,7 @@ document.addEventListener('alpine:init', () => {
 
                                 <!-- Mini Features List -->
                                 <div class="space-y-2 py-3 border-y border-slate-100/50 mb-3">
-                                    <template x-for="feature in (currentPlan.features || []).slice(0, 3)" :key="feature">
+                                    <template x-for="feature in (currentPlan.features || [])" :key="feature">
                                         <div class="flex items-center gap-2 text-[10px] font-bold text-slate-600 font-arabic">
                                             <i class="bi bi-check2 text-emerald-500"></i>
                                             <span x-text="feature"></span>
