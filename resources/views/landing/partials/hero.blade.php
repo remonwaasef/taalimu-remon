@@ -103,7 +103,7 @@
                             $heroImage = match(app()->getLocale()) {
                                 'en' => 'hero-mockup-en.webp',
                                 'fr' => 'hero-mockup-fr.webp',
-                                default => 'hero-mockup-v2.webp',
+                                default => 'hero-mockup-ar.png',
                             };
                         @endphp
                         <img 
