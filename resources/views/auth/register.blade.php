@@ -380,7 +380,7 @@ document.addEventListener('alpine:init', () => {
                 </div>
             </div>
 
-            <form action="{{ route('register.submit') }}" method="POST" class="space-y-4">
+            <form action="{{ route('register.submit') }}" method="POST" class="space-y-4" @submit="if(currentStep === 1) { $event.preventDefault(); nextStep(); }">
                 @csrf
                 @if(request('google_id'))
                     <input type="hidden" name="google_id" value="{{ request('google_id') }}">
