@@ -215,8 +215,8 @@ document.addEventListener('alpine:init', () => {
 
 <div class="min-h-screen bg-slate-50/50 flex justify-center p-2 lg:p-4 mesh-gradient-soft noise-overlay register-page-offset" 
      x-data="registrationForm({
-        selectedPlan: {{ Js::from(request('plan', $packages->firstWhere('is_default', true)?->slug ?? $packages->first()?->slug ?? '')) }},
-        billingCycle: {{ Js::from(request('cycle', 'monthly')) }},
+        selectedPlan: {{ Js::from(old('plan', request('plan', $packages->firstWhere('is_default', true)?->slug ?? $packages->first()?->slug ?? ''))) }},
+        billingCycle: {{ Js::from(old('billing_cycle', request('cycle', 'monthly'))) }},
         packages: {{ Js::from($packagesData) }},
         centerName: {{ Js::from(old('center_name')) }},
         subdomain: {{ Js::from(old('subdomain')) }},
