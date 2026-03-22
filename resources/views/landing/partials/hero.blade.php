@@ -88,26 +88,26 @@
                         <div class="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('landing.hero.stats.collection') }}</div>
                     </div>
 
-                    <!-- WhatsApp Payment Notification (Refined & Compact) -->
+                    <!-- WhatsApp Payment Notification (Extra Compact) -->
                     <div 
-                        class="absolute bottom-6 left-10 md:bottom-10 md:left-16 z-50 animate-fade-in-up delay-3 transform-gpu"
-                        style="transform: translateZ(100px) rotateY(10deg);"
+                        class="absolute bottom-6 left-12 md:bottom-10 md:left-20 z-50 animate-fade-in-up delay-3 transform-gpu"
+                        style="transform: translateZ(80px) rotateY(10deg);"
                     >
-                        <div class="flex items-center gap-3 p-2.5 md:p-4 bg-white rounded-3xl shadow-[0_30px_60px_rgba(0,0,0,0.12)] border border-emerald-50/50 min-w-[240px] md:min-w-[320px]">
+                        <div class="flex items-center gap-2.5 p-2 md:p-3 bg-white rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.1)] border border-emerald-50/50 min-w-[200px] md:min-w-[280px]">
                             <div class="relative flex-shrink-0">
-                                <div class="w-8 h-8 md:w-11 md:h-11 rounded-full bg-[#25D366] flex items-center justify-center text-white text-lg md:text-2xl shadow-lg shadow-[#25D366]/20">
+                                <div class="w-7 h-7 md:w-9 md:h-9 rounded-full bg-[#25D366] flex items-center justify-center text-white text-base md:text-xl shadow-md shadow-[#25D366]/20">
                                     <i class="fab fa-whatsapp"></i>
                                 </div>
-                                <div class="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 md:w-5 md:h-5 bg-white rounded-full flex items-center justify-center shadow-sm">
-                                    <i class="fas fa-check-circle text-emerald-500 text-[6px] md:text-xs"></i>
+                                <div class="absolute -top-0.5 -right-0.5 w-3 h-3 md:w-4 md:h-4 bg-white rounded-full flex items-center justify-center shadow-sm">
+                                    <i class="fas fa-check-circle text-emerald-500 text-[5px] md:text-[8px]"></i>
                                 </div>
                             </div>
                             <div class="flex-1 text-start overflow-hidden">
                                 <div class="flex flex-col gap-0">
-                                    <p class="text-[11px] md:text-sm font-black text-slate-900 leading-tight whitespace-normal">
+                                    <p class="text-[10px] md:text-[13px] font-black text-slate-900 leading-tight whitespace-normal">
                                         {{ __('landing.hero.mockup.whatsapp.payment_success') }}
                                     </p>
-                                    <p class="text-[8px] md:text-[10px] font-bold text-slate-400 flex items-center gap-1 uppercase tracking-wide">
+                                    <p class="text-[7px] md:text-[9px] font-bold text-slate-400 flex items-center gap-1 uppercase tracking-wide">
                                         <span class="w-1 h-1 rounded-full bg-emerald-500 animate-pulse"></span>
                                         {{ __('landing.hero.mockup.whatsapp.now') }}
                                     </p>
