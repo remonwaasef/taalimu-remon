@@ -39,7 +39,6 @@ return [
             'revenue' => 'Augmentation des Revenus',
             'time' => 'Heures Économisées/Semaine',
             'collection' => 'Taux de Recouvrement',
-            'attendance' => 'Taux de Présence',
         ],
         'mockup' => [
             'whatsapp' => [

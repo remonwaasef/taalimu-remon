@@ -73,76 +73,85 @@
                 </div>
             </div>
 
-            <!-- Right Content - Hybrid Mockup -->
-            <div class="w-full lg:w-[50%] relative flex items-center justify-center lg:justify-end">
+            <!-- Right Content - Hybrid Mockup with 3D Slant -->
+            <div class="w-full lg:w-[50%] relative flex items-center justify-center lg:justify-end py-12 lg:py-0">
                 <div 
-                    class="relative z-10 w-full max-w-[620px] animate-fade-in-right animate-float-slow transform-gpu backface-hidden delay-2"
+                    class="relative z-10 w-full max-w-[650px] animate-fade-in-right transform-gpu backface-hidden delay-2"
+                    style="perspective: 2000px;"
                 >
-                    <!-- WhatsApp Payment Notification (NEW) -->
-                    <div class="absolute top-0 -start-6 md:top-4 md:-start-12 z-50 animate-fade-in-up delay-3">
-                        <div class="flex items-center gap-3 p-3 md:p-4 bg-white rounded-2xl shadow-2xl border border-slate-50 min-w-[240px] md:min-w-[280px]">
-                            <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#25D366] flex items-center justify-center text-white text-xl md:text-2xl shadow-lg shadow-[#25D366]/20">
-                                <i class="fab fa-whatsapp"></i>
-                            </div>
-                            <div class="flex-1 text-start">
-                                <div class="flex items-center justify-between gap-2">
-                                    <p class="text-sm md:text-base font-black text-slate-800">{{ __('landing.hero.mockup.whatsapp.payment_success') }}</p>
-                                    <i class="fas fa-check-circle text-emerald-500 text-sm"></i>
-                                </div>
-                                <p class="text-[10px] md:text-xs font-bold text-slate-400">{{ __('landing.hero.mockup.whatsapp.just_now') }}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Floating Stat Cards: Collection Rate -->
-                    <div class="absolute top-24 -start-2 md:top-32 md:-start-6 w-24 md:w-32 bg-white rounded-3xl shadow-2xl p-4 z-50 border border-slate-50 text-center animate-bounce-slow delay-5">
-                        <div class="text-xl md:text-2xl font-black text-emerald-500 mb-0.5">98%</div>
+                    <!-- Floating Stat Cards: Collection Rate (Top) -->
+                    <div 
+                        class="absolute -top-12 right-12 md:-top-16 md:right-24 bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-4 z-50 border border-slate-50 text-center animate-bounce-slow transform-gpu"
+                        style="transform: translateZ(50px) rotateY(-5deg);"
+                    >
+                        <div class="text-xl md:text-3xl font-black text-emerald-500 mb-0.5">98%</div>
                         <div class="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('landing.hero.stats.collection') }}</div>
                     </div>
 
-                    <!-- Floating Stat Cards: Attendance Rate (NEW) -->
-                    <div class="absolute top-48 -start-6 md:top-60 md:-start-12 w-24 md:w-32 bg-white rounded-3xl shadow-2xl p-4 z-50 border border-slate-50 text-center animate-bounce-slow delay-7">
-                        <div class="text-xl md:text-2xl font-black text-blue-500 mb-0.5">94%</div>
-                        <div class="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('landing.hero.stats.attendance') }}</div>
+                    <!-- WhatsApp Payment Notification (Floating Bottom) -->
+                    <div 
+                        class="absolute -bottom-10 right-4 md:-bottom-16 md:right-12 z-50 animate-fade-in-up delay-3 transform-gpu"
+                        style="transform: translateZ(80px) rotateY(-5deg);"
+                    >
+                        <div class="flex items-center gap-3 p-3 md:p-5 bg-white rounded-[2rem] shadow-[0_30px_60px_rgba(0,0,0,0.12)] border border-slate-50 min-w-[260px] md:min-w-[320px]">
+                            <div class="w-10 h-10 md:w-14 md:h-14 rounded-full bg-[#25D366] flex items-center justify-center text-white text-xl md:text-3xl shadow-lg shadow-[#25D366]/20">
+                                <i class="fab fa-whatsapp"></i>
+                            </div>
+                            <div class="flex-1 text-start">
+                                <div class="flex items-center justify-between gap-2 mb-0.5">
+                                    <p class="text-sm md:text-lg font-black text-slate-800">{{ __('landing.hero.mockup.whatsapp.payment_success') }}</p>
+                                    <i class="fas fa-check-circle text-emerald-500 text-sm md:text-lg"></i>
+                                </div>
+                                <p class="text-[10px] md:text-sm font-bold text-slate-400">{{ __('landing.hero.mockup.whatsapp.just_now') }}</p>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Elite Browser Frame Mockup -->
-                    <div class="relative group browser-frame-shadow p-2 md:p-4 bg-white/40 backdrop-blur-xl border border-white/60 rounded-[2.5rem] overflow-hidden">
-                        <!-- Browser Header -->
-                        <div class="flex items-center justify-between px-6 pb-4 md:pb-6 border-b border-slate-200/50 mb-2">
-                            <div class="flex gap-2">
-                                <div class="w-2.5 h-2.5 rounded-full bg-rose-400/80"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-emerald-400/80"></div>
+                    <!-- Browser Frame with 3D Tilt -->
+                    <div 
+                        class="relative group p-1 transition-all duration-700 transform-gpu"
+                        style="transform: rotateY(-18deg) rotateX(8deg) rotateZ(2deg); transform-style: preserve-3d;"
+                    >
+                        <!-- Glow behind the frame -->
+                        <div class="absolute inset-0 bg-emerald-500/10 blur-[100px] -z-10 rounded-full scale-110"></div>
+                        
+                        <div class="relative bg-white/40 backdrop-blur-xl border border-white/60 rounded-[3rem] p-2 md:p-4 shadow-[0_50px_100px_rgba(0,0,0,0.08)] overflow-hidden">
+                            <!-- Browser Header -->
+                            <div class="flex items-center justify-between px-6 pb-4 md:pb-6 border-b border-slate-200/50 mb-2">
+                                <div class="flex gap-2">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-rose-400/80"></div>
+                                    <div class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></div>
+                                    <div class="w-2.5 h-2.5 rounded-full bg-emerald-400/80"></div>
+                                </div>
+                                <div class="h-6 px-12 rounded-full bg-slate-100 border border-slate-200/50 flex items-center justify-center">
+                                    <div class="w-2 h-2 rounded-full bg-slate-300"></div>
+                                </div>
+                                <div class="w-10"></div>
                             </div>
-                            <div class="h-6 px-12 rounded-full bg-slate-100 border border-slate-200/50 flex items-center justify-center">
-                                <div class="w-2 h-2 rounded-full bg-slate-300"></div>
-                            </div>
-                            <div class="w-10"></div>
-                        </div>
 
-                        @php
-                            $heroImage = match(app()->getLocale()) {
-                                'en' => 'hero-mockup-en.webp',
-                                'fr' => 'hero-mockup-fr.webp',
-                                default => 'hero-mockup-ar.png',
-                            };
-                        @endphp
-                        <img 
-                            src="{{ asset('images/' . $heroImage) }}" 
-                            alt="Taalimu Dashboard Mockup" 
-                            class="w-full h-auto rounded-2xl md:rounded-3xl border border-slate-200/30 shadow-inner"
-                            width="800"
-                            height="550"
-                            decoding="async"
-                            loading="eager"
-                            fetchpriority="high"
-                        >
+                            @php
+                                $heroImage = match(app()->getLocale()) {
+                                    'en' => 'hero-mockup-en.webp',
+                                    'fr' => 'hero-mockup-fr.webp',
+                                    default => 'hero-mockup-ar.png',
+                                };
+                            @endphp
+                            <img 
+                                src="{{ asset('images/' . $heroImage) }}" 
+                                alt="Taalimu Dashboard Mockup" 
+                                class="w-full h-auto rounded-2xl md:rounded-3xl border border-slate-200/30 shadow-inner"
+                                width="800"
+                                height="550"
+                                decoding="async"
+                                loading="eager"
+                                fetchpriority="high"
+                            >
+                        </div>
                     </div>
 
                     <!-- Background Accents -->
-                    <div class="absolute -bottom-10 -left-10 w-48 h-48 bg-emerald-400/10 rounded-full blur-3xl -z-10"></div>
-                    <div class="absolute -top-10 -right-10 w-48 h-48 bg-blue-400/10 rounded-full blur-3xl -z-10"></div>
+                    <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-emerald-400/10 rounded-full blur-[120px] -z-10"></div>
+                    <div class="absolute -top-20 -right-20 w-80 h-80 bg-blue-400/10 rounded-full blur-[120px] -z-10"></div>
                 </div>
             </div>
         </div>
