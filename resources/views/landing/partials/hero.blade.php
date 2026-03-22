@@ -94,10 +94,16 @@
                         </div>
                     </div>
 
-                    <!-- Floating Stat Cards: Collection Rate (Repositioned) -->
+                    <!-- Floating Stat Cards: Collection Rate -->
                     <div class="absolute top-24 -start-2 md:top-32 md:-start-6 w-24 md:w-32 bg-white rounded-3xl shadow-2xl p-4 z-50 border border-slate-50 text-center animate-bounce-slow delay-5">
                         <div class="text-xl md:text-2xl font-black text-emerald-500 mb-0.5">98%</div>
                         <div class="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('landing.hero.stats.collection') }}</div>
+                    </div>
+
+                    <!-- Floating Stat Cards: Attendance Rate (NEW) -->
+                    <div class="absolute top-48 -start-6 md:top-60 md:-start-12 w-24 md:w-32 bg-white rounded-3xl shadow-2xl p-4 z-50 border border-slate-50 text-center animate-bounce-slow delay-7">
+                        <div class="text-xl md:text-2xl font-black text-blue-500 mb-0.5">94%</div>
+                        <div class="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('landing.hero.stats.attendance') }}</div>
                     </div>
 
                     <!-- Elite Browser Frame Mockup -->
