@@ -231,6 +231,8 @@ class SocialAuthController extends Controller
             'phone' => 'required|string|max:20|unique:users,phone',
             'plan' => 'required|exists:packages,slug',
             'billing_cycle' => 'required|in:monthly,term,yearly',
+            'payment_gateway' => 'nullable|in:paypal,paymob,test',
+            'coupon_code' => 'nullable|string|exists:coupons,code',
         ]);
 
         // 1. Check if user already exists (safety check)
@@ -294,6 +296,18 @@ class SocialAuthController extends Controller
                 $basePrice = $package->price;
             }
 
+            // Handle Coupon Discount
+            $discountAmount = 0;
+            $couponId = null;
+            if ($request->filled('coupon_code')) {
+                $coupon = \App\Models\Coupon::where('code', $request->coupon_code)->first();
+                if ($coupon && $coupon->isValid() && (!$coupon->package_id || $coupon->package_id === $package->id)) {
+                    $discountAmount = $coupon->calculateDiscount($basePrice);
+                    $couponId = $coupon->id;
+                }
+            }
+            $finalAmount = max(0, $basePrice - $discountAmount);
+
             if ($request->plan === 'free-trial') {
                 \App\Models\Subscription::create([
                     'tenant_id' => $tenant->id,
@@ -306,8 +320,8 @@ class SocialAuthController extends Controller
                     'status' => 'active',
                     'billing_cycle' => $billingCycle,
                     'base_price' => $basePrice,
-                    'total_amount' => $basePrice,
-                    'discount_amount' => 0,
+                    'total_amount' => $finalAmount,
+                    'discount_amount' => $discountAmount,
                 ]);
 
                 // Send Telegram Notification
@@ -329,7 +343,7 @@ class SocialAuthController extends Controller
                     'center_name' => $request->center_name,
                     'billing_cycle' => $billingCycle,
                     'base_price' => $basePrice,
-                    'total_amount' => $basePrice,
+                    'total_amount' => $finalAmount,
                     'registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . $user->id, config('app.key')),
                 ]);
 
@@ -352,7 +366,8 @@ class SocialAuthController extends Controller
                     'selected_plan' => $request->plan,
                     'billing_cycle' => $billingCycle,
                     'base_price' => $basePrice,
-                    'total_amount' => $basePrice,
+                    'total_amount' => $finalAmount,
+                    'discount_amount' => $discountAmount,
                     'registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . $user->id, config('app.key')),
                 ]);
 
@@ -361,7 +376,9 @@ class SocialAuthController extends Controller
                 $gateway = \App\Services\PaymentFactory::make($gatewayName);
                 
                 $redirectUrl = $gateway->createCheckoutSession($tenant, $package, $billingCycle, [
-                    'total_amount' => $basePrice,
+                    'total_amount' => $finalAmount,
+                    'coupon_id' => $couponId,
+                    'discount_amount' => $discountAmount,
                 ]);
 
                 return redirect()->away($redirectUrl);
