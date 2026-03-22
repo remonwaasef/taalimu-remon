@@ -483,6 +483,28 @@ document.addEventListener('alpine:init', () => {
                                 </div>
                                 <div class="space-y-3">
                                     <input :type="showPassword ? 'text' : 'password'" name="password" x-model="password" class="w-full h-11 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" placeholder="••••••••" :required="currentStep === 2">
+                                    
+                                    <!-- Password Live Criteria Indicators -->
+                                    <div x-show="password.length > 0" x-collapse x-cloak class="px-1 py-1">
+                                        <div class="flex flex-wrap gap-x-3 gap-y-1.5">
+                                            <div class="flex items-center gap-1 text-[10px] font-black font-arabic transition-all duration-300" :class="passwordCriteria.length ? 'text-emerald-500' : 'text-slate-400'">
+                                                <i class="bi" :class="passwordCriteria.length ? 'bi-check-circle-fill' : 'bi-circle'"></i> {{ app()->isLocale('ar') ? '٨ أحرف على الأقل' : '8+ Characters' }}
+                                            </div>
+                                            <div class="flex items-center gap-1 text-[10px] font-black font-arabic transition-all duration-300" :class="passwordCriteria.upper ? 'text-emerald-500' : 'text-slate-400'">
+                                                <i class="bi" :class="passwordCriteria.upper ? 'bi-check-circle-fill' : 'bi-circle'"></i> {{ app()->isLocale('ar') ? 'حرف كبير' : 'Uppercase' }}
+                                            </div>
+                                            <div class="flex items-center gap-1 text-[10px] font-black font-arabic transition-all duration-300" :class="passwordCriteria.lower ? 'text-emerald-500' : 'text-slate-400'">
+                                                <i class="bi" :class="passwordCriteria.lower ? 'bi-check-circle-fill' : 'bi-circle'"></i> {{ app()->isLocale('ar') ? 'حرف صغير' : 'Lowercase' }}
+                                            </div>
+                                            <div class="flex items-center gap-1 text-[10px] font-black font-arabic transition-all duration-300" :class="passwordCriteria.number ? 'text-emerald-500' : 'text-slate-400'">
+                                                <i class="bi" :class="passwordCriteria.number ? 'bi-check-circle-fill' : 'bi-circle'"></i> {{ app()->isLocale('ar') ? 'رقم' : 'Number' }}
+                                            </div>
+                                            <div class="flex items-center gap-1 text-[10px] font-black font-arabic transition-all duration-300" :class="passwordCriteria.symbol ? 'text-emerald-500' : 'text-slate-400'">
+                                                <i class="bi" :class="passwordCriteria.symbol ? 'bi-check-circle-fill' : 'bi-circle'"></i> {{ app()->isLocale('ar') ? 'رمز (!@#$)' : 'Symbol (!@#$)' }}
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <input :type="showPassword ? 'text' : 'password'" name="password_confirmation" x-model="password_confirmation" class="w-full h-11 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" :class="password_confirmation.length > 0 && !isPasswordMatch ? 'border-red-300 bg-red-50' : ''" placeholder="{{ __('auth.register.confirm_password') }}" :required="currentStep === 2">
                                 </div>
                             </div>
