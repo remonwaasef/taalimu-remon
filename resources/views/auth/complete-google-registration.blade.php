@@ -417,7 +417,9 @@ window.addEventListener('pageshow', (event) => {
                     <div class="pt-4">
                         <button type="submit" :disabled="isSubmitting || subdomainStatus === 'invalid'"
                                 class="w-full h-14 rounded-full flex items-center justify-center gap-3 group bg-brand-secondary text-white shadow-xl shadow-brand-secondary/20 hover:shadow-brand-secondary/40 hover:-translate-y-0.5 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale">
-                            <span x-show="!isSubmitting" class="text-lg font-black font-arabic">{{ __('auth.register.cta_main') }}</span>
+                            <span x-show="!isSubmitting" class="text-lg font-black font-arabic" 
+                                  x-text="finalPrice === 0 ? '{{ __('auth.register.cta_main') }}' : '{{ app()->isLocale('ar') ? 'ادفع واستكمل التسجيل' : 'Pay & Complete Registration' }}'">
+                            </span>
                             <span x-show="isSubmitting" class="flex items-center gap-2">
                                 <div class="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
                                 {{ app()->isLocale('ar') ? 'جاري الإكمال...' : 'Completing...' }}

@@ -614,7 +614,7 @@ document.addEventListener('alpine:init', () => {
                                 class="flex-[2] h-12 rounded-full font-black text-base text-white bg-brand-secondary shadow-lg shadow-brand-secondary/20 hover:shadow-brand-secondary/30 hover:-translate-y-1 transition-all disabled:opacity-50 disabled:grayscale relative overflow-hidden group">
                             <!-- Button Shine Effect -->
                             <div class="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-white opacity-20 group-hover:animate-[shine_1s] group-hover:left-full transition-all duration-700 ease-in-out"></div>
-                            <span class="relative z-10">{{ __('auth.register.cta_main') }}</span>
+                            <span class="relative z-10" x-text="finalPrice === 0 ? '{{ __('auth.register.cta_main') }}' : '{{ app()->isLocale('ar') ? 'ادفع واستكمل التسجيل' : 'Pay & Complete' }}'"></span>
                         </button>
                     </div>
 
