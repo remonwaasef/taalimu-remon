@@ -1,7 +1,7 @@
 <section class="relative min-h-[70vh] pt-16 lg:pt-24 overflow-hidden bg-white">
     <!-- Sophisticated Background Gradient -->
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-from),_transparent_60%)] from-emerald-100/60 to-transparent"></div>
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-from),_transparent_50%)] from-teal-50/50 to-transparent"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-from),_transparent_50%)] from-emerald-50/40 to-transparent"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-from),_transparent_40%)] from-blue-50/30 to-transparent"></div>
     
     <div 
         dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"
@@ -122,7 +122,7 @@
                         style="transform: rotateY(18deg) rotateX(8deg) rotateZ(-2deg); transform-style: preserve-3d;"
                     >
                         <!-- Glow behind the frame -->
-                        <div class="absolute inset-0 bg-emerald-400/20 blur-[100px] -z-10 rounded-full scale-110"></div>
+                        <div class="absolute inset-0 bg-emerald-500/10 blur-[100px] -z-10 rounded-full scale-110"></div>
                         
                         <div class="relative bg-white/40 backdrop-blur-xl border border-white/60 rounded-[3rem] p-2 md:p-4 shadow-[0_50px_100px_rgba(0,0,0,0.08)] overflow-hidden">
                             <!-- Browser Header -->
@@ -159,8 +159,8 @@
                     </div>
 
                     <!-- Background Accents -->
-                    <div class="absolute -bottom-20 -right-20 w-96 h-96 bg-emerald-400/20 rounded-full blur-[120px] -z-10"></div>
-                    <div class="absolute -top-20 -left-20 w-96 h-96 bg-teal-300/20 rounded-full blur-[120px] -z-10"></div>
+                    <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-emerald-400/10 rounded-full blur-[120px] -z-10"></div>
+                    <div class="absolute -top-20 -left-20 w-80 h-80 bg-blue-400/10 rounded-full blur-[120px] -z-10"></div>
                 </div>
             </div>
         </div>
