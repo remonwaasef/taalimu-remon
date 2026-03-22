@@ -1,176 +1,317 @@
-<section class="relative min-h-[60vh] pt-12 lg:pt-16 overflow-hidden hero-professional-bg noise-overlay">
-    <!-- Background Elements - Simplified -->
-    <div class="absolute inset-0 bg-slate-50/50"></div>
+<section class="relative min-h-screen pt-20 pb-32 overflow-hidden hero-mesh-bg">
+    <!-- Animated Background Blobs -->
+    <div class="blob top-[-10%] left-[-10%] opacity-20"></div>
+    <div class="blob bottom-[-10%] right-[-10%] opacity-30 animation-delay-2000" style="background: linear-gradient(135deg, var(--hero-mesh-3) 0%, var(--hero-mesh-1) 100%);"></div>
     
     <div 
         dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"
-        class="container relative mx-auto px-4 lg:px-8 py-4 lg:py-6"
+        class="container relative z-10 mx-auto px-4"
     >
-        <div class="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center justify-between">
-            <!-- Left Content -->
-            <div class="w-full lg:w-[45%] text-center lg:text-start">
-                <!-- Premium Badge -->
-                <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-primary/5 backdrop-blur-md border border-primary/10 mb-6 animate-fade-in shadow-sm relative z-20">
-                    <span class="relative flex h-3 w-3">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
-                    </span>
-                    <span class="text-sm font-bold text-primary tracking-wide">{{ __('landing.hero.badge') }}</span>
-                </div>
-
-                <!-- Headline -->
-                <h1 
-                    dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}" 
-                    class="font-cairo text-2xl md:text-3xl lg:text-2xl xl:text-3xl font-black text-primary leading-[1.2] mb-4 animate-fade-in tracking-tight delay-1"
-                >
-                    {!! __('landing.hero.title') !!}
-                </h1>
-
-                <!-- Subheadline -->
-                <p 
-                    dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"
-                    class="text-base md:text-lg text-muted-foreground mb-6 max-w-xl mx-auto lg:mx-0 animate-fade-in font-medium leading-[1.6] md:leading-relaxed delay-2"
-                >
-                    {{ \App\Models\SiteSetting::get('site_description_' . app()->getLocale(), __('landing.hero.subtitle')) }}
-                </p>
-
-                <!-- Premium CTA Buttons -->
-                <div 
-                    class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10 animate-fade-in delay-3"
-                >
-                    <a href="{{ route('register') }}?account_type=center" class="inline-flex items-center justify-center rounded-full text-sm font-black h-10 md:h-12 px-6 md:px-8 group transition-all bg-secondary text-white shadow-lg hover:bg-secondary/90 hover:-translate-y-1">
-                        <i class="fas fa-university me-2 text-xs"></i>
-                        {{ app()->isLocale('ar') ? 'سجل كمركز تعليمي' : 'Register as Center' }}
-                    </a>
-                    <a href="{{ route('register') }}?account_type=instructor" class="inline-flex items-center justify-center rounded-full text-sm font-black h-10 md:h-12 px-6 md:px-8 group transition-all border-2 border-primary/10 text-primary hover:bg-primary/5">
-                        <i class="fas fa-chalkboard-teacher me-2 text-xs"></i>
-                        {{ app()->isLocale('ar') ? 'سجل كمدرس مستقل' : 'Register as Teacher' }}
-                    </a>
-                </div>
-
-                <!-- Professional Trust Badges - Simplified -->
-                <div 
-                    class="flex flex-wrap gap-8 justify-center lg:justify-start animate-fade-in py-6 border-y border-border mb-12 delay-4"
-                >
-                    <div class="flex items-center gap-3 text-sm font-bold text-muted-foreground group cursor-default">
-                        <div class="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors border border-primary/10">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1-1z"/></svg>
-                        </div>
-                        {{ __('landing.hero.trust.security') }}
-                    </div>
-                    <div class="flex items-center gap-3 text-sm font-bold text-muted-foreground group cursor-default">
-                        <div class="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors border border-primary/10">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                        </div>
-                        {{ __('landing.hero.trust.centers') }}
-                    </div>
-                    <div class="flex items-center gap-3 text-sm font-bold text-muted-foreground group cursor-default">
-                        <div class="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors border border-primary/10">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
-                        </div>
-                        {{ __('landing.hero.trust.uptime') }}
-                    </div>
-                </div>
-
-                <!-- High Impact Stats -->
-                <div 
-                    class="grid grid-cols-3 gap-6 animate-fade-in delay-5"
-                >
-                    <div class="text-center lg:text-start p-3 rounded-2xl bg-white border border-border shadow-sm">
-                        <div class="text-2xl lg:text-3xl font-black gradient-text mb-0.5">38%</div>
-                        <div class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.revenue') }}</div>
-                    </div>
-                    <div class="text-center lg:text-start p-3 rounded-2xl bg-white border border-border shadow-sm">
-                        <div class="text-2xl lg:text-3xl font-black gradient-text mb-0.5">15h</div>
-                        <div class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.time') }}</div>
-                    </div>
-                    <div class="text-center lg:text-start p-3 rounded-2xl bg-white border border-border shadow-sm">
-                        <div class="text-2xl lg:text-3xl font-black gradient-text mb-0.5">98%</div>
-                        <div class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.collection') }}</div>
-                    </div>
-                </div>
+        <!-- Content Wrapper - Centered Design -->
+        <div class="max-w-4xl mx-auto text-center mb-16 lg:mb-24">
+            <!-- Premium Badge -->
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-morphism mb-8 animate-fade-in shadow-sm">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+                </span>
+                <span class="text-xs font-bold text-primary tracking-wide uppercase">{{ __('landing.hero.badge') }}</span>
             </div>
 
-            <!-- Right Content - Hybrid Mockup -->
-            <div class="w-full lg:w-[55%] relative flex items-center justify-center lg:justify-end">
-                <div 
-                    class="relative z-10 w-full max-w-[550px] animate-fade-in-right animate-float-slow transform-gpu backface-hidden delay-2"
-                >
-                    <!-- Localized Floating WhatsApp Notification -->
-                    <div 
-                        class="absolute top-0 -start-6 md:-start-12 w-64 md:w-80 glass-card rounded-3xl shadow-2xl z-50 p-1 border border-white/40 overflow-hidden"
-                    >
-                        <div class="bg-white/90 rounded-[1.4rem] overflow-hidden">
-                            <div class="p-3 md:p-4 flex items-center gap-3 bg-muted/20">
-                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-2xl bg-success-green flex items-center justify-center shadow-lg shadow-success-green/20">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                                </div>
-                                <div class="flex-1">
-                                    <div class="flex justify-between items-center mb-0.5">
-                                        <span class="text-xs md:text-sm font-bold text-foreground">{{ __('landing.hero.mockup.whatsapp.title') }}</span>
-                                        <span class="text-[9px] md:text-[10px] font-medium text-muted-foreground">{{ __('landing.hero.mockup.whatsapp.now') }}</span>
-                                    </div>
-                                    <div class="flex items-center gap-1.5">
-                                        <div class="w-1.5 h-1.5 rounded-full bg-success-green"></div>
-                                        <span class="text-[10px] md:text-[11px] font-bold text-success-green uppercase tracking-wider">{{ __('landing.hero.mockup.whatsapp.online') }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-3 md:p-4 bg-gradient-to-b from-muted/10 to-transparent">
-                                <div class="bg-white rounded-2xl p-3 md:p-4 shadow-sm border border-border/10">
-                                    <p class="text-[12px] md:text-[13px] text-foreground font-medium leading-relaxed antialiased">
-                                        {{ __('landing.hero.mockup.whatsapp.message') }}
-                                    </p>
-                                    <div class="mt-3 md:mt-4 pt-2 md:pt-3 border-t border-border/50 flex justify-between items-center">
-                                        <span class="text-[12px] md:text-[13px] font-black text-cyan flex items-center gap-1">
-                                            {{ __('landing.hero.mockup.whatsapp.cta') }}
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180"><path d="m9 18 6-6-6-6"/></svg>
-                                        </span>
-                                        <span class="text-[9px] md:text-[10px] font-bold text-muted-foreground">10:30 AM</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Main Headline -->
+            <h1 
+                class="font-cairo text-4xl md:text-5xl lg:text-7xl font-black text-primary leading-[1.1] mb-8 animate-fade-in-up tracking-tight"
+            >
+                {!! __('landing.hero.title') !!}
+            </h1>
 
-                    <!-- Elite Browser Frame Mockup -->
-                    <div class="relative group browser-frame-shadow p-2 md:p-3 bg-white/40 backdrop-blur-xl border border-white/50 rounded-3xl overflow-hidden">
-                        <!-- Browser Header -->
-                        <div class="flex items-center justify-between px-4 pb-3 md:pb-4 border-b border-black/5 mb-2">
-                            <div class="flex gap-1.5">
-                                <div class="w-2 md:w-2.5 h-2 md:h-2.5 rounded-full bg-red-400/80"></div>
-                                <div class="w-2 md:w-2.5 h-2 md:h-2.5 rounded-full bg-amber-400/80"></div>
-                                <div class="w-2 md:w-2.5 h-2 md:h-2.5 rounded-full bg-emerald-400/80"></div>
-                            </div>
-                            <div class="h-5 md:h-6 px-10 rounded-full bg-black/5 border border-black/5 flex items-center justify-center">
-                                <div class="w-2 h-2 rounded-full bg-black/10"></div>
-                            </div>
-                            <div class="w-6 md:w-10"></div>
-                        </div>
+            <!-- Subheadline -->
+            <p 
+                class="text-lg md:text-xl text-muted-foreground/80 mb-10 max-w-2xl mx-auto animate-fade-in-up font-medium leading-relaxed delay-2 shadow-sm"
+            >
+                {{ \App\Models\SiteSetting::get('site_description_' . app()->getLocale(), __('landing.hero.subtitle')) }}
+            </p>
 
-                        @php
-                            $heroImage = match(app()->getLocale()) {
-                                'en' => 'hero-mockup-en.webp',
-                                'fr' => 'hero-mockup-fr.webp',
-                                default => 'hero-mockup-v2.webp',
-                            };
-                        @endphp
-                        <img 
-                            src="{{ asset('images/' . $heroImage) }}" 
-                            alt="EduFlow Dashboard Mockup" 
-                            class="w-full h-auto rounded-xl md:rounded-2xl border border-black/5 shadow-inner"
-                            width="750"
-                            height="500"
-                            decoding="async"
-                            loading="eager"
-                            fetchpriority="high"
-                        >
+            <!-- Premium CTA Group -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up delay-3">
+                <a href="{{ route('register') }}?account_type=center" class="group relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-black text-white rounded-full bg-gradient-to-br from-secondary to-secondary-vibrant group-hover:from-secondary group-hover:to-secondary-vibrant hover:text-white focus:ring-4 focus:outline-none focus:ring-secondary/30 transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-xl shadow-secondary/20">
+                    <span class="relative px-8 py-4 transition-all ease-in duration-75 bg-secondary group-hover:bg-opacity-0 rounded-full flex items-center gap-3">
+                        <i class="fas fa-rocket text-sm"></i>
+                        {{ app()->isLocale('ar') ? 'سجل كمركز تعليمي' : 'Register as Center' }}
+                    </span>
+                </a>
+                
+                <a href="{{ route('register') }}?account_type=instructor" class="group relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-black text-primary rounded-full border-2 border-primary/20 hover:border-primary/40 transition-all duration-300 transform hover:scale-105 active:scale-95">
+                    <span class="relative px-8 py-3.5 flex items-center gap-3">
+                        <i class="fas fa-user-tie text-sm"></i>
+                        {{ app()->isLocale('ar') ? 'سجل كمدرس مستقل' : 'Register as Teacher' }}
+                    </span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Interactive Visual Section -->
+        <div class="relative max-w-6xl mx-auto mt-12 px-4 lg:px-0">
+            <!-- Main Browser Mockup -->
+            <div class="relative z-10 glass-morphism p-2 rounded-3xl browser-frame-shadow animate-fade-in-up delay-4">
+                <div class="bg-white rounded-2xl overflow-hidden border border-border/50">
+                    <!-- Browser Header -->
+                    <div class="flex items-center justify-between px-4 py-3 bg-muted/30 border-b border-border/50">
+                        <div class="flex gap-1.5">
+                            <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                            <div class="w-3 h-3 rounded-full bg-amber-400"></div>
+                            <div class="w-3 h-3 rounded-full bg-emerald-400"></div>
+                        </div>
+                        <div class="h-6 px-12 rounded-full bg-white/50 border border-border/50 flex items-center text-[10px] text-muted-foreground font-mono">
+                            taalimu.com/dashboard/analytics
+                        </div>
+                        <div class="w-10"></div>
                     </div>
                     
-                    <!-- Minimalist Decorative Elements -->
-                    <div class="absolute -top-12 -left-12 w-32 h-32 bg-primary/5 rounded-full blur-2xl -z-10"></div>
+                    @php
+                        $heroImage = match(app()->getLocale()) {
+                            'en' => 'hero-mockup-en.webp',
+                            'fr' => 'hero-mockup-fr.webp',
+                            default => 'hero-mockup-v2.webp',
+                        };
+                    @endphp
+                    <img 
+                        src="{{ asset('images/' . $heroImage) }}" 
+                        alt="EduFlow Dashboard Mockup" 
+                        class="w-full h-auto"
+                        width="1200"
+                        height="800"
+                        decoding="async"
+                        loading="eager"
+                        fetchpriority="high"
+                    >
                 </div>
             </div>
+
+            <!-- Floating Interactive Elements -->
+            <!-- WhatsApp Notification Card -->
+            <div class="absolute -top-10 -start-10 md:-start-20 z-20 w-64 md:w-80 animate-float-slow hidden md:block">
+                <div class="glass-morphism p-1 rounded-3xl shadow-2xl border-white/50">
+                    <div class="bg-white/90 rounded-2xl p-4">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-success-green flex items-center justify-center text-white shadow-lg shadow-success-green/20">
+                                <i class="fab fa-whatsapp text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-sm font-black text-primary">{{ __('landing.hero.mockup.whatsapp.title') }}</h4>
+                                <div class="flex items-center gap-1.5 mt-0.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-success-green animate-pulse"></span>
+                                    <span class="text-[10px] font-bold text-success-green tracking-wide">{{ __('landing.hero.mockup.whatsapp.online') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-[12px] text-foreground font-medium leading-relaxed mb-3">
+                            {{ __('landing.hero.mockup.whatsapp.message') }}
+                        </p>
+                        <div class="flex justify-between items-center pt-3 border-t border-border/30">
+                            <span class="text-[12px] font-black text-secondary flex items-center gap-1">
+                                {{ __('landing.hero.mockup.whatsapp.cta') }}
+                                <i class="fas fa-arrow-left text-[10px] rtl:block ltr:hidden"></i>
+                                <i class="fas fa-arrow-right text-[10px] ltr:block rtl:hidden"></i>
+                            </span>
+                            <span class="text-[9px] font-bold text-muted-foreground">10:30 AM</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Badge 1: Revenue -->
+            <div class="absolute top-[40%] -start-8 md:-start-16 z-20 animate-float-delayed hidden md:block">
+                <div class="glass-morphism px-6 py-4 rounded-2xl shadow-xl border-white/40">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+                            <i class="fas fa-chart-line text-lg"></i>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black gradient-text">38%+</div>
+                            <div class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.revenue') }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Badge 2: Time Saving -->
+            <div class="absolute bottom-10 -end-8 md:-end-16 z-20 animate-float-slow hidden md:block" style="animation-delay: 1.5s;">
+                <div class="glass-morphism px-6 py-4 rounded-2xl shadow-xl border-white/40">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-primary/5 flex items-center justify-center text-primary">
+                            <i class="fas fa-clock text-lg"></i>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black text-primary">15h</div>
+                            <div class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.time') }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<section class="relative min-h-screen pt-20 pb-32 overflow-hidden hero-mesh-bg">
+    <!-- Animated Background Blobs -->
+    <div class="blob top-[-10%] left-[-10%] opacity-20"></div>
+    <div class="blob bottom-[-10%] right-[-10%] opacity-30 animation-delay-2000" style="background: linear-gradient(135deg, var(--hero-mesh-3) 0%, var(--hero-mesh-1) 100%);"></div>
+    
+    <div 
+        dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"
+        class="container relative z-10 mx-auto px-4"
+    >
+        <!-- Content Wrapper - Centered Design -->
+        <div class="max-w-4xl mx-auto text-center mb-16 lg:mb-24">
+            <!-- Premium Badge -->
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-morphism mb-8 animate-fade-in shadow-sm">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+                </span>
+                <span class="text-xs font-bold text-primary tracking-wide uppercase">{{ __('landing.hero.badge') }}</span>
+            </div>
+
+            <!-- Main Headline -->
+            <h1 
+                class="font-cairo text-4xl md:text-5xl lg:text-7xl font-black text-primary leading-[1.1] mb-8 animate-fade-in-up tracking-tight"
+            >
+                {!! __('landing.hero.title') !!}
+            </h1>
+
+            <!-- Subheadline -->
+            <p 
+                class="text-lg md:text-xl text-muted-foreground/80 mb-10 max-w-2xl mx-auto animate-fade-in-up font-medium leading-relaxed delay-2 shadow-sm"
+            >
+                {{ \App\Models\SiteSetting::get('site_description_' . app()->getLocale(), __('landing.hero.subtitle')) }}
+            </p>
+
+            <!-- Premium CTA Group -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up delay-3">
+                <a href="{{ route('register') }}?account_type=center" class="group relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-black text-white rounded-full bg-gradient-to-br from-secondary to-secondary-vibrant group-hover:from-secondary group-hover:to-secondary-vibrant hover:text-white focus:ring-4 focus:outline-none focus:ring-secondary/30 transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-xl shadow-secondary/20">
+                    <span class="relative px-8 py-4 transition-all ease-in duration-75 bg-secondary group-hover:bg-opacity-0 rounded-full flex items-center gap-3">
+                        <i class="fas fa-rocket text-sm"></i>
+                        {{ app()->isLocale('ar') ? 'سجل كمركز تعليمي' : 'Register as Center' }}
+                    </span>
+                </a>
+                
+                <a href="{{ route('register') }}?account_type=instructor" class="group relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-black text-primary rounded-full border-2 border-primary/20 hover:border-primary/40 transition-all duration-300 transform hover:scale-105 active:scale-95">
+                    <span class="relative px-8 py-3.5 flex items-center gap-3">
+                        <i class="fas fa-user-tie text-sm"></i>
+                        {{ app()->isLocale('ar') ? 'سجل كمدرس مستقل' : 'Register as Teacher' }}
+                    </span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Interactive Visual Section -->
+        <div class="relative max-w-6xl mx-auto mt-12 px-4 lg:px-0">
+            <!-- Main Browser Mockup -->
+            <div class="relative z-10 glass-morphism p-2 rounded-3xl browser-frame-shadow animate-fade-in-up delay-4">
+                <div class="bg-white rounded-2xl overflow-hidden border border-border/50">
+                    <!-- Browser Header -->
+                    <div class="flex items-center justify-between px-4 py-3 bg-muted/30 border-b border-border/50">
+                        <div class="flex gap-1.5">
+                            <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                            <div class="w-3 h-3 rounded-full bg-amber-400"></div>
+                            <div class="w-3 h-3 rounded-full bg-emerald-400"></div>
+                        </div>
+                        <div class="h-6 px-12 rounded-full bg-white/50 border border-border/50 flex items-center text-[10px] text-muted-foreground font-mono">
+                            taalimu.com/dashboard/analytics
+                        </div>
+                        <div class="w-10"></div>
+                    </div>
+                    
+                    @php
+                        $heroImage = match(app()->getLocale()) {
+                            'en' => 'hero-mockup-en.webp',
+                            'fr' => 'hero-mockup-fr.webp',
+                            default => 'hero-mockup-v2.webp',
+                        };
+                    @endphp
+                    <img 
+                        src="{{ asset('images/' . $heroImage) }}" 
+                        alt="EduFlow Dashboard Mockup" 
+                        class="w-full h-auto"
+                        width="1200"
+                        height="800"
+                        decoding="async"
+                        loading="eager"
+                        fetchpriority="high"
+                    >
+                </div>
+            </div>
+
+            <!-- Floating Interactive Elements -->
+            <!-- WhatsApp Notification Card -->
+            <div class="absolute -top-10 -start-10 md:-start-20 z-20 w-64 md:w-80 animate-float-slow hidden md:block">
+                <div class="glass-morphism p-1 rounded-3xl shadow-2xl border-white/50">
+                    <div class="bg-white/90 rounded-2xl p-4">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-success-green flex items-center justify-center text-white shadow-lg shadow-success-green/20">
+                                <i class="fab fa-whatsapp text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-sm font-black text-primary">{{ __('landing.hero.mockup.whatsapp.title') }}</h4>
+                                <div class="flex items-center gap-1.5 mt-0.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-success-green animate-pulse"></span>
+                                    <span class="text-[10px] font-bold text-success-green tracking-wide">{{ __('landing.hero.mockup.whatsapp.online') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-[12px] text-foreground font-medium leading-relaxed mb-3">
+                            {{ __('landing.hero.mockup.whatsapp.message') }}
+                        </p>
+                        <div class="flex justify-between items-center pt-3 border-t border-border/30">
+                            <span class="text-[12px] font-black text-secondary flex items-center gap-1">
+                                {{ __('landing.hero.mockup.whatsapp.cta') }}
+                                <i class="fas fa-arrow-left text-[10px] rtl:block ltr:hidden"></i>
+                                <i class="fas fa-arrow-right text-[10px] ltr:block rtl:hidden"></i>
+                            </span>
+                            <span class="text-[9px] font-bold text-muted-foreground">10:30 AM</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Badge 1: Revenue -->
+            <div class="absolute top-[40%] -start-8 md:-start-16 z-20 animate-float-delayed hidden md:block">
+                <div class="glass-morphism px-6 py-4 rounded-2xl shadow-xl border-white/40">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+                            <i class="fas fa-chart-line text-lg"></i>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black gradient-text">38%+</div>
+                            <div class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.revenue') }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Badge 2: Time Saving -->
+            <div class="absolute bottom-10 -end-8 md:-end-16 z-20 animate-float-slow hidden md:block" style="animation-delay: 1.5s;">
+                <div class="glass-morphism px-6 py-4 rounded-2xl shadow-xl border-white/40">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-primary/5 flex items-center justify-center text-primary">
+                            <i class="fas fa-clock text-lg"></i>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black text-primary">15h</div>
+                            <div class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{{ __('landing.hero.stats.time') }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trust Badge: Security -->
+            <div class="absolute -bottom-12 start-1/4 z-20 animate-fade-in-up delay-5 hidden md:block">
+                <div class="glass-morphism px-5 py-3 rounded-full flex items-center gap-3 border-white/30 backdrop-blur-xl">
+                    <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-white shadow-lg">
+                        <i class="fas fa-shield-alt text-xs"></i>
+                    </div>
+                    <span class="text-xs font-black text-primary">{{ __('landing.hero.trust.security') }}</span>
+                    <div class="w-1px h-4 bg-primary/10 mx-1"></div>
+                    <span class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{{ app()->isLocale('ar') ? 'معايير عالمية' : 'Enterprise Grade' }}</span>
+                </div>
             </div>
         </div>
     </div>
