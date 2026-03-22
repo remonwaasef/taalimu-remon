@@ -318,9 +318,9 @@ window.addEventListener('pageshow', (event) => {
 
                 <form action="{{ route('google.complete-registration') }}" method="POST" class="space-y-4" @submit="handleSubmit($event)">
                     @csrf
-                    <input type="hidden" name="plan" x-model="selectedPlan">
-                    <input type="hidden" name="account_type" x-model="accountType">
-                    <input type="hidden" name="billing_cycle" x-model="billingCycle">
+                    <input type="hidden" name="plan" :value="selectedPlan">
+                    <input type="hidden" name="account_type" :value="accountType">
+                    <input type="hidden" name="billing_cycle" :value="billingCycle">
 
                     {{-- Center Name --}}
                     <div class="space-y-1">
