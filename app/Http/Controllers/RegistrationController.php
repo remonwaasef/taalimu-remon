@@ -246,6 +246,7 @@ class RegistrationController extends Controller
                     'coupon_id' => $coupon ? $coupon->id : null,
                     'coupon_code' => $coupon ? $coupon->code : null,
                     'discount_amount' => $discountAmount,
+                    'base_price' => $basePrice,
                     'total_amount' => ($basePrice - $discountAmount),
                 ]);
 

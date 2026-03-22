@@ -91,6 +91,11 @@ class PaymentController extends Controller
                         ->first();
                     
                     $telegram->sendRegistrationAlert($tenant, $user, '******** (PayPal Order)');
+
+                    // Log in the user if not already logged in
+                    if (!Auth::check() && $user) {
+                        Auth::login($user, true);
+                    }
                 }
 
                 if (session('is_subscription_change')) {
@@ -233,7 +238,11 @@ class PaymentController extends Controller
                      ->whereIn('role', ['center_admin', 'instructor'])
                      ->first();
                  
-                 $telegram->sendRegistrationAlert($tenant, $user, "******** (Paymob ID: {$transactionId})");
+                  $telegram->sendRegistrationAlert($tenant, $user, "******** (Paymob ID: {$transactionId})");
+
+                  if (!Auth::check() && $user) {
+                      Auth::login($user, true);
+                  }
                  
                  // Enable success state for the view
                  session(['registration_success' => true]);
@@ -477,6 +486,11 @@ class PaymentController extends Controller
             ->first();
             
         $telegram->sendRegistrationAlert($tenant, $user, '********');
+
+        // Log in the user if not already logged in
+        if (!Auth::check() && $user) {
+            Auth::login($user, true);
+        }
 
         return redirect()->route('registration.success');
     }

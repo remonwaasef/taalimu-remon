@@ -18,6 +18,7 @@ document.addEventListener('alpine:init', () => {
         isSubmitting: false,
         userCountry: 'default',
         accountType: config.accountType || 'center',
+        paymentGateway: 'paymob', // Default to Paymob
 
         showPlanModal: false,
         couponCode: '',
@@ -33,8 +34,19 @@ document.addEventListener('alpine:init', () => {
             try {
                 const response = await fetch('https://get.geojs.io/v1/ip/country.json');
                 const data = await response.json();
-                this.userCountry = data.country || '';
-            } catch(e) { console.log('IP fetch failed', e); }
+                this.userCountry = data.country || 'EG'; // Default to EG if empty
+                
+                // Auto-select gateway based on country
+                if (this.userCountry === 'EG' || !this.userCountry) {
+                    this.paymentGateway = 'paymob';
+                } else {
+                    this.paymentGateway = 'paypal';
+                }
+            } catch(e) { 
+                console.log('IP fetch failed', e);
+                this.userCountry = 'EG';
+                this.paymentGateway = 'paymob';
+            }
         },
 
         get currentPlan() {
@@ -395,16 +407,16 @@ window.addEventListener('pageshow', (event) => {
                         </label>
                         <div class="grid grid-cols-2 gap-2">
                             <!-- Paymob -->
-                            <label class="relative cursor-pointer group">
-                                <input type="radio" name="payment_gateway" value="paymob" checked class="peer sr-only">
+                            <label class="relative cursor-pointer group" x-show="userCountry === 'EG' || userCountry === 'default'">
+                                <input type="radio" name="payment_gateway" value="paymob" x-model="paymentGateway" class="peer sr-only">
                                 <div class="flex items-center gap-2 p-3 rounded-xl border-2 border-slate-100 bg-slate-50/50 peer-checked:border-brand-secondary peer-checked:bg-white transition-all shadow-sm">
                                     <i class="bi bi-credit-card-2-back text-lg text-slate-400 peer-checked:text-brand-secondary"></i>
                                     <span class="text-xs font-black text-slate-600 peer-checked:text-slate-900">Paymob</span>
                                 </div>
                             </label>
                             <!-- PayPal -->
-                            <label class="relative cursor-pointer group">
-                                <input type="radio" name="payment_gateway" value="paypal" class="peer sr-only">
+                            <label class="relative cursor-pointer group" x-show="userCountry !== 'EG' && userCountry !== 'default'">
+                                <input type="radio" name="payment_gateway" value="paypal" x-model="paymentGateway" class="peer sr-only">
                                 <div class="flex items-center gap-2 p-3 rounded-xl border-2 border-slate-100 bg-slate-50/50 peer-checked:border-brand-secondary peer-checked:bg-white transition-all shadow-sm">
                                     <i class="bi bi-paypal text-lg text-slate-400 peer-checked:text-brand-secondary"></i>
                                     <span class="text-xs font-black text-slate-600 peer-checked:text-slate-900">PayPal</span>
