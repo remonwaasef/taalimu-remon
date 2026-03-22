@@ -165,7 +165,7 @@ return [
             ],
             'basic' => [
                 'name' => 'Débutant',
-                'price' => '199 SAR',
+                'price' => '199',
                 'description' => 'Pour les startups et petits centres',
                 'cta' => 'S\'Abonner',
                 'features' => [
@@ -180,7 +180,7 @@ return [
             ],
             'pro' => [
                 'name' => 'Croissance',
-                'price' => '399 SAR',
+                'price' => '399',
                 'description' => 'Pour les centres en croissance et grands',
                 'cta' => 'S\'Abonner',
                 'features' => [
@@ -198,7 +198,7 @@ return [
             ],
             'enterprise' => [
                 'name' => 'Entreprise',
-                'price' => '950 SAR',
+                'price' => '950',
                 'description' => 'Pour les grandes chaînes et organisations.',
                 'cta' => 'Contactez-nous',
                 'features' => [
