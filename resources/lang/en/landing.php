@@ -176,7 +176,7 @@ return [
             ],
             'basic' => [
                 'name' => 'Starter',
-                'price' => '199 SAR',
+                'price' => '199',
                 'description' => 'For startups and small centers',
                 'cta' => 'Subscribe Now',
                 'features' => [
@@ -191,7 +191,7 @@ return [
             ],
             'pro' => [
                 'name' => 'Growth',
-                'price' => '399 SAR',
+                'price' => '399',
                 'description' => 'For growing and large centers',
                 'cta' => 'Subscribe Now',
                 'features' => [
@@ -209,7 +209,7 @@ return [
             ],
             'enterprise' => [
                 'name' => 'Institution',
-                'price' => '950 SAR',
+                'price' => '950',
                 'description' => 'For large chains and organizations.',
                 'cta' => 'Contact Us',
                 'features' => [
