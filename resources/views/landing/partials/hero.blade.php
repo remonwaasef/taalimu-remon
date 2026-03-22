@@ -78,14 +78,8 @@
                 <div 
                     class="relative z-10 w-full max-w-[620px] animate-fade-in-right animate-float-slow transform-gpu backface-hidden delay-2"
                 >
-                    <!-- Floating Stat Cards from Image -->
-                    <div class="absolute -top-6 -right-6 md:-top-10 md:-right-10 w-24 md:w-32 bg-white rounded-3xl shadow-2xl p-4 z-50 border border-slate-50 text-center animate-bounce-slow">
-                        <div class="text-xl md:text-2xl font-black text-emerald-500 mb-0.5">98%</div>
-                        <div class="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider">نسبة التحصيل</div>
-                    </div>
-
                     <!-- WhatsApp Payment Notification (NEW) -->
-                    <div class="absolute -bottom-6 -left-6 md:-bottom-10 md:-left-10 z-50 animate-fade-in-up delay-3">
+                    <div class="absolute top-0 -start-6 md:top-4 md:-start-12 z-50 animate-fade-in-up delay-3">
                         <div class="flex items-center gap-3 p-3 md:p-4 bg-white rounded-2xl shadow-2xl border border-slate-50 min-w-[240px] md:min-w-[280px]">
                             <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#25D366] flex items-center justify-center text-white text-xl md:text-2xl shadow-lg shadow-[#25D366]/20">
                                 <i class="fab fa-whatsapp"></i>
@@ -98,6 +92,12 @@
                                 <p class="text-[10px] md:text-xs font-bold text-slate-400">{{ __('landing.hero.mockup.whatsapp.just_now') }}</p>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Floating Stat Cards: Collection Rate (Repositioned) -->
+                    <div class="absolute top-24 -start-2 md:top-32 md:-start-6 w-24 md:w-32 bg-white rounded-3xl shadow-2xl p-4 z-50 border border-slate-50 text-center animate-bounce-slow delay-5">
+                        <div class="text-xl md:text-2xl font-black text-emerald-500 mb-0.5">98%</div>
+                        <div class="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('landing.hero.stats.collection') }}</div>
                     </div>
 
                     <!-- Elite Browser Frame Mockup -->
