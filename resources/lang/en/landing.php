@@ -39,7 +39,6 @@ return [
             'revenue' => 'Revenue Increase',
             'time' => 'Hours Saved/Week',
             'collection' => 'Collection Rate',
-            'attendance' => 'Attendance Rate',
         ],
         'mockup' => [
             'whatsapp' => [
