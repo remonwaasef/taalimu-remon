@@ -74,26 +74,26 @@
             </div>
 
             <!-- Right Content - Hybrid Mockup with Reversed 3D Slant -->
-            <div class="w-full lg:w-[50%] relative flex items-center justify-center lg:justify-end py-16 lg:py-20">
+            <div class="w-full lg:w-[50%] relative flex items-center justify-center lg:justify-end py-12 lg:py-16">
                 <div 
                     class="relative z-10 w-full max-w-[580px] animate-fade-in-right transform-gpu backface-hidden delay-2"
                     style="perspective: 2000px;"
                 >
-                    <!-- Floating Stat Cards: Collection Rate (Top) -->
+                    <!-- Floating Stat Cards: Collection Rate (Inward) -->
                     <div 
-                        class="absolute -top-10 left-8 md:-top-14 md:left-16 bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-4 z-50 border border-slate-50 text-center animate-bounce-slow transform-gpu"
-                        style="transform: translateZ(60px) rotateY(10deg);"
+                        class="absolute top-4 left-6 md:top-8 md:left-12 bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-4 z-50 border border-slate-50 text-center animate-bounce-slow transform-gpu"
+                        style="transform: translateZ(80px) rotateY(10deg);"
                     >
                         <div class="text-xl md:text-3xl font-black text-emerald-500 mb-0.5">98%</div>
                         <div class="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('landing.hero.stats.collection') }}</div>
                     </div>
 
-                    <!-- WhatsApp Payment Notification (Floating Bottom) -->
+                    <!-- WhatsApp Payment Notification (Inward) -->
                     <div 
-                        class="absolute -bottom-8 left-0 md:-bottom-12 md:left-4 z-50 animate-fade-in-up delay-3 transform-gpu"
-                        style="transform: translateZ(90px) rotateY(10deg);"
+                        class="absolute bottom-8 left-12 md:bottom-12 md:left-20 z-50 animate-fade-in-up delay-3 transform-gpu"
+                        style="transform: translateZ(100px) rotateY(10deg);"
                     >
-                        <div class="flex items-center gap-3 p-3 md:p-5 bg-white rounded-[2rem] shadow-[0_30px_60px_rgba(0,0,0,0.12)] border border-slate-50 min-w-[250px] md:min-w-[310px]">
+                        <div class="flex items-center gap-3 p-3 md:p-5 bg-white rounded-[2rem] shadow-[0_30px_60px_rgba(0,0,0,0.12)] border border-slate-50 min-w-[240px] md:min-w-[300px]">
                             <div class="w-10 h-10 md:w-14 md:h-14 rounded-full bg-[#25D366] flex items-center justify-center text-white text-xl md:text-3xl shadow-lg shadow-[#25D366]/20">
                                 <i class="fab fa-whatsapp"></i>
                             </div>
