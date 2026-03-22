@@ -47,6 +47,8 @@ return [
                 'online' => 'Online',
                 'message' => 'Hello Ahmed! 👋 We wanted to remind you that your subscription payment of 150 SAR is due tomorrow.',
                 'cta' => 'Pay Now',
+                'payment_success' => '150 SAR paid',
+                'just_now' => 'Just now',
             ],
         ],
     ],

@@ -47,6 +47,8 @@ return [
                 'online' => 'En ligne',
                 'message' => 'Bonjour Ahmed ! 👋 Nous souhaitons vous rappeler que le paiement de votre abonnement de 150 SAR est dû demain.',
                 'cta' => 'Payer maintenant',
+                'payment_success' => '150 SAR payé',
+                'just_now' => 'Il y a une minute',
             ],
         ],
     ],
