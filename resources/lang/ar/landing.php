@@ -39,6 +39,7 @@ return [
             'revenue' => 'زيادة الإيرادات',
             'time' => 'توفير الوقت أسبوعياً',
             'collection' => 'نسبة التحصيل',
+            'attendance' => 'نسبة الحضور',
         ],
         'mockup' => [
             'whatsapp' => [
