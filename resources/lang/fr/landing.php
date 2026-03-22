@@ -20,14 +20,19 @@ return [
         'start_trial' => 'Essai Gratuit',
     ],
     'hero' => [
-        'badge' => 'Transformez votre centre éducatif en une institution intelligente complète',
-        'title' => 'Gérez Votre Centre <span class=\"gradient-text\">Intelligemment</span>',
-        'subtitle' => 'Un système intégré pour la gestion des centres éducatifs, comprenant (Étudiants – Présence – Frais – Messagerie – Horaires – Rapports).',
+        'badge' => 'Le système de gestion n°1 pour les centres éducatifs',
+        'title' => 'Gérez votre centre <span class="gradient-text">intelligemment</span> et économisez des heures de travail chaque semaine',
+        'subtitle' => 'Un système intégré pour la gestion des étudiants, des présences et des paiements — tout dans un tableau de bord facile à utiliser.',
+        'testimonial' => [
+            'quote' => 'J\'ai économisé plus de 15 heures par semaine après avoir utilisé Taalimu.',
+            'author' => 'Ahmed Mohamed, Instructeur Indépendant',
+        ],
         'cta_primary' => 'Essayer Gratuitement',
-        'cta_secondary' => 'Voir la Démo',
+        'cta_secondary' => 'Voir Comment Ça Marche',
+        'trial_note' => 'Pas de carte de crédit requise • 14 jours d\'essai gratuit',
         'trust' => [
             'security' => 'Haute Sécurité',
-            'centers' => '+500 Centres',
+            'centers' => 'Gestion Nouvelle Génération',
             'uptime' => '99,9% Disponibilité',
         ],
         'stats' => [
