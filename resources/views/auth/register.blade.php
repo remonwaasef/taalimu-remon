@@ -32,7 +32,7 @@ document.addEventListener('alpine:init', () => {
         discountText: '',
         isApplyingCoupon: false,
         userCountry: 'default',
-        accountType: null,
+        accountType: config.accountType || null,
         showPlanModal: false,
 
         async init() {
