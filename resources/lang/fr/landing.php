@@ -41,19 +41,13 @@ return [
             'collection' => 'Taux de Recouvrement',
         ],
         'mockup' => [
-            'dashboard' => 'Tableau de bord',
-            'attendance' => 'Présences',
-            'students' => 'Étudiants',
-            'revenue' => 'Revenus',
-            'growth_analysis' => 'Analyse de Croissance',
-            'jan_dec' => 'Jan - Déc',
             'whatsapp' => [
                 'title' => 'WhatsApp',
                 'now' => 'maintenant',
                 'online' => 'En ligne',
-                'message' => 'Bonjour Ahmed ! 👋 Nous souhaitons vous rappeler que le paiement de votre abonnement de 150 est dû demain.',
+                'message' => 'Bonjour Ahmed ! 👋 Nous souhaitons vous rappeler que le paiement de votre abonnement de 150 SAR est dû demain.',
                 'cta' => 'Payer maintenant',
-                'payment_success' => '150 payés par l\'étudiant Ahmed Mohamed (Groupe Élite)',
+                'payment_success' => '150 SAR payés par l\'étudiant Ahmed Mohamed (Groupe Élite)',
                 'just_now' => 'Il y a une minute',
             ],
         ],
@@ -171,7 +165,7 @@ return [
             ],
             'basic' => [
                 'name' => 'Débutant',
-                'price' => '199',
+                'price' => '199 SAR',
                 'description' => 'Pour les startups et petits centres',
                 'cta' => 'S\'Abonner',
                 'features' => [
@@ -186,7 +180,7 @@ return [
             ],
             'pro' => [
                 'name' => 'Croissance',
-                'price' => '399',
+                'price' => '399 SAR',
                 'description' => 'Pour les centres en croissance et grands',
                 'cta' => 'S\'Abonner',
                 'features' => [
@@ -204,7 +198,7 @@ return [
             ],
             'enterprise' => [
                 'name' => 'Entreprise',
-                'price' => '950',
+                'price' => '950 SAR',
                 'description' => 'Pour les grandes chaînes et organisations.',
                 'cta' => 'Contactez-nous',
                 'features' => [

@@ -41,19 +41,13 @@ return [
             'collection' => 'Collection Rate',
         ],
         'mockup' => [
-            'dashboard' => 'Dashboard',
-            'attendance' => 'Attendance',
-            'students' => 'Students',
-            'revenue' => 'Revenue',
-            'growth_analysis' => 'Growth Analysis',
-            'jan_dec' => 'Jan - Dec',
             'whatsapp' => [
                 'title' => 'WhatsApp',
                 'now' => 'now',
                 'online' => 'Online',
-                'message' => 'Hello Ahmed! 👋 We wanted to remind you that your subscription payment of 150 is due tomorrow.',
+                'message' => 'Hello Ahmed! 👋 We wanted to remind you that your subscription payment of 150 SAR is due tomorrow.',
                 'cta' => 'Pay Now',
-                'payment_success' => '150 paid by student Ahmed Mohamed (Elite Group)',
+                'payment_success' => '150 SAR paid by student Ahmed Mohamed (Elite Group)',
                 'just_now' => 'Just now',
             ],
         ],
@@ -182,7 +176,7 @@ return [
             ],
             'basic' => [
                 'name' => 'Starter',
-                'price' => '199',
+                'price' => '199 SAR',
                 'description' => 'For startups and small centers',
                 'cta' => 'Subscribe Now',
                 'features' => [
@@ -197,7 +191,7 @@ return [
             ],
             'pro' => [
                 'name' => 'Growth',
-                'price' => '399',
+                'price' => '399 SAR',
                 'description' => 'For growing and large centers',
                 'cta' => 'Subscribe Now',
                 'features' => [
@@ -215,7 +209,7 @@ return [
             ],
             'enterprise' => [
                 'name' => 'Institution',
-                'price' => '950',
+                'price' => '950 SAR',
                 'description' => 'For large chains and organizations.',
                 'cta' => 'Contact Us',
                 'features' => [
