@@ -18,13 +18,26 @@ class PayPalGateway implements PaymentGatewayInterface
 
     public function createCheckoutSession(Tenant $tenant, Package $package, string $billingCycle, array $options = []): string
     {
-        // PayPal support for USD only (Simplified)
+        // PayPal support for USD only
         $currency = 'USD';
-        $amount = $package->regional_prices['default']['amount'] ?? 49;
-
+        
+        // Base USD price from regional prices (defaulting to package defaults)
+        $baseUsdPrice = $package->regional_prices['default']['amount'] ?? 49;
         if ($billingCycle === 'yearly') {
-            $amount = $package->regional_prices['default']['yearly_price'] ?? ($amount * 2);
+            $baseUsdPrice = $package->regional_prices['default']['yearly_price'] ?? ($baseUsdPrice * 10);
+        } elseif ($billingCycle === 'term') {
+            $baseUsdPrice = $package->regional_prices['default']['term_price'] ?? ($baseUsdPrice * 4);
         }
+
+        // Apply proportional discount if provided in options
+        $amount = $baseUsdPrice;
+        if (isset($options['base_price']) && $options['base_price'] > 0 && isset($options['discount_amount'])) {
+            $discountRatio = $options['discount_amount'] / $options['base_price'];
+            $amount = $baseUsdPrice * (1 - $discountRatio);
+        }
+
+        // Ensure amount is at least 0 and formatted for PayPal (2 decimal places)
+        $amount = number_format(max(0, $amount), 2, '.', '');
 
         $resp = $this->paypal->createOrder(
             $amount, 

@@ -18,7 +18,7 @@ document.addEventListener('alpine:init', () => {
         name: '{{ old('name', request('name')) }}',
         email: '{{ old('email', request('email')) }}',
         phone: '{{ old('phone', request('phone')) }}',
-        currentStep: 1,
+        currentStep: {{ $errors->hasAny(['name', 'email', 'phone', 'password']) ? 2 : 1 }},
         showPassword: false,
         password: '',
         password_confirmation: '',

@@ -355,9 +355,6 @@ class SocialAuthController extends Controller
                 // Clear Google session data ONLY ON SUCCESS
                 session()->forget('google_user');
                 
-                // Login the user
-                Auth::login($user, true);
-
                 session([
                     'tenant_domain' => $subdomain,
                     'admin_email' => $googleData['email'],
@@ -377,6 +374,7 @@ class SocialAuthController extends Controller
                 
                 $redirectUrl = $gateway->createCheckoutSession($tenant, $package, $billingCycle, [
                     'total_amount' => $finalAmount,
+                    'base_price' => $basePrice,
                     'coupon_id' => $couponId,
                     'discount_amount' => $discountAmount,
                 ]);
