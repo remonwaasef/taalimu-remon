@@ -73,7 +73,7 @@
                 </div>
             </div>
 
-            <!-- Right Content - Hybrid Mockup with 3D Slant -->
+            <!-- Right Content - Hybrid Mockup with Reversed 3D Slant -->
             <div class="w-full lg:w-[50%] relative flex items-center justify-center lg:justify-end py-12 lg:py-0">
                 <div 
                     class="relative z-10 w-full max-w-[650px] animate-fade-in-right transform-gpu backface-hidden delay-2"
@@ -81,8 +81,8 @@
                 >
                     <!-- Floating Stat Cards: Collection Rate (Top) -->
                     <div 
-                        class="absolute -top-12 right-12 md:-top-16 md:right-24 bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-4 z-50 border border-slate-50 text-center animate-bounce-slow transform-gpu"
-                        style="transform: translateZ(50px) rotateY(-5deg);"
+                        class="absolute -top-12 left-12 md:-top-16 md:left-24 bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-4 z-50 border border-slate-50 text-center animate-bounce-slow transform-gpu"
+                        style="transform: translateZ(50px) rotateY(10deg);"
                     >
                         <div class="text-xl md:text-3xl font-black text-emerald-500 mb-0.5">98%</div>
                         <div class="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('landing.hero.stats.collection') }}</div>
@@ -90,8 +90,8 @@
 
                     <!-- WhatsApp Payment Notification (Floating Bottom) -->
                     <div 
-                        class="absolute -bottom-10 right-4 md:-bottom-16 md:right-12 z-50 animate-fade-in-up delay-3 transform-gpu"
-                        style="transform: translateZ(80px) rotateY(-5deg);"
+                        class="absolute -bottom-10 left-4 md:-bottom-16 md:left-12 z-50 animate-fade-in-up delay-3 transform-gpu"
+                        style="transform: translateZ(80px) rotateY(10deg);"
                     >
                         <div class="flex items-center gap-3 p-3 md:p-5 bg-white rounded-[2rem] shadow-[0_30px_60px_rgba(0,0,0,0.12)] border border-slate-50 min-w-[260px] md:min-w-[320px]">
                             <div class="w-10 h-10 md:w-14 md:h-14 rounded-full bg-[#25D366] flex items-center justify-center text-white text-xl md:text-3xl shadow-lg shadow-[#25D366]/20">
@@ -107,10 +107,10 @@
                         </div>
                     </div>
 
-                    <!-- Browser Frame with 3D Tilt -->
+                    <!-- Browser Frame with Reversed 3D Tilt -->
                     <div 
                         class="relative group p-1 transition-all duration-700 transform-gpu"
-                        style="transform: rotateY(-18deg) rotateX(8deg) rotateZ(2deg); transform-style: preserve-3d;"
+                        style="transform: rotateY(18deg) rotateX(8deg) rotateZ(-2deg); transform-style: preserve-3d;"
                     >
                         <!-- Glow behind the frame -->
                         <div class="absolute inset-0 bg-emerald-500/10 blur-[100px] -z-10 rounded-full scale-110"></div>
@@ -150,8 +150,8 @@
                     </div>
 
                     <!-- Background Accents -->
-                    <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-emerald-400/10 rounded-full blur-[120px] -z-10"></div>
-                    <div class="absolute -top-20 -right-20 w-80 h-80 bg-blue-400/10 rounded-full blur-[120px] -z-10"></div>
+                    <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-emerald-400/10 rounded-full blur-[120px] -z-10"></div>
+                    <div class="absolute -top-20 -left-20 w-80 h-80 bg-blue-400/10 rounded-full blur-[120px] -z-10"></div>
                 </div>
             </div>
         </div>
