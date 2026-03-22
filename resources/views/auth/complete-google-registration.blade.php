@@ -388,6 +388,31 @@ window.addEventListener('pageshow', (event) => {
                         </div>
                     </div>
 
+                    <!-- Payment Gateway Selection -->
+                    <div class="space-y-2 pt-2" x-show="selectedPlan !== 'free-trial'">
+                        <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">
+                            {{ app()->getLocale() == 'ar' ? 'طريقة الدفع' : 'Payment' }}
+                        </label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <!-- Paymob -->
+                            <label class="relative cursor-pointer group">
+                                <input type="radio" name="payment_gateway" value="paymob" checked class="peer sr-only">
+                                <div class="flex items-center gap-2 p-3 rounded-xl border-2 border-slate-100 bg-slate-50/50 peer-checked:border-brand-secondary peer-checked:bg-white transition-all shadow-sm">
+                                    <i class="bi bi-credit-card-2-back text-lg text-slate-400 peer-checked:text-brand-secondary"></i>
+                                    <span class="text-xs font-black text-slate-600 peer-checked:text-slate-900">Paymob</span>
+                                </div>
+                            </label>
+                            <!-- PayPal -->
+                            <label class="relative cursor-pointer group">
+                                <input type="radio" name="payment_gateway" value="paypal" class="peer sr-only">
+                                <div class="flex items-center gap-2 p-3 rounded-xl border-2 border-slate-100 bg-slate-50/50 peer-checked:border-brand-secondary peer-checked:bg-white transition-all shadow-sm">
+                                    <i class="bi bi-paypal text-lg text-slate-400 peer-checked:text-brand-secondary"></i>
+                                    <span class="text-xs font-black text-slate-600 peer-checked:text-slate-900">PayPal</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
                     {{-- Submit Button --}}
                     <div class="pt-4">
                         <button type="submit" :disabled="isSubmitting || subdomainStatus === 'invalid'"
