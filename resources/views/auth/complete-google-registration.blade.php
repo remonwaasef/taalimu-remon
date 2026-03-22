@@ -227,13 +227,19 @@ window.addEventListener('pageshow', (event) => {
                         </div>
 
                         <!-- Mini Features List -->
-                        <div class="space-y-2 py-3 border-y border-slate-50">
-                            <template x-for="feature in (currentPlan.features || [])" :key="feature">
-                                <div class="flex items-center gap-2 text-[10px] font-bold text-slate-600 font-arabic">
-                                    <i class="bi bi-check2 text-emerald-500"></i>
-                                    <span x-text="feature"></span>
-                                </div>
-                            </template>
+                        <div x-data="{ openFeatures: false }" class="py-3 border-y border-slate-50">
+                            <button type="button" @click="openFeatures = !openFeatures" class="w-full flex items-center justify-between text-[11px] font-black text-slate-700 font-arabic hover:text-brand-secondary transition-colors pb-2">
+                                <span>{{ app()->isLocale('ar') ? 'عرض المميزات' : 'View Features' }}</span>
+                                <i class="bi transition-transform duration-300" :class="openFeatures ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                            </button>
+                            <div x-show="openFeatures" x-transition.opacity.duration.300ms class="space-y-2 pt-2 border-t border-slate-50">
+                                <template x-for="feature in (currentPlan.features || [])" :key="feature">
+                                    <div class="flex items-center gap-2 text-[10px] font-bold text-slate-600 font-arabic">
+                                        <i class="bi bi-check2 text-emerald-500"></i>
+                                        <span x-text="feature"></span>
+                                    </div>
+                                </template>
+                            </div>
                         </div>
 
                         <!-- Price & Switcher -->
