@@ -74,9 +74,9 @@
             </div>
 
             <!-- Right Content - Hybrid Mockup with Reversed 3D Slant -->
-            <div class="w-full lg:w-[50%] relative flex items-center justify-center lg:justify-end py-12 lg:py-16">
+            <div class="w-full lg:w-[50%] relative flex items-start justify-center lg:justify-end pt-4 lg:pt-0 pb-12 lg:pb-16">
                 <div 
-                    class="relative z-10 w-full max-w-[580px] animate-fade-in-right transform-gpu backface-hidden delay-2"
+                    class="relative z-10 w-full max-w-[580px] animate-fade-in-right transform-gpu backface-hidden lg:-mt-16 xl:-mt-24 delay-2"
                     style="perspective: 2000px;"
                 >
                     <!-- Floating Stat Cards: Collection Rate (Inward) -->
