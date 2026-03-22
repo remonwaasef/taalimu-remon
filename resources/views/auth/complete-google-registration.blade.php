@@ -228,9 +228,9 @@ window.addEventListener('pageshow', (event) => {
 
                         <!-- Mini Features List -->
                         <div x-data="{ openFeatures: false }" class="py-3 border-y border-slate-50">
-                            <button type="button" @click="openFeatures = !openFeatures" class="flex items-center gap-2 text-[11px] font-black text-slate-700 font-arabic hover:text-brand-secondary transition-colors pb-2">
+                            <button type="button" @click="openFeatures = !openFeatures" class="w-full flex items-center justify-center gap-2 text-[12px] font-black text-slate-700 font-arabic hover:text-brand-secondary transition-colors pb-2 cursor-pointer">
                                 <span>{{ app()->isLocale('ar') ? 'عرض المميزات' : 'View Features' }}</span>
-                                <i class="bi bi-chevron-down transition-transform duration-300 text-[10px]" :class="openFeatures ? 'rotate-180' : ''"></i>
+                                <i class="bi bi-chevron-down transition-transform duration-300 transform" :class="openFeatures ? 'rotate-180' : ''"></i>
                             </button>
                             <div x-show="openFeatures" x-transition.opacity.duration.300ms class="space-y-2 pt-2 border-t border-slate-50">
                                 <template x-for="feature in (currentPlan.features || [])" :key="feature">
