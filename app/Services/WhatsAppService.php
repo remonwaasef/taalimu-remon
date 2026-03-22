@@ -145,4 +145,46 @@ class WhatsAppService
         
         return $this->sendMessageByTenant($tenant, $to, $message);
     }
+
+    /**
+     * Send a system-wide WhatsApp message (e.g., for registration OTP).
+     * Uses global credentials from .env.
+     */
+    public function sendSystemMessage($to, $message)
+    {
+        $token = env('WHATSAPP_SYSTEM_TOKEN');
+        $instanceId = env('WHATSAPP_SYSTEM_INSTANCE_ID');
+        $countryCode = env('WHATSAPP_SYSTEM_COUNTRY_CODE', '20');
+
+        if (!$token || !$instanceId) {
+            // Fallback: Log the message instead of sending if keys are missing
+            Log::info("WhatsApp System Message (SIMULATED): To: {$to}, Message: {$message}");
+            return true; 
+        }
+
+        // Format phone number
+        $to = preg_replace('/[^0-9]/', '', $to);
+        if ($countryCode && !str_starts_with($to, $countryCode)) {
+            $to = $countryCode . ltrim($to, '0');
+        }
+
+        try {
+            $response = Http::post("https://api.ultramsg.com/{$instanceId}/messages/chat", [
+                'token' => $token,
+                'to' => $to,
+                'body' => $message,
+            ]);
+
+            if ($response->successful()) {
+                Log::info("WhatsApp System Message sent to {$to}");
+                return true;
+            }
+
+            Log::error("WhatsApp System Message failed: " . $response->body());
+        } catch (\Exception $e) {
+            Log::error("WhatsApp System Message exception: " . $e->getMessage());
+        }
+
+        return false;
+    }
 }

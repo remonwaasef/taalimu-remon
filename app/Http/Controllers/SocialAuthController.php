@@ -284,6 +284,15 @@ class SocialAuthController extends Controller
             app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
             $user->assignRole($user->role);
 
+            // Generate and Send WhatsApp OTP
+            $otpCode = $user->generatePhoneVerificationCode();
+            $whatsapp = app(\App\Services\WhatsAppService::class);
+            $message = app()->getLocale() == 'ar' 
+                ? "مرحباً بك في منصة تعليمي! كود تفعيل حسابك هو: {$otpCode}"
+                : "Welcome to Taalimu! Your verification code is: {$otpCode}";
+            
+            $whatsapp->sendSystemMessage($user->phone, $message);
+
             // 3. Handle Subscription logic
             $billingCycle = $request->input('billing_cycle', 'monthly');
             $package = \App\Models\Package::where('slug', $request->plan)->first();

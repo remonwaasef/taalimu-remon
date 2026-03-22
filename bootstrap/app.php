@@ -81,6 +81,7 @@ return Application::configure(basePath: dirname(__DIR__))
             '2fa' => \App\Http\Middleware\TwoFactorMiddleware::class,
             'force_password_change' => \App\Http\Middleware\ForcePasswordChange::class,
             'feature' => \App\Http\Middleware\CheckFeature::class,
+            'phone.verified' => \App\Http\Middleware\EnsurePhoneIsVerified::class,
             'abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
             'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
         ]);

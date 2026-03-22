@@ -12,7 +12,7 @@ use Spatie\Activitylog\LogOptions;
 use Laravel\Sanctum\HasApiTokens;
 use App\Traits\ManagesTokens;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles, LogsActivity, HasApiTokens, ManagesTokens, \App\Traits\IdentifyTenant;
@@ -105,6 +105,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'locale',
         'google_id',
         'email_verified_at',
+        'phone_verified_at',
+        'phone_verification_code',
+        'phone_verification_expires_at',
     ];
 
     /**
@@ -148,5 +151,34 @@ class User extends Authenticatable implements MustVerifyEmail
     public function enrollments()
     {
         return $this->hasMany(Enrollment::class);
+    }
+
+    /**
+     * Phone Verification Helpers
+     */
+    public function hasVerifiedPhone()
+    {
+        return !is_null($this->phone_verified_at);
+    }
+
+    public function markPhoneAsVerified()
+    {
+        return $this->forceFill([
+            'phone_verified_at' => $this->freshTimestamp(),
+            'phone_verification_code' => null,
+            'phone_verification_expires_at' => null,
+        ])->save();
+    }
+
+    public function generatePhoneVerificationCode()
+    {
+        $code = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        
+        $this->forceFill([
+            'phone_verification_code' => $code,
+            'phone_verification_expires_at' => now()->addMinutes(15),
+        ])->save();
+
+        return $code;
     }
 }
