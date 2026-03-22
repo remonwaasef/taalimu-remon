@@ -41,6 +41,12 @@ return [
             'collection' => 'نسبة التحصيل',
         ],
         'mockup' => [
+            'dashboard' => 'لوحة التحكم',
+            'attendance' => 'الحضور',
+            'students' => 'الطلاب',
+            'revenue' => 'الإيرادات',
+            'growth_analysis' => 'تحليل النمو',
+            'jan_dec' => 'يناير - ديسمبر',
             'whatsapp' => [
                 'title' => 'واتساب',
                 'now' => 'الآن',

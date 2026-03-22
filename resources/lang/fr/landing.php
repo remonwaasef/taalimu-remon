@@ -41,6 +41,12 @@ return [
             'collection' => 'Taux de Recouvrement',
         ],
         'mockup' => [
+            'dashboard' => 'Tableau de bord',
+            'attendance' => 'Présences',
+            'students' => 'Étudiants',
+            'revenue' => 'Revenus',
+            'growth_analysis' => 'Analyse de Croissance',
+            'jan_dec' => 'Jan - Déc',
             'whatsapp' => [
                 'title' => 'WhatsApp',
                 'now' => 'maintenant',
