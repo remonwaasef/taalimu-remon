@@ -80,7 +80,9 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Custom CSS Variables -->
-
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
 </head>
 <body class="font-sans antialiased text-foreground bg-background selection:bg-primary selection:text-white">
     <div class="min-h-screen flex flex-col">
