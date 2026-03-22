@@ -11,7 +11,8 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
         ->middleware('throttle:registration')
         ->name('register.submit');
 
-    // Email Verification Routes
+    // Email Verification Routes (Disabled in favor of WhatsApp OTP)
+    /*
     Route::get('/email/verify', function () {
         return view('auth.verify-email');
     })->middleware('auth')->name('verification.notice');
@@ -25,6 +26,7 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
         $request->user()->sendEmailVerificationNotification();
         return back()->with('message', 'Verification link sent!');
     })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+    */
     
     // Protected Dashboard Route
     Route::get('/dashboard', function () {
@@ -40,7 +42,17 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
             }
         }
         return redirect()->route('login.portal');
-    })->middleware(['auth', 'verified'])->name('dashboard');
+    })->middleware(['auth', 'phone.verified'])->name('dashboard');
+
+    // WhatsApp Phone Verification
+    Route::get('/verify-phone', [\App\Http\Controllers\PhoneVerificationController::class, 'show'])
+        ->name('verification.phone.notice');
+    Route::post('/verify-phone', [\App\Http\Controllers\PhoneVerificationController::class, 'verify'])
+        ->middleware(['auth', 'throttle:6,1'])
+        ->name('verification.phone.verify');
+    Route::post('/verify-phone/resend', [\App\Http\Controllers\PhoneVerificationController::class, 'resend'])
+        ->middleware(['auth', 'throttle:3,1'])
+        ->name('verification.phone.resend');
     
     Route::get('/registration-success', function() {
         if (!session('registration_success')) {
