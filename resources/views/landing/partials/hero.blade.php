@@ -138,23 +138,121 @@
                                 <div class="w-10"></div>
                             </div>
 
-                            @php
-                                $heroImage = match(app()->getLocale()) {
-                                    'en' => 'hero-mockup-en.webp',
-                                    'fr' => 'hero-mockup-fr.webp',
-                                    default => 'hero-mockup-ar.png',
-                                };
-                            @endphp
-                            <img 
-                                src="{{ asset('images/' . $heroImage) }}" 
-                                alt="Taalimu Dashboard Mockup" 
-                                class="w-full h-auto rounded-2xl md:rounded-3xl border border-slate-200/30 shadow-inner"
-                                width="800"
-                                height="550"
-                                decoding="async"
-                                loading="eager"
-                                fetchpriority="high"
-                            >
+                            <div class="w-full bg-white rounded-2xl md:rounded-3xl border border-slate-200/30 shadow-inner overflow-hidden flex h-[350px] md:h-[480px] select-none" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
+                                <!-- Sidebar (Sleek Dark) -->
+                                <div class="w-12 md:w-48 bg-[#0F172A] flex flex-col p-2 md:p-4 gap-4 flex-shrink-0">
+                                    <div class="flex items-center gap-2 mb-4">
+                                        <div class="w-6 h-6 rounded-lg bg-emerald-500 flex items-center justify-center">
+                                            <i class="fas fa-graduation-cap text-white text-[10px]"></i>
+                                        </div>
+                                        <div class="hidden md:block text-[10px] font-black text-white uppercase tracking-tighter">{{ config('app.name') }}</div>
+                                    </div>
+                                    @for($i=0; $i<6; $i++)
+                                        <div class="w-full h-8 md:h-10 flex items-center gap-3 md:px-3 rounded-xl transition-colors {{ $i === 0 ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'text-slate-500 hover:bg-slate-800' }}">
+                                            <div class="w-5 h-5 flex-shrink-0 flex items-center justify-center">
+                                                <i class="fas fa-{{ ['chart-pie', 'users', 'calendar-alt', 'wallet', 'envelope', 'cog'][$i] }} {{ $i === 0 ? '' : 'opacity-60' }} text-xs md:text-sm"></i>
+                                            </div>
+                                            <div class="hidden md:block h-1.5 bg-current opacity-20 rounded-full w-20"></div>
+                                        </div>
+                                    @endfor
+                                </div>
+
+                                <!-- Main Content Area -->
+                                <div class="flex-1 bg-[#F8FAFC] p-3 md:p-6 overflow-hidden flex flex-col gap-4">
+                                    <!-- Header -->
+                                    <div class="flex items-center justify-between">
+                                        <div class="h-5 px-3 bg-white rounded-full border border-slate-200 flex items-center gap-2 shadow-sm">
+                                            <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                                            <div class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">{{ __('landing.hero.mockup.dashboard') }}</div>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <div class="w-7 h-7 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center">
+                                                <i class="fas fa-search text-[10px] text-slate-400"></i>
+                                            </div>
+                                            <div class="w-7 h-7 rounded-full bg-white border border-slate-200 shadow-sm overflow-hidden">
+                                                <div class="w-full h-full bg-slate-100 flex items-center justify-center">
+                                                    <i class="fas fa-user-circle text-slate-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Stat Cards -->
+                                    <div class="grid grid-cols-3 gap-2 md:gap-4">
+                                        <div class="bg-blue-500 rounded-2xl p-3 md:p-4 text-white shadow-lg shadow-blue-500/10">
+                                            <div class="text-[7px] md:text-[9px] opacity-70 font-bold mb-1 uppercase tracking-wider">{{ __('landing.hero.mockup.attendance') }}</div>
+                                            <div class="text-xs md:text-xl font-black mb-1">94%</div>
+                                            <div class="flex items-center gap-1">
+                                                <i class="fas fa-arrow-up text-[6px]"></i>
+                                                <span class="text-[6px] md:text-[8px] font-black">3.1%</span>
+                                            </div>
+                                        </div>
+                                        <div class="bg-slate-900 rounded-2xl p-3 md:p-4 text-white shadow-lg shadow-slate-900/10">
+                                            <div class="text-[7px] md:text-[9px] opacity-70 font-bold mb-1 uppercase tracking-wider">{{ __('landing.hero.mockup.students') }}</div>
+                                            <div class="text-xs md:text-xl font-black mb-1">1,850</div>
+                                            <div class="flex items-center gap-1 text-emerald-400">
+                                                <i class="fas fa-arrow-up text-[6px]"></i>
+                                                <span class="text-[6px] md:text-[8px] font-black">12%</span>
+                                            </div>
+                                        </div>
+                                        <div class="bg-emerald-500 rounded-2xl p-3 md:p-4 text-white shadow-lg shadow-emerald-500/10">
+                                            <div class="text-[7px] md:text-[9px] opacity-70 font-bold mb-1 uppercase tracking-wider">{{ __('landing.hero.mockup.revenue') }}</div>
+                                            <div class="text-xs md:text-xl font-black mb-1">154,200</div>
+                                            <div class="flex items-center gap-1">
+                                                <i class="fas fa-arrow-up text-[6px]"></i>
+                                                <span class="text-[6px] md:text-[8px] font-black">6.5%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Chart Area -->
+                                    <div class="flex-1 bg-white rounded-2xl p-4 border border-slate-200/60 shadow-sm flex flex-col gap-4 overflow-hidden relative group/chart">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex flex-col gap-0.5">
+                                                <div class="text-[10px] font-black text-slate-800">{{ __('landing.hero.mockup.growth_analysis') }}</div>
+                                                <div class="text-[7px] font-bold text-slate-400 uppercase tracking-tighter">{{ __('landing.hero.mockup.jan_dec') }}</div>
+                                            </div>
+                                            <div class="flex gap-1">
+                                                @foreach(['1M', '3M', '6M', '1Y'] as $period)
+                                                    <div class="px-2 py-0.5 rounded-md text-[6px] font-black {{ $loop->last ? 'bg-slate-100 text-slate-600' : 'text-slate-300' }}">{{ $period }}</div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Mock Graph SVG -->
+                                        <div class="relative flex-1 bg-emerald-50/20 rounded-xl overflow-hidden mt-2 p-2">
+                                            <svg class="w-full h-full" viewBox="0 0 100 40" preserveAspectRatio="none">
+                                                <defs>
+                                                    <linearGradient id="chartGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                        <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.2" />
+                                                        <stop offset="100%" style="stop-color:#10b981;stop-opacity:0" />
+                                                    </linearGradient>
+                                                </defs>
+                                                <path d="M0,40 C10,38 15,30 20,32 C25,34 30,20 40,22 C50,24 55,10 70,12 C85,14 90,4 100,5 L100,40 L0,40 Z" fill="url(#chartGrad)" />
+                                                <path d="M0,40 C10,38 15,30 20,32 C25,34 30,20 40,22 C50,24 55,10 70,12 C85,14 90,4 100,5" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" />
+                                                
+                                                <!-- Points -->
+                                                <circle cx="20" cy="32" r="1.5" fill="white" stroke="#10b981" stroke-width="1" />
+                                                <circle cx="40" cy="22" r="1.5" fill="white" stroke="#10b981" stroke-width="1" />
+                                                <circle cx="70" cy="12" r="1.5" fill="white" stroke="#10b981" stroke-width="1" />
+                                                <circle cx="100" cy="5" r="2" fill="#10b981" />
+                                            </svg>
+                                        </div>
+                                        
+                                        <!-- Legend -->
+                                        <div class="flex items-center gap-4 mt-2">
+                                            <div class="flex items-center gap-1.5">
+                                                <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                                                <div class="text-[7px] font-bold text-slate-500">Users</div>
+                                            </div>
+                                            <div class="flex items-center gap-1.5">
+                                                <div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+                                                <div class="text-[7px] font-bold text-slate-500">Activity</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

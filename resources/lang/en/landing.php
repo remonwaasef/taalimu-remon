@@ -41,6 +41,12 @@ return [
             'collection' => 'Collection Rate',
         ],
         'mockup' => [
+            'dashboard' => 'Dashboard',
+            'attendance' => 'Attendance',
+            'students' => 'Students',
+            'revenue' => 'Revenue',
+            'growth_analysis' => 'Growth Analysis',
+            'jan_dec' => 'Jan - Dec',
             'whatsapp' => [
                 'title' => 'WhatsApp',
                 'now' => 'now',
