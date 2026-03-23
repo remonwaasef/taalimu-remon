@@ -1,6 +1,6 @@
 @extends('instructor::components.layouts.master')
 
-@section('page-title', 'إدارة الحسابات والمدفوعات')
+@section('page-title', __('instructor::billing.page_title'))
 
 @section('content')
 <div class="container-fluid">
@@ -11,7 +11,7 @@
         </div>
         <div class="col-md-6 text-md-end mt-3 mt-md-0">
             <div id="resultCount" class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2">
-                {{ $students->count() }} طالب
+                {{ $students->count() }} {{ __('instructor::billing.student_count') }}
             </div>
         </div>
     </div>
@@ -23,14 +23,14 @@
                 <div class="col-md-6">
                     <div class="input-group">
                         <span class="input-group-text bg-light border-0 rounded-start-pill px-3"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" id="searchInput" class="form-control bg-light border-0 rounded-end-pill py-2" placeholder="بحث باسم الطالب أو رقم الهاتف...">
+                        <input type="text" id="searchInput" class="form-control bg-light border-0 rounded-end-pill py-2" placeholder="{{ __('instructor::billing.search_placeholder') }}">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <select id="filterStatus" class="form-select bg-light border-0 rounded-pill py-2">
-                        <option value="all">كل الطلاب</option>
-                        <option value="unpaid">عليهم متبقي</option>
-                        <option value="paid">تم التحصيل بالكامل</option>
+                        <option value="all">{{ __('instructor::billing.all_students') }}</option>
+                        <option value="unpaid">{{ __('instructor::billing.has_balance') }}</option>
+                        <option value="paid">{{ __('instructor::billing.fully_paid') }}</option>
                     </select>
                 </div>
             </div>
@@ -42,14 +42,14 @@
             <div class="mb-4">
                 <i class="fas fa-users fs-1 text-muted opacity-25"></i>
             </div>
-            <h5 class="text-muted">لا يوجد طلاب مسجلين حالياً</h5>
+            <h5 class="text-muted">{{ __('instructor::billing.no_students_registered') }}</h5>
         </div>
     @else
         <div id="noResults" class="stats-card p-5 text-center d-none">
             <div class="mb-4">
                 <i class="fas fa-search fs-1 text-muted opacity-25"></i>
             </div>
-            <h5 class="text-muted">لا توجد نتائج تطابق بحثك</h5>
+            <h5 class="text-muted">{{ __('instructor::billing.no_search_results') }}</h5>
         </div>
 
         <div class="stats-card p-0 overflow-hidden shadow-sm border-0" id="billingTableContainer">
@@ -112,7 +112,7 @@
                                                 <i class="fab fa-whatsapp me-1"></i> {{ __('instructor::billing.whatsapp_reminder') }}
                                             </a>
                                         @else
-                                            <span class="text-success small fw-medium"><i class="fas fa-check-circle me-1"></i> تم التحصيل</span>
+                                            <span class="text-success small fw-medium"><i class="fas fa-check-circle me-1"></i> {{ __('instructor::billing.collected') }}</span>
                                         @endif
                                     </div>
                                 </td>
@@ -158,7 +158,7 @@
                     </div>
                 </div>
                 <div class="modal-footer border-0 pt-0 p-4">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">{{ __('instructor::billing.cancel') }}</button>
                     <button type="submit" class="btn btn-primary rounded-pill px-4">{{ __('instructor::billing.confirm_collection') }}</button>
                 </div>
             </form>
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        if (resultCount) resultCount.textContent = visible + ' طالب';
+        if (resultCount) resultCount.textContent = visible + ' {{ __('instructor::billing.student_count') }}';
         if (noResults) noResults.classList.toggle('d-none', visible > 0);
         if (tableContainer) tableContainer.classList.toggle('d-none', visible === 0);
     }
@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('modal_student_name').textContent = name;
             document.getElementById('modal_amount').value = balance;
             document.getElementById('modal_amount').max = balance;
-            document.getElementById('modal_balance_hint').textContent = 'المبلغ المتبقي حالياً: ' + new Intl.NumberFormat().format(balance);
+            document.getElementById('modal_balance_hint').textContent = '{{ __('instructor::billing.current_balance') }}' + new Intl.NumberFormat().format(balance);
         });
     }
 });

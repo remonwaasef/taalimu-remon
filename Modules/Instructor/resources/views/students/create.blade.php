@@ -21,7 +21,7 @@
                                 <label class="form-label fw-bold">{{ __('instructor::students.student') }}</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light border-0"><i class="fas fa-user" style="color: var(--primary-color);"></i></span>
-                                    <input type="text" name="name" class="form-control bg-light border-0 focus-ring-primary" placeholder="مثال: أحمد محمد علي" required value="{{ old('name') }}">
+                                    <input type="text" name="name" class="form-control bg-light border-0 focus-ring-primary" placeholder="{{ __('instructor::students.name_placeholder') }}" required value="{{ old('name') }}">
                                 </div>
                             </div>
 
