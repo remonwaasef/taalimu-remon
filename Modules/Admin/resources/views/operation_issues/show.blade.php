@@ -28,7 +28,6 @@
                     ? __('admin.operation_issues.messages.' . $issue->exception_class) 
                     : ($issue->exception_class ?: __('admin.operation_issues.history.system')) }}
             </h1>
-            </h1>
         </div>
         
         <!-- Status Actions -->
