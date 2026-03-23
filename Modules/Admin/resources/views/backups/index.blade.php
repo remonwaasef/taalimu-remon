@@ -67,7 +67,7 @@
                             </td>
                             <td class="text-end px-4">
                                 <div class="btn-group">
-                                    <a href="{{ route('admin.backups.download', $backup['file_name']) }}" class="btn btn-light btn-sm rounded-pill px-3 me-2 border">
+                                    <a href="{{ route('admin.backups.download', ['file' => $backup['file_name']]) }}" class="btn btn-light btn-sm rounded-pill px-3 me-2 border">
                                         <i class="fas fa-download me-1 text-primary"></i> تحميل
                                     </a>
                                     <form action="{{ route('admin.backups.delete', $backup['file_name']) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذه النسخة الاحتياطية؟')">
