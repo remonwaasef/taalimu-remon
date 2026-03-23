@@ -18,7 +18,7 @@
                 <div class="col-md-8">
                     <div class="input-group">
                         <span class="input-group-text bg-white border-end-0 rounded-start-pill"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" id="scheduleSearchInput" class="form-control border-start-0 rounded-end-pill" placeholder="بحث باسم المجموعة (مثلاً: فيزياء)...">
+                        <input type="text" id="scheduleSearchInput" class="form-control border-start-0 rounded-end-pill" placeholder="{{ __('instructor::schedules.search_placeholder') }}">
                     </div>
                 </div>
                 <div class="col-md-4 text-end">
@@ -52,7 +52,7 @@
                         </div>
                         <h4 class="fw-bold mb-0">{{ __('instructor::schedules.days.' . $dayIndex) }}</h4>
                         <div class="ms-auto flex-grow-1 mx-3 border-bottom opacity-10"></div>
-                        <span class="badge bg-light text-dark rounded-pill day-count">{{ count($groupedSchedules[$dayIndex]) }} حصة</span>
+                        <span class="badge bg-light text-dark rounded-pill day-count">{{ count($groupedSchedules[$dayIndex]) }} {{ __('instructor::schedules.session_word') }}</span>
                     </div>
 
                     <div class="row g-3 sessions-row">
@@ -101,7 +101,7 @@
 
                                         <div class="mt-auto">
                                             <div class="d-flex justify-content-between align-items-center mb-1">
-                                                <small class="text-muted fw-semibold">السعة</small>
+                                                <small class="text-muted fw-semibold">{{ __('instructor::schedules.capacity') }}</small>
                                                 <small class="fw-bold text-{{ $statusColor }}">{{ $confirmedBookings }}/{{ $schedule->max_students }}</small>
                                             </div>
                                             <div class="progress rounded-pill shadow-none" style="height: 6px;">
@@ -119,7 +119,7 @@
 
         <div id="noScheduleResults" class="col-12 text-center py-5 d-none">
             <i class="far fa-calendar-times display-1 text-light mb-3"></i>
-            <h4 class="text-muted">لا توجد حصص مطابقة للبحث.</h4>
+            <h4 class="text-muted">{{ __('instructor::schedules.no_matching_sessions') }}</h4>
         </div>
 
         @if($groupedSchedules->isEmpty())
@@ -180,7 +180,7 @@
 
                 // Update day count badge
                 const countBadge = section.querySelector('.day-count');
-                if (countBadge) countBadge.textContent = dayVisibleCount + ' حصة';
+                if (countBadge) countBadge.textContent = dayVisibleCount + ' {{ __('instructor::schedules.session_word') }}';
 
                 // Show/hide day section
                 if (dayVisibleCount > 0) {
@@ -191,7 +191,7 @@
                 }
             });
 
-            if (resultCount) resultCount.textContent = totalVisible + ' حصة إجمالاً';
+            if (resultCount) resultCount.textContent = totalVisible + ' {{ __('instructor::schedules.total_sessions') }}';
             if (noResults) {
                 // Only show "no results" if we started with data but filtered everything out
                 const hasInitialData = daySections.length > 0;

@@ -527,7 +527,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const first = selectedPhones[0];
                 window.open(`https://api.whatsapp.com/send?phone=${first}`, '_blank');
                 if (selectedPhones.length > 1) {
-                    alert('سيتم فتح الطالب الأول. للمراسلة الجماعية الاحترافية، يوصى بربط خدمة WhatsApp API.');
+                    alert('{{ __('instructor::students.whatsapp_bulk_alert') }}');
                 }
             }
         });
@@ -557,7 +557,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         updateBulkBar();
-        if (resultCount) resultCount.textContent = visibleCount + ' طالب';
+        if (resultCount) resultCount.textContent = visibleCount + ' {{ __('instructor::students.student_count') }}';
         
         if (noResults) {
             noResults.classList.toggle('d-none', visibleCount > 0 || rows.length === 0);
@@ -610,7 +610,7 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', function() {
             const id = this.dataset.id;
             const groups = JSON.parse(this.dataset.groups);
-            transferStudentName.textContent = 'نقل الطالب: ' + this.dataset.name;
+            transferStudentName.textContent = '{{ __('instructor::students.transfer_student_prefix') }}' + this.dataset.name;
             transferForm.action = `/instructor/students/${id}/transfer`;
             fromCourseIdInput.value = groups[0] || ''; // Pick first group as from
             transferModal.show();
