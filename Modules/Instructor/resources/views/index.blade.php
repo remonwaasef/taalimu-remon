@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="row g-4 mb-5">
-        <div class="col-md-4">
+        <div class="col-md-4" id="tour-stats-students">
             <div class="stats-card p-4 h-100 position-relative overflow-hidden">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <div>
@@ -21,7 +21,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" id="tour-stats-groups">
             <div class="stats-card p-4 h-100 position-relative overflow-hidden">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <div>
@@ -70,7 +70,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-4" id="tour-quick-links">
             <div class="stats-card p-4 h-100">
                 <h5 class="fw-bold mb-4">{{ __('instructor::dashboard.quick_links') }}</h5>
                 <div class="d-grid gap-3">
@@ -104,11 +104,12 @@
     </div>
 
     <!-- Groups Section -->
-    <div class="stats-card p-4 mb-5">
+    <div class="stats-card p-4 mb-5" id="tour-groups-section">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h5 class="fw-bold mb-0">{{ __('instructor::dashboard.groups_and_registration') }}</h5>
         </div>
         
+        @if($courses->count() > 0)
         <div class="table-responsive">
             <table class="table table-hover align-middle">
                 <thead class="bg-light">
@@ -179,11 +180,102 @@
                 </tbody>
             </table>
         </div>
+        @else
+        <div class="text-center py-5 empty-state-container">
+            <div class="mb-4">
+                <div class="d-inline-flex p-4 rounded-circle mb-3" style="background: rgba(22, 41, 99, 0.05);">
+                    <i class="fas fa-layer-group text-primary" style="font-size: 3.5rem; opacity: 0.8;"></i>
+                </div>
+            </div>
+            <h4 class="fw-bold text-dark mb-2">{{ __('instructor::dashboard.no_groups') ?? 'لا يوجد مجموعات حالياً' }}</h4>
+            <p class="text-muted mb-4 mx-auto" style="max-width: 400px;">
+                {{ __('instructor::dashboard.no_groups_desc') ?? 'يبدو أنك لم تقم بإنشاء أي مجموعة دراسية حتى الآن. ابدأ الآن بإنشاء أول مجموعة لك لتتمكن من دعوة الطلاب وإدارة حضورهم.' }}
+            </p>
+            <a href="{{ route('instructor.groups.create') }}" class="btn btn-primary px-4 py-2 rounded-4 hover-lift fw-bold shadow-sm">
+                <i class="fas fa-plus me-2"></i> {{ __('instructor::dashboard.create_new_group') }}
+            </a>
+        </div>
+        @endif
     </div>
 </div>
 
 @push('scripts')
+<!-- Driver.js CSS & JS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"/>
+<script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
+<style>
+    /* Custom style for driver js arabic */
+    .driver-popover {
+        font-family: inherit !important;
+        text-align: right;
+        direction: rtl;
+    }
+    .driver-popover-title {
+        color: #162963 !important;
+        font-weight: 700 !important;
+        margin-bottom: 10px !important;
+    }
+    .driver-popover-progress-text {
+        direction: ltr; /* Fix for Arabic numbers direction like 4 of 1 */
+    }
+</style>
+
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Interactive Tour Setup
+    if (!localStorage.getItem('instructor_tour_done_v1')) {
+        const driver = window.driver.js.driver;
+        const driverObj = driver({
+            showProgress: true,
+            progressText: '{{current}} من {{total}}',
+            nextBtnText: 'التالي ←',
+            prevBtnText: '→ السابق',
+            doneBtnText: 'إنهاء الجولة 🏁',
+            popoverClass: 'driverjs-theme',
+            allowClose: false,
+            steps: [
+                { 
+                    popover: { 
+                        title: 'مرحباً بك في لوحة تحكم المعلم! 👋', 
+                        description: 'أهلاً بك في منصتك. دعنا نأخذ جولة سريعة لنعطيك لمحة عن أهم الأدوات المتاحة لك لإدارة عملك بمنتهى السهولة.' 
+                    } 
+                },
+                { 
+                    element: '#tour-quick-links', 
+                    popover: { 
+                        title: '⚡ الروابط السريعة', 
+                        description: 'هذا القسم هو أهم جزء للبدء: قم بإنشاء مجموعة دراسية، إضافة طالب يدوياً، أو الوصول المباشر لمسجل الغياب الذكي.',
+                    }
+                },
+                { 
+                    element: '#tour-groups-section', 
+                    popover: { 
+                        title: '📚 مجموعاتك وروابط التسجيل', 
+                        description: 'هنا تظهر مجوعاتك الدراسية بأكملها. لكل مجموعة رابط خاص، يمكنك نسخه وإرساله للطلاب ليسجلوا بياناتهم بأنفسهم دون أي جهد منك.',
+                    }
+                },
+                { 
+                    element: '#tour-stats-students', 
+                    popover: { 
+                        title: '📊 الإحصائيات العامة', 
+                        description: 'تابع عدد طلابك، ومجموعاتك النشطة، ونظرة سريعة على الإيرادات الشهرية هنا لتبقى دائماً على اطلاع بنشاطك.' 
+                    } 
+                }
+            ],
+            onDestroyStarted: () => {
+                if (!driverObj.hasNextStep() || confirm("هل تود تخطي الجولة التعريفية فعلاً؟")) {
+                    localStorage.setItem('instructor_tour_done_v1', 'true');
+                    driverObj.destroy();
+                }
+            },
+        });
+        
+        setTimeout(() => {
+            driverObj.drive();
+        }, 1200);
+    }
+});
+
 function copyLink(id) {
     var copyText = document.getElementById(id);
     copyText.select();

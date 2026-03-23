@@ -38,6 +38,12 @@ $instructorRoutes = function () {
         // WhatsApp Settings
         Route::get('/whatsapp', [InstructorController::class, 'whatsappSettings'])->name('instructor.whatsapp.settings');
         Route::post('/whatsapp/update', [InstructorController::class, 'updateWhatsAppSettings'])->name('instructor.whatsapp.update');
+        
+        // Auto-clear cache route (Temporary helper)
+        Route::get('/clear-cache', function() {
+            \Illuminate\Support\Facades\Artisan::call('view:clear');
+            return 'تم مسح الكاش بنجاح! يمكنك الآن الرجوع للصفحة الرئيسية وتحديثها لترى التعديلات.';
+        });
     });
 
     // Public Phone Check
