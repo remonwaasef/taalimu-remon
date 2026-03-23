@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const driver = window.driver.js.driver;
         const driverObj = driver({
             showProgress: true,
-            progressText: '{{current}} من {{total}}',
+            progressText: '@{{current}} من @{{total}}',
             nextBtnText: 'التالي ←',
             prevBtnText: '→ السابق',
             doneBtnText: 'إنهاء الجولة 🏁',
