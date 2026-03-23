@@ -123,39 +123,7 @@ class CampusController extends Controller
         return view('campus::profile', compact('student'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('campus::create');
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request) {}
-
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
-    {
-        return view('campus::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        return view('campus::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id) {}
 
     public function downloadCertificate(Certificate $certificate, CertificateService $certificateService)
     {
@@ -168,8 +136,5 @@ class CampusController extends Controller
             ->download('certificate-' . $certificate->uuid . '.pdf');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id) {}
+
 }

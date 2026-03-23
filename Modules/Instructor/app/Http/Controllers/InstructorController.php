@@ -68,43 +68,9 @@ class InstructorController extends Controller
         return view('instructor::index', compact('courses', 'totalStudents', 'totalCourses', 'monthlyRevenue', 'attendanceData', 'days'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('instructor::create');
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request) {}
 
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
-    {
-        return view('instructor::show');
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        return view('instructor::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id) {}
-
-    /**
-     * Remove the specified resource from storage.
-     */
     /**
      * Show the QR Scanner interface for a specific course/group
      */

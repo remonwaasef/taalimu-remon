@@ -101,10 +101,22 @@ class IssueNotifier
             return;
         }
 
-        // TODO: Implement digest notification
-        Log::info('Daily issue digest would be sent', [
-            'issue_count' => $issues->count(),
-            'critical_count' => $issues->where('severity', 'critical')->count(),
-        ]);
+        // Send notification
+        try {
+            $admins = $this->getAdminsToNotify();
+            
+            if ($admins->isNotEmpty()) {
+                Notification::send($admins, new \App\Notifications\DailyIssueDigestNotification($issues));
+                
+                Log::info('Daily issue digest notification sent', [
+                    'issue_count' => $issues->count(),
+                    'admins_notified' => $admins->pluck('id')->toArray(),
+                ]);
+            }
+        } catch (\Throwable $e) {
+            Log::error('Failed to send daily issue digest notification', [
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 }
