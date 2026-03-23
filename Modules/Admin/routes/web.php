@@ -98,7 +98,7 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::prefix('backups')->name('backups.')->group(function() {
             Route::get('/', [\Modules\Admin\Http\Controllers\BackupController::class, 'index'])->name('index');
             Route::post('/', [\Modules\Admin\Http\Controllers\BackupController::class, 'create'])->name('create');
-            Route::get('/download/{fileName}', [\Modules\Admin\Http\Controllers\BackupController::class, 'download'])->name('download');
+            Route::get('/download', [\Modules\Admin\Http\Controllers\BackupController::class, 'download'])->name('download');
             Route::delete('/{fileName}', [\Modules\Admin\Http\Controllers\BackupController::class, 'delete'])->name('delete');
         });
 
