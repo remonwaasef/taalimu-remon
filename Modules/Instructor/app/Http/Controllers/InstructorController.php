@@ -23,6 +23,10 @@ class InstructorController extends Controller
     {
         try {
             \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+            
+            // Temporary Cache Clearing
+            \Illuminate\Support\Facades\Artisan::call('view:clear');
+            \Illuminate\Support\Facades\Artisan::call('cache:clear');
         } catch (\Exception $e) {
             // Ignore errors if already migrated or other issues for now
         }
