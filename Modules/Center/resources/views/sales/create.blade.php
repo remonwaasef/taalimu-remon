@@ -82,7 +82,7 @@
                             <!-- Unpaid invoices will appear here -->
                         </div>
                         <div class="text-center">
-                            <a id="summaryProfileLink" href="#" class="btn btn-sm btn-outline-primary w-100 rounded-pill small mb-2">
+                            <a id="summaryProfileLink" href="{{ route('center.students.index') }}" class="btn btn-sm btn-outline-primary w-100 rounded-pill small mb-2">
                                 <i class="fas fa-user-circle me-1"></i>{{ __('center::messages.blade_0586') }}</a>
                         </div>
                     </div>

@@ -82,7 +82,7 @@
                         <!-- Dynamic content -->
                     </div>
                     <div class="card-footer bg-white border-0 py-3 text-center">
-                        <a id="fullProfileBtn" href="#" class="btn btn-light rounded-pill px-4 border">
+                        <a id="fullProfileBtn" href="{{ route('center.students.index') }}" class="btn btn-light rounded-pill px-4 border">
                             <i class="fas fa-user-circle me-1"></i>{{ __('center::messages.blade_0568') }}</a>
                     </div>
                 </div>

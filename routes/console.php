@@ -22,3 +22,5 @@ Schedule::command('app:send-weekly-telegram-report')->weeklyOn(0, '08:00');
 
 // Telegram Inactivity Check (Daily)
 Schedule::command('app:check-inactive-tenants')->dailyAt('11:00');
+// Daily Issue Digest (Daily at 08:30 AM)
+Schedule::call(fn() => app(\App\Services\IssueNotifier::class)->sendDailyDigest())->dailyAt('08:30');

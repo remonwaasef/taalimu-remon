@@ -382,7 +382,7 @@
     <!-- Sidebar -->
     <aside class="sidebar d-flex flex-column" id="sidebar">
         <div class="p-4 mb-3 border-bottom d-flex align-items-center justify-content-between" style="border-bottom: 1px solid var(--sidebar-border) !important;">
-            <a href="#" class="text-white text-decoration-none fs-4 fw-bold d-flex align-items-center gap-2">
+            <a href="{{ route('admin.dashboard') }}" class="text-white text-decoration-none fs-4 fw-bold d-flex align-items-center gap-2">
                 <span class="bg-primary rounded p-1 d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px; font-size: 1.2rem;">
                     {{ substr(\App\Models\SiteSetting::get('site_name', 'EduCentral'), 0, 1) }}
                 </span>
@@ -513,7 +513,7 @@
                             <div class="fw-bold">{{ auth()->user()->name }}</div>
                             <div class="text-muted small">{{ auth()->user()->email }}</div>
                         </li>
-                        <li><a class="dropdown-item py-2 px-3 rounded-3 mx-2 w-auto" href="#">
+                        <li><a class="dropdown-item py-2 px-3 rounded-3 mx-2 w-auto" href="{{ route('admin.users.edit', auth()->id()) }}">
                             <i class="bi bi-person me-2"></i> {{ __('admin::admin.sidebar.profile') }}
                         </a></li>
                         <li><hr class="dropdown-divider mx-2"></li>
