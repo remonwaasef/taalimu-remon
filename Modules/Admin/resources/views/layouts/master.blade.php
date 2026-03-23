@@ -438,6 +438,12 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="{{ route('admin.backups.index') }}" class="nav-link {{ request()->routeIs('admin.backups.*') ? 'active' : '' }}">
+                    <span>💾</span>
+                    <span>النسخ الاحتياطي</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="{{ route('admin.roles.index') }}" class="nav-link {{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
                     <span>🛡️</span>
                     <span>{{ __('admin::admin.sidebar.roles') }}</span>
