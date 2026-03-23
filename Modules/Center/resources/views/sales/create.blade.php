@@ -7,7 +7,7 @@
     <a href="{{ route('center.sales.index') }}" class="btn btn-light rounded-circle me-3">
         <i class="fas fa-arrow-right"></i>
     </a>
-    <h2 class="fw-bold text-dark mb-0">{{ __('center::sales.new_sale') }}</h2>
+    <h2 class="fw-bold text-dark mb-0">{{ __('center::sales.new_sale') }} <span class="badge bg-info bg-opacity-10 text-info fs-6 fw-normal rounded-pill ms-2">بيئة التطوير</span></h2>
 </div>
 
 <div class="row g-4">

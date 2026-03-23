@@ -1,17 +1,27 @@
 # Deployment Script for Edu SaaS
-# This script commits changes locally, pushes to GitHub, 
-# and then tells the production server to pull and rebuild.
+# This script MUST be run from the 'main' branch.
+# It merges 'dev' into 'main', pushes to GitHub, and updates the production server.
 
-$commitMsg = Read-Host "Enter commit message (default: 'Auto-deploy')"
-if (-not $commitMsg) { $commitMsg = "Auto-deploy $(Get-Date -Format 'yyyy-MM-dd HH:mm')" }
+$currentBranch = git branch --show-current
+if ($currentBranch -ne "main") {
+    Write-Host "!!! ERROR: You are on branch [$currentBranch]. Deployment is only allowed from [main]. !!!" -ForegroundColor Red
+    Write-Host "Please switch to main: git checkout main"
+    exit 1
+}
 
-Write-Host "--- 1. Saving changes locally ---" -ForegroundColor Cyan
-git add .
-git commit -m $commitMsg
+Write-Host "--- 1. Syncing with dev branch ---" -ForegroundColor Cyan
+git merge dev --no-edit
 
-Write-Host "--- 2. Pushing to GitHub ---" -ForegroundColor Cyan
+$confirm = Read-Host "Are you sure you want to DEPLOY these changes to the LIVE server? (y/n)"
+if ($confirm -ne "y") {
+    Write-Host "Deployment cancelled." -ForegroundColor Yellow
+    exit 0
+}
+
+Write-Host "--- 2. Pushing to GitHub (main) ---" -ForegroundColor Cyan
 git push origin main
 
+Write-Host "--- 3. Updating Production Server ---" -ForegroundColor Cyan
 # We use bash -lc to ensure the full environment (composer, npm, etc.) is loaded
 $remoteCmd = "bash -lc 'git config --global --add safe.directory /home/taalimu/htdocs/taalimu.com && cd /home/taalimu/htdocs/taalimu.com && export GIT_TERMINAL_PROMPT=0 && git pull origin main && export COMPOSER_ALLOW_SUPERUSER=1 && composer install --no-dev --optimize-autoloader && npm run build && php artisan migrate --force && php artisan storage:link && php artisan optimize:clear'"
 
@@ -23,3 +33,4 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 Write-Host "--- Done! Your changes are live. ---" -ForegroundColor Green
+
