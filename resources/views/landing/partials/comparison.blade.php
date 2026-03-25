@@ -1,41 +1,40 @@
-<section id="comparison" class="py-8 lg:py-12 bg-white relative overflow-hidden">
-    <!-- Background Accents -->
-    <div class="absolute top-0 right-0 w-1/3 h-1/3 bg-cyan/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2"></div>
-    <div class="absolute bottom-0 left-0 w-1/3 h-1/3 bg-light-purple/5 blur-[120px] rounded-full translate-y-1/2 -translate-x-1/2"></div>
+<section id="comparison" class="py-24 bg-white relative overflow-hidden">
+    <!-- Artistic Accents -->
+    <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-slate-50 rounded-full blur-[100px] -z-10 opacity-70"></div>
 
-    <div class="container mx-auto px-4 lg:px-8 relative z-10">
+    <div class="container mx-auto px-4 lg:px-12 relative z-10">
         <!-- Section Header -->
-        <div class="text-center mb-6 lg:mb-8">
-            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-4">
-                <span class="text-sm font-medium text-primary">{{ __('landing.comparison.badge') }}</span>
+        <div class="text-center mb-20">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#fef2f2] border border-red-50 mb-6">
+                <span class="text-xs font-black text-[#ef4444] uppercase tracking-[0.2em]">{{ __('landing.comparison.badge') }}</span>
             </div>
-            <h2 class="text-2xl lg:text-3xl font-bold text-foreground mb-3 text-center mx-auto">
+            <h2 class="text-3xl md:text-5xl font-black text-[#0f172a] mb-6 tracking-tight leading-tight">
                 {!! str_replace(config('app.name'), \App\Models\SiteSetting::get('site_name', config('app.name')), __('landing.comparison.title')) !!}
             </h2>
-            <p class="text-muted-foreground text-base max-w-2xl mx-auto">
+            <p class="text-lg text-slate-500 max-w-2xl mx-auto font-medium">
                 {{ __('landing.comparison.subtitle') }}
             </p>
         </div>
 
-        <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 max-w-6xl mx-auto">
+        <div class="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto items-stretch">
             <!-- Manual / Traditional Management -->
-            <div class="group relative bg-card/50 backdrop-blur-sm rounded-2xl p-5 lg:p-6 border border-border hover:border-destructive/30 transition-all duration-500 hover:shadow-2xl">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 rounded-xl bg-destructive/10 flex items-center justify-center text-destructive">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 9-6 6"/><path d="m9 9 6 6"/><circle cx="12" cy="12" r="10"/></svg>
+            <div class="group relative bg-[#fef2f2]/30 rounded-[2.5rem] p-10 border border-red-50 hover:shadow-soft transition-all duration-500">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-14 h-14 rounded-2xl bg-white shadow-soft flex items-center justify-center text-red-500">
+                        <i class="fas fa-times-circle text-xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-foreground">
+                    <h3 class="text-2xl font-black text-[#0f172a]">
                         {{ __('landing.comparison.manual.title') }}
                     </h3>
                 </div>
 
-                <ul class="space-y-3">
+                <ul class="space-y-6">
                     @foreach(__('landing.comparison.manual.items') as $item)
-                        <li class="flex items-start gap-4 group/item">
-                            <div class="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-destructive/5 flex items-center justify-center text-destructive/40 group-hover/item:text-destructive transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                        <li class="flex items-start gap-4">
+                            <div class="mt-1 w-5 h-5 rounded-full bg-white flex items-center justify-center text-red-400/50 flex-shrink-0">
+                                <i class="fas fa-minus text-[10px]"></i>
                             </div>
-                            <span class="text-muted-foreground leading-relaxed">
+                            <span class="text-slate-500 font-medium leading-relaxed">
                                 {{ $item }}
                             </span>
                         </li>
@@ -44,37 +43,36 @@
             </div>
 
             <!-- Edu System -->
-            <div class="group relative bg-muted/30 backdrop-blur-sm rounded-2xl p-5 lg:p-6 border border-light-purple/20 hover:border-cyan/40 transition-all duration-500 hover:shadow-2xl overflow-hidden">
+            <div class="group relative bg-white rounded-[2.5rem] p-10 border border-[#22c55e]/20 shadow-premium hover:-translate-y-2 transition-all duration-500 overflow-hidden">
                 <!-- Highlight Effect -->
-                <div class="absolute top-0 right-0 w-32 h-32 bg-cyan/10 blur-3xl rounded-full"></div>
+                <div class="absolute top-0 right-0 w-48 h-48 bg-[#22c55e]/5 blur-[100px] rounded-full"></div>
                 
-                <div class="flex items-center gap-3 mb-4 relative z-10">
-                    <div class="w-10 h-10 rounded-xl bg-cyan/10 flex items-center justify-center text-cyan shadow-[0_0_20px_rgba(0,255,255,0.2)]">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <div class="flex items-center gap-4 mb-8 relative z-10">
+                    <div class="w-14 h-14 rounded-2xl bg-[#f0fdf4] flex items-center justify-center text-[#22c55e] shadow-soft">
+                        <i class="fas fa-check-circle text-xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-foreground">
+                    <h3 class="text-2xl font-black text-[#0f172a]">
                         {{ str_replace(config('app.name'), \App\Models\SiteSetting::get('site_name', config('app.name')), __('landing.comparison.edu.title')) }}
                     </h3>
                 </div>
 
-                <ul class="space-y-3 relative z-10">
+                <ul class="space-y-6 relative z-10">
                     @foreach(__('landing.comparison.edu.items') as $item)
-                        <li class="flex items-start gap-4 group/item">
-                            <div class="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-cyan/10 flex items-center justify-center text-cyan group-hover/item:scale-110 transition-transform">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3"><polyline points="20 6 9 17 4 12"/></svg>
+                        <li class="flex items-start gap-4">
+                            <div class="mt-1 w-5 h-5 rounded-full bg-[#f0fdf4] flex items-center justify-center text-[#22c55e] shadow-sm flex-shrink-0">
+                                <i class="fas fa-check text-[10px]"></i>
                             </div>
-                            <span class="text-foreground font-medium leading-relaxed">
+                            <span class="text-slate-700 font-black leading-relaxed">
                                 {{ $item }}
                             </span>
                         </li>
                     @endforeach
                 </ul>
 
-                <!-- CTA Subtle Trigger -->
-                <div class="mt-6 pt-4 border-t border-border/10">
-                    <a href="#pricing" class="inline-flex items-center gap-2 text-cyan font-bold hover:gap-3 transition-all">
-                        <span>{{ __('landing.hero.cta_primary') }}</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                <div class="mt-12 pt-8 border-t border-slate-50">
+                    <a href="#pricing" class="inline-flex items-center gap-3 text-[#22c55e] font-black group/cta">
+                        <span class="uppercase tracking-widest text-xs">{{ __('landing.hero.cta_primary') }}</span>
+                        <i class="fas fa-arrow-right text-xs group-hover:translate-x-2 transition-transform"></i>
                     </a>
                 </div>
             </div>

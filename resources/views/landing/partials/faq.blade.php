@@ -1,17 +1,18 @@
-<section id="faq" class="py-12 lg:py-16">
-    <div class="container mx-auto px-4 lg:px-8">
+<section id="faq" class="py-24 bg-white relative overflow-hidden">
+    <!-- Subtle Decor -->
+    <div class="absolute top-0 left-0 w-[400px] h-[400px] bg-slate-50 rounded-full blur-[100px] -z-10 opacity-60"></div>
+
+    <div class="container mx-auto px-4 lg:px-12">
         <!-- Section Header -->
-        <div class="text-center mb-6 lg:mb-8">
-            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-outline-purple/10 border border-outline-purple/20 mb-4">
-                <span class="text-sm font-medium text-outline-purple">{{ __('landing.faq.badge') }}</span>
+        <div class="text-center mb-16">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#f0f9ff] border border-blue-50 mb-6">
+                <span class="text-xs font-black text-[#0ea5e9] uppercase tracking-[0.2em]">{{ __('landing.faq.badge') }}</span>
             </div>
-            <h2 class="text-2xl lg:text-3xl font-bold text-foreground mb-3">
-                {{ __('landing.faq.title_prefix') }} <span class="gradient-text">{{ __('landing.faq.title_highlight') }}</span>
+            <h2 class="text-3xl md:text-5xl font-black text-[#0f172a] mb-6 tracking-tight leading-tight">
+                {{ __('landing.faq.title_prefix') }} <span class="text-[#22c55e]">{{ __('landing.faq.title_highlight') }}</span>
             </h2>
-            @php
-                $siteName = \App\Models\SiteSetting::get('site_name', config('app.name'));
-            @endphp
-            <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
+            @php $siteName = \App\Models\SiteSetting::get('site_name', 'Taalimu'); @endphp
+            <p class="text-lg text-slate-500 max-w-2xl mx-auto font-medium">
                 {{ str_replace(config('app.name'), $siteName, __('landing.faq.subtitle')) }}
             </p>
         </div>
@@ -22,37 +23,26 @@
                 @php
                     $question = str_replace(config('app.name'), $siteName, __("landing.faq.items.$index.question"));
                     $answer = str_replace(config('app.name'), $siteName, __("landing.faq.items.$index.answer"));
-                    // Skip if translation key is not found
                     if ($question === "landing.faq.items.$index.question") break;
                 @endphp
-                <div class="bg-card rounded-xl border border-border px-6 shadow-sm hover:shadow-card transition-shadow" :class="{ 'border-light-purple/30': active === {{ $index }} }">
+                <div class="group bg-white rounded-3xl border border-slate-100 shadow-soft transition-all duration-500 overflow-hidden" 
+                     :class="{ 'border-[#22c55e]/30 shadow-premium': active === {{ $index }} }">
                     <button 
                         @click="active = (active === {{ $index }} ? null : {{ $index }})" 
-                        class="flex items-center justify-between w-full text-left font-semibold text-foreground hover:text-primary-purple py-5 transition-colors"
-                        :class="{ 'text-primary-purple': active === {{ $index }} }"
+                        class="flex items-center justify-between w-full text-left px-8 py-6 transition-colors"
                     >
-                        <span>{{ $question }}</span>
-                        <svg 
-                            xmlns="http://www.w3.org/2000/svg" 
-                            width="24" 
-                            height="24" 
-                            viewBox="0 0 24 24" 
-                            fill="none" 
-                            stroke="currentColor" 
-                            stroke-width="2" 
-                            stroke-linecap="round" 
-                            stroke-linejoin="round" 
-                            class="w-4 h-4 transition-transform duration-200"
-                            :class="{ 'rotate-180': active === {{ $index }} }"
-                        >
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
+                        <span class="text-lg font-black text-[#0f172a] group-hover:text-[#22c55e] transition-colors" :class="{ 'text-[#22c55e]': active === {{ $index }} }">
+                            {{ $question }}
+                        </span>
+                        <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center transition-all duration-300"
+                             :class="{ 'rotate-180 bg-[#22c55e] text-white': active === {{ $index }} }">
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </div>
                     </button>
                     <div 
                         x-show="active === {{ $index }}" 
                         x-collapse 
-                        class="text-muted-foreground pb-5 leading-relaxed"
-                        style="display: none;"
+                        class="px-8 pb-6 text-slate-500 font-medium leading-relaxed"
                     >
                         {{ $answer }}
                     </div>

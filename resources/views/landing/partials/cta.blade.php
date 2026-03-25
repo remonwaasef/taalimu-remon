@@ -1,61 +1,64 @@
-<section class="bg-white py-8 lg:py-12 relative overflow-hidden">
-    <div class="container mx-auto px-4 lg:px-8">
-        <div class="relative bg-primary rounded-2xl p-5 lg:p-8 text-center overflow-hidden border border-white/10 shadow-2xl">
-            <!-- Background decorations - Enhanced for dark background -->
-            <div class="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
-            <div class="absolute bottom-0 right-0 w-64 h-64 bg-secondary/10 rounded-full blur-3xl"></div>
+<section class="py-24 bg-white relative overflow-hidden">
+    <div class="container mx-auto px-4 lg:px-12">
+        <div class="relative bg-[#0f172a] rounded-[3.5rem] p-12 lg:p-20 text-center overflow-hidden border border-white/10 shadow-premium">
+            <!-- Advanced Mesh Backdrop -->
+            <div class="absolute inset-0 bg-gradient-to-br from-[#22c55e]/20 via-transparent to-[#0ea5e9]/20 opacity-40"></div>
+            <div class="absolute -top-40 -left-40 w-96 h-96 bg-[#22c55e]/10 rounded-full blur-[120px]"></div>
+            <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-[#0ea5e9]/10 rounded-full blur-[120px]"></div>
             
             <div class="relative z-10">
                 <!-- Badge -->
-                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 mb-6 backdrop-blur-sm">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+                <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 mb-10 backdrop-blur-xl">
+                    <span class="relative flex h-2.5 w-2.5">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#22c55e] opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#22c55e]"></span>
                     </span>
-                    <span class="text-xs font-bold text-white tracking-wider uppercase">{{ __('landing.cta.badge') }}</span>
+                    <span class="text-[10px] font-black text-white tracking-[0.2em] uppercase">{{ __('landing.cta.badge') }}</span>
                 </div>
 
                 <!-- Headline -->
-                <h2 class="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-2 max-w-3xl mx-auto leading-tight">
+                <h2 class="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-8 max-w-4xl mx-auto tracking-tighter leading-[1.1] drop-shadow-xl">
                     {{ __('landing.cta.title') }}
                 </h2>
 
                 <!-- Subheadline -->
-                <p class="text-sm lg:text-base text-white/70 mb-4 max-w-2xl mx-auto">
+                <p class="text-lg lg:text-xl text-slate-400 mb-12 max-w-2xl mx-auto font-medium">
                     {{ __('landing.cta.subtitle') }}
                 </p>
 
-                <!-- Stats - Enhanced for dark background -->
-                <div class="flex flex-wrap justify-center gap-4 lg:gap-8 mb-6">
-                    <div class="text-center">
-                        <div class="text-xl lg:text-2xl font-bold text-white">{{ __('landing.cta.stats.revenue_value') }}</div>
-                        <div class="text-[10px] text-white/50 uppercase tracking-wider">{{ __('landing.cta.stats.revenue') }}</div>
+                <!-- Premium Stats Grid -->
+                <div class="flex flex-wrap justify-center gap-12 lg:gap-24 mb-16">
+                    <div class="group">
+                        <div class="text-4xl lg:text-5xl font-black text-white mb-2 tracking-tighter group-hover:scale-110 transition-transform">{{ __('landing.cta.stats.revenue_value') }}</div>
+                        <div class="text-[11px] text-slate-500 font-bold uppercase tracking-[0.2em]">{{ __('landing.cta.stats.revenue') }}</div>
                     </div>
-                    <div class="text-center">
-                        <div class="text-xl lg:text-2xl font-bold text-white">{{ __('landing.cta.stats.time_value') }}</div>
-                        <div class="text-[10px] text-white/50 uppercase tracking-wider">{{ __('landing.cta.stats.time') }}</div>
+                    <div class="group">
+                        <div class="text-4xl lg:text-5xl font-black text-white mb-2 tracking-tighter group-hover:scale-110 transition-transform">{{ __('landing.cta.stats.time_value') }}</div>
+                        <div class="text-[11px] text-slate-500 font-bold uppercase tracking-[0.2em]">{{ __('landing.cta.stats.time') }}</div>
                     </div>
-                    <div class="text-center">
-                        <div class="text-xl lg:text-2xl font-bold text-white">{{ __('landing.cta.stats.trial_value') }}</div>
-                        <div class="text-[10px] text-white/50 uppercase tracking-wider">{{ __('landing.cta.stats.trial') }}</div>
+                    <div class="group">
+                        <div class="text-4xl lg:text-5xl font-black text-white mb-2 tracking-tighter group-hover:scale-110 transition-transform">{{ __('landing.cta.stats.trial_value') }}</div>
+                        <div class="text-[11px] text-slate-500 font-bold uppercase tracking-[0.2em]">{{ __('landing.cta.stats.trial') }}</div>
                     </div>
                 </div>
 
                 <!-- CTA Buttons -->
-                <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                    <a href="{{ route('register') }}?account_type=center" class="inline-flex items-center justify-center rounded-full text-sm font-bold transition-all bg-secondary text-white shadow-xl hover:bg-secondary/90 hover:scale-105 hover:-translate-y-1 h-10 px-6 group whitespace-nowrap">
-                        <svg class="w-4 h-4 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                <div class="flex flex-col sm:flex-row gap-5 justify-center">
+                    <a href="{{ route('register') }}?account_type=center" 
+                       class="inline-flex items-center justify-center rounded-[1.5rem] text-sm font-black transition-all bg-[#22c55e] text-white shadow-lg shadow-green-500/20 hover:shadow-green-500/40 hover:scale-105 h-16 px-10 group whitespace-nowrap">
+                        <i class="fas fa-building me-3 opacity-70"></i>
                         {{ app()->isLocale('ar') ? 'ابدأ كمركز تعليمي' : 'Start as Center' }}
                     </a>
-                    <a href="{{ route('register') }}?account_type=instructor" class="inline-flex items-center justify-center rounded-full text-sm font-bold transition-all bg-white text-primary shadow-xl hover:scale-105 hover:-translate-y-1 h-10 px-6 group whitespace-nowrap">
-                        <svg class="w-4 h-4 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    <a href="{{ route('register') }}?account_type=instructor" 
+                       class="inline-flex items-center justify-center rounded-[1.5rem] text-sm font-black transition-all bg-white text-[#0f172a] shadow-lg hover:shadow-white/10 hover:scale-105 h-16 px-10 group whitespace-nowrap">
+                        <i class="fas fa-user-tie me-3 opacity-70"></i>
                         {{ app()->isLocale('ar') ? 'ابدأ كمدرس مستقل' : 'Start as Teacher' }}
                     </a>
                 </div>
 
                 <!-- Trust Note -->
-                <p class="mt-6 text-xs text-white/40 flex items-center justify-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+                <p class="mt-12 text-xs font-bold text-slate-500 flex items-center justify-center gap-3 uppercase tracking-widest">
+                    <i class="fas fa-shield-check text-[#22c55e]"></i>
                     {{ __('landing.cta.trust_note') }}
                 </p>
             </div>
