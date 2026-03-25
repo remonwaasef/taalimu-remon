@@ -95,10 +95,14 @@ $tenantRoutes = function () {
         Route::get('subscription/checkout/{package}', [SubscriptionController::class, 'checkout'])->name('center.subscription.checkout');
         Route::get('subscription/success', [SubscriptionController::class, 'success'])->name('center.subscription.success');
         Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->name('center.subscription.cancel');
+        
+        // Onboarding Routes (Must be accessible before onboarding is complete)
+        Route::get('onboarding', [\Modules\Center\Http\Controllers\OnboardingController::class, 'show'])->name('center.onboarding.show');
+        Route::post('onboarding/submit', [\Modules\Center\Http\Controllers\OnboardingController::class, 'submit'])->name('center.onboarding.submit');
     });
 
-    // Protected Routes with Subscription Check
-    Route::middleware(['auth', 'subscription', 'force_password_change', 'prevent-back-history'])->group(function() {
+    // Protected Routes with Subscription Check and Onboarding Check
+    Route::middleware(['auth', 'subscription', 'force_password_change', 'onboarding.completed', 'prevent-back-history'])->group(function() {
         // Dashboard
         Route::get('/', [CenterController::class, 'index'])->name('center.dashboard');
         Route::get('/dashboard', [CenterController::class, 'index'])->name('center.dashboard.alt');
