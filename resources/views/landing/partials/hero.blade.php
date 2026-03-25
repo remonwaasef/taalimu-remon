@@ -4,11 +4,41 @@
     x-data="{ 
         mouseX: 0, 
         mouseY: 0,
+        words: [
+            '{{ __('landing.hero.types.center') ?? 'مركزك التعليمي' }}', 
+            '{{ __('landing.hero.types.school') ?? 'مدرستك' }}', 
+            '{{ __('landing.hero.types.academy') ?? 'أكاديميتك' }}'
+        ],
+        wordIndex: 0,
+        currentWord: '',
+        isDeleting: false,
         updateMouse(e) {
             this.mouseX = (e.clientX / window.innerWidth - 0.5) * 20;
             this.mouseY = (e.clientY / window.innerHeight - 0.5) * 20;
+        },
+        type() {
+            let fullWord = this.words[this.wordIndex];
+            if (this.isDeleting) {
+                this.currentWord = fullWord.substring(0, this.currentWord.length - 1);
+            } else {
+                this.currentWord = fullWord.substring(0, this.currentWord.length + 1);
+            }
+
+            let speed = this.isDeleting ? 50 : 150;
+
+            if (!this.isDeleting && this.currentWord === fullWord) {
+                speed = 2000;
+                this.isDeleting = true;
+            } else if (this.isDeleting && this.currentWord === '') {
+                this.isDeleting = false;
+                this.wordIndex = (this.wordIndex + 1) % this.words.length;
+                speed = 500;
+            }
+
+            setTimeout(() => this.type(), speed);
         }
     }"
+    x-init="type()"
     @mousemove="updateMouse($event)"
 >
     <!-- Premium Atmosphere -->
@@ -29,12 +59,13 @@
                     <span class="text-[13px] font-extrabold text-[#0f172a] uppercase tracking-wider">{{ __('landing.hero.badge') }}</span>
                 </div>
 
-                <!-- Headline -->
+                <!-- Headline with Typewriter -->
                 <h1
-                    class="font-cairo text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4.2rem] font-[900] text-[#0f172a] leading-[1.08] mb-8 tracking-[-0.03em] opacity-0"
+                    class="font-cairo text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4.2rem] font-[900] text-[#0f172a] leading-[1.08] mb-8 tracking-[-0.03em] opacity-0 min-h-[2.2em] lg:min-h-0"
                     style="animation: heroFadeInUp 0.7s ease-out 0.2s forwards;"
                 >
-                    {!! __('landing.hero.title') !!}
+                    أدِر <span class="text-[#22c55e] transition-all duration-300" x-text="currentWord"></span><br>
+                    بذكاء ووفّر ساعات من العمل أسبوعياً
                 </h1>
 
                 <!-- Subheadline -->
@@ -112,9 +143,9 @@
                         </div>
                     </div>
 
-                    <!-- Floating Glass Cards -->
+                    <!-- Floating Glass Cards (Masterpiece Widgets) -->
                     <div 
-                        class="absolute -top-10 -left-10 w-48 glass-premium p-4 rounded-2xl shadow-xl z-30 opacity-0"
+                        class="absolute -top-10 -left-10 w-48 hero-widget p-4 rounded-2xl z-30 opacity-0"
                         :style="`transform: translate(${-mouseX}px, ${-mouseY}px)`"
                         style="animation: heroSlideInLeft 0.8s ease-out 0.8s forwards;"
                     >
@@ -131,9 +162,9 @@
                     </div>
 
                     <div 
-                        class="absolute -bottom-10 -left-6 w-56 glass-premium p-4 rounded-2xl shadow-xl z-30 border-l-4 border-l-[#22c55e] opacity-0"
+                        class="absolute -bottom-10 -left-6 w-56 hero-widget p-4 rounded-2xl z-30 border-l-4 border-l-[#22c55e] opacity-0"
                         :style="`transform: translate(${mouseX/2}px, ${mouseY/2}px)`"
-                        style="animation: heroSlideInLeft 0.8s ease-out 1.1s forwards;"
+                        style="animation: heroSlideInLeft 0.8s ease-out 1.1s forwards; animation: heroFloating 7s ease-in-out infinite 0.5s;"
                     >
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-full bg-[#e7f9ee] flex items-center justify-center text-[#22c55e]">
@@ -147,11 +178,11 @@
                     </div>
 
                     <div 
-                        class="absolute -bottom-4 -right-8 w-44 glass-premium p-5 rounded-2xl shadow-2xl z-30 opacity-0"
+                        class="absolute -bottom-4 -right-12 w-48 hero-widget p-5 rounded-2xl z-30 opacity-0"
                         :style="`transform: translate(${-mouseX/3}px, ${-mouseY/3}px)`"
-                        style="animation: heroFadeInRight 0.8s ease-out 1.4s forwards;"
+                        style="animation: heroFadeInRight 0.8s ease-out 1.4s forwards; animation: heroFloating 8s ease-in-out infinite 1s;"
                     >
-                        <div class="text-[10px] font-bold text-slate-400 uppercase mb-1">{{ __('landing.features.items.1.title') }}</div>
+                        <div class="text-[10px] font-bold text-slate-400 uppercase mb-1">التقارير التلقائية</div>
                         <div class="text-3xl font-black text-[#0f172a]">94%</div>
                         <div class="mt-3 flex items-center gap-2">
                             <div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
@@ -166,22 +197,25 @@
         </div>
     </div>
 
-    <!-- Trust Strip: Real Numbers Instead of Placeholders -->
-    <div class="mt-24 relative opacity-0" style="animation: heroFadeInUp 1s ease-out 1s forwards;">
-        <div class="container mx-auto px-4 lg:px-12">
-            <div class="flex flex-wrap items-center justify-center gap-8 lg:gap-20 py-8 border-t border-slate-100">
-                @foreach([
+    <!-- Infinity Trust Marquee -->
+    <div class="mt-32 trust-marquee-container border-y border-slate-100 py-10">
+        <div class="trust-marquee-track">
+            @php
+                $marqueeStats = [
                     ['value' => '500+', 'label' => __('landing.hero.trust_centers') ?? 'Educational Centers'],
                     ['value' => '10,000+', 'label' => __('landing.hero.trust_students') ?? 'Active Students'],
                     ['value' => '98%', 'label' => __('landing.hero.trust_satisfaction') ?? 'Satisfaction Rate'],
                     ['value' => '15h', 'label' => __('landing.hero.trust_saved') ?? 'Saved Per Week'],
-                ] as $stat)
-                <div class="text-center group">
-                    <div class="text-3xl lg:text-4xl font-black text-[#0f172a] tracking-tighter group-hover:text-[#22c55e] transition-colors">{{ $stat['value'] }}</div>
-                    <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mt-1">{{ $stat['label'] }}</div>
-                </div>
-                @endforeach
+                ];
+            @endphp
+            
+            {{-- Double the loop for seamless infinite scrolling --}}
+            @foreach(array_merge($marqueeStats, $marqueeStats, $marqueeStats) as $stat)
+            <div class="flex items-center gap-4 min-w-[200px]">
+                <div class="text-3xl font-black text-[#0f172a] tracking-tight">{{ $stat['value'] }}</div>
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-widest leading-tight w-24">{{ $stat['label'] }}</div>
             </div>
+            @endforeach
         </div>
     </div>
 </section>
