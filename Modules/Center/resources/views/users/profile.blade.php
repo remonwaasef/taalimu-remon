@@ -61,7 +61,7 @@
                 <div class="card-body p-4">
                     <div class="row g-3">
                         <div class="col-md-4">
-                            <a href="{{ route('lang.switch', 'ar') }}" class="btn w-100 py-3 rounded-4 border-2 {{ app()->getLocale() == 'ar' ? 'btn-primary border-primary' : 'btn-outline-secondary border-light bg-light' }} d-flex flex-column align-items-center gap-2">
+                            <a href="{{ route('lang.switch', 'ar') }}" class="btn w-100 py-3 rounded-4 border-2 {{ app()->getLocale() == 'ar' ? 'btn-primary border-primary shadow' : 'bg-light border-light text-dark' }} d-flex flex-column align-items-center gap-2 transition-all">
                                 <span class="fs-2">🇸🇦</span>
                                 <span class="fw-bold">{{ __('center::profile.arabic') }}</span>
                                 @if(app()->getLocale() == 'ar')
@@ -70,7 +70,7 @@
                             </a>
                         </div>
                         <div class="col-md-4">
-                            <a href="{{ route('lang.switch', 'en') }}" class="btn w-100 py-3 rounded-4 border-2 {{ app()->getLocale() == 'en' ? 'btn-primary border-primary' : 'btn-outline-secondary border-light bg-light' }} d-flex flex-column align-items-center gap-2">
+                            <a href="{{ route('lang.switch', 'en') }}" class="btn w-100 py-3 rounded-4 border-2 {{ app()->getLocale() == 'en' ? 'btn-primary border-primary shadow' : 'bg-light border-light text-dark' }} d-flex flex-column align-items-center gap-2 transition-all">
                                 <span class="fs-2">🇺🇸</span>
                                 <span class="fw-bold">{{ __('center::profile.english') }}</span>
                                 @if(app()->getLocale() == 'en')
@@ -79,7 +79,7 @@
                             </a>
                         </div>
                         <div class="col-md-4">
-                            <a href="{{ route('lang.switch', 'fr') }}" class="btn w-100 py-3 rounded-4 border-2 {{ app()->getLocale() == 'fr' ? 'btn-primary border-primary' : 'btn-outline-secondary border-light bg-light' }} d-flex flex-column align-items-center gap-2">
+                            <a href="{{ route('lang.switch', 'fr') }}" class="btn w-100 py-3 rounded-4 border-2 {{ app()->getLocale() == 'fr' ? 'btn-primary border-primary shadow' : 'bg-light border-light text-dark' }} d-flex flex-column align-items-center gap-2 transition-all">
                                 <span class="fs-2">🇫🇷</span>
                                 <span class="fw-bold">{{ __('center::profile.french') }}</span>
                                 @if(app()->getLocale() == 'fr')
