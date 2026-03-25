@@ -184,15 +184,15 @@ git --version
 ### الخطوة 3.1: إنشاء مجلد التطبيق
 
 ```bash
-mkdir -p /var/www
-cd /var/www
+mkdir -p /home/taalimu/htdocs
+cd /home/taalimu/htdocs
 ```
 
 ### الخطوة 3.2: استنساخ المشروع من GitHub
 
 ```bash
-git clone https://github.com/remonwaasef/taalimu-remon.git edu
-cd edu
+git clone https://github.com/remonwaasef/taalimu-remon.git taalimu.com
+cd taalimu.com
 ```
 
 ### الخطوة 3.3: تثبيت PHP Dependencies
@@ -215,10 +215,10 @@ npm run build
 ### الخطوة 3.5: ضبط الصلاحيات
 
 ```bash
-chown -R www-data:www-data /var/www/edu
-chmod -R 755 /var/www/edu
-chmod -R 775 /var/www/edu/storage
-chmod -R 775 /var/www/edu/bootstrap/cache
+chown -R taalimu:taalimu /home/taalimu/htdocs/taalimu.com
+chmod -R 755 /home/taalimu/htdocs/taalimu.com
+chmod -R 775 /home/taalimu/htdocs/taalimu.com/storage
+chmod -R 775 /home/taalimu/htdocs/taalimu.com/bootstrap/cache
 ```
 
 ---
@@ -353,7 +353,7 @@ server {
     # الدومين الرئيسي والـ Subdomains للـ Tenants
     server_name yourdomain.com *.yourdomain.com;
     
-    root /var/www/edu/public;
+    root /home/taalimu/htdocs/taalimu.com/public;
     index index.php index.html;
 
     # Security Headers
@@ -468,15 +468,15 @@ nano /etc/supervisor/conf.d/edu-worker.conf
 ```ini
 [program:edu-worker]
 process_name=%(program_name)s_%(process_num)02d
-command=php /var/www/edu/artisan queue:work redis --sleep=3 --tries=3 --max-time=3600
+command=php /home/taalimu/htdocs/taalimu.com/artisan queue:work redis --sleep=3 --tries=3 --max-time=3600
 autostart=true
 autorestart=true
 stopasgroup=true
 killasgroup=true
-user=www-data
+user=taalimu
 numprocs=2
 redirect_stderr=true
-stdout_logfile=/var/www/edu/storage/logs/worker.log
+stdout_logfile=/home/taalimu/htdocs/taalimu.com/storage/logs/worker.log
 stopwaitsecs=3600
 ```
 
@@ -515,7 +515,7 @@ git push origin main
 
 أنشئ ملف النشر:
 ```bash
-nano /var/www/edu/deploy.sh
+nano /home/taalimu/htdocs/taalimu.com/deploy.sh
 ```
 
 ```bash
@@ -524,7 +524,7 @@ echo "========================================"
 echo "🚀 بدء عملية النشر..."
 echo "========================================"
 
-cd /var/www/edu
+cd /home/taalimu/htdocs/taalimu.com
 
 echo ""
 echo "📥 سحب التحديثات من GitHub..."
@@ -556,8 +556,8 @@ php artisan queue:restart
 
 echo ""
 echo "🔧 ضبط الصلاحيات..."
-chown -R www-data:www-data /var/www/edu
-chmod -R 775 /var/www/edu/storage
+chown -R taalimu:taalimu /home/taalimu/htdocs/taalimu.com
+chmod -R 775 /home/taalimu/htdocs/taalimu.com/storage
 
 echo ""
 echo "========================================"
@@ -566,12 +566,12 @@ echo "========================================"
 ```
 
 ```bash
-chmod +x /var/www/edu/deploy.sh
+chmod +x /home/taalimu/htdocs/taalimu.com/deploy.sh
 ```
 
 **الآن للنشر فقط نفذ:**
 ```bash
-/var/www/edu/deploy.sh
+/home/taalimu/htdocs/taalimu.com/deploy.sh
 ```
 
 ---
@@ -582,11 +582,11 @@ chmod +x /var/www/edu/deploy.sh
 
 ```bash
 # تحقق من الـ Logs
-tail -f /var/www/edu/storage/logs/laravel.log
+tail -f /home/taalimu/htdocs/taalimu.com/storage/logs/laravel.log
 
 # تأكد من الصلاحيات
-chown -R www-data:www-data /var/www/edu
-chmod -R 775 /var/www/edu/storage
+chown -R taalimu:taalimu /home/taalimu/htdocs/taalimu.com
+chmod -R 775 /home/taalimu/htdocs/taalimu.com/storage
 ```
 
 ### مشكلة: صفحة بيضاء
