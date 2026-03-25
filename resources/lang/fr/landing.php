@@ -23,6 +23,11 @@ return [
         'badge' => 'Le système de gestion n°1 pour les centres éducatifs',
         'title' => 'Gérez votre centre <span class="gradient-text">intelligemment</span> et économisez des heures de travail chaque semaine',
         'subtitle' => 'Un système intégré pour la gestion des étudiants, des présences et des paiements — tout dans un tableau de bord facile à utiliser.',
+        'types' => [
+            'center' => 'Centre Éducatif',
+            'school' => 'École',
+            'academy' => 'Académie',
+        ],
         'testimonial' => [
             'quote' => 'J\'ai économisé plus de 15 heures par semaine après avoir utilisé Taalimu.',
             'author' => 'Ahmed Mohamed, Instructeur Indépendant',
