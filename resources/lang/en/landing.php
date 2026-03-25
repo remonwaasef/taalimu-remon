@@ -23,6 +23,11 @@ return [
         'badge' => 'The #1 Management System for Educational Centers',
         'title' => 'Manage Your Center <span class="gradient-text">Smartly</span> and Save Hours of Work Weekly',
         'subtitle' => 'An integrated system for managing students, attendance, and payments — everything in one easy-to-use dashboard.',
+        'types' => [
+            'center' => 'Educational Center',
+            'school' => 'School',
+            'academy' => 'Academy',
+        ],
         'testimonial' => [
             'quote' => 'I saved over 15 hours a week after using Taalimu.',
             'author' => 'Ahmed Mohamed, Independent Instructor',
