@@ -584,6 +584,85 @@
         transform: translateY(-3px) scale(1.02) !important;
     }
 
+    /* =====================================================
+       Hero Section - Ultra-Premium Refinements
+       ===================================================== */
+
+    /* Premium Mesh Orbs */
+    .hero-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        z-index: -1;
+        opacity: 0.45;
+        pointer-events: none;
+    }
+
+    .orb-1 {
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, #22c55e 0%, transparent 70%);
+        top: -100px;
+        right: -50px;
+        animation: orbMove 20s ease-in-out infinite alternate;
+    }
+
+    .orb-2 {
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(circle, #10b981 0%, transparent 70%);
+        bottom: 10%;
+        left: -100px;
+        animation: orbMove 25s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes orbMove {
+        0% { transform: translate(0, 0) scale(1); }
+        100% { transform: translate(40px, 60px) scale(1.1); }
+    }
+
+    /* Trust Marquee */
+    @keyframes marquee {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+
+    .animate-marquee {
+        animation: marquee 30s linear infinite;
+    }
+
+    .rtl .animate-marquee {
+        animation: marquee-rtl 30s linear infinite;
+    }
+
+    @keyframes marquee-rtl {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(50%); }
+    }
+
+    /* Glass Card Premium */
+    .glass-premium {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 
+            0 10px 30px -10px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    /* Noise Texture */
+    .bg-noise {
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3Insight%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        opacity: 0.015;
+    }
+
+    /* Mouse Parallax Utility */
+    .parallax-layer {
+        transition: transform 0.1s ease-out;
+        will-change: transform;
+    }
+
     /* Responsive Dashboard Adjustments */
     @media (max-width: 1024px) {
         .hero-dashboard-frame {
