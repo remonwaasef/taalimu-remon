@@ -1,6 +1,6 @@
 <section class="py-24 bg-white relative overflow-hidden">
     <div class="container mx-auto px-4 lg:px-12">
-        <div class="relative bg-[#0f172a] rounded-[3.5rem] p-12 lg:p-20 text-center overflow-hidden border border-white/10 shadow-premium">
+        <div class="relative animated-gradient-bg rounded-[3.5rem] p-12 lg:p-20 text-center overflow-hidden border border-white/10 shadow-premium" data-animate="scale">
             <!-- Advanced Mesh Backdrop -->
             <div class="absolute inset-0 bg-gradient-to-br from-[#22c55e]/20 via-transparent to-[#0ea5e9]/20 opacity-40"></div>
             <div class="absolute -top-40 -left-40 w-96 h-96 bg-[#22c55e]/10 rounded-full blur-[120px]"></div>

@@ -1,4 +1,4 @@
-<section id="pricing" class="py-24 bg-white relative overflow-hidden" 
+<section id="pricing" class="py-24 bg-white relative overflow-hidden section-wave" 
          x-data="{ 
             billingCycle: 'monthly',
             userCountry: 'default',
@@ -30,7 +30,7 @@
 
     <div class="container mx-auto px-4 lg:px-12">
         <!-- Section Header -->
-        <div class="text-center mb-16">
+        <div class="text-center mb-16" data-animate>
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#f0fdf4] border border-green-100 mb-6">
                 <span class="text-xs font-black text-[#22c55e] uppercase tracking-[0.2em]">{{ __('landing.pricing.badge') }}</span>
             </div>
@@ -63,7 +63,7 @@
         </div>
 
         <!-- Pricing Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch" data-stagger>
             @foreach($packages as $index => $package)
                 @php
                     $isFeatured = $package->is_featured;
