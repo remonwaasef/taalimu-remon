@@ -98,21 +98,18 @@
                 </div>
             </div>
 
-            <!-- Access Button - More Prominent -->
-            <div class="pt-1">
+            <div class="pt-4">
                 <a 
                     href="{{ $accessUrl }}"
-                    class="btn-hero-cta group block w-full text-center py-4 rounded-xl shadow-2xl transition-all transform hover:scale-[1.02]"
+                    class="group flex items-center justify-center gap-3 w-full text-center py-4 px-6 bg-brand-primary text-white rounded-xl font-bold hover:bg-brand-primary-dark transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                 >
-                    <span class="flex items-center justify-center gap-3">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                        </svg>
-                        <span class="text-xl font-black font-arabic">{{ __('auth.registration.access_center') }}</span>
-                        <svg class="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                        </svg>
-                    </span>
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                    <span class="text-xl font-arabic">{{ __('auth.registration.access_center') }}</span>
+                    <svg class="w-6 h-6 group-hover:-translate-x-2 rtl:group-hover:-translate-x-2 ltr:group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
                 </a>
             </div>
         </div>
