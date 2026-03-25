@@ -151,7 +151,7 @@
                             list.innerHTML += `
                                 <div class="bg-white border rounded-4 p-3 mb-3 d-flex justify-content-between align-items-center hover-shadow transition-all">
                                     <div>
-                                        <div class="fw-bold text-dark mb-1">فاتورة #${inv.id}</div>
+                                        <div class="fw-bold text-dark mb-1">{{ __('center::sales.invoice_id_prefix') }}${inv.id}</div>
                                         <div class="small text-muted">تاريخ: ${inv.created_at.split('T')[0]}</div>
                                         <div class="text-danger fw-bold mt-1">${inv.remaining.toFixed(2)} ${currency}</div>
                                     </div>
@@ -176,9 +176,9 @@
     }
 
     function collectDebt(saleId, remaining, studentId) {
-        Swal.fire({
-            title: '{{ __('center::messages.blade_0577') }}',
-            text: 'الفاتورة #' + saleId + ' | المتبقي: ' + remaining.toFixed(2) + ' ' + currency,
+         Swal.fire({
+            title: '{{ __('center::sales.collect_debt_title') }}',
+            text: '{{ __('center::sales.invoice_id_prefix') }}' + saleId + ' | {{ __('center::sales.collect_debt_remaining') }}: ' + remaining.toFixed(2) + ' ' + currency,
             input: 'number',
             inputAttributes: { min: 0.01, max: remaining, step: 0.01 },
             inputValue: remaining,
@@ -202,11 +202,10 @@
                     if (!response.ok) throw new Error(response.statusText);
                     return response.json();
                 })
-                .catch(error => { Swal.showValidationMessage(`فشل العملية: ${error}`); });
+                 .catch(error => { Swal.showValidationMessage(`{{ __('center::sales.collect_debt_fail') }}: ${error}`); });
             }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({ icon: 'success', title: '{{ __('center::messages.blade_0581') }}' });
+             if (result.isConfirmed) {
+                Swal.fire({ icon: 'success', title: '{{ __('center::sales.collect_debt_success') }}' });
                 loadStudentAccount(studentId);
             }
         });

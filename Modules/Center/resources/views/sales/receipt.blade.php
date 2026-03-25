@@ -83,7 +83,7 @@
     <div class="container">
         <div class="header">
             <h1>{{ $tenant->name }}</h1>
-            <p>{{ $reshaper->reshape('إيصال استلام نقدية (Receipt)') }}</p>
+            <p>{{ $reshaper->reshape(__('center::sales.receipt_title')) }}</p>
         </div>
 
         <table class="info-table">
@@ -99,14 +99,14 @@
         </table>
 
         <div style="margin-bottom: 15px; font-size: 13px;">
-            <strong>{{ $reshaper->reshape('وصلنا من السيد/السيدة:') }}</strong> {{ $payment->sale->student->name }}<br>
+            <strong>{{ $reshaper->reshape(__('center::sales.received_from')) }}</strong> {{ $payment->sale->student->name }}<br>
             <strong>{{ $reshaper->reshape(__('center::messages.blade_0609')) }}</strong> {{ number_format($payment->amount, 2) }} {{ $reshaper->reshape(__('center::messages.blade_0610', ['currency' => get_currency_symbol()])) }}
         </div>
 
         <table class="table">
             <thead>
                 <tr>
-                    <th>{{ $reshaper->reshape('البيان (Description)') }}</th>
+                    <th>{{ $reshaper->reshape(__('center::sales.description')) }}</th>
                     <th style="width: 100px;">{{ $reshaper->reshape(__('center::messages.blade_0611')) }}</th>
                 </tr>
             </thead>
@@ -134,21 +134,21 @@
                     <strong>{{ $reshaper->reshape(__('center::messages.blade_0620')) }}</strong> {{ number_format($payment->sale->total_amount - $payment->sale->paid_amount, 2) }} {{ $reshaper->reshape(__('center::messages.blade_0621', ['currency' => get_currency_symbol()])) }}
                     <br>
                     <span style="font-size: 10px; color: #666;">
-                        <strong>{{ $reshaper->reshape('إجمالي الفاتورة:') }}</strong> {{ number_format($payment->sale->total_amount, 2) }}
-                        @if($payment->sale->discount_amount > 0) | <strong>{{ $reshaper->reshape('الخصم:') }}</strong> {{ number_format($payment->sale->discount_amount, 2) }} @endif
-                        @if($payment->sale->tax_amount > 0) | <strong>{{ $reshaper->reshape('الضريبة:') }}</strong> {{ number_format($payment->sale->tax_amount, 2) }} @endif
+                        <strong>{{ $reshaper->reshape(__('center::sales.invoice_total')) }}</strong> {{ number_format($payment->sale->total_amount, 2) }}
+                        @if($payment->sale->discount_amount > 0) | <strong>{{ $reshaper->reshape(__('center::sales.discount_label')) }}</strong> {{ number_format($payment->sale->discount_amount, 2) }} @endif
+                        @if($payment->sale->tax_amount > 0) | <strong>{{ $reshaper->reshape(__('center::sales.tax_label')) }}</strong> {{ number_format($payment->sale->tax_amount, 2) }} @endif
                     </span>
                 </td>
                 <td class="text-center" style="width: 40%;">
                     <p style="margin-bottom: 5px;">{{ $reshaper->reshape(__('center::messages.blade_0622')) }}</p>
-                    <div class="stamp">{{ $reshaper->reshape('مدفوع PAID') }}</div>
+                    <div class="stamp">{{ $reshaper->reshape(__('center::sales.paid_stamp')) }}</div>
                 </td>
             </tr>
         </table>
 
         <div class="footer">
             {{ $tenant->address ?? '' }} | {{ $tenant->phone ?? '' }}<br>
-            {{ $reshaper->reshape('نشكركم على ثقتكم بنا (Thank you for your trust)') }}
+            {{ $reshaper->reshape(__('center::sales.thank_you')) }}
         </div>
     </div>
 </body>

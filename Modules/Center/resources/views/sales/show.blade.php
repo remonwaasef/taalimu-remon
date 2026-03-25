@@ -63,7 +63,7 @@
                     <table class="table align-middle">
                         <thead class="bg-light">
                             <tr>
-                                <th class="border-0 rounded-start">البند / الكورس</th>
+                                <th class="border-0 rounded-start">{{ __('center::sales.item_course') }}</th>
                                 <th class="border-0 text-center">{{ __('center::messages.blade_0628') }}</th>
                                 <th class="border-0 text-center">{{ __('center::messages.blade_0629') }}</th>
                                 <th class="border-0 text-end rounded-end">{{ __('center::messages.blade_0630') }}</th>
@@ -87,18 +87,18 @@
                     <div class="col-md-5">
                         <div class="bg-light rounded-4 p-4">
                             <div class="d-flex justify-content-between mb-2">
-                                <span class="text-muted">الإجمالي الفرعي:</span>
+                                <span class="text-muted">{{ __('center::sales.subtotal') }}:</span>
                                 <span>{{ number_format($sale->subtotal_amount > 0 ? $sale->subtotal_amount : $sale->total_amount, 2) }} {{ __('center::sales.currency') }}</span>
                             </div>
                             @if($sale->discount_amount > 0)
                             <div class="d-flex justify-content-between mb-2">
-                                <span class="text-danger">الخصم (Discount):</span>
+                                <span class="text-danger">{{ __('center::sales.discount') }}:</span>
                                 <span class="text-danger">-{{ number_format($sale->discount_amount, 2) }} {{ __('center::sales.currency') }}</span>
                             </div>
                             @endif
                             @if($sale->tax_amount > 0)
                             <div class="d-flex justify-content-between mb-2">
-                                <span class="text-muted">الضريبة (Tax):</span>
+                                <span class="text-muted">{{ __('center::sales.tax') }}:</span>
                                 <span>+{{ number_format($sale->tax_amount, 2) }} {{ __('center::sales.currency') }}</span>
                             </div>
                             @endif
@@ -123,7 +123,7 @@
         <!-- Payment History (Ledger) -->
         <div class="card border-0 shadow-sm rounded-4 mb-4 no-print">
             <div class="card-header bg-white border-0 py-3">
-                <h5 class="fw-bold mb-0 text-primary"><i class="fas fa-history me-2"></i> سجل الحركات المالية (Ledger)</h5>
+                <h5 class="fw-bold mb-0 text-primary"><i class="fas fa-history me-2"></i> {{ __('center::sales.ledger') }}</h5>
             </div>
             <div class="table-responsive">
                 <table class="table align-middle mb-0">
@@ -157,7 +157,7 @@
                         <tr>
                             <td class="ps-4 text-muted">{{ $refund->created_at->format('Y/m/d H:i') }}</td>
                             <td class="fw-bold text-danger">-{{ number_format($refund->amount, 2) }} {{ __('center::sales.currency') }}</td>
-                            <td><span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">استرداد (Refund)</span></td>
+                            <td><span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">{{ __('center::sales.refund_transaction') }}</span></td>
                             <td><small class="text-muted"><i class="fas fa-user-shield me-1"></i> {{ $refund->processor->name ?? '-' }}</small></td>
                             <td><small class="text-danger">{{ $refund->reason }}</small></td>
                             <td class="text-end pe-4"></td>
@@ -217,9 +217,9 @@
 
                     <!-- Electronic Payment Link -->
                     <div class="mt-4 pt-3 border-top text-center">
-                        <p class="small text-muted mb-2"><i class="fas fa-link me-1"></i> رابط الدفع السريع (Online Pay):</p>
+                        <p class="small text-muted mb-2"><i class="fas fa-link me-1"></i> {{ __('center::sales.online_pay_link') }}</p>
                         <a href="{{ route('center.sales.checkout', $sale->id) }}" class="btn btn-outline-primary w-100 rounded-pill fs-6 py-2 fw-bold">
-                            <i class="fas fa-credit-card me-2"></i> الدفع باستخدام البطاقة
+                            <i class="fas fa-credit-card me-2"></i> {{ __('center::sales.pay_with_card') }}
                         </a>
                     </div>
                 @else
@@ -231,9 +231,9 @@
                 @endif
 
                 @if($sale->paid_amount > 0)
-                    <hr class="my-4 opacity-10">
+                     <hr class="my-4 opacity-10">
                     <button type="button" class="btn btn-outline-danger w-100 rounded-pill py-2 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#refundModal">
-                        <i class="fas fa-undo-alt me-2"></i> إجراء استرداد مبلغ (Refund)
+                        <i class="fas fa-undo-alt me-2"></i> {{ __('center::sales.refund_transaction') }}
                     </button>
                 @endif
             </div>
@@ -247,58 +247,58 @@
         <div class="modal-content border-0 rounded-4 shadow">
             <form action="{{ route('center.sales.refund', $sale->id) }}" method="POST">
                 @csrf
-                <div class="modal-header border-0 p-4 pb-0">
-                    <h5 class="fw-bold mb-0">إجراء عملية استرداد (Refund)</h5>
+                 <div class="modal-header border-0 p-4 pb-0">
+                    <h5 class="fw-bold mb-0">{{ __('center::sales.refund_transaction') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
                     <div class="alert alert-warning border-0 rounded-4 small mb-4">
                         <i class="fas fa-exclamation-triangle me-2"></i>
-                        تحذير: هذه العملية ستقلل من قيمة المبيعات المدفوعة وقد تؤثر على عمولات المدرسين المرتبطة بهذه الفاتورة.
+                        {{ __('center::sales.refund_warning') }}
                     </div>
 
                     <div class="mb-4 text-center p-3 bg-light rounded-3">
-                        <small class="text-muted d-block mb-1">إجمالي المبلغ القابل للاسترداد</small>
+                        <small class="text-muted d-block mb-1">{{ __('center::sales.refundable_amount') }}</small>
                         <h4 class="fw-bold mb-0 text-dark">{{ number_format($sale->paid_amount, 2) }} {{ __('center::sales.currency') }}</h4>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">المبلغ المسترد</label>
+                        <label class="form-label small fw-bold">{{ __('center::sales.refund_amount') }}</label>
                         <div class="input-group">
                             <input type="number" name="amount" step="0.01" class="form-control rounded-start-3" 
                                 max="{{ $sale->paid_amount }}" min="0.01" value="{{ $sale->paid_amount }}" required>
-                            <span class="input-group-text bg-light border-start-0 rounded-end-3">EGP</span>
+                            <span class="input-group-text bg-light border-start-0 rounded-end-3">{{ __('center::sales.currency') }}</span>
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold">طريقة الاسترداد</label>
+                     <div class="mb-3">
+                        <label class="form-label small fw-bold">{{ __('center::sales.refund_method') }}</label>
                         <select name="refund_method" class="form-select rounded-3" required>
-                            <option value="cash">نقدي</option>
-                            <option value="bank_transfer">تحويل بنكي</option>
-                            <option value="online">أونلاين (إرجاع للبطاقة)</option>
-                            <option value="other">أخرى</option>
+                            <option value="cash">{{ __('center::sales.refund_cash') }}</option>
+                            <option value="bank_transfer">{{ __('center::sales.refund_bank') }}</option>
+                            <option value="online">{{ __('center::sales.refund_online') }}</option>
+                            <option value="other">{{ __('center::sales.refund_other') }}</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">السبب</label>
-                        <textarea name="reason" class="form-control rounded-3" rows="2" placeholder="أدخل سبب الاسترداد..."></textarea>
+                        <label class="form-label small fw-bold">{{ __('center::sales.refund_reason') }}</label>
+                        <textarea name="reason" class="form-control rounded-3" rows="2" placeholder="{{ __('center::sales.reason_placeholder') }}"></textarea>
                     </div>
 
-                    <div class="form-check form-switch p-0 mt-4">
+                     <div class="form-check form-switch p-0 mt-4">
                         <div class="bg-light p-3 rounded-4 d-flex align-items-center justify-content-between">
                             <div>
-                                <label class="form-check-label fw-bold d-block mb-1" for="unenrollSwitch">إلغاء تسجيل الطالب</label>
-                                <small class="text-muted d-block">سيتم حذف الطالب من الدورات التعليمية المرتبطة بهذه الفاتورة.</small>
+                                <label class="form-check-label fw-bold d-block mb-1" for="unenrollSwitch">{{ __('center::sales.unenroll_student') }}</label>
+                                <small class="text-muted d-block">{{ __('center::sales.unenroll_warning') }}</small>
                             </div>
                             <input class="form-check-input ms-0" type="checkbox" name="unenroll_student" value="1" id="unenrollSwitch">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer border-0 p-4 pt-0">
-                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">إلغاء</button>
-                    <button type="submit" class="btn btn-danger rounded-pill px-4">تأكيد الاسترداد</button>
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">{{ __('center::sales.cancel') }}</button>
+                    <button type="submit" class="btn btn-danger rounded-pill px-4">{{ __('center::sales.confirm_refund') }}</button>
                 </div>
             </form>
         </div>

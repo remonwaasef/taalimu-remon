@@ -1,5 +1,5 @@
 @extends('center::layouts.master')
-@section('page-title', 'تحليلات الضرائب المحصلة')
+@section('page-title', __('center::analytics.taxes_analytics'))
 
 @section('content')
 <div class="container-fluid">

@@ -11,7 +11,7 @@
         </div>
         <div>
             <button class="btn btn-sm btn-primary shadow-sm rounded-pill px-3" onclick="window.print()">
-                <i class="fas fa-file-download fa-sm text-white-50 me-2"></i> تحميل تقرير PDF
+                <i class="fas fa-file-download fa-sm text-white-50 me-2"></i> {{ __('center::analytics.download_pdf_report') }}
             </button>
         </div>
     </div>
@@ -73,7 +73,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col me-2">
-                            <div class="text-xs fw-bold text-success text-uppercase mb-1">إيرادات الشهر الحالي</div>
+                            <div class="text-xs fw-bold text-success text-uppercase mb-1">{{ __('center::analytics.current_month_revenue') }}</div>
                             <div class="h3 mb-0 fw-bold text-gray-800">{{ format_price($monthlyRevenueSum) }}</div>
                         </div>
                         <div class="col-auto">
@@ -89,7 +89,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col me-2">
-                            <div class="text-xs fw-bold text-danger text-uppercase mb-1">مصروفات الشهر الحالي</div>
+                            <div class="text-xs fw-bold text-danger text-uppercase mb-1">{{ __('center::analytics.current_month_expenses') }}</div>
                             <div class="h3 mb-0 fw-bold text-gray-800">{{ format_price($totalExpenses) }}</div>
                         </div>
                         <div class="col-auto">
@@ -105,7 +105,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col me-2">
-                            <div class="text-xs fw-bold text-primary text-uppercase mb-1">صافي ربح الشهر</div>
+                            <div class="text-xs fw-bold text-primary text-uppercase mb-1">{{ __('center::analytics.monthly_net_profit') }}</div>
                             <div class="h3 mb-0 fw-bold text-{{ ($monthlyRevenueSum - $totalExpenses) >= 0 ? 'success' : 'danger' }}">{{ format_price($monthlyRevenueSum - $totalExpenses) }}</div>
                         </div>
                         <div class="col-auto">
@@ -120,8 +120,8 @@
         <div class="col-12 mt-2">
             <div class="card border-0 shadow-sm rounded-4 bg-light border-0">
                 <div class="card-body py-2 px-4 d-flex justify-content-between align-items-center overflow-auto">
-                    <div class="small text-muted"><i class="fas fa-history me-1"></i> إجمالي الإيرادات (كل الوقت): <span class="fw-bold">{{ format_price($totalRevenue) }}</span></div>
-                    <div class="small text-muted"><i class="fas fa-coins me-1"></i> إجمالي الربح (كل الوقت): <span class="fw-bold text-success">{{ format_price($totalRevenue - $totalExpenses) }}</span></div>
+                    <div class="small text-muted"><i class="fas fa-history me-1"></i> {{ __('center::analytics.total_revenue_all_time') }}: <span class="fw-bold">{{ format_price($totalRevenue) }}</span></div>
+                                <div class="small text-muted"><i class="fas fa-coins me-1"></i> {{ __('center::analytics.total_profit_all_time') }}: <span class="fw-bold text-success">{{ format_price($totalRevenue - $totalExpenses) }}</span></div>
                 </div>
             </div>
         </div>
@@ -250,7 +250,7 @@
         data: {
             labels: @json($revenueLabels),
             datasets: [{
-                label: "الإيرادات",
+                label: "{{ __('center::analytics.revenue') }}",
                 lineTension: 0.3,
                 backgroundColor: "rgba(78, 115, 223, 0.05)",
                 borderColor: "rgba(78, 115, 223, 1)",
@@ -285,7 +285,7 @@
     new Chart(document.getElementById("attendanceChart"), {
         type: 'doughnut',
         data: {
-            labels: ["حاضر", "متأخر", "غائب"],
+            labels: ["{{ __('center::analytics.present') }}", "{{ __('center::analytics.late') }}", "{{ __('center::analytics.absent') }}"],
             datasets: [{
                 data: @json($attendanceData),
                 backgroundColor: ['#1cc88a', '#f6c23e', '#e74a3b'],
@@ -308,7 +308,7 @@
         data: {
             labels: @json($popularCoursesLabels),
             datasets: [{
-                label: "عدد الطلاب",
+                label: "{{ __('center::subscription.features.max_students') }}",
                 backgroundColor: "#4e73df",
                 hoverBackgroundColor: "#2e59d9",
                 borderColor: "#4e73df",
@@ -334,7 +334,7 @@
         data: {
             labels: @json($growthLabels),
             datasets: [{
-                label: "الطلاب الجدد",
+                label: "{{ __('center::analytics.new_students') }}",
                 backgroundColor: "#36b9cc",
                 hoverBackgroundColor: "#2c9faf",
                 borderColor: "#36b9cc",
