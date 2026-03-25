@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>إعداد المركز | المنصة التعليمية</title>
+    <title>{{ __('onboarding.title') }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Fonts -->
@@ -54,8 +54,8 @@
         
         <!-- Header -->
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-slate-900 mb-2">أهلاً بك في منصتك التعليمية الجديدة 🚀</h1>
-            <p class="text-slate-600">لنجعل مركزك جاهزاً للانطلاق في 4 خطوات بسيطة فقط.</p>
+            <h1 class="text-3xl font-bold text-slate-900 mb-2">{{ __('onboarding.welcome_title') }}</h1>
+            <p class="text-slate-600">{{ __('onboarding.welcome_subtitle') }}</p>
         </div>
 
         <!-- Progress Bar -->
@@ -85,7 +85,7 @@
                  x-transition.opacity 
                  class="absolute inset-0 bg-white/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
                 <div class="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
-                <p class="mt-4 text-slate-600 font-medium">جاري معالجة البيانات...</p>
+                <p class="mt-4 text-slate-600 font-medium" x-text="'{{ __('onboarding.loading') }}'"></p>
             </div>
 
             <div class="p-8">
@@ -100,14 +100,14 @@
                         <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 text-primary">
                             <i class="fa-solid fa-gear text-2xl"></i>
                         </div>
-                        <h2 class="text-2xl font-bold text-slate-800">الإعدادات الأساسية</h2>
-                        <p class="text-slate-500 mt-1">دعنا نبدأ بضبط خيارات عرض منصتك.</p>
+                        <h2 class="text-2xl font-bold text-slate-800">{{ __('onboarding.step_1.title') }}</h2>
+                        <p class="text-slate-500 mt-1">{{ __('onboarding.step_1.subtitle') }}</p>
                     </div>
 
                     <form @submit.prevent="submitStep('step_1')" class="space-y-5">
                         <!-- Language -->
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">لغة النظام الافتراضية</label>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_1.language_label') }}</label>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                 <label class="border rounded-xl p-4 cursor-pointer transition-all duration-200 hover:border-primary/50 relative"
                                        :class="formData.step_1.locale === 'ar' ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-slate-200'">
@@ -147,7 +147,7 @@
 
                         <!-- Currency -->
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">العملة المحلية</label>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_1.currency_label') }}</label>
                             <select x-model="formData.step_1.currency" class="w-full border-slate-200 rounded-xl focus:ring-primary focus:border-primary h-12">
                                 <option value="EGP">جنيه مصري (EGP)</option>
                                 <option value="SAR">ريال سعودي (SAR)</option>
@@ -159,7 +159,7 @@
                         
                         <div class="pt-4 border-t border-slate-100 flex justify-end">
                             <button type="submit" class="bg-primary hover:bg-primary-focus text-white px-8 py-3 rounded-xl font-medium transition-colors flex items-center gap-2">
-                                حفظ والمتابعة <i class="fa-solid fa-arrow-left mt-1"></i>
+                                {{ __('onboarding.step_1.btn_submit') }} <i class="fa-solid fa-arrow-right rtl:rotate-180 mt-1"></i>
                             </button>
                         </div>
                     </form>
@@ -176,26 +176,26 @@
                         <div class="w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4 text-blue-600">
                             <i class="fa-solid fa-chalkboard-user text-2xl"></i>
                         </div>
-                        <h2 class="text-2xl font-bold text-slate-800">أضف أول مدرس</h2>
-                        <p class="text-slate-500 mt-1">قم بإضافة المدرس الأول لمنصتك للبدء في ربط المواد به.</p>
+                        <h2 class="text-2xl font-bold text-slate-800">{{ __('onboarding.step_2.title') }}</h2>
+                        <p class="text-slate-500 mt-1">{{ __('onboarding.step_2.subtitle') }}</p>
                     </div>
 
                     <form @submit.prevent="submitStep('step_2', false)" class="space-y-5">
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">اسم المدرس</label>
-                            <input type="text" x-model="formData.step_2.instructor_name" placeholder="مثال: أ. أحمد محمد" class="w-full border-slate-200 rounded-xl focus:ring-primary focus:border-primary h-12" required>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_2.name_label') }}</label>
+                            <input type="text" x-model="formData.step_2.instructor_name" placeholder="{{ __('onboarding.step_2.name_placeholder') }}" class="w-full border-slate-200 rounded-xl focus:ring-primary focus:border-primary h-12" required>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">رقم الهاتف <span class="text-slate-400 font-normal text-xs">(سيستخدم لتسجيل الدخول)</span></label>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_2.phone_label') }} <span class="text-slate-400 font-normal text-xs">{{ __('onboarding.step_2.phone_hint') }}</span></label>
                             <input type="text" x-model="formData.step_2.instructor_phone" dir="ltr" placeholder="01xxxxxxxxx" class="w-full border-slate-200 rounded-xl focus:ring-primary focus:border-primary h-12 text-right" required>
                         </div>
 
                         <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
                             <button type="button" @click="submitStep('step_2', true)" class="text-slate-500 hover:text-slate-800 font-medium transition-colors text-sm">
-                                تخطي هذه الخطوة مؤقتاً
+                                {{ __('onboarding.step_2.btn_skip') }}
                             </button>
                             <button type="submit" class="bg-primary hover:bg-primary-focus text-white w-full sm:w-auto px-8 py-3 rounded-xl font-medium transition-colors flex justify-center items-center gap-2">
-                                إضافة ومتابعة <i class="fa-solid fa-arrow-left mt-1"></i>
+                                {{ __('onboarding.step_2.btn_submit') }} <i class="fa-solid fa-arrow-right rtl:rotate-180 mt-1"></i>
                             </button>
                         </div>
                     </form>
@@ -212,22 +212,22 @@
                         <div class="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4 text-emerald-600">
                             <i class="fa-solid fa-book-open text-2xl"></i>
                         </div>
-                        <h2 class="text-2xl font-bold text-slate-800">إنشاء الدروس</h2>
-                        <p class="text-slate-500 mt-1">أضف المادة العلمية الأولى أو الدورة التدريبية.</p>
+                        <h2 class="text-2xl font-bold text-slate-800">{{ __('onboarding.step_3.title') }}</h2>
+                        <p class="text-slate-500 mt-1">{{ __('onboarding.step_3.subtitle') }}</p>
                     </div>
 
                     <form @submit.prevent="submitStep('step_3', false)" class="space-y-5">
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">اسم المادة / الدورة</label>
-                            <input type="text" x-model="formData.step_3.course_name" placeholder="مثال: لغة عربية - الصف الأول الثانوي" class="w-full border-slate-200 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 h-12" required>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_3.name_label') }}</label>
+                            <input type="text" x-model="formData.step_3.course_name" placeholder="{{ __('onboarding.step_3.name_placeholder') }}" class="w-full border-slate-200 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 h-12" required>
                         </div>
 
                         <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
                             <button type="button" @click="submitStep('step_3', true)" class="text-slate-500 hover:text-slate-800 font-medium transition-colors text-sm">
-                                تخطي مؤقتاً
+                                {{ __('onboarding.step_3.btn_skip') }}
                             </button>
                             <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 text-white w-full sm:w-auto px-8 py-3 rounded-xl font-medium transition-colors flex justify-center items-center gap-2">
-                                إنشاء المادة <i class="fa-solid fa-arrow-left mt-1"></i>
+                                {{ __('onboarding.step_3.btn_submit') }} <i class="fa-solid fa-arrow-right rtl:rotate-180 mt-1"></i>
                             </button>
                         </div>
                     </form>
@@ -244,26 +244,26 @@
                         <div class="w-16 h-16 bg-purple-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4 text-purple-600">
                             <i class="fa-solid fa-user-graduate text-2xl"></i>
                         </div>
-                        <h2 class="text-2xl font-bold text-slate-800">الخطوة الأخيرة: أول طالب 🎉</h2>
-                        <p class="text-slate-500 mt-1">قم بتسجيل أول طالب في منصتك للبدء بالتفاعل.</p>
+                        <h2 class="text-2xl font-bold text-slate-800">{{ __('onboarding.step_4.title') }}</h2>
+                        <p class="text-slate-500 mt-1">{{ __('onboarding.step_4.subtitle') }}</p>
                     </div>
 
                     <form @submit.prevent="submitStep('step_4', false)" class="space-y-5">
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">اسم الطالب</label>
-                            <input type="text" x-model="formData.step_4.student_name" placeholder="مثال: عمر ممدوح" class="w-full border-slate-200 rounded-xl focus:ring-purple-500 focus:border-purple-500 h-12" required>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_4.name_label') }}</label>
+                            <input type="text" x-model="formData.step_4.student_name" placeholder="{{ __('onboarding.step_4.name_placeholder') }}" class="w-full border-slate-200 rounded-xl focus:ring-purple-500 focus:border-purple-500 h-12" required>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">رقم هاتف الطالب</label>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_4.phone_label') }}</label>
                             <input type="text" x-model="formData.step_4.student_phone" dir="ltr" placeholder="01xxxxxxxxx" class="w-full border-slate-200 rounded-xl focus:ring-purple-500 focus:border-purple-500 h-12 text-right" required>
                         </div>
 
                         <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
                             <button type="button" @click="submitStep('step_4', true)" class="text-slate-500 hover:text-slate-800 font-medium transition-colors text-sm">
-                                تخطي والذهاب للوحة التحكم
+                                {{ __('onboarding.step_4.btn_skip') }}
                             </button>
                             <button type="submit" class="bg-purple-600 hover:bg-purple-700 shadow-lg shadow-purple-200 text-white w-full sm:w-auto px-8 py-3 rounded-xl font-medium transition-colors flex justify-center items-center gap-2">
-                                إنهاء الإعداد والبدء! <i class="fa-solid fa-rocket mt-1"></i>
+                                {{ __('onboarding.step_4.btn_submit') }} <i class="fa-solid fa-rocket rtl:mr-2 ltr:ml-2"></i>
                             </button>
                         </div>
                     </form>
@@ -273,7 +273,7 @@
         </div>
         
         <p class="text-center text-slate-400 text-sm mt-8">
-            <i class="fa-solid fa-shield-halved ml-1"></i> معلوماتك و بيانات مركزك مشفرة ومؤمنة بالكامل
+            <i class="fa-solid fa-shield-halved rtl:ml-1 ltr:mr-1"></i> {{ __('onboarding.security_note') }}
         </p>
     </div>
 </div>
@@ -286,10 +286,10 @@
             loading: false,
             
             steps: [
-                { id: 'step_1', label: 'الإعدادات الأساسية' },
-                { id: 'step_2', label: 'المدرسين' },
-                { id: 'step_3', label: 'المواد والدورات' },
-                { id: 'step_4', label: 'الطلاب' }
+                { id: 'step_1', label: '{{ __('onboarding.steps.step_1') }}' },
+                { id: 'step_2', label: '{{ __('onboarding.steps.step_2') }}' },
+                { id: 'step_3', label: '{{ __('onboarding.steps.step_3') }}' },
+                { id: 'step_4', label: '{{ __('onboarding.steps.step_4') }}' }
             ],
             
             formData: {
@@ -339,6 +339,9 @@
 
                     if (data.redirect) {
                         window.location.href = data.redirect;
+                    } else if (stepId === 'step_1') {
+                        // Reload page to apply new language & direction formatting immediately
+                        window.location.reload();
                     } else if (data.next_step) {
                         this.currentStep = data.next_step;
                     }
@@ -346,9 +349,9 @@
                 } catch (error) {
                     Swal.fire({
                         icon: 'error',
-                        title: 'عفواً',
-                        text: error.message,
-                        confirmButtonText: 'حسناً',
+                        title: '{{ __('onboarding.error_title') }}',
+                        text: error.message || '{{ __('onboarding.error_fallback') }}',
+                        confirmButtonText: '{{ __('onboarding.btn_ok') }}',
                         confirmButtonColor: '#0f172a'
                     });
                 } finally {
