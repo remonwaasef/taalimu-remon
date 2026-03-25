@@ -1,5 +1,5 @@
 @extends('center::layouts.master')
-@section('page-title', 'تحليلات عمولات المعلمين')
+@section('page-title', __('center::analytics.commissions_analytics'))
 
 @section('content')
 <div class="container-fluid">

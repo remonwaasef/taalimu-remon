@@ -179,7 +179,7 @@
         data: {
             labels: @json($monthlyRevenue->pluck('months')),
             datasets: [{
-                label: "الإيرادات",
+                label: "{{ __('center::analytics.revenue') }}",
                 lineTension: 0.3,
                 backgroundColor: "rgba(28, 200, 138, 0.05)",
                 borderColor: "rgba(28, 200, 138, 1)",
