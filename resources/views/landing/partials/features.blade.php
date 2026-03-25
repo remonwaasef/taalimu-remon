@@ -1,4 +1,4 @@
-<section id="features" class="py-8 lg:py-12 bg-slate-100 border-y border-slate-200">
+<section id="features" class="py-10 lg:py-14 bg-green-50/30 border-y border-slate-100">
     <div class="container mx-auto px-4 lg:px-8">
         <!-- Section Header -->
         <div class="text-center mb-8 lg:mb-12">
