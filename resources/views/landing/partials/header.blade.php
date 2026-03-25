@@ -27,7 +27,7 @@
             <!-- Navigation: Airy & Clean -->
             <nav class="hidden lg:flex items-center gap-10">
                 @foreach(['features', 'pricing', 'testimonials', 'faq'] as $nav)
-                <a href="#{{$nav}}" class="text-[15px] font-bold text-slate-500 hover:text-[#22c55e] transition-all relative group">
+                <a href="#{{$nav}}" class="text-[15px] font-bold text-[#1e293b] hover:text-[#22c55e] transition-all relative group">
                     {{ __("landing.nav.$nav") }}
                     <span class="absolute -bottom-1 start-0 w-0 h-0.5 bg-[#22c55e] transition-all group-hover:w-full"></span>
                 </a>
@@ -51,7 +51,7 @@
                     </div>
                 </div>
 
-                <a href="{{ route('login.portal') }}" class="text-sm font-bold text-slate-900 hover:text-[#22c55e] transition-colors">
+                <a href="{{ route('login.portal') }}" class="text-sm font-bold text-[#0f172a] hover:text-[#22c55e] transition-colors">
                     {{ __('landing.nav.sign_in') }}
                 </a>
                 
