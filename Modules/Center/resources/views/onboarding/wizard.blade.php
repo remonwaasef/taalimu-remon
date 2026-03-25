@@ -1,9 +1,48 @@
-@extends('center::layouts.master')
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}" class="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>إعداد المركز | المنصة التعليمية</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Scripts & Styles -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        [x-cloak] { display: none !important; }
+        /* Custom Tailwind Utilities for Wizard */
+        .bg-primary { background-color: #3b82f6; }
+        .bg-primary-focus { background-color: #2563eb; }
+        .text-primary { color: #3b82f6; }
+        .ring-primary { --tw-ring-color: #3b82f6; }
+        .border-primary { border-color: #3b82f6; }
+    </style>
+</head>
+<body class="bg-slate-900 min-h-screen text-slate-800 antialiased relative selection:bg-primary selection:text-white">
+    
+    <!-- Blurred Background map -->
+    <div class="fixed inset-0 z-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat mix-blend-overlay"></div>
+    <div class="fixed inset-0 z-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
 
-@section('title', 'إعداد المركز | المنصة التعليمية')
+    <!-- Decorative Glows -->
+    <div class="fixed -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-blue-600/20 blur-[100px] mix-blend-screen pointer-events-none z-0"></div>
+    <div class="fixed -bottom-40 -left-40 w-[600px] h-[600px] rounded-full bg-purple-600/20 blur-[100px] mix-blend-screen pointer-events-none z-0"></div>
 
-@section('content')
-<div class="min-h-screen bg-slate-50 flex items-center justify-center p-4 relative overflow-hidden" 
+<div class="min-h-screen flex items-center justify-center p-4 relative z-10 overflow-hidden" 
      x-data="onboardingWizard('{{ $status }}')"
      x-init="initWizard()">
     
@@ -238,9 +277,8 @@
         </p>
     </div>
 </div>
-@endsection
+</div>
 
-@push('scripts')
 <script>
     document.addEventListener('alpine:init', () => {
         Alpine.data('onboardingWizard', (initialStatus) => ({
@@ -320,4 +358,6 @@
         }));
     });
 </script>
-@endpush
+</script>
+</body>
+</html>
