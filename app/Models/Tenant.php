@@ -91,6 +91,7 @@ class Tenant extends Model
         'database_name',
         'type',
         'status',
+        'onboarding_status',
         'settings',
         'timezone',
     ];

@@ -82,6 +82,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'force_password_change' => \App\Http\Middleware\ForcePasswordChange::class,
             'feature' => \App\Http\Middleware\CheckFeature::class,
             'phone.verified' => \App\Http\Middleware\EnsurePhoneIsVerified::class,
+            'onboarding.completed' => \App\Http\Middleware\EnsureOnboardingCompleted::class,
             'abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
             'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
         ]);
