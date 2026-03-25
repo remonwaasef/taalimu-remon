@@ -1,66 +1,68 @@
-<section id="features" class="py-10 lg:py-14 bg-green-50/30 border-y border-slate-100">
-    <div class="container mx-auto px-4 lg:px-8">
-        <!-- Section Header -->
-        <div class="text-center mb-8 lg:mb-12">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-                <span class="text-sm font-medium text-primary">{{ __('landing.features.badge') }}</span>
+<section id="features" class="relative py-24 bg-white overflow-hidden">
+    <!-- Decorative Elements -->
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-slate-50 rounded-full blur-[120px] -z-10 opacity-60"></div>
+    <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#f0fdf4] rounded-full blur-[100px] -z-10 opacity-50"></div>
+
+    <div class="container mx-auto px-4 lg:px-12">
+        <!-- Section Header: Centered & Impactful -->
+        <div class="text-center mb-20">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#f0fdf4] border border-green-100 mb-6">
+                <span class="text-xs font-black text-[#22c55e] uppercase tracking-[0.2em]">{{ __('landing.features.badge') }}</span>
             </div>
-            <h2 class="text-2xl lg:text-3xl font-bold text-foreground mb-3">
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-[#0f172a] mb-6 tracking-tight leading-[1.1]">
                 {!! __('landing.features.title') !!}
             </h2>
-            <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
+            <p class="text-lg text-slate-500 max-w-2xl mx-auto font-medium leading-relaxed">
                 {{ __('landing.features.subtitle') }}
             </p>
         </div>
 
-        <!-- Features Grid -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-            {{-- Feature data remains same, just updated card styling --}}
+        <!-- Features Grid: Spacious & Professional -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
 @php
     $featuresData = [
-        ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>', 'delay' => '0'],
-        ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="m9 16 3-3 3 3"/><path d="m9 13 3 3 3-3"/></svg>', 'delay' => '100'],
-        ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-11.7 8.38 8.38 0 0 1 3.8.9L21 3z"/></svg>', 'delay' => '200'],
-        ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><path d="M7 15h.01"/><path d="M11 15h.01"/></svg>', 'delay' => '300'],
-        ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>', 'delay' => '400'],
-        ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>', 'delay' => '500'],
-        ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>', 'delay' => '600'],
-        ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>', 'delay' => '700']
+        ['icon' => 'fa-users', 'color' => '#22c55e', 'bg' => '#f0fdf4'],
+        ['icon' => 'fa-calendar-check', 'color' => '#0ea5e9', 'bg' => '#f0f9ff'],
+        ['icon' => 'fa-comments', 'color' => '#22c55e', 'bg' => '#f0fdf4'],
+        ['icon' => 'fa-credit-card', 'color' => '#8b5cf6', 'bg' => '#f5f3ff'],
+        ['icon' => 'fa-chart-pie', 'color' => '#22c55e', 'bg' => '#f0fdf4'],
+        ['icon' => 'fa-shield-alt', 'color' => '#0ea5e9', 'bg' => '#f0f9ff'],
+        ['icon' => 'fa-clock', 'color' => '#22c55e', 'bg' => '#f0fdf4'],
+        ['icon' => 'fa-check-double', 'color' => '#8b5cf6', 'bg' => '#f5f3ff']
     ];
 @endphp
 
             @foreach(__('landing.features.items') as $index => $item)
                 @php $data = $featuresData[$index] ?? $featuresData[0]; @endphp
                 <div
-                    class="group bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 animate-fade-in"
-                    style="animation-delay: {{ $data['delay'] }}ms;"
+                    class="group relative bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-soft hover:shadow-premium transition-all duration-500 overflow-hidden"
                 >
-                    <!-- Icon -->
-                    <div class="w-12 h-12 rounded-xl bg-green-50/50 flex items-center justify-center mb-5 group-hover:bg-green-100/50 transition-colors">
-                        <div class="text-[#22c55e]">
-                            {!! $data['icon'] !!}
-                        </div>
+                    <!-- Hover Accent -->
+                    <div class="absolute top-0 left-0 w-2 h-0 bg-[#22c55e] group-hover:h-full transition-all duration-500"></div>
+
+                    <!-- Icon: Large & Refined -->
+                    <div class="w-16 h-16 rounded-2xl mb-8 flex items-center justify-center transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3" style="background-color: {{ $data['bg'] }}; color: {{ $data['color'] }};">
+                        <i class="fas {{ $data['icon'] }} text-2xl"></i>
                     </div>
 
                     <!-- Title -->
-                    <h3 class="text-lg font-bold text-slate-800 mb-2">
+                    <h3 class="text-xl font-black text-[#0f172a] mb-4 tracking-tight group-hover:text-[#22c55e] transition-colors">
                         {{ $item['title'] }}
                     </h3>
 
                     <!-- Description -->
-                    <p class="text-slate-500 leading-relaxed text-sm">
+                    <p class="text-slate-500 font-medium leading-[1.8] text-sm md:text-[15px]">
                         {{ $item['description'] }}
                     </p>
 
-                    <!-- Learn More -->
-                    <div class="mt-5 flex items-center gap-2 text-[#22c55e] opacity-0 group-hover:opacity-100 transition-opacity">
-                        <span class="text-sm font-bold">{{ __('landing.features.learn_more') }}</span>
-                        <svg class="w-4 h-4 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform rtl:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
+                    <!-- Subtle Footer -->
+                    <div class="mt-8 flex items-center gap-2 text-[#22c55e] opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                        <span class="text-xs font-black uppercase tracking-wider">{{ __('landing.features.learn_more') }}</span>
+                        <i class="fas fa-arrow-right text-[10px] rtl:rotate-180"></i>
                     </div>
                 </div>
             @endforeach
         </div>
     </div>
 </section>
+

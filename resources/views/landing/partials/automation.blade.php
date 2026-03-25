@@ -1,162 +1,114 @@
-<section class="py-8 lg:py-12 relative overflow-hidden bg-white">
-    <!-- Background decorations - Simplified -->
-    <div class="absolute top-1/2 left-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl -translate-y-1/2"></div>
-    <div class="absolute top-1/2 right-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl -translate-y-1/2"></div>
+<section class="py-24 bg-white relative overflow-hidden">
+    <!-- Sophisticated Accents -->
+    <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-slate-50/50 rounded-full blur-[120px] -z-10"></div>
     
-    <div class="container relative mx-auto px-4 lg:px-8">
+    <div class="container mx-auto px-4 lg:px-12">
         <!-- Section Header -->
-        <div class="text-center mb-8 lg:mb-12">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/20 mb-6">
-                <span class="text-sm font-medium text-primary">{{ __('landing.automation.badge') }}</span>
+        <div class="text-center mb-20">
+            <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#f0f9ff] border border-blue-100 mb-6">
+                <i class="fab fa-whatsapp text-[#25D366] text-sm"></i>
+                <span class="text-xs font-black text-[#0ea5e9] uppercase tracking-[0.2em]">{{ __('landing.automation.badge') }}</span>
             </div>
-            <h2 class="text-2xl lg:text-3xl font-bold text-foreground mb-3">
-                {{ __('landing.automation.title_prefix') }} <span class="gradient-text">{{ \App\Models\SiteSetting::get('site_name', __('landing.automation.title_highlight')) }}</span>
+            <h2 class="text-3xl md:text-5xl font-black text-[#0f172a] mb-6 tracking-tight leading-tight">
+                {{ __('landing.automation.title_prefix') }} <span class="text-[#22c55e]">{{ \App\Models\SiteSetting::get('site_name', 'Taalimu') }}</span>
             </h2>
-            <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
+            <p class="text-lg text-slate-500 max-w-2xl mx-auto font-medium">
                 {{ __('landing.automation.subtitle') }}
             </p>
         </div>
 
-        <!-- Steps -->
-        <div class="grid md:grid-cols-3 gap-8 lg:gap-12 relative">
-            <!-- Connection Lines (Desktop) - Simplified -->
-            <div class="hidden md:block absolute top-24 left-1/3 right-1/3 h-0.5 bg-slate-200"></div>
-            
-            <!-- Step 1 -->
-            <div
-                class="relative text-center group animate-fade-in delay-0"
-            >
-                <!-- Step Circle -->
-                <div class="relative mx-auto mb-8">
-                    <!-- Outer ring -->
-                    <div class="w-20 h-20 lg:w-24 lg:h-24 rounded-full border-2 border-dashed border-primary/20 flex items-center justify-center mx-auto group-hover:border-secondary/50 transition-colors duration-500">
-                        <!-- Inner circle -->
-                        <div class="w-14 h-14 lg:w-16 lg:h-16 rounded-full bg-primary/5 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 lg:w-8 lg:h-8 text-primary"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <!-- Left: Step-by-Step Flow -->
+            <div class="space-y-12">
+                @foreach([
+                    ['num' => '01', 'icon' => 'fa-user-plus', 'color' => '#22c55e', 'bg' => '#f0fdf4'],
+                    ['num' => '02', 'icon' => 'fa-comment-alt-check', 'color' => '#0ea5e9', 'bg' => '#f0f9ff'],
+                    ['num' => '03', 'icon' => 'fa-wallet', 'color' => '#8b5cf6', 'bg' => '#f5f3ff']
+                ] as $index => $step)
+                <div class="group flex gap-6 animate-fade-in" style="animation-delay: {{ $index * 150 }}ms;">
+                    <div class="relative flex-shrink-0">
+                        <div class="w-16 h-16 rounded-[1.5rem] flex items-center justify-center text-xl shadow-soft group-hover:scale-110 transition-transform duration-500" style="background-color: {{ $step['bg'] }}; color: {{ $step['color'] }};">
+                            <i class="fas {{ $step['icon'] }}"></i>
+                        </div>
+                        <div class="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-white shadow-soft flex items-center justify-center text-[10px] font-black text-slate-800 border border-slate-100">
+                            {{ $step['num'] }}
                         </div>
                     </div>
-                    
-                    <!-- Step number -->
-                    <div class="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-md">
-                        <span class="text-sm font-bold text-white">01</span>
+                    <div>
+                        <h3 class="text-xl font-black text-[#0f172a] mb-2 group-hover:text-[#22c55e] transition-colors">
+                            {{ __("landing.automation.step" . ($index + 1) . ".title") }}
+                        </h3>
+                        <p class="text-slate-500 font-medium leading-relaxed">
+                            {{ __("landing.automation.step" . ($index + 1) . ".description") }}
+                        </p>
                     </div>
                 </div>
-
-                <!-- Content -->
-                <h3 class="text-lg font-semibold text-foreground mb-2">
-                    {{ __('landing.automation.step1.title') }}
-                </h3>
-                <p class="text-muted-foreground max-w-xs mx-auto mb-8">
-                    {{ __('landing.automation.step1.description') }}
-                </p>
-
-                <!-- Visual -->
-                <div class="relative mx-auto max-w-[240px] rounded-xl overflow-hidden border border-border shadow-2xl group-hover:-translate-y-2 transition-transform duration-500 bg-card">
-                    <img src="{{ asset('images/automation/step1.webp') }}" alt="{{ __('landing.automation.step1.title') }}" class="w-full h-auto opacity-90 group-hover:opacity-100 transition-opacity" loading="lazy" decoding="async" width="600" height="400">
-                    <!-- Glass overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none"></div>
-                </div>
-
-                <!-- Arrow (Mobile) -->
-                <div class="md:hidden flex justify-center my-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-cyan rotate-90"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                </div>
+                @endforeach
             </div>
 
-            <!-- Step 2 -->
-            <div
-                class="relative text-center group animate-fade-in delay-15"
-            >
-                <!-- Step Circle -->
-                <div class="relative mx-auto mb-8">
-                    <!-- Outer ring -->
-                    <div class="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-2 border-dashed border-primary/20 flex items-center justify-center mx-auto group-hover:border-secondary/50 transition-colors duration-500">
-                        <!-- Inner circle -->
-                        <div class="w-16 h-16 lg:w-24 lg:h-24 rounded-full bg-primary/5 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 lg:w-10 lg:h-10 text-primary"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <!-- Right: Interactive WhatsApp Mockup (Pure CSS/Glass) -->
+            <div class="relative lg:pl-12">
+                <div class="relative z-10 mx-auto max-w-[340px] rounded-[3rem] border-[10px] border-[#1e293b] shadow-[0_50px_100px_-20px_rgba(15,23,42,0.3)] overflow-hidden aspect-[9/18.5] bg-[#ece5dd]">
+                    <!-- WhatsApp Header -->
+                    <div class="bg-[#075e54] p-5 pt-10 text-white flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                            <i class="fas fa-school"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-bold">{{ \App\Models\SiteSetting::get('site_name', 'Taalimu') }}</div>
+                            <div class="text-[10px] opacity-70">Online</div>
                         </div>
                     </div>
-                    
-                    <!-- Step number -->
-                <div class="absolute -top-1 -right-1 w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-md">
-                        <span class="text-xs font-bold text-white">02</span>
-                    </div>
-                </div>
 
-                <!-- Content -->
-                <h3 class="text-xl font-semibold text-foreground mb-3">
-                    {{ __('landing.automation.step2.title') }}
-                </h3>
-                <p class="text-muted-foreground max-w-xs mx-auto mb-8">
-                    {{ __('landing.automation.step2.description') }}
-                </p>
+                    <!-- Chat Content -->
+                    <div class="p-4 space-y-4">
+                        <!-- Message 1 (Bot) -->
+                        <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm max-w-[85%] animate-fade-in">
+                            <p class="text-[13px] text-slate-800 font-medium">Hello! Welcome to {{ \App\Models\SiteSetting::get('site_name', 'Taalimu') }}. How can I help you today?</p>
+                            <span class="text-[9px] text-slate-400 float-right mt-1">10:00 AM</span>
+                        </div>
 
-                <!-- Visual -->
-                <div class="relative mx-auto max-w-[280px] rounded-2xl overflow-hidden border border-border shadow-2xl group-hover:-translate-y-2 transition-transform duration-500 bg-card">
-                    <img src="{{ asset('images/automation/step2.webp') }}" alt="{{ __('landing.automation.step2.title') }}" class="w-full h-auto opacity-90 group-hover:opacity-100 transition-opacity" loading="lazy" decoding="async" width="600" height="400">
-                    <!-- Glass overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none"></div>
-                </div>
+                        <!-- Message 2 (Parent) -->
+                        <div class="bg-[#dcf8c6] p-3 rounded-2xl rounded-tr-none shadow-sm max-w-[85%] ml-auto animate-fade-in delay-200">
+                            <p class="text-[13px] text-slate-800 font-medium">I'd like to register my son for the Math course.</p>
+                            <span class="text-[9px] text-slate-400 float-right mt-1">10:01 AM</span>
+                        </div>
 
-                <!-- Arrow (Mobile) -->
-                <div class="md:hidden flex justify-center my-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-cyan rotate-90"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                </div>
-            </div>
-
-            <!-- Step 3 -->
-            <div
-                class="relative text-center group animate-fade-in delay-3"
-            >
-                <!-- Step Circle -->
-                <div class="relative mx-auto mb-8">
-                    <!-- Outer ring -->
-                    <div class="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-2 border-dashed border-primary/20 flex items-center justify-center mx-auto group-hover:border-secondary/50 transition-colors duration-500">
-                        <!-- Inner circle -->
-                        <div class="w-16 h-16 lg:w-24 lg:h-24 rounded-full bg-primary/5 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 lg:w-10 lg:h-10 text-primary"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                        <!-- Message 3 (Bot/Automated) -->
+                        <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm max-w-[85%] animate-fade-in delay-500">
+                            <p class="text-[13px] text-slate-800 font-medium">Great! Please click the link below to complete the registration:</p>
+                            <div class="mt-2 p-2 bg-slate-50 rounded-xl border border-slate-100 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-[#22c55e]/10 flex items-center justify-center text-[#22c55e]">
+                                    <i class="fas fa-link"></i>
+                                </div>
+                                <div class="text-[11px] font-black text-[#22c55e]">Registration Form</div>
+                            </div>
+                            <span class="text-[9px] text-slate-400 float-right mt-1">10:01 AM</span>
                         </div>
                     </div>
-                    
-                    <!-- Step number -->
-                    <div class="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-md">
-                        <span class="text-sm font-bold text-white">03</span>
-                    </div>
                 </div>
 
-                <!-- Content -->
-                <h3 class="text-xl font-semibold text-foreground mb-3">
-                    {{ __('landing.automation.step3.title') }}
-                </h3>
-                <p class="text-muted-foreground max-w-xs mx-auto mb-8">
-                    {{ __('landing.automation.step3.description') }}
-                </p>
-
-                <!-- Visual -->
-                <div class="relative mx-auto max-w-[280px] rounded-2xl overflow-hidden border border-border shadow-2xl group-hover:-translate-y-2 transition-transform duration-500 bg-card">
-                    <img src="{{ asset('images/automation/step3.webp') }}" alt="{{ __('landing.automation.step3.title') }}" class="w-full h-auto opacity-90 group-hover:opacity-100 transition-opacity" loading="lazy" decoding="async" width="600" height="400">
-                    <!-- Glass overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none"></div>
-                </div>
+                <!-- Floating Accents -->
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-[#22c55e]/10 rounded-full blur-2xl animate-pulse"></div>
+                <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-[#0ea5e9]/10 rounded-full blur-3xl"></div>
             </div>
         </div>
 
-        <!-- Result Box -->
-        <div class="mt-12 lg:mt-16 max-w-2xl mx-auto">
-            <div class="relative rounded-3xl p-8 lg:p-10 text-center overflow-hidden border border-white/10 shadow-2xl result-box-gradient">
-
-                <!-- Decorative elements - Simplified -->
-                <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
-                <div class="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+        <!-- High-Impact Result -->
+        <div class="mt-24 max-w-4xl mx-auto group">
+            <div class="relative bg-[#0f172a] rounded-[3rem] p-12 text-center overflow-hidden border border-white/10">
+                <!-- Mesh Backdrop -->
+                <div class="absolute inset-0 bg-gradient-to-br from-[#22c55e]/20 via-transparent to-[#0ea5e9]/20 opacity-40 group-hover:scale-110 transition-transform duration-1000"></div>
+                <div class="absolute -top-20 -right-20 w-64 h-64 bg-[#22c55e]/20 rounded-full blur-[100px]"></div>
                 
-                <div class="relative">
-                    <div class="text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-blue-100 to-blue-200 mb-1 drop-shadow-lg">
+                <div class="relative z-10">
+                    <div class="text-6xl md:text-7xl font-black text-white mb-4 tracking-tighter drop-shadow-2xl">
                         98%
                     </div>
-                    <div class="text-base lg:text-lg font-semibold text-primary-foreground/90 mb-2">
+                    <div class="text-xl font-bold text-[#22c55e] mb-4 uppercase tracking-[0.2em]">
                         {{ __('landing.automation.result.rate') }}
                     </div>
-                    <p class="text-primary-foreground/70 text-sm">
+                    <p class="text-slate-400 text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed">
                         {{ __('landing.automation.result.text') }}
                     </p>
                 </div>
@@ -164,3 +116,4 @@
         </div>
     </div>
 </section>
+
