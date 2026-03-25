@@ -42,17 +42,8 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
             }
         }
         return redirect()->route('login.portal');
-    })->middleware(['auth', 'phone.verified'])->name('dashboard');
+    })->middleware(['auth'])->name('dashboard');
 
-    // WhatsApp Phone Verification
-    Route::get('/verify-phone', [\App\Http\Controllers\PhoneVerificationController::class, 'show'])
-        ->name('verification.phone.notice');
-    Route::post('/verify-phone', [\App\Http\Controllers\PhoneVerificationController::class, 'verify'])
-        ->middleware(['auth', 'throttle:6,1'])
-        ->name('verification.phone.verify');
-    Route::post('/verify-phone/resend', [\App\Http\Controllers\PhoneVerificationController::class, 'resend'])
-        ->middleware(['auth', 'throttle:3,1'])
-        ->name('verification.phone.resend');
     
     Route::get('/registration-success', function() {
         if (!session('registration_success')) {

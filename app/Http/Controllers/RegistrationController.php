@@ -196,6 +196,8 @@ class RegistrationController extends Controller
                 'phone' => $request->phone,
                 'password' => Hash::make($request->password),
                 'locale' => session('locale', 'ar'),
+                'email_verified_at' => now(),
+                'phone_verified_at' => now(),
             ]);
             $user->tenant_id = $tenant->id;
             $user->role = $request->account_type === 'instructor' ? 'instructor' : 'center_admin';
@@ -218,15 +220,6 @@ class RegistrationController extends Controller
             // Set Spatie Team Context
             app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
             $user->assignRole($user->role);
-
-            // Generate and Send WhatsApp OTP
-            $otpCode = $user->generatePhoneVerificationCode();
-            $whatsapp = app(\App\Services\WhatsAppService::class);
-            $message = app()->getLocale() == 'ar' 
-                ? "مرحباً بك في منصة تعليمي! كود تفعيل حسابك هو: {$otpCode}"
-                : "Welcome to Taalimu! Your verification code is: {$otpCode}";
-            
-            $whatsapp->sendSystemMessage($user->phone, $message);
 
                 // 3. Handle Subscription based on selected plan (Dynamic Gateway)
                 DB::commit();
