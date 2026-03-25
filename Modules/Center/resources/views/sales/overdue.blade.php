@@ -1,6 +1,6 @@
 @extends('center::layouts.master')
 
-@section('title', 'الطلاب المتأخرون عن الدفع')
+@section('title', __('center::sales.overdue_title'))
 
 @section('content')
 <div class="mb-4 d-flex align-items-center justify-content-between">
@@ -9,12 +9,12 @@
             <i class="fas fa-wallet fa-lg"></i>
         </div>
         <div>
-            <h2 class="fw-bold text-dark mb-0">قائمة المتأخرين عن الدفع</h2>
-            <p class="text-muted small mb-0">عرض جميع الطلاب الذين لديهم مبالغ متبقية لم يتم تحصيلها بالكامل.</p>
+            <h2 class="fw-bold text-dark mb-0">{{ __('center::sales.overdue_list') }}</h2>
+            <p class="text-muted small mb-0">{{ __('center::sales.overdue_subtitle') }}</p>
         </div>
     </div>
     <div class="badge bg-danger rounded-pill px-3 py-2">
-        إجمالي الطلاب: {{ $students->count() }}
+        {{ __('center::sales.total_students') }} {{ $students->count() }}
     </div>
 </div>
 
@@ -24,10 +24,10 @@
             <table class="table align-middle mb-0">
                 <thead class="bg-light">
                     <tr>
-                        <th class="border-0 ps-4">الطالب</th>
-                        <th class="border-0">رقم الهاتف</th>
-                        <th class="border-0">إجمالي المديونية</th>
-                        <th class="border-0 text-center">الإجراءات</th>
+                        <th class="border-0 ps-4">{{ __('center::sales.student') }}</th>
+                        <th class="border-0">{{ __('center::sales.phone_number') }}</th>
+                        <th class="border-0">{{ __('center::sales.total_debt') }}</th>
+                        <th class="border-0 text-center">{{ __('center::sales.action') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,10 +48,10 @@
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-2">
                                     <a href="{{ route('center.sales.account', ['tenant' => $tenant->domain, 'student_id' => $student->id]) }}" class="btn btn-primary btn-sm rounded-pill px-3">
-                                        <i class="fas fa-user-invoice me-1"></i> تحصيل
+                                        <i class="fas fa-user-invoice me-1"></i> {{ __('center::sales.collect') }}
                                     </a>
                                     <a href="{{ route('center.students.show', ['tenant' => $tenant->domain, 'student' => $student->id]) }}" class="btn btn-outline-light text-dark btn-sm rounded-pill px-3 border">
-                                        <i class="fas fa-user me-1"></i> الملف
+                                        <i class="fas fa-user me-1"></i> {{ __('center::sales.profile') }}
                                     </a>
                                 </div>
                             </td>
@@ -61,8 +61,8 @@
                             <td colspan="4" class="text-center py-5">
                                 <div class="text-muted">
                                     <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
-                                    <h5 class="fw-bold">لا يوجد متأخرات</h5>
-                                    <p class="mb-0">جميع الطلاب قاموا بسداد مستحقاتهم بالكامل.</p>
+                                    <h5 class="fw-bold">{{ __('center::sales.no_overdue') }}</h5>
+                                    <p class="mb-0">{{ __('center::sales.no_overdue_subtitle') }}</p>
                                 </div>
                             </td>
                         </tr>
