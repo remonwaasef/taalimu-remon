@@ -1,16 +1,16 @@
-<footer class="bg-white pt-24 pb-12 border-t border-slate-100 relative overflow-hidden">
+<footer class="bg-[#0f172a] pt-24 pb-12 overflow-hidden relative">
     <!-- Sophisticated Accents -->
-    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
-    <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-slate-50 rounded-full blur-[120px] -z-10"></div>
+    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+    <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-900/10 rounded-full blur-[120px] -z-10"></div>
 
     <div class="container mx-auto px-4 lg:px-12">
         <div class="grid lg:grid-cols-5 gap-16 mb-20">
             <!-- Brand Column -->
             <div class="lg:col-span-2 space-y-8">
                 <a href="{{ route('home') }}" class="flex items-center gap-3">
-                    <img src="{{ asset('images/brand/logo-full.png?v=3') }}" alt="{{ config('app.name') }}" class="h-10 w-auto mix-blend-multiply">
+                    <img src="{{ asset('images/brand/logo-full.png?v=3') }}" alt="{{ config('app.name') }}" class="h-10 w-auto brightness-0 invert">
                     <div class="flex flex-col">
-                        <span class="font-black text-xl text-[#0f172a] leading-tight tracking-tighter">
+                        <span class="font-black text-xl text-white leading-tight tracking-tighter">
                             {{ \App\Models\SiteSetting::get('site_name', 'Taalimu') }}
                         </span>
                         <span class="text-[10px] font-black text-[#22c55e] uppercase tracking-[0.2em]">
@@ -18,13 +18,13 @@
                         </span>
                     </div>
                 </a>
-                <p class="text-slate-500 font-medium leading-relaxed max-w-sm">
+                <p class="text-slate-400 font-medium leading-relaxed max-w-sm">
                     {{ \App\Models\SiteSetting::get('site_description_' . app()->getLocale(), __('landing.hero.subtitle')) }}
                 </p>
                 <!-- Social Links -->
                 <div class="flex items-center gap-4">
                     @foreach(['facebook-f', 'linkedin-in', 'twitter', 'instagram'] as $social)
-                    <a href="#" class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-[#22c55e] hover:text-white transition-all duration-500 shadow-soft hover:shadow-premium group">
+                    <a href="#" class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-slate-400 hover:bg-[#22c55e] hover:text-white transition-all duration-500 shadow-soft group">
                         <i class="fab fa-{{ $social }} text-sm"></i>
                     </a>
                     @endforeach
@@ -33,26 +33,26 @@
 
             <!-- Links Columns -->
             <div>
-                <h4 class="text-[#0f172a] font-black text-sm uppercase tracking-[0.2em] mb-8">{{ __('landing.footer.product.title') }}</h4>
+                <h4 class="text-white font-black text-sm uppercase tracking-[0.2em] mb-8">{{ __('landing.footer.product.title') }}</h4>
                 <ul class="space-y-4">
                     @foreach(['features', 'pricing', 'integrations', 'updates'] as $link)
-                    <li><a href="#" class="text-slate-500 hover:text-[#22c55e] font-bold text-sm transition-colors">{{ __("landing.footer.product.$link") }}</a></li>
+                    <li><a href="#" class="text-slate-400 hover:text-[#22c55e] font-bold text-sm transition-colors">{{ __("landing.footer.product.$link") }}</a></li>
                     @endforeach
                 </ul>
             </div>
             <div>
-                <h4 class="text-[#0f172a] font-black text-sm uppercase tracking-[0.2em] mb-8">{{ __('landing.footer.resources.title') }}</h4>
+                <h4 class="text-white font-black text-sm uppercase tracking-[0.2em] mb-8">{{ __('landing.footer.resources.title') }}</h4>
                 <ul class="space-y-4">
                     @foreach(['help', 'docs', 'blog', 'api'] as $link)
-                    <li><a href="#" class="text-slate-500 hover:text-[#22c55e] font-bold text-sm transition-colors">{{ __("landing.footer.resources.$link") }}</a></li>
+                    <li><a href="#" class="text-slate-400 hover:text-[#22c55e] font-bold text-sm transition-colors">{{ __("landing.footer.resources.$link") }}</a></li>
                     @endforeach
                 </ul>
             </div>
             <div>
-                <h4 class="text-[#0f172a] font-black text-sm uppercase tracking-[0.2em] mb-8">{{ __('landing.footer.legal.title') }}</h4>
+                <h4 class="text-white font-black text-sm uppercase tracking-[0.2em] mb-8">{{ __('landing.footer.legal.title') }}</h4>
                 <ul class="space-y-4">
                     @foreach(['privacy', 'terms', 'cookies'] as $link)
-                    <li><a href="{{ route($link) }}" class="text-slate-500 hover:text-[#22c55e] font-bold text-sm transition-colors">{{ __("landing.footer.legal.$link") }}</a></li>
+                    <li><a href="{{ route($link) }}" class="text-slate-400 hover:text-[#22c55e] font-bold text-sm transition-colors">{{ __("landing.footer.legal.$link") }}</a></li>
                     @endforeach
                 </ul>
             </div>

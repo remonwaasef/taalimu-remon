@@ -8,57 +8,49 @@
 
 @layer base {
     :root {
-        /* Taalimu "Clean Light SaaS" Design System */
-        /* Primary: Brand Green (#22c55e) */
-        --brand-green: 142 71% 45%;
+        /* Taalimu "60-30-10" Design System */
+        /* Neutral/Base (60%): White & Soft Grays */
+        --background: 0 0% 100%;
+        --bg-soft: 210 40% 98%;      /* #f8fafc */
+        
+        /* Structural (30%): Deep Navy & Slate Blue */
+        --foreground: 221 39% 11%;     /* #0f172a - The Heavy Hitter */
+        --navy-primary: 217 33% 17%;   /* #1e293b - Slate Navy */
+        --muted-foreground: 215 16% 47%;    /* #64748b */
+        --border: 214 32% 91%;        /* #e2e8f0 */
+
+        /* Accent (10%): High-Impact Brand Green */
+        --brand-green: 142 71% 45%;    /* #22c55e */
         --brand-green-dark: 142 72% 36%;
         --brand-green-light: 142 71% 95%;
         
-        /* Secondary: Sky/Cyan Accents for "Design 2" feel */
+        /* Cyan/Sky Accents - Minimal Support */
         --accent-sky: 199 89% 48%;
         --accent-sky-light: 199 89% 96%;
 
-        /* Typography & Layout */
-        --foreground: 221 39% 11%;     /* #0f172a */
-        --muted-foreground: 215 16% 47%;    /* #64748b */
-        --background: 0 0% 100%;
-        --bg-soft: 210 40% 98%;      /* #f8fafc */
-
-        /* Components */
-        --border: 214 32% 91%;        /* #e2e8f0 */
-        --radius: 1.5rem;             /* Larger, friendlier radius */
-
-        /* Shadows - High-end Soft Shadows */
+        /* Components & Radius */
+        --radius: 1.5rem;
+        
+        /* Shadows - Navy-Tinted for depth */
         --shadow-soft: 0 20px 50px -12px rgba(15, 23, 42, 0.04);
         --shadow-premium: 0 30px 100px -20px rgba(15, 23, 42, 0.08);
-        --shadow-border: 0 0 0 1px rgba(15, 23, 42, 0.04);
+        --shadow-border: 0 0 0 1px rgba(15, 23, 42, 0.05);
 
         /* Animations */
         --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
 
-        /* Legacy Mapping Overrides (to avoid breaking global classes immediately) */
-        --primary: var(--brand-green);
-        --primary-purple: var(--brand-green);
+        /* Legacy Bridge Mapping */
+        --primary: var(--navy-primary); /* Navy is now primary structure */
+        --primary-accent: var(--brand-green);
+        --primary-purple: var(--navy-primary);
         --primary-light: var(--brand-green-light);
         --dark-text: var(--foreground);
         --muted: var(--bg-soft);
-        --card: 0 0% 100%;
-        --card-foreground: var(--foreground);
 
-        /* Gradients: Subtle mesh for light theme */
+        /* Gradients: Navy Centric */
         --gradient-hero: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
-        --gradient-cta: linear-gradient(135deg, #F8FAFC 0%, #FFFFFF 100%);
-        --gradient-card: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
-        --gradient-cyan: linear-gradient(135deg, hsl(158 82% 47%) 0%, hsl(158 82% 52%) 100%);
+        --gradient-navy: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
         --brand-gradient: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
-
-        /* Shadows - Cleaner/Sharper (Legacy compatibility) */
-        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
-        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
-        --shadow-glow: none;
-        --shadow-purple-glow: none;
     }
 
     .dark {
