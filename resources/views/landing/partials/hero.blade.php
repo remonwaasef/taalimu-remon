@@ -1,5 +1,5 @@
 <section 
-    class="hero-section relative min-h-[95vh] pt-24 lg:pt-32 pb-16 overflow-hidden bg-white section-wave z-0" 
+    class="hero-section relative min-h-[95vh] pt-24 lg:pt-32 pb-16 overflow-hidden bg-white section-wave" 
     id="hero"
     x-data="{ 
         mouseX: 0, 
@@ -41,18 +41,20 @@
     x-init="type()"
     @mousemove="updateMouse($event)"
 >
-    <!-- Premium Atmosphere -->
-    <div class="absolute inset-0 bg-noise pointer-events-none -z-10"></div>
-    <div class="hero-orb orb-1"></div>
-    <div class="hero-orb orb-2"></div>
+    <!-- Premium Atmosphere: Isolated from content -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden" style="z-index: 1;">
+        <div class="hero-orb orb-1 opacity-60"></div>
+        <div class="hero-orb orb-2 opacity-60"></div>
+        <div class="absolute inset-0 bg-noise opacity-[0.03]"></div>
+    </div>
 
     <div
         dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"
-        class="container relative mx-auto px-4 lg:px-12"
+        class="container relative mx-auto px-4 lg:px-12 z-10"
     >
         <div class="flex flex-col lg:flex-row gap-16 lg:gap-10 items-center justify-between">
             <!-- Left Content: High Impact -->
-            <div class="w-full lg:w-[46%] text-center lg:text-start z-10">
+            <div class="w-full lg:w-[46%] text-center lg:text-start relative z-20">
                 <!-- Premium Badge -->
                 <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-premium mb-8 shadow-sm border border-slate-200/50 opacity-0" style="animation: heroFadeInUp 0.6s ease-out 0.1s forwards;">
                     <span class="flex h-2 w-2 rounded-full bg-[#22c55e] shadow-[0_0_8px_#22c55e]"></span>
@@ -116,7 +118,7 @@
             </div>
 
             <!-- Right Visual: The 3D Masterpiece -->
-            <div class="w-full lg:w-[50%] relative py-12 lg:py-0">
+            <div class="w-full lg:w-[50%] relative py-12 lg:py-0 z-10">
                 <div 
                     class="relative w-full aspect-[4/3] flex items-center justify-center"
                     :style="`transform: perspective(1000px) rotateX(${mouseY/2}deg) rotateY(${-mouseX/2}deg)`"
@@ -190,15 +192,13 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="absolute inset-0 bg-green-500/10 rounded-full blur-[100px] -z-10 scale-125"></div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Infinity Trust Marquee -->
-    <div class="mt-32 trust-marquee-container border-y border-slate-100 py-10">
+    <div class="mt-32 trust-marquee-container border-y border-slate-100 py-10 relative z-10">
         <div class="trust-marquee-track">
             @php
                 $marqueeStats = [
