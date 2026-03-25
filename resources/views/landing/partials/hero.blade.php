@@ -26,7 +26,7 @@
                 <!-- Premium Badge -->
                 <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-premium mb-8 shadow-sm border border-slate-200/50 opacity-0" style="animation: heroFadeInUp 0.6s ease-out 0.1s forwards;">
                     <span class="flex h-2 w-2 rounded-full bg-[#22c55e] shadow-[0_0_8px_#22c55e]"></span>
-                    <span class="text-[13px] font-extrabold text-[#1a2e35] uppercase tracking-wider">{{ __('landing.hero.badge') }}</span>
+                    <span class="text-[13px] font-extrabold text-[#0f172a] uppercase tracking-wider">{{ __('landing.hero.badge') }}</span>
                 </div>
 
                 <!-- Headline -->
