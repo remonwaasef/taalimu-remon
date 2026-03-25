@@ -8,48 +8,48 @@
 
 @layer base {
     :root {
-        /* Edusion Light Theme - Professional & Airy */
-        /* Primary: Academy Blue #162963 (hsl 224 64% 24%) */
-        --primary-purple: 224 64% 24%;
-        --primary-vibrant: 224 64% 30%;
-        --primary-light: 224 64% 98%;
+        /* Edusion Light Theme - Professional & Airy Green */
+        /* Primary: Vibrant Green (hsl 142 71% 45%) */
+        --primary-purple: 142 100% 41%; /* mapped to green #00d24b approx for simplicity */
+        --primary-vibrant: 142 100% 36%;
+        --primary-light: 142 100% 97%;
 
-        /* Typography: Academy Blue applied to headings */
-        --dark-text: 224 64% 24%;
-        --foreground: 224 64% 24%;
+        /* Typography: Dark Slate applied to headings */
+        --dark-text: 215 28% 17%;
+        --foreground: 215 28% 17%;
 
         /* Accents - Vibrant Green from reference image */
-        --secondary: 158 82% 47%; /* Vibrant #22C55E type green */
-        --secondary-vibrant: 158 82% 52%;
+        --secondary: 142 100% 41%;
+        --secondary-vibrant: 142 100% 36%;
 
         --accent-peach: 25 95% 66%;
-        --accent-teal: 158 82% 47%;
-        --success-green: 158 82% 47%;
+        --accent-teal: 142 100% 41%;
+        --success-green: 142 100% 41%;
         /* Neutrals (60% White Dominance) */
         --background: 0 0% 100%;
         --muted: 210 40% 98%;
         --muted-foreground: 215 25% 30%;
 
         --card: 0 0% 100%;
-        --card-foreground: 224 64% 24%;
+        --card-foreground: 215 28% 17%;
 
-        --primary: 224 64% 24%;
+        --primary: 142 100% 41%;
         --primary-foreground: 0 0% 100%;
 
         --border: 214 32% 91%;
         --input: 214 32% 91%;
-        --ring: 224 64% 24%;
+        --ring: 142 100% 41%;
         --radius: 1.25rem;
 
         /* Core Colors Mapping */
-        --dark-purple: 224 64% 24%;
-        --light-purple: 224 64% 98%;
-        --cyan: 158 82% 47%;
+        --dark-purple: 215 28% 17%; /* dark text instead of dark purple */
+        --light-purple: 142 100% 97%; /* light green instead of light purple */
+        --cyan: 142 100% 41%;
         --light-bg: 0 0% 100%;
         --gray-text: 215 16% 47%;
-        --analytical-blue: 224 64% 98%;
-        --outline-green: 158 82% 47%;
-        --outline-purple: 224 64% 24%;
+        --analytical-blue: 142 100% 97%;
+        --outline-green: 142 100% 41%;
+        --outline-purple: 142 100% 41%;
 
         /* Gradients: Subtle mesh for light theme */
         --gradient-hero: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);

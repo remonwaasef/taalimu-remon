@@ -1,7 +1,7 @@
-<section class="relative min-h-[70vh] pt-16 lg:pt-24 overflow-hidden bg-white">
-    <!-- Sophisticated Background Gradient -->
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-from),_transparent_50%)] from-emerald-50/40 to-transparent"></div>
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-from),_transparent_40%)] from-blue-50/30 to-transparent"></div>
+<section class="relative min-h-[70vh] pt-16 lg:pt-24 overflow-hidden bg-white z-0">
+    <!-- Clean Minimal Background Shapes -->
+    <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-green-50 rounded-full blur-[120px] -z-10 opacity-70"></div>
+    <div class="absolute -bottom-40 -left-20 w-[600px] h-[600px] bg-slate-50 rounded-full blur-[120px] -z-10"></div>
     
     <div 
         dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"
@@ -73,94 +73,29 @@
                 </div>
             </div>
 
-            <!-- Right Content - Hybrid Mockup with Reversed 3D Slant -->
-            <div class="w-full lg:w-[50%] relative flex items-start justify-center lg:justify-end pt-4 lg:pt-0 pb-12 lg:pb-16">
-                <div 
-                    class="relative z-10 w-full max-w-[580px] animate-fade-in-right transform-gpu backface-hidden lg:-mt-16 xl:-mt-24 delay-2"
-                    style="perspective: 2000px;"
-                >
-                    <!-- Floating Stat Cards: Collection Rate (Inward) -->
-                    <div 
-                        class="absolute top-4 left-6 md:top-8 md:left-12 bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-4 z-50 border border-slate-50 text-center animate-bounce-slow transform-gpu"
-                        style="transform: translateZ(80px) rotateY(10deg);"
+            <!-- Right Content - Clean Minimal Image -->
+            <div class="w-full lg:w-[50%] relative flex items-center justify-center pt-4 lg:pt-0 pb-12 lg:pb-16">
+                <!-- Simple glowing accent -->
+                <div class="absolute inset-0 bg-green-100 rounded-full blur-3xl opacity-30 -z-10 transform scale-125"></div>
+                
+                <div class="relative z-10 w-full max-w-[580px] animate-fade-in-right">
+                    @php
+                        $heroImage = match(app()->getLocale()) {
+                            'en' => 'hero-mockup-en.webp',
+                            'fr' => 'hero-mockup-fr.webp',
+                            default => 'hero-mockup-ar.png',
+                        };
+                    @endphp
+                    <img 
+                        src="{{ asset('images/' . $heroImage) }}" 
+                        alt="Taalimu Dashboard Mockup" 
+                        class="w-full h-auto rounded-3xl shadow-2xl border-4 border-white"
+                        width="800"
+                        height="550"
+                        decoding="async"
+                        loading="eager"
+                        fetchpriority="high"
                     >
-                        <div class="text-xl md:text-3xl font-black text-emerald-500 mb-0.5">98%</div>
-                        <div class="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('landing.hero.stats.collection') }}</div>
-                    </div>
-
-                    <!-- WhatsApp Payment Notification (Extra Compact) -->
-                    <div 
-                        class="absolute bottom-6 left-12 md:bottom-10 md:left-20 z-50 animate-fade-in-up delay-3 transform-gpu"
-                        style="transform: translateZ(80px) rotateY(10deg);"
-                    >
-                        <div class="flex items-center gap-2.5 p-2 md:p-3 bg-white rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.1)] border border-emerald-50/50 min-w-[200px] md:min-w-[280px]">
-                            <div class="relative flex-shrink-0">
-                                <div class="w-7 h-7 md:w-9 md:h-9 rounded-full bg-[#25D366] flex items-center justify-center text-white text-base md:text-xl shadow-md shadow-[#25D366]/20">
-                                    <i class="fab fa-whatsapp"></i>
-                                </div>
-                                <div class="absolute -top-0.5 -right-0.5 w-3 h-3 md:w-4 md:h-4 bg-white rounded-full flex items-center justify-center shadow-sm">
-                                    <i class="fas fa-check-circle text-emerald-500 text-[5px] md:text-[8px]"></i>
-                                </div>
-                            </div>
-                            <div class="flex-1 text-start overflow-hidden">
-                                <div class="flex flex-col gap-0">
-                                    <p class="text-[10px] md:text-[13px] font-black text-slate-900 leading-tight whitespace-normal">
-                                        {{ __('landing.hero.mockup.whatsapp.payment_success') }}
-                                    </p>
-                                    <p class="text-[7px] md:text-[9px] font-bold text-slate-400 flex items-center gap-1 uppercase tracking-wide">
-                                        <span class="w-1 h-1 rounded-full bg-emerald-500 animate-pulse"></span>
-                                        {{ __('landing.hero.mockup.whatsapp.now') }}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Browser Frame with Reversed 3D Tilt -->
-                    <div 
-                        class="relative group p-1 transition-all duration-700 transform-gpu"
-                        style="transform: rotateY(18deg) rotateX(8deg) rotateZ(-2deg); transform-style: preserve-3d;"
-                    >
-                        <!-- Glow behind the frame -->
-                        <div class="absolute inset-0 bg-emerald-500/10 blur-[100px] -z-10 rounded-full scale-110"></div>
-                        
-                        <div class="relative bg-white/40 backdrop-blur-xl border border-white/60 rounded-[3rem] p-2 md:p-4 shadow-[0_50px_100px_rgba(0,0,0,0.08)] overflow-hidden">
-                            <!-- Browser Header -->
-                            <div class="flex items-center justify-between px-6 pb-4 md:pb-6 border-b border-slate-200/50 mb-2">
-                                <div class="flex gap-2">
-                                    <div class="w-2.5 h-2.5 rounded-full bg-rose-400/80"></div>
-                                    <div class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></div>
-                                    <div class="w-2.5 h-2.5 rounded-full bg-emerald-400/80"></div>
-                                </div>
-                                <div class="h-6 px-12 rounded-full bg-slate-100 border border-slate-200/50 flex items-center justify-center">
-                                    <div class="w-2 h-2 rounded-full bg-slate-300"></div>
-                                </div>
-                                <div class="w-10"></div>
-                            </div>
-
-                            @php
-                                $heroImage = match(app()->getLocale()) {
-                                    'en' => 'hero-mockup-en.webp',
-                                    'fr' => 'hero-mockup-fr.webp',
-                                    default => 'hero-mockup-ar.png',
-                                };
-                            @endphp
-                            <img 
-                                src="{{ asset('images/' . $heroImage) }}" 
-                                alt="Taalimu Dashboard Mockup" 
-                                class="w-full h-auto rounded-2xl md:rounded-3xl border border-slate-200/30 shadow-inner"
-                                width="800"
-                                height="550"
-                                decoding="async"
-                                loading="eager"
-                                fetchpriority="high"
-                            >
-                        </div>
-                    </div>
-
-                    <!-- Background Accents -->
-                    <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-emerald-400/10 rounded-full blur-[120px] -z-10"></div>
-                    <div class="absolute -top-20 -left-20 w-80 h-80 bg-blue-400/10 rounded-full blur-[120px] -z-10"></div>
                 </div>
             </div>
         </div>
