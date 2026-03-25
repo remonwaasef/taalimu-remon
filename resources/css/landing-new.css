@@ -28,6 +28,10 @@
         --accent-sky: 199 89% 48%;
         --accent-sky-light: 199 89% 96%;
 
+        /* Brand Secondary (Purple) */
+        --secondary: 263 85% 35%;
+        --secondary-light: 263 85% 95%;
+
         /* Components & Radius */
         --radius: 1.5rem;
         
