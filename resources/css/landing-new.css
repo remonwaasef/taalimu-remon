@@ -8,48 +8,42 @@
 
 @layer base {
     :root {
-        /* Edusion Light Theme - Professional & Airy Green */
-        /* Primary: Vibrant Green (hsl 142 71% 45%) */
-        --primary-purple: 142 100% 41%; /* mapped to green #00d24b approx for simplicity */
-        --primary-vibrant: 142 100% 36%;
-        --primary-light: 142 100% 97%;
+        /* Taalimu "Clean Light SaaS" Design System */
+        /* Primary: Brand Green (#22c55e) */
+        --brand-green: 142 71% 45%;
+        --brand-green-dark: 142 72% 36%;
+        --brand-green-light: 142 71% 95%;
+        
+        /* Secondary: Sky/Cyan Accents for "Design 2" feel */
+        --accent-sky: 199 89% 48%;
+        --accent-sky-light: 199 89% 96%;
 
-        /* Typography: Dark Slate applied to headings */
-        --dark-text: 215 28% 17%;
-        --foreground: 215 28% 17%;
-
-        /* Accents - Vibrant Green from reference image */
-        --secondary: 142 100% 41%;
-        --secondary-vibrant: 142 100% 36%;
-
-        --accent-peach: 25 95% 66%;
-        --accent-teal: 142 100% 41%;
-        --success-green: 142 100% 41%;
-        /* Neutrals (60% White Dominance) */
+        /* Typography & Layout */
+        --foreground: 221 39% 11%;     /* #0f172a */
+        --muted-foreground: 215 16% 47%;    /* #64748b */
         --background: 0 0% 100%;
-        --muted: 210 40% 98%;
-        --muted-foreground: 215 25% 30%;
+        --bg-soft: 210 40% 98%;      /* #f8fafc */
 
+        /* Components */
+        --border: 214 32% 91%;        /* #e2e8f0 */
+        --radius: 1.5rem;             /* Larger, friendlier radius */
+
+        /* Shadows - High-end Soft Shadows */
+        --shadow-soft: 0 20px 50px -12px rgba(15, 23, 42, 0.04);
+        --shadow-premium: 0 30px 100px -20px rgba(15, 23, 42, 0.08);
+        --shadow-border: 0 0 0 1px rgba(15, 23, 42, 0.04);
+
+        /* Animations */
+        --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+
+        /* Legacy Mapping Overrides (to avoid breaking global classes immediately) */
+        --primary: var(--brand-green);
+        --primary-purple: var(--brand-green);
+        --primary-light: var(--brand-green-light);
+        --dark-text: var(--foreground);
+        --muted: var(--bg-soft);
         --card: 0 0% 100%;
-        --card-foreground: 215 28% 17%;
-
-        --primary: 142 100% 41%;
-        --primary-foreground: 0 0% 100%;
-
-        --border: 214 32% 91%;
-        --input: 214 32% 91%;
-        --ring: 142 100% 41%;
-        --radius: 1.25rem;
-
-        /* Core Colors Mapping */
-        --dark-purple: 215 28% 17%; /* dark text instead of dark purple */
-        --light-purple: 142 100% 97%; /* light green instead of light purple */
-        --cyan: 142 100% 41%;
-        --light-bg: 0 0% 100%;
-        --gray-text: 215 16% 47%;
-        --analytical-blue: 142 100% 97%;
-        --outline-green: 142 100% 41%;
-        --outline-purple: 142 100% 41%;
+        --card-foreground: var(--foreground);
 
         /* Gradients: Subtle mesh for light theme */
         --gradient-hero: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
@@ -58,7 +52,7 @@
         --gradient-cyan: linear-gradient(135deg, hsl(158 82% 47%) 0%, hsl(158 82% 52%) 100%);
         --brand-gradient: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
 
-        /* Shadows - Cleaner/Sharper */
+        /* Shadows - Cleaner/Sharper (Legacy compatibility) */
         --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
         --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
@@ -111,23 +105,23 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
+        line-height: 1.6;
     }
 
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
+    h1, h2, h3, h4, h5, h6 {
         font-weight: 800;
-        /* EduMove uses very bold headers */
-        color: inherit;
+        letter-spacing: -0.02em;
+        color: hsl(var(--foreground));
+    }
+
+    p {
+        color: hsl(var(--muted-foreground));
     }
 
     /* Arabic text styling */
-    [dir="rtl"],
-    .rtl {
+    [dir="rtl"], .rtl {
         font-family: 'Cairo', 'Outfit', sans-serif;
+        letter-spacing: 0;
     }
 }
 

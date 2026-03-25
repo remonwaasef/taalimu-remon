@@ -1,246 +1,148 @@
-<section id="pricing" class="py-8 lg:py-12 bg-slate-100 border-y border-slate-200" 
+<section id="pricing" class="py-24 bg-white relative overflow-hidden" 
          x-data="{ 
-             billingCycle: 'monthly',
+            billingCycle: 'monthly',
             userCountry: 'default',
             currencySymbol: '{{ \App\Models\SiteSetting::get('currency_symbol', '$') }}',
-            exchangeRates: { 'USD': 1, 'EGP': 1, 'SAR': 1, 'AED': 1, 'EUR': 1 },
             async init() {
                 try {
-                    // Use geojs.io - CORS-friendly geo-location API
                     const response = await fetch('https://get.geojs.io/v1/ip/country.json');
                     const data = await response.json();
-                    this.userCountry = data.country; // EG, SA, AE, FR, etc.
+                    this.userCountry = data.country;
                     
-                    // Set currency symbol based on country
                     if(this.userCountry === 'EG') this.currencySymbol = 'EGP';
                     else if(this.userCountry === 'SA') this.currencySymbol = 'SAR';
                     else if(this.userCountry === 'AE') this.currencySymbol = 'AED';
                     else if(['FR', 'DE', 'IT', 'ES', 'NL'].includes(this.userCountry)) this.currencySymbol = '€';
                     else this.currencySymbol = '$';
-
-                } catch(e) {
-                    console.log('Could not fetch location', e);
-                    this.userCountry = 'default';
-                }
+                } catch(e) { console.log('Geo fetch failed'); }
             },
             getPrice(packagePrice, packageRegionalPrices) {
-                // If no regional prices, fallback to base price
                 if (!packageRegionalPrices || Object.keys(packageRegionalPrices).length === 0) {
                     return { amount: packagePrice, currency: '{{ \App\Models\SiteSetting::get('currency_code', 'USD') }}' }; 
                 }
-
                 let priceData = packageRegionalPrices[this.userCountry] || packageRegionalPrices['default'];
-                
-                // Final fallback if specific country and default are missing in JSON
-                if(!priceData) {
-                     return { amount: packagePrice, currency: '{{ \App\Models\SiteSetting::get('currency_code', 'USD') }}' };
-                }
-                
-                return priceData;
+                return priceData || { amount: packagePrice, currency: '{{ \App\Models\SiteSetting::get('currency_code', 'USD') }}' };
             }
          }">
-    <div class="container mx-auto px-4 lg:px-8">
+    
+    <!-- Background Decor -->
+    <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-slate-50 rounded-full blur-[120px] -z-10 opacity-70"></div>
+
+    <div class="container mx-auto px-4 lg:px-12">
         <!-- Section Header -->
-        <div class="text-center mb-8 lg:mb-12">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 mb-6">
-                <span class="text-sm font-medium text-primary">{{ __('landing.pricing.badge') }}</span>
+        <div class="text-center mb-16">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#f0fdf4] border border-green-100 mb-6">
+                <span class="text-xs font-black text-[#22c55e] uppercase tracking-[0.2em]">{{ __('landing.pricing.badge') }}</span>
             </div>
-            <h2 class="text-2xl lg:text-3xl font-bold text-foreground mb-3">
+            <h2 class="text-3xl md:text-5xl font-black text-[#0f172a] mb-6 tracking-tight leading-tight">
                 {!! __('landing.pricing.title') !!}
             </h2>
-            <p class="text-muted-foreground text-base max-w-2xl mx-auto mb-6">
+            <p class="text-lg text-slate-500 max-w-2xl mx-auto font-medium">
                 {{ __('landing.pricing.subtitle') }}
             </p>
 
-            <!-- Billing Toggle -->
-            <div class="flex justify-center mb-12">
-                <div class="inline-flex items-center bg-muted/60 p-1.5 rounded-full border border-border/50 backdrop-blur-sm">
+            <!-- Refined Billing Toggle -->
+            <div class="mt-12 flex justify-center">
+                <div class="inline-flex items-center bg-slate-100 p-1.5 rounded-[2rem] border border-slate-200">
+                    @foreach(['monthly' => 'landing.pricing.monthly', 'term' => 'landing.pricing.term', 'yearly' => 'landing.pricing.yearly'] as $cycle => $label)
                     <button 
-                        @click="billingCycle = 'monthly'"
-                        class="px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 flex items-center"
-                        :class="billingCycle === 'monthly' ? 'bg-white text-primary shadow-md scale-105 ring-1 ring-black/5' : 'text-muted-foreground hover:text-foreground hover:bg-white/50'"
+                        @click="billingCycle = '{{$cycle}}'"
+                        class="px-8 py-3 rounded-[1.75rem] text-sm font-black transition-all duration-300 relative"
+                        :class="billingCycle === '{{$cycle}}' ? 'bg-white text-[#22c55e] shadow-soft scale-105' : 'text-slate-500 hover:text-slate-800'"
                     >
-                        {{ __('landing.pricing.monthly') ?? 'Monthly' }}
-                    </button>
-
-                    <button 
-                        @click="billingCycle = 'term'"
-                        class="px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 flex items-center"
-                        :class="billingCycle === 'term' ? 'bg-white text-primary shadow-md scale-105 ring-1 ring-black/5' : 'text-muted-foreground hover:text-foreground hover:bg-white/50'"
-                    >
-                        {{ __('landing.pricing.term') ?? 'Term' }}
-                    </button>
-
-                    <button 
-                        @click="billingCycle = 'yearly'"
-                        class="px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 flex items-center gap-2"
-                        :class="billingCycle === 'yearly' ? 'bg-white text-primary shadow-md scale-105 ring-1 ring-black/5' : 'text-muted-foreground hover:text-foreground hover:bg-white/50'"
-                    >
-                        {{ __('landing.pricing.yearly') ?? 'Yearly' }}
-                        <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 text-[10px] font-black uppercase tracking-wider border border-emerald-500/20">
-                            {{ __('landing.pricing.save_20') ?? 'SAVE 17%' }}
+                        {{ __($label) }}
+                        @if($cycle === 'yearly')
+                        <span class="absolute -top-3 -right-3 px-2 py-0.5 rounded-full bg-[#22c55e] text-white text-[9px] font-black border-2 border-white shadow-sm">
+                            -17%
                         </span>
+                        @endif
                     </button>
+                    @endforeach
                 </div>
             </div>
-
+        </div>
 
         <!-- Pricing Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch max-w-8xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch">
             @foreach($packages as $index => $package)
                 @php
                     $isFeatured = $package->is_featured;
-                    $delay = $index * 0.1;
-                    
-                    // Use local landing translations first
-                    $transPkgName = __('landing.pricing.plans.' . $package->slug . '.name');
-                    if ($transPkgName === 'landing.pricing.plans.' . $package->slug . '.name') {
-                        // Fallback to English from DB or direct name
-                        $transPkgName = (app()->getLocale() === 'en' && $package->name_en) ? $package->name_en : $package->name;
-                    }
-                    
                     $regionalPrices = $package->regional_prices ?? []; 
                 @endphp
 
                 <div
-                    class="relative rounded-2xl p-6 border-2 transition-all duration-300 hover:shadow-2xl animate-fade-in flex flex-col
+                    class="group relative rounded-[2.5rem] p-10 border transition-all duration-500 flex flex-col bg-white
                     {{ $isFeatured 
-                        ? 'border-primary bg-primary text-primary-foreground scale-105 shadow-xl hover:-translate-y-3 z-10' 
-                        : 'bg-card border-border hover:border-primary/30 hover:-translate-y-3 shadow-sm' }}"
-                    style="animation-delay: {{ $delay }}s;"
+                        ? 'border-[#22c55e] shadow-premium scale-105 z-10' 
+                        : 'border-slate-100 shadow-soft hover:shadow-premium hover:-translate-y-2' }}"
                 >
-                    <!-- Trial Badge -->
-                    @if($package->trial_days > 0)
-                        <div class="absolute -top-3 -right-3 w-12 h-12 bg-white rounded-full flex flex-col items-center justify-center shadow-lg border-4 border-primary z-20">
-                            <span class="text-sm font-black text-primary leading-none">{{ $package->trial_days }}</span>
-                            <span class="text-[8px] font-bold text-primary/70 uppercase">{{ __('landing.pricing.days') }}</span>
-                        </div>
+                    @if($isFeatured)
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#22c55e] text-white px-6 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
+                        {{ __('landing.pricing.featured') ?? 'Most Popular' }}
+                    </div>
                     @endif
 
-                            <!-- Static fallback or JS updated -->
-                            <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-white rounded-full flex items-center gap-2 shadow-lg z-20"
-                                 x-show="billingCycle === 'yearly' && (localPrice.discount_label || '{{ $package->discount_label }}')"
-                            >
-                                <span class="text-xs font-bold text-primary tracking-wide" x-text="localPrice.discount_label || '{{ $package->discount_label ?: $package->badge }}'"></span>
-                            </div>
-
-                        <!-- Header -->
-                        <div class="text-center mb-6 pt-2">
-                            <h3 class="text-xl font-bold mb-2 {{ $isFeatured ? 'text-primary-foreground' : 'text-foreground' }}">
-                                {{ $transPkgName }}
-                            </h3>
+                    <!-- Header -->
+                    <div class="text-center mb-10">
+                        <h3 class="text-xl font-black text-[#0f172a] mb-6 tracking-tight">
+                            {{ __('landing.pricing.plans.' . $package->slug . '.name') }}
+                        </h3>
                         
-                            <!-- Dynamic Pricing -->
-                            <div class="flex flex-col items-center justify-center gap-1"
-                                 x-data="{ 
-                                    localPrice: getPrice({{ $package->price }}, {{ json_encode($regionalPrices) }}) 
-                                 }"
-                                 x-effect="localPrice = getPrice({{ $package->price }}, {{ json_encode($regionalPrices) }})">
+                        <!-- Price Display -->
+                        <div x-data="{ localPrice: getPrice({{ $package->price }}, {{ json_encode($regionalPrices) }}) }"
+                             x-effect="localPrice = getPrice({{ $package->price }}, {{ json_encode($regionalPrices) }})"
+                             class="flex flex-col items-center">
                             
-                                <!-- Old Price (Strikethrough) -->
-                                <template x-if="billingCycle === 'monthly' ? localPrice.old_price : (billingCycle === 'term' ? localPrice.term_old_price : localPrice.yearly_old_price)">
-                                    <div class="text-sm opacity-60 font-bold {{ $isFeatured ? 'text-white' : 'text-muted-foreground' }} line-through">
-                                        <span x-text="localPrice.currency"></span>
-                                        <span x-text="billingCycle === 'monthly' ? localPrice.old_price : (billingCycle === 'term' ? localPrice.term_old_price : localPrice.yearly_old_price)"></span>
-                                    </div>
-                                </template>
-
-                                <!-- Price Display -->
-                                <div class="flex items-baseline gap-1">
-                                    <span class="text-4xl font-extrabold {{ $isFeatured ? 'text-primary-foreground' : 'text-primary' }}" 
-                                          x-text="billingCycle === 'monthly' ? localPrice.amount : (billingCycle === 'term' ? (localPrice.term_price || localPrice.amount * 4) : (localPrice.yearly_price || localPrice.amount * 10))">
-                                    </span>
-                                    <span class="text-xl font-bold {{ $isFeatured ? 'text-primary-foreground' : 'text-foreground' }}" x-text="localPrice.currency"></span>
-                                </div>
-
-                                <div class="text-xs {{ $isFeatured ? 'text-primary-foreground/80' : 'text-muted-foreground' }}">
-                                    <span x-show="billingCycle === 'monthly'">{{ __('landing.pricing.per_month') }}</span>
-                                    <span x-show="billingCycle === 'term'">{{ __('landing.pricing.per_term') }}</span>
-                                    <span x-show="billingCycle === 'yearly'">{{ __('landing.pricing.per_year') }}</span>
-                                </div>
+                            <div class="flex items-baseline gap-2">
+                                <span class="text-sm font-black text-slate-400" x-text="localPrice.currency"></span>
+                                <span class="text-5xl font-black text-[#0f172a] tracking-tighter" 
+                                      x-text="billingCycle === 'monthly' ? localPrice.amount : (billingCycle === 'term' ? (localPrice.term_price || localPrice.amount * 4) : (localPrice.yearly_price || localPrice.amount * 10))">
+                                </span>
                             </div>
-                        
-                        <p class="text-xs mt-3 opacity-80 {{ $isFeatured ? 'text-primary-foreground' : 'text-muted-foreground' }}">
-                            @php
-                                $pkgDesc = __('landing.pricing.plans.' . $package->slug . '.description');
-                                if ($pkgDesc === 'landing.pricing.plans.' . $package->slug . '.description') {
-                                    $pkgDesc = (app()->getLocale() === 'en' && $package->description_en) ? $package->description_en : $package->description;
-                                }
-                            @endphp
-                            {{ $pkgDesc }}
-                        </p>
+                            <div class="mt-2 text-xs font-bold text-slate-500 uppercase tracking-widest opacity-60">
+                                <span x-show="billingCycle === 'monthly'">{{ __('landing.pricing.per_month') }}</span>
+                                <span x-show="billingCycle === 'term'">{{ __('landing.pricing.per_term') }}</span>
+                                <span x-show="billingCycle === 'yearly'">{{ __('landing.pricing.per_year') }}</span>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Features -->
-                    <ul class="space-y-3 mb-8 flex-grow">
+                    <ul class="space-y-4 mb-10 flex-grow">
                         @php
                             $pFeatures = [];
                             foreach ($package->features as $feat) {
                                 $val = $feat->pivot->value;
                                 if ($feat->type === 'boolean' && ($val === 'false' || !$val)) continue;
                                 if ($feat->type === 'limit' && $val === '0') continue;
-                                
-                                // Try translation key first
-                                $transKey = 'features.' . $feat->code;
-                                $label = __($transKey);
-                                
-                                // Fallback to DB name if translation missing (key returned)
-                                if ($label === $transKey) {
-                                    $label = app()->getLocale() === 'en' && $feat->name_en ? $feat->name_en : $feat->name;
-                                }
-                                
-                                if ($val === '-1') {
-                                    $pFeatures[] = $label . ': ' . __('features.unlimited');
-                                } elseif ($feat->type === 'boolean') {
-                                    $pFeatures[] = $label;
-                                } else {
-                                    // Localize specific values like "Email" if they are hardcoded in Arabic in DB
-                                    $valDisplay = $val;
-                                    $normalizedVal = trim($val);
-                                    if ($normalizedVal === 'إيميل') {
-                                        $valDisplay = __('features.email');
-                                        if ($valDisplay === 'features.email') $valDisplay = 'Email';
-                                    } elseif ($normalizedVal === 'أولوية') {
-                                        $valDisplay = __('features.priority');
-                                        if ($valDisplay === 'features.priority') $valDisplay = 'Priority';
-                                    } elseif ($normalizedVal === 'مدير حساب') {
-                                        $valDisplay = __('features.account_manager');
-                                        if ($valDisplay === 'features.account_manager') $valDisplay = 'Account Manager';
-                                    } elseif ($normalizedVal === 'unlimited') {
-                                        $valDisplay = __('features.unlimited');
-                                        if ($valDisplay === 'features.unlimited') $valDisplay = 'Unlimited';
-                                    }
-                                    
-                                    $pFeatures[] = $label . ': ' . $valDisplay;
-                                }
+                                $label = __($feat->code) === $feat->code ? (app()->getLocale() === 'en' && $feat->name_en ? $feat->name_en : $feat->name) : __($feat->code);
+                                $pFeatures[] = ($val === '-1') ? ($label . ': Unlimited') : (($feat->type === 'boolean') ? $label : ($label . ': ' . $val));
                             }
                         @endphp
-                        @foreach($pFeatures as $feature)
-                            <li class="flex items-start gap-3">
-                                <div class="mt-1 w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center {{ $isFeatured ? 'bg-white/20' : 'bg-primary/10' }}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="{{ $isFeatured ? 'text-white' : 'text-primary' }}"><polyline points="20 6 9 17 4 12"/></svg>
-                                </div>
-                                <span class="text-xs leading-tight {{ $isFeatured ? 'text-white font-medium' : 'text-foreground/90' }}">
-                                    {{ $feature }}
-                                </span>
-                            </li>
+                        @foreach(array_slice($pFeatures, 0, 8) as $feature)
+                        <li class="flex items-start gap-3">
+                            <div class="w-5 h-5 rounded-full bg-[#f0fdf4] flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i class="fas fa-check text-[10px] text-[#22c55e]"></i>
+                            </div>
+                            <span class="text-[14px] font-medium text-slate-600 leading-tight">{{ $feature }}</span>
+                        </li>
                         @endforeach
                     </ul>
 
                     <div class="mt-auto">
                         <a :href="'{{ route('register') }}?plan={{ $package->slug }}&cycle=' + billingCycle"
-                           class="inline-flex items-center justify-center rounded-full text-sm font-bold h-10 px-6 w-full group transition-all
+                           class="w-full flex items-center justify-center py-5 rounded-2xl font-black text-sm tracking-wide transition-all duration-300
                            {{ $isFeatured 
-                               ? 'bg-secondary text-white hover:bg-secondary/90 shadow-lg' 
-                               : 'bg-secondary text-white hover:bg-secondary/90 shadow-lg' }}">
-                            {{ $package->price == 0 ? __('landing.pricing.cta_free') : __('landing.pricing.cta_paid') }}
+                               ? 'bg-[#22c55e] text-white shadow-lg shadow-green-500/30 hover:shadow-xl hover:scale-[1.02]' 
+                               : 'bg-slate-100 text-slate-800 hover:bg-slate-200' }}">
+                            {{ __('landing.pricing.cta_paid') }}
                         </a>
                     </div>
                 </div>
             @endforeach
         </div>
         
-        <p class="text-center text-xs text-muted-foreground mt-8 mb-16">
+        <p class="text-center text-sm font-medium text-slate-400 mt-12 mb-16">
             {{ __('landing.pricing.bottom_note') }}
         </p>
     </div>

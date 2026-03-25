@@ -1,159 +1,69 @@
-<section id="testimonials" class="py-8 lg:py-12 relative overflow-hidden">
-    <!-- Background decorations -->
-    <div class="absolute top-0 left-1/4 w-96 h-96 bg-light-purple/5 rounded-full blur-3xl"></div>
-    <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan/5 rounded-full blur-3xl"></div>
+<section id="testimonials" class="py-24 bg-[#f8fafc] relative overflow-hidden">
+    <!-- Artistic Backdrops -->
+    <div class="absolute top-1/2 left-0 w-[500px] h-[500px] bg-white rounded-full blur-[140px] -translate-y-1/2 -z-10 opacity-70"></div>
+    <div class="absolute top-1/2 right-0 w-[400px] h-[400px] bg-[#f0f9ff] rounded-full blur-[120px] -translate-y-1/2 -z-10 opacity-50"></div>
     
-    <div class="container relative mx-auto px-4 lg:px-8">
+    <div class="container mx-auto px-4 lg:px-12">
         <!-- Section Header -->
-        <div class="text-center mb-6 lg:mb-8">
-            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-success-green/10 border border-success-green/20 mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-success-green"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <span class="text-sm font-medium text-success-green">{{ __('landing.testimonials.badge') }}</span>
+        <div class="text-center mb-20">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-100 mb-6 shadow-sm">
+                <i class="fas fa-star text-[#ffc107] text-xs"></i>
+                <span class="text-xs font-black text-slate-500 uppercase tracking-[0.2em]">{{ __('landing.testimonials.badge') }}</span>
             </div>
-            <h2 class="text-2xl lg:text-3xl font-bold text-foreground mb-3">
-                {{ __('landing.testimonials.title_prefix') }} <span class="gradient-text">{{ __('landing.testimonials.title_highlight') }}</span>
+            <h2 class="text-3xl md:text-5xl font-black text-[#0f172a] mb-6 tracking-tight leading-tight">
+                {{ __('landing.testimonials.title_prefix') }} <span class="text-[#22c55e]">{{ __('landing.testimonials.title_highlight') }}</span>
             </h2>
-            <p class="text-muted-foreground text-base max-w-2xl mx-auto">
+            <p class="text-lg text-slate-500 max-w-2xl mx-auto font-medium">
                 {{ str_replace(config('app.name'), \App\Models\SiteSetting::get('site_name', config('app.name')), __('landing.testimonials.subtitle')) }}
             </p>
         </div>
 
         <!-- Testimonials Grid -->
-        <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
-            <!-- Testimonial 1 -->
-            <div
-                class="group relative bg-card rounded-2xl p-6 lg:p-8 border-2 border-border hover:border-primary/20 transition-all duration-300 hover:shadow-card-hover animate-fade-in delay-0"
-            >
-                <!-- Quote Icon -->
-                <div class="absolute -top-4 left-6 w-10 h-10 rounded-xl gradient-hero flex items-center justify-center shadow-md">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-primary-foreground"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/></svg>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @foreach(__('landing.testimonials.items') as $index => $item)
+            <div class="group relative bg-white rounded-[2.5rem] p-10 border border-slate-50 shadow-soft hover:shadow-premium transition-all duration-500 hover:-translate-y-2">
+                <!-- Quote Icon (Subtle) -->
+                <div class="absolute top-8 right-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i class="fas fa-quote-right text-4xl text-slate-400"></i>
                 </div>
 
                 <!-- Rating -->
-                <div class="flex gap-1 mb-4 pt-4">
+                <div class="flex gap-1 mb-6">
                     @for ($i = 0; $i < 5; $i++)
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-cyan"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        <i class="fas fa-star text-[#ffc107] text-xs"></i>
                     @endfor
                 </div>
 
                 <!-- Content -->
-                <p class="text-foreground mb-6 leading-relaxed">
-                    "{{ __('landing.testimonials.items.0.quote') }}"
+                <p class="text-slate-600 font-medium text-lg leading-relaxed mb-8 italic">
+                    "{{ $item['quote'] }}"
                 </p>
 
-                <!-- Stat Box -->
-                <div class="bg-muted/50 rounded-xl p-4 mb-6 flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-success-green/10 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-success-green"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                <!-- Premium Stat Box -->
+                <div class="bg-[#f8fafc] rounded-2xl p-5 mb-8 flex items-center gap-4 border border-slate-50 group-hover:bg-[#f0fdf4] transition-colors duration-500">
+                    <div class="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-[#22c55e]">
+                        <i class="fas fa-chart-line"></i>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold gradient-text">{{ __('landing.testimonials.items.0.stat_value') }}</div>
-                        <div class="text-sm text-muted-foreground">{{ __('landing.testimonials.items.0.stat_label') }}</div>
+                        <div class="text-xl font-black text-[#0f172a]">{{ $item['stat_value'] }}</div>
+                        <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ $item['stat_label'] }}</div>
                     </div>
                 </div>
 
                 <!-- Author -->
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold">
-                        A
+                    <div class="w-14 h-14 rounded-full bg-gradient-to-br from-[#f8fafc] to-slate-100 flex items-center justify-center text-[#22c55e] font-black text-xl border-2 border-white shadow-soft">
+                        {{ substr($item['author_name'], 0, 1) }}
                     </div>
                     <div>
-                        <div class="font-semibold text-primary">{{ __('landing.testimonials.items.0.author_name') }}</div>
-                        <div class="text-sm text-muted-foreground">{{ __('landing.testimonials.items.0.author_role') }}, {{ __('landing.testimonials.items.0.author_company') }}</div>
-                        <div class="text-xs text-secondary font-bold">{{ __('landing.testimonials.items.0.author_location') }}</div>
+                        <div class="font-black text-[#0f172a]">{{ $item['author_name'] }}</div>
+                        <div class="text-[13px] font-bold text-slate-400 leading-tight">
+                            {{ $item['author_role'] }} <span class="mx-1 text-slate-300">•</span> {{ $item['author_company'] }}
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Testimonial 2 -->
-            <div
-                class="group relative bg-card rounded-2xl p-6 lg:p-8 border-2 border-border hover:border-primary/20 transition-all duration-300 hover:shadow-card-hover animate-fade-in delay-1"
-            >
-                <!-- Quote Icon -->
-                <div class="absolute -top-4 left-6 w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-md">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-white"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/></svg>
-                </div>
-
-                <!-- Rating -->
-                <div class="flex gap-1 mb-4 pt-4">
-                    @for ($i = 0; $i < 5; $i++)
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-cyan"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    @endfor
-                </div>
-
-                <!-- Content -->
-                <p class="text-foreground mb-6 leading-relaxed">
-                    "{{ __('landing.testimonials.items.1.quote') }}"
-                </p>
-
-                <!-- Stat Box -->
-                <div class="bg-muted/50 rounded-xl p-4 mb-6 flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-success-green/10 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-success-green"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                    </div>
-                    <div>
-                        <div class="text-2xl font-bold gradient-text">{{ __('landing.testimonials.items.1.stat_value') }}</div>
-                        <div class="text-sm text-muted-foreground">{{ __('landing.testimonials.items.1.stat_label') }}</div>
-                    </div>
-                </div>
-
-                <!-- Author -->
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold">
-                        F
-                    </div>
-                    <div>
-                        <div class="font-semibold text-primary">{{ __('landing.testimonials.items.1.author_name') }}</div>
-                        <div class="text-sm text-muted-foreground">{{ __('landing.testimonials.items.1.author_role') }}, {{ __('landing.testimonials.items.1.author_company') }}</div>
-                        <div class="text-xs text-secondary font-bold">{{ __('landing.testimonials.items.1.author_location') }}</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Testimonial 3 -->
-            <div
-                class="group relative bg-card rounded-2xl p-6 lg:p-8 border-2 border-border hover:border-primary/20 transition-all duration-300 hover:shadow-card-hover animate-fade-in delay-2"
-            >
-                <!-- Quote Icon -->
-                <div class="absolute -top-4 left-6 w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-md">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-white"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/></svg>
-                </div>
-
-                <!-- Rating -->
-                <div class="flex gap-1 mb-4 pt-4">
-                    @for ($i = 0; $i < 5; $i++)
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-cyan"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    @endfor
-                </div>
-
-                <!-- Content -->
-                <p class="text-foreground mb-6 leading-relaxed">
-                    "{{ __('landing.testimonials.items.2.quote') }}"
-                </p>
-
-                <!-- Stat Box -->
-                <div class="bg-muted/50 rounded-xl p-4 mb-6 flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-success-green/10 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-success-green"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                    </div>
-                    <div>
-                        <div class="text-2xl font-bold gradient-text">{{ __('landing.testimonials.items.2.stat_value') }}</div>
-                        <div class="text-sm text-muted-foreground">{{ __('landing.testimonials.items.2.stat_label') }}</div>
-                    </div>
-                </div>
-
-                <!-- Author -->
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold">
-                        M
-                    </div>
-                    <div>
-                        <div class="font-semibold text-primary">{{ __('landing.testimonials.items.2.author_name') }}</div>
-                        <div class="text-sm text-muted-foreground">{{ __('landing.testimonials.items.2.author_role') }}, {{ __('landing.testimonials.items.2.author_company') }}</div>
-                        <div class="text-xs text-secondary font-bold">{{ __('landing.testimonials.items.2.author_location') }}</div>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 </section>

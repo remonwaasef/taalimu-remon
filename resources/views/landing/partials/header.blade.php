@@ -1,130 +1,95 @@
 <header 
-    class="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border/50"
-    x-data="{ isMenuOpen: false }"
+    class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+    x-data="{ 
+        scrolled: false,
+        isMenuOpen: false
+    }"
+    @scroll.window="scrolled = window.pageYOffset > 20"
+    :class="scrolled ? 'bg-white/80 backdrop-blur-xl border-b border-slate-200/50 py-3' : 'bg-transparent py-5'"
 >
-    <div class="container mx-auto px-4 lg:px-8">
-        <div class="flex items-center justify-between h-12 lg:h-14">
-            <!-- Logo -->
-            <a href="{{ route('home') }}" class="flex items-center gap-2.5 group transition-all duration-300">
-                <img src="{{ asset('images/brand/logo-full.png?v=3') }}" alt="{{ config('app.name') }}" class="h-8 lg:h-10 w-auto object-contain transition-transform duration-500 group-hover:scale-110 mix-blend-multiply">
-                <div class="flex flex-col">
-                    <span class="font-bold text-base lg:text-lg text-primary leading-none tracking-tight group-hover:text-primary/90 transition-colors">
+    <div class="container mx-auto px-4 lg:px-12">
+        <div class="flex items-center justify-between">
+            <!-- Logo area -->
+            <a href="{{ route('home') }}" class="flex items-center gap-3 group">
+                <div class="relative">
+                    <img src="{{ asset('images/brand/logo-full.png?v=3') }}" alt="Logo" class="h-9 lg:h-11 w-auto mix-blend-multiply group-hover:scale-105 transition-transform">
+                </div>
+                <div class="hidden sm:flex flex-col border-s border-slate-200 ps-3">
+                    <span class="font-black text-lg text-[#0f172a] leading-tight tracking-tighter uppercase">
                         {{ \App\Models\SiteSetting::get('site_name', 'Taalimu') }}
                     </span>
-                    <span class="text-[9px] font-extrabold text-secondary uppercase tracking-[0.2em] mt-0.5 opacity-70 group-hover:opacity-100 transition-all duration-300">
-                        {{ __('landing.navbar.badge_short') ?? 'Smart Education' }}
+                    <span class="text-[10px] font-bold text-[#22c55e] uppercase tracking-[0.2em] opacity-80">
+                        {{ __('landing.navbar.badge_short') ?? 'Smart Ed' }}
                     </span>
                 </div>
             </a>
 
-            <!-- Desktop Navigation -->
-            <nav class="hidden lg:flex items-center gap-6">
-                <a href="#features" class="text-muted-foreground hover:text-foreground transition-colors font-medium">{{ __('landing.nav.features') }}</a>
-                <a href="#pricing" class="text-muted-foreground hover:text-foreground transition-colors font-medium">{{ __('landing.nav.pricing') }}</a>
-                <a href="#testimonials" class="text-muted-foreground hover:text-foreground transition-colors font-medium">{{ __('landing.nav.testimonials') }}</a>
-                <a href="#faq" class="text-muted-foreground hover:text-foreground transition-colors font-medium">{{ __('landing.nav.faq') }}</a>
+            <!-- Navigation: Airy & Clean -->
+            <nav class="hidden lg:flex items-center gap-10">
+                @foreach(['features', 'pricing', 'testimonials', 'faq'] as $nav)
+                <a href="#{{$nav}}" class="text-[15px] font-bold text-slate-500 hover:text-[#22c55e] transition-all relative group">
+                    {{ __("landing.nav.$nav") }}
+                    <span class="absolute -bottom-1 start-0 w-0 h-0.5 bg-[#22c55e] transition-all group-hover:w-full"></span>
+                </a>
+                @endforeach
             </nav>
 
-            <!-- Desktop CTA -->
-            <div class="hidden lg:flex items-center gap-4">
-                <a href="{{ route('login.portal') }}" class="inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 text-muted-foreground">
+            <!-- Secondary Actions -->
+            <div class="hidden lg:flex items-center gap-6">
+                <!-- Lang Switcher (Minimal) -->
+                <div x-data="{ open: false }" class="relative">
+                    <button @click="open = !open" class="flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors">
+                        <i class="fas fa-globe text-xs"></i>
+                        {{ strtoupper(app()->getLocale()) }}
+                    </button>
+                    <div x-show="open" @click.away="open = false" class="absolute right-0 mt-3 w-40 glass-premium rounded-xl shadow-xl py-2 overflow-hidden z-50 animate-fade-in">
+                        @foreach(['en' => 'English', 'ar' => 'العربية', 'fr' => 'Français'] as $code => $label)
+                        <a href="{{ route('lang.switch', ['locale' => $code]) }}" class="block px-4 py-2 text-sm @if(app()->isLocale($code)) text-[#22c55e] font-black @else text-slate-600 font-bold hover:bg-slate-50 @endif">
+                            {{ $label }}
+                        </a>
+                        @endforeach
+                    </div>
+                </div>
+
+                <a href="{{ route('login.portal') }}" class="text-sm font-bold text-slate-900 hover:text-[#22c55e] transition-colors">
                     {{ __('landing.nav.sign_in') }}
                 </a>
-                <a href="{{ route('register') }}" class="inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-white shadow hover:bg-secondary/90 h-9 px-4 py-2">
-                    {{ __('landing.nav.start_trial') }}
-                </a>
                 
-                <!-- Language Switcher Dropdown -->
-                <div x-data="{ langOpen: false }" class="relative">
-                    <button 
-                        @click="langOpen = !langOpen"
-                        @click.away="langOpen = false"
-                        class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
-                            <path d="M2 12h20"/>
-                        </svg>
-                        <span>{{ strtoupper(app()->getLocale()) }}</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m6 9 6 6 6-6"/>
-                        </svg>
-                    </button>
-                    
-                    <!-- Dropdown Menu -->
-                    <div 
-                        x-show="langOpen"
-                        x-transition
-                        class="absolute right-0 mt-2 w-40 bg-card border border-border rounded-lg shadow-lg overflow-hidden z-50"
-                        style="display: none;"
-                    >
-                        <a href="{{ route('lang.switch', ['locale' => 'en']) }}" class="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-muted/50 transition-colors {{ app()->getLocale() == 'en' ? 'bg-muted/30 text-foreground font-medium' : 'text-muted-foreground' }}">
-                            <span class="text-lg">🇬🇧</span>
-                            <span>English</span>
-                        </a>
-                        <a href="{{ route('lang.switch', ['locale' => 'ar']) }}" class="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-muted/50 transition-colors {{ app()->getLocale() == 'ar' ? 'bg-muted/30 text-foreground font-medium' : 'text-muted-foreground' }}">
-                            <span class="text-lg">🇸🇦</span>
-                            <span>العربية</span>
-                        </a>
-                        <a href="{{ route('lang.switch', ['locale' => 'fr']) }}" class="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-muted/50 transition-colors {{ app()->getLocale() == 'fr' ? 'bg-muted/30 text-foreground font-medium' : 'text-muted-foreground' }}">
-                            <span class="text-lg">🇫🇷</span>
-                            <span>Français</span>
-                        </a>
+                <a href="{{ route('register') }}" class="relative group">
+                    <div class="absolute inset-0 bg-[#22c55e] rounded-full blur-lg opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                    <div class="relative bg-[#22c55e] text-white px-7 py-3 rounded-full font-black text-sm flex items-center gap-2 transition-transform active:scale-95 group-hover:scale-[1.02]">
+                        {{ __('landing.nav.start_trial') }}
+                        <i class="fas fa-rocket text-[10px] opacity-80"></i>
                     </div>
-                </div>
+                </a>
             </div>
 
-            <!-- Mobile Menu Button -->
-            <button
-                class="lg:hidden p-2 text-foreground"
-                @click="isMenuOpen = !isMenuOpen"
-                aria-label="Toggle menu"
-            >
-                <svg x-show="!isMenuOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-                <svg x-show="isMenuOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            <!-- Mobile Trigger -->
+            <button @click="isMenuOpen = !isMenuOpen" class="lg:hidden w-10 h-10 flex items-center justify-center text-slate-900 rounded-lg hover:bg-slate-100 transition-colors">
+                <i class="fas" :class="isMenuOpen ? 'fa-times' : 'fa-bars'"></i>
             </button>
         </div>
+    </div>
 
-        <!-- Mobile Menu -->
-        <div 
-            class="lg:hidden py-4 border-t border-border/50 animate-fade-in"
-            x-show="isMenuOpen"
-            x-transition
-            style="display: none;"
-        >
-            <nav class="flex flex-col gap-4">
-                <a href="#features" class="text-muted-foreground hover:text-foreground transition-colors font-medium py-2" @click="isMenuOpen = false">{{ __('landing.nav.features') }}</a>
-                <a href="#pricing" class="text-muted-foreground hover:text-foreground transition-colors font-medium py-2" @click="isMenuOpen = false">{{ __('landing.nav.pricing') }}</a>
-                <a href="#testimonials" class="text-muted-foreground hover:text-foreground transition-colors font-medium py-2" @click="isMenuOpen = false">{{ __('landing.nav.testimonials') }}</a>
-                <a href="#faq" class="text-muted-foreground hover:text-foreground transition-colors font-medium py-2" @click="isMenuOpen = false">{{ __('landing.nav.faq') }}</a>
-                
-                <div class="flex flex-col gap-3 pt-4 border-t border-border/50">
-                    <a href="{{ route('login.portal') }}" class="inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 w-full">
-                        {{ __('landing.nav.sign_in') }}
-                    </a>
-                    <a href="{{ route('register') }}" class="inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-white shadow hover:bg-secondary/90 h-9 px-4 py-2 w-full">
-                        {{ __('landing.nav.start_trial') }}
-                    </a>
-                    
-                    <!-- Language Options -->
-                    <div class="pt-2 border-t border-border/50">
-                        <div class="text-xs text-muted-foreground mb-2 px-4">Language / اللغة</div>
-                        <a href="{{ route('lang.switch', ['locale' => 'en']) }}" class="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-muted/50 transition-colors {{ app()->getLocale() == 'en' ? 'bg-muted/30 text-foreground font-medium' : 'text-muted-foreground' }}">
-                            <span class="text-lg">🇬🇧</span>
-                            <span>English</span>
-                        </a>
-                        <a href="{{ route('lang.switch', ['locale' => 'ar']) }}" class="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-muted/50 transition-colors {{ app()->getLocale() == 'ar' ? 'bg-muted/30 text-foreground font-medium' : 'text-muted-foreground' }}">
-                            <span class="text-lg">🇸🇦</span>
-                            <span>العربية</span>
-                        </a>
-                        <a href="{{ route('lang.switch', ['locale' => 'fr']) }}" class="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-muted/50 transition-colors {{ app()->getLocale() == 'fr' ? 'bg-muted/30 text-foreground font-medium' : 'text-muted-foreground' }}">
-                            <span class="text-lg">🇫🇷</span>
-                            <span>Français</span>
-                        </a>
-                    </div>
-                </div>
-            </nav>
-        </div>
+    <!-- Mobile Menu: Clean Glass -->
+    <div 
+        x-show="isMenuOpen" 
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 -translate-y-4"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        class="lg:hidden absolute top-full left-0 right-0 bg-white border-b border-slate-100 shadow-xl py-6 px-4 z-40"
+    >
+        <nav class="flex flex-col gap-5">
+            @foreach(['features', 'pricing', 'testimonials', 'faq'] as $nav)
+            <a href="#{{$nav}}" @click="isMenuOpen = false" class="text-lg font-bold text-slate-700 hover:text-[#22c55e]">
+                {{ __("landing.nav.$nav") }}
+            </a>
+            @endforeach
+            <div class="h-px bg-slate-100 my-2"></div>
+            <a href="{{ route('login.portal') }}" class="text-lg font-bold text-slate-700">{{ __('landing.nav.sign_in') }}</a>
+            <a href="{{ route('register') }}" class="bg-[#22c55e] text-white text-center py-4 rounded-xl font-black shadow-lg shadow-green-500/20">
+                {{ __('landing.nav.start_trial') }}
+            </a>
+        </nav>
     </div>
 </header>
