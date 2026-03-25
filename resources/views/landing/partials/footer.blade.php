@@ -51,7 +51,7 @@
             <div>
                 <h4 class="text-[#0f172a] font-black text-sm uppercase tracking-[0.2em] mb-8">{{ __('landing.footer.legal.title') }}</h4>
                 <ul class="space-y-4">
-                    @foreach(['privacy', 'terms', 'cookie'] as $link)
+                    @foreach(['privacy', 'terms', 'cookies'] as $link)
                     <li><a href="{{ route($link) }}" class="text-slate-500 hover:text-[#22c55e] font-bold text-sm transition-colors">{{ __("landing.footer.legal.$link") }}</a></li>
                     @endforeach
                 </ul>
