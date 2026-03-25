@@ -1,4 +1,4 @@
-@extends('layouts.auth')
+@extends('layouts.auth-minimal')
 
 @section('content')
 <div class="min-h-screen bg-slate-50/50 flex justify-center p-4 lg:p-8 mesh-gradient-soft noise-overlay register-page-offset" 
