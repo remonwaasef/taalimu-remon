@@ -49,19 +49,19 @@ class StoreStudentRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.regex' => 'اسم الطالب يجب أن يحتوي على حروف فقط.',
-            'phone.regex' => 'رقم الهاتف يجب أن يحتوي على أرقام فقط.',
-            'phone.min' => 'رقم الهاتف يجب أن لا يقل عن 10 أرقام.',
-            'parent_phone.regex' => 'رقم ولي الأمر يجب أن يحتوي على أرقام فقط.',
-            'parent_phone.min' => 'رقم ولي الأمر يجب أن لا يقل عن 10 أرقام.',
-            'emergency_phone.regex' => 'رقم الطوارئ يجب أن يحتوي على أرقام فقط.',
-            'emergency_phone.min' => 'رقم الطوارئ يجب أن لا يقل عن 10 أرقام.',
-            'parent_name.regex' => 'اسم ولي الأمر يجب أن يحتوي على حروف فقط.',
-            'parent_job.regex' => 'الوظيفة يجب أن تحتوي على حروف فقط.',
-            'parent_relation.regex' => 'صلة القرابة يجب أن تحتوي على حروف فقط.',
-            'section_type.regex' => 'الشعبة يجب أن تحتوي على حروف فقط.',
-            'email.unique' => 'البريد الإلكتروني مستخدم بالفعل.',
-            'grade_id.exists' => 'الصف الدراسي المختار غير صحيح.',
+            'name.regex' => __('center::students.val_name_regex'),
+            'phone.regex' => __('center::students.val_phone_regex'),
+            'phone.min' => __('center::students.val_phone_min'),
+            'parent_phone.regex' => __('center::students.val_parent_phone_regex'),
+            'parent_phone.min' => __('center::students.val_parent_phone_min'),
+            'emergency_phone.regex' => __('center::students.val_emergency_phone_regex'),
+            'emergency_phone.min' => __('center::students.val_emergency_phone_min'),
+            'parent_name.regex' => __('center::students.val_parent_name_regex'),
+            'parent_job.regex' => __('center::students.val_parent_job_regex'),
+            'parent_relation.regex' => __('center::students.val_parent_relation_regex'),
+            'section_type.regex' => __('center::students.val_section_type_regex'),
+            'email.unique' => __('center::students.val_email_unique'),
+            'grade_id.exists' => __('center::students.val_grade_id_exists'),
         ];
     }
 }

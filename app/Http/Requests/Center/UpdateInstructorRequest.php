@@ -45,19 +45,19 @@ class UpdateInstructorRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'اسم المدرس مطلوب.',
-            'name.regex' => 'اسم المدرس يجب أن يحتوي على حروف فقط.',
-            'name.max' => 'اسم المدرس يجب ألا يتجاوز 255 حرفاً.',
-            'phone.regex' => 'رقم الهاتف يجب أن يحتوي على أرقام فقط.',
-            'phone.min' => 'رقم الهاتف يجب أن لا يقل عن 10 أرقام.',
-            'email.email' => 'البريد الإلكتروني غير صحيح.',
-            'specialization.required' => 'تخصص المدرس مطلوب.',
-            'specialization.regex' => 'التخصص يجب أن يحتوي على نص صحيح.',
-            'commission_rate.required' => 'نسبة/مبلغ العمولة مطلوب.',
-            'commission_type.required' => 'نوع العمولة مطلوب.',
-            'bio.string' => 'النبذة يجب أن تكون نصاً.',
-            'image.image' => 'الملف المرفق يجب أن يكون صورة.',
-            'image.max' => 'حجم الصورة يجب ألا يتجاوز 2 ميجابايت.',
+            'name.required' => __('center::instructors.val_name_required'),
+            'name.regex' => __('center::instructors.val_name_regex'),
+            'name.max' => __('center::instructors.val_name_max'),
+            'phone.regex' => __('center::instructors.val_phone_regex'),
+            'phone.min' => __('center::instructors.val_phone_min'),
+            'email.email' => __('center::instructors.val_email_email'),
+            'specialization.required' => __('center::instructors.val_specialization_required'),
+            'specialization.regex' => __('center::instructors.val_specialization_regex'),
+            'commission_rate.required' => __('center::instructors.val_commission_rate_required'),
+            'commission_type.required' => __('center::instructors.val_commission_type_required'),
+            'bio.string' => __('center::instructors.val_bio_string'),
+            'image.image' => __('center::instructors.val_image_image'),
+            'image.max' => __('center::instructors.val_image_max'),
         ];
     }
 }
