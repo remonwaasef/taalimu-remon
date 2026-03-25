@@ -1,25 +1,21 @@
 # Deployment Script for Edu SaaS
-# This script MUST be run from the 'main' branch.
-# It merges 'dev' into 'main', pushes to GitHub, and updates the production server.
+# This script pushes the current branch to 'main' on GitHub and updates the production server.
 
 $currentBranch = git branch --show-current
-if ($currentBranch -ne "main") {
-    Write-Host "!!! ERROR: You are on branch [$currentBranch]. Deployment is only allowed from [main]. !!!" -ForegroundColor Red
-    Write-Host "Please switch to main: git checkout main"
-    exit 1
-}
 
-Write-Host "--- 1. Syncing with dev branch ---" -ForegroundColor Cyan
-git merge dev --no-edit
-
-$confirm = Read-Host "Are you sure you want to DEPLOY these changes to the LIVE server? (y/n)"
+$confirm = Read-Host "Are you sure you want to COMMIT and DEPLOY these changes to the LIVE server? (y/n)"
 if ($confirm -ne "y") {
     Write-Host "Deployment cancelled." -ForegroundColor Yellow
     exit 0
 }
 
+Write-Host "--- 1. Committing local changes ---" -ForegroundColor Cyan
+git add .
+$commitMsg = "Auto-deploy $(Get-Date -Format 'yyyy-MM-dd HH:mm')"
+git commit -m $commitMsg
+
 Write-Host "--- 2. Pushing to GitHub (main) ---" -ForegroundColor Cyan
-git push origin main
+git push origin ${currentBranch}:main
 
 Write-Host "--- 3. Updating Production Server ---" -ForegroundColor Cyan
 # We use bash -lc to ensure the full environment (composer, npm, etc.) is loaded

@@ -13,8 +13,8 @@ if (-not $commitMsg) { $commitMsg = "Save work $(Get-Date -Format 'yyyy-MM-dd HH
 git add .
 git commit -m $commitMsg
 
-Write-Host "--- Pushing to GitHub (Branch: $currentBranch) ---" -ForegroundColor Cyan
-git push origin $currentBranch
+Write-Host "--- Pushing to GitHub (main) ---" -ForegroundColor Cyan
+git push origin ${currentBranch}:main
 
 Write-Host "--- Done! Your work is saved on GitHub. ---" -ForegroundColor Green
 Write-Host "Note: This did NOT deploy to the live server. Use deploy.ps1 from main branch to go live." -ForegroundColor Yellow
