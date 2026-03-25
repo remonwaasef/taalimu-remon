@@ -22,10 +22,10 @@ Write-Host "--- 3. Updating Production Server ---" -ForegroundColor Cyan
 $userToken = "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"
 $repoName = "remonwaasef/taalimu-remon"
 $remotePath = "/home/taalimu/htdocs/taalimu.com"
-$gitUrl = "https://oauth2:${userToken}@github.com/${repoName}.git"
+$gitUrl = "https://x-access-token:${userToken}@github.com/${repoName}.git"
 
-# Remote Command: Set token URL precisely to avoid password prompts
-$remoteCmd = "bash -lc 'git config --global --add safe.directory $remotePath && cd $remotePath && git remote set-url origin $gitUrl && export GIT_TERMINAL_PROMPT=0 && git pull origin main && export COMPOSER_ALLOW_SUPERUSER=1 && composer install --no-dev --optimize-autoloader && npm run build && php artisan migrate --force && php artisan storage:link && php artisan optimize:clear && chown -R taalimu:taalimu storage bootstrap/cache && chmod -R 775 storage bootstrap/cache'"
+# Remote Command: Force Pull using direct URL to bypass any server-side credential issues
+$remoteCmd = "bash -lc 'git config --global --add safe.directory $remotePath && cd $remotePath && export GIT_TERMINAL_PROMPT=0 && git pull $gitUrl main && export COMPOSER_ALLOW_SUPERUSER=1 && composer install --no-dev --optimize-autoloader && npm run build && php artisan migrate --force && php artisan storage:link && php artisan optimize:clear && chown -R taalimu:taalimu storage bootstrap/cache && chmod -R 775 storage bootstrap/cache'"
 
 ssh root@46.202.155.30 $remoteCmd
 
