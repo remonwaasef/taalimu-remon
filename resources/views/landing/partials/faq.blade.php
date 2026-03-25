@@ -4,7 +4,7 @@
 
     <div class="container mx-auto px-4 lg:px-12">
         <!-- Section Header -->
-        <div class="text-center mb-16">
+        <div class="text-center mb-16" data-animate>
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#f0f9ff] border border-blue-50 mb-6">
                 <span class="text-xs font-black text-[#0ea5e9] uppercase tracking-[0.2em]">{{ __('landing.faq.badge') }}</span>
             </div>
@@ -18,7 +18,7 @@
         </div>
 
         <!-- FAQ Accordion -->
-        <div class="max-w-3xl mx-auto space-y-4" x-data="{ active: null }">
+        <div class="max-w-3xl mx-auto space-y-4" x-data="{ active: null }" data-stagger>
             @for ($index = 0; $index < 8; $index++)
                 @php
                     $question = str_replace(config('app.name'), $siteName, __("landing.faq.items.$index.question"));

@@ -1,11 +1,11 @@
-<section id="testimonials" class="py-24 bg-[#f8fafc] relative overflow-hidden">
+<section id="testimonials" class="py-24 bg-[#f8fafc] relative overflow-hidden section-wave section-wave-white">
     <!-- Artistic Backdrops -->
     <div class="absolute top-1/2 left-0 w-[500px] h-[500px] bg-white rounded-full blur-[140px] -translate-y-1/2 -z-10 opacity-70"></div>
     <div class="absolute top-1/2 right-0 w-[400px] h-[400px] bg-[#f0f9ff] rounded-full blur-[120px] -translate-y-1/2 -z-10 opacity-50"></div>
     
     <div class="container mx-auto px-4 lg:px-12">
         <!-- Section Header -->
-        <div class="text-center mb-20">
+        <div class="text-center mb-20" data-animate>
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-100 mb-6 shadow-sm">
                 <i class="fas fa-star text-[#ffc107] text-xs"></i>
                 <span class="text-xs font-black text-slate-500 uppercase tracking-[0.2em]">{{ __('landing.testimonials.badge') }}</span>
@@ -19,9 +19,9 @@
         </div>
 
         <!-- Testimonials Grid -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" data-stagger>
             @foreach(__('landing.testimonials.items') as $index => $item)
-            <div class="group relative bg-white rounded-[2.5rem] p-10 border border-slate-50 shadow-soft hover:shadow-premium transition-all duration-500 hover:-translate-y-2">
+            <div class="group relative bg-white rounded-3xl p-10 border border-slate-100/50 hover:shadow-premium transition-all duration-500 hover:-translate-y-2 border-l-4 border-l-transparent hover:border-l-[#22c55e]">
                 <!-- Quote Icon (Subtle) -->
                 <div class="absolute top-8 right-8 opacity-10 group-hover:opacity-20 transition-opacity">
                     <i class="fas fa-quote-right text-4xl text-slate-400"></i>

@@ -1,5 +1,5 @@
 <section 
-    class="hero-section relative min-h-[95vh] pt-24 lg:pt-32 pb-16 overflow-hidden bg-white z-0" 
+    class="hero-section relative min-h-[95vh] pt-24 lg:pt-32 pb-16 overflow-hidden bg-white section-wave z-0" 
     id="hero"
     x-data="{ 
         mouseX: 0, 
@@ -29,7 +29,7 @@
                     <span class="text-[13px] font-extrabold text-[#1a2e35] uppercase tracking-wider">{{ __('landing.hero.badge') }}</span>
                 </div>
 
-                <!-- Headline: Focus on saves -->
+                <!-- Headline -->
                 <h1
                     class="font-cairo text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4.2rem] font-[900] text-[#0f172a] leading-[1.08] mb-8 tracking-[-0.03em] opacity-0"
                     style="animation: heroFadeInUp 0.7s ease-out 0.2s forwards;"
@@ -86,7 +86,6 @@
 
             <!-- Right Visual: The 3D Masterpiece -->
             <div class="w-full lg:w-[50%] relative py-12 lg:py-0">
-                <!-- Wrapper for 3D and Parallax -->
                 <div 
                     class="relative w-full aspect-[4/3] flex items-center justify-center"
                     :style="`transform: perspective(1000px) rotateX(${mouseY/2}deg) rotateY(${-mouseX/2}deg)`"
@@ -94,7 +93,6 @@
                 >
                     <!-- Main Dashboard Window -->
                     <div class="relative w-full max-w-[550px] rounded-2xl overflow-hidden glass-premium shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] border border-white/50 z-20">
-                        <!-- Browser Header -->
                         <div class="bg-slate-50/50 backdrop-blur-md px-4 py-3 flex items-center gap-2 border-b border-slate-200/50">
                             <div class="flex gap-1.5">
                                 <div class="w-2.5 h-2.5 rounded-full bg-[#ff5f56]"></div>
@@ -105,7 +103,6 @@
                                 <div class="bg-white/50 rounded-lg h-6 flex items-center px-4 text-[10px] text-slate-400 font-medium">app.taalimu.com</div>
                             </div>
                         </div>
-                        <!-- Dashboard Image -->
                         <div class="bg-[#f8fafc] group">
                             <img 
                                 src="{{ asset('images/hero-dashboard.png') }}" 
@@ -115,9 +112,7 @@
                         </div>
                     </div>
 
-                    <!-- Floating Glass Cards (Reactive Parallax) -->
-                    
-                    <!-- Card 1: Revenue (Top Left) -->
+                    <!-- Floating Glass Cards -->
                     <div 
                         class="absolute -top-10 -left-10 w-48 glass-premium p-4 rounded-2xl shadow-xl z-30 opacity-0"
                         :style="`transform: translate(${-mouseX}px, ${-mouseY}px)`"
@@ -135,7 +130,6 @@
                         </div>
                     </div>
 
-                    <!-- Card 2: WhatsApp (Bottom Left) -->
                     <div 
                         class="absolute -bottom-10 -left-6 w-56 glass-premium p-4 rounded-2xl shadow-xl z-30 border-l-4 border-l-[#22c55e] opacity-0"
                         :style="`transform: translate(${mouseX/2}px, ${mouseY/2}px)`"
@@ -152,7 +146,6 @@
                         </div>
                     </div>
 
-                    <!-- Card 3: Attendance (Bottom Right) -->
                     <div 
                         class="absolute -bottom-4 -right-8 w-44 glass-premium p-5 rounded-2xl shadow-2xl z-30 opacity-0"
                         :style="`transform: translate(${-mouseX/3}px, ${-mouseY/3}px)`"
@@ -167,31 +160,25 @@
                         </div>
                     </div>
 
-                    <!-- Decorative Glows -->
                     <div class="absolute inset-0 bg-green-500/10 rounded-full blur-[100px] -z-10 scale-125"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Trust Marquee: Social Proof -->
+    <!-- Trust Strip: Real Numbers Instead of Placeholders -->
     <div class="mt-24 relative opacity-0" style="animation: heroFadeInUp 1s ease-out 1s forwards;">
-        <div class="text-center mb-8">
-            <span class="text-xs font-bold text-slate-400 uppercase tracking-[0.3em]">{{ __('landing.pain_points.trust_label') ?? 'Trusted by elite educators' }}</span>
-        </div>
-        <div class="w-full overflow-hidden py-4">
-            <div class="flex animate-marquee gap-12 sm:gap-20 items-center grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all">
-                @foreach(range(1, 12) as $i)
-                <div class="flex-shrink-0 flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-lg bg-slate-100"></div>
-                    <span class="font-black text-slate-500 text-lg uppercase tracking-tighter">Center {{$i}}</span>
-                </div>
-                @endforeach
-                <!-- Repeat for seamless loop -->
-                @foreach(range(1, 12) as $i)
-                <div class="flex-shrink-0 flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-lg bg-slate-100"></div>
-                    <span class="font-black text-slate-500 text-lg uppercase tracking-tighter">Center {{$i}}</span>
+        <div class="container mx-auto px-4 lg:px-12">
+            <div class="flex flex-wrap items-center justify-center gap-8 lg:gap-20 py-8 border-t border-slate-100">
+                @foreach([
+                    ['value' => '500+', 'label' => __('landing.hero.trust_centers') ?? 'Educational Centers'],
+                    ['value' => '10,000+', 'label' => __('landing.hero.trust_students') ?? 'Active Students'],
+                    ['value' => '98%', 'label' => __('landing.hero.trust_satisfaction') ?? 'Satisfaction Rate'],
+                    ['value' => '15h', 'label' => __('landing.hero.trust_saved') ?? 'Saved Per Week'],
+                ] as $stat)
+                <div class="text-center group">
+                    <div class="text-3xl lg:text-4xl font-black text-[#0f172a] tracking-tighter group-hover:text-[#22c55e] transition-colors">{{ $stat['value'] }}</div>
+                    <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mt-1">{{ $stat['label'] }}</div>
                 </div>
                 @endforeach
             </div>

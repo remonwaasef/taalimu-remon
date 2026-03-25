@@ -885,3 +885,97 @@
     width: 80px;
     height: 80px;
 }
+
+/* =====================================================
+   V2 — Scroll-Triggered Animation System
+   ===================================================== */
+
+/* Base state: hidden & offset */
+[data-animate] {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-animate="fade-left"] {
+    transform: translateX(-40px);
+}
+
+[data-animate="fade-right"] {
+    transform: translateX(40px);
+}
+
+[data-animate="scale"] {
+    transform: scale(0.92);
+}
+
+[data-animate="zoom"] {
+    transform: scale(0.85);
+}
+
+/* Visible state: triggered by Intersection Observer */
+[data-animate].is-visible {
+    opacity: 1;
+    transform: translateY(0) translateX(0) scale(1);
+}
+
+/* Stagger children utility */
+[data-stagger] > * { opacity: 0; transform: translateY(24px); transition: opacity 0.5s ease, transform 0.5s ease; }
+[data-stagger].is-visible > *:nth-child(1) { transition-delay: 0ms; }
+[data-stagger].is-visible > *:nth-child(2) { transition-delay: 100ms; }
+[data-stagger].is-visible > *:nth-child(3) { transition-delay: 200ms; }
+[data-stagger].is-visible > *:nth-child(4) { transition-delay: 300ms; }
+[data-stagger].is-visible > *:nth-child(5) { transition-delay: 400ms; }
+[data-stagger].is-visible > *:nth-child(6) { transition-delay: 500ms; }
+[data-stagger].is-visible > *:nth-child(7) { transition-delay: 600ms; }
+[data-stagger].is-visible > *:nth-child(8) { transition-delay: 700ms; }
+[data-stagger].is-visible > * { opacity: 1; transform: translateY(0); }
+
+/* =====================================================
+   V2 — Utility Classes
+   ===================================================== */
+.shadow-soft {
+    box-shadow: var(--shadow-soft), var(--shadow-border);
+}
+
+.shadow-premium {
+    box-shadow: var(--shadow-premium);
+}
+
+/* Typing indicator */
+.typing-indicator { display: inline-flex; gap: 4px; padding: 12px 18px; background: white; border-radius: 18px; border-top-left-radius: 0; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+.typing-indicator span { width: 8px; height: 8px; border-radius: 50%; background: #94a3b8; animation: typingBounce 1.4s ease-in-out infinite; }
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingBounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-6px); opacity: 1; } }
+
+/* Animated gradient for CTA */
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+.animated-gradient-bg {
+    background: linear-gradient(-45deg, #0f172a, #1e3a5f, #0f172a, #1a3c34);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+}
+
+/* Section wave divider */
+.section-wave { position: relative; }
+.section-wave::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 60'%3E%3Cpath fill='%23f8fafc' d='M0,40 C360,80 720,0 1440,40 L1440,60 L0,60 Z'/%3E%3C/svg%3E") no-repeat bottom center;
+    background-size: 100% 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+.section-wave-white::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 60'%3E%3Cpath fill='%23ffffff' d='M0,40 C360,80 720,0 1440,40 L1440,60 L0,60 Z'/%3E%3C/svg%3E");
+}

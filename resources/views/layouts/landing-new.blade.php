@@ -102,6 +102,7 @@
     @include('components.cookie-consent')
     
     <!-- Alpine.js with Collapse plugin for interactivity -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script>
@@ -148,6 +149,22 @@
                     .catch((err) => console.log('SW failed:', err));
             });
         }
+    </script>
+
+    <!-- V2: Scroll Animation Observer -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+            document.querySelectorAll('[data-animate], [data-stagger]').forEach(el => observer.observe(el));
+        });
     </script>
     @stack('scripts')
 </body>
