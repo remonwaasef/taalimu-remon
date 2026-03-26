@@ -59,6 +59,7 @@ return [
         'name_label' => 'Nom de l\'étudiant',
         'name_placeholder' => 'ex: Alex Martin',
         'phone_label' => 'Numéro de téléphone de l\'étudiant',
+        'enroll_checkbox' => 'Inscrire l\'étudiant au cours que vous avez créé ( :course )',
         'btn_skip' => 'Ignorer et aller au tableau de bord',
         'btn_submit' => 'Terminer la configuration !',
     ],

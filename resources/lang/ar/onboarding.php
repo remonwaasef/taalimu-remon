@@ -59,6 +59,7 @@ return [
         'name_label' => 'اسم الطالب',
         'name_placeholder' => 'مثال: عمر ممدوح',
         'phone_label' => 'رقم هاتف الطالب',
+        'enroll_checkbox' => 'تسجيل الطالب في الدورة التي أنشأتها ( :course )',
         'btn_skip' => 'تخطي والذهاب للوحة التحكم',
         'btn_submit' => 'إنهاء الإعداد والبدء!',
     ],

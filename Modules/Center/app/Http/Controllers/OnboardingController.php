@@ -159,16 +159,44 @@ class OnboardingController extends Controller
                     'student_name' => 'required|string|max:255',
                     'student_phone' => 'required|string|max:20',
                 ]);
-                
-                \App\Models\Student::create([
+
+                // Create student user
+                $user = \App\Models\User::create([
                     'tenant_id' => $tenant->id,
                     'name' => $request->student_name,
                     'phone' => $request->student_phone,
+                    'password' => \Illuminate\Support\Facades\Hash::make($request->student_phone), // default password as phone
+                    'user_type' => 'student',
+                    'status' => 'active',
                 ]);
+
+                // Also create student record
+                \App\Models\Student::create([
+                    'tenant_id' => $tenant->id,
+                    'user_id' => $user->id,
+                    'name' => $request->student_name,
+                    'phone' => $request->student_phone,
+                    'status' => 'active',
+                ]);
+
+                // Enroll in course if requested
+                if ($request->boolean('enroll_in_course')) {
+                    $course = \App\Models\Course::where('tenant_id', $tenant->id)->latest()->first();
+                    if ($course) {
+                        \App\Models\Enrollment::create([
+                            'tenant_id' => $tenant->id,
+                            'user_id' => $user->id,
+                            'course_id' => $course->id,
+                            'enrolled_at' => now(),
+                            'status' => 'active',
+                            'remaining_sessions' => $course->sessions_count,
+                        ]);
+                    }
+                }
             }
             
             $tenant->update(['onboarding_status' => 'completed']);
-            return response()->json(['success' => true, 'next_step' => 'completed', 'redirect' => route('center.dashboard')]);
+            return response()->json(['success' => true, 'redirect' => route('center.dashboard')]);
         }
 
         return response()->json(['success' => false, 'message' => 'Invalid step.'], 400);
