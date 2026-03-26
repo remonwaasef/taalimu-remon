@@ -46,6 +46,8 @@ return [
         'schedule_section' => 'Horaires (Rendez-vous principal)',
         'day_label' => 'Jour',
         'time_label' => 'Heure de Début',
+        'btn_add_schedule' => 'Ajouter un autre rendez-vous',
+        'btn_remove_schedule' => 'Supprimer',
         'btn_skip' => 'Ignorer pour l\'instant',
         'btn_submit' => 'Créer le cours',
     ],

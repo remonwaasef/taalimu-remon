@@ -116,8 +116,9 @@ class OnboardingController extends Controller
                     'course_name' => 'required|string|max:255',
                     'price' => 'required|numeric|min:0',
                     'sessions_count' => 'required|integer|min:1',
-                    'day_of_week' => 'required|integer|between:0,6',
-                    'start_time' => 'required',
+                    'schedules' => 'required|array|min:1',
+                    'schedules.*.day' => 'required|integer|between:0,6',
+                    'schedules.*.time' => 'required',
                 ]);
 
                 // Try to find the instructor created in step 2
@@ -132,16 +133,16 @@ class OnboardingController extends Controller
                     'status' => 'active',
                 ]);
 
-                // Create Schedule
-                if ($request->filled('start_time')) {
-                    $startTime = \Carbon\Carbon::createFromFormat('H:i', $request->start_time);
+                // Create Schedules
+                foreach ($request->input('schedules') as $sched) {
+                    $startTime = \Carbon\Carbon::createFromFormat('H:i', $sched['time']);
                     $endTime = (clone $startTime)->addHours(2); // Default 2 hours session
                     
                     \App\Models\Schedule::create([
                         'tenant_id' => $tenant->id,
                         'course_id' => $course->id,
                         'instructor_id' => $instructor?->user_id, // Schedule uses user_id for instructor as per migration
-                        'day_of_week' => $request->day_of_week,
+                        'day_of_week' => $sched['day'],
                         'start_time' => $startTime->format('H:i:s'),
                         'end_time' => $endTime->format('H:i:s'),
                     ]);

@@ -222,27 +222,40 @@
                         </div>
 
                         <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 space-y-4">
-                            <h3 class="font-bold text-emerald-800 text-sm flex items-center gap-2">
-                                <i class="fa-solid fa-calendar-days"></i> {{ __('onboarding.step_3.schedule_section') }}
-                            </h3>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-xs font-bold text-emerald-700 mb-1">{{ __('onboarding.step_3.day_label') }}</label>
-                                    <select x-model="formData.step_3.day_of_week" class="w-full border-emerald-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-white">
-                                        <option value="0">{{ __('onboarding.days.0') }}</option>
-                                        <option value="1">{{ __('onboarding.days.1') }}</option>
-                                        <option value="2">{{ __('onboarding.days.2') }}</option>
-                                        <option value="3">{{ __('onboarding.days.3') }}</option>
-                                        <option value="4">{{ __('onboarding.days.4') }}</option>
-                                        <option value="5">{{ __('onboarding.days.5') }}</option>
-                                        <option value="6">{{ __('onboarding.days.6') }}</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-emerald-700 mb-1">{{ __('onboarding.step_3.time_label') }}</label>
-                                    <input type="time" x-model="formData.step_3.start_time" class="w-full border-emerald-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-white h-11">
-                                </div>
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="font-bold text-emerald-800 text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-calendar-days"></i> {{ __('onboarding.step_3.schedule_section') }}
+                                </h3>
+                                <button type="button" @click="formData.step_3.schedules.push({day: '0', time: '16:00'})" class="text-xs font-bold text-emerald-600 hover:text-emerald-800 flex items-center gap-1 transition-colors">
+                                    <i class="fa-solid fa-plus-circle"></i> {{ __('onboarding.step_3.btn_add_schedule') }}
+                                </button>
                             </div>
+
+                            <template x-for="(schedule, index) in formData.step_3.schedules" :key="index">
+                                <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end pb-4 border-b border-emerald-100 last:border-0 last:pb-0">
+                                    <div class="sm:col-span-6">
+                                        <label class="block text-xs font-bold text-emerald-700 mb-1">{{ __('onboarding.step_3.day_label') }}</label>
+                                        <select x-model="schedule.day" class="w-full border-emerald-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-white text-sm">
+                                            <option value="0">{{ __('onboarding.days.0') }}</option>
+                                            <option value="1">{{ __('onboarding.days.1') }}</option>
+                                            <option value="2">{{ __('onboarding.days.2') }}</option>
+                                            <option value="3">{{ __('onboarding.days.3') }}</option>
+                                            <option value="4">{{ __('onboarding.days.4') }}</option>
+                                            <option value="5">{{ __('onboarding.days.5') }}</option>
+                                            <option value="6">{{ __('onboarding.days.6') }}</option>
+                                        </select>
+                                    </div>
+                                    <div class="sm:col-span-4">
+                                        <label class="block text-xs font-bold text-emerald-700 mb-1">{{ __('onboarding.step_3.time_label') }}</label>
+                                        <input type="time" x-model="schedule.time" class="w-full border-emerald-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-white h-10 text-sm">
+                                    </div>
+                                    <div class="sm:col-span-2 flex justify-end">
+                                        <button type="button" x-show="formData.step_3.schedules.length > 1" @click="formData.step_3.schedules.splice(index, 1)" class="w-10 h-10 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition-colors shadow-sm" title="{{ __('onboarding.step_3.btn_remove_schedule') }}">
+                                            <i class="fa-solid fa-trash-can text-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </template>
                         </div>
 
                         <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -328,7 +341,7 @@
             formData: {
                 step_1: { locale: '{{ app()->getLocale() }}', currency: 'EGP' },
                 step_2: { instructor_name: '', instructor_phone: '', instructor_specialization: '', instructor_email: '' },
-                step_3: { course_name: '', price: '', sessions_count: '', day_of_week: '0', start_time: '16:00' },
+                step_3: { course_name: '', price: '', sessions_count: '', schedules: [{day: '0', time: '16:00'}] },
                 step_4: { student_name: '', student_phone: '' }
             },
 
