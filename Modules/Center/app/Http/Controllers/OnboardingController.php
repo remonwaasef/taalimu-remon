@@ -82,7 +82,7 @@ class OnboardingController extends Controller
                     'name' => $request->instructor_name,
                     'phone' => $request->instructor_phone,
                     'email' => 'instructor_' . time() . '@' . $tenant->domain,
-                    'password' => bcrypt('password123'),
+                    'password' => 'password123',
                     'role' => 'instructor',
                     'email_verified_at' => now(),
                     'phone_verified_at' => now(),
