@@ -362,8 +362,8 @@
                     if (data.redirect) {
                         window.location.href = data.redirect;
                     } else if (stepId === 'step_1') {
-                        // Reload page to apply new language & direction formatting immediately
-                        window.location.reload();
+                        // Reload page without the step param to let server-side status take over
+                        window.location.href = window.location.pathname;
                     } else if (data.next_step) {
                         this.currentStep = data.next_step;
                     }
@@ -382,7 +382,6 @@
             }
         }));
     });
-</script>
 </script>
 </body>
 </html>
