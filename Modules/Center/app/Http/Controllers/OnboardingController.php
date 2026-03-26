@@ -101,7 +101,7 @@ class OnboardingController extends Controller
                 
                 \App\Models\Course::create([
                     'tenant_id' => $tenant->id,
-                    'name' => $request->course_name,
+                    'title' => $request->course_name,
                     'status' => 'active',
                 ]);
             }
