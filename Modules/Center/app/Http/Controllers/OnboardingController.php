@@ -19,6 +19,29 @@ class OnboardingController extends Controller
         return view('center::onboarding.wizard', compact('status'));
     }
 
+    public function updateLocale(Request $request)
+    {
+        $request->validate([
+            'locale' => 'required|in:ar,en,fr',
+        ]);
+
+        $tenant = auth()->user()->tenant;
+        
+        // Update user locale
+        auth()->user()->update(['locale' => $request->locale]);
+        
+        // Update session locale
+        session(['locale' => $request->locale]);
+
+        // Optional: Also update tenant default setting if you want it to be the "choice"
+        $settings = $tenant->settings ?? [];
+        $settings['default_locale'] = $request->locale;
+        $tenant->settings = $settings;
+        $tenant->save();
+
+        return response()->json(['success' => true]);
+    }
+
     public function submit(Request $request)
     {
         $tenant = auth()->user()->tenant;
@@ -106,25 +129,6 @@ class OnboardingController extends Controller
         }
 
         return response()->json(['success' => false, 'message' => 'Invalid step.'], 400);
-    }
-
-    public function updateLocale(Request $request)
-    {
-        $request->validate([
-            'locale' => 'required|in:ar,en,fr',
-        ]);
-
-        $locale = $request->locale;
-
-        // Set session locale
-        session(['locale' => $locale]);
-
-        // Update authenticated user's locale if logged in
-        if (auth()->check()) {
-            auth()->user()->update(['locale' => $locale]);
-        }
-
-        return response()->json(['success' => true]);
     }
 
 }
