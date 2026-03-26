@@ -111,7 +111,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                 <label class="border rounded-xl p-4 cursor-pointer transition-all duration-200 hover:border-primary/50 relative"
                                        :class="formData.step_1.locale === 'ar' ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-slate-200'">
-                                    <input type="radio" x-model="formData.step_1.locale" value="ar" @change="submitStep('step_1')" class="sr-only">
+                                    <input type="radio" x-model="formData.step_1.locale" value="ar" @change="updateLocale()" class="sr-only">
                                     <div class="flex items-center gap-3">
                                         <span class="text-2xl">🇸🇦</span>
                                         <span class="font-medium text-slate-800">العربية</span>
@@ -122,7 +122,7 @@
                                 </label>
                                 <label class="border rounded-xl p-4 cursor-pointer transition-all duration-200 hover:border-primary/50 relative"
                                        :class="formData.step_1.locale === 'en' ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-slate-200'">
-                                    <input type="radio" x-model="formData.step_1.locale" value="en" @change="submitStep('step_1')" class="sr-only">
+                                    <input type="radio" x-model="formData.step_1.locale" value="en" @change="updateLocale()" class="sr-only">
                                     <div class="flex items-center gap-3">
                                         <span class="text-2xl">🇬🇧</span>
                                         <span class="font-medium text-slate-800">English</span>
@@ -133,7 +133,7 @@
                                 </label>
                                 <label class="border rounded-xl p-4 cursor-pointer transition-all duration-200 hover:border-primary/50 relative"
                                        :class="formData.step_1.locale === 'fr' ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-slate-200'">
-                                    <input type="radio" x-model="formData.step_1.locale" value="fr" @change="submitStep('step_1')" class="sr-only">
+                                    <input type="radio" x-model="formData.step_1.locale" value="fr" @change="updateLocale()" class="sr-only">
                                     <div class="flex items-center gap-3">
                                         <span class="text-2xl">🇫🇷</span>
                                         <span class="font-medium text-slate-800">Français</span>
@@ -322,6 +322,31 @@
                 const currentIndex = this.currentStepIndex;
                 if (currentIndex > 0) {
                     this.currentStep = this.steps[currentIndex - 1].id;
+                }
+            },
+
+            async updateLocale() {
+                if (this.loading) return;
+                this.loading = true;
+
+                try {
+                    const response = await fetch('{{ route('center.onboarding.update-locale') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({ locale: this.formData.step_1.locale })
+                    });
+
+                    if (response.ok) {
+                        window.location.reload();
+                    }
+                } catch (error) {
+                    console.error('Failed to update locale:', error);
+                } finally {
+                    this.loading = false;
                 }
             },
 

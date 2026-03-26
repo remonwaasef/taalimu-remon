@@ -99,6 +99,7 @@ $tenantRoutes = function () {
         // Onboarding Routes (Must be accessible before onboarding is complete)
         Route::get('onboarding', [\Modules\Center\Http\Controllers\OnboardingController::class, 'show'])->name('center.onboarding.show');
         Route::post('onboarding/submit', [\Modules\Center\Http\Controllers\OnboardingController::class, 'submit'])->name('center.onboarding.submit');
+        Route::post('onboarding/update-locale', [\Modules\Center\Http\Controllers\OnboardingController::class, 'updateLocale'])->name('center.onboarding.update-locale');
     });
 
     // Protected Routes with Subscription Check and Onboarding Check
