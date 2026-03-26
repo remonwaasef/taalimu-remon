@@ -80,13 +80,15 @@ class OnboardingController extends Controller
                 $request->validate([
                     'instructor_name' => 'required|string|max:255',
                     'instructor_phone' => 'required|string|max:20',
+                    'instructor_specialization' => 'nullable|string|max:255',
+                    'instructor_email' => 'nullable|email|max:255',
                 ]);
                 
                 $user = \App\Models\User::create([
                     'tenant_id' => $tenant->id,
                     'name' => $request->instructor_name,
                     'phone' => $request->instructor_phone,
-                    'email' => 'instructor_' . time() . '@' . $tenant->domain,
+                    'email' => $request->instructor_email ?: 'instructor_' . time() . '@' . $tenant->domain,
                     'password' => 'password123',
                     'role' => 'instructor',
                     'email_verified_at' => now(),
@@ -99,6 +101,7 @@ class OnboardingController extends Controller
                     'name' => $request->instructor_name,
                     'phone' => $request->instructor_phone,
                     'email' => $user->email,
+                    'specialization' => $request->instructor_specialization,
                     'status' => 'active',
                 ]);
             }
