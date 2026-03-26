@@ -88,6 +88,19 @@
                 <p class="mt-4 text-slate-600 font-medium" x-text="'{{ __('onboarding.loading') }}'"></p>
             </div>
 
+            <!-- Global Language Switcher -->
+            <div class="border-b border-slate-100 bg-slate-50/50 p-4 flex justify-center gap-4">
+                <button @click="updateLanguage('ar')" :class="formData.step_1.locale === 'ar' ? 'bg-white shadow-sm ring-1 ring-primary/20 text-primary' : 'text-slate-500 hover:text-primary'" class="px-3 py-1.5 rounded-lg text-sm font-bold transition-all flex items-center gap-2">
+                    <span>🇸🇦</span> العربية
+                </button>
+                <button @click="updateLanguage('en')" :class="formData.step_1.locale === 'en' ? 'bg-white shadow-sm ring-1 ring-primary/20 text-primary' : 'text-slate-500 hover:text-primary'" class="px-3 py-1.5 rounded-lg text-sm font-bold transition-all flex items-center gap-2">
+                    <span>🇬🇧</span> English
+                </button>
+                <button @click="updateLanguage('fr')" :class="formData.step_1.locale === 'fr' ? 'bg-white shadow-sm ring-1 ring-primary/20 text-primary' : 'text-slate-500 hover:text-primary'" class="px-3 py-1.5 rounded-lg text-sm font-bold transition-all flex items-center gap-2">
+                    <span>🇫🇷</span> Français
+                </button>
+            </div>
+
             <div class="p-8">
                 <!-- STEP 1: Core Settings -->
                 <div x-show="currentStep === 'step_1'" 
@@ -105,46 +118,6 @@
                     </div>
 
                     <form @submit.prevent="submitStep('step_1')" class="space-y-5">
-                        <!-- Language -->
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_1.language_label') }}</label>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                <label class="border rounded-xl p-4 cursor-pointer transition-all duration-200 hover:border-primary/50 relative"
-                                       :class="formData.step_1.locale === 'ar' ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-slate-200'">
-                                    <input type="radio" x-model="formData.step_1.locale" value="ar" @change="updateLanguage('ar')" class="sr-only">
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-2xl">🇸🇦</span>
-                                        <span class="font-medium text-slate-800">العربية</span>
-                                    </div>
-                                    <div x-show="formData.step_1.locale === 'ar'" class="absolute top-2 right-2 text-primary">
-                                        <i class="fa-solid fa-circle-check"></i>
-                                    </div>
-                                </label>
-                                <label class="border rounded-xl p-4 cursor-pointer transition-all duration-200 hover:border-primary/50 relative"
-                                       :class="formData.step_1.locale === 'en' ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-slate-200'">
-                                    <input type="radio" x-model="formData.step_1.locale" value="en" @change="updateLanguage('en')" class="sr-only">
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-2xl">🇬🇧</span>
-                                        <span class="font-medium text-slate-800">English</span>
-                                    </div>
-                                    <div x-show="formData.step_1.locale === 'en'" class="absolute top-2 right-2 text-primary">
-                                        <i class="fa-solid fa-circle-check"></i>
-                                    </div>
-                                </label>
-                                <label class="border rounded-xl p-4 cursor-pointer transition-all duration-200 hover:border-primary/50 relative"
-                                       :class="formData.step_1.locale === 'fr' ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-slate-200'">
-                                    <input type="radio" x-model="formData.step_1.locale" value="fr" @change="updateLanguage('fr')" class="sr-only">
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-2xl">🇫🇷</span>
-                                        <span class="font-medium text-slate-800">Français</span>
-                                    </div>
-                                    <div x-show="formData.step_1.locale === 'fr'" class="absolute top-2 right-2 text-primary">
-                                        <i class="fa-solid fa-circle-check"></i>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-
                         <!-- Currency -->
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_1.currency_label') }}</label>
@@ -297,7 +270,7 @@
 <script>
     document.addEventListener('alpine:init', () => {
         Alpine.data('onboardingWizard', (initialStatus) => ({
-            currentStep: initialStatus === 'pending' ? 'step_1' : initialStatus,
+            currentStep: (new URLSearchParams(window.location.search).get('step')) || (initialStatus === 'pending' ? 'step_1' : initialStatus),
             loading: false,
             
             steps: [
@@ -348,7 +321,9 @@
                     });
                     
                     if (response.ok) {
-                        window.location.reload();
+                        const url = new URL(window.location.href);
+                        url.searchParams.set('step', this.currentStep);
+                        window.location.href = url.toString();
                     }
                 } catch (error) {
                     console.error('Failed to update language:', error);
