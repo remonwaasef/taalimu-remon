@@ -235,7 +235,7 @@
 
                             <template x-for="(schedule, index) in formData.step_3.schedules" :key="index">
                                 <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end pb-4 border-b border-emerald-100 last:border-0 last:pb-0">
-                                    <div class="sm:col-span-6">
+                                    <div class="sm:col-span-4">
                                         <label class="block text-xs font-bold text-emerald-700 mb-1">{{ __('onboarding.step_3.day_label') }}</label>
                                         <select x-model="schedule.day" class="w-full border-emerald-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-white text-sm">
                                             <option value="0">{{ __('onboarding.days.0') }}</option>
@@ -247,9 +247,13 @@
                                             <option value="6">{{ __('onboarding.days.6') }}</option>
                                         </select>
                                     </div>
-                                    <div class="sm:col-span-4">
+                                    <div class="sm:col-span-3">
                                         <label class="block text-xs font-bold text-emerald-700 mb-1">{{ __('onboarding.step_3.time_label') }}</label>
                                         <input type="time" x-model="schedule.time" class="w-full border-emerald-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-white h-10 text-sm">
+                                    </div>
+                                    <div class="sm:col-span-3">
+                                        <label class="block text-xs font-bold text-emerald-700 mb-1">{{ __('onboarding.step_3.time_end_label') }}</label>
+                                        <input type="time" x-model="schedule.time_end" class="w-full border-emerald-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-white h-10 text-sm">
                                     </div>
                                     <div class="sm:col-span-2 flex justify-end">
                                         <button type="button" x-show="formData.step_3.schedules.length > 1" @click="formData.step_3.schedules.splice(index, 1)" class="w-10 h-10 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition-colors shadow-sm" title="{{ __('onboarding.step_3.btn_remove_schedule') }}">
@@ -343,7 +347,7 @@
             formData: {
                 step_1: { locale: '{{ app()->getLocale() }}', currency: 'EGP' },
                 step_2: { instructor_name: '', instructor_phone: '', instructor_specialization: '', instructor_email: '' },
-                step_3: { course_name: '', price: '', sessions_count: '1', schedules: [{day: '0', time: '16:00'}] },
+                step_3: { course_name: '', price: '', sessions_count: '1', schedules: [{day: '0', time: '16:00', time_end: '18:00'}] },
                 step_4: { student_name: '', student_phone: '' }
             },
             
@@ -357,7 +361,7 @@
                 const currentCount = this.formData.step_3.schedules.length;
                 if (finalCount > currentCount) {
                     for (let i = 0; i < (finalCount - currentCount); i++) {
-                        this.formData.step_3.schedules.push({day: '0', time: '16:00'});
+                        this.formData.step_3.schedules.push({day: '0', time: '16:00', time_end: '18:00'});
                     }
                 } else if (finalCount < currentCount) {
                     this.formData.step_3.schedules.splice(finalCount);
