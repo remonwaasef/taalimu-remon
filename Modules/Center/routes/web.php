@@ -40,6 +40,10 @@ use Modules\Center\Http\Controllers\CoursePlayerController;
 
 // Define the route group closure once to avoid duplication
 $tenantRoutes = function () {
+    Route::get('onboarding/run-migrate', function() {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        return \Illuminate\Support\Facades\Artisan::output();
+    });
     // Guest Routes with rate limiting
     Route::middleware(['guest', 'prevent-back-history'])->group(function() {
         Route::get('login', [AuthController::class, 'showLoginForm'])->name('center.login');
