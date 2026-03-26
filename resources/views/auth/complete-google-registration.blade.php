@@ -196,7 +196,7 @@ window.addEventListener('pageshow', (event) => {
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
     
     <!-- Main Centered Card Container (Optimized Layout) -->
-    <div class="w-full max-w-4xl bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100/50 animate-fade-in-up md:backdrop-blur-xl relative">
+    <div class="w-full max-w-4xl bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100/50 animate-fade-in-up md:backdrop-blur-xl relative" x-cloak>
         
         <div class="grid grid-cols-1 lg:grid-cols-12">
             <!-- Left Info Panel (Hidden on Mobile or as Sidebar) -->
@@ -388,7 +388,7 @@ window.addEventListener('pageshow', (event) => {
                                 class="text-[11px] font-black text-brand-secondary hover:underline flex items-center gap-1 font-arabic">
                             <i class="bi bi-tag-fill"></i> {{ __('auth.register.have_coupon') ?? 'هل لديك كود خصم؟' }}
                         </button>
-                        <div x-show="showCouponInput || couponStatus === 'valid'" class="relative">
+                        <div x-show="showCouponInput || couponStatus === 'valid'" x-cloak class="relative">
                             <input type="text" name="coupon_code" x-model="couponCode" @input.debounce.500ms="validateCoupon()"
                                 placeholder="{{ __('admin.coupon_code') }}"
                                 class="w-full h-10 px-4 bg-slate-50 border-2 border-slate-100 rounded-xl text-xs font-black uppercase focus:outline-none focus:border-brand-secondary transition-all"
