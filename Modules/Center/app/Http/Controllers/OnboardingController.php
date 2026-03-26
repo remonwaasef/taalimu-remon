@@ -108,4 +108,23 @@ class OnboardingController extends Controller
         return response()->json(['success' => false, 'message' => 'Invalid step.'], 400);
     }
 
+    public function updateLocale(Request $request)
+    {
+        $request->validate([
+            'locale' => 'required|in:ar,en,fr',
+        ]);
+
+        $locale = $request->locale;
+
+        // Set session locale
+        session(['locale' => $locale]);
+
+        // Update authenticated user's locale if logged in
+        if (auth()->check()) {
+            auth()->user()->update(['locale' => $locale]);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
 }
