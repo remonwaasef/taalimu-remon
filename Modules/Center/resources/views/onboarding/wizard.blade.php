@@ -366,6 +366,13 @@
                         window.location.href = window.location.pathname;
                     } else if (data.next_step) {
                         this.currentStep = data.next_step;
+                        // Update UI and URL to prevent jumping back on refresh
+                        const url = new URL(window.location.href);
+                        url.searchParams.set('step', this.currentStep);
+                        window.history.pushState({}, '', url);
+                        
+                        // Scroll to top of wizard
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
                     }
 
                 } catch (error) {

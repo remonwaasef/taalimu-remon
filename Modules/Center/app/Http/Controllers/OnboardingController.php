@@ -82,7 +82,7 @@ class OnboardingController extends Controller
                     'instructor_phone' => 'required|string|max:20',
                 ]);
                 
-                \App\Models\User::create([
+                $user = \App\Models\User::create([
                     'tenant_id' => $tenant->id,
                     'name' => $request->instructor_name,
                     'phone' => $request->instructor_phone,
@@ -91,6 +91,15 @@ class OnboardingController extends Controller
                     'role' => 'instructor',
                     'email_verified_at' => now(),
                     'phone_verified_at' => now(),
+                ]);
+
+                \App\Models\Instructor::create([
+                    'tenant_id' => $tenant->id,
+                    'user_id' => $user->id,
+                    'name' => $request->instructor_name,
+                    'phone' => $request->instructor_phone,
+                    'email' => $user->email,
+                    'status' => 'active',
                 ]);
             }
             
