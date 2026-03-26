@@ -84,26 +84,45 @@ class OnboardingController extends Controller
                     'instructor_email' => 'nullable|email|max:255',
                 ]);
                 
-                $user = \App\Models\User::create([
-                    'tenant_id' => $tenant->id,
-                    'name' => $request->instructor_name,
-                    'phone' => $request->instructor_phone,
-                    'email' => $request->instructor_email ?: 'instructor_' . time() . '@' . $tenant->domain,
-                    'password' => 'password123',
-                    'role' => 'instructor',
-                    'email_verified_at' => now(),
-                    'phone_verified_at' => now(),
-                ]);
+                // Prevent duplicates: check if an onboarding instructor already exists
+                $existingInstructor = \App\Models\Instructor::where('tenant_id', $tenant->id)->first();
+                if ($existingInstructor) {
+                    // Update existing records instead of creating new ones
+                    $existingInstructor->update([
+                        'name' => $request->instructor_name,
+                        'phone' => $request->instructor_phone,
+                        'email' => $request->instructor_email ?: $existingInstructor->email,
+                        'specialization' => $request->instructor_specialization,
+                    ]);
+                    // Also update associated user
+                    if ($existingInstructor->user) {
+                        $existingInstructor->user->update([
+                            'name' => $request->instructor_name,
+                            'phone' => $request->instructor_phone,
+                        ]);
+                    }
+                } else {
+                    $user = \App\Models\User::create([
+                        'tenant_id' => $tenant->id,
+                        'name' => $request->instructor_name,
+                        'phone' => $request->instructor_phone,
+                        'email' => $request->instructor_email ?: 'instructor_' . time() . '@' . $tenant->domain,
+                        'password' => 'password123',
+                        'role' => 'instructor',
+                        'email_verified_at' => now(),
+                        'phone_verified_at' => now(),
+                    ]);
 
-                \App\Models\Instructor::create([
-                    'tenant_id' => $tenant->id,
-                    'user_id' => $user->id,
-                    'name' => $request->instructor_name,
-                    'phone' => $request->instructor_phone,
-                    'email' => $user->email,
-                    'specialization' => $request->instructor_specialization,
-                    'status' => 'active',
-                ]);
+                    \App\Models\Instructor::create([
+                        'tenant_id' => $tenant->id,
+                        'user_id' => $user->id,
+                        'name' => $request->instructor_name,
+                        'phone' => $request->instructor_phone,
+                        'email' => $user->email,
+                        'specialization' => $request->instructor_specialization,
+                        'status' => 'active',
+                    ]);
+                }
             }
             
             $tenant->update(['onboarding_status' => 'step_3']);
@@ -121,19 +140,33 @@ class OnboardingController extends Controller
                     'schedules.*.time' => 'required',
                 ]);
 
-                // Try to find the instructor created in step 2
                 $instructor = \App\Models\Instructor::where('tenant_id', $tenant->id)->first();
                 
-                $course = \App\Models\Course::create([
-                    'tenant_id' => $tenant->id,
-                    'instructor_id' => $instructor?->id,
-                    'title' => $request->course_name,
-                    'price' => $request->price,
-                    'sessions_count' => $request->sessions_count,
-                    'status' => 'active',
-                ]);
+                // Prevent duplicates: check if an onboarding course already exists
+                $existingCourse = \App\Models\Course::where('tenant_id', $tenant->id)->first();
+                if ($existingCourse) {
+                    // Update existing course
+                    $existingCourse->update([
+                        'instructor_id' => $instructor?->id,
+                        'title' => $request->course_name,
+                        'price' => $request->price,
+                        'sessions_count' => $request->sessions_count,
+                    ]);
+                    // Delete old schedules and recreate
+                    \App\Models\Schedule::where('course_id', $existingCourse->id)->delete();
+                    $course = $existingCourse;
+                } else {
+                    $course = \App\Models\Course::create([
+                        'tenant_id' => $tenant->id,
+                        'instructor_id' => $instructor?->id,
+                        'title' => $request->course_name,
+                        'price' => $request->price,
+                        'sessions_count' => $request->sessions_count,
+                        'status' => 'active',
+                    ]);
+                }
 
-                // Create Schedules
+                // Create Schedules (fresh)
                 foreach ($request->input('schedules') as $sched) {
                     $startTime = \Carbon\Carbon::createFromFormat('H:i', $sched['time']);
                     $endTime = isset($sched['time_end']) ? \Carbon\Carbon::createFromFormat('H:i', $sched['time_end']) : (clone $startTime)->addHours(2);
@@ -141,7 +174,7 @@ class OnboardingController extends Controller
                     \App\Models\Schedule::create([
                         'tenant_id' => $tenant->id,
                         'course_id' => $course->id,
-                        'instructor_id' => $instructor?->user_id, // Schedule uses user_id for instructor as per migration
+                        'instructor_id' => $instructor?->user_id,
                         'day_of_week' => $sched['day'],
                         'start_time' => $startTime->format('H:i:s'),
                         'end_time' => $endTime->format('H:i:s'),
@@ -160,38 +193,58 @@ class OnboardingController extends Controller
                     'student_phone' => 'required|string|max:20',
                 ]);
 
-                // Create student user
-                $user = \App\Models\User::create([
-                    'tenant_id' => $tenant->id,
-                    'name' => $request->student_name,
-                    'phone' => $request->student_phone,
-                    'email' => 'student_' . $request->student_phone . '@' . $tenant->id . '.edu',
-                    'password' => \Illuminate\Support\Facades\Hash::make($request->student_phone),
-                    'user_type' => 'student',
-                    'status' => 'active',
-                ]);
+                // Prevent duplicates: check if an onboarding student already exists
+                $existingStudent = \App\Models\Student::where('tenant_id', $tenant->id)->first();
+                if ($existingStudent) {
+                    // Update existing
+                    $existingStudent->update([
+                        'name' => $request->student_name,
+                        'phone' => $request->student_phone,
+                    ]);
+                    if ($existingStudent->user) {
+                        $existingStudent->user->update([
+                            'name' => $request->student_name,
+                            'phone' => $request->student_phone,
+                        ]);
+                    }
+                    $user = $existingStudent->user;
+                } else {
+                    $user = \App\Models\User::create([
+                        'tenant_id' => $tenant->id,
+                        'name' => $request->student_name,
+                        'phone' => $request->student_phone,
+                        'email' => 'student_' . $request->student_phone . '@' . $tenant->id . '.edu',
+                        'password' => \Illuminate\Support\Facades\Hash::make($request->student_phone),
+                        'user_type' => 'student',
+                        'status' => 'active',
+                    ]);
 
-                // Also create student record
-                \App\Models\Student::create([
-                    'tenant_id' => $tenant->id,
-                    'user_id' => $user->id,
-                    'name' => $request->student_name,
-                    'phone' => $request->student_phone,
-                    'status' => 'active',
-                ]);
+                    \App\Models\Student::create([
+                        'tenant_id' => $tenant->id,
+                        'user_id' => $user->id,
+                        'name' => $request->student_name,
+                        'phone' => $request->student_phone,
+                        'status' => 'active',
+                    ]);
+                }
 
                 // Enroll in course if requested
-                if ($request->boolean('enroll_in_course')) {
+                if ($request->boolean('enroll_in_course') && $user) {
                     $course = \App\Models\Course::where('tenant_id', $tenant->id)->latest()->first();
                     if ($course) {
-                        \App\Models\Enrollment::create([
-                            'tenant_id' => $tenant->id,
-                            'user_id' => $user->id,
-                            'course_id' => $course->id,
-                            'enrolled_at' => now(),
-                            'status' => 'active',
-                            'remaining_sessions' => $course->sessions_count,
-                        ]);
+                        // Prevent duplicate enrollment
+                        $existingEnrollment = \App\Models\Enrollment::where('user_id', $user->id)
+                            ->where('course_id', $course->id)->first();
+                        if (!$existingEnrollment) {
+                            \App\Models\Enrollment::create([
+                                'tenant_id' => $tenant->id,
+                                'user_id' => $user->id,
+                                'course_id' => $course->id,
+                                'enrolled_at' => now(),
+                                'status' => 'active',
+                                'remaining_sessions' => $course->sessions_count,
+                            ]);
+                        }
                     }
                 }
             }
