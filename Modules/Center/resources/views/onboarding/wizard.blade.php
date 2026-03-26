@@ -229,13 +229,13 @@
                                 <div>
                                     <label class="block text-xs font-bold text-emerald-700 mb-1">{{ __('onboarding.step_3.day_label') }}</label>
                                     <select x-model="formData.step_3.day_of_week" class="w-full border-emerald-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-white">
-                                        <option value="0">{{ __('center::messages.blade_0843') ?? 'Sunday' }}</option>
-                                        <option value="1">{{ __('center::messages.blade_0844') ?? 'Monday' }}</option>
-                                        <option value="2">{{ __('center::messages.blade_0845') ?? 'Tuesday' }}</option>
-                                        <option value="3">{{ __('center::messages.blade_0846') ?? 'Wednesday' }}</option>
-                                        <option value="4">{{ __('center::messages.blade_0847') ?? 'Thursday' }}</option>
-                                        <option value="5">{{ __('center::messages.blade_0848') ?? 'Friday' }}</option>
-                                        <option value="6">{{ __('center::messages.blade_0849') ?? 'Saturday' }}</option>
+                                        <option value="0">{{ __('onboarding.days.0') }}</option>
+                                        <option value="1">{{ __('onboarding.days.1') }}</option>
+                                        <option value="2">{{ __('onboarding.days.2') }}</option>
+                                        <option value="3">{{ __('onboarding.days.3') }}</option>
+                                        <option value="4">{{ __('onboarding.days.4') }}</option>
+                                        <option value="5">{{ __('onboarding.days.5') }}</option>
+                                        <option value="6">{{ __('onboarding.days.6') }}</option>
                                     </select>
                                 </div>
                                 <div>
