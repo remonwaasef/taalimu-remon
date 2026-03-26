@@ -46,6 +46,8 @@ return [
         'schedule_section' => 'المواعيد (موعد أساسي)',
         'day_label' => 'اليوم',
         'time_label' => 'وقت البدء',
+        'btn_add_schedule' => 'إضافة موعد آخر',
+        'btn_remove_schedule' => 'حذف',
         'btn_skip' => 'تخطي مؤقتاً',
         'btn_submit' => 'إنشاء المادة',
     ],
