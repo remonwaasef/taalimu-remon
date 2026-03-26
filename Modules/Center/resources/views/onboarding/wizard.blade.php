@@ -305,6 +305,14 @@
                             <input type="text" x-model="formData.step_4.student_phone" dir="ltr" placeholder="01xxxxxxxxx" class="w-full border-slate-200 rounded-xl focus:ring-purple-500 focus:border-purple-500 h-12 text-right" required>
                         </div>
 
+                        <div class="p-4 bg-purple-50/50 rounded-2xl border border-purple-100 flex items-center gap-3">
+                            <input type="checkbox" x-model="formData.step_4.enroll_in_course" class="w-5 h-5 rounded border-purple-300 text-purple-600 focus:ring-purple-500">
+                            <label class="text-sm font-medium text-purple-900">
+                                {{ __('onboarding.step_4.enroll_checkbox', ['course' => '']) }}
+                                <span class="font-bold underline" x-text="formData.step_3.course_name"></span>
+                            </label>
+                        </div>
+
                         <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
                             <div class="flex items-center gap-6">
                                 <button type="button" @click="prevStep()" class="text-slate-400 hover:text-slate-700 font-medium transition-colors text-sm flex items-center gap-2">
@@ -348,7 +356,7 @@
                 step_1: { locale: '{{ app()->getLocale() }}', currency: 'EGP' },
                 step_2: { instructor_name: '', instructor_phone: '', instructor_specialization: '', instructor_email: '' },
                 step_3: { course_name: '', price: '', sessions_count: '1', schedules: [{day: '0', time: '16:00', time_end: '18:00'}] },
-                step_4: { student_name: '', student_phone: '' }
+                step_4: { student_name: '', student_phone: '', enroll_in_course: true }
             },
             
             syncSchedules(count) {

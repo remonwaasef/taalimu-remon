@@ -59,6 +59,7 @@ return [
         'name_label' => 'Student Name',
         'name_placeholder' => 'e.g., Alex Smith',
         'phone_label' => 'Student Phone Number',
+        'enroll_checkbox' => 'Enroll the student in the course you created ( :course )',
         'btn_skip' => 'Skip & Go to Dashboard',
         'btn_submit' => 'Finish Setup & Start!',
     ],
