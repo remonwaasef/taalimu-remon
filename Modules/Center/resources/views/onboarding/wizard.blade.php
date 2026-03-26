@@ -218,7 +218,9 @@
 
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_3.sessions_label') }}</label>
-                            <input type="number" x-model="formData.step_3.sessions_count" placeholder="12" class="w-full border-slate-200 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 h-12" required>
+                            <input type="number" x-model="formData.step_3.sessions_count" 
+                                   @input="syncSchedules($event.target.value)"
+                                   placeholder="12" class="w-full border-slate-200 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 h-12" required>
                         </div>
 
                         <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 space-y-4">
@@ -341,8 +343,25 @@
             formData: {
                 step_1: { locale: '{{ app()->getLocale() }}', currency: 'EGP' },
                 step_2: { instructor_name: '', instructor_phone: '', instructor_specialization: '', instructor_email: '' },
-                step_3: { course_name: '', price: '', sessions_count: '', schedules: [{day: '0', time: '16:00'}] },
+                step_3: { course_name: '', price: '', sessions_count: '1', schedules: [{day: '0', time: '16:00'}] },
                 step_4: { student_name: '', student_phone: '' }
+            },
+            
+            syncSchedules(count) {
+                const n = parseInt(count) || 0;
+                if (n < 1) return;
+                
+                // Limit to a reasonable number to avoid UI freeze
+                const finalCount = Math.min(n, 20);
+                
+                const currentCount = this.formData.step_3.schedules.length;
+                if (finalCount > currentCount) {
+                    for (let i = 0; i < (finalCount - currentCount); i++) {
+                        this.formData.step_3.schedules.push({day: '0', time: '16:00'});
+                    }
+                } else if (finalCount < currentCount) {
+                    this.formData.step_3.schedules.splice(finalCount);
+                }
             },
 
             get currentStepIndex() {
