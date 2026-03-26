@@ -55,5 +55,12 @@ return [
     'error_title' => 'Oups',
     'error_fallback' => 'Une erreur inattendue est survenue',
     'btn_ok' => 'OK',
+    'currencies' => [
+        'egp' => 'Livre Égyptienne (EGP)',
+        'sar' => 'Riyal Saoudien (SAR)',
+        'aed' => 'Dirham des Émirats (AED)',
+        'usd' => 'Dollar Américain (USD)',
+        'eur' => 'Euro (EUR)',
+    ],
     'btn_back' => 'Retour',
 ];
