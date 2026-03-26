@@ -111,7 +111,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                 <label class="border rounded-xl p-4 cursor-pointer transition-all duration-200 hover:border-primary/50 relative"
                                        :class="formData.step_1.locale === 'ar' ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-slate-200'">
-                                    <input type="radio" x-model="formData.step_1.locale" value="ar" @change="updateLocale()" class="sr-only">
+                                    <input type="radio" x-model="formData.step_1.locale" value="ar" @change="updateLanguage('ar')" class="sr-only">
                                     <div class="flex items-center gap-3">
                                         <span class="text-2xl">🇸🇦</span>
                                         <span class="font-medium text-slate-800">العربية</span>
@@ -122,7 +122,7 @@
                                 </label>
                                 <label class="border rounded-xl p-4 cursor-pointer transition-all duration-200 hover:border-primary/50 relative"
                                        :class="formData.step_1.locale === 'en' ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-slate-200'">
-                                    <input type="radio" x-model="formData.step_1.locale" value="en" @change="updateLocale()" class="sr-only">
+                                    <input type="radio" x-model="formData.step_1.locale" value="en" @change="updateLanguage('en')" class="sr-only">
                                     <div class="flex items-center gap-3">
                                         <span class="text-2xl">🇬🇧</span>
                                         <span class="font-medium text-slate-800">English</span>
@@ -133,7 +133,7 @@
                                 </label>
                                 <label class="border rounded-xl p-4 cursor-pointer transition-all duration-200 hover:border-primary/50 relative"
                                        :class="formData.step_1.locale === 'fr' ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-slate-200'">
-                                    <input type="radio" x-model="formData.step_1.locale" value="fr" @change="updateLocale()" class="sr-only">
+                                    <input type="radio" x-model="formData.step_1.locale" value="fr" @change="updateLanguage('fr')" class="sr-only">
                                     <div class="flex items-center gap-3">
                                         <span class="text-2xl">🇫🇷</span>
                                         <span class="font-medium text-slate-800">Français</span>
@@ -308,7 +308,7 @@
             ],
             
             formData: {
-                step_1: { locale: 'ar', currency: 'EGP' },
+                step_1: { locale: '{{ app()->getLocale() }}', currency: 'EGP' },
                 step_2: { instructor_name: '', instructor_phone: '' },
                 step_3: { course_name: '' },
                 step_4: { student_name: '', student_phone: '' }
@@ -325,10 +325,17 @@
                 }
             },
 
-            async updateLocale() {
+            initWizard() {
+                // Ensure we don't start on an invalid step if something went wrong
+                if (!this.steps.find(s => s.id === this.currentStep)) {
+                    this.currentStep = 'step_1';
+                }
+            },
+            
+            async updateLanguage(locale) {
                 if (this.loading) return;
                 this.loading = true;
-
+                
                 try {
                     const response = await fetch('{{ route('center.onboarding.update-locale') }}', {
                         method: 'POST',
@@ -337,23 +344,16 @@
                             'Accept': 'application/json',
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
-                        body: JSON.stringify({ locale: this.formData.step_1.locale })
+                        body: JSON.stringify({ locale: locale })
                     });
-
+                    
                     if (response.ok) {
                         window.location.reload();
                     }
                 } catch (error) {
-                    console.error('Failed to update locale:', error);
+                    console.error('Failed to update language:', error);
                 } finally {
                     this.loading = false;
-                }
-            },
-
-            initWizard() {
-                // Ensure we don't start on an invalid step if something went wrong
-                if (!this.steps.find(s => s.id === this.currentStep)) {
-                    this.currentStep = 'step_1';
                 }
             },
 
