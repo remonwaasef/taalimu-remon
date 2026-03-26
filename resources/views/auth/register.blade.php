@@ -228,6 +228,7 @@ document.addEventListener('alpine:init', () => {
     
     <!-- Main Centered Card Container (Simplified Single Column) -->
     <div class="w-full transition-all duration-500 bg-white rounded-3xl shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100/50 animate-fade-in-up md:backdrop-blur-xl relative"
+         x-cloak
          :class="currentStep === 2 ? 'max-w-4xl' : 'max-w-xl'">
         
         <!-- Minimalist Progress & Header -->
@@ -250,7 +251,7 @@ document.addEventListener('alpine:init', () => {
 
             <!-- Contextual Header -->
             <div class="mb-4 text-center transition-all duration-700 ease-in-out" :class="!accountType ? 'transform scale-110 translate-y-[3vh] mb-8' : ''">
-                <div x-show="currentStep === 1">
+                <div x-show="currentStep === 1" x-cloak>
                     <h1 class="text-xl lg:text-2xl font-black text-slate-900 mb-1 font-arabic leading-tight">
                         {{ app()->isLocale('ar') ? 'ابدأ رحلتك التعليمية' : 'Start Your Journey' }}
                     </h1>
@@ -273,7 +274,7 @@ document.addEventListener('alpine:init', () => {
             </div>
 
             <!-- Account Type Selection (Premium Position) -->
-            <div x-show="currentStep === 1" class="mb-4 transition-all duration-700 ease-in-out relative z-10" :class="!accountType ? 'transform scale-110 translate-y-[3vh] pb-12 mt-4' : ''">
+            <div x-show="currentStep === 1" x-cloak class="mb-4 transition-all duration-700 ease-in-out relative z-10" :class="!accountType ? 'transform scale-110 translate-y-[3vh] pb-12 mt-4' : ''">
                 <label class="text-[11px] font-black text-slate-500 px-1 font-arabic uppercase tracking-wider block mb-3 text-center opacity-70 transition-all duration-700" :class="!accountType ? 'text-base text-slate-800 opacity-100 font-black mb-6' : ''">
                     {{ app()->isLocale('ar') ? 'ابدأ كـ ...' : 'Start as ...' }}
                 </label>
@@ -576,7 +577,7 @@ document.addEventListener('alpine:init', () => {
                                             class="text-[10px] font-black text-brand-secondary hover:underline flex items-center gap-1 font-arabic">
                                         <i class="bi bi-tag-fill"></i> {{ __('auth.register.have_coupon') ?? 'هل لديك كود خصم؟' }}
                                     </button>
-                                    <div x-show="showCouponInput || couponStatus === 'valid'" class="relative">
+                                    <div x-show="showCouponInput || couponStatus === 'valid'" x-cloak class="relative">
                                         <input type="text" name="coupon_code" x-model="couponCode" @input.debounce.500ms="validateCoupon()"
                                             placeholder="{{ __('admin.coupon_code') }}"
                                             class="w-full h-8 px-3 bg-white border-2 border-slate-100 rounded-lg text-[10px] font-black uppercase focus:outline-none focus:border-brand-secondary transition-all"

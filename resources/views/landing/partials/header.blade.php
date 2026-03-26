@@ -42,7 +42,7 @@
                         <i class="fas fa-globe text-xs"></i>
                         {{ strtoupper(app()->getLocale()) }}
                     </button>
-                    <div x-show="open" @click.away="open = false" class="absolute right-0 mt-3 w-40 glass-premium rounded-xl shadow-xl py-2 overflow-hidden z-50 animate-fade-in">
+                    <div x-show="open" x-cloak @click.away="open = false" class="absolute right-0 mt-3 w-40 glass-premium rounded-xl shadow-xl py-2 overflow-hidden z-50 animate-fade-in">
                         @foreach(['en' => 'English', 'ar' => 'العربية', 'fr' => 'Français'] as $code => $label)
                         <a href="{{ route('lang.switch', ['locale' => $code]) }}" class="block px-4 py-2 text-sm @if(app()->isLocale($code)) text-[#22c55e] font-black @else text-slate-600 font-bold hover:bg-slate-50 @endif">
                             {{ $label }}
@@ -74,6 +74,7 @@
     <!-- Mobile Menu: Clean Glass -->
     <div 
         x-show="isMenuOpen" 
+        x-cloak
         x-transition:enter="transition ease-out duration-200"
         x-transition:enter-start="opacity-0 -translate-y-4"
         x-transition:enter-end="opacity-100 translate-y-0"
