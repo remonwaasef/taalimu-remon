@@ -55,5 +55,12 @@ return [
     'error_title' => 'عفواً',
     'error_fallback' => 'حدث خطأ غير متوقع',
     'btn_ok' => 'حسناً',
+    'currencies' => [
+        'egp' => 'جنيه مصري (EGP)',
+        'sar' => 'ريال سعودي (SAR)',
+        'aed' => 'درهم إماراتي (AED)',
+        'usd' => 'دولار أمريكي (USD)',
+        'eur' => 'يورو (EUR)',
+    ],
     'btn_back' => 'رجوع',
 ];

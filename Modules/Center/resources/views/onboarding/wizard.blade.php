@@ -122,11 +122,11 @@
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_1.currency_label') }}</label>
                             <select x-model="formData.step_1.currency" class="w-full border-slate-200 rounded-xl focus:ring-primary focus:border-primary h-12">
-                                <option value="EGP">جنيه مصري (EGP)</option>
-                                <option value="SAR">ريال سعودي (SAR)</option>
-                                <option value="AED">درهم إماراتي (AED)</option>
-                                <option value="USD">دولار أمريكي (USD)</option>
-                                <option value="EUR">يورو (EUR)</option>
+                                <option value="EGP">{{ __('onboarding.currencies.egp') }}</option>
+                                <option value="SAR">{{ __('onboarding.currencies.sar') }}</option>
+                                <option value="AED">{{ __('onboarding.currencies.aed') }}</option>
+                                <option value="USD">{{ __('onboarding.currencies.usd') }}</option>
+                                <option value="EUR">{{ __('onboarding.currencies.eur') }}</option>
                             </select>
                         </div>
                         
