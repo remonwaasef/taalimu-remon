@@ -136,7 +136,7 @@ class OnboardingController extends Controller
                 // Create Schedules
                 foreach ($request->input('schedules') as $sched) {
                     $startTime = \Carbon\Carbon::createFromFormat('H:i', $sched['time']);
-                    $endTime = (clone $startTime)->addHours(2); // Default 2 hours session
+                    $endTime = isset($sched['time_end']) ? \Carbon\Carbon::createFromFormat('H:i', $sched['time_end']) : (clone $startTime)->addHours(2);
                     
                     \App\Models\Schedule::create([
                         'tenant_id' => $tenant->id,

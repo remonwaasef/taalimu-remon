@@ -46,6 +46,7 @@ return [
         'schedule_section' => 'Schedules (Main Appointment)',
         'day_label' => 'Day',
         'time_label' => 'Start Time',
+        'time_end_label' => 'End Time',
         'btn_add_schedule' => 'Add Another Appointment',
         'btn_remove_schedule' => 'Remove',
         'btn_skip' => 'Skip for now',
