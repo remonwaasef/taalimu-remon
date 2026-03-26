@@ -191,9 +191,14 @@
                         </div>
 
                         <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <button type="button" @click="submitStep('step_2', true)" class="text-slate-500 hover:text-slate-800 font-medium transition-colors text-sm">
-                                {{ __('onboarding.step_2.btn_skip') }}
-                            </button>
+                            <div class="flex items-center gap-6">
+                                <button type="button" @click="prevStep()" class="text-slate-400 hover:text-slate-700 font-medium transition-colors text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-arrow-left rtl:rotate-180"></i> {{ __('onboarding.btn_back') }}
+                                </button>
+                                <button type="button" @click="submitStep('step_2', true)" class="text-slate-500 hover:text-slate-800 font-medium transition-colors text-sm">
+                                    {{ __('onboarding.step_2.btn_skip') }}
+                                </button>
+                            </div>
                             <button type="submit" class="bg-primary hover:bg-primary-focus text-white w-full sm:w-auto px-8 py-3 rounded-xl font-medium transition-colors flex justify-center items-center gap-2">
                                 {{ __('onboarding.step_2.btn_submit') }} <i class="fa-solid fa-arrow-right rtl:rotate-180 mt-1"></i>
                             </button>
@@ -223,9 +228,14 @@
                         </div>
 
                         <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <button type="button" @click="submitStep('step_3', true)" class="text-slate-500 hover:text-slate-800 font-medium transition-colors text-sm">
-                                {{ __('onboarding.step_3.btn_skip') }}
-                            </button>
+                            <div class="flex items-center gap-6">
+                                <button type="button" @click="prevStep()" class="text-slate-400 hover:text-slate-700 font-medium transition-colors text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-arrow-left rtl:rotate-180"></i> {{ __('onboarding.btn_back') }}
+                                </button>
+                                <button type="button" @click="submitStep('step_3', true)" class="text-slate-500 hover:text-slate-800 font-medium transition-colors text-sm">
+                                    {{ __('onboarding.step_3.btn_skip') }}
+                                </button>
+                            </div>
                             <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 text-white w-full sm:w-auto px-8 py-3 rounded-xl font-medium transition-colors flex justify-center items-center gap-2">
                                 {{ __('onboarding.step_3.btn_submit') }} <i class="fa-solid fa-arrow-right rtl:rotate-180 mt-1"></i>
                             </button>
@@ -259,9 +269,14 @@
                         </div>
 
                         <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <button type="button" @click="submitStep('step_4', true)" class="text-slate-500 hover:text-slate-800 font-medium transition-colors text-sm">
-                                {{ __('onboarding.step_4.btn_skip') }}
-                            </button>
+                            <div class="flex items-center gap-6">
+                                <button type="button" @click="prevStep()" class="text-slate-400 hover:text-slate-700 font-medium transition-colors text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-arrow-left rtl:rotate-180"></i> {{ __('onboarding.btn_back') }}
+                                </button>
+                                <button type="button" @click="submitStep('step_4', true)" class="text-slate-500 hover:text-slate-800 font-medium transition-colors text-sm">
+                                    {{ __('onboarding.step_4.btn_skip') }}
+                                </button>
+                            </div>
                             <button type="submit" class="bg-purple-600 hover:bg-purple-700 shadow-lg shadow-purple-200 text-white w-full sm:w-auto px-8 py-3 rounded-xl font-medium transition-colors flex justify-center items-center gap-2">
                                 {{ __('onboarding.step_4.btn_submit') }} <i class="fa-solid fa-rocket rtl:mr-2 ltr:ml-2"></i>
                             </button>
@@ -301,6 +316,13 @@
 
             get currentStepIndex() {
                 return this.steps.findIndex(s => s.id === this.currentStep);
+            },
+
+            prevStep() {
+                const currentIndex = this.currentStepIndex;
+                if (currentIndex > 0) {
+                    this.currentStep = this.steps[currentIndex - 1].id;
+                }
             },
 
             initWizard() {

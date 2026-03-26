@@ -55,4 +55,5 @@ return [
     'error_title' => 'عفواً',
     'error_fallback' => 'حدث خطأ غير متوقع',
     'btn_ok' => 'حسناً',
+    'btn_back' => 'رجوع',
 ];

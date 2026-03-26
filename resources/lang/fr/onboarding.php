@@ -55,4 +55,5 @@ return [
     'error_title' => 'Oups',
     'error_fallback' => 'Une erreur inattendue est survenue',
     'btn_ok' => 'OK',
+    'btn_back' => 'Retour',
 ];
