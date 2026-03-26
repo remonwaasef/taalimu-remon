@@ -158,9 +158,19 @@
                             <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_2.name_label') }}</label>
                             <input type="text" x-model="formData.step_2.instructor_name" placeholder="{{ __('onboarding.step_2.name_placeholder') }}" class="w-full border-slate-200 rounded-xl focus:ring-primary focus:border-primary h-12" required>
                         </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_2.specialization_label') }}</label>
+                                <input type="text" x-model="formData.step_2.instructor_specialization" placeholder="{{ __('onboarding.step_2.specialization_placeholder') }}" class="w-full border-slate-200 rounded-xl focus:ring-primary focus:border-primary h-12">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_2.phone_label') }} <span class="text-slate-400 font-normal text-xs">{{ __('onboarding.step_2.phone_hint') }}</span></label>
+                                <input type="tel" x-model="formData.step_2.instructor_phone" dir="ltr" placeholder="01xxxxxxxxx" class="w-full border-slate-200 rounded-xl focus:ring-primary focus:border-primary h-12 text-right" required>
+                            </div>
+                        </div>
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_2.phone_label') }} <span class="text-slate-400 font-normal text-xs">{{ __('onboarding.step_2.phone_hint') }}</span></label>
-                            <input type="text" x-model="formData.step_2.instructor_phone" dir="ltr" placeholder="01xxxxxxxxx" class="w-full border-slate-200 rounded-xl focus:ring-primary focus:border-primary h-12 text-right" required>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_2.email_label') }}</label>
+                            <input type="email" x-model="formData.step_2.instructor_email" dir="ltr" placeholder="{{ __('onboarding.step_2.email_placeholder') }}" class="w-full border-slate-200 rounded-xl focus:ring-primary focus:border-primary h-12 text-right">
                         </div>
 
                         <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -282,7 +292,7 @@
             
             formData: {
                 step_1: { locale: '{{ app()->getLocale() }}', currency: 'EGP' },
-                step_2: { instructor_name: '', instructor_phone: '' },
+                step_2: { instructor_name: '', instructor_phone: '', instructor_specialization: '', instructor_email: '' },
                 step_3: { course_name: '' },
                 step_4: { student_name: '', student_phone: '' }
             },
