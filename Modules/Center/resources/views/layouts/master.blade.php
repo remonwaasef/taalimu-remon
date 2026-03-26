@@ -88,6 +88,11 @@
             background-color: var(--bg-light);
             color: var(--text-dark);
         }
+
+        /* Fix for action dropdowns in responsive tables */
+        .table-responsive {
+            min-height: 300px;
+        }
         
         /* Sidebar Luxury Design */
         .sidebar {

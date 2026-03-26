@@ -108,7 +108,7 @@
                                         <button class="btn btn-icon btn-light rounded-circle shadow-none" type="button" data-bs-toggle="dropdown">
                                             <i class="fas fa-ellipsis-v"></i>
                                         </button>
-                                        <ul class="dropdown-menu border-0 shadow-lg p-2 rounded-4">
+                                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2 rounded-4">
                                             <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('center.instructors.show', $instructor->id) }}"><i class="far fa-eye me-2 text-primary opacity-75"></i> {{ __('center::instructors.show') }}</a></li>
                                             <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('center.instructors.edit', $instructor->id) }}"><i class="far fa-edit me-2 text-success opacity-75"></i> {{ __('center::instructors.edit') }}</a></li>
                                             <li><hr class="dropdown-divider opacity-10"></li>

@@ -64,7 +64,7 @@
                                                 <i class="far fa-calendar-alt text-primary"></i>
                                                 <span class="fw-bold">{{ $course->schedules->count() }} {{ __('center::schedules.schedules_count') }}</span>
                                             </button>
-                                            <div class="dropdown-menu border-0 shadow-lg p-2 rounded-4" style="min-width: 250px;">
+                                            <div class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2 rounded-4" style="min-width: 250px;">
                                                 <h6 class="dropdown-header text-primary fw-bold mb-2">{{ __('center::messages.blade_0337') }}</h6>
                                                 <div class="d-flex flex-column gap-2">
                                                     @foreach($course->schedules as $schedule)
