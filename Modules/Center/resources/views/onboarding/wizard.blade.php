@@ -205,9 +205,44 @@
                     </div>
 
                     <form @submit.prevent="submitStep('step_3', false)" class="space-y-5">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_3.name_label') }}</label>
+                                <input type="text" x-model="formData.step_3.course_name" placeholder="{{ __('onboarding.step_3.name_placeholder') }}" class="w-full border-slate-200 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 h-12" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_3.price_label') }}</label>
+                                <input type="number" x-model="formData.step_3.price" placeholder="0.00" class="w-full border-slate-200 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 h-12" required>
+                            </div>
+                        </div>
+
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_3.name_label') }}</label>
-                            <input type="text" x-model="formData.step_3.course_name" placeholder="{{ __('onboarding.step_3.name_placeholder') }}" class="w-full border-slate-200 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 h-12" required>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_3.sessions_label') }}</label>
+                            <input type="number" x-model="formData.step_3.sessions_count" placeholder="12" class="w-full border-slate-200 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 h-12" required>
+                        </div>
+
+                        <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 space-y-4">
+                            <h3 class="font-bold text-emerald-800 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-calendar-days"></i> {{ __('onboarding.step_3.schedule_section') }}
+                            </h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-emerald-700 mb-1">{{ __('onboarding.step_3.day_label') }}</label>
+                                    <select x-model="formData.step_3.day_of_week" class="w-full border-emerald-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-white">
+                                        <option value="0">{{ __('center::messages.blade_0843') ?? 'Sunday' }}</option>
+                                        <option value="1">{{ __('center::messages.blade_0844') ?? 'Monday' }}</option>
+                                        <option value="2">{{ __('center::messages.blade_0845') ?? 'Tuesday' }}</option>
+                                        <option value="3">{{ __('center::messages.blade_0846') ?? 'Wednesday' }}</option>
+                                        <option value="4">{{ __('center::messages.blade_0847') ?? 'Thursday' }}</option>
+                                        <option value="5">{{ __('center::messages.blade_0848') ?? 'Friday' }}</option>
+                                        <option value="6">{{ __('center::messages.blade_0849') ?? 'Saturday' }}</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-emerald-700 mb-1">{{ __('onboarding.step_3.time_label') }}</label>
+                                    <input type="time" x-model="formData.step_3.start_time" class="w-full border-emerald-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-white h-11">
+                                </div>
+                            </div>
                         </div>
 
                         <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -293,7 +328,7 @@
             formData: {
                 step_1: { locale: '{{ app()->getLocale() }}', currency: 'EGP' },
                 step_2: { instructor_name: '', instructor_phone: '', instructor_specialization: '', instructor_email: '' },
-                step_3: { course_name: '' },
+                step_3: { course_name: '', price: '', sessions_count: '', day_of_week: '0', start_time: '16:00' },
                 step_4: { student_name: '', student_phone: '' }
             },
 
