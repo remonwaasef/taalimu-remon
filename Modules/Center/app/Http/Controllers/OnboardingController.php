@@ -165,7 +165,8 @@ class OnboardingController extends Controller
                     'tenant_id' => $tenant->id,
                     'name' => $request->student_name,
                     'phone' => $request->student_phone,
-                    'password' => \Illuminate\Support\Facades\Hash::make($request->student_phone), // default password as phone
+                    'email' => 'student_' . $request->student_phone . '@' . $tenant->id . '.edu',
+                    'password' => \Illuminate\Support\Facades\Hash::make($request->student_phone),
                     'user_type' => 'student',
                     'status' => 'active',
                 ]);
