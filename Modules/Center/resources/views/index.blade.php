@@ -146,11 +146,6 @@
         </ul>
     </div>
 
-    <!-- Launchpad Widget (Only if setup incomplete) -->
-    @if($launchpadProgress < 100)
-        @include('center::partials.launchpad')
-    @endif
-
     <div class="tab-content" id="dashboardTabsContent">
         
         <!-- Tab 1: Daily Overview (Simplified) -->

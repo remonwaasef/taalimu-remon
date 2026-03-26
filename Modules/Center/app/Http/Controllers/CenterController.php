@@ -51,14 +51,6 @@ class CenterController extends Controller
 
         $dashboardData = \App\Support\TenantCache::remember($cacheKey, now()->addMinutes(15), function () use ($tenantId) {
             $activeStudentsCount = Student::where('status', 'active')->count();
-            
-            $launchpadSteps = [
-                'education_system' => \App\Models\Stage::where('tenant_id', $tenantId)->exists(),
-                'instructor' => Instructor::where('tenant_id', $tenantId)->exists(),
-                'course' => Course::where('tenant_id', $tenantId)->exists(),
-                'student' => $activeStudentsCount > 0,
-                'attendance' => \Modules\Center\Models\Attendance::where('tenant_id', $tenantId)->exists(),
-            ];
 
             return [
                 'activeStudents' => $activeStudentsCount,
@@ -69,7 +61,6 @@ class CenterController extends Controller
                 'monthlyExpenses' => Expense::whereMonth('date', now()->month)
                     ->whereYear('date', now()->year)
                     ->sum('amount'),
-                'launchpadSteps' => $launchpadSteps,
             ];
         });
 
@@ -77,11 +68,7 @@ class CenterController extends Controller
         $activeCourses = $dashboardData['activeCourses'];
         $monthlyRevenue = $dashboardData['monthlyRevenue'];
         $monthlyExpenses = $dashboardData['monthlyExpenses'];
-        $launchpadSteps = $dashboardData['launchpadSteps'];
         $netProfit = $monthlyRevenue - $monthlyExpenses;
-        
-        $completedSteps = count(array_filter($launchpadSteps));
-        $launchpadProgress = ($completedSteps / 5) * 100;
 
         // 1.1 Fetch Recent Activities (Cached for 5 minutes)
         $activityCacheKey = "recent_activities";
@@ -107,9 +94,7 @@ class CenterController extends Controller
             'recentActivities',
             'atRiskStudents',
             'aiInsights',
-            'performanceTrends',
-            'launchpadProgress',
-            'launchpadSteps'
+            'performanceTrends'
         ));
     }
 
