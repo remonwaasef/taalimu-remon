@@ -1,4 +1,4 @@
-@extends('admin::layouts.master')
+@extends('admin::layouts.hope-master')
 
 @section('title', 'إضافة مستخدم إداري')
 @section('page-title', 'إضافة مستخدم إداري')

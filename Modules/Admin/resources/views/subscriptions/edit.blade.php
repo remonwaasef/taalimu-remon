@@ -1,4 +1,4 @@
-@extends('admin::layouts.master')
+@extends('admin::layouts.hope-master')
 
 @section('title', 'تعديل اشتراك ' . $subscription->tenant->name)
 

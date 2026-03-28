@@ -1,4 +1,4 @@
-@extends('instructor::components.layouts.master')
+@extends('instructor::components.layouts.hope-master')
 
 @section('content')
 <div class="container py-4">
