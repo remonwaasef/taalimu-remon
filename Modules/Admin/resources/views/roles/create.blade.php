@@ -1,4 +1,4 @@
-@extends('admin::layouts.master')
+@extends('admin::layouts.hope-master')
 
 @section('title', __('admin.roles.create_new'))
 @section('page-title', __('admin.roles.create_new'))

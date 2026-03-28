@@ -1,4 +1,4 @@
-@extends('admin::layouts.master')
+@extends('admin::layouts.hope-master')
 
 @section('page-title', __('admin::admin.dashboard.title'))
 
