@@ -1,48 +1,39 @@
-<section class="py-24 bg-white relative overflow-hidden section-wave" 
-    x-data="{ 
-        visible: false,
-        animateCounter(el, target) {
-            let current = 0;
-            const step = Math.ceil(target / 40);
-            const timer = setInterval(() => {
-                current += step;
-                if (current >= target) { current = target; clearInterval(timer); }
-                el.textContent = current + (el.dataset.suffix || '');
-            }, 30);
-        }
-    }"
-    x-intersect.once="visible = true"
->
-    <!-- Sophisticated Background -->
-    <div class="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#f8fafc] rounded-full blur-[120px] -z-10 opacity-80"></div>
-
+<!-- Dark statement section -->
+<section class="py-24 bg-[#0B1120] relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+    
     <div class="container mx-auto px-4 lg:px-12">
-        <!-- Section Header -->
-        <div class="text-center mb-20" data-animate>
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#fef2f2] border border-red-50 mb-6">
-                <span class="text-xs font-extrabold text-[#ef4444] uppercase tracking-[0.2em]">{{ __('landing.pain_points.badge') ?? 'The Problem' }}</span>
-            </div>
-            <h2 class="text-3xl md:text-5xl font-black text-[#0f172a] mb-6 tracking-tight leading-tight">
-                {{ __('landing.pain_points.title_prefix') }} <span class="text-[#ef4444]">{{ __('landing.pain_points.title_highlight') }}</span> {{ __('landing.pain_points.title_suffix') }}
+        <div class="max-w-4xl mx-auto text-center mb-20" data-animate>
+            <h2 class="text-3xl md:text-5xl font-black text-white mb-6 tracking-tight leading-tight">
+                {{ __('landing.pain_points.title_prefix') }} <span class="text-emerald-400">{{ __('landing.pain_points.title_highlight') }}</span> {{ __('landing.pain_points.title_suffix') }}
             </h2>
-            <p class="text-lg text-slate-500 max-w-2xl mx-auto font-medium">
+            <p class="text-lg text-slate-400 max-w-2xl mx-auto font-medium">
                 {{ __('landing.pain_points.subtitle') }}
             </p>
         </div>
+    </div>
+</section>
 
-        <!-- Pain Points Grid with Animated Counters -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8" data-stagger>
+<!-- Stats Grid Section - White -->
+<section class="py-24 bg-white relative overflow-hidden"
+    x-data="{ visible: false }"
+    x-intersect.once="visible = true"
+>
+    <div class="container mx-auto px-4 lg:px-12">
+        <div class="text-center mb-16" data-animate>
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-50 border border-red-100 mb-6">
+                <span class="text-xs font-bold text-red-500 uppercase tracking-widest">{{ __('landing.pain_points.badge') ?? 'The Problem' }}</span>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto" data-stagger>
             @foreach([
-                ['stat' => '35', 'suffix' => '%', 'icon' => 'fa-chart-line-down', 'iconColor' => '#ef4444', 'iconBg' => '#fef2f2', 'key' => 'revenue_lost'],
-                ['stat' => '12', 'suffix' => 'h', 'icon' => 'fa-clock', 'iconColor' => '#f97316', 'iconBg' => '#fff7ed', 'key' => 'time_wasted'],
-                ['stat' => '24', 'suffix' => '/7', 'icon' => 'fa-exclamation-triangle', 'iconColor' => '#0ea5e9', 'iconBg' => '#f0f9ff', 'key' => 'complaints'],
-                ['stat' => '100', 'suffix' => '%', 'icon' => 'fa-hand-paper', 'iconColor' => '#22c55e', 'iconBg' => '#f0fdf4', 'key' => 'manual_work']
+                ['stat' => '35', 'suffix' => '%', 'color' => 'text-red-500', 'border' => 'border-red-100 hover:border-red-200', 'bg' => 'bg-red-50', 'key' => 'revenue_lost'],
+                ['stat' => '12', 'suffix' => 'h', 'color' => 'text-orange-500', 'border' => 'border-orange-100 hover:border-orange-200', 'bg' => 'bg-orange-50', 'key' => 'time_wasted'],
+                ['stat' => '24', 'suffix' => '/7', 'color' => 'text-blue-500', 'border' => 'border-blue-100 hover:border-blue-200', 'bg' => 'bg-blue-50', 'key' => 'complaints'],
             ] as $pain)
-            <div class="group bg-white rounded-3xl p-8 border border-slate-100/50 shadow-sm hover:-translate-y-2 hover:shadow-premium transition-all duration-500 text-center">
-                <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform" style="background-color: {{ $pain['iconBg'] }};">
-                    <i class="fas {{ $pain['icon'] }} text-xl" style="color: {{ $pain['iconColor'] }};"></i>
-                </div>
-                <div class="text-4xl font-black mb-3 tracking-tighter" style="color: {{ $pain['iconColor'] }};"
+            <div class="group bg-white rounded-2xl p-8 border {{ $pain['border'] }} transition-all duration-300 hover:-translate-y-1 hover:shadow-lg text-center">
+                <div class="text-5xl font-black mb-3 tracking-tighter {{ $pain['color'] }}"
                      x-data="{ shown: false }" x-intersect.once="shown = true"
                 >
                     <span x-show="!shown">0{{ $pain['suffix'] }}</span>
@@ -59,14 +50,31 @@
                         })
                     ">0{{ $pain['suffix'] }}</span>
                 </div>
-                <h3 class="text-base font-extrabold text-[#0f172a] mb-2">{{ __("landing.pain_points.{$pain['key']}.title") }}</h3>
-                <p class="text-slate-500 text-sm font-medium leading-relaxed">{{ __("landing.pain_points.{$pain['key']}.description") }}</p>
+                <h3 class="text-base font-bold text-slate-800 mb-2">{{ __("landing.pain_points.{$pain['key']}.title") }}</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">{{ __("landing.pain_points.{$pain['key']}.description") }}</p>
             </div>
             @endforeach
         </div>
 
-        <!-- Trust Badges (Translated) -->
-        <div class="mt-20 pt-12 border-t border-slate-100" data-animate>
+        <!-- Second row -->
+        <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mt-6" data-stagger>
+            @foreach([
+                ['stat' => '100', 'suffix' => '%', 'color' => 'text-emerald-500', 'border' => 'border-emerald-100 hover:border-emerald-200', 'key' => 'manual_work'],
+                ['stat' => '98', 'suffix' => '%', 'color' => 'text-violet-500', 'border' => 'border-violet-100 hover:border-violet-200', 'key' => 'revenue_lost'],
+                ['stat' => '0', 'suffix' => '', 'color' => 'text-slate-800', 'border' => 'border-slate-200 hover:border-slate-300', 'key' => 'complaints'],
+            ] as $pain)
+            <div class="group bg-white rounded-2xl p-8 border {{ $pain['border'] }} transition-all duration-300 hover:-translate-y-1 hover:shadow-lg text-center">
+                <div class="text-5xl font-black mb-3 tracking-tighter {{ $pain['color'] }}">
+                    {{ $pain['stat'] }}{{ $pain['suffix'] }}
+                </div>
+                <h3 class="text-base font-bold text-slate-800 mb-2">{{ __("landing.pain_points.{$pain['key']}.title") }}</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">{{ __("landing.pain_points.{$pain['key']}.description") }}</p>
+            </div>
+            @endforeach
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="mt-16 pt-12 border-t border-slate-100" data-animate>
             <div class="flex flex-wrap items-center justify-center gap-12 lg:gap-20">
                 @foreach([
                     ['icon' => 'fa-shield-check', 'color' => '#10b981', 'label' => __('landing.pain_points.trust_secure') ?? 'Secure Payments'],
@@ -74,10 +82,10 @@
                     ['icon' => 'fa-graduation-cap', 'color' => '#6366f1', 'label' => __('landing.pain_points.trust_educators') ?? 'Educator Trusted']
                 ] as $badge)
                 <div class="flex items-center gap-3 group">
-                    <div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center border border-slate-100 group-hover:scale-110 transition-transform">
+                    <div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 group-hover:scale-110 transition-transform">
                         <i class="{{ isset($badge['brand']) ? 'fab' : 'fas' }} {{ $badge['icon'] }}" style="color: {{ $badge['color'] }};"></i>
                     </div>
-                    <span class="font-extrabold text-slate-400 text-sm uppercase tracking-widest group-hover:text-slate-600 transition-colors">{{ $badge['label'] }}</span>
+                    <span class="font-bold text-slate-400 text-sm uppercase tracking-wider group-hover:text-slate-600 transition-colors">{{ $badge['label'] }}</span>
                 </div>
                 @endforeach
             </div>
