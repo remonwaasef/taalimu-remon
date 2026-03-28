@@ -1,4 +1,4 @@
-@extends('center::layouts.master')
+@extends('center::layouts.hope-master')
 
 @section('title', __('center::roles.admins_and_roles'))
 

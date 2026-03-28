@@ -1,4 +1,4 @@
-@extends('center::layouts.master')
+@extends('center::layouts.hope-master')
 
 @section('content')
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">

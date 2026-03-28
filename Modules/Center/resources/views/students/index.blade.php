@@ -1,4 +1,4 @@
-@extends('center::layouts.master')
+@extends('center::layouts.hope-master')
 
 @php
     if (!function_exists('sanitizePhoneForWhatsApp')) {
