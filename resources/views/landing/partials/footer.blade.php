@@ -1,71 +1,64 @@
-<footer class="bg-[#0f172a] pt-24 pb-12 overflow-hidden relative">
-    <!-- Sophisticated Accents -->
-    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
-    <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-900/10 rounded-full blur-[120px] -z-10"></div>
+<footer class="bg-[#0B1120] pt-20 pb-10 overflow-hidden relative">
+    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
 
     <div class="container mx-auto px-4 lg:px-12">
-        <div class="grid lg:grid-cols-5 gap-16 mb-20">
-            <!-- Brand Column -->
-            <div class="lg:col-span-2 space-y-8">
+        <div class="grid lg:grid-cols-5 gap-12 mb-16">
+            <!-- Brand -->
+            <div class="lg:col-span-2 space-y-6">
                 <a href="{{ route('home') }}" class="flex items-center gap-3">
-                    <img src="{{ asset('images/brand/logo-full.png?v=3') }}" alt="{{ config('app.name') }}" class="h-10 w-auto brightness-0 invert">
-                    <div class="flex flex-col">
-                        <span class="font-black text-xl text-white leading-tight tracking-tighter">
-                            {{ \App\Models\SiteSetting::get('site_name', 'Taalimu') }}
-                        </span>
-                        <span class="text-[10px] font-black text-[#22c55e] uppercase tracking-[0.2em]">
-                            {{ __('landing.navbar.badge_short') ?? 'Smart Education' }}
-                        </span>
-                    </div>
+                    <img src="{{ asset('images/brand/logo-full.png?v=3') }}" alt="{{ config('app.name') }}" class="h-9 w-auto brightness-0 invert">
+                    <span class="font-black text-xl text-white leading-tight tracking-tight">
+                        {{ \App\Models\SiteSetting::get('site_name', 'Taalimu') }}
+                    </span>
                 </a>
-                <p class="text-slate-400 font-medium leading-relaxed max-w-sm">
+                <p class="text-slate-500 font-medium leading-relaxed max-w-sm text-sm">
                     {{ \App\Models\SiteSetting::get('site_description_' . app()->getLocale(), __('landing.hero.subtitle')) }}
                 </p>
-                <!-- Social Links -->
-                <div class="flex items-center gap-4">
+                <!-- Social -->
+                <div class="flex items-center gap-3">
                     @foreach(['facebook-f', 'linkedin-in', 'twitter', 'instagram'] as $social)
-                    <a href="#" class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-slate-400 hover:bg-[#22c55e] hover:text-white transition-all duration-500 shadow-soft group">
+                    <a href="#" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-500 hover:bg-emerald-500 hover:text-white transition-all duration-300">
                         <i class="fab fa-{{ $social }} text-sm"></i>
                     </a>
                     @endforeach
                 </div>
             </div>
 
-            <!-- Links Columns -->
+            <!-- Links -->
             <div>
-                <h4 class="text-white font-black text-sm uppercase tracking-[0.2em] mb-8">{{ __('landing.footer.product.title') }}</h4>
-                <ul class="space-y-4">
+                <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-6">{{ __('landing.footer.product.title') }}</h4>
+                <ul class="space-y-3">
                     @foreach(['features', 'pricing', 'integrations', 'updates'] as $link)
-                    <li><a href="#" class="text-slate-400 hover:text-[#22c55e] font-bold text-sm transition-colors">{{ __("landing.footer.product.$link") }}</a></li>
+                    <li><a href="#" class="text-slate-500 hover:text-emerald-400 font-medium text-sm transition-colors">{{ __("landing.footer.product.$link") }}</a></li>
                     @endforeach
                 </ul>
             </div>
             <div>
-                <h4 class="text-white font-black text-sm uppercase tracking-[0.2em] mb-8">{{ __('landing.footer.resources.title') }}</h4>
-                <ul class="space-y-4">
+                <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-6">{{ __('landing.footer.resources.title') }}</h4>
+                <ul class="space-y-3">
                     @foreach(['help', 'docs', 'blog', 'api'] as $link)
-                    <li><a href="#" class="text-slate-400 hover:text-[#22c55e] font-bold text-sm transition-colors">{{ __("landing.footer.resources.$link") }}</a></li>
+                    <li><a href="#" class="text-slate-500 hover:text-emerald-400 font-medium text-sm transition-colors">{{ __("landing.footer.resources.$link") }}</a></li>
                     @endforeach
                 </ul>
             </div>
             <div>
-                <h4 class="text-white font-black text-sm uppercase tracking-[0.2em] mb-8">{{ __('landing.footer.legal.title') }}</h4>
-                <ul class="space-y-4">
+                <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-6">{{ __('landing.footer.legal.title') }}</h4>
+                <ul class="space-y-3">
                     @foreach(['privacy', 'terms', 'cookies'] as $link)
-                    <li><a href="{{ route($link) }}" class="text-slate-400 hover:text-[#22c55e] font-bold text-sm transition-colors">{{ __("landing.footer.legal.$link") }}</a></li>
+                    <li><a href="{{ route($link) }}" class="text-slate-500 hover:text-emerald-400 font-medium text-sm transition-colors">{{ __("landing.footer.legal.$link") }}</a></li>
                     @endforeach
                 </ul>
             </div>
         </div>
 
-        <div class="pt-12 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-8">
-            <div class="text-slate-400 text-sm font-bold">
+        <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-slate-600 text-sm font-medium">
                 {{ str_replace(config('app.name'), \App\Models\SiteSetting::get('site_name', config('app.name')), __('landing.footer.copyright')) }}
             </div>
             
-            <div class="flex items-center gap-4 px-5 py-2.5 rounded-full bg-slate-50 border border-slate-100">
-                <span class="w-2.5 h-2.5 rounded-full bg-[#22c55e] animate-pulse"></span>
-                <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">All Systems Operational</span>
+            <div class="flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">All Systems Operational</span>
             </div>
         </div>
     </div>
