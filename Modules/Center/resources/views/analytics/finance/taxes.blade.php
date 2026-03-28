@@ -1,4 +1,4 @@
-@extends('center::layouts.master')
+@extends('center::layouts.hope-master')
 @section('page-title', __('center::analytics.taxes_analytics'))
 
 @section('content')

@@ -1,4 +1,4 @@
-@extends('center::layouts.master')
+@extends('center::layouts.hope-master')
 
 @section('content')
     <div class="row g-4 position-relative scroll-container-elite">

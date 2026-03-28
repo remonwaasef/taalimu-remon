@@ -1,4 +1,4 @@
-@extends('center::layouts.master')
+@extends('center::layouts.hope-master')
 
 @section('title', __('center::messages.blade_0947'))
 @section('page-title', __('center::messages.blade_0948'))
