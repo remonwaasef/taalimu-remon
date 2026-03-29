@@ -17,7 +17,7 @@ return [
             ],
             'success' => [
                 'label' => 'Connexion rapide',
-                'amount' => 'D\'un clic',
+                'amount' => 'Scannez le QR',
             ],
         ],
     ],
