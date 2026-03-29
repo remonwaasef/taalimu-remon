@@ -31,6 +31,13 @@ return [
         'start_free' => 'ابدأ مجاناً',
         'badge_short' => 'تعليمي (Taalimu) - إدارة تعليمية ذكية',
     ],
+    'nav' => [
+        'features' => 'الميزات',
+        'pricing' => 'الأسعار',
+        'faq' => 'الأسئلة الشائعة',
+        'sign_in' => 'تسجيل الدخول',
+        'start_trial' => 'ابدأ التجربة المجانية',
+    ],
     'pain_points' => [
         'title_prefix' => 'هل يبدو هذا',
         'title_highlight' => 'مألوفاً',

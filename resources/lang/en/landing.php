@@ -31,6 +31,13 @@ return [
         'start_free' => 'Start Free',
         'badge_short' => 'Taalimu - Smart Education',
     ],
+    'nav' => [
+        'features' => 'Features',
+        'pricing' => 'Pricing',
+        'faq' => 'FAQ',
+        'sign_in' => 'Sign In',
+        'start_trial' => 'Start Free Trial',
+    ],
     'pain_points' => [
         'title_prefix' => 'Sound',
         'title_highlight' => 'Familiar',

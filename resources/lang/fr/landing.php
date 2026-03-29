@@ -31,6 +31,13 @@ return [
         'start_free' => 'Commencer Gratuitement',
         'badge_short' => 'Taalimu - Gestion Éducative',
     ],
+    'nav' => [
+        'features' => 'Fonctionnalités',
+        'pricing' => 'Tarifs',
+        'faq' => 'FAQ',
+        'sign_in' => 'Se Connecter',
+        'start_trial' => 'Essai Gratuit',
+    ],
     'pain_points' => [
         'title_prefix' => 'Cela vous semble',
         'title_highlight' => 'Familier',
