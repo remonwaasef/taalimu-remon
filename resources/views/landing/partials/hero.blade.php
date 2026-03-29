@@ -86,11 +86,18 @@
 
                 <!-- Floating Indicators (Fast Login) -->
                 <div class="absolute -bottom-6 -right-2 lg:-bottom-8 lg:-right-8 glass-card-premium p-3 lg:p-5 rounded-2xl shadow-xl z-30 animate-float-fast flex items-center gap-3 lg:gap-4 border border-white/60 bg-white/95 backdrop-blur-xl">
-                    <div class="w-9 h-9 lg:w-14 lg:h-14 rounded-full bg-gradient-to-br from-emerald-100 to-emerald-50 flex items-center justify-center text-emerald-600 shadow-inner relative">
-                        <i class="fas fa-qrcode text-lg lg:text-2xl"></i>
-                        <span class="absolute -bottom-1 -right-1 lg:-bottom-0.5 lg:-right-0.5 bg-white rounded flex items-center justify-center w-3 h-3 lg:w-5 lg:h-5 shadow-sm text-slate-700">
-                            <i class="fas fa-mobile-alt text-[8px] lg:text-[11px]"></i>
-                        </span>
+                    <div class="w-9 h-9 lg:w-14 lg:h-14 rounded-full bg-gradient-to-br from-emerald-100 to-emerald-50 flex items-center justify-center text-emerald-600 shadow-inner">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 lg:w-7 lg:h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 7V5a2 2 0 0 1 2-2h2"/>
+                            <path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+                            <path d="M21 17v2a2 2 0 0 1-2 2h-2"/>
+                            <path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
+                            <rect x="7" y="7" width="4" height="4" />
+                            <rect x="13" y="7" width="4" height="4" />
+                            <rect x="7" y="13" width="4" height="4" />
+                            <path d="M14 14h2v2h-2z" />
+                            <path d="M2 12h20" stroke="currentColor" class="text-emerald-400 animate-pulse" stroke-width="2"/>
+                        </svg>
                     </div>
                     <div>
                         <div class="text-[9px] lg:text-[12px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">{{ __('landing.hero.mockup.success.label') }}</div>
