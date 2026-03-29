@@ -1015,4 +1015,35 @@
     color: #94a3b8;
     font-weight: 500;
 }
+
+/* =====================================================
+   V2 — Professional Hero Utilities
+   ===================================================== */
+.glass-card-premium {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+    animation: float 4s ease-in-out infinite;
+}
+
+.animate-float-slow {
+    animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-fast {
+    animation: float 3s ease-in-out infinite;
+}
+
+.perspective-2000 {
+    perspective: 2000px;
+}
 
