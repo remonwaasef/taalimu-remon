@@ -84,14 +84,14 @@
                     </div>
                 </div>
 
-                <!-- Floating Indicators (Payment/Enrollment) -->
+                <!-- Floating Indicators (Fast Login) -->
                 <div class="absolute -bottom-6 -right-2 lg:-bottom-8 lg:-right-8 glass-card-premium p-3 lg:p-5 rounded-2xl shadow-xl z-30 animate-float-fast flex items-center gap-3 lg:gap-4 border border-white/60 bg-white/95 backdrop-blur-xl">
-                    <div class="w-9 h-9 lg:w-14 lg:h-14 rounded-full bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center text-blue-600 shadow-inner">
-                        <i class="fas fa-check-circle text-lg lg:text-2xl"></i>
+                    <div class="w-9 h-9 lg:w-14 lg:h-14 rounded-full bg-gradient-to-br from-emerald-100 to-emerald-50 flex items-center justify-center text-emerald-600 shadow-inner">
+                        <i class="fas fa-fingerprint text-lg lg:text-2xl"></i>
                     </div>
                     <div>
                         <div class="text-[9px] lg:text-[12px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">{{ __('landing.hero.mockup.success.label') }}</div>
-                        <div class="text-sm lg:text-xl font-black text-slate-900 leading-none">{{ __('landing.hero.mockup.success.amount') }}+</div>
+                        <div class="text-sm lg:text-xl font-black text-slate-900 leading-none">{{ __('landing.hero.mockup.success.amount') }}</div>
                     </div>
                 </div>
 
