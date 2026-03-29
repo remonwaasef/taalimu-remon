@@ -16,8 +16,8 @@ return [
                 'cta' => 'Pay Now',
             ],
             'success' => [
-                'label' => 'Smart Login',
-                'amount' => 'One Touch',
+                'label' => 'Fast Login',
+                'amount' => 'Scan QR Code',
             ],
         ],
     ],
