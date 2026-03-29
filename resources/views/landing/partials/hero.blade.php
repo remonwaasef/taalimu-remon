@@ -61,44 +61,44 @@
             </div>
 
             <!-- Image Side -->
-            <div class="relative w-full lg:mt-0 mt-12" data-animate="fade-image">
+            <div class="relative w-full lg:mt-0 mt-16 max-w-2xl mx-auto lg:max-w-none" data-animate="fade-image">
                 <!-- Glowing effect -->
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-emerald-500/20 via-teal-500/10 to-blue-500/20 blur-[100px] -z-10 rounded-[3rem] opacity-80"></div>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] lg:w-[120%] lg:h-[120%] bg-gradient-to-tr from-emerald-500/25 via-teal-500/15 to-blue-500/20 blur-[80px] lg:blur-[100px] -z-10 rounded-[3rem] opacity-80"></div>
 
                 <!-- Floating Elements Over Mockup -->
-                <div class="absolute -top-6 -right-4 md:-right-8 glass-card-premium p-3 md:p-4 rounded-2xl shadow-xl z-30 animate-float-slow hidden lg:flex items-center gap-4 border border-white/60 bg-white/90 backdrop-blur-xl">
-                    <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-emerald-100 to-emerald-50 flex items-center justify-center text-emerald-600 shadow-inner">
-                        <i class="fas fa-check-circle lg:text-lg"></i>
+                <div class="absolute -top-6 -right-2 md:-right-8 glass-card-premium p-2.5 md:p-4 rounded-xl md:rounded-2xl shadow-xl z-30 animate-float-slow flex items-center gap-3 md:gap-4 border border-white/60 bg-white/90 backdrop-blur-xl">
+                    <div class="w-8 h-8 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-emerald-100 to-emerald-50 flex items-center justify-center text-emerald-600 shadow-inner">
+                        <i class="fas fa-check-circle text-sm lg:text-lg text-emerald-500"></i>
                     </div>
                     <div>
-                        <div class="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{{ app()->isLocale('ar') ? 'تحصيل ناجح' : 'Payment Success' }}</div>
-                        <div class="text-xs md:text-sm font-black text-slate-900">1,250 SAR</div>
+                        <div class="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{{ app()->isLocale('ar') ? 'تحصيل ناجح' : 'Payment Success' }}</div>
+                        <div class="text-[10px] md:text-sm font-black text-slate-900 line-height-1">1,250 SAR</div>
                     </div>
                 </div>
 
-                <div class="absolute -bottom-6 -left-4 md:-left-8 glass-card-premium p-3 md:p-4 rounded-2xl shadow-xl z-30 animate-float-fast hidden lg:flex items-center gap-4 border border-white/60 bg-white/90 backdrop-blur-xl">
-                    <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center text-blue-600 shadow-inner">
-                        <i class="fas fa-user-graduate lg:text-lg"></i>
+                <div class="absolute -bottom-6 -left-2 md:-left-8 glass-card-premium p-2.5 md:p-4 rounded-xl md:rounded-2xl shadow-xl z-30 animate-float-fast flex items-center gap-3 md:gap-4 border border-white/60 bg-white/90 backdrop-blur-xl">
+                    <div class="w-8 h-8 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center text-blue-600 shadow-inner">
+                        <i class="fas fa-user-graduate text-sm lg:text-lg text-blue-500"></i>
                     </div>
                     <div>
-                        <div class="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{{ app()->isLocale('ar') ? 'تسجيل جديد' : 'New Enrollment' }}</div>
-                        <div class="text-xs md:text-sm font-black text-slate-900">+24%</div>
+                        <div class="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{{ app()->isLocale('ar') ? 'تسجيل جديد' : 'New Enrollment' }}</div>
+                        <div class="text-[10px] md:text-sm font-black text-slate-900 line-height-1">+24%</div>
                     </div>
                 </div>
 
                 <!-- 3D Browser Mockup Frame -->
                 <div class="hero-3d-wrapper perspective-2000 relative z-20">
-                    <div class="hero-3d-card rounded-2xl md:rounded-[1.5rem] overflow-hidden border border-slate-200 shadow-[0_30px_100px_-15px_rgba(0,0,0,0.15)] bg-white ring-1 ring-slate-900/5 hero-3d-side">
+                    <div class="hero-3d-card rounded-xl md:rounded-[1.5rem] overflow-hidden border border-slate-200 shadow-[0_20px_60px_-10px_rgba(0,0,0,0.15)] bg-white ring-1 ring-slate-900/5 hero-3d-side">
                         <!-- MacOS style browser header -->
-                        <div class="flex items-center gap-2 px-4 py-3 bg-slate-50/80 backdrop-blur-md border-b border-slate-100/80">
-                            <div class="flex gap-2">
-                                <div class="w-2.5 h-2.5 rounded-full bg-red-400/80 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)]"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-yellow-400/80 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)]"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-emerald-400/80 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)]"></div>
+                        <div class="flex items-center gap-2 px-3 py-2 md:px-4 md:py-3 bg-slate-50/80 backdrop-blur-md border-b border-slate-100/80">
+                            <div class="flex gap-1.5 md:gap-2">
+                                <div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-red-400/80 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)]"></div>
+                                <div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-yellow-400/80 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)]"></div>
+                                <div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-emerald-400/80 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)]"></div>
                             </div>
-                            <div class="flex-1 mx-4">
-                                <div class="bg-white/70 border border-slate-200/60 shadow-sm rounded-lg px-4 py-1 text-[10px] text-slate-500 font-mono text-center flex items-center justify-center gap-2 max-w-[200px] mx-auto">
-                                    <i class="fas fa-lock text-[8px] text-slate-400"></i>
+                            <div class="flex-1 mx-2 md:mx-4">
+                                <div class="bg-white/70 border border-slate-200/60 shadow-sm rounded-lg px-2 py-0.5 lg:px-4 lg:py-1 text-[8px] md:text-[10px] text-slate-500 font-mono text-center flex items-center justify-center gap-1.5 max-w-[140px] md:max-w-[200px] mx-auto">
+                                    <i class="fas fa-lock text-[7px] md:text-[8px] text-slate-400"></i>
                                     app.taalimu.com
                                 </div>
                             </div>
@@ -128,13 +128,17 @@
     to { opacity: 1; transform: translateX(0) scale(1); }
 }
 @keyframes heroFadeUpMobile {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(40px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Base animations (mobile is always bottom-up) */
-[data-animate="fade-text"], [data-animate="fade-image"] {
+/* Base animations */
+[data-animate="fade-text"] {
     animation: heroFadeUpMobile 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+[data-animate="fade-image"] {
+    animation: heroFadeUpMobile 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Desktop animations */
@@ -156,8 +160,17 @@
 
 .hero-3d-side {
     filter: drop-shadow(0 20px 40px rgba(0,0,0,0.08));
-    /* Dynamic tilt based on direction */
-    transform: {{ app()->isLocale('ar') ? 'rotateY(12deg) rotateX(4deg)' : 'rotateY(-12deg) rotateX(4deg)' }} scale(0.98);
+    /* Subtle tilt for mobile, stronger for desktop */
+    transform: {{ app()->isLocale('ar') ? 'rotateY(6deg) rotateX(4deg)' : 'rotateY(-6deg) rotateX(4deg)' }} scale(0.96);
+}
+
+@media (min-width: 1024px) {
+    .hero-3d-side {
+        transform: {{ app()->isLocale('ar') ? 'rotateY(12deg) rotateX(4deg)' : 'rotateY(-12deg) rotateX(4deg)' }} scale(0.98);
+    }
+}
+
+.hero-3d-side {
     transform-origin: center;
     transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform, filter;
