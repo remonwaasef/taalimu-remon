@@ -1,9 +1,4 @@
-<section class="relative pt-44 md:pt-40 lg:pt-52 pb-16 lg:pb-24 overflow-visible bg-slate-50" id="hero">
-    <!-- Subtle Grid Background -->
-    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMTQ4LCAxNjMsIDE4NCwgMC4xNSkiLz48L3N2Zz4=')] [mask-image:linear-gradient(to_bottom,white,transparent_80%)] z-0"></div>
-
-    <!-- Ambient Glows -->
-    <div class="absolute top-0 w-full h-[400px] lg:h-[600px] bg-gradient-to-b from-blue-600/10 via-indigo-400/5 to-transparent blur-[80px] lg:blur-[120px] pointer-events-none z-0"></div>
+<section class="relative pt-44 md:pt-40 lg:pt-52 pb-16 lg:pb-24 overflow-visible bg-white" id="hero">
 
     <div dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}" class="container relative mx-auto px-4 lg:px-8 z-10 max-w-7xl">
         <div class="grid grid-cols-12 gap-6 lg:gap-12 items-center">
@@ -62,8 +57,6 @@
 
             <!-- Image Side -->
             <div class="col-span-12 lg:col-span-6 relative w-full lg:mt-0 mt-20" data-animate="fade-image">
-                <!-- Glowing effect -->
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160%] lg:w-[140%] h-[160%] lg:h-[140%] bg-gradient-to-tr from-blue-600/25 via-indigo-500/15 to-purple-500/20 blur-[50px] lg:blur-[100px] -z-10 rounded-full opacity-80"></div>
 
                 <!-- Floating WhatsApp Card -->
                 <div class="absolute -top-16 -left-2 lg:-top-24 lg:-left-20 z-40 animate-float-slow w-56 lg:w-72" data-animate="fade-up">
