@@ -1,4 +1,4 @@
-<section class="relative pt-32 lg:pt-40 pb-20 overflow-hidden bg-slate-50" id="hero">
+<section class="relative pt-40 md:pt-32 lg:pt-40 pb-20 overflow-hidden bg-slate-50" id="hero">
     <!-- Subtle Grid Background -->
     <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMTQ4LCAxNjMsIDE4NCwgMC4xNSkiLz48L3N2Zz4=')] [mask-image:linear-gradient(to_bottom,white,transparent_80%)] z-0"></div>
 
@@ -9,28 +9,28 @@
         <div class="grid lg:grid-cols-2 gap-16 lg:gap-12 items-center">
             
             <!-- Content Side -->
-            <div class="text-start" data-animate="fade-text">
+            <div class="text-center lg:text-start" data-animate="fade-text">
                 <!-- Premium Pill Badge -->
-                <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-sm mb-8 transition-transform hover:scale-105 cursor-pointer hover:shadow-md hover:border-emerald-200">
-                    <span class="relative flex h-2.5 w-2.5">
+                <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-sm mb-6 lg:mb-8 transition-transform hover:scale-105 cursor-pointer hover:shadow-md hover:border-emerald-200">
+                    <span class="relative flex h-2 w-2 lg:h-2.5 lg:w-2.5">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 lg:h-2.5 lg:w-2.5 bg-emerald-500"></span>
                     </span>
-                    <span class="text-xs font-bold text-slate-700 uppercase tracking-widest">{{ __('landing.hero.badge') }}</span>
+                    <span class="text-[10px] lg:text-xs font-bold text-slate-700 uppercase tracking-widest">{{ __('landing.hero.badge') }}</span>
                 </div>
 
                 <!-- Massive Headline -->
-                <h1 class="text-4xl md:text-5xl lg:text-[4rem] font-black text-slate-900 leading-[1.15] mb-6 tracking-tight">
+                <h1 class="text-[2.5rem] md:text-5xl lg:text-[4rem] font-black text-slate-900 leading-[1.2] lg:leading-[1.15] mb-6 tracking-tight">
                     {!! __('landing.hero.title', ['highlight' => '<span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">' . __('landing.hero.title_highlight', [], app()->getLocale()) . '</span>']) !!}
                 </h1>
 
                 <!-- Refined Subtitle -->
-                <p class="text-lg md:text-xl text-slate-600 mb-10 max-w-xl font-medium leading-relaxed">
+                <p class="text-base md:text-xl text-slate-600 mb-10 max-w-xl mx-auto lg:mx-0 font-medium leading-relaxed">
                     {{ __('landing.hero.subtitle') }}
                 </p>
 
                 <!-- CTAs -->
-                <div class="flex flex-col sm:flex-row gap-4 items-start mb-12">
+                <div class="flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start lg:items-start mb-10 lg:mb-12 mx-auto lg:mx-0 max-w-sm sm:max-w-none">
                     <a href="{{ route('register') }}" class="group relative inline-flex items-center justify-center bg-slate-900 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:bg-slate-800 hover:shadow-2xl hover:shadow-slate-900/20 hover:-translate-y-1 overflow-hidden w-full sm:w-auto">
                         <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
                         <span class="relative flex items-center gap-2">
@@ -47,13 +47,13 @@
                 </div>
                 
                 <!-- Trust Stats -->
-                <div class="flex flex-wrap items-center gap-6 md:gap-10 pt-6 opacity-90 border-t border-slate-200/60">
-                    <div>
+                <div class="flex flex-wrap items-center justify-center lg:justify-start gap-6 md:gap-10 pt-6 opacity-90 border-t border-slate-200/60 max-w-lg mx-auto lg:mx-0">
+                    <div class="text-center lg:text-start">
                         <div class="text-2xl font-black text-slate-900 mb-0.5">+500</div>
                         <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{{ app()->isLocale('ar') ? 'مركز تعليمي' : 'Learning Centers' }}</div>
                     </div>
                     <div class="w-px h-10 bg-slate-200"></div>
-                    <div>
+                    <div class="text-center lg:text-start">
                         <div class="text-2xl font-black text-slate-900 mb-0.5">+10k</div>
                         <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{{ app()->isLocale('ar') ? 'طالب نشط' : 'Active Students' }}</div>
                     </div>
