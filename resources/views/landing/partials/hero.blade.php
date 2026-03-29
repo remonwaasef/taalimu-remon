@@ -78,6 +78,33 @@
 
                 <!-- 3D Browser Mockup Frame -->
                 <div class="hero-3d-wrapper perspective-2000 relative z-20">
+                    
+                    <!-- WhatsApp Floating Notification -->
+                    <div class="absolute -top-12 -left-4 lg:-top-20 lg:-left-20 z-40 animate-float-slow w-48 lg:w-64" data-animate="fade-up">
+                        <div class="bg-white/95 backdrop-blur-xl border border-emerald-100 rounded-2xl shadow-2xl overflow-hidden ring-1 ring-emerald-500/10">
+                            <div class="bg-emerald-500 px-3 py-1.5 lg:px-4 lg:py-2 flex items-center justify-between">
+                                <div class="flex items-center gap-1.5 lg:gap-2">
+                                    <i class="fab fa-whatsapp text-white text-[10px] lg:text-xs"></i>
+                                    <span class="text-white text-[9px] lg:text-[11px] font-bold uppercase tracking-wider">{{ __('landing.hero.mockup.whatsapp.title') }}</span>
+                                </div>
+                                <span class="text-white/80 text-[8px] lg:text-[10px]">{{ __('landing.hero.mockup.whatsapp.now') }}</span>
+                            </div>
+                            <div class="p-2.5 lg:p-4">
+                                <div class="flex items-start gap-2 lg:gap-3 mb-2 lg:mb-3">
+                                    <div class="w-6 h-6 lg:w-8 lg:h-8 rounded-full bg-slate-100 flex-shrink-0 flex items-center justify-center">
+                                        <i class="fas fa-user text-slate-400 text-[10px] lg:text-xs"></i>
+                                    </div>
+                                    <p class="text-[9px] lg:text-[13px] text-slate-700 leading-snug font-medium">
+                                        {{ __('landing.hero.mockup.whatsapp.message') }}
+                                    </p>
+                                </div>
+                                <div class="bg-emerald-50 rounded-lg py-1.5 px-3 text-center border border-emerald-100 shadow-sm">
+                                    <span class="text-emerald-700 font-bold text-[9px] lg:text-[12px]">{{ __('landing.hero.mockup.whatsapp.cta') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="hero-3d-card rounded-lg lg:rounded-[1.5rem] overflow-hidden border border-slate-200 shadow-xl lg:shadow-[0_30px_100px_-15px_rgba(0,0,0,0.15)] bg-white ring-1 ring-slate-900/5 hero-3d-side">
                         <!-- MacOS style browser header -->
                         <div class="flex items-center gap-1 lg:gap-2 px-1.5 py-1 lg:px-4 lg:py-3 bg-slate-50/80 backdrop-blur-md border-b border-slate-100/80">
