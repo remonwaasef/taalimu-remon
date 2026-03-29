@@ -1,6 +1,26 @@
 <?php
 
 return [
+    'hero' => [
+        'badge' => 'The #1 System for Education Centers',
+        'title' => 'Manage your center :highlight and save hours of weekly work',
+        'title_highlight' => 'smartly',
+        'subtitle' => 'An integrated system for managing students, attendance, and payments — everything in one easy-to-use dashboard.',
+        'cta_primary' => 'Start Free Trial',
+        'cta_secondary' => 'Watch How it Works',
+        'mockup' => [
+            'whatsapp' => [
+                'title' => 'WhatsApp',
+                'now' => 'now',
+                'message' => 'Hello Ahmed! 👋 We wanted to remind you that your subscription payment of $15 is due tomorrow.',
+                'cta' => 'Pay Now',
+            ],
+            'success' => [
+                'label' => 'Success',
+                'amount' => '$1,250',
+            ],
+        ],
+    ],
     'navbar' => [
         'home' => 'Home',
         'features' => 'Features',
