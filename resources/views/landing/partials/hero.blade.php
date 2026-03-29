@@ -55,8 +55,8 @@
             </div>
 
             <!-- Dashboard Mockup -->
-            <div class="relative max-w-5xl mx-auto" style="animation: heroFadeUp 0.8s ease-out forwards;">
-                <div class="rounded-2xl overflow-hidden border border-slate-200 shadow-2xl shadow-slate-200/50 bg-white">
+            <div class="relative max-w-4xl mx-auto hero-perspective" style="animation: heroFadeUp 0.8s ease-out forwards;">
+                <div class="hero-3d-card rounded-2xl overflow-hidden border border-slate-200 shadow-2xl shadow-slate-200/50 bg-white">
                     <!-- Browser Bar -->
                     <div class="flex items-center gap-2 px-4 py-3 bg-slate-50 border-b border-slate-100">
                         <div class="flex gap-1.5">
@@ -70,7 +70,9 @@
                             </div>
                         </div>
                     </div>
-                    <img src="{{ asset('images/hero-dashboard.png') }}" alt="Taalimu Dashboard" class="w-full h-auto">
+                    <div class="aspect-video relative overflow-hidden">
+                        <img src="{{ asset('images/hero-dashboard.png') }}" alt="Taalimu Dashboard" class="w-full h-auto object-cover object-top">
+                    </div>
                 </div>
                 
                 <!-- Glow effects -->
@@ -99,7 +101,21 @@
 
 <style>
 @keyframes heroFadeUp {
-    from { opacity: 0; transform: translateY(40px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(30px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.hero-perspective {
+    perspective: 2000px;
+}
+
+.hero-3d-card {
+    transform: rotateX(8deg) scale(0.96);
+    transform-origin: top;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-3d-card:hover {
+    transform: rotateX(2deg) scale(1);
 }
 </style>
