@@ -37,12 +37,12 @@
 
             <!-- Billing Toggle -->
             <div class="mt-10 flex justify-center">
-                <div class="inline-flex items-center bg-slate-100 p-1 rounded-full border border-slate-200">
+                <div class="inline-flex items-center bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
                     @foreach(['monthly' => 'landing.pricing.monthly', 'term' => 'landing.pricing.term', 'yearly' => 'landing.pricing.yearly'] as $cycle => $label)
                     <button 
                         @click="billingCycle = '{{$cycle}}'"
-                        class="px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 relative"
-                        :class="billingCycle === '{{$cycle}}' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-800'"
+                        class="px-6 py-2 rounded-xl text-sm font-bold transition-all duration-300 relative"
+                        :class="billingCycle === '{{$cycle}}' ? 'bg-white text-slate-900 shadow-sm border border-slate-200/50' : 'text-slate-500 hover:text-slate-800'"
                     >
                         {{ __($label) }}
                         @if($cycle === 'yearly')
@@ -68,7 +68,7 @@
                 <div
                     class="group relative rounded-2xl p-8 border transition-all duration-300 flex flex-col
                     {{ $isFeatured 
-                        ? 'bg-[#0B1120] border-emerald-500/30 shadow-2xl shadow-emerald-500/10 scale-105 z-10 text-white' 
+                        ? 'bg-white border-emerald-500 shadow-2xl shadow-emerald-500/10 scale-105 z-10' 
                         : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-lg hover:-translate-y-1' }}"
                 >
                     @if($isFeatured)
@@ -79,21 +79,20 @@
 
                     <!-- Header -->
                     <div class="mb-8">
-                        <h3 class="text-lg font-bold {{ $isFeatured ? 'text-white' : 'text-slate-900' }} mb-6">
+                        <h3 class="text-lg font-bold text-slate-900 mb-6">
                             {{ __('landing.pricing.plans.' . $package->slug . '.name') }}
                         </h3>
                         
-                        <!-- Price -->
                         <div x-data="{ localPrice: getPrice({{ $package->price }}, {{ json_encode($regionalPrices) }}) }"
                              x-effect="localPrice = getPrice({{ $package->price }}, {{ json_encode($regionalPrices) }})"
                         >
                             <div class="flex items-baseline gap-1">
-                                <span class="text-sm font-bold {{ $isFeatured ? 'text-slate-400' : 'text-slate-400' }}" x-text="localPrice.currency"></span>
-                                <span class="text-5xl font-black {{ $isFeatured ? 'text-white' : 'text-slate-900' }} tracking-tighter" 
+                                <span class="text-sm font-bold text-slate-400" x-text="localPrice.currency"></span>
+                                <span class="text-5xl font-black text-slate-900 tracking-tighter" 
                                       x-text="billingCycle === 'monthly' ? localPrice.amount : (billingCycle === 'term' ? (localPrice.term_price || localPrice.amount * 4) : (localPrice.yearly_price || localPrice.amount * 10))">
                                 </span>
                             </div>
-                            <div class="mt-2 text-xs font-semibold {{ $isFeatured ? 'text-slate-500' : 'text-slate-400' }} uppercase tracking-wider">
+                            <div class="mt-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">
                                 <span x-show="billingCycle === 'monthly'">{{ __('landing.pricing.per_month') }}</span>
                                 <span x-show="billingCycle === 'term'">{{ __('landing.pricing.per_term') }}</span>
                                 <span x-show="billingCycle === 'yearly'">{{ __('landing.pricing.per_year') }}</span>
@@ -115,10 +114,10 @@
                         @endphp
                         @foreach(array_slice($pFeatures, 0, 7) as $feature)
                         <li class="flex items-start gap-3">
-                            <div class="w-5 h-5 rounded-full {{ $isFeatured ? 'bg-emerald-500/20' : 'bg-emerald-50' }} flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <div class="w-5 h-5 rounded-full bg-emerald-50 flex items-center justify-center flex-shrink-0 mt-0.5">
                                 <i class="fas fa-check text-[9px] text-emerald-500"></i>
                             </div>
-                            <span class="text-sm {{ $isFeatured ? 'text-slate-300' : 'text-slate-600' }} leading-tight">{{ $feature }}</span>
+                            <span class="text-sm text-slate-600 leading-tight">{{ $feature }}</span>
                         </li>
                         @endforeach
                     </ul>

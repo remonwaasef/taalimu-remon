@@ -1,13 +1,13 @@
-<!-- Dark statement section -->
-<section class="py-24 bg-[#0B1120] relative overflow-hidden">
-    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+<!-- Light statement section -->
+<section class="py-24 bg-slate-50 relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
     
     <div class="container mx-auto px-4 lg:px-12">
         <div class="max-w-4xl mx-auto text-center mb-20" data-animate>
-            <h2 class="text-3xl md:text-5xl font-black text-white mb-6 tracking-tight leading-tight">
-                {{ __('landing.pain_points.title_prefix') }} <span class="text-emerald-400">{{ __('landing.pain_points.title_highlight') }}</span> {{ __('landing.pain_points.title_suffix') }}
+            <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
+                {{ __('landing.pain_points.title_prefix') }} <span class="text-emerald-600">{{ __('landing.pain_points.title_highlight') }}</span> {{ __('landing.pain_points.title_suffix') }}
             </h2>
-            <p class="text-lg text-slate-400 max-w-2xl mx-auto font-medium">
+            <p class="text-lg text-slate-600 max-w-2xl mx-auto font-medium">
                 {{ __('landing.pain_points.subtitle') }}
             </p>
         </div>
