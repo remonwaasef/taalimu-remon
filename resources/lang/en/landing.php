@@ -31,52 +31,6 @@ return [
         'start_free' => 'Start Free',
         'badge_short' => 'Taalimu - Smart Education',
     ],
-    'nav' => [
-        'features' => 'Features',
-        'pricing' => 'Pricing',
-        'testimonials' => 'Testimonials',
-        'faq' => 'FAQ',
-        'sign_in' => 'Sign In',
-        'start_trial' => 'Start Free Trial',
-    ],
-    'hero' => [
-        'badge' => 'The #1 Management System for Educational Centers',
-        'title' => 'Manage Your Center <span class="gradient-text">Smartly</span> and Save Hours of Work Weekly',
-        'subtitle' => 'An integrated system for managing students, attendance, and payments — everything in one easy-to-use dashboard.',
-        'types' => [
-            'center' => 'Educational Center',
-            'school' => 'School',
-            'academy' => 'Academy',
-        ],
-        'testimonial' => [
-            'quote' => 'I saved over 15 hours a week after using Taalimu.',
-            'author' => 'Ahmed Mohamed, Independent Instructor',
-        ],
-        'cta_primary' => 'Start Free',
-        'cta_secondary' => 'See How It Works',
-        'trial_note' => 'No credit card required • 14 days free trial',
-        'trust' => [
-            'security' => 'High Security',
-            'centers' => 'Next-Gen Management',
-            'uptime' => '99.9% Uptime',
-        ],
-        'stats' => [
-            'revenue' => 'Revenue Increase',
-            'time' => 'Hours Saved/Week',
-            'collection' => 'Collection Rate',
-        ],
-        'mockup' => [
-            'whatsapp' => [
-                'title' => 'WhatsApp',
-                'now' => 'now',
-                'online' => 'Online',
-                'message' => 'Hello Ahmed! 👋 We wanted to remind you that your subscription payment of 150 SAR is due tomorrow.',
-                'cta' => 'Pay Now',
-                'payment_success' => '150 SAR paid by student Ahmed Mohamed (Elite Group)',
-                'just_now' => 'Just now',
-            ],
-        ],
-    ],
     'pain_points' => [
         'title_prefix' => 'Sound',
         'title_highlight' => 'Familiar',

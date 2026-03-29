@@ -97,8 +97,8 @@
                         <i class="fas fa-user-graduate text-lg lg:text-2xl"></i>
                     </div>
                     <div>
-                        <div class="text-[9px] lg:text-[12px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">{{ app()->isLocale('ar') ? 'ناجح' : 'Success' }}</div>
-                        <div class="text-sm lg:text-xl font-black text-slate-900 leading-none">1.2k+</div>
+                        <div class="text-[9px] lg:text-[12px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">{{ __('landing.hero.mockup.success.label') }}</div>
+                        <div class="text-sm lg:text-xl font-black text-slate-900 leading-none">{{ __('landing.hero.mockup.success.amount') }}+</div>
                     </div>
                 </div>
 
