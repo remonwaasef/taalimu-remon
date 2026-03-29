@@ -16,8 +16,8 @@ return [
                 'cta' => 'Payer Maintenant',
             ],
             'success' => [
-                'label' => 'Succès',
-                'amount' => '1 250 €',
+                'label' => 'Connexion rapide',
+                'amount' => 'D\'un clic',
             ],
         ],
     ],
