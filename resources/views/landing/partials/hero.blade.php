@@ -3,7 +3,7 @@
     <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMTQ4LCAxNjMsIDE4NCwgMC4xNSkiLz48L3N2Zz4=')] [mask-image:linear-gradient(to_bottom,white,transparent_80%)] z-0"></div>
 
     <!-- Ambient Glows -->
-    <div class="absolute top-0 w-full h-[400px] lg:h-[600px] bg-gradient-to-b from-emerald-500/10 via-teal-400/5 to-transparent blur-[80px] lg:blur-[120px] pointer-events-none z-0"></div>
+    <div class="absolute top-0 w-full h-[400px] lg:h-[600px] bg-gradient-to-b from-blue-600/10 via-indigo-400/5 to-transparent blur-[80px] lg:blur-[120px] pointer-events-none z-0"></div>
 
     <div dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}" class="container relative mx-auto px-4 lg:px-8 z-10 max-w-7xl">
         <div class="grid grid-cols-12 gap-6 lg:gap-12 items-center">
@@ -11,17 +11,17 @@
             <!-- Content Side -->
             <div class="col-span-12 lg:col-span-6 text-center lg:text-start" data-animate="fade-text">
                 <!-- Premium Pill Badge -->
-                <div class="inline-flex items-center gap-2 lg:gap-3 px-3 py-1.5 lg:px-4 lg:py-2 rounded-full bg-white border border-slate-200 shadow-sm mb-6 lg:mb-10 transition-transform hover:scale-105 cursor-pointer hover:shadow-md hover:border-emerald-200">
+                <div class="inline-flex items-center gap-2 lg:gap-3 px-3 py-1.5 lg:px-4 lg:py-2 rounded-full bg-white border border-slate-200 shadow-sm mb-6 lg:mb-10 transition-transform hover:scale-105 cursor-pointer hover:shadow-md hover:border-blue-200">
                     <span class="relative flex h-2 w-2 lg:h-2.5 lg:w-2.5">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 lg:h-2.5 lg:w-2.5 bg-emerald-500"></span>
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 lg:h-2.5 lg:w-2.5 bg-blue-500"></span>
                     </span>
                     <span class="text-[9px] lg:text-xs font-bold text-slate-700 uppercase tracking-widest leading-none">{{ __('landing.hero.badge') }}</span>
                 </div>
 
                 <!-- Massive Headline -->
                 <h1 class="text-3xl md:text-5xl lg:text-[4.2rem] font-black text-slate-900 leading-[1.2] lg:leading-[1.1] mb-6 lg:mb-8 tracking-tight">
-                    {!! __('landing.hero.title', ['highlight' => '<span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">' . __('landing.hero.title_highlight', [], app()->getLocale()) . '</span>']) !!}
+                    {!! __('landing.hero.title', ['highlight' => '<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-600">' . __('landing.hero.title_highlight', [], app()->getLocale()) . '</span>']) !!}
                 </h1>
 
                 <!-- Refined Subtitle -->
@@ -40,7 +40,7 @@
                     </a>
                     <a href="#features" class="group bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 px-8 py-4 lg:px-10 lg:py-5 rounded-xl font-bold text-base lg:text-xl transition-all shadow-sm hover:shadow-md hover:-translate-y-1 w-full sm:w-auto">
                         <span class="flex items-center justify-center gap-2 lg:gap-3">
-                            <i class="fas fa-play-circle text-emerald-500 text-xl lg:text-2xl group-hover:scale-110 transition-transform"></i>
+                            <i class="fas fa-play-circle text-blue-600 text-xl lg:text-2xl group-hover:scale-110 transition-transform"></i>
                             {{ __('landing.hero.cta_secondary') }}
                         </span>
                     </a>
@@ -63,12 +63,12 @@
             <!-- Image Side -->
             <div class="col-span-12 lg:col-span-6 relative w-full lg:mt-0 mt-20" data-animate="fade-image">
                 <!-- Glowing effect -->
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160%] lg:w-[140%] h-[160%] lg:h-[140%] bg-gradient-to-tr from-emerald-500/25 via-teal-500/15 to-blue-500/20 blur-[50px] lg:blur-[100px] -z-10 rounded-full opacity-80"></div>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160%] lg:w-[140%] h-[160%] lg:h-[140%] bg-gradient-to-tr from-blue-600/25 via-indigo-500/15 to-purple-500/20 blur-[50px] lg:blur-[100px] -z-10 rounded-full opacity-80"></div>
 
                 <!-- Floating WhatsApp Card -->
                 <div class="absolute -top-16 -left-2 lg:-top-24 lg:-left-20 z-40 animate-float-slow w-56 lg:w-72" data-animate="fade-up">
-                    <div class="bg-white/95 backdrop-blur-xl border border-emerald-100 rounded-2xl shadow-2xl overflow-hidden ring-1 ring-emerald-500/10">
-                        <div class="bg-emerald-500 px-3 py-2 lg:px-4 lg:py-2.5 flex items-center justify-between">
+                    <div class="bg-white/95 backdrop-blur-xl border border-blue-100 rounded-2xl shadow-2xl overflow-hidden ring-1 ring-blue-500/10">
+                        <div class="bg-slate-900 px-3 py-2 lg:px-4 lg:py-2.5 flex items-center justify-between">
                             <div class="flex items-center gap-1.5 lg:gap-2">
                                 <i class="fab fa-whatsapp text-white text-[11px] lg:text-sm"></i>
                                 <span class="text-white text-[10px] lg:text-[11px] font-bold uppercase tracking-wider">{{ __('landing.hero.mockup.whatsapp.title') }}</span>
@@ -77,15 +77,15 @@
                         </div>
                         <div class="p-3 lg:p-5">
                             <div class="flex items-start gap-2 lg:gap-3 mb-3 lg:mb-4">
-                                <div class="w-7 h-7 lg:w-9 lg:h-9 rounded-full bg-emerald-50 flex-shrink-0 flex items-center justify-center">
-                                    <i class="fas fa-user text-emerald-600 text-[11px] lg:text-xs"></i>
+                                <div class="w-7 h-7 lg:w-9 lg:h-9 rounded-full bg-blue-50 flex-shrink-0 flex items-center justify-center">
+                                    <i class="fas fa-user text-blue-600 text-[11px] lg:text-xs"></i>
                                 </div>
                                 <p class="text-[11px] lg:text-[14px] text-slate-700 leading-snug font-medium">
                                     {{ __('landing.hero.mockup.whatsapp.message') }}
                                 </p>
                             </div>
-                            <div class="bg-emerald-50 rounded-lg py-2 lg:py-2.5 px-4 text-center border border-emerald-100 shadow-sm transition-transform hover:scale-105 cursor-pointer">
-                                <span class="text-emerald-700 font-bold text-[10px] lg:text-[13px]">{{ __('landing.hero.mockup.whatsapp.cta') }}</span>
+                            <div class="bg-blue-50 rounded-lg py-2 lg:py-2.5 px-4 text-center border border-blue-100 shadow-sm transition-transform hover:scale-105 cursor-pointer">
+                                <span class="text-blue-700 font-bold text-[10px] lg:text-[13px]">{{ __('landing.hero.mockup.whatsapp.cta') }}</span>
                             </div>
                         </div>
                     </div>
