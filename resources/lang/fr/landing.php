@@ -1,6 +1,26 @@
 <?php
 
 return [
+    'hero' => [
+        'badge' => 'Le système n°1 pour les centres de formation',
+        'title' => 'Gérez votre centre :highlight et gagnez des heures de travail',
+        'title_highlight' => 'intelligemment',
+        'subtitle' => 'Un système intégré pour la gestion des étudiants, des présences et des paiements — tout dans un tableau de bord facile.',
+        'cta_primary' => 'Essai Gratuit',
+        'cta_secondary' => 'Voir Comment ça Marche',
+        'mockup' => [
+            'whatsapp' => [
+                'title' => 'WhatsApp',
+                'now' => 'maintenant',
+                'message' => 'Salut Ahmed ! 👋 Nous voulions vous rappeler que le paiement de votre abonnement de 15 € est dû demain.',
+                'cta' => 'Payer Maintenant',
+            ],
+            'success' => [
+                'label' => 'Succès',
+                'amount' => '1 250 €',
+            ],
+        ],
+    ],
     'navbar' => [
         'home' => 'Accueil',
         'features' => 'Fonctionnalités',
@@ -10,52 +30,6 @@ return [
         'login' => 'Connexion',
         'start_free' => 'Commencer Gratuitement',
         'badge_short' => 'Taalimu - Gestion Éducative',
-    ],
-    'nav' => [
-        'features' => 'Fonctionnalités',
-        'pricing' => 'Tarifs',
-        'testimonials' => 'Témoignages',
-        'faq' => 'FAQ',
-        'sign_in' => 'Se Connecter',
-        'start_trial' => 'Essai Gratuit',
-    ],
-    'hero' => [
-        'badge' => 'Le système de gestion n°1 pour les centres éducatifs',
-        'title' => 'Gérez votre centre <span class="gradient-text">intelligemment</span> et économisez des heures de travail chaque semaine',
-        'subtitle' => 'Un système intégré pour la gestion des étudiants, des présences et des paiements — tout dans un tableau de bord facile à utiliser.',
-        'types' => [
-            'center' => 'Centre Éducatif',
-            'school' => 'École',
-            'academy' => 'Académie',
-        ],
-        'testimonial' => [
-            'quote' => 'J\'ai économisé plus de 15 heures par semaine après avoir utilisé Taalimu.',
-            'author' => 'Ahmed Mohamed, Instructeur Indépendant',
-        ],
-        'cta_primary' => 'Essayer Gratuitement',
-        'cta_secondary' => 'Voir Comment Ça Marche',
-        'trial_note' => 'Pas de carte de crédit requise • 14 jours d\'essai gratuit',
-        'trust' => [
-            'security' => 'Haute Sécurité',
-            'centers' => 'Gestion Nouvelle Génération',
-            'uptime' => '99,9% Disponibilité',
-        ],
-        'stats' => [
-            'revenue' => 'Augmentation des Revenus',
-            'time' => 'Heures Économisées/Semaine',
-            'collection' => 'Taux de Recouvrement',
-        ],
-        'mockup' => [
-            'whatsapp' => [
-                'title' => 'WhatsApp',
-                'now' => 'maintenant',
-                'online' => 'En ligne',
-                'message' => 'Bonjour Ahmed ! 👋 Nous souhaitons vous rappeler que le paiement de votre abonnement de 150 SAR est dû demain.',
-                'cta' => 'Payer maintenant',
-                'payment_success' => '150 SAR payés par l\'étudiant Ahmed Mohamed (Groupe Élite)',
-                'just_now' => 'Il y a une minute',
-            ],
-        ],
     ],
     'pain_points' => [
         'title_prefix' => 'Cela vous semble',
