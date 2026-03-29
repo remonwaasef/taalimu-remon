@@ -16,8 +16,8 @@ return [
                 'cta' => 'Pay Now',
             ],
             'success' => [
-                'label' => 'Success',
-                'amount' => '$1,250',
+                'label' => 'QR Attendance',
+                'amount' => 'Scan & Go',
             ],
         ],
     ],
