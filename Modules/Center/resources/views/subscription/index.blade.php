@@ -313,7 +313,7 @@
                                     ⚡ {{ __('center::subscription.recommended') }}
                                 </span>
                             @endif
-                            <h5 class="fw-bold mb-0 mt-1 text-dark">
+                            <h5 class="fw-black mb-0 mt-1">
                                 @php
                                     $transPkgName = __('center::subscription.plans.' . $package->slug);
                                     if ($transPkgName === 'center::subscription.plans.' . $package->slug) {
@@ -332,14 +332,13 @@
                                     {{ number_format($package->old_price, 0) }} <span class="plan-currency">{{ $currency }}</span>
                                 </div>
                             @endif
-                            <div class="fw-bold text-primary plan-price-display" style="font-size:1.6rem; line-height:1;" 
+                            <div class="fw-black text-primary plan-price-display" style="font-size:1.6rem; line-height:1;" 
                                  data-monthly="{{ $package->price }}" 
                                  data-term="{{ $package->term_price ?: ($package->price * 5) }}"
                                  data-yearly="{{ $package->yearly_price ?: ($package->price * 12) }}">
                                 {{ number_format($package->term_price ?: ($package->price * 5), 0) }}
                             </div>
-                            <small class="text-muted"><span class="plan-currency text-dark">{{ $currency }}</span> / <span class="plan-cycle-text">{{ __('center::subscription.billing_term_cycle') }}</span></small>
-观察: 这里的 plan-currency 也加上 text-dark 确保币种符号可见。
+                            <small class="text-muted"><span class="plan-currency">{{ $currency }}</span> / <span class="plan-cycle-text">{{ __('center::subscription.billing_term_cycle') }}</span></small>
                             @if($package->old_price && $package->old_price > $package->price)
                                 @php
                                     $discountPercent = round((($package->old_price - $package->price) / $package->old_price) * 100);
@@ -375,12 +374,10 @@
                             </button>
                         @elseif($package->stripe_price_id)
                             <a href="{{ route('center.subscription.checkout', ['tenant' => $tenant->domain, 'package' => $package->id]) }}?cycle=monthly"
-                               class="btn btn-primary w-100 rounded-pill fw-bold plan-checkout-btn {{ $isFeatured ? '' : 'btn-outline-primary' }}"
+                               class="btn w-100 rounded-pill fw-bold plan-checkout-btn {{ $isFeatured ? 'btn-primary shadow-sm' : 'btn-outline-primary' }}"
                                data-base-url="{{ route('center.subscription.checkout', ['tenant' => $tenant->domain, 'package' => $package->id]) }}"
                                data-name="{{ addslashes($package->name) }}"
-                               style=""
                                onclick="return confirm('{{ __('center::subscription.confirm_upgrade', ['name' => addslashes($package->name)]) }}')">
-观察: 去掉了 hardcoded style="... #3A0CA3 ..." 让 btn-outline-primary 自动使用 emerald.
                                 @if($currentPackage && $package->price > $currentPackage->price)
                                     <i class="fas fa-arrow-up me-1"></i> {{ __('center::subscription.upgrade_now') }}
                                 @elseif($currentPackage && $package->price < $currentPackage->price)
