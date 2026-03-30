@@ -44,7 +44,7 @@
         </li>
 
         <li class="nav-item dropdown">
-          <a class="nav-link py-0 d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link py-0 d-flex align-items-center" href="#" id="navbarDropdown" role="button" aria-expanded="false" onclick="toggleCustomDropdown(event, this)">
               <div class="avatar avatar-50 avatar-rounded bg-primary d-flex align-items-center justify-content-center text-white fw-bold" style="background: linear-gradient(135deg, #3A0CA3 0%, #2A4DFF 100%) !important;">
                   {{ substr(auth()->user()->name ?? 'A', 0, 1) }}
               </div>
