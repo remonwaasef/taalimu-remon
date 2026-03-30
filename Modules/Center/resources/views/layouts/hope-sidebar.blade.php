@@ -4,15 +4,15 @@
             @if($tenant->logo)
                 <img src="{{ asset('storage/' . $tenant->logo) }}" class="rounded-3 shadow-sm p-1" style="max-height: 45px; max-width: 100%;">
             @else
-                <div class="mb-2 mx-auto bg-white rounded-circle d-flex align-items-center justify-content-center text-primary fw-bold" style="width: 45px; height: 45px; font-size: 1.2rem;">
+                <div class="mb-2 mx-auto bg-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 45px; height: 45px; font-size: 1.2rem; color: #059669;">
                     {{ substr($tenant->name ?? 'T', 0, 1) }}
                 </div>
             @endif
-            <h4 class="logo-title ms-2 text-truncate" style="max-width: 150px;" title="{{ $tenant->name ?? __('sidebar.center_name') }}">
+            <h4 class="logo-title ms-2 text-truncate" style="max-width: 150px; color: #1e293b;" title="{{ $tenant->name ?? __('sidebar.center_name') }}">
                 {{ $tenant->name ?? __('sidebar.center_name') }}
             </h4>
         </a>
-        <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
+        <div class="sidebar-toggle" data-toggle="sidebar" data-active="true" style="color: #059669;">
             <i class="icon">
                 <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4.25 12.2744L19.25 12.2744" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>

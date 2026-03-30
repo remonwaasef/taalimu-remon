@@ -17,14 +17,14 @@
       </svg>
       </i>
     </div>
-    <div class="input-group search-input">
-      <span class="input-group-text" id="search-input">
+    <div class="input-group search-input" style="border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; background: #f8fafc;">
+      <span class="input-group-text" id="breadcrumb-search" style="background: transparent; border: none; color: #059669;">
         <svg width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle>
           <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
       </span>
-      <input type="search" class="form-control" placeholder="Search...">
+      <input type="search" class="form-control" placeholder="{{ app()->isLocale('ar') ? 'بحث...' : 'Search...' }}" style="border: none; background: transparent; font-size: 0.9rem;">
     </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -61,12 +61,12 @@
                 <path opacity="0.4" d="M14.0088 19.2283C13.5088 19.1215 10.4627 19.1215 9.96275 19.2283C9.53539 19.327 9.07324 19.5566 9.07324 20.0602C9.09809 20.5406 9.37935 20.9646 9.76895 21.2335L9.76795 21.2345C10.2718 21.6273 10.8632 21.877 11.4824 21.9667C11.8123 22.012 12.1482 22.01 12.4901 21.9667C13.1083 21.877 13.6997 21.6273 14.2036 21.2345L14.2026 21.2335C14.5922 20.9646 14.8734 20.5406 14.8983 20.0602C14.8983 19.5566 14.4361 19.327 14.0088 19.2283Z" fill="currentColor"></path>
               </svg>
               @if(auth()->user()->unreadNotifications->count() > 0)
-                  <span class="bg-danger dots"></span>
+                  <span class="dots" style="background: #ef4444 !important; outline: 2px solid white;"></span>
               @endif
             </a>
             <div class="sub-drop dropdown-menu dropdown-menu-end p-0" aria-labelledby="notification-drop">
               <div class="card shadow-none m-0">
-                <div class="card-header d-flex justify-content-between bg-primary py-3">
+                <div class="card-header d-flex justify-content-between py-3" style="background: var(--bs-primary) !important;">
                   <div class="header-title">
                     <h5 class="mb-0 text-white">{{ __('center::sidebar.notifications') }}</h5>
                   </div>
@@ -132,7 +132,7 @@
               @if(auth()->user()->image)
                   <img src="{{ asset('storage/' . auth()->user()->image) }}" alt="User-Profile" class="theme-color-default-img img-fluid avatar avatar-50 avatar-rounded">
               @else
-                  <div class="avatar avatar-50 avatar-rounded bg-primary d-flex align-items-center justify-content-center text-white fw-bold">
+                  <div class="avatar avatar-50 avatar-rounded d-flex align-items-center justify-content-center text-white fw-bold" style="background: var(--bs-primary) !important;">
                       {{ substr(auth()->user()->name ?? 'U', 0, 1) }}
                   </div>
               @endif

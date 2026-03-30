@@ -8,7 +8,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Bootstrap 5 CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
@@ -21,18 +21,22 @@
 
     <style>
         :root {
-            --primary-color: #6366f1;
-            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            --primary-color: #10b981;
+            --primary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
             --sidebar-width: 280px;
             --topbar-height: 70px;
-            --bg-body: #f1f5f9;
+            --bg-body: #f8fafc;
         }
 
         body { 
-            font-family: 'Cairo', sans-serif; 
+            font-family: 'Outfit', 'Cairo', sans-serif; 
             background-color: var(--bg-body);
             color: #334155;
             overflow-x: hidden;
+        }
+
+        [dir="rtl"] body {
+            font-family: 'Cairo', sans-serif;
         }
 
         /* Sidebar Styles */
