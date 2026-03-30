@@ -56,4 +56,23 @@ return [
         'advanced_roles'      => 'Advanced Permissions',
         'student_portal'      => 'Student Portal',
     ],
+    'currency' => 'EGP',
+    'plans' => [
+        'free' => [
+            'name' => 'Free Trial',
+            'desc' => 'Perfect for testing the platform features',
+        ],
+        'starter' => [
+            'name' => 'Starter',
+            'desc' => 'For independent teachers and small groups',
+        ],
+        'growth' => [
+            'name' => 'Growth',
+            'desc' => 'For growing educational centers',
+        ],
+        'enterprise' => [
+            'name' => 'Enterprise',
+            'desc' => 'For large educational institutions and branches',
+        ],
+    ],
 ];

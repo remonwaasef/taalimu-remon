@@ -56,4 +56,23 @@ return [
         'advanced_roles'      => 'Permissions avancées',
         'student_portal'      => 'Portail étudiant',
     ],
+    'currency' => 'EGP',
+    'plans' => [
+        'free' => [
+            'name' => 'Essai Gratuit',
+            'desc' => 'Idéal pour tester la plateforme',
+        ],
+        'starter' => [
+            'name' => 'Starter',
+            'desc' => 'Pour les enseignants indépendants et les petits groupes',
+        ],
+        'growth' => [
+            'name' => 'Croissance',
+            'desc' => 'Pour les centres éducatifs en pleine expansion',
+        ],
+        'enterprise' => [
+            'name' => 'Entreprise',
+            'desc' => 'Pour les grandes institutions et les succursales',
+        ],
+    ],
 ];
