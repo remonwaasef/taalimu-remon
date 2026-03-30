@@ -58,15 +58,15 @@ return [
     ],
     'currency' => 'EGP',
     'plans' => [
-        'free' => [
+        'free-trial' => [
             'name' => 'Essai Gratuit',
             'desc' => 'Idéal pour tester la plateforme',
         ],
-        'starter' => [
+        'basic' => [
             'name' => 'Starter',
             'desc' => 'Pour les enseignants indépendants et les petits groupes',
         ],
-        'growth' => [
+        'pro' => [
             'name' => 'Croissance',
             'desc' => 'Pour les centres éducatifs en pleine expansion',
         ],
@@ -74,5 +74,11 @@ return [
             'name' => 'Entreprise',
             'desc' => 'Pour les grandes institutions et les succursales',
         ],
+    ],
+    'values' => [
+        'إيميل' => 'E-mail',
+        'أولوية' => 'Priorité',
+        'مدير حساب' => 'Gestionnaire de compte',
+        'basic' => 'Basique',
     ],
 ];
