@@ -53,19 +53,19 @@
                                         <div class="row g-3">
                                             <div class="col-md-6">
                                                 <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.center_name') }}</label>
-                                                <input type="text" name="name" class="form-control bg-light border-0 rounded-3" value="{{ $tenant->name }}" required>
+                                                <input type="text" name="name" class="form-control bg-white border rounded-3" value="{{ $tenant->name }}" required>
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.general_phone') }}</label>
-                                                <input type="text" name="phone" class="form-control bg-light border-0 rounded-3" value="{{ $tenant->phone }}">
+                                                <input type="text" name="phone" class="form-control bg-white border rounded-3" value="{{ $tenant->phone }}">
                                             </div>
                                             <div class="col-md-12">
                                                 <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.address') }}</label>
-                                                <input type="text" name="address" class="form-control bg-light border-0 rounded-3" value="{{ $tenant->address }}">
+                                                <input type="text" name="address" class="form-control bg-white border rounded-3" value="{{ $tenant->address }}">
                                             </div>
                                             <div class="col-md-12">
                                                 <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.description') }}</label>
-                                                <textarea name="description" class="form-control bg-light border-0 rounded-3" rows="3">{{ $tenant->description }}</textarea>
+                                                <textarea name="description" class="form-control bg-white border rounded-3" rows="3">{{ $tenant->description }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -96,16 +96,16 @@
                                         <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.default_country_code') }}</label>
                                         <div class="input-group">
                                             <span class="input-group-text bg-light border-0"><i class="fas fa-globe text-muted"></i></span>
-                                            <input type="text" name="country_code" class="form-control bg-light border-0" value="{{ $settings['country_code'] ?? '20' }}">
+                                            <input type="text" name="country_code" class="form-control bg-white border" value="{{ $settings['country_code'] ?? '20' }}">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.instance_id') }}</label>
-                                        <input type="text" name="instance_id" class="form-control bg-light border-0" value="{{ $settings['instance_id'] ?? '' }}">
+                                        <input type="text" name="instance_id" class="form-control bg-white border" value="{{ $settings['instance_id'] ?? '' }}">
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.token') }}</label>
-                                        <input type="password" name="token" class="form-control bg-light border-0" value="{{ $settings['token'] ?? '' }}">
+                                        <input type="password" name="token" class="form-control bg-white border" value="{{ $settings['token'] ?? '' }}">
                                     </div>
                                 </div>
 
@@ -115,15 +115,15 @@
                                 <div class="row g-3">
                                     <div class="col-md-4">
                                         <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.attendance_msg') }}</label>
-                                        <textarea name="attendance_template" class="form-control bg-light border-0" rows="4">{{ $settings['attendance_template'] ?? '' }}</textarea>
+                                        <textarea name="attendance_template" class="form-control bg-white border" rows="4">{{ $settings['attendance_template'] ?? '' }}</textarea>
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.payment_msg') }}</label>
-                                        <textarea name="payment_template" class="form-control bg-light border-0" rows="4">{{ $settings['payment_template'] ?? '' }}</textarea>
+                                        <textarea name="payment_template" class="form-control bg-white border" rows="4">{{ $settings['payment_template'] ?? '' }}</textarea>
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.debt_msg') }}</label>
-                                        <textarea name="debt_template" class="form-control bg-light border-0" rows="4">{{ $settings['debt_template'] ?? '' }}</textarea>
+                                        <textarea name="debt_template" class="form-control bg-white border" rows="4">{{ $settings['debt_template'] ?? '' }}</textarea>
                                     </div>
                                 </div>
 
@@ -257,14 +257,14 @@
                                                      <div class="mb-4">
                                                         <div x-show="billingCycle === 'monthly'" class="animate-fade-in">
                                                             <div class="d-flex align-items-baseline gap-1">
-                                                                <span class="fs-4 fw-bold text-primary">{{ number_format($pkg->price) }}</span>
+                                                                <span class="fs-4 fw-bold text-primary">{{ number_format((float)$pkg->price) }}</span>
                                                                 <small class="text-muted x-small">{{ __('instructor::dashboard.currency') }} / {{ __('instructor::settings.monthly') }}</small>
                                                             </div>
                                                         </div>
                                                         @if($pkg->term_price)
                                                         <div x-show="billingCycle === 'term'" class="animate-fade-in" style="display: none;">
                                                             <div class="d-flex align-items-baseline gap-1">
-                                                                <span class="fs-4 fw-bold text-primary">{{ number_format($pkg->term_price) }}</span>
+                                                                <span class="fs-4 fw-bold text-primary">{{ number_format((float)$pkg->term_price) }}</span>
                                                                 <small class="text-muted x-small">{{ __('instructor::dashboard.currency') }} / {{ __('instructor::settings.term') }}</small>
                                                             </div>
                                                         </div>
@@ -272,7 +272,7 @@
                                                         @if($pkg->yearly_price)
                                                         <div x-show="billingCycle === 'yearly'" class="animate-fade-in" style="display: none;">
                                                             <div class="d-flex align-items-baseline gap-1">
-                                                                <span class="fs-4 fw-bold text-primary">{{ number_format($pkg->yearly_price) }}</span>
+                                                                <span class="fs-4 fw-bold text-primary">{{ number_format((float)$pkg->yearly_price) }}</span>
                                                                 <small class="text-muted x-small">{{ __('instructor::dashboard.currency') }} / {{ __('instructor::settings.yearly') }}</small>
                                                             </div>
                                                         </div>

@@ -18,12 +18,12 @@
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::instructors.name') }} <span class="text-danger">*</span></label>
-                                <input type="text" name="name" value="{{ old('name', $instructor->name) }}" class="form-control bg-light border-0" required>
+                                <input type="text" name="name" value="{{ old('name', $instructor->name) }}" class="form-control bg-white border" required>
                                 @error('name')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::instructors.specialization') }} <span class="text-danger">*</span></label>
-                                <input type="text" name="specialization" value="{{ old('specialization', $instructor->specialization) }}" class="form-control bg-light border-0" placeholder="{{ __('center::messages.blade_0440') }}" required>
+                                <input type="text" name="specialization" value="{{ old('specialization', $instructor->specialization) }}" class="form-control bg-white border" placeholder="{{ __('center::messages.blade_0440') }}" required>
                                 @error('specialization')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                         </div>
@@ -32,7 +32,7 @@
                         <div class="row g-3 mb-4">
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">{{ __('center::instructors.status') }} <span class="text-danger">*</span></label>
-                                <select name="status" class="form-select bg-light border-0" required>
+                                <select name="status" class="form-select bg-white border" required>
                                     <option value="active" {{ old('status', $instructor->status) == 'active' ? 'selected' : '' }}>{{ __('center::instructors.active') }}</option>
                                     <option value="inactive" {{ old('status', $instructor->status) == 'inactive' ? 'selected' : '' }}>{{ __('center::instructors.inactive') }}</option>
                                     <option value="on_hold" {{ old('status', $instructor->status) == 'on_hold' ? 'selected' : '' }}>{{ __('center::instructors.on_hold') }}</option>
@@ -40,7 +40,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">{{ __('center::instructors.gender') }}</label>
-                                <select name="gender" class="form-select bg-light border-0">
+                                <select name="gender" class="form-select bg-white border">
                                     <option value="">{{ __('center::messages.blade_0433') }}</option>
                                     <option value="male" {{ old('gender', $instructor->gender) == 'male' ? 'selected' : '' }}>{{ __('center::instructors.male') }}</option>
                                     <option value="female" {{ old('gender', $instructor->gender) == 'female' ? 'selected' : '' }}>{{ __('center::instructors.female') }}</option>
@@ -48,7 +48,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">{{ __('center::instructors.hiring_date') }}</label>
-                                <input type="date" name="hiring_date" value="{{ old('hiring_date', $instructor->hiring_date ? $instructor->hiring_date->format('Y-m-d') : '') }}" class="form-control bg-light border-0">
+                                <input type="date" name="hiring_date" value="{{ old('hiring_date', $instructor->hiring_date ? $instructor->hiring_date->format('Y-m-d') : '') }}" class="form-control bg-white border">
                             </div>
                         </div>
 
@@ -56,16 +56,16 @@
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::instructors.national_id') }}</label>
-                                <input type="text" name="national_id" value="{{ old('national_id', $instructor->national_id) }}" class="form-control bg-light border-0" placeholder="{{ __('center::messages.blade_0441') }}">
+                                <input type="text" name="national_id" value="{{ old('national_id', $instructor->national_id) }}" class="form-control bg-white border" placeholder="{{ __('center::messages.blade_0441') }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::instructors.commission_rate') }} <span class="text-danger">*</span></label>
                                 <div class="input-group">
-                                    <select name="commission_type" class="form-select bg-light border-0" style="max-width: 140px; border-radius: 0 10px 10px 0 !important;" required>
+                                    <select name="commission_type" class="form-select bg-white border" style="max-width: 140px; border-radius: 0 10px 10px 0 !important;" required>
                                         <option value="percentage" {{ old('commission_type', $instructor->commission_type) == 'percentage' ? 'selected' : '' }}>{{ __('center::instructors.commission_percentage') }}</option>
                                         <option value="fixed" {{ old('commission_type', $instructor->commission_type) == 'fixed' ? 'selected' : '' }}>{{ __('center::instructors.commission_fixed') }}</option>
                                     </select>
-                                    <input type="number" step="0.01" name="commission_rate" value="{{ old('commission_rate', $instructor->commission_rate) }}" class="form-control bg-light border-0" placeholder="0.00" style="border-radius: 10px 0 0 10px !important;" required>
+                                    <input type="number" step="0.01" name="commission_rate" value="{{ old('commission_rate', $instructor->commission_rate) }}" class="form-control bg-white border" placeholder="0.00" style="border-radius: 10px 0 0 10px !important;" required>
                                 </div>
                                 @error('commission_rate')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                                 @error('commission_type')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
@@ -76,19 +76,19 @@
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::instructors.email') }}</label>
-                                <input type="email" name="email" value="{{ old('email', $instructor->email) }}" class="form-control bg-light border-0">
+                                <input type="email" name="email" value="{{ old('email', $instructor->email) }}" class="form-control bg-white border">
                                 @error('email')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::instructors.phone') }} <span class="text-danger">*</span></label>
-                                <input type="tel" name="phone" value="{{ old('phone', $instructor->phone) }}" class="form-control bg-light border-0" required>
+                                <input type="tel" name="phone" value="{{ old('phone', $instructor->phone) }}" class="form-control bg-white border" required>
                                 @error('phone')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label fw-bold">{{ __('center::instructors.bio') }}</label>
-                            <textarea name="bio" class="form-control bg-light border-0" rows="3">{{ old('bio', $instructor->bio) }}</textarea>
+                            <textarea name="bio" class="form-control bg-white border" rows="3">{{ old('bio', $instructor->bio) }}</textarea>
                         </div>
 
                         <div class="mb-5">
@@ -101,7 +101,7 @@
                                     </div>
                                 </div>
                             @endif
-                            <input type="file" name="image" class="form-control bg-light border-0" accept="image/*">
+                            <input type="file" name="image" class="form-control bg-white border" accept="image/*">
                             <small class="text-muted">{{ __('center::messages.blade_0437') }}</small>
                         </div>
 
