@@ -26,11 +26,11 @@
 
                 <!-- CTAs -->
                 <div class="flex flex-col sm:flex-row gap-3 lg:gap-4 items-center justify-center md:justify-start mb-10 lg:mb-16 mx-auto md:mx-0">
-                    <a href="{{ route('register') }}" class="group relative inline-flex items-center justify-center bg-slate-900 text-white px-8 py-4 lg:px-10 lg:py-5 rounded-xl font-bold text-base lg:text-xl transition-all hover:bg-slate-800 hover:shadow-2xl hover:shadow-slate-900/20 hover:-translate-y-1 overflow-hidden w-full sm:w-auto">
-                        <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
-                        <span class="relative flex items-center gap-2 lg:gap-3">
+                    <a href="{{ route('register') }}" class="group relative inline-flex items-center justify-center bg-slate-900 text-white px-10 py-5 lg:px-14 lg:py-6 rounded-2xl font-black text-xl lg:text-2xl transition-all hover:bg-slate-800 shadow-xl lg:shadow-2xl ring-4 ring-slate-900/10 hover:shadow-slate-900/30 hover:-translate-y-1.5 overflow-hidden w-full sm:w-auto">
+                        <span class="absolute inset-0 w-full h-full -mt-1 rounded-2xl opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
+                        <span class="relative flex items-center gap-3 lg:gap-4">
                             {{ __('landing.hero.cta_primary') }}
-                            <i class="fas {{ app()->getLocale() == 'ar' ? 'fa-arrow-left group-hover:-translate-x-1' : 'fa-arrow-right group-hover:translate-x-1' }} text-sm lg:text-lg opacity-70 transition-transform"></i>
+                            <i class="fas {{ app()->getLocale() == 'ar' ? 'fa-arrow-left group-hover:-translate-x-2' : 'fa-arrow-right group-hover:translate-x-2' }} text-lg lg:text-2xl opacity-70 transition-transform duration-300"></i>
                         </span>
                     </a>
 
