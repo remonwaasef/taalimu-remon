@@ -132,12 +132,19 @@
         font-size: 0.75rem;
         padding: 4px 8px;
         white-space: nowrap;
-        background: #10b981 !important;
+        background: #f59e0b !important;
         color: #fff !important;
         border-radius: 6px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 10px rgba(245,158,11,0.3);
         z-index: 10;
-        border: 1px solid rgba(255,255,255,0.2) !important;
+        border: 1px solid rgba(255,255,255,0.3) !important;
+        animation: pulse-orange 2.5s infinite;
+        font-weight: 800;
+    }
+    @keyframes pulse-orange {
+        0%   { box-shadow: 0 0 0 0 rgba(245,158,11,0.5); transform: translateX(-50%) scale(1); }
+        70%  { box-shadow: 0 0 0 8px rgba(245,158,11,0); transform: translateX(-50%) scale(1.05); }
+        100% { box-shadow: 0 0 0 0 rgba(245,158,11,0); transform: translateX(-50%) scale(1); }
     }
 </style>
 @endpush
@@ -334,22 +341,6 @@
                                 @endphp
                                 {{ $transPkgName }}
                             </h5>
-                            @if($package->old_price && $package->old_price > $package->price)
-                                @php
-                                    $saveM = round((($package->old_price - $package->price) / $package->old_price) * 100);
-                                    $saveT = round(((($package->old_price * 5) - ($package->term_price ?: ($package->price * 5))) / ($package->old_price * 5)) * 100);
-                                    $saveY = round(((($package->old_price * 12) - ($package->yearly_price ?: ($package->price * 12))) / ($package->old_price * 12)) * 100);
-                                @endphp
-                                <div class="mt-1">
-                                    <span class="badge bg-success bg-opacity-15 text-success rounded-pill px-2 py-1 plan-save-badge" 
-                                          style="font-size: 0.75rem;" 
-                                          data-monthly="{{ $saveM }}" 
-                                          data-term="{{ $saveT }}" 
-                                          data-yearly="{{ $saveY }}">
-                                        {{ __('center::subscription.save_badge', ['percent' => $saveT]) }}
-                                    </span>
-                                </div>
-                            @endif
                         </div>
                         <div class="text-end">
                             @if($package->old_price && $package->old_price > $package->price)
@@ -367,6 +358,16 @@
                                 {{ number_format($package->term_price ?: ($package->price * 5), 0) }}
                             </div>
                             <small class="text-muted"><span class="plan-currency">{{ $currency }}</span> / <span class="plan-cycle-text">{{ __('center::subscription.billing_term_cycle') }}</span></small>
+                            @if($package->old_price && $package->old_price > $package->price)
+                                @php
+                                    $discountPercent = round((($package->old_price - $package->price) / $package->old_price) * 100);
+                                @endphp
+                                <div class="mt-1">
+                                    <span class="badge bg-warning text-white rounded-pill px-2 py-1 shadow-sm" style="font-size: 0.7rem; background-color: #f59e0b !important;">
+                                        <i class="fas fa-tag me-1"></i> {{ __('center::subscription.save_badge') }}
+                                    </span>
+                                </div>
+                            @endif
                         </div>
                     </div>
 
@@ -458,15 +459,6 @@ document.addEventListener('DOMContentLoaded', function() {
         priceDisplays.forEach(display => {
             const price = parseFloat(display.getAttribute('data-' + cycle));
             display.textContent = price.toLocaleString('en-US', { maximumFractionDigits: 0 });
-        });
-
-        // Update save badges
-        const saveBadges = document.querySelectorAll('.plan-save-badge');
-        saveBadges.forEach(badge => {
-            const percent = badge.getAttribute('data-' + cycle);
-            const template = '{{ __('center::subscription.save_badge', ['percent' => ':percent']) }}';
-            badge.textContent = template.replace(':percent', percent);
-            badge.parentElement.style.display = (percent > 0) ? 'block' : 'none';
         });
 
         // Update old prices (strikethrough)

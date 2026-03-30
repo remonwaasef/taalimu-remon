@@ -28,7 +28,7 @@ return [
     'billing_monthly' => 'اشتراك شهر',
     'billing_term'    => 'اشتراك ترم',
     'billing_year'    => 'اشتراك سنة',
-    'save_badge'      => 'وفر :percent%',
+    'save_badge'      => 'وفر 17%',
     'card_payment'    => 'بطاقة',
     'recommended'     => 'الأكثر شهرة',
     'unlimited'       => 'غير محدود',
