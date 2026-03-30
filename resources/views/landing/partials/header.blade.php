@@ -37,7 +37,7 @@
                         {{ strtoupper(app()->getLocale()) }}
                     </button>
                     <div x-show="open" x-cloak @click.away="open = false" x-transition class="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-2xl py-2 overflow-hidden z-50 border border-slate-200">
-                        @foreach(['en' => 'English', 'ar' => 'العربية', 'fr' => 'Français'] as $code => $label)
+                        @foreach(['ar' => 'العربية', 'fr' => 'Français'] as $code => $label)
                         <a href="{{ route('lang.switch', ['locale' => $code]) }}" class="block px-4 py-2.5 text-sm @if(app()->isLocale($code)) text-emerald-600 font-bold @else text-slate-600 hover:bg-slate-50 @endif">
                             {{ $label }}
                         </a>

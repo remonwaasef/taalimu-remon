@@ -130,7 +130,7 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
 
 // Global Language Switcher (Accessible from any domain) — rate limited to prevent locale flooding
 Route::get('lang/{locale}', function ($locale) {
-    if (in_array($locale, ['en', 'ar', 'fr'])) {
+    if (in_array($locale, ['ar', 'fr'])) {
         session(['locale' => $locale]);
         if (auth()->check()) {
             auth()->user()->update(['locale' => $locale]);
