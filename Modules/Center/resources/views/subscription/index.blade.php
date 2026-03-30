@@ -323,9 +323,17 @@
                         $label = app()->getLocale() === 'en' && $feat->name_en ? $feat->name_en : $feat->name;
                     }
 
-                    if ($val === '-1')              $pFeatures[] = $label . ': ' . __('center::subscription.unlimited');
-                    elseif ($feat->type === 'boolean') $pFeatures[] = $label;
-                    else                              $pFeatures[] = $label . ': ' . $val;
+                    if ($val === '-1' || $val === 'unlimited') {
+                        $pFeatures[] = $label . ': ' . __('center::subscription.unlimited');
+                    } elseif ($feat->type === 'boolean') {
+                        $pFeatures[] = $label;
+                    } else {
+                        $transVal = __('center::subscription.values.' . $val);
+                        if ($transVal === 'center::subscription.values.' . $val) {
+                            $transVal = $val;
+                        }
+                        $pFeatures[] = $label . ': ' . $transVal;
+                    }
                 }
             @endphp
 
