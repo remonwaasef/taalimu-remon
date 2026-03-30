@@ -31,32 +31,53 @@
     <style>
         /* ===== Global Emerald Green Theme Override (Taalimu Unified) ===== */
         :root {
-            --bs-primary: #10b981 !important; /* Emerald 500 */
+            /* SaaS Emerald Palette (Refined HSL) */
+            --bs-primary: #10b981 !important;
             --bs-primary-rgb: 16, 185, 129 !important;
-            --bs-link-color: #10b981 !important;
-            --bs-link-hover-color: #059669 !important;
-            --primary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --emerald-50: #ecfdf5;
+            --emerald-100: #d1fae5;
+            --emerald-400: #34d399;
+            --emerald-500: #10b981;
+            --emerald-600: #059669;
+            --emerald-700: #047857;
+            
+            --bs-link-color: var(--emerald-600) !important;
+            --bs-link-hover-color: var(--emerald-700) !important;
+            
+            --primary-gradient: linear-gradient(135deg, var(--emerald-500) 0%, var(--emerald-600) 100%);
+            
+            /* Layered Shadows (Premium depth) */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
         body { 
             font-family: 'Outfit', 'Cairo', sans-serif; 
-            background-color: #f8fafc;
+            background-color: #f1f5f9; /* Slate 100 for better contrast with white cards */
+            color: #1e293b; /* Slate 800 */
+            -webkit-font-smoothing: antialiased;
         }
 
         /* Arabic text specific font weight/style adjustment */
         [dir="rtl"] body {
             font-family: 'Cairo', sans-serif;
+            letter-spacing: 0;
         }
+
+        /* Global Transitions */
+        * { transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; }
 
         /* Override Hope UI primary color classes */
         .bg-primary, .btn-primary, .badge-primary {
-            background-color: #10b981 !important;
-            border-color: #10b981 !important;
+            background-color: var(--emerald-500) !important;
+            border-color: var(--emerald-500) !important;
         }
         .btn-primary:hover, .btn-primary:focus {
-            background-color: #059669 !important;
-            border-color: #059669 !important;
-            box-shadow: 0 8px 15px rgba(16, 185, 129, 0.2) !important;
+            background-color: var(--emerald-600) !important;
+            border-color: var(--emerald-600) !important;
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3) !important;
         }
 
         /* Header banner */
@@ -78,60 +99,67 @@
         
         /* Sidebar Refinements */
         .sidebar {
-            box-shadow: 0 0 40px rgba(0,0,0,0.03) !important;
+            box-shadow: 10px 0 15px -3px rgba(0, 0, 0, 0.02) !important;
             border-left: 1px solid rgba(0,0,0,0.05) !important;
+            background: #ffffff !important;
         }
         
         /* Category Headers (Groups) */
         .sidebar .static-item {
-            padding: 1.5rem 1.5rem 0.5rem !important;
-            margin-top: 0.5rem;
+            padding: 2.25rem 1.5rem 0.75rem !important;
+            margin-top: 0;
         }
         .sidebar .static-item .default-icon {
-            font-size: 0.7rem !important;
-            letter-spacing: 1.2px;
-            color: #10b981 !important;
-            opacity: 0.65 !important;
+            font-size: 0.65rem !important;
+            letter-spacing: 0.1em;
+            color: var(--emerald-600) !important;
+            opacity: 0.8 !important;
             font-weight: 800 !important;
+            text-transform: uppercase;
         }
 
         .sidebar .navbar-nav > .nav-item > .nav-link {
-            padding: 0.75rem 1.25rem !important;
-            transition: all 0.3s ease;
-            font-weight: 500;
+            padding: 0.85rem 1.25rem !important;
+            border-radius: 12px !important;
+            margin: 0.2rem 12px;
+            color: #475569 !important; /* Sidebar text color */
         }
 
         .sidebar .navbar-nav > .nav-item > .nav-link.active {
-            background: var(--primary-gradient) !important;
-            color: white !important;
-            box-shadow: 0 8px 16px -4px rgba(16, 185, 129, 0.4) !important;
-            border-radius: 12px !important;
-            margin: 0 12px;
+            background: var(--emerald-50) !important;
+            color: var(--emerald-600) !important;
+            box-shadow: none !important;
+            border-right: 4px solid var(--emerald-500) !important;
+            font-weight: 700;
         }
         
         .sidebar .navbar-nav > .nav-item > .nav-link:hover:not(.active) {
-            background: rgba(16, 185, 129, 0.08);
-            color: #10b981 !important;
-            border-radius: 12px !important;
-            margin: 0 12px;
+            background: var(--emerald-50) !important;
+            color: var(--emerald-600) !important;
             transform: translateX(-4px);
         }
 
         .sidebar .icon {
-            font-size: 1.1rem;
-            margin-left: 10px;
-            width: 24px;
+            font-size: 1.25rem;
+            margin-left: 12px;
+            width: 28px;
             display: inline-flex;
             justify-content: center;
+            opacity: 0.7;
+        }
+        .sidebar .navbar-nav > .nav-item > .nav-link.active .icon {
+            opacity: 1;
+            color: var(--emerald-500);
         }
 
         .card {
-            border: 1px solid rgba(0,0,0,0.05) !important;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03) !important;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid rgba(0,0,0,0.04) !important;
+            box-shadow: var(--shadow-sm) !important;
+            border-radius: 1.25rem !important;
         }
         .card:hover {
-            box-shadow: 0 8px 24px rgba(0,0,0,0.06) !important;
+            box-shadow: var(--shadow-md) !important;
+            transform: translateY(-2px);
         }
 
         /* Quick Action Overlap Fix */
@@ -176,16 +204,16 @@
             <!-- Header Component -->
             @include('admin::layouts.hope-header')
             
-            <div class="iq-navbar-header" style="height: 180px;">
+            <div class="iq-navbar-header" style="height: 200px; background: linear-gradient(135deg, var(--emerald-600) 0%, var(--emerald-700) 100%) !important;">
                 <div class="container-fluid iq-container">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="flex-wrap d-flex justify-content-between align-items-center pt-4">
+                            <div class="flex-wrap d-flex justify-content-between align-items-center pt-5">
                                 @hasSection('page-title')
-                                <div class="page-title-content">
-                                    <h1 class="text-white mb-1">@yield('page-title')</h1>
+                                <div class="page-title-content animated-scaleX">
+                                    <h1 class="text-white mb-2 fw-bold" style="font-size: 2.2rem; letter-spacing: -1px;">@yield('page-title')</h1>
                                     <p class="text-white opacity-75 mb-0 small fw-bold">
-                                        <i class="bi bi-info-circle me-1"></i> @yield('page-subtitle')
+                                        <i class="bi bi-stars me-1 text-warning"></i> @yield('page-subtitle')
                                     </p>
                                 </div>
                                 <div class="d-flex align-items-center gap-3">
@@ -196,9 +224,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="iq-header-img">
-                     <img src="{{ asset('assets/hope-ui/images/dashboard/top-header.png') }}" alt="header" class="theme-color-default-img img-fluid w-100 h-100 animated-scaleX">
-                </div>
+                <!-- Premium Mesh Overlay -->
+                <div class="iq-header-img" style="background-image: url(\"data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 4c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM54 96c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-8-70c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm50-10c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM16 62c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm31 34c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM91 69c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM64 39c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM24 78c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm-8-10c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm44 14c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm24-74c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm6 4c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-18-7c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-24 4c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm4 18c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm6 66c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm16-93c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm0 16c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm4 52c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm33 7c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-56-65c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm0 31c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-11-1c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm48 3c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm23-3c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-99-13c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm93 25c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm11 11c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-2 13c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-45-21c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-31 26c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm33-7c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-35-1c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-42-51c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm39-19c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm47 88c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-35-73c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM20 98c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm76-86c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM10 8c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm66 66c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm20 4c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E\"); opacity: 0.6 !important; mix-blend-mode: soft-light !important;"></div>
             </div>
         </div>
 
