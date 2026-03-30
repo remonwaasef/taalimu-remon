@@ -199,10 +199,22 @@
                             $transCurrName = (app()->getLocale() === 'en' && $currentPackage?->name_en) ? $currentPackage->name_en : $currentPackage?->name;
                         }
                     @endphp
-                    {{ $transCurrName ?? __('center::subscription.no_subscription') }}
+                    @php
+                        $currSlug = $currentPackage?->slug ?? 'free';
+                        $transPkgName = __('center::subscription.plans.' . $currSlug . '.name');
+                        if ($transPkgName === 'center::subscription.plans.' . $currSlug . '.name') {
+                            $transPkgName = (app()->getLocale() === 'en' && $currentPackage?->name_en) ? $currentPackage->name_en : ($currentPackage?->name ?? __('center::subscription.no_subscription'));
+                        }
+
+                        $transPkgDesc = __('center::subscription.plans.' . $currSlug . '.desc');
+                        if ($transPkgDesc === 'center::subscription.plans.' . $currSlug . '.desc') {
+                            $transPkgDesc = (app()->getLocale() === 'en' && $currentPackage?->description_en) ? $currentPackage->description_en : ($currentPackage?->description ?? __('center::subscription.no_package_activated'));
+                        }
+                    @endphp
+                    {{ $transPkgName }}
                 </h2>
                 <p class="text-muted mb-4">
-                    {{ (app()->getLocale() === 'en' && $currentPackage?->description_en) ? $currentPackage->description_en : ($currentPackage?->description ?? __('center::subscription.no_package_activated')) }}
+                    {{ $transPkgDesc }}
                 </p>
 
                 {{-- Days Progress --}}
@@ -230,7 +242,7 @@
                     <div class="info-tile text-center">
                         <div class="fw-black fs-4">
                             {{ number_format($subscription?->total_amount ?? 0, 0) }}
-                            <small class="fs-6">{{ $currency }}</small>
+                            <small class="fs-6">{{ __('center::subscription.currency') }}</small>
                         </div>
                         <div class="small opacity-70">{{ __('center::subscription.total_amount') }}</div>
                     </div>
@@ -334,8 +346,9 @@
                             @endif
                             <h5 class="fw-black mb-0 mt-1">
                                 @php
-                                    $transPkgName = __('center::subscription.plans.' . $package->slug);
-                                    if ($transPkgName === 'center::subscription.plans.' . $package->slug) {
+                                    $pkgSlug = $package->slug ?? 'free';
+                                    $transPkgName = __('center::subscription.plans.' . $pkgSlug . '.name');
+                                    if ($transPkgName === 'center::subscription.plans.' . $pkgSlug . '.name') {
                                         $transPkgName = app()->getLocale() === 'en' && $package->name_en ? $package->name_en : $package->name;
                                     }
                                 @endphp
@@ -348,16 +361,16 @@
                                      data-monthly="{{ $package->old_price }}" 
                                      data-term="{{ $package->old_price * 5 }}"
                                      data-yearly="{{ $package->old_price * 12 }}">
-                                    {{ number_format($package->old_price, 0) }} <span class="plan-currency">{{ $currency }}</span>
+                                    {{ number_format((float)$package->old_price, 0) }} <span class="plan-currency">{{ __('center::subscription.currency') }}</span>
                                 </div>
                             @endif
                             <div class="fw-black text-primary plan-price-display" style="font-size:1.6rem; line-height:1;" 
                                  data-monthly="{{ $package->price }}" 
                                  data-term="{{ $package->term_price ?: ($package->price * 5) }}"
                                  data-yearly="{{ $package->yearly_price ?: ($package->price * 12) }}">
-                                {{ number_format($package->term_price ?: ($package->price * 5), 0) }}
+                                {{ number_format((float)($package->term_price ?: ($package->price * 5)), 0) }}
                             </div>
-                            <small class="text-muted"><span class="plan-currency">{{ $currency }}</span> / <span class="plan-cycle-text">{{ __('center::subscription.billing_term_cycle') }}</span></small>
+                            <small class="text-muted"><span class="plan-currency">{{ __('center::subscription.currency') }}</span> / <span class="plan-cycle-text">{{ __('center::subscription.billing_term_cycle') }}</span></small>
                             @if($package->old_price && $package->old_price > $package->price)
                                 @php
                                     $discountPercent = round((($package->old_price - $package->price) / $package->old_price) * 100);
@@ -372,7 +385,13 @@
                     </div>
 
                     <p class="text-muted small mb-3">
-                        {{ app()->getLocale() === 'en' && $package->description_en ? $package->description_en : $package->description }}
+                        @php
+                            $transPkgDesc = __('center::subscription.plans.' . $pkgSlug . '.desc');
+                            if ($transPkgDesc === 'center::subscription.plans.' . $pkgSlug . '.desc') {
+                                $transPkgDesc = app()->getLocale() === 'en' && $package->description_en ? $package->description_en : $package->description;
+                            }
+                        @endphp
+                        {{ $transPkgDesc }}
                     </p>
 
                     {{-- Features List --}}
