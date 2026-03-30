@@ -40,6 +40,46 @@
         body { 
             font-family: 'Cairo', sans-serif; 
         }
+
+        /* Sidebar Spacing Fix - reduce cramped feeling */
+        .sidebar .navbar-nav > .nav-item {
+            margin-bottom: 2px;
+        }
+        .sidebar .navbar-nav > .nav-item > .nav-link {
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin: 0 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        .sidebar .navbar-nav > .nav-item > .nav-link:hover {
+            background: rgba(var(--bs-primary-rgb), 0.06);
+        }
+        .sidebar .navbar-nav > .nav-item > .nav-link.active {
+            border-radius: 10px;
+        }
+        .sidebar .sub-nav .nav-item .nav-link {
+            padding: 10px 20px 10px 45px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .sidebar .nav-item.static-item .nav-link {
+            padding: 16px 20px 6px 20px;
+            margin: 0 10px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            opacity: 0.5;
+        }
+        .sidebar hr.hr-horizontal {
+            margin: 8px 20px;
+            opacity: 0.06;
+        }
+        .sidebar .sidebar-header {
+            padding: 20px;
+        }
     </style>
     @stack('styles')
 </head>
