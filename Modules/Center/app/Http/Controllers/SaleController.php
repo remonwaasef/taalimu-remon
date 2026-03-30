@@ -144,7 +144,7 @@ class SaleController extends Controller
     public function getStudentSummary($id)
     {
         $tenant = app('tenant');
-        $student = Student::where('tenant_id', $tenant->id)->findOrFail($id);
+        $student = Student::where('tenant_id', $tenant->id)->with(['grade.stage'])->findOrFail($id);
         
         // Active Enrollments
         $courses = DB::table('enrollments')
@@ -164,22 +164,66 @@ class SaleController extends Controller
             });
 
         $totalDebt = $sales->sum('remaining');
+        $totalPaid = $sales->sum('paid_amount');
         $unpaidSales = $sales->where('remaining', '>', 0)->values();
 
-        // Student status (for clerical check)
-        $studentStatus = $student->status ?? 'unknown';
+        // Attendance Stats
+        $attendance = \Modules\Center\Models\Attendance::where('student_id', $student->id)
+            ->where('tenant_id', $tenant->id)
+            ->orderBy('session_date', 'desc')
+            ->get();
+        
+        $totalSessions = $attendance->count();
+        $presentSessions = $attendance->where('status', 'present')->count();
+        $attendanceRate = $totalSessions > 0 ? round(($presentSessions / $totalSessions) * 100) : 0;
+        $recentAttendance = $attendance->take(5)->map(function($att) {
+             return [
+                 'date' => $att->session_date->format('Y-m-d'),
+                 'status' => $att->status,
+                 'course' => $att->course?->title ?? 'N/A'
+             ];
+        });
 
         return response()->json([
             'success' => true,
             'student' => [
                 'name' => $student->name,
                 'phone' => $student->phone,
-                'status' => $studentStatus,
+                'status' => $student->status,
+                'grade' => $student->grade_level_name,
             ],
             'courses' => $courses,
-            'total_debt' => number_format($totalDebt, 2),
+            'stats' => [
+                'total_debt' => number_format($totalDebt, 2),
+                'total_paid' => number_format($totalPaid, 2),
+                'attendance_rate' => $attendanceRate,
+                'course_count' => $courses->count(),
+            ],
             'unpaid_invoices' => $unpaidSales,
+            'recent_attendance' => $recentAttendance,
         ]);
+    }
+
+    public function downloadStatement($id)
+    {
+        $tenant = app('tenant');
+        $student = Student::where('tenant_id', $tenant->id)->findOrFail($id);
+        
+        $sales = Sale::where('student_id', $student->id)
+            ->with(['items.item', 'payments'])
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        $totalDebt = $sales->sum(function($s) { return $s->total_amount - $s->paid_amount; });
+
+        // Reshape Arabic
+        $studentName = $this->arabicReshaper->reshape($student->name);
+        $tenantName = $this->arabicReshaper->reshape($tenant->name);
+
+        $pdf = Pdf::loadView('center::sales.statement', compact('student', 'sales', 'totalDebt', 'tenant', 'studentName', 'tenantName'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('statement-' . $student->id . '.pdf');
     }
 
     public function downloadReceipt($paymentId)
