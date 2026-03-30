@@ -81,7 +81,7 @@
                         </svg>
                         {{ __('auth.registration.email') }}
                     </label>
-                    <div class="text-foreground font-semibold truncate">
+                    <div class="text-foreground font-semibold break-all">
                         {{ session('admin_email') }}
                     </div>
                 </div>
@@ -112,8 +112,6 @@
                     </svg>
                 </a>
             </div>
-        </div>
-
         </div>
     </div>
 </div>
