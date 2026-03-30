@@ -89,6 +89,34 @@
             background: rgba(16, 185, 129, 0.05);
             color: #10b981 !important;
         }
+
+        /* Quick Action Overlap Fix */
+        .content-inner {
+            margin-top: -3.5rem !important;
+        }
+
+        /* Auto-style the first row containing title and actions over the green banner */
+        .content-inner > .d-flex:first-child h2, 
+        .content-inner > .row:first-child h2 {
+            color: #ffffff !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .content-inner > .d-flex:first-child .text-muted,
+        .content-inner > .d-flex:first-child p {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+        /* Buttons in the overlapping header */
+        .content-inner > .d-flex:first-child .btn-primary {
+            background-color: #ffffff !important;
+            color: #10b981 !important;
+            border-color: #ffffff !important;
+            font-weight: 700;
+        }
+        .content-inner > .d-flex:first-child .btn-primary:hover {
+            background-color: #f8fafc !important;
+            color: #059669 !important;
+            transform: translateY(-1px);
+        }
     </style>
     @stack('styles')
 </head>
@@ -110,20 +138,25 @@
             <!-- Header Component -->
             @include('instructor::components.layouts.hope-header')
             
-            <div class="iq-navbar-header" style="height: 125px;">
+            <div class="iq-navbar-header" style="height: 180px;">
                 <div class="container-fluid iq-container">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="flex-wrap d-flex justify-content-between align-items-center">
+                                @hasSection('page-title')
                                 <div>
-                                    <h1 class="text-white">@yield('page-title', __('instructor::sidebar.welcome'))</h1>
-                                    <p class="text-white opacity-75 small mb-0">{{ now()->translatedFormat('l, d F Y') }}</p>
+                                    <h1 class="text-white">@yield('page-title')</h1>
+                                    <p class="text-white opacity-75 small mb-0">@yield('page-subtitle', now()->translatedFormat('l, d F Y'))</p>
                                 </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    @yield('page-actions')
+                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="iq-header-img" style="background-color: #162963;">
+                <div class="iq-header-img" style="background-color: var(--bs-primary);">
                      <img src="{{ asset('assets/hope-ui/images/dashboard/top-header.png') }}" alt="header" class="theme-color-default-img img-fluid w-100 h-100 animated-scaleX">
                 </div>
             </div>
