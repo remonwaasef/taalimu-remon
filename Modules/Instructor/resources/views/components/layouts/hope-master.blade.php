@@ -64,7 +64,16 @@
 
         /* Header banner */
         .iq-header-img {
-            background: linear-gradient(135deg, #10b981 0%, #064e3b 100%) !important;
+            background: linear-gradient(135deg, #10b981 0%, #059669 50%, #064e3b 100%) !important;
+        }
+        .iq-header-img img {
+            opacity: 0.08 !important;
+            mix-blend-mode: overlay !important;
+        }
+
+        .iq-navbar-header h1, .iq-navbar-header p, .iq-navbar-header span {
+            color: #ffffff !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
         
         /* Sidebar active item - Ultra Premium */

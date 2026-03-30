@@ -116,8 +116,13 @@
             background: linear-gradient(135deg, #10b981 0%, #059669 50%, #064e3b 100%) !important;
         }
         .iq-header-img img {
-            opacity: 0.1;
-            mix-blend-mode: color-dodge;
+            opacity: 0.08;
+            mix-blend-mode: overlay;
+        }
+
+        .iq-navbar-header h1, .iq-navbar-header p, .iq-navbar-header span {
+            color: #ffffff !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
 
         /* Form focus states */
@@ -184,7 +189,11 @@
                         <div class="col-md-12">
                             <div class="flex-wrap d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h1>@yield('page-title', __('sidebar.overview'))</h1>
+                                    <h1 class="text-white">@yield('page-title', __('sidebar.overview'))</h1>
+                                    <p class="text-white opacity-75 mb-0 small">@yield('page-subtitle')</p>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    @yield('page-actions')
                                 </div>
                             </div>
                         </div>
