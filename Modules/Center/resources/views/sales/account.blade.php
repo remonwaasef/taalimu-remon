@@ -266,8 +266,7 @@
                                         </div>
                                     </div>
                                     <div class="d-flex gap-2">
-                                        <a href="/sales/${inv.id}" target="_blank" class="btn btn-outline-light text-dark btn-sm rounded-pill px-3 border shadow-none"><i class="fas fa-eye me-1"></i></a>
-                                        <button class="btn btn-success btn-sm rounded-pill px-4 shadow-sm" onclick="collectDebt(${inv.id}, ${inv.remaining}, ${studentId})">{{ __('center::messages.blade_0572') }}</button>
+                                        <a href="/sales/${inv.id}" target="_blank" class="btn btn-outline-light text-dark btn-sm rounded-pill px-3 border shadow-none"><i class="fas fa-eye me-1 text-primary"></i> {{ __('center::messages.blade_0573') }}</a>
                                     </div>
                                 </div>`;
                         });
@@ -318,43 +317,6 @@
             });
     }
 
-    function collectDebt(saleId, remaining, studentId) {
-         Swal.fire({
-            title: '{{ __('center::sales.collect_debt_title') }}',
-            text: '{{ __('center::sales.invoice_id_prefix') }}' + saleId + ' | {{ __('center::sales.collect_debt_remaining') }}: ' + remaining.toFixed(2) + ' ' + currency,
-            input: 'number',
-            inputAttributes: { min: 0.01, max: remaining, step: 0.01 },
-            inputValue: remaining,
-            showCancelButton: true,
-            confirmButtonText: '{{ __('center::messages.blade_0578') }}',
-            cancelButtonText: '{{ __('center::messages.blade_0579') }}',
-            confirmButtonColor: '#059669',
-            showLoaderOnConfirm: true,
-            preConfirm: (amount) => {
-                return fetch(`/sales/${saleId}/payment`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify({
-                        amount: amount,
-                        payment_method: 'cash',
-                        notes: 'تحصيل سريع من شاشة الحسابات',
-                        _token: '{{ csrf_token() }}'
-                    })
-                })
-                .then(response => {
-                    if (!response.ok) throw new Error(response.statusText);
-                    return response.json();
-                })
-                .catch(error => { Swal.showValidationMessage(`خطأ: ${error}`); });
-            },
-            allowOutsideClick: () => !Swal.isLoading()
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({ icon: 'success', title: 'تم التحصيل بنجاح' });
-                loadStudentAccount(studentId);
-            }
-        });
-    }
 </script>
 @endpush
 @endsection
