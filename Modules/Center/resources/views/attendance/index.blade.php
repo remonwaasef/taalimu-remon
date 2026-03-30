@@ -1,10 +1,9 @@
 @extends('center::layouts.hope-master')
 
+@section('page-title', __('center::messages.blade_0111'))
+@section('page-subtitle', __('center::messages.blade_0112'))
+
 @section('content')
-    <div class="mb-4">
-        <h2 class="fw-bold text-dark">{{ __('center::messages.blade_0111') }}</h2>
-        <p class="text-muted">{{ __('center::messages.blade_0112') }}</p>
-    </div>
 
     <div class="row g-4">
         <!-- Today's Sessions -->

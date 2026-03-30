@@ -1,19 +1,15 @@
 @extends('center::layouts.hope-master')
-@section('page-title', __('center::analytics.taxes_analytics'))
+@section('page-title', __('center::analytics.total_taxes'))
+@section('page-subtitle', __('center::analytics.tax_invoices_log'))
+
+@section('page-actions')
+    <a href="{{ route('center.analytics.finance') }}" class="btn btn-primary shadow-sm">
+        <i class="fas fa-arrow-right me-2"></i>{{ __('center::analytics.back_to_finance') }}
+    </a>
+@endsection
 
 @section('content')
 <div class="container-fluid">
-    <div class="row align-items-center mb-4">
-        <div class="col-md-6 mb-3 mb-md-0">
-            <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-file-invoice-dollar text-primary me-2"></i>{{ __('center::analytics.total_taxes') }}</h1>
-            <p class="text-muted mb-0 mt-1">{{ __('center::analytics.tax_invoices_log') }}</p>
-        </div>
-        <div class="col-md-6 text-md-end">
-            <a href="{{ route('center.analytics.finance') }}" class="btn btn-outline-secondary">
-                <i class="fas fa-arrow-right me-2"></i>{{ __('center::analytics.back_to_finance') }}
-            </a>
-        </div>
-    </div>
 
     <div class="row mb-4">
         <div class="col-md-4">

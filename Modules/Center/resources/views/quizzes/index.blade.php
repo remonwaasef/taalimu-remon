@@ -1,18 +1,18 @@
 @extends('center::layouts.hope-master')
 
+@section('page-title', __('center::messages.blade_0536'))
+@section('page-subtitle', __('center::messages.blade_0537'))
+
+@section('page-actions')
+    <a href="{{ route('center.questions.index') }}" class="btn btn-primary shadow-sm">
+        <i class="bi bi-database-fill me-2"></i>{{ __('center::messages.blade_0538') }}
+    </a>
+    <a href="{{ route('center.courses.index') }}" class="btn btn-primary shadow-sm" title="{{ __('center::messages.blade_0551') }}">
+        <i class="bi bi-plus-circle-fill me-2"></i>{{ __('center::messages.blade_0539') }}
+    </a>
+@endsection
+
 @section('content')
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
-        <div>
-            <h2 class="fw-bold text-dark mb-1">{{ __('center::messages.blade_0536') }}</h2>
-            <p class="text-muted mb-0">{{ __('center::messages.blade_0537') }}</p>
-        </div>
-        <div class="d-flex gap-2">
-            <a href="{{ route('center.questions.index') }}" class="btn btn-outline-primary rounded-pill px-4 shadow-sm">
-                <i class="bi bi-database-fill me-2"></i>{{ __('center::messages.blade_0538') }}</a>
-            <a href="{{ route('center.courses.index') }}" class="btn btn-primary rounded-pill px-4 shadow-sm" title="{{ __('center::messages.blade_0551') }}">
-                <i class="bi bi-plus-circle-fill me-2"></i>{{ __('center::messages.blade_0539') }}</a>
-        </div>
-    </div>
 
     <!-- Statistics Cards -->
     <div class="row g-4 mb-5">

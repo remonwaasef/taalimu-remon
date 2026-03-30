@@ -1,14 +1,14 @@
 @extends('center::layouts.hope-master')
 
-@section('title', __('center::messages.blade_0040'))
+@section('page-title', __('center::messages.blade_0027'))
+
+@section('page-actions')
+    <a href="{{ route('center.analytics.index') }}" class="btn btn-primary shadow-sm">
+        <i class="fas fa-arrow-right me-2"></i>{{ __('center::analytics.back_to_finance') }}
+    </a>
+@endsection
 
 @section('content')
-<div class="container-fluid">
-    <div class="d-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">{{ __('center::messages.blade_0027') }}</h1>
-        <a href="{{ route('center.analytics.index') }}" class="btn btn-sm btn-outline-secondary">
-            <i class="fas fa-arrow-right me-2"></i>{{ __('center::analytics.back_to_finance') }}</a>
-    </div>
 
     <!-- Financial Summary Cards -->
     <div class="row g-4 mb-4">
