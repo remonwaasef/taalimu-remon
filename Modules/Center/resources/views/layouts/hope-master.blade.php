@@ -37,11 +37,99 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
+        /* ===== Global Emerald Green Theme Override ===== */
+        :root {
+            --bs-primary: #059669 !important;
+            --bs-primary-rgb: 5, 150, 105 !important;
+            --bs-link-color: #059669 !important;
+            --bs-link-hover-color: #047857 !important;
+        }
+
         body { 
             font-family: 'Cairo', sans-serif; 
         }
 
-        /* Sidebar Spacing Fix - reduce cramped feeling */
+        /* Override Hope UI primary color classes */
+        .bg-primary, .btn-primary, .badge-primary {
+            background-color: #059669 !important;
+            border-color: #059669 !important;
+        }
+        .btn-primary:hover, .btn-primary:focus {
+            background-color: #047857 !important;
+            border-color: #047857 !important;
+        }
+        .btn-outline-primary {
+            color: #059669 !important;
+            border-color: #059669 !important;
+        }
+        .btn-outline-primary:hover {
+            background-color: #059669 !important;
+            border-color: #059669 !important;
+            color: white !important;
+        }
+        .text-primary {
+            color: #059669 !important;
+        }
+        .border-primary {
+            border-color: #059669 !important;
+        }
+        a {
+            color: #059669;
+        }
+        a:hover {
+            color: #047857;
+        }
+
+        /* Sidebar active item */
+        .sidebar .nav-link.active {
+            background-color: #059669 !important;
+            color: white !important;
+        }
+        .sidebar .nav-link.active .icon i,
+        .sidebar .nav-link.active .item-name {
+            color: white !important;
+        }
+
+        /* Header banner */
+        .iq-header-img {
+            background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%) !important;
+        }
+        .iq-header-img img {
+            opacity: 0.15;
+            mix-blend-mode: overlay;
+        }
+
+        /* Links in navbar */
+        .iq-navbar .navbar-nav .nav-link {
+            color: #334155;
+        }
+
+        /* Form focus states */
+        .form-control:focus, .form-select:focus {
+            border-color: #059669 !important;
+            box-shadow: 0 0 0 0.2rem rgba(5, 150, 105, 0.15) !important;
+        }
+
+        /* Progress bars */
+        .progress-bar, .bg-primary {
+            background-color: #059669 !important;
+        }
+
+        /* Badges */
+        .badge.bg-primary {
+            background-color: #059669 !important;
+        }
+
+        /* Pagination */
+        .page-item.active .page-link {
+            background-color: #059669 !important;
+            border-color: #059669 !important;
+        }
+        .page-link {
+            color: #059669;
+        }
+
+        /* Sidebar Spacing Fix */
         .sidebar .navbar-nav > .nav-item {
             margin-bottom: 2px;
         }
@@ -54,7 +142,7 @@
             transition: all 0.2s ease;
         }
         .sidebar .navbar-nav > .nav-item > .nav-link:hover {
-            background: rgba(var(--bs-primary-rgb), 0.06);
+            background: rgba(5, 150, 105, 0.08);
         }
         .sidebar .navbar-nav > .nav-item > .nav-link.active {
             border-radius: 10px;
@@ -63,6 +151,10 @@
             padding: 10px 20px 10px 45px;
             font-size: 0.85rem;
             font-weight: 500;
+        }
+        .sidebar .sub-nav .nav-item .nav-link.active {
+            background: rgba(5, 150, 105, 0.1) !important;
+            color: #059669 !important;
         }
         .sidebar .nav-item.static-item .nav-link {
             padding: 16px 20px 6px 20px;
