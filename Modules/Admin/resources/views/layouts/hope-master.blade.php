@@ -62,62 +62,69 @@
         /* Header banner */
         .iq-navbar-header { 
             background: linear-gradient(135deg, #10b981 0%, #059669 50%, #064e3b 100%) !important; 
+            border-bottom: 5px solid rgba(255,255,255,0.1);
         }
         .iq-header-img img {
-            opacity: 0.08 !important;
+            opacity: 0.12 !important;
             mix-blend-mode: overlay !important;
+            filter: contrast(1.2);
         }
-        .iq-navbar-header h1, .iq-navbar-header p, .iq-navbar-header span {
+        .iq-navbar-header h1 {
+            font-weight: 800 !important;
+            letter-spacing: -0.5px;
             color: #ffffff !important;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         /* Sidebar Refinements */
+        .sidebar {
+            box-shadow: 0 0 40px rgba(0,0,0,0.03) !important;
+            border-left: 1px solid rgba(0,0,0,0.05) !important;
+        }
         .sidebar .navbar-nav > .nav-item > .nav-link.active {
             background: var(--primary-gradient) !important;
             color: white !important;
-            box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.3) !important;
-            border-radius: 14px;
-            margin: 0 12px;
+            box-shadow: 0 8px 16px -4px rgba(16, 185, 129, 0.4) !important;
+            border-radius: 12px;
+            margin: 0 10px;
         }
         
         .sidebar .navbar-nav > .nav-item > .nav-link:hover:not(.active) {
-            background: rgba(16, 185, 129, 0.05);
+            background: rgba(16, 185, 129, 0.08);
             color: #10b981 !important;
+            border-radius: 12px;
+            margin: 0 10px;
         }
 
         .card {
-            border: none;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            border-radius: 1rem;
+            border: 1px solid rgba(0,0,0,0.05) !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03) !important;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06) !important;
         }
 
         /* Quick Action Overlap Fix */
         .content-inner {
-            margin-top: -3.5rem !important;
+            margin-top: -4.5rem !important;
+            padding-bottom: 3rem !important;
         }
 
-        /* Auto-style the first row containing title and actions over the green banner */
-        .content-inner > .d-flex:first-child h2, 
-        .content-inner > .row:first-child h2 {
-            color: #ffffff !important;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
-        .content-inner > .d-flex:first-child .text-muted,
-        .content-inner > .d-flex:first-child p {
-            color: rgba(255, 255, 255, 0.8) !important;
-        }
         /* Buttons in the overlapping header */
-        .content-inner > .d-flex:first-child .btn-primary {
-            background-color: #ffffff !important;
-            color: #10b981 !important;
-            border-color: #ffffff !important;
-            font-weight: 700;
+        .iq-navbar-header .btn-primary {
+            background-color: rgba(255, 255, 255, 0.15) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            backdrop-filter: blur(10px);
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
-        .content-inner > .d-flex:first-child .btn-primary:hover {
-            background-color: #f8fafc !important;
+        .iq-navbar-header .btn-primary:hover {
+            background-color: #ffffff !important;
             color: #059669 !important;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
         }
     </style>
     @stack('styles')
@@ -144,13 +151,15 @@
                 <div class="container-fluid iq-container">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="flex-wrap d-flex justify-content-between align-items-center">
+                            <div class="flex-wrap d-flex justify-content-between align-items-center pt-4">
                                 @hasSection('page-title')
-                                <div>
-                                    <h1 class="text-white">@yield('page-title')</h1>
-                                    <p class="text-white opacity-75 mb-0 small">@yield('page-subtitle')</p>
+                                <div class="page-title-content">
+                                    <h1 class="text-white mb-1">@yield('page-title')</h1>
+                                    <p class="text-white opacity-75 mb-0 small fw-bold">
+                                        <i class="bi bi-info-circle me-1"></i> @yield('page-subtitle')
+                                    </p>
                                 </div>
-                                <div class="d-flex align-items-center gap-2">
+                                <div class="d-flex align-items-center gap-3">
                                     @yield('page-actions')
                                 </div>
                                 @endif
