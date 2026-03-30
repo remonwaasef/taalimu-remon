@@ -1,12 +1,12 @@
 <aside class="sidebar sidebar-default navs-rounded-all sidebar-base">
-    <div class="sidebar-header d-flex align-items-center justify-content-start">
+    <div class="sidebar-header d-flex align-items-center justify-content-start" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 1.5rem 1.25rem;">
         <a href="{{ route('admin.dashboard') }}" class="navbar-brand">
-            <div class="mb-2 mx-auto bg-primary rounded-circle d-flex align-items-center justify-content-center text-white fw-bold" style="width: 45px; height: 45px; font-size: 1.2rem;">
+            <div class="mb-0 bg-primary rounded-pill d-flex align-items-center justify-content-center text-white fw-bold" style="width: 38px; height: 38px; font-size: 1rem;">
                 {{ substr(\App\Models\SiteSetting::get('site_name', 'T'), 0, 1) }}
             </div>
-            <h4 class="logo-title ms-2 text-truncate" style="max-width: 150px;">{{ \App\Models\SiteSetting::get('site_name', 'EduCentral') }}</h4>
+            <h5 class="logo-title ms-2 text-truncate text-white fw-bold mb-0" style="max-width: 140px; font-size: 1rem; letter-spacing: -0.5px;">{{ \App\Models\SiteSetting::get('site_name', 'EduCentral') }}</h5>
         </a>
-        <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
+        <div class="sidebar-toggle bg-transparent" data-toggle="sidebar" data-active="true" style="color: rgba(255,255,255,0.4);">
             <i class="icon">
                 <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4.25 12.2744L19.25 12.2744" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -23,7 +23,7 @@
                 <!-- Category: Navigation -->
                 <li class="nav-item static-item">
                     <a class="nav-link static-item disabled" href="#" tabindex="-1">
-                        <span class="default-icon text-uppercase small fw-bold text-primary opacity-75">{{ __('admin::admin.sidebar.groups.navigation') }}</span>
+                        <span class="default-icon">{{ __('admin::admin.sidebar.groups.navigation') }}</span>
                         <span class="mini-icon">-</span>
                     </a>
                 </li>
@@ -37,7 +37,7 @@
                 <!-- Category: Management -->
                 <li class="nav-item static-item">
                     <a class="nav-link static-item disabled" href="#" tabindex="-1">
-                        <span class="default-icon text-uppercase small fw-bold text-primary opacity-75">{{ __('admin::admin.sidebar.groups.management') }}</span>
+                        <span class="default-icon">{{ __('admin::admin.sidebar.groups.management') }}</span>
                         <span class="mini-icon">-</span>
                     </a>
                 </li>
@@ -57,7 +57,7 @@
                 <!-- Category: Monitoring -->
                 <li class="nav-item static-item">
                     <a class="nav-link static-item disabled" href="#" tabindex="-1">
-                        <span class="default-icon text-uppercase small fw-bold text-primary opacity-75">{{ __('admin::admin.sidebar.groups.monitoring') }}</span>
+                        <span class="default-icon">{{ __('admin::admin.sidebar.groups.monitoring') }}</span>
                         <span class="mini-icon">-</span>
                     </a>
                 </li>
@@ -83,7 +83,7 @@
                 <!-- Category: Resources -->
                 <li class="nav-item static-item">
                     <a class="nav-link static-item disabled" href="#" tabindex="-1">
-                        <span class="default-icon text-uppercase small fw-bold text-primary opacity-75">{{ __('admin::admin.sidebar.groups.resources') }}</span>
+                        <span class="default-icon">{{ __('admin::admin.sidebar.groups.resources') }}</span>
                         <span class="mini-icon">-</span>
                     </a>
                 </li>
@@ -103,7 +103,7 @@
                 <!-- Category: Administration -->
                 <li class="nav-item static-item">
                     <a class="nav-link static-item disabled" href="#" tabindex="-1">
-                        <span class="default-icon text-uppercase small fw-bold text-primary opacity-75">{{ __('admin::admin.sidebar.groups.administration') }}</span>
+                        <span class="default-icon">{{ __('admin::admin.sidebar.groups.administration') }}</span>
                         <span class="mini-icon">-</span>
                     </a>
                 </li>

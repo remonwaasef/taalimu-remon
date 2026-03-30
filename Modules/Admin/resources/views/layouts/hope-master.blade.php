@@ -31,32 +31,27 @@
     <style>
         /* ===== Global Emerald Green Theme Override (Taalimu Unified) ===== */
         :root {
-            /* SaaS Emerald Palette (Refined HSL) */
+            /* Bento Pro Palette (High Contrast) */
             --bs-primary: #10b981 !important;
             --bs-primary-rgb: 16, 185, 129 !important;
-            --emerald-50: #ecfdf5;
-            --emerald-100: #d1fae5;
-            --emerald-400: #34d399;
-            --emerald-500: #10b981;
-            --emerald-600: #059669;
-            --emerald-700: #047857;
             
-            --bs-link-color: var(--emerald-600) !important;
-            --bs-link-hover-color: var(--emerald-700) !important;
+            --sidebar-bg: #0f172a; /* Slate 900 */
+            --sidebar-hover: rgba(255, 255, 255, 0.05);
+            --sidebar-text: rgba(255, 255, 255, 0.65);
+            --sidebar-active-text: #ffffff;
             
-            --primary-gradient: linear-gradient(135deg, var(--emerald-500) 0%, var(--emerald-600) 100%);
+            --bg-workspace: #f8fafc; /* Slate 50 */
+            --card-border: #e2e8f0; /* Slate 200 */
+            --text-main: #1e293b; /* Slate 800 */
             
-            /* Layered Shadows (Premium depth) */
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-bento: none;
+            --radius-bento: 12px;
         }
 
         body { 
-            font-family: 'Outfit', 'Cairo', sans-serif; 
-            background-color: #f1f5f9; /* Slate 100 for better contrast with white cards */
-            color: #1e293b; /* Slate 800 */
+            font-family: 'Inter', 'Outfit', 'Cairo', sans-serif; 
+            background-color: var(--bg-workspace) !important;
+            color: var(--text-main);
             -webkit-font-smoothing: antialiased;
         }
 
@@ -67,17 +62,17 @@
         }
 
         /* Global Transitions */
-        * { transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; }
+        * { transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease; }
 
         /* Override Hope UI primary color classes */
         .bg-primary, .btn-primary, .badge-primary {
-            background-color: var(--emerald-500) !important;
-            border-color: var(--emerald-500) !important;
+            background-color: var(--bs-primary) !important;
+            border-color: var(--bs-primary) !important;
         }
         .btn-primary:hover, .btn-primary:focus {
-            background-color: var(--emerald-600) !important;
-            border-color: var(--emerald-600) !important;
-            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3) !important;
+            background-color: #059669 !important;
+            border-color: #059669 !important;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2) !important;
         }
 
         /* Header banner */
@@ -97,70 +92,88 @@
             text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
-        /* Sidebar Refinements */
+        /* Bento Sidebar (Dark Theme) */
         .sidebar {
-            box-shadow: 10px 0 15px -3px rgba(0, 0, 0, 0.02) !important;
-            border-left: 1px solid rgba(0,0,0,0.05) !important;
-            background: #ffffff !important;
+            background: var(--sidebar-bg) !important;
+            border-left: 1px solid rgba(255,255,255,0.05) !important;
+            box-shadow: 1px 0 0 0 rgba(255,255,255,0.05) !important;
         }
         
-        /* Category Headers (Groups) */
         .sidebar .static-item {
-            padding: 2.25rem 1.5rem 0.75rem !important;
-            margin-top: 0;
+            padding: 1.5rem 1.25rem 0.5rem !important;
+            border-top: 1px solid rgba(255,255,255,0.02);
+            margin-top: 1rem;
         }
         .sidebar .static-item .default-icon {
-            font-size: 0.65rem !important;
-            letter-spacing: 0.1em;
-            color: var(--emerald-600) !important;
-            opacity: 0.8 !important;
-            font-weight: 800 !important;
+            font-size: 0.6rem !important;
+            color: rgba(255, 255, 255, 0.4) !important;
+            font-weight: 700 !important;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .sidebar .navbar-nav > .nav-item > .nav-link {
-            padding: 0.85rem 1.25rem !important;
-            border-radius: 12px !important;
-            margin: 0.2rem 12px;
-            color: #475569 !important; /* Sidebar text color */
+            padding: 0.65rem 1rem !important;
+            border-radius: 8px !important;
+            margin: 0.15rem 0.75rem;
+            color: var(--sidebar-text) !important;
+            font-size: 0.875rem;
         }
 
         .sidebar .navbar-nav > .nav-item > .nav-link.active {
-            background: var(--emerald-50) !important;
-            color: var(--emerald-600) !important;
-            box-shadow: none !important;
-            border-right: 4px solid var(--emerald-500) !important;
-            font-weight: 700;
+            background: var(--sidebar-hover) !important;
+            color: var(--sidebar-active-text) !important;
+            font-weight: 600;
+            border-right: 3px solid var(--bs-primary) !important;
         }
         
         .sidebar .navbar-nav > .nav-item > .nav-link:hover:not(.active) {
-            background: var(--emerald-50) !important;
-            color: var(--emerald-600) !important;
-            transform: translateX(-4px);
+            background: var(--sidebar-hover) !important;
+            color: var(--sidebar-active-text) !important;
         }
 
         .sidebar .icon {
-            font-size: 1.25rem;
-            margin-left: 12px;
-            width: 28px;
-            display: inline-flex;
-            justify-content: center;
-            opacity: 0.7;
+            font-size: 1.15rem;
+            margin-left: 10px;
+            width: 24px;
+            opacity: 0.6;
         }
         .sidebar .navbar-nav > .nav-item > .nav-link.active .icon {
             opacity: 1;
-            color: var(--emerald-500);
+            color: var(--bs-primary);
         }
 
+        /* Bento Grid Cards */
         .card {
-            border: 1px solid rgba(0,0,0,0.04) !important;
-            box-shadow: var(--shadow-sm) !important;
-            border-radius: 1.25rem !important;
+            border: 1px solid var(--card-border) !important;
+            box-shadow: none !important;
+            border-radius: var(--radius-bento) !important;
+            background: #ffffff !important;
         }
-        .card:hover {
-            box-shadow: var(--shadow-md) !important;
-            transform: translateY(-2px);
+        
+        /* Specialized Table for Bento */
+        .table thead th {
+            background: #f8fafc !important;
+            color: #64748b !important; /* Slate 500 */
+            border-bottom: 1px solid var(--card-border) !important;
+            font-weight: 700 !important;
+            font-size: 0.75rem !important;
+            text-transform: uppercase;
         }
+        .bg-hover-light-soft:hover {
+            background-color: #f1f5f9 !important;
+        }
+
+        /* Header simplification */
+        .iq-navbar-header { 
+            height: auto !important; 
+            background: white !important; 
+            border-bottom: 1px solid var(--card-border);
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+        }
+        .iq-navbar-header .text-white { color: var(--text-main) !important; }
+        .iq-header-img { display: none !important; }
 
         /* Quick Action Overlap Fix */
         .content-inner {
