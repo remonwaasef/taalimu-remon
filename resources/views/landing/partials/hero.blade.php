@@ -1,10 +1,10 @@
 <section class="relative pt-32 md:pt-36 lg:pt-40 pb-16 lg:pb-24 overflow-hidden bg-white" id="hero">
 
     <div dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}" class="container relative mx-auto px-4 lg:px-8 z-10 max-w-7xl">
-        <div class="grid grid-cols-12 gap-6 lg:gap-12 items-center">
+        <div class="grid grid-cols-12 gap-6 lg:gap-10 items-center">
             
             <!-- Content Side -->
-            <div class="col-span-12 lg:col-span-6 text-center lg:text-start" data-animate="fade-text">
+            <div class="col-span-12 md:col-span-6 text-center md:text-start" data-animate="fade-text">
                 <!-- Premium Pill Badge -->
                 <div class="inline-flex items-center gap-2 lg:gap-3 px-3 py-1.5 lg:px-4 lg:py-2 rounded-full bg-white border border-slate-200 shadow-sm mb-6 lg:mb-10 transition-transform hover:scale-105 cursor-pointer hover:shadow-md hover:border-emerald-200">
                     <span class="relative flex h-2 w-2 lg:h-2.5 lg:w-2.5">
@@ -25,7 +25,7 @@
                 </p>
 
                 <!-- CTAs -->
-                <div class="flex flex-col sm:flex-row gap-3 lg:gap-4 items-center justify-center lg:justify-start mb-10 lg:mb-16 mx-auto lg:mx-0">
+                <div class="flex flex-col sm:flex-row gap-3 lg:gap-4 items-center justify-center md:justify-start mb-10 lg:mb-16 mx-auto md:mx-0">
                     <a href="{{ route('register') }}" class="group relative inline-flex items-center justify-center bg-slate-900 text-white px-8 py-4 lg:px-10 lg:py-5 rounded-xl font-bold text-base lg:text-xl transition-all hover:bg-slate-800 hover:shadow-2xl hover:shadow-slate-900/20 hover:-translate-y-1 overflow-hidden w-full sm:w-auto">
                         <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
                         <span class="relative flex items-center gap-2 lg:gap-3">
@@ -42,7 +42,7 @@
                 </div>
                 
                 <!-- Trust Stats -->
-                <div class="flex items-center justify-center lg:justify-start gap-8 lg:gap-12 pt-6 lg:pt-8 border-t border-slate-200/60 max-w-lg mx-auto lg:mx-0">
+                <div class="flex items-center justify-center md:justify-start gap-8 lg:gap-12 pt-6 lg:pt-8 border-t border-slate-200/60 max-w-lg mx-auto md:mx-0">
                     <div class="text-start">
                         <div class="text-2xl lg:text-3xl font-black text-slate-900">+500</div>
                         <div class="text-[9px] lg:text-[11px] font-bold text-slate-500 uppercase tracking-widest">{{ app()->isLocale('ar') ? 'مركز تعليمي' : 'Centers' }}</div>
@@ -56,7 +56,7 @@
             </div>
 
             <!-- Image Side -->
-            <div class="col-span-12 lg:col-span-6 relative w-full lg:w-[85%] xl:w-[80%] mx-auto lg:-mt-12 xl:-mt-16 mt-20" data-animate="fade-image">
+            <div class="col-span-12 md:col-span-6 relative w-full md:w-[95%] xl:w-[90%] md:ms-0 me-auto md:-mt-8 xl:-mt-16 mt-16" data-animate="fade-image">
 
                 <!-- Floating WhatsApp Card -->
                 <div class="absolute -top-10 -left-2 lg:-top-12 lg:-left-6 z-40 animate-float-slow w-56 lg:w-72" data-animate="fade-up">
