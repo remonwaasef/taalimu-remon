@@ -367,7 +367,7 @@
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label class="form-label fw-bold small text-muted">{{ __('center::settings.appearance.primary_color') }}</label>
-                                    <input type="color" name="settings[appearance][primary_color]" class="form-control form-control-color w-100" value="{{ $tenant->settings['appearance']['primary_color'] ?? '#140342' }}">
+                                    <input type="color" name="settings[appearance][primary_color]" class="form-control form-control-color w-100" value="{{ $tenant->settings['appearance']['primary_color'] ?? '#10b981' }}">
                                 </div>
                                 <div class="col-12">
                                     <div class="form-check form-switch mt-3">

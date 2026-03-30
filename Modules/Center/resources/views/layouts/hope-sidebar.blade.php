@@ -1,16 +1,20 @@
 <aside class="sidebar sidebar-default navs-rounded-all sidebar-base">
-    <div class="sidebar-header d-flex align-items-center justify-content-start">
-        <a href="{{ route('center.dashboard', ['tenant' => $tenant->domain ?? 'center']) }}" class="navbar-brand">
+    <div class="sidebar-header d-flex align-items-center justify-content-between">
+        <a href="{{ route('center.dashboard', ['tenant' => $tenant->domain ?? 'center']) }}" class="navbar-brand d-flex align-items-center m-0">
             @if($tenant->logo)
-                <img src="{{ asset('storage/' . $tenant->logo) }}" class="rounded-3 shadow-sm p-1" style="max-height: 45px; max-width: 100%;">
+                <div class="brand-logo-container">
+                    <img src="{{ asset('storage/' . $tenant->logo) }}" class="rounded-4 shadow-sm" style="max-height: 40px; width: auto; object-fit: contain;">
+                </div>
             @else
-                <div class="mb-2 mx-auto bg-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 45px; height: 45px; font-size: 1.2rem; color: #059669;">
+                <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 40px; height: 40px; font-size: 1.2rem; background: linear-gradient(135deg, #fff 0%, #f0fdf4 100%) !important;">
                     {{ substr($tenant->name ?? 'T', 0, 1) }}
                 </div>
             @endif
-            <h4 class="logo-title ms-2 text-truncate" style="max-width: 150px; color: #1e293b;" title="{{ $tenant->name ?? __('sidebar.center_name') }}">
-                {{ $tenant->name ?? __('sidebar.center_name') }}
-            </h4>
+            <div class="ms-3 line-height">
+                <h4 class="logo-title fw-bold mb-0 text-dark" style="font-family: 'Cairo', 'Outfit', sans-serif; font-size: 1.15rem; letter-spacing: -0.5px;">
+                    {{ $tenant->name ?? __('sidebar.center_name') }}
+                </h4>
+            </div>
         </a>
         <div class="sidebar-toggle" data-toggle="sidebar" data-active="true" style="color: #059669;">
             <i class="icon">
