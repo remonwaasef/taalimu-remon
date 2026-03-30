@@ -1,19 +1,19 @@
 @extends('center::layouts.hope-master')
 
+@section('page-title', __('center::messages.blade_0511'))
+@section('page-subtitle', __('center::messages.blade_0512'))
+
+@section('page-actions')
+    <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#categoryModal">
+        <i class="fas fa-tags me-2"></i>{{ __('center::messages.blade_0513') }}
+    </button>
+    <a href="{{ route('center.questions.create') }}" class="btn btn-primary shadow-sm">
+        <i class="fas fa-plus me-2"></i>{{ __('center::messages.blade_0514') }}
+    </a>
+@endsection
+
 @section('content')
 <div class="container-fluid p-0">
-    <div class="d-flex align-items-center justify-content-between mb-4">
-        <div>
-            <h4 class="fw-bold mb-1"><i class="fas fa-database me-2 text-primary"></i>{{ __('center::messages.blade_0511') }}</h4>
-            <p class="text-muted small mb-0">{{ __('center::messages.blade_0512') }}</p>
-        </div>
-        <div class="d-flex gap-2">
-            <button class="btn btn-outline-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#categoryModal">
-                <i class="fas fa-tags me-2"></i>{{ __('center::messages.blade_0513') }}</button>
-            <a href="{{ route('center.questions.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
-                <i class="fas fa-plus me-2"></i>{{ __('center::messages.blade_0514') }}</a>
-        </div>
-    </div>
 
     <div class="row">
         <div class="col-12">

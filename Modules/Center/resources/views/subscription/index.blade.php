@@ -5,27 +5,12 @@
 @push('styles')
 <style>
     .subscription-hero {
-        background: linear-gradient(135deg, #3A0CA3 0%, #2A4DFF 100%);
+        background: #fff;
         border-radius: 1.25rem;
-        color: #fff;
+        color: var(--bs-dark);
         position: relative;
         overflow: hidden;
-    }
-    .subscription-hero::before {
-        content: '';
-        position: absolute;
-        top: -60px; right: -60px;
-        width: 220px; height: 220px;
-        background: rgba(255,255,255,0.06);
-        border-radius: 50%;
-    }
-    .subscription-hero::after {
-        content: '';
-        position: absolute;
-        bottom: -40px; left: -40px;
-        width: 160px; height: 160px;
-        background: rgba(255,255,255,0.04);
-        border-radius: 50%;
+        border: 1px solid rgba(0,0,0,0.05);
     }
     .progress-bar-custom {
         height: 8px;
@@ -64,10 +49,10 @@
     .feature-check { color: #16a34a; }
     .feature-x     { color: #d1d5db; }
     .info-tile {
-        background: rgba(255,255,255,0.12);
+        background: rgba(0,0,0,0.03);
         border-radius: 0.75rem;
         padding: 1rem 1.25rem;
-        backdrop-filter: blur(4px);
+        border: 1px solid rgba(0,0,0,0.05);
     }
     .pulse-dot {
         width: 10px; height: 10px;
@@ -147,6 +132,26 @@
 
 @section('page-title', __('center::subscription.page_title'))
 
+@section('page-actions')
+    @php
+        $subStatus = $subscription?->stripe_status ?? 'none';
+        $isActive  = in_array($subStatus, ['active', 'trialing']);
+    @endphp
+    @if($subStatus === 'trialing')
+        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill shadow-sm">
+            <i class="fas fa-hourglass-half me-1"></i> {{ __('center::subscription.trial_badge') }}
+        </span>
+    @elseif($isActive)
+        <span class="badge bg-white text-success px-3 py-2 rounded-pill shadow-sm d-inline-flex align-items-center gap-2">
+            <span class="pulse-dot" style="background: #22c55e;"></span> {{ __('center::subscription.active_badge') }}
+        </span>
+    @else
+        <span class="badge bg-white text-danger px-3 py-2 rounded-pill shadow-sm">
+            <i class="fas fa-times-circle me-1"></i> {{ __('center::subscription.expired') }}
+        </span>
+    @endif
+@endsection
+
 @section('content')
 <div class="container-fluid px-0">
 
@@ -168,28 +173,7 @@
     <div class="subscription-hero p-4 p-md-5 mb-4 shadow-lg">
         <div class="row align-items-center g-4 position-relative" style="z-index:1;">
             <div class="col-md-7">
-                {{-- Status badge --}}
-                @php
-                    $subStatus = $subscription?->stripe_status ?? 'none';
-                    $isActive  = in_array($subStatus, ['active', 'trialing']);
-                @endphp
-                <div class="mb-3">
-                    @if($subStatus === 'trialing')
-                        <span class="status-badge" style="background:rgba(251,191,36,0.25);color:#fde68a;">
-                            <i class="fas fa-hourglass-half fa-xs"></i> {{ __('center::subscription.trial_badge') }}
-                        </span>
-                    @elseif($isActive)
-                        <span class="badge bg-success bg-opacity-25 text-white px-3 py-2 rounded-pill d-inline-flex align-items-center gap-2">
-                            <span class="pulse-dot"></span> {{ __('center::subscription.active_badge') }}
-                        </span>
-                    @else
-                        <span class="badge bg-danger bg-opacity-25 text-white px-3 py-2 rounded-pill">
-                            <i class="fas fa-times-circle fa-xs me-1"></i> {{ __('center::subscription.expired') }}
-                        </span>
-                    @endif
-                </div>
-
-                <h2 class="fw-black mb-1" style="font-size:2rem;">
+                <h2 class="fw-bold mb-1 text-dark" style="font-size:1.75rem;">
                     @php
                         $transCurrName = $currentPackage ? __('center::subscription.plans.' . $currentPackage->slug) : null;
                         if ($transCurrName === 'center::subscription.plans.' . ($currentPackage->slug ?? '')) {
@@ -198,7 +182,7 @@
                     @endphp
                     {{ $transCurrName ?? __('center::subscription.no_subscription') }}
                 </h2>
-                <p class="opacity-80 mb-4">
+                <p class="text-muted mb-4">
                     {{ (app()->getLocale() === 'en' && $currentPackage?->description_en) ? $currentPackage->description_en : ($currentPackage?->description ?? __('center::subscription.no_package_activated')) }}
                 </p>
 
@@ -238,14 +222,14 @@
                 <div style="width:180px;height:180px;margin:auto;position:relative;">
                     @php $remaining = 100 - $progressPercent; @endphp
                     <svg viewBox="0 0 36 36" class="w-100 h-100" style="transform: rotate(-90deg);">
-                        <circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="3"/>
-                        <circle cx="18" cy="18" r="15.9" fill="none" stroke="#7ecbff" stroke-width="3"
+                        <circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(0,0,0,0.05)" stroke-width="3"/>
+                        <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--bs-primary)" stroke-width="3"
                                 stroke-dasharray="{{ $remaining }} {{ 100 - $remaining }}"
                                 stroke-linecap="round"/>
                     </svg>
                     <div class="position-absolute top-50 start-50 translate-middle text-center">
-                        <div class="fw-black" style="font-size:2rem;">{{ $daysRemaining ?? '—' }}</div>
-                        <div class="small opacity-70">{{ trans_choice('center::subscription.days_remaining', $daysRemaining ?? 0) }}</div>
+                        <div class="fw-bold text-dark" style="font-size:2rem;">{{ $daysRemaining ?? '—' }}</div>
+                        <div class="small text-muted">{{ trans_choice('center::subscription.days_remaining', $daysRemaining ?? 0) }}</div>
                     </div>
                 </div>
             </div>

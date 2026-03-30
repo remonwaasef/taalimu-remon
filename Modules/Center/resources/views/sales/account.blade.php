@@ -1,19 +1,9 @@
 @extends('center::layouts.hope-master')
 
-@section('title', __('center::messages.blade_0576'))
+@section('page-title', __('center::messages.blade_0558'))
+@section('page-subtitle', __('center::messages.blade_0559'))
 
 @section('content')
-<div class="mb-4 d-flex align-items-center justify-content-between">
-    <div class="d-flex align-items-center">
-        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
-            <i class="fas fa-user-invoice fa-lg"></i>
-        </div>
-        <div>
-            <h2 class="fw-bold text-dark mb-0">{{ __('center::messages.blade_0558') }}</h2>
-            <p class="text-muted small mb-0">{{ __('center::messages.blade_0559') }}</p>
-        </div>
-    </div>
-</div>
 
 <div class="row g-4">
     <!-- Student Selector -->
