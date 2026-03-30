@@ -3,8 +3,8 @@
 @section('content')
 <style>
     :root {
-        --dash-primary: #162963;
-        --dash-primary-light: #e8edf7;
+        --dash-primary: #059669;
+        --dash-primary-light: #ecfdf5;
         --dash-success: #059669;
         --dash-success-light: #ecfdf5;
         --dash-warning: #d97706;
@@ -13,7 +13,7 @@
         --dash-danger-light: #fef2f2;
         --dash-info: #0284c7;
         --dash-info-light: #f0f9ff;
-        --dash-gradient: linear-gradient(135deg, #162963 0%, #1e3a8a 50%, #2563eb 100%);
+        --dash-gradient: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
         --dash-gradient-success: linear-gradient(135deg, #059669 0%, #10b981 100%);
         --dash-card-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
         --dash-card-shadow-hover: 0 10px 25px rgba(0,0,0,0.08);
@@ -648,8 +648,8 @@
                                 <svg viewBox="0 0 400 150" class="w-100 h-auto">
                                     <defs>
                                         <linearGradient id="chartGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                            <stop offset="0%" style="stop-color:rgba(22, 41, 99, 0.3);stop-opacity:1" />
-                                            <stop offset="100%" style="stop-color:rgba(22, 41, 99, 0);stop-opacity:1" />
+                                            <stop offset="0%" style="stop-color:rgba(5, 150, 105, 0.3);stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:rgba(5, 150, 105, 0);stop-opacity:1" />
                                         </linearGradient>
                                     </defs>
                                     @php
@@ -657,7 +657,7 @@
                                         $isDemo = $performanceTrends['is_demo'] ?? false;
                                         $step = 400 / max(count($trendsData) - 1, 1);
                                         $opacity = $isDemo ? 0.3 : 1;
-                                        $strokeColor = $isDemo ? '#94a3b8' : '#162963';
+                                        $strokeColor = $isDemo ? '#94a3b8' : '#059669';
 
                                         $pathD = "M 0,100";
                                         foreach($trendsData as $i => $val) {

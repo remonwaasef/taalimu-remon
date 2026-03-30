@@ -12,7 +12,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Hope UI CSS (from public/assets/hope-ui) -->
     <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/libs.min.css') }}">
@@ -29,10 +29,60 @@
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
 
     <style>
-        body { 
-            font-family: 'Cairo', sans-serif; 
+        /* ===== Global Emerald Green Theme Override (Taalimu Unified) ===== */
+        :root {
+            --bs-primary: #10b981 !important; /* Emerald 500 */
+            --bs-primary-rgb: 16, 185, 129 !important;
+            --bs-link-color: #10b981 !important;
+            --bs-link-hover-color: #059669 !important;
+            --primary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
         }
-        .iq-navbar-header { background: linear-gradient(135deg, #3A0CA3 0%, #2A4DFF 100%) !important; }
+
+        body { 
+            font-family: 'Outfit', 'Cairo', sans-serif; 
+            background-color: #f8fafc;
+        }
+
+        /* Arabic text specific font weight/style adjustment */
+        [dir="rtl"] body {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        /* Override Hope UI primary color classes */
+        .bg-primary, .btn-primary, .badge-primary {
+            background-color: #10b981 !important;
+            border-color: #10b981 !important;
+        }
+        .btn-primary:hover, .btn-primary:focus {
+            background-color: #059669 !important;
+            border-color: #059669 !important;
+            box-shadow: 0 8px 15px rgba(16, 185, 129, 0.2) !important;
+        }
+
+        /* Header banner */
+        .iq-navbar-header { 
+            background: linear-gradient(135deg, #10b981 0%, #064e3b 100%) !important; 
+        }
+        
+        /* Sidebar Refinements */
+        .sidebar .navbar-nav > .nav-item > .nav-link.active {
+            background: var(--primary-gradient) !important;
+            color: white !important;
+            box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.3) !important;
+            border-radius: 14px;
+            margin: 0 12px;
+        }
+        
+        .sidebar .navbar-nav > .nav-item > .nav-link:hover:not(.active) {
+            background: rgba(16, 185, 129, 0.05);
+            color: #10b981 !important;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border-radius: 1rem;
+        }
     </style>
     @stack('styles')
 </head>

@@ -12,11 +12,11 @@
                         <h6 class="text-muted mb-1">{{ __('instructor::dashboard.total_students') }}</h6>
                         <h2 class="fw-bold mb-0 count-up text-primary">{{ number_format($totalStudents) }}</h2>
                     </div>
-                    <div class="p-3 rounded-4" style="background: rgba(22, 41, 99, 0.08);">
+                    <div class="p-3 rounded-4" style="background: rgba(16, 185, 129, 0.08);">
                         <i class="fas fa-user-graduate text-primary fs-4"></i>
                     </div>
                 </div>
-                <div class="progress mt-3" style="height: 4px; background: rgba(22, 41, 99, 0.05);">
+                <div class="progress mt-3" style="height: 4px; background: rgba(16, 185, 129, 0.05);">
                     <div class="progress-bar bg-primary" style="width: 70%"></div>
                 </div>
             </div>
@@ -183,7 +183,7 @@
         @else
         <div class="text-center py-5 empty-state-container">
             <div class="mb-4">
-                <div class="d-inline-flex p-4 rounded-circle mb-3" style="background: rgba(22, 41, 99, 0.05);">
+                <div class="d-inline-flex p-4 rounded-circle mb-3" style="background: rgba(16, 185, 129, 0.05);">
                     <i class="fas fa-layer-group text-primary" style="font-size: 3.5rem; opacity: 0.8;"></i>
                 </div>
             </div>
@@ -211,7 +211,7 @@
         direction: rtl;
     }
     .driver-popover-title {
-        color: #162963 !important;
+        color: #10b981 !important;
         font-weight: 700 !important;
         margin-bottom: 10px !important;
     }
@@ -306,12 +306,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 datasets: [{
                     label: 'عدد الحاضرين',
                     data: {!! json_encode($attendanceData) !!},
-                    borderColor: '#162963',
-                    backgroundColor: 'rgba(22, 41, 99, 0.08)',
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.08)',
                     fill: true,
                     tension: 0.4,
                     pointRadius: 5,
-                    pointBackgroundColor: '#162963',
+                    pointBackgroundColor: '#10b981',
                     borderWidth: 3,
                     pointHoverRadius: 7,
                     pointBorderColor: '#fff',

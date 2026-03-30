@@ -16,7 +16,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Hope UI CSS (from public/assets/hope-ui) -->
     <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/libs.min.css') }}">
@@ -31,146 +31,130 @@
     <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/customizer.css?v=1.1.0') }}">
 
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
-        /* ===== Global Emerald Green Theme Override ===== */
+        /* ===== Global Emerald Green Theme Override (Taalimu Unified) ===== */
         :root {
-            --bs-primary: #059669 !important;
-            --bs-primary-rgb: 5, 150, 105 !important;
-            --bs-link-color: #059669 !important;
-            --bs-link-hover-color: #047857 !important;
+            --bs-primary: #10b981 !important; /* Emerald 500 */
+            --bs-primary-rgb: 16, 185, 129 !important;
+            --bs-link-color: #10b981 !important;
+            --bs-link-hover-color: #059669 !important;
+            --primary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
         }
 
         body { 
-            font-family: 'Cairo', sans-serif; 
+            font-family: 'Outfit', 'Cairo', sans-serif; 
+            background-color: #f8fafc;
+        }
+
+        /* Arabic text specific font weight/style adjustment */
+        [dir="rtl"] body {
+            font-family: 'Cairo', sans-serif;
         }
 
         /* Override Hope UI primary color classes */
         .bg-primary, .btn-primary, .badge-primary {
-            background-color: #059669 !important;
-            border-color: #059669 !important;
+            background-color: #10b981 !important;
+            border-color: #10b981 !important;
         }
         .btn-primary:hover, .btn-primary:focus {
-            background-color: #047857 !important;
-            border-color: #047857 !important;
-        }
-        .btn-outline-primary {
-            color: #059669 !important;
-            border-color: #059669 !important;
-        }
-        .btn-outline-primary:hover {
             background-color: #059669 !important;
             border-color: #059669 !important;
+            box-shadow: 0 8px 15px rgba(16, 185, 129, 0.2) !important;
+        }
+        .btn-outline-primary {
+            color: #10b981 !important;
+            border-color: #10b981 !important;
+        }
+        .btn-outline-primary:hover {
+            background-color: #10b981 !important;
+            border-color: #10b981 !important;
             color: white !important;
         }
         .text-primary {
-            color: #059669 !important;
+            color: #10b981 !important;
         }
         .border-primary {
-            border-color: #059669 !important;
+            border-color: #10b981 !important;
         }
         a {
-            color: #059669;
+            color: #10b981;
+            transition: all 0.2s ease;
         }
         a:hover {
-            color: #047857;
+            color: #059669;
         }
 
-        /* Sidebar active item */
-        .sidebar .nav-link.active {
-            background-color: #059669 !important;
+        /* Sidebar active item - Ultra Premium */
+        .sidebar .navbar-nav > .nav-item > .nav-link.active {
+            background: var(--primary-gradient) !important;
             color: white !important;
+            box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.3) !important;
+            border-radius: 14px;
+            margin: 0 12px;
         }
-        .sidebar .nav-link.active .icon i,
-        .sidebar .nav-link.active .item-name {
-            color: white !important;
+        
+        .sidebar .navbar-nav > .nav-item > .nav-link {
+            padding: 12px 18px;
+            border-radius: 14px;
+            margin: 0 12px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sidebar .navbar-nav > .nav-item > .nav-link:hover:not(.active) {
+            background: rgba(16, 185, 129, 0.05); /* Very light emerald tint on hover */
+            color: #10b981 !important;
         }
 
         /* Header banner */
         .iq-header-img {
-            background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%) !important;
+            background: linear-gradient(135deg, #10b981 0%, #059669 50%, #064e3b 100%) !important;
         }
         .iq-header-img img {
-            opacity: 0.15;
-            mix-blend-mode: overlay;
-        }
-
-        /* Links in navbar */
-        .iq-navbar .navbar-nav .nav-link {
-            color: #334155;
+            opacity: 0.1;
+            mix-blend-mode: color-dodge;
         }
 
         /* Form focus states */
         .form-control:focus, .form-select:focus {
-            border-color: #059669 !important;
-            box-shadow: 0 0 0 0.2rem rgba(5, 150, 105, 0.15) !important;
+            border-color: #10b981 !important;
+            box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.1) !important;
         }
 
-        /* Progress bars */
-        .progress-bar, .bg-primary {
-            background-color: #059669 !important;
+        /* Card styling */
+        .card {
+            border: none;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1);
+            border-radius: 1rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
         }
 
-        /* Badges */
-        .badge.bg-primary {
-            background-color: #059669 !important;
+        /* Quick Action Overlap Fix */
+        .content-inner {
+            margin-top: -3.5rem !important;
         }
 
-        /* Pagination */
-        .page-item.active .page-link {
-            background-color: #059669 !important;
-            border-color: #059669 !important;
+        /* Scrollbar Theme */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-        .page-link {
-            color: #059669;
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
         }
-
-        /* Sidebar Spacing Fix */
-        .sidebar .navbar-nav > .nav-item {
-            margin-bottom: 2px;
-        }
-        .sidebar .navbar-nav > .nav-item > .nav-link {
-            padding: 12px 20px;
-            border-radius: 10px;
-            margin: 0 10px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-        }
-        .sidebar .navbar-nav > .nav-item > .nav-link:hover {
-            background: rgba(5, 150, 105, 0.08);
-        }
-        .sidebar .navbar-nav > .nav-item > .nav-link.active {
+        ::-webkit-scrollbar-thumb {
+            background: rgba(16, 185, 129, 0.2);
             border-radius: 10px;
         }
-        .sidebar .sub-nav .nav-item .nav-link {
-            padding: 10px 20px 10px 45px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-        .sidebar .sub-nav .nav-item .nav-link.active {
-            background: rgba(5, 150, 105, 0.1) !important;
-            color: #059669 !important;
-        }
-        .sidebar .nav-item.static-item .nav-link {
-            padding: 16px 20px 6px 20px;
-            margin: 0 10px;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 700;
-            opacity: 0.5;
-        }
-        .sidebar hr.hr-horizontal {
-            margin: 8px 20px;
-            opacity: 0.06;
-        }
-        .sidebar .sidebar-header {
-            padding: 20px;
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(16, 185, 129, 0.4);
         }
     </style>
     @stack('styles')
