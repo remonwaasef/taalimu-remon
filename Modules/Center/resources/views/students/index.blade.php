@@ -17,15 +17,17 @@
 @section('page-title', __('center::students.title'))
 
 @section('page-actions')
-    <a href="{{ route('center.students.export') }}" class="btn btn-primary bg-white text-primary border-0 rounded-pill px-4 shadow-sm fw-bold" id="export-students-btn">
-        <i class="fas fa-file-export me-2"></i> {{ __('center::students.export_file') ?? __('center::messages.blade_0808') }}
-    </a>
-    <a href="{{ route('center.students.import') }}" class="btn btn-primary bg-white text-primary border-0 rounded-pill px-4 shadow-sm fw-bold">
-        <i class="fas fa-file-import me-2"></i> {{ __('center::students.import_file') }}
-    </a>
-    <a href="{{ route('center.students.create') }}" class="btn btn-primary bg-white text-primary border-0 rounded-pill px-4 shadow-sm fw-bold">
-        <span class="me-2">+</span> {{ __('center::students.add_new') }}
-    </a>
+    <div class="d-flex gap-2">
+        <a href="{{ route('center.students.export') }}" class="btn btn-primary shadow-sm" id="export-students-btn">
+            <i class="fas fa-file-export me-2"></i> {{ __('center::students.export_file') ?? __('center::messages.blade_0808') }}
+        </a>
+        <a href="{{ route('center.students.import') }}" class="btn btn-primary shadow-sm">
+            <i class="fas fa-file-import me-2"></i> {{ __('center::students.import_file') }}
+        </a>
+        <a href="{{ route('center.students.create') }}" class="btn btn-primary shadow-sm">
+            <span class="me-2">+</span> {{ __('center::students.add_new') }}
+        </a>
+    </div>
 @endsection
 
 @section('content')
