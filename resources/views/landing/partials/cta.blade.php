@@ -19,17 +19,12 @@
                         {{ __('landing.cta.subtitle') }}
                     </p>
 
-                    <!-- CTA Buttons -->
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center mb-10">
-                        <a href="{{ route('register') }}?account_type=center" 
-                           class="bg-white text-emerald-700 hover:bg-emerald-50 px-8 py-4 rounded-xl font-bold text-base shadow-xl transition-all hover:scale-[1.02] flex items-center justify-center gap-2">
-                            <i class="fas fa-building opacity-70"></i>
-                            {{ app()->isLocale('ar') ? 'ابدأ كمركز تعليمي' : __('landing.hero.cta_primary') }}
-                        </a>
-                        <a href="{{ route('register') }}?account_type=instructor" 
-                           class="bg-emerald-500/20 hover:bg-emerald-500/30 text-white border border-white/20 px-8 py-4 rounded-xl font-bold text-base transition-all backdrop-blur-sm flex items-center justify-center gap-2">
-                            <i class="fas fa-user-tie opacity-70"></i>
-                            {{ app()->isLocale('ar') ? 'ابدأ كمدرس مستقل' : __('landing.hero.cta_secondary') }}
+                    <!-- CTA Button -->
+                    <div class="flex justify-center mb-10">
+                        <a href="{{ route('register') }}" 
+                           class="group bg-white text-emerald-700 hover:bg-emerald-50 px-12 py-6 lg:px-16 lg:py-7 rounded-2xl font-black text-xl lg:text-2xl shadow-2xl transition-all hover:scale-[1.03] hover:-translate-y-1 flex items-center justify-center gap-3 lg:gap-4 ring-4 ring-white/20">
+                            {{ __('landing.cta.cta_primary') }}
+                            <i class="fas {{ app()->getLocale() == 'ar' ? 'fa-arrow-left group-hover:-translate-x-2' : 'fa-arrow-right group-hover:translate-x-2' }} text-lg lg:text-2xl opacity-70 transition-transform duration-300"></i>
                         </a>
                     </div>
 
