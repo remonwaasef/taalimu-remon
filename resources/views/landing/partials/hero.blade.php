@@ -4,7 +4,7 @@
         <div class="grid grid-cols-12 gap-6 lg:gap-10 items-center">
             
             <!-- Content Side -->
-            <div class="col-span-12 md:col-span-6 text-center md:text-start" data-animate="fade-text">
+            <div class="col-span-12 md:col-span-6 text-center md:text-start order-2 md:order-1 mt-12 md:mt-0" data-animate="fade-text">
                 <!-- Premium Pill Badge -->
                 <div class="inline-flex items-center gap-2 lg:gap-3 px-3 py-1.5 lg:px-4 lg:py-2 rounded-full bg-white border border-slate-200 shadow-sm mb-6 lg:mb-10 transition-transform hover:scale-105 cursor-pointer hover:shadow-md hover:border-emerald-200">
                     <span class="relative flex h-2 w-2 lg:h-2.5 lg:w-2.5">
@@ -56,7 +56,7 @@
             </div>
 
             <!-- Image Side -->
-            <div class="col-span-12 md:col-span-6 relative w-full md:w-[95%] xl:w-[90%] md:ms-0 me-auto md:-mt-8 xl:-mt-16 mt-16" data-animate="fade-image">
+            <div class="col-span-12 md:col-span-6 relative w-full md:w-[95%] xl:w-[90%] md:ms-0 me-auto md:-mt-8 xl:-mt-16 order-1 md:order-2" data-animate="fade-image">
 
                 <!-- Floating WhatsApp Card -->
                 <div class="absolute -top-10 -left-2 lg:-top-12 lg:-left-6 z-40 animate-float-slow w-56 lg:w-72" data-animate="fade-up">
