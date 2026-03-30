@@ -1,4 +1,4 @@
-<section class="relative pt-44 md:pt-40 lg:pt-52 pb-16 lg:pb-24 overflow-visible bg-white" id="hero">
+<section class="relative pt-32 md:pt-36 lg:pt-40 pb-16 lg:pb-24 overflow-hidden bg-white" id="hero">
 
     <div dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}" class="container relative mx-auto px-4 lg:px-8 z-10 max-w-7xl">
         <div class="grid grid-cols-12 gap-6 lg:gap-12 items-center">
@@ -30,7 +30,7 @@
                         <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
                         <span class="relative flex items-center gap-2 lg:gap-3">
                             {{ __('landing.hero.cta_primary') }}
-                            <i class="fas fa-arrow-right text-sm lg:text-lg opacity-70 group-hover:translate-x-1 transition-transform rtl:rotate-180"></i>
+                            <i class="fas {{ app()->getLocale() == 'ar' ? 'fa-arrow-left group-hover:-translate-x-1' : 'fa-arrow-right group-hover:translate-x-1' }} text-sm lg:text-lg opacity-70 transition-transform"></i>
                         </span>
                     </a>
                     <a href="#features" class="group bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 px-8 py-4 lg:px-10 lg:py-5 rounded-xl font-bold text-base lg:text-xl transition-all shadow-sm hover:shadow-md hover:-translate-y-1 w-full sm:w-auto">
@@ -59,7 +59,7 @@
             <div class="col-span-12 lg:col-span-6 relative w-full lg:mt-0 mt-20" data-animate="fade-image">
 
                 <!-- Floating WhatsApp Card -->
-                <div class="absolute -top-16 -left-2 lg:-top-24 lg:-left-20 z-40 animate-float-slow w-56 lg:w-72" data-animate="fade-up">
+                <div class="absolute -top-10 -left-2 lg:-top-12 lg:-left-6 z-40 animate-float-slow w-56 lg:w-72" data-animate="fade-up">
                     <div class="bg-white/95 backdrop-blur-xl border border-emerald-100 rounded-2xl shadow-2xl overflow-hidden ring-1 ring-emerald-500/10">
                         <div class="bg-emerald-500 px-3 py-2 lg:px-4 lg:py-2.5 flex items-center justify-between">
                             <div class="flex items-center gap-1.5 lg:gap-2">
