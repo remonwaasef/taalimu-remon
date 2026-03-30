@@ -73,7 +73,7 @@
                 >
                     @if($isFeatured)
                     <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-white px-5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
-                        {{ __('landing.pricing.featured') ?? 'Most Popular' }}
+                        {{ __('landing.pricing.featured') }}
                     </div>
                     @endif
 
@@ -108,8 +108,10 @@
                                 $val = $feat->pivot->value;
                                 if ($feat->type === 'boolean' && ($val === 'false' || !$val)) continue;
                                 if ($feat->type === 'limit' && $val === '0') continue;
-                                $label = __($feat->code) === $feat->code ? (app()->getLocale() === 'en' && $feat->name_en ? $feat->name_en : $feat->name) : __($feat->code);
-                                $pFeatures[] = ($val === '-1') ? ($label . ': Unlimited') : (($feat->type === 'boolean') ? $label : ($label . ': ' . $val));
+                                $transKey = 'features.' . $feat->code;
+                                $label = __($transKey) !== $transKey ? __($transKey) : (app()->getLocale() === 'en' && $feat->name_en ? $feat->name_en : $feat->name);
+                                $unlimitedText = __('features.unlimited');
+                                $pFeatures[] = ($val === '-1') ? ($label . ': ' . $unlimitedText) : (($feat->type === 'boolean') ? $label : ($label . ': ' . $val));
                             }
                         @endphp
                         @foreach(array_slice($pFeatures, 0, 7) as $feature)

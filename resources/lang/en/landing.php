@@ -137,6 +137,7 @@ return [
         'per_month' => '/ Month',
         'per_term' => '/ Term',
         'per_year' => '/ Year',
+        'featured' => 'Most Popular',
         'equivalent_to' => 'equivalent to',
         'month_short' => 'mo',
         'cta_note' => 'Start Now – No credit card needed',

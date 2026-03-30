@@ -137,6 +137,7 @@ return [
         'per_month' => '/ شهر',
         'per_term' => '/ ترم (5 شهور)',
         'per_year' => '/ سنة',
+        'featured' => 'الأكثر طلباً',
         'equivalent_to' => 'ما يعادل',
         'month_short' => 'شهر',
         'monthly' => 'اشتراك شهر',
