@@ -20,89 +20,109 @@
         <div class="sidebar-list" id="sidebar">
             <ul class="navbar-nav iq-main-menu" id="sidebar-menu">
                 
+                <!-- Category: Navigation -->
+                <li class="nav-item static-item">
+                    <a class="nav-link static-item disabled" href="#" tabindex="-1">
+                        <span class="default-icon text-uppercase small fw-bold text-primary opacity-75">{{ __('admin::admin.sidebar.groups.navigation') }}</span>
+                        <span class="mini-icon">-</span>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
-                        <i class="icon"><i class="fas fa-chart-line"></i></i>
+                        <i class="icon"><i class="bi bi-speedometer2"></i></i>
                         <span class="item-name">{{ __('admin::admin.sidebar.dashboard') }}</span>
                     </a>
                 </li>
                 
-                <li><hr class="hr-horizontal"></li>
-
+                <!-- Category: Management -->
+                <li class="nav-item static-item">
+                    <a class="nav-link static-item disabled" href="#" tabindex="-1">
+                        <span class="default-icon text-uppercase small fw-bold text-primary opacity-75">{{ __('admin::admin.sidebar.groups.management') }}</span>
+                        <span class="mini-icon">-</span>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.tenants.*') || request()->routeIs('admin.subscriptions.*') ? 'active' : '' }}" href="{{ route('admin.tenants.index') }}">
-                        <i class="icon"><i class="fas fa-university"></i></i>
-                        <span class="item-name">{{ __('admin::admin.sidebar.tenants_subscriptions') ?? 'Centres & Abonnements' }}</span>
+                        <i class="icon"><i class="bi bi-building"></i></i>
+                        <span class="item-name">{{ __('admin::admin.sidebar.tenants_subscriptions') }}</span>
                     </a>
                 </li>
-
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.settings.*') && !str_contains(request()->fullUrl(), 'tab=coupons') ? 'active' : '' }}" href="{{ route('admin.settings.index') }}">
-                        <i class="icon"><i class="fas fa-cog"></i></i>
-                        <span class="item-name">{{ __('admin::admin.sidebar.settings') }}</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link {{ str_contains(request()->fullUrl(), 'tab=coupons') ? 'active' : '' }}" href="{{ route('admin.settings.index', ['tab' => 'coupons']) }}">
-                        <i class="icon"><i class="fas fa-ticket-alt"></i></i>
-                        <span class="item-name">{{ __('admin::admin.coupons_discounts') }}</span>
-                    </a>
-                </li>
-                
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.tickets.*') ? 'active' : '' }}" href="{{ route('admin.tickets.index') }}">
-                        <i class="icon"><i class="fas fa-headset"></i></i>
+                        <i class="icon"><i class="bi bi-headset"></i></i>
                         <span class="item-name">{{ __('admin::admin.sidebar.support') }}</span>
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.activity-logs.*') ? 'active' : '' }}" href="{{ route('admin.activity-logs.index') }}">
-                        <i class="icon"><i class="fas fa-history"></i></i>
-                        <span class="item-name">{{ __('admin::admin.sidebar.activity_logs') }}</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.operation-issues.*') ? 'active' : '' }}" href="{{ route('admin.operation-issues.index') }}">
-                        <i class="icon"><i class="fas fa-exclamation-triangle"></i></i>
-                        <span class="item-name">{{ __('admin::admin.sidebar.operation_issues') }}</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.backups.*') ? 'active' : '' }}" href="{{ route('admin.backups.index') }}">
-                        <i class="icon"><i class="fas fa-database"></i></i>
-                        <span class="item-name">{{ __('admin::admin.sidebar.backups') ?? 'Sauvegardes' }}</span>
-                    </a>
-                </li>
-
+                <!-- Category: Monitoring -->
                 <li class="nav-item static-item">
                     <a class="nav-link static-item disabled" href="#" tabindex="-1">
-                        <span class="default-icon">{{ __('admin::admin.sidebar.super_admin') ?? 'Administration Supérieure' }}</span>
+                        <span class="default-icon text-uppercase small fw-bold text-primary opacity-75">{{ __('admin::admin.sidebar.groups.monitoring') }}</span>
                         <span class="mini-icon">-</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.operation-issues.*') ? 'active' : '' }}" href="{{ route('admin.operation-issues.index') }}">
+                        <i class="icon"><i class="bi bi-shield-exclamation"></i></i>
+                        <span class="item-name">{{ __('admin::admin.sidebar.operation_issues') }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.activity-logs.*') ? 'active' : '' }}" href="{{ route('admin.activity-logs.index') }}">
+                        <i class="icon"><i class="bi bi-journal-text"></i></i>
+                        <span class="item-name">{{ __('admin::admin.sidebar.activity_logs') }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('consent.report') ? 'active' : '' }}" href="{{ route('consent.report') }}">
+                        <i class="icon"><i class="bi bi-fingerprint"></i></i>
+                        <span class="item-name">{{ __('admin::admin.sidebar.cookie_reports') }}</span>
+                    </a>
+                </li>
 
+                <!-- Category: Resources -->
+                <li class="nav-item static-item">
+                    <a class="nav-link static-item disabled" href="#" tabindex="-1">
+                        <span class="default-icon text-uppercase small fw-bold text-primary opacity-75">{{ __('admin::admin.sidebar.groups.resources') }}</span>
+                        <span class="mini-icon">-</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.settings.*') && !str_contains(request()->fullUrl(), 'tab=coupons') ? 'active' : '' }}" href="{{ route('admin.settings.index') }}">
+                        <i class="icon"><i class="bi bi-gear"></i></i>
+                        <span class="item-name">{{ __('admin::admin.sidebar.settings') }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ str_contains(request()->fullUrl(), 'tab=coupons') ? 'active' : '' }}" href="{{ route('admin.settings.index', ['tab' => 'coupons']) }}">
+                        <i class="icon"><i class="bi bi-ticket-perforated"></i></i>
+                        <span class="item-name">{{ __('admin::admin.coupons_discounts') }}</span>
+                    </a>
+                </li>
+
+                <!-- Category: Administration -->
+                <li class="nav-item static-item">
+                    <a class="nav-link static-item disabled" href="#" tabindex="-1">
+                        <span class="default-icon text-uppercase small fw-bold text-primary opacity-75">{{ __('admin::admin.sidebar.groups.administration') }}</span>
+                        <span class="mini-icon">-</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.backups.*') ? 'active' : '' }}" href="{{ route('admin.backups.index') }}">
+                        <i class="icon"><i class="bi bi-database"></i></i>
+                        <span class="item-name">{{ __('admin::admin.sidebar.backups') }}</span>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.roles.*') ? 'active' : '' }}" href="{{ route('admin.roles.index') }}">
-                        <i class="icon"><i class="fas fa-shield-alt"></i></i>
+                        <i class="icon"><i class="bi bi-shield-lock"></i></i>
                         <span class="item-name">{{ __('admin::admin.sidebar.roles') }}</span>
                     </a>
                 </li>
-
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
-                        <i class="icon"><i class="fas fa-users-cog"></i></i>
-                        <span class="item-name">{{ __('admin::admin.sidebar.admin_team') ?? 'Équipe d\'administration' }}</span>
-                    </a>
-                </li>
-                
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('consent.report') ? 'active' : '' }}" href="{{ route('consent.report') }}">
-                        <i class="icon"><i class="fas fa-cookie-bite"></i></i>
-                        <span class="item-name">{{ __('admin::admin.sidebar.cookie_reports') }}</span>
+                        <i class="icon"><i class="bi bi-people"></i></i>
+                        <span class="item-name">{{ __('admin::admin.sidebar.admin_team') }}</span>
                     </a>
                 </li>
 

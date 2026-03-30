@@ -81,19 +81,48 @@
             box-shadow: 0 0 40px rgba(0,0,0,0.03) !important;
             border-left: 1px solid rgba(0,0,0,0.05) !important;
         }
+        
+        /* Category Headers (Groups) */
+        .sidebar .static-item {
+            padding: 1.5rem 1.5rem 0.5rem !important;
+            margin-top: 0.5rem;
+        }
+        .sidebar .static-item .default-icon {
+            font-size: 0.7rem !important;
+            letter-spacing: 1.2px;
+            color: #10b981 !important;
+            opacity: 0.65 !important;
+            font-weight: 800 !important;
+        }
+
+        .sidebar .navbar-nav > .nav-item > .nav-link {
+            padding: 0.75rem 1.25rem !important;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
         .sidebar .navbar-nav > .nav-item > .nav-link.active {
             background: var(--primary-gradient) !important;
             color: white !important;
             box-shadow: 0 8px 16px -4px rgba(16, 185, 129, 0.4) !important;
-            border-radius: 12px;
-            margin: 0 10px;
+            border-radius: 12px !important;
+            margin: 0 12px;
         }
         
         .sidebar .navbar-nav > .nav-item > .nav-link:hover:not(.active) {
             background: rgba(16, 185, 129, 0.08);
             color: #10b981 !important;
-            border-radius: 12px;
-            margin: 0 10px;
+            border-radius: 12px !important;
+            margin: 0 12px;
+            transform: translateX(-4px);
+        }
+
+        .sidebar .icon {
+            font-size: 1.1rem;
+            margin-left: 10px;
+            width: 24px;
+            display: inline-flex;
+            justify-content: center;
         }
 
         .card {
