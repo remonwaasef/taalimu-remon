@@ -27,14 +27,6 @@
                             <span><i class="fas fa-circle me-1" id="statusDot"></i> <span id="studentStatusDisplay">Status</span></span>
                         </div>
                     </div>
-                    <div class="col-md-auto mt-3 mt-md-0 d-flex gap-2">
-                        <a id="whatsappBtn" href="#" target="_blank" class="btn btn-light bg-opacity-25 border-0 text-white rounded-pill px-4">
-                            <i class="fab fa-whatsapp me-2"></i>{{ __('center::messages.blade_0551') }}
-                        </a>
-                        <a id="statementBtn" href="#" target="_blank" class="btn btn-light rounded-pill px-4">
-                            <i class="fas fa-file-pdf me-2 text-danger"></i>{{ __('center::messages.blade_0581', ['default' => 'تحميل كشف حساب']) }}
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>
@@ -239,9 +231,6 @@
                     document.getElementById('studentStatusDisplay').innerText = s.status === 'active' ? 'نشط' : 'غير نشط';
                     document.getElementById('statusDot').className = `fas fa-circle me-1 ${s.status === 'active' ? 'text-success' : 'text-danger'}`;
                     
-                    document.getElementById('whatsappBtn').href = `https://wa.me/${s.phone}?text=مرحباً ${s.name}, نود تذكيركم بمديونية قدرها ${data.stats.total_debt} ${currency}`;
-                    document.getElementById('statementBtn').href = `/sales/student-statement/${studentId}`;
-
                     // Update Stats
                     document.getElementById('debtStat').innerText = data.stats.total_debt + ' ' + currency;
                     document.getElementById('paidStat').innerText = data.stats.total_paid + ' ' + currency;
