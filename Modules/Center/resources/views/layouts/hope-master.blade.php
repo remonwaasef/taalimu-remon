@@ -49,11 +49,75 @@
         body { 
             font-family: 'Outfit', 'Cairo', sans-serif; 
             background-color: #f8fafc;
+            color: #1e293b;
         }
 
         /* Arabic text specific font weight/style adjustment */
         [dir="rtl"] body {
             font-family: 'Cairo', sans-serif;
+        }
+
+        /* Unified Header Banner - Ultra Premium */
+        .iq-navbar-header {
+            padding: 2.5rem 0 !important;
+            height: auto !important;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .iq-navbar-header .iq-header-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .iq-navbar-header .iq-header-img img {
+            opacity: 0.12;
+            mix-blend-mode: overlay;
+            object-fit: cover;
+        }
+
+        .iq-navbar-header .container-fluid {
+            position: relative;
+            z-index: 2;
+        }
+
+        .iq-navbar-header h1 {
+            font-size: 1.85rem !important;
+            font-weight: 800 !important;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.25rem;
+            color: #ffffff !important;
+        }
+        
+        .iq-navbar-header p {
+            font-size: 0.95rem !important;
+            font-weight: 500 !important;
+            color: rgba(255, 255, 255, 0.85) !important;
+        }
+
+        /* Premium Buttons in Header */
+        .iq-navbar-header .btn-primary {
+            background-color: #ffffff !important;
+            color: #10b981 !important;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+            font-weight: 700 !important;
+            padding: 0.75rem 1.5rem !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .iq-navbar-header .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important;
+            background-color: #f8fafc !important;
         }
 
         /* Override Hope UI primary color classes */
@@ -150,24 +214,7 @@
         /* Auto-style the first row containing title and actions over the green banner */
         .content-inner > .d-flex:first-child h2, 
         .content-inner > .row:first-child h2 {
-            color: #ffffff !important;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
-        .content-inner > .d-flex:first-child .text-muted,
-        .content-inner > .d-flex:first-child p {
-            color: rgba(255, 255, 255, 0.8) !important;
-        }
-        /* Buttons in the overlapping header */
-        .content-inner > .d-flex:first-child .btn-primary {
-            background-color: #ffffff !important;
-            color: #10b981 !important;
-            border-color: #ffffff !important;
-            font-weight: 700;
-        }
-        .content-inner > .d-flex:first-child .btn-primary:hover {
-            background-color: #f8fafc !important;
-            color: #059669 !important;
-            transform: translateY(-1px);
+            display: none !important; /* Hide redundant titles in content if we use header sections */
         }
 
         /* Scrollbar Theme */
