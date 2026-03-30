@@ -65,22 +65,6 @@
             @endforeach
         </div>
 
-        <!-- Trust Badges -->
-        <div class="mt-16 pt-12 border-t border-slate-100" data-animate>
-            <div class="flex flex-wrap items-center justify-center gap-12 lg:gap-20">
-                @foreach([
-                    ['icon' => 'fa-shield-check', 'color' => '#10b981', 'label' => __('landing.pain_points.trust_secure') ?? 'Secure Payments'],
-                    ['icon' => 'fa-whatsapp', 'color' => '#25D366', 'label' => __('landing.pain_points.trust_whatsapp') ?? 'WhatsApp Verified', 'brand' => true],
-                    ['icon' => 'fa-graduation-cap', 'color' => '#6366f1', 'label' => __('landing.pain_points.trust_educators') ?? 'Educator Trusted']
-                ] as $badge)
-                <div class="flex items-center gap-3 group">
-                    <div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 group-hover:scale-110 transition-transform">
-                        <i class="{{ isset($badge['brand']) ? 'fab' : 'fas' }} {{ $badge['icon'] }}" style="color: {{ $badge['color'] }};"></i>
-                    </div>
-                    <span class="font-bold text-slate-400 text-sm uppercase tracking-wider group-hover:text-slate-600 transition-colors">{{ $badge['label'] }}</span>
-                </div>
-                @endforeach
-            </div>
-        </div>
+
     </div>
 </section>
