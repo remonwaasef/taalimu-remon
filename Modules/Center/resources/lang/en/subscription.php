@@ -58,15 +58,15 @@ return [
     ],
     'currency' => 'EGP',
     'plans' => [
-        'free' => [
+        'free-trial' => [
             'name' => 'Free Trial',
             'desc' => 'Perfect for testing the platform features',
         ],
-        'starter' => [
+        'basic' => [
             'name' => 'Starter',
             'desc' => 'For independent teachers and small groups',
         ],
-        'growth' => [
+        'pro' => [
             'name' => 'Growth',
             'desc' => 'For growing educational centers',
         ],
@@ -74,5 +74,11 @@ return [
             'name' => 'Enterprise',
             'desc' => 'For large educational institutions and branches',
         ],
+    ],
+    'values' => [
+        'إيميل' => 'Email',
+        'أولوية' => 'Priority',
+        'مدير حساب' => 'Account Manager',
+        'basic' => 'Basic',
     ],
 ];
