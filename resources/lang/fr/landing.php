@@ -2,12 +2,12 @@
 
 return [
     'hero' => [
-        'badge' => 'Le système n°1 pour les centres de formation',
-        'title' => 'Gérez votre centre :highlight et gagnez des heures de travail',
-        'title_highlight' => 'intelligemment',
-        'subtitle' => 'Un système intégré pour la gestion des étudiants, des présences et des paiements — tout dans un tableau de bord facile.',
-        'cta_primary' => 'Essai Gratuit',
-        'cta_secondary' => 'Voir Comment ça Marche',
+        'badge' => 'Système N°1 pour Centres Éducatifs',
+        'title' => '68% du temps administratif ne sert pas à :highlight.',
+        'title_highlight' => 'enseigner',
+        'subtitle' => 'Il est temps de passer à un système intelligent qui gère la facturation, le suivi de l\'avancement, la fréquentation... le tout en quelques clics.',
+        'cta_primary' => 'Démarrer gratuitement',
+        'cta_secondary' => 'Voir la vidéo',
         'mockup' => [
             'whatsapp' => [
                 'title' => 'WhatsApp',
@@ -39,10 +39,10 @@ return [
         'start_trial' => 'Essai Gratuit',
     ],
     'pain_points' => [
-        'title_prefix' => 'Cela vous semble',
-        'title_highlight' => 'Familier',
-        'title_suffix' => '?',
-        'subtitle' => 'Les centres d\'apprentissage de la région MENA font face à ces défis quotidiennement. Vous n\'êtes pas seul.',
+        'title_prefix' => 'Vous reconnaissez',
+        'title_highlight' => 'votre quotidien',
+        'title_suffix' => 'ici ?',
+        'subtitle' => '10h par semaine. Du temps et de l\'argent qui ne reviennent jamais. Découvrez nos systèmes automatisés. C\'est plus qu\'un outil.',
         'revenue_lost' => [
             'title' => 'Revenus Perdus',
             'description' => 'de revenus perdus en raison de créances non recouvrées',
@@ -62,21 +62,21 @@ return [
         'cta' => 'Il est temps d\'<span class=\"font-bold gradient-text\">arrêter l\'hémorragie</span> et de reprendre le contrôle.',
     ],
     'automation' => [
-        'badge' => 'Processus Simple en 3 Étapes',
-        'title_prefix' => 'Comment',
-        'title_highlight' => config('app.name'),
+        'badge' => 'Simplicité',
+        'title_prefix' => 'Opérationnel en',
+        'title_highlight' => 'moins d\'une journée.',
         'subtitle' => 'Démarrez en quelques minutes, pas des jours. Notre processus simplifié rend l\'automatisation sans effort.',
         'step1' => [
-            'title' => 'Ajoutez des Étudiants',
-            'description' => 'Importez ou ajoutez vos étudiants en quelques secondes avec notre interface intuitive',
+            'title' => 'Inscrivez votre centre',
+            'description' => 'Créez un compte et importez vos données en quelques secondes.',
         ],
         'step2' => [
-            'title' => 'Rappels WhatsApp Automatiques',
-            'description' => 'Configurez et oubliez. Les rappels intelligents sont envoyés automatiquement avant les dates d\'échéance',
+            'title' => 'Configurez vos notifications',
+            'description' => 'Assurez-vous d\'avoir un compte WhatsApp professionnel pour activer l\'envoi de messages.',
         ],
         'step3' => [
-            'title' => 'Soyez Payé et Concentrez-vous sur l\'Enseignement',
-            'description' => 'Regardez les paiements arriver pendant que vous vous concentrez sur ce qui compte vraiment',
+            'title' => 'Soyez opérationnel',
+            'description' => 'Concentrez-vous sur l\'enseignement, le système fait le reste.',
         ],
         'result' => [
             'rate' => 'Jusqu\'à 98% de Taux de Recouvrement',
@@ -125,7 +125,7 @@ return [
     ],
     'pricing' => [
         'badge' => 'Tarifs',
-        'title' => 'Plans Tarifaires <span class=\"gradient-text\">Flexibles</span>',
+        'title' => '1 formule pour chaque étape de votre <span class=\"gradient-text\">activité.</span>',
         'subtitle' => 'Choisissez le plan qui correspond à la taille et aux besoins de votre centre éducatif',
         'most_popular' => 'Le Plus Populaire',
         'per_14_days' => '/ 14 Jours',
@@ -150,8 +150,8 @@ return [
                 ],
             ],
             'basic' => [
-                'name' => 'Débutant',
-                'price' => '199 SAR',
+                'name' => 'Starter',
+                'price' => '199 EGP',
                 'description' => 'Pour les startups et petits centres',
                 'cta' => 'S\'Abonner',
                 'features' => [
@@ -165,8 +165,8 @@ return [
                 'badge' => 'Populaire',
             ],
             'pro' => [
-                'name' => 'Croissance',
-                'price' => '399 SAR',
+                'name' => 'Pro',
+                'price' => '1249 EGP',
                 'description' => 'Pour les centres en croissance et grands',
                 'cta' => 'S\'Abonner',
                 'features' => [
@@ -183,8 +183,8 @@ return [
                 'best_value' => 'Meilleur Choix',
             ],
             'enterprise' => [
-                'name' => 'Entreprise',
-                'price' => '950 SAR',
+                'name' => 'Enterprise',
+                'price' => 'Sur mesure',
                 'description' => 'Pour les grandes chaînes et organisations.',
                 'cta' => 'Contactez-nous',
                 'features' => [
@@ -276,9 +276,9 @@ return [
         'unlimited' => 'Illimité',
     ],
     'testimonials' => [
-        'badge' => 'Approuvé par 10 000+ Centres',
-        'title_prefix' => 'Résultats Réels de',
-        'title_highlight' => 'Vrais Centres',
+        'badge' => 'Témoignages',
+        'title_prefix' => '0 chiffre gonflé.',
+        'title_highlight' => '100% construit avec vous.',
         'subtitle' => 'Découvrez comment les centres d\'apprentissage à travers la région MENA transforment leurs opérations avec ' . config('app.name') . '.',
         'items' => [
             0 => [
