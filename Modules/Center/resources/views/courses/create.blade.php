@@ -25,7 +25,7 @@
                         
                         <div class="mb-4">
                             <label class="form-label fw-bold">{{ __('center::messages.blade_0272') }}</label>
-                            <input type="text" name="title" value="{{ old('title') }}" class="form-control form-control-lg bg-light border-0 @error('title') is-invalid border-danger @enderror">
+                            <input type="text" name="title" value="{{ old('title') }}" class="form-control form-control-lg bg-white border @error('title') is-invalid border-danger @enderror">
                             @error('title')
                                 <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                             @enderror
@@ -33,7 +33,7 @@
 
                         <div class="mb-4">
                             <label class="form-label fw-bold">{{ __('center::messages.blade_0273') }}</label>
-                            <select name="instructor_id" class="form-select form-select-lg bg-light border-0 @error('instructor_id') is-invalid border-danger @enderror">
+                            <select name="instructor_id" class="form-select form-select-lg bg-white border @error('instructor_id') is-invalid border-danger @enderror">
                                 <option value="">{{ __('center::messages.blade_0274') }}</option>
                                 @foreach($instructors as $instructor)
                                     <option value="{{ $instructor->id }}" {{ old('instructor_id') == $instructor->id ? 'selected' : '' }}>{{ $instructor->name }}</option>
@@ -47,14 +47,14 @@
                         <div class="row mb-4">
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">{{ __('center::messages.blade_0275', ['currency' => get_currency_symbol()]) }}</label>
-                                <input type="number" name="price" value="{{ old('price', 0) }}" class="form-control form-control-lg bg-light border-0 @error('price') is-invalid border-danger @enderror" min="0" step="0.01">
+                                <input type="number" name="price" value="{{ old('price', 0) }}" class="form-control form-control-lg bg-white border @error('price') is-invalid border-danger @enderror" min="0" step="0.01">
                                 @error('price')
                                     <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">{{ __('center::messages.blade_0276') }}</label>
-                                <input type="number" name="sessions_count" value="{{ old('sessions_count', 0) }}" class="form-control form-control-lg bg-light border-0 @error('sessions_count') is-invalid border-danger @enderror" min="0">
+                                <input type="number" name="sessions_count" value="{{ old('sessions_count', 0) }}" class="form-control form-control-lg bg-white border @error('sessions_count') is-invalid border-danger @enderror" min="0">
                                 @error('sessions_count')
                                     <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                                 @enderror
@@ -78,7 +78,7 @@
 
                         <div class="mb-4">
                             <label class="form-label fw-bold">{{ __('center::messages.blade_0280') }}</label>
-                            <input type="file" name="image" class="form-control form-control-lg bg-light border-0 @error('image') is-invalid border-danger @enderror" accept="image/*">
+                            <input type="file" name="image" class="form-control form-control-lg bg-white border @error('image') is-invalid border-danger @enderror" accept="image/*">
                             @error('image')
                                 <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                             @enderror
@@ -86,7 +86,7 @@
 
                         <div class="mb-4">
                             <label class="form-label fw-bold">{{ __('center::messages.blade_0281') }}</label>
-                            <textarea name="description" class="form-control form-control-lg bg-light border-0 @error('description') is-invalid border-danger @enderror" rows="4">{{ old('description') }}</textarea>
+                            <textarea name="description" class="form-control form-control-lg bg-white border @error('description') is-invalid border-danger @enderror" rows="4">{{ old('description') }}</textarea>
                             @error('description')
                                 <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                             @enderror
@@ -121,7 +121,7 @@
                                     <div class="row g-3">
                                         <div class="col-md-3">
                                             <label class="small text-muted mb-1">{{ __('center::schedules.day') }}</label>
-                                            <select name="schedules[INDEX][day_of_week]" class="form-select border-0">
+                                            <select name="schedules[INDEX][day_of_week]" class="form-select bg-white border">
                                                 <option value="saturday">{{ __('center::schedules.saturday') }}</option>
                                                 <option value="sunday">{{ __('center::schedules.sunday') }}</option>
                                                 <option value="monday">{{ __('center::schedules.monday') }}</option>
@@ -133,7 +133,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="small text-muted mb-1">{{ __('center::schedules.classroom') }}</label>
-                                            <select name="schedules[INDEX][classroom_id]" class="form-select border-0">
+                                            <select name="schedules[INDEX][classroom_id]" class="form-select bg-white border">
                                                 <option value="">{{ __('center::schedules.choose_classroom') }}</option>
                                                 @foreach($classrooms as $classroom)
                                                     <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
@@ -142,11 +142,11 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="small text-muted mb-1">{{ __('center::schedules.from') }}</label>
-                                            <input type="time" name="schedules[INDEX][start_time]" class="form-control border-0">
+                                            <input type="time" name="schedules[INDEX][start_time]" class="form-control bg-white border">
                                         </div>
                                         <div class="col-md-3">
                                             <label class="small text-muted mb-1">{{ __('center::schedules.to') }}</label>
-                                            <input type="time" name="schedules[INDEX][end_time]" class="form-control border-0">
+                                            <input type="time" name="schedules[INDEX][end_time]" class="form-control bg-white border">
                                         </div>
                                     </div>
                                 </div>
