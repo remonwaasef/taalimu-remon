@@ -91,6 +91,34 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             border-radius: 1rem;
         }
+
+        /* Quick Action Overlap Fix */
+        .content-inner {
+            margin-top: -3.5rem !important;
+        }
+
+        /* Auto-style the first row containing title and actions over the green banner */
+        .content-inner > .d-flex:first-child h2, 
+        .content-inner > .row:first-child h2 {
+            color: #ffffff !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .content-inner > .d-flex:first-child .text-muted,
+        .content-inner > .d-flex:first-child p {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+        /* Buttons in the overlapping header */
+        .content-inner > .d-flex:first-child .btn-primary {
+            background-color: #ffffff !important;
+            color: #10b981 !important;
+            border-color: #ffffff !important;
+            font-weight: 700;
+        }
+        .content-inner > .d-flex:first-child .btn-primary:hover {
+            background-color: #f8fafc !important;
+            color: #059669 !important;
+            transform: translateY(-1px);
+        }
     </style>
     @stack('styles')
 </head>
@@ -112,18 +140,20 @@
             <!-- Header Component -->
             @include('admin::layouts.hope-header')
             
-            <div class="iq-navbar-header" style="height: 125px;">
+            <div class="iq-navbar-header" style="height: 180px;">
                 <div class="container-fluid iq-container">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="flex-wrap d-flex justify-content-between align-items-center">
+                                @hasSection('page-title')
                                 <div>
-                                    <h1 class="text-white">@yield('page-title', __('admin.title'))</h1>
+                                    <h1 class="text-white">@yield('page-title')</h1>
                                     <p class="text-white opacity-75 mb-0 small">@yield('page-subtitle')</p>
                                 </div>
                                 <div class="d-flex align-items-center gap-2">
                                     @yield('page-actions')
                                 </div>
+                                @endif
                             </div>
                         </div>
                     </div>
