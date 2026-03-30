@@ -19,7 +19,7 @@
         
         <!-- Language Switcher -->
         <li class="nav-item dropdown">
-          <a href="#" class="nav-link" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <a href="#" class="nav-link" id="langDropdown" aria-expanded="false" onclick="toggleCustomDropdown(event, this)">
              @php
                 $currentLocale = app()->getLocale();
                 $locales = [
