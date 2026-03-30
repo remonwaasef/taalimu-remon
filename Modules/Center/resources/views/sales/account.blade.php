@@ -107,13 +107,13 @@
             <div class="card-header bg-white border-0 p-0">
                 <ul class="nav nav-tabs nav-justified border-bottom" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#financialsTab" type="button"><i class="fas fa-wallet me-2"></i>{{ __('center::messages.blade_0585', ['default' => 'الماليات والتحصيل']) }}</button>
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#financialsTab" type="button"><i class="fas fa-wallet me-2"></i>{{ __('center::sales.ledger') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#coursesTab" type="button"><i class="fas fa-graduation-cap me-2"></i>{{ __('center::messages.blade_0586', ['default' => 'الكورسات والاشتراكات']) }}</button>
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#coursesTab" type="button"><i class="fas fa-graduation-cap me-2"></i>{{ __('center::messages.blade_0020') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#attendanceTab" type="button"><i class="fas fa-user-check me-2"></i>{{ __('center::messages.blade_0587', ['default' => 'سجل الحضور']) }}</button>
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#attendanceTab" type="button"><i class="fas fa-user-check me-2"></i>{{ __('center::messages.blade_0130') }}</button>
                     </li>
                 </ul>
             </div>
@@ -228,7 +228,7 @@
                     document.getElementById('studentNameDisplay').innerText = s.name;
                     document.getElementById('studentPhoneDisplay').innerText = s.phone;
                     document.getElementById('studentGradeDisplay').innerText = s.grade || '-';
-                    document.getElementById('studentStatusDisplay').innerText = s.status === 'active' ? 'نشط' : 'غير نشط';
+                    document.getElementById('studentStatusDisplay').innerText = s.status === 'active' ? '{{ __('center::messages.blade_0583') }}' : '{{ __('center::messages.blade_0085') }}';
                     document.getElementById('statusDot').className = `fas fa-circle me-1 ${s.status === 'active' ? 'text-success' : 'text-danger'}`;
                     
                     // Update Stats
