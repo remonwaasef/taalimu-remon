@@ -142,7 +142,8 @@
               </div>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center']) }}">Settings</a></li>
+              <li><a class="dropdown-item" href="{{ route('center.profile', ['tenant' => $tenant->domain ?? 'center']) }}">{{ __('center::sidebar.profile') }}</a></li>
+              <li><a class="dropdown-item" href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center']) }}">{{ __('center::sidebar.settings') }}</a></li>
               <li><hr class="dropdown-divider"></li>
               <li>
                 <form method="POST" action="{{ route('logout') }}">
