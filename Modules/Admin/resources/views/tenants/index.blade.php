@@ -1,82 +1,82 @@
 @extends('admin::layouts.hope-master')
 
 @section('page-title', __('admin::admin.tenants.title'))
+@section('page-subtitle', __('admin::admin.tenants.subtitle'))
+
+@section('page-actions')
+    <a href="{{ route('admin.settings.index') }}#plans" class="btn btn-primary rounded-pill px-4 shadow-sm border-white border-2">
+        <i class="bi bi-patch-check me-2"></i> {{ __('admin::admin.subscriptions.plans_pricing') ?? 'الخطط والأسعار' }}
+    </a>
+    <a href="{{ route('admin.tenants.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm border-white border-2">
+        <i class="bi bi-plus-lg me-2"></i> {{ __('admin::admin.tenants.add_new') }}
+    </a>
+@endsection
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h2 class="fw-bold mb-1">{{ __('admin::admin.tenants.title') }}</h2>
-            <p class="text-muted mb-0">{{ __('admin::admin.tenants.subtitle') }}</p>
-        </div>
-        <div class="d-flex gap-2">
-            <a href="{{ route('admin.settings.index') }}#plans" class="btn btn-outline-primary rounded-pill px-4 shadow-sm">
-                <i class="bi bi-patch-check me-2"></i> {{ __('admin::admin.subscriptions.plans_pricing') ?? 'الخطط والأسعار' }}
-            </a>
-            <a href="{{ route('admin.tenants.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
-                <i class="bi bi-plus-lg me-2"></i> {{ __('admin::admin.tenants.add_new') }}
-            </a>
-        </div>
-    </div>
 
     <!-- Stats Row -->
     <div class="row g-4 mb-4">
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-right: 4px solid #4361EE !important;">
-                <div class="card-body p-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden" style="background: #ffffff;">
+                <div class="card-body p-4 position-relative">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <div class="text-muted x-small fw-bold text-uppercase mb-1">{{ __('admin::admin.tenants.stats.total') }}</div>
                             <div class="h3 fw-bold mb-0 text-dark">{{ $stats['total_count'] }}</div>
                         </div>
-                        <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
-                            <i class="bi bi-building fs-5"></i>
+                        <div class="icon-box rounded-3 shadow-sm" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; background: rgba(16, 185, 129, 0.1);">
+                            <i class="bi bi-building fs-5 text-success"></i>
                         </div>
                     </div>
+                    <div class="position-absolute bottom-0 start-0 w-100" style="height: 4px; background: linear-gradient(to right, #10b981 0%, #059669 100%); opacity: 0.6;"></div>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-right: 4px solid #10b981 !important;">
-                <div class="card-body p-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden" style="background: #ffffff;">
+                <div class="card-body p-4 position-relative">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <div class="text-muted x-small fw-bold text-uppercase mb-1">الاشتراكات النشطة</div>
                             <div class="h3 fw-bold mb-0 text-success">{{ $stats['active_subscriptions'] }}</div>
                         </div>
-                        <div class="icon-box bg-success bg-opacity-10 text-success rounded-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                        <div class="icon-box bg-success bg-opacity-10 text-success rounded-3 shadow-sm" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
                             <i class="bi bi-check-circle fs-5"></i>
                         </div>
                     </div>
+                    <div class="position-absolute bottom-0 start-0 w-100" style="height: 4px; background: #10b981; opacity: 0.3;"></div>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-right: 4px solid #f59e0b !important;">
-                <div class="card-body p-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden" style="background: #ffffff;">
+                <div class="card-body p-4 position-relative">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <div class="text-muted x-small fw-bold text-uppercase mb-1">تنتهي قريباً</div>
                             <div class="h3 fw-bold mb-0 text-warning">{{ $stats['expiring_soon'] }}</div>
                         </div>
-                        <div class="icon-box bg-warning bg-opacity-10 text-warning rounded-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                        <div class="icon-box bg-warning bg-opacity-10 text-warning rounded-3 shadow-sm" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
                             <i class="bi bi-hourglass-split fs-5"></i>
                         </div>
                     </div>
+                    <div class="position-absolute bottom-0 start-0 w-100" style="height: 4px; background: #f59e0b; opacity: 0.3;"></div>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100" style="background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%); border-right: 4px solid #4361EE !important;">
-                <div class="card-body p-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden" style="background: #ffffff;">
+                <div class="card-body p-4 position-relative">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <div class="text-muted x-small fw-bold text-uppercase mb-1">{{ __('admin::admin.tenants.stats.students') }}</div>
                             <div class="h3 fw-bold mb-0 text-dark">{{ number_format($stats['total_students']) }}</div>
                         </div>
-                        <div class="icon-box bg-primary text-white rounded-3 shadow-sm" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #4361EE 0%, #4895ef 100%);">
+                        <div class="icon-box bg-primary text-white rounded-3 shadow-sm" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
                             <i class="bi bi-mortarboard fs-5"></i>
                         </div>
                     </div>
+                    <div class="position-absolute bottom-0 start-0 w-100" style="height: 4px; background: linear-gradient(to right, #059669 0%, #064e3b 100%); opacity: 1;"></div>
                 </div>
             </div>
         </div>
@@ -130,8 +130,8 @@
                     <thead class="bg-light">
                         <tr class="text-secondary small text-uppercase">
                             <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.center_admin') }}</th>
-                            <th class="px-4 py-3 border-0">الاشتراك والفوترة</th>
-                            <th class="px-4 py-3 border-0 text-center">الأداء والتفاعل</th>
+                            <th class="px-4 py-3 border-0">{{ __('admin::admin.subscriptions.title') ?? 'L\'abonnement' }}</th>
+                            <th class="px-4 py-3 border-0 text-center">{{ __('admin::admin.tenants.table.performance') ?? 'Performance' }}</th>
                             <th class="px-4 py-3 border-0 text-center">{{ __('admin::admin.tenants.table.students') }}</th>
                             <th class="px-4 py-3 border-0 text-center">{{ __('admin::admin.tenants.table.status') }}</th>
                             <th class="px-4 py-3 border-0 text-end">{{ __('admin::admin.tenants.table.actions') }}</th>
@@ -223,8 +223,8 @@
                                 <td class="text-center">
                                     <div class="d-flex flex-column align-items-center gap-2">
                                         <div class="d-flex flex-column align-items-center">
-                                            <div class="x-small text-muted mb-1">القيمة الكلية (LTV)</div>
-                                            <span class="fw-bold text-success">{{ number_format($tenant->ltv ?: 0, 0) }} ج.م</span>
+                                            <div class="x-small text-muted mb-0 opacity-75">{{ __('admin::admin.tenants.table.total_value') ?? 'Valeur Totale' }} (LTV)</div>
+                                            <span class="fw-bold text-success fs-6">{{ number_format($tenant->ltv ?: 0, 0) }} <small class="fw-normal opacity-75">ج.م</small></span>
                                         </div>
                                         
                                         @if($subscription && $subscription->ends_at && !$isExpired)
@@ -232,23 +232,26 @@
                                                 $totalDays = max(1, $subscription->created_at->diffInDays($subscription->ends_at));
                                                 $remainingDays = now()->diffInDays($subscription->ends_at, false);
                                                 $percent = min(100, max(0, ($remainingDays / $totalDays) * 100));
-                                                $barColor = $percent < 20 ? 'danger' : ($percent < 50 ? 'warning' : 'primary');
+                                                $barColor = $percent < 20 ? 'danger' : ($percent < 50 ? 'warning' : 'success');
                                             @endphp
-                                            <div class="w-75">
-                                                <div class="progress" style="height: 4px; background-color: rgba(0,0,0,0.05);">
-                                                    <div class="progress-bar bg-{{ $barColor }}" role="progressbar" style="width: {{ 100 - $percent }}%"></div>
+                                            <div class="w-100 px-3">
+                                                <div class="progress" style="height: 5px; background-color: rgba(0,0,0,0.05); border-radius: 10px;">
+                                                    <div class="progress-bar bg-{{ $barColor }}" role="progressbar" style="width: {{ 100 - $percent }}%; border-radius: 10px;"></div>
                                                 </div>
-                                                <div class="x-small text-muted mt-1" style="font-size: 0.65rem;">متبقي {{ (int)$remainingDays }} يوم</div>
+                                                <div class="x-small text-muted mt-1 d-flex justify-content-between" style="font-size: 0.65rem;">
+                                                    <span>{{ $remainingDays }} {{ __('admin::admin.tenants.table.days_left') ?? 'jours' }}</span>
+                                                    <span class="opacity-50 ms-2">P-{{ (int)$percent }}</span>
+                                                </div>
                                             </div>
                                         @endif
 
                                         @if($tenant->last_activity_at)
-                                            <div class="x-small text-muted mt-1 border-top pt-1 w-100">
-                                                <i class="bi bi-lightning-charge text-warning"></i>
+                                            <div class="x-small text-muted mt-1 border-top pt-1 w-100 opacity-75">
+                                                <i class="bi bi-clock-history me-1"></i>
                                                 {{ \Illuminate\Support\Carbon::parse($tenant->last_activity_at)->diffForHumans() }}
                                             </div>
                                         @else
-                                            <div class="x-small text-muted mt-1 border-top pt-1 w-100">لا نشاط مؤخراً</div>
+                                            <div class="x-small text-muted mt-1 border-top pt-1 w-100 opacity-50">{{ __('admin::admin.tenants.table.no_activity') ?? 'Aucune activité' }}</div>
                                         @endif
                                     </div>
                                 </td>

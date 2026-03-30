@@ -32,7 +32,7 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.tenants.*') || request()->routeIs('admin.subscriptions.*') ? 'active' : '' }}" href="{{ route('admin.tenants.index') }}">
                         <i class="icon"><i class="fas fa-university"></i></i>
-                        <span class="item-name">إدارة المراكز والاشتراكات</span>
+                        <span class="item-name">{{ __('admin::admin.sidebar.tenants_subscriptions') ?? 'Centres & Abonnements' }}</span>
                     </a>
                 </li>
 
@@ -74,13 +74,13 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.backups.*') ? 'active' : '' }}" href="{{ route('admin.backups.index') }}">
                         <i class="icon"><i class="fas fa-database"></i></i>
-                        <span class="item-name">النسخ الاحتياطي</span>
+                        <span class="item-name">{{ __('admin::admin.sidebar.backups') ?? 'Sauvegardes' }}</span>
                     </a>
                 </li>
 
                 <li class="nav-item static-item">
                     <a class="nav-link static-item disabled" href="#" tabindex="-1">
-                        <span class="default-icon">الإدارة العليا</span>
+                        <span class="default-icon">{{ __('admin::admin.sidebar.super_admin') ?? 'Administration Supérieure' }}</span>
                         <span class="mini-icon">-</span>
                     </a>
                 </li>
@@ -95,7 +95,7 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
                         <i class="icon"><i class="fas fa-users-cog"></i></i>
-                        <span class="item-name">فريق الإدارة</span>
+                        <span class="item-name">{{ __('admin::admin.sidebar.admin_team') ?? 'Équipe d\'administration' }}</span>
                     </a>
                 </li>
                 
