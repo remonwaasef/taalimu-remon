@@ -56,7 +56,7 @@
             </div>
 
             <!-- Image Side -->
-            <div class="col-span-12 lg:col-span-6 relative w-full lg:w-[85%] xl:w-[80%] mx-auto lg:mt-0 mt-20" data-animate="fade-image">
+            <div class="col-span-12 lg:col-span-6 relative w-full lg:w-[85%] xl:w-[80%] mx-auto lg:-mt-12 xl:-mt-16 mt-20" data-animate="fade-image">
 
                 <!-- Floating WhatsApp Card -->
                 <div class="absolute -top-10 -left-2 lg:-top-12 lg:-left-6 z-40 animate-float-slow w-56 lg:w-72" data-animate="fade-up">
