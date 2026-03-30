@@ -102,9 +102,9 @@
     }
     .toggle-slider {
         position: absolute;
-        top: 5px;
-        bottom: 5px;
-        left: 5px; 
+        top: 4px;
+        bottom: 4px;
+        left: 4px; 
         width: calc(33.33% - 5px);
         background: #10b981;
         border-radius: 999px;
@@ -112,7 +112,13 @@
         z-index: 0;
         box-shadow: 0 4px 12px rgba(16,185,129, 0.3);
     }
+    .dual-toggle .toggle-slider {
+        width: calc(50% - 6px);
+    }
     .billing-toggle input[type="radio"]:nth-of-type(2):checked ~ .toggle-slider {
+        transform: translateX(100%);
+    }
+    .dual-toggle input[type="radio"]:nth-of-type(2):checked ~ .toggle-slider {
         transform: translateX(100%);
     }
     .billing-toggle input[type="radio"]:nth-of-type(3):checked ~ .toggle-slider {
@@ -120,12 +126,18 @@
     }
     .save-badge {
         position: absolute;
-        top: -12px;
+        top: -15px;
         left: 50%;
         transform: translateX(-50%);
-        font-size: 0.7rem;
-        padding: 3px 8px;
+        font-size: 0.75rem;
+        padding: 4px 8px;
         white-space: nowrap;
+        background: #10b981 !important;
+        color: #fff !important;
+        border-radius: 6px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        z-index: 10;
+        border: 1px solid rgba(255,255,255,0.2) !important;
     }
 </style>
 @endpush
@@ -263,7 +275,7 @@
             <div class="toggle-slider" style="direction: ltr;"></div>
         </div>
 
-        <div class="billing-toggle ms-md-3">
+        <div class="billing-toggle dual-toggle ms-md-3">
             <input type="radio" id="gateway-paymob" name="payment_gateway" value="paymob" checked>
             <label for="gateway-paymob"><i class="bi bi-credit-card me-1"></i> {{ __('center::subscription.card_payment') }} (Paymob)</label>
             
