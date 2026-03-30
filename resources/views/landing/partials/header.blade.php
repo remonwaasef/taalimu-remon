@@ -54,10 +54,27 @@
                 </a>
             </div>
 
-            <!-- Mobile -->
-            <button @click="isMenuOpen = !isMenuOpen" class="lg:hidden w-10 h-10 flex items-center justify-center text-slate-900 rounded-lg hover:bg-slate-100 transition-colors">
-                <i class="fas" :class="isMenuOpen ? 'fa-times' : 'fa-bars'"></i>
-            </button>
+            <!-- Mobile Actions -->
+            <div class="flex lg:hidden items-center gap-1 sm:gap-2">
+                <!-- Mobile Lang -->
+                <div x-data="{ open: false }" class="relative">
+                    <button @click="open = !open" class="flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors px-2 py-2 rounded-lg hover:bg-slate-100">
+                        <i class="fas fa-globe"></i>
+                        <span>{{ strtoupper(app()->getLocale()) }}</span>
+                    </button>
+                    <div x-show="open" x-cloak @click.away="open = false" x-transition class="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-2xl py-2 overflow-hidden z-50 border border-slate-200">
+                        @foreach(['ar' => 'العربية', 'fr' => 'Français'] as $code => $label)
+                        <a href="{{ route('lang.switch', ['locale' => $code]) }}" class="block px-4 py-2.5 text-sm @if(app()->isLocale($code)) text-emerald-600 font-bold @else text-slate-600 hover:bg-slate-50 @endif">
+                            {{ $label }}
+                        </a>
+                        @endforeach
+                    </div>
+                </div>
+
+                <button @click="isMenuOpen = !isMenuOpen" class="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-slate-900 rounded-lg hover:bg-slate-100 transition-colors">
+                    <i class="fas" :class="isMenuOpen ? 'fa-times' : 'fa-bars'"></i>
+                </button>
+            </div>
         </div>
     </div>
 
