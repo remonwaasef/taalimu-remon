@@ -1,19 +1,23 @@
 @extends('layouts.landing-new')
 
 @section('content')
-<div class="min-h-screen flex items-center justify-center mesh-gradient-soft noise-overlay py-2 px-4 pt-32">
-    <div class="max-w-2xl w-full">
+<div class="min-h-screen flex items-center justify-center relative overflow-hidden bg-white py-12 px-4 pt-32">
+    <!-- Hero Orbs Decoration -->
+    <div class="hero-orb orb-1 opacity-60"></div>
+    <div class="hero-orb orb-2 opacity-40"></div>
+
+    <div class="max-w-2xl w-full relative z-10">
         <!-- Success Icon -->
-        <div class="text-center mb-3 animate-fade-in">
-            <div class="inline-flex items-center justify-center w-16 h-16 bg-success-green rounded-full mb-2 shadow-lg animate-scale-in">
-                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
+        <div class="text-center mb-10 animate-fade-in-up">
+            <div class="inline-flex items-center justify-center w-24 h-24 bg-emerald-500 rounded-full mb-6 shadow-2xl shadow-emerald-500/20 animate-scale-in">
+                <svg class="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                 </svg>
             </div>
-            <h1 class="text-2xl font-bold text-foreground mb-1">
-                {{ __('auth.registration.success_title') }}
+            <h1 class="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
+                <span class="gradient-text">{{ __('auth.registration.success_title') }}</span>
             </h1>
-            <p class="text-muted-foreground text-sm">
+            <p class="text-slate-500 text-lg md:text-xl font-medium max-w-lg mx-auto">
                 {{ __('auth.registration.success_subtitle') }}
             </p>
         </div>
@@ -31,85 +35,79 @@
             }
         @endphp
 
-        <!-- Center Details Card -->
-        <div class="bg-card border-2 border-brand-primary/20 rounded-2xl shadow-2xl p-4 space-y-3 animate-scale-in" style="animation-delay: 0.1s;">
-            <!-- Center Name with Icon -->
-            <div class="text-center pb-3 border-b-2 border-border">
-                <div class="inline-flex items-center gap-2 bg-brand-primary/10 px-4 py-2 rounded-xl">
-                    <svg class="w-5 h-5 text-brand-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                    </svg>
-                    <h2 class="text-xl font-bold text-brand-primary">
+        <!-- Center Details Glass Card -->
+        <div class="glass-premium rounded-[2.5rem] p-8 md:p-12 space-y-10 animate-scale-in border border-white/60 shadow-2xl shadow-slate-200/50" style="animation-delay: 0.1s;">
+            <!-- Center Name -->
+            <div class="text-center pb-8 border-b border-slate-100/80">
+                <div class="inline-flex flex-col items-center gap-4">
+                    <div class="w-16 h-16 rounded-3xl bg-brand-primary/10 flex items-center justify-center text-brand-primary shadow-inner">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-3xl font-black text-slate-900 tracking-tight">
                         {{ session('center_name') }}
                     </h2>
                 </div>
             </div>
 
-            <!-- Access URL with Icon -->
-            <div>
-                <label class="flex items-center gap-2 text-xs font-semibold text-foreground mb-2">
-                    <svg class="w-5 h-5 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
-                    </svg>
+            <!-- Access URL -->
+            <div class="space-y-4">
+                <label class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] px-1">
                     {{ __('auth.registration.your_center_url') }}
                 </label>
-                <div class="flex items-center gap-2 p-3 bg-brand-secondary/5 rounded-xl border-2 border-brand-secondary/20">
+                <div class="flex flex-col sm:flex-row items-center gap-3 p-2 bg-white/60 backdrop-blur-md rounded-[2rem] border-2 border-slate-100/80 shadow-inner group-focus-within:border-brand-primary/30 transition-all transition-all duration-500">
                     <input 
                         type="text" 
                         readonly 
                         value="{{ $accessUrl }}"
-                        class="flex-1 bg-transparent border-0 text-sm font-mono font-semibold text-brand-secondary focus:outline-none select-all"
+                        class="flex-1 bg-transparent border-0 text-lg font-mono font-bold text-slate-600 px-6 py-3 focus:outline-none select-all w-full sm:w-auto"
                         id="centerUrl"
                         dir="ltr"
                     >
                     <button 
                         onclick="copyUrl()"
-                        class="px-3 py-2 bg-brand-secondary text-white rounded-lg hover:opacity-90 transition-all shadow-md hover:shadow-lg flex items-center gap-1 font-semibold text-sm"
+                        class="w-full sm:w-auto px-8 py-4 bg-slate-900 text-white rounded-[1.5rem] hover:bg-slate-800 transition-all shadow-xl hover:shadow-slate-900/30 flex items-center justify-center gap-3 font-black text-base"
                         id="copyBtn"
                     >
                         <i class="fas fa-copy"></i>
-                        <span class="text-sm">{{ __('auth.registration.copy') }}</span>
+                        <span>{{ __('auth.registration.copy') }}</span>
                     </button>
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-3">
-                <div class="bg-muted/50 p-3 rounded-xl border border-border">
-                    <label class="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
-                        </svg>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white/50 backdrop-blur-md p-6 rounded-3xl border border-white/80 shadow-sm transition-all hover:shadow-md hover:border-brand-primary/20 group">
+                    <label class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 group-hover:text-brand-primary transition-colors">
+                        <i class="fas fa-envelope opacity-70"></i>
                         {{ __('auth.registration.email') }}
                     </label>
-                    <div class="text-foreground font-semibold break-all">
+                    <div class="text-slate-900 font-extrabold break-all text-base tracking-tight">
                         {{ session('admin_email') }}
                     </div>
                 </div>
-                <div class="bg-muted/50 p-3 rounded-xl border border-border">
-                    <label class="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
-                        </svg>
+                <div class="bg-white/50 backdrop-blur-md p-6 rounded-3xl border border-white/80 shadow-sm transition-all hover:shadow-md hover:border-brand-primary/20 group">
+                    <label class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 group-hover:text-brand-primary transition-colors">
+                        <i class="fas fa-key opacity-70"></i>
                         {{ __('auth.registration.password') }}
                     </label>
-                    <div class="text-muted-foreground text-sm">
+                    <div class="text-slate-500 font-bold text-sm leading-relaxed">
                         {{ __('auth.registration.password_hint') }}
                     </div>
                 </div>
             </div>
 
-            <div class="pt-4">
+            <div class="pt-6">
                 <a 
                     href="{{ $accessUrl }}"
-                    class="group flex items-center justify-center gap-3 w-full text-center py-4 px-6 bg-brand-primary text-white rounded-xl font-bold hover:bg-brand-primary-dark transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                    class="group relative flex items-center justify-center gap-4 w-full py-6 px-8 bg-slate-900 text-white rounded-[2rem] font-black text-2xl hover:bg-slate-800 transition-all shadow-2xl hover:shadow-slate-900/40 transform hover:-translate-y-2 overflow-hidden"
                 >
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                    </svg>
-                    <span class="text-xl font-arabic">{{ __('auth.registration.access_center') }}</span>
-                    <svg class="w-6 h-6 group-hover:-translate-x-2 rtl:group-hover:-translate-x-2 ltr:group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                    </svg>
+                    <span class="absolute inset-0 w-full h-full -mt-1 rounded-2xl opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
+                    <span class="relative z-10 flex items-center gap-4">
+                        <i class="fas fa-rocket text-emerald-400 animate-pulse"></i>
+                        {{ __('auth.registration.access_center') }}
+                        <i class="fas {{ app()->getLocale() == 'ar' ? 'fa-arrow-left group-hover:-translate-x-3' : 'fa-arrow-right group-hover:translate-x-3' }} transition-transform duration-300"></i>
+                    </span>
                 </a>
             </div>
         </div>
