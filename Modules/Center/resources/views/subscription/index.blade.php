@@ -43,10 +43,10 @@
         background: #fff;
         cursor: pointer;
     }
-    .plan-card:hover          { border-color: #3A0CA3; transform: translateY(-4px); box-shadow: 0 12px 30px rgba(58,12,163,0.12); }
-    .plan-card.current-plan   { border-color: #3A0CA3; background: linear-gradient(135deg, #f5f3ff, #eff6ff); }
-    .plan-card.featured-plan  { border-color: #2A4DFF; }
-    .feature-check { color: #16a34a; }
+    .plan-card:hover          { border-color: #10b981; transform: translateY(-4px); box-shadow: 0 12px 30px rgba(16,185,129,0.12); }
+    .plan-card.current-plan   { border-color: #10b981; background: linear-gradient(135deg, #f0fdf4, #f8fafc); }
+    .plan-card.featured-plan  { border-color: #10b981; }
+    .feature-check { color: #10b981; }
     .feature-x     { color: #d1d5db; }
     .info-tile {
         background: rgba(0,0,0,0.03);
@@ -57,16 +57,16 @@
     .pulse-dot {
         width: 10px; height: 10px;
         border-radius: 50%;
-        background: #4ade80;
+        background: #10b981;
         animation: pulse-green 2s infinite;
     }
     @keyframes pulse-green {
-        0%   { box-shadow: 0 0 0 0 rgba(74,222,128,0.6); }
-        70%  { box-shadow: 0 0 0 8px rgba(74,222,128,0); }
-        100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); }
+        0%   { box-shadow: 0 0 0 0 rgba(16,185,129,0.6); }
+        70%  { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
+        100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
     }
     .contact-card {
-        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
         border-radius: 1rem;
         color: #fff;
     }
@@ -106,11 +106,11 @@
         bottom: 5px;
         left: 5px; 
         width: calc(33.33% - 5px);
-        background: #3A0CA3;
+        background: #10b981;
         border-radius: 999px;
         transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
         z-index: 0;
-        box-shadow: 0 4px 12px rgba(58, 12, 163, 0.3);
+        box-shadow: 0 4px 12px rgba(16,185,129, 0.3);
     }
     .billing-toggle input[type="radio"]:nth-of-type(2):checked ~ .toggle-slider {
         transform: translateX(100%);
@@ -309,7 +309,7 @@
                                     <i class="fas fa-check-circle me-1"></i> {{ __('center::subscription.current_plan') }}
                                 </span>
                             @elseif($isFeatured)
-                                <span class="badge" style="background: linear-gradient(90deg,#3A0CA3,#2A4DFF); color:#fff; border-radius:999px;" class="rounded-pill mb-2 px-3 py-1">
+                                <span class="badge" style="background: linear-gradient(90deg,#059669,#10b981); color:#fff; border-radius:999px;" class="rounded-pill mb-2 px-3 py-1">
                                     ⚡ {{ __('center::subscription.recommended') }}
                                 </span>
                             @endif
