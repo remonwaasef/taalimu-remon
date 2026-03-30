@@ -1,12 +1,12 @@
 <section class="relative pt-32 md:pt-36 lg:pt-40 pb-16 lg:pb-24 overflow-hidden bg-white" id="hero">
 
     <div dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}" class="container relative mx-auto px-4 lg:px-8 z-10 max-w-7xl">
-        <div class="grid grid-cols-12 gap-4 md:gap-6 lg:gap-10 items-center">
+        <div class="grid grid-cols-12 gap-6 lg:gap-10 items-center">
             
             <!-- Content Side -->
-            <div class="col-span-6 text-start" data-animate="fade-text">
+            <div class="col-span-12 md:col-span-6 text-center md:text-start order-2 md:order-1 mt-12 md:mt-0" data-animate="fade-text">
                 <!-- Premium Pill Badge -->
-                <div class="hidden sm:inline-flex items-center gap-2 lg:gap-3 px-3 py-1.5 lg:px-4 lg:py-2 rounded-full bg-white border border-slate-200 shadow-sm mb-6 lg:mb-10 transition-transform hover:scale-105 cursor-pointer hover:shadow-md hover:border-emerald-200">
+                <div class="inline-flex items-center gap-2 lg:gap-3 px-3 py-1.5 lg:px-4 lg:py-2 rounded-full bg-white border border-slate-200 shadow-sm mb-6 lg:mb-10 transition-transform hover:scale-105 cursor-pointer hover:shadow-md hover:border-emerald-200">
                     <span class="relative flex h-2 w-2 lg:h-2.5 lg:w-2.5">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-2 w-2 lg:h-2.5 lg:w-2.5 bg-emerald-500"></span>
@@ -15,25 +15,25 @@
                 </div>
 
                 <!-- Massive Headline -->
-                <h1 class="text-lg sm:text-2xl md:text-4xl lg:text-[4.2rem] font-black text-slate-900 leading-[1.2] lg:leading-[1.1] mb-3 md:mb-6 lg:mb-8 tracking-tight">
+                <h1 class="text-3xl md:text-5xl lg:text-[4.2rem] font-black text-slate-900 leading-[1.2] lg:leading-[1.1] mb-6 lg:mb-8 tracking-tight">
                     {!! __('landing.hero.title', ['highlight' => '<span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">' . __('landing.hero.title_highlight', [], app()->getLocale()) . '</span>']) !!}
                 </h1>
 
                 <!-- Refined Subtitle -->
-                <p class="text-[10px] sm:text-xs md:text-base lg:text-xl text-slate-600 mb-4 md:mb-8 lg:mb-12 max-w-xl font-medium leading-relaxed">
+                <p class="text-[13px] md:text-xl text-slate-600 mb-8 lg:mb-12 max-w-xl mx-auto md:mx-0 font-medium leading-relaxed">
                     {{ __('landing.hero.subtitle') }}
                 </p>
 
                 <!-- CTAs -->
-                <div class="flex flex-col sm:flex-row gap-2 lg:gap-4 items-start mb-6 md:mb-10 lg:mb-16">
-                    <a href="{{ route('register') }}" class="group relative inline-flex items-center justify-center bg-slate-900 text-white px-4 py-2 md:px-8 md:py-4 lg:px-10 lg:py-5 rounded-lg md:rounded-xl font-bold text-xs md:text-base lg:text-xl transition-all hover:bg-slate-800 hover:shadow-2xl hover:shadow-slate-900/20 hover:-translate-y-1 overflow-hidden">
+                <div class="flex flex-col sm:flex-row gap-3 lg:gap-4 items-center justify-center md:justify-start mb-10 lg:mb-16 mx-auto md:mx-0">
+                    <a href="{{ route('register') }}" class="group relative inline-flex items-center justify-center bg-slate-900 text-white px-8 py-4 lg:px-10 lg:py-5 rounded-xl font-bold text-base lg:text-xl transition-all hover:bg-slate-800 hover:shadow-2xl hover:shadow-slate-900/20 hover:-translate-y-1 overflow-hidden w-full sm:w-auto">
                         <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
                         <span class="relative flex items-center gap-2 lg:gap-3">
                             {{ __('landing.hero.cta_primary') }}
                             <i class="fas {{ app()->getLocale() == 'ar' ? 'fa-arrow-left group-hover:-translate-x-1' : 'fa-arrow-right group-hover:translate-x-1' }} text-sm lg:text-lg opacity-70 transition-transform"></i>
                         </span>
                     </a>
-                    <a href="#features" class="hidden sm:inline-flex group bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 px-4 py-2 md:px-8 md:py-4 lg:px-10 lg:py-5 rounded-lg md:rounded-xl font-bold text-xs md:text-base lg:text-xl transition-all shadow-sm hover:shadow-md hover:-translate-y-1">
+                    <a href="#features" class="group bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 px-8 py-4 lg:px-10 lg:py-5 rounded-xl font-bold text-base lg:text-xl transition-all shadow-sm hover:shadow-md hover:-translate-y-1 w-full sm:w-auto">
                         <span class="flex items-center justify-center gap-2 lg:gap-3">
                             <i class="fas fa-play-circle text-emerald-500 text-xl lg:text-2xl group-hover:scale-110 transition-transform"></i>
                             {{ __('landing.hero.cta_secondary') }}
@@ -42,7 +42,7 @@
                 </div>
                 
                 <!-- Trust Stats -->
-                <div class="hidden sm:flex items-center gap-6 md:gap-8 lg:gap-12 pt-4 md:pt-6 lg:pt-8 border-t border-slate-200/60 max-w-lg">
+                <div class="flex items-center justify-center md:justify-start gap-8 lg:gap-12 pt-6 lg:pt-8 border-t border-slate-200/60 max-w-lg mx-auto md:mx-0">
                     <div class="text-start">
                         <div class="text-2xl lg:text-3xl font-black text-slate-900">+500</div>
                         <div class="text-[9px] lg:text-[11px] font-bold text-slate-500 uppercase tracking-widest">{{ app()->isLocale('ar') ? 'مركز تعليمي' : 'Centers' }}</div>
@@ -56,7 +56,7 @@
             </div>
 
             <!-- Image Side -->
-            <div class="col-span-6 relative w-full xl:w-[90%]" data-animate="fade-image">
+            <div class="col-span-12 md:col-span-6 relative w-full md:w-[95%] xl:w-[90%] md:ms-0 me-auto md:-mt-8 xl:-mt-16 order-1 md:order-2" data-animate="fade-image">
 
                 <!-- Floating WhatsApp Card -->
                 <div class="hidden sm:block absolute -top-10 -left-2 lg:-top-12 lg:-left-6 z-40 animate-float-slow w-56 lg:w-72" data-animate="fade-up">
