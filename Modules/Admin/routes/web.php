@@ -37,7 +37,7 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('impersonate/return', [TenantController::class, 'returnFromImpersonation'])->name('impersonate.return');
 
     // Protected Routes (Super Admin Only)
-    Route::middleware(['auth', 'role:super_admin'])->group(function() {
+    Route::middleware(['auth', \App\Http\Middleware\CheckAdminRole::class])->group(function() {
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
         
         Route::get('/', [AdminController::class, 'index'])->name('dashboard');
