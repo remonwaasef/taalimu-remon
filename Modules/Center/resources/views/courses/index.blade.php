@@ -1,13 +1,14 @@
 @extends('center::layouts.hope-master')
 
-@section('content')
+@section('page-title', __('center::courses.title'))
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark">{{ __('center::courses.title') }}</h2>
-        <a href="{{ route('center.courses.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
-            <span class="me-2">+</span> {{ __('center::courses.add_new') }}
-        </a>
-    </div>
+@section('page-actions')
+    <a href="{{ route('center.courses.create') }}" class="btn btn-primary shadow-sm">
+        <i class="fas fa-plus me-2"></i> {{ __('center::courses.add_new') }}
+    </a>
+@endsection
+
+@section('content')
 
     <div class="card border-0 shadow-sm rounded-4">
         <div class="card-body p-4">

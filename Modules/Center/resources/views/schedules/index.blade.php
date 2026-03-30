@@ -4,7 +4,7 @@
 @section('page-subtitle', __('center::students.weekly_schedule_overview'))
 
 @section('page-actions')
-    <a href="{{ route('center.schedules.create') }}" class="btn btn-primary bg-white text-primary border-0 rounded-pill px-4 shadow-sm fw-bold">
+    <a href="{{ route('center.schedules.create') }}" class="btn btn-primary shadow-sm">
         <i class="fas fa-plus me-2"></i> {{ __('center::students.add_new_schedule') }}
     </a>
 @endsection

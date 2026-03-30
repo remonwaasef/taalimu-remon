@@ -3,7 +3,7 @@
 @section('page-title', __('center::instructors.title'))
 
 @section('page-actions')
-    <a href="{{ route('center.instructors.create') }}" class="btn btn-primary bg-white text-primary border-0 rounded-pill px-4 shadow-sm fw-bold">
+    <a href="{{ route('center.instructors.create') }}" class="btn btn-primary shadow-sm">
         <span class="me-2">+</span> {{ __('center::instructors.add_new') }}
     </a>
 @endsection
