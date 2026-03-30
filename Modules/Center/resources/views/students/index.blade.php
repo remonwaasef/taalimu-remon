@@ -14,21 +14,21 @@
     }
 @endphp
 
+@section('page-title', __('center::students.title'))
+
+@section('page-actions')
+    <a href="{{ route('center.students.export') }}" class="btn btn-primary bg-white text-primary border-0 rounded-pill px-4 shadow-sm fw-bold" id="export-students-btn">
+        <i class="fas fa-file-export me-2"></i> {{ __('center::students.export_file') ?? __('center::messages.blade_0808') }}
+    </a>
+    <a href="{{ route('center.students.import') }}" class="btn btn-primary bg-white text-primary border-0 rounded-pill px-4 shadow-sm fw-bold">
+        <i class="fas fa-file-import me-2"></i> {{ __('center::students.import_file') }}
+    </a>
+    <a href="{{ route('center.students.create') }}" class="btn btn-primary bg-white text-primary border-0 rounded-pill px-4 shadow-sm fw-bold">
+        <span class="me-2">+</span> {{ __('center::students.add_new') }}
+    </a>
+@endsection
+
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark">{{ __('center::students.title') }}</h2>
-        <div class="d-flex gap-2">
-            <a href="{{ route('center.students.export') }}" class="btn btn-outline-success rounded-pill px-4 shadow-sm" id="export-students-btn">
-                <i class="fas fa-file-export me-2"></i> {{ __('center::students.export_file') ?? __('center::messages.blade_0808') }}
-            </a>
-            <a href="{{ route('center.students.import') }}" class="btn btn-outline-primary rounded-pill px-4 shadow-sm">
-                <i class="fas fa-file-import me-2"></i> {{ __('center::students.import_file') }}
-            </a>
-            <a href="{{ route('center.students.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
-                <span class="me-2">+</span> {{ __('center::students.add_new') }}
-            </a>
-        </div>
-    </div>
 
     @if(session('generated_password'))
         <div class="premium-ticket-container mb-5 animate__animated animate__fadeIn">

@@ -1,12 +1,9 @@
 @extends('admin::layouts.hope-master')
 
 @section('page-title', __('admin::admin.dashboard.title'))
+@section('page-subtitle', date('Y-m-d'))
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark">{{ __('admin::admin.dashboard.title') }}</h2>
-        <div class="text-muted">{{ date('Y-m-d') }}</div>
-    </div>
 
     <!-- Stats Cards -->
     <div class="row g-4 mb-5">
