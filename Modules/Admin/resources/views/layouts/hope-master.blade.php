@@ -282,6 +282,34 @@
         @if(session('error'))
             Toast.fire({ icon: 'error', title: "{{ session('error') }}" });
         @endif
+
+        function toggleCustomDropdown(event, btn) {
+            if (event) event.stopPropagation();
+            
+            // Close all other dropdowns
+            document.querySelectorAll('.dropdown-menu.show').forEach(el => {
+                if (el.previousElementSibling !== btn) {
+                    el.classList.remove('show');
+                }
+            });
+
+            const menu = btn.nextElementSibling;
+            if (menu) {
+                menu.classList.toggle('show');
+                
+                // Handle click outside to close
+                const closeHandler = function(e) {
+                    if (!btn.contains(e.target) && !menu.contains(e.target)) {
+                        menu.classList.remove('show');
+                        document.removeEventListener('click', closeHandler);
+                    }
+                };
+                
+                if (menu.classList.contains('show')) {
+                    document.addEventListener('click', closeHandler);
+                }
+            }
+        }
     </script>
 
     @stack('scripts')
