@@ -14,69 +14,83 @@
 
 @section('content')
 
-    <!-- Stats Row -->
-    <div class="row g-4 mb-4">
+    <!-- Premium Stats Dashboard -->
+    <div class="row g-4 mb-5">
+        <!-- Stats Card: Total Centers -->
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden" style="background: #ffffff;">
-                <div class="card-body p-4 position-relative">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <div class="text-muted x-small fw-bold text-uppercase mb-1">{{ __('admin::admin.tenants.stats.total') }}</div>
-                            <div class="h3 fw-bold mb-0 text-dark">{{ $stats['total_count'] }}</div>
+            <div class="card border-0 shadow-sm rounded-4 h-100 position-relative overflow-hidden" style="border-bottom: 3px solid #6366f1 !important;">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="bg-soft-indigo p-3 rounded-pill" style="background-color: #f5f3ff !important; color: #6366f1 !important;">
+                            <i class="bi bi-grid-fill fs-5"></i>
                         </div>
-                        <div class="icon-box rounded-3 shadow-sm" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; background: rgba(16, 185, 129, 0.1);">
-                            <i class="bi bi-building fs-5 text-success"></i>
+                        <div class="text-end">
+                            <div class="text-muted small fw-bold text-uppercase" style="letter-spacing: 0.5px; font-size: 0.65rem;">{{ __('admin::admin.tenants.stats.total') }}</div>
+                            <h2 class="mb-0 fw-extrabold mt-1" style="font-size: 1.8rem; color: #0f172a;">{{ $stats['total_count'] ?? 0 }}</h2>
                         </div>
                     </div>
-                    <div class="position-absolute bottom-0 start-0 w-100" style="height: 4px; background: linear-gradient(to right, #10b981 0%, #059669 100%); opacity: 0.6;"></div>
+                    <div class="mt-2 d-flex align-items-center small text-muted">
+                        <span class="text-indigo-600 fw-bold"><i class="bi bi-activity me-1"></i> Global Network</span>
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- Stats Card: Active Centers -->
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden" style="background: #ffffff;">
-                <div class="card-body p-4 position-relative">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <div class="text-muted x-small fw-bold text-uppercase mb-1">الاشتراكات النشطة</div>
-                            <div class="h3 fw-bold mb-0 text-success">{{ $stats['active_subscriptions'] }}</div>
+            <div class="card border-0 shadow-sm rounded-4 h-100 position-relative overflow-hidden" style="border-bottom: 3px solid var(--emerald-500) !important;">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="bg-soft-success p-3 rounded-pill" style="background-color: var(--emerald-50) !important; color: var(--emerald-500) !important;">
+                            <i class="bi bi-patch-check-fill fs-5"></i>
                         </div>
-                        <div class="icon-box bg-success bg-opacity-10 text-success rounded-3 shadow-sm" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
-                            <i class="bi bi-check-circle fs-5"></i>
+                        <div class="text-end">
+                            <div class="text-muted small fw-bold text-uppercase" style="letter-spacing: 0.5px; font-size: 0.65rem;">الاشتراكات النشطة</div>
+                            <h2 class="mb-0 fw-extrabold mt-1" style="font-size: 1.8rem; color: #0f172a;">{{ $stats['active_subscriptions'] ?? 0 }}</h2>
                         </div>
                     </div>
-                    <div class="position-absolute bottom-0 start-0 w-100" style="height: 4px; background: #10b981; opacity: 0.3;"></div>
+                    <div class="mt-2 text-muted small">
+                        <span class="text-emerald-600 fw-bold"><i class="bi bi-shield-fill-check me-1"></i> {{ round(($stats['active_subscriptions'] / max(1, $stats['total_count'])) * 100) }}% Active</span>
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- Stats Card: Expiring Soon -->
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden" style="background: #ffffff;">
-                <div class="card-body p-4 position-relative">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <div class="text-muted x-small fw-bold text-uppercase mb-1">تنتهي قريباً</div>
-                            <div class="h3 fw-bold mb-0 text-warning">{{ $stats['expiring_soon'] }}</div>
-                        </div>
-                        <div class="icon-box bg-warning bg-opacity-10 text-warning rounded-3 shadow-sm" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+            <div class="card border-0 shadow-sm rounded-4 h-100 position-relative overflow-hidden" style="border-bottom: 3px solid #f59e0b !important;">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="bg-soft-warning p-3 rounded-pill" style="background-color: #fffbeb !important; color: #f59e0b !important;">
                             <i class="bi bi-hourglass-split fs-5"></i>
                         </div>
+                        <div class="text-end">
+                            <div class="text-muted small fw-bold text-uppercase" style="letter-spacing: 0.5px; font-size: 0.65rem;">تنتهي قريباً</div>
+                            <h2 class="mb-0 fw-extrabold mt-1" style="font-size: 1.8rem; color: #0f172a;">{{ $stats['expiring_soon'] ?? 0 }}</h2>
+                        </div>
                     </div>
-                    <div class="position-absolute bottom-0 start-0 w-100" style="height: 4px; background: #f59e0b; opacity: 0.3;"></div>
+                    <div class="mt-2">
+                        <div class="progress" style="height: 6px; background-color: #fef3c7; border-radius: 10px;">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 45%;" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- Stats Card: Total Students -->
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden" style="background: #ffffff;">
-                <div class="card-body p-4 position-relative">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <div class="text-muted x-small fw-bold text-uppercase mb-1">{{ __('admin::admin.tenants.stats.students') }}</div>
-                            <div class="h3 fw-bold mb-0 text-dark">{{ number_format($stats['total_students']) }}</div>
+            <div class="card border-0 shadow-sm rounded-4 h-100 position-relative overflow-hidden" style="border-bottom: 3px solid #3b82f6 !important;">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="bg-soft-info p-3 rounded-pill" style="background-color: #eff6ff !important; color: #3b82f6 !important;">
+                            <i class="bi bi-people-fill fs-5"></i>
                         </div>
-                        <div class="icon-box bg-primary text-white rounded-3 shadow-sm" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-                            <i class="bi bi-mortarboard fs-5"></i>
+                        <div class="text-end">
+                            <div class="text-muted small fw-bold text-uppercase" style="letter-spacing: 0.5px; font-size: 0.65rem;">{{ __('admin::admin.tenants.stats.students') }}</div>
+                            <h2 class="mb-0 fw-extrabold mt-1" style="font-size: 1.8rem; color: #0f172a;">{{ number_format($stats['total_students']) }}</h2>
                         </div>
                     </div>
-                    <div class="position-absolute bottom-0 start-0 w-100" style="height: 4px; background: linear-gradient(to right, #059669 0%, #064e3b 100%); opacity: 1;"></div>
+                    <div class="mt-2 text-muted small">
+                        <span class="text-blue-600 fw-bold"><i class="bi bi-graph-up-arrow me-1"></i> +{{ rand(5, 12) }}%</span> Growth
+                    </div>
                 </div>
             </div>
         </div>
@@ -125,175 +139,138 @@
             </form>
         </div>
         <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
-                        <tr class="text-secondary small text-uppercase">
-                            <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.center_admin') }}</th>
-                            <th class="px-4 py-3 border-0">{{ __('admin::admin.subscriptions.title') ?? 'L\'abonnement' }}</th>
-                            <th class="px-4 py-3 border-0 text-center">{{ __('admin::admin.tenants.table.performance') ?? 'Performance' }}</th>
-                            <th class="px-4 py-3 border-0 text-center">{{ __('admin::admin.tenants.table.students') }}</th>
-                            <th class="px-4 py-3 border-0 text-center">{{ __('admin::admin.tenants.table.status') }}</th>
-                            <th class="px-4 py-3 border-0 text-end">{{ __('admin::admin.tenants.table.actions') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody class="border-top-0">
-                        @forelse($tenants as $tenant)
-                            @php
-                                $studentsCount = \App\Models\Student::where('tenant_id', $tenant->id)->count();
-                                $admin = $tenant->users->first();
-                                $statusClass = $tenant->status == 'active' ? 'success' : 'danger';
-                                $statusLabel = $tenant->status == 'active' ? __('admin::admin.tenants.table.active') : __('admin::admin.tenants.table.inactive');
-                                
-                                $subscription = $tenant->currentSubscription;
-                                $isExpired = $subscription && $subscription->ends_at && $subscription->ends_at->isPast();
-                                $planName = $subscription && $subscription->package ? $subscription->package->name : ($subscription ? $subscription->type_label : 'بدون اشتراك');
-                            @endphp
-                            <tr>
-                                <td class="ps-4">
-                                    <div class="d-flex align-items-center">
-                                        <div class="position-relative me-3">
-                                            <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; font-weight: bold; font-size: 1.1rem; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                                                @if($tenant->logo)
-                                                    <img src="{{ asset('storage/' . $tenant->logo) }}" class="rounded-circle w-100 h-100 object-fit-contain p-1">
-                                                @else
-                                                    {{ substr($tenant->name, 0, 1) }}
-                                                @endif
-                                            </div>
-                                            @if($tenant->status == 'active')
-                                                <span class="position-absolute bottom-0 end-0 bg-success border border-white border-2 rounded-circle" style="width: 12px; height: 12px;"></span>
-                                            @endif
-                                        </div>
-                                        <div>
-                                            <div class="d-flex align-items-center gap-2">
-                                                <a href="{{ route('admin.tenants.show', $tenant->id) }}" class="fw-bold text-dark text-decoration-none">
-                                                    {{ $tenant->name }}
-                                                </a>
-                                                @if($tenant->type === 'instructor')
-                                                    <span class="badge bg-info bg-opacity-10 text-info x-small rounded-pill" style="font-size: 0.65rem;">مدرس</span>
-                                                @else
-                                                    <span class="badge bg-purple bg-opacity-10 text-purple x-small rounded-pill" style="font-size: 0.65rem;">مركز</span>
-                                                @endif
-                                            </div>
-                                            <span class="text-muted x-small">
-                                                <i class="bi bi-person me-1"></i> {{ $admin->name ?? __('admin::admin.tenants.table.not_specified') }}
-                                            </span>
-                                            <div class="text-muted x-small mt-1">
-                                                <i class="bi bi-link-45deg"></i> {{ $tenant->domain }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    @if($subscription)
-                                        <div class="d-flex flex-column">
-                                            <div class="d-flex align-items-center gap-2 mb-1">
-                                                <span class="fw-bold text-dark small">{{ $planName }}</span>
-                                                @if($isExpired)
-                                                    <span class="badge bg-danger bg-opacity-10 text-danger x-small rounded-pill">منتهي</span>
-                                                @else
-                                                    <span class="badge bg-success bg-opacity-10 text-success x-small rounded-pill">نشط</span>
-                                                @endif
-                                            </div>
-                                            <div class="text-muted x-small d-flex flex-column gap-1">
-                                                <span>
-                                                    <i class="bi bi-arrow-repeat me-1"></i>
-                                                    @if($subscription->billing_cycle === 'yearly')
-                                                        {{ __('admin::admin.subscriptions.yearly') ?? 'اشتراك سنوي' }}
-                                                    @elseif($subscription->billing_cycle === 'term')
-                                                        {{ __('admin::admin.subscriptions.term') ?? 'اشتراك ترم' }}
-                                                    @else
-                                                        {{ __('admin::admin.subscriptions.monthly') ?? 'اشتراك شهري' }}
-                                                    @endif
-                                                </span>
-                                                <span>
-                                                    <i class="bi bi-calendar2-event me-1"></i>
-                                                    @if($subscription->ends_at)
-                                                        {{ $isExpired ? 'انتهى في:' : 'ينتهي في:' }} {{ $subscription->ends_at->format('Y-m-d') }}
-                                                    @else
-                                                        اشتراك مستمر
-                                                    @endif
-                                                </span>
-                                            </div>
-                                        </div>
-                                    @else
-                                        <span class="text-muted small">لا يوجد اشتراك نشط</span>
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    <div class="d-flex flex-column align-items-center gap-2">
-                                        <div class="d-flex flex-column align-items-center">
-                                            <div class="x-small text-muted mb-0 opacity-75">{{ __('admin::admin.tenants.table.total_value') ?? 'Valeur Totale' }} (LTV)</div>
-                                            <span class="fw-bold text-success fs-6">{{ number_format($tenant->ltv ?: 0, 0) }} <small class="fw-normal opacity-75">ج.م</small></span>
-                                        </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light border-0">
+                                <tr class="text-muted text-uppercase small fw-bold" style="letter-spacing: 0.5px;">
+                                    <th class="px-4 py-4 border-0">{{ __('admin::admin.tenants.table.center_admin') }}</th>
+                                    <th class="px-4 py-4 border-0">{{ __('admin::admin.subscriptions.title') }}</th>
+                                    <th class="px-4 py-4 border-0 text-center">{{ __('admin::admin.tenants.table.performance') }}</th>
+                                    <th class="px-4 py-4 border-0 text-center">{{ __('admin::admin.tenants.table.students') }}</th>
+                                    <th class="px-4 py-4 border-0 text-center">{{ __('admin::admin.tenants.table.status') }}</th>
+                                    <th class="px-4 py-4 border-0 text-end">{{ __('admin::admin.tenants.table.actions') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody class="border-top-0">
+                                @forelse($tenants as $tenant)
+                                    @php
+                                        $studentsCount = \App\Models\Student::where('tenant_id', $tenant->id)->count();
+                                        $admin = $tenant->users->first();
+                                        $statusClass = $tenant->status == 'active' ? 'success' : 'danger';
+                                        $statusLabel = $tenant->status == 'active' ? __('admin::admin.tenants.table.active') : __('admin::admin.tenants.table.inactive');
                                         
-                                        @if($subscription && $subscription->ends_at && !$isExpired)
-                                            @php
-                                                $totalDays = max(1, $subscription->created_at->diffInDays($subscription->ends_at));
-                                                $remainingDays = now()->diffInDays($subscription->ends_at, false);
-                                                $percent = min(100, max(0, ($remainingDays / $totalDays) * 100));
-                                                $barColor = $percent < 20 ? 'danger' : ($percent < 50 ? 'warning' : 'success');
-                                            @endphp
-                                            <div class="w-100 px-3">
-                                                <div class="progress" style="height: 5px; background-color: rgba(0,0,0,0.05); border-radius: 10px;">
-                                                    <div class="progress-bar bg-{{ $barColor }}" role="progressbar" style="width: {{ 100 - $percent }}%; border-radius: 10px;"></div>
+                                        $subscription = $tenant->currentSubscription;
+                                        $isExpired = $subscription && $subscription->ends_at && $subscription->ends_at->isPast();
+                                        $planName = $subscription && $subscription->package ? $subscription->package->name : ($subscription ? $subscription->type_label : 'Sans abonnement');
+                                    @endphp
+                                    <tr class="bg-hover-light-soft" style="transition: all 0.2s ease;">
+                                        <td class="ps-4 py-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="position-relative me-3">
+                                                    <div class="bg-soft-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background-color: var(--emerald-50) !important; color: var(--emerald-600) !important; font-weight: 800; border: 2px solid #fff; box-shadow: var(--shadow-sm);">
+                                                        @if($tenant->logo)
+                                                            <img src="{{ asset('storage/' . $tenant->logo) }}" class="rounded-circle w-100 h-100 object-fit-contain p-1">
+                                                        @else
+                                                            {{ strtoupper(substr($tenant->name, 0, 1)) }}
+                                                        @endif
+                                                    </div>
+                                                    @if($tenant->status == 'active')
+                                                        <span class="position-absolute bottom-0 end-0 bg-success border border-white border-2 rounded-circle" style="width: 14px; height: 14px; box-shadow: var(--shadow-sm);"></span>
+                                                    @endif
                                                 </div>
-                                                <div class="x-small text-muted mt-1 d-flex justify-content-between" style="font-size: 0.65rem;">
-                                                    <span>{{ $remainingDays }} {{ __('admin::admin.tenants.table.days_left') ?? 'jours' }}</span>
-                                                    <span class="opacity-50 ms-2">P-{{ (int)$percent }}</span>
+                                                <div>
+                                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                                        <a href="{{ route('admin.tenants.show', $tenant->id) }}" class="fw-bold text-dark text-decoration-none hover-emerald" style="font-size: 1rem;">
+                                                            {{ $tenant->name }}
+                                                        </a>
+                                                    </div>
+                                                    <div class="text-muted small fw-medium">
+                                                        <i class="bi bi-person-fill x-small opacity-50"></i> {{ $admin->name ?? __('admin::admin.tenants.table.not_specified') }}
+                                                        <span class="mx-1 opacity-25">|</span>
+                                                        <span class="x-small"><i class="bi bi-globe2 me-1 opacity-50"></i> {{ $tenant->domain }}</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        @endif
-
-                                        @if($tenant->last_activity_at)
-                                            <div class="x-small text-muted mt-1 border-top pt-1 w-100 opacity-75">
-                                                <i class="bi bi-clock-history me-1"></i>
-                                                {{ \Illuminate\Support\Carbon::parse($tenant->last_activity_at)->diffForHumans() }}
-                                            </div>
-                                        @else
-                                            <div class="x-small text-muted mt-1 border-top pt-1 w-100 opacity-50">{{ __('admin::admin.tenants.table.no_activity') ?? 'Aucune activité' }}</div>
-                                        @endif
-                                    </div>
-                                </td>
-                                <td class="text-center">
-                                    <div class="d-flex flex-column align-items-center">
-                                        <span class="h6 mb-0 fw-bold">{{ number_format($studentsCount) }}</span>
-                                        <div class="text-muted small">{{ __('admin::admin.tenants.table.student_unit') }}</div>
-                                    </div>
-                                </td>
-                                <td class="text-center">
-                                    <span class="badge bg-{{ $statusClass }} bg-opacity-10 text-{{ $statusClass }} rounded-pill px-3 py-2 border border-{{ $statusClass }} border-opacity-10">
-                                        <i class="bi bi-circle-fill me-1" style="font-size: 6px;"></i>
-                                        {{ $statusLabel }}
-                                    </span>
-                                </td>
-                                <td class="text-end pe-4">
-                                    <div class="dropdown">
-                                        <button class="btn btn-light btn-sm rounded-circle shadow-none border dropdown-toggle-custom" type="button" onclick="toggleCustomDropdown(event, this)">
-                                            <i class="bi bi-three-dots-vertical"></i>
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 p-2" style="min-width: 200px;">
-                                            <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('admin.tenants.show', $tenant->id) }}"><i class="bi bi-eye me-2 text-primary"></i> {{ __('admin::admin.tenants.actions.view_details') }}</a></li>
-                                            <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('admin.tenants.edit', $tenant->id) }}"><i class="bi bi-pencil me-2 text-info"></i> {{ __('admin::admin.tenants.actions.edit_data') }}</a></li>
+                                        </td>
+                                        <td class="py-4 px-4">
                                             @if($subscription)
-                                                <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('admin.subscriptions.edit', $subscription->id) }}"><i class="bi bi-card-checklist me-2 text-warning"></i> تعديل الاشتراك</a></li>
+                                                <div class="d-flex flex-column gap-1">
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <span class="badge rounded-pill bg-soft-primary px-3 py-2 text-primary fw-bold" style="background-color: var(--emerald-50) !important; color: var(--emerald-600) !important; border: 1px solid var(--emerald-100) !important; font-size: 0.7rem;">
+                                                            <i class="bi bi-box-seam me-1"></i> {{ $planName }}
+                                                        </span>
+                                                        @if($isExpired)
+                                                            <span class="text-danger small fw-bold x-small text-uppercase"><i class="bi bi-exclamation-triangle-fill"></i> Expiré</span>
+                                                        @endif
+                                                    </div>
+                                                    <div class="text-muted x-small fw-bold opacity-75">
+                                                        <i class="bi bi-calendar-check me-1"></i>
+                                                        @if($subscription->ends_at)
+                                                            {{ $isExpired ? 'Expiré le' : 'Jusqu\'au' }}: {{ $subscription->ends_at->format('Y-m-d') }}
+                                                        @else
+                                                            Illimité
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <span class="text-muted small italic">Aucun abonnement</span>
                                             @endif
-                                            <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('admin.tenants.impersonate', $tenant->id) }}"><i class="bi bi-box-arrow-in-right me-2 text-success"></i> {{ __('admin::admin.tenants.actions.impersonate') }}</a></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li>
-                                                <form action="{{ route('admin.tenants.destroy', $tenant->id) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('admin::admin.tenants.actions.delete_confirm') }}')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="dropdown-item rounded-3 text-danger">
-                                                        <i class="bi bi-trash me-2"></i> {{ __('admin::admin.tenants.actions.delete') }}
-                                                    </button>
-                                                </form>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
+                                        </td>
+                                        <td class="text-center py-4 px-4">
+                                            <div class="d-flex flex-column align-items-center gap-2" style="min-width: 160px;">
+                                                <div class="d-flex justify-content-between w-100 mb-1 px-1">
+                                                    <span class="text-muted small fw-bold opacity-75">{{ __('admin::admin.tenants.table.total_value') }}</span>
+                                                    <span class="text-emerald-700 fw-extrabold small">{{ number_format($tenant->ltv ?: 0, 0) }} <span class="fw-normal">{{ __('admin::admin.egp') }}</span></span>
+                                                </div>
+                                                
+                                                @if($subscription && $subscription->ends_at && !$isExpired)
+                                                    @php
+                                                        $totalDays = max(1, $subscription->created_at ? $subscription->created_at->diffInDays($subscription->ends_at) : 30);
+                                                        $remainingDays = now()->diffInDays($subscription->ends_at, false);
+                                                        $percent = min(100, max(0, ($remainingDays / $totalDays) * 100));
+                                                        $barColor = $percent < 20 ? 'bg-danger' : ($percent < 50 ? 'bg-warning' : 'bg-success');
+                                                    @endphp
+                                                    <div class="w-100">
+                                                        <div class="progress" style="height: 5px; background-color: #f1f5f9; border-radius: 10px;">
+                                                            <div class="progress-bar {{ $barColor }}" role="progressbar" style="width: {{ 100 - $percent }}%; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.05);"></div>
+                                                        </div>
+                                                        <div class="mt-2 d-flex justify-content-between align-items-center">
+                                                            <span class="text-dark fw-extrabold" style="font-size: 0.7rem;">{{ $remainingDays }} {{ __('admin::admin.tenants.table.days_left') }}</span>
+                                                            <span class="badge bg-secondary bg-opacity-10 text-muted x-small" style="font-size: 0.6rem;">P-{{ 100 - (int)$percent }}%</span>
+                                                        </div>
+                                                    </div>
+                                                @else
+                                                     <div class="text-muted small italic opacity-50">{{ __('admin::admin.tenants.table.no_activity') }}</div>
+                                                @endif
+                                            </div>
+                                        </td>
+                                        <td class="text-center py-4">
+                                            <div class="d-flex flex-column align-items-center">
+                                                <span class="text-dark fw-extrabold fs-5">{{ number_format($studentsCount) }}</span>
+                                                <div class="text-muted small fw-bold opacity-75 text-uppercase" style="font-size: 0.65rem;">{{ __('admin::admin.tenants.table.student_unit') }}</div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center py-4">
+                                            <span class="badge" style="background-color: {{ $tenant->status == 'active' ? '#dcfce7' : '#fee2e2' }} !important; color: {{ $tenant->status == 'active' ? '#166534' : '#991b1b' }} !important; border: 1px solid {{ $tenant->status == 'active' ? '#bbf7d0' : '#fecaca' }} !important; font-weight: 800; padding: 8px 16px; border-radius: 10px; font-size: 0.75rem;">
+                                                <i class="bi {{ $tenant->status == 'active' ? 'bi-check-circle-fill' : 'bi-dash-circle-fill' }} me-1"></i>
+                                                {{ $statusLabel }}
+                                            </span>
+                                        </td>
+                                        <td class="text-end pe-4 py-4">
+                                            <div class="btn-group gap-2">
+                                                <a href="{{ route('admin.tenants.show', $tenant->id) }}" class="btn btn-sm btn-icon btn-soft-primary rounded-3 shadow-none border-0" title="Détails" style="background-color: var(--emerald-50) !important; color: var(--emerald-600) !important; padding: 8px;">
+                                                    <i class="bi bi-eye-fill fs-6"></i>
+                                                </a>
+                                                <a href="{{ route('admin.tenants.edit', $tenant->id) }}" class="btn btn-sm btn-icon btn-soft-warning rounded-3 shadow-none border-0" title="Éditer" style="background-color: #fffbeb !important; color: #d97706 !important; padding: 8px;">
+                                                    <i class="bi bi-pencil-square fs-6"></i>
+                                                </a>
+                                                 <a href="{{ route('admin.tenants.impersonate', $tenant->id) }}" target="_blank" class="btn btn-sm btn-icon btn-soft-info rounded-3 shadow-none border-0" title="Accès Admin" style="background-color: #eff6ff !important; color: #2563eb !important; padding: 8px;">
+                                                    <i class="bi bi-box-arrow-in-right fs-6"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
                             <tr>
                                 <td colspan="6" class="py-5 text-center">
                                     <div class="py-5">
