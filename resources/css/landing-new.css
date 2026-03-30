@@ -41,6 +41,17 @@
         --shadow-premium: 0 30px 60px -12px rgba(15, 23, 42, 0.08), 0 18px 36px -18px rgba(15, 23, 42, 0.1);
         --shadow-emerald: 0 20px 40px -10px rgba(34, 197, 94, 0.15);
 
+        --primary-purple: 230 100% 58%;
+        --primary-purple-dark: 231 100% 48%;
+        --dark-purple: 258 86% 34%;
+        --light-purple: 229 83% 60%;
+        --cyan: 165 75% 63%;
+        --success-green: 142 71% 45%;
+        --bg-light: 210 40% 98%;
+        --gray-text: 215 16% 47%;
+        --dark-text: 221 39% 11%;
+        --primary-vibrant: 158 82% 47%;
+
         /* Legacy Bridge Mapping */
         --primary: var(--navy-primary);
         --primary-accent: var(--brand-green);
@@ -285,6 +296,10 @@
 
     .bg-brand-primary {
         background-color: hsl(var(--primary-purple));
+    }
+
+    .hover\:bg-brand-primary-dark:hover {
+        background-color: hsl(var(--primary-purple-dark));
     }
 
     .bg-brand-secondary {
