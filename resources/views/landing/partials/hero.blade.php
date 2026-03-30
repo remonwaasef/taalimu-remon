@@ -36,18 +36,7 @@
 
                 </div>
                 
-                <!-- Trust Stats -->
-                <div class="flex items-center justify-center md:justify-start gap-8 lg:gap-12 pt-6 lg:pt-8 border-t border-slate-200/60 max-w-lg mx-auto md:mx-0">
-                    <div class="text-start">
-                        <div class="text-2xl lg:text-3xl font-black text-slate-900">+500</div>
-                        <div class="text-[9px] lg:text-[11px] font-bold text-slate-500 uppercase tracking-widest">{{ app()->isLocale('ar') ? 'مركز تعليمي' : 'Centers' }}</div>
-                    </div>
-                    <div class="w-px h-10 lg:h-12 bg-slate-200"></div>
-                    <div class="text-start">
-                        <div class="text-2xl lg:text-3xl font-black text-slate-900">+10k</div>
-                        <div class="text-[9px] lg:text-[11px] font-bold text-slate-500 uppercase tracking-widest">{{ app()->isLocale('ar') ? 'طالب نشط' : 'Students' }}</div>
-                    </div>
-                </div>
+
             </div>
 
             <!-- Image Side -->
