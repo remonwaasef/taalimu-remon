@@ -39,6 +39,7 @@ return [
         'start_trial' => 'Start Free Trial',
     ],
     'pain_points' => [
+        'badge' => 'The Problem',
         'title_prefix' => 'Sound',
         'title_highlight' => 'Familiar',
         'title_suffix' => '?',
@@ -60,6 +61,9 @@ return [
             'description' => 'Wasting effort on routine tasks instead of improving teaching content',
         ],
         'trust_label' => 'Trusted by the best educators and centers',
+        'trust_secure' => 'Secure Payments',
+        'trust_whatsapp' => 'WhatsApp Verified',
+        'trust_educators' => 'Educator Trusted',
         'cta' => 'It\'s time to <span class=\"font-bold gradient-text\">stop the bleeding</span> and take control.',
     ],
     'automation' => [

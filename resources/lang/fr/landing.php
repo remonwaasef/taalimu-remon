@@ -39,6 +39,7 @@ return [
         'start_trial' => 'Essai Gratuit',
     ],
     'pain_points' => [
+        'badge' => 'Le Problème',
         'title_prefix' => 'Vous reconnaissez',
         'title_highlight' => 'votre quotidien',
         'title_suffix' => 'ici ?',
@@ -51,6 +52,14 @@ return [
             'title' => 'Temps Perdu',
             'description' => 'par semaine perdu en suivi manuel',
         ],
+        'complaints' => [
+            'title' => 'Plaintes des Parents',
+            'description' => 'Messages constants et questions sans fin sur les frais et les résultats',
+        ],
+        'manual_work' => [
+            'title' => 'Travail 100% Manuel',
+            'description' => 'Effort gaspillé sur des tâches routinières au lieu d\'améliorer le contenu pédagogique',
+        ],
         'visibility' => [
             'title' => 'Visibilité',
             'description' => 'visibilité sur les flux de trésorerie pour prendre des décisions éclairées',
@@ -59,6 +68,10 @@ return [
             'title' => 'Chaos des Horaires',
             'description' => 'chevauchement des cours et sessions manquées par gestion manuelle',
         ],
+        'trust_label' => 'Approuvé par les meilleurs éducateurs et centres',
+        'trust_secure' => 'Paiements Sécurisés',
+        'trust_whatsapp' => 'WhatsApp Vérifié',
+        'trust_educators' => 'Approuvé par les Éducateurs',
         'cta' => 'Il est temps d\'<span class=\"font-bold gradient-text\">arrêter l\'hémorragie</span> et de reprendre le contrôle.',
     ],
     'automation' => [

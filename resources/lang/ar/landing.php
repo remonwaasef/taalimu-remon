@@ -39,6 +39,7 @@ return [
         'start_trial' => 'ابدأ التجربة المجانية',
     ],
     'pain_points' => [
+        'badge' => 'المشكلة',
         'title_prefix' => 'هل تتعرف على',
         'title_highlight' => 'يومياتك',
         'title_suffix' => 'هنا؟',
@@ -60,6 +61,9 @@ return [
             'description' => 'إهدار المجهود في مهام روتينية بدلاً من تطوير المحتوى التعليمي',
         ],
         'trust_label' => 'موثوق به لدى أفضل المدرسين والمراكز',
+        'trust_secure' => 'دفع آمن',
+        'trust_whatsapp' => 'واتساب موثق',
+        'trust_educators' => 'موثوق من المعلمين',
         'cta' => 'حان الوقت <span class="font-bold gradient-text">لوقف النزيف</span> والسيطرة على الوضع.',
     ],
     'automation' => [
