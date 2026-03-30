@@ -479,7 +479,7 @@
             <div class="d-flex align-items-center gap-3">
                 <!-- Language Dropdown -->
                 <div class="dropdown lang-dropdown">
-                    <button class="dropdown-toggle" type="button" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="dropdown-toggle" type="button" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false" onclick="toggleCustomDropdown(event, this)">
                         @php
                             $currentLocale = app()->getLocale();
                             $locales = [
@@ -508,7 +508,7 @@
 
                 <!-- User Dropdown in Header -->
                 <div class="dropdown user-dropdown">
-                    <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle py-1 px-2 rounded-pill hover-bg-light" id="dropdownUserHeader" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle py-1 px-2 rounded-pill hover-bg-light" id="dropdownUserHeader" data-bs-toggle="dropdown" aria-expanded="false" onclick="toggleCustomDropdown(event, this)">
                         <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center text-white fw-bold shadow-sm" style="width: 35px; height: 35px; background: var(--gradient-primary) !important;">
                             {{ substr(auth()->user()->name ?? 'Admin', 0, 1) }}
                         </div>
