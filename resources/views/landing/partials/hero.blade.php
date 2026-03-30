@@ -33,12 +33,7 @@
                             <i class="fas {{ app()->getLocale() == 'ar' ? 'fa-arrow-left group-hover:-translate-x-1' : 'fa-arrow-right group-hover:translate-x-1' }} text-sm lg:text-lg opacity-70 transition-transform"></i>
                         </span>
                     </a>
-                    <a href="#features" class="group bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 px-8 py-4 lg:px-10 lg:py-5 rounded-xl font-bold text-base lg:text-xl transition-all shadow-sm hover:shadow-md hover:-translate-y-1 w-full sm:w-auto">
-                        <span class="flex items-center justify-center gap-2 lg:gap-3">
-                            <i class="fas fa-play-circle text-emerald-500 text-xl lg:text-2xl group-hover:scale-110 transition-transform"></i>
-                            {{ __('landing.hero.cta_secondary') }}
-                        </span>
-                    </a>
+
                 </div>
                 
                 <!-- Trust Stats -->
