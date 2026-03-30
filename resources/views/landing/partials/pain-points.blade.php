@@ -1,29 +1,21 @@
-<!-- Light statement section -->
-<section class="py-24 bg-slate-50 relative overflow-hidden">
+<!-- Pain Points Section -->
+<section class="py-24 bg-white relative overflow-hidden"
+    x-data="{ visible: false }"
+    x-intersect.once="visible = true"
+>
     <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
     
     <div class="container mx-auto px-4 lg:px-12">
-        <div class="max-w-4xl mx-auto text-center mb-20" data-animate>
+        <div class="text-center mb-16" data-animate>
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-50 border border-red-100 mb-6">
+                <span class="text-xs font-bold text-red-500 uppercase tracking-widest">{{ __('landing.pain_points.badge') }}</span>
+            </div>
             <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
                 {{ __('landing.pain_points.title_prefix') }} <span class="text-emerald-600">{{ __('landing.pain_points.title_highlight') }}</span> {{ __('landing.pain_points.title_suffix') }}
             </h2>
             <p class="text-lg text-slate-600 max-w-2xl mx-auto font-medium">
                 {{ __('landing.pain_points.subtitle') }}
             </p>
-        </div>
-    </div>
-</section>
-
-<!-- Stats Grid Section - White -->
-<section class="py-24 bg-white relative overflow-hidden"
-    x-data="{ visible: false }"
-    x-intersect.once="visible = true"
->
-    <div class="container mx-auto px-4 lg:px-12">
-        <div class="text-center mb-16" data-animate>
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-50 border border-red-100 mb-6">
-                <span class="text-xs font-bold text-red-500 uppercase tracking-widest">{{ __('landing.pain_points.badge') ?? 'The Problem' }}</span>
-            </div>
         </div>
 
         <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto" data-stagger>
