@@ -332,7 +332,18 @@
                                         $transPkgName = app()->getLocale() === 'en' && $package->name_en ? $package->name_en : $package->name;
                                     }
                                 @endphp
-                                {{ $transPkgName }}
+                                @php
+                                    $discountPercent = 0;
+                                    if($package->old_price && $package->old_price > $package->price) {
+                                        $discountPercent = round((($package->old_price - $package->price) / $package->old_price) * 100);
+                                    }
+                                @endphp
+                                {{ $transPkgName }} 
+                                @if($discountPercent > 0)
+                                    <span class="badge bg-success bg-opacity-10 text-success ms-1" style="font-size: 0.65rem; border: 1px solid rgba(16,185,129,0.2);">
+                                        {{ __('center::subscription.save_badge_prefix') ?? 'وفر' }} {{ $discountPercent }}%
+                                    </span>
+                                @endif
                             </h5>
                         </div>
                         <div class="text-end">
@@ -351,16 +362,6 @@
                                 {{ number_format($package->term_price ?: ($package->price * 5), 0) }}
                             </div>
                             <small class="text-muted"><span class="plan-currency">{{ $currency }}</span> / <span class="plan-cycle-text">{{ __('center::subscription.billing_term_cycle') }}</span></small>
-                            @if($package->old_price && $package->old_price > $package->price)
-                                @php
-                                    $discountPercent = round((($package->old_price - $package->price) / $package->old_price) * 100);
-                                @endphp
-                                <div class="mt-1">
-                                    <span class="badge bg-success bg-opacity-15 text-success rounded-pill px-2 py-1" style="font-size: 0.7rem;">
-                                        {{ __('center::subscription.save_badge') }}
-                                    </span>
-                                </div>
-                            @endif
                         </div>
                     </div>
 
