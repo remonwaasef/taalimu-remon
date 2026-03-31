@@ -45,27 +45,6 @@
          x-data="onboardingWizard('{{ $status }}')"
          x-init="initWizard()">
         
-        <!-- Language Switcher Pill (Top Floating) -->
-        <div class="fixed top-8 left-1/2 -translate-x-1/2 z-50">
-            <div class="flex items-center gap-1 p-1.5 bg-white/60 backdrop-blur-xl border border-white/80 rounded-2xl shadow-xl shadow-slate-200/40">
-                <button @click="updateLanguage('ar')" 
-                        :class="formData.step_1.locale === 'ar' ? 'bg-brand-primary text-white shadow-lg' : 'text-slate-500 hover:bg-slate-50'" 
-                        class="px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-2">
-                    <span class="text-sm">🇸🇦</span> العربية
-                </button>
-                <button @click="updateLanguage('en')" 
-                        :class="formData.step_1.locale === 'en' ? 'bg-brand-primary text-white shadow-lg' : 'text-slate-500 hover:bg-slate-50'" 
-                        class="px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-2">
-                    <span class="text-sm">🇬🇧</span> English
-                </button>
-                <button @click="updateLanguage('fr')" 
-                        :class="formData.step_1.locale === 'fr' ? 'bg-brand-primary text-white shadow-lg' : 'text-slate-500 hover:bg-slate-50'" 
-                        class="px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-2">
-                    <span class="text-sm">🇫🇷</span> Français
-                </button>
-            </div>
-        </div>
-
         <div class="w-full max-w-3xl">
             
             <!-- Welcome Header -->
@@ -351,8 +330,22 @@
                 </div>
             </div>
             
-            <!-- Secure Footer -->
-            <div class="text-center mt-12 animate-fade-in opacity-50 hover:opacity-100 transition-opacity">
+            <!-- Secure Footer & Language -->
+            <div class="text-center mt-12 animate-fade-in opacity-80 hover:opacity-100 transition-opacity flex flex-col items-center gap-6">
+                <!-- Language Switcher (Now at the bottom) -->
+                <div class="flex items-center gap-1 p-1 bg-white shadow-sm border border-slate-100 rounded-2xl">
+                    <button @click="updateLanguage('ar')" 
+                            :class="formData.step_1.locale === 'ar' ? 'bg-brand-primary text-white shadow-md' : 'text-slate-400 hover:bg-slate-50'" 
+                            class="px-4 py-2 rounded-xl text-[10px] font-black transition-all flex items-center gap-2">
+                        <span class="text-sm">🇸🇦</span> العربية
+                    </button>
+                    <button @click="updateLanguage('fr')" 
+                            :class="formData.step_1.locale === 'fr' ? 'bg-brand-primary text-white shadow-md' : 'text-slate-400 hover:bg-slate-50'" 
+                            class="px-4 py-2 rounded-xl text-[10px] font-black transition-all flex items-center gap-2">
+                        <span class="text-sm">🇫🇷</span> Français
+                    </button>
+                </div>
+
                 <p class="inline-flex items-center gap-3 px-6 py-2 rounded-full text-slate-300 text-[10px] font-black uppercase tracking-widest">
                     <i class="fa-solid fa-shield-halved text-brand-primary text-sm"></i> {{ __('onboarding.security_note') }}
                 </p>
