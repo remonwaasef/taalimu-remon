@@ -244,6 +244,28 @@ class OnboardingController extends Controller
                                 'status' => 'active',
                                 'remaining_sessions' => $course->sessions_count,
                             ]);
+
+                            // Financial Record: Create a Sale to reflect the debt
+                            $student = \App\Models\Student::where('user_id', $user->id)->first();
+                            if ($student) {
+                                $sale = \App\Models\Sale::create([
+                                    'tenant_id' => $tenant->id,
+                                    'student_id' => $student->id,
+                                    'subtotal_amount' => $course->price,
+                                    'total_amount' => $course->price,
+                                    'paid_amount' => 0,
+                                    'status' => 'pending',
+                                    'notes' => 'Onboarding Enrollment',
+                                ]);
+
+                                \App\Models\SaleItem::create([
+                                    'sale_id' => $sale->id,
+                                    'item_type' => \App\Models\Course::class,
+                                    'item_id' => $course->id,
+                                    'price' => $course->price,
+                                    'quantity' => 1,
+                                ]);
+                            }
                         }
                     }
                 }
