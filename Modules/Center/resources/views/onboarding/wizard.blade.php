@@ -23,12 +23,13 @@
     <style>
         [x-cloak] { display: none !important; }
         .onboarding-gradient-text {
-            background: linear-gradient(135deg, #3A0CA3 0%, #4361EE 100%);
+            /* Landing Page Emerald-to-Green Gradient */
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         .step-line-active {
-            box-shadow: 0 0 10px rgba(67, 97, 238, 0.4);
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
         }
     </style>
 </head>
@@ -36,7 +37,7 @@
     
     <!-- Backdrop Orbs -->
     <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <div class="absolute -top-[10%] -right-[5%] w-[600px] h-[600px] rounded-full bg-brand-primary/5 blur-[120px] animate-pulse-slow"></div>
+        <div class="absolute -top-[10%] -right-[5%] w-[600px] h-[600px] rounded-full bg-emerald-500/5 blur-[120px] animate-pulse-slow"></div>
         <div class="absolute top-[20%] -left-[10%] w-[500px] h-[500px] rounded-full bg-brand-secondary/5 blur-[100px] animate-pulse-slow" style="animation-delay: 2s;"></div>
     </div>
 
@@ -49,7 +50,7 @@
             
             <!-- Welcome Header -->
             <div class="text-center mb-12 animate-fade-in translate-y-0 opacity-100">
-                <div class="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary/5 text-brand-primary rounded-full text-xs font-black uppercase tracking-[0.2em] mb-6">
+                <div class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-full text-xs font-black uppercase tracking-[0.2em] mb-6 border border-emerald-100 shadow-sm">
                     <i class="fa-solid fa-sparkles"></i> One step away
                 </div>
                 <h1 class="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
@@ -66,14 +67,14 @@
                     <template x-for="(stepObj, index) in steps" :key="index">
                         <div class="space-y-3 group cursor-default">
                             <div class="h-1.5 rounded-full overflow-hidden bg-slate-100 relative shadow-inner">
-                                <div class="h-full bg-brand-primary transition-all duration-700 ease-out"
+                                <div class="h-full bg-emerald-500 transition-all duration-700 ease-out shadow-[0_0_12px_rgba(34,197,94,0.3)]"
                                      :class="currentStepIndex >= index ? 'step-line-active' : ''"
                                      :style="'width: ' + (currentStepIndex > index ? '100%' : (currentStepIndex === index ? '75%' : '0%'))">
                                 </div>
                             </div>
                             <div class="flex items-center justify-between">
                                 <span class="text-[10px] font-black uppercase tracking-widest transition-colors duration-300"
-                                      :class="currentStepIndex >= index ? 'text-brand-primary' : 'text-slate-300'"
+                                      :class="currentStepIndex >= index ? 'text-emerald-600' : 'text-slate-300'"
                                       x-text="stepObj.label">
                                 </span>
                                 <span class="text-[10px] font-bold text-slate-400" x-text="'0' + (index + 1)"></span>
@@ -103,7 +104,7 @@
                          class="space-y-10">
                         
                         <div class="flex items-center gap-6">
-                            <div class="w-16 h-16 bg-brand-primary/10 rounded-2xl flex items-center justify-center text-brand-primary shadow-inner">
+                            <div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-500 shadow-inner border border-emerald-100/50">
                                 <i class="fa-solid fa-earth-africa text-2xl"></i>
                             </div>
                             <div>
@@ -115,7 +116,7 @@
                         <form @submit.prevent="submitStep('step_1')" class="space-y-8">
                             <div>
                                 <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_1.currency_label') }}</label>
-                                <select x-model="formData.step_1.currency" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-brand-primary focus:border-brand-primary h-14 px-6 text-base font-bold transition-all hover:bg-white focus:bg-white focus:shadow-lg focus:shadow-brand-primary/5 appearance-none cursor-pointer">
+                                <select x-model="formData.step_1.currency" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all hover:bg-white focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5 appearance-none cursor-pointer">
                                     <option value="EGP">{{ __('onboarding.currencies.egp') }}</option>
                                     <option value="SAR">{{ __('onboarding.currencies.sar') }}</option>
                                     <option value="AED">{{ __('onboarding.currencies.aed') }}</option>
@@ -125,7 +126,7 @@
                             </div>
                             
                             <div class="pt-6 flex justify-end">
-                                <button type="submit" class="group bg-brand-primary hover:bg-brand-primary-dark text-white px-10 py-5 rounded-2xl font-black text-base transition-all shadow-xl shadow-brand-primary/20 flex items-center gap-3 transform hover:-translate-y-1">
+                                <button type="submit" class="group bg-emerald-500 hover:bg-emerald-600 text-white px-10 py-5 rounded-2xl font-black text-base transition-all shadow-xl shadow-emerald-500/20 flex items-center gap-3 transform hover:-translate-y-1">
                                     {{ __('onboarding.step_1.btn_submit') }} 
                                     <i class="fa-solid fa-arrow-right rtl:rotate-180 group-hover:translate-x-1 transition-transform"></i>
                                 </button>
@@ -141,7 +142,7 @@
                          class="space-y-10">
                         
                         <div class="flex items-center gap-6">
-                            <div class="w-16 h-16 bg-brand-primary/10 rounded-2xl flex items-center justify-center text-brand-primary shadow-inner">
+                            <div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-500 shadow-inner border border-emerald-100/50">
                                 <i class="fa-solid fa-chalkboard-user text-2xl"></i>
                             </div>
                             <div>
@@ -153,16 +154,16 @@
                         <form @submit.prevent="submitStep('step_2', false)" class="space-y-6">
                             <div>
                                 <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_2.name_label') }}</label>
-                                <input type="text" x-model="formData.step_2.instructor_name" placeholder="{{ __('onboarding.step_2.name_placeholder') }}" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-brand-primary focus:border-brand-primary h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-brand-primary/5" required>
+                                <input type="text" x-model="formData.step_2.instructor_name" placeholder="{{ __('onboarding.step_2.name_placeholder') }}" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5" required>
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_2.specialization_label') }}</label>
-                                    <input type="text" x-model="formData.step_2.instructor_specialization" placeholder="{{ __('onboarding.step_2.specialization_placeholder') }}" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-brand-primary focus:border-brand-primary h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-brand-primary/5">
+                                    <input type="text" x-model="formData.step_2.instructor_specialization" placeholder="{{ __('onboarding.step_2.specialization_placeholder') }}" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5">
                                 </div>
                                 <div>
                                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_2.phone_label') }}</label>
-                                    <input type="tel" x-model="formData.step_2.instructor_phone" dir="ltr" placeholder="01xxxxxxxxx" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-brand-primary focus:border-brand-primary h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-brand-primary/5" required>
+                                    <input type="tel" x-model="formData.step_2.instructor_phone" dir="ltr" placeholder="01xxxxxxxxx" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5" required>
                                 </div>
                             </div>
 
@@ -175,7 +176,7 @@
                                         {{ __('onboarding.step_2.btn_skip') }}
                                     </button>
                                 </div>
-                                <button type="submit" class="group bg-brand-primary hover:bg-brand-primary-dark text-white w-full sm:w-auto px-10 py-5 rounded-2xl font-black text-base transition-all shadow-xl shadow-brand-primary/20 flex justify-center items-center gap-3 transform hover:-translate-y-1">
+                                <button type="submit" class="group bg-emerald-500 hover:bg-emerald-600 text-white w-full sm:w-auto px-10 py-5 rounded-2xl font-black text-base transition-all shadow-xl shadow-emerald-500/20 flex justify-center items-center gap-3 transform hover:-translate-y-1">
                                     {{ __('onboarding.step_2.btn_submit') }} 
                                     <i class="fa-solid fa-arrow-right rtl:rotate-180 group-hover:translate-x-1 transition-transform"></i>
                                 </button>
@@ -191,7 +192,7 @@
                          class="space-y-10">
                         
                         <div class="flex items-center gap-6">
-                            <div class="w-16 h-16 bg-brand-primary/10 rounded-2xl flex items-center justify-center text-brand-primary shadow-inner">
+                            <div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-500 shadow-inner border border-emerald-100/50">
                                 <i class="fa-solid fa-book-open text-2xl"></i>
                             </div>
                             <div>
@@ -204,12 +205,12 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_3.name_label') }}</label>
-                                    <input type="text" x-model="formData.step_3.course_name" placeholder="{{ __('onboarding.step_3.name_placeholder') }}" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-brand-primary focus:border-brand-primary h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-brand-primary/5" required>
+                                    <input type="text" x-model="formData.step_3.course_name" placeholder="{{ __('onboarding.step_3.name_placeholder') }}" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5" required>
                                 </div>
                                 <div>
                                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_3.price_label') }}</label>
                                     <div class="relative">
-                                        <input type="number" x-model="formData.step_3.price" placeholder="0.00" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-brand-primary focus:border-brand-primary h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-brand-primary/5" required>
+                                        <input type="number" x-model="formData.step_3.price" placeholder="0.00" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5" required>
                                         <div class="absolute inset-y-0 ltr:right-6 rtl:left-6 flex items-center pointer-events-none text-slate-400 font-bold text-xs">
                                             <span x-text="formData.step_1.currency"></span>
                                         </div>
@@ -260,7 +261,7 @@
                                         {{ __('onboarding.step_3.btn_skip') }}
                                     </button>
                                 </div>
-                                <button type="submit" class="group bg-brand-primary hover:bg-brand-primary-dark text-white w-full sm:w-auto px-10 py-5 rounded-2xl font-black text-base transition-all shadow-xl shadow-brand-primary/20 flex justify-center items-center gap-3 transform hover:-translate-y-1">
+                                <button type="submit" class="group bg-emerald-500 hover:bg-emerald-600 text-white w-full sm:w-auto px-10 py-5 rounded-2xl font-black text-base transition-all shadow-xl shadow-emerald-500/20 flex justify-center items-center gap-3 transform hover:-translate-y-1">
                                     {{ __('onboarding.step_3.btn_submit') }} 
                                     <i class="fa-solid fa-arrow-right rtl:rotate-180 group-hover:translate-x-1 transition-transform"></i>
                                 </button>
@@ -276,7 +277,7 @@
                          class="space-y-10">
                         
                         <div class="flex items-center gap-6">
-                            <div class="w-16 h-16 bg-brand-primary/10 rounded-2xl flex items-center justify-center text-brand-primary shadow-inner">
+                            <div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-500 shadow-inner border border-emerald-100/50">
                                 <i class="fa-solid fa-user-graduate text-2xl"></i>
                             </div>
                             <div>
@@ -289,21 +290,21 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_4.name_label') }}</label>
-                                    <input type="text" x-model="formData.step_4.student_name" placeholder="{{ __('onboarding.step_4.name_placeholder') }}" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-brand-primary focus:border-brand-primary h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-brand-primary/5" required>
+                                    <input type="text" x-model="formData.step_4.student_name" placeholder="{{ __('onboarding.step_4.name_placeholder') }}" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5" required>
                                 </div>
                                 <div>
                                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_4.phone_label') }}</label>
-                                    <input type="text" x-model="formData.step_4.student_phone" dir="ltr" placeholder="01xxxxxxxxx" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-brand-primary focus:border-brand-primary h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-brand-primary/5" required>
+                                    <input type="text" x-model="formData.step_4.student_phone" dir="ltr" placeholder="01xxxxxxxxx" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5" required>
                                 </div>
                             </div>
 
-                            <div class="p-6 bg-brand-primary/5 rounded-2xl border-2 border-brand-primary/5 flex items-center gap-4 transition-all hover:bg-brand-primary/10 group cursor-pointer" @click="formData.step_4.enroll_in_course = !formData.step_4.enroll_in_course">
+                            <div class="p-6 bg-emerald-50/50 rounded-2xl border-2 border-emerald-100/50 flex items-center gap-4 transition-all hover:bg-emerald-50 group cursor-pointer" @click="formData.step_4.enroll_in_course = !formData.step_4.enroll_in_course">
                                 <div class="relative flex items-center">
-                                    <input type="checkbox" x-model="formData.step_4.enroll_in_course" class="w-6 h-6 rounded-lg border-brand-primary/20 text-brand-primary focus:ring-brand-primary cursor-pointer transition-all">
+                                    <input type="checkbox" x-model="formData.step_4.enroll_in_course" class="w-6 h-6 rounded-lg border-emerald-200 text-emerald-500 focus:ring-emerald-500 cursor-pointer transition-all">
                                 </div>
                                 <label class="text-sm font-bold text-slate-800 cursor-pointer select-none">
                                     {{ __('onboarding.step_4.enroll_checkbox', ['course' => '']) }}
-                                    <span class="text-brand-primary font-black" x-text="formData.step_3.course_name"></span>
+                                    <span class="text-emerald-600 font-black" x-text="formData.step_3.course_name"></span>
                                 </label>
                             </div>
 
@@ -316,9 +317,9 @@
                                         {{ __('onboarding.step_4.btn_skip') }}
                                     </button>
                                 </div>
-                                <button type="submit" class="group bg-brand-primary hover:bg-brand-primary-dark text-white w-full sm:w-auto px-12 py-6 rounded-[2rem] font-black text-2xl transition-all shadow-xl shadow-brand-primary/20 flex justify-center items-center gap-4 transform hover:-translate-y-2 overflow-hidden">
+                                <button type="submit" class="group bg-emerald-500 hover:bg-emerald-600 text-white w-full sm:w-auto px-12 py-6 rounded-[2rem] font-black text-2xl transition-all shadow-[0_20px_50px_-12px_rgba(16,185,129,0.35)] flex justify-center items-center gap-4 transform hover:-translate-y-2 overflow-hidden">
                                     <span class="relative z-10 flex items-center gap-4">
-                                        <i class="fa-solid fa-rocket text-white"></i>
+                                        <i class="fa-solid fa-rocket text-white animate-bounce-subtle"></i>
                                         {{ __('onboarding.btn_finish') ?? 'Finish Setup' }}
                                         <i class="fa-solid fa-chevron-right rtl:rotate-180 group-hover:translate-x-2 transition-transform"></i>
                                     </span>
@@ -335,19 +336,19 @@
                 <!-- Language Switcher (Now at the bottom) -->
                 <div class="flex items-center gap-1 p-1 bg-white shadow-sm border border-slate-100 rounded-2xl">
                     <button @click="updateLanguage('ar')" 
-                            :class="formData.step_1.locale === 'ar' ? 'bg-brand-primary text-white shadow-md' : 'text-slate-400 hover:bg-slate-50'" 
+                            :class="formData.step_1.locale === 'ar' ? 'bg-emerald-500 text-white shadow-md' : 'text-slate-400 hover:bg-slate-50'" 
                             class="px-4 py-2 rounded-xl text-[10px] font-black transition-all flex items-center gap-2">
                         <span class="text-sm">🇸🇦</span> العربية
                     </button>
                     <button @click="updateLanguage('fr')" 
-                            :class="formData.step_1.locale === 'fr' ? 'bg-brand-primary text-white shadow-md' : 'text-slate-400 hover:bg-slate-50'" 
+                            :class="formData.step_1.locale === 'fr' ? 'bg-emerald-500 text-white shadow-md' : 'text-slate-400 hover:bg-slate-50'" 
                             class="px-4 py-2 rounded-xl text-[10px] font-black transition-all flex items-center gap-2">
                         <span class="text-sm">🇫🇷</span> Français
                     </button>
                 </div>
 
                 <p class="inline-flex items-center gap-3 px-6 py-2 rounded-full text-slate-300 text-[10px] font-black uppercase tracking-widest">
-                    <i class="fa-solid fa-shield-halved text-brand-primary text-sm"></i> {{ __('onboarding.security_note') }}
+                    <i class="fa-solid fa-shield-halved text-emerald-500 text-sm"></i> {{ __('onboarding.security_note') }}
                 </p>
             </div>
         </div>
@@ -447,7 +448,7 @@
                             window.scrollTo({ top: 0, behavior: 'smooth' });
                         }
                     } catch (error) {
-                        Swal.fire({ icon: 'error', title: 'Error', text: error.message, confirmButtonColor: '#3A0CA3' });
+                        Swal.fire({ icon: 'error', title: 'Error', text: error.message, confirmButtonColor: '#10b981' });
                     } finally { this.loading = false; }
                 }
             }));
