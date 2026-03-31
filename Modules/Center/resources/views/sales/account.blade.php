@@ -5,26 +5,60 @@
 
 @section('content')
 
-<div class="row g-4">
+<div class="row g-4 position-relative">
+    <!-- Redesign: Hero Background Orbs (Subtle) -->
+    <div class="position-absolute top-0 start-50 translate-middle-x overflow-hidden w-100 h-100" style="z-index: -1; pointer-events: none;">
+        <div class="position-absolute top-0 start-0 bg-emerald-500/10 blur-[120px] rounded-full w-96 h-96 -translate-x-1/2 -translate-y-1/2"></div>
+        <div class="position-absolute bottom-0 end-0 bg-slate-900/[0.02] blur-[100px] rounded-full w-80 h-80 translate-x-1/3 translate-y-1/3"></div>
+    </div>
+
     <!-- Student Header Dashboard (Hidden until search) -->
     <div id="studentHeader" class="col-lg-12 d-none animate__animated animate__fadeIn">
-        <div class="card border-0 shadow-sm rounded-4 bg-primary text-white overflow-hidden">
-            <div class="card-body p-4 position-relative">
-                <div class="position-absolute top-0 end-0 p-4 opacity-10">
-                    <i class="fas fa-user-graduate fa-6x"></i>
-                </div>
+        <div class="card border-0 shadow-2xl rounded-[2.5rem] bg-slate-900 text-white overflow-hidden position-relative">
+            <div class="card-body p-5 position-relative z-10">
                 <div class="row align-items-center">
                     <div class="col-auto">
-                        <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-lg" style="width: 80px; height: 80px; font-size: 2rem;">
+                        <div class="bg-emerald-500 text-white rounded-[2rem] d-flex align-items-center justify-content-center fw-black shadow-[0_20px_50px_-12px_rgba(16,185,129,0.35)]" style="width: 100px; height: 100px; font-size: 2.5rem;">
                             <span id="studentInitial">S</span>
                         </div>
                     </div>
                     <div class="col">
-                        <h2 id="studentNameDisplay" class="fw-bold mb-1">Student Name</h2>
-                        <div class="d-flex gap-3 small opacity-75">
-                            <span><i class="fas fa-phone-alt me-1"></i> <span id="studentPhoneDisplay">00000000</span></span>
-                            <span><i class="fas fa-graduation-cap me-1"></i> <span id="studentGradeDisplay">Grade</span></span>
-                            <span><i class="fas fa-circle me-1" id="statusDot"></i> <span id="studentStatusDisplay">Status</span></span>
+                        <h1 id="studentNameDisplay" class="fw-black mb-2 tracking-tight display-6">Student Name</h1>
+                        <div class="d-flex flex-wrap gap-4 opacity-90">
+                            <span class="d-flex align-items-center gap-2 px-3 py-2 bg-white/10 rounded-pill"><i class="fa-solid fa-phone-volume text-emerald-400"></i> <span id="studentPhoneDisplay" class="fw-bold">00000000</span></span>
+                            <span class="d-flex align-items-center gap-2 px-3 py-2 bg-white/10 rounded-pill"><i class="fa-solid fa-graduation-cap text-emerald-400"></i> <span id="studentGradeDisplay" class="fw-bold">Grade</span></span>
+                            <span class="d-flex align-items-center gap-2 px-3 py-2 bg-white/10 rounded-pill"><i class="fa-solid fa-circle text-emerald-400" id="statusDot"></i> <span id="studentStatusDisplay" class="fw-bold">Status</span></span>
+                        </div>
+                    </div>
+                    <div class="col-auto d-none d-md-block">
+                        <i class="fa-solid fa-fingerprint fa-6x opacity-10"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- Decorative line -->
+            <div class="position-absolute bottom-0 start-0 w-100 h-1 bg-gradient-to-r from-emerald-500 to-emerald-400"></div>
+        </div>
+    </div>
+
+    <!-- Redesign: Premium Search Container -->
+    <div class="col-lg-12">
+        <div class="card border-0 shadow-xl rounded-[2rem] bg-white transform hover:-translate-y-1 transition-all duration-300">
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+                    <div class="col-lg-12">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="bg-emerald-100 text-emerald-600 p-2 rounded-xl">
+                                <i class="fa-solid fa-users-viewfinder fs-4"></i>
+                            </div>
+                            <h5 class="fw-black text-slate-900 mb-0">{{ __('center::messages.blade_0560') }}</h5>
+                        </div>
+                        <div class="premium-search-wrapper">
+                            <select id="studentSelector" class="form-select form-select-lg border-0 bg-slate-50 rounded-2xl" placeholder="{{ __('center::messages.blade_0561') }}">
+                                <option value="">{{ __('center::messages.blade_0561') }}</option>
+                                @foreach($students as $student)
+                                    <option value="{{ $student->id }}">{{ $student->name }} | {{ $student->phone }} | {{ $student->code }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -34,67 +68,48 @@
 
     <!-- Stats Cards (Hidden until search) -->
     <div id="statsSection" class="col-lg-12 d-none">
-        <div class="row g-3">
+        <div class="row g-4">
             <div class="col-md-3">
-                <div class="card border-0 shadow-sm rounded-4 animate__animated animate__fadeInUp">
-                    <div class="card-body p-3 d-flex align-items-center gap-3">
-                        <div class="bg-danger bg-opacity-10 text-danger rounded-4 p-3"><i class="fas fa-money-bill-wave fa-lg"></i></div>
+                <div class="card border-0 shadow-lg rounded-[2rem] bg-white animate__animated animate__fadeInUp border-l-4 border-rose-500">
+                    <div class="card-body p-4 d-flex align-items-center gap-4">
+                        <div class="bg-rose-50 text-rose-500 rounded-2xl p-3 shadow-inner"><i class="fa-solid fa-receipt fs-3"></i></div>
                         <div>
-                            <div class="text-muted small fw-bold">{{ __('center::messages.blade_0562') }}</div>
-                            <h4 id="debtStat" class="mb-0 fw-bold text-danger">0.00</h4>
+                            <div class="text-slate-500 small fw-black text-uppercase tracking-wider">{{ __('center::messages.blade_0562') }}</div>
+                            <h3 id="debtStat" class="mb-0 fw-black text-rose-600">0.00</h3>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card border-0 shadow-sm rounded-4 animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
-                    <div class="card-body p-3 d-flex align-items-center gap-3">
-                        <div class="bg-success bg-opacity-10 text-success rounded-4 p-3"><i class="fas fa-check-circle fa-lg"></i></div>
+                <div class="card border-0 shadow-lg rounded-[2rem] bg-white animate__animated animate__fadeInUp" style="animation-delay: 0.1s; border-left: 4px solid #10b981;">
+                    <div class="card-body p-4 d-flex align-items-center gap-4">
+                        <div class="bg-emerald-50 text-emerald-500 rounded-2xl p-3 shadow-inner"><i class="fa-solid fa-circle-check fs-3"></i></div>
                         <div>
-                            <div class="text-muted small fw-bold">{{ __('center::messages.blade_0582', ['default' => 'إجمالي المسدد']) }}</div>
-                            <h4 id="paidStat" class="mb-0 fw-bold text-success">0.00</h4>
+                            <div class="text-slate-500 small fw-black text-uppercase tracking-wider">{{ __('center::messages.blade_0582', ['default' => 'إجمالي المسدد']) }}</div>
+                            <h3 id="paidStat" class="mb-0 fw-black text-emerald-600">0.00</h3>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card border-0 shadow-sm rounded-4 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
-                    <div class="card-body p-3 d-flex align-items-center gap-3">
-                        <div class="bg-info bg-opacity-10 text-info rounded-4 p-3"><i class="fas fa-calendar-check fa-lg"></i></div>
+                <div class="card border-0 shadow-lg rounded-[2rem] bg-white animate__animated animate__fadeInUp" style="animation-delay: 0.2s; border-left: 4px solid #06b6d4;">
+                    <div class="card-body p-4 d-flex align-items-center gap-4">
+                        <div class="bg-cyan-50 text-cyan-500 rounded-2xl p-3 shadow-inner"><i class="fa-solid fa-calendar-check fs-3"></i></div>
                         <div>
-                            <div class="text-muted small fw-bold">{{ __('center::messages.blade_0583', ['default' => 'نسبة الحضور']) }}</div>
-                            <h4 id="attendanceStat" class="mb-0 fw-bold text-info">0%</h4>
+                            <div class="text-slate-500 small fw-black text-uppercase tracking-wider">{{ __('center::messages.blade_0583', ['default' => 'نسبة الحضور']) }}</div>
+                            <h3 id="attendanceStat" class="mb-0 fw-black text-cyan-600">0%</h3>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card border-0 shadow-sm rounded-4 animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
-                    <div class="card-body p-3 d-flex align-items-center gap-3">
-                        <div class="bg-warning bg-opacity-10 text-warning rounded-4 p-3"><i class="fas fa-book-open fa-lg"></i></div>
+                <div class="card border-0 shadow-lg rounded-[2rem] bg-white animate__animated animate__fadeInUp" style="animation-delay: 0.3s; border-left: 4px solid #f59e0b;">
+                    <div class="card-body p-4 d-flex align-items-center gap-4">
+                        <div class="bg-amber-50 text-amber-500 rounded-2xl p-3 shadow-inner"><i class="fa-solid fa-book-bookmark fs-3"></i></div>
                         <div>
-                            <div class="text-muted small fw-bold">{{ __('center::messages.blade_0584', ['default' => 'الكورسات المشتركة']) }}</div>
-                            <h4 id="coursesStat" class="mb-0 fw-bold text-warning">0</h4>
+                            <div class="text-slate-500 small fw-black text-uppercase tracking-wider">{{ __('center::messages.blade_0584', ['default' => 'الدورات']) }}</div>
+                            <h3 id="coursesStat" class="mb-0 fw-black text-amber-600">0</h3>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Student Selector -->
-    <div class="col-lg-12">
-        <div class="card border-0 shadow-sm rounded-4">
-            <div class="card-body p-4">
-                <div class="row align-items-center">
-                    <div class="col-lg-12">
-                        <label class="form-label fw-bold text-dark mb-3"><i class="fas fa-search me-1 text-primary"></i>{{ __('center::messages.blade_0560') }}</label>
-                        <select id="studentSelector" class="form-select form-select-lg" placeholder="{{ __('center::messages.blade_0561') }}">
-                            <option value="">{{ __('center::messages.blade_0561') }}</option>
-                            @foreach($students as $student)
-                                <option value="{{ $student->id }}">{{ $student->name }} | {{ $student->phone }} | {{ $student->code }}</option>
-                            @endforeach
-                        </select>
                     </div>
                 </div>
             </div>
@@ -103,30 +118,33 @@
 
     <!-- Main Content Tabs (Hidden initially) -->
     <div id="accountTabs" class="col-lg-12 d-none animate__animated animate__fadeIn">
-        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-            <div class="card-header bg-white border-0 p-0">
-                <ul class="nav nav-tabs nav-justified border-bottom" id="myTab" role="tablist">
+        <div class="card border-0 shadow-2xl rounded-[2.5rem] bg-white overflow-hidden">
+            <div class="card-header bg-slate-50 border-0 p-0">
+                <ul class="nav nav-pills nav-justified p-2 gap-2" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#financialsTab" type="button"><i class="fas fa-wallet me-2"></i>{{ __('center::sales.ledger') }}</button>
+                        <button class="nav-link active rounded-2xl py-3 fw-black text-uppercase" data-bs-toggle="tab" data-bs-target="#financialsTab" type="button"><i class="fa-solid fa-wallet me-2"></i>{{ __('center::sales.ledger') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#coursesTab" type="button"><i class="fas fa-graduation-cap me-2"></i>{{ __('center::messages.blade_0020') }}</button>
+                        <button class="nav-link rounded-2xl py-3 fw-black text-uppercase" data-bs-toggle="tab" data-bs-target="#coursesTab" type="button"><i class="fa-solid fa-scroll me-2"></i>{{ __('center::messages.blade_0020') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#attendanceTab" type="button"><i class="fas fa-user-check me-2"></i>{{ __('center::messages.blade_0130') }}</button>
+                        <button class="nav-link rounded-2xl py-3 fw-black text-uppercase" data-bs-toggle="tab" data-bs-target="#attendanceTab" type="button"><i class="fa-solid fa-clock-rotate-left me-2"></i>{{ __('center::messages.blade_0130') }}</button>
                     </li>
                 </ul>
             </div>
-            <div class="card-body p-4">
+            <div class="card-body p-5">
                 <div class="tab-content" id="myTabContent">
                     <!-- Financials Tab -->
                     <div class="tab-pane fade show active" id="financialsTab">
-                        <div class="mb-4">
-                            <h5 class="fw-bold mb-3 d-flex align-items-center">
-                                <span class="bg-danger bg-opacity-10 text-danger rounded-circle p-2 me-2 d-flex align-items-center justify-content-center" style="width:35px; height:35px;"><i class="fas fa-exclamation-circle small"></i></span>
-                                {{ __('center::messages.blade_0567') }}
-                            </h5>
-                            <div id="unpaidInvoicesList">
+                        <div class="mb-0">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="fw-black text-slate-900 mb-0 d-flex align-items-center gap-3">
+                                    <span class="bg-rose-100 text-rose-600 rounded-xl p-2 d-flex align-items-center justify-content-center" style="width:40px; height:40px;"><i class="fa-solid fa-file-invoice-dollar fs-5"></i></span>
+                                    {{ __('center::messages.blade_0567') }}
+                                </h4>
+                                <button onclick="window.print()" class="btn btn-outline-slate rounded-pill px-4 fw-bold shadow-sm"><i class="fa-solid fa-print me-2"></i>طباعة كشف حساب</button>
+                            </div>
+                            <div id="unpaidInvoicesList" class="row g-3">
                                 <!-- Dynamic dynamic -->
                             </div>
                         </div>
@@ -134,20 +152,20 @@
 
                     <!-- Courses Tab -->
                     <div class="tab-pane fade" id="coursesTab">
-                        <div id="coursesListSection" class="row g-3">
+                        <div id="coursesListSection" class="row g-4">
                             <!-- Dynamic dynamic -->
                         </div>
                     </div>
 
                     <!-- Attendance Tab -->
                     <div class="tab-pane fade" id="attendanceTab">
-                        <div class="table-responsive">
-                            <table class="table align-middle">
-                                <thead class="bg-light">
+                        <div class="table-responsive rounded-3xl border">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-slate-50 border-bottom">
                                     <tr>
-                                        <th>{{ __('center::messages.blade_0677', ['default' => 'التاريخ']) }}</th>
-                                        <th>{{ __('center::messages.blade_0650', ['default' => 'الكورس']) }}</th>
-                                        <th>{{ __('center::messages.blade_0434', ['default' => 'الحالة']) }}</th>
+                                        <th class="py-4 ps-4 fw-black text-slate-500 uppercase small tracking-widest">{{ __('center::messages.blade_0677', ['default' => 'التاريخ']) }}</th>
+                                        <th class="py-4 fw-black text-slate-500 uppercase small tracking-widest">{{ __('center::messages.blade_0650', ['default' => 'الدورة']) }}</th>
+                                        <th class="py-4 fw-black text-slate-500 uppercase small tracking-widest text-center">{{ __('center::messages.blade_0434', ['default' => 'الحالة']) }}</th>
                                     </tr>
                                 </thead>
                                 <tbody id="attendanceTableBody">
@@ -163,26 +181,71 @@
 
     <!-- Empty State -->
     <div id="emptyState" class="col-lg-12 text-center py-5">
-        <div class="bg-white rounded-4 shadow-sm p-5 d-inline-block" style="max-width: 500px;">
-            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 100px; height: 100px;">
-                <i class="fas fa-user-search fa-3x text-muted"></i>
+        <div class="premium-glass p-5 d-inline-block rounded-[3rem] shadow-2xl border border-white/50" style="max-width: 600px; backdrop-filter: blur(20px); background: rgba(255,255,255,0.7);">
+            <div class="bg-emerald-50 rounded-full d-flex align-items-center justify-content-center mx-auto mb-4 floating-icon" style="width: 140px; height: 140px;">
+                <i class="fa-solid fa-user-gear fa-4x text-emerald-500"></i>
             </div>
-            <h4 class="fw-bold text-dark">{{ __('center::messages.blade_0569') }}</h4>
-            <p class="text-muted mb-0">{{ __('center::messages.blade_0570') }}</p>
+            <h2 class="fw-black text-slate-900 mb-3 display-6 tracking-tighter">{{ __('center::messages.blade_0569') }}</h2>
+            <p class="text-slate-500 fs-5 mb-0 leading-relaxed">{{ __('center::messages.blade_0570') }}</p>
         </div>
     </div>
 </div>
 
 @push('styles')
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 <style>
-    .ts-control { border-radius: 1rem !important; padding: 0.75rem 1.25rem !important; border: 1px solid #eee !important; transition: all 0.3s; }
-    .ts-control:focus { border-color: var(--bs-primary) !important; box-shadow: 0 0 0 0.25rem rgba(5, 150, 105, 0.1) !important; }
-    .nav-tabs .nav-link { padding: 1.25rem; border: none; font-weight: 600; color: #64748b; border-bottom: 3px solid transparent; }
-    .nav-tabs .nav-link.active { color: var(--bs-primary); border-bottom-color: var(--bs-primary); background: transparent; }
-    .transition-all { transition: all 0.3s ease; }
-    .hover-shadow:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important; border-color: var(--bs-primary) !important; }
+    :root {
+        --emerald-500: #10b981;
+        --emerald-600: #059669;
+        --slate-900: #0f172a;
+    }
+    body { background-color: #f8fafc; font-family: 'Outfit', 'Cairo', sans-serif !important; }
+    .fw-black { font-weight: 900 !important; }
+    
+    /* TomSelect Premium Override */
+    .ts-control { 
+        border: 2px solid transparent !important;
+        background: #f1f5f9 !important;
+        border-radius: 1.5rem !important;
+        padding: 1.25rem 1.5rem !important;
+        font-weight: 700 !important;
+        font-size: 1.1rem !important;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    .ts-control:focus { 
+        background: white !important;
+        border-color: var(--emerald-500) !important;
+        box-shadow: 0 10px 40px -10px rgba(16,185,129,0.15) !important;
+        transform: scale(1.01);
+    }
+    
+    /* Premium Nav Pills */
+    .nav-pills .nav-link { color: #64748b; background: transparent; transition: all 0.4s; }
+    .nav-pills .nav-link.active { 
+        background: var(--emerald-500) !important; 
+        color: white !important;
+        box-shadow: 0 10px 25px -5px rgba(16,185,129,0.4) !important;
+    }
+    
+    /* Animations */
+    .floating-icon { animation: float 6s ease-in-out infinite; }
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+    }
+    
+    .hover-scale { transition: all 0.3s; }
+    .hover-scale:hover { transform: scale(1.02); }
+    
+    /* Custom Utilities */
+    .tracking-widest { letter-spacing: 0.1em; }
+    .rounded-2xl { border-radius: 1rem !important; }
+    .rounded-3xl { border-radius: 1.5rem !important; }
+    .display-6 { font-size: 2.25rem; }
+    .blur-\[120px\] { filter: blur(120px); }
+    .blur-\[100px\] { filter: blur(100px); }
 </style>
 @endpush
 
@@ -243,24 +306,28 @@
                     if (data.unpaid_invoices.length > 0) {
                         data.unpaid_invoices.forEach(inv => {
                             invoiceList.innerHTML += `
-                                <div class="bg-white border rounded-4 p-3 mb-3 d-flex justify-content-between align-items-center hover-shadow transition-all shadow-sm">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center" style="width:45px; height:45px;">
-                                            <i class="fas fa-file-invoice"></i>
+                                <div class="col-md-6 animate__animated animate__fadeIn">
+                                    <div class="bg-white border-2 border-slate-50 rounded-[2rem] p-4 d-flex justify-content-between align-items-center hover-scale transition-all shadow-sm">
+                                        <div class="d-flex align-items-center gap-4">
+                                            <div class="bg-rose-50 text-rose-500 rounded-2xl d-flex align-items-center justify-content-center shadow-inner" style="width:55px; height:55px;">
+                                                <i class="fa-solid fa-file-invoice-dollar fs-4"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-black text-slate-900 mb-0 fs-5">{{ __('center::sales.invoice_id_prefix') }}${inv.id}</div>
+                                                <div class="small fw-bold text-slate-400 mb-2">${inv.created_at.split('T')[0]}</div>
+                                                <div class="bg-rose-50 text-rose-600 fw-black px-3 py-1 rounded-pill d-inline-block small">
+                                                    ${inv.remaining.toFixed(2)} ${currency}
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <div class="fw-bold text-dark mb-0">{{ __('center::sales.invoice_id_prefix') }}${inv.id}</div>
-                                            <div class="x-small text-muted">${inv.created_at.split('T')[0]}</div>
-                                            <div class="text-danger fw-bold small mt-1">${inv.remaining.toFixed(2)} ${currency}</div>
+                                        <div class="d-flex gap-2">
+                                            <a href="/sales/${inv.id}" target="_blank" class="btn btn-slate-900 text-white btn-sm rounded-xl px-4 py-2 fw-bold shadow-lg"><i class="fa-solid fa-arrow-up-right-from-square me-2"></i> {{ __('center::messages.blade_0573') }}</a>
                                         </div>
-                                    </div>
-                                    <div class="d-flex gap-2">
-                                        <a href="/sales/${inv.id}" target="_blank" class="btn btn-outline-light text-dark btn-sm rounded-pill px-3 border shadow-none"><i class="fas fa-eye me-1 text-primary"></i> {{ __('center::messages.blade_0573') }}</a>
                                     </div>
                                 </div>`;
                         });
                     } else {
-                        invoiceList.innerHTML = `<div class="text-center py-4 text-muted"><i class="fas fa-check-circle text-success me-2"></i>{{ __('center::messages.blade_0574') }}</div>`;
+                        invoiceList.innerHTML = `<div class="col-12 text-center py-5"><div class="bg-emerald-50 text-emerald-600 rounded-full d-inline-flex align-items-center justify-content-center mb-3" style="width:70px; height:70px;"><i class="fa-solid fa-circle-check fa-2x"></i></div><h5 class="fw-black text-slate-900">{{ __('center::messages.blade_0574') }}</h5></div>`;
                     }
 
                     // Update Courses Tab
@@ -268,19 +335,28 @@
                     coursesGrid.innerHTML = '';
                     if (data.courses.length > 0) {
                         data.courses.forEach(c => {
+                            let statusColor = c.status === 'active' ? 'emerald' : 'slate';
                             coursesGrid.innerHTML += `
-                                <div class="col-md-6">
-                                    <div class="card border border-light-subtle shadow-none rounded-4 bg-light bg-opacity-25">
-                                        <div class="card-body p-3">
-                                            <h6 class="fw-bold text-dark mb-1">${c.title}</h6>
-                                            <div class="small text-muted mb-2">تاريخ الاشتراك: ${c.enrolled_at || '-'}</div>
-                                            <span class="badge bg-primary rounded-pill px-3">${c.status}</span>
+                                <div class="col-md-6 animate__animated animate__fadeIn">
+                                    <div class="card border-0 shadow-lg rounded-[2.25rem] bg-white overflow-hidden">
+                                        <div class="card-body p-4">
+                                            <div class="d-flex align-items-center gap-3 mb-3">
+                                                <div class="bg-${statusColor}-50 text-${statusColor}-500 rounded-xl p-2">
+                                                    <i class="fa-solid fa-book-bookmark fs-5"></i>
+                                                </div>
+                                                <h5 class="fw-black text-slate-900 mb-0">${c.title}</h5>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="small fw-bold text-slate-400">تاريخ الاشتراك: ${c.enrolled_at || '-'}</div>
+                                                <span class="badge bg-${statusColor}-500 rounded-pill px-4 py-2 fw-black text-uppercase shadow-sm">${c.status}</span>
+                                            </div>
                                         </div>
+                                        <div class="bg-slate-50 py-2 border-top"></div>
                                     </div>
                                 </div>`;
                         });
                     } else {
-                        coursesGrid.innerHTML = `<div class="col-12 text-center py-4 text-muted">{{ __('center::messages.blade_0571') }}</div>`;
+                        coursesGrid.innerHTML = `<div class="col-12 text-center py-5 text-slate-400 font-bold fs-5">{{ __('center::messages.blade_0571') }}</div>`;
                     }
 
                     // Update Attendance Tab
@@ -288,19 +364,21 @@
                     attTable.innerHTML = '';
                     if (data.recent_attendance.length > 0) {
                         data.recent_attendance.forEach(a => {
-                            let badgeClass = 'bg-secondary';
-                            if(a.status === 'present') badgeClass = 'bg-success';
-                            if(a.status === 'absent') badgeClass = 'bg-danger';
+                            let badgeClass = 'bg-slate-100 text-slate-600';
+                            if(a.status === 'present') badgeClass = 'bg-emerald-100 text-emerald-600';
+                            if(a.status === 'absent') badgeClass = 'bg-rose-100 text-rose-600';
                             
                             attTable.innerHTML += `
-                                <tr>
-                                    <td class="fw-bold">${a.date}</td>
-                                    <td>${a.course}</td>
-                                    <td><span class="badge ${badgeClass} rounded-pill px-3">${a.status}</span></td>
+                                <tr class="animate__animated animate__fadeIn">
+                                    <td class="py-4 ps-4 fw-black text-slate-900 fs-5">${a.date}</td>
+                                    <td class="py-4 fw-bold text-slate-600">${a.course}</td>
+                                    <td class="py-4 text-center">
+                                        <span class="badge ${badgeClass} rounded-pill px-4 py-2 fw-black text-uppercase shadow-sm">${a.status}</span>
+                                    </td>
                                 </tr>`;
                         });
                     } else {
-                        attTable.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-muted">{{ __('center::messages.blade_0571') }}</td></tr>`;
+                        attTable.innerHTML = `<tr><td colspan="3" class="text-center py-5 text-slate-400 fw-bold fs-5">{{ __('center::messages.blade_0571') }}</td></tr>`;
                     }
                 }
             });
