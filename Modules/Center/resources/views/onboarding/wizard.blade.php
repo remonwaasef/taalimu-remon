@@ -1,138 +1,123 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}" class="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ __('onboarding.title') }}</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Scripts & Styles -->
-    @vite(['resources/css/landing-new.css'])
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
-    <style>
-        body { font-family: 'Cairo', sans-serif; }
-        [x-cloak] { display: none !important; }
-        /* Custom Tailwind Utilities for Wizard */
-        .bg-primary { background-color: #3b82f6; }
-        .bg-primary-focus { background-color: #2563eb; }
-        .text-primary { color: #3b82f6; }
-        .ring-primary { --tw-ring-color: #3b82f6; }
-        .border-primary { border-color: #3b82f6; }
-    </style>
-</head>
-<body class="bg-slate-900 min-h-screen text-slate-800 antialiased relative selection:bg-primary selection:text-white">
-    
-    <!-- Blurred Background map -->
-    <div class="fixed inset-0 z-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat mix-blend-overlay"></div>
-    <div class="fixed inset-0 z-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
+@extends('layouts.landing-new')
 
-    <!-- Decorative Glows -->
-    <div class="fixed -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-blue-600/20 blur-[100px] mix-blend-screen pointer-events-none z-0"></div>
-    <div class="fixed -bottom-40 -left-40 w-[600px] h-[600px] rounded-full bg-purple-600/20 blur-[100px] mix-blend-screen pointer-events-none z-0"></div>
-
-<div class="min-h-screen flex items-center justify-center p-4 relative z-10 overflow-hidden" 
+@section('content')
+<div class="min-h-screen flex items-center justify-center relative overflow-hidden bg-white py-12 px-4 pt-32 ltr:font-sans rtl:font-arabic" 
      x-data="onboardingWizard('{{ $status }}')"
      x-init="initWizard()">
     
-    <!-- Background Elements -->
-    <div class="absolute -top-[500px] -right-[500px] w-[1000px] h-[1000px] rounded-full bg-primary/5 blur-3xl mix-blend-multiply pointer-events-none"></div>
-    <div class="absolute -bottom-[500px] -left-[500px] w-[1000px] h-[1000px] rounded-full bg-secondary/5 blur-3xl mix-blend-multiply pointer-events-none"></div>
+    <!-- Hero Orbs Decoration -->
+    <div class="hero-orb orb-1 opacity-60"></div>
+    <div class="hero-orb orb-2 opacity-40"></div>
 
-    <div class="w-full max-w-2xl relative z-10">
+    <div class="w-full max-w-4xl relative z-20">
         
         <!-- Header -->
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-slate-900 mb-2">{{ __('onboarding.welcome_title') }}</h1>
-            <p class="text-slate-600">{{ __('onboarding.welcome_subtitle') }}</p>
+        <div class="text-center mb-12 animate-fade-in">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-brand-primary/10 rounded-3xl mb-6 shadow-inner animate-bounce-slow">
+                <i class="fa-solid fa-rocket text-4xl text-brand-primary"></i>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
+                <span class="gradient-text">{{ __('onboarding.welcome_title') }}</span>
+            </h1>
+            <p class="text-slate-500 text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed">
+                {{ __('onboarding.welcome_subtitle') }}
+            </p>
         </div>
 
-        <!-- Progress Bar -->
-        <div class="mb-8">
-            <div class="flex justify-between mb-2">
+        <!-- Progress Bar (Premium Style) -->
+        <div class="mb-12 max-w-3xl mx-auto">
+            <div class="flex justify-between items-center relative">
+                <!-- Connecting Line -->
+                <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-100 rounded-full z-0">
+                    <div class="h-full bg-brand-primary transition-all duration-700 ease-in-out shadow-[0_0_15px_rgba(58,12,163,0.3)]"
+                         :style="'width: ' + ((currentStepIndex / (steps.length - 1)) * 100) + '%'">
+                    </div>
+                </div>
+
+                <!-- Step Orbs -->
                 <template x-for="(stepObj, index) in steps" :key="index">
-                    <div class="flex-1 text-center relative group">
-                        <div class="text-xs font-semibold mb-1 transition-colors duration-300"
-                             :class="currentStepIndex >= index ? 'text-primary' : 'text-slate-400'"
-                             x-text="stepObj.label">
+                    <div class="relative z-10 flex flex-col items-center group">
+                        <div class="w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-500 font-bold text-sm shadow-xl"
+                             :class="currentStepIndex >= index ? 'bg-brand-primary text-white scale-110' : 'bg-white text-slate-400 border border-slate-100'">
+                            <span x-show="currentStepIndex > index"><i class="fa-solid fa-check text-xs"></i></span>
+                            <span x-show="currentStepIndex <= index" x-text="index + 1"></span>
                         </div>
-                        <div class="h-2 w-full bg-slate-200 rounded-full overflow-hidden mx-1">
-                            <div class="h-full bg-primary transition-all duration-500 ease-out"
-                                 :style="'width: ' + (currentStepIndex > index ? '100%' : (currentStepIndex === index ? '50%' : '0%'))">
-                            </div>
+                        <div class="absolute -bottom-8 whitespace-nowrap text-[10px] font-black uppercase tracking-widest transition-colors duration-300"
+                             :class="currentStepIndex >= index ? 'text-brand-primary' : 'text-slate-400'"
+                             x-text="stepObj.label">
                         </div>
                     </div>
                 </template>
             </div>
         </div>
 
-        <!-- Cards Container -->
-        <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden relative min-h-[400px]">
+        <!-- Main Wizard Card (Glass Premium) -->
+        <div class="glass-premium rounded-[3rem] shadow-2xl shadow-slate-200/50 border border-white/60 overflow-hidden relative min-h-[500px] mt-16 animate-scale-in">
             
             <!-- Loading Overlay -->
             <div x-show="loading" 
                  x-transition.opacity 
-                 class="absolute inset-0 bg-white/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
-                <div class="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
-                <p class="mt-4 text-slate-600 font-medium" x-text="'{{ __('onboarding.loading') }}'"></p>
+                 class="absolute inset-0 bg-white/80 backdrop-blur-md z-50 flex flex-col items-center justify-center">
+                <div class="w-16 h-16 border-4 border-brand-primary/20 border-t-brand-primary rounded-full animate-spin"></div>
+                <p class="mt-6 text-slate-900 font-black text-xl tracking-tight" x-text="'{{ __('onboarding.loading') }}'"></p>
             </div>
 
-            <!-- Global Language Switcher -->
-            <div class="border-b border-slate-100 bg-slate-50/50 p-4 flex justify-center gap-4">
-                <button @click="updateLanguage('ar')" :class="formData.step_1.locale === 'ar' ? 'bg-white shadow-sm ring-1 ring-primary/20 text-primary' : 'text-slate-500 hover:text-primary'" class="px-3 py-1.5 rounded-lg text-sm font-bold transition-all flex items-center gap-2">
-                    <span>🇸🇦</span> العربية
+            <!-- Language Switcher (Pill Style) -->
+            <div class="p-6 bg-white/30 border-b border-white/60 backdrop-blur-sm flex justify-center gap-4">
+                <button @click="updateLanguage('ar')" 
+                        :class="formData.step_1.locale === 'ar' ? 'bg-slate-900 text-white shadow-xl scale-105' : 'bg-white/50 text-slate-500 hover:bg-white transition-all'" 
+                        class="px-5 py-2.5 rounded-2xl text-sm font-black transition-all flex items-center gap-2">
+                    <span class="text-base">🇸🇦</span> العربية
                 </button>
-                <button @click="updateLanguage('en')" :class="formData.step_1.locale === 'en' ? 'bg-white shadow-sm ring-1 ring-primary/20 text-primary' : 'text-slate-500 hover:text-primary'" class="px-3 py-1.5 rounded-lg text-sm font-bold transition-all flex items-center gap-2">
-                    <span>🇬🇧</span> English
+                <button @click="updateLanguage('en')" 
+                        :class="formData.step_1.locale === 'en' ? 'bg-slate-900 text-white shadow-xl scale-105' : 'bg-white/50 text-slate-500 hover:bg-white transition-all'" 
+                        class="px-5 py-2.5 rounded-2xl text-sm font-black transition-all flex items-center gap-2">
+                    <span class="text-base">🇬🇧</span> English
                 </button>
-                <button @click="updateLanguage('fr')" :class="formData.step_1.locale === 'fr' ? 'bg-white shadow-sm ring-1 ring-primary/20 text-primary' : 'text-slate-500 hover:text-primary'" class="px-3 py-1.5 rounded-lg text-sm font-bold transition-all flex items-center gap-2">
-                    <span>🇫🇷</span> Français
+                <button @click="updateLanguage('fr')" 
+                        :class="formData.step_1.locale === 'fr' ? 'bg-slate-900 text-white shadow-xl scale-105' : 'bg-white/50 text-slate-500 hover:bg-white transition-all'" 
+                        class="px-5 py-2.5 rounded-2xl text-sm font-black transition-all flex items-center gap-2">
+                    <span class="text-base">🇫🇷</span> Français
                 </button>
             </div>
 
-            <div class="p-8">
+            <div class="p-8 md:p-14">
                 <!-- STEP 1: Core Settings -->
                 <div x-show="currentStep === 'step_1'" 
-                     x-transition:enter="transition ease-out duration-300 transform"
-                     x-transition:enter-start="opacity-0 translate-x-8"
-                     x-transition:enter-end="opacity-100 translate-x-0"
-                     class="space-y-6">
+                     x-transition:enter="transition ease-out duration-500 transform"
+                     x-transition:enter-start="opacity-0 translate-y-12"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     class="space-y-10">
                     
-                    <div class="text-center mb-6">
-                        <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 text-primary">
-                            <i class="fa-solid fa-gear text-2xl"></i>
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-brand-primary/10 rounded-[2rem] flex items-center justify-center mx-auto mb-6 text-brand-primary shadow-inner">
+                            <i class="fa-solid fa-earth-africa text-3xl"></i>
                         </div>
-                        <h2 class="text-2xl font-bold text-slate-800">{{ __('onboarding.step_1.title') }}</h2>
-                        <p class="text-slate-500 mt-1">{{ __('onboarding.step_1.subtitle') }}</p>
+                        <h2 class="text-3xl font-black text-slate-900 tracking-tight">{{ __('onboarding.step_1.title') }}</h2>
+                        <p class="text-slate-500 mt-2 text-lg font-medium">{{ __('onboarding.step_1.subtitle') }}</p>
                     </div>
 
-                    <form @submit.prevent="submitStep('step_1')" class="space-y-5">
-                        <!-- Currency -->
+                    <form @submit.prevent="submitStep('step_1')" class="space-y-8">
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_1.currency_label') }}</label>
-                            <select x-model="formData.step_1.currency" class="w-full border-slate-200 rounded-xl focus:ring-primary focus:border-primary h-12">
-                                <option value="EGP">{{ __('onboarding.currencies.egp') }}</option>
-                                <option value="SAR">{{ __('onboarding.currencies.sar') }}</option>
-                                <option value="AED">{{ __('onboarding.currencies.aed') }}</option>
-                                <option value="USD">{{ __('onboarding.currencies.usd') }}</option>
-                                <option value="EUR">{{ __('onboarding.currencies.eur') }}</option>
-                            </select>
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_1.currency_label') }}</label>
+                            <div class="relative">
+                                <select x-model="formData.step_1.currency" class="w-full bg-white/50 border-2 border-slate-100 rounded-2xl focus:ring-brand-primary focus:border-brand-primary h-14 px-6 text-lg font-bold transition-all hover:bg-white">
+                                    <option value="EGP">{{ __('onboarding.currencies.egp') }}</option>
+                                    <option value="SAR">{{ __('onboarding.currencies.sar') }}</option>
+                                    <option value="AED">{{ __('onboarding.currencies.aed') }}</option>
+                                    <option value="USD">{{ __('onboarding.currencies.usd') }}</option>
+                                    <option value="EUR">{{ __('onboarding.currencies.eur') }}</option>
+                                </select>
+                                <div class="absolute inset-y-0 ltr:right-6 rtl:left-6 flex items-center pointer-events-none">
+                                    <i class="fa-solid fa-chevron-down text-slate-400"></i>
+                                </div>
+                            </div>
                         </div>
                         
-                        <div class="pt-4 border-t border-slate-100 flex justify-end">
-                            <button type="submit" class="bg-primary hover:bg-primary-focus text-white px-8 py-3 rounded-xl font-medium transition-colors flex items-center gap-2">
-                                {{ __('onboarding.step_1.btn_submit') }} <i class="fa-solid fa-arrow-right rtl:rotate-180 mt-1"></i>
+                        <div class="pt-8 border-t border-slate-100 flex justify-end">
+                            <button type="submit" class="group bg-slate-900 hover:bg-slate-800 text-white px-10 py-5 rounded-[1.5rem] font-black text-lg transition-all shadow-2xl hover:shadow-slate-900/40 flex items-center gap-3 transform hover:-translate-y-1">
+                                {{ __('onboarding.step_1.btn_submit') }} 
+                                <i class="fa-solid fa-arrow-right rtl:rotate-180 group-hover:translate-x-1.5 transition-transform"></i>
                             </button>
                         </div>
                     </form>
@@ -140,50 +125,52 @@
 
                 <!-- STEP 2: First Instructor -->
                 <div x-show="currentStep === 'step_2'" style="display: none;"
-                     x-transition:enter="transition ease-out duration-300 transform"
-                     x-transition:enter-start="opacity-0 translate-x-8"
-                     x-transition:enter-end="opacity-100 translate-x-0"
-                     class="space-y-6">
+                     x-transition:enter="transition ease-out duration-500 transform"
+                     x-transition:enter-start="opacity-0 translate-y-12"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     class="space-y-10">
                     
-                    <div class="text-center mb-6">
-                        <div class="w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4 text-blue-600">
-                            <i class="fa-solid fa-chalkboard-user text-2xl"></i>
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-brand-primary/10 rounded-[2rem] flex items-center justify-center mx-auto mb-6 text-brand-primary shadow-inner">
+                            <i class="fa-solid fa-graduation-cap text-3xl"></i>
                         </div>
-                        <h2 class="text-2xl font-bold text-slate-800">{{ __('onboarding.step_2.title') }}</h2>
-                        <p class="text-slate-500 mt-1">{{ __('onboarding.step_2.subtitle') }}</p>
+                        <h2 class="text-3xl font-black text-slate-900 tracking-tight">{{ __('onboarding.step_2.title') }}</h2>
+                        <p class="text-slate-500 mt-2 text-lg font-medium">{{ __('onboarding.step_2.subtitle') }}</p>
                     </div>
 
-                    <form @submit.prevent="submitStep('step_2', false)" class="space-y-5">
+                    <form @submit.prevent="submitStep('step_2', false)" class="space-y-6">
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_2.name_label') }}</label>
-                            <input type="text" x-model="formData.step_2.instructor_name" placeholder="{{ __('onboarding.step_2.name_placeholder') }}" class="w-full border-slate-200 rounded-xl focus:ring-primary focus:border-primary h-12" required>
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_2.name_label') }}</label>
+                            <input type="text" x-model="formData.step_2.instructor_name" placeholder="{{ __('onboarding.step_2.name_placeholder') }}" class="w-full bg-white/50 border-2 border-slate-100 rounded-2xl focus:ring-brand-primary focus:border-brand-primary h-14 px-6 text-lg font-bold transition-all hover:bg-white" required>
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_2.specialization_label') }}</label>
-                                <input type="text" x-model="formData.step_2.instructor_specialization" placeholder="{{ __('onboarding.step_2.specialization_placeholder') }}" class="w-full border-slate-200 rounded-xl focus:ring-primary focus:border-primary h-12">
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_2.specialization_label') }}</label>
+                                <input type="text" x-model="formData.step_2.instructor_specialization" placeholder="{{ __('onboarding.step_2.specialization_placeholder') }}" class="w-full bg-white/50 border-2 border-slate-100 rounded-2xl focus:ring-brand-primary focus:border-brand-primary h-14 px-6 text-lg font-bold transition-all hover:bg-white">
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_2.phone_label') }} <span class="text-slate-400 font-normal text-xs">{{ __('onboarding.step_2.phone_hint') }}</span></label>
-                                <input type="tel" x-model="formData.step_2.instructor_phone" dir="ltr" placeholder="01xxxxxxxxx" class="w-full border-slate-200 rounded-xl focus:ring-primary focus:border-primary h-12 text-right" required>
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_2.phone_label') }}</label>
+                                <input type="tel" x-model="formData.step_2.instructor_phone" dir="ltr" placeholder="01xxxxxxxxx" class="w-full bg-white/50 border-2 border-slate-100 rounded-2xl focus:ring-brand-primary focus:border-brand-primary h-14 px-6 text-lg font-bold transition-all hover:bg-white text-right" required>
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_2.email_label') }}</label>
-                            <input type="email" x-model="formData.step_2.instructor_email" dir="ltr" placeholder="{{ __('onboarding.step_2.email_placeholder') }}" class="w-full border-slate-200 rounded-xl focus:ring-primary focus:border-primary h-12 text-right">
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_2.email_label') }}</label>
+                            <input type="email" x-model="formData.step_2.instructor_email" dir="ltr" placeholder="{{ __('onboarding.step_2.email_placeholder') }}" class="w-full bg-white/50 border-2 border-slate-100 rounded-2xl focus:ring-brand-primary focus:border-brand-primary h-14 px-6 text-lg font-bold transition-all hover:bg-white text-right">
                         </div>
 
-                        <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <div class="flex items-center gap-6">
-                                <button type="button" @click="prevStep()" class="text-slate-400 hover:text-slate-700 font-medium transition-colors text-sm flex items-center gap-2">
-                                    <i class="fa-solid fa-arrow-left rtl:rotate-180"></i> {{ __('onboarding.btn_back') }}
+                        <div class="pt-10 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-6">
+                            <div class="flex items-center gap-8">
+                                <button type="button" @click="prevStep()" class="text-slate-400 hover:text-slate-900 font-black uppercase tracking-widest text-[10px] transition-all flex items-center gap-3 group">
+                                    <i class="fa-solid fa-arrow-left rtl:rotate-180 group-hover:-translate-x-1.5 transition-transform"></i> 
+                                    {{ __('onboarding.btn_back') }}
                                 </button>
-                                <button type="button" @click="submitStep('step_2', true)" class="text-slate-500 hover:text-slate-800 font-medium transition-colors text-sm">
+                                <button type="button" @click="submitStep('step_2', true)" class="text-slate-400 hover:text-slate-900 font-black uppercase tracking-widest text-[10px] transition-all">
                                     {{ __('onboarding.step_2.btn_skip') }}
                                 </button>
                             </div>
-                            <button type="submit" class="bg-primary hover:bg-primary-focus text-white w-full sm:w-auto px-8 py-3 rounded-xl font-medium transition-colors flex justify-center items-center gap-2">
-                                {{ __('onboarding.step_2.btn_submit') }} <i class="fa-solid fa-arrow-right rtl:rotate-180 mt-1"></i>
+                            <button type="submit" class="group bg-slate-900 hover:bg-slate-800 text-white w-full sm:w-auto px-10 py-5 rounded-[1.5rem] font-black text-xl transition-all shadow-2xl hover:shadow-slate-900/40 flex justify-center items-center gap-4 transform hover:-translate-y-1">
+                                {{ __('onboarding.step_2.btn_submit') }} 
+                                <i class="fa-solid fa-arrow-right rtl:rotate-180 group-hover:translate-x-1.5 transition-transform"></i>
                             </button>
                         </div>
                     </form>
@@ -191,53 +178,62 @@
 
                 <!-- STEP 3: First Course -->
                 <div x-show="currentStep === 'step_3'" style="display: none;"
-                     x-transition:enter="transition ease-out duration-300 transform"
-                     x-transition:enter-start="opacity-0 translate-x-8"
-                     x-transition:enter-end="opacity-100 translate-x-0"
-                     class="space-y-6">
+                     x-transition:enter="transition ease-out duration-500 transform"
+                     x-transition:enter-start="opacity-0 translate-y-12"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     class="space-y-10">
                     
-                    <div class="text-center mb-6">
-                        <div class="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4 text-emerald-600">
-                            <i class="fa-solid fa-book-open text-2xl"></i>
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-brand-primary/10 rounded-[2rem] flex items-center justify-center mx-auto mb-6 text-brand-primary shadow-inner">
+                            <i class="fa-solid fa-book-open text-3xl"></i>
                         </div>
-                        <h2 class="text-2xl font-bold text-slate-800">{{ __('onboarding.step_3.title') }}</h2>
-                        <p class="text-slate-500 mt-1">{{ __('onboarding.step_3.subtitle') }}</p>
+                        <h2 class="text-3xl font-black text-slate-900 tracking-tight">{{ __('onboarding.step_3.title') }}</h2>
+                        <p class="text-slate-500 mt-2 text-lg font-medium">{{ __('onboarding.step_3.subtitle') }}</p>
                     </div>
 
-                    <form @submit.prevent="submitStep('step_3', false)" class="space-y-5">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <form @submit.prevent="submitStep('step_3', false)" class="space-y-8">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_3.name_label') }}</label>
-                                <input type="text" x-model="formData.step_3.course_name" placeholder="{{ __('onboarding.step_3.name_placeholder') }}" class="w-full border-slate-200 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 h-12" required>
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_3.name_label') }}</label>
+                                <input type="text" x-model="formData.step_3.course_name" placeholder="{{ __('onboarding.step_3.name_placeholder') }}" class="w-full bg-white/50 border-2 border-slate-100 rounded-2xl focus:ring-brand-primary focus:border-brand-primary h-14 px-6 text-lg font-bold transition-all hover:bg-white" required>
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_3.price_label') }}</label>
-                                <input type="number" x-model="formData.step_3.price" placeholder="0.00" class="w-full border-slate-200 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 h-12" required>
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_3.price_label') }}</label>
+                                <div class="relative">
+                                    <input type="number" x-model="formData.step_3.price" placeholder="0.00" class="w-full bg-white/50 border-2 border-slate-100 rounded-2xl focus:ring-brand-primary focus:border-brand-primary h-14 px-6 text-lg font-bold transition-all hover:bg-white" required>
+                                    <div class="absolute inset-y-0 ltr:right-6 rtl:left-6 flex items-center pointer-events-none text-slate-400 font-bold">
+                                        <span x-text="formData.step_1.currency"></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_3.sessions_label') }}</label>
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_3.sessions_label') }}</label>
                             <input type="number" x-model="formData.step_3.sessions_count" 
                                    @input="syncSchedules($event.target.value)"
-                                   placeholder="12" class="w-full border-slate-200 rounded-xl focus:ring-emerald-500 focus:border-emerald-500 h-12" required>
+                                   placeholder="12" class="w-full bg-white/50 border-2 border-slate-100 rounded-2xl focus:ring-brand-primary focus:border-brand-primary h-14 px-6 text-lg font-bold transition-all hover:bg-white" required>
                         </div>
 
-                        <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 space-y-4">
-                            <div class="flex items-center justify-between mb-2">
-                                <h3 class="font-bold text-emerald-800 text-sm flex items-center gap-2">
-                                    <i class="fa-solid fa-calendar-days"></i> {{ __('onboarding.step_3.schedule_section') }}
+                        <!-- Schedule Section (Enhanced Visuals) -->
+                        <div class="p-8 bg-white/50 backdrop-blur-md rounded-[2.5rem] border-2 border-brand-primary/5 space-y-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-black text-slate-900 text-base flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-xl bg-brand-primary text-white flex items-center justify-center text-xs shadow-lg shadow-brand-primary/20">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                    </div>
+                                    {{ __('onboarding.step_3.schedule_section') }}
                                 </h3>
-                                <button type="button" @click="formData.step_3.schedules.push({day: '0', time: '16:00'})" class="text-xs font-bold text-emerald-600 hover:text-emerald-800 flex items-center gap-1 transition-colors">
-                                    <i class="fa-solid fa-plus-circle"></i> {{ __('onboarding.step_3.btn_add_schedule') }}
+                                <button type="button" @click="formData.step_3.schedules.push({day: '0', time: '16:00', time_end: '18:00'})" class="text-[10px] font-black uppercase tracking-widest text-brand-primary hover:text-brand-primary-dark flex items-center gap-2 transition-all">
+                                    <i class="fa-solid fa-plus-circle text-base"></i> {{ __('onboarding.step_3.btn_add_schedule') }}
                                 </button>
                             </div>
 
                             <template x-for="(schedule, index) in formData.step_3.schedules" :key="index">
-                                <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end pb-4 border-b border-emerald-100 last:border-0 last:pb-0">
+                                <div class="grid grid-cols-1 sm:grid-cols-12 gap-6 items-end pb-8 border-b border-slate-100 last:border-0 last:pb-0 group">
                                     <div class="sm:col-span-4">
-                                        <label class="block text-xs font-bold text-emerald-700 mb-1">{{ __('onboarding.step_3.day_label') }}</label>
-                                        <select x-model="schedule.day" class="w-full border-emerald-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-white text-sm">
+                                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">{{ __('onboarding.step_3.day_label') }}</label>
+                                        <select x-model="schedule.day" class="w-full bg-white border-2 border-slate-100 rounded-xl focus:ring-brand-primary focus:border-brand-primary h-12 px-4 font-bold text-sm">
                                             <option value="0">{{ __('onboarding.days.0') }}</option>
                                             <option value="1">{{ __('onboarding.days.1') }}</option>
                                             <option value="2">{{ __('onboarding.days.2') }}</option>
@@ -248,33 +244,35 @@
                                         </select>
                                     </div>
                                     <div class="sm:col-span-3">
-                                        <label class="block text-xs font-bold text-emerald-700 mb-1">{{ __('onboarding.step_3.time_label') }}</label>
-                                        <input type="time" x-model="schedule.time" class="w-full border-emerald-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-white h-10 text-sm">
+                                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">{{ __('onboarding.step_3.time_label') }}</label>
+                                        <input type="time" x-model="schedule.time" class="w-full bg-white border-2 border-slate-100 rounded-xl focus:ring-brand-primary focus:border-brand-primary h-12 px-4 font-bold text-sm">
                                     </div>
                                     <div class="sm:col-span-3">
-                                        <label class="block text-xs font-bold text-emerald-700 mb-1">{{ __('onboarding.step_3.time_end_label') }}</label>
-                                        <input type="time" x-model="schedule.time_end" class="w-full border-emerald-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-white h-10 text-sm">
+                                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">{{ __('onboarding.step_3.time_end_label') }}</label>
+                                        <input type="time" x-model="schedule.time_end" class="w-full bg-white border-2 border-slate-100 rounded-xl focus:ring-brand-primary focus:border-brand-primary h-12 px-4 font-bold text-sm">
                                     </div>
                                     <div class="sm:col-span-2 flex justify-end">
-                                        <button type="button" x-show="formData.step_3.schedules.length > 1" @click="formData.step_3.schedules.splice(index, 1)" class="w-10 h-10 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition-colors shadow-sm" title="{{ __('onboarding.step_3.btn_remove_schedule') }}">
-                                            <i class="fa-solid fa-trash-can text-sm"></i>
+                                        <button type="button" x-show="formData.step_3.schedules.length > 1" @click="formData.step_3.schedules.splice(index, 1)" class="w-12 h-12 rounded-2xl bg-red-50 text-red-500 hover:bg-red-100 hover:scale-110 flex items-center justify-center transition-all shadow-sm" title="{{ __('onboarding.step_3.btn_remove_schedule') }}">
+                                            <i class="fa-solid fa-trash-can text-base"></i>
                                         </button>
                                     </div>
                                 </div>
                             </template>
                         </div>
 
-                        <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <div class="flex items-center gap-6">
-                                <button type="button" @click="prevStep()" class="text-slate-400 hover:text-slate-700 font-medium transition-colors text-sm flex items-center gap-2">
-                                    <i class="fa-solid fa-arrow-left rtl:rotate-180"></i> {{ __('onboarding.btn_back') }}
+                        <div class="pt-10 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-6">
+                            <div class="flex items-center gap-8">
+                                <button type="button" @click="prevStep()" class="text-slate-400 hover:text-slate-900 font-black uppercase tracking-widest text-[10px] transition-all flex items-center gap-3 group">
+                                    <i class="fa-solid fa-arrow-left rtl:rotate-180 group-hover:-translate-x-1.5 transition-transform"></i> 
+                                    {{ __('onboarding.btn_back') }}
                                 </button>
-                                <button type="button" @click="submitStep('step_3', true)" class="text-slate-500 hover:text-slate-800 font-medium transition-colors text-sm">
+                                <button type="button" @click="submitStep('step_3', true)" class="text-slate-400 hover:text-slate-900 font-black uppercase tracking-widest text-[10px] transition-all">
                                     {{ __('onboarding.step_3.btn_skip') }}
                                 </button>
                             </div>
-                            <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 text-white w-full sm:w-auto px-8 py-3 rounded-xl font-medium transition-colors flex justify-center items-center gap-2">
-                                {{ __('onboarding.step_3.btn_submit') }} <i class="fa-solid fa-arrow-right rtl:rotate-180 mt-1"></i>
+                            <button type="submit" class="group bg-brand-primary hover:bg-brand-primary-dark text-white w-full sm:w-auto px-10 py-5 rounded-[1.5rem] font-black text-xl transition-all shadow-2xl shadow-brand-primary/20 flex justify-center items-center gap-4 transform hover:-translate-y-1">
+                                {{ __('onboarding.step_3.btn_submit') }} 
+                                <i class="fa-solid fa-arrow-right rtl:rotate-180 group-hover:translate-x-1.5 transition-transform"></i>
                             </button>
                         </div>
                     </form>
@@ -282,48 +280,56 @@
 
                 <!-- STEP 4: First Student -->
                 <div x-show="currentStep === 'step_4'" style="display: none;"
-                     x-transition:enter="transition ease-out duration-300 transform"
-                     x-transition:enter-start="opacity-0 translate-x-8"
-                     x-transition:enter-end="opacity-100 translate-x-0"
-                     class="space-y-6">
+                     x-transition:enter="transition ease-out duration-500 transform"
+                     x-transition:enter-start="opacity-0 translate-y-12"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     class="space-y-10">
                     
-                    <div class="text-center mb-6">
-                        <div class="w-16 h-16 bg-purple-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4 text-purple-600">
-                            <i class="fa-solid fa-user-graduate text-2xl"></i>
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-brand-primary/10 rounded-[2rem] flex items-center justify-center mx-auto mb-6 text-brand-primary shadow-inner">
+                            <i class="fa-solid fa-user-graduate text-3xl"></i>
                         </div>
-                        <h2 class="text-2xl font-bold text-slate-800">{{ __('onboarding.step_4.title') }}</h2>
-                        <p class="text-slate-500 mt-1">{{ __('onboarding.step_4.subtitle') }}</p>
+                        <h2 class="text-3xl font-black text-slate-900 tracking-tight">{{ __('onboarding.step_4.title') }}</h2>
+                        <p class="text-slate-500 mt-2 text-lg font-medium">{{ __('onboarding.step_4.subtitle') }}</p>
                     </div>
 
-                    <form @submit.prevent="submitStep('step_4', false)" class="space-y-5">
+                    <form @submit.prevent="submitStep('step_4', false)" class="space-y-6">
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_4.name_label') }}</label>
-                            <input type="text" x-model="formData.step_4.student_name" placeholder="{{ __('onboarding.step_4.name_placeholder') }}" class="w-full border-slate-200 rounded-xl focus:ring-purple-500 focus:border-purple-500 h-12" required>
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_4.name_label') }}</label>
+                            <input type="text" x-model="formData.step_4.student_name" placeholder="{{ __('onboarding.step_4.name_placeholder') }}" class="w-full bg-white/50 border-2 border-slate-100 rounded-2xl focus:ring-brand-primary focus:border-brand-primary h-14 px-6 text-lg font-bold transition-all hover:bg-white" required>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">{{ __('onboarding.step_4.phone_label') }}</label>
-                            <input type="text" x-model="formData.step_4.student_phone" dir="ltr" placeholder="01xxxxxxxxx" class="w-full border-slate-200 rounded-xl focus:ring-purple-500 focus:border-purple-500 h-12 text-right" required>
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_4.phone_label') }}</label>
+                            <input type="text" x-model="formData.step_4.student_phone" dir="ltr" placeholder="01xxxxxxxxx" class="w-full bg-white/50 border-2 border-slate-100 rounded-2xl focus:ring-brand-primary focus:border-brand-primary h-14 px-6 text-lg font-bold transition-all hover:bg-white text-right" required>
                         </div>
 
-                        <div class="p-4 bg-purple-50/50 rounded-2xl border border-purple-100 flex items-center gap-3">
-                            <input type="checkbox" x-model="formData.step_4.enroll_in_course" class="w-5 h-5 rounded border-purple-300 text-purple-600 focus:ring-purple-500">
-                            <label class="text-sm font-medium text-purple-900">
+                        <div class="p-8 bg-brand-primary/5 rounded-[2.5rem] border-2 border-brand-primary/10 flex items-center gap-6 group transition-all hover:bg-brand-primary/10">
+                            <div class="relative flex items-center">
+                                <input type="checkbox" x-model="formData.step_4.enroll_in_course" class="w-8 h-8 rounded-xl border-brand-primary/20 text-brand-primary focus:ring-brand-primary transition-all cursor-pointer">
+                                <div class="absolute inset-0 pointer-events-none rounded-xl ring-4 ring-brand-primary/0 group-hover:ring-brand-primary/10 transition-all"></div>
+                            </div>
+                            <label class="text-lg font-bold text-slate-900 cursor-pointer select-none">
                                 {{ __('onboarding.step_4.enroll_checkbox', ['course' => '']) }}
-                                <span class="font-bold underline" x-text="formData.step_3.course_name"></span>
+                                <span class="gradient-text underline" x-text="formData.step_3.course_name"></span>
                             </label>
                         </div>
 
-                        <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <div class="flex items-center gap-6">
-                                <button type="button" @click="prevStep()" class="text-slate-400 hover:text-slate-700 font-medium transition-colors text-sm flex items-center gap-2">
-                                    <i class="fa-solid fa-arrow-left rtl:rotate-180"></i> {{ __('onboarding.btn_back') }}
+                        <div class="pt-10 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-6">
+                            <div class="flex items-center gap-8">
+                                <button type="button" @click="prevStep()" class="text-slate-400 hover:text-slate-900 font-black uppercase tracking-widest text-[10px] transition-all flex items-center gap-3 group">
+                                    <i class="fa-solid fa-arrow-left rtl:rotate-180 group-hover:-translate-x-1.5 transition-transform"></i> 
+                                    {{ __('onboarding.btn_back') }}
                                 </button>
-                                <button type="button" @click="submitStep('step_4', true)" class="text-slate-500 hover:text-slate-800 font-medium transition-colors text-sm">
+                                <button type="button" @click="submitStep('step_4', true)" class="text-slate-400 hover:text-slate-900 font-black uppercase tracking-widest text-[10px] transition-all">
                                     {{ __('onboarding.step_4.btn_skip') }}
                                 </button>
                             </div>
-                            <button type="submit" class="bg-purple-600 hover:bg-purple-700 shadow-lg shadow-purple-200 text-white w-full sm:w-auto px-8 py-3 rounded-xl font-medium transition-colors flex justify-center items-center gap-2">
-                                {{ __('onboarding.step_4.btn_submit') }} <i class="fa-solid fa-rocket rtl:mr-2 ltr:ml-2"></i>
+                            <button type="submit" class="group bg-slate-900 hover:bg-slate-800 text-white w-full sm:w-auto px-12 py-6 rounded-[2rem] font-black text-2xl transition-all shadow-2xl hover:shadow-slate-900/40 flex justify-center items-center gap-6 transform hover:-translate-y-2 overflow-hidden">
+                                <span class="relative z-10 flex items-center gap-4">
+                                    <i class="fa-solid fa-bolt text-brand-primary animate-pulse"></i>
+                                    {{ __('onboarding.step_4.btn_submit') }}
+                                    <i class="fa-solid fa-chevron-right rtl:rotate-180 group-hover:translate-x-2 transition-transform"></i>
+                                </span>
                             </button>
                         </div>
                     </form>
@@ -332,13 +338,15 @@
             </div>
         </div>
         
-        <p class="text-center text-slate-400 text-sm mt-8">
-            <i class="fa-solid fa-shield-halved rtl:ml-1 ltr:mr-1"></i> {{ __('onboarding.security_note') }}
-        </p>
+        <div class="text-center mt-12 animate-fade-in" style="animation-delay: 0.5s;">
+            <p class="inline-flex items-center gap-3 bg-slate-50/50 backdrop-blur-sm px-6 py-3 rounded-full border border-slate-100 text-slate-400 text-sm font-bold">
+                <i class="fa-solid fa-shield-halved text-brand-primary"></i> {{ __('onboarding.security_note') }}
+            </p>
+        </div>
     </div>
 </div>
-</div>
 
+@push('scripts')
 <script>
     document.addEventListener('alpine:init', () => {
         Alpine.data('onboardingWizard', (initialStatus) => ({
@@ -479,5 +487,5 @@
         }));
     });
 </script>
-</body>
-</html>
+@endpush
+@endsection
