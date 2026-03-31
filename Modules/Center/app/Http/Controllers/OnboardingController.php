@@ -47,7 +47,7 @@ class OnboardingController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function submit(Request $request)
+    public function submit(Request $request, \App\Services\FinanceService $financeService)
     {
         $tenant = auth()->user()->tenant;
         $step = $request->input('step');
@@ -228,22 +228,24 @@ class OnboardingController extends Controller
                     ]);
                 }
 
-                // Enroll in course if requested
+                // Enroll in course and create financial record if requested
                 if ($request->boolean('enroll_in_course') && $user) {
                     $course = \App\Models\Course::where('tenant_id', $tenant->id)->latest()->first();
-                    if ($course) {
-                        // Prevent duplicate enrollment
-                        $existingEnrollment = \App\Models\Enrollment::where('user_id', $user->id)
-                            ->where('course_id', $course->id)->first();
-                        if (!$existingEnrollment) {
-                            \App\Models\Enrollment::create([
-                                'tenant_id' => $tenant->id,
-                                'user_id' => $user->id,
-                                'course_id' => $course->id,
-                                'enrolled_at' => now(),
-                                'status' => 'active',
-                                'remaining_sessions' => $course->sessions_count,
+                    $student = \App\Models\Student::where('user_id', $user->id)->first();
+                    if ($course && $student) {
+                        // Use FinanceService to create a Sale (this handles Enrollment too)
+                        try {
+                            $financeService->createSale([
+                                'student_id' => $student->id,
+                                'items' => [
+                                    ['id' => $course->id, 'price' => $course->price]
+                                ],
+                                'paid_amount' => 0,
+                                'payment_method' => 'cash',
+                                'notes' => 'قيد تلقائي عند إعداد المركز',
                             ]);
+                        } catch (\Exception $e) {
+                            \Illuminate\Support\Facades\Log::error("Onboarding Sale Creation Failed: " . $e->getMessage());
                         }
                     }
                 }
