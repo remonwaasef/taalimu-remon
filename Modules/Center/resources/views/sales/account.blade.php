@@ -5,177 +5,153 @@
 
 @section('content')
 
-<div class="premium-dashboard-container animate__animated animate__fadeIn">
-    <!-- Header Section with Hero Orbs -->
-    <div class="premium-header position-relative rounded-5 overflow-hidden mb-5">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="glass-header p-5 d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-4">
-            <div class="header-info">
-                <span class="badge bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-2 rounded-pill mb-3 animate__animated animate__fadeInDown">
-                    <i class="fas fa-chart-line me-2"></i>{{ __('center::messages.blade_0558') }}
-                </span>
-                <h1 class="display-5 fw-black text-white mb-2">{{ __('center::messages.blade_0558') }}</h1>
-                <p class="text-slate-400 mb-0">{{ __('center::messages.blade_0559') }}</p>
-            </div>
-            
-            <!-- Modern Search Pill -->
-            <div class="search-wrap flex-grow-1 max-w-xl">
-                <div class="glass-card p-2 rounded-pill border-slate-700/50 shadow-2xl">
-                    <select id="studentSelector" class="form-select border-0 bg-transparent text-white" placeholder="{{ __('center::messages.blade_0561') }}">
-                        <option value="">{{ __('center::messages.blade_0561') }}</option>
-                        @foreach($students as $student)
-                            <option value="{{ $student->id }}">{{ $student->name }} | {{ $student->phone }}</option>
-                        @endforeach
-                    </select>
+<div class="row g-4">
+    <!-- Student Header Dashboard (Hidden until search) -->
+    <div id="studentHeader" class="col-lg-12 d-none animate__animated animate__fadeIn">
+        <div class="card border-0 shadow-sm rounded-4 bg-primary text-white overflow-hidden">
+            <div class="card-body p-4 position-relative">
+                <div class="position-absolute top-0 end-0 p-4 opacity-10">
+                    <i class="fas fa-user-graduate fa-6x"></i>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Bento Grid -->
-    <div class="row g-4 mb-5">
-        <!-- Student Identity Card -->
-        <div id="studentHeader" class="col-lg-4 d-none animate__animated animate__fadeInLeft">
-            <div class="glass-card h-full p-4 rounded-5 border-slate-800/50 flex flex-column justify-content-center">
-                <div class="d-flex align-items-center gap-4 mb-4">
-                    <div class="avatar-ring p-1 rounded-circle bg-gradient-to-tr from-emerald-500 to-teal-400">
-                        <div class="bg-slate-900 rounded-circle d-flex align-items-center justify-content-center text-white fw-black" style="width: 80px; height: 80px; font-size: 2.5rem;">
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-lg" style="width: 80px; height: 80px; font-size: 2rem;">
                             <span id="studentInitial">S</span>
                         </div>
                     </div>
-                    <div>
-                        <h2 id="studentNameDisplay" class="fw-black text-white h3 mb-1">Student Name</h2>
-                        <span id="studentStatusBadge" class="badge bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-pill small">Active</span>
-                    </div>
-                </div>
-                <div class="space-y-3">
-                    <div class="d-flex align-items-center gap-3 text-slate-400">
-                        <div class="w-10 h-10 rounded-3 bg-slate-800/50 d-flex align-items-center justify-content-center"><i class="fas fa-phone-alt"></i></div>
-                        <span id="studentPhoneDisplay" class="fw-medium text-slate-200">00000000</span>
-                    </div>
-                    <div class="d-flex align-items-center gap-3 text-slate-400">
-                        <div class="w-10 h-10 rounded-3 bg-slate-800/50 d-flex align-items-center justify-content-center"><i class="fas fa-graduation-cap"></i></div>
-                        <span id="studentGradeDisplay" class="fw-medium text-slate-200">Grade Level</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quick Stats Bento -->
-        <div class="col-lg-8">
-            <div id="statsSection" class="row g-4 h-full d-none">
-                <div class="col-md-6">
-                    <div class="glass-card p-4 rounded-5 border-emerald-500/10 bg-emerald-500/5 hover-emerald transition-all animate__animated animate__fadeInUp">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div class="p-3 rounded-4 bg-emerald-500/10 text-emerald-400"><i class="fas fa-money-bill-wave fa-xl"></i></div>
-                            <span class="text-xs font-bold text-emerald-500/50 uppercase tracking-widest">Balance</span>
+                    <div class="col">
+                        <h2 id="studentNameDisplay" class="fw-bold mb-1">Student Name</h2>
+                        <div class="d-flex gap-3 small opacity-75">
+                            <span><i class="fas fa-phone-alt me-1"></i> <span id="studentPhoneDisplay">00000000</span></span>
+                            <span><i class="fas fa-graduation-cap me-1"></i> <span id="studentGradeDisplay">Grade</span></span>
+                            <span><i class="fas fa-circle me-1" id="statusDot"></i> <span id="studentStatusDisplay">Status</span></span>
                         </div>
-                        <div class="text-slate-400 small mb-1">{{ __('center::messages.blade_0562') }}</div>
-                        <h3 id="debtStat" class="display-6 fw-black text-emerald-400 mb-0">0.00</h3>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="glass-card p-4 rounded-5 border-slate-800/50 hover-indigo transition-all animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div class="p-3 rounded-4 bg-indigo-500/10 text-indigo-400"><i class="fas fa-check-circle fa-xl"></i></div>
-                            <span class="text-xs font-bold text-indigo-500/50 uppercase tracking-widest">Settled</span>
-                        </div>
-                        <div class="text-slate-400 small mb-1">{{ __('center::messages.blade_0582', ['default' => 'إجمالي المسدد']) }}</div>
-                        <h3 id="paidStat" class="display-6 fw-black text-indigo-400 mb-0">0.00</h3>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="glass-card p-4 rounded-5 border-slate-800/50 hover-cyan transition-all animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div class="p-3 rounded-4 bg-cyan-500/10 text-cyan-400"><i class="fas fa-calendar-check fa-xl"></i></div>
-                            <span class="text-xs font-bold text-cyan-500/50 uppercase tracking-widest">Attendance</span>
-                        </div>
-                        <div class="text-slate-400 small mb-1">{{ __('center::messages.blade_0583', ['default' => 'نسبة الحضور']) }}</div>
-                        <h3 id="attendanceStat" class="display-6 fw-black text-cyan-400 mb-0">0%</h3>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="glass-card p-4 rounded-5 border-slate-800/50 hover-amber transition-all animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div class="p-3 rounded-4 bg-amber-500/10 text-amber-400"><i class="fas fa-book-open fa-xl"></i></div>
-                            <span class="text-xs font-bold text-amber-500/50 uppercase tracking-widest">Activity</span>
-                        </div>
-                        <div class="text-slate-400 small mb-1">{{ __('center::messages.blade_0584', ['default' => 'الكورسات المشتركة']) }}</div>
-                        <h3 id="coursesStat" class="display-6 fw-black text-amber-400 mb-0">0</h3>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Empty State for Stats -->
-            <div id="emptyState" class="glass-card h-full rounded-5 p-5 d-flex flex-column align-items-center justify-content-center text-center">
-                <div class="p-4 rounded-circle bg-slate-800/50 mb-4 animate__animated animate__pulse animate__infinite">
-                    <i class="fas fa-user-plus fa-3x text-slate-500"></i>
-                </div>
-                <h3 class="text-white fw-bold">{{ __('center::messages.blade_0569') }}</h3>
-                <p class="text-slate-400 max-w-sm">{{ __('center::messages.blade_0570') }}</p>
             </div>
         </div>
     </div>
 
-    <!-- Details Tabs Section -->
-    <div id="accountTabs" class="d-none animate__animated animate__fadeInUp">
-        <div class="glass-card rounded-5 overflow-hidden border-slate-800/50">
-            <div class="premium-tabs border-bottom border-slate-800/50 p-2">
-                <ul class="nav nav-pills nav-justified gap-2" id="myTab" role="tablist">
-                    <li class="nav-item">
-                        <button class="nav-link active rounded-4 p-3 font-bold transition-all" data-bs-toggle="tab" data-bs-target="#financialsTab">
-                            <i class="fas fa-wallet me-2"></i>{{ __('center::sales.ledger') }}
-                        </button>
+    <!-- Stats Cards (Hidden until search) -->
+    <div id="statsSection" class="col-lg-12 d-none">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm rounded-4 animate__animated animate__fadeInUp">
+                    <div class="card-body p-3 d-flex align-items-center gap-3">
+                        <div class="bg-danger bg-opacity-10 text-danger rounded-4 p-3"><i class="fas fa-money-bill-wave fa-lg"></i></div>
+                        <div>
+                            <div class="text-muted small fw-bold">{{ __('center::messages.blade_0562') }}</div>
+                            <h4 id="debtStat" class="mb-0 fw-bold text-danger">0.00</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm rounded-4 animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
+                    <div class="card-body p-3 d-flex align-items-center gap-3">
+                        <div class="bg-success bg-opacity-10 text-success rounded-4 p-3"><i class="fas fa-check-circle fa-lg"></i></div>
+                        <div>
+                            <div class="text-muted small fw-bold">{{ __('center::messages.blade_0582', ['default' => 'إجمالي المسدد']) }}</div>
+                            <h4 id="paidStat" class="mb-0 fw-bold text-success">0.00</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm rounded-4 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+                    <div class="card-body p-3 d-flex align-items-center gap-3">
+                        <div class="bg-info bg-opacity-10 text-info rounded-4 p-3"><i class="fas fa-calendar-check fa-lg"></i></div>
+                        <div>
+                            <div class="text-muted small fw-bold">{{ __('center::messages.blade_0583', ['default' => 'نسبة الحضور']) }}</div>
+                            <h4 id="attendanceStat" class="mb-0 fw-bold text-info">0%</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm rounded-4 animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+                    <div class="card-body p-3 d-flex align-items-center gap-3">
+                        <div class="bg-warning bg-opacity-10 text-warning rounded-4 p-3"><i class="fas fa-book-open fa-lg"></i></div>
+                        <div>
+                            <div class="text-muted small fw-bold">{{ __('center::messages.blade_0584', ['default' => 'الكورسات المشتركة']) }}</div>
+                            <h4 id="coursesStat" class="mb-0 fw-bold text-warning">0</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Selector -->
+    <div class="col-lg-12">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+                    <div class="col-lg-12">
+                        <label class="form-label fw-bold text-dark mb-3"><i class="fas fa-search me-1 text-primary"></i>{{ __('center::messages.blade_0560') }}</label>
+                        <select id="studentSelector" class="form-select form-select-lg" placeholder="{{ __('center::messages.blade_0561') }}">
+                            <option value="">{{ __('center::messages.blade_0561') }}</option>
+                            @foreach($students as $student)
+                                <option value="{{ $student->id }}">{{ $student->name }} | {{ $student->phone }} | {{ $student->code }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Tabs (Hidden initially) -->
+    <div id="accountTabs" class="col-lg-12 d-none animate__animated animate__fadeIn">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="card-header bg-white border-0 p-0">
+                <ul class="nav nav-tabs nav-justified border-bottom" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#financialsTab" type="button"><i class="fas fa-wallet me-2"></i>{{ __('center::sales.ledger') }}</button>
                     </li>
-                    <li class="nav-item">
-                        <button class="nav-link rounded-4 p-3 font-bold transition-all" data-bs-toggle="tab" data-bs-target="#coursesTab">
-                            <i class="fas fa-graduation-cap me-2"></i>{{ __('center::messages.blade_0020') }}
-                        </button>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#coursesTab" type="button"><i class="fas fa-graduation-cap me-2"></i>{{ __('center::messages.blade_0020') }}</button>
                     </li>
-                    <li class="nav-item">
-                        <button class="nav-link rounded-4 p-3 font-bold transition-all" data-bs-toggle="tab" data-bs-target="#attendanceTab">
-                            <i class="fas fa-user-check me-2"></i>{{ __('center::messages.blade_0130') }}
-                        </button>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#attendanceTab" type="button"><i class="fas fa-user-check me-2"></i>{{ __('center::messages.blade_0130') }}</button>
                     </li>
                 </ul>
             </div>
-            
-            <div class="card-body p-5">
-                <div class="tab-content">
+            <div class="card-body p-4">
+                <div class="tab-content" id="myTabContent">
                     <!-- Financials Tab -->
                     <div class="tab-pane fade show active" id="financialsTab">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h4 class="text-white fw-black mb-0"><i class="fas fa-file-invoice-dollar text-emerald-500 me-2"></i>{{ __('center::messages.blade_0567') }}</h4>
-                            <button class="btn btn-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-pill px-4 btn-sm">
-                                <i class="fas fa-download me-2"></i>Export Ledger
-                            </button>
-                        </div>
-                        <div id="unpaidInvoicesList" class="space-y-4">
-                            <!-- Dynamic Content -->
+                        <div class="mb-4">
+                            <h5 class="fw-bold mb-3 d-flex align-items-center">
+                                <span class="bg-danger bg-opacity-10 text-danger rounded-circle p-2 me-2 d-flex align-items-center justify-content-center" style="width:35px; height:35px;"><i class="fas fa-exclamation-circle small"></i></span>
+                                {{ __('center::messages.blade_0567') }}
+                            </h5>
+                            <div id="unpaidInvoicesList">
+                                <!-- Dynamic dynamic -->
+                            </div>
                         </div>
                     </div>
 
                     <!-- Courses Tab -->
                     <div class="tab-pane fade" id="coursesTab">
-                        <div id="coursesListSection" class="row g-4">
-                            <!-- Dynamic Content -->
+                        <div id="coursesListSection" class="row g-3">
+                            <!-- Dynamic dynamic -->
                         </div>
                     </div>
 
                     <!-- Attendance Tab -->
                     <div class="tab-pane fade" id="attendanceTab">
-                        <div class="glass-table-wrap rounded-4 overflow-hidden border border-slate-800/50">
-                            <table class="table table-dark table-hover mb-0 align-middle">
-                                <thead class="bg-slate-800/50">
-                                    <tr class="border-slate-800/50">
-                                        <th class="p-4 text-slate-400 uppercase tracking-tighter small">{{ __('center::messages.blade_0677', ['default' => 'التاريخ']) }}</th>
-                                        <th class="p-4 text-slate-400 uppercase tracking-tighter small">{{ __('center::messages.blade_0650', ['default' => 'الكورس']) }}</th>
-                                        <th class="p-4 text-slate-400 uppercase tracking-tighter small">{{ __('center::messages.blade_0434', ['default' => 'الحالة']) }}</th>
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th>{{ __('center::messages.blade_0677', ['default' => 'التاريخ']) }}</th>
+                                        <th>{{ __('center::messages.blade_0650', ['default' => 'الكورس']) }}</th>
+                                        <th>{{ __('center::messages.blade_0434', ['default' => 'الحالة']) }}</th>
                                     </tr>
                                 </thead>
-                                <tbody id="attendanceTableBody" class="border-slate-800/50">
-                                    <!-- Dynamic Content -->
+                                <tbody id="attendanceTableBody">
+                                    <!-- Dynamic dynamic -->
                                 </tbody>
                             </table>
                         </div>
@@ -184,70 +160,29 @@
             </div>
         </div>
     </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="col-lg-12 text-center py-5">
+        <div class="bg-white rounded-4 shadow-sm p-5 d-inline-block" style="max-width: 500px;">
+            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 100px; height: 100px;">
+                <i class="fas fa-user-search fa-3x text-muted"></i>
+            </div>
+            <h4 class="fw-bold text-dark">{{ __('center::messages.blade_0569') }}</h4>
+            <p class="text-muted mb-0">{{ __('center::messages.blade_0570') }}</p>
+        </div>
+    </div>
 </div>
 
 @push('styles')
 <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&family=Cairo:wght@400;700;900&display=swap');
-
-    :root {
-        --premium-bg: #030712;
-        --glass-bg: rgba(15, 23, 42, 0.6);
-        --emerald-500: #10b981;
-        --indigo-500: #6366f1;
-        --slate-900: #0f172a;
-    }
-
-    body {
-        background-color: var(--premium-bg) !important;
-        font-family: 'Outfit', 'Cairo', sans-serif !important;
-    }
-
-    .fw-black { font-weight: 900; }
-    .glass-card { background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
-    
-    /* Header Premium Style */
-    .premium-header { 
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-    }
-    .orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.15; }
-    .orb-1 { width: 300px; height: 300px; background: var(--emerald-500); top: -100px; left: -50px; }
-    .orb-2 { width: 250px; height: 250px; background: var(--indigo-500); bottom: -50px; right: -50px; }
-
-    /* TomSelect Premium Redesign */
-    .ts-control { 
-        background: transparent !important; 
-        border: none !important; 
-        color: white !important;
-        font-size: 1.1rem !important;
-        padding: 0.75rem 1rem !important;
-    }
-    .ts-dropdown { background: #1e293b !important; color: white !important; border: 1px solid #334155 !important; border-radius: 1rem !important; top: 10px !important; }
-    .ts-dropdown .option { padding: 10px 20px !important; }
-    .ts-dropdown .active { background: var(--emerald-500) !important; }
-
-    /* Bento Grid Effects */
-    .hover-emerald:hover { border-color: var(--emerald-500) !important; box-shadow: 0 0 30px rgba(16, 185, 129, 0.15); transform: translateY(-3px); }
-    .hover-indigo:hover { border-color: var(--indigo-500) !important; box-shadow: 0 0 30px rgba(99, 102, 241, 0.15); transform: translateY(-3px); }
-    /* More colors as needed */
-
-    /* Premium Tabs */
-    .premium-tabs .nav-link { color: #94a3b8; border: none; background: transparent; }
-    .premium-tabs .nav-link.active { background: var(--emerald-500) !important; color: white !important; box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3); }
-
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: var(--premium-bg); }
-    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: #334155; }
-
-    .space-y-3 > * + * { margin-top: 0.75rem; }
-    .space-y-4 > * + * { margin-top: 1rem; }
-    .max-w-sm { max-width: 24rem; }
-    .max-w-xl { max-width: 36rem; }
+    .ts-control { border-radius: 1rem !important; padding: 0.75rem 1.25rem !important; border: 1px solid #eee !important; transition: all 0.3s; }
+    .ts-control:focus { border-color: var(--bs-primary) !important; box-shadow: 0 0 0 0.25rem rgba(5, 150, 105, 0.1) !important; }
+    .nav-tabs .nav-link { padding: 1.25rem; border: none; font-weight: 600; color: #64748b; border-bottom: 3px solid transparent; }
+    .nav-tabs .nav-link.active { color: var(--bs-primary); border-bottom-color: var(--bs-primary); background: transparent; }
+    .transition-all { transition: all 0.3s ease; }
+    .hover-shadow:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important; border-color: var(--bs-primary) !important; }
 </style>
 @endpush
 
@@ -288,76 +223,64 @@
                 if (data.success) {
                     const s = data.student;
                     
-                    // Update Header Bento
+                    // Update Header
                     document.getElementById('studentInitial').innerText = s.name.charAt(0).toUpperCase();
                     document.getElementById('studentNameDisplay').innerText = s.name;
                     document.getElementById('studentPhoneDisplay').innerText = s.phone;
                     document.getElementById('studentGradeDisplay').innerText = s.grade || '-';
+                    document.getElementById('studentStatusDisplay').innerText = s.status === 'active' ? '{{ __('center::messages.blade_0583') }}' : '{{ __('center::messages.blade_0085') }}';
+                    document.getElementById('statusDot').className = `fas fa-circle me-1 ${s.status === 'active' ? 'text-success' : 'text-danger'}`;
                     
-                    const statusBadge = document.getElementById('studentStatusBadge');
-                    statusBadge.innerText = s.status === 'active' ? '{{ __('center::messages.blade_0583') }}' : '{{ __('center::messages.blade_0085') }}';
-                    statusBadge.className = `badge ${s.status === 'active' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-danger/10 text-danger'} px-3 py-1 rounded-pill small`;
-                    
-                    // Update Stats with Counting Animation logic (optional but nice)
+                    // Update Stats
                     document.getElementById('debtStat').innerText = data.stats.total_debt + ' ' + currency;
                     document.getElementById('paidStat').innerText = data.stats.total_paid + ' ' + currency;
                     document.getElementById('attendanceStat').innerText = data.stats.attendance_rate + '%';
                     document.getElementById('coursesStat').innerText = data.stats.course_count;
 
-                    // Update Financials Tab (Premium List Items)
+                    // Update Financials Tab
                     const invoiceList = document.getElementById('unpaidInvoicesList');
                     invoiceList.innerHTML = '';
                     if (data.unpaid_invoices.length > 0) {
                         data.unpaid_invoices.forEach(inv => {
                             invoiceList.innerHTML += `
-                                <div class="glass-card p-4 rounded-4 d-flex justify-content-between align-items-center hover-emerald transition-all border-slate-800/50">
-                                    <div class="d-flex align-items-center gap-4">
-                                        <div class="bg-emerald-500/10 text-emerald-400 rounded-3 d-flex align-items-center justify-content-center" style="width:55px; height:55px;">
-                                            <i class="fas fa-file-invoice-dollar fa-lg"></i>
+                                <div class="bg-white border rounded-4 p-3 mb-3 d-flex justify-content-between align-items-center hover-shadow transition-all shadow-sm">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center" style="width:45px; height:45px;">
+                                            <i class="fas fa-file-invoice"></i>
                                         </div>
                                         <div>
-                                            <div class="fw-black text-white mb-0 h6">{{ __('center::sales.invoice_id_prefix') }}${inv.id}</div>
-                                            <div class="small text-slate-400 font-mono uppercase tracking-tighter">${inv.created_at.split('T')[0]}</div>
+                                            <div class="fw-bold text-dark mb-0">{{ __('center::sales.invoice_id_prefix') }}${inv.id}</div>
+                                            <div class="x-small text-muted">${inv.created_at.split('T')[0]}</div>
+                                            <div class="text-danger fw-bold small mt-1">${inv.remaining.toFixed(2)} ${currency}</div>
                                         </div>
                                     </div>
-                                    <div class="text-end">
-                                        <div class="text-emerald-400 fw-black h5 mb-1">${inv.remaining.toFixed(2)} ${currency}</div>
-                                        <a href="/sales/${inv.id}" target="_blank" class="text-xs font-bold text-slate-500 hover-white transition-all uppercase tracking-widest decoration-none">
-                                            <i class="fas fa-external-link-alt me-1"></i> {{ __('center::messages.blade_0573') }}
-                                        </a>
+                                    <div class="d-flex gap-2">
+                                        <a href="/sales/${inv.id}" target="_blank" class="btn btn-outline-light text-dark btn-sm rounded-pill px-3 border shadow-none"><i class="fas fa-eye me-1 text-primary"></i> {{ __('center::messages.blade_0573') }}</a>
                                     </div>
                                 </div>`;
                         });
                     } else {
-                        invoiceList.innerHTML = `
-                            <div class="text-center py-5 glass-card rounded-4 border-dashed border-slate-800">
-                                <div class="text-emerald-500 mb-3"><i class="fas fa-check-double fa-3x"></i></div>
-                                <h5 class="text-white fw-bold">{{ __('center::messages.blade_0574') }}</h5>
-                                <p class="text-slate-500 mb-0">All accounts are settled for this student.</p>
-                            </div>`;
+                        invoiceList.innerHTML = `<div class="text-center py-4 text-muted"><i class="fas fa-check-circle text-success me-2"></i>{{ __('center::messages.blade_0574') }}</div>`;
                     }
 
-                    // Update Courses Tab (Premium Grid)
+                    // Update Courses Tab
                     const coursesGrid = document.getElementById('coursesListSection');
                     coursesGrid.innerHTML = '';
                     if (data.courses.length > 0) {
                         data.courses.forEach(c => {
                             coursesGrid.innerHTML += `
                                 <div class="col-md-6">
-                                    <div class="glass-card p-4 rounded-4 border-slate-800/50 h-full">
-                                        <div class="d-flex align-items-start gap-3">
-                                            <div class="p-3 rounded-3 bg-indigo-500/10 text-indigo-400"><i class="fas fa-book-bookmark"></i></div>
-                                            <div>
-                                                <h6 class="fw-black text-white h6 mb-1">${c.title}</h6>
-                                                <div class="text-xs text-slate-500 mb-3">Enrolled: ${c.enrolled_at || '-'}</div>
-                                                <span class="badge bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-pill px-3 py-1 font-bold small">${c.status}</span>
-                                            </div>
+                                    <div class="card border border-light-subtle shadow-none rounded-4 bg-light bg-opacity-25">
+                                        <div class="card-body p-3">
+                                            <h6 class="fw-bold text-dark mb-1">${c.title}</h6>
+                                            <div class="small text-muted mb-2">تاريخ الاشتراك: ${c.enrolled_at || '-'}</div>
+                                            <span class="badge bg-primary rounded-pill px-3">${c.status}</span>
                                         </div>
                                     </div>
                                 </div>`;
                         });
                     } else {
-                        coursesGrid.innerHTML = `<div class="col-12 text-center py-5 text-slate-500 glass-card rounded-4 border-dashed">{{ __('center::messages.blade_0571') }}</div>`;
+                        coursesGrid.innerHTML = `<div class="col-12 text-center py-4 text-muted">{{ __('center::messages.blade_0571') }}</div>`;
                     }
 
                     // Update Attendance Tab
@@ -365,19 +288,19 @@
                     attTable.innerHTML = '';
                     if (data.recent_attendance.length > 0) {
                         data.recent_attendance.forEach(a => {
-                            let badgeStyle = 'bg-slate-800/50 text-slate-400';
-                            if(a.status === 'present') badgeStyle = 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
-                            if(a.status === 'absent') badgeStyle = 'bg-danger/10 text-danger border border-danger/20';
+                            let badgeClass = 'bg-secondary';
+                            if(a.status === 'present') badgeClass = 'bg-success';
+                            if(a.status === 'absent') badgeClass = 'bg-danger';
                             
                             attTable.innerHTML += `
-                                <tr class="border-slate-800/50">
-                                    <td class="p-4 text-white fw-bold"><i class="far fa-calendar me-2 text-slate-500"></i>${a.date}</td>
-                                    <td class="p-4 text-slate-300 font-medium">${a.course}</td>
-                                    <td class="p-4"><span class="badge ${badgeStyle} rounded-pill px-3 py-1 font-bold small uppercase shadow-none">${a.status}</span></td>
+                                <tr>
+                                    <td class="fw-bold">${a.date}</td>
+                                    <td>${a.course}</td>
+                                    <td><span class="badge ${badgeClass} rounded-pill px-3">${a.status}</span></td>
                                 </tr>`;
                         });
                     } else {
-                        attTable.innerHTML = `<tr><td colspan="3" class="text-center py-5 text-slate-500 glass-card border-0">{{ __('center::messages.blade_0571') }}</td></tr>`;
+                        attTable.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-muted">{{ __('center::messages.blade_0571') }}</td></tr>`;
                     }
                 }
             });
