@@ -320,7 +320,7 @@
                                 <button type="submit" class="group bg-emerald-500 hover:bg-emerald-600 text-white w-full sm:w-auto px-12 py-6 rounded-[2rem] font-black text-2xl transition-all shadow-[0_20px_50px_-12px_rgba(16,185,129,0.35)] flex justify-center items-center gap-4 transform hover:-translate-y-2 overflow-hidden">
                                     <span class="relative z-10 flex items-center gap-4">
                                         <i class="fa-solid fa-rocket text-white animate-bounce-subtle"></i>
-                                        {{ __('onboarding.btn_finish') ?? 'Finish Setup' }}
+                                        {{ __('onboarding.step_4.btn_submit') }}
                                         <i class="fa-solid fa-chevron-right rtl:rotate-180 group-hover:translate-x-2 transition-transform"></i>
                                     </span>
                                 </button>
