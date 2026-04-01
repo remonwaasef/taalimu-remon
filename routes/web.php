@@ -121,60 +121,6 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
     
     Route::post('logout', [App\Http\Controllers\UnifiedAuthController::class, 'logout'])->name('logout');
 
-    // TEMPORARY: Update package prices - REMOVE AFTER USE
-    Route::get('/dev/update-prices', function() {
-        if (app()->environment('production') && !auth()->check()) abort(403);
-        
-        $updates = [
-            'basic' => [
-                'price' => 299,
-                'term_price' => 1299,
-                'yearly_price' => 2990,
-                'regional_prices' => [
-                    'EGP' => ['amount' => 299, 'currency' => 'EGP', 'yearly_price' => 2990],
-                    'USD' => ['amount' => 29, 'currency' => 'USD', 'yearly_price' => 290],
-                    'EUR' => ['amount' => 19.90, 'currency' => 'EUR', 'yearly_price' => 199],
-                ],
-                'max_students' => 100
-            ],
-            'pro' => [
-                'price' => 599,
-                'term_price' => 2499,
-                'yearly_price' => 5990,
-                'regional_prices' => [
-                    'EGP' => ['amount' => 599, 'currency' => 'EGP', 'yearly_price' => 5990],
-                    'USD' => ['amount' => 49, 'currency' => 'USD', 'yearly_price' => 490],
-                    'EUR' => ['amount' => 39.90, 'currency' => 'EUR', 'yearly_price' => 399],
-                ],
-                'max_students' => 500
-            ],
-            'enterprise' => [
-                'price' => 1299,
-                'term_price' => 4999,
-                'yearly_price' => 12990,
-                'regional_prices' => [
-                    'EGP' => ['amount' => 1299, 'currency' => 'EGP', 'yearly_price' => 12990],
-                    'USD' => ['amount' => 99, 'currency' => 'USD', 'yearly_price' => 990],
-                    'EUR' => ['amount' => 79.90, 'currency' => 'EUR', 'yearly_price' => 799],
-                ],
-                'max_students' => 2000
-            ]
-        ];
-
-        $output = [];
-        foreach ($updates as $slug => $data) {
-            $package = \App\Models\Package::where('slug', $slug)->first();
-            if ($package) {
-                $maxStudents = $data['max_students'];
-                unset($data['max_students']);
-                $package->update($data);
-                $package->features()->syncWithoutDetaching([1 => ['value' => $maxStudents]]);
-                $output[] = "Updated $slug (Students: $maxStudents)";
-            }
-        }
-        return response()->json($output);
-    });
-
     // Social Auth Routes
     Route::get('auth/google', [App\Http\Controllers\SocialAuthController::class, 'redirectToGoogle'])->name('auth.google');
     Route::get('auth/google/callback', [App\Http\Controllers\SocialAuthController::class, 'handleGoogleCallback']);

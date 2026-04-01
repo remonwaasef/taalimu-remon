@@ -140,10 +140,20 @@ class RegistrationController extends Controller
             ],
             'plan' => 'required|exists:packages,slug',
             'billing_cycle' => 'required|in:monthly,term,yearly',
+            'currency' => 'nullable|in:EGP,USD,EUR',
             'coupon_code' => 'nullable|string|exists:coupons,code',
             'country_code' => 'nullable|string|max:2',
             'payment_gateway' => 'required|in:paypal,paymob,test',
         ]);
+
+        // Enforce gateway based on currency
+        $currency = $request->input('currency', 'EGP');
+        if ($currency === 'EGP' && $request->payment_gateway === 'paypal') {
+            return back()->withErrors(['payment_gateway' => __('PayPal does not support EGP. Please use Paymob.')])->withInput();
+        }
+        if ($currency !== 'EGP' && $request->payment_gateway === 'paymob') {
+            return back()->withErrors(['payment_gateway' => __('Paymob is only available for EGP payments.')])->withInput();
+        }
 
         try {
             DB::beginTransaction();
@@ -151,13 +161,15 @@ class RegistrationController extends Controller
             $coupon = null;
             $discountAmount = 0;
             $package = \App\Models\Package::where('slug', $request->plan)->first();
+            $currency = $request->input('currency', 'EGP');
+            $regionalPrice = $package->getRegionalPrice($currency);
             
             if ($request->billing_cycle === 'term') {
-                $basePrice = $package->term_price ?: ($package->price * 4);
+                $basePrice = $regionalPrice['term_price'] ?? ($regionalPrice['amount'] * 4);
             } elseif ($request->billing_cycle === 'yearly') {
-                $basePrice = $package->yearly_price ?: ($package->price * 10);
+                $basePrice = $regionalPrice['yearly_price'] ?? ($regionalPrice['amount'] * 10);
             } else {
-                $basePrice = $package->price;
+                $basePrice = $regionalPrice['amount'];
             }
 
             if ($request->has('coupon_code') && $request->coupon_code) {
@@ -234,6 +246,7 @@ class RegistrationController extends Controller
                     'tenant_id' => $tenant->id,
                     'selected_plan' => $request->plan,
                     'billing_cycle' => $request->billing_cycle,
+                    'selected_currency' => $currency,
                     'applied_coupon_id' => $coupon ? $coupon->id : null,
                     'applied_coupon_code' => $coupon ? $coupon->code : null,
                     'discount_amount' => $discountAmount,
