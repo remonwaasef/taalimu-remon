@@ -171,15 +171,24 @@
                                                 </div>
                                                 <div class="flex-grow-1">
                                                     <div class="row g-2">
-                                                        <div class="col-6">
-                                                            <label class="small text-muted mb-0">{{ __('admin.package_name_ar') }}</label>
-                                                            <input type="text" class="form-control form-control-sm" name="packages[{{ $package->id }}][name]" value="{{ $package->name }}">
+                                                        <div class="col-md-3">
+                                                            <label class="small text-muted mb-0">Slug</label>
+                                                            <input type="text" class="form-control form-control-sm bg-light fw-bold" name="packages[{{ $package->id }}][slug]" value="{{ $package->slug }}">
                                                         </div>
-                                                        <div class="col-6">
+                                                        <div class="col-md-3">
                                                             <label class="small text-muted mb-0">{{ __('admin.package_name_en') }}</label>
                                                             <input type="text" class="form-control form-control-sm text-end" dir="ltr" name="packages[{{ $package->id }}][name_en]" value="{{ $package->name_en }}">
                                                         </div>
+                                                        <div class="col-md-3">
+                                                            <label class="small text-muted mb-0">Nom (FR)</label>
+                                                            <input type="text" class="form-control form-control-sm text-end" dir="ltr" name="packages[{{ $package->id }}][name_fr]" value="{{ $package->name_fr }}">
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label class="small text-muted mb-0">{{ __('admin.package_name_ar') }}</label>
+                                                            <input type="text" class="form-control form-control-sm" name="packages[{{ $package->id }}][name]" value="{{ $package->name }}">
+                                                        </div>
                                                     </div>
+ streams.
                                                     <span class="badge bg-light text-muted border mt-1" style="font-size: 0.65rem;">{{ $package->slug }}</span>
                                                 </div>
                                             </div>
@@ -234,31 +243,13 @@
                                                         </button>
                                                     </h2>
                                                     <div id="reg_eg_{{ $package->id }}" class="accordion-collapse collapse" data-bs-parent="#regionalAccordion{{ $package->id }}">
-                                                        <div class="accordion-body p-3">
-                                                            <div class="row g-2">
-                                                                <div class="col-3">
-                                                                    <label class="small text-muted mb-0">Slug (ID Unique)</label>
-                                                                    <input type="text" class="form-control form-control-sm rounded-3 fw-bold bg-light" name="packages[{{ $package->id }}][slug]" value="{{ $package->slug }}">
-                                                                </div>
-                                                                <div class="col-3">
-                                                                    <label class="small text-muted mb-0">Nom du Forfait (EN)</label>
-                                                                    <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][name_en]" value="{{ $package->name_en }}">
-                                                                </div>
-                                                                <div class="col-3">
-                                                                    <label class="small text-muted mb-0">Nom du Forfait (FR)</label>
-                                                                    <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][name_fr]" value="{{ $package->name_fr }}">
-                                                                </div>
-                                                                <div class="col-3">
-                                                                    <label class="small text-muted mb-0">اسم الباقة (AR)</label>
-                                                                    <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][name]" value="{{ $package->name }}">
-                                                                </div>
-                                                            </div>
-                                                            <div class="row g-2 mt-2">
+                                                                                             <div class="row g-2">
                                                                 <input type="hidden" name="packages[{{ $package->id }}][regional_prices][EG][currency]" value="EGP">
                                                                 <div class="col-4">
                                                                     <label class="small text-muted mb-0">{{ __('admin::admin.price_monthly') }}</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][EG][amount]" value="{{ $regional['EG']['amount'] ?? '' }}">
+                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][EG][amount]" value="{{ $regional['EG']['amount'] ?? 0 }}">
                                                                 </div>
+                                                          </div>
                                                                 <div class="col-4">
                                                                     <label class="small text-muted mb-0">سعر الترم</label>
                                                                     <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][EG][term_price]" value="{{ $regional['EG']['term_price'] ?? '' }}">
@@ -531,15 +522,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="mb-3">
-                                            <label class="form-label small fw-bold text-muted mb-1">{{ __('admin.description_ar') }}</label>
-                                            <textarea class="form-control rounded-3" name="packages[{{ $package->id }}][description]" rows="2">{{ $package->description }}</textarea>
-                                        </div>
-
-                                        <div class="mb-4">
-                                            <label class="form-label small fw-bold text-muted mb-1">{{ __('admin.description_en') }}</label>
-                                            <textarea class="form-control rounded-3 text-end" dir="ltr" name="packages[{{ $package->id }}][description_en]" rows="2">{{ $package->description_en }}</textarea>
-                                        </div>
+streams.
 
                                         <div class="d-flex justify-content-between align-items-center bg-light/50 p-2 rounded-3 border border-dashed">
                                             <div class="form-check form-switch m-0">
