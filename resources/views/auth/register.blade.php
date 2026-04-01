@@ -31,7 +31,7 @@ document.addEventListener('alpine:init', () => {
         discountText: '',
         discountText: '',
         isApplyingCoupon: false,
-        userCountry: 'default',
+        selectedCurrency: config.selectedCurrency || 'EGP',
         accountType: config.accountType || null,
         showPlanModal: false,
 
@@ -45,6 +45,14 @@ document.addEventListener('alpine:init', () => {
                 const response = await fetch('https://get.geojs.io/v1/ip/country.json');
                 const data = await response.json();
                 this.userCountry = data.country || '';
+                
+                // If currency wasn't passed in URL, try to guess from country
+                const urlParams = new URLSearchParams(window.location.search);
+                if (!urlParams.has('currency')) {
+                    if (this.userCountry === 'EG') this.selectedCurrency = 'EGP';
+                    else if (['FR', 'DE', 'IT', 'ES', 'NL', 'BE', 'AT', 'PT', 'IE'].includes(this.userCountry)) this.selectedCurrency = 'EUR';
+                    else this.selectedCurrency = 'USD';
+                }
             } catch(e) { console.log('IP fetch failed', e); }
         },
 
@@ -68,12 +76,12 @@ document.addEventListener('alpine:init', () => {
                  discount_label: pkg.discount_label
              };
 
-             if (this.userCountry && prices[this.userCountry]) {
-                 let r = prices[this.userCountry];
+             if (prices[this.selectedCurrency]) {
+                 let r = prices[this.selectedCurrency];
                  data.currency = r.currency || data.currency;
                  data.amount = parseFloat(r.amount || data.amount);
                  data.term = parseFloat(r.term_price || (data.amount * 4));
-                 data.yearly = parseFloat(r.yearly_price || (data.amount * 10)); // Default annual logic
+                 data.yearly = parseFloat(r.yearly_price || (data.amount * 10));
                  data.old = parseFloat(r.old_price || 0);
                  data.discount_label = r.discount_label || data.discount_label;
              }
@@ -222,6 +230,7 @@ document.addEventListener('alpine:init', () => {
         subdomain: {{ Js::from(old('subdomain')) }},
         manuallyEditedSubdomain: {{ old('subdomain') ? 'true' : 'false' }},
         accountType: {{ Js::from(old('account_type', $accountType)) }},
+        selectedCurrency: {{ Js::from(old('currency', request('currency', 'EGP'))) }},
         userCountry: ''
      })"
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
@@ -608,17 +617,17 @@ document.addEventListener('alpine:init', () => {
                                     {{ app()->getLocale() == 'ar' ? 'طريقة الدفع' : 'Payment' }}
                                 </label>
                                 <div class="grid grid-cols-2 gap-2">
-                                    <!-- Paymob -->
-                                    <label class="relative cursor-pointer group">
-                                        <input type="radio" name="payment_gateway" value="paymob" checked class="peer sr-only">
+                                    <!-- Paymob (EGP only) -->
+                                    <label class="relative cursor-pointer group" x-show="selectedCurrency === 'EGP'">
+                                        <input type="radio" name="payment_gateway" value="paymob" :checked="selectedCurrency === 'EGP'" class="peer sr-only">
                                         <div class="flex items-center gap-2 p-2 rounded-xl border-2 border-slate-100 bg-slate-50/30 peer-checked:border-brand-secondary peer-checked:bg-white transition-all">
                                             <i class="bi bi-credit-card-2-back text-sm text-slate-400 peer-checked:text-brand-secondary"></i>
                                             <span class="text-[10px] font-black text-slate-600 peer-checked:text-slate-900">Paymob</span>
                                         </div>
                                     </label>
-                                    <!-- PayPal -->
-                                    <label class="relative cursor-pointer group">
-                                        <input type="radio" name="payment_gateway" value="paypal" class="peer sr-only">
+                                    <!-- PayPal (USD/EUR only) -->
+                                    <label class="relative cursor-pointer group" x-show="selectedCurrency !== 'EGP'">
+                                        <input type="radio" name="payment_gateway" value="paypal" :checked="selectedCurrency !== 'EGP'" class="peer sr-only">
                                         <div class="flex items-center gap-2 p-2 rounded-xl border-2 border-slate-100 bg-slate-50/30 peer-checked:border-brand-secondary peer-checked:bg-white transition-all">
                                             <i class="bi bi-paypal text-sm text-slate-400 peer-checked:text-brand-secondary"></i>
                                             <span class="text-[10px] font-black text-slate-600 peer-checked:text-slate-900">PayPal</span>

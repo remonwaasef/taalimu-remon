@@ -50,4 +50,29 @@ class Package extends Model
             ->withPivot('value')
             ->withTimestamps();
     }
+
+    /**
+     * Get pricing for a specific currency.
+     */
+    public function getRegionalPrice(string $currency = 'EGP'): array
+    {
+        $prices = $this->regional_prices ?? [];
+        
+        if (isset($prices[$currency])) {
+            return $prices[$currency];
+        }
+
+        // Fallback to default USD if EUR/EGP not found
+        if (isset($prices['USD'])) {
+            return $prices['USD'];
+        }
+
+        // Ultimate fallback to main price columns
+        return [
+            'amount' => (float)$this->price,
+            'currency' => 'EGP',
+            'yearly_price' => (float)$this->yearly_price,
+            'term_price' => (float)$this->term_price,
+        ];
+    }
 }

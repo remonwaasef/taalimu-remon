@@ -1,27 +1,31 @@
 <section id="pricing" class="py-24 bg-white relative overflow-hidden" 
          x-data="{ 
             billingCycle: 'monthly',
-            userCountry: 'default',
-            currencySymbol: '{{ \App\Models\SiteSetting::get('currency_symbol', '$') }}',
+            selectedCurrency: 'EGP',
             async init() {
                 try {
                     const response = await fetch('https://get.geojs.io/v1/ip/country.json');
                     const data = await response.json();
-                    this.userCountry = data.country;
+                    const country = data.country;
                     
-                    if(this.userCountry === 'EG') this.currencySymbol = 'EGP';
-                    else if(this.userCountry === 'SA') this.currencySymbol = 'SAR';
-                    else if(this.userCountry === 'AE') this.currencySymbol = 'AED';
-                    else if(['FR', 'DE', 'IT', 'ES', 'NL'].includes(this.userCountry)) this.currencySymbol = '€';
-                    else this.currencySymbol = '$';
-                } catch(e) { console.log('Geo fetch failed'); }
-            },
-            getPrice(packagePrice, packageRegionalPrices) {
-                if (!packageRegionalPrices || Object.keys(packageRegionalPrices).length === 0) {
-                    return { amount: packagePrice, currency: '{{ \App\Models\SiteSetting::get('currency_code', 'USD') }}' }; 
+                    if (country === 'EG') this.selectedCurrency = 'EGP';
+                    else if (['FR', 'DE', 'IT', 'ES', 'NL', 'BE', 'AT', 'PT', 'IE'].includes(country)) this.selectedCurrency = 'EUR';
+                    else this.selectedCurrency = 'USD';
+                } catch(e) { 
+                    console.log('Geo fetch failed, defaulting to EGP');
+                    this.selectedCurrency = 'EGP';
                 }
-                let priceData = packageRegionalPrices[this.userCountry] || packageRegionalPrices['default'];
-                return priceData || { amount: packagePrice, currency: '{{ \App\Models\SiteSetting::get('currency_code', 'USD') }}' };
+            },
+            getRegionalPrice(packageRegionalPrices, basePrice, baseTermPrice, baseYearlyPrice) {
+                if (!packageRegionalPrices || !packageRegionalPrices[this.selectedCurrency]) {
+                    return { 
+                        amount: basePrice, 
+                        currency: this.selectedCurrency,
+                        term_price: baseTermPrice,
+                        yearly_price: baseYearlyPrice
+                    };
+                }
+                return packageRegionalPrices[this.selectedCurrency];
             }
          }">
     
@@ -35,8 +39,9 @@
                 {{ __('landing.pricing.subtitle') }}
             </p>
 
-            <!-- Billing Toggle -->
-            <div class="mt-10 flex justify-center">
+            <!-- Billing & Currency Toggles -->
+            <div class="mt-10 flex flex-col items-center gap-6">
+                <!-- Billing Cycle -->
                 <div class="inline-flex items-center bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
                     @foreach(['monthly' => 'landing.pricing.monthly', 'term' => 'landing.pricing.term', 'yearly' => 'landing.pricing.yearly'] as $cycle => $label)
                     <button 
@@ -52,6 +57,22 @@
                         @endif
                     </button>
                     @endforeach
+                </div>
+
+                <!-- Currency Selector -->
+                <div class="flex items-center gap-3">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">{{ __('landing.pricing.currency') }}:</span>
+                    <div class="inline-flex items-center bg-slate-50 p-1 rounded-xl border border-slate-200">
+                        @foreach(['EGP', 'USD', 'EUR'] as $curr)
+                        <button 
+                            @click="selectedCurrency = '{{$curr}}'"
+                            class="px-4 py-1.5 rounded-lg text-xs font-black transition-all duration-300"
+                            :class="selectedCurrency === '{{$curr}}' ? 'bg-white text-emerald-600 shadow-sm border border-slate-200/50' : 'text-slate-400 hover:text-slate-600'"
+                        >
+                            {{$curr}}
+                        </button>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>
@@ -83,19 +104,22 @@
                             {{ __('landing.pricing.plans.' . $package->slug . '.name') }}
                         </h3>
                         
-                        <div x-data="{ localPrice: getPrice({{ $package->price }}, {{ json_encode($regionalPrices) }}) }"
-                             x-effect="localPrice = getPrice({{ $package->price }}, {{ json_encode($regionalPrices) }})"
+                        <div x-data="{ localPrice: {} }"
+                             x-effect="localPrice = getRegionalPrice({{ json_encode($package->regional_prices) }}, {{ $package->price }}, {{ $package->term_price }}, {{ $package->yearly_price }})"
                         >
-                            <div class="flex items-baseline gap-1">
-                                <span class="text-sm font-bold text-slate-400" x-text="localPrice.currency"></span>
+                            <div class="flex items-baseline gap-1.5">
+                                <span class="text-sm font-bold text-emerald-500" x-text="localPrice.currency"></span>
                                 <span class="text-5xl font-black text-slate-900 tracking-tighter" 
-                                      x-text="billingCycle === 'monthly' ? localPrice.amount : (billingCycle === 'term' ? (localPrice.term_price || localPrice.amount * 4) : (localPrice.yearly_price || localPrice.amount * 10))">
+                                      x-text="billingCycle === 'monthly' ? localPrice.amount : (billingCycle === 'term' ? localPrice.term_price : localPrice.yearly_price)">
                                 </span>
                             </div>
-                            <div class="mt-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                            <div class="mt-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                 <span x-show="billingCycle === 'monthly'">{{ __('landing.pricing.per_month') }}</span>
                                 <span x-show="billingCycle === 'term'">{{ __('landing.pricing.per_term') }}</span>
                                 <span x-show="billingCycle === 'yearly'">{{ __('landing.pricing.per_year') }}</span>
+                                <template x-if="billingCycle !== 'monthly'">
+                                    <span class="px-2 py-0.5 bg-slate-100 rounded text-emerald-600 lowercase" x-text="'≈ ' + (billingCycle === 'term' ? (localPrice.term_price / 4).toFixed(1) : (localPrice.yearly_price / 12).toFixed(1)) + ' /mo'"></span>
+                                </template>
                             </div>
                         </div>
                     </div>
@@ -125,11 +149,11 @@
                     </ul>
 
                     <div class="mt-auto">
-                        <a :href="'{{ route('register') }}?plan={{ $package->slug }}&cycle=' + billingCycle"
-                           class="w-full flex items-center justify-center py-3.5 rounded-xl font-bold text-sm transition-all duration-300
+                        <a :href="'{{ route('register') }}?plan={{ $package->slug }}&cycle=' + billingCycle + '&currency=' + selectedCurrency"
+                           class="w-full flex items-center justify-center py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-300
                            {{ $isFeatured 
-                               ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 hover:bg-emerald-400 hover:scale-[1.02]' 
-                               : 'bg-slate-100 text-slate-800 hover:bg-slate-200' }}">
+                               ? 'bg-emerald-500 text-white shadow-xl shadow-emerald-500/20 hover:bg-emerald-600 hover:scale-[1.02] active:scale-95' 
+                               : 'bg-slate-900 text-white hover:bg-slate-800 hover:scale-[1.02] active:scale-95' }}">
                             {{ __('landing.pricing.cta_paid') }}
                         </a>
                     </div>

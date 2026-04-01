@@ -37,6 +37,8 @@ class SettingsController extends Controller
             'packages.*.term_price' => 'nullable|numeric|min:0',
             'packages.*.yearly_price' => 'nullable|numeric|min:0',
             'packages.*.old_price' => 'nullable|numeric|min:0',
+            'packages.*.paypal_plan_id' => 'nullable|string|max:255',
+            'packages.*.stripe_price_id' => 'nullable|string|max:255',
         ]);
 
         $settings = [

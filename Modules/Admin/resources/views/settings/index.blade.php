@@ -423,15 +423,30 @@
                                             </div>
                                         </div>
 
-                                        <!-- Custom CTA -->
+                                        <!-- Custom CTA & Payment IDs -->
                                         <div class="bg-light p-3 rounded-4 mb-4">
-                                            <label class="form-label small fw-bold text-primary mb-2"><i class="bi bi-link-45deg"></i> {{ __('admin.custom_cta_section') }}</label>
-                                            <div class="row g-2">
-                                                <div class="col-6">
-                                                    <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][custom_cta_text]" value="{{ $package->custom_cta_text }}" placeholder="{{ __('admin.cta_text_placeholder') }}">
+                                            <div class="row g-3">
+                                                <div class="col-md-6 border-end border-light">
+                                                    <label class="form-label small fw-bold text-primary mb-2"><i class="bi bi-link-45deg"></i> {{ __('admin.custom_cta_section') }}</label>
+                                                    <div class="row g-2">
+                                                        <div class="col-6">
+                                                            <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][custom_cta_text]" value="{{ $package->custom_cta_text }}" placeholder="{{ __('admin.cta_text_placeholder') }}">
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][custom_cta_link]" value="{{ $package->custom_cta_link }}" placeholder="{{ __('admin.cta_link_placeholder') }}">
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-6">
-                                                    <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][custom_cta_link]" value="{{ $package->custom_cta_link }}" placeholder="{{ __('admin.cta_link_placeholder') }}">
+                                                <div class="col-md-6">
+                                                    <label class="form-label small fw-bold text-primary mb-2"><i class="bi bi-paypal"></i> PayPal & Stripe IDs</label>
+                                                    <div class="row g-2">
+                                                        <div class="col-6">
+                                                            <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][paypal_plan_id]" value="{{ $package->paypal_plan_id }}" placeholder="PayPal Plan ID">
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][stripe_price_id]" value="{{ $package->stripe_price_id }}" placeholder="Stripe Price ID">
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
