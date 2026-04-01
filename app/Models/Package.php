@@ -9,6 +9,7 @@ class Package extends Model
     protected $fillable = [
         'name',
         'name_en',
+        'name_fr',
         'slug',
         'price',
         'yearly_price',
@@ -18,6 +19,7 @@ class Package extends Model
         'duration_in_days',
         'description',
         'description_en',
+        'description_fr',
         'stripe_price_id',
         'paypal_plan_id',
         'display_features',

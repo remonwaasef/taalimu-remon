@@ -425,6 +425,16 @@
 
                                         <!-- Custom CTA & Payment IDs -->
                                         <div class="bg-light p-3 rounded-4 mb-4">
+                                            <div class="mb-4 mt-3">
+                                                <label class="form-label small fw-bold text-primary mb-2"><i class="bi bi-card-text"></i> Description (AR)</label>
+                                                <textarea class="form-control rounded-4 shadow-sm" name="packages[{{ $package->id }}][description]" rows="3">{{ $package->description }}</textarea>
+
+                                                <label class="form-label small fw-bold text-primary mb-2 mt-3"><i class="bi bi-card-text"></i> Description (EN)</label>
+                                                <textarea class="form-control rounded-4 shadow-sm" name="packages[{{ $package->id }}][description_en]" rows="2">{{ $package->description_en }}</textarea>
+
+                                                <label class="form-label small fw-bold text-primary mb-2 mt-3"><i class="bi bi-card-text"></i> Description (FR)</label>
+                                                <textarea class="form-control rounded-4 shadow-sm" name="packages[{{ $package->id }}][description_fr]" rows="2">{{ $package->description_fr }}</textarea>
+                                            </div>
                                             <div class="row g-3">
                                                 <div class="col-md-6 border-end border-light">
                                                     <label class="form-label small fw-bold text-primary mb-2"><i class="bi bi-link-45deg"></i> {{ __('admin.custom_cta_section') }}</label>

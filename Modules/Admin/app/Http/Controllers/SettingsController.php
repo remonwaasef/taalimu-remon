@@ -33,12 +33,16 @@ class SettingsController extends Controller
             'admin_email' => 'required|email|max:255',
             'term_duration_days' => 'nullable|integer|min:30|max:365',
             'packages.*.name' => 'required|string|max:255',
+            'packages.*.name_en' => 'nullable|string|max:255',
+            'packages.*.name_fr' => 'nullable|string|max:255',
             'packages.*.price' => 'nullable|numeric|min:0',
             'packages.*.term_price' => 'nullable|numeric|min:0',
             'packages.*.yearly_price' => 'nullable|numeric|min:0',
             'packages.*.old_price' => 'nullable|numeric|min:0',
             'packages.*.paypal_plan_id' => 'nullable|string|max:255',
             'packages.*.stripe_price_id' => 'nullable|string|max:255',
+            'packages.*.description_en' => 'nullable|string',
+            'packages.*.description_fr' => 'nullable|string',
         ]);
 
         $settings = [

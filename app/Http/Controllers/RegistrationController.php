@@ -31,7 +31,11 @@ class RegistrationController extends Controller
 
             return [
                 'slug' => $p->slug,
-                'name' => app()->getLocale() == 'ar' ? $p->name : ($p->name_en ?: $p->name),
+                'name' => match(app()->getLocale()) {
+                    'ar' => $p->name,
+                    'fr' => $p->name_fr ?: ($p->name_en ?: $p->name),
+                    default => $p->name_en ?: $p->name,
+                },
                 'price' => number_format($p->price, 0) . ' ' . $currency,
                 'price_value' => number_format($p->price, 0),
                 'price_raw' => (float)$p->price,
@@ -121,7 +125,7 @@ class RegistrationController extends Controller
         return $slug;
     }
 
-    public function register(Request $request, TelegramService $telegram)
+    public function register(Request $request, TelegramService $telegram, \App\Services\GeoIPService $geoIP)
     {
         $request->validate([
             'account_type' => 'required|in:center,instructor',
@@ -146,8 +150,20 @@ class RegistrationController extends Controller
             'payment_gateway' => 'required|in:paypal,paymob,test',
         ]);
 
-        // Enforce gateway based on currency
         $currency = $request->input('currency', 'EGP');
+
+        // VPN/LOCATION SECURITY: Prevent EGP usage outside Egypt
+        if ($currency === 'EGP') {
+            $detectedCountry = $geoIP->getCountryCode($request->ip());
+            if ($detectedCountry && $detectedCountry !== 'EG') {
+                $errorMsg = app()->getLocale() == 'ar' 
+                    ? 'عذراً، الدفع بالجنيه المصري متاح فقط للمقيمين داخل مصر. يرجى اختيار عملة أخرى (USD أو EUR).'
+                    : 'EGP pricing is only available for users in Egypt. Please select another currency (USD or EUR).';
+                return back()->withErrors(['currency' => $errorMsg])->withInput();
+            }
+        }
+
+        // Enforce gateway based on currency
         if ($currency === 'EGP' && $request->payment_gateway === 'paypal') {
             return back()->withErrors(['payment_gateway' => __('PayPal does not support EGP. Please use Paymob.')])->withInput();
         }
