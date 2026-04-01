@@ -522,7 +522,15 @@
                                             </div>
                                         </div>
 
-streams.
+                                        <div class="mb-3">
+                                            <label class="form-label small fw-bold text-muted mb-1">{{ __('admin.description_ar') }}</label>
+                                            <textarea class="form-control rounded-3" name="packages[{{ $package->id }}][description]" rows="2">{{ $package->description }}</textarea>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label class="form-label small fw-bold text-muted mb-1">{{ __('admin.description_en') }}</label>
+                                            <textarea class="form-control rounded-3 text-end" dir="ltr" name="packages[{{ $package->id }}][description_en]" rows="2">{{ $package->description_en }}</textarea>
+                                        </div>
 
                                         <div class="d-flex justify-content-between align-items-center bg-light/50 p-2 rounded-3 border border-dashed">
                                             <div class="form-check form-switch m-0">
