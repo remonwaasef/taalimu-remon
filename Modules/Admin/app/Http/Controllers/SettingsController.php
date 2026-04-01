@@ -32,6 +32,7 @@ class SettingsController extends Controller
             'site_name' => 'required|string|max:255',
             'admin_email' => 'required|email|max:255',
             'term_duration_days' => 'nullable|integer|min:30|max:365',
+            'packages.*.slug' => 'required|string|max:255',
             'packages.*.name' => 'required|string|max:255',
             'packages.*.name_en' => 'nullable|string|max:255',
             'packages.*.name_fr' => 'nullable|string|max:255',

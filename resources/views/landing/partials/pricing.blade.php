@@ -118,9 +118,24 @@
 
                     <!-- Header -->
                     <div class="mb-8">
-                        <h3 class="text-lg font-bold text-slate-900 mb-6">
-                            {{ __('landing.pricing.plans.' . $package->slug . '.name') }}
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">
+                            @php
+                                $packageName = match(app()->getLocale()) {
+                                    'ar' => $package->name,
+                                    'fr' => $package->name_fr ?: ($package->name_en ?: $package->name),
+                                    default => $package->name_en ?: $package->name,
+                                };
+                                $packageDesc = match(app()->getLocale()) {
+                                    'ar' => $package->description,
+                                    'fr' => $package->description_fr ?: ($package->description_en ?: $package->description),
+                                    default => $package->description_en ?: $package->description,
+                                };
+                            @endphp
+                            {{ $packageName ?: __('landing.pricing.plans.' . $package->slug . '.name') }}
                         </h3>
+                        <p class="text-xs text-slate-400 font-medium mb-6">
+                            {{ $packageDesc ?: __('landing.pricing.plans.' . $package->slug . '.description') }}
+                        </p>
                         
                         <div x-data="{ localPrice: {} }"
                              x-effect="localPrice = getRegionalPrice({{ json_encode($package->regional_prices) }}, {{ $package->price }}, {{ $package->term_price }}, {{ $package->yearly_price }})"
