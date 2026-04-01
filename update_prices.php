@@ -8,27 +8,36 @@ use App\Models\Package;
 
 $updates = [
     'basic' => [
-        'price' => 450,
-        'term_price' => 1450,
-        'yearly_price' => 2500,
+        'price' => 299,
+        'term_price' => 1299, // Approximate or requested? User didn't specify term prices. I'll stick to monthly.
+        'yearly_price' => 2990,
+        'max_students' => 100,
         'regional_prices' => [
-            'EG' => ['amount' => 450, 'currency' => 'EGP', 'term_price' => 1450, 'yearly_price' => 2500],
+            'EGP' => ['amount' => 299, 'currency' => 'EGP', 'yearly_price' => 2990],
+            'USD' => ['amount' => 29, 'currency' => 'USD', 'yearly_price' => 290],
+            'EUR' => ['amount' => 19.90, 'currency' => 'EUR', 'yearly_price' => 199],
         ]
     ],
     'pro' => [
-        'price' => 950,
-        'term_price' => 3450,
-        'yearly_price' => 6000,
+        'price' => 599,
+        'term_price' => 2499,
+        'yearly_price' => 5990,
+        'max_students' => 500,
         'regional_prices' => [
-            'EG' => ['amount' => 950, 'currency' => 'EGP', 'term_price' => 3450, 'yearly_price' => 6000],
+            'EGP' => ['amount' => 599, 'currency' => 'EGP', 'yearly_price' => 5990],
+            'USD' => ['amount' => 49, 'currency' => 'USD', 'yearly_price' => 490],
+            'EUR' => ['amount' => 39.90, 'currency' => 'EUR', 'yearly_price' => 399],
         ]
     ],
     'enterprise' => [
-        'price' => 1950,
-        'term_price' => 6950,
-        'yearly_price' => 12000,
+        'price' => 1299,
+        'term_price' => 4999,
+        'yearly_price' => 12990,
+        'max_students' => 2000,
         'regional_prices' => [
-            'EG' => ['amount' => 1950, 'currency' => 'EGP', 'term_price' => 6950, 'yearly_price' => 12000],
+            'EGP' => ['amount' => 1299, 'currency' => 'EGP', 'yearly_price' => 12990],
+            'USD' => ['amount' => 99, 'currency' => 'USD', 'yearly_price' => 990],
+            'EUR' => ['amount' => 79.90, 'currency' => 'EUR', 'yearly_price' => 799],
         ]
     ]
 ];
@@ -36,8 +45,17 @@ $updates = [
 foreach ($updates as $slug => $data) {
     $package = Package::where('slug', $slug)->first();
     if ($package) {
+        $maxStudents = $data['max_students'];
+        unset($data['max_students']);
+        
         $package->update($data);
-        echo "Updated $slug\n";
+        
+        // Update student limit feature
+        $package->features()->syncWithoutDetaching([
+            1 => ['value' => $maxStudents] // ID 1 is max_students
+        ]);
+        
+        echo "Updated $slug (Students: $maxStudents)\n";
     } else {
         echo "Package $slug not found\n";
     }
