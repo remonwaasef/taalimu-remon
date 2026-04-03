@@ -52,8 +52,9 @@ class PaymobGateway implements PaymentGatewayInterface
             // 3. Payment Key Generation
             $paymentToken = $this->getPaymentKey($authToken, $orderId, $amountInCents, $tenant, $package);
 
-            // 4. Return Redirect URL (assuming Card integration for now)
-            return "https://accept.paymob.com/api/acceptance/iframes/{$this->iframeId}?payment_token={$paymentToken}";
+            $paymobUrl = "https://accept.paymob.com/api/acceptance/iframes/{$this->iframeId}?payment_token={$paymentToken}";
+            session(['paymob_redirect_url' => $paymobUrl]);
+            return route('payment.paymob.checkout');
 
         } catch (\Exception $e) {
             Log::error('Paymob Checkout Error: ' . $e->getMessage());
