@@ -61,6 +61,7 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
     Route::post('/webhooks/paypal', [App\Http\Controllers\PayPalWebhookController::class, 'handle'])->name('webhooks.paypal');
     
     // Paymob specific routes
+    Route::get('/payment/paymob/checkout', [App\Http\Controllers\PaymentController::class, 'paymobCheckout'])->name('payment.paymob.checkout');
     Route::get('/payment/paymob/callback', [App\Http\Controllers\PaymentController::class, 'paymobCallback'])->name('payment.paymob.callback');
     Route::post('/webhooks/paymob', [App\Http\Controllers\PaymobWebhookController::class, 'handle'])->name('webhooks.paymob');
     
