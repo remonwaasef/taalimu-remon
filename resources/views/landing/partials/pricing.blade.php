@@ -3,6 +3,18 @@
             billingCycle: 'monthly',
             selectedCurrency: 'EGP',
             async init() {
+                const locale = '{{ app()->getLocale() }}';
+                
+                // Override based on explicitly selected language
+                if (locale === 'fr') {
+                    this.selectedCurrency = 'EUR';
+                    return;
+                } else if (locale === 'en') {
+                    this.selectedCurrency = 'USD';
+                    return;
+                }
+
+                // Default to Geographical logic if Arabic or other
                 try {
                     const response = await fetch('https://get.geojs.io/v1/ip/country.json');
                     const data = await response.json();
@@ -59,39 +71,7 @@
                     @endforeach
                 </div>
 
-                <!-- Currency Selector -->
-                <div class="flex flex-col items-center gap-4">
-                    <div class="flex items-center gap-3">
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">{{ __('landing.pricing.currency') }}:</span>
-                        <div class="inline-flex items-center bg-slate-50 p-1 rounded-xl border border-slate-200">
-                            @foreach(['EGP', 'USD', 'EUR'] as $curr)
-                            <button 
-                                @click="selectedCurrency = '{{$curr}}'"
-                                class="px-4 py-1.5 rounded-lg text-xs font-black transition-all duration-300"
-                                :class="selectedCurrency === '{{$curr}}' ? 'bg-white text-emerald-600 shadow-sm border border-slate-200/50' : 'text-slate-400 hover:text-slate-600'"
-                            >
-                                {{$curr}}
-                            </button>
-                            @endforeach
-                        </div>
-                    </div>
 
-                    <!-- EGP Regional Notice -->
-                    <div x-show="selectedCurrency === 'EGP'" 
-                         x-transition:enter="transition ease-out duration-300"
-                         x-transition:enter-start="opacity-0 transform -translate-y-2"
-                         x-transition:enter-end="opacity-100 transform translate-y-0"
-                         class="flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-xl text-[10px] font-bold border border-emerald-100 max-w-sm text-center">
-                        <i class="fas fa-info-circle"></i>
-                        <span>
-                            @if(app()->getLocale() == 'ar')
-                                دفع الجنيه المصري متاح فقط داخل مصر وللبطاقات والمحافظ المصرية.
-                            @else
-                                EGP payment is only available within Egypt and for Egyptian cards/wallets.
-                            @endif
-                        </span>
-                    </div>
-                </div>
             </div>
         </div>
 
