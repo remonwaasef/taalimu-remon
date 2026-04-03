@@ -8,7 +8,7 @@
 <div class="row g-4">
     <!-- Student Header Dashboard (Hidden until search) -->
     <div id="studentHeader" class="col-lg-12 d-none animate__animated animate__fadeIn">
-        <div class="card border-0 shadow-sm rounded-4 bg-primary text-white overflow-hidden">
+        <div class="card border-0 shadow-sm rounded-4 text-white overflow-hidden" style="background: linear-gradient(135deg, #059669 0%, #0d9488 100%);">
             <div class="card-body p-4 position-relative">
                 <div class="position-absolute top-0 end-0 p-4 opacity-10">
                     <i class="fas fa-user-graduate fa-6x"></i>
@@ -21,10 +21,18 @@
                     </div>
                     <div class="col">
                         <h2 id="studentNameDisplay" class="fw-bold mb-1">Student Name</h2>
-                        <div class="d-flex gap-3 small opacity-75">
+                        <div class="d-flex flex-wrap gap-3 small opacity-75 mb-3">
                             <span><i class="fas fa-phone-alt me-1"></i> <span id="studentPhoneDisplay">00000000</span></span>
                             <span><i class="fas fa-graduation-cap me-1"></i> <span id="studentGradeDisplay">Grade</span></span>
                             <span><i class="fas fa-circle me-1" id="statusDot"></i> <span id="studentStatusDisplay">Status</span></span>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button onclick="downloadStatement()" class="btn btn-white btn-sm rounded-pill px-3 fw-bold text-dark shadow-sm">
+                                <i class="fas fa-file-pdf me-1 text-danger"></i> {{ __('center::sales.download_statement') }}
+                            </button>
+                            <button id="quickPayBtn" onclick="openQuickPayModal()" class="btn btn-success btn-sm rounded-pill px-3 fw-bold shadow-sm d-none" style="background: #fbbf24; border-color: #fbbf24; color: #000;">
+                                <i class="fas fa-bolt me-1"></i> {{ __('center::sales.quick_pay') }}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -117,7 +125,10 @@
                     </li>
                 </ul>
             </div>
-            <div class="card-body p-4">
+            <div class="card-body p-4 position-relative">
+                <div id="tabsLoader" class="position-absolute top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-none align-items-center justify-content-center z-index-1" style="z-index: 10;">
+                    <div class="spinner-border text-primary" role="status"></div>
+                </div>
                 <div class="tab-content" id="myTabContent">
                     <!-- Financials Tab -->
                     <div class="tab-pane fade show active" id="financialsTab">
@@ -183,6 +194,8 @@
     .nav-tabs .nav-link.active { color: var(--bs-primary); border-bottom-color: var(--bs-primary); background: transparent; }
     .transition-all { transition: all 0.3s ease; }
     .hover-shadow:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important; border-color: var(--bs-primary) !important; }
+    .btn-white { background: white; border: none; transition: all 0.3s; }
+    .btn-white:hover { background: #f8fafc; transform: translateY(-1px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
 </style>
 @endpush
 
@@ -207,6 +220,105 @@
         }
     });
 
+    function downloadStatement() {
+        const studentId = studentSelector.getValue();
+        if (studentId) {
+            window.open(`/sales/student-statement/${studentId}`, '_blank');
+        }
+    }
+
+    let currentUnpaidInvoices = [];
+    function openQuickPayModal() {
+        if (currentUnpaidInvoices.length === 0) return;
+        
+        const modalHtml = `
+            <div class="modal fade" id="quickPayModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 rounded-4 shadow">
+                        <div class="modal-header border-0 shadow-sm p-4">
+                            <h5 class="fw-bold mb-0"><i class="fas fa-bolt text-warning me-2"></i>{{ __('center::sales.quick_pay') }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                            <div class="mb-4">
+                                <label class="form-label fw-bold small">{{ __('center::sales.select_invoice') }}</label>
+                                <select id="quickInvoiceSelect" class="form-select rounded-3">
+                                    ${currentUnpaidInvoices.map(inv => `<option value="${inv.id}">${inv.id} - (${inv.remaining.toFixed(2)} ${currency})</option>`).join('')}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small text-muted">{{ __('center::sales.paid_amount') }}</label>
+                                <div class="input-group">
+                                    <input type="number" id="quickAmount" step="0.01" class="form-control rounded-start-3" value="${currentUnpaidInvoices[0].remaining.toFixed(2)}">
+                                    <span class="input-group-text bg-light border-start-0 rounded-end-3">${currency}</span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small text-muted">{{ __('center::sales.payment_method') }}</label>
+                                <select id="quickMethod" class="form-select rounded-3">
+                                    <option value="cash">{{ __('center::sales.cash') }}</option>
+                                    <option value="card">{{ __('center::sales.card') }}</option>
+                                    <option value="bank_transfer">{{ __('center::sales.bank_transfer') }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0 p-4 pt-0">
+                            <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">{{ __('center::sales.cancel') }}</button>
+                            <button type="button" id="confirmQuickPay" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
+                                <i class="fas fa-check-circle me-1"></i> {{ __('center::sales.complete_sale') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+            
+        // Remove old modal if exists
+        const oldModal = document.getElementById('quickPayModal');
+        if (oldModal) oldModal.remove();
+        
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        const modal = new bootstrap.Modal(document.getElementById('quickPayModal'));
+        modal.show();
+
+        document.getElementById('quickInvoiceSelect').addEventListener('change', function() {
+            const selectedId = this.value;
+            const inv = currentUnpaidInvoices.find(i => i.id == selectedId);
+            if (inv) document.getElementById('quickAmount').value = inv.remaining.toFixed(2);
+        });
+
+        document.getElementById('confirmQuickPay').addEventListener('click', function() {
+            const saleId = document.getElementById('quickInvoiceSelect').value;
+            const amount = document.getElementById('quickAmount').value;
+            const method = document.getElementById('quickMethod').value;
+            
+            this.disabled = true;
+            this.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>{{ __('center::sales.saving') }}';
+
+            fetch(`/sales/${saleId}/payment`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ amount: amount, payment_method: method })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    modal.hide();
+                    Swal.fire({ icon: 'success', title: '{{ __('center::sales.collect_debt_success') }}', timer: 1500 });
+                    loadStudentAccount(studentSelector.getValue());
+                }
+            })
+            .catch(() => {
+                Swal.fire({ icon: 'error', title: '{{ __('center::sales.collect_debt_fail') }}' });
+                this.disabled = false;
+                this.innerHTML = '<i class="fas fa-check-circle me-1"></i> {{ __('center::sales.complete_sale') }}';
+            });
+        });
+    }
+
     function loadStudentAccount(studentId) {
         if (!studentId) {
             document.querySelectorAll('#studentHeader, #statsSection, #accountTabs').forEach(el => el.classList.add('d-none'));
@@ -216,13 +328,24 @@
 
         document.getElementById('emptyState').classList.add('d-none');
         document.querySelectorAll('#studentHeader, #statsSection, #accountTabs').forEach(el => el.classList.remove('d-none'));
+        document.getElementById('tabsLoader').classList.replace('d-none', 'd-flex');
 
         fetch(`/sales/student-summary/${studentId}`)
             .then(response => response.json())
             .then(data => {
+                document.getElementById('tabsLoader').classList.replace('d-flex', 'd-none');
                 if (data.success) {
                     const s = data.student;
+                    currentUnpaidInvoices = data.unpaid_invoices;
                     
+                    // Toggle Quick Pay Button
+                    const quickPayBtn = document.getElementById('quickPayBtn');
+                    if (currentUnpaidInvoices.length > 0) {
+                        quickPayBtn.classList.remove('d-none');
+                    } else {
+                        quickPayBtn.classList.add('d-none');
+                    }
+
                     // Update Header
                     document.getElementById('studentInitial').innerText = s.name.charAt(0).toUpperCase();
                     document.getElementById('studentNameDisplay').innerText = s.name;
@@ -260,7 +383,7 @@
                                 </div>`;
                         });
                     } else {
-                        invoiceList.innerHTML = `<div class="text-center py-4 text-muted"><i class="fas fa-check-circle text-success me-2"></i>{{ __('center::messages.blade_0574') }}</div>`;
+                        invoiceList.innerHTML = `<div class="text-center py-4 text-muted"><i class="fas fa-check-circle text-success me-2"></i>{{ __('center::sales.no_unpaid_invoices') }}</div>`;
                     }
 
                     // Update Courses Tab
@@ -273,7 +396,7 @@
                                     <div class="card border border-light-subtle shadow-none rounded-4 bg-light bg-opacity-25">
                                         <div class="card-body p-3">
                                             <h6 class="fw-bold text-dark mb-1">${c.title}</h6>
-                                            <div class="small text-muted mb-2">تاريخ الاشتراك: ${c.enrolled_at || '-'}</div>
+                                            <div class="small text-muted mb-2">{{ __('center::messages.blade_0174') }}: ${c.enrolled_at || '-'}</div>
                                             <span class="badge bg-primary rounded-pill px-3">${c.status}</span>
                                         </div>
                                     </div>
@@ -303,6 +426,9 @@
                         attTable.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-muted">{{ __('center::messages.blade_0571') }}</td></tr>`;
                     }
                 }
+            })
+            .catch(() => {
+                document.getElementById('tabsLoader').classList.replace('d-flex', 'd-none');
             });
     }
 

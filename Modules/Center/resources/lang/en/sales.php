@@ -82,4 +82,9 @@ return [
     'tax_label' => 'Tax:',
     'paid_stamp' => 'PAID',
     'thank_you' => 'Thank you for your trust',
+    'download_statement' => 'Download Statement',
+    'quick_pay' => 'Quick Pay',
+    'loading_data' => 'Loading data...',
+    'select_invoice' => 'Select invoice to pay',
+    'no_unpaid_invoices' => 'No unpaid invoices found',
 ];

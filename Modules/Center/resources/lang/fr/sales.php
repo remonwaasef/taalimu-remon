@@ -82,4 +82,9 @@ return [
     'tax_label' => 'Taxe :',
     'paid_stamp' => 'PAYÉ',
     'thank_you' => 'Merci de votre confiance',
+    'download_statement' => 'Télécharger le relevé',
+    'quick_pay' => 'Paiement rapide',
+    'loading_data' => 'Chargement des données...',
+    'select_invoice' => 'Sélectionnez la facture à payer',
+    'no_unpaid_invoices' => 'Aucune facture impayée trouvée',
 ];
