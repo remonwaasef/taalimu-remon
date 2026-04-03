@@ -156,29 +156,28 @@
             color: #059669;
         }
 
-        /* Sidebar active item - Soft Premium */
-        .sidebar .navbar-nav > .nav-item > .nav-link.active {
+        /* Sidebar active item - Soft Premium (All Levels) */
+        .sidebar .nav-item .nav-link.active,
+        .sidebar-default .sidebar-list .nav-item li > .nav-link.active {
             background: #ecfdf5 !important; /* Soft Pastel Green */
             color: #059669 !important; /* Deep Emerald */
             box-shadow: none !important;
-            border-radius: 12px;
-            margin: 0 12px;
+            border-radius: 10px !important;
             font-weight: 700;
         }
 
-        .sidebar .navbar-nav > .nav-item > .nav-link.active i {
+        .sidebar .nav-item .nav-link.active i,
+        .sidebar-default .sidebar-list .nav-item li > .nav-link.active i {
             color: #059669 !important;
         }
         
-        .sidebar .navbar-nav > .nav-item > .nav-link {
-            padding: 12px 18px;
-            border-radius: 12px;
-            margin: 0 12px;
+        .sidebar .nav-item .nav-link {
+            border-radius: 10px;
             font-weight: 600;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .sidebar .navbar-nav > .nav-item > .nav-link:hover:not(.active) {
+        .sidebar .nav-item .nav-link:hover:not(.active) {
             background: rgba(16, 185, 129, 0.05); /* Very light emerald tint on hover */
             color: #10b981 !important;
         }
@@ -202,15 +201,61 @@
             box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.1) !important;
         }
 
+        /* Premium Table Styles */
+        .table {
+            border-collapse: separate !important;
+            border-spacing: 0 0.5rem !important;
+        }
+        .table thead th, .table thead td {
+            background-color: transparent !important;
+            color: #64748b !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            font-size: 0.75rem !important;
+            letter-spacing: 0.5px;
+            border-bottom: none !important;
+            padding: 1rem 1.25rem !important;
+        }
+        .table tbody tr {
+            background-color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .table tbody tr:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            background-color: #f8fafc;
+        }
+        .table tbody td {
+            border: none !important;
+            border-top: 1px solid transparent !important;
+            border-bottom: 1px solid transparent !important;
+            padding: 1rem 1.25rem !important;
+            vertical-align: middle;
+        }
+        /* Handle RTL and LTR for border radius on table rows */
+        [dir="rtl"] .table tbody td:first-child,
+        [dir="ltr"] .table tbody td:last-child {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+        [dir="rtl"] .table tbody td:last-child,
+        [dir="ltr"] .table tbody td:first-child {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+
         /* Card styling */
         .card {
             border: none;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05) !important;
+            border: 1px solid rgba(226, 232, 240, 0.8) !important; /* Slate 200 */
             border-radius: 1rem;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .card:hover {
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
         }
 
         /* Quick Action Overlap Fix */
