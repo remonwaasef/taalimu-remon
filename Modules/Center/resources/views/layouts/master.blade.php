@@ -549,6 +549,7 @@
             </div>
             @endif
 
+            
 
             @php 
                 $hasFinancialReports = $tenant->getFeatureValue('financial_reports');
