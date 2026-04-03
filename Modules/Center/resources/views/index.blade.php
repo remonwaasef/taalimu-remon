@@ -56,7 +56,7 @@
                 <div class="col-lg-7 order-2 order-lg-1">
                     <div class="d-flex justify-content-lg-start justify-content-center gap-3 w-100 flex-wrap flex-md-nowrap">
                         <div class="stat-box flex-grow-1 text-center p-3">
-                            <h3 class="fw-bold text-dark mb-2">{{ number_format() }} <i class="fas fa-arrow-up text-success fs-6 align-middle ms-1"></i></h3>
+                            <h3 class="fw-bold text-dark mb-2">{{ number_format($activeStudents) }} <i class="fas fa-arrow-up text-success fs-6 align-middle ms-1"></i></h3>
                             <span class="text-muted small fw-semibold" style="background: #ecfdf5; padding: 4px 12px; border-radius: 6px;"><i class="fas fa-user-graduate me-1 text-success"></i> الطلاب</span>
                         </div>
                         <div class="stat-box flex-grow-1 text-center p-3">
@@ -64,7 +64,7 @@
                             <span class="text-muted small fw-semibold" style="background: #f0f9ff; padding: 4px 12px; border-radius: 6px;"><i class="fas fa-calendar-alt me-1 text-info"></i> جلسات اليوم</span>
                         </div>
                         <div class="stat-box flex-grow-1 text-center p-3">
-                            <h3 class="fw-bold text-dark mb-2">{{ number_format(, 0) }}</h3>
+                            <h3 class="fw-bold text-dark mb-2">{{ number_format($monthlyRevenue, 0) }}</h3>
                             <span class="text-muted small fw-semibold" style="background: #fef2f2; padding: 4px 12px; border-radius: 6px;"><i class="fas fa-wallet me-1 text-danger"></i> إيرادات الشهر</span>
                         </div>
                     </div>
