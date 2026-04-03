@@ -259,7 +259,15 @@ window.addEventListener('pageshow', (event) => {
                             <div class="flex items-center justify-between mb-3">
                                 <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">{{ app()->getLocale() == 'ar' ? 'الإجمالي' : 'Total' }}</span>
                                 <div class="text-right">
-                                    <template x-if="couponStatus === 'valid' || currentPriceData.old_price_raw > finalPrice">
+                                    <template x-if="currentPlan.trial_days > 0 && couponStatus !== 'valid'">
+                                        <div class="flex items-center justify-end gap-2 mb-1 animate-fade-in">
+                                            <span class="text-[9px] font-black bg-brand-secondary/10 text-brand-secondary px-2 py-0.5 rounded-md uppercase tracking-wider">
+                                                <i class="bi bi-gift-fill me-1"></i>
+                                                <span x-text="currentPlan.trial_days"></span> {{ app()->isLocale('ar') ? 'أيام مجانية' : 'Days Free' }}
+                                            </span>
+                                        </div>
+                                    </template>
+                                    <template x-if="(couponStatus === 'valid' || currentPriceData.old_price_raw > finalPrice) && currentPlan.trial_days === 0">
                                         <div class="flex items-center justify-end gap-2 mb-1 animate-fade-in">
                                             <span class="text-[10px] font-bold text-slate-300 line-through">
                                                 <span x-text="((couponStatus === 'valid' ? currentPriceData.price_raw : currentPriceData.old_price_raw) || 0).toLocaleString()"></span>
@@ -275,8 +283,8 @@ window.addEventListener('pageshow', (event) => {
                                             </span>
                                         </div>
                                     </template>
-                                    <div class="flex items-baseline gap-1 text-brand-secondary">
-                                        <span class="text-2xl font-black tracking-tighter" x-text="finalPrice.toLocaleString()"></span>
+                                    <div class="flex items-baseline gap-1" :class="currentPlan.trial_days > 0 ? 'text-emerald-500' : 'text-brand-secondary'">
+                                        <span class="text-2xl font-black tracking-tighter" x-text="currentPlan.trial_days > 0 ? '0' : finalPrice.toLocaleString()"></span>
                                         <span class="text-xs font-bold opacity-60" x-text="currentPriceData.currency"></span>
                                     </div>
                                     <span class="text-[9px] font-bold text-slate-400" x-text="'/' + (billingCycle === 'yearly' ? '{{ app()->getLocale() == 'ar' ? 'سنة' : 'year' }}' : (billingCycle === 'term' ? '{{ app()->getLocale() == 'ar' ? 'ترم' : 'term' }}' : '{{ app()->getLocale() == 'ar' ? 'شهر' : 'month' }}'))"></span>
@@ -401,7 +409,7 @@ window.addEventListener('pageshow', (event) => {
                     </div>
 
                     <!-- Payment Gateway Selection -->
-                    <div class="space-y-2 pt-2" x-show="selectedPlan !== 'free-trial'">
+                    <div class="space-y-2 pt-2" x-show="currentPlan.trial_days === 0">
                         <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">
                             {{ app()->getLocale() == 'ar' ? 'طريقة الدفع' : 'Payment' }}
                         </label>
@@ -429,8 +437,8 @@ window.addEventListener('pageshow', (event) => {
                     <div class="pt-4">
                         <button type="submit" :disabled="isSubmitting || subdomainStatus === 'invalid'"
                                 class="w-full h-14 rounded-full flex items-center justify-center gap-3 group bg-brand-secondary text-white shadow-xl shadow-brand-secondary/20 hover:shadow-brand-secondary/40 hover:-translate-y-0.5 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale">
-                            <span x-show="!isSubmitting" class="text-lg font-black font-arabic" 
-                                  x-text="finalPrice === 0 ? '{{ __('auth.register.cta_main') }}' : '{{ app()->isLocale('ar') ? 'ادفع واستكمل التسجيل' : 'Pay & Complete Registration' }}'">
+                             <span x-show="!isSubmitting" class="text-lg font-black font-arabic" 
+                                  x-text="currentPlan.trial_days > 0 ? ({{ Js::from(app()->isLocale('ar') ? 'ابدأ الفترة التجريبية' : 'Start Free Trial') }}) : (finalPrice === 0 ? '{{ __('auth.register.cta_main') }}' : '{{ app()->isLocale('ar') ? 'ادفع واستكمل التسجيل' : 'Pay & Complete Registration' }}')">
                             </span>
                             <span x-show="isSubmitting" class="flex items-center gap-2">
                                 <div class="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>

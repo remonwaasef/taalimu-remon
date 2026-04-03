@@ -187,6 +187,7 @@ class SocialAuthController extends Controller
                 'term_price_value' => $p->term_price ? number_format($p->term_price, 0) : number_format($p->price * 4, 0),
                 'term_price_raw' => $p->term_price ?: ($p->price * 4),
                 'regional_prices' => $p->regional_prices ?? [],
+                'trial_days' => (int)$p->trial_days,
                 'features' => ($p->display_features && is_array($p->display_features) && count($p->display_features) > 0) 
                     ? $p->display_features 
                     : $p->features->map(function($f) {
@@ -317,16 +318,18 @@ class SocialAuthController extends Controller
             }
             $finalAmount = max(0, $basePrice - $discountAmount);
 
-            if ($request->plan === 'free-trial') {
+            if ($package->trial_days > 0) {
                 \App\Models\Subscription::create([
                     'tenant_id' => $tenant->id,
+                    'package_id' => $package->id,
                     'name' => 'default',
-                    'stripe_id' => 'sub_google_' . Str::random(10),
-                    'stripe_status' => 'active',
-                    'stripe_price' => 'price_free',
+                    'stripe_id' => 'sub_trial_' . Str::random(10),
+                    'stripe_status' => 'trialing',
+                    'stripe_price' => $package->slug,
                     'quantity' => 1,
-                    'ends_at' => now()->addDays(14),
-                    'status' => 'active',
+                    'trial_ends_at' => now()->addDays($package->trial_days),
+                    'ends_at' => now()->addDays($package->trial_days),
+                    'status' => 'trialing',
                     'billing_cycle' => $billingCycle,
                     'base_price' => $basePrice,
                     'total_amount' => $finalAmount,
@@ -334,7 +337,7 @@ class SocialAuthController extends Controller
                 ]);
 
                 // Send Telegram Notification
-                $telegram->sendRegistrationAlert($tenant, $user, '(Google Login - Free Trial)');
+                $telegram->sendRegistrationAlert($tenant, $user, '(Registration - Free Trial)');
 
                 DB::commit();
 
