@@ -21,7 +21,7 @@ class OnboardingController extends Controller
             return redirect()->route('center.dashboard');
         }
 
-        return view('center::onboarding.wizard', compact('status'));
+        return view('center::onboarding.wizard', compact('status', 'tenant'));
     }
 
     public function updateLocale(Request $request)
@@ -41,6 +41,17 @@ class OnboardingController extends Controller
         // Optional: Also update tenant default setting if you want it to be the "choice"
         $settings = $tenant->settings ?? [];
         $settings['default_locale'] = $request->locale;
+        
+        // Map language to default currency
+        $currencyMap = [
+            'ar' => 'EGP',
+            'fr' => 'EUR',
+            'en' => 'USD',
+        ];
+        if (isset($currencyMap[$request->locale])) {
+            $settings['currency'] = $currencyMap[$request->locale];
+        }
+
         $tenant->settings = $settings;
         $tenant->save();
 

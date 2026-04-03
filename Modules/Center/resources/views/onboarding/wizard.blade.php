@@ -369,7 +369,7 @@
                 ],
                 
                 formData: {
-                    step_1: { locale: '{{ app()->getLocale() }}', currency: 'EGP' },
+                    step_1: { locale: '{{ app()->getLocale() }}', currency: '{{ $tenant->settings['currency'] ?? 'EGP' }}' },
                     step_2: { instructor_name: '', instructor_phone: '', instructor_specialization: '', instructor_email: '' },
                     step_3: { course_name: '', price: '', sessions_count: '1', schedules: [{day: '0', time: '16:00', time_end: '18:00'}] },
                     step_4: { student_name: '', student_phone: '', enroll_in_course: true }
