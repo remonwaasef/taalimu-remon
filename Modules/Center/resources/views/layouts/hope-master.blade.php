@@ -57,14 +57,15 @@
             font-family: 'Cairo', sans-serif;
         }
 
-        /* Unified Header Banner - Ultra Premium */
+        /* Unified Header Banner - Premium Pastel */
         .iq-navbar-header {
             padding: 2.5rem 0 !important;
             height: auto !important;
             min-height: 200px;
             display: flex;
             align-items: center;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+            background: linear-gradient(135deg, #f0fdf4 0%, #f8fafc 100%) !important;
+            border-bottom: 1px solid rgba(16, 185, 129, 0.1);
             position: relative;
             overflow: hidden;
         }
@@ -79,7 +80,8 @@
         }
 
         .iq-navbar-header .iq-header-img img {
-            opacity: 0.12;
+            opacity: 0.03;
+            filter: grayscale(100%);
             mix-blend-mode: overlay;
             object-fit: cover;
         }
@@ -94,21 +96,21 @@
             font-weight: 800 !important;
             letter-spacing: -0.5px;
             margin-bottom: 0.25rem;
-            color: #ffffff !important;
+            color: #0f172a !important; /* Slate 900 */
         }
         
         .iq-navbar-header p {
             font-size: 0.95rem !important;
             font-weight: 500 !important;
-            color: rgba(255, 255, 255, 0.85) !important;
+            color: #475569 !important; /* Slate 600 */
         }
 
         /* Premium Buttons in Header */
         .iq-navbar-header .btn-primary {
-            background-color: #ffffff !important;
-            color: #10b981 !important;
+            background-color: #10b981 !important;
+            color: #ffffff !important;
             border: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+            box-shadow: 0 4px 12px rgba(16,185,129,0.2) !important;
             font-weight: 700 !important;
             padding: 0.75rem 1.5rem !important;
             transition: all 0.3s ease !important;
@@ -116,8 +118,8 @@
 
         .iq-navbar-header .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important;
-            background-color: #f8fafc !important;
+            box-shadow: 0 8px 20px rgba(16,185,129,0.3) !important;
+            background-color: #059669 !important;
         }
 
         /* Override Hope UI primary color classes */
@@ -177,16 +179,15 @@
 
         /* Header banner */
         .iq-header-img {
-            background: linear-gradient(135deg, #10b981 0%, #059669 50%, #064e3b 100%) !important;
+            background: transparent !important;
         }
         .iq-header-img img {
-            opacity: 0.08;
+            opacity: 0.03;
             mix-blend-mode: overlay;
         }
 
         .iq-navbar-header h1, .iq-navbar-header p, .iq-navbar-header span {
-            color: #ffffff !important;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            /* Now handled by top css block (darker colors) */
         }
 
         /* Form focus states */
