@@ -1072,4 +1072,12 @@ return [
     'blade_1075' => 'Salle :',
     'blade_1076' => 'min',
     'blade_1077' => 'Échec du démarrage de la caméra.',
+    'blade_quiz_modal_title' => 'Comment ajouter un nouveau quiz?',
+    'blade_quiz_modal_desc' => 'Pour maintenir la progression du materiel, les quiz sont ajoutes directement dans les lecons de vos cours.',
+    'blade_quiz_modal_steps_title' => 'Etapes:',
+    'blade_quiz_modal_step1' => '1. Allez dans la Gestion des cours.',
+    'blade_quiz_modal_step2' => '2. Selectionnez le cours, puis la section, puis la lecon.',
+    'blade_quiz_modal_step3' => '3. Cliquez sur \"Ajouter un quiz\" dans le contenu de la lecon.',
+    'blade_quiz_modal_close' => 'Fermer',
+    'blade_quiz_modal_go' => 'Aller aux cours',
 ];

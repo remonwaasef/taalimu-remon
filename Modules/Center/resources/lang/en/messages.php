@@ -1072,4 +1072,12 @@ return [
     'blade_1075' => 'Classroom:',
     'blade_1076' => 'min',
     'blade_1077' => 'Failed to start camera.',
+    'blade_quiz_modal_title' => 'How to add a new quiz?',
+    'blade_quiz_modal_desc' => 'To maintain the progression of the material, quizzes are added directly as part of the lessons in your courses.',
+    'blade_quiz_modal_steps_title' => 'Steps:',
+    'blade_quiz_modal_step1' => '1. Go to Course Management.',
+    'blade_quiz_modal_step2' => '2. Select the course, then the section, then the lesson.',
+    'blade_quiz_modal_step3' => '3. Click on \"Add Quiz\" within the lesson content.',
+    'blade_quiz_modal_close' => 'Close',
+    'blade_quiz_modal_go' => 'Go to Courses',
 ];
