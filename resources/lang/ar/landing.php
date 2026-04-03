@@ -145,6 +145,8 @@ return [
         'yearly' => 'اشتراك سنة',
         'save_20' => 'وفر 17%',
         'days' => 'يوم',
+        'trial_days' => ':days يوم مجاناً',
+        'trial_badge' => 'فترة تجريبية',
         'unlimited' => 'غير محدود',
         'students_count_label' => 'طالباً',
         'admins_count_label' => 'مديراً',

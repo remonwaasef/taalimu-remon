@@ -120,6 +120,15 @@
                         <div x-data="{ localPrice: {} }"
                              x-effect="localPrice = getRegionalPrice({{ json_encode($package->regional_prices) }}, {{ $package->price }}, {{ $package->term_price }}, {{ $package->yearly_price }})"
                         >
+                            @if($package->trial_days > 0)
+                                <div class="mb-3">
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase tracking-wider">
+                                        <i class="fas fa-gift"></i>
+                                        {{ __('landing.pricing.trial_days', ['days' => $package->trial_days]) }}
+                                    </span>
+                                </div>
+                            @endif
+                            
                             <div class="flex items-baseline gap-1.5">
                                 @if(app()->getLocale() == 'ar')
                                     <span class="text-sm font-bold text-emerald-500" x-text="localPrice.currency"></span>

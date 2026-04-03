@@ -145,6 +145,8 @@ return [
         'term' => 'Term',
         'yearly' => 'Yearly',
         'save_20' => 'Save 17%',
+        'trial_days' => ':days days free trial',
+        'trial_badge' => 'Free Trial',
         'unlimited' => 'Unlimited',
         'students_count_label' => 'Students',
         'admins_count_label' => 'Admins',

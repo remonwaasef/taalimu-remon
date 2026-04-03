@@ -288,6 +288,8 @@ return [
         'monthly' => 'Mensuel',
         'yearly' => 'Annuel',
         'save_20' => 'Économisez 17%',
+        'trial_days' => ':days jours d\'essai gratuit',
+        'trial_badge' => 'Essai Gratuit',
         'days' => 'jours',
         'unlimited' => 'Illimité',
     ],
