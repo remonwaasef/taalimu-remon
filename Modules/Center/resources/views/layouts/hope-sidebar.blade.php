@@ -142,33 +142,7 @@
                     </li>
                 @endif
                 
-                {{-- EXAMS --}}
-                @if($tenant->getFeatureValue('manage_exams'))
-                @php $isExamsActive = request()->routeIs('center.quizzes.*') || request()->routeIs('center.questions.*'); @endphp
-                    <li class="nav-item">
-                        <a class="nav-link {{ $isExamsActive ? 'active' : '' }}" data-bs-toggle="collapse" href="#examsCollapse" role="button" aria-expanded="{{ $isExamsActive ? 'true' : 'false' }}" aria-controls="examsCollapse">
-                            <i class="icon"><i class="fas fa-file-alt text-primary"></i></i>
-                            <span class="item-name">{{ __('center::sidebar.exams_results') }}</span>
-                            <i class="right-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                </svg>
-                            </i>
-                        </a>
-                        <ul class="sub-nav collapse {{ $isExamsActive ? 'show' : '' }}" id="examsCollapse" data-bs-parent="#sidebar-menu">
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('center.quizzes.*') ? 'active' : '' }}" href="{{ route('center.quizzes.index', ['tenant' => $tenant->domain ?? 'center']) }}">
-                                    <i class="sidenav-mini-icon">E</i><span class="item-name">{{ __('center::sidebar.exams_results') }}</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('center.questions.*') ? 'active' : '' }}" href="{{ route('center.questions.index', ['tenant' => $tenant->domain ?? 'center']) }}">
-                                    <i class="sidenav-mini-icon">Q</i><span class="item-name">{{ __('center::sidebar.questions_bank') }}</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                @endif
+
 
                 {{-- FINANCE --}}
                 @php 

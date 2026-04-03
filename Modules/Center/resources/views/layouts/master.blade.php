@@ -549,24 +549,6 @@
             </div>
             @endif
 
-            <!-- 3. EXAMS & RESULTS -->
-            @if($tenant->getFeatureValue('manage_exams'))
-            @php $isExamsActive = request()->routeIs('center.quizzes.*') || request()->routeIs('center.questions.*'); @endphp
-            <a href="#examsCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 {{ $isExamsActive ? 'sidebar-section-active' : '' }}" role="button" aria-expanded="{{ $isExamsActive ? 'true' : 'false' }}">
-                <span><i class="fas fa-file-alt me-2 {{ $isExamsActive ? 'text-primary' : 'opacity-75' }}"></i> {{ __('center::sidebar.exams_results') }}</span>
-                <i class="fas fa-chevron-down fa-xs opacity-50"></i>
-            </a>
-            <div class="collapse {{ $isExamsActive ? 'show' : '' }}" id="examsCollapse">
-                <div class="sidebar-submenu">
-                    <a href="{{ route('center.quizzes.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.quizzes.*') ? 'active' : '' }}">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.exams_results') }}
-                    </a>
-                    <a href="{{ route('center.questions.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.questions.*') ? 'active' : '' }}">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.questions_bank') }}
-                    </a>
-                </div>
-            </div>
-            @endif
 
             @php 
                 $hasFinancialReports = $tenant->getFeatureValue('financial_reports');
