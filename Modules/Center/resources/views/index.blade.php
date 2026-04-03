@@ -19,12 +19,13 @@
         --dash-card-shadow-hover: 0 10px 25px rgba(0,0,0,0.08);
     }
 
-    /* Welcome Banner */
+    /* Welcome Banner - Premium Pastel */
     .welcome-banner {
-        background: var(--dash-gradient);
+        background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+        border: 1px solid rgba(16, 185, 129, 0.2);
         border-radius: 1.25rem;
         padding: 2rem 2.5rem;
-        color: white;
+        color: #0f172a;
         position: relative;
         overflow: hidden;
     }
@@ -36,7 +37,7 @@
         width: 300px;
         height: 300px;
         border-radius: 50%;
-        background: rgba(255,255,255,0.05);
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0) 100%);
     }
     .welcome-banner::after {
         content: '';
@@ -46,23 +47,24 @@
         width: 200px;
         height: 200px;
         border-radius: 50%;
-        background: rgba(255,255,255,0.03);
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(16, 185, 129, 0) 100%);
     }
     .welcome-banner h2 {
-        color: white !important;
+        color: #064e3b !important;
         font-weight: 800;
         font-size: 1.5rem;
         margin-bottom: 0.25rem;
     }
     .welcome-banner p {
-        color: rgba(255,255,255,0.75) !important;
+        color: #065f46 !important;
+        opacity: 0.8;
         font-size: 0.9rem;
         margin: 0;
     }
     .welcome-banner .welcome-stat {
-        background: rgba(255,255,255,0.12);
+        background: rgba(255,255,255,0.7);
         backdrop-filter: blur(8px);
-        border: 1px solid rgba(255,255,255,0.15);
+        border: 1px solid rgba(16,185,129,0.2);
         border-radius: 0.875rem;
         padding: 0.75rem 1.25rem;
         text-align: center;
@@ -71,12 +73,12 @@
     .welcome-banner .welcome-stat .stat-num {
         font-size: 1.5rem;
         font-weight: 800;
-        color: white;
+        color: #064e3b;
         line-height: 1.2;
     }
     .welcome-banner .welcome-stat .stat-label {
         font-size: 0.7rem;
-        color: rgba(255,255,255,0.7);
+        color: #065f46;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         font-weight: 600;
@@ -337,7 +339,7 @@
             <div>
                 <div class="d-flex align-items-center gap-2 mb-2">
                     <span class="pulse-dot"></span>
-                    <span style="font-size: 0.75rem; color: rgba(255,255,255,0.6); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">
+                    <span style="font-size: 0.75rem; color: #065f46; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
                         {{ __('center::dashboard.center_status') }}: {{ __('center::dashboard.healthy') }}
                     </span>
                 </div>
