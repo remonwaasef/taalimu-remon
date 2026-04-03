@@ -104,6 +104,10 @@ $tenantRoutes = function () {
         Route::get('onboarding', [\Modules\Center\Http\Controllers\OnboardingController::class, 'show'])->name('center.onboarding.show');
         Route::post('onboarding/submit', [\Modules\Center\Http\Controllers\OnboardingController::class, 'submit'])->name('center.onboarding.submit');
         Route::post('onboarding/update-locale', [\Modules\Center\Http\Controllers\OnboardingController::class, 'updateLocale'])->name('center.onboarding.update-locale');
+
+        // One-time fix: Creates pending invoices for students who were enrolled via old onboarding (no finance record)
+        // Visit this URL once while logged in as admin, then it's safe to leave it (it's idempotent)
+        Route::get('onboarding/fix-invoices', [\Modules\Center\Http\Controllers\OnboardingController::class, 'fixMissingInvoices'])->name('center.onboarding.fix-invoices');
     });
 
     // Protected Routes with Subscription Check and Onboarding Check

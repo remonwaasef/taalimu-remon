@@ -18,6 +18,67 @@ class OnboardingController extends Controller
         $this->financeService = $financeService;
     }
 
+    /**
+     * One-time fix: Create pending invoices for students who have enrollments but no sales.
+     * Protected by auth middleware. Run once then remove the route.
+     */
+    public function fixMissingInvoices()
+    {
+        $tenant = auth()->user()->tenant;
+        if (!$tenant) abort(403);
+
+        $students = \App\Models\Student::where('tenant_id', $tenant->id)
+            ->has('enrollments')
+            ->doesntHave('sales')
+            ->with('enrollments.course')
+            ->get();
+
+        $fixed = [];
+
+        foreach ($students as $student) {
+            foreach ($student->enrollments as $enrollment) {
+                $course = $enrollment->course;
+                if (!$course) continue;
+
+                $price = $course->price ?? 0;
+
+                $sale = \App\Models\Sale::create([
+                    'tenant_id'       => $tenant->id,
+                    'student_id'      => $student->id,
+                    'subtotal_amount' => $price,
+                    'discount_amount' => 0,
+                    'tax_amount'      => 0,
+                    'total_amount'    => $price,
+                    'paid_amount'     => 0,
+                    'status'          => $price > 0 ? 'pending' : 'paid',
+                    'payment_method'  => 'cash',
+                    'notes'           => 'إصلاح تلقائي - تسجيل من الإعداد الأولي',
+                ]);
+
+                \App\Models\SaleItem::create([
+                    'sale_id'   => $sale->id,
+                    'item_type' => \App\Models\Course::class,
+                    'item_id'   => $course->id,
+                    'price'     => $price,
+                    'quantity'  => 1,
+                ]);
+
+                $fixed[] = [
+                    'student' => $student->name,
+                    'course'  => $course->title,
+                    'amount'  => $price,
+                    'sale_id' => $sale->id,
+                ];
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => count($fixed) > 0 ? 'تم إنشاء ' . count($fixed) . ' فاتورة بنجاح' : 'لا يوجد طلاب بدون فواتير',
+            'fixed'   => $fixed,
+        ]);
+    }
+
     public function show()
     {
         // Fix: Ensure step_4 is in the ENUM (Self-correcting DB)
@@ -226,7 +287,9 @@ class OnboardingController extends Controller
                 $student = $result['student'];
 
                 // 2. Enroll in course if requested using FinanceService
-                if ($request->boolean('enroll_in_course')) {
+                // Note: enroll_in_course comes as boolean from Alpine.js JSON
+                $shouldEnroll = filter_var($request->input('enroll_in_course', false), FILTER_VALIDATE_BOOLEAN);
+                if ($shouldEnroll) {
                     $course = \App\Models\Course::where('tenant_id', $tenant->id)->latest()->first();
                     if ($course) {
                         try {
