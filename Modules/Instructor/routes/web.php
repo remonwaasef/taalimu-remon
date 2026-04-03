@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Instructor\Http\Controllers\InstructorController;
 
 $instructorRoutes = function () {
-    Route::middleware(['auth', 'verified'])->prefix('instructor')->group(function () {
+    Route::middleware(['auth', 'verified', 'subscription'])->prefix('instructor')->group(function () {
         Route::get('/', [InstructorController::class, 'index'])->name('instructor.dashboard');
         Route::get('/set-locale/{locale}', [InstructorController::class, 'setLocale'])->name('instructor.set-locale');
         Route::get('/scanner/{course}', [InstructorController::class, 'scanner'])->name('instructor.scanner');
@@ -49,7 +49,7 @@ $instructorRoutes = function () {
     // Public Phone Check
     Route::get('/instructor/check-phone', [InstructorController::class, 'checkPhone'])->name('instructor.students.check-phone');
 
-    Route::middleware(['auth', 'verified'])->prefix('instructor')->group(function () {
+    Route::middleware(['auth', 'verified', 'subscription'])->prefix('instructor')->group(function () {
 
         // Instructor Schedule Management
         Route::get('/schedules', [InstructorController::class, 'schedules'])->name('instructor.schedules.index');
