@@ -121,10 +121,17 @@
                              x-effect="localPrice = getRegionalPrice({{ json_encode($package->regional_prices) }}, {{ $package->price }}, {{ $package->term_price }}, {{ $package->yearly_price }})"
                         >
                             <div class="flex items-baseline gap-1.5">
-                                <span class="text-sm font-bold text-emerald-500" x-text="localPrice.currency"></span>
-                                <span class="text-5xl font-black text-slate-900 tracking-tighter" 
-                                      x-text="billingCycle === 'monthly' ? localPrice.amount : (billingCycle === 'term' ? localPrice.term_price : localPrice.yearly_price)">
-                                </span>
+                                @if(app()->getLocale() == 'ar')
+                                    <span class="text-sm font-bold text-emerald-500" x-text="localPrice.currency"></span>
+                                    <span class="text-5xl font-black text-slate-900 tracking-tighter" 
+                                          x-text="billingCycle === 'monthly' ? localPrice.amount : (billingCycle === 'term' ? localPrice.term_price : localPrice.yearly_price)">
+                                    </span>
+                                @else
+                                    <span class="text-5xl font-black text-slate-900 tracking-tighter" 
+                                          x-text="billingCycle === 'monthly' ? localPrice.amount : (billingCycle === 'term' ? localPrice.term_price : localPrice.yearly_price)">
+                                    </span>
+                                    <span class="text-sm font-bold text-emerald-500" x-text="localPrice.currency"></span>
+                                @endif
                             </div>
                             <div class="mt-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                 <span x-show="billingCycle === 'monthly'">{{ __('landing.pricing.per_month') }}</span>
