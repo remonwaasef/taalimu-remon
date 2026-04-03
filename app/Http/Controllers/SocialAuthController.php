@@ -151,6 +151,18 @@ class SocialAuthController extends Controller
                 ->withErrors(['email' => __('Session expired. Please try again with Google.')]);
         }
 
+        // AUTO-LOGIN FALLBACK: If user already exists (from a previous partial attempt), skip the form
+        $user = \App\Models\User::where('email', $googleData['email'])->first();
+        if ($user) {
+             Auth::login($user, true);
+             session()->forget('google_user');
+             
+             if ($user->role === 'instructor' || ($user->tenant && $user->tenant->type === 'instructor')) {
+                 return redirect()->route('instructor.dashboard', ['tenant' => $user->tenant->domain]);
+             }
+             return redirect()->intended('/dashboard');
+        }
+
         // Fetch packages for the sidebar summary
         $packages = \App\Models\Package::with('features')
             ->where('is_active', true)

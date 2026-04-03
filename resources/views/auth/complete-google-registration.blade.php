@@ -234,7 +234,10 @@ window.addEventListener('pageshow', (event) => {
                                         {{ app()->getLocale() == 'ar' ? 'تغيير' : 'Change' }}
                                     </button>
                                 </div>
-                                <h3 class="text-lg font-black text-slate-900 font-arabic" x-text="currentPlan.name"></h3>
+                                <h3 class="text-lg font-black text-slate-900 font-arabic">
+                                    <span x-text="currentPlan.name"></span>
+                                    <span class="text-xs font-bold text-slate-400 ms-1" x-text="'(' + (billingCycle === 'yearly' ? (currentPriceData.yearly || 0).toLocaleString() : (billingCycle === 'term' ? (currentPriceData.term || 0).toLocaleString() : (currentPriceData.amount || 0).toLocaleString())) + ' ' + currentPriceData.currency + ')'"></span>
+                                </h3>
                             </div>
                         </div>
 
