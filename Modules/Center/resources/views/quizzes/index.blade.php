@@ -4,15 +4,53 @@
 @section('page-subtitle', __('center::messages.blade_0537'))
 
 @section('page-actions')
-    <a href="{{ route('center.questions.index') }}" class="btn btn-light shadow-sm">
+    <a href="{{ route('center.questions.index') }}" class="btn btn-outline-primary shadow-sm rounded-pill px-4" style="font-weight: 500;">
         <i class="fas fa-database me-2"></i>{{ __('center::messages.blade_0538') }}
     </a>
-    <button type="button" class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#createQuizModal" title="{{ __('center::messages.blade_0551') }}">
-        <i class="fas fa-plus-circle me-2"></i>{{ __('center::messages.blade_0539') }}
-    </button>
 @endsection
 
 @section('content')
+
+    <!-- Premium Instructional Banner for Desktop -->
+    <div class="card border-0 mb-5 position-relative overflow-hidden shadow-sm d-none d-md-block" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-radius: 1.5rem;">
+        <!-- decorative blurred elements -->
+        <div class="position-absolute top-0 end-0 translate-middle pointer-events-none" style="width: 300px; height: 300px; background: rgba(16, 185, 129, 0.08); filter: blur(60px); border-radius: 50%;"></div>
+        <div class="position-absolute bottom-0 start-0 translate-middle pointer-events-none" style="width: 250px; height: 250px; background: rgba(59, 130, 246, 0.08); filter: blur(60px); border-radius: 50%;"></div>
+        
+        <div class="card-body p-4 p-lg-5 d-flex flex-column flex-md-row align-items-center justify-content-between position-relative z-1">
+            <div class="mb-4 mb-md-0 d-flex align-items-center gap-4">
+                <div class="rounded-4 d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 80px; height: 80px; background: linear-gradient(135deg, #10b981, #059669);">
+                    <i class="fas fa-clipboard-check text-white" style="font-size: 2rem;"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bolder text-dark mb-2" style="letter-spacing: -0.5px;">كيف تدير الاختبارات في تعلِيمُ؟</h4>
+                    <p class="text-muted mb-0" style="max-width: 600px; line-height: 1.6; font-size: 0.95rem;">
+                        <span class="fw-bold text-dark">الاختبارات جزء لا يتجزأ من المنهج التعليمي.</span> لإنشاء اختبار للطلاب، يرجى التوجه إلى قسم الدورات، ثم فتح <strong>المنهج الدراسي</strong> الخاص بالدورة المطلوبة، وإضافة اختبارك كعنصر داخل الفصول الدراسية وتحديد أسئلته.
+                    </p>
+                </div>
+            </div>
+            <div class="ms-md-4 text-center">
+                <a href="{{ route('center.courses.index') }}" class="btn btn-primary btn-lg shadow px-4 py-3 rounded-pill" style="font-weight: 600; min-width: 200px;">
+                    <i class="fas fa-layer-group me-2"></i> {{ __('center::messages.blade_0539') }}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Informational Banner for Mobile -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4 d-md-none position-relative overflow-hidden" style="background: #ffffff;">
+        <div class="position-absolute top-0 end-0 bg-primary opacity-10" style="width: 100px; height: 100px; border-radius: 0 0 0 100%;"></div>
+        <div class="card-body p-4 d-flex flex-column align-items-center text-center">
+            <div class="rounded-circle d-flex align-items-center justify-content-center mb-3 shadow-sm" style="width: 60px; height: 60px; background: linear-gradient(135deg, #10b981, #059669);">
+                <i class="fas fa-clipboard-check text-white fs-3"></i>
+            </div>
+            <h5 class="fw-bold mb-2">كيف تدير الاختبارات؟</h5>
+            <p class="text-muted small mb-4">يتم إنشاء الاختبارات مباشرة من داخل قسم الدورات والمناهج الدراسية لضمان تقديم تسلسل دراسي صحيح ومنظم للطالب.</p>
+            <a href="{{ route('center.courses.index') }}" class="btn btn-primary w-100 rounded-pill py-2 shadow-sm">
+                <i class="fas fa-layer-group me-2"></i>{{ __('center::messages.blade_0539') }}
+            </a>
+        </div>
+    </div>
 
     <!-- Statistics Cards -->
     <div class="row g-4 mb-4">
@@ -126,14 +164,22 @@
                                 @empty
                                     <tr>
                                         <td colspan="4" class="text-center py-5">
-                                            <div class="py-4">
-                                                <div class="rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px; background: #f1f5f9;">
-                                                    <i class="fas fa-inbox fa-2x" style="color: #cbd5e1;"></i>
+                                            <div class="py-5">
+                                                <div class="rounded-circle mx-auto d-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px; background: linear-gradient(135deg, #f1f5f9, #e2e8f0); box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
+                                                    <i class="fas fa-clipboard-list fa-2x" style="color: #94a3b8;"></i>
                                                 </div>
-                                                <p class="text-muted fw-medium mb-2">{{ __('center::messages.blade_0547') }}</p>
-                                                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createQuizModal">
-                                                    <i class="fas fa-plus me-1"></i>{{ __('center::messages.blade_0548') }}
-                                                </button>
+                                                <h5 class="fw-bold text-dark mb-2">{{ __('center::messages.blade_0547') }}</h5>
+                                                <p class="text-muted d-block mx-auto mb-4" style="max-width: 450px; line-height: 1.6;">
+                                                    لإضافة أول اختبار لك، يجب أن تتوجه إلى قسم المستودع/الدورات، قم باختيار دورتك، افتح إدارة المنهج وأضف الاختبار من هناك ليظهر هنا للطلاب للبدء في حله.
+                                                </p>
+                                                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                                                    <a href="{{ route('center.courses.index') }}" class="btn btn-primary px-4 py-2 rounded-pill shadow-sm">
+                                                        <i class="fas fa-book-reader me-2"></i>الذهاب للدورات التدريبية
+                                                    </a>
+                                                    <a href="{{ route('center.questions.index') }}" class="btn btn-white px-4 py-2 rounded-pill border shadow-sm text-dark bg-white">
+                                                        <i class="fas fa-database me-2 text-primary"></i>بنك الأسئلة
+                                                    </a>
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
@@ -179,35 +225,6 @@
                             <p class="text-muted small fw-medium mb-0">{{ __('center::messages.blade_0550') }}</p>
                         </div>
                     @endforelse
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Create Quiz Modal -->
-    <div class="modal fade" id="createQuizModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: 1.25rem;">
-                <div class="modal-header border-0 pb-0 justify-content-center mt-4">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: #f0fdf4;">
-                        <i class="fas fa-file-alt fa-3x" style="color: #10b981;"></i>
-                    </div>
-                </div>
-                <div class="modal-body text-center p-4">
-                    <h4 class="fw-bold text-dark mb-3">{{ __('center::messages.blade_quiz_modal_title') }}</h4>
-                    <p class="text-muted mb-4" style="font-size: 1.05rem; line-height: 1.6;">
-                        {{ __('center::messages.blade_quiz_modal_desc') }} <br><br>
-                        <strong>{{ __('center::messages.blade_quiz_modal_steps_title') }}</strong><br>
-                        {{ __('center::messages.blade_quiz_modal_step1') }}<br>
-                        {{ __('center::messages.blade_quiz_modal_step2') }}<br>
-                        {{ __('center::messages.blade_quiz_modal_step3') }}
-                    </p>
-                    <div class="d-flex justify-content-center gap-3">
-                        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">{{ __('center::messages.blade_quiz_modal_close') }}</button>
-                        <a href="{{ route('center.courses.index') }}" class="btn btn-primary px-4 fw-bold">
-                            <i class="fas fa-book me-2"></i>{{ __('center::messages.blade_quiz_modal_go') }}
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>
