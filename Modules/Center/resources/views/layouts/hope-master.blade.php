@@ -59,15 +59,16 @@
 
         /* Unified Header Banner - Premium Pastel */
         .iq-navbar-header {
-            padding: 2.5rem 0 !important;
+            padding: 1.5rem 0 !important;
             height: auto !important;
-            min-height: 200px;
             display: flex;
             align-items: center;
-            background: linear-gradient(135deg, #f0fdf4 0%, #f8fafc 100%) !important;
+            background: #ffffff !important;
             border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+            box-shadow: 0 4px 20px -5px rgba(0,0,0,0.02) !important;
             position: relative;
             overflow: hidden;
+            margin-bottom: 1.5rem;
         }
         
         .iq-navbar-header .iq-header-img {
@@ -155,18 +156,23 @@
             color: #059669;
         }
 
-        /* Sidebar active item - Ultra Premium */
+        /* Sidebar active item - Soft Premium */
         .sidebar .navbar-nav > .nav-item > .nav-link.active {
-            background: var(--primary-gradient) !important;
-            color: white !important;
-            box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.3) !important;
-            border-radius: 14px;
+            background: #ecfdf5 !important; /* Soft Pastel Green */
+            color: #059669 !important; /* Deep Emerald */
+            box-shadow: none !important;
+            border-radius: 12px;
             margin: 0 12px;
+            font-weight: 700;
+        }
+
+        .sidebar .navbar-nav > .nav-item > .nav-link.active i {
+            color: #059669 !important;
         }
         
         .sidebar .navbar-nav > .nav-item > .nav-link {
             padding: 12px 18px;
-            border-radius: 14px;
+            border-radius: 12px;
             margin: 0 12px;
             font-weight: 600;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -209,7 +215,7 @@
 
         /* Quick Action Overlap Fix */
         .content-inner {
-            margin-top: -3.5rem !important;
+            margin-top: 0 !important;
         }
 
         /* Auto-style the first row containing title and actions over the green banner */
@@ -254,7 +260,7 @@
             @include('center::layouts.hope-header')
             
             <!-- Sub Header Banner -->
-            <div class="iq-navbar-header" style="height: 180px;">
+            <div class="iq-navbar-header">
                 <div class="container-fluid iq-container">
                     <div class="row">
                         <div class="col-md-12">
@@ -279,7 +285,7 @@
             </div>
         </div>
 
-        <div class="container-fluid content-inner mt-n5 py-0">
+        <div class="container-fluid content-inner py-4">
             @yield('content')
         </div>
 
