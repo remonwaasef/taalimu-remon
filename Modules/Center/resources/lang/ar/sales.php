@@ -88,4 +88,9 @@ return [
     'tax_label' => 'الضريبة:',
     'paid_stamp' => 'مدفوع PAID',
     'thank_you' => 'نشكركم على ثقتكم بنا (Thank you for your trust)',
+    'download_statement' => 'تحميل كشف الحساب',
+    'quick_pay' => 'سداد سريع',
+    'loading_data' => 'جاري تحميل البيانات...',
+    'select_invoice' => 'اختر الفاتورة للسداد',
+    'no_unpaid_invoices' => 'لا توجد مديونيات مستحقة حالياً',
 ];
