@@ -567,12 +567,6 @@
 
 <body class="{{ ($tenant->settings['appearance']['dark_mode'] ?? false) ? 'dark' : '' }} {{ app()->getLocale() == 'ar' ? 'rtl' : '' }}">
 
-    <!-- loader -->
-    <div id="loading">
-        <div class="loader simple-loader">
-            <div class="loader-body"></div>
-        </div>
-    </div>
 
     <!-- Sidebar Component -->
     @include('center::layouts.hope-sidebar')
