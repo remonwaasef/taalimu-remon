@@ -294,16 +294,6 @@ class PaymentController extends Controller
         return redirect()->route('home')->withErrors(['error' => 'فشل الدفع عبر Paymob أو تم إلغاؤه.']);
     }
 
-    public function paymobCheckout(Request $request)
-    {
-        $redirectUrl = session('paymob_redirect_url');
-        
-        if (!$redirectUrl) {
-            return redirect()->route('home')->withErrors(['error' => 'No payment session found.']);
-        }
-        
-        return view('auth.payment-paymob', compact('redirectUrl'));
-    }
 
     public function cancel()
     {
