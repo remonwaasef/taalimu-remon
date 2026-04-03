@@ -34,6 +34,7 @@ class Subscription extends CashierSubscription
 
     protected $fillable = [
         'tenant_id',
+        'package_id',
         'name',
         'stripe_id',
         'paypal_id',

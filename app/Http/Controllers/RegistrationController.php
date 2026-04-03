@@ -53,6 +53,7 @@ class RegistrationController extends Controller
                 'yearly_price_value' => $p->yearly_price ? number_format($p->yearly_price, 0) : number_format($p->price * 10, 0),
                 'yearly_price_raw' => $p->yearly_price ?: ($p->price * 10),
                 'regional_prices' => $p->regional_prices ?? [],
+                'trial_days' => (int)$p->trial_days,
                 'features' => ($p->display_features && is_array($p->display_features) && count($p->display_features) > 0) 
                     ? $p->display_features 
                     : $p->features->map(function($f) {
@@ -249,7 +250,54 @@ class RegistrationController extends Controller
             app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
             $user->assignRole($user->role);
 
-                // 3. Handle Subscription based on selected plan (Dynamic Gateway)
+                // 3. Handle Subscription logic
+                $finalAmount = $basePrice - $discountAmount;
+
+                if ($package->trial_days > 0) {
+                    \App\Models\Subscription::create([
+                        'tenant_id' => $tenant->id,
+                        'package_id' => $package->id,
+                        'name' => 'default',
+                        'stripe_id' => 'sub_trial_' . \Illuminate\Support\Str::random(10),
+                        'stripe_status' => 'trialing',
+                        'stripe_price' => $package->slug,
+                        'quantity' => 1,
+                        'trial_ends_at' => now()->addDays($package->trial_days),
+                        'ends_at' => now()->addDays($package->trial_days),
+                        'status' => 'trialing',
+                        'billing_cycle' => $request->billing_cycle,
+                        'base_price' => $basePrice,
+                        'total_amount' => $finalAmount,
+                        'discount_amount' => $discountAmount,
+                    ]);
+
+                    $telegram->sendRegistrationAlert($tenant, $user, '(Registration - Free Trial)');
+
+                    DB::commit();
+
+                    // Set session integrity token to prevent payment bypass
+                    session(['registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . $user->id, config('app.key'))]);
+
+                    session([
+                        'registration_success' => true,
+                        'tenant_domain' => $subdomain,
+                        'admin_email' => $request->email,
+                        'center_name' => $request->center_name,
+                        'tenant_id' => $tenant->id,
+                        'selected_plan' => $request->plan,
+                        'billing_cycle' => $request->billing_cycle,
+                        'selected_currency' => $currency,
+                        'applied_coupon_id' => $coupon ? $coupon->id : null,
+                        'applied_coupon_code' => $coupon ? $coupon->code : null,
+                        'discount_amount' => $discountAmount,
+                        'base_price' => $basePrice,
+                        'total_amount' => $finalAmount,
+                    ]);
+
+                    return redirect()->route('registration.success');
+                }
+
+                // Paid Plan Flow (Modular Payment Gateway)
                 DB::commit();
 
                 // Set session integrity token to prevent payment bypass
@@ -267,7 +315,7 @@ class RegistrationController extends Controller
                     'applied_coupon_code' => $coupon ? $coupon->code : null,
                     'discount_amount' => $discountAmount,
                     'base_price' => $basePrice,
-                    'total_amount' => ($basePrice - $discountAmount),
+                    'total_amount' => $finalAmount,
                 ]);
 
                 // Modular Payment Gateway Logic
@@ -278,7 +326,7 @@ class RegistrationController extends Controller
                     'coupon_code' => $coupon ? $coupon->code : null,
                     'discount_amount' => $discountAmount,
                     'base_price' => $basePrice,
-                    'total_amount' => ($basePrice - $discountAmount),
+                    'total_amount' => $finalAmount,
                 ]);
 
                 return redirect()->away($redirectUrl);

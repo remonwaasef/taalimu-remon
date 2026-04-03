@@ -535,11 +535,17 @@ document.addEventListener('alpine:init', () => {
                                         <h3 class="text-lg font-black text-slate-900 font-arabic" x-text="currentPlan.name"></h3>
                                     </div>
                                     <div class="text-right">
-                                        <template x-if="couponStatus === 'valid'">
+                                        <template x-if="currentPlan.trial_days > 0">
+                                            <div class="text-[9px] font-black text-emerald-600 mb-1 animate-fade-in uppercase tracking-wider">
+                                                <i class="bi bi-gift-fill me-1"></i>
+                                                <span x-text="currentPlan.trial_days"></span> {{ app()->isLocale('ar') ? 'أيام مجانية' : 'Days Free' }}
+                                            </div>
+                                        </template>
+                                        <template x-if="couponStatus === 'valid' && currentPlan.trial_days === 0">
                                             <div class="text-[10px] font-black text-emerald-600 mb-1 animate-fade-in">-<span x-text="couponDiscountAmount.toLocaleString()"></span> <span x-text="currentPriceData.currency"></span></div>
                                         </template>
-                                        <div class="flex items-baseline gap-1 text-brand-secondary">
-                                            <span class="text-2xl font-black tracking-tighter" x-text="finalPrice.toLocaleString()"></span>
+                                        <div class="flex items-baseline gap-1" :class="currentPlan.trial_days > 0 ? 'text-emerald-500' : 'text-brand-secondary'">
+                                            <span class="text-2xl font-black tracking-tighter" x-text="currentPlan.trial_days > 0 ? '0' : finalPrice.toLocaleString()"></span>
                                             <span class="text-xs font-bold opacity-60" x-text="currentPriceData.currency"></span>
                                         </div>
                                     </div>
@@ -612,7 +618,7 @@ document.addEventListener('alpine:init', () => {
                             </div>
 
                             <!-- Payment Gateway Selection -->
-                            <div class="space-y-2" x-show="selectedPlan !== 'free-trial'">
+                            <div class="space-y-2" x-show="currentPlan.trial_days === 0">
                                 <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">
                                     {{ app()->getLocale() == 'ar' ? 'طريقة الدفع' : 'Payment' }}
                                 </label>
@@ -646,7 +652,7 @@ document.addEventListener('alpine:init', () => {
                                 class="flex-[2] h-12 rounded-full font-black text-base text-white bg-brand-secondary shadow-lg shadow-brand-secondary/20 hover:shadow-brand-secondary/30 hover:-translate-y-1 transition-all disabled:opacity-50 disabled:grayscale relative overflow-hidden group">
                             <!-- Button Shine Effect -->
                             <div class="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-white opacity-20 group-hover:animate-[shine_1s] group-hover:left-full transition-all duration-700 ease-in-out"></div>
-                            <span class="relative z-10" x-text="finalPrice === 0 ? '{{ __('auth.register.cta_main') }}' : '{{ app()->isLocale('ar') ? 'ادفع واستكمل التسجيل' : 'Pay & Complete' }}'"></span>
+                            <span class="relative z-10" x-text="currentPlan.trial_days > 0 ? ({{ Js::from(app()->isLocale('ar') ? 'ابدأ الفترة التجريبية' : 'Start Free Trial') }}) : (finalPrice === 0 ? '{{ __('auth.register.cta_main') }}' : '{{ app()->isLocale('ar') ? 'ادفع واستكمل التسجيل' : 'Pay & Complete' }}')"></span>
                         </button>
                     </div>
 
