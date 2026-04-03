@@ -4,9 +4,20 @@ namespace Modules\Center\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Services\StudentService;
+use App\Services\FinanceService;
 
 class OnboardingController extends Controller
 {
+    protected $studentService;
+    protected $financeService;
+
+    public function __construct(StudentService $studentService, FinanceService $financeService)
+    {
+        $this->studentService = $studentService;
+        $this->financeService = $financeService;
+    }
+
     public function show()
     {
         // Fix: Ensure step_4 is in the ENUM (Self-correcting DB)
@@ -204,57 +215,30 @@ class OnboardingController extends Controller
                     'student_phone' => 'required|string|max:20',
                 ]);
 
-                // Prevent duplicates: check if an onboarding student already exists
-                $existingStudent = \App\Models\Student::where('tenant_id', $tenant->id)->first();
-                if ($existingStudent) {
-                    // Update existing
-                    $existingStudent->update([
-                        'name' => $request->student_name,
-                        'phone' => $request->student_phone,
-                    ]);
-                    if ($existingStudent->user) {
-                        $existingStudent->user->update([
-                            'name' => $request->student_name,
-                            'phone' => $request->student_phone,
-                        ]);
-                    }
-                    $user = $existingStudent->user;
-                } else {
-                    $user = \App\Models\User::create([
-                        'tenant_id' => $tenant->id,
-                        'name' => $request->student_name,
-                        'phone' => $request->student_phone,
-                        'email' => 'student_' . $request->student_phone . '@' . $tenant->id . '.edu',
-                        'password' => \Illuminate\Support\Facades\Hash::make($request->student_phone),
-                        'user_type' => 'student',
-                        'status' => 'active',
-                    ]);
+                // 1. Register Student using natural StudentService
+                // This handles unique email, unique code, and admin notifications
+                $studentData = \App\DTOs\StudentData::fromArray([
+                    'name' => $request->student_name,
+                    'phone' => $request->student_phone,
+                ]);
 
-                    \App\Models\Student::create([
-                        'tenant_id' => $tenant->id,
-                        'user_id' => $user->id,
-                        'name' => $request->student_name,
-                        'phone' => $request->student_phone,
-                        'status' => 'active',
-                    ]);
-                }
+                $result = $this->studentService->registerStudent($studentData, auth()->user());
+                $student = $result['student'];
 
-                // Enroll in course if requested
-                if ($request->boolean('enroll_in_course') && $user) {
+                // 2. Enroll in course if requested using FinanceService
+                if ($request->boolean('enroll_in_course')) {
                     $course = \App\Models\Course::where('tenant_id', $tenant->id)->latest()->first();
                     if ($course) {
-                        // Prevent duplicate enrollment
-                        $existingEnrollment = \App\Models\Enrollment::where('user_id', $user->id)
-                            ->where('course_id', $course->id)->first();
-                        if (!$existingEnrollment) {
-                            \App\Models\Enrollment::create([
-                                'tenant_id' => $tenant->id,
-                                'user_id' => $user->id,
-                                'course_id' => $course->id,
-                                'enrolled_at' => now(),
-                                'status' => 'active',
-                                'remaining_sessions' => $course->sessions_count,
+                        try {
+                            $this->financeService->createSale([
+                                'student_id' => $student->id,
+                                'items' => [['id' => $course->id, 'price' => $course->price]],
+                                'payment_method' => 'cash',
+                                'paid_amount' => 0, // Unpaid invoice = due amount
+                                'notes' => 'Onboarding Enrollment',
                             ]);
+                        } catch (\Exception $e) {
+                            \Log::error("Onboarding Finance Error: " . $e->getMessage());
                         }
                     }
                 }
