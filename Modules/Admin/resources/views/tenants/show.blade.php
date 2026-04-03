@@ -218,7 +218,7 @@
                     <div class="flex-grow-1">
                         <div class="text-muted x-small fw-bold text-uppercase tracking-wider">الباقة الحالية</div>
                         <div class="d-flex align-items-center justify-content-between">
-                            <span class="stat-value fs-4 text-dark">{{ $sub->package->name ?? ($sub->type_label ?? 'مخصص') }}</span>
+                            <span class="stat-value fs-4 text-dark">{{ $sub ? ($sub->package->name ?? ($sub->type_label ?? 'مخصص')) : 'لا يوجد اشتراك' }}</span>
                             @if($sub)
                                 @php
                                     $isExpired = $sub->ends_at && $sub->ends_at->isPast();
@@ -229,11 +229,18 @@
                                 </span>
                             @endif
                         </div>
-                        <div class="x-small text-muted mb-1">
-                            <i class="bi bi-arrow-repeat me-1"></i>
-                            {{ $sub->billing_cycle === 'yearly' ? 'اشتراك سنوي' : ($sub->billing_cycle === 'term' ? 'اشتراك ترم' : 'اشتراك شهري') }}
-                            - <span class="fw-bold text-primary">{{ number_format($sub->total_amount, 0) }} ج.م</span>
-                        </div>
+                        @if($sub)
+                            <div class="x-small text-muted mb-1">
+                                <i class="bi bi-arrow-repeat me-1"></i>
+                                {{ $sub->billing_cycle === 'yearly' ? 'اشتراك سنوي' : ($sub->billing_cycle === 'term' ? 'اشتراك ترم' : 'اشتراك شهري') }}
+                                - <span class="fw-bold text-primary">{{ number_format($sub->total_amount, 0) }} ج.م</span>
+                            </div>
+                        @else
+                            <div class="x-small text-muted mb-1">
+                                <i class="bi bi-info-circle me-1"></i>
+                                الباقة التجريبية أو لا يوجد اشتراك
+                            </div>
+                        @endif
                     </div>
                 </div>
 
