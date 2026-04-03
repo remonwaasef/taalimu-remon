@@ -152,7 +152,7 @@ class Tenant extends Model
         }
 
         return $this->subscriptions()
-            ->where('status', 'active')
+            ->whereIn('status', ['active', 'trialing'])
             ->where('ends_at', '>', now())
             ->latest()
             ->first();
@@ -164,7 +164,7 @@ class Tenant extends Model
     public function currentSubscription()
     {
         return $this->hasOne(Subscription::class)
-            ->where('status', 'active')
+            ->whereIn('status', ['active', 'trialing'])
             ->where('ends_at', '>', now())
             ->latest();
     }
