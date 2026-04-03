@@ -59,16 +59,16 @@
 
         /* Unified Header Banner - Premium Pastel */
         .iq-navbar-header {
-            padding: 1.5rem 0 !important;
+            padding: 1.25rem 0 !important;
             height: auto !important;
             display: flex;
             align-items: center;
             background: #ffffff !important;
-            border-bottom: 1px solid rgba(16, 185, 129, 0.1);
-            box-shadow: 0 4px 20px -5px rgba(0,0,0,0.02) !important;
+            border-bottom: 1px solid rgba(16, 185, 129, 0.08);
+            box-shadow: 0 4px 15px -5px rgba(0,0,0,0.02) !important;
             position: relative;
             overflow: hidden;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0;
         }
         
         .iq-navbar-header .iq-header-img {
@@ -260,15 +260,15 @@
             @include('center::layouts.hope-header')
             
             <!-- Sub Header Banner -->
-            <div class="iq-navbar-header">
+            <div class="iq-navbar-header mb-4">
                 <div class="container-fluid iq-container">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="flex-wrap d-flex justify-content-between align-items-center">
                                 @hasSection('page-title')
                                 <div>
-                                    <h1 class="text-white">@yield('page-title')</h1>
-                                    <p class="text-white opacity-75 mb-0 small">@yield('page-subtitle')</p>
+                                    <h1 class="text-dark m-0 fs-3">@yield('page-title')</h1>
+                                    <p class="text-muted mb-0 small">@yield('page-subtitle')</p>
                                 </div>
                                 <div class="d-flex align-items-center gap-2">
                                     @yield('page-actions')
@@ -278,14 +278,10 @@
                         </div>
                     </div>
                 </div>
-                <!-- Banner Image -->
-                <div class="iq-header-img" style="background-color: var(--bs-primary);">
-                     <img src="{{ asset('assets/hope-ui/images/dashboard/top-header.png') }}" alt="header" class="theme-color-default-img img-fluid w-100 h-100 animated-scaleX">
-                </div>
             </div>
         </div>
 
-        <div class="container-fluid content-inner py-4">
+        <div class="container-fluid content-inner py-0">
             @yield('content')
         </div>
 
