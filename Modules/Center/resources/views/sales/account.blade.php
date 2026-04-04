@@ -307,14 +307,27 @@
     let studentSelector;
 
     document.addEventListener('DOMContentLoaded', function() {
-        // Advanced TomSelect with AJAX
+        // Advanced TomSelect with AJAX - Optimized for Live Loading
         studentSelector = new TomSelect('#studentSelector', {
             valueField: 'id',
             labelField: 'name',
             searchField: ['name', 'phone', 'code'],
+            openOnFocus: true,
             loadThrottle: 300,
+            maxResults: 15,
+            shouldLoad: function(query) {
+                return query.length > 0;
+            },
+            score: function(search) {
+                // Return a constant score so TomSelect shows all server results 
+                // exactly as they are returned, without its own internal filtering.
+                return function(item) { return 1; };
+            },
             options: [],
             render: {
+                no_results: function(data, escape) {
+                    return `<div class="no-results p-3 text-muted text-center"><i class="fas fa-search me-2"></i>لا توجد نتائج مطابقة لـ "${escape(data.input)}"</div>`;
+                },
                 option: function(item, escape) {
                     return `
                         <div class="search-result-item">
