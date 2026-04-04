@@ -298,6 +298,7 @@ $tenantRoutes = function () {
         // Sales & Expenses
         Route::middleware(['feature:financial_reports'])->group(function() {
             Route::middleware(['can:view sales'])->group(function() {
+                Route::get('sales/students/lookup', [SaleController::class, 'lookupStudents'])->name('center.sales.lookup');
                 Route::get('sales/overdue', [SaleController::class, 'overdue'])->name('center.sales.overdue');
                 Route::get('sales/account', [SaleController::class, 'account'])->name('center.sales.account');
                 Route::get('sales/student-statement/{id}', [SaleController::class, 'downloadStatement'])->name('center.sales.statement');
