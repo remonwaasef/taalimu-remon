@@ -113,7 +113,7 @@
                     <span class="input-group-text bg-transparent border-0 ps-4 pe-2 text-muted">
                         <i class="fas fa-search"></i>
                     </span>
-                    <select id="studentSelector" class="form-select border-0 shadow-none border-radius-0" placeholder="ابدأ بكتابة اسم الطالب، رقم الهاتف، أو الكود..."></select>
+                    <input type="text" id="studentSelector" class="form-control border-0 shadow-none border-radius-0" placeholder="ابدأ بكتابة اسم الطالب، رقم الهاتف، أو الكود..." autocomplete="off">
                     <span class="input-group-text bg-transparent border-0 pe-4 ps-2 text-muted d-none d-md-flex">
                         <kbd class="bg-light border text-dark ms-2 opacity-50">/</kbd>
                     </span>
@@ -307,14 +307,14 @@
     let studentSelector;
 
     document.addEventListener('DOMContentLoaded', function() {
-        // Advanced TomSelect with AJAX - Optimized for Live Loading
+        // Advanced TomSelect with Input - Forced Live Loading
         studentSelector = new TomSelect('#studentSelector', {
             valueField: 'id',
             labelField: 'name',
             searchField: ['name', 'phone', 'code'],
             openOnFocus: true,
-            loadThrottle: 300,
-            maxResults: 15,
+            loadThrottle: 100, // Faster trigger (100ms)
+            maxOptions: 20,
             shouldLoad: function(query) {
                 return query.length > 0;
             },
@@ -325,6 +325,9 @@
             },
             options: [],
             render: {
+                loading: function(data, escape) {
+                    return `<div class="spinner-loader p-3 text-center"><div class="spinner-border spinner-border-sm text-primary me-2"></div>جاري البحث عن "${escape(data.input)}"...</div>`;
+                },
                 no_results: function(data, escape) {
                     return `<div class="no-results p-3 text-muted text-center"><i class="fas fa-search me-2"></i>لا توجد نتائج مطابقة لـ "${escape(data.input)}"</div>`;
                 },
