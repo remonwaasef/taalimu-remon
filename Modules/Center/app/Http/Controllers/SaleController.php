@@ -67,8 +67,42 @@ class SaleController extends Controller
     {
         $this->authorize('viewAny', Sale::class);
         $tenant = app('tenant');
-        $students = Student::where('tenant_id', $tenant->id)->get();
-        return view('center::sales.account', compact('students', 'tenant'));
+        // We no longer load all students here to keep the page lightweight.
+        // The search bar will use AJAX to find students.
+        return view('center::sales.account', compact('tenant'));
+    }
+
+    public function lookupStudents(Request $request)
+    {
+        $this->authorize('viewAny', Sale::class);
+        $tenant = app('tenant');
+        $query = $request->get('q');
+
+        if (empty($query)) {
+            return response()->json([]);
+        }
+
+        $results = Student::where('tenant_id', $tenant->id)
+            ->where(function($q) use ($query) {
+                $q->where('name', 'like', "%{$query}%")
+                  ->orWhere('phone', 'like', "%{$query}%")
+                  ->orWhere('code', 'like', "%{$query}%");
+            })
+            ->with(['grade.stage'])
+            ->limit(10) // Limit for performance and UX
+            ->get()
+            ->map(function($s) {
+                return [
+                    'id' => $s->id,
+                    'name' => $s->name,
+                    'phone' => $s->phone,
+                    'code' => $s->code,
+                    'grade' => $s->grade_level_name,
+                    'initial' => mb_substr($s->name, 0, 1, 'UTF-8')
+                ];
+            });
+
+        return response()->json($results);
     }
 
     public function create()

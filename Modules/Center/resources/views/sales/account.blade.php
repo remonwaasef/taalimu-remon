@@ -105,23 +105,21 @@
         </div>
     </div>
 
-    <!-- Student Selector -->
+    <!-- Developed Student Selector -->
     <div class="col-lg-12">
-        <div class="card border-0 shadow-sm rounded-4 overlay-container overflow-hidden">
-            <div class="card-body p-4">
-                <div class="row align-items-center">
-                    <div class="col-lg-12">
-                        <label class="form-label fw-bold text-dark mb-3"><i class="fas fa-search me-1 text-primary"></i> ابحث عن الطالب لبدء المعالجة</label>
-                        <select id="studentSelector" class="form-select form-select-lg" placeholder="-- ابحث بالاسم أو رقم الهاتف --">
-                            <option value="">-- ابحث بالاسم أو رقم الهاتف --</option>
-                            @foreach($students as $student)
-                                <option value="{{ $student->id }}">{{ $student->name }} | {{ $student->phone }} | {{ $student->code }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+        <div class="card border-0 shadow rounded-4 overlay-container overflow-hidden search-bar-container">
+            <div class="card-body p-1">
+                <div class="input-group input-group-lg search-input-group">
+                    <span class="input-group-text bg-transparent border-0 ps-4 pe-2 text-muted">
+                        <i class="fas fa-search"></i>
+                    </span>
+                    <select id="studentSelector" class="form-select border-0 shadow-none border-radius-0" placeholder="ابدأ بكتابة اسم الطالب، رقم الهاتف، أو الكود..."></select>
+                    <span class="input-group-text bg-transparent border-0 pe-4 ps-2 text-muted d-none d-md-flex">
+                        <kbd class="bg-light border text-dark ms-2 opacity-50">/</kbd>
+                    </span>
                 </div>
             </div>
-            <div class="position-absolute bottom-0 start-0 w-100 h-1 bg-primary opacity-25"></div>
+            <div id="searchProgressLine" class="position-absolute bottom-0 start-0 w-0 h-2 bg-primary transition-all d-none"></div>
         </div>
     </div>
 
@@ -231,13 +229,65 @@
         --bs-primary: #059669;
         --bs-primary-rgb: 5, 150, 105;
     }
-    .ts-control { border-radius: 1rem !important; padding: 0.85rem 1.25rem !important; border: 1px solid #eee !important; transition: all 0.3s; font-size: 1.1rem; }
-    .ts-control:focus { border-color: var(--bs-primary) !important; box-shadow: 0 0 0 0.25rem rgba(5, 150, 105, 0.1) !important; }
     
+    .search-bar-container {
+        border: 2px solid transparent;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background: #fff;
+    }
+    
+    .search-bar-container:focus-within {
+        border-color: var(--bs-primary);
+        box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.15) !important;
+        transform: translateY(-2px);
+    }
+
+    .ts-control { 
+        border-radius: 0 !important; 
+        padding: 1rem 0.5rem !important; 
+        border: none !important; 
+        box-shadow: none !important;
+        font-size: 1.15rem !important;
+        font-weight: 500;
+        background: transparent !important;
+    }
+    
+    .ts-wrapper.single .ts-control {
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .ts-dropdown {
+        border-radius: 0 0 1rem 1rem !important;
+        border: none !important;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+        padding: 0.5rem !important;
+        margin-top: 5px !important;
+    }
+    
+    .ts-dropdown .option {
+        padding: 0.75rem 1rem !important;
+        border-radius: 0.75rem !important;
+        margin-bottom: 2px;
+        transition: all 0.2s;
+    }
+    
+    .ts-dropdown .active {
+        background-color: rgba(5, 150, 105, 0.08) !important;
+        color: var(--bs-primary) !important;
+    }
+
+    /* Result Rendering UI */
+    .search-result-item { display: flex; align-items: center; gap: 12px; }
+    .search-result-avatar { width: 40px; height: 40px; border-radius: 10px; background: rgba(5, 150, 105, 0.1); color: var(--bs-primary); display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    .search-result-info { flex: 1; }
+    .search-result-name { font-weight: 600; font-size: 0.95rem; display: block; margin-bottom: 1px; }
+    .search-result-meta { font-size: 0.75rem; color: #64748b; }
+
     .nav-tabs .nav-link { border: none; font-weight: 600; color: #64748b; border-bottom: 3px solid transparent; transition: all 0.2s; }
     .nav-tabs .nav-link.active { color: var(--bs-primary); border-bottom-color: var(--bs-primary); background: rgba(5, 150, 105, 0.03); }
-    .nav-tabs .nav-link:hover:not(.active) { color: var(--bs-primary); background: #fefefe; }
-
+    
     .btn-white { background: white; border: none; transition: all 0.3s; }
     .btn-white:hover { background: #f8fafc; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
     
@@ -245,12 +295,7 @@
     .ledger-item:not(:last-child)::before { content: ''; position: absolute; top: 10px; right: 23px; width: 2px; height: 100%; background: #f1f5f9; }
     .ledger-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; z-index: 1; }
     
-    .card-content-area { min-height: 400px; }
-    .hover-scale { transition: transform 0.2s; }
-    .hover-scale:hover { transform: scale(1.02); }
-    
-    .skeleton { background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 4px; }
-    @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    .h-2 { height: 3px; }
 </style>
 @endpush
 
@@ -262,16 +307,83 @@
     let studentSelector;
 
     document.addEventListener('DOMContentLoaded', function() {
+        // Advanced TomSelect with AJAX
         studentSelector = new TomSelect('#studentSelector', {
-            sortField: { field: "text", direction: "asc" },
-            onChange: function(value) { loadStudentAccount(value); }
+            valueField: 'id',
+            labelField: 'name',
+            searchField: ['name', 'phone', 'code'],
+            loadThrottle: 300,
+            options: [],
+            render: {
+                option: function(item, escape) {
+                    return `
+                        <div class="search-result-item">
+                            <div class="search-result-avatar">${escape(item.initial)}</div>
+                            <div class="search-result-info">
+                                <span class="search-result-name">${escape(item.name)}</span>
+                                <div class="search-result-meta">
+                                    <span class="me-2"><i class="fas fa-phone-alt me-1"></i>${escape(item.phone)}</span>
+                                    <span><i class="fas fa-graduation-cap me-1"></i>${escape(item.grade)}</span>
+                                </div>
+                            </div>
+                            <div class="text-muted small">#${escape(item.code)}</div>
+                        </div>`;
+                },
+                item: function(item, escape) {
+                    return `<div class="fw-bold">${escape(item.name)} <span class="text-muted small ms-1">(${escape(item.phone)})</span></div>`;
+                }
+            },
+            load: function(query, callback) {
+                if (!query.length) return callback();
+                
+                const progressLine = document.getElementById('searchProgressLine');
+                progressLine.classList.remove('d-none');
+                progressLine.style.width = '40%';
+
+                fetch(`/sales/students/lookup?q=${encodeURIComponent(query)}`)
+                    .then(response => response.json())
+                    .then(json => {
+                        progressLine.style.width = '100%';
+                        setTimeout(() => { progressLine.classList.add('d-none'); progressLine.style.width = '0'; }, 300);
+                        callback(json);
+                    }).catch(() => {
+                        progressLine.classList.add('d-none');
+                        callback();
+                    });
+            },
+            onChange: function(value) {
+                if (value) loadStudentAccount(value);
+            }
+        });
+
+        // Keyboard Shortcut (/) to focus search
+        document.addEventListener('keydown', function(e) {
+            if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                studentSelector.focus();
+            }
         });
 
         // Load if ID in URL
         const urlParams = new URLSearchParams(window.location.search);
         const studentId = urlParams.get('student_id');
         if (studentId) {
-            studentSelector.setValue(studentId);
+            // Since options are remote, we might need to manually add this one if it's not and then set it
+            fetch(`/sales/student-summary/${studentId}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        studentSelector.addOption({
+                            id: data.student.id,
+                            name: data.student.name,
+                            phone: data.student.phone,
+                            code: data.student.code || 'N/A',
+                            grade: data.student.grade,
+                            initial: data.student.name.charAt(0)
+                        });
+                        studentSelector.setValue(studentId);
+                    }
+                });
         }
     });
 
@@ -440,11 +552,6 @@
                 document.getElementById('tabsLoader').classList.replace('d-none', 'd-flex');
                 Swal.fire({ icon: 'error', title: 'خطأ في تحميل البيانات' });
             });
-    }
-
-    function openQuickPayModal() {
-        if (currentUnpaidInvoices.length === 0) return;
-        openGenericQuickPayModal(currentUnpaidInvoices[0].id, currentUnpaidInvoices[0].remaining);
     }
 
     function openGenericQuickPayModal(saleId, amount) {
