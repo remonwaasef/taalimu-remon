@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use App\Services\FinanceService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Payment;
+use App\Models\Refund;
 use App\Services\RefundService;
 
 class SaleController extends Controller
@@ -144,7 +145,7 @@ class SaleController extends Controller
     public function getStudentSummary($id)
     {
         $tenant = app('tenant');
-        $student = Student::where('tenant_id', $tenant->id)->with(['grade.stage'])->findOrFail($id);
+        $student = Student::with(['grade.stage'])->where('tenant_id', $tenant->id)->findOrFail($id);
         
         // Active Enrollments
         $courses = DB::table('enrollments')
@@ -154,18 +155,65 @@ class SaleController extends Controller
             ->select('courses.title', 'enrollments.enrolled_at', 'enrollments.status')
             ->get();
 
-        // Financial Summary
+        // Financial Summary: Fetch all Sales, Payments, and Refunds
         $sales = Sale::where('student_id', $student->id)
-            ->select('id', 'total_amount', 'paid_amount', 'status', 'created_at')
-            ->get()
-            ->map(function($sale) {
-                $sale->remaining = $sale->total_amount - $sale->paid_amount;
-                return $sale;
-            });
+            ->where('tenant_id', $tenant->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        $totalDebt = $sales->sum('remaining');
-        $totalPaid = $sales->sum('paid_amount');
-        $unpaidSales = $sales->where('remaining', '>', 0)->values();
+        $payments = Payment::whereHas('sale', function($q) use ($student) {
+            $q->where('student_id', $student->id);
+        })->where('tenant_id', $tenant->id)->get();
+
+        $refunds = Refund::whereHas('sale', function($q) use ($student) {
+            $q->where('student_id', $student->id);
+        })->where('tenant_id', $tenant->id)->get();
+
+        // Combine into Ledger (Transactions Timeline)
+        $ledger = collect();
+
+        foreach ($sales as $sale) {
+            $ledger->push([
+                'id' => $sale->id,
+                'date' => $sale->created_at->format('Y-m-d H:i'),
+                'type' => 'invoice',
+                'amount' => (float)$sale->total_amount,
+                'status' => $sale->status,
+                'remaining' => (float)($sale->total_amount - $sale->paid_amount),
+                'description' => 'فاتورة مبيعات #' . $sale->id
+            ]);
+        }
+
+        foreach ($payments as $payment) {
+            $ledger->push([
+                'id' => $payment->id,
+                'date' => ($payment->paid_at ?? $payment->created_at)->format('Y-m-d H:i'),
+                'type' => 'payment',
+                'amount' => (float)$payment->amount,
+                'method' => $payment->payment_method,
+                'description' => 'سداد دفعة مالية' . ($payment->payment_method ? " ({$payment->payment_method})" : ""),
+                'sale_id' => $payment->sale_id
+            ]);
+        }
+
+        foreach ($refunds as $refund) {
+            $ledger->push([
+                'id' => $refund->id,
+                'date' => $refund->created_at->format('Y-m-d H:i'),
+                'type' => 'refund',
+                'amount' => (float)$refund->amount,
+                'description' => 'عملية استرداد (Refund)',
+                'sale_id' => $refund->sale_id
+            ]);
+        }
+
+        $ledger = $ledger->sortByDesc('date')->values();
+
+        // Stats calculation
+        $totalBilled = $sales->sum('total_amount');
+        $totalPaid = $payments->sum('amount');
+        $totalRefunded = $refunds->sum('amount');
+        $totalDebt = $totalBilled - $totalPaid + $totalRefunded;
 
         // Attendance Stats
         $attendance = \Modules\Center\Models\Attendance::where('student_id', $student->id)
@@ -191,6 +239,7 @@ class SaleController extends Controller
                 'phone' => $student->phone,
                 'status' => $student->status,
                 'grade' => $student->grade_level_name,
+                'id' => $student->id
             ],
             'courses' => $courses,
             'stats' => [
@@ -199,7 +248,11 @@ class SaleController extends Controller
                 'attendance_rate' => $attendanceRate,
                 'course_count' => $courses->count(),
             ],
-            'unpaid_invoices' => $unpaidSales,
+            'ledger' => $ledger,
+            'unpaid_invoices' => $sales->where('paid_amount', '<', 'total_amount')->map(function($s) {
+                $s->remaining = $s->total_amount - $s->paid_amount;
+                return $s;
+            })->values(),
             'recent_attendance' => $recentAttendance,
         ]);
     }

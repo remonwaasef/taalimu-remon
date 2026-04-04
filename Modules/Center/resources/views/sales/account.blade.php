@@ -15,22 +15,31 @@
                 </div>
                 <div class="row align-items-center">
                     <div class="col-auto">
-                        <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-lg" style="width: 80px; height: 80px; font-size: 2rem;">
+                        <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-lg" style="width: 90px; height: 90px; font-size: 2.5rem;">
                             <span id="studentInitial">S</span>
                         </div>
                     </div>
                     <div class="col">
-                        <h2 id="studentNameDisplay" class="fw-bold mb-1">Student Name</h2>
-                        <div class="d-flex flex-wrap gap-3 small opacity-75 mb-3">
+                        <div class="d-flex align-items-center gap-3 mb-1">
+                            <h2 id="studentNameDisplay" class="fw-bold mb-0">Student Name</h2>
+                            <span id="studentStatusBadge" class="badge bg-white bg-opacity-25 rounded-pill px-3">Status</span>
+                        </div>
+                        <div class="d-flex flex-wrap gap-4 small opacity-75 mb-3">
                             <span><i class="fas fa-phone-alt me-1"></i> <span id="studentPhoneDisplay">00000000</span></span>
                             <span><i class="fas fa-graduation-cap me-1"></i> <span id="studentGradeDisplay">Grade</span></span>
-                            <span><i class="fas fa-circle me-1" id="statusDot"></i> <span id="studentStatusDisplay">Status</span></span>
+                            <span><i class="fas fa-id-card me-1"></i> ID: <span id="studentIdDisplay">#0</span></span>
                         </div>
                         <div class="d-flex gap-2">
-                            <button onclick="downloadStatement()" class="btn btn-white btn-sm rounded-pill px-3 fw-bold text-dark shadow-sm">
-                                <i class="fas fa-file-pdf me-1 text-danger"></i> {{ __('center::sales.download_statement') }}
+                            <a id="whatsappBtn" href="#" target="_blank" class="btn btn-white btn-sm rounded-pill px-3 fw-bold text-success shadow-sm">
+                                <i class="fab fa-whatsapp me-1"></i> واتساب
+                            </a>
+                            <a id="callBtn" href="#" class="btn btn-white btn-sm rounded-pill px-3 fw-bold text-primary shadow-sm">
+                                <i class="fas fa-phone-alt me-1"></i> اتصال
+                            </a>
+                            <button onclick="downloadStatement()" class="btn btn-white btn-sm rounded-pill px-3 fw-bold text-danger shadow-sm">
+                                <i class="fas fa-file-pdf me-1"></i> كشف حساب
                             </button>
-                            <button id="quickPayBtn" onclick="openQuickPayModal()" class="btn btn-success btn-sm rounded-pill px-3 fw-bold shadow-sm d-none" style="background: #fbbf24; border-color: #fbbf24; color: #000;">
+                            <button id="quickPayBtn" onclick="openQuickPayModal()" class="btn btn-warning btn-sm rounded-pill px-3 fw-bold shadow-sm d-none">
                                 <i class="fas fa-bolt me-1"></i> {{ __('center::sales.quick_pay') }}
                             </button>
                         </div>
@@ -44,46 +53,52 @@
     <div id="statsSection" class="col-lg-12 d-none">
         <div class="row g-3">
             <div class="col-md-3">
-                <div class="card border-0 shadow-sm rounded-4 animate__animated animate__fadeInUp">
-                    <div class="card-body p-3 d-flex align-items-center gap-3">
-                        <div class="bg-danger bg-opacity-10 text-danger rounded-4 p-3"><i class="fas fa-money-bill-wave fa-lg"></i></div>
-                        <div>
+                <div class="card border-0 shadow-sm rounded-4 animate__animated animate__fadeInUp bg-white">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center gap-3 mb-2">
+                            <div class="bg-danger bg-opacity-10 text-danger rounded-3 p-2"><i class="fas fa-money-bill-wave"></i></div>
                             <div class="text-muted small fw-bold">{{ __('center::messages.blade_0562') }}</div>
-                            <h4 id="debtStat" class="mb-0 fw-bold text-danger">0.00</h4>
+                        </div>
+                        <h3 id="debtStat" class="mb-0 fw-bold text-danger">0.00</h3>
+                        <div class="mt-2 small text-muted"><i class="fas fa-info-circle me-1"></i> مبالغ لم يتم تسويتها</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm rounded-4 animate__animated animate__fadeInUp bg-white" style="animation-delay: 0.1s;">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center gap-3 mb-2">
+                            <div class="bg-success bg-opacity-10 text-success rounded-3 p-2"><i class="fas fa-check-circle"></i></div>
+                            <div class="text-muted small fw-bold">إجمالي المسدد</div>
+                        </div>
+                        <h3 id="paidStat" class="mb-0 fw-bold text-success">0.00</h3>
+                        <div class="mt-2 small text-muted"><i class="fas fa-arrow-up text-success me-1"></i> تحصيلات نقدية/بنكية</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm rounded-4 animate__animated animate__fadeInUp bg-white" style="animation-delay: 0.2s;">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center gap-3 mb-2">
+                            <div class="bg-info bg-opacity-10 text-info rounded-3 p-2"><i class="fas fa-calendar-check"></i></div>
+                            <div class="text-muted small fw-bold">نسبة الحضور</div>
+                        </div>
+                        <h3 id="attendanceStat" class="mb-0 fw-bold text-info">0%</h3>
+                        <div class="progress mt-3" style="height: 6px;">
+                            <div id="attendanceProgress" class="progress-bar bg-info" style="width: 0%"></div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card border-0 shadow-sm rounded-4 animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
-                    <div class="card-body p-3 d-flex align-items-center gap-3">
-                        <div class="bg-success bg-opacity-10 text-success rounded-4 p-3"><i class="fas fa-check-circle fa-lg"></i></div>
-                        <div>
-                            <div class="text-muted small fw-bold">{{ __('center::messages.blade_0582', ['default' => 'إجمالي المسدد']) }}</div>
-                            <h4 id="paidStat" class="mb-0 fw-bold text-success">0.00</h4>
+                <div class="card border-0 shadow-sm rounded-4 animate__animated animate__fadeInUp bg-white" style="animation-delay: 0.3s;">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center gap-3 mb-2">
+                            <div class="bg-purple bg-opacity-10 text-purple rounded-3 p-2" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;"><i class="fas fa-book-open"></i></div>
+                            <div class="text-muted small fw-bold">الدورات النشطة</div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm rounded-4 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
-                    <div class="card-body p-3 d-flex align-items-center gap-3">
-                        <div class="bg-info bg-opacity-10 text-info rounded-4 p-3"><i class="fas fa-calendar-check fa-lg"></i></div>
-                        <div>
-                            <div class="text-muted small fw-bold">{{ __('center::messages.blade_0583', ['default' => 'نسبة الحضور']) }}</div>
-                            <h4 id="attendanceStat" class="mb-0 fw-bold text-info">0%</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm rounded-4 animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
-                    <div class="card-body p-3 d-flex align-items-center gap-3">
-                        <div class="bg-warning bg-opacity-10 text-warning rounded-4 p-3"><i class="fas fa-book-open fa-lg"></i></div>
-                        <div>
-                            <div class="text-muted small fw-bold">{{ __('center::messages.blade_0584', ['default' => 'الكورسات المشتركة']) }}</div>
-                            <h4 id="coursesStat" class="mb-0 fw-bold text-warning">0</h4>
-                        </div>
+                        <h3 id="coursesStat" class="mb-0 fw-bold" style="color: #8b5cf6;">0</h3>
+                        <div class="mt-2 small text-muted"><i class="fas fa-graduation-cap me-1"></i> دورات مسجل بها الطالب</div>
                     </div>
                 </div>
             </div>
@@ -92,13 +107,13 @@
 
     <!-- Student Selector -->
     <div class="col-lg-12">
-        <div class="card border-0 shadow-sm rounded-4">
+        <div class="card border-0 shadow-sm rounded-4 overlay-container overflow-hidden">
             <div class="card-body p-4">
                 <div class="row align-items-center">
                     <div class="col-lg-12">
-                        <label class="form-label fw-bold text-dark mb-3"><i class="fas fa-search me-1 text-primary"></i>{{ __('center::messages.blade_0560') }}</label>
-                        <select id="studentSelector" class="form-select form-select-lg" placeholder="{{ __('center::messages.blade_0561') }}">
-                            <option value="">{{ __('center::messages.blade_0561') }}</option>
+                        <label class="form-label fw-bold text-dark mb-3"><i class="fas fa-search me-1 text-primary"></i> ابحث عن الطالب لبدء المعالجة</label>
+                        <select id="studentSelector" class="form-select form-select-lg" placeholder="-- ابحث بالاسم أو رقم الهاتف --">
+                            <option value="">-- ابحث بالاسم أو رقم الهاتف --</option>
                             @foreach($students as $student)
                                 <option value="{{ $student->id }}">{{ $student->name }} | {{ $student->phone }} | {{ $student->code }}</option>
                             @endforeach
@@ -106,6 +121,7 @@
                     </div>
                 </div>
             </div>
+            <div class="position-absolute bottom-0 start-0 w-100 h-1 bg-primary opacity-25"></div>
         </div>
     </div>
 
@@ -115,54 +131,72 @@
             <div class="card-header bg-white border-0 p-0">
                 <ul class="nav nav-tabs nav-justified border-bottom" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#financialsTab" type="button"><i class="fas fa-wallet me-2"></i>{{ __('center::sales.ledger') }}</button>
+                        <button class="nav-link active py-3" data-bs-toggle="tab" data-bs-target="#ledgerTab" type="button">
+                            <i class="fas fa-history me-2"></i> السجل المالي (Timeline)
+                        </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#coursesTab" type="button"><i class="fas fa-graduation-cap me-2"></i>{{ __('center::messages.blade_0020') }}</button>
+                        <button class="nav-link py-3" data-bs-toggle="tab" data-bs-target="#invoicesTab" type="button">
+                            <i class="fas fa-file-invoice-dollar me-2"></i> المديونيات المعلقة
+                        </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#attendanceTab" type="button"><i class="fas fa-user-check me-2"></i>{{ __('center::messages.blade_0130') }}</button>
+                        <button class="nav-link py-3" data-bs-toggle="tab" data-bs-target="#coursesTab" type="button">
+                            <i class="fas fa-graduation-cap me-2"></i> الدورات المسجلة
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link py-3" data-bs-toggle="tab" data-bs-target="#attendanceTab" type="button">
+                            <i class="fas fa-user-check me-2"></i> سجل الحضور
+                        </button>
                     </li>
                 </ul>
             </div>
-            <div class="card-body p-4 position-relative">
-                <div id="tabsLoader" class="position-absolute top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-none align-items-center justify-content-center z-index-1" style="z-index: 10;">
-                    <div class="spinner-border text-primary" role="status"></div>
+            <div class="card-body p-4 position-relative card-content-area">
+                <div id="tabsLoader" class="position-absolute top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-none align-items-center justify-content-center" style="z-index: 10;">
+                    <div class="text-center">
+                        <div class="spinner-border text-primary mb-2" role="status"></div>
+                        <div class="small fw-bold text-primary">جاري تحميل البيانات...</div>
+                    </div>
                 </div>
+
                 <div class="tab-content" id="myTabContent">
-                    <!-- Financials Tab -->
-                    <div class="tab-pane fade show active" id="financialsTab">
-                        <div class="mb-4">
-                            <h5 class="fw-bold mb-3 d-flex align-items-center">
-                                <span class="bg-danger bg-opacity-10 text-danger rounded-circle p-2 me-2 d-flex align-items-center justify-content-center" style="width:35px; height:35px;"><i class="fas fa-exclamation-circle small"></i></span>
-                                {{ __('center::messages.blade_0567') }}
-                            </h5>
-                            <div id="unpaidInvoicesList">
-                                <!-- Dynamic dynamic -->
+                    <!-- Ledger Tab -->
+                    <div class="tab-pane fade show active" id="ledgerTab">
+                        <div class="timeline-container px-2">
+                            <div id="ledgerTimeline">
+                                <!-- Timeline items dynamic -->
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Invoices Tab -->
+                    <div class="tab-pane fade" id="invoicesTab">
+                        <div id="unpaidInvoicesList">
+                            <!-- Unpaid invoices dynamic -->
                         </div>
                     </div>
 
                     <!-- Courses Tab -->
                     <div class="tab-pane fade" id="coursesTab">
                         <div id="coursesListSection" class="row g-3">
-                            <!-- Dynamic dynamic -->
+                            <!-- Courses dynamic -->
                         </div>
                     </div>
 
                     <!-- Attendance Tab -->
                     <div class="tab-pane fade" id="attendanceTab">
-                        <div class="table-responsive">
-                            <table class="table align-middle">
+                        <div class="table-responsive rounded-3 border">
+                            <table class="table table-hover align-middle mb-0">
                                 <thead class="bg-light">
                                     <tr>
-                                        <th>{{ __('center::messages.blade_0677', ['default' => 'التاريخ']) }}</th>
-                                        <th>{{ __('center::messages.blade_0650', ['default' => 'الكورس']) }}</th>
-                                        <th>{{ __('center::messages.blade_0434', ['default' => 'الحالة']) }}</th>
+                                        <th class="ps-4">التاريخ</th>
+                                        <th>الكورس</th>
+                                        <th class="text-center">الحالة</th>
                                     </tr>
                                 </thead>
                                 <tbody id="attendanceTableBody">
-                                    <!-- Dynamic dynamic -->
+                                    <!-- Attendance dynamic -->
                                 </tbody>
                             </table>
                         </div>
@@ -174,12 +208,17 @@
 
     <!-- Empty State -->
     <div id="emptyState" class="col-lg-12 text-center py-5">
-        <div class="bg-white rounded-4 shadow-sm p-5 d-inline-block" style="max-width: 500px;">
-            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 100px; height: 100px;">
-                <i class="fas fa-user-search fa-3x text-muted"></i>
+        <div class="bg-white rounded-4 shadow-sm p-5 d-inline-block border w-100" style="max-width: 600px;">
+            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 120px; height: 120px;">
+                <img src="https://cdni.iconscout.com/illustration/premium/thumb/searching-student-data-8703478-7058866.png" class="img-fluid opacity-75" style="max-width: 80px;" alt="">
             </div>
-            <h4 class="fw-bold text-dark">{{ __('center::messages.blade_0569') }}</h4>
-            <p class="text-muted mb-0">{{ __('center::messages.blade_0570') }}</p>
+            <h4 class="fw-bold text-dark mb-2">ابدأ بالبحث عن طالب</h4>
+            <p class="text-muted mb-4 mx-auto" style="max-width: 400px;">قم باختيار طالب من المحرك أعلاه لمشاهدة تفاصيل حسابه المالي، سجله الأكاديمي، وإدارة التحصيلات بسرعة وكفاءة.</p>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <div class="small text-muted"><i class="fas fa-check-circle text-success me-1"></i> متابعة المديونيات</div>
+                <div class="small text-muted"><i class="fas fa-check-circle text-success me-1"></i> سجل سداد كامل</div>
+                <div class="small text-muted"><i class="fas fa-check-circle text-success me-1"></i> التحصيل السريع</div>
+            </div>
         </div>
     </div>
 </div>
@@ -188,14 +227,30 @@
 <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 <style>
-    .ts-control { border-radius: 1rem !important; padding: 0.75rem 1.25rem !important; border: 1px solid #eee !important; transition: all 0.3s; }
+    :root {
+        --bs-primary: #059669;
+        --bs-primary-rgb: 5, 150, 105;
+    }
+    .ts-control { border-radius: 1rem !important; padding: 0.85rem 1.25rem !important; border: 1px solid #eee !important; transition: all 0.3s; font-size: 1.1rem; }
     .ts-control:focus { border-color: var(--bs-primary) !important; box-shadow: 0 0 0 0.25rem rgba(5, 150, 105, 0.1) !important; }
-    .nav-tabs .nav-link { padding: 1.25rem; border: none; font-weight: 600; color: #64748b; border-bottom: 3px solid transparent; }
-    .nav-tabs .nav-link.active { color: var(--bs-primary); border-bottom-color: var(--bs-primary); background: transparent; }
-    .transition-all { transition: all 0.3s ease; }
-    .hover-shadow:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important; border-color: var(--bs-primary) !important; }
+    
+    .nav-tabs .nav-link { border: none; font-weight: 600; color: #64748b; border-bottom: 3px solid transparent; transition: all 0.2s; }
+    .nav-tabs .nav-link.active { color: var(--bs-primary); border-bottom-color: var(--bs-primary); background: rgba(5, 150, 105, 0.03); }
+    .nav-tabs .nav-link:hover:not(.active) { color: var(--bs-primary); background: #fefefe; }
+
     .btn-white { background: white; border: none; transition: all 0.3s; }
-    .btn-white:hover { background: #f8fafc; transform: translateY(-1px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+    .btn-white:hover { background: #f8fafc; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+    
+    .ledger-item { position: relative; padding-bottom: 1.5rem; }
+    .ledger-item:not(:last-child)::before { content: ''; position: absolute; top: 10px; right: 23px; width: 2px; height: 100%; background: #f1f5f9; }
+    .ledger-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; z-index: 1; }
+    
+    .card-content-area { min-height: 400px; }
+    .hover-scale { transition: transform 0.2s; }
+    .hover-scale:hover { transform: scale(1.02); }
+    
+    .skeleton { background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 4px; }
+    @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 </style>
 @endpush
 
@@ -228,96 +283,6 @@
     }
 
     let currentUnpaidInvoices = [];
-    function openQuickPayModal() {
-        if (currentUnpaidInvoices.length === 0) return;
-        
-        const modalHtml = `
-            <div class="modal fade" id="quickPayModal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content border-0 rounded-4 shadow">
-                        <div class="modal-header border-0 shadow-sm p-4">
-                            <h5 class="fw-bold mb-0"><i class="fas fa-bolt text-warning me-2"></i>{{ __('center::sales.quick_pay') }}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body p-4">
-                            <div class="mb-4">
-                                <label class="form-label fw-bold small">{{ __('center::sales.select_invoice') }}</label>
-                                <select id="quickInvoiceSelect" class="form-select rounded-3">
-                                    ${currentUnpaidInvoices.map(inv => `<option value="${inv.id}">${inv.id} - (${inv.remaining.toFixed(2)} ${currency})</option>`).join('')}
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold small text-muted">{{ __('center::sales.paid_amount') }}</label>
-                                <div class="input-group">
-                                    <input type="number" id="quickAmount" step="0.01" class="form-control rounded-start-3" value="${currentUnpaidInvoices[0].remaining.toFixed(2)}">
-                                    <span class="input-group-text bg-light border-start-0 rounded-end-3">${currency}</span>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold small text-muted">{{ __('center::sales.payment_method') }}</label>
-                                <select id="quickMethod" class="form-select rounded-3">
-                                    <option value="cash">{{ __('center::sales.cash') }}</option>
-                                    <option value="card">{{ __('center::sales.card') }}</option>
-                                    <option value="bank_transfer">{{ __('center::sales.bank_transfer') }}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer border-0 p-4 pt-0">
-                            <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">{{ __('center::sales.cancel') }}</button>
-                            <button type="button" id="confirmQuickPay" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
-                                <i class="fas fa-check-circle me-1"></i> {{ __('center::sales.complete_sale') }}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>`;
-            
-        // Remove old modal if exists
-        const oldModal = document.getElementById('quickPayModal');
-        if (oldModal) oldModal.remove();
-        
-        document.body.insertAdjacentHTML('beforeend', modalHtml);
-        const modal = new bootstrap.Modal(document.getElementById('quickPayModal'));
-        modal.show();
-
-        document.getElementById('quickInvoiceSelect').addEventListener('change', function() {
-            const selectedId = this.value;
-            const inv = currentUnpaidInvoices.find(i => i.id == selectedId);
-            if (inv) document.getElementById('quickAmount').value = inv.remaining.toFixed(2);
-        });
-
-        document.getElementById('confirmQuickPay').addEventListener('click', function() {
-            const saleId = document.getElementById('quickInvoiceSelect').value;
-            const amount = document.getElementById('quickAmount').value;
-            const method = document.getElementById('quickMethod').value;
-            
-            this.disabled = true;
-            this.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>{{ __('center::sales.saving') }}';
-
-            fetch(`/sales/${saleId}/payment`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({ amount: amount, payment_method: method })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    modal.hide();
-                    Swal.fire({ icon: 'success', title: '{{ __('center::sales.collect_debt_success') }}', timer: 1500 });
-                    loadStudentAccount(studentSelector.getValue());
-                }
-            })
-            .catch(() => {
-                Swal.fire({ icon: 'error', title: '{{ __('center::sales.collect_debt_fail') }}' });
-                this.disabled = false;
-                this.innerHTML = '<i class="fas fa-check-circle me-1"></i> {{ __('center::sales.complete_sale') }}';
-            });
-        });
-    }
 
     function loadStudentAccount(studentId) {
         if (!studentId) {
@@ -338,6 +303,20 @@
                     const s = data.student;
                     currentUnpaidInvoices = data.unpaid_invoices;
                     
+                    // Update Header
+                    document.getElementById('studentInitial').innerText = s.name.charAt(0).toUpperCase();
+                    document.getElementById('studentNameDisplay').innerText = s.name;
+                    document.getElementById('studentPhoneDisplay').innerText = s.phone;
+                    document.getElementById('studentGradeDisplay').innerText = s.grade || '-';
+                    document.getElementById('studentIdDisplay').innerText = '#' + s.id;
+                    
+                    document.getElementById('studentStatusBadge').innerText = s.status === 'active' ? 'نشط' : 'غير نشط';
+                    document.getElementById('studentStatusBadge').className = `badge bg-white bg-opacity-25 rounded-pill px-3 ${s.status === 'active' ? '' : 'text-danger'}`;
+
+                    // Quick buttons
+                    document.getElementById('whatsappBtn').href = `https://wa.me/2${s.phone}`;
+                    document.getElementById('callBtn').href = `tel:${s.phone}`;
+
                     // Toggle Quick Pay Button
                     const quickPayBtn = document.getElementById('quickPayBtn');
                     if (currentUnpaidInvoices.length > 0) {
@@ -346,67 +325,96 @@
                         quickPayBtn.classList.add('d-none');
                     }
 
-                    // Update Header
-                    document.getElementById('studentInitial').innerText = s.name.charAt(0).toUpperCase();
-                    document.getElementById('studentNameDisplay').innerText = s.name;
-                    document.getElementById('studentPhoneDisplay').innerText = s.phone;
-                    document.getElementById('studentGradeDisplay').innerText = s.grade || '-';
-                    document.getElementById('studentStatusDisplay').innerText = s.status === 'active' ? '{{ __('center::messages.blade_0583') }}' : '{{ __('center::messages.blade_0085') }}';
-                    document.getElementById('statusDot').className = `fas fa-circle me-1 ${s.status === 'active' ? 'text-success' : 'text-danger'}`;
-                    
                     // Update Stats
                     document.getElementById('debtStat').innerText = data.stats.total_debt + ' ' + currency;
                     document.getElementById('paidStat').innerText = data.stats.total_paid + ' ' + currency;
                     document.getElementById('attendanceStat').innerText = data.stats.attendance_rate + '%';
+                    document.getElementById('attendanceProgress').style.width = data.stats.attendance_rate + '%';
                     document.getElementById('coursesStat').innerText = data.stats.course_count;
 
-                    // Update Financials Tab
-                    const invoiceList = document.getElementById('unpaidInvoicesList');
-                    invoiceList.innerHTML = '';
-                    if (data.unpaid_invoices.length > 0) {
-                        data.unpaid_invoices.forEach(inv => {
-                            invoiceList.innerHTML += `
-                                <div class="bg-white border rounded-4 p-3 mb-3 d-flex justify-content-between align-items-center hover-shadow transition-all shadow-sm">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center" style="width:45px; height:45px;">
-                                            <i class="fas fa-file-invoice"></i>
+                    // Update Ledger (Timeline)
+                    const timeline = document.getElementById('ledgerTimeline');
+                    timeline.innerHTML = '';
+                    if (data.ledger && data.ledger.length > 0) {
+                        data.ledger.forEach(item => {
+                            let icon, bg, color;
+                            if (item.type === 'invoice') { icon = 'fa-file-invoice-dollar'; bg = 'rgba(239, 68, 68, 0.1)'; color = '#ef4444'; }
+                            else if (item.type === 'payment') { icon = 'fa-cash-register'; bg = 'rgba(16, 185, 129, 0.1)'; color = '#10b981'; }
+                            else { icon = 'fa-undo'; bg = 'rgba(245, 158, 11, 0.1)'; color = '#f59e0b'; }
+
+                            timeline.innerHTML += `
+                                <div class="ledger-item d-flex gap-4">
+                                    <div class="ledger-icon flex-shrink-0" style="background: ${bg}; color: ${color};"><i class="fas ${icon} fa-lg"></i></div>
+                                    <div class="flex-grow-1 pt-1 pb-3">
+                                        <div class="d-flex justify-content-between align-items-start mb-1">
+                                            <h6 class="fw-bold mb-0 text-dark">${item.description}</h6>
+                                            <span class="small fw-bold text-dark">${item.type === 'invoice' ? '-' : '+'}${item.amount.toFixed(2)} ${currency}</span>
                                         </div>
-                                        <div>
-                                            <div class="fw-bold text-dark mb-0">{{ __('center::sales.invoice_id_prefix') }}${inv.id}</div>
-                                            <div class="x-small text-muted">${inv.created_at.split('T')[0]}</div>
-                                            <div class="text-danger fw-bold small mt-1">${inv.remaining.toFixed(2)} ${currency}</div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="x-small text-muted"><i class="far fa-calendar-alt me-1"></i> ${item.date}</span>
+                                            ${item.type === 'invoice' ? `<span class="badge ${item.status === 'paid' ? 'bg-success' : (item.status === 'partial' ? 'bg-warning' : 'bg-danger')} bg-opacity-10 text-reset small">${item.status}</span>` : ''}
                                         </div>
-                                    </div>
-                                    <div class="d-flex gap-2">
-                                        <a href="/sales/${inv.id}" target="_blank" class="btn btn-outline-light text-dark btn-sm rounded-pill px-3 border shadow-none"><i class="fas fa-eye me-1 text-primary"></i> {{ __('center::messages.blade_0573') }}</a>
+                                        ${item.type === 'invoice' ? `
+                                            <div class="mt-2">
+                                                <a href="/sales/${item.id}" target="_blank" class="x-small text-primary fw-bold text-decoration-none">عرض الفاتورة <i class="fas fa-external-link-alt ms-1"></i></a>
+                                            </div>` : ''}
                                     </div>
                                 </div>`;
                         });
                     } else {
-                        invoiceList.innerHTML = `<div class="text-center py-4 text-muted"><i class="fas fa-check-circle text-success me-2"></i>{{ __('center::sales.no_unpaid_invoices') }}</div>`;
+                        timeline.innerHTML = `<div class="text-center py-5 text-muted"><i class="fas fa-ghost fa-2x mb-2 opacity-50"></i><p>لا يوجد سجلات مالية بعد.</p></div>`;
                     }
 
-                    // Update Courses Tab
+                    // Update Unpaid Invoices
+                    const invList = document.getElementById('unpaidInvoicesList');
+                    invList.innerHTML = '';
+                    if (data.unpaid_invoices.length > 0) {
+                        data.unpaid_invoices.forEach(inv => {
+                            invList.innerHTML += `
+                                <div class="bg-white border rounded-4 p-4 mb-3 d-flex justify-content-between align-items-center hover-scale shadow-none">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width:50px; height:50px;">
+                                            <i class="fas fa-file-invoice-dollar fa-lg"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-dark mb-1">فاتورة مبيعات #${inv.id}</div>
+                                            <div class="small text-muted mb-1"><i class="far fa-clock me-1"></i> ${inv.created_at.split('T')[0]}</div>
+                                            <div class="text-danger fw-bold">متبقي: ${inv.remaining.toFixed(2)} ${currency}</div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <a href="/sales/${inv.id}" target="_blank" class="btn btn-outline-light text-dark btn-sm rounded-pill px-4 border shadow-none">عرض</a>
+                                        <button onclick="openGenericQuickPayModal(${inv.id}, ${inv.remaining})" class="btn btn-primary btn-sm rounded-pill px-4 shadow-sm">تحصيل</button>
+                                    </div>
+                                </div>`;
+                        });
+                    } else {
+                        invList.innerHTML = `<div class="text-center py-5 text-muted"><div class="bg-success bg-opacity-10 text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:80px; height:80px;"><i class="fas fa-check-double fa-2x"></i></div><h6 class="fw-bold">رائع! لا توجد مديونيات معلقة</h6><p class="small">هذا الطالب ملتزم بسداد جميع المستحقات المالية.</p></div>`;
+                    }
+
+                    // Update Courses Grid
                     const coursesGrid = document.getElementById('coursesListSection');
                     coursesGrid.innerHTML = '';
                     if (data.courses.length > 0) {
                         data.courses.forEach(c => {
                             coursesGrid.innerHTML += `
                                 <div class="col-md-6">
-                                    <div class="card border border-light-subtle shadow-none rounded-4 bg-light bg-opacity-25">
-                                        <div class="card-body p-3">
-                                            <h6 class="fw-bold text-dark mb-1">${c.title}</h6>
-                                            <div class="small text-muted mb-2">{{ __('center::messages.blade_0174') }}: ${c.enrolled_at || '-'}</div>
-                                            <span class="badge bg-primary rounded-pill px-3">${c.status}</span>
+                                    <div class="card border border-light-subtle shadow-none rounded-4 bg-light bg-opacity-25 h-100">
+                                        <div class="card-body p-4">
+                                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                                <h6 class="fw-bold text-dark mb-0">${c.title}</h6>
+                                                <span class="badge bg-primary rounded-pill px-3">${c.status}</span>
+                                            </div>
+                                            <div class="small text-muted mb-0"><i class="far fa-calendar-alt me-1"></i> تاريخ الالتحاق: ${c.enrolled_at || '-'}</div>
                                         </div>
                                     </div>
                                 </div>`;
                         });
                     } else {
-                        coursesGrid.innerHTML = `<div class="col-12 text-center py-4 text-muted">{{ __('center::messages.blade_0571') }}</div>`;
+                        coursesGrid.innerHTML = `<div class="col-12 text-center py-5 text-muted"><p>الطالب غير مسجل في أي دورات حالياً.</p></div>`;
                     }
 
-                    // Update Attendance Tab
+                    // Update Attendance
                     const attTable = document.getElementById('attendanceTableBody');
                     attTable.innerHTML = '';
                     if (data.recent_attendance.length > 0) {
@@ -417,19 +425,109 @@
                             
                             attTable.innerHTML += `
                                 <tr>
-                                    <td class="fw-bold">${a.date}</td>
+                                    <td class="ps-4 fw-bold text-dark">${a.date}</td>
                                     <td>${a.course}</td>
-                                    <td><span class="badge ${badgeClass} rounded-pill px-3">${a.status}</span></td>
+                                    <td class="text-center"><span class="badge ${badgeClass} rounded-pill px-3">${a.status}</span></td>
                                 </tr>`;
                         });
                     } else {
-                        attTable.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-muted">{{ __('center::messages.blade_0571') }}</td></tr>`;
+                        attTable.innerHTML = `<tr><td colspan="3" class="text-center py-5 text-muted">لا يوجد سجلات حضور مسجلة.</td></tr>`;
                     }
                 }
             })
-            .catch(() => {
-                document.getElementById('tabsLoader').classList.replace('d-flex', 'd-none');
+            .catch((err) => {
+                console.error(err);
+                document.getElementById('tabsLoader').classList.replace('d-none', 'd-flex');
+                Swal.fire({ icon: 'error', title: 'خطأ في تحميل البيانات' });
             });
+    }
+
+    function openQuickPayModal() {
+        if (currentUnpaidInvoices.length === 0) return;
+        openGenericQuickPayModal(currentUnpaidInvoices[0].id, currentUnpaidInvoices[0].remaining);
+    }
+
+    function openGenericQuickPayModal(saleId, amount) {
+        const modalHtml = `
+            <div class="modal fade" id="quickPayModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 rounded-4 shadow">
+                        <div class="modal-header border-0 shadow-sm p-4">
+                            <h5 class="fw-bold mb-0"><i class="fas fa-bolt text-warning me-2"></i>تحصيل سريع للدين</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                            <div class="p-3 bg-light rounded-4 mb-4 text-center">
+                                <div class="text-muted small">رقم الفاتورة</div>
+                                <div class="fw-bold fs-5">#${saleId}</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small text-muted">المبلغ المراد تحصيله</label>
+                                <div class="input-group">
+                                    <input type="number" id="quickAmount" step="0.01" class="form-control rounded-start-3" value="${amount.toFixed(2)}">
+                                    <span class="input-group-text bg-light border-start-0 rounded-end-3">${currency}</span>
+                                </div>
+                                <div class="form-text">المبلغ المتبقي الكلي: <strong>${amount.toFixed(2)}</strong></div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small text-muted">طريقة السداد</label>
+                                <select id="quickMethod" class="form-select rounded-3">
+                                    <option value="cash">نقداً (Cash)</option>
+                                    <option value="card">بطاقة إئتمان</option>
+                                    <option value="bank_transfer">تحويل بنكي / محفظة</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0 p-4 pt-0">
+                            <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">إلغاء</button>
+                            <button type="button" id="confirmQuickPay" onclick="submitQuickPay(${saleId})" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">
+                                <i class="fas fa-check-circle me-1"></i> إتمام عملية السداد
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+            
+        const oldModal = document.getElementById('quickPayModal');
+        if (oldModal) oldModal.remove();
+        
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        const modal = new bootstrap.Modal(document.getElementById('quickPayModal'));
+        modal.show();
+    }
+
+    function submitQuickPay(saleId) {
+        const amount = document.getElementById('quickAmount').value;
+        const method = document.getElementById('quickMethod').value;
+        const btn = document.getElementById('confirmQuickPay');
+        
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>جاري الحفظ...';
+
+        fetch(`/sales/${saleId}/payment`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ amount: amount, payment_method: method })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                bootstrap.Modal.getInstance(document.getElementById('quickPayModal')).hide();
+                Swal.fire({ icon: 'success', title: 'تم التحصيل بنجاح', timer: 1500, showConfirmButton: false });
+                loadStudentAccount(studentSelector.getValue());
+            } else {
+                throw new Error(data.message);
+            }
+        })
+        .catch((err) => {
+            Swal.fire({ icon: 'error', title: 'فشل التحصيل', text: err.message });
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-check-circle me-1"></i> إتمام عملية السداد';
+        });
     }
 
 </script>
