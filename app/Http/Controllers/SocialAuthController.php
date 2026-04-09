@@ -169,7 +169,12 @@ class SocialAuthController extends Controller
             ->orderBy('sort_order')
             ->get();
 
-        $currency = \App\Models\SiteSetting::get('currency_symbol', 'جنيه');
+        $suggestedCurrency = session('suggested_currency', 'EGP');
+        $symbols = ['EGP' => 'EGP', 'USD' => '$', 'EUR' => '€'];
+        if (app()->getLocale() == 'ar') {
+            $symbols['EGP'] = 'ج.م';
+        }
+        $currency = $symbols[$suggestedCurrency] ?? $suggestedCurrency;
         
         $packagesData = $packages->map(function($p) use ($currency) {
             $discountPercent = 0;

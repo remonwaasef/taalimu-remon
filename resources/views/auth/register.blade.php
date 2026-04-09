@@ -230,8 +230,8 @@ document.addEventListener('alpine:init', () => {
         subdomain: {{ Js::from(old('subdomain')) }},
         manuallyEditedSubdomain: {{ old('subdomain') ? 'true' : 'false' }},
         accountType: {{ Js::from(old('account_type', $accountType)) }},
-        selectedCurrency: {{ Js::from(old('currency', request('currency', 'EGP'))) }},
-        userCountry: ''
+        selectedCurrency: {{ Js::from(old('currency', request('currency', session('suggested_currency', 'EGP')))) }},
+        userCountry: '{{ session('user_country_code', '') }}'
      })"
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
     
