@@ -6,6 +6,35 @@
 @section('content')
 
 <div class="row g-4">
+    <!-- Custom Student Search (Always at the top) -->
+    <div class="col-lg-12">
+        <div class="card border-0 shadow rounded-4 overflow-visible search-bar-container" style="position: relative; z-index: 100;">
+            <div class="card-body p-0">
+                <div class="d-flex align-items-center">
+                    <span class="ps-4 pe-2 text-muted"><i class="fas fa-search fa-lg"></i></span>
+                    <input type="text"
+                           id="studentSearchInput"
+                           class="form-control form-control-lg border-0 shadow-none py-4"
+                           placeholder="ابحث بالاسم، رقم الهاتف، أو الكود..."
+                           autocomplete="off"
+                           style="font-size: 1.1rem;">
+                    <span id="searchSpinner" class="pe-3 d-none">
+                        <div class="spinner-border spinner-border-sm text-primary"></div>
+                    </span>
+                    <span class="pe-4 text-muted d-none d-md-inline">
+                        <kbd class="bg-light border text-dark opacity-50 small">/</kbd>
+                    </span>
+                </div>
+                <!-- Search Results Dropdown -->
+                <div id="searchDropdown" class="search-dropdown d-none">
+                    <div id="searchResults"></div>
+                </div>
+            </div>
+            <!-- Progress Bar -->
+            <div id="searchProgressLine" class="search-progress-bar"></div>
+        </div>
+    </div>
+
     <!-- Student Header Dashboard (Hidden until search) -->
     <div id="studentHeader" class="col-lg-12 d-none animate__animated animate__fadeIn">
         <div class="card border-0 shadow-sm rounded-4 text-white overflow-hidden" style="background: linear-gradient(135deg, #059669 0%, #0d9488 100%);">
@@ -102,35 +131,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Custom Student Search -->
-    <div class="col-lg-12">
-        <div class="card border-0 shadow rounded-4 overflow-visible search-bar-container" style="position: relative; z-index: 100;">
-            <div class="card-body p-0">
-                <div class="d-flex align-items-center">
-                    <span class="ps-4 pe-2 text-muted"><i class="fas fa-search fa-lg"></i></span>
-                    <input type="text"
-                           id="studentSearchInput"
-                           class="form-control form-control-lg border-0 shadow-none py-4"
-                           placeholder="ابحث بالاسم، رقم الهاتف، أو الكود..."
-                           autocomplete="off"
-                           style="font-size: 1.1rem;">
-                    <span id="searchSpinner" class="pe-3 d-none">
-                        <div class="spinner-border spinner-border-sm text-primary"></div>
-                    </span>
-                    <span class="pe-4 text-muted d-none d-md-inline">
-                        <kbd class="bg-light border text-dark opacity-50 small">/</kbd>
-                    </span>
-                </div>
-                <!-- Search Results Dropdown -->
-                <div id="searchDropdown" class="search-dropdown d-none">
-                    <div id="searchResults"></div>
-                </div>
-            </div>
-            <!-- Progress Bar -->
-            <div id="searchProgressLine" class="search-progress-bar"></div>
         </div>
     </div>
 

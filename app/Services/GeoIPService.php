@@ -69,4 +69,36 @@ class GeoIPService
 
         return 'en'; // Global default
     }
+
+    /**
+     * Map country code and locale to application currency.
+     * 
+     * @param string $locale
+     * @param string|null $countryCode
+     * @return string
+     */
+    public function getCurrencyFromLocale($locale, $countryCode = null)
+    {
+        // 1. Explicit locale overrides
+        if ($locale === 'fr') {
+            return 'EUR';
+        }
+        
+        if ($locale === 'en') {
+            return 'USD';
+        }
+
+        // 2. Fallback to Geographical logic (mostly for Arabic or other defaults)
+        if ($countryCode === 'EG') {
+            return 'EGP';
+        }
+
+        // European countries fallback to EUR even if locale is not FR
+        $euroCountries = ['FR', 'BE', 'MC', 'LU', 'CH', 'DE', 'IT', 'ES', 'NL', 'AT', 'PT', 'IE'];
+        if ($countryCode && in_array($countryCode, $euroCountries)) {
+            return 'EUR';
+        }
+
+        return 'USD'; // Global default
+    }
 }
