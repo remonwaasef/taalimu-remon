@@ -59,14 +59,25 @@ class Package extends Model
     public function getRegionalPrice(string $currency = 'EGP'): array
     {
         $prices = $this->regional_prices ?? [];
+
+        // Map currency code to the regional_prices key (country code)
+        $currencyToRegionKey = [
+            'EGP' => 'EG',
+            'EUR' => 'FR',
+            'USD' => 'default',
+            'SAR' => 'SA',
+            'AED' => 'AE',
+        ];
+
+        $regionKey = $currencyToRegionKey[$currency] ?? 'default';
         
-        if (isset($prices[$currency])) {
-            return $prices[$currency];
+        if (isset($prices[$regionKey])) {
+            return $prices[$regionKey];
         }
 
-        // Fallback to default USD if EUR/EGP not found
-        if (isset($prices['USD'])) {
-            return $prices['USD'];
+        // Fallback to default if the region key wasn't found
+        if (isset($prices['default'])) {
+            return $prices['default'];
         }
 
         // Ultimate fallback to main price columns
