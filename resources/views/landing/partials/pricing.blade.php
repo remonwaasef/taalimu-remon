@@ -1,20 +1,17 @@
 <section id="pricing" class="py-24 bg-white relative overflow-hidden" 
          x-data="{ 
             billingCycle: 'monthly',
-            selectedCurrency: 'EGP',
+            selectedCurrency: '{{ session('suggested_currency', 'EGP') }}',
             async init() {
                 const locale = '{{ app()->getLocale() }}';
                 
-                // Override based on explicitly selected language
-                if (locale === 'fr') {
-                    this.selectedCurrency = 'EUR';
-                    return;
-                } else if (locale === 'en') {
-                    this.selectedCurrency = 'USD';
+                // If it's already set by backend and it's not EGP (default), we might trust it
+                // But for Arabic, we always verify geographical location if possible
+                if (locale !== 'ar' && this.selectedCurrency !== 'EGP') {
                     return;
                 }
 
-                // Default to Geographical logic if Arabic or other
+                // Default to Geographical logic if Arabic or fallback
                 try {
                     const response = await fetch('https://get.geojs.io/v1/ip/country.json');
                     const data = await response.json();
@@ -22,10 +19,9 @@
                     
                     if (country === 'EG') this.selectedCurrency = 'EGP';
                     else if (['FR', 'DE', 'IT', 'ES', 'NL', 'BE', 'AT', 'PT', 'IE'].includes(country)) this.selectedCurrency = 'EUR';
-                    else this.selectedCurrency = 'USD';
+                    else if (this.selectedCurrency === 'EGP') this.selectedCurrency = 'USD'; // If detected not EG and current is EGP, switch to USD
                 } catch(e) { 
-                    console.log('Geo fetch failed, defaulting to EGP');
-                    this.selectedCurrency = 'EGP';
+                    console.log('Geo fetch failed, keeping: ' + this.selectedCurrency);
                 }
             },
             getRegionalPrice(packageRegionalPrices, basePrice, baseTermPrice, baseYearlyPrice) {
