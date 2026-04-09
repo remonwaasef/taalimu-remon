@@ -20,8 +20,14 @@ class RegistrationController extends Controller
             ->orderBy('sort_order')
             ->get();
 
-        $packagesData = $packages->map(function($p) {
-            $currency = \App\Models\SiteSetting::get('currency_symbol', 'جنيه');
+        $suggestedCurrency = session('suggested_currency', 'EGP');
+        
+        $packagesData = $packages->map(function($p) use ($suggestedCurrency) {
+            $symbols = ['EGP' => 'EGP', 'USD' => '$', 'EUR' => '€'];
+            if (app()->getLocale() == 'ar') {
+                $symbols['EGP'] = 'ج.م';
+            }
+            $currency = $symbols[$suggestedCurrency] ?? $suggestedCurrency;
             $discountPercent = 0;
             $savingsAmount = 0;
             if ($p->old_price > 0 && $p->old_price > $p->price) {

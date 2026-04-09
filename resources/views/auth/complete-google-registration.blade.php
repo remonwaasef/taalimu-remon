@@ -17,6 +17,7 @@ document.addEventListener('alpine:init', () => {
         subdomainMessage: '',
         isSubmitting: false,
         userCountry: 'default',
+        selectedCurrency: config.selectedCurrency || 'EGP',
         accountType: config.accountType || 'center',
         paymentGateway: 'paymob', // Default to Paymob
 
@@ -34,8 +35,15 @@ document.addEventListener('alpine:init', () => {
             try {
                 const response = await fetch('https://get.geojs.io/v1/ip/country.json');
                 const data = await response.json();
-                this.userCountry = data.country || 'EG'; // Default to EG if empty
+                this.userCountry = data.country || '';
                 
+                // Refine currency based on detection if Arabic
+                const locale = '{{ app()->getLocale() }}';
+                if (locale === 'ar') {
+                    if (this.userCountry === 'EG') this.selectedCurrency = 'EGP';
+                    else this.selectedCurrency = 'USD';
+                }
+
                 // Auto-select gateway based on country
                 if (this.userCountry === 'EG' || !this.userCountry) {
                     this.paymentGateway = 'paymob';
@@ -44,8 +52,6 @@ document.addEventListener('alpine:init', () => {
                 }
             } catch(e) { 
                 console.log('IP fetch failed', e);
-                this.userCountry = 'EG';
-                this.paymentGateway = 'paymob';
             }
         },
 
@@ -59,14 +65,14 @@ document.addEventListener('alpine:init', () => {
              let data = {
                  amount: parseFloat(pkg.price_raw),
                  yearly: parseFloat(pkg.yearly_price_raw),
-                 term: parseFloat(pkg.term_price_raw || 0),
+                 term: parseFloat(pkg.term_price_raw || (pkg.price_raw * 4)),
                  currency: pkg.currency || '$',
                  old: parseFloat(pkg.old_price_raw || 0),
                  discount_label: pkg.discount_label
              };
 
-             if (this.userCountry && prices[this.userCountry]) {
-                 let r = prices[this.userCountry];
+             if (prices[this.selectedCurrency]) {
+                 let r = prices[this.selectedCurrency];
                  data.currency = r.currency || data.currency;
                  data.amount = parseFloat(r.amount || data.amount);
                  data.yearly = parseFloat(r.yearly_price || (data.amount * 10));
@@ -190,7 +196,8 @@ window.addEventListener('pageshow', (event) => {
         selectedPlan: {{ Js::from($selectedPlanSlug) }},
         selectedCycle: {{ Js::from($selectedCycle) }},
         accountType: {{ Js::from($accountType) }},
-        packages: {{ Js::from($packagesData) }}
+        packages: {{ Js::from($packagesData) }},
+        selectedCurrency: '{{ session('suggested_currency', 'EGP') }}'
      })"
      @reset-submission-state.window="isSubmitting = false"
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
