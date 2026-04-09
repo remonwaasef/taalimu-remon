@@ -25,7 +25,7 @@
                 }
             },
             getRegionalPrice(packageRegionalPrices, basePrice, baseTermPrice, baseYearlyPrice) {
-                if (!packageRegionalPrices || !packageRegionalPrices[this.selectedCurrency]) {
+                if (!packageRegionalPrices) {
                     return { 
                         amount: basePrice, 
                         currency: this.selectedCurrency,
@@ -33,7 +33,33 @@
                         yearly_price: baseYearlyPrice
                     };
                 }
-                return packageRegionalPrices[this.selectedCurrency];
+
+                // Map currency code to the regional_prices key (country code)
+                const currencyToRegionKey = {
+                    'EGP': 'EG',
+                    'EUR': 'FR',
+                    'USD': 'default',
+                    'SAR': 'SA',
+                    'AED': 'AE'
+                };
+
+                const regionKey = currencyToRegionKey[this.selectedCurrency] || 'default';
+                
+                if (packageRegionalPrices[regionKey]) {
+                    return packageRegionalPrices[regionKey];
+                }
+
+                // Fallback to 'default' if the region key wasn't found
+                if (packageRegionalPrices['default']) {
+                    return packageRegionalPrices['default'];
+                }
+
+                return { 
+                    amount: basePrice, 
+                    currency: this.selectedCurrency,
+                    term_price: baseTermPrice,
+                    yearly_price: baseYearlyPrice
+                };
             }
          }">
     
