@@ -86,21 +86,23 @@
         .iq-navbar-header h1 {
             font-weight: 800 !important;
             letter-spacing: -1px;
-            margin-bottom: 0.2rem;
+            margin-bottom: 0.5rem;
         }
 
         .iq-navbar-header p {
             font-weight: 500;
+            font-size: 1.1rem;
         }
 
         .iq-navbar-header .iq-container {
             position: relative;
             z-index: 1;
+            padding-top: 2rem !important;
         }
         
         /* Stats Card & Content */
         .content-inner {
-            margin-top: -4.5rem !important; /* Deeper overlap for premium look */
+            margin-top: -5.5rem !important; /* Deeper overlap for premium look */
             position: relative;
             z-index: 10;
         }
@@ -194,11 +196,11 @@
             <!-- Header Component -->
             @include('instructor::components.layouts.hope-header')
             
-            <div class="iq-navbar-header" style="height: 220px;">
+            <div class="iq-navbar-header" style="height: 280px;">
                 <div class="container-fluid iq-container">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="flex-wrap d-flex justify-content-between align-items-center pt-5">
+                            <div class="flex-wrap d-flex justify-content-between align-items-center pt-4 pb-5">
                                 @hasSection('page-title')
                                 <div>
                                     <h1 class="text-white display-5">@yield('page-title')</h1>

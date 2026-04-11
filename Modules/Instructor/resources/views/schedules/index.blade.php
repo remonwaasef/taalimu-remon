@@ -1,15 +1,16 @@
-<x-instructor::layouts.master>
-@section('content')
+@extends('instructor::components.layouts.hope-master')
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h2 class="fw-bold text-dark mb-1">{{ __('instructor::schedules.title') }}</h2>
-            <p class="text-muted mb-0">{{ __('instructor::schedules.subtitle') }}</p>
-        </div>
-        <a href="{{ route('instructor.schedules.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm border-0 fw-bold" style="background: var(--primary-color);">
-            <i class="fas fa-plus me-2"></i> {{ __('instructor::schedules.add_schedule') }}
-        </a>
-    </div>
+@section('page-title', __('instructor::schedules.title'))
+@section('page-subtitle', __('instructor::schedules.subtitle'))
+
+@section('page-actions')
+    <a href="{{ route('instructor.schedules.create') }}" class="btn btn-glass">
+        <i class="fas fa-plus me-2"></i> {{ __('instructor::schedules.add_schedule') }}
+    </a>
+@endsection
+
+@section('content')
+<div class="container-fluid">
 
     {{-- Search Bar --}}
     <div class="card border-0 shadow-sm rounded-4 mb-4">
@@ -125,13 +126,15 @@
         @if($groupedSchedules->isEmpty())
             <div class="col-12">
                 <div class="card border-0 shadow-sm rounded-4 text-center p-5">
-                    <div class="mb-3">
-                        <i class="far fa-calendar-times display-1 text-light"></i>
+                    <div class="mb-4">
+                        <div class="d-inline-flex p-4 rounded-circle mb-3" style="background: rgba(16, 185, 129, 0.05);">
+                            <i class="far fa-calendar-times text-primary" style="font-size: 3rem; opacity: 0.5;"></i>
+                        </div>
                     </div>
-                    <h4 class="text-muted">{{ __('instructor::schedules.no_schedules') }}</h4>
+                    <h4 class="text-muted fw-bold">{{ __('instructor::schedules.no_schedules') }}</h4>
                     <div class="mt-3">
-                        <a href="{{ route('instructor.schedules.create') }}" class="btn btn-primary rounded-pill px-4">
-                            {{ __('instructor::schedules.add_schedule') }}
+                        <a href="{{ route('instructor.schedules.create') }}" class="btn btn-primary rounded-pill px-4 border-0">
+                             <i class="fas fa-plus me-2"></i> {{ __('instructor::schedules.add_schedule') }}
                         </a>
                     </div>
                 </div>
@@ -204,4 +207,3 @@
     });
     </script>
 @endsection
-</x-instructor::layouts.master>

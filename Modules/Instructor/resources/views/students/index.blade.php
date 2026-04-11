@@ -309,8 +309,13 @@
                         @empty
                         <tr id="emptyRow">
                             <td colspan="8" class="text-center py-5">
-                                <img src="https://illustrations.popsy.co/gray/fogg-searching.png" alt="No data" style="width: 150px;" class="mb-3 opacity-50">
-                                <h6 class="text-muted">{{ __('instructor::students.no_students') }}</h6>
+                                <div class="mb-4">
+                                    <div class="d-inline-flex p-4 rounded-circle mb-3" style="background: rgba(16, 185, 129, 0.05);">
+                                        <i class="fas fa-users-slash text-primary" style="font-size: 3rem; opacity: 0.5;"></i>
+                                    </div>
+                                </div>
+                                <h6 class="text-muted fw-bold">{{ __('instructor::students.no_students') }}</h6>
+                                <p class="text-muted small">يمكنك إضافة طلاب يدوياً أو دعوة الطلاب للتسجيل عبر روابط المجموعات.</p>
                             </td>
                         </tr>
                         @endforelse
