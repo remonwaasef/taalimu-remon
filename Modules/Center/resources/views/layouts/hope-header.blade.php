@@ -129,7 +129,7 @@
                       {{ substr(auth()->user()->name ?? 'U', 0, 1) }}
                   </div>
               @endif
-              <div class="caption ms-3 d-none d-md-block ">
+              <div class="caption ms-3 d-none d-md-block {{ app()->isLocale('ar') ? 'me-3 ms-0' : '' }}">
                 <h6 class="mb-0 caption-title">{{ auth()->user()->name }}</h6>
                 <p class="mb-0 caption-sub-title text-capitalize">{{ auth()->user()->role ?? __('center::sidebar.admin') }}</p>
               </div>

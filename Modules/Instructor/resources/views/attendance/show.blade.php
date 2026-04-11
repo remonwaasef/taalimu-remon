@@ -1,45 +1,45 @@
 <x-instructor::layouts.master>
+@php
+    $isEnded = now()->isAfter(\Carbon\Carbon::parse($schedule->end_time));
+    $hasUnrecorded = $schedule->course->enrollments->count() > $attendances->count();
+@endphp
+
 @section('page-title', __('instructor::attendance.review_attendance'))
-@section('content')
-    <div class="mb-4">
-        <h2 class="fw-bold text-dark">{{ __('instructor::attendance.mark_attendance') }}: {{ $schedule->course->title }}</h2>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('instructor.attendance.index') }}">{{ __('instructor::attendance.title') }}</a></li>
-                <li class="breadcrumb-item active">{{ __('instructor::attendance.manual_attendance') }}</li>
-            </ol>
-        </nav>
+@section('page-subtitle', __('instructor::attendance.mark_attendance') . ': ' . $schedule->course->title)
+
+@section('page-actions')
+    <div class="d-flex align-items-center gap-2">
+        <!-- Scan Button -->
+        <a href="{{ route('instructor.scanner', $schedule->course) }}" class="btn btn-glass shadow-sm">
+            <i class="fas fa-qrcode me-2"></i> {{ __('instructor::attendance.scan_student_card') }}
+        </a>
+
+        @if($isEnded && $hasUnrecorded)
+            <form action="{{ route('center.attendance.bulkAbsent', $schedule) }}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-glass text-white shadow-sm" style="background: rgba(220, 53, 69, 0.2) !important;">
+                    <i class="fas fa-user-xmark me-2"></i> {{ __('instructor::attendance.mark_remaining_absent') }}
+                </button>
+            </form>
+        @endif
+        <span class="btn btn-glass cursor-default opacity-100">
+            <i class="fas fa-calendar-alt me-2"></i> {{ today()->format('Y-m-d') }}
+        </span>
     </div>
+@endsection
+
+@section('content')
+<div class="container-fluid">
 
     <div class="row">
         <div class="col-md-12">
             <div class="card border-0 shadow-sm rounded-4">
-                <div class="card-header bg-white border-0 p-4 pb-0 d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="fw-bold mb-1"><i class="bi bi-people me-2"></i>{{ __('instructor::attendance.enrolled_students') }}</h5>
-                        <p class="text-muted small mb-0">{{ __('instructor::attendance.session_details', [
-                            'time' => \Carbon\Carbon::parse($schedule->start_time)->format('h:i A'),
-                            'hall' => $schedule->classroom->name ?? __('instructor::attendance.classroom_not_specified')
-                        ]) }}</p>
-                    </div>
-                    <div class="text-end d-flex align-items-center gap-2">
-                        <!-- Scan Button -->
-                        <a href="{{ route('instructor.scanner', $schedule->course) }}" class="btn btn-success btn-sm rounded-pill px-3 shadow-sm">
-                            <i class="bi bi-qr-code-scan me-1"></i>{{ __('instructor::attendance.scan_student_card') }}</a>
-
-                        @php
-                            $isEnded = now()->isAfter(\Carbon\Carbon::parse($schedule->end_time));
-                            $hasUnrecorded = $schedule->course->enrollments->count() > $attendances->count();
-                        @endphp
-                        @if($isEnded && $hasUnrecorded)
-                            <form action="{{ route('center.attendance.bulkAbsent', $schedule) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm">
-                                    <i class="bi bi-person-x-fill me-1"></i>{{ __('instructor::attendance.mark_remaining_absent') }}</button>
-                            </form>
-                        @endif
-                        <span class="badge px-3 rounded-pill fw-bold" style="background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);">{{ today()->format('Y-m-d') }}</span>
-                    </div>
+                <div class="card-header bg-white border-0 p-4 pb-0">
+                    <h5 class="fw-bold mb-1"><i class="fas fa-users-viewfinder me-2"></i>{{ __('instructor::attendance.enrolled_students') }}</h5>
+                    <p class="text-muted small mb-0">{{ __('instructor::attendance.session_details', [
+                        'time' => \Carbon\Carbon::parse($schedule->start_time)->format('h:i A'),
+                        'hall' => $schedule->classroom->name ?? __('instructor::attendance.classroom_not_specified')
+                    ]) }}</p>
                 </div>
                 <div class="card-body p-4">
                     <div class="table-responsive">

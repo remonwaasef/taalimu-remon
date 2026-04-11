@@ -1,9 +1,10 @@
 @extends('center::layouts.hope-master')
 
 @section('page-title', __('center::sales.title'))
+@section('page-subtitle', __('center::sales.subtitle') ?? 'قائمة الفواتير والتحصيل المالي للطلاب')
 
 @section('page-actions')
-    <a href="{{ route('center.sales.create') }}" class="btn btn-primary shadow-sm">
+    <a href="{{ route('center.sales.create') }}" class="btn btn-glass">
         <i class="fas fa-plus me-2"></i> {{ __('center::sales.new_sale') }}
     </a>
 @endsection
@@ -26,7 +27,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($sales as $sale)
+                    @forelse($sales as $sale)
                     <tr class="hover-bg">
                         <td class="ps-4 fw-bold">#{{ $sale->id }}</td>
                         <td>
@@ -51,7 +52,19 @@
                             </a>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <div class="mb-4">
+                                    <div class="d-inline-flex p-4 rounded-circle mb-3" style="background: rgba(16, 185, 129, 0.05);">
+                                        <i class="fas fa-file-invoice-dollar text-primary" style="font-size: 3rem; opacity: 0.5;"></i>
+                                    </div>
+                                </div>
+                                <h5 class="text-muted fw-bold">{{ __('center::sales.no_sales') ?? 'لا توجد فواتير حالياً' }}</h5>
+                                <p class="text-muted small">ابدأ بتسجيل مبيعات جديدة للطلاب.</p>
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

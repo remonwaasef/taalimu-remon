@@ -1,9 +1,11 @@
 @extends('center::layouts.hope-master')
+@section('page-title', auth()->user()->name . ' 👋')
+@section('page-subtitle', app()->isLocale('ar') ? 'إدارة مركزك بشكل أسهل من أي وقت مضى' : 'Manage your center easier than ever')
 
 @section('content')
 <style>
 /* Reset some default padding if necessary */
-.container-fluid { padding-top: 1rem !important; }
+.content-inner { margin-top: -8.5rem !important; }
 
 /* AI Insights Block */
 .ai-insights-block {
@@ -21,21 +23,8 @@
 </style>
 
 <div class="container-fluid">
-    <!-- Top Greeting Container -->
-    <div class="d-flex justify-content-between align-items-center mb-4 mt-2 px-2" dir="rtl">
-        <div>
-           <div class="d-flex align-items-center gap-2 mb-1">
-               <h2 class="fw-bold mb-0 text-dark" style="font-size: 2rem;">
-                   {{ auth()->user()->name }} 👋
-               </h2>
-           </div>
-           <p class="text-muted mb-0 fs-6">{{ app()->isLocale('ar') ? 'إدارة مركزك بشكل أسهل من أي وقت مضى' : 'Manage your center easier than ever' }}</p>
-        </div>
-        <div>
-            <!-- Decorative icon replacing the book -->
-            <i class="fas fa-book-open fa-3x" style="color: #10b981; opacity: 0.15;"></i>
-        </div>
-    </div>
+    <!-- Top Greeting Container Removed as it moved to Banner -->
+
 
     <!-- Green Health Card + 3 Stats -->
     <div class="card shadow-sm mb-4" style="background-color: #f8fafc; border: 1px solid rgba(16, 185, 129, 0.15); border-radius: 1.5rem;">
