@@ -1,10 +1,10 @@
-<x-instructor::layouts.master>
+@extends('instructor::components.layouts.hope-master')
+
 @section('page-title', __('instructor::attendance.title'))
+@section('page-subtitle', __('instructor::attendance.subtitle'))
+
 @section('content')
-    <div class="mb-4">
-        <h2 class="fw-bold text-dark">{{ __('instructor::attendance.title') }}</h2>
-        <p class="text-muted">{{ __('instructor::attendance.subtitle') }}</p>
-    </div>
+<div class="container-fluid">
 
     <div class="row g-4">
         <!-- Today's Sessions -->
@@ -113,4 +113,3 @@
         </div>
     </div>
 @endsection
-</x-instructor::layouts.master>

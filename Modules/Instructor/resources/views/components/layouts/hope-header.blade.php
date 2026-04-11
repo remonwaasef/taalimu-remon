@@ -33,7 +33,7 @@
               <div class="avatar avatar-50 avatar-rounded bg-primary d-flex align-items-center justify-content-center text-white fw-bold">
                   {{ substr(auth()->user()->name ?? 'I', 0, 1) }}
               </div>
-              <div class="caption ms-3 d-none d-md-block ">
+              <div class="caption mx-3 d-none d-md-block ">
                 <h6 class="mb-0 caption-title">{{ auth()->user()->name ?? __('instructor::sidebar.instructor') }}</h6>
                 <p class="mb-0 caption-sub-title text-capitalize">{{ __('instructor::sidebar.instructor') }}</p>
               </div>

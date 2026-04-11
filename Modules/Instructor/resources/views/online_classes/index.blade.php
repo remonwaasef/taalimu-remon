@@ -101,8 +101,13 @@
                         @empty
                         <tr id="emptyRow">
                             <td colspan="6" class="text-center py-5">
-                                <img src="https://illustrations.popsy.co/gray/fogg-searching.png" alt="No data" style="width: 150px;" class="mb-3 opacity-50">
-                                <h6 class="text-muted">لا توجد دروس أونلاين حتى الآن.</h6>
+                                <div class="mb-4">
+                                    <div class="d-inline-flex p-4 rounded-circle mb-3" style="background: rgba(16, 185, 129, 0.05);">
+                                        <i class="fas fa-video-slash text-primary" style="font-size: 3rem; opacity: 0.5;"></i>
+                                    </div>
+                                </div>
+                                <h6 class="text-muted fw-bold">لا توجد دروس أونلاين حتى الآن.</h6>
+                                <p class="text-muted small">قم بجدولة درس جديد الآن للتواصل مع طلابك مباشرة.</p>
                             </td>
                         </tr>
                         @endforelse
