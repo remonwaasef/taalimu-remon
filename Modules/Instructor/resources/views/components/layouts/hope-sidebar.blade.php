@@ -51,7 +51,7 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('instructor.online_classes.*') ? 'active' : '' }}" href="{{ route('instructor.online_classes.index') }}">
                         <i class="icon"><i class="fas fa-video"></i></i>
-                        <span class="item-name">{{ __('instructor::dashboard.online_classes') ?? 'الدروس الأونلاين' }}</span>
+                        <span class="item-name">{{ __('instructor::sidebar.online_classes') }}</span>
                     </a>
                 </li>
 

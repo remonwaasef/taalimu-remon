@@ -2,6 +2,43 @@
 
 @section('page-title', __('instructor::dashboard.title'))
 
+@push('styles')
+<style>
+    .stats-card {
+        background-color: #ffffff;
+        border-radius: 1rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.03);
+    }
+    .stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+    }
+    .hover-lift {
+        transition: all 0.2s ease;
+        border: 1px solid #f1f5f9 !important;
+        background: #ffffff !important;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
+    }
+    .hover-lift:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.1);
+        border-color: rgba(16, 185, 129, 0.2) !important;
+    }
+    .hover-lift i {
+        background: #f8fafc;
+        padding: 12px;
+        border-radius: 12px;
+    }
+    .empty-state-container {
+        background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+        border-radius: 1rem;
+        border: 1px dashed #cbd5e1;
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="container-fluid">
     <div class="row g-4 mb-5">
