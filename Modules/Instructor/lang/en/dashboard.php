@@ -48,4 +48,5 @@ return [
         'skip_confirm' => 'Do you really want to skip the introductory tour?',
         'progress' => ':current of :total',
     ],
+    'online_classes' => 'Online Classes',
 ];

@@ -48,4 +48,5 @@ return [
         'skip_confirm' => 'هل تود تخطي الجولة التعريفية فعلاً؟',
         'progress' => ':current من :total',
     ],
+    'online_classes' => 'الدروس الأونلاين',
 ];
