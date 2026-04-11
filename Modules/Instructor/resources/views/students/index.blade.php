@@ -1,26 +1,23 @@
 @extends('instructor::components.layouts.hope-master')
 
 @section('page-title', __('instructor::students.title'))
+@section('page-subtitle', __('instructor::students.subtitle'))
+
+@section('page-actions')
+    <button type="button" class="btn btn-glass" data-bs-toggle="modal" data-bs-target="#importModal">
+        <i class="fas fa-file-import me-2"></i> {{ __('instructor::students.import') }}
+    </button>
+    <a href="{{ route('instructor.students.export') }}" class="btn btn-glass">
+        <i class="fas fa-file-export me-2"></i> {{ __('instructor::students.export') }}
+    </a>
+    <a href="{{ route('instructor.students.create') }}" class="btn btn-glass" style="background: rgba(255,255,255,0.25);">
+        <i class="fas fa-user-plus me-2"></i> {{ __('instructor::students.add_new') }}
+    </a>
+@endsection
 
 @section('content')
 <div class="container-fluid">
-    <div class="row mb-4 align-items-center">
-        <div class="col">
-            <h3 class="fw-bold mb-0">{{ __('instructor::students.manage_students') }}</h3>
-            <p class="text-muted small">{{ __('instructor::students.subtitle') }}</p>
-        </div>
-        <div class="col-auto d-flex gap-2">
-            <button type="button" class="btn btn-outline-primary rounded-pill px-4 shadow-sm fw-bold border-2" data-bs-toggle="modal" data-bs-target="#importModal">
-                <i class="fas fa-file-import me-2"></i> {{ __('instructor::students.import') }}
-            </button>
-            <a href="{{ route('instructor.students.export') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm fw-bold border-2">
-                <i class="fas fa-file-export me-2"></i> {{ __('instructor::students.export') }}
-            </a>
-            <a href="{{ route('instructor.students.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm fw-bold border-0" style="background: var(--primary-color);">
-                <i class="fas fa-user-plus me-2"></i> {{ __('instructor::students.add_new') }}
-            </a>
-        </div>
-    </div>
+    {{-- Top Metrics Section --}}
 
     {{-- Top Metrics Section --}}
     <div class="row g-3 mb-4">

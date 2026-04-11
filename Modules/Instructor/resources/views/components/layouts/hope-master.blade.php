@@ -63,17 +63,73 @@
         }
 
         /* Header banner */
-        .iq-header-img {
-            background: linear-gradient(135deg, #10b981 0%, #059669 50%, #064e3b 100%) !important;
+        .iq-navbar-header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+            border-bottom: 0 !important;
+            box-shadow: inset 0 -30px 60px -30px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
         }
-        .iq-header-img img {
-            opacity: 0.08 !important;
+
+        .iq-header-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.1 !important;
             mix-blend-mode: overlay !important;
+            pointer-events: none;
+        }
+
+        .iq-navbar-header h1 {
+            font-weight: 800 !important;
+            letter-spacing: -1px;
+            margin-bottom: 0.2rem;
+        }
+
+        .iq-navbar-header p {
+            font-weight: 500;
+        }
+
+        .iq-navbar-header .iq-container {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Stats Card & Content */
+        .content-inner {
+            margin-top: -4.5rem !important; /* Deeper overlap for premium look */
+            position: relative;
+            z-index: 10;
+        }
+
+        .card, .stats-card {
+            border: 0 !important;
+            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05), 0 5px 15px -5px rgba(0,0,0,0.02);
+            border-radius: 20px !important;
+        }
+        
+        .btn-glass {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white !important;
+            border-radius: 50px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-glass:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
         }
 
         .iq-navbar-header h1, .iq-navbar-header p, .iq-navbar-header span {
             color: #ffffff !important;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
         }
         
         /* Sidebar active item - Ultra Premium */
@@ -138,15 +194,17 @@
             <!-- Header Component -->
             @include('instructor::components.layouts.hope-header')
             
-            <div class="iq-navbar-header" style="height: 180px;">
+            <div class="iq-navbar-header" style="height: 220px;">
                 <div class="container-fluid iq-container">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="flex-wrap d-flex justify-content-between align-items-center">
+                            <div class="flex-wrap d-flex justify-content-between align-items-center pt-5">
                                 @hasSection('page-title')
                                 <div>
-                                    <h1 class="text-white">@yield('page-title')</h1>
-                                    <p class="text-white opacity-75 small mb-0">@yield('page-subtitle', now()->translatedFormat('l, d F Y'))</p>
+                                    <h1 class="text-white display-5">@yield('page-title')</h1>
+                                    <p class="text-white opacity-75 mb-0">
+                                        <i class="fas fa-calendar-day me-1"></i> @yield('page-subtitle', now()->translatedFormat('l, d F Y'))
+                                    </p>
                                 </div>
                                 <div class="d-flex align-items-center gap-2">
                                     @yield('page-actions')
@@ -156,7 +214,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="iq-header-img" style="background-color: var(--bs-primary);">
+                <div class="iq-header-img">
                      <img src="{{ asset('assets/hope-ui/images/dashboard/top-header.png') }}" alt="header" class="theme-color-default-img img-fluid w-100 h-100 animated-scaleX">
                 </div>
             </div>
