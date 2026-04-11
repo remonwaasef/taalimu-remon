@@ -1,11 +1,11 @@
 @extends('instructor::components.layouts.hope-master')
 
-@section('page-title', __('instructor::dashboard.online_classes') ?? 'الدروس الأونلاين')
-@section('page-subtitle', 'إدارة وتفعيل روابط الدروس الخاصة بك')
+@section('page-title', __('instructor::dashboard.online_classes'))
+@section('page-subtitle', __('instructor::online_classes.subtitle'))
 
 @section('page-actions')
     <a href="{{ route('instructor.online_classes.create') }}" class="btn btn-glass">
-        <i class="fas fa-plus me-2"></i> إضافة درس جديد
+        <i class="fas fa-plus me-2"></i> {{ __('instructor::online_classes.add_new') }}
     </a>
 @endsection
 
@@ -20,7 +20,7 @@
                 <div class="col-md-12">
                     <div class="input-group">
                         <span class="input-group-text bg-white border-end-0 rounded-start-pill"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" id="lessonSearchInput" class="form-control border-start-0 rounded-end-pill" placeholder="ابحث عن درس...">
+                        <input type="text" id="lessonSearchInput" class="form-control border-start-0 rounded-end-pill" placeholder="{{ __('instructor::online_classes.search') }}">
                     </div>
                 </div>
             </div>
@@ -33,12 +33,12 @@
                 <table class="table table-hover align-middle mb-0 text-center" id="lessonsTable">
                     <thead class="bg-light">
                         <tr>
-                            <th class="border-0 px-4 py-3 text-start">تفاصيل الدرس</th>
-                            <th class="border-0">المجموعة</th>
-                            <th class="border-0">توقيت البدء</th>
-                            <th class="border-0">رابط البث</th>
-                            <th class="border-0">الحالة</th>
-                            <th class="border-0">إجراءات</th>
+                            <th class="border-0 px-4 py-3 text-start">{{ __('instructor::online_classes.lesson_details') }}</th>
+                            <th class="border-0">{{ __('instructor::online_classes.group') }}</th>
+                            <th class="border-0">{{ __('instructor::online_classes.start_time') }}</th>
+                            <th class="border-0">{{ __('instructor::online_classes.meeting_link') }}</th>
+                            <th class="border-0">{{ __('instructor::online_classes.status') }}</th>
+                            <th class="border-0">{{ __('instructor::online_classes.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -53,11 +53,11 @@
                             </td>
                             <td>
                                 <div>{{ $lesson->start_time->format('Y-m-d') }}</div>
-                                <div class="text-muted small">{{ $lesson->start_time->format('h:i A') }} ({{ $lesson->duration_minutes }} دقيقة)</div>
+                                <div class="text-muted small">{{ $lesson->start_time->format('h:i A') }} ({{ $lesson->duration_minutes }} {{ __('instructor::online_classes.minutes') }})</div>
                             </td>
                             <td>
                                 <a href="{{ $lesson->meeting_link }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                    <i class="fas fa-external-link-alt me-1"></i> فتح الرابط
+                                    <i class="fas fa-external-link-alt me-1"></i> {{ __('instructor::online_classes.open_link') }}
                                 </a>
                                 @if($lesson->meeting_id)
                                     <div class="text-muted small mt-1">ID: {{ $lesson->meeting_id }}</div>
@@ -68,13 +68,13 @@
                             </td>
                             <td>
                                 @if($lesson->status == 'scheduled')
-                                    <span class="badge bg-warning text-dark rounded-pill px-3">مجدول</span>
+                                    <span class="badge bg-warning text-dark rounded-pill px-3">{{ __('instructor::online_classes.scheduled') }}</span>
                                 @elseif($lesson->status == 'in_progress')
-                                    <span class="badge bg-info text-white rounded-pill px-3">قيد الانعقاد</span>
+                                    <span class="badge bg-info text-white rounded-pill px-3">{{ __('instructor::online_classes.in_progress') }}</span>
                                 @elseif($lesson->status == 'completed')
-                                    <span class="badge bg-success text-white rounded-pill px-3">منتهي</span>
+                                    <span class="badge bg-success text-white rounded-pill px-3">{{ __('instructor::online_classes.completed') }}</span>
                                 @else
-                                    <span class="badge bg-danger text-white rounded-pill px-3">ملغي</span>
+                                    <span class="badge bg-danger text-white rounded-pill px-3">{{ __('instructor::online_classes.canceled') }}</span>
                                 @endif
                             </td>
                             <td>
@@ -83,14 +83,14 @@
                                         <i class="fas fa-ellipsis-v"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end border-0 shadow rounded-4 p-2">
-                                        <li><a class="dropdown-item rounded-3" href="{{ route('instructor.online_classes.edit', $lesson->id) }}"><i class="fas fa-edit me-2 text-muted"></i> تعديل</a></li>
+                                        <li><a class="dropdown-item rounded-3" href="{{ route('instructor.online_classes.edit', $lesson->id) }}"><i class="fas fa-edit me-2 text-muted"></i> {{ __('instructor::online_classes.edit') }}</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li>
                                             <form action="{{ route('instructor.online_classes.destroy', $lesson->id) }}" method="POST" id="deleteForm_{{ $lesson->id }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" class="dropdown-item text-danger" onclick="if(confirm('هل أنت متأكد من الحذف؟')) document.getElementById('deleteForm_{{ $lesson->id }}').submit();">
-                                                    <i class="fas fa-trash me-2"></i> حذف
+                                                <button type="button" class="dropdown-item text-danger" onclick="if(confirm('{{ __('instructor::online_classes.confirm_delete') }}')) document.getElementById('deleteForm_{{ $lesson->id }}').submit();">
+                                                    <i class="fas fa-trash me-2"></i> {{ __('instructor::online_classes.delete') }}
                                                 </button>
                                             </form>
                                         </li>
@@ -106,8 +106,8 @@
                                         <i class="fas fa-video-slash text-primary" style="font-size: 3rem; opacity: 0.5;"></i>
                                     </div>
                                 </div>
-                                <h6 class="text-muted fw-bold">لا توجد دروس أونلاين حتى الآن.</h6>
-                                <p class="text-muted small">قم بجدولة درس جديد الآن للتواصل مع طلابك مباشرة.</p>
+                                <h6 class="text-muted fw-bold">{{ __('instructor::online_classes.no_classes') }}</h6>
+                                <p class="text-muted small">{{ __('instructor::online_classes.no_classes_desc') }}</p>
                             </td>
                         </tr>
                         @endforelse
