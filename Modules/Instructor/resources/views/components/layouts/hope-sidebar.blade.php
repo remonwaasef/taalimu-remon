@@ -49,6 +49,13 @@
                 </li>
 
                 <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('instructor.online_classes.*') ? 'active' : '' }}" href="{{ route('instructor.online_classes.index') }}">
+                        <i class="icon"><i class="fas fa-video"></i></i>
+                        <span class="item-name">{{ __('instructor::dashboard.online_classes') ?? 'الدروس الأونلاين' }}</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('instructor.attendance.*') ? 'active' : '' }}" href="{{ route('instructor.attendance.index') }}">
                         <i class="icon"><i class="fas fa-clipboard-check"></i></i>
                         <span class="item-name">{{ __('instructor::sidebar.attendance') }}</span>

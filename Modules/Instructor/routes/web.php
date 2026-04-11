@@ -51,6 +51,9 @@ $instructorRoutes = function () {
 
     Route::middleware(['auth', 'verified', 'subscription'])->prefix('instructor')->group(function () {
 
+        // Online Classes
+        Route::resource('online-classes', \Modules\Instructor\Http\Controllers\OnlineClassController::class)->names('instructor.online_classes');
+
         // Instructor Schedule Management
         Route::get('/schedules', [InstructorController::class, 'schedules'])->name('instructor.schedules.index');
         Route::get('/schedules/create', [InstructorController::class, 'createSchedule'])->name('instructor.schedules.create');

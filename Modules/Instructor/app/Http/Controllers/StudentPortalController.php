@@ -42,6 +42,14 @@ class StudentPortalController extends Controller
         $enrollment = $user->enrollments()->with('course.instructor')->latest()->first();
         $course = $enrollment ? $enrollment->course : null;
 
-        return view('instructor::student_portal', compact('student', 'user', 'attendances', 'sales', 'course'));
+        // Get upcoming online classes
+        $enrolledCourseIds = $user->enrollments()->pluck('course_id');
+        $onlineClasses = \App\Models\OnlineClass::whereIn('course_id', $enrolledCourseIds)
+            ->whereIn('status', ['scheduled', 'in_progress'])
+            ->where('start_time', '>=', now()->subHours(2)) // Hide old classes
+            ->orderBy('start_time', 'asc')
+            ->get();
+
+        return view('instructor::student_portal', compact('student', 'user', 'attendances', 'sales', 'course', 'onlineClasses'));
     }
 }

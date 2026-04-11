@@ -1,6 +1,6 @@
 @extends('instructor::components.layouts.hope-master')
 
-@section('page-title', 'نظرة عامة على نشاطك')
+@section('page-title', __('instructor::dashboard.title'))
 
 @section('content')
 <div class="container-fluid">
@@ -203,12 +203,15 @@
 <!-- Driver.js CSS & JS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"/>
 <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
+@php
+    $isRtl = app()->getLocale() == 'ar';
+@endphp
 <style>
-    /* Custom style for driver js arabic */
+    /* Custom style for driver js */
     .driver-popover {
         font-family: inherit !important;
-        text-align: right;
-        direction: rtl;
+        text-align: {{ $isRtl ? 'right' : 'left' }};
+        direction: {{ $isRtl ? 'rtl' : 'ltr' }};
     }
     .driver-popover-title {
         color: #10b981 !important;
@@ -216,7 +219,7 @@
         margin-bottom: 10px !important;
     }
     .driver-popover-progress-text {
-        direction: ltr; /* Fix for Arabic numbers direction like 4 of 1 */
+        direction: ltr; /* Always LTR for numbers like 1 / 4 */
     }
 </style>
 
@@ -227,43 +230,43 @@ document.addEventListener('DOMContentLoaded', function() {
         const driver = window.driver.js.driver;
         const driverObj = driver({
             showProgress: true,
-            progressText: '@{{current}} من @{{total}}',
-            nextBtnText: 'التالي ←',
-            prevBtnText: '→ السابق',
-            doneBtnText: 'إنهاء الجولة 🏁',
+            progressText: '{{ __('instructor::dashboard.tour.progress', ['current' => '@{{current}}', 'total' => '@{{total}}']) }}',
+            nextBtnText: '{{ __('instructor::dashboard.tour.next') }}',
+            prevBtnText: '{{ __('instructor::dashboard.tour.prev') }}',
+            doneBtnText: '{{ __('instructor::dashboard.tour.done') }}',
             popoverClass: 'driverjs-theme',
             allowClose: false,
             steps: [
                 { 
                     popover: { 
-                        title: 'مرحباً بك في لوحة تحكم المعلم! 👋', 
-                        description: 'أهلاً بك في منصتك. دعنا نأخذ جولة سريعة لنعطيك لمحة عن أهم الأدوات المتاحة لك لإدارة عملك بمنتهى السهولة.' 
+                        title: '{{ __('instructor::dashboard.tour.welcome_title') }}', 
+                        description: '{{ __('instructor::dashboard.tour.welcome_desc') }}' 
                     } 
                 },
                 { 
                     element: '#tour-quick-links', 
                     popover: { 
-                        title: '⚡ الروابط السريعة', 
-                        description: 'هذا القسم هو أهم جزء للبدء: قم بإنشاء مجموعة دراسية، إضافة طالب يدوياً، أو الوصول المباشر لمسجل الغياب الذكي.',
+                        title: '{{ __('instructor::dashboard.tour.quick_links_title') }}', 
+                        description: '{{ __('instructor::dashboard.tour.quick_links_desc') }}',
                     }
                 },
                 { 
                     element: '#tour-groups-section', 
                     popover: { 
-                        title: '📚 مجموعاتك وروابط التسجيل', 
-                        description: 'هنا تظهر مجوعاتك الدراسية بأكملها. لكل مجموعة رابط خاص، يمكنك نسخه وإرساله للطلاب ليسجلوا بياناتهم بأنفسهم دون أي جهد منك.',
+                        title: '{{ __('instructor::dashboard.tour.groups_title') }}', 
+                        description: '{{ __('instructor::dashboard.tour.groups_desc') }}',
                     }
                 },
                 { 
                     element: '#tour-stats-students', 
                     popover: { 
-                        title: '📊 الإحصائيات العامة', 
-                        description: 'تابع عدد طلابك، ومجموعاتك النشطة، ونظرة سريعة على الإيرادات الشهرية هنا لتبقى دائماً على اطلاع بنشاطك.' 
+                        title: '{{ __('instructor::dashboard.tour.stats_title') }}', 
+                        description: '{{ __('instructor::dashboard.tour.stats_desc') }}' 
                     } 
                 }
             ],
             onDestroyStarted: () => {
-                if (!driverObj.hasNextStep() || confirm("هل تود تخطي الجولة التعريفية فعلاً؟")) {
+                if (!driverObj.hasNextStep() || confirm("{{ __('instructor::dashboard.tour.skip_confirm') }}")) {
                     localStorage.setItem('instructor_tour_done_v1', 'true');
                     driverObj.destroy();
                 }
@@ -304,7 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
             data: {
                 labels: {!! json_encode($days) !!},
                 datasets: [{
-                    label: 'عدد الحاضرين',
+                    label: '{{ __('instructor::dashboard.attendees_count') }}',
                     data: {!! json_encode($attendanceData) !!},
                     borderColor: '#10b981',
                     backgroundColor: 'rgba(16, 185, 129, 0.08)',

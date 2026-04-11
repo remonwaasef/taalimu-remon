@@ -50,6 +50,7 @@
                     $isSchoolMgmtActive = request()->routeIs('center.classrooms.*') || 
                                           request()->routeIs('center.instructors.*') || 
                                           request()->routeIs('center.courses.*') || 
+                                          request()->routeIs('center.online_classes.*') || 
                                           request()->routeIs('center.schedules.*');
                     
                     $showSchoolMgmt = ($canInstructors || $canCourses || $canClassrooms || $canSchedules) && ($tenant->type !== 'instructor');
@@ -101,6 +102,11 @@
                                 </a>
                             </li>
                             @endif
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('center.online_classes.*') ? 'active' : '' }}" href="{{ route('center.online_classes.index', ['tenant' => $tenant->domain ?? 'center']) }}">
+                                    <i class="sidenav-mini-icon">V</i><span class="item-name text-success fw-bold">الدروس المباشرة</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 @endif

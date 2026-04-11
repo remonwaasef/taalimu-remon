@@ -225,6 +225,46 @@
 
             <!-- Main Content: History -->
             <div class="col-lg-8">
+                <!-- Upcoming Online Classes -->
+                @if(isset($onlineClasses) && $onlineClasses->count() > 0)
+                <div class="portal-card" style="border-right: 4px solid var(--success);">
+                    <div class="card-header-badge">
+                        <h6><i class="fas fa-video me-2 text-success"></i> {{ __('instructor::dashboard.online_classes') ?? 'الدروس الأونلاين القادمة' }}</h6>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="border-0 text-muted small fw-bold">الدرس وموعد البدء</th>
+                                    <th class="border-0 text-muted small fw-bold text-center">الرابط</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($onlineClasses as $lesson)
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold mb-1">{{ $lesson->title }}</div>
+                                        <div class="text-muted small">
+                                            <i class="far fa-clock me-1"></i> {{ $lesson->start_time->format('Y-m-d h:i A') }}
+                                            <span class="badge bg-light text-dark ms-2">{{ ucfirst($lesson->platform) }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center align-middle">
+                                        <a href="{{ $lesson->meeting_link }}" target="_blank" class="btn btn-sm btn-success rounded-pill px-3 shadow-sm">
+                                            <i class="fas fa-play me-1"></i> انضمام للدرس
+                                        </a>
+                                        @if($lesson->meeting_password)
+                                            <div class="text-muted small mt-1">الباسوورد: <code>{{ $lesson->meeting_password }}</code></div>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                @endif
+
                 <!-- Attendance History -->
                 <div class="portal-card">
                     <div class="card-header-badge">
