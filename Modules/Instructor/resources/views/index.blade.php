@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const driver = window.driver.js.driver;
         const driverObj = driver({
             showProgress: true,
-            progressText: '{{ __('instructor::dashboard.tour.progress', ['current' => '@{{current}}', 'total' => '@{{total}}']) }}',
+            progressText: '<?php echo __("instructor::dashboard.tour.progress", ["current" => "{{current}}", "total" => "{{total}}"]); ?>',
             nextBtnText: '{{ __('instructor::dashboard.tour.next') }}',
             prevBtnText: '{{ __('instructor::dashboard.tour.prev') }}',
             doneBtnText: '{{ __('instructor::dashboard.tour.done') }}',
