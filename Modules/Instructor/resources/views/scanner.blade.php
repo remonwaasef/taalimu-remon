@@ -1,15 +1,19 @@
 @extends('instructor::components.layouts.hope-master')
 
+@section('page-title', __('instructor::scanner.smart_attendance', ['title' => $course->title]))
+@section('page-subtitle', __('instructor::scanner.guide_camera'))
+
+@section('page-actions')
+    <a href="{{ route('instructor.dashboard') }}" class="btn btn-glass shadow-sm">
+        <i class="fas fa-arrow-right me-2"></i> {{ __('instructor::dashboard.back_to_dashboard') }}
+    </a>
+@endsection
+
 @section('content')
-<div class="container py-4">
+<div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-8 text-center">
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
-                <div class="card-header bg-white border-0 py-3">
-                    <h5 class="fw-bold mb-0">{{ __('instructor::scanner.smart_attendance', ['title' => $course->title]) }}</h5>
-                    <p class="text-muted small mb-0">{{ __('instructor::scanner.guide_camera') }}</p>
-                </div>
-                
                 <div class="card-body p-0 position-relative">
                     <div id="reader" style="width: 100%; min-height: 300px; background: #000;"></div>
                     
@@ -34,10 +38,9 @@
                         </div>
                     @endif
                     
-                    <button id="toggle-camera" class="btn btn-primary rounded-pill px-4 mt-3" style="background: var(--primary-color);">
+                    <button id="toggle-camera" class="btn btn-primary rounded-pill px-5 mt-3 shadow">
                         <i class="fas fa-camera me-2"></i> {{ __('instructor::scanner.start_camera') }}
                     </button>
-                    <a href="{{ route('instructor.dashboard') }}" class="btn btn-link text-muted mt-3 d-block">{{ __('instructor::dashboard.back_to_dashboard') }}</a>
                 </div>
             </div>
 

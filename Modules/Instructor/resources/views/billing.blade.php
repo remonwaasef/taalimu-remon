@@ -1,20 +1,16 @@
 @extends('instructor::components.layouts.hope-master')
 
-@section('page-title', __('instructor::billing.page_title'))
+@section('page-title', __('instructor::billing.title'))
+@section('page-subtitle', __('instructor::billing.subtitle'))
+
+@section('page-actions')
+    <div id="resultCount" class="btn btn-glass cursor-default opacity-100">
+        <i class="fas fa-user-graduate me-2"></i> {{ $students->count() }} {{ __('instructor::billing.student_count') }}
+    </div>
+@endsection
 
 @section('content')
 <div class="container-fluid">
-    <div class="row mb-4 align-items-center">
-        <div class="col-md-6">
-            <h3 class="fw-bold mb-1">{{ __('instructor::billing.title') }}</h3>
-            <p class="text-muted mb-0">{{ __('instructor::billing.subtitle') }}</p>
-        </div>
-        <div class="col-md-6 text-md-end mt-3 mt-md-0">
-            <div id="resultCount" class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2">
-                {{ $students->count() }} {{ __('instructor::billing.student_count') }}
-            </div>
-        </div>
-    </div>
 
     {{-- Search & Filter Bar --}}
     <div class="card border-0 shadow-sm rounded-4 mb-4">

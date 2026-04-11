@@ -3,7 +3,7 @@
 @section('page-title', __('center::courses.title'))
 
 @section('page-actions')
-    <a href="{{ route('center.courses.create') }}" class="btn btn-primary shadow-sm">
+    <a href="{{ route('center.courses.create') }}" class="btn btn-glass">
         <i class="fas fa-plus me-2"></i> {{ __('center::courses.add_new') }}
     </a>
 @endsection
@@ -152,7 +152,15 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center py-5 text-muted">{{ __('center::courses.no_courses') }}</td>
+                                <td colspan="6" class="text-center py-5">
+                                    <div class="mb-4">
+                                        <div class="d-inline-flex p-4 rounded-circle mb-3" style="background: rgba(16, 185, 129, 0.05);">
+                                            <i class="fas fa-book text-primary" style="font-size: 3rem; opacity: 0.5;"></i>
+                                        </div>
+                                    </div>
+                                    <h5 class="text-muted fw-bold">{{ __('center::courses.no_courses') }}</h5>
+                                    <p class="text-muted small">ابدأ بإنشاء مجموعات دراسية جديدة لطلابك.</p>
+                                </td>
                             </tr>
                         @endforelse
                     </tbody>

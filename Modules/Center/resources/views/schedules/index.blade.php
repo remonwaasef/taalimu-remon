@@ -4,7 +4,7 @@
 @section('page-subtitle', __('center::students.weekly_schedule_overview'))
 
 @section('page-actions')
-    <a href="{{ route('center.schedules.create') }}" class="btn btn-primary shadow-sm">
+    <a href="{{ route('center.schedules.create') }}" class="btn btn-glass">
         <i class="fas fa-plus me-2"></i> {{ __('center::students.add_new_schedule') }}
     </a>
 @endsection
@@ -108,10 +108,12 @@
         @if($groupedSchedules->isEmpty())
             <div class="col-12">
                 <div class="card border-0 shadow-sm rounded-4 text-center p-5">
-                    <div class="mb-3">
-                        <i class="far fa-calendar-times display-1 text-light"></i>
+                    <div class="mb-4">
+                        <div class="d-inline-flex p-4 rounded-circle mb-3" style="background: rgba(16, 185, 129, 0.05);">
+                            <i class="fas fa-calendar-alt text-primary" style="font-size: 3rem; opacity: 0.5;"></i>
+                        </div>
                     </div>
-                    <h4 class="text-muted">{{ __('center::students.no_schedules_found') }}</h4>
+                    <h5 class="text-muted fw-bold">{{ __('center::students.no_schedules_found') }}</h5>
                     <div class="mt-3">
                         <a href="{{ route('center.schedules.create') }}" class="btn btn-primary rounded-pill px-4">
                             {{ __('center::students.add_your_first_schedule') }}

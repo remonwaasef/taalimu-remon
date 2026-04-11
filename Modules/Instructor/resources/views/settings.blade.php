@@ -1,26 +1,27 @@
 @extends('instructor::components.layouts.hope-master')
 
 @section('page-title', __('instructor::settings.title'))
+@section('page-subtitle', __('instructor::settings.subtitle') ?? 'Manage your account and subscription')
 
 @section('content')
 <div class="container-fluid">
     <div class="row mb-4">
         <div class="col-12">
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                <div class="card-header bg-white border-0 p-0">
-                    <ul class="nav nav-tabs nav-justified border-bottom-0" id="settingsTabs" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active py-3 fw-bold border-0 rounded-0" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab">
+                <div class="card-header bg-white border-0 p-4 pb-0">
+                    <ul class="nav nav-tabs border-0 bg-light p-1 rounded-pill" id="settingsTabs" role="tablist">
+                        <li class="nav-item m-0" role="presentation">
+                            <button class="nav-link active rounded-pill fw-bold" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab">
                                 <i class="fas fa-info-circle me-2"></i> {{ __('instructor::settings.general_data') }}
                             </button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link py-3 fw-bold border-0 rounded-0" id="whatsapp-tab" data-bs-toggle="tab" data-bs-target="#whatsapp" type="button" role="tab">
+                        <li class="nav-item m-0" role="presentation">
+                            <button class="nav-link rounded-pill fw-bold" id="whatsapp-tab" data-bs-toggle="tab" data-bs-target="#whatsapp" type="button" role="tab">
                                 <i class="fab fa-whatsapp me-2"></i> {{ __('instructor::settings.whatsapp_settings') }}
                             </button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link py-3 fw-bold border-0 rounded-0" id="subscription-tab" data-bs-toggle="tab" data-bs-target="#subscription" type="button" role="tab">
+                        <li class="nav-item m-0" role="presentation">
+                            <button class="nav-link rounded-pill fw-bold" id="subscription-tab" data-bs-toggle="tab" data-bs-target="#subscription" type="button" role="tab">
                                 <i class="fas fa-credit-card me-2"></i> {{ __('instructor::settings.platform_subscription') }}
                             </button>
                         </li>

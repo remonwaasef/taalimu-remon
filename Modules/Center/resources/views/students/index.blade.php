@@ -18,13 +18,13 @@
 
 @section('page-actions')
     <div class="d-flex gap-2">
-        <a href="{{ route('center.students.export') }}" class="btn btn-primary shadow-sm" id="export-students-btn">
+        <a href="{{ route('center.students.export') }}" class="btn btn-glass" id="export-students-btn">
             <i class="fas fa-file-export me-2"></i> {{ __('center::students.export_file') ?? __('center::messages.blade_0808') }}
         </a>
-        <a href="{{ route('center.students.import') }}" class="btn btn-primary shadow-sm">
+        <a href="{{ route('center.students.import') }}" class="btn btn-glass">
             <i class="fas fa-file-import me-2"></i> {{ __('center::students.import_file') }}
         </a>
-        <a href="{{ route('center.students.create') }}" class="btn btn-primary shadow-sm">
+        <a href="{{ route('center.students.create') }}" class="btn btn-glass">
             <span class="me-2">+</span> {{ __('center::students.add_new') }}
         </a>
     </div>
@@ -355,15 +355,13 @@
                         @empty
                             <tr>
                                 <td colspan="7" class="text-center py-5">
-                                    <div class="mb-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-muted opacity-50">
-                                            <circle cx="11" cy="11" r="8"></circle>
-                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                            <line x1="11" y1="8" x2="11" y2="14"></line>
-                                            <line x1="8" y1="11" x2="14" y2="11"></line>
-                                        </svg>
+                                    <div class="mb-4">
+                                        <div class="d-inline-flex p-4 rounded-circle mb-3" style="background: rgba(16, 185, 129, 0.05);">
+                                            <i class="fas fa-user-graduate text-primary" style="font-size: 3rem; opacity: 0.5;"></i>
+                                        </div>
                                     </div>
-                                    <p class="text-muted mt-3 mb-0">{{ __('center::students.no_students') }}</p>
+                                    <h5 class="text-muted fw-bold">{{ __('center::students.no_students') }}</h5>
+                                    <p class="text-muted small">قم بإضافة طلاب جدد أو استيرادهم من ملف اكسيل للبدء.</p>
                                 </td>
                             </tr>
                         @endforelse

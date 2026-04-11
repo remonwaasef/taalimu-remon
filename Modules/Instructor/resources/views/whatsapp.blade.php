@@ -1,6 +1,7 @@
 @extends('instructor::components.layouts.hope-master')
 
 @section('page-title', __('instructor::whatsapp.title'))
+@section('page-subtitle', __('instructor::whatsapp.connect_subtitle'))
 
 @section('content')
 <div class="container-fluid">
@@ -13,8 +14,7 @@
                             <i class="fab fa-whatsapp fa-2x"></i>
                         </div>
                         <div>
-                            <h4 class="fw-bold mb-1">{{ __('instructor::whatsapp.connect_header') }}</h4>
-                            <p class="text-muted small mb-0">{{ __('instructor::whatsapp.connect_subtitle') }}</p>
+                            <h4 class="fw-bold mb-0 text-success">{{ __('instructor::whatsapp.connect_header') }}</h4>
                         </div>
                     </div>
                 </div>
