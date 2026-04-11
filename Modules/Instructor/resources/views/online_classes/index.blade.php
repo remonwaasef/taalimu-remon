@@ -1,20 +1,17 @@
 @extends('instructor::components.layouts.hope-master')
 
 @section('page-title', __('instructor::dashboard.online_classes') ?? 'الدروس الأونلاين')
+@section('page-subtitle', 'إدارة وتفعيل روابط الدروس الخاصة بك')
+
+@section('page-actions')
+    <a href="{{ route('instructor.online_classes.create') }}" class="btn btn-glass">
+        <i class="fas fa-plus me-2"></i> إضافة درس جديد
+    </a>
+@endsection
 
 @section('content')
 <div class="container-fluid">
-    <div class="row mb-4 align-items-center">
-        <div class="col">
-            <h3 class="fw-bold mb-0">الدروس الأونلاين</h3>
-            <p class="text-muted small">إدارة وتفعيل روابط الدروس الخاصة بك</p>
-        </div>
-        <div class="col-auto">
-            <a href="{{ route('instructor.online_classes.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm border-0 fw-bold" style="background: var(--primary-color);">
-                <i class="fas fa-plus me-2"></i> إضافة درس جديد
-            </a>
-        </div>
-    </div>
+    {{-- Search Bar --}}
 
     {{-- Search Bar --}}
     <div class="card border-0 shadow-sm rounded-4 mb-3">

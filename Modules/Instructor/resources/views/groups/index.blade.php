@@ -1,20 +1,17 @@
 @extends('instructor::components.layouts.hope-master')
 
 @section('page-title', __('instructor::groups.title'))
+@section('page-subtitle', __('instructor::groups.subtitle'))
+
+@section('page-actions')
+    <a href="{{ route('instructor.groups.create') }}" class="btn btn-glass">
+        <i class="fas fa-plus me-2"></i> {{ __('instructor::groups.create_new') }}
+    </a>
+@endsection
 
 @section('content')
 <div class="container-fluid">
-    <div class="row mb-4 align-items-center">
-        <div class="col">
-            <h3 class="fw-bold mb-0">{{ __('instructor::groups.study_groups') }}</h3>
-            <p class="text-muted small">{{ __('instructor::groups.subtitle') }}</p>
-        </div>
-        <div class="col-auto">
-            <a href="{{ route('instructor.groups.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm border-0 fw-bold" style="background: var(--primary-color);">
-                <i class="fas fa-plus me-2"></i> {{ __('instructor::groups.create_new') }}
-            </a>
-        </div>
-    </div>
+    {{-- Search Bar --}}
 
     {{-- Search Bar --}}
     <div class="card border-0 shadow-sm rounded-4 mb-3">
