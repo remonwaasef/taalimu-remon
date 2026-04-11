@@ -189,6 +189,12 @@ $tenantRoutes = function () {
             Route::delete('instructors/{instructor}', [InstructorController::class, 'destroy'])->name('center.instructors.destroy');
         });
 
+        // Online Classes Management
+        Route::middleware(['can:manage schedule'])->group(function() {
+            Route::get('online-classes', [\Modules\Center\Http\Controllers\OnlineClassController::class, 'index'])->name('center.online_classes.index');
+            Route::delete('online-classes/{class}', [\Modules\Center\Http\Controllers\OnlineClassController::class, 'destroy'])->name('center.online_classes.destroy');
+        });
+
         // Course Management
         Route::middleware(['can:view courses'])->group(function() {
             Route::get('courses', [CourseController::class, 'index'])->name('center.courses.index');
