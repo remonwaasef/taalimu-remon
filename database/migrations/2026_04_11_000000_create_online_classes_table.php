@@ -11,6 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::dropIfExists('online_classes');
+        
         Schema::create('online_classes', function (Blueprint $table) {
             $table->id();
             
