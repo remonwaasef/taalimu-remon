@@ -12,4 +12,5 @@ return [
     'welcome' => 'مرحباً بك',
     'instructor' => 'المعلم',
     'panel_title' => 'لوحة تحكم المعلم',
+    'online_classes' => 'الدروس المباشرة',
 ];
