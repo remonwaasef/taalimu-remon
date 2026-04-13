@@ -119,6 +119,7 @@
             border: 0 !important;
             box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05), 0 5px 15px -5px rgba(0,0,0,0.02);
             border-radius: 20px !important;
+            overflow: visible !important;
         }
         
         .btn-glass {
@@ -184,7 +185,7 @@
             transform: translateY(-1px);
         }
         /* Fix Dropdown menus being cut off in responsive tables */
-        .table-responsive {
+        .table-responsive, .card-body, table {
             overflow: visible !important;
         }
         @media (max-width: 991.98px) {
@@ -201,6 +202,7 @@
             border-radius: 12px !important;
             padding: 0.5rem !important;
             z-index: 1060 !important;
+            min-width: 180px !important;
         }
         .dropdown-item {
             border-radius: 8px !important;
@@ -295,5 +297,22 @@
     <script src="{{ asset('assets/hope-ui/js/hope-ui.js') }}"></script>
     
     @stack('scripts')
+    <script>
+        // Global fix for dropdown clipping in tables/cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdownElementList = [].slice.call(document.querySelectorAll('[data-bs-toggle="dropdown"]'))
+            dropdownElementList.map(function (dropdownToggleEl) {
+                return new bootstrap.Dropdown(dropdownToggleEl, {
+                    boundary: 'viewport',
+                    popperConfig: (defaultConfig) => {
+                        return {
+                            ...defaultConfig,
+                            strategy: 'fixed'
+                        };
+                    }
+                })
+            })
+        });
+    </script>
 </body>
 </html>
