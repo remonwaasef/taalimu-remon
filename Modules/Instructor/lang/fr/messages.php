@@ -36,4 +36,11 @@ return [
     'error_saving_group' => 'Erreur lors de la tentative d\'enregistrement du groupe : :message',
     'quick_collection_note' => 'Collecte rapide depuis l\'interface instructeur',
     'copy_suffix' => ' - copie',
+    'confirm_delete' => 'Êtes-vous sûr de vouloir supprimer ?',
+    'unauthorized_course' => 'Vous ne pouvez pas créer de session pour un groupe qui ne vous appartient pas.',
+    'instructor_conflict' => 'Conflit d\'horaire ! Vous avez une autre session enregistrée à la même heure.',
+    'hall_conflict' => 'Conflit d\'horaire ! La salle sélectionnée est déjà réservée pour un autre groupe à la même heure.',
+    'schedule_created' => 'Horaire de session créé avec succès.',
+    'schedule_updated' => 'Horaire de session mis à jour avec succès.',
+    'schedule_deleted' => 'Horaire de session supprimé avec succès.',
 ];

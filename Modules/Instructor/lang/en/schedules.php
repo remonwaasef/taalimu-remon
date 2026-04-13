@@ -40,4 +40,5 @@ return array (
   'notes_link' => 'This schedule will automatically link to the attendance section for easier student tracking.',
   'location' => 'Session Location / Center',
   'location_placeholder' => 'e.g., Al-Noor Center, Student Home, Online...',
+  'hall_not_specified' => 'Hall not specified',
 );
