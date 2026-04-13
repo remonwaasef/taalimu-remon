@@ -77,11 +77,11 @@
                                     <div class="fw-bold text-dark">{{ $student->name }}</div>
                                     <small class="text-muted">{{ $student->enrollments->pluck('course.title')->filter()->implode(', ') }}</small>
                                 </td>
-                                <td>{{ number_format($totalDue) }} {{ __('instructor::dashboard.currency') }}</td>
-                                <td>{{ number_format($totalPaid) }} {{ __('instructor::dashboard.currency') }}</td>
+                                <td>{{ number_format($totalDue) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }}</td>
+                                <td>{{ number_format($totalPaid) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }}</td>
                                 <td>
                                     @if($balance > 0)
-                                        <span class="text-danger fw-bold">{{ number_format($balance) }} {{ __('instructor::dashboard.currency') }}</span>
+                                        <span class="text-danger fw-bold">{{ number_format($balance) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }}</span>
                                     @else
                                         <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{ __('instructor::billing.paid') }}</span>
                                     @endif
@@ -143,7 +143,7 @@
                         <label class="form-label small fw-bold text-muted">{{ __('instructor::billing.amount_received') }}</label>
                         <div class="input-group">
                             <input type="number" name="amount" id="modal_amount" class="form-control bg-light border-0 py-2" required>
-                            <span class="input-group-text bg-light border-0">{{ __('instructor::dashboard.currency') }}</span>
+                            <span class="input-group-text bg-light border-0">{{ app('tenant')->settings['currency'] ?? 'EGP' }}</span>
                         </div>
                         <div class="form-text text-danger" id="modal_balance_hint"></div>
                     </div>

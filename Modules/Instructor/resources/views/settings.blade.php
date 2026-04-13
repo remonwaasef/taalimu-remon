@@ -61,6 +61,16 @@
                                                 <input type="text" name="phone" class="form-control bg-white border rounded-3" value="{{ $tenant->phone }}">
                                             </div>
                                             <div class="col-md-12">
+                                                <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.default_currency', 'العملة الافتراضية') }}</label>
+                                                <select name="currency" class="form-control bg-white border rounded-3">
+                                                    <option value="ج.م" {{ ($tenant->settings['currency'] ?? '') == 'ج.م' ? 'selected' : '' }}>جنيه مصري (ج.م)</option>
+                                                    <option value="EGP" {{ ($tenant->settings['currency'] ?? '') == 'EGP' ? 'selected' : '' }}>Egyptian Pound (EGP)</option>
+                                                    <option value="SAR" {{ ($tenant->settings['currency'] ?? '') == 'SAR' ? 'selected' : '' }}>Saudi Riyal (SAR)</option>
+                                                    <option value="$" {{ ($tenant->settings['currency'] ?? '') == '$' ? 'selected' : '' }}>US Dollar ($)</option>
+                                                    <option value="€" {{ ($tenant->settings['currency'] ?? '') == '€' ? 'selected' : '' }}>Euro (€)</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-12">
                                                 <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.address') }}</label>
                                                 <input type="text" name="address" class="form-control bg-white border rounded-3" value="{{ $tenant->address }}">
                                             </div>
@@ -259,14 +269,14 @@
                                                         <div x-show="billingCycle === 'monthly'" class="animate-fade-in">
                                                             <div class="d-flex align-items-baseline gap-1">
                                                                 <span class="fs-4 fw-bold text-primary">{{ number_format((float)$pkg->price) }}</span>
-                                                                <small class="text-muted x-small">{{ __('instructor::dashboard.currency') }} / {{ __('instructor::settings.monthly') }}</small>
+                                                                <small class="text-muted x-small">{{ app('tenant')->settings['currency'] ?? 'EGP' }} / {{ __('instructor::settings.monthly') }}</small>
                                                             </div>
                                                         </div>
                                                         @if($pkg->term_price)
                                                         <div x-show="billingCycle === 'term'" class="animate-fade-in" style="display: none;">
                                                             <div class="d-flex align-items-baseline gap-1">
                                                                 <span class="fs-4 fw-bold text-primary">{{ number_format((float)$pkg->term_price) }}</span>
-                                                                <small class="text-muted x-small">{{ __('instructor::dashboard.currency') }} / {{ __('instructor::settings.term') }}</small>
+                                                                <small class="text-muted x-small">{{ app('tenant')->settings['currency'] ?? 'EGP' }} / {{ __('instructor::settings.term') }}</small>
                                                             </div>
                                                         </div>
                                                         @endif
@@ -274,7 +284,7 @@
                                                         <div x-show="billingCycle === 'yearly'" class="animate-fade-in" style="display: none;">
                                                             <div class="d-flex align-items-baseline gap-1">
                                                                 <span class="fs-4 fw-bold text-primary">{{ number_format((float)$pkg->yearly_price) }}</span>
-                                                                <small class="text-muted x-small">{{ __('instructor::dashboard.currency') }} / {{ __('instructor::settings.yearly') }}</small>
+                                                                <small class="text-muted x-small">{{ app('tenant')->settings['currency'] ?? 'EGP' }} / {{ __('instructor::settings.yearly') }}</small>
                                                             </div>
                                                         </div>
                                                         @endif

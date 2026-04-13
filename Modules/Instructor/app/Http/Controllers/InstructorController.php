@@ -1089,6 +1089,7 @@ class InstructorController extends Controller
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:500',
             'description' => 'nullable|string|max:1000',
+            'currency' => 'nullable|string|max:10',
             'logo' => 'nullable|image|max:2048'
         ]);
 
@@ -1098,6 +1099,10 @@ class InstructorController extends Controller
         $tenant->phone = $request->phone;
         $tenant->address = $request->address;
         $tenant->description = $request->description;
+
+        $settings = $tenant->settings ?? [];
+        $settings['currency'] = $request->currency ?? 'EGP';
+        $tenant->settings = $settings;
 
         if ($request->hasFile('logo')) {
             $tenant->logo = $request->file('logo')->store("{$tenant->id}/logos", 'public');
