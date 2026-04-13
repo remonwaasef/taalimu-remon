@@ -89,6 +89,14 @@
             color: var(--text-dark);
         }
 
+        /* Fix text cursor and typing direction for Arabic inputs */
+        [dir="rtl"] .form-control, 
+        [dir="rtl"] .form-select, 
+        [dir="rtl"] textarea {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+
         /* Fix for action dropdowns in responsive tables */
         .table-responsive {
             min-height: 300px;
