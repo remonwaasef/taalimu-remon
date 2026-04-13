@@ -38,4 +38,6 @@ return array (
   'notes_conflict' => 'The system will automatically prevent any conflicts in booking the same hall at the same time.',
   'notes_vacancy' => 'It will also verify your availability during this time before saving.',
   'notes_link' => 'This schedule will automatically link to the attendance section for easier student tracking.',
+  'location' => 'Session Location / Center',
+  'location_placeholder' => 'e.g., Al-Noor Center, Student Home, Online...',
 );

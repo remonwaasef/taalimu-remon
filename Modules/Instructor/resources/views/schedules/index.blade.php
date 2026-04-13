@@ -95,8 +95,16 @@
 
                                         <div class="mb-3">
                                             <div class="d-flex align-items-center mb-2">
-                                                <i class="fas fa-door-open text-muted me-2" style="width: 20px;"></i>
-                                                <span class="text-secondary small">{{ $schedule->classroom->name ?? __('instructor::schedules.hall_not_specified') }}</span>
+                                                <i class="fas fa-map-marker-alt text-muted me-2" style="width: 20px;"></i>
+                                                <span class="text-secondary small">
+                                                    @if($schedule->classroom)
+                                                        {{ $schedule->classroom->name }}
+                                                    @elseif($schedule->location)
+                                                        {{ $schedule->location }}
+                                                    @else
+                                                        {{ __('instructor::schedules.hall_not_specified') }}
+                                                    @endif
+                                                </span>
                                             </div>
                                         </div>
 

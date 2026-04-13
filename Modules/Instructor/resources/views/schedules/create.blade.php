@@ -51,9 +51,9 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">{{ __('instructor::schedules.hall') }} <span class="text-danger">*</span></label>
-                            <select name="classroom_id" class="form-select rounded-pill px-3 @error('classroom_id') is-invalid @enderror" required>
-                                <option value="" disabled selected>{{ __('instructor::schedules.select_hall') }}</option>
+                            <label class="form-label fw-bold">{{ __('instructor::schedules.hall') }} <span class="text-muted small">({{ __('instructor::online_classes.optional') }})</span></label>
+                            <select name="classroom_id" class="form-select rounded-pill px-3 @error('classroom_id') is-invalid @enderror">
+                                <option value="" selected>{{ __('instructor::schedules.select_hall') }}</option>
                                 @foreach($classrooms as $classroom)
                                     <option value="{{ $classroom->id }}" {{ old('classroom_id', $schedule->classroom_id ?? '') == $classroom->id ? 'selected' : '' }}>
                                         {{ $classroom->name }} ({{ __('instructor::schedules.capacity') }}: {{ $classroom->capacity ?? '∞' }})
@@ -61,6 +61,12 @@
                                 @endforeach
                             </select>
                             @error('classroom_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">{{ __('instructor::schedules.location') }} <span class="text-muted small">({{ __('instructor::online_classes.optional') }})</span></label>
+                            <input type="text" name="location" class="form-control rounded-pill px-3 @error('location') is-invalid @enderror" value="{{ old('location', $schedule->location ?? '') }}" placeholder="{{ __('instructor::schedules.location_placeholder') }}">
+                            @error('location') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
                         {{-- Hidden instructor_id: auto-set to the logged-in instructor --}}

@@ -815,6 +815,7 @@ class InstructorController extends Controller
         $validated = $request->validate([
             'course_id' => 'required|exists:courses,id',
             'classroom_id' => 'nullable|exists:classrooms,id',
+            'location' => 'nullable|string|max:255',
             'day_of_week' => 'required|integer|between:0,6',
             'start_time' => 'required',
             'end_time' => 'required|after:start_time',
@@ -877,6 +878,7 @@ class InstructorController extends Controller
         $validated = $request->validate([
             'course_id' => 'required|exists:courses,id',
             'classroom_id' => 'nullable|exists:classrooms,id',
+            'location' => 'nullable|string|max:255',
             'day_of_week' => 'required|integer|between:0,6',
             'start_time' => 'required',
             'end_time' => 'required|after:start_time',
