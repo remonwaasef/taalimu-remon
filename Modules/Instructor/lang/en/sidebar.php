@@ -7,6 +7,7 @@ return [
     'schedules' => 'Schedules',
     'attendance' => 'Attendance',
     'billing' => 'Accounts',
+    'reports' => 'Reports',
     'settings' => 'Settings',
     'logout' => 'Logout',
     'welcome' => 'Welcome',

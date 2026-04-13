@@ -1042,6 +1042,51 @@ class InstructorController extends Controller
         return back()->with('success', __('instructor::messages.saved'));
     }
 
+    public function reports()
+    {
+        $instructor = $this->resolveInstructor();
+        $courseIds = $instructor ? $instructor->courses->pluck('id') : Course::pluck('id');
+
+        // Revenue Chart Data (Last 6 Months)
+        $revenueData = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $month = now()->subMonths($i);
+            $revenueData[] = [
+                'month' => $month->translatedFormat('F'),
+                'amount' => Sale::whereIn('course_id', $courseIds)
+                    ->whereMonth('created_at', $month->month)
+                    ->whereYear('created_at', $month->year)
+                    ->sum('paid_amount')
+            ];
+        }
+
+        // Attendance Trends (Last 7 Days)
+        $attendanceTrends = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            $attendanceTrends[] = [
+                'date' => $date->translatedFormat('D'),
+                'present' => Attendance::whereIn('course_id', $courseIds)
+                    ->whereDate('session_date', $date)
+                    ->where('status', 'present')
+                    ->count(),
+                'absent' => Attendance::whereIn('course_id', $courseIds)
+                    ->whereDate('session_date', $date)
+                    ->where('status', 'absent')
+                    ->count()
+            ];
+        }
+
+        // Student Enrollment by Course
+        $courseStats = Course::whereIn('id', $courseIds)
+            ->withCount('enrollments')
+            ->orderBy('enrollments_count', 'desc')
+            ->take(5)
+            ->get();
+
+        return view('instructor::reports', compact('revenueData', 'attendanceTrends', 'courseStats'));
+    }
+
     /**
      * Helper to resolve the instructor profile for the current user,
      * creating it if it doesn't exist for authorized users.

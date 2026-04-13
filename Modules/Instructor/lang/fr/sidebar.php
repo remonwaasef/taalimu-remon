@@ -7,6 +7,7 @@ return [
     'schedules' => 'Horaires',
     'attendance' => 'Présence',
     'billing' => 'Facturation',
+    'reports' => 'Rapports',
     'settings' => 'Paramètres',
     'logout' => 'Déconnexion',
     'welcome' => 'Bienvenue',

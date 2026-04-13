@@ -7,6 +7,7 @@ return [
     'schedules' => 'المواعيد والجداول',
     'attendance' => 'الحضور والغياب',
     'billing' => 'الحسابات',
+    'reports' => 'التقارير',
     'settings' => 'الإعدادات',
     'logout' => 'خروج',
     'welcome' => 'مرحباً بك',
