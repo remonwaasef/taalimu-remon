@@ -17,4 +17,5 @@ return [
     'edit' => 'Modifier',
     'delete' => 'Supprimer',
     'cancel' => 'Annuler',
+    'back' => 'Retour',
 ];

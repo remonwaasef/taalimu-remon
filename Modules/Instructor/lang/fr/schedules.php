@@ -38,4 +38,6 @@ return array (
   'notes_conflict' => 'Le système empêchera automatiquement tout conflit lors de la réservation de la même salle au même moment.',
   'notes_vacancy' => 'Il vérifiera également votre disponibilité pendant cette période avant de sauvegarder.',
   'notes_link' => 'Cet horaire sera automatiquement lié à la section de présence pour faciliter le suivi des étudiants.',
+  'location' => 'Lieu de la session / Centre',
+  'location_placeholder' => 'ex: Centre Al-Noor, Domicile de l\'étudiant, En ligne...',
 );
