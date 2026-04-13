@@ -209,15 +209,15 @@
                         @endphp
                         <div class="balance-item">
                             <span class="text-muted">{{ __('instructor::portal.total_due') }}</span>
-                            <span class="fw-bold">{{ number_format($totalDue, 0) }} {{ __('instructor::students.currency') }}</span>
+                            <span class="fw-bold">{{ number_format($totalDue, 0) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }}</span>
                         </div>
                         <div class="balance-item">
                             <span class="text-muted">{{ __('instructor::portal.total_paid') }}</span>
-                            <span class="text-success fw-bold">{{ number_format($totalPaid, 0) }} {{ __('instructor::students.currency') }}</span>
+                            <span class="text-success fw-bold">{{ number_format($totalPaid, 0) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }}</span>
                         </div>
                         <div class="balance-item border-0">
                             <span class="fw-bold text-dark">{{ __('instructor::portal.balance_required') }}</span>
-                            <span class="text-danger fw-bold h4 mb-0">{{ number_format($balance, 0) }} {{ __('instructor::students.currency') }}</span>
+                            <span class="text-danger fw-bold h4 mb-0">{{ number_format($balance, 0) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }}</span>
                         </div>
                     </div>
                 </div>

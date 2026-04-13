@@ -35,7 +35,7 @@
                                 <label class="form-label fw-bold">{{ __('instructor::groups.group_price_label') }}</label>
                                 <div class="input-group">
                                     <input type="number" name="price" class="form-control rounded-start-3 py-2 @error('price') is-invalid @enderror" value="{{ old('price') }}" required step="0.01" min="0" placeholder="0.00">
-                                    <span class="input-group-text rounded-end-3 bg-light border-start-0">{{ __('instructor::groups.currency') }}</span>
+                                    <span class="input-group-text rounded-end-3 bg-light border-start-0">{{ app('tenant')->settings['currency'] ?? __('instructor::groups.currency') }}</span>
                                 </div>
                                 @error('price')
                                     <div class="text-danger small mt-1">{{ $message }}</div>

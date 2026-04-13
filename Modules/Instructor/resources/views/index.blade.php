@@ -85,7 +85,7 @@
                         <h6 class="text-muted mb-1">{{ __('instructor::dashboard.monthly_revenue') }}</h6>
                         <h2 class="fw-bold mb-0">
                             <span class="count-up text-info">{{ number_format($monthlyRevenue) }}</span>
-                            <small class="fs-6 fw-normal text-muted">{{ __('instructor::dashboard.currency') }}</small>
+                            <small class="fs-6 fw-normal text-muted">{{ app('tenant')->settings['currency'] ?? 'EGP' }}</small>
                         </h2>
                     </div>
                     <div class="p-3 rounded-4" style="background: rgba(13, 202, 240, 0.08);">
