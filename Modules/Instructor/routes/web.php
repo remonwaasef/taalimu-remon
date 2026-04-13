@@ -68,6 +68,9 @@ $instructorRoutes = function () {
         Route::post('/attendance/store', [InstructorController::class, 'storeAttendance'])->name('instructor.attendance.store');
         Route::post('/attendance/bulk-absent/{schedule}', [InstructorController::class, 'bulkAbsent'])->name('instructor.attendance.bulkAbsent');
 
+        // Reports
+        Route::get('/reports', [InstructorController::class, 'reports'])->name('instructor.reports');
+
     });
 
     // Public Student Portal (Accessible via QR Link)

@@ -70,6 +70,13 @@
                 </li>
 
                 <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('instructor.reports') ? 'active' : '' }}" href="{{ route('instructor.reports') }}">
+                        <i class="icon"><i class="fas fa-chart-line"></i></i>
+                        <span class="item-name">{{ __('instructor::sidebar.reports') }}</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('instructor.settings') || request()->routeIs('instructor.whatsapp.*') ? 'active' : '' }}" href="{{ route('instructor.settings') }}">
                         <i class="icon"><i class="fas fa-cog"></i></i>
                         <span class="item-name">{{ __('instructor::sidebar.settings') }}</span>
