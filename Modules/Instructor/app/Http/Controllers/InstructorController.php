@@ -1053,7 +1053,9 @@ class InstructorController extends Controller
             $month = now()->subMonths($i);
             $revenueData[] = [
                 'month' => $month->translatedFormat('F'),
-                'amount' => Sale::whereIn('course_id', $courseIds)
+                'amount' => Sale::whereHas('items', function($q) use ($courseIds) {
+                        $q->where('item_type', Course::class)->whereIn('item_id', $courseIds);
+                    })
                     ->whereMonth('created_at', $month->month)
                     ->whereYear('created_at', $month->year)
                     ->sum('paid_amount')
