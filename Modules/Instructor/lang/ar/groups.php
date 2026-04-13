@@ -57,4 +57,5 @@ return [
     'back' => 'إلغاء',
     'select_day' => 'اختر اليوم...',
     'currency' => 'ج.م',
+    'max_students' => 'أقصى عدد للطلاب',
 ];

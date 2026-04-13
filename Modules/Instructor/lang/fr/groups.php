@@ -57,4 +57,5 @@ return [
     'back' => 'Annuler',
     'select_day' => 'Sélectionnez le jour...',
     'currency' => 'EGP',
+    'max_students' => 'Nombre Maximum d\'Étudiants',
 ];

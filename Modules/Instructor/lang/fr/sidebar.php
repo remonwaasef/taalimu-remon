@@ -13,4 +13,8 @@ return [
     'instructor' => 'Instructeur',
     'panel_title' => 'Panneau Instructeur',
     'online_classes' => 'Cours en ligne',
+    'add' => 'Ajouter',
+    'edit' => 'Modifier',
+    'delete' => 'Supprimer',
+    'cancel' => 'Annuler',
 ];
