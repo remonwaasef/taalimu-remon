@@ -48,8 +48,7 @@
                         <tr class="group-row" data-title="{{ $course->title }}">
                             <td class="px-4 py-3 text-start">
                                 <div class="fw-bold fs-5" style="color: var(--primary-color);">{{ $course->title }}</div>
-                                <div class="text-muted small mb-2">{{ __('instructor::groups.code', ['code' => $course->code ?? 'N/A']) }}</div>
-                                <div class="d-flex flex-wrap gap-1">
+                                <div class="d-flex flex-wrap gap-1 mt-2">
                                     @forelse($course->schedules as $schedule)
                                         @php
                                             $days = [
@@ -70,6 +69,9 @@
                                     @empty
                                         <span class="badge bg-light text-muted border rounded-pill fw-normal">{{ __('instructor::groups.no_schedules') }}</span>
                                     @endforelse
+                                    <a href="{{ route('instructor.schedules.create', ['course_id' => $course->id]) }}" class="badge border rounded-pill fw-normal text-decoration-none ms-1" style="color: var(--primary-color) !important; border-color: var(--primary-color) !important; border-style: dashed !important; background: transparent; transition: all 0.2s;" onmouseover="this.style.background='rgba(16,185,129,0.1)'" onmouseout="this.style.background='transparent'">
+                                        <i class="fas fa-plus fa-sm"></i> تخصيص موعد
+                                    </a>
                                 </div>
                             </td>
                             <td>
