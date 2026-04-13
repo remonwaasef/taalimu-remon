@@ -183,6 +183,39 @@
             color: #059669 !important;
             transform: translateY(-1px);
         }
+        /* Fix Dropdown menus being cut off in responsive tables */
+        .table-responsive {
+            overflow: visible !important;
+        }
+        @media (max-width: 991.98px) {
+            .table-responsive {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+        
+        /* Dropdown menu premium look */
+        .dropdown-menu {
+            border: 0 !important;
+            box-shadow: 0 15px 35px -5px rgba(0,0,0,0.1), 0 5px 15px -5px rgba(0,0,0,0.05) !important;
+            border-radius: 12px !important;
+            padding: 0.5rem !important;
+            z-index: 1060 !important;
+        }
+        .dropdown-item {
+            border-radius: 8px !important;
+            padding: 0.6rem 1rem !important;
+            font-weight: 500 !important;
+            transition: all 0.2s !important;
+        }
+        .dropdown-item:hover {
+            background-color: rgba(16, 185, 129, 0.08) !important;
+            color: #10b981 !important;
+            transform: translateX(3px);
+        }
+        [dir="rtl"] .dropdown-item:hover {
+            transform: translateX(-3px);
+        }
     </style>
     @stack('styles')
 </head>
