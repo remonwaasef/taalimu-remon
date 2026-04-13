@@ -268,6 +268,10 @@
     </div>
 
     {{-- ─── Section: Available Plans ─────────────────────────── --}}
+    @php
+        $initialCycle = $subscription?->billing_cycle ?? 'term';
+    @endphp
+
     <div class="mb-4 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
         <div class="d-flex align-items-center">
             <h5 class="fw-bold mb-0">
@@ -364,25 +368,39 @@
                             </h5>
                         </div>
                         <div class="text-end">
-                            @if($package->old_price && $package->old_price > $package->price)
+                            @php
+                                $currentPrice = match($initialCycle) {
+                                    'monthly' => $package->price,
+                                    'yearly'  => $package->yearly_price ?: ($package->price * 12),
+                                    default   => $package->term_price ?: ($package->price * 5),
+                                };
+                                $oldPriceValue = match($initialCycle) {
+                                    'monthly' => $package->old_price,
+                                    'yearly'  => $package->old_price ? ($package->old_price * 12) : null,
+                                    default   => $package->old_price ? ($package->old_price * 5) : null,
+                                };
+                                $cycleText = match($initialCycle) {
+                                    'monthly' => __('center::subscription.billing_month_cycle'),
+                                    'yearly'  => __('center::subscription.billing_year_cycle'),
+                                    default   => __('center::subscription.billing_term_cycle'),
+                                };
+                            @endphp
+                            @if($oldPriceValue && $oldPriceValue > $currentPrice)
                                 <div class="text-muted small plan-old-price" style="text-decoration: line-through; opacity: 0.6;" 
                                      data-monthly="{{ $package->old_price }}" 
                                      data-term="{{ $package->old_price * 5 }}"
                                      data-yearly="{{ $package->old_price * 12 }}">
-                                    {{ number_format((float)$package->old_price, 0) }} <span class="plan-currency">{{ __('center::subscription.currency') }}</span>
+                                    {{ number_format((float)$oldPriceValue, 0) }} <span class="plan-currency">{{ __('center::subscription.currency') }}</span>
                                 </div>
                             @endif
                             <div class="fw-black text-primary plan-price-display" style="font-size:1.6rem; line-height:1;" 
                                  data-monthly="{{ $package->price }}" 
                                  data-term="{{ $package->term_price ?: ($package->price * 5) }}"
                                  data-yearly="{{ $package->yearly_price ?: ($package->price * 12) }}">
-                                {{ number_format((float)($package->term_price ?: ($package->price * 5)), 0) }}
+                                {{ number_format((float)$currentPrice, 0) }}
                             </div>
-                            <small class="text-muted"><span class="plan-currency">{{ __('center::subscription.currency') }}</span> / <span class="plan-cycle-text">{{ __('center::subscription.billing_term_cycle') }}</span></small>
+                            <small class="text-muted"><span class="plan-currency">{{ __('center::subscription.currency') }}</span> / <span class="plan-cycle-text">{{ $cycleText }}</span></small>
                             @if($package->old_price && $package->old_price > $package->price)
-                                @php
-                                    $discountPercent = round((($package->old_price - $package->price) / $package->old_price) * 100);
-                                @endphp
                                 <div class="mt-1">
                                     <span class="badge bg-warning text-white rounded-pill px-2 py-1 shadow-sm" style="font-size: 0.7rem; background-color: #f59e0b !important;">
                                         <i class="fas fa-tag me-1"></i> {{ __('center::subscription.save_badge') }}
@@ -419,7 +437,7 @@
                                 <i class="fas fa-check me-1"></i> {{ __('center::subscription.current_plan') }}
                             </button>
                         @elseif($package->stripe_price_id)
-                            <a href="{{ route('center.subscription.checkout', ['tenant' => $tenant->domain, 'package' => $package->id]) }}?cycle=monthly"
+                            <a href="{{ route('center.subscription.checkout', ['tenant' => $tenant->domain, 'package' => $package->id]) }}?cycle={{ $initialCycle }}&payment_gateway=paymob"
                                class="btn w-100 rounded-pill fw-bold plan-checkout-btn {{ $isFeatured ? 'btn-primary shadow-sm' : 'btn-outline-primary' }}"
                                data-base-url="{{ route('center.subscription.checkout', ['tenant' => $tenant->domain, 'package' => $package->id]) }}"
                                data-name="{{ addslashes($package->name) }}"
@@ -531,6 +549,23 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
+
+    // Initialize pricing and links on load
+    const checkedRadio = document.querySelector('input[name="billing_cycle"]:checked');
+    if (checkedRadio) {
+        updatePricing(checkedRadio.value);
+    }
+    
+    // Sync gateway if different from default
+    const checkedGateway = document.querySelector('input[name="payment_gateway"]:checked');
+    if (checkedGateway && checkedGateway.value !== 'paymob') {
+        const gateway = checkedGateway.value;
+        checkoutBtns.forEach(btn => {
+            let url = new URL(btn.href);
+            url.searchParams.set('payment_gateway', gateway);
+            btn.href = url.toString();
+        });
+    }
 });
 </script>
 @endpush
