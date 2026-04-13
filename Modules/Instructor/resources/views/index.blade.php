@@ -263,7 +263,8 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Interactive Tour Setup
-    if (!localStorage.getItem('instructor_tour_done_v1')) {
+    const tourKey = 'instructor_tour_v2_{{ auth()->id() }}';
+    if (!localStorage.getItem(tourKey)) {
         const driver = window.driver.js.driver;
         const driverObj = driver({
             showProgress: true,
@@ -304,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function() {
             ],
             onDestroyStarted: () => {
                 if (!driverObj.hasNextStep() || confirm("{{ __('instructor::dashboard.tour.skip_confirm') }}")) {
-                    localStorage.setItem('instructor_tour_done_v1', 'true');
+                    localStorage.setItem(tourKey, 'true');
                     driverObj.destroy();
                 }
             },
