@@ -1110,7 +1110,7 @@ class InstructorController extends Controller
 
         $tenant->save();
 
-        return redirect()->route('instructor.settings')->with('success', 'تم تحديث البيانات العامة للمركز بنجاح.');
+        return redirect()->route('instructor.settings')->with('success', __('instructor::settings.update_success'));
     }
 
     /**
