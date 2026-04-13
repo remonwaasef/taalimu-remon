@@ -39,4 +39,6 @@ return [
     'available' => 'Available',
     'not_available' => 'Not Available',
     'default_currency' => 'Default Currency',
+    'update_success' => 'Center general data updated successfully.',
+    'subtitle' => 'Manage your account and subscription',
 ];

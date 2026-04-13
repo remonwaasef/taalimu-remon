@@ -39,4 +39,6 @@ return [
     'available' => 'متاح',
     'not_available' => 'غير متاح',
     'default_currency' => 'العملة الافتراضية',
+    'update_success' => 'تم تحديث البيانات العامة للمركز بنجاح.',
+    'subtitle' => 'إدارة حسابك واشتراكك',
 ];

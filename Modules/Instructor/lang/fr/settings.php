@@ -39,4 +39,6 @@ return [
     'available' => 'Disponible',
     'not_available' => 'Pas disponible',
     'default_currency' => 'Devise par défaut',
+    'update_success' => 'Les données générales du centre ont été mises à jour avec succès.',
+    'subtitle' => 'Gérez votre compte et votre abonnement',
 ];
