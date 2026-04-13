@@ -57,4 +57,5 @@ return [
     'back' => 'Cancel',
     'select_day' => 'Select day...',
     'currency' => 'EGP',
+    'max_students' => 'Max Students',
 ];
