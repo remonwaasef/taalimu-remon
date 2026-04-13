@@ -16,6 +16,7 @@ class Schedule extends Model
         'tenant_id',
         'course_id',
         'classroom_id',
+        'location',
         'instructor_id',
         'day_of_week',
         'start_time',

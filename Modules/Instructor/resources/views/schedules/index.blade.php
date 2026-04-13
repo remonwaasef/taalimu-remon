@@ -102,7 +102,7 @@
                                                     @elseif($schedule->location)
                                                         {{ $schedule->location }}
                                                     @else
-                                                        {{ __('instructor::schedules.hall_not_specified') }}
+                                                        {{ app('tenant')->name ?? __('instructor::schedules.hall_not_specified') }}
                                                     @endif
                                                 </span>
                                             </div>
