@@ -224,9 +224,9 @@
                     <i class="fas fa-layer-group text-primary" style="font-size: 3.5rem; opacity: 0.8;"></i>
                 </div>
             </div>
-            <h4 class="fw-bold text-dark mb-2">{{ __('instructor::dashboard.no_groups') ?? 'لا يوجد مجموعات حالياً' }}</h4>
+            <h4 class="fw-bold text-dark mb-2">{{ __('instructor::dashboard.no_groups') }}</h4>
             <p class="text-muted mb-4 mx-auto" style="max-width: 400px;">
-                {{ __('instructor::dashboard.no_groups_desc') ?? 'يبدو أنك لم تقم بإنشاء أي مجموعة دراسية حتى الآن. ابدأ الآن بإنشاء أول مجموعة لك لتتمكن من دعوة الطلاب وإدارة حضورهم.' }}
+                {{ __('instructor::dashboard.no_groups_desc') }}
             </p>
             <a href="{{ route('instructor.groups.create') }}" class="btn btn-primary px-4 py-2 rounded-4 hover-lift fw-bold shadow-sm">
                 <i class="fas fa-plus me-2"></i> {{ __('instructor::dashboard.create_new_group') }}

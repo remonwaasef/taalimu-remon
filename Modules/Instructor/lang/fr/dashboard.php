@@ -48,4 +48,7 @@ return [
         'skip_confirm' => 'Voulez-vous vraiment ignorer la visite guidée ?',
         'progress' => ':current sur :total',
     ],
+    'online_classes' => 'Cours en ligne',
+    'no_groups' => 'Aucun groupe actuellement',
+    'no_groups_desc' => 'Il semble que vous n\'avez pas encore créé de groupes d\'étude. Commencez dès maintenant en créant votre premier groupe pour inviter des étudiants et gérer leur présence.',
 ];
