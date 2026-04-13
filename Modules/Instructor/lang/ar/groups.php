@@ -54,4 +54,5 @@ return [
     'update_group_btn' => 'حفظ التعديلات',
     'back' => 'إلغاء',
     'select_day' => 'اختر اليوم...',
+    'currency' => 'ج.م',
 ];
