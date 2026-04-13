@@ -17,13 +17,17 @@
     }
     .hover-lift {
         transition: all 0.2s ease;
-        border: 1px solid #f1f5f9 !important;
-        background: #ffffff !important;
         box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
     }
     .hover-lift:hover {
         transform: translateY(-2px);
         box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.1);
+    }
+    .action-card {
+        background: #ffffff !important;
+        border: 1px solid #f1f5f9 !important;
+    }
+    .action-card:hover {
         border-color: rgba(16, 185, 129, 0.2) !important;
     }
     .hover-lift i {
@@ -111,7 +115,7 @@
             <div class="stats-card p-4 h-100">
                 <h5 class="fw-bold mb-4">{{ __('instructor::dashboard.quick_links') }}</h5>
                 <div class="d-grid gap-3">
-                    <a href="{{ route('instructor.students.create') }}" class="btn btn-light bg-light-subtle text-start p-3 rounded-4 border-0 hover-lift">
+                    <a href="{{ route('instructor.students.create') }}" class="btn btn-light action-card text-start p-3 rounded-4 border-0 hover-lift">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-plus-circle text-primary me-3 fs-5"></i>
                             <div>
@@ -119,7 +123,7 @@
                             </div>
                         </div>
                     </a>
-                    <a href="{{ route('instructor.groups.create') }}" class="btn btn-light bg-light-subtle text-start p-3 rounded-4 border-0 hover-lift">
+                    <a href="{{ route('instructor.groups.create') }}" class="btn btn-light action-card text-start p-3 rounded-4 border-0 hover-lift">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-folder-plus text-success me-3 fs-5"></i>
                             <div>
@@ -127,7 +131,7 @@
                             </div>
                         </div>
                     </a>
-                    <a href="{{ route('instructor.attendance.index') }}" class="btn btn-light bg-light-subtle text-start p-3 rounded-4 border-0 hover-lift">
+                    <a href="{{ route('instructor.attendance.index') }}" class="btn btn-light action-card text-start p-3 rounded-4 border-0 hover-lift">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-qrcode text-info me-3 fs-5"></i>
                             <div>
