@@ -40,4 +40,5 @@ return array (
   'notes_link' => 'Cet horaire sera automatiquement lié à la section de présence pour faciliter le suivi des étudiants.',
   'location' => 'Lieu de la session / Centre',
   'location_placeholder' => 'ex: Centre Al-Noor, Domicile de l\'étudiant, En ligne...',
+  'hall_not_specified' => 'Salle non spécifiée',
 );

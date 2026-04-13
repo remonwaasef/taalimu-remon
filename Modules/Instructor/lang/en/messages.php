@@ -36,4 +36,11 @@ return [
     'error_saving_group' => 'Error attempting to save group: :message',
     'quick_collection_note' => 'Quick collection from instructor interface',
     'copy_suffix' => ' - copy',
+    'confirm_delete' => 'Are you sure you want to delete?',
+    'unauthorized_course' => 'You cannot create a session for a group that does not belong to you.',
+    'instructor_conflict' => 'Schedule conflict! You have another session registered at the same time.',
+    'hall_conflict' => 'Schedule conflict! The selected hall is already booked for another group at the same time.',
+    'schedule_created' => 'Session schedule created successfully.',
+    'schedule_updated' => 'Session schedule updated successfully.',
+    'schedule_deleted' => 'Session schedule deleted successfully.',
 ];

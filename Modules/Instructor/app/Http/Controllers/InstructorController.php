@@ -809,7 +809,7 @@ class InstructorController extends Controller
     {
         $instructor = $this->resolveInstructor();
         if (!$instructor) {
-            return back()->with('error', 'يجب أن تكون مسجلاً كمعلم.');
+            return back()->with('error', __('instructor::messages.not_instructor_error'));
         }
 
         $validated = $request->validate([
@@ -827,7 +827,7 @@ class InstructorController extends Controller
         // Verify course belongs to instructor
         $course = Course::findOrFail($validated['course_id']);
         if ($course->instructor_id !== $instructor->id) {
-            return back()->withInput()->with('error', 'لا يمكنك إنشاء حصة لمجموعة لا تخصك.');
+            return back()->withInput()->with('error', __('instructor::messages.unauthorized_course'));
         }
 
         // Conflict Detection
@@ -838,21 +838,21 @@ class InstructorController extends Controller
         // Check Instructor Conflict
         $instructorConflict = clone $conflictQuery;
         if ($instructorConflict->where('instructor_id', $instructor->id)->exists()) {
-            return back()->withInput()->with('error', 'يوجد تعارض في المواعيد! لديك حصة أخرى مسجلة في نفس هذا الوقت.');
+            return back()->withInput()->with('error', __('instructor::messages.instructor_conflict'));
         }
 
         // Check Classroom Conflict (if classroom is selected)
         if (!empty($validated['classroom_id'])) {
             $classroomConflict = clone $conflictQuery;
             if ($classroomConflict->where('classroom_id', $validated['classroom_id'])->exists()) {
-                return back()->withInput()->with('error', 'يوجد تعارض في المواعيد! القاعة المختارة محجوزة بالفعل لمجموعة أخرى في نفس الوقت.');
+                return back()->withInput()->with('error', __('instructor::messages.hall_conflict'));
             }
         }
 
         Schedule::create($validated);
 
         return redirect()->route('instructor.schedules.index')
-            ->with('success', 'تم إنشاء موعد الحصة بنجاح.');
+            ->with('success', __('instructor::messages.schedule_created'));
     }
 
     public function editSchedule(Schedule $schedule)
@@ -896,21 +896,21 @@ class InstructorController extends Controller
         // Check Instructor Conflict
         $instructorConflict = clone $conflictQuery;
         if ($instructorConflict->where('instructor_id', $instructor->id)->exists()) {
-            return back()->withInput()->with('error', 'يوجد تعارض في المواعيد! لديك حصة أخرى مسجلة في نفس هذا الوقت.');
+            return back()->withInput()->with('error', __('instructor::messages.instructor_conflict'));
         }
 
         // Check Classroom Conflict (if classroom is selected)
         if (!empty($validated['classroom_id'])) {
             $classroomConflict = clone $conflictQuery;
             if ($classroomConflict->where('classroom_id', $validated['classroom_id'])->exists()) {
-                return back()->withInput()->with('error', 'يوجد تعارض في المواعيد! القاعة المختارة محجوزة بالفعل لمجموعة أخرى في نفس الوقت.');
+                return back()->withInput()->with('error', __('instructor::messages.hall_conflict'));
             }
         }
 
         $schedule->update($validated);
 
         return redirect()->route('instructor.schedules.index')
-            ->with('success', 'تم تعديل موعد الحصة بنجاح.');
+            ->with('success', __('instructor::messages.schedule_updated'));
     }
 
     public function destroySchedule(Schedule $schedule)
@@ -923,7 +923,7 @@ class InstructorController extends Controller
         $schedule->delete();
 
         return redirect()->route('instructor.schedules.index')
-            ->with('success', 'تم حذف موعد الحصة بنجاح.');
+            ->with('success', __('instructor::messages.schedule_deleted'));
     }
 
     // ─── Attendance ───
