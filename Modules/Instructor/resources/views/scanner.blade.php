@@ -87,7 +87,7 @@
             return;
         }
 
-        fetch(`{{ url('instructor/scan') }}/${courseId}`, {
+        fetch(`{{ route('instructor.scan', $course->id) }}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
