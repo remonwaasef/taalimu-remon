@@ -121,6 +121,7 @@
     @endif
 </div>
 
+@push('modals')
 <!-- Collection Modal -->
 <div class="modal fade" id="collectModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
@@ -142,15 +143,15 @@
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-muted">{{ __('instructor::billing.amount_received') }}</label>
                         <div class="input-group">
-                            <input type="number" name="amount" id="modal_amount" class="form-control bg-light border-0 py-2" required>
-                            <span class="input-group-text bg-light border-0">{{ app('tenant')->settings['currency'] ?? 'EGP' }}</span>
+                            <input type="number" name="amount" id="modal_amount" class="form-control bg-white border py-2" required>
+                            <span class="input-group-text bg-white border">{{ app('tenant')->settings['currency'] ?? 'EGP' }}</span>
                         </div>
                         <div class="form-text text-danger" id="modal_balance_hint"></div>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-muted">{{ __('instructor::billing.notes') }}</label>
-                        <textarea name="notes" class="form-control bg-light border-0" rows="3" placeholder="{{ __('instructor::billing.notes_placeholder') }}"></textarea>
+                        <textarea name="notes" class="form-control bg-white border" rows="3" placeholder="{{ __('instructor::billing.notes_placeholder') }}"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer border-0 pt-0 p-4">
@@ -161,6 +162,7 @@
         </div>
     </div>
 </div>
+@endpush
 
 <style>
     .bg-danger-soft { background-color: rgba(220, 53, 69, 0.1); }
