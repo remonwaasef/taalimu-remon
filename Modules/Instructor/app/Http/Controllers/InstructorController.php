@@ -980,6 +980,68 @@ class InstructorController extends Controller
         return view('instructor::attendance.show', compact('schedule', 'attendances'));
     }
 
+    public function storeAttendance(Request $request)
+    {
+        $validated = $request->validate([
+            'student_id' => 'required|integer',
+            'course_id' => 'required|integer',
+            'schedule_id' => 'required|integer',
+            'status' => 'required|in:present,late,absent',
+            'session_date' => 'required|date',
+        ]);
+
+        $instructor = $this->resolveInstructor();
+        $schedule = Schedule::findOrFail($validated['schedule_id']);
+        
+        if ($instructor && $schedule->instructor_id !== $instructor->id) {
+            abort(403);
+        }
+
+        $attendanceService = app(AttendanceService::class);
+        $attendanceService->markAttendance($validated);
+
+        return back()->with('success', __('instructor::messages.saved'));
+    }
+
+    public function bulkAbsent(Schedule $schedule)
+    {
+        $instructor = $this->resolveInstructor();
+        if ($instructor && $schedule->instructor_id !== $instructor->id) {
+            abort(403);
+        }
+
+        $enrolledIds = $schedule->course->enrollments()
+            ->with('user.student')
+            ->get()
+            ->pluck('user.student.id')
+            ->filter();
+
+        $attendedIds = Attendance::where('schedule_id', $schedule->id)
+            ->whereDate('session_date', today())
+            ->pluck('student_id')
+            ->toArray();
+
+        $absentIds = $enrolledIds->diff($attendedIds);
+
+        foreach ($absentIds as $studentId) {
+            Attendance::updateOrCreate(
+                [
+                    'student_id' => $studentId,
+                    'schedule_id' => $schedule->id,
+                    'session_date' => today(),
+                ],
+                [
+                    'tenant_id' => app('tenant')->id,
+                    'course_id' => $schedule->course_id,
+                    'status' => 'absent',
+                    'check_in_time' => now(),
+                ]
+            );
+        }
+
+        return back()->with('success', __('instructor::messages.saved'));
+    }
+
     /**
      * Helper to resolve the instructor profile for the current user,
      * creating it if it doesn't exist for authorized users.

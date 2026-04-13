@@ -65,6 +65,8 @@ $instructorRoutes = function () {
         // Instructor Attendance
         Route::get('/attendance', [InstructorController::class, 'attendance'])->name('instructor.attendance.index');
         Route::get('/attendance/schedule/{schedule}', [InstructorController::class, 'attendanceShow'])->name('instructor.attendance.show');
+        Route::post('/attendance/store', [InstructorController::class, 'storeAttendance'])->name('instructor.attendance.store');
+        Route::post('/attendance/bulk-absent/{schedule}', [InstructorController::class, 'bulkAbsent'])->name('instructor.attendance.bulkAbsent');
 
     });
 
