@@ -38,4 +38,5 @@ return [
     'unlimited' => 'غير محدود',
     'available' => 'متاح',
     'not_available' => 'غير متاح',
+    'default_currency' => 'العملة الافتراضية',
 ];

@@ -38,4 +38,5 @@ return [
     'unlimited' => 'Illimité',
     'available' => 'Disponible',
     'not_available' => 'Pas disponible',
+    'default_currency' => 'Devise par défaut',
 ];
