@@ -314,5 +314,6 @@
             })
         });
     </script>
+    @stack('modals')
 </body>
 </html>
