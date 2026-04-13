@@ -93,6 +93,14 @@
             background-color: var(--bs-body-bg);
             color: var(--bs-body-color);
         }
+
+        /* Fix text cursor and typing direction for Arabic inputs */
+        [dir="rtl"] .form-control, 
+        [dir="rtl"] .form-select, 
+        [dir="rtl"] textarea {
+            direction: rtl !important;
+            text-align: right !important;
+        }
         
         /* Sidebar Luxury Design */
         .sidebar {
