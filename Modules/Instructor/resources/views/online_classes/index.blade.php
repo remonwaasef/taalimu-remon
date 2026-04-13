@@ -117,7 +117,7 @@
             
             <div id="noLessonsResults" class="text-center py-5 d-none">
                 <i class="fas fa-search-minus display-4 text-light mb-3"></i>
-                <p class="text-muted">لا توجد نتائج مطابقة</p>
+                <p class="text-muted">{{ __('instructor::online_classes.no_results') }}</p>
             </div>
         </div>
     </div>

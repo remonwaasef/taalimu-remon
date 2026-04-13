@@ -70,7 +70,7 @@
                                         <span class="badge bg-light text-muted border rounded-pill fw-normal">{{ __('instructor::groups.no_schedules') }}</span>
                                     @endforelse
                                     <a href="{{ route('instructor.schedules.create', ['course_id' => $course->id]) }}" class="badge border rounded-pill fw-normal text-decoration-none ms-1" style="color: var(--primary-color) !important; border-color: var(--primary-color) !important; border-style: dashed !important; background: transparent; transition: all 0.2s;" onmouseover="this.style.background='rgba(16,185,129,0.1)'" onmouseout="this.style.background='transparent'">
-                                        <i class="fas fa-plus fa-sm"></i> تخصيص موعد
+                                        <i class="fas fa-plus fa-sm"></i> {{ __('instructor::groups.add_schedule') }}
                                     </a>
                                 </div>
                             </td>
@@ -137,7 +137,7 @@
                                     </div>
                                 </div>
                                 <h6 class="text-muted fw-bold">{{ __('instructor::groups.no_groups') }}</h6>
-                                <p class="text-muted small">ابدأ بإنشاء أول مجموعة تعليمية لمتابعة طلابك.</p>
+                                <p class="text-muted small">{{ __('instructor::groups.no_groups_hint') }}</p>
                             </td>
                         </tr>
                         @endforelse

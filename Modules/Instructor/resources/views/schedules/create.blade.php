@@ -98,11 +98,11 @@
         <div class="col-md-4">
             <div class="card border-0 shadow-sm rounded-4 text-white" style="background: var(--primary-gradient);">
                 <div class="card-body p-4">
-                    <h5 class="fw-bold mb-3"><i class="bi bi-info-circle me-2"></i>ملاحظات</h5>
+                    <h5 class="fw-bold mb-3"><i class="bi bi-info-circle me-2"></i>{{ __('instructor::schedules.notes') }}</h5>
                     <ul class="list-unstyled mb-0 lh-lg">
-                        <li class="mb-2 small">✓ سيقوم النظام تلقائياً بمنع أي تعارض في حجز نفس القاعة في نفس الوقت.</li>
-                        <li class="mb-2 small">✓ سيتم التأكد أيضاً من تفرغك في هذا الوقت قبل الحفظ.</li>
-                        <li class="small">✓ هذا الجدول سيرتبط تلقائياً بقسم الحضور والغياب لتسهيل تحضير الطلاب.</li>
+                        <li class="mb-2 small">✓ {{ __('instructor::schedules.notes_conflict') }}</li>
+                        <li class="mb-2 small">✓ {{ __('instructor::schedules.notes_vacancy') }}</li>
+                        <li class="small">✓ {{ __('instructor::schedules.notes_link') }}</li>
                     </ul>
                 </div>
             </div>

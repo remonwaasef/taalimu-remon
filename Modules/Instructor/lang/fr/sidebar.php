@@ -12,4 +12,5 @@ return [
     'welcome' => 'Bienvenue',
     'instructor' => 'Instructeur',
     'panel_title' => 'Panneau Instructeur',
+    'online_classes' => 'Cours en ligne',
 ];

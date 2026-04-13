@@ -34,4 +34,8 @@ return array (
   'capacity' => 'Capacity',
   'no_matching_sessions' => 'No sessions matching your search.',
   'total_sessions' => 'Total Sessions',
+  'notes' => 'Notes',
+  'notes_conflict' => 'The system will automatically prevent any conflicts in booking the same hall at the same time.',
+  'notes_vacancy' => 'It will also verify your availability during this time before saving.',
+  'notes_link' => 'This schedule will automatically link to the attendance section for easier student tracking.',
 );

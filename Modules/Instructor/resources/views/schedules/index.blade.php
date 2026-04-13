@@ -31,13 +31,13 @@
 
     @php
         $daysOfWeek = [
-            0 => ['name' => 'الأحد', 'color' => 'primary'],
-            1 => ['name' => 'الإثنين', 'color' => 'success'],
-            2 => ['name' => 'الثلاثاء', 'color' => 'info'],
-            3 => ['name' => 'الأربعاء', 'color' => 'warning'],
-            4 => ['name' => 'الخميس', 'color' => 'danger'],
-            5 => ['name' => 'الجمعة', 'color' => 'secondary'],
-            6 => ['name' => 'السبت', 'color' => 'dark'],
+            0 => ['name' => __('instructor::schedules.days.0'), 'color' => 'primary'],
+            1 => ['name' => __('instructor::schedules.days.1'), 'color' => 'success'],
+            2 => ['name' => __('instructor::schedules.days.2'), 'color' => 'info'],
+            3 => ['name' => __('instructor::schedules.days.3'), 'color' => 'warning'],
+            4 => ['name' => __('instructor::schedules.days.4'), 'color' => 'danger'],
+            5 => ['name' => __('instructor::schedules.days.5'), 'color' => 'secondary'],
+            6 => ['name' => __('instructor::schedules.days.6'), 'color' => 'dark'],
         ];
 
         $groupedSchedules = $schedules->groupBy('day_of_week')->sortKeys();

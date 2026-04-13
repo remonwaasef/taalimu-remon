@@ -41,4 +41,5 @@ return [
     'edit_online_class' => 'تعديل درس أونلاين',
     'update_lesson' => 'تحديث بيانات الدرس',
     'optional' => '(اختياري)',
+    'no_results' => 'لا توجد نتائج مطابقة',
 ];

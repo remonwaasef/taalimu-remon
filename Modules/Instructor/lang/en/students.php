@@ -40,6 +40,8 @@ return array (
   'confirm_delete' => 'Are you sure you want to permanently delete this student?',
   'no_students' => 'No students currently registered',
   'no_results' => 'No results matching your search.',
+  'no_students_desc' => 'You can add students manually or invite them to register via group links.',
+  'whatsapp_parent' => 'Message Parent',
   'qr_modal_title' => 'QR Code & Portal',
   'portal_link' => 'Parent/Student Portal Link',
   'open_portal' => 'Open Portal',
