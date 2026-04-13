@@ -26,10 +26,17 @@ class SiteSetting extends Model
      */
     public static function get($key, $default = null)
     {
-        return \Illuminate\Support\Facades\Cache::rememberForever("setting_{$key}", function () use ($key, $default) {
+        try {
+            return \Illuminate\Support\Facades\Cache::rememberForever("setting_{$key}", function () use ($key, $default) {
+                $setting = self::where('key', $key)->first();
+                return $setting ? $setting->value : $default;
+            });
+        } catch (\Throwable $e) {
+            // Fallback to DB if cache fails (e.g., file permissions or Redis down)
+            \Illuminate\Support\Facades\Log::warning("Cache failure in SiteSetting::get({$key}): " . $e->getMessage());
             $setting = self::where('key', $key)->first();
             return $setting ? $setting->value : $default;
-        });
+        }
     }
 
     /**
