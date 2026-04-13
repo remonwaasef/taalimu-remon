@@ -54,4 +54,5 @@ return [
     'update_group_btn' => 'Enregistrer les Modifications',
     'back' => 'Annuler',
     'select_day' => 'Sélectionnez le jour...',
+    'currency' => 'EGP',
 ];

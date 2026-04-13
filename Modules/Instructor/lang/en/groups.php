@@ -54,4 +54,5 @@ return [
     'update_group_btn' => 'Save Changes',
     'back' => 'Cancel',
     'select_day' => 'Select day...',
+    'currency' => 'EGP',
 ];
