@@ -1042,51 +1042,44 @@ class InstructorController extends Controller
         return back()->with('success', __('instructor::messages.saved'));
     }
 
-    public function reports()
+    public function studentReports()
     {
         $instructor = $this->resolveInstructor();
         $courseIds = $instructor ? $instructor->courses->pluck('id') : Course::pluck('id');
 
-        // Revenue Chart Data (Last 6 Months)
-        $revenueData = [];
-        for ($i = 5; $i >= 0; $i--) {
-            $month = now()->subMonths($i);
-            $revenueData[] = [
-                'month' => $month->translatedFormat('F'),
-                'amount' => Sale::whereHas('items', function($q) use ($courseIds) {
-                        $q->where('item_type', Course::class)->whereIn('item_id', $courseIds);
-                    })
-                    ->whereMonth('created_at', $month->month)
-                    ->whereYear('created_at', $month->year)
-                    ->sum('paid_amount')
-            ];
+        $students = Student::whereHas('enrollments', function($q) use ($courseIds) {
+            $q->whereIn('course_id', $courseIds);
+        })->with(['enrollments' => function($q) use ($courseIds) {
+            $q->whereIn('course_id', $courseIds)->with('course');
+        }])->get();
+
+        foreach ($students as $student) {
+            $totalSessions = $student->enrollments->sum('course.sessions_count');
+            $attendedSessions = Attendance::where('student_id', $student->id)
+                ->whereIn('course_id', $courseIds)
+                ->where('status', 'present')
+                ->count();
+            
+            $student->attendance_percentage = $totalSessions > 0 ? round(($attendedSessions / $totalSessions) * 100) : 0;
+            $student->attended_count = $attendedSessions;
+            $student->total_sessions = $totalSessions;
         }
 
-        // Attendance Trends (Last 7 Days)
-        $attendanceTrends = [];
-        for ($i = 6; $i >= 0; $i--) {
-            $date = now()->subDays($i);
-            $attendanceTrends[] = [
-                'date' => $date->translatedFormat('D'),
-                'present' => Attendance::whereIn('course_id', $courseIds)
-                    ->whereDate('session_date', $date)
-                    ->where('status', 'present')
-                    ->count(),
-                'absent' => Attendance::whereIn('course_id', $courseIds)
-                    ->whereDate('session_date', $date)
-                    ->where('status', 'absent')
-                    ->count()
-            ];
-        }
+        return view('instructor::reports.students', compact('students'));
+    }
 
-        // Student Enrollment by Course
-        $courseStats = Course::whereIn('id', $courseIds)
-            ->withCount('enrollments')
-            ->orderBy('enrollments_count', 'desc')
-            ->take(5)
-            ->get();
+    public function paymentReports()
+    {
+        $instructor = $this->resolveInstructor();
+        $courseIds = $instructor ? $instructor->courses->pluck('id') : Course::pluck('id');
 
-        return view('instructor::reports', compact('revenueData', 'attendanceTrends', 'courseStats'));
+        $payments = Sale::whereHas('items', function($q) use ($courseIds) {
+            $q->where('item_type', Course::class)->whereIn('item_id', $courseIds);
+        })->with(['student', 'items' => function($q) use ($courseIds) {
+            $q->where('item_type', Course::class)->whereIn('item_id', $courseIds);
+        }])->latest()->get();
+
+        return view('instructor::reports.payments', compact('payments'));
     }
 
     /**

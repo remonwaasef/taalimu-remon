@@ -70,10 +70,25 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('instructor.reports') ? 'active' : '' }}" href="{{ route('instructor.reports') }}">
+                    <a class="nav-link {{ request()->routeIs('instructor.reports.*') ? 'active' : '' }}" data-bs-toggle="collapse" href="#sidebar-reports" role="button" aria-expanded="{{ request()->routeIs('instructor.reports.*') ? 'true' : 'false' }}" aria-controls="sidebar-reports">
                         <i class="icon"><i class="fas fa-chart-line"></i></i>
                         <span class="item-name">{{ __('instructor::sidebar.reports') }}</span>
+                        <i class="right-icon"><i class="fas fa-chevron-right"></i></i>
                     </a>
+                    <ul class="sub-nav collapse {{ request()->routeIs('instructor.reports.*') ? 'show' : '' }}" id="sidebar-reports" data-bs-parent="#sidebar-menu">
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('instructor.reports.students') ? 'active' : '' }}" href="{{ route('instructor.reports.students') }}">
+                                <i class="icon"><i class="fas fa-user-graduate"></i></i>
+                                <span class="item-name">{{ __('instructor::reports.student_reports') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('instructor.reports.payments') ? 'active' : '' }}" href="{{ route('instructor.reports.payments') }}">
+                                <i class="icon"><i class="fas fa-wallet"></i></i>
+                                <span class="item-name">{{ __('instructor::reports.payment_reports') }}</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="nav-item">
