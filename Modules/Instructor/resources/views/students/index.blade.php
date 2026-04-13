@@ -130,7 +130,7 @@
         </div>
     </div>
 
-    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="card border-0 shadow-sm rounded-4">
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0" id="studentsTable">
@@ -255,10 +255,10 @@
                                     
                                     {{-- Management Dropdown --}}
                                     <div class="dropdown d-inline-block">
-                                        <button class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-dark shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-dark shadow-sm" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v fa-lg"></i>
                                         </button>
-                                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 overflow-hidden">
+                                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4">
                                             <li>
                                                 <button type="button" class="dropdown-item py-2 show-qr-btn" data-name="{{ $student->name }}" data-qr="{{ $qrUrl }}" data-portal="{{ $portalUrl }}">
                                                     <i class="fas fa-qrcode me-2 text-primary"></i> {{ __('instructor::students.qr_and_portal') }}
