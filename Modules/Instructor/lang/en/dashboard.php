@@ -49,4 +49,6 @@ return [
         'progress' => ':current of :total',
     ],
     'online_classes' => 'Online Classes',
+    'no_groups' => 'No Groups Currently',
+    'no_groups_desc' => 'It seems you haven\'t created any study groups yet. Start now by creating your first group to invite students and manage their attendance.',
 ];
