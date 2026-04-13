@@ -40,6 +40,8 @@ return array (
   'confirm_delete' => 'Êtes-vous sûr de vouloir supprimer définitivement cet étudiant ?',
   'no_students' => 'Aucun étudiant inscrit actuellement',
   'no_results' => 'Aucun résultat ne correspond à votre recherche.',
+  'no_students_desc' => 'Vous pouvez ajouter des étudiants manuellement ou les inviter à s\'inscrire via des liens de groupe.',
+  'whatsapp_parent' => 'Contacter le parent',
   'qr_modal_title' => 'Code QR & Portail',
   'portal_link' => 'Lien du Portail Parent/Étudiant',
   'open_portal' => 'Ouvrir le Portail',

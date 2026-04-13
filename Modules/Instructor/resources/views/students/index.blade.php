@@ -249,7 +249,7 @@
                                         $qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" . urlencode($student->user->qr_identifier ?? '');
                                         $portalUrl = route('student.portal', ['identifier' => $student->user->qr_identifier ?? '']);
                                     @endphp
-                                    <a href="https://api.whatsapp.com/send?phone={{ $phoneForWa }}" target="_blank" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-success shadow-sm" title="مراسلة ولي الأمر">
+                                    <a href="https://api.whatsapp.com/send?phone={{ $phoneForWa }}" target="_blank" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-success shadow-sm" title="{{ __('instructor::students.whatsapp_parent') }}">
                                         <i class="fab fa-whatsapp fa-lg"></i>
                                     </a>
                                     
@@ -315,7 +315,7 @@
                                     </div>
                                 </div>
                                 <h6 class="text-muted fw-bold">{{ __('instructor::students.no_students') }}</h6>
-                                <p class="text-muted small">يمكنك إضافة طلاب يدوياً أو دعوة الطلاب للتسجيل عبر روابط المجموعات.</p>
+                                <p class="text-muted small">{{ __('instructor::students.no_students_desc') }}</p>
                             </td>
                         </tr>
                         @endforelse

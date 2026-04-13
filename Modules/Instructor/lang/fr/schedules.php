@@ -34,4 +34,8 @@ return array (
   'capacity' => 'Capacité',
   'no_matching_sessions' => 'Aucune session ne correspond à votre recherche.',
   'total_sessions' => 'Total des sessions',
+  'notes' => 'Remarques',
+  'notes_conflict' => 'Le système empêchera automatiquement tout conflit lors de la réservation de la même salle au même moment.',
+  'notes_vacancy' => 'Il vérifiera également votre disponibilité pendant cette période avant de sauvegarder.',
+  'notes_link' => 'Cet horaire sera automatiquement lié à la section de présence pour faciliter le suivi des étudiants.',
 );
