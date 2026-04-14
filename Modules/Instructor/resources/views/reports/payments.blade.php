@@ -11,12 +11,12 @@
     <div class="col-md-4">
         <div class="card border-0 shadow-sm rounded-4">
             <div class="card-body d-flex align-items-center gap-3 py-3 px-4">
-                <div class="bg-primary bg-opacity-10 p-3 rounded-3">
-                    <i class="fas fa-file-invoice-dollar text-primary fs-4"></i>
+                <div class="bg-primary bg-opacity-10 p-3 rounded-3 text-center" style="width: 60px;">
+                    <i class="fas fa-university text-primary fs-4"></i>
                 </div>
                 <div>
                     <small class="text-muted fw-bold text-uppercase">{{ __('instructor::reports.total_due_label') }}</small>
-                    <h4 class="fw-bold mb-0">{{ number_format($totalDue) }} <small class="text-muted fs-6">{{ app('tenant')->settings['currency'] ?? 'EGP' }}</small></h4>
+                    <h4 class="fw-bold mb-0 text-dark">{{ number_format($totalDue) }} <small class="text-muted fs-6">{{ app('tenant')->settings['currency'] ?? 'EGP' }}</small></h4>
                 </div>
             </div>
         </div>
@@ -56,27 +56,31 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="bg-light">
                     <tr>
-                        <th class="px-4 py-3 border-0">#</th>
-                        <th class="border-0">{{ __('instructor::reports.student') }}</th>
-                        <th class="border-0">{{ __('instructor::reports.enrolled_courses') }}</th>
-                        <th class="border-0">{{ __('instructor::reports.total_due_label') }}</th>
-                        <th class="border-0">{{ __('instructor::reports.total_collected') }}</th>
-                        <th class="border-0">{{ __('instructor::reports.remaining') }}</th>
-                        <th class="px-4 border-0">{{ __('instructor::reports.status') }}</th>
+                        <th class="px-4 py-3 border-0 text-dark fw-bold" style="width: 50px;">#</th>
+                        <th class="border-0 text-dark fw-bold">{{ __('instructor::reports.student') }}</th>
+                        <th class="border-0 text-dark fw-bold">{{ __('instructor::reports.enrolled_courses') }}</th>
+                        <th class="border-0 text-dark fw-bold">{{ __('instructor::reports.total_due_label') }}</th>
+                        <th class="border-0 text-dark fw-bold">{{ __('instructor::reports.total_collected') }}</th>
+                        <th class="border-0 text-dark fw-bold">{{ __('instructor::reports.remaining') }}</th>
+                        <th class="px-4 border-0 text-dark fw-bold">{{ __('instructor::reports.status') }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($students as $index => $student)
                         <tr>
-                            <td class="px-4 py-3 text-muted">{{ $index + 1 }}</td>
+                            <td class="px-4 py-3 text-muted fw-bold">{{ $index + 1 }}</td>
                             <td>
-                                <div class="fw-bold text-dark">{{ $student->name }}</div>
-                                <small class="text-muted">{{ $student->phone }}</small>
+                                <div class="fw-bold text-dark fs-6">{{ $student->name }}</div>
+                                <div class="text-muted small"><i class="fas fa-phone-alt me-1 small"></i> {{ $student->phone }}</div>
                             </td>
                             <td>
-                                @foreach($student->enrollments as $enrollment)
-                                    <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-2 mb-1">{{ $enrollment->course->title ?? '-' }}</span>
-                                @endforeach
+                                @forelse($student->enrollments as $enrollment)
+                                    <span class="badge bg-soft-primary text-primary rounded-pill px-3 py-2 mb-1 border shadow-none">
+                                        <i class="fas fa-book-open me-1 small"></i> {{ $enrollment->course->title ?? __('instructor::reports.untitled_course') }}
+                                    </span>
+                                @empty
+                                    <span class="text-muted small italic">{{ __('instructor::reports.no_courses') }}</span>
+                                @endforelse
                             </td>
                             <td>
                                 <span class="fw-bold">{{ number_format($student->total_due) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }}</span>
