@@ -69,6 +69,7 @@ $instructorRoutes = function () {
         Route::post('/attendance/bulk-absent/{schedule}', [InstructorController::class, 'bulkAbsent'])->name('instructor.attendance.bulkAbsent');
 
         // Reports
+        Route::get('/reports', function() { return redirect()->route('instructor.reports.students'); })->name('instructor.reports');
         Route::get('/reports/students', [InstructorController::class, 'studentReports'])->name('instructor.reports.students');
         Route::get('/reports/payments', [InstructorController::class, 'paymentReports'])->name('instructor.reports.payments');
 
