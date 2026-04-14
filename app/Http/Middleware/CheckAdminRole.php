@@ -22,9 +22,11 @@ class CheckAdminRole
         }
 
         // Bypasses Spatie strictly isolated teams validation which blocks global roles
+        // Or if the user is currently impersonating someone (we allow them to return to admin panel)
         if (in_array(strtolower($user->role), ['admin', 'super_admin']) || 
             $user->hasRole('super_admin') || 
-            $user->hasRole('Super Admin')) {
+            $user->hasRole('Super Admin') ||
+            session()->has('impersonator_id')) {
             return $next($request);
         }
 

@@ -276,12 +276,29 @@
                                 <div class="p-4 rounded-4 text-white mb-3" style="background: linear-gradient(135deg, #4361EE 0%, #3A0CA3 100%);">
                                     <div class="d-flex justify-content-between align-items-start mb-3">
                                         <div>
-                                            <div class="x-small fw-bold text-uppercase opacity-75">اسم الباقة</div>
-                                            <h3 class="fw-bold mb-0 text-white">{{ $sub->package->name ?? ($sub->type_label ?? 'مخصص') }}</h3>
+                                            <div class="x-small fw-bold text-uppercase opacity-75">نوع الاشتراك</div>
+                                            <h4 class="fw-bold mb-0 text-white">
+                                                @if($sub->trial_ends_at && $sub->trial_ends_at->isFuture())
+                                                    <i class="bi bi-gift me-2"></i> فترة تجريبية مجانية
+                                                @elseif($sub->total_amount > 0)
+                                                    <i class="bi bi-shield-check me-2"></i> اشتراك مدفوع مجدد
+                                                @else
+                                                    <i class="bi bi-info-circle me-2"></i> اشتراك أساسي
+                                                @endif
+                                            </h4>
                                         </div>
-                                        <span class="badge bg-white bg-opacity-20 rounded-pill px-3">{{ $sub->billing_cycle == 'yearly' ? 'سنوي' : 'شهري' }}</span>
+                                        <span class="badge bg-white bg-opacity-20 rounded-pill px-3">{{ $sub->billing_cycle == 'yearly' ? 'سنوي' : ($sub->billing_cycle == 'term' ? 'ترم' : 'شهري') }}</span>
                                     </div>
-                                    <div class="h4 fw-bold mb-0 text-white">{{ number_format($sub->total_amount) }} <small class="fs-6 opacity-75">ج.م</small></div>
+                                    <div class="d-flex justify-content-between align-items-end mt-4">
+                                        <div>
+                                            <div class="x-small fw-bold text-uppercase opacity-75">اسم الباقة</div>
+                                            <div class="h5 fw-bold mb-0">{{ $sub->package->name ?? ($sub->type_label ?? 'مخصص') }}</div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div class="x-small fw-bold text-uppercase opacity-75">القيمة</div>
+                                            <div class="h4 fw-bold mb-0 text-white">{{ number_format($sub->total_amount) }} <small class="fs-6 opacity-75">ج.م</small></div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="vstack gap-3 border shadow-sm rounded-4 p-3 bg-white">
