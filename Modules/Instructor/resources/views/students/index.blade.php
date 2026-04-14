@@ -331,6 +331,7 @@
     </div>
 </div>
 
+@push('modals')
 {{-- QR & Portal Modal --}}
 <div class="modal fade" id="qrModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-md modal-dialog-centered">
@@ -344,7 +345,7 @@
                 <div class="mb-3">
                     <label class="form-label small text-muted">{{ __('instructor::students.portal_link') }}</label>
                     <div class="input-group">
-                        <input type="text" id="portalUrlInput" class="form-control text-ltr" readonly>
+                        <input type="text" id="portalUrlInput" class="form-control text-ltr" readonly onclick="this.select()" style="cursor: pointer;" title="{{ __('instructor::students.click_to_select') ?? 'Click to select' }}">
                         <button class="btn btn-outline-primary" type="button" id="copyPortalBtn">
                             <i class="fas fa-copy"></i>
                         </button>
@@ -420,7 +421,7 @@
                             @endforeach
                         </select>
                     </div>
-
+ 
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-info text-white flex-grow-1 rounded-pill">{{ __('instructor::students.confirm_transfer') }}</button>
                         <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">{{ __('instructor::students.cancel') }}</button>
@@ -452,6 +453,8 @@
         </div>
     </div>
 </div>
+@endpush
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
