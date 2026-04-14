@@ -71,6 +71,11 @@ class TenantService
             $admin = $tenant->users()->where('role', 'admin')->first();
         }
 
+        // Fallback to instructor (for instructor-type tenants)
+        if (!$admin) {
+            $admin = $tenant->users()->where('role', 'instructor')->orderBy('id', 'asc')->first();
+        }
+
         return $admin;
     }
     /**
