@@ -11,29 +11,37 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="bg-light">
                     <tr>
-                        <th class="px-4 py-3 border-0">#</th>
-                        <th class="border-0">{{ __('instructor::reports.student_name') }}</th>
-                        <th class="border-0">{{ __('instructor::reports.enrolled_courses') }}</th>
-                        <th class="border-0 text-center">{{ __('instructor::reports.attendance_stats') }}</th>
-                        <th class="border-0 text-center" style="min-width: 200px;">{{ __('instructor::reports.progress') }}</th>
+                        <th class="px-4 py-3 border-0 text-dark fw-bold" style="width: 50px;">#</th>
+                        <th class="border-0 text-dark fw-bold">{{ __('instructor::reports.student_name') }}</th>
+                        <th class="border-0 text-dark fw-bold">{{ __('instructor::reports.enrolled_courses') }}</th>
+                        <th class="border-0 text-dark fw-bold text-center">{{ __('instructor::reports.attendance_stats') }}</th>
+                        <th class="border-0 text-dark fw-bold text-center" style="min-width: 200px;">{{ __('instructor::reports.progress') }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($students as $index => $student)
                         <tr>
-                            <td class="px-4 py-3 text-muted">{{ $index + 1 }}</td>
+                            <td class="px-4 py-3 text-muted fw-bold">{{ $index + 1 }}</td>
                             <td>
-                                <div class="fw-bold text-dark">{{ $student->name }}</div>
-                                <small class="text-muted">{{ $student->phone }}</small>
+                                <div class="fw-bold text-dark fs-6">{{ $student->name }}</div>
+                                <div class="text-muted small"><i class="fas fa-phone-alt me-1 small"></i> {{ $student->phone }}</div>
                             </td>
                             <td>
-                                @foreach($student->enrollments as $enrollment)
-                                    <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-2 mb-1">{{ $enrollment->course->title ?? '-' }}</span>
-                                @endforeach
+                                @forelse($student->enrollments as $enrollment)
+                                    <span class="badge bg-soft-primary text-primary rounded-pill px-3 py-2 mb-1 shadow-none border">
+                                        <i class="fas fa-book-open me-1 small"></i> {{ $enrollment->course->title ?? __('instructor::reports.untitled_course') }}
+                                    </span>
+                                @empty
+                                    <span class="text-muted small italic">{{ __('instructor::reports.no_courses') }}</span>
+                                @endforelse
                             </td>
                             <td class="text-center">
-                                <div class="fw-bold">{{ $student->attended_count }} / {{ $student->total_sessions ?: '-' }}</div>
-                                <small class="text-muted">{{ __('instructor::reports.sessions') }}</small>
+                                <div class="d-inline-block bg-light rounded-3 px-3 py-2">
+                                    <span class="fw-bold text-dark fs-5">{{ $student->attended_count }}</span>
+                                    <span class="text-muted mx-1">/</span>
+                                    <span class="text-muted small">{{ $student->total_sessions }}</span>
+                                </div>
+                                <div class="text-muted small mt-1">{{ __('instructor::reports.sessions') }}</div>
                             </td>
                             <td class="text-center">
                                 <div class="d-flex align-items-center justify-content-center gap-2">

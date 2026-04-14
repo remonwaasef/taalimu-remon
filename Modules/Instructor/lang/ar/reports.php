@@ -44,4 +44,6 @@ return [
     'method_cash' => 'نقدي',
     'method_vodafone_cash' => 'فودافون كاش',
     'method_bank' => 'تحويل بنكي',
+    'untitled_course' => 'دورة بدون اسم',
+    'no_courses' => 'غير مسجل في دورات',
 ];
