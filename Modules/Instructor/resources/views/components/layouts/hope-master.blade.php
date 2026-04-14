@@ -138,6 +138,18 @@
             box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
         }
 
+        /* Table Enhancements */
+        .table thead th {
+            color: #2b3a4a !important;
+            font-weight: 700 !important;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+        .bg-soft-primary {
+            background-color: rgba(0, 123, 255, 0.1) !important;
+        }
+
         .iq-navbar-header h1, .iq-navbar-header p, .iq-navbar-header span {
             color: #ffffff !important;
             text-shadow: 0 2px 4px rgba(0,0,0,0.15);
