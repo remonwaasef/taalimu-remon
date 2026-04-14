@@ -1073,11 +1073,14 @@ class InstructorController extends Controller
         $instructor = $this->resolveInstructor();
         $courseIds = $instructor ? $instructor->courses->pluck('id') : Course::pluck('id');
 
-        $payments = Sale::whereHas('items', function($q) use ($courseIds) {
-            $q->where('item_type', Course::class)->whereIn('item_id', $courseIds);
-        })->with(['student', 'items' => function($q) use ($courseIds) {
-            $q->where('item_type', Course::class)->whereIn('item_id', $courseIds);
-        }])->latest()->get();
+        // Get student IDs enrolled in instructor's courses
+        $studentIds = Enrollment::whereIn('course_id', $courseIds)->pluck('user_id');
+        $studentModelIds = Student::whereIn('user_id', $studentIds)->pluck('id');
+
+        $payments = Sale::whereIn('student_id', $studentModelIds)
+            ->with('student')
+            ->latest()
+            ->get();
 
         return view('instructor::reports.payments', compact('payments'));
     }
