@@ -1073,16 +1073,26 @@ class InstructorController extends Controller
         $instructor = $this->resolveInstructor();
         $courseIds = $instructor ? $instructor->courses->pluck('id') : Course::pluck('id');
 
-        // Get student IDs enrolled in instructor's courses
-        $studentIds = Enrollment::whereIn('course_id', $courseIds)->pluck('user_id');
-        $studentModelIds = Student::whereIn('user_id', $studentIds)->pluck('id');
+        // Get ALL students enrolled in instructor's courses with their financial data
+        $students = Student::whereHas('enrollments', function($q) use ($courseIds) {
+            $q->whereIn('course_id', $courseIds);
+        })->with(['enrollments' => function($q) use ($courseIds) {
+            $q->whereIn('course_id', $courseIds)->with('course');
+        }, 'sales'])->get();
 
-        $payments = Sale::whereIn('student_id', $studentModelIds)
-            ->with('student')
-            ->latest()
-            ->get();
+        foreach ($students as $student) {
+            $student->total_due = $student->enrollments->sum(function($e) { return $e->course->price ?? 0; });
+            $student->total_paid = $student->sales->sum('paid_amount');
+            $student->balance = $student->total_due - $student->total_paid;
+            $student->financial_status = $student->balance <= 0 ? 'paid' : ($student->total_paid > 0 ? 'partial' : 'unpaid');
+        }
 
-        return view('instructor::reports.payments', compact('payments'));
+        // Summary stats
+        $totalDue = $students->sum('total_due');
+        $totalPaid = $students->sum('total_paid');
+        $totalBalance = $students->sum('balance');
+
+        return view('instructor::reports.payments', compact('students', 'totalDue', 'totalPaid', 'totalBalance'));
     }
 
     /**
