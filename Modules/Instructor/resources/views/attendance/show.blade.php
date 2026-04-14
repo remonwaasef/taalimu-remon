@@ -40,7 +40,7 @@
                             <h5 class="fw-bold mb-1" style="color: var(--primary-color);">
                                 <i class="fas fa-users-viewfinder me-2"></i>{{ __('instructor::attendance.enrolled_students') }}
                             </h5>
-                            <p class="text-muted small mb-0">{{ __('instructor::attendance.session_details', [
+                            <p class="text-secondary mb-0 fw-bold">{{ __('instructor::attendance.session_details', [
                                 'time' => \Carbon\Carbon::parse($schedule->start_time)->format('h:i A'),
                                 'hall' => $schedule->classroom->name ?? ($schedule->location ?: __('instructor::attendance.classroom_not_specified'))
                             ]) }}</p>
@@ -55,10 +55,10 @@
                         <table class="table table-hover align-middle">
                             <thead class="bg-light">
                                 <tr>
-                                    <th class="border-0 px-4 py-3">{{ __('instructor::attendance.student') }}</th>
-                                    <th class="border-0">{{ __('instructor::attendance.student_code') }}</th>
-                                    <th class="border-0 text-center">{{ __('instructor::attendance.today_status') }}</th>
-                                    <th class="border-0 text-center">{{ __('instructor::attendance.mark_attendance') }}</th>
+                                    <th class="border-0 px-4 py-3 text-dark fw-bold">{{ __('instructor::attendance.student') }}</th>
+                                    <th class="border-0 text-dark fw-bold">{{ __('instructor::attendance.student_code') }}</th>
+                                    <th class="border-0 text-dark fw-bold text-center">{{ __('instructor::reports.status') ?? __('instructor::attendance.today_status') }}</th>
+                                    <th class="border-0 text-dark fw-bold text-center">{{ __('instructor::attendance.mark_attendance') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -81,7 +81,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <code class="rounded-pill px-2 py-1" style="color: var(--primary-color); background-color: rgba(58, 12, 163, 0.05);">#{{ $student->id }}</code>
+                                            <code class="rounded-pill px-3 py-1 fw-bold" style="color: var(--primary-color); background-color: rgba(58, 12, 163, 0.08);">#{{ $student->id }}</code>
                                         </td>
                                         <td class="text-center">
                                             @if($attendance)
