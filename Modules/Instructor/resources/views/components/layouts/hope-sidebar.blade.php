@@ -98,14 +98,24 @@
                     </a>
                 </li>
 
-                <li class="nav-item mt-5">
-                    <form action="{{ route('center.logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="nav-link text-danger border-0 bg-transparent w-100 text-start">
-                            <i class="icon"><i class="fas fa-sign-out-alt"></i></i>
-                            <span class="item-name">{{ __('instructor::sidebar.logout') }}</span>
-                        </button>
-                    </form>
+                <li class="nav-item mt-5 py-3 border-top mx-3">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar avatar-40 avatar-rounded bg-primary-subtle text-primary fw-bold d-flex align-items-center justify-content-center">
+                                {{ substr(auth()->user()->name ?? 'I', 0, 1) }}
+                            </div>
+                            <div class="ms-2">
+                                <h6 class="mb-0 small fw-bold text-dark text-truncate" style="max-width: 100px;">{{ auth()->user()->name }}</h6>
+                                <p class="mb-0 extra-small text-muted">{{ __('instructor::sidebar.instructor') }}</p>
+                            </div>
+                        </div>
+                        <form action="{{ route('center.logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-icon btn-soft-danger rounded-circle shadow-none border-0 hover-lift" title="{{ __('instructor::sidebar.logout') }}">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </button>
+                        </form>
+                    </div>
                 </li>
 
             </ul>
