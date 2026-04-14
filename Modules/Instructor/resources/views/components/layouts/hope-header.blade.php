@@ -28,25 +28,16 @@
           </ul>
         </li>
 
-        <li class="nav-item dropdown d-flex align-items-center">
-          <div class="d-flex align-items-center">
-            <a class="nav-link py-0 d-flex align-items-center pe-0" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <div class="avatar avatar-45 avatar-rounded bg-primary d-flex align-items-center justify-content-center text-white fw-bold shadow-sm">
-                    {{ substr(auth()->user()->name ?? 'I', 0, 1) }}
-                </div>
-                <div class="caption mx-2 d-none d-md-block">
-                  <h6 class="mb-0 caption-title fw-bold text-dark">{{ auth()->user()->name ?? __('instructor::sidebar.instructor') }}</h6>
-                  <p class="mb-0 caption-sub-title text-muted extra-small text-capitalize">{{ __('instructor::sidebar.instructor') }}</p>
-                </div>
-            </a>
-            
-            <form method="POST" action="{{ route('center.logout') }}" class="ms-1">
-              @csrf
-              <button type="submit" class="btn btn-sm btn-icon btn-soft-danger rounded-circle border-0 shadow-none hover-lift" title="{{ __('instructor::sidebar.logout') }}" style="width: 32px; height: 32px;">
-                  <i class="fas fa-power-off fa-xs"></i>
-              </button>
-            </form>
-          </div>
+        <li class="nav-item dropdown">
+          <a class="nav-link py-0 d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <div class="avatar avatar-50 avatar-rounded bg-primary d-flex align-items-center justify-content-center text-white fw-bold">
+                  {{ substr(auth()->user()->name ?? 'I', 0, 1) }}
+              </div>
+              <div class="caption mx-3 d-none d-md-block ">
+                <h6 class="mb-0 caption-title">{{ auth()->user()->name ?? __('instructor::sidebar.instructor') }}</h6>
+                <p class="mb-0 caption-sub-title text-capitalize">{{ __('instructor::sidebar.instructor') }}</p>
+              </div>
+          </a>
           <ul class="dropdown-menu dropdown-menu-end py-2" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="{{ route('instructor.settings') }}">
                 <i class="fas fa-cog me-2"></i> {{ __('instructor::sidebar.settings') }}

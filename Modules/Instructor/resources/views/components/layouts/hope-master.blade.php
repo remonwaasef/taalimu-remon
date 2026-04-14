@@ -146,20 +146,9 @@
             font-size: 0.85rem;
             letter-spacing: 0.5px;
         }
-        .bg-soft-primary, .bg-primary-subtle {
-            background-color: rgba(16, 185, 129, 0.1) !important;
-            color: #10b981 !important;
+        .bg-soft-primary {
+            background-color: rgba(0, 123, 255, 0.1) !important;
         }
-        .btn-soft-danger {
-            background-color: rgba(239, 68, 68, 0.1) !important;
-            color: #ef4444 !important;
-            border: none;
-        }
-        .btn-soft-danger:hover {
-            background-color: #ef4444 !important;
-            color: #ffffff !important;
-        }
-        .extra-small { font-size: 0.7rem; }
 
         .iq-navbar-header h1, .iq-navbar-header p, .iq-navbar-header span {
             color: #ffffff !important;
