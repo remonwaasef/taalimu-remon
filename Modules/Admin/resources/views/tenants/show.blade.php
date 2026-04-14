@@ -139,7 +139,7 @@
                             </div>
                             <h3 class="fw-bold text-success mb-0">{{ number_format($totalRevenue) }}</h3>
                             <div class="text-muted small fw-bold text-uppercase">إجمالي الإيرادات</div>
-                            <div class="small text-muted mt-2">عملة المركز: {{ app('tenant')->settings['currency'] ?? 'EGP' }}</div>
+                            <div class="small text-muted mt-2">عملة المركز: {{ $tenant->settings['financial']['currency'] ?? 'EGP' }}</div>
                         </div>
                     </div>
                 </div>
