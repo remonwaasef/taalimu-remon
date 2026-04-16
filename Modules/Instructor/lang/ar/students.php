@@ -24,6 +24,7 @@ return array (
   'status' => 'الحالة',
   'actions' => 'الإجراءات',
   'parent_phone' => 'هاتف ولي الأمر',
+  'phone' => 'رقم الهاتف',
   'paid' => 'مدفوع',
   'remaining' => 'متبقي :amount',
   'due' => 'مطلوب :amount',
