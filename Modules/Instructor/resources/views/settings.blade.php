@@ -106,7 +106,7 @@
                                     <div class="col-md-4">
                                         <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.default_country_code') }}</label>
                                         <div class="input-group">
-                                            <span class="input-group-text bg-light border-0"><i class="fas fa-globe text-muted"></i></span>
+                                            <span class="input-group-text bg-white"><i class="fas fa-globe text-muted"></i></span>
                                             <input type="text" name="country_code" class="form-control bg-white border" value="{{ $settings['country_code'] ?? '20' }}">
                                         </div>
                                     </div>

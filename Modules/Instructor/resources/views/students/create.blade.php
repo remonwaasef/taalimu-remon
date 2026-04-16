@@ -20,8 +20,8 @@
                             <div class="col-12">
                                 <label class="form-label fw-bold">{{ __('instructor::students.student') }}</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-light border-0"><i class="fas fa-user" style="color: var(--primary-color);"></i></span>
-                                    <input type="text" name="name" class="form-control bg-light border-0 focus-ring-primary" placeholder="{{ __('instructor::students.name_placeholder') }}" required value="{{ old('name') }}">
+                                    <span class="input-group-text bg-white"><i class="fas fa-user" style="color: var(--primary-color);"></i></span>
+                                    <input type="text" name="name" class="form-control bg-white focus-ring-primary" placeholder="{{ __('instructor::students.name_placeholder') }}" required value="{{ old('name') }}">
                                 </div>
                             </div>
 
@@ -29,8 +29,8 @@
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('instructor::students.phone') }}</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-light border-0"><i class="fas fa-phone" style="color: var(--primary-color);"></i></span>
-                                    <input type="tel" name="phone" id="phone_input" class="form-control bg-light border-0 focus-ring-primary" placeholder="01XXXXXXXXX" required minlength="11" maxlength="11" pattern="[0-9]{11}" title="{{ __('instructor::students.phone_length_error') }}" value="{{ old('phone') }}">
+                                    <span class="input-group-text bg-white"><i class="fas fa-phone" style="color: var(--primary-color);"></i></span>
+                                    <input type="tel" name="phone" id="phone_input" class="form-control bg-white focus-ring-primary" placeholder="01XXXXXXXXX" required minlength="11" maxlength="11" pattern="[0-9]{11}" title="{{ __('instructor::students.phone_length_error') }}" value="{{ old('phone') }}">
                                 </div>
                                 <div id="phone-feedback" class="mt-1 small"></div>
                                 <small class="text-muted mt-1 d-block">{{ __('instructor::students.phone_hint') }}</small>
@@ -40,8 +40,8 @@
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('instructor::students.email') }}</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-light border-0"><i class="fas fa-envelope" style="color: var(--primary-color);"></i></span>
-                                    <input type="email" name="email" class="form-control bg-light border-0 focus-ring-primary" placeholder="example@mail.com" value="{{ old('email') }}">
+                                    <span class="input-group-text bg-white"><i class="fas fa-envelope" style="color: var(--primary-color);"></i></span>
+                                    <input type="email" name="email" class="form-control bg-white focus-ring-primary" placeholder="example@mail.com" value="{{ old('email') }}">
                                 </div>
                             </div>
 
@@ -49,8 +49,8 @@
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('instructor::students.parent_phone') }}</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-light border-0"><i class="fas fa-users" style="color: var(--primary-color);"></i></span>
-                                    <input type="tel" name="parent_phone" class="form-control bg-light border-0 focus-ring-primary" placeholder="01XXXXXXXXX" required minlength="11" maxlength="11" pattern="[0-9]{11}" title="{{ __('instructor::students.phone_length_error') }}" value="{{ old('parent_phone') }}">
+                                    <span class="input-group-text bg-white"><i class="fas fa-users" style="color: var(--primary-color);"></i></span>
+                                    <input type="tel" name="parent_phone" class="form-control bg-white focus-ring-primary" placeholder="01XXXXXXXXX" required minlength="11" maxlength="11" pattern="[0-9]{11}" title="{{ __('instructor::students.phone_length_error') }}" value="{{ old('parent_phone') }}">
                                 </div>
                             </div>
 
@@ -58,8 +58,8 @@
                             <div class="col-12">
                                 <label class="form-label fw-bold">{{ __('instructor::students.target_group') }}</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-light border-0"><i class="fas fa-layer-group" style="color: var(--primary-color);"></i></span>
-                                    <select name="course_id" class="form-select bg-light border-0 focus-ring-primary" required>
+                                    <span class="input-group-text bg-white"><i class="fas fa-layer-group" style="color: var(--primary-color);"></i></span>
+                                    <select name="course_id" class="form-select bg-white focus-ring-primary" required>
                                         <option value="" disabled selected>{{ __('instructor::students.select_group_placeholder') }}</option>
                                         @foreach($courses as $course)
                                             <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
