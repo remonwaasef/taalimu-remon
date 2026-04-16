@@ -267,7 +267,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Interactive Tour Setup
-    const tourKey = 'instructor_tour_v2_{{ auth()->id() }}';
+    const tourKey = 'instructor_tour_v3_{{ auth()->id() }}';
     if (!localStorage.getItem(tourKey)) {
         const driver = window.driver.js.driver;
         const driverObj = driver({
@@ -286,17 +286,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     } 
                 },
                 { 
-                    element: '#tour-quick-links', 
-                    popover: { 
-                        title: '{{ __('instructor::dashboard.tour.quick_links_title') }}', 
-                        description: '{{ __('instructor::dashboard.tour.quick_links_desc') }}',
-                    }
-                },
-                { 
                     element: '#tour-groups-section', 
                     popover: { 
                         title: '{{ __('instructor::dashboard.tour.groups_title') }}', 
                         description: '{{ __('instructor::dashboard.tour.groups_desc') }}',
+                    }
+                },
+                { 
+                    element: '#tour-quick-links', 
+                    popover: { 
+                        title: '{{ __('instructor::dashboard.tour.quick_links_title') }}', 
+                        description: '{{ __('instructor::dashboard.tour.quick_links_desc') }}',
                     }
                 },
                 { 
