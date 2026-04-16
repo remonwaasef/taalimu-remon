@@ -18,12 +18,12 @@
             <div class="row g-2 align-items-center">
                 <div class="col-md-6">
                     <div class="input-group">
-                        <span class="input-group-text bg-light border-0 rounded-start-pill px-3"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" id="searchInput" class="form-control bg-light border-0 rounded-end-pill py-2" placeholder="{{ __('instructor::billing.search_placeholder') }}">
+                        <span class="input-group-text bg-white rounded-start-pill px-3"><i class="fas fa-search text-muted"></i></span>
+                        <input type="text" id="searchInput" class="form-control bg-white rounded-end-pill py-2" placeholder="{{ __('instructor::billing.search_placeholder') }}">
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <select id="filterStatus" class="form-select bg-light border-0 rounded-pill py-2">
+                    <select id="filterStatus" class="form-select bg-white rounded-pill py-2">
                         <option value="all">{{ __('instructor::billing.all_students') }}</option>
                         <option value="unpaid">{{ __('instructor::billing.has_balance') }}</option>
                         <option value="paid">{{ __('instructor::billing.fully_paid') }}</option>

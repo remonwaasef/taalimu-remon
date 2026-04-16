@@ -32,8 +32,8 @@
                             <div class="col-md-4">
                                 <label class="form-label fw-bold small text-muted">{{ __('instructor::whatsapp.default_country_code') }}</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-light border-0"><i class="fas fa-globe text-muted"></i></span>
-                                    <input type="text" name="country_code" class="form-control bg-light border-0 focus-ring-primary" value="{{ $settings['country_code'] ?? '20' }}" placeholder="مثال: 20" required>
+                                    <span class="input-group-text bg-white"><i class="fas fa-globe text-muted"></i></span>
+                                    <input type="text" name="country_code" class="form-control bg-white focus-ring-primary" value="{{ $settings['country_code'] ?? '20' }}" placeholder="مثال: 20" required>
                                 </div>
                                 <div class="form-text mt-1 small">{{ __('instructor::whatsapp.country_code_hint') }}</div>
                             </div>
@@ -41,16 +41,16 @@
                             <div class="col-md-4">
                                 <label class="form-label fw-bold small text-muted">{{ __('instructor::whatsapp.instance_id') }}</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-light border-0"><i class="fas fa-id-card text-muted"></i></span>
-                                    <input type="text" name="instance_id" class="form-control bg-light border-0 focus-ring-primary" value="{{ $settings['instance_id'] ?? '' }}" placeholder="مثال: instance12345" required>
+                                    <span class="input-group-text bg-white"><i class="fas fa-id-card text-muted"></i></span>
+                                    <input type="text" name="instance_id" class="form-control bg-white focus-ring-primary" value="{{ $settings['instance_id'] ?? '' }}" placeholder="مثال: instance12345" required>
                                 </div>
                             </div>
                             
                             <div class="col-md-4">
                                 <label class="form-label fw-bold small text-muted">{{ __('instructor::whatsapp.token') }}</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-light border-0"><i class="fas fa-key text-muted"></i></span>
-                                    <input type="password" name="token" class="form-control bg-light border-0 focus-ring-primary" value="{{ $settings['token'] ?? '' }}" placeholder="{{ __('instructor::whatsapp.token_placeholder') }}" required>
+                                    <span class="input-group-text bg-white"><i class="fas fa-key text-muted"></i></span>
+                                    <input type="password" name="token" class="form-control bg-white focus-ring-primary" value="{{ $settings['token'] ?? '' }}" placeholder="{{ __('instructor::whatsapp.token_placeholder') }}" required>
                                 </div>
                             </div>
                         </div>
@@ -78,19 +78,19 @@
 
                             <div class="col-md-4">
                                 <label class="form-label fw-bold small text-muted">{{ __('instructor::whatsapp.attendance_msg') }}</label>
-                                <textarea name="attendance_template" class="form-control bg-light border-0 rounded-3 text-start" rows="4" placeholder="{{ __('instructor::whatsapp.leave_empty') }}">{{ $settings['attendance_template'] ?? '' }}</textarea>
+                                <textarea name="attendance_template" class="form-control bg-white rounded-3 text-start" rows="4" placeholder="{{ __('instructor::whatsapp.leave_empty') }}">{{ $settings['attendance_template'] ?? '' }}</textarea>
                                 <div class="form-text x-small mt-1 text-muted">{{ __('instructor::whatsapp.attendance_msg_hint') }}</div>
                             </div>
 
                             <div class="col-md-4">
                                 <label class="form-label fw-bold small text-muted">{{ __('instructor::whatsapp.payment_msg') }}</label>
-                                <textarea name="payment_template" class="form-control bg-light border-0 rounded-3 text-start" rows="4" placeholder="{{ __('instructor::whatsapp.leave_empty') }}">{{ $settings['payment_template'] ?? '' }}</textarea>
+                                <textarea name="payment_template" class="form-control bg-white rounded-3 text-start" rows="4" placeholder="{{ __('instructor::whatsapp.leave_empty') }}">{{ $settings['payment_template'] ?? '' }}</textarea>
                                 <div class="form-text x-small mt-1 text-muted">{{ __('instructor::whatsapp.payment_msg_hint') }}</div>
                             </div>
 
                             <div class="col-md-4">
                                 <label class="form-label fw-bold small text-muted">{{ __('instructor::whatsapp.debt_msg') }}</label>
-                                <textarea name="debt_template" class="form-control bg-light border-0 rounded-3 text-start" rows="4" placeholder="{{ __('instructor::whatsapp.leave_empty') }}">{{ $settings['debt_template'] ?? '' }}</textarea>
+                                <textarea name="debt_template" class="form-control bg-white rounded-3 text-start" rows="4" placeholder="{{ __('instructor::whatsapp.leave_empty') }}">{{ $settings['debt_template'] ?? '' }}</textarea>
                                 <div class="form-text x-small mt-1 text-muted">{{ __('instructor::whatsapp.debt_msg_hint') }}</div>
                             </div>
                         </div>

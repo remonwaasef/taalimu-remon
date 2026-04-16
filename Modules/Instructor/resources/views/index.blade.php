@@ -176,7 +176,7 @@
                         <td>
                             @if($course->registration_token)
                             <div class="input-group input-group-sm" style="max-width: 250px;">
-                                <input type="text" class="form-control bg-light border-0" value="{{ route('student.portal', $course->registration_token) }}" id="link-{{ $course->id }}" readonly>
+                                <input type="text" class="form-control bg-white" value="{{ route('student.portal', $course->registration_token) }}" id="link-{{ $course->id }}" readonly>
                                 <button class="btn btn-primary px-3" onclick="copyLink('link-{{ $course->id }}')">
                                     <i class="fas fa-copy"></i>
                                 </button>
