@@ -19,6 +19,7 @@
         --navy-primary: 217 33% 17%;   /* #1e293b - Strong context */
         --muted-foreground: 215 16% 47%;    /* #64748b */
         --border: 214 32% 91%;        /* #e2e8f0 */
+        --primary-foreground: 0 0% 100%; /* #ffffff - Ensure text is visible on primary buttons */
 
         /* Accent (10%): Vibrant Brand Identity */
         --brand-green: 142 71% 45%;    /* #22c55e */
@@ -129,7 +130,7 @@
     }
 
     body.cookie-banner-active main {
-        padding-bottom: 5rem; /* Space for the cookie banner */
+        padding-bottom: 8rem; /* Increased space for the cookie banner card */
     }
 }
 
