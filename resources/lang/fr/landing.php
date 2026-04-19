@@ -155,7 +155,7 @@ return [
             'free-trial' => [
                 'name' => 'Essai Gratuit',
                 'price' => 'Gratuit',
-                'description' => 'Parfait pour tester le système et explorer les fonctionnalités',
+                'description' => 'Essayez la plateforme sans aucun engagement.',
                 'cta' => 'Commencer l\'Essai',
                 'features' => [
                     0 => 'Jusqu\'à 50 étudiants',
@@ -168,7 +168,7 @@ return [
             'basic' => [
                 'name' => 'Starter',
                 'price' => '199 EGP',
-                'description' => 'Pour les startups et petits centres',
+                'description' => 'Parfait pour les tuteurs individuels.',
                 'cta' => 'S\'Abonner',
                 'features' => [
                     0 => 'Jusqu\'à 200 étudiants',
@@ -183,7 +183,7 @@ return [
             'pro' => [
                 'name' => 'Pro',
                 'price' => '1249 EGP',
-                'description' => 'Pour les centres en croissance et grands',
+                'description' => 'Idéal pour les centres en pleine croissance.',
                 'cta' => 'S\'Abonner',
                 'features' => [
                     0 => 'Étudiants illimités',
