@@ -253,11 +253,27 @@
                                 <div>
                                     <h1 class="text-white display-5">@yield('page-title')</h1>
                                     <p class="text-white opacity-75 mb-0">
-                                        <i class="fas fa-calendar-day me-1"></i> @yield('page-subtitle', now()->translatedFormat('l, d F Y'))
+                                        @yield('page-subtitle')
                                     </p>
                                 </div>
                                 <div class="d-flex align-items-center gap-2">
                                     @yield('page-actions')
+                                </div>
+                                @else
+                                @php
+                                    $hour = now()->format('H');
+                                    $greeting = $hour < 12 ? 'صباح الخير' : ($hour < 17 ? 'مساء الخير' : 'طاب مساؤك');
+                                    $quotes = [
+                                        app()->getLocale() == 'ar' ? 'جاهز لإلهام طلابك اليوم؟' : 'Ready to inspire your students today?',
+                                        app()->getLocale() == 'ar' ? 'التعليم هو أقوى أداة لتغيير العالم.' : 'Education is the most powerful weapon.',
+                                        app()->getLocale() == 'ar' ? 'كل يوم هو فرصة جديدة للتميز.' : 'Every day is a new opportunity to excel.',
+                                        app()->getLocale() == 'ar' ? 'أهلاً بك في مساحة الإبداع الخاصة بك.' : 'Welcome to your creative space.',
+                                    ];
+                                    $randomQuote = $quotes[array_rand($quotes)];
+                                @endphp
+                                <div class="text-white">
+                                    <h1 class="display-5 fw-bold mb-1">{{ $greeting }}، {{ auth()->user()->name ?? 'أستاذنا' }}! 👋</h1>
+                                    <p class="opacity-75 fs-5 mb-0">{{ $randomQuote }}</p>
                                 </div>
                                 @endif
                             </div>
