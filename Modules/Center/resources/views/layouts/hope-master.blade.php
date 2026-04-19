@@ -613,14 +613,23 @@
         .sidebar .nav-item .nav-link {
             display: flex !important;
             align-items: center !important;
+            position: relative !important;
+            padding-left: 40px !important; /* Space for arrow on the left */
+            padding-right: 15px !important; /* Icon spacing */
         }
         .sidebar .nav-item .nav-link .item-name {
             flex-grow: 1 !important;
-            padding-inline-end: 10px !important;
+            text-align: right !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
         }
         .sidebar .nav-item .nav-link .right-icon {
-            margin-inline-start: auto !important;
+            position: absolute !important;
+            left: 15px !important;
+            right: auto !important;
             display: inline-flex !important;
+            margin: 0 !important;
         }
 
         ::-webkit-scrollbar {
