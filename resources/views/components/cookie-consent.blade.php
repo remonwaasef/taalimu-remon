@@ -1,100 +1,120 @@
 <!-- Cookie Consent Banner -->
-<div id="cookieConsentBanner" class="fixed bottom-0 left-0 right-0 bg-card border-t-2 border-primary shadow-2xl z-50" style="display: none;">
-    <div class="container mx-auto px-4 py-5">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div class="flex-1 text-center md:text-left">
-                <h3 class="font-bold text-foreground mb-2">{{ __('gdpr.banner.title') }}</h3>
-                <p class="text-sm text-muted-foreground">
-                    {{ __('gdpr.banner.message') }}
-                    <a href="{{ route('cookies') }}" class="text-primary hover:underline">{{ __('gdpr.banner.learn_more') }}</a>
-                </p>
+<div id="cookieConsentBanner" class="fixed bottom-6 start-6 end-6 md:start-auto md:end-6 md:max-w-md bg-card/95 backdrop-blur-md border border-border shadow-premium rounded-2xl z-[100] transition-all duration-500 transform translate-y-full opacity-0" style="display: none;">
+    <div class="p-5 md:p-6">
+        <div class="flex flex-col gap-4">
+            <div class="flex items-start gap-3">
+                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 text-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><path d="M8.5 8.5v.01"/><path d="M16 15.5v.01"/><path d="M12 12v.01"/><path d="M11 17v.01"/><path d="M7 14v.01"/></svg>
+                </div>
+                <div class="flex-1">
+                    <h3 class="font-bold text-foreground text-lg mb-1">{{ __('gdpr.banner.title') }}</h3>
+                    <p class="text-sm text-muted-foreground leading-relaxed">
+                        {{ __('gdpr.banner.message') }}
+                        <a href="{{ route('cookies') }}" class="text-primary font-semibold hover:underline">{{ __('gdpr.banner.learn_more') }}</a>
+                    </p>
+                </div>
             </div>
-            <div class="flex flex-col sm:flex-row gap-3 flex-shrink-0">
-                <button 
-                    onclick="CookieConsent.openSettings()"
-                    class="px-4 py-2 border border-border rounded-lg text-sm font-medium hover:bg-muted transition-colors whitespace-nowrap"
-                >
-                    {{ __('gdpr.banner.settings') }}
-                </button>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button 
                     onclick="CookieConsent.acceptAll()"
-                    class="px-5 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors whitespace-nowrap"
+                    class="w-full px-5 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-bold hover:bg-primary/90 transition-all shadow-sm active:scale-95"
                 >
                     {{ __('gdpr.banner.accept_all') }}
                 </button>
-                <button 
-                    onclick="CookieConsent.acceptEssential()"
-                    class="px-4 py-2 border border-border rounded-lg text-sm font-medium hover:bg-muted transition-colors whitespace-nowrap"
-                >
-                    {{ __('gdpr.banner.essential_only') }}
-                </button>
+                <div class="grid grid-cols-2 gap-2">
+                    <button 
+                        onclick="CookieConsent.openSettings()"
+                        class="px-3 py-2.5 border border-border rounded-xl text-xs font-semibold hover:bg-muted transition-all text-foreground whitespace-nowrap active:scale-95"
+                    >
+                        {{ __('gdpr.banner.settings') }}
+                    </button>
+                    <button 
+                        onclick="CookieConsent.acceptEssential()"
+                        class="px-3 py-2.5 border border-border rounded-xl text-xs font-semibold hover:bg-muted transition-all text-foreground whitespace-nowrap active:scale-95"
+                    >
+                        {{ __('gdpr.banner.essential_only') }}
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+
 <!-- Settings Modal -->
-<div id="cookieSettingsModal" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50" style="display: none;">
-    <div class="bg-card rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div class="p-6 border-b border-border">
-            <div class="flex items-center justify-between">
-                <h2 class="text-xl font-bold text-foreground">{{ __('gdpr.settings.title') }}</h2>
-                <button onclick="CookieConsent.closeSettings()" class="text-muted-foreground hover:text-foreground">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-                </button>
+<div id="cookieSettingsModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-[110]" style="display: none;">
+    <div class="bg-card rounded-3xl max-w-2xl w-full shadow-premium border border-border overflow-hidden animate-fade-in-up">
+        <div class="p-6 md:p-8 border-b border-border flex items-center justify-between bg-muted/30">
+            <div>
+                <h2 class="text-2xl font-black text-foreground tracking-tight">{{ __('gdpr.settings.title') }}</h2>
+                <p class="text-sm text-muted-foreground mt-1">{{ __('gdpr.banner.message') }}</p>
             </div>
+            <button onclick="CookieConsent.closeSettings()" class="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
         </div>
         
-        <div class="p-6 space-y-6">
+        <div class="p-6 md:p-8 space-y-8">
             <!-- Essential Cookies -->
-            <div class="flex items-start gap-4">
-                <div class="flex-1">
-                    <div class="flex items-center gap-2 mb-2">
-                        <h3 class="font-semibold text-foreground">{{ __('gdpr.settings.essential.title') }}</h3>
-                        <span class="text-xs bg-muted px-2 py-1 rounded">{{ __('gdpr.settings.always_active') }}</span>
-                    </div>
-                    <p class="text-sm text-muted-foreground">{{ __('gdpr.settings.essential.description') }}</p>
+            <div class="flex items-start gap-6">
+                <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0 text-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 </div>
-                <div class="w-12 h-6 bg-primary rounded-full flex items-center px-1">
-                    <div class="w-4 h-4 bg-white rounded-full ml-auto"></div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-2">
+                        <h3 class="font-bold text-foreground text-lg">{{ __('gdpr.settings.essential.title') }}</h3>
+                        <span class="text-[10px] font-bold uppercase tracking-widest bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">{{ __('gdpr.settings.always_active') }}</span>
+                    </div>
+                    <p class="text-sm text-muted-foreground leading-relaxed">{{ __('gdpr.settings.essential.description') }}</p>
                 </div>
             </div>
 
+            <div class="h-px bg-border/50"></div>
+
             <!-- Analytics Cookies -->
-            <div class="flex items-start gap-4">
+            <div class="flex items-start gap-6">
+                <div class="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center flex-shrink-0 text-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                </div>
                 <div class="flex-1">
-                    <h3 class="font-semibold text-foreground mb-2">{{ __('gdpr.settings.analytics.title') }}</h3>
-                    <p class="text-sm text-muted-foreground">{{ __('gdpr.settings.analytics.description') }}</p>
+                    <h3 class="font-bold text-foreground text-lg mb-2">{{ __('gdpr.settings.analytics.title') }}</h3>
+                    <p class="text-sm text-muted-foreground leading-relaxed">{{ __('gdpr.settings.analytics.description') }}</p>
                 </div>
                 <button 
                     id="analyticsToggle"
                     onclick="CookieConsent.togglePreference('analytics')"
-                    class="w-12 h-6 rounded-full flex items-center px-1 transition-colors bg-muted"
+                    class="w-14 h-7 rounded-full flex items-center px-1 transition-all duration-300 bg-muted relative"
                 >
-                    <div class="w-4 h-4 bg-white rounded-full transition-all"></div>
+                    <div class="w-5 h-5 bg-white rounded-full shadow-sm transition-all duration-300 transform"></div>
                 </button>
             </div>
 
+            <div class="h-px bg-border/50"></div>
+
             <!-- Marketing Cookies -->
-            <div class="flex items-start gap-4">
+            <div class="flex items-start gap-6">
+                <div class="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center flex-shrink-0 text-purple-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-11.7 8.38 8.38 0 0 1 3.8.9"/><path d="M11 3a13 13 0 0 0 9 9"/><path d="m15 5 4 4"/></svg>
+                </div>
                 <div class="flex-1">
-                    <h3 class="font-semibold text-foreground mb-2">{{ __('gdpr.settings.marketing.title') }}</h3>
-                    <p class="text-sm text-muted-foreground">{{ __('gdpr.settings.marketing.description') }}</p>
+                    <h3 class="font-bold text-foreground text-lg mb-2">{{ __('gdpr.settings.marketing.title') }}</h3>
+                    <p class="text-sm text-muted-foreground leading-relaxed">{{ __('gdpr.settings.marketing.description') }}</p>
                 </div>
                 <button 
                     id="marketingToggle"
                     onclick="CookieConsent.togglePreference('marketing')"
-                    class="w-12 h-6 rounded-full flex items-center px-1 transition-colors bg-muted"
+                    class="w-14 h-7 rounded-full flex items-center px-1 transition-all duration-300 bg-muted relative"
                 >
-                    <div class="w-4 h-4 bg-white rounded-full transition-all"></div>
+                    <div class="w-5 h-5 bg-white rounded-full shadow-sm transition-all duration-300 transform"></div>
                 </button>
             </div>
         </div>
 
-        <div class="p-6 border-t border-border flex gap-3">
+        <div class="p-6 md:p-8 bg-muted/30 border-t border-border">
             <button 
                 onclick="CookieConsent.savePreferences()"
-                class="flex-1 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+                class="w-full py-4 bg-primary text-primary-foreground rounded-2xl font-bold text-lg hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 active:scale-[0.98]"
             >
                 {{ __('gdpr.settings.save') }}
             </button>
@@ -123,12 +143,22 @@ const CookieConsent = {
     },
 
     showBanner() {
-        document.getElementById('cookieConsentBanner').style.display = 'block';
+        const banner = document.getElementById('cookieConsentBanner');
+        banner.style.display = 'block';
+        setTimeout(() => {
+            banner.classList.remove('translate-y-full', 'opacity-0');
+            banner.classList.add('translate-y-0', 'opacity-100');
+        }, 100);
         document.body.classList.add('cookie-banner-active');
     },
 
     hideBanner() {
-        document.getElementById('cookieConsentBanner').style.display = 'none';
+        const banner = document.getElementById('cookieConsentBanner');
+        banner.classList.remove('translate-y-0', 'opacity-100');
+        banner.classList.add('translate-y-full', 'opacity-0');
+        setTimeout(() => {
+            banner.style.display = 'none';
+        }, 500);
         document.body.classList.remove('cookie-banner-active');
     },
 
@@ -150,32 +180,28 @@ const CookieConsent = {
     updateTogglesUI() {
         // Update Analytics Toggle
         const analyticsToggle = document.getElementById('analyticsToggle');
-        const analyticsCircle = analyticsToggle.querySelector('div');
-        if (this.preferences.analytics) {
-            analyticsToggle.classList.remove('bg-muted');
-            analyticsToggle.classList.add('bg-primary');
-            analyticsCircle.classList.remove('mr-auto');
-            analyticsCircle.classList.add('ml-auto');
-        } else {
-            analyticsToggle.classList.remove('bg-primary');
-            analyticsToggle.classList.add('bg-muted');
-            analyticsCircle.classList.remove('ml-auto');
-            analyticsCircle.classList.add('mr-auto');
+        const analyticsCircle = analyticsToggle?.querySelector('div');
+        if (analyticsToggle && analyticsCircle) {
+            if (this.preferences.analytics) {
+                analyticsToggle.classList.replace('bg-muted', 'bg-primary');
+                analyticsCircle.style.transform = 'translateX(28px)';
+            } else {
+                analyticsToggle.classList.replace('bg-primary', 'bg-muted');
+                analyticsCircle.style.transform = 'translateX(0)';
+            }
         }
 
         // Update Marketing Toggle
         const marketingToggle = document.getElementById('marketingToggle');
-        const marketingCircle = marketingToggle.querySelector('div');
-        if (this.preferences.marketing) {
-            marketingToggle.classList.remove('bg-muted');
-            marketingToggle.classList.add('bg-primary');
-            marketingCircle.classList.remove('mr-auto');
-            marketingCircle.classList.add('ml-auto');
-        } else {
-            marketingToggle.classList.remove('bg-primary');
-            marketingToggle.classList.add('bg-muted');
-            marketingCircle.classList.remove('ml-auto');
-            marketingCircle.classList.add('mr-auto');
+        const marketingCircle = marketingToggle?.querySelector('div');
+        if (marketingToggle && marketingCircle) {
+            if (this.preferences.marketing) {
+                marketingToggle.classList.replace('bg-muted', 'bg-primary');
+                marketingCircle.style.transform = 'translateX(28px)';
+            } else {
+                marketingToggle.classList.replace('bg-primary', 'bg-muted');
+                marketingCircle.style.transform = 'translateX(0)';
+            }
         }
     },
 
