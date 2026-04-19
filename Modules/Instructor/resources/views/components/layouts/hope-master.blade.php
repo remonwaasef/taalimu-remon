@@ -202,15 +202,36 @@
 
         /* Auto-style the first row containing title and actions over the green banner */
         .content-inner > .d-flex:first-child h2, 
-        .content-inner > .row:first-child h2 {
+        .content-inner > .row:first-child h2,
+        .content-inner > .mb-4:first-child h2 {
             color: #ffffff !important;
             text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
         .content-inner > .d-flex:first-child .text-muted,
-        .content-inner > .d-flex:first-child p {
-            color: rgba(255, 255, 255, 0.8) !important;
+        .content-inner > .d-flex:first-child p,
+        .content-inner > .mb-4:first-child .breadcrumb-item a,
+        .content-inner > .mb-4:first-child .breadcrumb-item.active {
+            color: rgba(255, 255, 255, 0.85) !important;
         }
+        .content-inner > .mb-4:first-child .breadcrumb-item + .breadcrumb-item::before {
+            color: rgba(255, 255, 255, 0.6) !important;
+        }
+        
         /* Buttons in the overlapping header */
+        .content-inner > .d-flex:first-child .btn-primary,
+        .content-inner > .d-flex:first-child .btn-outline-secondary {
+            background-color: rgba(255, 255, 255, 0.15) !important;
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            backdrop-filter: blur(10px);
+            font-weight: 700;
+        }
+        .content-inner > .d-flex:first-child .btn-primary:hover,
+        .content-inner > .d-flex:first-child .btn-outline-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.25) !important;
+            color: #ffffff !important;
+            transform: translateY(-1px);
+        }
         .content-inner > .d-flex:first-child .btn-primary {
             background-color: #ffffff !important;
             color: #10b981 !important;
