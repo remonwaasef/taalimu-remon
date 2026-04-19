@@ -406,6 +406,12 @@ class InstructorController extends Controller
     {
         $instructor = $this->resolveInstructor();
         $courses = $instructor ? $instructor->courses : Course::all();
+
+        // Enforce group-first: redirect to create a group if none exist
+        if ($courses->isEmpty()) {
+            return redirect()->route('instructor.groups.create')
+                ->with('info', __('instructor::messages.create_group_first'));
+        }
         
         return view('instructor::students.create', compact('courses'));
     }

@@ -43,4 +43,5 @@ return [
     'schedule_created' => 'Session schedule created successfully.',
     'schedule_updated' => 'Session schedule updated successfully.',
     'schedule_deleted' => 'Session schedule deleted successfully.',
+    'create_group_first' => 'You must create a group first before adding students. Create your first group now!',
 ];

@@ -12,6 +12,24 @@
                     <p class="text-muted small">{{ __('instructor::groups.group_hint') }}</p>
                 </div>
                 <div class="card-body p-4">
+                    @if(session('info'))
+                        <div class="alert alert-info border-0 rounded-3 shadow-sm d-flex align-items-center gap-2 mb-4">
+                            <i class="fas fa-info-circle fs-5"></i>
+                            <div>{{ session('info') }}</div>
+                        </div>
+                    @endif
+                    @if(session('success'))
+                        <div class="alert alert-success border-0 rounded-3 shadow-sm d-flex align-items-center gap-2 mb-4">
+                            <i class="fas fa-check-circle fs-5"></i>
+                            <div>{{ session('success') }}</div>
+                        </div>
+                    @endif
+                    @if(session('error'))
+                        <div class="alert alert-danger border-0 rounded-3 shadow-sm d-flex align-items-center gap-2 mb-4">
+                            <i class="fas fa-exclamation-circle fs-5"></i>
+                            <div>{{ session('error') }}</div>
+                        </div>
+                    @endif
                     <form action="{{ route('instructor.groups.store') }}" method="POST">
                         @csrf
                         <div class="row g-4">
