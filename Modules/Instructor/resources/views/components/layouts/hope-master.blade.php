@@ -70,15 +70,25 @@
             box-shadow: 0 8px 15px rgba(16, 185, 129, 0.2) !important;
         }
 
-        /* Header banner - Minimalist */
+        /* Header banner */
         .iq-navbar-header {
-            background: transparent !important;
-            border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+            border-bottom: 0 !important;
+            box-shadow: inset 0 -30px 60px -30px rgba(0,0,0,0.1);
             position: relative;
+            overflow: hidden;
         }
 
         .iq-header-img {
-            display: none !important;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.1 !important;
+            mix-blend-mode: overlay !important;
+            pointer-events: none;
         }
 
         .iq-navbar-header h1 {
@@ -113,9 +123,10 @@
         }
         
         .btn-glass {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            color: #10b981 !important;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white !important;
             border-radius: 50px;
             padding: 0.6rem 1.5rem;
             font-weight: 600;
@@ -139,13 +150,9 @@
             background-color: rgba(0, 123, 255, 0.1) !important;
         }
 
-        .iq-navbar-header h1 {
-            color: #0f172a !important;
-            text-shadow: none;
-        }
-        .iq-navbar-header p, .iq-navbar-header span {
-            color: #64748b !important;
-            text-shadow: none;
+        .iq-navbar-header h1, .iq-navbar-header p, .iq-navbar-header span {
+            color: #ffffff !important;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
         }
         
         /* Sidebar active item - Ultra Premium */
@@ -164,24 +171,24 @@
 
         /* Quick Action Overlap Fix */
         .content-inner {
-            margin-top: 1rem !important;
+            margin-top: -3rem !important;
         }
 
         /* Auto-style the first row containing title and actions over the green banner */
         .content-inner > .d-flex:first-child h2, 
         .content-inner > .row:first-child h2 {
-            color: #0f172a !important;
-            text-shadow: none;
+            color: #ffffff !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
         .content-inner > .d-flex:first-child .text-muted,
         .content-inner > .d-flex:first-child p {
-            color: #64748b !important;
+            color: rgba(255, 255, 255, 0.8) !important;
         }
         /* Buttons in the overlapping header */
         .content-inner > .d-flex:first-child .btn-primary {
-            background-color: #10b981 !important;
-            color: #ffffff !important;
-            border-color: #10b981 !important;
+            background-color: #ffffff !important;
+            color: #10b981 !important;
+            border-color: #ffffff !important;
             font-weight: 700;
         }
         .content-inner > .d-flex:first-child .btn-primary:hover {
@@ -237,15 +244,15 @@
             <!-- Header Component -->
             @include('instructor::components.layouts.hope-header')
             
-            <div class="iq-navbar-header" style="height: auto; min-height: 120px;">
+            <div class="iq-navbar-header" style="height: 180px;">
                 <div class="container-fluid iq-container">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="flex-wrap d-flex justify-content-between align-items-center pt-3 pb-3">
                                 @hasSection('page-title')
                                 <div>
-                                    <h1 class="text-dark display-5">@yield('page-title')</h1>
-                                    <p class="text-muted mb-0">
+                                    <h1 class="text-white display-5">@yield('page-title')</h1>
+                                    <p class="text-white opacity-75 mb-0">
                                         <i class="fas fa-calendar-day me-1"></i> @yield('page-subtitle', now()->translatedFormat('l, d F Y'))
                                     </p>
                                 </div>
