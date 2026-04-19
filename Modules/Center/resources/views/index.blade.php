@@ -4,9 +4,6 @@
 
 @section('content')
 <style>
-/* Reset some default padding if necessary */
-.content-inner { margin-top: -8.5rem !important; }
-
 /* AI Insights Block */
 .ai-insights-block {
     background: #f8fafc;

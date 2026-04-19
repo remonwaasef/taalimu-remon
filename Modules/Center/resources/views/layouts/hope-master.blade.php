@@ -560,7 +560,7 @@
 
         /* Content overlap effect */
         .content-inner {
-            margin-top: -5.5rem !important;
+            margin-top: -3.5rem !important;
             position: relative;
             z-index: 10;
         }
@@ -622,7 +622,7 @@
             </div>
         </div>
 
-        <div class="container-fluid content-inner py-0">
+        <div class="container-fluid content-inner mt-n5 py-0">
             @yield('content')
         </div>
 

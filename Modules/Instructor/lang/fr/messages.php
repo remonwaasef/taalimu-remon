@@ -43,4 +43,5 @@ return [
     'schedule_created' => 'Horaire de session créé avec succès.',
     'schedule_updated' => 'Horaire de session mis à jour avec succès.',
     'schedule_deleted' => 'Horaire de session supprimé avec succès.',
+    'create_group_first' => 'Vous devez d\'abord créer un groupe avant d\'ajouter des étudiants. Créez votre premier groupe maintenant !',
 ];
