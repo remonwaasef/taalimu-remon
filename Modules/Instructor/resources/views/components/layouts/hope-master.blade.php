@@ -171,7 +171,7 @@
 
         /* Quick Action Overlap Fix */
         .content-inner {
-            margin-top: -3.5rem !important;
+            margin-top: -3rem !important;
         }
 
         /* Auto-style the first row containing title and actions over the green banner */
@@ -244,11 +244,11 @@
             <!-- Header Component -->
             @include('instructor::components.layouts.hope-header')
             
-            <div class="iq-navbar-header" style="height: 280px;">
+            <div class="iq-navbar-header" style="height: 180px;">
                 <div class="container-fluid iq-container">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="flex-wrap d-flex justify-content-between align-items-center pt-4 pb-5">
+                            <div class="flex-wrap d-flex justify-content-between align-items-center pt-3 pb-3">
                                 @hasSection('page-title')
                                 <div>
                                     <h1 class="text-white display-5">@yield('page-title')</h1>
