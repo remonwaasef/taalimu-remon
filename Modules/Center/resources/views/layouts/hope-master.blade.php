@@ -608,6 +608,21 @@
         .content-inner > .d-flex:first-child .btn-outline-secondary:hover {
             background-color: rgba(255, 255, 255, 0.25) !important;
         }
+
+        /* Prevent Sidebar Arrow Overlap in RTL */
+        .sidebar .nav-item .nav-link {
+            display: flex !important;
+            align-items: center !important;
+        }
+        .sidebar .nav-item .nav-link .item-name {
+            flex-grow: 1 !important;
+            padding-inline-end: 10px !important;
+        }
+        .sidebar .nav-item .nav-link .right-icon {
+            margin-inline-start: auto !important;
+            display: inline-flex !important;
+        }
+
         ::-webkit-scrollbar {
             width: 8px;
         }

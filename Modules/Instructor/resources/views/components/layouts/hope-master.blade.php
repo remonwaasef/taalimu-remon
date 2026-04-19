@@ -243,6 +243,21 @@
             color: #059669 !important;
             transform: translateY(-1px);
         }
+
+        /* Prevent Sidebar Arrow Overlap in RTL */
+        .sidebar .nav-item .nav-link {
+            display: flex !important;
+            align-items: center !important;
+        }
+        .sidebar .nav-item .nav-link .item-name {
+            flex-grow: 1 !important;
+            padding-inline-end: 10px !important;
+        }
+        .sidebar .nav-item .nav-link .right-icon {
+            margin-inline-start: auto !important;
+            display: inline-flex !important;
+        }
+
         /* Fix Dropdown menus being cut off in responsive tables */
         .table-responsive, .card-body, table {
             overflow: visible !important;
