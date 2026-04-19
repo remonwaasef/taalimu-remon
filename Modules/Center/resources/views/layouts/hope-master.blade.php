@@ -609,27 +609,40 @@
             background-color: rgba(255, 255, 255, 0.25) !important;
         }
 
-        /* Prevent Sidebar Arrow Overlap in RTL */
+        /* Bulletproof Sidebar RTL Layout Fix */
         .sidebar .nav-item .nav-link {
-            display: flex !important;
+            display: grid !important;
+            grid-template-columns: 30px 1fr 30px !important; /* [Arrow] [Text] [Icon] in RTL */
             align-items: center !important;
+            gap: 5px !important;
+            padding: 12px 15px !important;
+            width: 100% !important;
             position: relative !important;
-            padding-left: 40px !important; /* Space for arrow on the left */
-            padding-right: 15px !important; /* Icon spacing */
         }
-        .sidebar .nav-item .nav-link .item-name {
-            flex-grow: 1 !important;
+        
+        .sidebar .nav-item .nav-link .icon { 
+            grid-column: 3 !important; /* Forces Icon to the Right */
+            margin: 0 !important;
+            display: flex !important;
+            justify-content: center !important;
+        }
+        
+        .sidebar .nav-item .nav-link .item-name { 
+            grid-column: 2 !important; /* Text in the Middle */
             text-align: right !important;
             white-space: nowrap !important;
             overflow: hidden !important;
             text-overflow: ellipsis !important;
+            margin: 0 5px !important;
         }
-        .sidebar .nav-item .nav-link .right-icon {
-            position: absolute !important;
-            left: 15px !important;
-            right: auto !important;
-            display: inline-flex !important;
+        
+        .sidebar .nav-item .nav-link .right-icon { 
+            grid-column: 1 !important; /* Forces Arrow to the Left */
+            justify-self: start !important;
+            position: static !important;
             margin: 0 !important;
+            display: flex !important;
+            transform: none !important;
         }
 
         ::-webkit-scrollbar {
