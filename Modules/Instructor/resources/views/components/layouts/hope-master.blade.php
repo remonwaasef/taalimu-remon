@@ -79,6 +79,32 @@
             overflow: hidden;
         }
 
+        /* Premium Tech-Mesh Dot Matrix Background */
+        .iq-navbar-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.2) 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+            opacity: 0.5;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .iq-navbar-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top right, rgba(255,255,255,0.1) 0%, transparent 60%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
         .iq-header-img {
             position: absolute;
             top: 0;
