@@ -127,6 +127,10 @@
         font-family: 'Cairo', 'Outfit', sans-serif;
         letter-spacing: 0;
     }
+
+    body.cookie-banner-active main {
+        padding-bottom: 5rem; /* Space for the cookie banner */
+    }
 }
 
 @layer utilities {
@@ -1060,5 +1064,15 @@
 
 .perspective-2000 {
     perspective: 2000px;
+}
+
+/* Force Light Background for Footer if needed */
+.landing-footer {
+    background-color: #f8fafc !important; /* Forces slate-50 light color */
+}
+
+/* Ensure sections have enough bottom space */
+#pricing {
+    padding-bottom: 8rem !important;
 }
 
