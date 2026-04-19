@@ -615,25 +615,11 @@
                                     @yield('page-actions')
                                 </div>
                                 @else
-                                @php
-                                    $hour = now()->format('H');
-                                    $greeting = $hour < 12 ? __('center::messages.good_morning') : ($hour < 17 ? __('center::messages.good_afternoon') : __('center::messages.good_evening'));
-                                    // Fallback if translations are missing
-                                    if(str_starts_with($greeting, 'center::')) {
-                                        $greeting = $hour < 12 ? 'صباح الخير' : ($hour < 17 ? 'مساء الخير' : 'طاب مساؤك');
-                                    }
-                                    
-                                    $quotes = [
-                                        app()->getLocale() == 'ar' ? 'جاهز لإدارة مركزك اليوم؟' : 'Ready to manage your center today?',
-                                        app()->getLocale() == 'ar' ? 'التعليم هو أساس بناء المستقبل.' : 'Education is the foundation of the future.',
-                                        app()->getLocale() == 'ar' ? 'كل إنجاز عظيم يبدأ بخطوة جادة.' : 'Every great achievement begins with a serious step.',
-                                        app()->getLocale() == 'ar' ? 'مرحباً بك في لوحة تحكم المركز الشاملة.' : 'Welcome to your comprehensive center dashboard.',
-                                    ];
-                                    $randomQuote = $quotes[array_rand($quotes)];
-                                @endphp
                                 <div class="text-white">
-                                    <h1 class="display-5 fw-bold mb-1">{{ $greeting }}، {{ auth()->user()->name ?? 'مديرنا' }}! 🌟</h1>
-                                    <p class="opacity-75 fs-5 mb-0">{{ $randomQuote }}</p>
+                                    <h1 class="display-5 fw-bold mb-1">{{ app()->getLocale() == 'ar' ? 'مرحباً، ' : 'Welcome, ' }}{{ auth()->user()->name ?? '' }}</h1>
+                                    <p class="opacity-75 fs-5 mb-0">
+                                        {{ app()->getLocale() == 'ar' ? 'نظرة عامة على إحصائيات وأداء المركز' : 'An overview of your center activities and performance statistics' }}
+                                    </p>
                                 </div>
                                 @endif
                             </div>
