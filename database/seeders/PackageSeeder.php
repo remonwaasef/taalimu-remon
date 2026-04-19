@@ -51,6 +51,7 @@ class PackageSeeder extends Seeder
                 'trial_days' => 14,
                 'description' => 'مثالية لتجربة المنصة.',
                 'description_en' => 'Test drive the platform with no commitment.',
+                'description_fr' => 'Essayez la plateforme sans aucun engagement.',
                 'is_featured' => false,
                 'regional_prices' => [
                     'default' => ['amount' => 0, 'currency' => 'USD'],
@@ -90,6 +91,7 @@ class PackageSeeder extends Seeder
                 'duration_in_days' => 150,
                 'description' => 'للمدرسين المستقلين والمجموعات الصغيرة.',
                 'description_en' => 'Perfect for individual tutors.',
+                'description_fr' => 'Parfait pour les tuteurs individuels.',
                 'is_featured' => false,
                 'regional_prices' => [
                     'default' => ['amount' => 15, 'currency' => 'USD', 'term_price' => 49, 'yearly_price' => 85, 'old_price' => 60],
@@ -129,6 +131,7 @@ class PackageSeeder extends Seeder
                 'badge' => 'الأكثر طلباً',
                 'description' => 'للمراكز التعليمية المتنامية.',
                 'description_en' => 'Best for growing centers.',
+                'description_fr' => 'Idéal pour les centres en pleine croissance.',
                 'is_featured' => true,
                 'discount_label' => 'وفر 20%',
                 'regional_prices' => [
@@ -169,6 +172,7 @@ class PackageSeeder extends Seeder
                 'duration_in_days' => 150,
                 'description' => 'للرشكات التعليمية الكبرى والفروع.',
                 'description_en' => 'For large chains and organizations.',
+                'description_fr' => 'Pour les grandes chaînes et organisations.',
                 'is_featured' => false,
                 'regional_prices' => [
                     'default' => ['amount' => 60, 'currency' => 'USD', 'term_price' => 199, 'yearly_price' => 340, 'old_price' => 250],
