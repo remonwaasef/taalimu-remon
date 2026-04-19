@@ -632,7 +632,7 @@
                                     $randomQuote = $quotes[array_rand($quotes)];
                                 @endphp
                                 <div class="text-white">
-                                    <h1 class="display-5 fw-bold mb-1">{{ $greeting }}، {{ auth('admin')->user()->name ?? auth()->user()->name ?? 'مديرنا' }}! 🌟</h1>
+                                    <h1 class="display-5 fw-bold mb-1">{{ $greeting }}، {{ auth()->user()->name ?? 'مديرنا' }}! 🌟</h1>
                                     <p class="opacity-75 fs-5 mb-0">{{ $randomQuote }}</p>
                                 </div>
                                 @endif
