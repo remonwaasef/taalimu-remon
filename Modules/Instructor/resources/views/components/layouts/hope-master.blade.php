@@ -244,40 +244,46 @@
             transform: translateY(-1px);
         }
 
-        /* Bulletproof Sidebar RTL Layout Fix */
+        /* Prevent Sidebar Arrow Overlap in RTL */
         .sidebar .nav-item .nav-link {
-            display: grid !important;
-            grid-template-columns: 30px 1fr 30px !important; /* [Arrow] [Text] [Icon] in RTL */
-            align-items: center !important;
-            gap: 5px !important;
-            padding: 12px 15px !important;
-            width: 100% !important;
-            position: relative !important;
-        }
-        
-        .sidebar .nav-item .nav-link .icon { 
-            grid-column: 3 !important; /* Forces Icon to the Right */
-            margin: 0 !important;
             display: flex !important;
-            justify-content: center !important;
+            align-items: center !important;
+            position: relative !important;
+            padding-left: 45px !important; /* Space for arrow on the left */
+            padding-right: 15px !important; /* Icon spacing */
         }
-        
-        .sidebar .nav-item .nav-link .item-name { 
-            grid-column: 2 !important; /* Text in the Middle */
+        .sidebar .nav-item .nav-link .item-name {
+            flex-grow: 1 !important;
             text-align: right !important;
             white-space: nowrap !important;
             overflow: hidden !important;
             text-overflow: ellipsis !important;
-            margin: 0 5px !important;
+            margin-left: 10px !important; /* Clear the arrow */
+        }
+        .sidebar .nav-item .nav-link .right-icon {
+            position: absolute !important;
+            left: 15px !important;
+            right: auto !important;
+            display: inline-flex !important;
+            margin: 0 !important;
+            transform: none !important;
+        }
+
+        /* Global RTL Content Fixes (Select components, Breadcrumbs) */
+        [dir="rtl"] .form-select, [dir="rtl"] .ts-control {
+            background-position: left 0.75rem center !important;
+            padding-left: 2.75rem !important;
+            padding-right: 0.75rem !important;
         }
         
-        .sidebar .nav-item .nav-link .right-icon { 
-            grid-column: 1 !important; /* Forces Arrow to the Left */
-            justify-self: start !important;
-            position: static !important;
-            margin: 0 !important;
-            display: flex !important;
-            transform: none !important;
+        [dir="rtl"] .breadcrumb-item + .breadcrumb-item {
+            padding-right: 0.5rem !important;
+            padding-left: 0 !important;
+        }
+        
+        [dir="rtl"] .breadcrumb-item + .breadcrumb-item::before {
+            padding-left: 0.5rem !important;
+            padding-right: 0 !important;
         }
 
         /* Fix Dropdown menus being cut off in responsive tables */
