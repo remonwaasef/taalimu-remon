@@ -1,7 +1,7 @@
 @extends('layouts.landing-new')
 
 @section('content')
-<div class="min-h-screen flex items-center justify-center py-20 px-4 sm:px-6 lg:px-8 bg-slate-50/50 mesh-gradient-soft noise-overlay">
+<div class="min-h-[80vh] flex items-center justify-center py-12 lg:py-24 px-4 sm:px-6 lg:px-8 bg-slate-50/50 mesh-gradient-soft noise-overlay">
     <div class="max-w-md w-full space-y-8 animate-fade-in-up">
         <div class="bg-white border border-slate-100/50 rounded-[2.5rem] shadow-2xl shadow-blue-900/5 p-8 lg:p-10 backdrop-blur-xl relative overflow-hidden">
             <!-- Decorative glow -->

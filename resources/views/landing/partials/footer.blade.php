@@ -1,4 +1,4 @@
-<footer class="bg-slate-50 pt-20 pb-10 overflow-hidden relative border-t border-slate-200/60">
+<footer class="bg-slate-50 pt-20 pb-10 overflow-hidden relative border-t border-slate-200/60 landing-footer">
     <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
 
     <div class="container mx-auto px-4 lg:px-12">

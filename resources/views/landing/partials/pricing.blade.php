@@ -1,4 +1,4 @@
-<section id="pricing" class="py-24 bg-white relative overflow-hidden" 
+<section id="pricing" class="py-24 pb-32 bg-white relative overflow-hidden" 
          x-data="{ 
             billingCycle: 'monthly',
             selectedCurrency: '{{ session('suggested_currency', 'EGP') }}',

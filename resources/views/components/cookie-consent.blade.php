@@ -124,10 +124,12 @@ const CookieConsent = {
 
     showBanner() {
         document.getElementById('cookieConsentBanner').style.display = 'block';
+        document.body.classList.add('cookie-banner-active');
     },
 
     hideBanner() {
         document.getElementById('cookieConsentBanner').style.display = 'none';
+        document.body.classList.remove('cookie-banner-active');
     },
 
     openSettings() {
