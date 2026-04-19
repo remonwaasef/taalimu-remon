@@ -629,13 +629,6 @@
                                 <div class="d-flex align-items-center gap-2">
                                     @yield('page-actions')
                                 </div>
-                                @else
-                                <div class="text-white">
-                                    <h1 class="display-5 fw-bold mb-1">{{ app()->getLocale() == 'ar' ? 'مرحباً، ' : 'Welcome, ' }}{{ auth()->user()->name ?? '' }}</h1>
-                                    <p class="opacity-75 fs-5 mb-0">
-                                        {{ app()->getLocale() == 'ar' ? 'نظرة عامة على إحصائيات وأداء المركز' : 'An overview of your center activities and performance statistics' }}
-                                    </p>
-                                </div>
                                 @endif
                             </div>
                         </div>
