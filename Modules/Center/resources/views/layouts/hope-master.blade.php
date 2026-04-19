@@ -60,7 +60,7 @@
         /* Unified Header Banner - Premium Emerald */
         .iq-navbar-header {
             padding: 0 !important;
-            height: 280px !important;
+            height: 180px !important;
             background: linear-gradient(135deg, #065f46 0%, #10b981 100%) !important;
             position: relative;
             overflow: hidden;
@@ -560,7 +560,7 @@
 
         /* Content overlap effect */
         .content-inner {
-            margin-top: -3.5rem !important;
+            margin-top: -3rem !important;
             position: relative;
             z-index: 10;
         }
@@ -601,11 +601,11 @@
             @include('center::layouts.hope-header')
             
             <!-- Sub Header Banner -->
-            <div class="iq-navbar-header" style="height: 280px;">
+            <div class="iq-navbar-header" style="height: 180px;">
                 <div class="container-fluid iq-container">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="flex-wrap d-flex justify-content-between align-items-center pt-4 pb-5">
+                            <div class="flex-wrap d-flex justify-content-between align-items-center pt-3 pb-3">
                                 @hasSection('page-title')
                                 <div>
                                     <h1 class="text-white">@yield('page-title')</h1>
