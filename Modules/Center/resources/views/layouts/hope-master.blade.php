@@ -573,9 +573,9 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        /* Content overlap effect */
+        /* Content layout (Fixed overlap issue) */
         .content-inner {
-            margin-top: -3rem !important;
+            margin-top: 1.5rem !important;
             position: relative;
             z-index: 10;
         }
@@ -584,29 +584,27 @@
         .content-inner > .d-flex:first-child h2, 
         .content-inner > .row:first-child h2,
         .content-inner > .mb-4:first-child h2 {
-            color: #ffffff !important;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            color: #1e293b !important;
         }
         .content-inner > .d-flex:first-child .text-muted,
         .content-inner > .d-flex:first-child p,
         .content-inner > .mb-4:first-child .breadcrumb-item a,
         .content-inner > .mb-4:first-child .breadcrumb-item.active {
-            color: rgba(255, 255, 255, 0.85) !important;
+            color: #64748b !important;
         }
         .content-inner > .mb-4:first-child .breadcrumb-item + .breadcrumb-item::before {
-            color: rgba(255, 255, 255, 0.6) !important;
+            color: #94a3b8 !important;
         }
         
-        /* Buttons in the overlapping header */
+        /* Buttons in the standard header layout */
         .content-inner > .d-flex:first-child .btn-outline-secondary {
-            background-color: rgba(255, 255, 255, 0.15) !important;
-            color: #ffffff !important;
-            border-color: rgba(255, 255, 255, 0.3) !important;
-            backdrop-filter: blur(10px);
+            background-color: #ffffff !important;
+            color: #475569 !important;
+            border-color: #cbd5e1 !important;
             font-weight: 600;
         }
         .content-inner > .d-flex:first-child .btn-outline-secondary:hover {
-            background-color: rgba(255, 255, 255, 0.25) !important;
+            background-color: #f1f5f9 !important;
         }
 
         /* Prevent Sidebar Arrow Overlap in RTL */
@@ -701,7 +699,7 @@
             </div>
         </div>
 
-        <div class="container-fluid content-inner mt-n5 py-0">
+        <div class="container-fluid content-inner py-0">
             @yield('content')
         </div>
 
