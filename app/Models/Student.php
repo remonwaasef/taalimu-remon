@@ -63,6 +63,7 @@ class Student extends Model
         'address',
         'parent_name',
         'parent_phone',
+        'parent_email',
         'parent_job',
         'parent_relation',
         'emergency_phone',
@@ -71,11 +72,15 @@ class Student extends Model
         'joined_at',
         'grade_level',
         'status',
+        'monthly_fee',
+        'payment_due_day',
     ];
 
     protected $casts = [
         'birth_date' => 'date',
         'joined_at' => 'date',
+        'monthly_fee' => 'decimal:2',
+        'payment_due_day' => 'integer',
     ];
 
     /**

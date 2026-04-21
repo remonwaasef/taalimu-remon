@@ -1257,8 +1257,10 @@ class InstructorController extends Controller
     public function updateWhatsAppSettings(Request $request)
     {
         $request->validate([
-            'instance_id' => 'required|string',
-            'token' => 'required|string',
+            'phone_number_id' => 'required|string',
+            'access_token' => 'required|string',
+            'waba_id' => 'nullable|string',
+            'api_version' => 'nullable|string',
             'country_code' => 'required|string',
             'attendance_template' => 'nullable|string',
             'payment_template' => 'nullable|string',
@@ -1270,8 +1272,10 @@ class InstructorController extends Controller
         
         $settings['whatsapp'] = [
             'enabled' => $request->has('enabled'),
-            'instance_id' => $request->instance_id,
-            'token' => $request->token,
+            'phone_number_id' => $request->phone_number_id,
+            'access_token' => $request->access_token,
+            'waba_id' => $request->waba_id,
+            'api_version' => $request->api_version ?: 'v21.0',
             'country_code' => $request->country_code,
             'attendance_template' => $request->attendance_template,
             'payment_template' => $request->payment_template,
@@ -1283,6 +1287,7 @@ class InstructorController extends Controller
 
         return back()->with('success', __('instructor::messages.saved'));
     }
+
 
     /**
      * Set the application locale for the session
@@ -1298,6 +1303,70 @@ class InstructorController extends Controller
         }
         
         return back();
+    }
+
+    /**
+     * Update payment reminder settings for the tenant.
+     */
+    public function updateReminderSettings(Request $request)
+    {
+        $request->validate([
+            'default_due_day' => 'required|integer|min:1|max:28',
+            'default_monthly_fee' => 'nullable|numeric|min:0',
+            'email_reminders' => 'array',
+            'whatsapp_reminders' => 'array',
+            'whatsapp_before_due' => 'boolean',
+            'email_template' => 'nullable|string|max:2000',
+            'whatsapp_template' => 'nullable|string|max:2000',
+        ]);
+
+        $tenant = \App\Models\Tenant::findOrFail(app('tenant')->id);
+        $settings = $tenant->settings ?? [];
+
+        $settings['payment_reminders'] = [
+            'default_due_day' => (int) $request->default_due_day,
+            'default_monthly_fee' => $request->default_monthly_fee ? (float) $request->default_monthly_fee : null,
+            'email_reminders' => collect($request->email_reminders)->map(function ($item) {
+                return [
+                    'days_before' => (int) $item['days_before'],
+                    'enabled' => (bool) ($item['enabled'] ?? false),
+                ];
+            })->toArray(),
+            'whatsapp_reminders' => collect($request->whatsapp_reminders)->map(function ($item) {
+                return [
+                    'days_after' => (int) $item['days_after'],
+                    'enabled' => (bool) ($item['enabled'] ?? false),
+                ];
+            })->toArray(),
+            'whatsapp_before_due' => (bool) $request->whatsapp_before_due,
+            'email_template' => $request->email_template,
+            'whatsapp_template' => $request->whatsapp_template,
+        ];
+
+        $tenant->settings = $settings;
+        $tenant->save();
+
+        return back()->with('success', __('instructor::reminders.saved'));
+    }
+
+    /**
+     * Update student-specific payment settings (monthly fee + due day).
+     */
+    public function updateStudentPayment(Request $request, \App\Models\Student $student)
+    {
+        $request->validate([
+            'monthly_fee' => 'nullable|numeric|min:0',
+            'payment_due_day' => 'nullable|integer|min:1|max:28',
+            'parent_email' => 'nullable|email|max:255',
+        ]);
+
+        $student->update([
+            'monthly_fee' => $request->monthly_fee ?: null,
+            'payment_due_day' => $request->payment_due_day ?: null,
+            'parent_email' => $request->parent_email ?: null,
+        ]);
+
+        return back()->with('success', __('instructor::reminders.saved'));
     }
 }
 

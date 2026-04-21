@@ -66,6 +66,43 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Monthly Payment Settings --}}
+            <div class="card border-0 shadow-sm rounded-4 mt-4">
+                <div class="card-body p-4">
+                    <h6 class="fw-bold mb-3"><i class="fas fa-money-check-alt me-2 text-primary"></i> {{ __('instructor::reminders.student_payment_section') }}</h6>
+                    <form action="{{ route('instructor.students.update-payment', $student->id) }}" method="POST">
+                        @csrf
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label fw-bold small text-muted">{{ __('instructor::reminders.student_monthly_fee') }}</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" name="monthly_fee" class="form-control bg-white" value="{{ $student->monthly_fee }}" placeholder="{{ __('instructor::reminders.student_payment_hint') }}">
+                                    <span class="input-group-text bg-white">{{ app('tenant')->settings['currency'] ?? 'ج.م' }}</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-bold small text-muted">{{ __('instructor::reminders.student_due_day') }}</label>
+                                <select name="payment_due_day" class="form-select bg-white">
+                                    <option value="">{{ __('instructor::reminders.student_payment_hint') }}</option>
+                                    @for($d = 1; $d <= 28; $d++)
+                                        <option value="{{ $d }}" {{ $student->payment_due_day == $d ? 'selected' : '' }}>{{ $d }}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-bold small text-muted">{{ __('instructor::reminders.student_parent_email') }}</label>
+                                <input type="email" name="parent_email" class="form-control bg-white" value="{{ $student->parent_email }}" placeholder="parent@example.com">
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary btn-sm rounded-pill px-4 fw-bold">
+                                    <i class="fas fa-save me-1"></i> {{ __('instructor::reminders.save_settings') }}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <!-- Quick Stats -->
