@@ -13,11 +13,11 @@
                     
                     {{-- Header --}}
                     <tr>
-                        <td style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 32px 40px; text-align: center;">
-                            <h1 style="color: #ffffff; margin: 0; font-size: 22px; font-weight: 700;">
+                        <td style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 50px 40px; text-align: center;">
+                            <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 700;">
                                 {{ $tenantName }}
                             </h1>
-                            <p style="color: rgba(255,255,255,0.85); margin: 8px 0 0; font-size: 14px;">
+                            <p style="color: rgba(255,255,255,0.85); margin: 12px 0 0; font-size: 15px;">
                                 @if($stage === 'due_day')
                                     ⏰ اليوم موعد السداد
                                 @elseif(str_starts_with($stage, 'overdue'))
@@ -31,8 +31,8 @@
 
                     {{-- Body --}}
                     <tr>
-                        <td style="padding: 40px;">
-                            <p style="color: #374151; font-size: 16px; line-height: 1.8; margin: 0 0 24px;">
+                        <td style="padding: 50px 40px 40px;">
+                            <p style="color: #374151; font-size: 16px; line-height: 1.8; margin: 0 0 32px;">
                                 مرحباً،
                                 <br>
                                 نود تذكيركم بأن مصروفات الطالب/ة <strong style="color: #10b981;">{{ $studentName }}</strong>
