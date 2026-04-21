@@ -679,41 +679,21 @@
             <!-- Header Component -->
             @include('center::layouts.hope-header')
             
-            <!-- Sub Header Banner (Premium Emerald Branding) -->
-            <div class="iq-navbar-header" style="height: 220px;">
+            <!-- Sub Header Banner -->
+            <div class="iq-navbar-header" style="height: 180px;">
                 <div class="container-fluid iq-container">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="d-flex justify-content-between align-items-center pt-5 pb-3">
-                                {{-- Left Side: Page Actions (Visible in RTL as left) --}}
-                                <div class="d-flex align-items-center gap-2 order-1">
+                            <div class="flex-wrap d-flex justify-content-between align-items-center pt-3 pb-3">
+                                @hasSection('page-title')
+                                <div>
+                                    <h1 class="text-white">@yield('page-title')</h1>
+                                    <p class="mb-0 text-white opacity-75">@yield('page-subtitle')</p>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
                                     @yield('page-actions')
                                 </div>
-
-                                {{-- Right Side: Center Branding & Page Title (Visible in RTL as right) --}}
-                                <div class="text-end order-2">
-                                    <div class="d-flex align-items-center justify-content-end gap-3 mb-2">
-                                        <div>
-                                            <h1 class="text-white fw-800 mb-0" style="font-size: 2.5rem !important;">{{ $tenant->name ?? 'Taalimu' }}</h1>
-                                        </div>
-                                        @if($tenant->logo)
-                                            <div class="bg-white p-2 rounded-4 shadow-sm">
-                                                <img src="{{ asset('storage/' . $tenant->logo) }}" class="img-fluid" style="max-height: 50px; width: auto;">
-                                            </div>
-                                        @else
-                                            <div class="bg-white rounded-4 shadow-sm d-flex align-items-center justify-content-center text-primary fw-bold" style="width: 60px; height: 60px; font-size: 1.5rem;">
-                                                <i class="fas fa-university"></i>
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <p class="mb-0 text-white opacity-80 fw-600" style="font-size: 1.1rem !important;">
-                                        @if(trim($__env->yieldContent('page-subtitle')))
-                                            @yield('page-subtitle')
-                                        @else
-                                            {{ app()->isLocale('ar') ? 'إدارة مركزك بشكل أسهل من أي وقت مضى' : 'Manage your center easier than ever' }}
-                                        @endif
-                                    </p>
-                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
