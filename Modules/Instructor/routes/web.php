@@ -39,6 +39,10 @@ $instructorRoutes = function () {
         Route::get('/whatsapp', [InstructorController::class, 'whatsappSettings'])->name('instructor.whatsapp.settings');
         Route::post('/whatsapp/update', [InstructorController::class, 'updateWhatsAppSettings'])->name('instructor.whatsapp.update');
         
+        // Payment Reminders Settings
+        Route::post('/reminders/update', [InstructorController::class, 'updateReminderSettings'])->name('instructor.reminders.update');
+        Route::post('/students/{student}/update-payment', [InstructorController::class, 'updateStudentPayment'])->name('instructor.students.update-payment');
+        
         // Auto-clear cache route (Temporary helper)
         Route::get('/clear-cache', function() {
             \Illuminate\Support\Facades\Artisan::call('view:clear');

@@ -409,43 +409,36 @@
 
                                         <div class="row g-3">
                                             <div class="col-md-6">
-                                                <label class="form-label fw-bold small text-muted">{{ __('center::settings.whatsapp.instance_id') }}</label>
-                                                <input type="text" name="settings[whatsapp][instance_id]" class="form-control" value="{{ $tenant->settings['whatsapp']['instance_id'] ?? '' }}" placeholder="{{ __('center::settings.whatsapp.instance_id_placeholder') }}">
+                                                <label class="form-label fw-bold small text-muted">Phone Number ID</label>
+                                                <input type="text" name="settings[whatsapp][phone_number_id]" class="form-control" value="{{ $tenant->settings['whatsapp']['phone_number_id'] ?? '' }}" placeholder="1234567890">
                                             </div>
                                             <div class="col-md-6">
-                                                <label class="form-label fw-bold small text-muted">{{ __('center::settings.whatsapp.token') }}</label>
-                                                <input type="text" name="settings[whatsapp][token]" class="form-control" value="{{ $tenant->settings['whatsapp']['token'] ?? '' }}" placeholder="{{ __('center::messages.blade_0707') }}">
+                                                <label class="form-label fw-bold small text-muted">Access Token</label>
+                                                <input type="password" name="settings[whatsapp][access_token]" class="form-control" value="{{ $tenant->settings['whatsapp']['access_token'] ?? '' }}" placeholder="EAAG...">
                                             </div>
                                             <div class="col-md-6 mt-3">
                                                 <label class="form-label fw-bold small text-muted"><i class="fas fa-globe me-1"></i> {{ __('center::settings.whatsapp.default_country_code') }}</label>
-                                                <select name="settings[default_country_code]" class="form-select">
-                                                    @php $cc = $tenant->settings['default_country_code'] ?? '20'; @endphp
-                                                    <option value="20"  {{ $cc == '20'  ? 'selected' : '' }}>🇪🇬 {{ __('center::settings.whatsapp.countries.eg') }} (+20)</option>
-                                                    <option value="966" {{ $cc == '966' ? 'selected' : '' }}>🇸🇦 {{ __('center::settings.whatsapp.countries.sa') }} (+966)</option>
-                                                    <option value="971" {{ $cc == '971' ? 'selected' : '' }}>🇦🇪 {{ __('center::settings.whatsapp.countries.ae') }} (+971)</option>
-                                                    <option value="965" {{ $cc == '965' ? 'selected' : '' }}>🇰🇼 {{ __('center::settings.whatsapp.countries.kw') }} (+965)</option>
-                                                    <option value="974" {{ $cc == '974' ? 'selected' : '' }}>🇶🇦 {{ __('center::settings.whatsapp.countries.qa') }} (+974)</option>
-                                                    <option value="973" {{ $cc == '973' ? 'selected' : '' }}>🇧🇭 {{ __('center::settings.whatsapp.countries.bh') }} (+973)</option>
-                                                    <option value="968" {{ $cc == '968' ? 'selected' : '' }}>🇴🇲 {{ __('center::settings.whatsapp.countries.om') }} (+968)</option>
-                                                    <option value="962" {{ $cc == '962' ? 'selected' : '' }}>🇯🇴 {{ __('center::settings.whatsapp.countries.jo') }} (+962)</option>
-                                                    <option value="961" {{ $cc == '961' ? 'selected' : '' }}>🇱🇧 {{ __('center::settings.whatsapp.countries.lb') }} (+961)</option>
-                                                    <option value="964" {{ $cc == '964' ? 'selected' : '' }}>🇮🇶 {{ __('center::settings.whatsapp.countries.iq') }} (+964)</option>
-                                                    <option value="218" {{ $cc == '218' ? 'selected' : '' }}>🇱🇾 {{ __('center::settings.whatsapp.countries.ly') }} (+218)</option>
-                                                    <option value="216" {{ $cc == '216' ? 'selected' : '' }}>🇹🇳 {{ __('center::settings.whatsapp.countries.tn') }} (+216)</option>
-                                                    <option value="213" {{ $cc == '213' ? 'selected' : '' }}>🇩🇿 {{ __('center::settings.whatsapp.countries.dz') }} (+213)</option>
-                                                    <option value="212" {{ $cc == '212' ? 'selected' : '' }}>🇲🇦 {{ __('center::settings.whatsapp.countries.ma') }} (+212)</option>
-                                                    <option value="249" {{ $cc == '249' ? 'selected' : '' }}>🇸🇩 {{ __('center::settings.whatsapp.countries.sd') }} (+249)</option>
-                                                    <option value="33"  {{ $cc == '33'  ? 'selected' : '' }}>🇫🇷 {{ __('center::settings.whatsapp.countries.fr') }} (+33)</option>
-                                                    <option value="44"  {{ $cc == '44'  ? 'selected' : '' }}>🇬🇧 {{ __('center::settings.whatsapp.countries.gb') }} (+44)</option>
-                                                    <option value="1"   {{ $cc == '1'   ? 'selected' : '' }}>🇺🇸 {{ __('center::settings.whatsapp.countries.us') }} (+1)</option>
-                                                    <option value="90"  {{ $cc == '90'  ? 'selected' : '' }}>🇹🇷 {{ __('center::settings.whatsapp.countries.tr') }} (+90)</option>
+                                                <select name="settings[whatsapp][country_code]" class="form-select">
+                                                    @php $cc = $tenant->settings['whatsapp']['country_code'] ?? '20'; @endphp
+                                                    <option value="20"  {{ $cc == '20'  ? 'selected' : '' }}>🇪🇬 (+20)</option>
+                                                    <option value="966" {{ $cc == '966' ? 'selected' : '' }}>🇸🇦 (+966)</option>
                                                 </select>
                                                 <small class="text-muted">{{ __('center::settings.whatsapp.default_country_code_help') }}</small>
+                                            </div>
+                                            <div class="col-md-6 mt-3">
+                                                <label class="form-label fw-bold small text-muted">API Version</label>
+                                                <input type="text" name="settings[whatsapp][api_version]" class="form-control" value="{{ $tenant->settings['whatsapp']['api_version'] ?? 'v21.0' }}" placeholder="v21.0">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
+                                <div class="alert alert-success border-0 rounded-4 bg-opacity-10 py-3">
+                                    <h6 class="fw-bold"><i class="fas fa-lightbulb me-2 text-success"></i> WhatsApp Official Setup</h6>
+                                    <p class="small mb-0 mt-2">
+                                        {{ __('center::settings.whatsapp.official_note') ?? 'Ensure templates are approved in Meta Business Suite.' }}
+                                    </p>
+                                </div>
                                 <div class="alert alert-info border-0 rounded-4">
                                     <h6 class="fw-bold"><i class="fas fa-lightbulb me-2"></i>{{ __('center::settings.whatsapp.info_title') }}</h6>
                                     <ul class="small mb-0 mt-2">
@@ -453,6 +446,7 @@
                                         <li><strong>{{ __('center::settings.whatsapp.payment_msg') }}</strong></li>
                                     </ul>
                                 </div>
+
 
                                 <div class="mt-4 pt-3 border-top d-flex justify-content-end">
                                     <button type="submit" class="btn btn-primary px-5 shadow-sm rounded-pill">

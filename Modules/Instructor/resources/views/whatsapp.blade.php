@@ -29,29 +29,45 @@
                         </div>
 
                         <div class="row g-4 mb-4">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label class="form-label fw-bold small text-muted">{{ __('instructor::whatsapp.default_country_code') }}</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-white"><i class="fas fa-globe text-muted"></i></span>
-                                    <input type="text" name="country_code" class="form-control bg-white focus-ring-primary" value="{{ $settings['country_code'] ?? '20' }}" placeholder="مثال: 20" required>
+                                    <input type="text" name="country_code" class="form-control bg-white focus-ring-primary" value="{{ $settings['country_code'] ?? '20' }}" placeholder="20" required>
                                 </div>
-                                <div class="form-text mt-1 small">{{ __('instructor::whatsapp.country_code_hint') }}</div>
                             </div>
 
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold small text-muted">{{ __('instructor::whatsapp.instance_id') }}</label>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold small text-muted">{{ __('instructor::whatsapp.phone_number_id') }}</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-white"><i class="fas fa-id-card text-muted"></i></span>
-                                    <input type="text" name="instance_id" class="form-control bg-white focus-ring-primary" value="{{ $settings['instance_id'] ?? '' }}" placeholder="مثال: instance12345" required>
+                                    <input type="text" name="phone_number_id" class="form-control bg-white focus-ring-primary" value="{{ $settings['phone_number_id'] ?? '' }}" placeholder="1234567890" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold small text-muted">{{ __('instructor::whatsapp.api_version') }}</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white"><i class="fas fa-code-branch text-muted"></i></span>
+                                    <input type="text" name="api_version" class="form-control bg-white focus-ring-primary" value="{{ $settings['api_version'] ?? 'v21.0' }}" placeholder="v21.0">
                                 </div>
                             </div>
                             
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold small text-muted">{{ __('instructor::whatsapp.token') }}</label>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold small text-muted">{{ __('instructor::whatsapp.waba_id') }} ({{ __('instructor::whatsapp.optional') }})</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white"><i class="fas fa-briefcase text-muted"></i></span>
+                                    <input type="text" name="waba_id" class="form-control bg-white focus-ring-primary" value="{{ $settings['waba_id'] ?? '' }}" placeholder="Business ID">
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label fw-bold small text-muted">{{ __('instructor::whatsapp.access_token') }}</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-white"><i class="fas fa-key text-muted"></i></span>
-                                    <input type="password" name="token" class="form-control bg-white focus-ring-primary" value="{{ $settings['token'] ?? '' }}" placeholder="{{ __('instructor::whatsapp.token_placeholder') }}" required>
+                                    <input type="password" name="access_token" class="form-control bg-white focus-ring-primary" value="{{ $settings['access_token'] ?? '' }}" placeholder="EAAG..." required>
                                 </div>
+                                <div class="form-text small">{{ __('instructor::whatsapp.access_token_hint') }}</div>
                             </div>
                         </div>
 
@@ -66,11 +82,11 @@
                                         <i class="fas fa-info-circle"></i>
                                         <div class="small">
                                             {{ __('instructor::whatsapp.available_variables') }} 
-                                            <code class="mx-1">:student_name</code> ({{ __('instructor::whatsapp.student_name') }}) ، 
-                                            <code class="mx-1">:course_name</code> ({{ __('instructor::whatsapp.course_name') }}) ، 
-                                            <code class="mx-1">:tenant_name</code> ({{ __('instructor::whatsapp.tenant_name') }}) ،
-                                            <code class="mx-1">:amount</code> ({{ __('instructor::whatsapp.amount') }}) ،
-                                            <code class="mx-1">:remaining</code> ({{ __('instructor::whatsapp.remaining') }}).
+                                            <code class="mx-1">:student_name</code> ، 
+                                            <code class="mx-1">:course_name</code> ، 
+                                            <code class="mx-1">:tenant_name</code> ،
+                                            <code class="mx-1">:amount</code> ،
+                                            <code class="mx-1">:remaining</code>.
                                         </div>
                                     </div>
                                 </div>
@@ -78,30 +94,27 @@
 
                             <div class="col-md-4">
                                 <label class="form-label fw-bold small text-muted">{{ __('instructor::whatsapp.attendance_msg') }}</label>
-                                <textarea name="attendance_template" class="form-control bg-white rounded-3 text-start" rows="4" placeholder="{{ __('instructor::whatsapp.leave_empty') }}">{{ $settings['attendance_template'] ?? '' }}</textarea>
-                                <div class="form-text x-small mt-1 text-muted">{{ __('instructor::whatsapp.attendance_msg_hint') }}</div>
+                                <textarea name="attendance_template" class="form-control bg-white rounded-3 text-start" rows="4">{{ $settings['attendance_template'] ?? '' }}</textarea>
                             </div>
 
                             <div class="col-md-4">
                                 <label class="form-label fw-bold small text-muted">{{ __('instructor::whatsapp.payment_msg') }}</label>
-                                <textarea name="payment_template" class="form-control bg-white rounded-3 text-start" rows="4" placeholder="{{ __('instructor::whatsapp.leave_empty') }}">{{ $settings['payment_template'] ?? '' }}</textarea>
-                                <div class="form-text x-small mt-1 text-muted">{{ __('instructor::whatsapp.payment_msg_hint') }}</div>
+                                <textarea name="payment_template" class="form-control bg-white rounded-3 text-start" rows="4">{{ $settings['payment_template'] ?? '' }}</textarea>
                             </div>
 
                             <div class="col-md-4">
                                 <label class="form-label fw-bold small text-muted">{{ __('instructor::whatsapp.debt_msg') }}</label>
-                                <textarea name="debt_template" class="form-control bg-white rounded-3 text-start" rows="4" placeholder="{{ __('instructor::whatsapp.leave_empty') }}">{{ $settings['debt_template'] ?? '' }}</textarea>
-                                <div class="form-text x-small mt-1 text-muted">{{ __('instructor::whatsapp.debt_msg_hint') }}</div>
+                                <textarea name="debt_template" class="form-control bg-white rounded-3 text-start" rows="4">{{ $settings['debt_template'] ?? '' }}</textarea>
                             </div>
                         </div>
 
-                        <div class="alert alert-info border-0 rounded-4 bg-opacity-10 py-3">
-                            <h6 class="fw-bold fs-6"><i class="fas fa-lightbulb me-2 text-primary"></i> {{ __('instructor::whatsapp.setup_steps') }}</h6>
+                        <div class="alert alert-success border-0 rounded-4 bg-opacity-10 py-3 mt-4">
+                            <h6 class="fw-bold fs-6"><i class="fas fa-lightbulb me-2 text-success"></i> {{ __('instructor::whatsapp.setup_steps_official') }}</h6>
                             <ul class="small mb-0 mt-2 text-secondary">
-                                <li>{!! __('instructor::whatsapp.step_1') !!}</li>
-                                <li>{{ __('instructor::whatsapp.step_2') }}</li>
-                                <li>{!! __('instructor::whatsapp.step_3') !!}</li>
-                                <li>{{ __('instructor::whatsapp.step_4') }}</li>
+                                <li>{!! __('instructor::whatsapp.official_step_1') !!}</li>
+                                <li>{{ __('instructor::whatsapp.official_step_2') }}</li>
+                                <li>{!! __('instructor::whatsapp.official_step_3') !!}</li>
+                                <li>{{ __('instructor::whatsapp.official_step_4') }}</li>
                             </ul>
                         </div>
 
@@ -110,6 +123,7 @@
                                 <i class="fas fa-save me-2"></i> {{ __('instructor::whatsapp.save_settings') }}
                             </button>
                         </div>
+
                     </form>
                 </div>
             </div>

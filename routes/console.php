@@ -11,6 +11,9 @@ Artisan::command('inspire', function () {
 // Execute daily at 10:00 AM
 Schedule::command('finance:remind-debts')->dailyAt('10:00');
 
+// Payment Reminders: Email + WhatsApp (Daily at 08:00 AM)
+Schedule::command('reminders:send-payment')->dailyAt('08:00');
+
 // Telegram Subscription Reminders (Daily)
 Schedule::command('app:send-subscription-reminders')->dailyAt('09:00');
 

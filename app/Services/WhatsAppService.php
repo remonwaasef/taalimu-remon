@@ -12,6 +12,9 @@ class WhatsAppService
      * For now, this is a mock/placeholder for UltraMsg or similar APIs.
      * In a real scenario, we would use tenant-specific credentials.
      */
+    /**
+     * Send a WhatsApp message using Meta Cloud API.
+     */
     public function sendMessageByTenant($tenant, $to, $message)
     {
         $settings = $tenant->settings['whatsapp'] ?? [];
@@ -20,12 +23,13 @@ class WhatsAppService
             return false;
         }
 
-        $token = $settings['token'] ?? null;
-        $instanceId = $settings['instance_id'] ?? null;
+        $accessToken = $settings['access_token'] ?? null;
+        $phoneNumberId = $settings['phone_number_id'] ?? null;
+        $apiVersion = $settings['api_version'] ?? 'v21.0';
         $countryCode = $settings['country_code'] ?? '20';
 
-        if (!$token || !$instanceId) {
-            Log::warning("WhatsApp credentials missing for tenant: " . $tenant->id);
+        if (!$accessToken || !$phoneNumberId) {
+            Log::warning("Official WhatsApp credentials missing for tenant: " . $tenant->id);
             return false;
         }
 
@@ -35,22 +39,27 @@ class WhatsAppService
             $to = $countryCode . ltrim($to, '0');
         }
 
-        // Example for UltraMsg API
         try {
-            $response = Http::post("https://api.ultramsg.com/{$instanceId}/messages/chat", [
-                'token' => $token,
-                'to' => $to,
-                'body' => $message,
-            ]);
+            $response = Http::withToken($accessToken)
+                ->post("https://graph.facebook.com/{$apiVersion}/{$phoneNumberId}/messages", [
+                    'messaging_product' => 'whatsapp',
+                    'recipient_type' => 'individual',
+                    'to' => $to,
+                    'type' => 'text',
+                    'text' => [
+                        'preview_url' => false,
+                        'body' => $message,
+                    ],
+                ]);
 
             if ($response->successful()) {
-                Log::info("WhatsApp message sent to {$to} for tenant {$tenant->id}");
+                Log::info("Official WhatsApp message sent to {$to} for tenant {$tenant->id}");
                 return true;
             }
 
-            Log::error("WhatsApp failed for tenant {$tenant->id}: " . $response->body());
+            Log::error("Official WhatsApp failed for tenant {$tenant->id}: " . $response->body());
         } catch (\Exception $e) {
-            Log::error("WhatsApp exception for tenant {$tenant->id}: " . $e->getMessage());
+            Log::error("Official WhatsApp exception for tenant {$tenant->id}: " . $e->getMessage());
         }
 
         return false;
@@ -152,11 +161,12 @@ class WhatsAppService
      */
     public function sendSystemMessage($to, $message)
     {
-        $token = env('WHATSAPP_SYSTEM_TOKEN');
-        $instanceId = env('WHATSAPP_SYSTEM_INSTANCE_ID');
+        $accessToken = env('WHATSAPP_SYSTEM_TOKEN');
+        $phoneNumberId = env('WHATSAPP_SYSTEM_PHONE_ID');
+        $apiVersion = env('WHATSAPP_SYSTEM_VERSION', 'v21.0');
         $countryCode = env('WHATSAPP_SYSTEM_COUNTRY_CODE', '20');
 
-        if (!$token || !$instanceId) {
+        if (!$accessToken || !$phoneNumberId) {
             // Fallback: Log the message instead of sending if keys are missing
             Log::info("WhatsApp System Message (SIMULATED): To: {$to}, Message: {$message}");
             return true; 
@@ -169,22 +179,29 @@ class WhatsAppService
         }
 
         try {
-            $response = Http::post("https://api.ultramsg.com/{$instanceId}/messages/chat", [
-                'token' => $token,
-                'to' => $to,
-                'body' => $message,
-            ]);
+            $response = Http::withToken($accessToken)
+                ->post("https://graph.facebook.com/{$apiVersion}/{$phoneNumberId}/messages", [
+                    'messaging_product' => 'whatsapp',
+                    'recipient_type' => 'individual',
+                    'to' => $to,
+                    'type' => 'text',
+                    'text' => [
+                        'preview_url' => false,
+                        'body' => $message,
+                    ],
+                ]);
 
             if ($response->successful()) {
-                Log::info("WhatsApp System Message sent to {$to}");
+                Log::info("Official WhatsApp System Message sent to {$to}");
                 return true;
             }
 
-            Log::error("WhatsApp System Message failed: " . $response->body());
+            Log::error("Official WhatsApp System Message failed: " . $response->body());
         } catch (\Exception $e) {
-            Log::error("WhatsApp System Message exception: " . $e->getMessage());
+            Log::error("Official WhatsApp System Message exception: " . $e->getMessage());
         }
 
         return false;
     }
+
 }
