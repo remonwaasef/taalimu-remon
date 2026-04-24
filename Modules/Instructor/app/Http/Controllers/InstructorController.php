@@ -13,6 +13,9 @@ use App\Models\Payment;
 use App\Services\AttendanceService;
 use Modules\Center\Models\Attendance;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomeStudentMail;
+use App\Mail\WelcomeGuardianMail;
 
 class InstructorController extends Controller
 {
@@ -485,6 +488,39 @@ class InstructorController extends Controller
             }
 
             \DB::commit();
+
+            // Send welcome email to student (only if real email)
+            try {
+                $student = Student::where('user_id', $user->id)->first();
+                if ($student && $validated['email'] && !preg_match('/^std\d+\..+@taalimu\.com$/', $validated['email'])) {
+                    $tenant = app('tenant');
+                    $tenantSettings = $tenant->settings['email_templates'] ?? [];
+                    $defaultPresetKey = config('email_templates.default_preset', 'formal');
+                    $defaultPreset = config("email_templates.presets.{$defaultPresetKey}", []);
+
+                    $variables = [
+                        'student_name' => $student->name,
+                        'center_name'  => $tenant->name,
+                        'login_url'    => url('/login'),
+                        'password'     => $validated['phone'],
+                        'phone'        => $student->phone ?? '',
+                        'guardian_name' => '',
+                        'grade'        => '',
+                    ];
+
+                    $studentEnabled = (bool) ($tenantSettings['welcome_student_enabled'] ?? true);
+                    if ($studentEnabled) {
+                        $subject = $tenantSettings['welcome_student_subject'] ?? $defaultPreset['student_subject'] ?? '';
+                        $body = $tenantSettings['welcome_student_body'] ?? $defaultPreset['student_body'] ?? '';
+                        Mail::to($validated['email'])->queue(new WelcomeStudentMail(
+                            $student, $subject, $body, $variables, $tenant->name
+                        ));
+                    }
+                }
+            } catch (\Exception $mailEx) {
+                Log::error('Instructor welcome email failed: ' . $mailEx->getMessage());
+            }
+
             return redirect()->route('instructor.students.list')->with('success', __('instructor::messages.student_added', ['name' => $validated['name']]));
         } catch (\Exception $e) {
             \DB::rollBack();
@@ -785,6 +821,50 @@ class InstructorController extends Controller
         $attendances = $attendanceQuery->get();
 
         return view('instructor::students.show', compact('student', 'attendances'));
+    }
+
+    /**
+     * Send an email to the student
+     */
+    public function sendEmail(Request $request, Student $student)
+    {
+        $instructor = $this->resolveInstructor();
+        
+        // Exclude unauthorized
+        if ($instructor) {
+            $isEnrolled = Enrollment::where('user_id', $student->user_id)
+                ->whereIn('course_id', $instructor->courses->pluck('id'))
+                ->exists();
+            if (!$isEnrolled) {
+                abort(403);
+            }
+        }
+
+        $request->validate([
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string',
+        ]);
+
+        $email = $student->email ?: ($student->user ? $student->user->email : null);
+
+        if (!$email) {
+            return back()->with('error', 'هذا الطالب لا يمتلك بريداً إلكترونياً مسجلاً.');
+        }
+
+        try {
+            $senderName = $instructor ? $instructor->name : app('tenant')->name;
+            \Illuminate\Support\Facades\Mail::to($email)->send(new \App\Mail\CustomStudentMail(
+                $student, 
+                $request->subject, 
+                $request->message,
+                $senderName
+            ));
+            
+            return back()->with('success', 'تم إرسال البريد الإلكتروني للطالب بنجاح.');
+        } catch (\Exception $e) {
+            \Log::error("Failed to send email to student {$student->id}: " . $e->getMessage());
+            return back()->with('error', 'حدث خطأ أثناء الإرسال: ' . $e->getMessage());
+        }
     }
 
     // ─── Schedule Management ───

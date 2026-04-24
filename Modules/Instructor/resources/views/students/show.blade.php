@@ -46,6 +46,9 @@
                         <a href="tel:{{ $student->phone }}" class="btn btn-light rounded-pill px-3">
                             <i class="fas fa-phone"></i>
                         </a>
+                        <button type="button" class="btn btn-outline-primary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#sendEmailModal" title="{{ __('instructor::students.send_email') ?? 'إرسال بريد إلكتروني' }}">
+                            <i class="fas fa-envelope"></i>
+                        </button>
                     </div>
 
                     <hr class="opacity-10 my-4">
@@ -273,6 +276,42 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Send Email Modal -->
+<div class="modal fade" id="sendEmailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow rounded-4">
+            <div class="modal-header border-0 bg-light p-4 rounded-top-4">
+                <h5 class="modal-title fw-bold"><i class="fas fa-envelope me-2 text-primary"></i> إرسال بريد إلكتروني للطالب</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('instructor.students.send-email', $student->id) }}" method="POST">
+                @csrf
+                <div class="modal-body p-4">
+                    @if(!$student->email && !($student->user->email ?? null))
+                        <div class="alert alert-warning small border-0 shadow-sm">
+                            <i class="fas fa-exclamation-triangle me-1"></i> هذا الطالب لا يمتلك بريداً إلكترونياً مسجلاً. قد لا ينجح الإرسال.
+                        </div>
+                    @endif
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-muted">موضوع الرسالة (Subject) <span class="text-danger">*</span></label>
+                        <input type="text" name="subject" class="form-control bg-light border-0" required placeholder="مثال: تنبيه غياب، تحديث بيانات، أو تحية">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-muted">نص الرسالة <span class="text-danger">*</span></label>
+                        <textarea name="message" class="form-control bg-light border-0" rows="6" required placeholder="اكتب محتوى رسالتك هنا..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">
+                        <i class="fas fa-paper-plane me-2"></i> إرسال الآن
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
