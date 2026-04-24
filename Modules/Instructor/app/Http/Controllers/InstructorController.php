@@ -549,6 +549,7 @@ class InstructorController extends Controller
                             'اسم_الطالب' => $student->name,
                             'اسم_المركز' => $tenant->name,
                             'اسم_المجموعة' => $course ? $course->title : '',
+                            'سعر_الدورة' => $course ? ($course->price . ' ج.م') : '',
                             'رابط_الدخول' => url('/login'),
                         ];
                         
