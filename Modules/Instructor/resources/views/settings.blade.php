@@ -4,7 +4,6 @@
 @section('page-subtitle', __('instructor::settings.subtitle') ?? 'Manage your account and subscription')
 
 @section('content')
-<div class="container-fluid">
     <div class="row mb-4">
         <div class="col-12">
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
@@ -829,7 +828,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <style>
     .animate-fade-in {

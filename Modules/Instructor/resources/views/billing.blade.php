@@ -10,7 +10,6 @@
 @endsection
 
 @section('content')
-<div class="container-fluid">
 
     {{-- Search & Filter Bar --}}
     <div class="card border-0 shadow-sm rounded-4 mb-4">
