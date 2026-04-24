@@ -14,12 +14,14 @@ class NotifPaymentConfirmedMail extends Mailable implements ShouldQueue
     public string $processedBody;
     public string $subjectLine;
     public string $senderName;
+    public string $studentName;
 
-    public function __construct(string $subjectTemplate, string $bodyTemplate, array $variables, string $senderName)
+    public function __construct(?string $subjectTemplate, ?string $bodyTemplate, array $variables, string $senderName, string $studentName = '')
     {
         $this->senderName = $senderName;
-        $this->subjectLine = self::replacePlaceholders($subjectTemplate, $variables);
-        $this->processedBody = self::replacePlaceholders($bodyTemplate, $variables);
+        $this->studentName = $studentName;
+        $this->subjectLine = self::replacePlaceholders($subjectTemplate ?? '', $variables);
+        $this->processedBody = self::replacePlaceholders($bodyTemplate ?? '', $variables);
     }
 
     public function build()
@@ -27,7 +29,7 @@ class NotifPaymentConfirmedMail extends Mailable implements ShouldQueue
         return $this->subject($this->subjectLine)
                     ->view('emails.welcome_student_mail') // Reuse the clean template
                     ->with([
-                        'studentName' => $this->senderName,
+                        'studentName' => $this->studentName ?: $this->senderName,
                         'messageContent' => $this->processedBody,
                         'senderName'     => $this->senderName,
                     ]);

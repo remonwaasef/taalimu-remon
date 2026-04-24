@@ -557,13 +557,13 @@ class InstructorController extends Controller
                         
                         if ($hasValidStudentEmail) {
                             Mail::to($validated['email'])->queue(new \App\Mail\NotifGroupEnrollmentMail(
-                                $groupSubject, $groupBody, $groupVariables, $tenant->name
+                                $groupSubject, $groupBody, $groupVariables, $tenant->name, $student->name
                             ));
                         }
                         
                         if ($hasValidParentEmail) {
                             Mail::to($validated['parent_email'])->queue(new \App\Mail\NotifGroupEnrollmentMail(
-                                $groupSubject, $groupBody, $groupVariables, $tenant->name
+                                $groupSubject, $groupBody, $groupVariables, $tenant->name, $student->name
                             ));
                         }
                     }
@@ -813,14 +813,14 @@ class InstructorController extends Controller
 
                 if ($realEmail) {
                     \Illuminate\Support\Facades\Mail::to($realEmail)->queue(new \App\Mail\NotifPaymentConfirmedMail(
-                        $subject, $body, $variables, $tenant->name
+                        $subject, $body, $variables, $tenant->name, $student->name
                     ));
                 }
                 
                 // Also send to parent if email exists
                 if ($student->parent_email) {
                     \Illuminate\Support\Facades\Mail::to($student->parent_email)->queue(new \App\Mail\NotifPaymentConfirmedMail(
-                        $subject, $body, $variables, $tenant->name
+                        $subject, $body, $variables, $tenant->name, $student->name
                     ));
                 }
             }
