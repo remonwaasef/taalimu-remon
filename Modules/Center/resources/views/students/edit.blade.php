@@ -126,6 +126,13 @@
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold"><i class="fas fa-envelope me-1 text-info opacity-50"></i> بريد ولي الأمر</label>
+                                <input type="email" name="parent_email" value="{{ old('parent_email', $student->parent_email) }}" class="form-control form-control-lg bg-light border-0" placeholder="example@email.com">
+                                @error('parent_email')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">{{ __('center::messages.blade_0787') }}</label>
                                 <input type="text" name="parent_job" value="{{ old('parent_job', $student->parent_job) }}" class="form-control form-control-lg bg-light border-0">
                                 @error('parent_job')

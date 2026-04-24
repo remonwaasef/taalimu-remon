@@ -1,229 +1,168 @@
 @extends('center::layouts.hope-master')
 
 @section('content')
-    <div class="row g-4 position-relative scroll-container-elite">
-        <!-- Sticky Sidebar Navigation -->
-        <div class="col-xl-3 d-none d-xl-block">
-            <div class="sticky-top" style="top: 100px; z-index: 10;">
-                <div class="elite-nav-card bg-white rounded-5 shadow-elite border p-4">
-                    <h6 class="fw-bold mb-4 text-dark opacity-50 small text-uppercase letter-spacing-1">{{ __('center::messages.blade_0710') }}</h6>
-                    <div class="nav flex-column gap-3 elite-vertical-nav">
-                        <a href="#section-personal" class="nav-link active" data-section="personal">
-                            <div class="nav-dot"></div>
-                            <div class="nav-content">
-                                <span class="nav-label">{{ __('center::messages.blade_0711') }}</span>
-                                <small class="text-muted">{{ __('center::messages.blade_0712') }}</small>
-                            </div>
-                        </a>
-                        <a href="#section-parent" class="nav-link" data-section="parent">
-                            <div class="nav-dot"></div>
-                            <div class="nav-content">
-                                <span class="nav-label">{{ __('center::messages.blade_0713') }}</span>
-                                <small class="text-muted">{{ __('center::messages.blade_0714') }}</small>
-                            </div>
-                        </a>
-                        <a href="#section-academic" class="nav-link" data-section="academic">
-                            <div class="nav-dot"></div>
-                            <div class="nav-content">
-                                <span class="nav-label">{{ __('center::messages.blade_0715') }}</span>
-                                <small class="text-muted">{{ __('center::messages.blade_0716') }}</small>
-                            </div>
-                        </a>
-                    </div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark">{{ __('center::messages.blade_0719') }}</h2>
+        <a href="{{ route('center.students.index') }}" class="btn btn-outline-secondary rounded-pill px-4">{{ __('center::messages.blade_0721') }}</a>
+    </div>
 
-                    <div class="mt-5 pt-4 border-top">
-                        <div class="d-flex align-items-center gap-2 text-success small mb-3">
-                            <i class="fas fa-shield-halved"></i>
-                            <span class="fw-bold">{{ __('center::messages.blade_0717') }}</span>
-                        </div>
-                        <button type="button" onclick="document.getElementById('student-form').submit()" class="btn btn-primary w-100 rounded-pill py-3 fw-bold shadow-elite btn-elite-submit">{{ __('center::messages.blade_0718') }}<i class="fas fa-check-double ms-2"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main Form Column -->
-        <div class="col-xl-9">
-            <div class="header-action-bar mb-5 animate__animated animate__fadeIn">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h2 class="fw-bold text-dark mb-1">{{ __('center::messages.blade_0719') }}</h2>
-                        <p class="text-muted mb-0">{{ __('center::messages.blade_0720') }}</p>
-                    </div>
-                    <a href="{{ route('center.students.index') }}" class="btn btn-white border shadow-sm rounded-pill px-4 hover-lift">
-                        <i class="fas fa-arrow-right me-2"></i>{{ __('center::messages.blade_0721') }}</a>
-                </div>
-            </div>
-
-            <form action="{{ route('center.students.store') }}" method="POST" enctype="multipart/form-data" id="student-form" class="needs-validation" novalidate>
-                @csrf
-                
-                <!-- Section 1: Personal -->
-                <div id="section-personal" class="elite-form-card bg-white rounded-5 shadow-elite border p-4 p-md-5 mb-5 transition-all">
-                    <div class="section-header d-flex align-items-center gap-3 mb-5">
-                        <div class="section-icon bg-primary shadow-soft text-white rounded-4">
-                            <i class="fas fa-user-astronaut fs-4"></i>
-                        </div>
-                        <div>
-                            <h4 class="fw-bold mb-0">{{ __('center::messages.blade_0722') }}</h4>
-                            <p class="text-muted small mb-0">{{ __('center::messages.blade_0723') }}</p>
-                        </div>
-                    </div>
-
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <div class="elite-input-group">
-                                <input type="text" name="name" value="{{ old('name') }}" class="form-control" id="nameInput" placeholder="{{ __('center::messages.blade_0751') }}">
-                                <label for="nameInput">{{ __('center::messages.blade_0724') }}<span class="text-danger">*</span></label>
-                                <div class="validation-indicator"></div>
-                                @error('name') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-5">
+                    <form action="{{ route('center.students.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        
+                        {{-- 1. Student Info --}}
+                        <div class="row mb-4">
+                            <h5 class="text-secondary mb-3"><i class="bi bi-person me-2"></i>{{ __('center::messages.blade_0722') }}</h5>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0724') }} <span class="text-danger">*</span></label>
+                                <input type="text" name="name" value="{{ old('name') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0751') }}">
+                                @error('name')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="elite-input-group">
-                                <input type="tel" name="phone" value="{{ old('phone') }}" class="form-control" id="phoneInput" placeholder="{{ __('center::messages.blade_0752') }}">
-                                <label for="phoneInput">{{ __('center::messages.blade_0725') }}<span class="text-danger">*</span></label>
-                                <div class="validation-indicator"></div>
-                                @error('phone') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0725') }} <span class="text-danger">*</span></label>
+                                <input type="tel" name="phone" value="{{ old('phone') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0752') }}" pattern="[0-9\+\-\s\(\)]*" title="أرقام فقط (+ - مسافات)">
+                                @error('phone')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="elite-input-group">
-                                <input type="email" name="email" value="{{ old('email') }}" class="form-control" id="emailInput" placeholder="{{ __('center::messages.blade_0753') }}">
-                                <label for="emailInput">{{ __('center::messages.blade_0726') }}</label>
-                                <div class="validation-indicator"></div>
-                                @error('email') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0726') }}</label>
+                                <input type="email" name="email" value="{{ old('email') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0753') }}">
+                                @error('email')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="elite-input-group">
-                                <input type="text" name="code" value="{{ old('code') }}" class="form-control" id="codeInput" placeholder="{{ __('center::messages.blade_0754') }}">
-                                <label for="codeInput">{{ __('center::messages.blade_0727') }}</label>
-                                <div class="validation-indicator"></div>
-                                @error('code') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0727') }}</label>
+                                <input type="text" name="code" value="{{ old('code') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0754') }}">
+                                @error('code')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="elite-input-group">
-                                <input type="text" name="address" value="{{ old('address') }}" class="form-control" id="addressInput" placeholder="{{ __('center::messages.blade_0755') }}">
-                                <label for="addressInput">{{ __('center::messages.blade_0728') }}</label>
-                                @error('address') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0729') }}</label>
+                                <input type="text" name="national_id" value="{{ old('national_id') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0756') }}">
+                                @error('national_id')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="elite-input-group">
-                                <input type="text" name="national_id" value="{{ old('national_id') }}" class="form-control" id="idInput" placeholder="{{ __('center::messages.blade_0756') }}">
-                                <label for="idInput">{{ __('center::messages.blade_0729') }}</label>
-                                @error('national_id') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0730') }}</label>
+                                <input type="date" name="birth_date" value="{{ old('birth_date') }}" class="form-control form-control-lg bg-light border-0">
+                                @error('birth_date')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="elite-input-group">
-                                <input type="date" name="birth_date" value="{{ old('birth_date') }}" class="form-control" id="dateInput">
-                                <label for="dateInput">{{ __('center::messages.blade_0730') }}</label>
-                                @error('birth_date') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="elite-input-group">
-                                <select name="gender" class="form-select" id="genderSelect">
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0734') }}</label>
+                                <select name="gender" class="form-select form-select-lg bg-light border-0">
                                     <option value="">{{ __('center::messages.blade_0731') }}</option>
                                     <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>{{ __('center::messages.blade_0732') }}</option>
                                     <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>{{ __('center::messages.blade_0733') }}</option>
                                 </select>
-                                <label for="genderSelect">{{ __('center::messages.blade_0734') }}</label>
-                                @error('gender') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0728') }}</label>
+                                <input type="text" name="address" value="{{ old('address') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0755') }}">
+                                @error('address')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0735') }}</label>
+                                <input type="file" name="profile_photo" class="form-control bg-light border-0" accept="image/*">
+                                <small class="text-muted d-block mt-1">{{ __('center::messages.blade_0736') }}</small>
+                                @error('profile_photo')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
 
-                        <div class="col-12 mt-4">
-                            <div class="elite-image-upload rounded-5 p-5 text-center transition-all bg-light border-dashed">
-                                <div class="upload-visual mb-3 mx-auto">
-                                    <div class="avatar-preview-box rounded-circle shadow-sm mx-auto mb-3" id="imagePreview">
-                                        <i class="fas fa-camera-retro text-primary fs-3"></i>
-                                    </div>
+                        <hr class="my-4">
+
+                        {{-- 2. Parent Info --}}
+                        <div class="row mb-4">
+                            <h5 class="text-secondary mb-3"><i class="bi bi-people me-2"></i>{{ __('center::messages.blade_0737') }}</h5>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0741') }}</label>
+                                <input type="text" name="parent_name" value="{{ old('parent_name') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0758') }}">
+                                @error('parent_name')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0742') }}</label>
+                                <input type="text" name="parent_relation" value="{{ old('parent_relation') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0759') }}">
+                                @error('parent_relation')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0739') }}</label>
+                                <div class="input-group">
+                                    <input type="tel" name="parent_phone" id="parent_phone" value="{{ old('parent_phone') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0757') }}" pattern="[0-9\+\-\s\(\)]*" title="أرقام فقط (+ - مسافات)">
+                                    <span class="input-group-text bg-light border-0 d-none" id="guardian-found-badge">
+                                        <span class="badge bg-success rounded-pill"><i class="bi bi-check-circle-fill"></i>{{ __('center::messages.blade_0783') }}</span>
+                                    </span>
                                 </div>
-                                <h6 class="fw-bold mb-1">{{ __('center::messages.blade_0735') }}</h6>
-                                <p class="text-muted small">{{ __('center::messages.blade_0736') }}</p>
-                                <input type="file" name="profile_photo" id="photoInput" class="fake-input" accept="image/*">
-                                @error('profile_photo') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
+                                <div id="guardian-info-alert" class="alert alert-success border-0 rounded-4 small mt-2 d-none">
+                                    <i class="bi bi-info-circle-fill me-1"></i>{{ __('center::messages.blade_0784') }}<b><span id="found-guardian-name"></span></b>{{ __('center::messages.blade_0785') }}</div>
+                                @error('parent_phone')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0743') }}</label>
+                                <input type="tel" name="emergency_phone" value="{{ old('emergency_phone') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0760') }}" pattern="[0-9\+\-\s\(\)]*" title="أرقام فقط (+ - مسافات)">
+                                @error('emergency_phone')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold"><i class="fas fa-envelope me-1 text-info opacity-50"></i> بريد ولي الأمر</label>
+                                <input type="email" name="parent_email" value="{{ old('parent_email') }}" class="form-control form-control-lg bg-light border-0" placeholder="example@email.com">
+                                @error('parent_email')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0744') }}</label>
+                                <input type="text" name="parent_job" value="{{ old('parent_job') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0761') }}">
+                                @error('parent_job')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- Section 2: Parent -->
-                <div id="section-parent" class="elite-form-card bg-white rounded-5 shadow-elite border p-4 p-md-5 mb-5 transition-all">
-                    <div class="section-header d-flex align-items-center gap-3 mb-5">
-                        <div class="section-icon bg-info shadow-soft text-white rounded-4">
-                            <i class="fas fa-user-shield fs-4"></i>
-                        </div>
-                        <div>
-                            <h4 class="fw-bold mb-0">{{ __('center::messages.blade_0737') }}</h4>
-                            <p class="text-muted small mb-0">{{ __('center::messages.blade_0738') }}</p>
-                        </div>
-                    </div>
+                        <hr class="my-4">
 
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <div class="elite-input-group position-relative">
-                                <input type="tel" name="parent_phone" id="parent_phone" value="{{ old('parent_phone') }}" class="form-control" placeholder="{{ __('center::messages.blade_0757') }}">
-                                <label for="parent_phone">{{ __('center::messages.blade_0739') }}</label>
-                                <div class="validation-indicator"></div>
-                                @error('parent_phone') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
-                                <div id="parent-match-chip" class="match-chip d-none animate__animated animate__bounceIn">
-                                    <i class="fas fa-magic me-1"></i>{{ __('center::messages.blade_0740') }}<b id="match-name"></b>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="elite-input-group">
-                                <input type="text" name="parent_name" id="pNameInput" value="{{ old('parent_name') }}" class="form-control" placeholder="{{ __('center::messages.blade_0758') }}">
-                                <label for="pNameInput">{{ __('center::messages.blade_0741') }}</label>
-                                @error('parent_name') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="elite-input-group">
-                                <input type="text" name="parent_relation" value="{{ old('parent_relation') }}" class="form-control" id="relInput" placeholder="{{ __('center::messages.blade_0759') }}">
-                                <label for="relInput">{{ __('center::messages.blade_0742') }}</label>
-                                @error('parent_relation') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="elite-input-group">
-                                <input type="tel" name="emergency_phone" value="{{ old('emergency_phone') }}" class="form-control" id="ePhoneInput" placeholder="{{ __('center::messages.blade_0760') }}">
-                                <label for="ePhoneInput">{{ __('center::messages.blade_0743') }}</label>
-                                @error('emergency_phone') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="elite-input-group">
-                                <input type="text" name="parent_job" id="pJobInput" value="{{ old('parent_job') }}" class="form-control" placeholder="{{ __('center::messages.blade_0761') }}">
-                                <label for="pJobInput">{{ __('center::messages.blade_0744') }}</label>
-                                @error('parent_job') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 3: Academic -->
-                <div id="section-academic" class="elite-form-card bg-white rounded-5 shadow-elite border p-4 p-md-5 mb-5 transition-all">
-                    <div class="section-header d-flex align-items-center gap-3 mb-5">
-                        <div class="section-icon bg-success shadow-soft text-white rounded-4">
-                            <i class="fas fa-graduation-cap fs-4"></i>
-                        </div>
-                        <div>
-                            <h4 class="fw-bold mb-0">{{ __('center::messages.blade_0745') }}</h4>
-                            <p class="text-muted small mb-0">{{ __('center::messages.blade_0746') }}</p>
-                        </div>
-                    </div>
-
-                    <div class="row g-4">
-                        <div class="col-12">
-                            <div class="elite-input-group">
-                                <select name="grade_id" class="form-select" id="gradeSelect">
+                        {{-- 3. Academic Info --}}
+                        <div class="row mb-4">
+                            <h5 class="text-secondary mb-3"><i class="bi bi-mortarboard me-2"></i>{{ __('center::messages.blade_0745') }}</h5>
+                            
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0748') }} <span class="text-danger">*</span></label>
+                                <select name="grade_id" class="form-select form-select-lg bg-light border-0">
                                     <option value="">{{ __('center::messages.blade_0747') }}</option>
                                     @foreach($stages as $stage)
                                         <optgroup label="📂 {{ $stage->name }}">
@@ -233,34 +172,34 @@
                                         </optgroup>
                                     @endforeach
                                 </select>
-                                <label for="gradeSelect">{{ __('center::messages.blade_0748') }}<span class="text-danger">*</span></label>
-                                <div class="validation-indicator"></div>
-                                @error('grade_id') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
+                                @error('grade_id')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0749') }}</label>
+                                <input type="text" name="school_name" value="{{ old('school_name') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0762') }}">
+                                @error('school_name')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{{ __('center::students.section_type_label') }}</label>
+                                <input type="text" name="section_type" value="{{ old('section_type') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0763') }}">
+                                @error('section_type')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="elite-input-group">
-                                <input type="text" name="school_name" value="{{ old('school_name') }}" class="form-control" id="schoolInput" placeholder="{{ __('center::messages.blade_0762') }}">
-                                <label for="schoolInput">{{ __('center::messages.blade_0749') }}</label>
-                                @error('school_name') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="elite-input-group">
-                                <input type="text" name="section_type" value="{{ old('section_type') }}" class="form-control" id="secInput" placeholder="{{ __('center::messages.blade_0763') }}">
-                                <label for="secInput">{{ __('center::students.section_type_label') }}</label>
-                                @error('section_type') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Unified Sticky Submit Bar for Mobile -->
-                <div class="d-xl-none fixed-bottom bg-white border-top p-3 d-flex gap-2 shadow-lg" style="z-index: 1000;">
-                    <button type="submit" class="btn btn-primary w-100 rounded-pill py-3 fw-bold">{{ __('center::messages.blade_0750') }}</button>
-                    <a href="#section-personal" class="btn btn-outline-secondary rounded-circle p-0 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;"><i class="fas fa-arrow-up"></i></a>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">{{ __('center::messages.blade_0750') }}</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 @endsection
@@ -268,341 +207,96 @@
 @section('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const sections = document.querySelectorAll('.elite-form-card');
-        const navLinks = document.querySelectorAll('.elite-vertical-nav .nav-link');
-        const photoInput = document.getElementById('photoInput');
-        const imagePreview = document.getElementById('imagePreview');
+        
+        function showWarning(input, msg) {
+            // Remove existing warning if any
+            let existing = input.parentNode.querySelector('.custom-validation-msg');
+            if (existing) existing.remove();
 
-        // Scroll Spy Effect
-        window.addEventListener('scroll', () => {
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (window.pageYOffset >= sectionTop - 150) {
-                    current = section.getAttribute('id');
-                }
-            });
+            // Create new warning
+            let warning = document.createElement('div');
+            warning.className = 'custom-validation-msg text-danger small mt-1 fw-bold';
+            warning.style.transition = 'opacity 0.5s';
+            warning.innerHTML = '<i class="bi bi-exclamation-triangle ms-1"></i> ' + msg;
+            input.parentNode.appendChild(warning);
 
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${current}`) {
-                    link.classList.add('active');
-                }
-            });
-        });
+            // Fade out and remove
+            setTimeout(() => {
+                warning.style.opacity = '0';
+                setTimeout(() => warning.remove(), 500);
+            }, 2000);
+        }
 
-        // Smooth Scroll for Sidebar
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetId = link.getAttribute('href');
-                const targetEl = document.querySelector(targetId);
-                window.scrollTo({
-                    top: targetEl.offsetTop - 120,
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // Image Preview Magic
-        photoInput?.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    imagePreview.innerHTML = `<img src="${e.target.result}" class="w-100 h-100 object-fit-cover rounded-circle border">`;
-                    imagePreview.classList.add('glow-success');
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Smart Interaction & Validation
-        const allInputs = document.querySelectorAll('.form-control, .form-select');
-        allInputs.forEach(input => {
-            input.addEventListener('input', function() {
-                const group = this.closest('.elite-input-group');
-                if (!group) return;
-
-                if (this.value.trim() !== '') {
-                    if (this.checkValidity()) {
-                        group.classList.add('is-elite-valid');
-                        group.classList.remove('is-elite-invalid');
-                    } else {
-                        group.classList.add('is-elite-invalid');
-                        group.classList.remove('is-elite-valid');
-                    }
-                } else {
-                    group.classList.remove('is-elite-valid', 'is-elite-invalid');
+        // 1. Phone numbers: allow only digits and controls
+        const phoneInputs = document.querySelectorAll('input[type="tel"]');
+        phoneInputs.forEach(input => {
+            input.addEventListener('input', function(e) {
+                let original = this.value;
+                let clean = original.replace(/[^0-9+\s\-()]/g, '');
+                
+                if (original !== clean) {
+                    this.value = clean;
+                    showWarning(this, 'أرقام فقط (0-9)');
                 }
             });
         });
 
-        // Guardian Magic Lookup
-        const parentPhone = document.getElementById('parent_phone');
-        const matchChip = document.getElementById('parent-match-chip');
-        const matchName = document.getElementById('match-name');
-        let whisper;
+        // 2. Names: allow only letters and spaces (Arabic & English)
+        const nameInputs = document.querySelectorAll('input[name="name"], input[name="parent_name"], input[name="parent_job"], input[name="parent_relation"], input[name="section_type"]');
+        nameInputs.forEach(input => {
+            input.addEventListener('input', function(e) {
+                let original = this.value;
+                // Remove digits and special symbols
+                let clean = original.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g, '');
+                
+                if (original !== clean) {
+                    this.value = clean;
+                    showWarning(this, 'حروف فقط (أ-ي, A-Z)');
+                }
+            });
+        });
 
-        parentPhone?.addEventListener('input', function() {
-            clearTimeout(whisper);
-            const val = this.value.trim();
-            if (val.length >= 10) {
-                whisper = setTimeout(() => {
-                    fetch(`{{ route('center.guardians.lookup') }}?phone=${val}`)
-                        .then(r => r.json())
+        // 3. Guardian Lookup by Phone
+        const parentPhoneInput = document.getElementById('parent_phone');
+        const badge = document.getElementById('guardian-found-badge');
+        const alertBox = document.getElementById('guardian-info-alert');
+        const nameSpan = document.getElementById('found-guardian-name');
+        
+        const parentNameInput = document.querySelector('input[name="parent_name"]');
+        const parentJobInput = document.querySelector('input[name="parent_job"]');
+        const addressInput = document.querySelector('input[name="address"]');
+
+        let timeout = null;
+        parentPhoneInput.addEventListener('input', function() {
+            clearTimeout(timeout);
+            const phone = this.value.trim();
+            
+            if (phone.length >= 8) {
+                timeout = setTimeout(() => {
+                    fetch(`{{ route('center.guardians.lookup') }}?phone=${phone}`)
+                        .then(response => response.json())
                         .then(data => {
                             if (data.found) {
-                                matchChip.classList.remove('d-none');
-                                matchName.textContent = data.guardian.name;
-                                document.getElementById('pNameInput').value = data.guardian.name;
-                                document.getElementById('pJobInput').value = data.guardian.job || '';
-                                document.getElementById('addressInput').value = data.guardian.address || '';
-                                // Visual feedback
-                                document.getElementById('pNameInput').dispatchEvent(new Event('input'));
+                                badge.classList.remove('d-none');
+                                alertBox.classList.remove('d-none');
+                                nameSpan.textContent = data.guardian.name;
+                                
+                                // Auto-fill if empty
+                                if (!parentNameInput.value) parentNameInput.value = data.guardian.name;
+                                if (!parentJobInput.value) parentJobInput.value = data.guardian.job || '';
+                                if (!addressInput.value) addressInput.value = data.guardian.address || '';
                             } else {
-                                matchChip.classList.add('d-none');
+                                badge.classList.add('d-none');
+                                alertBox.classList.add('d-none');
                             }
-                        });
-                }, 400);
+                        })
+                        .catch(err => console.error('Error looking up guardian:', err));
+                }, 500);
             } else {
-                matchChip.classList.add('d-none');
+                badge.classList.add('d-none');
+                alertBox.classList.add('d-none');
             }
         });
     });
 </script>
 @endsection
-
-@section('styles')
-<style>
-    :root {
-        --elite-primary: #3A0CA3;
-        --elite-accent: #4361EE;
-        --elite-soft-bg: #F8FAFC;
-        --elite-radius: 2.5rem;
-        --elite-shadow: 0 20px 50px -15px rgba(58, 12, 163, 0.15);
-    }
-
-    body { background-color: #f1f5f9; }
-
-    .shadow-elite { box-shadow: var(--elite-shadow) !important; }
-    .rounded-5 { border-radius: var(--elite-radius) !important; }
-    .transition-all { transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-
-    /* Vertical Navigation Sidebar */
-    .elite-nav-card { border: 1px solid rgba(0,0,0,0.05); }
-
-    .elite-vertical-nav .nav-link {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        padding: 12px 15px;
-        border-radius: 1.2rem;
-        color: #64748b;
-        transition: 0.3s;
-        border: 1px solid transparent;
-    }
-
-    .nav-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: #cbd5e1;
-        transition: 0.3s;
-    }
-
-    .elite-vertical-nav .nav-link.active {
-        background: rgba(58, 12, 163, 0.05);
-        color: var(--elite-primary);
-        border-color: rgba(58, 12, 163, 0.1);
-    }
-
-    .elite-vertical-nav .nav-link.active .nav-dot {
-        background: var(--elite-primary);
-        transform: scale(1.5);
-        box-shadow: 0 0 10px rgba(58, 12, 163, 0.3);
-    }
-
-    .nav-label { font-weight: 800; font-size: 0.95rem; }
-    .nav-content small { display: block; font-size: 0.72rem; }
-
-    /* Modern Card Layout */
-    .elite-form-card {
-        border: 1px solid rgba(0,0,0,0.02);
-    }
-
-    .section-icon {
-        width: 56px;
-        height: 56px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-    }
-
-    /* === Unified Elite Input System === */
-    .elite-input-group { 
-        position: relative; 
-    }
-
-    .elite-input-group .form-control, 
-    .elite-input-group .form-select {
-        height: 65px; /* Fixed height for clean proportion */
-        padding: 1.75rem 1.25rem 0.5rem !important;
-        border: 2px solid #f1f5f9 !important;
-        background: #f8fafc !important;
-        border-radius: 1.2rem !important;
-        font-weight: 700;
-        font-size: 0.95rem;
-        color: #1e293b;
-        transition: 0.3s ease;
-        line-height: 1.5;
-    }
-
-    /* Fixed form-select padding to look exactly like inputs */
-    .elite-input-group .form-select {
-        padding-top: 1.75rem !important;
-        padding-bottom: 0.5rem !important;
-    }
-
-    /* Absolute centering of the label */
-    .elite-input-group label {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        padding: 1.15rem 1.25rem;
-        pointer-events: none !important; /* Critical for cursor focus */
-        transform-origin: 0 0;
-        transition: opacity .15s ease-in-out, transform .15s ease-in-out, color .15s ease-in-out;
-        color: #64748b;
-        font-weight: 600;
-        z-index: 5;
-        margin: 0;
-        display: flex;
-        align-items: center;
-    }
-
-    /* Move the label up when focused or has content */
-    .elite-input-group .form-control:focus ~ label,
-    .elite-input-group .form-control:not(:placeholder-shown) ~ label,
-    .elite-input-group .form-select ~ label {
-        transform: scale(0.85) translateY(-0.85rem) translateX(0.15rem);
-        color: var(--elite-primary);
-        font-weight: 800;
-        align-items: flex-start;
-        padding-top: 0.75rem;
-    }
-
-    /* Placeholder management: hide when empty, show on focus */
-    .elite-input-group .form-control::placeholder {
-        color: transparent !important;
-        transition: color 0.15s ease-in-out;
-    }
-    .elite-input-group .form-control:focus::placeholder {
-        color: #cbd5e1 !important;
-        font-weight: 500;
-    }
-
-    /* Focus styling */
-    .elite-input-group .form-control:focus, 
-    .elite-input-group .form-select:focus {
-        background: white !important;
-        border-color: var(--elite-accent) !important;
-        box-shadow: 0 8px 25px -5px rgba(67, 97, 238, 0.15) !important;
-        outline: 0;
-    }
-
-    .validation-indicator {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        height: 4px;
-        width: 0%;
-        background: #10b981;
-        transition: 0.5s ease;
-        border-radius: 0 0 1.2rem 1.2rem;
-        z-index: 6;
-    }
-
-
-
-    /* Image Upload Elite */
-    .elite-image-upload {
-        position: relative;
-        cursor: pointer;
-        border: 2px dashed #cbd5e1;
-    }
-
-    .elite-image-upload:hover {
-        background: white;
-        border-color: var(--elite-primary);
-        transform: translateY(-5px);
-    }
-
-    .avatar-preview-box {
-        width: 100px;
-        height: 100px;
-        background: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: 0.4s;
-    }
-
-    .fake-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-
-    /* Guardian Match Chip */
-    .match-chip {
-        position: absolute;
-        top: -12px;
-        left: 20px;
-        background: #10b981;
-        color: white;
-        padding: 4px 12px;
-        border-radius: 50px;
-        font-size: 0.7rem;
-        font-weight: 800;
-        z-index: 5;
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-    }
-
-    /* Buttons */
-    .btn-elite-submit {
-        background: linear-gradient(135deg, var(--elite-primary), var(--elite-accent));
-        border: none;
-        color: white;
-        box-shadow: 0 10px 20px -5px rgba(58, 12, 163, 0.4);
-    }
-
-    .btn-elite-submit:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 15px 30px -5px rgba(58, 12, 163, 0.5);
-        color: white;
-    }
-
-    .hover-lift:hover { transform: translateY(-3px); }
-    .letter-spacing-1 { letter-spacing: 1px; }
-
-    [dir="rtl"] .elite-input-group .form-control,
-    [dir="rtl"] .elite-input-group .form-select {
-        text-align: right;
-    }
-
-    [dir="rtl"] .elite-input-group label { 
-        right: 0; 
-        left: auto;
-        transform-origin: 100% 0;
-    }
-    
-    [dir="rtl"] .elite-input-group .form-control:focus ~ label,
-    [dir="rtl"] .elite-input-group .form-control:not(:placeholder-shown) ~ label,
-    [dir="rtl"] .elite-input-group .form-select ~ label {
-        transform: scale(0.85) translateY(-0.85rem) translateX(-0.15rem);
-    }
-
-    [dir="rtl"] .match-chip { right: 20px; left: auto; }
-</style>
-@endsection
-```
