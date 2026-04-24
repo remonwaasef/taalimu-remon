@@ -70,6 +70,7 @@ $instructorRoutes = function () {
         Route::get('/schedules/{schedule}/edit', [InstructorController::class, 'editSchedule'])->name('instructor.schedules.edit');
         Route::put('/schedules/{schedule}', [InstructorController::class, 'updateSchedule'])->name('instructor.schedules.update');
         Route::delete('/schedules/{schedule}', [InstructorController::class, 'destroySchedule'])->name('instructor.schedules.destroy');
+        Route::post('/classrooms/store', [InstructorController::class, 'storeClassroom'])->name('instructor.classrooms.store');
 
         // Instructor Attendance
         Route::get('/attendance', [InstructorController::class, 'attendance'])->name('instructor.attendance.index');
