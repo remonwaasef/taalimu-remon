@@ -54,6 +54,15 @@
                                 </div>
                             </div>
 
+                            <!-- Parent Email -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">{{ __('instructor::students.parent_email') }}</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white"><i class="fas fa-envelope" style="color: var(--primary-color);"></i></span>
+                                    <input type="email" name="parent_email" class="form-control bg-white focus-ring-primary" placeholder="parent@mail.com" value="{{ old('parent_email') }}">
+                                </div>
+                            </div>
+
                             <!-- Course Selection -->
                             <div class="col-12">
                                 <label class="form-label fw-bold">{{ __('instructor::students.target_group') }}</label>

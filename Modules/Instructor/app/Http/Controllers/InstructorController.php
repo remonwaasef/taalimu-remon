@@ -433,6 +433,7 @@ class InstructorController extends Controller
             'name' => 'required|string|max:255',
             'phone' => 'required|string|digits:11',
             'parent_phone' => 'required|string|digits:11',
+            'parent_email' => 'nullable|email|max:255',
             'email' => 'nullable|email|max:255',
             'course_id' => 'required|exists:courses,id',
         ]);
@@ -468,6 +469,7 @@ class InstructorController extends Controller
                     'name' => $validated['name'],
                     'phone' => $validated['phone'],
                     'parent_phone' => $validated['parent_phone'],
+                    'parent_email' => $validated['parent_email'],
                     'status' => 'active',
                 ]);
             }
@@ -514,6 +516,22 @@ class InstructorController extends Controller
                         $body = $tenantSettings['welcome_student_body'] ?? $defaultPreset['student_body'] ?? '';
                         Mail::to($validated['email'])->queue(new WelcomeStudentMail(
                             $student, $subject, $body, $variables, $tenant->name
+                        ));
+                    }
+
+                    // Send welcome email to guardian (if enabled and real email provided)
+                    $guardianEnabled = (bool) ($tenantSettings['welcome_guardian_enabled'] ?? true);
+                    if ($guardianEnabled && $validated['parent_email']) {
+                        $guardianSubject = $tenantSettings['welcome_guardian_subject'] ?? $defaultPreset['guardian_subject'] ?? '';
+                        $guardianBody = $tenantSettings['welcome_guardian_body'] ?? $defaultPreset['guardian_body'] ?? '';
+                        
+                        Mail::to($validated['parent_email'])->queue(new \App\Mail\WelcomeGuardianMail(
+                            '', // guardian name if available
+                            $student->name,
+                            $guardianSubject,
+                            $guardianBody,
+                            $variables,
+                            $tenant->name
                         ));
                     }
                 }
