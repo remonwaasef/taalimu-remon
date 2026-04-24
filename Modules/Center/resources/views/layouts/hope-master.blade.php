@@ -719,6 +719,8 @@
 
     <!-- Settings Wrapper for Hope UI (can be removed if customizing isn't needed by users) -->
     
+    @stack('modals')
+
     <!-- Backend Bundle JavaScript -->
     <script src="{{ asset('assets/hope-ui/js/libs.min.js') }}"></script>
     
