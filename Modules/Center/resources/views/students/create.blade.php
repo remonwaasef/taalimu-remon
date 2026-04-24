@@ -93,25 +93,62 @@
 
                         {{-- 3. Academic Info --}}
                         <div class="row mb-4">
-                            <h5 class="text-secondary mb-3"><i class="bi bi-mortarboard me-2"></i>{{ __('center::messages.blade_0745') }}</h5>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="text-secondary mb-0"><i class="bi bi-mortarboard me-2"></i>{{ __('center::messages.blade_0745') }}</h5>
+                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#gradePickerModal" id="gradePickerTrigger">
+                                    <i class="bi bi-grid-3x3-gap me-1"></i> اختر من القائمة
+                                </button>
+                            </div>
                             
                             <div class="col-md-12 mb-3">
                                 <label class="form-label fw-bold">{{ __('center::messages.blade_0748') }} <span class="text-danger">*</span></label>
-                                <select name="grade_id" class="form-select form-select-lg bg-light border-0">
-                                    <option value="">{{ __('center::messages.blade_0747') }}</option>
-                                    @foreach($stages as $stage)
-                                        <optgroup label="📂 {{ $stage->name }}">
-                                            @foreach($stage->grades as $grade)
-                                                <option value="{{ $grade->id }}" {{ old('grade_id') == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
-                                            @endforeach
-                                        </optgroup>
-                                    @endforeach
-                                </select>
+                                <div class="position-relative">
+                                    <select name="grade_id" id="main_grade_select" class="form-select form-select-lg bg-light border-0 shadow-none">
+                                        <option value="">{{ __('center::messages.blade_0747') }}</option>
+                                        @foreach($stages as $stage)
+                                            <optgroup label="📂 {{ $stage->name }}">
+                                                @foreach($stage->grades as $grade)
+                                                    <option value="{{ $grade->id }}" {{ old('grade_id') == $grade->id ? 'selected' : '' }} data-stage="{{ $stage->name }}">{{ $grade->name }}</option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endforeach
+                                    </select>
+                                    <div id="selected-grade-chip" class="mt-2 d-none">
+                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-2">
+                                            <i class="bi bi-journal-check me-1"></i> <span id="chip-text"></span>
+                                        </span>
+                                    </div>
+                                </div>
                                 @error('grade_id')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        {{-- 4. Course Enrollment --}}
+                        <div class="row mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="text-secondary mb-0"><i class="bi bi-collection-play me-2"></i>التسجيل المبدئي (اختياري)</h5>
+                            </div>
                             
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label fw-bold">اختر المجموعات أو الدورات <span class="text-muted fw-normal">(يمكنك اختيار أكثر من واحدة)</span></label>
+                                <div class="position-relative">
+                                    <select name="course_ids[]" id="courses_select" class="form-select form-select-lg bg-light border-0 shadow-none" multiple size="4">
+                                        @foreach($courses as $course)
+                                            <option value="{{ $course->id }}" {{ (is_array(old('course_ids')) && in_array($course->id, old('course_ids'))) ? 'selected' : '' }}>
+                                                {{ $course->title }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <small class="text-muted mt-2 d-block"><i class="bi bi-info-circle me-1"></i>اضغط باستمرار على زر (Ctrl) لتحديد أكثر من مجموعة في نفس الوقت.</small>
+                                </div>
+                                @error('course_ids')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
 
                         <div class="d-grid">
@@ -260,4 +297,72 @@
         }
     });
 </script>
+@endsection
+
+<!-- Grade Picker Modal -->
+<div class="modal fade" id="gradePickerModal" tabindex="-1" aria-labelledby="gradePickerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-5">
+            <div class="modal-header border-0 p-4">
+                <h5 class="modal-title fw-bold" id="gradePickerModalLabel">اختر الصف الدراسي</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 pt-0">
+                <div class="row g-3">
+                    @foreach($stages as $stage)
+                        <div class="col-12 mt-4 mb-2">
+                            <h6 class="text-muted fw-bold small text-uppercase letter-spacing-1 border-bottom pb-2">
+                                <i class="bi bi-folder2-open me-2"></i>{{ $stage->name }}
+                            </h6>
+                        </div>
+                        @foreach($stage->grades as $grade)
+                            <div class="col-md-4 col-6">
+                                <div class="grade-card p-3 rounded-4 border text-center cursor-pointer transition-all hover-shadow-sm h-100 d-flex flex-column justify-content-center align-items-center" 
+                                     onclick="selectGrade('{{ $grade->id }}', '{{ $grade->name }}', '{{ $stage->name }}')"
+                                     data-grade-id="{{ $grade->id }}">
+                                    <div class="grade-icon mb-2 rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                                        <i class="bi bi-book text-primary fs-5"></i>
+                                    </div>
+                                    <span class="fw-bold small">{{ $grade->name }}</span>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section('styles')
+<style>
+    .cursor-pointer { cursor: pointer; }
+    .transition-all { transition: all 0.3s ease; }
+    .hover-shadow-sm:hover { 
+        transform: translateY(-3px);
+        border-color: #3a0ca3 !important;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05) !important;
+        background-color: rgba(58, 12, 163, 0.02);
+    }
+    .grade-card.active {
+        border-color: #3a0ca3 !important;
+        background-color: rgba(58, 12, 163, 0.05);
+    }
+    .grade-card.active .grade-icon {
+        background-color: #3a0ca3 !important;
+    }
+    .grade-card.active i {
+        color: white !important;
+    }
+    
+    #gradePickerTrigger.pulse-btn {
+        animation: pulse-primary 2s infinite;
+    }
+    
+    @keyframes pulse-primary {
+        0% { box-shadow: 0 0 0 0 rgba(58, 12, 163, 0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(58, 12, 163, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(58, 12, 163, 0); }
+    }
+</style>
 @endsection

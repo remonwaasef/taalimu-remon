@@ -24,6 +24,7 @@ class StudentData
         public readonly ?string $section_type = null,
         public readonly ?string $profile_photo = null,
         public readonly ?string $grade_level = null, // Used for import
+        public readonly ?array $course_ids = null,
     ) {}
 
     /**
@@ -51,6 +52,7 @@ class StudentData
             section_type: $data['section_type'] ?? null,
             profile_photo: $data['profile_photo'] ?? null,
             grade_level: $data['grade_level'] ?? null,
+            course_ids: $data['course_ids'] ?? null,
         );
     }
 

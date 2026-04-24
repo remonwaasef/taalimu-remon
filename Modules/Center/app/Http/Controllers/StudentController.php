@@ -53,8 +53,9 @@ class StudentController extends Controller
         $this->authorize('create', Student::class);
         
         $stages = \App\Models\Stage::getCached();
+        $courses = \App\Models\Course::where('status', 'active')->orderBy('title')->get();
         
-        return view('center::students.create', compact('stages'));
+        return view('center::students.create', compact('stages', 'courses'));
     }
 
 

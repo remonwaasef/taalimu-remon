@@ -44,6 +44,8 @@ class StoreStudentRequest extends FormRequest
             'school_name' => 'nullable|string|max:255',
             'section_type' => ['nullable', 'string', 'max:100', 'regex:/^[\pL\s]+$/u'],
             'profile_photo' => 'nullable|image|max:2048',
+            'course_ids' => 'nullable|array',
+            'course_ids.*' => 'exists:courses,id',
         ];
     }
 
