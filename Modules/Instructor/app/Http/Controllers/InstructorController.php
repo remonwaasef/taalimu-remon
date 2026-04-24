@@ -494,10 +494,13 @@ class InstructorController extends Controller
 
             \DB::commit();
 
-            // Send welcome email to student (only if real email)
+            // Send emails (only if real email is provided)
             try {
                 $student = Student::where('user_id', $user->id)->first();
-                if ($student && $validated['email'] && !preg_match('/^std\d+\..+@taalimu\.com$/', $validated['email'])) {
+                $hasValidStudentEmail = $validated['email'] && !preg_match('/^std\d+\..+@taalimu\.com$/', $validated['email']);
+                $hasValidParentEmail = !empty($validated['parent_email']);
+
+                if ($student && ($hasValidStudentEmail || $hasValidParentEmail)) {
                     $tenant = app('tenant');
                     $tenantSettings = $tenant->settings['email_templates'] ?? [];
                     $defaultPresetKey = config('email_templates.default_preset', 'formal');
@@ -514,7 +517,7 @@ class InstructorController extends Controller
                     ];
 
                     $studentEnabled = (bool) ($tenantSettings['welcome_student_enabled'] ?? true);
-                    if ($studentEnabled) {
+                    if ($studentEnabled && $hasValidStudentEmail) {
                         $subject = $tenantSettings['welcome_student_subject'] ?? $defaultPreset['student_subject'] ?? '';
                         $body = $tenantSettings['welcome_student_body'] ?? $defaultPreset['student_body'] ?? '';
                         Mail::to($validated['email'])->queue(new WelcomeStudentMail(
@@ -524,7 +527,7 @@ class InstructorController extends Controller
 
                     // Send welcome email to guardian (if enabled and real email provided)
                     $guardianEnabled = (bool) ($tenantSettings['welcome_guardian_enabled'] ?? true);
-                    if ($guardianEnabled && $validated['parent_email']) {
+                    if ($guardianEnabled && $hasValidParentEmail) {
                         $guardianSubject = $tenantSettings['welcome_guardian_subject'] ?? $defaultPreset['guardian_subject'] ?? '';
                         $guardianBody = $tenantSettings['welcome_guardian_body'] ?? $defaultPreset['guardian_body'] ?? '';
                         
@@ -552,11 +555,13 @@ class InstructorController extends Controller
                         $groupSubject = $tenantSettings['notif_group_enrollment_subject'] ?? 'تم تسجيلك في مجموعة جديدة';
                         $groupBody = $tenantSettings['notif_group_enrollment_body'] ?? '';
                         
-                        Mail::to($validated['email'])->queue(new \App\Mail\NotifGroupEnrollmentMail(
-                            $groupSubject, $groupBody, $groupVariables, $tenant->name
-                        ));
+                        if ($hasValidStudentEmail) {
+                            Mail::to($validated['email'])->queue(new \App\Mail\NotifGroupEnrollmentMail(
+                                $groupSubject, $groupBody, $groupVariables, $tenant->name
+                            ));
+                        }
                         
-                        if ($validated['parent_email']) {
+                        if ($hasValidParentEmail) {
                             Mail::to($validated['parent_email'])->queue(new \App\Mail\NotifGroupEnrollmentMail(
                                 $groupSubject, $groupBody, $groupVariables, $tenant->name
                             ));
@@ -785,7 +790,15 @@ class InstructorController extends Controller
         try {
             $tenant = app('tenant');
             $tenantSettings = $tenant->settings['email_templates'] ?? [];
-            if (!empty($tenantSettings['notif_payment_confirmed_enabled']) && $student->email) {
+            
+            // Determine real email
+            $realEmail = null;
+            $studentEmail = $student->email ?? ($student->user ? $student->user->email : null);
+            if ($studentEmail && !preg_match('/^std\d+\..+@taalimu\.com$/', $studentEmail)) {
+                $realEmail = $studentEmail;
+            }
+
+            if (!empty($tenantSettings['notif_payment_confirmed_enabled']) && ($realEmail || $student->parent_email)) {
                 $subject = $tenantSettings['notif_payment_confirmed_subject'] ?? 'تأكيد استلام دفعة';
                 $body = $tenantSettings['notif_payment_confirmed_body'] ?? '';
                 
@@ -798,9 +811,11 @@ class InstructorController extends Controller
                     'طريقة_الدفع' => 'نقدي',
                 ];
 
-                \Illuminate\Support\Facades\Mail::to($student->email)->queue(new \App\Mail\NotifPaymentConfirmedMail(
-                    $subject, $body, $variables, $tenant->name
-                ));
+                if ($realEmail) {
+                    \Illuminate\Support\Facades\Mail::to($realEmail)->queue(new \App\Mail\NotifPaymentConfirmedMail(
+                        $subject, $body, $variables, $tenant->name
+                    ));
+                }
                 
                 // Also send to parent if email exists
                 if ($student->parent_email) {
