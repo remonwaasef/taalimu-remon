@@ -435,7 +435,8 @@ class InstructorController extends Controller
             'parent_phone' => 'required|string|digits:11',
             'parent_email' => 'nullable|email|max:255',
             'email' => 'nullable|email|max:255',
-            'course_id' => 'required|exists:courses,id',
+            'course_ids' => 'required|array|min:1',
+            'course_ids.*' => 'exists:courses,id',
         ]);
 
         try {
@@ -474,22 +475,23 @@ class InstructorController extends Controller
                 ]);
             }
 
-            // 2. Enroll in course
-            $isEnrolled = Enrollment::where('user_id', $user->id)
-                ->where('course_id', $validated['course_id'])
-                ->exists();
-
-            if (!$isEnrolled) {
-                Enrollment::create([
-                    'tenant_id' => $instructor->tenant_id,
-                    'user_id' => $user->id,
-                    'course_id' => $validated['course_id'],
-                    'status' => 'active',
-                    'enrolled_at' => now(),
-                ]);
-                $isNewEnrollment = true;
-            } else {
-                $isNewEnrollment = false;
+            // 2. Enroll in courses
+            $newEnrollments = [];
+            foreach ($validated['course_ids'] as $course_id) {
+                $isEnrolled = Enrollment::where('user_id', $user->id)
+                    ->where('course_id', $course_id)
+                    ->exists();
+    
+                if (!$isEnrolled) {
+                    Enrollment::create([
+                        'tenant_id' => $instructor->tenant_id,
+                        'user_id' => $user->id,
+                        'course_id' => $course_id,
+                        'status' => 'active',
+                        'enrolled_at' => now(),
+                    ]);
+                    $newEnrollments[] = $course_id;
+                }
             }
 
             \DB::commit();
@@ -541,31 +543,33 @@ class InstructorController extends Controller
                         ));
                     }
                     
-                    // Send Group Enrollment Notification (if enabled and it's a new enrollment)
+                    // Send Group Enrollment Notification (if enabled and there are new enrollments)
                     $groupEnrollmentEnabled = (bool) ($tenantSettings['notif_group_enrollment_enabled'] ?? false);
-                    if ($groupEnrollmentEnabled && isset($isNewEnrollment) && $isNewEnrollment) {
-                        $course = \App\Models\Course::find($validated['course_id']);
-                        $groupVariables = [
-                            'اسم_الطالب' => $student->name,
-                            'اسم_المركز' => $tenant->name,
-                            'اسم_المجموعة' => $course ? $course->title : '',
-                            'سعر_الدورة' => $course ? ($course->price . ' ج.م') : '',
-                            'رابط_الدخول' => url('/login'),
-                        ];
-                        
-                        $groupSubject = $tenantSettings['notif_group_enrollment_subject'] ?? 'تم تسجيلك في مجموعة جديدة';
-                        $groupBody = $tenantSettings['notif_group_enrollment_body'] ?? '';
-                        
-                        if ($hasValidStudentEmail) {
-                            Mail::to($validated['email'])->queue(new \App\Mail\NotifGroupEnrollmentMail(
-                                $groupSubject, $groupBody, $groupVariables, $tenant->name, $student->name
-                            ));
-                        }
-                        
-                        if ($hasValidParentEmail) {
-                            Mail::to($validated['parent_email'])->queue(new \App\Mail\NotifGroupEnrollmentMail(
-                                $groupSubject, $groupBody, $groupVariables, $tenant->name, $student->name
-                            ));
+                    if ($groupEnrollmentEnabled && count($newEnrollments) > 0) {
+                        foreach ($newEnrollments as $course_id) {
+                            $course = \App\Models\Course::find($course_id);
+                            $groupVariables = [
+                                'اسم_الطالب' => $student->name,
+                                'اسم_المركز' => $tenant->name,
+                                'اسم_المجموعة' => $course ? $course->title : '',
+                                'سعر_الدورة' => $course ? ($course->price . ' ج.م') : '',
+                                'رابط_الدخول' => url('/login'),
+                            ];
+                            
+                            $groupSubject = $tenantSettings['notif_group_enrollment_subject'] ?? 'تم تسجيلك في مجموعة جديدة';
+                            $groupBody = $tenantSettings['notif_group_enrollment_body'] ?? '';
+                            
+                            if ($hasValidStudentEmail) {
+                                Mail::to($validated['email'])->queue(new \App\Mail\NotifGroupEnrollmentMail(
+                                    $groupSubject, $groupBody, $groupVariables, $tenant->name, $student->name
+                                ));
+                            }
+                            
+                            if ($hasValidParentEmail) {
+                                Mail::to($validated['parent_email'])->queue(new \App\Mail\NotifGroupEnrollmentMail(
+                                    $groupSubject, $groupBody, $groupVariables, $tenant->name, $student->name
+                                ));
+                            }
                         }
                     }
                 }
