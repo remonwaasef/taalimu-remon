@@ -538,7 +538,7 @@ class StudentService
 
             // Send to Student
             if ($settings['welcome_student_enabled'] && $this->isRealEmail($student->email)) {
-                Mail::to($student->email)->queue(new WelcomeStudentMail(
+                Mail::to($student->email)->send(new WelcomeStudentMail(
                     $student,
                     $settings['welcome_student_subject'],
                     $settings['welcome_student_body'],
@@ -553,7 +553,7 @@ class StudentService
                 $guardianName = $student->guardian?->name ?? $student->parent_name ?? '';
 
                 if ($guardianEmail && $this->isRealEmail($guardianEmail)) {
-                    Mail::to($guardianEmail)->queue(new WelcomeGuardianMail(
+                    Mail::to($guardianEmail)->send(new WelcomeGuardianMail(
                         $guardianName,
                         $student->name,
                         $settings['welcome_guardian_subject'],
@@ -599,7 +599,7 @@ class StudentService
                 $variables = $this->buildTemplateVariables($student, $tenant, null);
 
                 if ($settings['welcome_student_enabled']) {
-                    Mail::to($student->email)->queue(new WelcomeStudentMail(
+                    Mail::to($student->email)->send(new WelcomeStudentMail(
                         $student,
                         $settings['welcome_student_subject'],
                         str_replace('{password}', '(يرجى استخدام "نسيت كلمة المرور" لتعيين كلمة مرور جديدة)', $settings['welcome_student_body']),
@@ -610,7 +610,7 @@ class StudentService
 
                 if ($settings['welcome_guardian_enabled'] && $student->guardian?->email && $this->isRealEmail($student->guardian->email)) {
                     $variables['guardian_name'] = $student->guardian->name ?? $student->parent_name ?? '';
-                    Mail::to($student->guardian->email)->queue(new WelcomeGuardianMail(
+                    Mail::to($student->guardian->email)->send(new WelcomeGuardianMail(
                         $student->guardian->name ?? '',
                         $student->name,
                         $settings['welcome_guardian_subject'],
