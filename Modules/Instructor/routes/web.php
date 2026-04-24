@@ -30,6 +30,7 @@ $instructorRoutes = function () {
         Route::post('/students/{student}/update-notes', [InstructorController::class, 'updateStudentNotes'])->name('instructor.students.update-notes');
         Route::post('/students/{student}/transfer', [InstructorController::class, 'transferStudent'])->name('instructor.students.transfer');
         Route::delete('/students/{student}', [InstructorController::class, 'destroyStudent'])->name('instructor.students.destroy');
+        Route::post('/students/{student}/send-email', [InstructorController::class, 'sendEmail'])->name('instructor.students.send-email');
         
         // Settings Dashboard
         Route::get('/settings', [InstructorController::class, 'settings'])->name('instructor.settings');

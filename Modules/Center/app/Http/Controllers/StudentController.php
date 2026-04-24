@@ -364,4 +364,38 @@ class StudentController extends Controller
             'guardian' => $guardian
         ]);
     }
+
+    /**
+     * Send an email to the student
+     */
+    public function sendEmail(Request $request, $id)
+    {
+        $student = Student::where('tenant_id', app('tenant')->id)->findOrFail($id);
+        $this->authorize('update', $student);
+
+        $request->validate([
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string',
+        ]);
+
+        $email = $student->email ?: ($student->user ? $student->user->email : null);
+
+        if (!$email) {
+            return redirect()->back()->with('error', 'هذا الطالب لا يمتلك بريداً إلكترونياً مسجلاً.');
+        }
+
+        try {
+            \Illuminate\Support\Facades\Mail::to($email)->send(new \App\Mail\CustomStudentMail(
+                $student, 
+                $request->subject, 
+                $request->message,
+                app('tenant')->name
+            ));
+            
+            return redirect()->back()->with('success', 'تم إرسال البريد الإلكتروني للطالب بنجاح.');
+        } catch (\Exception $e) {
+            \Log::error("Failed to send email to student {$student->id}: " . $e->getMessage());
+            return redirect()->back()->with('error', 'حدث خطأ أثناء الإرسال: ' . $e->getMessage());
+        }
+    }
 }

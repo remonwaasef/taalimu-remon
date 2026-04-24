@@ -6,8 +6,12 @@ use App\Models\User;
 use App\Models\Student;
 use App\Models\Guardian;
 use App\DTOs\StudentData;
+use App\Mail\WelcomeStudentMail;
+use App\Mail\WelcomeGuardianMail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class StudentService
@@ -29,7 +33,7 @@ class StudentService
      */
     public function registerStudent(StudentData $data, User $creator, bool $notify = true)
     {
-        return DB::transaction(function () use ($data, $creator, $notify) {
+        $result = DB::transaction(function () use ($data, $creator, $notify) {
             // ... (keep existing logic unchanged until notification) ...
             // 1. Generate a secure random password
             $generatedPassword = Str::random(12);
@@ -106,6 +110,13 @@ class StudentService
 
             return $result;
         });
+
+        // Send welcome emails AFTER transaction commits (outside DB::transaction)
+        if (isset($result['student'])) {
+            $this->sendWelcomeEmails($result['student'], $result['generated_password']);
+        }
+
+        return $result;
     }
 
     /**
@@ -480,6 +491,12 @@ class StudentService
                 'fas fa-file-import',
                 $creator->name
             );
+
+            // Send welcome emails for imported students (queued)
+            $this->sendBulkWelcomeEmails(
+                collect($studentsToInsert)->pluck('email')->toArray(),
+                $passwordHash
+            );
         }
 
         return [
@@ -505,6 +522,156 @@ class StudentService
         ]);
 
         return $newPassword;
+    }
+
+    /**
+     * Send welcome emails to the student and their guardian after registration.
+     * Only sends to real email addresses (not auto-generated ones).
+     */
+    protected function sendWelcomeEmails(Student $student, string $generatedPassword): void
+    {
+        try {
+            $tenant = app('tenant');
+            $settings = $this->getEmailTemplateSettings($tenant);
+
+            $variables = $this->buildTemplateVariables($student, $tenant, $generatedPassword);
+
+            // Send to Student
+            if ($settings['welcome_student_enabled'] && $this->isRealEmail($student->email)) {
+                Mail::to($student->email)->queue(new WelcomeStudentMail(
+                    $student,
+                    $settings['welcome_student_subject'],
+                    $settings['welcome_student_body'],
+                    $variables,
+                    $tenant->name
+                ));
+            }
+
+            // Send to Guardian
+            if ($settings['welcome_guardian_enabled']) {
+                $guardianEmail = $student->guardian?->email;
+                $guardianName = $student->guardian?->name ?? $student->parent_name ?? '';
+
+                if ($guardianEmail && $this->isRealEmail($guardianEmail)) {
+                    Mail::to($guardianEmail)->queue(new WelcomeGuardianMail(
+                        $guardianName,
+                        $student->name,
+                        $settings['welcome_guardian_subject'],
+                        $settings['welcome_guardian_body'],
+                        $variables,
+                        $tenant->name
+                    ));
+                }
+            }
+        } catch (\Exception $e) {
+            // Never block registration because of email failures
+            Log::error("Failed to queue welcome emails for student {$student->id}: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Send welcome emails for bulk-imported students (queued).
+     * Fetches students by their emails and dispatches welcome mails.
+     *
+     * @param array  $emails       List of student emails that were imported
+     * @param string $passwordHash The shared password hash (not the raw password)
+     */
+    protected function sendBulkWelcomeEmails(array $emails, string $passwordHash): void
+    {
+        try {
+            $tenant = app('tenant');
+            $settings = $this->getEmailTemplateSettings($tenant);
+
+            if (!$settings['welcome_student_enabled'] && !$settings['welcome_guardian_enabled']) {
+                return; // Both disabled, skip entirely
+            }
+
+            // Fetch only students with real emails
+            $students = Student::where('tenant_id', $tenant->id)
+                ->whereIn('email', $emails)
+                ->with('guardian')
+                ->get()
+                ->filter(fn($s) => $this->isRealEmail($s->email));
+
+            foreach ($students as $student) {
+                // For bulk imports we don't have the raw password (only the hash),
+                // so we indicate the student should use "forgot password"
+                $variables = $this->buildTemplateVariables($student, $tenant, null);
+
+                if ($settings['welcome_student_enabled']) {
+                    Mail::to($student->email)->queue(new WelcomeStudentMail(
+                        $student,
+                        $settings['welcome_student_subject'],
+                        str_replace('{password}', '(يرجى استخدام "نسيت كلمة المرور" لتعيين كلمة مرور جديدة)', $settings['welcome_student_body']),
+                        $variables,
+                        $tenant->name
+                    ));
+                }
+
+                if ($settings['welcome_guardian_enabled'] && $student->guardian?->email && $this->isRealEmail($student->guardian->email)) {
+                    $variables['guardian_name'] = $student->guardian->name ?? $student->parent_name ?? '';
+                    Mail::to($student->guardian->email)->queue(new WelcomeGuardianMail(
+                        $student->guardian->name ?? '',
+                        $student->name,
+                        $settings['welcome_guardian_subject'],
+                        str_replace('{password}', '(يرجى التواصل مع المركز للحصول على بيانات الدخول)', $settings['welcome_guardian_body']),
+                        $variables,
+                        $tenant->name
+                    ));
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error("Failed to queue bulk welcome emails: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Get email template settings for the tenant, with fallback to config defaults.
+     */
+    protected function getEmailTemplateSettings($tenant): array
+    {
+        $tenantSettings = $tenant->settings['email_templates'] ?? [];
+
+        // Get default preset from config
+        $defaultPresetKey = config('email_templates.default_preset', 'formal');
+        $defaultPreset = config("email_templates.presets.{$defaultPresetKey}", []);
+
+        return [
+            'welcome_student_enabled'  => (bool) ($tenantSettings['welcome_student_enabled'] ?? true),
+            'welcome_guardian_enabled' => (bool) ($tenantSettings['welcome_guardian_enabled'] ?? true),
+            'welcome_student_subject'  => $tenantSettings['welcome_student_subject'] ?? $defaultPreset['student_subject'] ?? '',
+            'welcome_student_body'     => $tenantSettings['welcome_student_body'] ?? $defaultPreset['student_body'] ?? '',
+            'welcome_guardian_subject' => $tenantSettings['welcome_guardian_subject'] ?? $defaultPreset['guardian_subject'] ?? '',
+            'welcome_guardian_body'    => $tenantSettings['welcome_guardian_body'] ?? $defaultPreset['guardian_body'] ?? '',
+        ];
+    }
+
+    /**
+     * Check if an email is a real one (not auto-generated by the system).
+     */
+    protected function isRealEmail(?string $email): bool
+    {
+        if (!$email) {
+            return false;
+        }
+        // Auto-generated emails follow pattern: std{N}.{domain}@taalimu.com
+        return !preg_match('/^std\d+\..+@taalimu\.com$/', $email);
+    }
+
+    /**
+     * Build the variables array for template placeholder replacement.
+     */
+    protected function buildTemplateVariables(Student $student, $tenant, ?string $password): array
+    {
+        return [
+            'student_name'  => $student->name,
+            'center_name'   => $tenant->name,
+            'login_url'     => url('/login'),
+            'password'      => $password ?? '',
+            'phone'         => $student->phone ?? '',
+            'guardian_name'  => $student->guardian?->name ?? $student->parent_name ?? '',
+            'grade'         => $student->grade_level_name ?? '',
+        ];
     }
 
     /**

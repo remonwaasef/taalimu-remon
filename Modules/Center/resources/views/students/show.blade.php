@@ -135,6 +135,9 @@
                                         <i class="fab fa-whatsapp me-2"></i>{{ __('center::messages.blade_0815') }}</a>
                                     <a href="{{ route('center.students.edit', $student->id) }}" class="btn btn-white border rounded-pill px-4 shadow-sm hover-lift text-dark fw-bold">
                                         <i class="fas fa-edit me-2"></i>{{ __('center::messages.blade_0816') }}</a>
+                                    <button type="button" class="btn btn-outline-primary bg-white border rounded-pill px-4 shadow-sm hover-lift text-primary fw-bold" data-bs-toggle="modal" data-bs-target="#sendEmailModal" title="{{ __('center::students.send_email') ?? 'إرسال بريد إلكتروني' }}">
+                                        <i class="fas fa-envelope"></i>
+                                    </button>
                                 </div>
                             </div>
                             
@@ -838,6 +841,41 @@
         </div>
     </div>
 
+    <!-- Send Email Modal -->
+    <div class="modal fade" id="sendEmailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-elite rounded-5">
+                <div class="modal-header border-0 bg-light p-4 p-md-5 rounded-top-5 pb-4">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-envelope me-2 text-primary"></i> إرسال بريد إلكتروني للطالب</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('center.students.send-email', $student->id) }}" method="POST">
+                    @csrf
+                    <div class="modal-body p-4 p-md-5">
+                        @if(!$student->email && !($student->user->email ?? null))
+                            <div class="alert alert-warning small border-0 shadow-sm rounded-4 text-center">
+                                <i class="fas fa-exclamation-triangle me-1"></i> هذا الطالب لا يمتلك بريداً إلكترونياً مسجلاً. قد لا ينجح الإرسال.
+                            </div>
+                        @endif
+                        <div class="mb-4">
+                            <label class="form-label fw-bold opacity-75">موضوع الرسالة (Subject) <span class="text-danger">*</span></label>
+                            <input type="text" name="subject" class="form-control rounded-4 p-3 border-light bg-light" required placeholder="مثال: تنبيه غياب، تحديث بيانات، أو تحية">
+                        </div>
+                        <div class="mb-0">
+                            <label class="form-label fw-bold opacity-75">نص الرسالة <span class="text-danger">*</span></label>
+                            <textarea name="message" class="form-control rounded-4 p-3 border-light bg-light" rows="6" required placeholder="اكتب محتوى رسالتك هنا..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 p-4 p-md-5 pt-0">
+                        <button type="button" class="btn btn-white border rounded-pill px-4 fw-bold" data-bs-dismiss="modal">إلغاء</button>
+                        <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm">
+                            <i class="fas fa-paper-plane me-2"></i> إرسال الآن
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <!-- ID Card Print Layout (positioned off-screen until print) -->
     <div class="id-card-print">
         <div class="id-card-container">
