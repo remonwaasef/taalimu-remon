@@ -1,675 +1,227 @@
 @extends('center::layouts.hope-master')
 
-@section('page-title', __('center::messages.blade_0558'))
-@section('page-subtitle', __('center::messages.blade_0559'))
+@section('page-title', __('instructor::billing.title'))
+@section('page-subtitle', __('instructor::billing.subtitle'))
+
+@section('page-actions')
+    <div id="resultCount" class="btn btn-glass cursor-default opacity-100">
+        <i class="fas fa-user-graduate me-2"></i> {{ $students->count() }} {{ __('instructor::billing.student_count') }}
+    </div>
+@endsection
 
 @section('content')
+<div class="container-fluid">
 
-<div class="row g-4">
-    <!-- Custom Student Search (Always at the top) -->
-    <div class="col-lg-12">
-        <div class="card border-0 shadow rounded-4 overflow-visible search-bar-container" style="position: relative; z-index: 100;">
-            <div class="card-body p-0">
-                <div class="d-flex align-items-center">
-                    <span class="ps-4 pe-2 text-muted"><i class="fas fa-search fa-lg"></i></span>
-                    <input type="text"
-                           id="studentSearchInput"
-                           class="form-control form-control-lg border-0 shadow-none py-4"
-                           placeholder="ابحث بالاسم، رقم الهاتف، أو الكود..."
-                           autocomplete="off"
-                           style="font-size: 1.1rem;">
-                    <span id="searchSpinner" class="pe-3 d-none">
-                        <div class="spinner-border spinner-border-sm text-primary"></div>
-                    </span>
-                    <span class="pe-4 text-muted d-none d-md-inline">
-                        <kbd class="bg-light border text-dark opacity-50 small">/</kbd>
-                    </span>
-                </div>
-                <!-- Search Results Dropdown -->
-                <div id="searchDropdown" class="search-dropdown d-none">
-                    <div id="searchResults"></div>
-                </div>
-            </div>
-            <!-- Progress Bar -->
-            <div id="searchProgressLine" class="search-progress-bar"></div>
-        </div>
-    </div>
-
-    <!-- Student Header Dashboard (Hidden until search) -->
-    <div id="studentHeader" class="col-lg-12 d-none animate__animated animate__fadeIn">
-        <div class="card border-0 shadow-sm rounded-4 text-white overflow-hidden" style="background: linear-gradient(135deg, #059669 0%, #0d9488 100%);">
-            <div class="card-body p-4 position-relative">
-                <div class="position-absolute top-0 end-0 p-4 opacity-10">
-                    <i class="fas fa-user-graduate fa-6x"></i>
-                </div>
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-lg" style="width: 90px; height: 90px; font-size: 2.5rem;">
-                            <span id="studentInitial">S</span>
-                        </div>
+    {{-- Search & Filter Bar --}}
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-3">
+            <div class="row g-2 align-items-center">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white rounded-start-pill px-3"><i class="fas fa-search text-muted"></i></span>
+                        <input type="text" id="searchInput" class="form-control bg-white rounded-end-pill py-2" placeholder="{{ __('instructor::billing.search_placeholder') }}">
                     </div>
-                    <div class="col">
-                        <div class="d-flex align-items-center gap-3 mb-1">
-                            <h2 id="studentNameDisplay" class="fw-bold mb-0">Student Name</h2>
-                            <span id="studentStatusBadge" class="badge bg-white bg-opacity-25 rounded-pill px-3">Status</span>
-                        </div>
-                        <div class="d-flex flex-wrap gap-4 small opacity-75 mb-3">
-                            <span><i class="fas fa-phone-alt me-1"></i> <span id="studentPhoneDisplay">00000000</span></span>
-                            <span><i class="fas fa-graduation-cap me-1"></i> <span id="studentGradeDisplay">Grade</span></span>
-                            <span><i class="fas fa-id-card me-1"></i> ID: <span id="studentIdDisplay">#0</span></span>
-                        </div>
-                        <div class="d-flex gap-2">
-                            <a id="whatsappBtn" href="#" target="_blank" class="btn btn-white btn-sm rounded-pill px-3 fw-bold text-success shadow-sm">
-                                <i class="fab fa-whatsapp me-1"></i> واتساب
-                            </a>
-                            <a id="callBtn" href="#" class="btn btn-white btn-sm rounded-pill px-3 fw-bold text-primary shadow-sm">
-                                <i class="fas fa-phone-alt me-1"></i> اتصال
-                            </a>
-                            <button onclick="downloadStatement()" class="btn btn-white btn-sm rounded-pill px-3 fw-bold text-danger shadow-sm">
-                                <i class="fas fa-file-pdf me-1"></i> كشف حساب
-                            </button>
-                            <button id="quickPayBtn" onclick="openQuickPayModal()" class="btn btn-warning btn-sm rounded-pill px-3 fw-bold shadow-sm d-none">
-                                <i class="fas fa-bolt me-1"></i> {{ __('center::sales.quick_pay') }}
-                            </button>
-                        </div>
-                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select id="filterStatus" class="form-select bg-white rounded-pill py-2">
+                        <option value="all">{{ __('instructor::billing.all_students') }}</option>
+                        <option value="unpaid">{{ __('instructor::billing.has_balance') }}</option>
+                        <option value="paid">{{ __('instructor::billing.fully_paid') }}</option>
+                    </select>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Stats Cards (Hidden until search) -->
-    <div id="statsSection" class="col-lg-12 d-none">
-        <div class="row g-3">
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm rounded-4 animate__animated animate__fadeInUp bg-white">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center gap-3 mb-2">
-                            <div class="bg-danger bg-opacity-10 text-danger rounded-3 p-2"><i class="fas fa-money-bill-wave"></i></div>
-                            <div class="text-muted small fw-bold">{{ __('center::messages.blade_0562') }}</div>
-                        </div>
-                        <h3 id="debtStat" class="mb-0 fw-bold text-danger">0.00</h3>
-                        <div class="mt-2 small text-muted"><i class="fas fa-info-circle me-1"></i> مبالغ لم يتم تسويتها</div>
-                    </div>
-                </div>
+    @if($students->isEmpty())
+        <div class="stats-card p-5 text-center">
+            <div class="mb-4">
+                <i class="fas fa-users fs-1 text-muted opacity-25"></i>
             </div>
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm rounded-4 animate__animated animate__fadeInUp bg-white" style="animation-delay: 0.1s;">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center gap-3 mb-2">
-                            <div class="bg-success bg-opacity-10 text-success rounded-3 p-2"><i class="fas fa-check-circle"></i></div>
-                            <div class="text-muted small fw-bold">إجمالي المسدد</div>
-                        </div>
-                        <h3 id="paidStat" class="mb-0 fw-bold text-success">0.00</h3>
-                        <div class="mt-2 small text-muted"><i class="fas fa-arrow-up text-success me-1"></i> تحصيلات نقدية/بنكية</div>
-                    </div>
-                </div>
+            <h5 class="text-muted">{{ __('instructor::billing.no_students_registered') }}</h5>
+        </div>
+    @else
+        <div id="noResults" class="stats-card p-5 text-center d-none">
+            <div class="mb-4">
+                <i class="fas fa-search fs-1 text-muted opacity-25"></i>
             </div>
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm rounded-4 animate__animated animate__fadeInUp bg-white" style="animation-delay: 0.2s;">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center gap-3 mb-2">
-                            <div class="bg-info bg-opacity-10 text-info rounded-3 p-2"><i class="fas fa-calendar-check"></i></div>
-                            <div class="text-muted small fw-bold">نسبة الحضور</div>
-                        </div>
-                        <h3 id="attendanceStat" class="mb-0 fw-bold text-info">0%</h3>
-                        <div class="progress mt-3" style="height: 6px;">
-                            <div id="attendanceProgress" class="progress-bar bg-info" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm rounded-4 animate__animated animate__fadeInUp bg-white" style="animation-delay: 0.3s;">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center gap-3 mb-2">
-                            <div class="bg-purple bg-opacity-10 text-purple rounded-3 p-2" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;"><i class="fas fa-book-open"></i></div>
-                            <div class="text-muted small fw-bold">الدورات النشطة</div>
-                        </div>
-                        <h3 id="coursesStat" class="mb-0 fw-bold" style="color: #8b5cf6;">0</h3>
-                        <div class="mt-2 small text-muted"><i class="fas fa-graduation-cap me-1"></i> دورات مسجل بها الطالب</div>
-                    </div>
-                </div>
+            <h5 class="text-muted">{{ __('instructor::billing.no_search_results') }}</h5>
+        </div>
+
+        <div class="stats-card p-0 overflow-hidden shadow-sm border-0" id="billingTableContainer">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" id="billingTable">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="px-4 py-3 border-0">{{ __('instructor::billing.student_name') }}</th>
+                            <th class="border-0">{{ __('instructor::billing.total_due') }}</th>
+                            <th class="border-0">{{ __('instructor::billing.total_paid') }}</th>
+                            <th class="border-0">{{ __('instructor::billing.balance') }}</th>
+                            <th class="px-4 border-0 text-end">{{ __('instructor::billing.actions') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($students as $student)
+                            @php
+                                $totalDue = $student->enrollments->sum(function($e) { return $e->course->price ?? 0; });
+                                $totalPaid = $student->sales->sum('paid_amount');
+                                $balance = $totalDue - $totalPaid;
+                                $status = $balance > 0 ? 'unpaid' : 'paid';
+                            @endphp
+                            <tr class="student-row" 
+                                data-name="{{ $student->name }}" 
+                                data-phone="{{ $student->phone }}" 
+                                data-balance="{{ $balance }}"
+                                data-status="{{ $status }}">
+                                <td class="px-4 py-3">
+                                    <div class="fw-bold text-dark">{{ $student->name }}</div>
+                                    <small class="text-muted">{{ $student->enrollments->pluck('course.title')->filter()->implode(', ') }}</small>
+                                </td>
+                                <td>{{ number_format($totalDue) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }}</td>
+                                <td>{{ number_format($totalPaid) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }}</td>
+                                <td>
+                                    @if($balance > 0)
+                                        <span class="text-danger fw-bold">{{ number_format($balance) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }}</span>
+                                    @else
+                                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{ __('instructor::billing.paid') }}</span>
+                                    @endif
+                                </td>
+                                <td class="px-4 text-end">
+                                    <div class="d-flex gap-2 justify-content-end">
+                                        @if($balance > 0)
+                                            <button type="button" class="btn btn-primary btn-sm rounded-pill px-3" 
+                                                data-bs-toggle="modal" data-bs-target="#collectModal" 
+                                                data-id="{{ $student->id }}" data-name="{{ $student->name }}" data-balance="{{ $balance }}">
+                                                <i class="fas fa-hand-holding-usd me-1"></i> {{ __('instructor::billing.collect') }}
+                                            </button>
+                                            @php
+                                                // Customize message for Center context
+                                                $reminderMsg = "تحية طيبة، نود تذكيركم بأن الطالب {$student->name} لديه مديونية متبقية قدرها {$balance} ج.م في " . (app('tenant')->name ?? 'المركز') . ". يرجى السداد في أقرب وقت. شكراً لكم.";
+                                                $phone = $student->phone;
+                                                if (str_starts_with($phone, '0')) $phone = '2' . $phone;
+                                                $whatsappUri = "https://api.whatsapp.com/send?phone=" . preg_replace('/[^0-9]/', '', $phone) . "&text=" . urlencode($reminderMsg);
+                                            @endphp
+                                            <a href="{{ $whatsappUri }}" target="_blank" class="btn btn-success btn-sm rounded-pill px-3">
+                                                <i class="fab fa-whatsapp me-1"></i> {{ __('instructor::billing.whatsapp_reminder') }}
+                                            </a>
+                                        @else
+                                            <span class="text-success small fw-medium"><i class="fas fa-check-circle me-1"></i> {{ __('instructor::billing.collected') }}</span>
+                                        @endif
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
-    </div>
+    @endif
+</div>
 
-    <!-- Main Content Tabs (Hidden initially) -->
-    <div id="accountTabs" class="col-lg-12 d-none animate__animated animate__fadeIn">
-        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-            <div class="card-header bg-white border-0 p-0">
-                <ul class="nav nav-tabs nav-justified border-bottom" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active py-3" data-bs-toggle="tab" data-bs-target="#ledgerTab" type="button">
-                            <i class="fas fa-history me-2"></i> السجل المالي (Timeline)
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link py-3" data-bs-toggle="tab" data-bs-target="#invoicesTab" type="button">
-                            <i class="fas fa-file-invoice-dollar me-2"></i> المديونيات المعلقة
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link py-3" data-bs-toggle="tab" data-bs-target="#coursesTab" type="button">
-                            <i class="fas fa-graduation-cap me-2"></i> الدورات المسجلة
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link py-3" data-bs-toggle="tab" data-bs-target="#attendanceTab" type="button">
-                            <i class="fas fa-user-check me-2"></i> سجل الحضور
-                        </button>
-                    </li>
-                </ul>
+@push('modals')
+<!-- Collection Modal -->
+<div class="modal fade" id="collectModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold">{{ __('instructor::billing.record_payment') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="card-body p-4 position-relative card-content-area">
-                <div id="tabsLoader" class="position-absolute top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-none align-items-center justify-content-center" style="z-index: 10;">
-                    <div class="text-center">
-                        <div class="spinner-border text-primary mb-2" role="status"></div>
-                        <div class="small fw-bold text-primary">جاري تحميل البيانات...</div>
+            <form action="{{ route('center.sales.mark-paid') }}" method="POST">
+                @csrf
+                <div class="modal-body p-4">
+                    <input type="hidden" name="student_id" id="modal_student_id">
+                    
+                    <div class="mb-4 text-center">
+                        <p class="text-muted mb-1">{{ __('instructor::billing.collect_from') }}</p>
+                        <h4 class="fw-bold mb-0" id="modal_student_name"></h4>
                     </div>
-                </div>
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="ledgerTab">
-                        <div class="timeline-container px-2"><div id="ledgerTimeline"></div></div>
-                    </div>
-                    <div class="tab-pane fade" id="invoicesTab">
-                        <div id="unpaidInvoicesList"></div>
-                    </div>
-                    <div class="tab-pane fade" id="coursesTab">
-                        <div id="coursesListSection" class="row g-3"></div>
-                    </div>
-                    <div class="tab-pane fade" id="attendanceTab">
-                        <div class="table-responsive rounded-3 border">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="bg-light">
-                                    <tr><th class="ps-4">التاريخ</th><th>الكورس</th><th class="text-center">الحالة</th></tr>
-                                </thead>
-                                <tbody id="attendanceTableBody"></tbody>
-                            </table>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">{{ __('instructor::billing.amount_received') }}</label>
+                        <div class="input-group">
+                            <input type="number" name="amount" id="modal_amount" class="form-control bg-white border py-2" required>
+                            <span class="input-group-text bg-white border">{{ app('tenant')->settings['currency'] ?? 'EGP' }}</span>
                         </div>
+                        <div class="form-text text-danger" id="modal_balance_hint"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">{{ __('instructor::billing.notes') }}</label>
+                        <textarea name="notes" class="form-control bg-white border" rows="3" placeholder="{{ __('instructor::billing.notes_placeholder') }}"></textarea>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Empty State -->
-    <div id="emptyState" class="col-lg-12 text-center py-5">
-        <div class="bg-white rounded-4 shadow-sm p-5 d-inline-block border w-100" style="max-width: 600px;">
-            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 120px; height: 120px;">
-                <i class="fas fa-search fa-3x text-muted opacity-50"></i>
-            </div>
-            <h4 class="fw-bold text-dark mb-2">ابدأ بالبحث عن طالب</h4>
-            <p class="text-muted mb-4 mx-auto" style="max-width: 400px;">قم بكتابة اسم الطالب في شريط البحث أعلاه لمشاهدة تفاصيل حسابه المالي وإدارة التحصيلات.</p>
-            <div class="d-flex flex-wrap justify-content-center gap-3">
-                <div class="small text-muted"><i class="fas fa-check-circle text-success me-1"></i> متابعة المديونيات</div>
-                <div class="small text-muted"><i class="fas fa-check-circle text-success me-1"></i> سجل سداد كامل</div>
-                <div class="small text-muted"><i class="fas fa-check-circle text-success me-1"></i> التحصيل السريع</div>
-            </div>
+                <div class="modal-footer border-0 pt-0 p-4">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">{{ __('instructor::billing.cancel') }}</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">{{ __('instructor::billing.confirm_collection') }}</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-
-@push('styles')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-<style>
-    :root {
-        --bs-primary: #059669;
-        --bs-primary-rgb: 5, 150, 105;
-    }
-
-    /* Search Bar */
-    .search-bar-container {
-        border: 2px solid transparent;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        background: #fff;
-    }
-    .search-bar-container:focus-within {
-        border-color: var(--bs-primary);
-        box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.15) !important;
-        transform: translateY(-2px);
-    }
-
-    /* Progress Bar */
-    .search-progress-bar {
-        position: absolute; bottom: 0; right: 0; height: 3px;
-        width: 0; background: var(--bs-primary); border-radius: 0 0 1rem 1rem;
-        transition: width 0.3s ease;
-    }
-
-    /* Custom Dropdown */
-    .search-dropdown {
-        position: absolute; top: 100%; right: 0; left: 0;
-        background: #fff; border-radius: 0 0 1rem 1rem;
-        box-shadow: 0 15px 30px rgba(0,0,0,0.12);
-        max-height: 400px; overflow-y: auto;
-        border-top: 1px solid #f1f5f9;
-        z-index: 999;
-    }
-    .search-result-option {
-        display: flex; align-items: center; gap: 12px;
-        padding: 12px 20px; cursor: pointer;
-        transition: background 0.15s;
-    }
-    .search-result-option:hover, .search-result-option.active {
-        background: rgba(5, 150, 105, 0.06);
-    }
-    .search-result-avatar {
-        width: 42px; height: 42px; border-radius: 12px;
-        background: rgba(5, 150, 105, 0.1); color: var(--bs-primary);
-        display: flex; align-items: center; justify-content: center;
-        font-weight: 700; font-size: 1.1rem; flex-shrink: 0;
-    }
-    .search-result-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 2px; }
-    .search-result-meta { font-size: 0.78rem; color: #64748b; }
-    .search-no-results {
-        padding: 30px 20px; text-align: center; color: #94a3b8;
-    }
-    .search-loading {
-        padding: 20px; text-align: center; color: var(--bs-primary);
-    }
-
-    /* Tabs */
-    .nav-tabs .nav-link { border: none; font-weight: 600; color: #64748b; border-bottom: 3px solid transparent; transition: all 0.2s; }
-    .nav-tabs .nav-link.active { color: var(--bs-primary); border-bottom-color: var(--bs-primary); background: rgba(5, 150, 105, 0.03); }
-
-    .btn-white { background: white; border: none; transition: all 0.3s; }
-    .btn-white:hover { background: #f8fafc; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
-
-    .ledger-item { position: relative; padding-bottom: 1.5rem; }
-    .ledger-item:not(:last-child)::before { content: ''; position: absolute; top: 10px; right: 23px; width: 2px; height: 100%; background: #f1f5f9; }
-    .ledger-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; z-index: 1; }
-</style>
 @endpush
 
-@push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+    .bg-danger-soft { background-color: rgba(220, 53, 69, 0.1); }
+    .bg-success-soft { background-color: rgba(25, 135, 84, 0.1); }
+    .stats-card { background: #fff; border-radius: 1.25rem; }
+    #billingTable thead th { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.025em; }
+</style>
+
 <script>
-const currency = '{{ __('center::sales.currency') }}';
-let selectedStudentId = null;
-let searchTimer = null;
-let activeIndex = -1;
-
 document.addEventListener('DOMContentLoaded', function() {
-    const input = document.getElementById('studentSearchInput');
-    const dropdown = document.getElementById('searchDropdown');
-    const results = document.getElementById('searchResults');
-    const spinner = document.getElementById('searchSpinner');
-    const progressBar = document.getElementById('searchProgressLine');
+    const searchInput = document.getElementById('searchInput');
+    const filterStatus = document.getElementById('filterStatus');
+    const rows = document.querySelectorAll('.student-row');
+    const noResults = document.getElementById('noResults');
+    const resultCount = document.getElementById('resultCount');
+    const tableContainer = document.getElementById('billingTableContainer');
 
-    // ========== LIVE SEARCH: fires on every keystroke ==========
-    input.addEventListener('input', function() {
-        const query = this.value.trim();
-        activeIndex = -1;
+    function applyFilters() {
+        const query = searchInput.value.trim().toLowerCase();
+        const filter = filterStatus.value;
+        let visible = 0;
 
-        // Clear previous timer (debounce)
-        if (searchTimer) clearTimeout(searchTimer);
+        rows.forEach(row => {
+            const name = row.dataset.name.toLowerCase();
+            const phone = row.dataset.phone.toLowerCase();
+            const status = row.dataset.status;
 
-        if (query.length === 0) {
-            dropdown.classList.add('d-none');
-            spinner.classList.add('d-none');
-            progressBar.style.width = '0';
-            return;
-        }
+            const matchSearch = !query || name.includes(query) || phone.includes(query);
+            const matchFilter = filter === 'all' || status === filter;
 
-        // Show loading immediately
-        spinner.classList.remove('d-none');
-        progressBar.style.width = '30%';
-        dropdown.classList.remove('d-none');
-        results.innerHTML = `<div class="search-loading"><div class="spinner-border spinner-border-sm me-2"></div> جاري البحث عن "${escapeHtml(query)}"...</div>`;
-
-        // Debounce: wait 250ms after last keystroke before fetching
-        searchTimer = setTimeout(function() {
-            progressBar.style.width = '60%';
-
-            fetch(`/sales/students/lookup?q=${encodeURIComponent(query)}`)
-                .then(r => r.json())
-                .then(data => {
-                    progressBar.style.width = '100%';
-                    setTimeout(() => { progressBar.style.width = '0'; }, 400);
-                    spinner.classList.add('d-none');
-
-                    if (data.length === 0) {
-                        results.innerHTML = `<div class="search-no-results"><i class="fas fa-user-slash fa-2x mb-2 d-block opacity-50"></i>لا يوجد طالب مطابق لـ "${escapeHtml(query)}"</div>`;
-                        return;
-                    }
-
-                    results.innerHTML = '';
-                    data.forEach((student, idx) => {
-                        const div = document.createElement('div');
-                        div.className = 'search-result-option';
-                        div.setAttribute('data-id', student.id);
-                        div.innerHTML = `
-                            <div class="search-result-avatar">${escapeHtml(student.initial)}</div>
-                            <div style="flex:1">
-                                <div class="search-result-name">${escapeHtml(student.name)}</div>
-                                <div class="search-result-meta">
-                                    <i class="fas fa-phone-alt me-1"></i>${escapeHtml(student.phone)}
-                                    <span class="mx-2">|</span>
-                                    <i class="fas fa-graduation-cap me-1"></i>${escapeHtml(student.grade || '-')}
-                                </div>
-                            </div>
-                            <span class="text-muted small opacity-50">#${escapeHtml(student.code || '')}</span>`;
-
-                        div.addEventListener('click', function() {
-                            selectStudent(student);
-                        });
-                        results.appendChild(div);
-                    });
-                })
-                .catch(err => {
-                    console.error('Search error:', err);
-                    spinner.classList.add('d-none');
-                    progressBar.style.width = '0';
-                    results.innerHTML = `<div class="search-no-results text-danger"><i class="fas fa-exclamation-triangle me-2"></i>حدث خطأ أثناء البحث</div>`;
-                });
-        }, 250);
-    });
-
-    // Keyboard navigation in dropdown
-    input.addEventListener('keydown', function(e) {
-        const options = results.querySelectorAll('.search-result-option');
-        if (!options.length) return;
-
-        if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            activeIndex = Math.min(activeIndex + 1, options.length - 1);
-            highlightOption(options);
-        } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            activeIndex = Math.max(activeIndex - 1, 0);
-            highlightOption(options);
-        } else if (e.key === 'Enter') {
-            e.preventDefault();
-            if (activeIndex >= 0 && options[activeIndex]) {
-                options[activeIndex].click();
+            if (matchSearch && matchFilter) {
+                row.style.display = '';
+                visible++;
+            } else {
+                row.style.display = 'none';
             }
-        } else if (e.key === 'Escape') {
-            dropdown.classList.add('d-none');
-        }
-    });
+        });
 
-    // Close dropdown on outside click
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.search-bar-container')) {
-            dropdown.classList.add('d-none');
-        }
-    });
+        if (resultCount) resultCount.textContent = visible + ' {{ __('instructor::billing.student_count') }}';
+        if (noResults) noResults.classList.toggle('d-none', visible > 0);
+        if (tableContainer) tableContainer.classList.toggle('d-none', visible === 0);
+    }
 
-    // Keyboard shortcut: "/" to focus search
-    document.addEventListener('keydown', function(e) {
-        if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
-            e.preventDefault();
-            input.focus();
-        }
-    });
+    if (searchInput) searchInput.addEventListener('input', applyFilters);
+    if (filterStatus) filterStatus.addEventListener('change', applyFilters);
 
-    // Load if ID in URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const studentId = urlParams.get('student_id');
-    if (studentId) {
-        loadStudentAccount(studentId);
+    // Modal data handling
+    const collectModal = document.getElementById('collectModal');
+    if (collectModal) {
+        collectModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const id = button.getAttribute('data-id');
+            const name = button.getAttribute('data-name');
+            const balance = button.getAttribute('data-balance');
+
+            document.getElementById('modal_student_id').value = id;
+            document.getElementById('modal_student_name').textContent = name;
+            document.getElementById('modal_amount').value = balance;
+            document.getElementById('modal_amount').max = balance;
+            document.getElementById('modal_balance_hint').textContent = '{{ __('instructor::billing.current_balance') }}' + new Intl.NumberFormat().format(balance);
+        });
     }
 });
-
-function highlightOption(options) {
-    options.forEach((opt, idx) => {
-        opt.classList.toggle('active', idx === activeIndex);
-        if (idx === activeIndex) opt.scrollIntoView({ block: 'nearest' });
-    });
-}
-
-function selectStudent(student) {
-    const input = document.getElementById('studentSearchInput');
-    const dropdown = document.getElementById('searchDropdown');
-    selectedStudentId = student.id;
-    input.value = student.name + ' (' + student.phone + ')';
-    dropdown.classList.add('d-none');
-    loadStudentAccount(student.id);
-}
-
-function escapeHtml(text) {
-    if (!text) return '';
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-function downloadStatement() {
-    if (selectedStudentId) {
-        window.open(`/sales/student-statement/${selectedStudentId}`, '_blank');
-    }
-}
-
-let currentUnpaidInvoices = [];
-
-function loadStudentAccount(studentId) {
-    if (!studentId) {
-        document.querySelectorAll('#studentHeader, #statsSection, #accountTabs').forEach(el => el.classList.add('d-none'));
-        document.getElementById('emptyState').classList.remove('d-none');
-        return;
-    }
-
-    selectedStudentId = studentId;
-    document.getElementById('emptyState').classList.add('d-none');
-    document.querySelectorAll('#studentHeader, #statsSection, #accountTabs').forEach(el => el.classList.remove('d-none'));
-    document.getElementById('tabsLoader').classList.replace('d-none', 'd-flex');
-
-    fetch(`/sales/student-summary/${studentId}`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('tabsLoader').classList.replace('d-flex', 'd-none');
-            if (data.success) {
-                const s = data.student;
-                currentUnpaidInvoices = data.unpaid_invoices;
-
-                // Update Header
-                document.getElementById('studentInitial').innerText = s.name.charAt(0).toUpperCase();
-                document.getElementById('studentNameDisplay').innerText = s.name;
-                document.getElementById('studentPhoneDisplay').innerText = s.phone;
-                document.getElementById('studentGradeDisplay').innerText = s.grade || '-';
-                document.getElementById('studentIdDisplay').innerText = '#' + s.id;
-
-                document.getElementById('studentStatusBadge').innerText = s.status === 'active' ? 'نشط' : 'غير نشط';
-                document.getElementById('studentStatusBadge').className = `badge bg-white bg-opacity-25 rounded-pill px-3 ${s.status === 'active' ? '' : 'text-danger'}`;
-
-                document.getElementById('whatsappBtn').href = `https://wa.me/2${s.phone}`;
-                document.getElementById('callBtn').href = `tel:${s.phone}`;
-
-                const quickPayBtn = document.getElementById('quickPayBtn');
-                quickPayBtn.classList.toggle('d-none', currentUnpaidInvoices.length === 0);
-
-                // Update Stats
-                document.getElementById('debtStat').innerText = data.stats.total_debt + ' ' + currency;
-                document.getElementById('paidStat').innerText = data.stats.total_paid + ' ' + currency;
-                document.getElementById('attendanceStat').innerText = data.stats.attendance_rate + '%';
-                document.getElementById('attendanceProgress').style.width = data.stats.attendance_rate + '%';
-                document.getElementById('coursesStat').innerText = data.stats.course_count;
-
-                // Update Ledger
-                const timeline = document.getElementById('ledgerTimeline');
-                timeline.innerHTML = '';
-                if (data.ledger && data.ledger.length > 0) {
-                    data.ledger.forEach(item => {
-                        let icon, bg, color;
-                        if (item.type === 'invoice') { icon = 'fa-file-invoice-dollar'; bg = 'rgba(239, 68, 68, 0.1)'; color = '#ef4444'; }
-                        else if (item.type === 'payment') { icon = 'fa-cash-register'; bg = 'rgba(16, 185, 129, 0.1)'; color = '#10b981'; }
-                        else { icon = 'fa-undo'; bg = 'rgba(245, 158, 11, 0.1)'; color = '#f59e0b'; }
-
-                        timeline.innerHTML += `
-                            <div class="ledger-item d-flex gap-4">
-                                <div class="ledger-icon flex-shrink-0" style="background: ${bg}; color: ${color};"><i class="fas ${icon} fa-lg"></i></div>
-                                <div class="flex-grow-1 pt-1 pb-3">
-                                    <div class="d-flex justify-content-between align-items-start mb-1">
-                                        <h6 class="fw-bold mb-0 text-dark">${item.description}</h6>
-                                        <span class="small fw-bold text-dark">${item.type === 'invoice' ? '-' : '+'}${item.amount.toFixed(2)} ${currency}</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="x-small text-muted"><i class="far fa-calendar-alt me-1"></i> ${item.date}</span>
-                                        ${item.type === 'invoice' ? `<span class="badge ${item.status === 'paid' ? 'bg-success' : (item.status === 'partial' ? 'bg-warning' : 'bg-danger')} bg-opacity-10 text-reset small">${item.status}</span>` : ''}
-                                    </div>
-                                    ${item.type === 'invoice' ? `<div class="mt-2"><a href="/sales/${item.id}" target="_blank" class="x-small text-primary fw-bold text-decoration-none">عرض الفاتورة <i class="fas fa-external-link-alt ms-1"></i></a></div>` : ''}
-                                </div>
-                            </div>`;
-                    });
-                } else {
-                    timeline.innerHTML = `<div class="text-center py-5 text-muted"><i class="fas fa-ghost fa-2x mb-2 opacity-50"></i><p>لا يوجد سجلات مالية بعد.</p></div>`;
-                }
-
-                // Unpaid Invoices
-                const invList = document.getElementById('unpaidInvoicesList');
-                invList.innerHTML = '';
-                if (data.unpaid_invoices.length > 0) {
-                    data.unpaid_invoices.forEach(inv => {
-                        invList.innerHTML += `
-                            <div class="bg-white border rounded-4 p-4 mb-3 d-flex justify-content-between align-items-center shadow-none">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width:50px; height:50px;"><i class="fas fa-file-invoice-dollar fa-lg"></i></div>
-                                    <div>
-                                        <div class="fw-bold text-dark mb-1">فاتورة مبيعات #${inv.id}</div>
-                                        <div class="small text-muted mb-1"><i class="far fa-clock me-1"></i> ${inv.created_at.split('T')[0]}</div>
-                                        <div class="text-danger fw-bold">متبقي: ${inv.remaining.toFixed(2)} ${currency}</div>
-                                    </div>
-                                </div>
-                                <div class="d-flex gap-2">
-                                    <a href="/sales/${inv.id}" target="_blank" class="btn btn-outline-light text-dark btn-sm rounded-pill px-4 border shadow-none">عرض</a>
-                                    <button onclick="openGenericQuickPayModal(${inv.id}, ${inv.remaining})" class="btn btn-primary btn-sm rounded-pill px-4 shadow-sm">تحصيل</button>
-                                </div>
-                            </div>`;
-                    });
-                } else {
-                    invList.innerHTML = `<div class="text-center py-5 text-muted"><div class="bg-success bg-opacity-10 text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:80px; height:80px;"><i class="fas fa-check-double fa-2x"></i></div><h6 class="fw-bold">رائع! لا توجد مديونيات معلقة</h6><p class="small">هذا الطالب ملتزم بسداد جميع المستحقات المالية.</p></div>`;
-                }
-
-                // Courses
-                const coursesGrid = document.getElementById('coursesListSection');
-                coursesGrid.innerHTML = '';
-                if (data.courses.length > 0) {
-                    data.courses.forEach(c => {
-                        coursesGrid.innerHTML += `
-                            <div class="col-md-6">
-                                <div class="card border border-light-subtle shadow-none rounded-4 bg-light bg-opacity-25 h-100">
-                                    <div class="card-body p-4">
-                                        <div class="d-flex justify-content-between align-items-start mb-3">
-                                            <h6 class="fw-bold text-dark mb-0">${c.title}</h6>
-                                            <span class="badge bg-primary rounded-pill px-3">${c.status}</span>
-                                        </div>
-                                        <div class="small text-muted"><i class="far fa-calendar-alt me-1"></i> تاريخ الالتحاق: ${c.enrolled_at || '-'}</div>
-                                    </div>
-                                </div>
-                            </div>`;
-                    });
-                } else {
-                    coursesGrid.innerHTML = `<div class="col-12 text-center py-5 text-muted"><p>الطالب غير مسجل في أي دورات حالياً.</p></div>`;
-                }
-
-                // Attendance
-                const attTable = document.getElementById('attendanceTableBody');
-                attTable.innerHTML = '';
-                if (data.recent_attendance.length > 0) {
-                    data.recent_attendance.forEach(a => {
-                        let badgeClass = a.status === 'present' ? 'bg-success' : (a.status === 'absent' ? 'bg-danger' : 'bg-secondary');
-                        attTable.innerHTML += `<tr><td class="ps-4 fw-bold text-dark">${a.date}</td><td>${a.course}</td><td class="text-center"><span class="badge ${badgeClass} rounded-pill px-3">${a.status}</span></td></tr>`;
-                    });
-                } else {
-                    attTable.innerHTML = `<tr><td colspan="3" class="text-center py-5 text-muted">لا يوجد سجلات حضور مسجلة.</td></tr>`;
-                }
-            }
-        })
-        .catch((err) => {
-            console.error(err);
-            document.getElementById('tabsLoader').classList.replace('d-flex', 'd-none');
-            Swal.fire({ icon: 'error', title: 'خطأ في تحميل البيانات' });
-        });
-}
-
-function openQuickPayModal() {
-    if (currentUnpaidInvoices.length === 0) return;
-    openGenericQuickPayModal(currentUnpaidInvoices[0].id, currentUnpaidInvoices[0].remaining);
-}
-
-function openGenericQuickPayModal(saleId, amount) {
-    const modalHtml = `
-        <div class="modal fade" id="quickPayModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 rounded-4 shadow">
-                    <div class="modal-header border-0 shadow-sm p-4">
-                        <h5 class="fw-bold mb-0"><i class="fas fa-bolt text-warning me-2"></i>تحصيل سريع للدين</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body p-4">
-                        <div class="p-3 bg-light rounded-4 mb-4 text-center">
-                            <div class="text-muted small">رقم الفاتورة</div>
-                            <div class="fw-bold fs-5">#${saleId}</div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold small text-muted">المبلغ المراد تحصيله</label>
-                            <div class="input-group">
-                                <input type="number" id="quickAmount" step="0.01" class="form-control rounded-start-3" value="${amount.toFixed(2)}">
-                                <span class="input-group-text bg-light border-start-0 rounded-end-3">${currency}</span>
-                            </div>
-                            <div class="form-text">المبلغ المتبقي الكلي: <strong>${amount.toFixed(2)}</strong></div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold small text-muted">طريقة السداد</label>
-                            <select id="quickMethod" class="form-select rounded-3">
-                                <option value="cash">نقداً (Cash)</option>
-                                <option value="card">بطاقة إئتمان</option>
-                                <option value="bank_transfer">تحويل بنكي / محفظة</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer border-0 p-4 pt-0">
-                        <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">إلغاء</button>
-                        <button type="button" id="confirmQuickPay" onclick="submitQuickPay(${saleId})" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">
-                            <i class="fas fa-check-circle me-1"></i> إتمام عملية السداد
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>`;
-
-    const oldModal = document.getElementById('quickPayModal');
-    if (oldModal) oldModal.remove();
-
-    document.body.insertAdjacentHTML('beforeend', modalHtml);
-    const modal = new bootstrap.Modal(document.getElementById('quickPayModal'));
-    modal.show();
-}
-
-function submitQuickPay(saleId) {
-    const amount = document.getElementById('quickAmount').value;
-    const method = document.getElementById('quickMethod').value;
-    const btn = document.getElementById('confirmQuickPay');
-
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>جاري الحفظ...';
-
-    fetch(`/sales/${saleId}/payment`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({ amount: amount, payment_method: method })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            bootstrap.Modal.getInstance(document.getElementById('quickPayModal')).hide();
-            Swal.fire({ icon: 'success', title: 'تم التحصيل بنجاح', timer: 1500, showConfirmButton: false });
-            loadStudentAccount(selectedStudentId);
-        } else {
-            throw new Error(data.message);
-        }
-    })
-    .catch((err) => {
-        Swal.fire({ icon: 'error', title: 'فشل التحصيل', text: err.message });
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-check-circle me-1"></i> إتمام عملية السداد';
-    });
-}
 </script>
-@endpush
 @endsection

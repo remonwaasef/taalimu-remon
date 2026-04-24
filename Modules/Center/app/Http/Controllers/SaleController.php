@@ -67,9 +67,61 @@ class SaleController extends Controller
     {
         $this->authorize('viewAny', Sale::class);
         $tenant = app('tenant');
-        // We no longer load all students here to keep the page lightweight.
-        // The search bar will use AJAX to find students.
-        return view('center::sales.account', compact('tenant'));
+        
+        $students = Student::where('tenant_id', $tenant->id)
+            ->with(['user', 'sales', 'enrollments.course'])
+            ->get();
+
+        return view('center::sales.account', compact('tenant', 'students'));
+    }
+
+    public function markPaid(Request $request)
+    {
+        $this->authorize('create', Sale::class);
+        $tenant = app('tenant');
+
+        $request->validate([
+            'student_id' => [
+                'required',
+                Rule::exists('students', 'id')->where('tenant_id', $tenant->id)
+            ],
+            'amount' => 'required|numeric|min:0',
+            'notes' => 'nullable|string',
+        ]);
+
+        $student = Student::with(['enrollments.course', 'sales'])->findOrFail($request->student_id);
+
+        // Calculate balance
+        $totalDue = $student->enrollments->sum(function($enrollment) {
+            return $enrollment->course->price ?? 0;
+        });
+        $totalPaid = $student->sales->sum('paid_amount');
+        $balance = $totalDue - $totalPaid;
+
+        if ($request->amount > $balance) {
+            return back()->with('error', __('center::messages.msg_071') . " (المبلغ أكبر من المديونية)"); // Using existing error or custom message
+        }
+
+        $sale = Sale::create([
+            'tenant_id' => $tenant->id,
+            'student_id' => $student->id,
+            'total_amount' => $request->amount,
+            'paid_amount' => $request->amount,
+            'status' => 'paid',
+            'payment_method' => 'cash',
+            'notes' => $request->notes ?? 'تحصيل سريع للمستحقات',
+        ]);
+
+        Payment::create([
+            'tenant_id' => $tenant->id,
+            'sale_id' => $sale->id,
+            'amount' => $request->amount,
+            'payment_method' => 'cash',
+            'received_by' => auth()->id(),
+            'paid_at' => now(),
+        ]);
+
+        return redirect()->back()->with('success', __('center::messages.msg_074'));
     }
 
     public function lookupStudents(Request $request)
