@@ -128,6 +128,10 @@ class StudentService
         // Send welcome emails AFTER transaction commits (outside DB::transaction)
         if (isset($result['student'])) {
             $this->sendWelcomeEmails($result['student'], $result['generated_password']);
+            
+            if (!empty($data->course_ids)) {
+                $this->sendGroupEnrollmentEmails($result['student'], $data->course_ids);
+            }
         }
 
         return $result;
@@ -582,6 +586,67 @@ class StudentService
         } catch (\Exception $e) {
             // Never block registration because of email failures
             Log::error("Failed to queue welcome emails for student {$student->id}: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Send group enrollment emails to the student and their guardian.
+     */
+    protected function sendGroupEnrollmentEmails(Student $student, array $courseIds): void
+    {
+        try {
+            $tenant = app('tenant');
+            $tenantSettings = $tenant->settings['email_templates'] ?? [];
+            
+            // If explicitely disabled (0 or false), disable. Otherwise enable.
+            $groupEnrollmentEnabled = !isset($tenantSettings['notif_group_enrollment_enabled']) || $tenantSettings['notif_group_enrollment_enabled'];
+            
+            if (!$groupEnrollmentEnabled) {
+                return;
+            }
+
+            $hasValidStudentEmail = $this->isRealEmail($student->email);
+            $guardianEmail = $student->parent_email ?: $student->guardian?->email;
+            $hasValidParentEmail = $this->isRealEmail($guardianEmail);
+
+            if (!$hasValidStudentEmail && !$hasValidParentEmail) {
+                return;
+            }
+
+            $groupSubject = !empty($tenantSettings['notif_group_enrollment_subject']) 
+                ? $tenantSettings['notif_group_enrollment_subject'] 
+                : 'تم تسجيلك في مجموعة جديدة';
+                
+            $groupBody = !empty($tenantSettings['notif_group_enrollment_body']) 
+                ? $tenantSettings['notif_group_enrollment_body'] 
+                : "مرحباً {اسم_الطالب}،\n\nلقد تم تسجيلك بنجاح في {اسم_المجموعة}.\nنتمنى لك التوفيق!\n\n{اسم_المركز}";
+
+            foreach ($courseIds as $courseId) {
+                $course = \App\Models\Course::find($courseId);
+                if (!$course) continue;
+
+                $groupVariables = [
+                    'اسم_الطالب' => $student->name,
+                    'اسم_المركز' => $tenant->name,
+                    'اسم_المجموعة' => $course->title,
+                    'سعر_الدورة' => $course->price . ' ج.م',
+                    'رابط_الدخول' => url('/login'),
+                ];
+
+                if ($hasValidStudentEmail) {
+                    Mail::to($student->email)->queue(new \App\Mail\NotifGroupEnrollmentMail(
+                        $groupSubject, $groupBody, $groupVariables, $tenant->name, $student->name
+                    ));
+                }
+
+                if ($hasValidParentEmail) {
+                    Mail::to($guardianEmail)->queue(new \App\Mail\NotifGroupEnrollmentMail(
+                        $groupSubject, $groupBody, $groupVariables, $tenant->name, $student->name
+                    ));
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error("Failed to queue group enrollment emails for student {$student->id}: " . $e->getMessage());
         }
     }
 
