@@ -65,18 +65,28 @@
 
                             <!-- Course Selection -->
                             <div class="col-12">
-                                <label class="form-label fw-bold">{{ __('instructor::students.target_group') }}</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white"><i class="fas fa-layer-group" style="color: var(--primary-color);"></i></span>
-                                    <select name="course_id" class="form-select bg-white focus-ring-primary" required>
-                                        <option value="" disabled selected>{{ __('instructor::students.select_group_placeholder') }}</option>
+                                <label class="form-label fw-bold mb-3">{{ __('instructor::students.target_group') }} <span class="text-muted fw-normal">({{ __('instructor::students.select_multiple_hint') ?? 'يمكنك اختيار أكثر من واحدة' }})</span></label>
+                                @if($courses->count() > 0)
+                                    <div class="row g-3">
                                         @foreach($courses as $course)
-                                            <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
-                                                {{ $course->title }}
-                                            </option>
+                                            <div class="col-md-6 col-lg-4">
+                                                <div class="form-check custom-checkbox-card bg-light border-0 rounded-4 p-3 h-100 d-flex align-items-center transition-all cursor-pointer" onclick="document.getElementById('course_{{ $course->id }}').click();">
+                                                    <input class="form-check-input ms-0 me-3" style="transform: scale(1.3);" type="checkbox" name="course_ids[]" value="{{ $course->id }}" id="course_{{ $course->id }}" {{ (is_array(old('course_ids')) && in_array($course->id, old('course_ids'))) ? 'checked' : '' }} onclick="event.stopPropagation();">
+                                                    <label class="form-check-label w-100 cursor-pointer fw-bold text-dark m-0" for="course_{{ $course->id }}" onclick="event.stopPropagation();">
+                                                        {{ $course->title }}
+                                                    </label>
+                                                </div>
+                                            </div>
                                         @endforeach
-                                    </select>
-                                </div>
+                                    </div>
+                                @else
+                                    <div class="alert alert-light border-0 rounded-4 small text-muted">
+                                        <i class="fas fa-info-circle me-1"></i> لا توجد مجموعات أو دورات متاحة حالياً.
+                                    </div>
+                                @endif
+                                @error('course_ids')
+                                    <div class="text-danger small mt-2">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <!-- Actions -->
@@ -137,6 +147,28 @@ document.addEventListener('DOMContentLoaded', function() {
         border-color: var(--primary-color) !important;
         box-shadow: 0 0 0 0.25rem rgba(58, 12, 163, 0.1) !important;
         background-color: white !important;
+    }
+
+    .cursor-pointer { cursor: pointer; }
+    .transition-all { transition: all 0.3s ease; }
+    .custom-checkbox-card {
+        border: 1px solid transparent !important;
+    }
+    .custom-checkbox-card:hover { 
+        transform: translateY(-3px);
+        border-color: var(--primary-color) !important;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05) !important;
+        background-color: rgba(58, 12, 163, 0.02) !important;
+    }
+    .custom-checkbox-card:has(input:checked) {
+        border: 2px solid var(--primary-color) !important;
+        background-color: rgba(58, 12, 163, 0.05) !important;
+        transform: translateY(-3px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05) !important;
+    }
+    .form-check-input:checked {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
     }
 </style>
 @endpush
