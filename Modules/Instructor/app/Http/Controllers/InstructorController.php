@@ -1598,5 +1598,20 @@ class InstructorController extends Controller
 
         return back()->with('success', 'تم حفظ إعدادات البريد الإلكتروني بنجاح');
     }
+
+    public function resetEmailTemplateSettings(Request $request)
+    {
+        $tenant = \App\Models\Tenant::findOrFail(app('tenant')->id);
+        $settings = $tenant->settings ?? [];
+
+        if (isset($settings['email_templates'])) {
+            unset($settings['email_templates']);
+        }
+
+        $tenant->settings = $settings;
+        $tenant->save();
+
+        return back()->with('success', 'تم إعادة ضبط نصوص البريد الإلكتروني للوضع الافتراضي بنجاح');
+    }
 }
 

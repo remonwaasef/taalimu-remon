@@ -46,6 +46,7 @@ $instructorRoutes = function () {
         
         // Email Templates Settings
         Route::post('/email-templates/update', [InstructorController::class, 'updateEmailTemplateSettings'])->name('instructor.email-templates.update');
+        Route::post('/email-templates/reset', [InstructorController::class, 'resetEmailTemplateSettings'])->name('instructor.email-templates.reset');
         
         // Auto-clear cache route (Temporary helper)
         Route::get('/clear-cache', function() {

@@ -451,11 +451,18 @@
                                     </div>
                                 </div>
 
-                                <div class="text-start mt-4 pt-3 border-top">
+                                <div class="text-start mt-4 pt-3 border-top d-flex gap-2">
                                     <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm">
                                         <i class="fas fa-save me-2"></i> حفظ إعدادات البريد
                                     </button>
                                 </div>
+                            </form>
+                            
+                            <form action="{{ route('instructor.email-templates.reset') }}" method="POST" class="d-inline-block mt-3" onsubmit="return confirm('هل أنت متأكد أنك تريد مسح جميع التعديلات وإعادة النصوص للوضع الافتراضي؟');">
+                                @csrf
+                                <button type="submit" class="btn btn-light text-danger rounded-pill px-4 fw-bold shadow-sm border">
+                                    <i class="fas fa-undo me-2"></i> إعادة الضبط للافتراضي
+                                </button>
                             </form>
                         </div>
 
