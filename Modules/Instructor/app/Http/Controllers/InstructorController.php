@@ -487,6 +487,9 @@ class InstructorController extends Controller
                     'status' => 'active',
                     'enrolled_at' => now(),
                 ]);
+                $isNewEnrollment = true;
+            } else {
+                $isNewEnrollment = false;
             }
 
             \DB::commit();
@@ -534,9 +537,34 @@ class InstructorController extends Controller
                             $tenant->name
                         ));
                     }
+                    
+                    // Send Group Enrollment Notification (if enabled and it's a new enrollment)
+                    $groupEnrollmentEnabled = (bool) ($tenantSettings['notif_group_enrollment_enabled'] ?? false);
+                    if ($groupEnrollmentEnabled && isset($isNewEnrollment) && $isNewEnrollment) {
+                        $course = \App\Models\Course::find($validated['course_id']);
+                        $groupVariables = [
+                            'اسم_الطالب' => $student->name,
+                            'اسم_المركز' => $tenant->name,
+                            'اسم_المجموعة' => $course ? $course->title : '',
+                            'رابط_الدخول' => url('/login'),
+                        ];
+                        
+                        $groupSubject = $tenantSettings['notif_group_enrollment_subject'] ?? 'تم تسجيلك في مجموعة جديدة';
+                        $groupBody = $tenantSettings['notif_group_enrollment_body'] ?? '';
+                        
+                        Mail::to($validated['email'])->queue(new \App\Mail\NotifGroupEnrollmentMail(
+                            $groupSubject, $groupBody, $groupVariables, $tenant->name
+                        ));
+                        
+                        if ($validated['parent_email']) {
+                            Mail::to($validated['parent_email'])->queue(new \App\Mail\NotifGroupEnrollmentMail(
+                                $groupSubject, $groupBody, $groupVariables, $tenant->name
+                            ));
+                        }
+                    }
                 }
             } catch (\Exception $mailEx) {
-                Log::error('Instructor welcome email failed: ' . $mailEx->getMessage());
+                Log::error('Instructor welcome/enrollment email failed: ' . $mailEx->getMessage());
             }
 
             return redirect()->route('instructor.students.list')->with('success', __('instructor::messages.student_added', ['name' => $validated['name']]));
@@ -752,6 +780,38 @@ class InstructorController extends Controller
             'received_by' => auth()->id(),
             'paid_at' => now(),
         ]);
+
+        // Send Payment Confirmation Email
+        try {
+            $tenant = app('tenant');
+            $tenantSettings = $tenant->settings['email_templates'] ?? [];
+            if (!empty($tenantSettings['notif_payment_confirmed_enabled']) && $student->email) {
+                $subject = $tenantSettings['notif_payment_confirmed_subject'] ?? 'تأكيد استلام دفعة';
+                $body = $tenantSettings['notif_payment_confirmed_body'] ?? '';
+                
+                $variables = [
+                    'اسم_الطالب' => $student->name,
+                    'اسم_المركز' => $tenant->name,
+                    'المبلغ_المدفوع' => $request->amount . ' ج.م',
+                    'تاريخ_الدفع' => now()->format('Y-m-d'),
+                    'المتبقي' => max(0, $balance - $request->amount) . ' ج.م',
+                    'طريقة_الدفع' => 'نقدي',
+                ];
+
+                \Illuminate\Support\Facades\Mail::to($student->email)->queue(new \App\Mail\NotifPaymentConfirmedMail(
+                    $subject, $body, $variables, $tenant->name
+                ));
+                
+                // Also send to parent if email exists
+                if ($student->parent_email) {
+                    \Illuminate\Support\Facades\Mail::to($student->parent_email)->queue(new \App\Mail\NotifPaymentConfirmedMail(
+                        $subject, $body, $variables, $tenant->name
+                    ));
+                }
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Payment confirmation email failed: ' . $e->getMessage());
+        }
 
         return back()->with('success', __('instructor::messages.collection_success', ['amount' => $request->amount, 'student' => $student->name]));
     }
@@ -1480,18 +1540,41 @@ class InstructorController extends Controller
             'welcome_student_body'     => 'nullable|string|max:5000',
             'welcome_guardian_subject' => 'nullable|string|max:500',
             'welcome_guardian_body'    => 'nullable|string|max:5000',
+            // Event-based notifications
+            'notif_payment_reminder_enabled'   => 'required|boolean',
+            'notif_payment_reminder_subject'   => 'nullable|string|max:500',
+            'notif_payment_reminder_body'      => 'nullable|string|max:5000',
+            'notif_group_enrollment_enabled'   => 'required|boolean',
+            'notif_group_enrollment_subject'   => 'nullable|string|max:500',
+            'notif_group_enrollment_body'      => 'nullable|string|max:5000',
+            'notif_payment_confirmed_enabled'  => 'required|boolean',
+            'notif_payment_confirmed_subject'  => 'nullable|string|max:500',
+            'notif_payment_confirmed_body'     => 'nullable|string|max:5000',
         ]);
 
         $tenant = \App\Models\Tenant::findOrFail(app('tenant')->id);
         $settings = $tenant->settings ?? [];
 
         $settings['email_templates'] = [
+            // Welcome emails
             'welcome_student_enabled'  => (bool) $request->welcome_student_enabled,
             'welcome_guardian_enabled' => (bool) $request->welcome_guardian_enabled,
             'welcome_student_subject'  => $request->welcome_student_subject,
             'welcome_student_body'     => $request->welcome_student_body,
             'welcome_guardian_subject' => $request->welcome_guardian_subject,
             'welcome_guardian_body'    => $request->welcome_guardian_body,
+            // Payment reminder
+            'notif_payment_reminder_enabled' => (bool) $request->notif_payment_reminder_enabled,
+            'notif_payment_reminder_subject' => $request->notif_payment_reminder_subject,
+            'notif_payment_reminder_body'    => $request->notif_payment_reminder_body,
+            // Group enrollment
+            'notif_group_enrollment_enabled' => (bool) $request->notif_group_enrollment_enabled,
+            'notif_group_enrollment_subject' => $request->notif_group_enrollment_subject,
+            'notif_group_enrollment_body'    => $request->notif_group_enrollment_body,
+            // Payment confirmation
+            'notif_payment_confirmed_enabled' => (bool) $request->notif_payment_confirmed_enabled,
+            'notif_payment_confirmed_subject' => $request->notif_payment_confirmed_subject,
+            'notif_payment_confirmed_body'    => $request->notif_payment_confirmed_body,
         ];
 
         $tenant->settings = $settings;

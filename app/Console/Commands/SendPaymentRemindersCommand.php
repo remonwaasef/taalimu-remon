@@ -43,8 +43,18 @@ class SendPaymentRemindersCommand extends Command
             $emailReminders = $settings['email_reminders'] ?? [];
             $whatsappReminders = $settings['whatsapp_reminders'] ?? [];
             $whatsappBeforeDue = $settings['whatsapp_before_due'] ?? false;
-            $emailTemplate = $settings['email_template'] ?? '';
+            
+            // Legacy templates fallback
             $whatsappTemplate = $settings['whatsapp_template'] ?? '';
+            
+            // New unified email templates
+            $emailSettings = $tenant->settings['email_templates'] ?? [];
+            if (!($emailSettings['notif_payment_reminder_enabled'] ?? false)) {
+                // If the new email toggle is off, don't send emails even if the cron runs
+                $emailReminders = []; 
+            }
+            $emailTemplate = $emailSettings['notif_payment_reminder_body'] ?? ($settings['email_template'] ?? '');
+            $emailSubject = $emailSettings['notif_payment_reminder_subject'] ?? 'تذكير بموعد الدفع';
 
             $today = now()->day;
             $currentYear = now()->year;
@@ -80,7 +90,7 @@ class SendPaymentRemindersCommand extends Command
                     $stage = $daysBefore === 0 ? 'due_day' : "pre_due_{$daysBefore}d";
 
                     if ($daysUntilDue === $daysBefore) {
-                        $this->sendEmailReminder($tenant, $student, $fee, $dueDay, $stage, $emailTemplate, $currentYear, $currentMonth);
+                        $this->sendEmailReminder($tenant, $student, $fee, $dueDay, $stage, $emailTemplate, $emailSubject, $currentYear, $currentMonth);
                         $processedCount++;
                     }
                 }
@@ -115,7 +125,7 @@ class SendPaymentRemindersCommand extends Command
                             $stage = "overdue_{$daysAfter}d";
 
                             // Also send email for overdue
-                            $this->sendEmailReminder($tenant, $student, $fee, $dueDay, $stage, $emailTemplate, $currentYear, $currentMonth);
+                            $this->sendEmailReminder($tenant, $student, $fee, $dueDay, $stage, $emailTemplate, $emailSubject, $currentYear, $currentMonth);
 
                             // Send WhatsApp
                             $this->sendWhatsAppReminder($whatsappService, $tenant, $student, $fee, $dueDay, $stage, $whatsappTemplate, $currentYear, $currentMonth);
@@ -145,7 +155,7 @@ class SendPaymentRemindersCommand extends Command
     /**
      * Send an email reminder and log it.
      */
-    protected function sendEmailReminder(Tenant $tenant, Student $student, float $fee, int $dueDay, string $stage, string $template, int $year, int $month): void
+    protected function sendEmailReminder(Tenant $tenant, Student $student, float $fee, int $dueDay, string $stage, string $template, string $subject, int $year, int $month): void
     {
         // Prevent duplicate
         if (PaymentReminder::alreadySent($tenant->id, $student->id, "email_{$stage}", $year, $month)) {
@@ -174,7 +184,18 @@ class SendPaymentRemindersCommand extends Command
         }
 
         try {
-            $mailable = new PaymentReminderMail($student, $tenant, $fee, $dueDay, $stage, $template);
+            // Transform variables to match the new template structure
+            $variables = [
+                'اسم_الطالب' => $student->name,
+                'اسم_المركز' => $tenant->name,
+                'المبلغ' => $fee,
+                'تاريخ_الاستحقاق' => $dueDay . ' من كل شهر',
+                'رابط_الدخول' => url('/login'),
+            ];
+            
+            // Reusing NotifGroupEnrollmentMail or a dedicated generic one. 
+            // We will use a generic mailer since PaymentReminderMail was built for the legacy system.
+            $mailable = new \App\Mail\NotifGroupEnrollmentMail($subject, $template, $variables, $tenant->name);
 
             Mail::to($emails->toArray())->send($mailable);
 
