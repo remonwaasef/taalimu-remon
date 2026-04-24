@@ -165,8 +165,9 @@ class SendPaymentRemindersCommand extends Command
 
         // Collect emails
         $emails = collect();
-        if ($student->email) {
-            $emails->push($student->email);
+        $studentEmail = $student->email ?? ($student->user ? $student->user->email : null);
+        if ($studentEmail && !preg_match('/^std\d+\..+@taalimu\.com$/', $studentEmail)) {
+            $emails->push($studentEmail);
         }
         if ($student->parent_email) {
             $emails->push($student->parent_email);
