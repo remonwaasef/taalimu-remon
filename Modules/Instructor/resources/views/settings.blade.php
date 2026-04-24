@@ -205,11 +205,11 @@
                                         </div>
                                         <div class="row g-3">
                                             <div class="col-md-12">
-                                                <label class="form-label fw-bold small text-muted">عنوان الرسالة (Subject)</label>
+                                                <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
                                                 <input type="text" name="welcome_student_subject" id="student_subject" class="form-control bg-white border rounded-3" value="{{ $emailSettings['welcome_student_subject'] ?? $defaultPreset['student_subject'] ?? '' }}" placeholder="مرحباً بك في {center_name}">
                                             </div>
                                             <div class="col-md-12">
-                                                <label class="form-label fw-bold small text-muted">محتوى الرسالة (Body)</label>
+                                                <label class="form-label fw-bold small text-muted">نص الرسالة</label>
                                                 <textarea name="welcome_student_body" id="student_body" class="form-control bg-white border rounded-3" rows="6" placeholder="اكتب رسالة الترحيب هنا...">{{ $emailSettings['welcome_student_body'] ?? $defaultPreset['student_body'] ?? '' }}</textarea>
                                             </div>
                                         </div>
@@ -229,11 +229,11 @@
                                         </div>
                                         <div class="row g-3">
                                             <div class="col-md-12">
-                                                <label class="form-label fw-bold small text-muted">عنوان الرسالة (Subject)</label>
+                                                <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
                                                 <input type="text" name="welcome_guardian_subject" id="guardian_subject" class="form-control bg-white border rounded-3" value="{{ $emailSettings['welcome_guardian_subject'] ?? $defaultPreset['guardian_subject'] ?? '' }}" placeholder="تم تسجيل {student_name} في {center_name}">
                                             </div>
                                             <div class="col-md-12">
-                                                <label class="form-label fw-bold small text-muted">محتوى الرسالة (Body)</label>
+                                                <label class="form-label fw-bold small text-muted">نص الرسالة</label>
                                                 <textarea name="welcome_guardian_body" id="guardian_body" class="form-control bg-white border rounded-3" rows="6" placeholder="اكتب رسالة ولي الأمر هنا...">{{ $emailSettings['welcome_guardian_body'] ?? $defaultPreset['guardian_body'] ?? '' }}</textarea>
                                             </div>
                                         </div>
@@ -242,15 +242,16 @@
 
                                 {{-- Available Variables Reference --}}
                                 <div class="alert alert-info border-0 shadow-none rounded-4 py-3 px-4 mb-4">
-                                    <h6 class="fw-bold mb-2"><i class="fas fa-info-circle me-2"></i> المتغيرات المتاحة</h6>
+                                    <h6 class="fw-bold mb-2"><i class="fas fa-info-circle me-2"></i> الرموز التلقائية</h6>
+                                    <p class="small mb-2">يمكنك استخدام الرموز التالية في نص الرسالة وسيتم استبدالها تلقائياً ببيانات الطالب:</p>
                                     <div class="small">
-                                        <code>{student_name}</code> اسم الطالب ·
-                                        <code>{center_name}</code> اسم المركز ·
-                                        <code>{login_url}</code> رابط الدخول ·
-                                        <code>{password}</code> كلمة المرور ·
-                                        <code>{phone}</code> رقم الهاتف ·
-                                        <code>{guardian_name}</code> اسم ولي الأمر ·
-                                        <code>{grade}</code> المرحلة الدراسية
+                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{student_name} = اسم الطالب</span>
+                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{center_name} = اسم المركز</span>
+                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{login_url} = رابط الدخول</span>
+                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{password} = كلمة المرور</span>
+                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{phone} = رقم الهاتف</span>
+                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{guardian_name} = اسم ولي الأمر</span>
+                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{grade} = المرحلة الدراسية</span>
                                     </div>
                                 </div>
 
