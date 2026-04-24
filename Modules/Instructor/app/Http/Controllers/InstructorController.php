@@ -1448,5 +1448,38 @@ class InstructorController extends Controller
 
         return back()->with('success', __('instructor::reminders.saved'));
     }
+
+    /**
+     * Update email template settings for welcome emails.
+     * Saves to tenant settings JSON under 'email_templates' key.
+     */
+    public function updateEmailTemplateSettings(Request $request)
+    {
+        $request->validate([
+            'welcome_student_enabled'  => 'required|boolean',
+            'welcome_guardian_enabled' => 'required|boolean',
+            'welcome_student_subject'  => 'nullable|string|max:500',
+            'welcome_student_body'     => 'nullable|string|max:5000',
+            'welcome_guardian_subject' => 'nullable|string|max:500',
+            'welcome_guardian_body'    => 'nullable|string|max:5000',
+        ]);
+
+        $tenant = \App\Models\Tenant::findOrFail(app('tenant')->id);
+        $settings = $tenant->settings ?? [];
+
+        $settings['email_templates'] = [
+            'welcome_student_enabled'  => (bool) $request->welcome_student_enabled,
+            'welcome_guardian_enabled' => (bool) $request->welcome_guardian_enabled,
+            'welcome_student_subject'  => $request->welcome_student_subject,
+            'welcome_student_body'     => $request->welcome_student_body,
+            'welcome_guardian_subject' => $request->welcome_guardian_subject,
+            'welcome_guardian_body'    => $request->welcome_guardian_body,
+        ];
+
+        $tenant->settings = $settings;
+        $tenant->save();
+
+        return back()->with('success', 'تم حفظ إعدادات البريد الإلكتروني بنجاح');
+    }
 }
 

@@ -44,6 +44,9 @@ $instructorRoutes = function () {
         Route::post('/reminders/update', [InstructorController::class, 'updateReminderSettings'])->name('instructor.reminders.update');
         Route::post('/students/{student}/update-payment', [InstructorController::class, 'updateStudentPayment'])->name('instructor.students.update-payment');
         
+        // Email Templates Settings
+        Route::post('/email-templates/update', [InstructorController::class, 'updateEmailTemplateSettings'])->name('instructor.email-templates.update');
+        
         // Auto-clear cache route (Temporary helper)
         Route::get('/clear-cache', function() {
             \Illuminate\Support\Facades\Artisan::call('view:clear');

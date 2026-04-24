@@ -21,6 +21,11 @@
                             </button>
                         </li>
                         <li class="nav-item m-0" role="presentation">
+                            <button class="nav-link rounded-pill fw-bold" id="email-tab" data-bs-toggle="tab" data-bs-target="#email" type="button" role="tab">
+                                <i class="fas fa-envelope me-2"></i> البريد الإلكتروني
+                            </button>
+                        </li>
+                        <li class="nav-item m-0" role="presentation">
                             <button class="nav-link rounded-pill fw-bold" id="reminders-tab" data-bs-toggle="tab" data-bs-target="#reminders" type="button" role="tab">
                                 <i class="fas fa-bell me-2"></i> تذكيرات الدفع
                             </button>
@@ -151,7 +156,113 @@
                             </form>
                         </div>
 
-                        {{-- Tab 3: Payment Reminders --}}
+                        {{-- Tab 3: Email Templates --}}
+                        <div class="tab-pane fade" id="email" role="tabpanel">
+                            @php
+                                $emailSettings = $tenant->settings['email_templates'] ?? [];
+                                $presets = config('email_templates.presets', []);
+                                $defaultPresetKey = config('email_templates.default_preset', 'formal');
+                                $defaultPreset = $presets[$defaultPresetKey] ?? [];
+                            @endphp
+                            <form action="{{ route('instructor.email-templates.update') }}" method="POST">
+                                @csrf
+
+                                {{-- Header --}}
+                                <div class="d-flex align-items-center justify-content-between mb-4">
+                                    <h5 class="fw-bold mb-0 text-primary"><i class="fas fa-envelope me-2"></i> إعدادات البريد الإلكتروني</h5>
+                                </div>
+                                <p class="text-muted small mb-4">تحكم في رسائل الترحيب التلقائية التي يتم إرسالها عند تسجيل طالب جديد.</p>
+
+                                {{-- Quick Preset Selector --}}
+                                <div class="card border bg-light shadow-none rounded-4 mb-4">
+                                    <div class="card-body p-4">
+                                        <h6 class="fw-bold mb-3"><i class="fas fa-magic me-2 text-warning"></i> اختر قالب جاهز</h6>
+                                        <div class="row g-3">
+                                            @foreach($presets as $key => $preset)
+                                                <div class="col-md-4">
+                                                    <div class="bg-white border rounded-3 p-3 h-100 text-center cursor-pointer preset-card" data-preset="{{ $key }}" style="cursor: pointer; transition: all 0.2s;">
+                                                        <div class="mb-2">
+                                                            <i class="{{ $preset['icon'] ?? 'fas fa-file-alt' }} fa-2x text-primary"></i>
+                                                        </div>
+                                                        <span class="fw-bold small">{{ $preset['name'] ?? $key }}</span>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Student Welcome Email --}}
+                                <div class="card border bg-light shadow-none rounded-4 mb-4">
+                                    <div class="card-body p-4">
+                                        <div class="d-flex align-items-center justify-content-between mb-3">
+                                            <h6 class="fw-bold mb-0"><i class="fas fa-user-graduate me-2 text-info"></i> رسالة ترحيب الطالب</h6>
+                                            <div class="form-check form-switch custom-switch">
+                                                <input type="hidden" name="welcome_student_enabled" value="0">
+                                                <input class="form-check-input" type="checkbox" name="welcome_student_enabled" value="1" id="studentEmailEnabled" {{ ($emailSettings['welcome_student_enabled'] ?? true) ? 'checked' : '' }}>
+                                                <label class="form-check-label fw-bold small ms-2" for="studentEmailEnabled">تفعيل</label>
+                                            </div>
+                                        </div>
+                                        <div class="row g-3">
+                                            <div class="col-md-12">
+                                                <label class="form-label fw-bold small text-muted">عنوان الرسالة (Subject)</label>
+                                                <input type="text" name="welcome_student_subject" id="student_subject" class="form-control bg-white border rounded-3" value="{{ $emailSettings['welcome_student_subject'] ?? $defaultPreset['student_subject'] ?? '' }}" placeholder="مرحباً بك في {center_name}">
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="form-label fw-bold small text-muted">محتوى الرسالة (Body)</label>
+                                                <textarea name="welcome_student_body" id="student_body" class="form-control bg-white border rounded-3" rows="6" placeholder="اكتب رسالة الترحيب هنا...">{{ $emailSettings['welcome_student_body'] ?? $defaultPreset['student_body'] ?? '' }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Guardian Welcome Email --}}
+                                <div class="card border bg-light shadow-none rounded-4 mb-4">
+                                    <div class="card-body p-4">
+                                        <div class="d-flex align-items-center justify-content-between mb-3">
+                                            <h6 class="fw-bold mb-0"><i class="fas fa-user-shield me-2 text-success"></i> رسالة ترحيب ولي الأمر</h6>
+                                            <div class="form-check form-switch custom-switch">
+                                                <input type="hidden" name="welcome_guardian_enabled" value="0">
+                                                <input class="form-check-input" type="checkbox" name="welcome_guardian_enabled" value="1" id="guardianEmailEnabled" {{ ($emailSettings['welcome_guardian_enabled'] ?? true) ? 'checked' : '' }}>
+                                                <label class="form-check-label fw-bold small ms-2" for="guardianEmailEnabled">تفعيل</label>
+                                            </div>
+                                        </div>
+                                        <div class="row g-3">
+                                            <div class="col-md-12">
+                                                <label class="form-label fw-bold small text-muted">عنوان الرسالة (Subject)</label>
+                                                <input type="text" name="welcome_guardian_subject" id="guardian_subject" class="form-control bg-white border rounded-3" value="{{ $emailSettings['welcome_guardian_subject'] ?? $defaultPreset['guardian_subject'] ?? '' }}" placeholder="تم تسجيل {student_name} في {center_name}">
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="form-label fw-bold small text-muted">محتوى الرسالة (Body)</label>
+                                                <textarea name="welcome_guardian_body" id="guardian_body" class="form-control bg-white border rounded-3" rows="6" placeholder="اكتب رسالة ولي الأمر هنا...">{{ $emailSettings['welcome_guardian_body'] ?? $defaultPreset['guardian_body'] ?? '' }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Available Variables Reference --}}
+                                <div class="alert alert-info border-0 shadow-none rounded-4 py-3 px-4 mb-4">
+                                    <h6 class="fw-bold mb-2"><i class="fas fa-info-circle me-2"></i> المتغيرات المتاحة</h6>
+                                    <div class="small">
+                                        <code>{student_name}</code> اسم الطالب ·
+                                        <code>{center_name}</code> اسم المركز ·
+                                        <code>{login_url}</code> رابط الدخول ·
+                                        <code>{password}</code> كلمة المرور ·
+                                        <code>{phone}</code> رقم الهاتف ·
+                                        <code>{guardian_name}</code> اسم ولي الأمر ·
+                                        <code>{grade}</code> المرحلة الدراسية
+                                    </div>
+                                </div>
+
+                                <div class="text-start mt-4 pt-3 border-top">
+                                    <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm">
+                                        <i class="fas fa-save me-2"></i> حفظ إعدادات البريد
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        {{-- Tab 4: Payment Reminders --}}
                         <div class="tab-pane fade" id="reminders" role="tabpanel">
                             @php $reminderSettings = $tenant->settings['payment_reminders'] ?? []; @endphp
                             <form action="{{ route('instructor.reminders.update') }}" method="POST">
@@ -527,5 +638,41 @@
         border-color: #22c55e;
     }
     .x-small { font-size: 0.75rem; }
+    .preset-card:hover {
+        border-color: var(--primary-color, #3A0CA3) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(58, 12, 163, 0.15);
+    }
+    .preset-card.active-preset {
+        border-color: var(--primary-color, #3A0CA3) !important;
+        border-width: 2px;
+        background: #f0f0ff !important;
+    }
 </style>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const presets = @json(config('email_templates.presets', []));
+
+    document.querySelectorAll('.preset-card').forEach(function(card) {
+        card.addEventListener('click', function() {
+            const key = this.dataset.preset;
+            const preset = presets[key];
+            if (!preset) return;
+
+            // Fill fields
+            document.getElementById('student_subject').value = preset.student_subject || '';
+            document.getElementById('student_body').value = preset.student_body || '';
+            document.getElementById('guardian_subject').value = preset.guardian_subject || '';
+            document.getElementById('guardian_body').value = preset.guardian_body || '';
+
+            // Visual feedback
+            document.querySelectorAll('.preset-card').forEach(c => c.classList.remove('active-preset'));
+            this.classList.add('active-preset');
+        });
+    });
+});
+</script>
+@endpush
 @endsection
