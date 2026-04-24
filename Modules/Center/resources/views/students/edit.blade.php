@@ -33,7 +33,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">{{ __('center::messages.blade_0769') }}</label>
-                                <input type="text" name="code" value="{{ old('code', $student->code) }}" class="form-control form-control-lg bg-light border-0">
+                                <input type="text" name="code" value="{{ old('code', $student->code) }}" class="form-control form-control-lg bg-light border-0" readonly>
                                 @error('code')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror

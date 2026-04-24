@@ -41,55 +41,11 @@
                                 @enderror
                             </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0727') }}</label>
-                                <input type="text" name="code" value="{{ old('code') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0754') }}">
-                                @error('code')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0729') }}</label>
-                                <input type="text" name="national_id" value="{{ old('national_id') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0756') }}">
-                                @error('national_id')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0730') }}</label>
-                                <input type="date" name="birth_date" value="{{ old('birth_date') }}" class="form-control form-control-lg bg-light border-0">
-                                @error('birth_date')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0734') }}</label>
-                                <select name="gender" class="form-select form-select-lg bg-light border-0">
-                                    <option value="">{{ __('center::messages.blade_0731') }}</option>
-                                    <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>{{ __('center::messages.blade_0732') }}</option>
-                                    <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>{{ __('center::messages.blade_0733') }}</option>
-                                </select>
-                            </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0728') }}</label>
-                                <input type="text" name="address" value="{{ old('address') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0755') }}">
-                                @error('address')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
                             
-                            <div class="col-md-12 mb-3">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0735') }}</label>
-                                <input type="file" name="profile_photo" class="form-control bg-light border-0" accept="image/*">
-                                <small class="text-muted d-block mt-1">{{ __('center::messages.blade_0736') }}</small>
-                                @error('profile_photo')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
                         </div>
 
                         <hr class="my-4">
@@ -106,13 +62,6 @@
                                 @enderror
                             </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0742') }}</label>
-                                <input type="text" name="parent_relation" value="{{ old('parent_relation') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0759') }}">
-                                @error('parent_relation')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
                             
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">{{ __('center::messages.blade_0739') }}</label>
@@ -129,13 +78,6 @@
                                 @enderror
                             </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0743') }}</label>
-                                <input type="tel" name="emergency_phone" value="{{ old('emergency_phone') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0760') }}" pattern="[0-9\+\-\s\(\)]*" title="أرقام فقط (+ - مسافات)">
-                                @error('emergency_phone')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
                             
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold"><i class="fas fa-envelope me-1 text-info opacity-50"></i> بريد ولي الأمر</label>
@@ -145,13 +87,6 @@
                                 @enderror
                             </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0744') }}</label>
-                                <input type="text" name="parent_job" value="{{ old('parent_job') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0761') }}">
-                                @error('parent_job')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
                         </div>
 
                         <hr class="my-4">
@@ -177,21 +112,6 @@
                                 @enderror
                             </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0749') }}</label>
-                                <input type="text" name="school_name" value="{{ old('school_name') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0762') }}">
-                                @error('school_name')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">{{ __('center::students.section_type_label') }}</label>
-                                <input type="text" name="section_type" value="{{ old('section_type') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0763') }}">
-                                @error('section_type')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
                         </div>
 
                         <div class="d-grid">
@@ -242,7 +162,7 @@
         });
 
         // 2. Names: allow only letters and spaces (Arabic & English)
-        const nameInputs = document.querySelectorAll('input[name="name"], input[name="parent_name"], input[name="parent_job"], input[name="parent_relation"], input[name="section_type"]');
+        const nameInputs = document.querySelectorAll('input[name="name"], input[name="parent_name"]');
         nameInputs.forEach(input => {
             input.addEventListener('input', function(e) {
                 let original = this.value;
@@ -263,8 +183,7 @@
         const nameSpan = document.getElementById('found-guardian-name');
         
         const parentNameInput = document.querySelector('input[name="parent_name"]');
-        const parentJobInput = document.querySelector('input[name="parent_job"]');
-        const addressInput = document.querySelector('input[name="address"]');
+        const addressInput = null; // Removed
 
         let timeout = null;
         parentPhoneInput.addEventListener('input', function() {
@@ -281,10 +200,7 @@
                                 alertBox.classList.remove('d-none');
                                 nameSpan.textContent = data.guardian.name;
                                 
-                                // Auto-fill if empty
                                 if (!parentNameInput.value) parentNameInput.value = data.guardian.name;
-                                if (!parentJobInput.value) parentJobInput.value = data.guardian.job || '';
-                                if (!addressInput.value) addressInput.value = data.guardian.address || '';
                             } else {
                                 badge.classList.add('d-none');
                                 alertBox.classList.add('d-none');
