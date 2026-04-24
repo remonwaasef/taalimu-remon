@@ -24,6 +24,7 @@ return array (
   'status' => 'Status',
   'actions' => 'Actions',
   'parent_phone' => 'Parent Phone',
+  'parent_email' => 'Parent Email (Optional)',
   'phone' => 'Phone Number',
   'paid' => 'Paid',
   'remaining' => 'Remaining :amount',
