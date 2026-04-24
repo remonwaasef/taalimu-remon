@@ -25,7 +25,7 @@ $remotePath = "/home/taalimu/htdocs/taalimu.com"
 $gitUrl = "https://x-access-token:${userToken}@github.com/${repoName}.git"
 
 # Remote Command: Force Pull using direct URL to bypass any server-side credential issues
-$remoteCmd = "bash -lc 'git config --global --add safe.directory $remotePath && cd $remotePath && export GIT_TERMINAL_PROMPT=0 && cp -f .env .env.deploy_backup && git reset --hard && git pull $gitUrl main && cp -f .env.deploy_backup .env && export COMPOSER_ALLOW_SUPERUSER=1 && composer install --no-dev --optimize-autoloader && npm run build && php artisan migrate --force && php artisan storage:link && php artisan optimize:clear && chown -R taalimu:taalimu storage bootstrap/cache && chmod -R 775 storage bootstrap/cache'"
+$remoteCmd = "bash -lc 'git config --global --add safe.directory $remotePath && cd $remotePath && export GIT_TERMINAL_PROMPT=0 && cp -f .env .env.deploy_backup && git fetch $gitUrl main && git reset --hard FETCH_HEAD && cp -f .env.deploy_backup .env && export COMPOSER_ALLOW_SUPERUSER=1 && composer install --no-dev --optimize-autoloader && npm run build && php artisan migrate --force && php artisan storage:link && php artisan optimize:clear && chown -R taalimu:taalimu storage bootstrap/cache && chmod -R 775 storage bootstrap/cache && php artisan queue:restart'"
 
 ssh root@46.202.155.30 $remoteCmd
 
