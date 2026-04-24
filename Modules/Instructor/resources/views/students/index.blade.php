@@ -16,7 +16,6 @@
 @endsection
 
 @section('content')
-<div class="container-fluid">
     {{-- Top Metrics Section --}}
 
     {{-- Top Metrics Section --}}
@@ -329,7 +328,6 @@
             </div>
         </div>
     </div>
-</div>
 
 @push('modals')
 {{-- QR & Portal Modal --}}

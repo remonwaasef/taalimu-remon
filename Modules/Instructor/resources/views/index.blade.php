@@ -44,7 +44,6 @@
 @endpush
 
 @section('content')
-<div class="container-fluid">
     <div class="row g-4 mb-5">
         <div class="col-md-4" id="tour-stats-students">
             <div class="stats-card p-4 h-100 position-relative overflow-hidden">
@@ -238,8 +237,6 @@
         </div>
         @endif
     </div>
-</div>
-
 @push('scripts')
 <!-- Driver.js CSS & JS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"/>

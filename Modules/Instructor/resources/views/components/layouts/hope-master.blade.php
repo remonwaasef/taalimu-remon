@@ -136,16 +136,25 @@
         
         /* Stats Card & Content */
         .content-inner {
-            margin-top: -5.5rem !important; /* Deeper overlap for premium look */
+            margin-top: -4rem !important; /* Standardized professional overlap */
             position: relative;
             z-index: 10;
         }
 
         .card, .stats-card {
-            border: 0 !important;
+            border: 1px solid rgba(255, 255, 255, 0.4) !important;
             box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05), 0 5px 15px -5px rgba(0,0,0,0.02);
             border-radius: 20px !important;
             overflow: visible !important;
+            background: rgba(255, 255, 255, 0.9) !important;
+            backdrop-filter: blur(10px);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8) !important;
+            backdrop-filter: blur(12px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07) !important;
         }
         
         .btn-glass {
@@ -195,10 +204,6 @@
             color: #10b981 !important;
         }
 
-        /* Quick Action Overlap Fix */
-        .content-inner {
-            margin-top: -3rem !important;
-        }
 
         /* Auto-style the first row containing title and actions over the green banner */
         .content-inner > .d-flex:first-child h2, 
@@ -334,15 +339,15 @@
             <!-- Header Component -->
             @include('instructor::components.layouts.hope-header')
             
-            <div class="iq-navbar-header" style="height: 180px;">
+            <div class="iq-navbar-header" style="height: 200px;">
                 <div class="container-fluid iq-container">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="flex-wrap d-flex justify-content-between align-items-center pt-3 pb-3">
+                            <div class="flex-wrap d-flex justify-content-between align-items-center pt-2 pb-5">
                                 @hasSection('page-title')
                                 <div>
-                                    <h1 class="text-white display-5">@yield('page-title')</h1>
-                                    <p class="text-white opacity-75 mb-0">
+                                    <h1 class="text-white display-5 mb-1 fw-bold">@yield('page-title')</h1>
+                                    <p class="text-white opacity-75 mb-0 fw-medium">
                                         @yield('page-subtitle')
                                     </p>
                                 </div>
@@ -360,7 +365,7 @@
             </div>
         </div>
 
-        <div class="container-fluid content-inner mt-n5 py-0">
+        <div class="container-fluid content-inner py-0">
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show rounded-4 border-0 shadow-sm mb-4" role="alert">
                     <i class="fas fa-check-circle me-2"></i> {{ session('success') }}

@@ -4,7 +4,6 @@
 @section('page-subtitle', __('instructor::whatsapp.connect_subtitle'))
 
 @section('content')
-<div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
@@ -129,7 +128,6 @@
             </div>
         </div>
     </div>
-</div>
 
 @push('styles')
 <style>

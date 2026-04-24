@@ -4,7 +4,6 @@
 @section('page-subtitle', __('instructor::attendance.subtitle'))
 
 @section('content')
-<div class="container-fluid">
 
     <div class="row g-4">
         <!-- Today's Sessions -->
@@ -111,5 +110,4 @@
                 </div>
             </div>
         </div>
-    </div>
 @endsection
