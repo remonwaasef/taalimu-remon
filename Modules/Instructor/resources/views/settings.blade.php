@@ -206,7 +206,7 @@
                                         <div class="row g-3">
                                             <div class="col-md-12">
                                                 <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
-                                                <input type="text" name="welcome_student_subject" id="student_subject" class="form-control bg-white border rounded-3" value="{{ $emailSettings['welcome_student_subject'] ?? $defaultPreset['student_subject'] ?? '' }}" placeholder="مرحباً بك في {center_name}">
+                                                <input type="text" name="welcome_student_subject" id="student_subject" class="form-control bg-white border rounded-3" value="{{ $emailSettings['welcome_student_subject'] ?? $defaultPreset['student_subject'] ?? '' }}" placeholder="مرحباً بك في {اسم_المركز}">
                                             </div>
                                             <div class="col-md-12">
                                                 <label class="form-label fw-bold small text-muted">نص الرسالة</label>
@@ -230,7 +230,7 @@
                                         <div class="row g-3">
                                             <div class="col-md-12">
                                                 <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
-                                                <input type="text" name="welcome_guardian_subject" id="guardian_subject" class="form-control bg-white border rounded-3" value="{{ $emailSettings['welcome_guardian_subject'] ?? $defaultPreset['guardian_subject'] ?? '' }}" placeholder="تم تسجيل {student_name} في {center_name}">
+                                                <input type="text" name="welcome_guardian_subject" id="guardian_subject" class="form-control bg-white border rounded-3" value="{{ $emailSettings['welcome_guardian_subject'] ?? $defaultPreset['guardian_subject'] ?? '' }}" placeholder="تم تسجيل {اسم_الطالب} في {اسم_المركز}">
                                             </div>
                                             <div class="col-md-12">
                                                 <label class="form-label fw-bold small text-muted">نص الرسالة</label>
@@ -245,13 +245,13 @@
                                     <h6 class="fw-bold mb-2"><i class="fas fa-info-circle me-2"></i> الرموز التلقائية</h6>
                                     <p class="small mb-2">يمكنك استخدام الرموز التالية في نص الرسالة وسيتم استبدالها تلقائياً ببيانات الطالب:</p>
                                     <div class="small">
-                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{student_name} = اسم الطالب</span>
-                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{center_name} = اسم المركز</span>
-                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{login_url} = رابط الدخول</span>
-                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{password} = كلمة المرور</span>
-                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{phone} = رقم الهاتف</span>
-                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{guardian_name} = اسم ولي الأمر</span>
-                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{grade} = المرحلة الدراسية</span>
+                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{اسم_الطالب} = اسم الطالب</span>
+                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{اسم_المركز} = اسم المركز</span>
+                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{رابط_الدخول} = رابط الدخول</span>
+                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{كلمة_المرور} = كلمة المرور</span>
+                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{رقم_الهاتف} = رقم الهاتف</span>
+                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{اسم_ولي_الأمر} = اسم ولي الأمر</span>
+                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{المرحلة} = المرحلة الدراسية</span>
                                     </div>
                                 </div>
 

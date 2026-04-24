@@ -499,13 +499,13 @@ class InstructorController extends Controller
                     $defaultPreset = config("email_templates.presets.{$defaultPresetKey}", []);
 
                     $variables = [
-                        'student_name' => $student->name,
-                        'center_name'  => $tenant->name,
-                        'login_url'    => url('/login'),
-                        'password'     => $validated['phone'],
-                        'phone'        => $student->phone ?? '',
-                        'guardian_name' => '',
-                        'grade'        => '',
+                        'اسم_الطالب'    => $student->name,
+                        'اسم_المركز'    => $tenant->name,
+                        'رابط_الدخول'   => url('/login'),
+                        'كلمة_المرور'   => $validated['phone'],
+                        'رقم_الهاتف'    => $student->phone ?? '',
+                        'اسم_ولي_الأمر' => '',
+                        'المرحلة'       => '',
                     ];
 
                     $studentEnabled = (bool) ($tenantSettings['welcome_student_enabled'] ?? true);

@@ -664,13 +664,13 @@ class StudentService
     protected function buildTemplateVariables(Student $student, $tenant, ?string $password): array
     {
         return [
-            'student_name'  => $student->name,
-            'center_name'   => $tenant->name,
-            'login_url'     => url('/login'),
-            'password'      => $password ?? '',
-            'phone'         => $student->phone ?? '',
-            'guardian_name'  => $student->guardian?->name ?? $student->parent_name ?? '',
-            'grade'         => $student->grade_level_name ?? '',
+            'اسم_الطالب'    => $student->name,
+            'اسم_المركز'    => $tenant->name,
+            'رابط_الدخول'   => url('/login'),
+            'كلمة_المرور'   => $password ?? '',
+            'رقم_الهاتف'    => $student->phone ?? '',
+            'اسم_ولي_الأمر' => $student->guardian?->name ?? $student->parent_name ?? '',
+            'المرحلة'       => $student->grade_level_name ?? '',
         ];
     }
 
