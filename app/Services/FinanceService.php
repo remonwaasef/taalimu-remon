@@ -9,6 +9,10 @@ use App\Models\Student;
 use App\Models\Payment;
 use App\Models\Commission;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+use App\Mail\NotifPaymentConfirmedMail;
+
 
 class FinanceService
 {
@@ -139,10 +143,9 @@ class FinanceService
                     'notes' => $data['notes'] ?? 'الدفعة الأولى عند البيع',
                 ]);
 
-                // WhatsApp Notification
-                $student = Student::find($data['student_id']);
+                // Notifications
                 if ($student) {
-                    $this->whatsappService->sendPaymentNotification(app('tenant'), $student, $data['paid_amount'], $totalAmount - $data['paid_amount']);
+                    $this->notifyPayment(app('tenant'), $student, $data['paid_amount'], $totalAmount - $data['paid_amount'], $data['payment_method'] ?? 'cash');
                 }
             }
 
@@ -181,8 +184,8 @@ class FinanceService
                 'notes' => $notes ?? 'إضافة دفعة لاحقة',
             ]);
 
-            // WhatsApp Notification
-            $this->whatsappService->sendPaymentNotification(app('tenant'), $sale->student, $amount, $sale->total_amount - $newPaidAmount);
+            // Notifications
+            $this->notifyPayment(app('tenant'), $sale->student, $amount, $sale->total_amount - $newPaidAmount, $method ?? $sale->payment_method);
 
             return $sale;
         });
@@ -203,5 +206,66 @@ class FinanceService
             return 'partial';
         }
         return 'pending';
+    }
+
+    /**
+     * Trigger both WhatsApp and Email notifications for a payment.
+     */
+    public function notifyPayment($tenant, $student, $amount, $balance, $method = 'cash')
+    {
+        // WhatsApp Notification
+        $this->whatsappService->sendPaymentNotification($tenant, $student, $amount, $balance);
+        
+        // Email Notification
+        $this->sendPaymentEmailNotification($tenant, $student, $amount, $balance, $method);
+    }
+
+    /**
+     * Send payment confirmation email notification.
+     */
+    public function sendPaymentEmailNotification($tenant, $student, $amount, $balance, $method = 'cash')
+    {
+        try {
+            $tenantSettings = $tenant->settings['email_templates'] ?? [];
+            
+            // Determine real email
+            $realEmail = null;
+            $studentEmail = $student->email ?? ($student->user ? $student->user->email : null);
+            
+            // Skip auto-generated emails
+            if ($studentEmail && !preg_match('/^std\d+\..+@taalimu\.com$/', $studentEmail)) {
+                $realEmail = $studentEmail;
+            }
+
+            $hasParentEmail = !empty($student->parent_email);
+
+            if (!empty($tenantSettings['notif_payment_confirmed_enabled']) && ($realEmail || $hasParentEmail)) {
+                $subject = $tenantSettings['notif_payment_confirmed_subject'] ?? 'تأكيد استلام دفعة';
+                $body = $tenantSettings['notif_payment_confirmed_body'] ?? '';
+                
+                $variables = [
+                    'اسم_الطالب' => $student->name,
+                    'اسم_المركز' => $tenant->name,
+                    'المبلغ_المدفوع' => $amount . ' ' . ($tenant->settings['currency'] ?? 'ج.م'),
+                    'تاريخ_الدفع' => now()->format('Y-m-d'),
+                    'المتبقي' => max(0, $balance) . ' ' . ($tenant->settings['currency'] ?? 'ج.م'),
+                    'طريقة_الدفع' => $method,
+                ];
+
+                if ($realEmail) {
+                    Mail::to($realEmail)->queue(new NotifPaymentConfirmedMail(
+                        $subject, $body, $variables, $tenant->name, $student->name
+                    ));
+                }
+                
+                if ($hasParentEmail) {
+                    Mail::to($student->parent_email)->queue(new NotifPaymentConfirmedMail(
+                        $subject, $body, $variables, $tenant->name, $student->name
+                    ));
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error('FinanceService payment confirmation email failed: ' . $e->getMessage());
+        }
     }
 }

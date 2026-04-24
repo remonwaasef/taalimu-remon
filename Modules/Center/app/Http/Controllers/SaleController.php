@@ -120,7 +120,10 @@ class SaleController extends Controller
             'received_by' => auth()->id(),
             'paid_at' => now(),
         ]);
-
+        
+        // Trigger Notifications (WhatsApp & Email)
+        $this->financeService->notifyPayment($tenant, $student, $request->amount, $balance - $request->amount, 'cash');
+ 
         return redirect()->back()->with('success', __('center::messages.msg_074'));
     }
 
