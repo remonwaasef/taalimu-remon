@@ -1039,6 +1039,32 @@ class InstructorController extends Controller
             ->with('success', __('instructor::messages.schedule_created'));
     }
 
+    public function storeClassroom(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'capacity' => 'nullable|integer|min:1',
+        ]);
+
+        $classroom = \App\Models\Classroom::create([
+            'tenant_id' => app('tenant')->id,
+            'name' => $request->name,
+            'capacity' => $request->capacity,
+            'is_active' => true,
+        ]);
+
+        if ($request->ajax()) {
+            $classrooms = \App\Models\Classroom::select('id', 'name', 'capacity')->get();
+            return response()->json([
+                'success' => true,
+                'classrooms' => $classrooms,
+                'new_id' => $classroom->id
+            ]);
+        }
+
+        return back()->with('success', __('instructor::messages.saved'));
+    }
+
     public function editSchedule(Schedule $schedule)
     {
         $instructor = $this->resolveInstructor();
