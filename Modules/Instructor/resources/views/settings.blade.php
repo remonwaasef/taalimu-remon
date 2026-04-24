@@ -199,10 +199,15 @@
                                             <div class="card-body p-4">
                                                 <div class="d-flex align-items-center justify-content-between mb-4">
                                                     <h6 class="fw-bold mb-0"><i class="fas fa-user-graduate me-2 text-info"></i> رسالة ترحيب الطالب</h6>
-                                                    <div class="form-check form-switch custom-switch">
-                                                        <input type="hidden" name="welcome_student_enabled" value="0">
-                                                        <input class="form-check-input" type="checkbox" name="welcome_student_enabled" value="1" id="studentEmailEnabled" {{ ($emailSettings['welcome_student_enabled'] ?? true) ? 'checked' : '' }}>
-                                                        <label class="form-check-label fw-bold small ms-2" for="studentEmailEnabled">تفعيل</label>
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="student_subject" data-body-id="student_body" data-default-subject="{{ $defaultPreset['student_subject'] ?? '' }}" data-default-body="{{ $defaultPreset['student_body'] ?? '' }}">
+                                                            <i class="fas fa-undo"></i> للافتراضي
+                                                        </button>
+                                                        <div class="form-check form-switch custom-switch mb-0">
+                                                            <input type="hidden" name="welcome_student_enabled" value="0">
+                                                            <input class="form-check-input" type="checkbox" name="welcome_student_enabled" value="1" id="studentEmailEnabled" {{ ($emailSettings['welcome_student_enabled'] ?? true) ? 'checked' : '' }}>
+                                                            <label class="form-check-label fw-bold small ms-2" for="studentEmailEnabled">تفعيل</label>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -240,10 +245,15 @@
                                             <div class="card-body p-4">
                                                 <div class="d-flex align-items-center justify-content-between mb-4">
                                                     <h6 class="fw-bold mb-0"><i class="fas fa-user-shield me-2 text-success"></i> رسالة ترحيب ولي الأمر</h6>
-                                                    <div class="form-check form-switch custom-switch">
-                                                        <input type="hidden" name="welcome_guardian_enabled" value="0">
-                                                        <input class="form-check-input" type="checkbox" name="welcome_guardian_enabled" value="1" id="guardianEmailEnabled" {{ ($emailSettings['welcome_guardian_enabled'] ?? true) ? 'checked' : '' }}>
-                                                        <label class="form-check-label fw-bold small ms-2" for="guardianEmailEnabled">تفعيل</label>
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="guardian_subject" data-body-id="guardian_body" data-default-subject="{{ $defaultPreset['guardian_subject'] ?? '' }}" data-default-body="{{ $defaultPreset['guardian_body'] ?? '' }}">
+                                                            <i class="fas fa-undo"></i> للافتراضي
+                                                        </button>
+                                                        <div class="form-check form-switch custom-switch mb-0">
+                                                            <input type="hidden" name="welcome_guardian_enabled" value="0">
+                                                            <input class="form-check-input" type="checkbox" name="welcome_guardian_enabled" value="1" id="guardianEmailEnabled" {{ ($emailSettings['welcome_guardian_enabled'] ?? true) ? 'checked' : '' }}>
+                                                            <label class="form-check-label fw-bold small ms-2" for="guardianEmailEnabled">تفعيل</label>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -338,15 +348,20 @@
                                                 <div class="accordion-body p-4">
                                                     <div class="d-flex align-items-center justify-content-between mb-3">
                                                         <span class="fw-bold small text-muted">حالة الإشعار</span>
-                                                        <div class="form-check form-switch custom-switch">
-                                                            <input type="hidden" name="notif_payment_reminder_enabled" value="0">
-                                                            <input class="form-check-input" type="checkbox" name="notif_payment_reminder_enabled" value="1" id="notifPaymentReminder" {{ ($emailSettings['notif_payment_reminder_enabled'] ?? false) ? 'checked' : '' }}>
-                                                            <label class="form-check-label fw-bold small ms-2" for="notifPaymentReminder">مفعّل</label>
+                                                        <div class="d-flex align-items-center gap-3">
+                                                            <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="notif_payment_reminder_subject" data-body-id="notif_payment_reminder_body" data-default-subject="تذكير بسداد مصروفات {اسم_الطالب} - {اسم_المركز}" data-default-body="نذكركم بأن مصروفات الطالب/ة {اسم_الطالب} بمبلغ {المبلغ} مستحقة بتاريخ {تاريخ_الاستحقاق}.\n\nيرجى السداد في الموعد المحدد لضمان استمرار الخدمة.\n\nشكراً لتعاونكم,\n{اسم_المركز}">
+                                                                <i class="fas fa-undo"></i> للافتراضي
+                                                            </button>
+                                                            <div class="form-check form-switch custom-switch mb-0">
+                                                                <input type="hidden" name="notif_payment_reminder_enabled" value="0">
+                                                                <input class="form-check-input" type="checkbox" name="notif_payment_reminder_enabled" value="1" id="notifPaymentReminder" {{ ($emailSettings['notif_payment_reminder_enabled'] ?? false) ? 'checked' : '' }}>
+                                                                <label class="form-check-label fw-bold small ms-2" for="notifPaymentReminder">مفعّل</label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
-                                                        <input type="text" name="notif_payment_reminder_subject" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['notif_payment_reminder_subject'] ?? 'تذكير بسداد مصروفات {اسم_الطالب} - {اسم_المركز}' }}">
+                                                        <input type="text" id="notif_payment_reminder_subject" name="notif_payment_reminder_subject" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['notif_payment_reminder_subject'] ?? 'تذكير بسداد مصروفات {اسم_الطالب} - {اسم_المركز}' }}">
                                                     </div>
                                                     <div class="mb-2 d-flex flex-wrap gap-1">
                                                         @php $payVars = ['اسم_الطالب'=>'اسم الطالب','اسم_المركز'=>'اسم المركز','المبلغ'=>'المبلغ المستحق','تاريخ_الاستحقاق'=>'تاريخ الاستحقاق','رابط_الدخول'=>'رابط الدخول']; @endphp
@@ -381,15 +396,20 @@
                                                 <div class="accordion-body p-4">
                                                     <div class="d-flex align-items-center justify-content-between mb-3">
                                                         <span class="fw-bold small text-muted">حالة الإشعار</span>
-                                                        <div class="form-check form-switch custom-switch">
-                                                            <input type="hidden" name="notif_group_enrollment_enabled" value="0">
-                                                            <input class="form-check-input" type="checkbox" name="notif_group_enrollment_enabled" value="1" id="notifGroupEnrollment" {{ ($emailSettings['notif_group_enrollment_enabled'] ?? false) ? 'checked' : '' }}>
-                                                            <label class="form-check-label fw-bold small ms-2" for="notifGroupEnrollment">مفعّل</label>
+                                                        <div class="d-flex align-items-center gap-3">
+                                                            <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="notif_group_enrollment_subject" data-body-id="notif_group_enrollment_body" data-default-subject="تم تسجيلك في مجموعة جديدة - {اسم_المركز}" data-default-body="مرحباً {اسم_الطالب}،\n\nتم تسجيلك في مجموعة جديدة: {اسم_المجموعة}\n\nيمكنك الدخول للمنصة من خلال:\n{رابط_الدخول}\n\nنتمنى لك التوفيق!\n{اسم_المركز}">
+                                                                <i class="fas fa-undo"></i> للافتراضي
+                                                            </button>
+                                                            <div class="form-check form-switch custom-switch mb-0">
+                                                                <input type="hidden" name="notif_group_enrollment_enabled" value="0">
+                                                                <input class="form-check-input" type="checkbox" name="notif_group_enrollment_enabled" value="1" id="notifGroupEnrollment" {{ ($emailSettings['notif_group_enrollment_enabled'] ?? false) ? 'checked' : '' }}>
+                                                                <label class="form-check-label fw-bold small ms-2" for="notifGroupEnrollment">مفعّل</label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
-                                                        <input type="text" name="notif_group_enrollment_subject" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['notif_group_enrollment_subject'] ?? 'تم تسجيلك في مجموعة جديدة - {اسم_المركز}' }}">
+                                                        <input type="text" id="notif_group_enrollment_subject" name="notif_group_enrollment_subject" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['notif_group_enrollment_subject'] ?? 'تم تسجيلك في مجموعة جديدة - {اسم_المركز}' }}">
                                                     </div>
                                                     <div class="mb-2 d-flex flex-wrap gap-1">
                                                         @php $grpVars = ['اسم_الطالب'=>'اسم الطالب','اسم_المركز'=>'اسم المركز','اسم_المجموعة'=>'اسم المجموعة','سعر_الدورة'=>'سعر الدورة','رابط_الدخول'=>'رابط الدخول']; @endphp
@@ -424,15 +444,20 @@
                                                 <div class="accordion-body p-4">
                                                     <div class="d-flex align-items-center justify-content-between mb-3">
                                                         <span class="fw-bold small text-muted">حالة الإشعار</span>
-                                                        <div class="form-check form-switch custom-switch">
-                                                            <input type="hidden" name="notif_payment_confirmed_enabled" value="0">
-                                                            <input class="form-check-input" type="checkbox" name="notif_payment_confirmed_enabled" value="1" id="notifPaymentConfirmed" {{ ($emailSettings['notif_payment_confirmed_enabled'] ?? false) ? 'checked' : '' }}>
-                                                            <label class="form-check-label fw-bold small ms-2" for="notifPaymentConfirmed">مفعّل</label>
+                                                        <div class="d-flex align-items-center gap-3">
+                                                            <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="notif_payment_confirmed_subject" data-body-id="notif_payment_confirmed_body" data-default-subject="تأكيد استلام دفعة - {اسم_المركز}" data-default-body="مرحباً {اسم_الطالب}،\n\nنؤكد استلام دفعة مالية بالتفاصيل التالية:\n• المبلغ: {المبلغ_المدفوع}\n• التاريخ: {تاريخ_الدفع}\n• طريقة الدفع: {طريقة_الدفع}\n• المتبقي: {المتبقي}\n\nشكراً لالتزامكم.\n{اسم_المركز}">
+                                                                <i class="fas fa-undo"></i> للافتراضي
+                                                            </button>
+                                                            <div class="form-check form-switch custom-switch mb-0">
+                                                                <input type="hidden" name="notif_payment_confirmed_enabled" value="0">
+                                                                <input class="form-check-input" type="checkbox" name="notif_payment_confirmed_enabled" value="1" id="notifPaymentConfirmed" {{ ($emailSettings['notif_payment_confirmed_enabled'] ?? false) ? 'checked' : '' }}>
+                                                                <label class="form-check-label fw-bold small ms-2" for="notifPaymentConfirmed">مفعّل</label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
-                                                        <input type="text" name="notif_payment_confirmed_subject" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['notif_payment_confirmed_subject'] ?? 'تأكيد استلام دفعة - {اسم_المركز}' }}">
+                                                        <input type="text" id="notif_payment_confirmed_subject" name="notif_payment_confirmed_subject" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['notif_payment_confirmed_subject'] ?? 'تأكيد استلام دفعة - {اسم_المركز}' }}">
                                                     </div>
                                                     <div class="mb-2 d-flex flex-wrap gap-1">
                                                         @php $confVars = ['اسم_الطالب'=>'اسم الطالب','اسم_المركز'=>'اسم المركز','المبلغ_المدفوع'=>'المبلغ المدفوع','تاريخ_الدفع'=>'تاريخ الدفع','المتبقي'=>'المبلغ المتبقي','طريقة_الدفع'=>'طريقة الدفع']; @endphp
