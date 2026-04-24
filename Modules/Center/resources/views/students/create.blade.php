@@ -73,7 +73,7 @@
 
                     <div class="row g-4">
                         <div class="col-md-6">
-                            <div class="form-floating elite-input-group">
+                            <div class="elite-input-group">
                                 <input type="text" name="name" value="{{ old('name') }}" class="form-control" id="nameInput" placeholder="{{ __('center::messages.blade_0751') }}">
                                 <label for="nameInput">{{ __('center::messages.blade_0724') }}<span class="text-danger">*</span></label>
                                 <div class="validation-indicator"></div>
@@ -81,7 +81,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-floating elite-input-group">
+                            <div class="elite-input-group">
                                 <input type="tel" name="phone" value="{{ old('phone') }}" class="form-control" id="phoneInput" placeholder="{{ __('center::messages.blade_0752') }}">
                                 <label for="phoneInput">{{ __('center::messages.blade_0725') }}<span class="text-danger">*</span></label>
                                 <div class="validation-indicator"></div>
@@ -89,7 +89,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-floating elite-input-group">
+                            <div class="elite-input-group">
                                 <input type="email" name="email" value="{{ old('email') }}" class="form-control" id="emailInput" placeholder="{{ __('center::messages.blade_0753') }}">
                                 <label for="emailInput">{{ __('center::messages.blade_0726') }}</label>
                                 <div class="validation-indicator"></div>
@@ -97,7 +97,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-floating elite-input-group">
+                            <div class="elite-input-group">
                                 <input type="text" name="code" value="{{ old('code') }}" class="form-control" id="codeInput" placeholder="{{ __('center::messages.blade_0754') }}">
                                 <label for="codeInput">{{ __('center::messages.blade_0727') }}</label>
                                 <div class="validation-indicator"></div>
@@ -105,28 +105,28 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <div class="form-floating elite-input-group">
+                            <div class="elite-input-group">
                                 <input type="text" name="address" value="{{ old('address') }}" class="form-control" id="addressInput" placeholder="{{ __('center::messages.blade_0755') }}">
                                 <label for="addressInput">{{ __('center::messages.blade_0728') }}</label>
                                 @error('address') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="form-floating elite-input-group">
+                            <div class="elite-input-group">
                                 <input type="text" name="national_id" value="{{ old('national_id') }}" class="form-control" id="idInput" placeholder="{{ __('center::messages.blade_0756') }}">
                                 <label for="idInput">{{ __('center::messages.blade_0729') }}</label>
                                 @error('national_id') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="form-floating elite-input-group">
+                            <div class="elite-input-group">
                                 <input type="date" name="birth_date" value="{{ old('birth_date') }}" class="form-control" id="dateInput">
                                 <label for="dateInput">{{ __('center::messages.blade_0730') }}</label>
                                 @error('birth_date') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="form-floating elite-input-group">
+                            <div class="elite-input-group">
                                 <select name="gender" class="form-select" id="genderSelect">
                                     <option value="">{{ __('center::messages.blade_0731') }}</option>
                                     <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>{{ __('center::messages.blade_0732') }}</option>
@@ -167,7 +167,7 @@
 
                     <div class="row g-4">
                         <div class="col-md-6">
-                            <div class="form-floating elite-input-group position-relative">
+                            <div class="elite-input-group position-relative">
                                 <input type="tel" name="parent_phone" id="parent_phone" value="{{ old('parent_phone') }}" class="form-control" placeholder="{{ __('center::messages.blade_0757') }}">
                                 <label for="parent_phone">{{ __('center::messages.blade_0739') }}</label>
                                 <div class="validation-indicator"></div>
@@ -178,28 +178,28 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-floating elite-input-group">
+                            <div class="elite-input-group">
                                 <input type="text" name="parent_name" id="pNameInput" value="{{ old('parent_name') }}" class="form-control" placeholder="{{ __('center::messages.blade_0758') }}">
                                 <label for="pNameInput">{{ __('center::messages.blade_0741') }}</label>
                                 @error('parent_name') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-floating elite-input-group">
+                            <div class="elite-input-group">
                                 <input type="text" name="parent_relation" value="{{ old('parent_relation') }}" class="form-control" id="relInput" placeholder="{{ __('center::messages.blade_0759') }}">
                                 <label for="relInput">{{ __('center::messages.blade_0742') }}</label>
                                 @error('parent_relation') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-floating elite-input-group">
+                            <div class="elite-input-group">
                                 <input type="tel" name="emergency_phone" value="{{ old('emergency_phone') }}" class="form-control" id="ePhoneInput" placeholder="{{ __('center::messages.blade_0760') }}">
                                 <label for="ePhoneInput">{{ __('center::messages.blade_0743') }}</label>
                                 @error('emergency_phone') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-12">
-                            <div class="form-floating elite-input-group">
+                            <div class="elite-input-group">
                                 <input type="text" name="parent_job" id="pJobInput" value="{{ old('parent_job') }}" class="form-control" placeholder="{{ __('center::messages.blade_0761') }}">
                                 <label for="pJobInput">{{ __('center::messages.blade_0744') }}</label>
                                 @error('parent_job') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
@@ -222,7 +222,7 @@
 
                     <div class="row g-4">
                         <div class="col-12">
-                            <div class="form-floating elite-input-group">
+                            <div class="elite-input-group">
                                 <select name="grade_id" class="form-select" id="gradeSelect">
                                     <option value="">{{ __('center::messages.blade_0747') }}</option>
                                     @foreach($stages as $stage)
@@ -239,14 +239,14 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-floating elite-input-group">
+                            <div class="elite-input-group">
                                 <input type="text" name="school_name" value="{{ old('school_name') }}" class="form-control" id="schoolInput" placeholder="{{ __('center::messages.blade_0762') }}">
                                 <label for="schoolInput">{{ __('center::messages.blade_0749') }}</label>
                                 @error('school_name') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-floating elite-input-group">
+                            <div class="elite-input-group">
                                 <input type="text" name="section_type" value="{{ old('section_type') }}" class="form-control" id="secInput" placeholder="{{ __('center::messages.blade_0763') }}">
                                 <label for="secInput">{{ __('center::students.section_type_label') }}</label>
                                 @error('section_type') <div class="text-danger extra-small mt-1">{{ $message }}</div> @enderror
@@ -441,25 +441,77 @@
         flex-shrink: 0;
     }
 
-    /* Floating Inputs Elite */
-    .elite-input-group { position: relative; }
-    .elite-input-group label { pointer-events: none; transition: all 0.2s ease; }
-
-    .form-control, .form-select {
-        border: 2px solid #f1f5f9 !important;
-        background: #f8fafc !important;
-        border-radius: 1.4rem !important;
-        padding-top: 1.8rem !important;
-        padding-bottom: 0.8rem !important;
-        font-weight: 700;
-        color: #1e293b;
-        transition: 0.3s;
+    /* === Unified Elite Input System === */
+    .elite-input-group { 
+        position: relative; 
     }
 
-    .form-control:focus, .form-select:focus {
+    .elite-input-group .form-control, 
+    .elite-input-group .form-select {
+        height: 65px; /* Fixed height for clean proportion */
+        padding: 1.75rem 1.25rem 0.5rem !important;
+        border: 2px solid #f1f5f9 !important;
+        background: #f8fafc !important;
+        border-radius: 1.2rem !important;
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: #1e293b;
+        transition: 0.3s ease;
+        line-height: 1.5;
+    }
+
+    /* Fixed form-select padding to look exactly like inputs */
+    .elite-input-group .form-select {
+        padding-top: 1.75rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+
+    /* Absolute centering of the label */
+    .elite-input-group label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        padding: 1.15rem 1.25rem;
+        pointer-events: none !important; /* Critical for cursor focus */
+        transform-origin: 0 0;
+        transition: opacity .15s ease-in-out, transform .15s ease-in-out, color .15s ease-in-out;
+        color: #64748b;
+        font-weight: 600;
+        z-index: 5;
+        margin: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Move the label up when focused or has content */
+    .elite-input-group .form-control:focus ~ label,
+    .elite-input-group .form-control:not(:placeholder-shown) ~ label,
+    .elite-input-group .form-select ~ label {
+        transform: scale(0.85) translateY(-0.85rem) translateX(0.15rem);
+        color: var(--elite-primary);
+        font-weight: 800;
+        align-items: flex-start;
+        padding-top: 0.75rem;
+    }
+
+    /* Placeholder management: hide when empty, show on focus */
+    .elite-input-group .form-control::placeholder {
+        color: transparent !important;
+        transition: color 0.15s ease-in-out;
+    }
+    .elite-input-group .form-control:focus::placeholder {
+        color: #cbd5e1 !important;
+        font-weight: 500;
+    }
+
+    /* Focus styling */
+    .elite-input-group .form-control:focus, 
+    .elite-input-group .form-select:focus {
         background: white !important;
         border-color: var(--elite-accent) !important;
-        box-shadow: 0 10px 25px -5px rgba(67, 97, 238, 0.1) !important;
+        box-shadow: 0 8px 25px -5px rgba(67, 97, 238, 0.15) !important;
+        outline: 0;
     }
 
     .validation-indicator {
@@ -470,21 +522,11 @@
         width: 0%;
         background: #10b981;
         transition: 0.5s ease;
-        border-radius: 0 0 1.4rem 1.4rem;
+        border-radius: 0 0 1.2rem 1.2rem;
+        z-index: 6;
     }
 
-    .is-elite-valid .validation-indicator { width: 100%; }
-    .is-elite-valid .form-control { border-color: rgba(16, 185, 129, 0.3) !important; }
 
-    /* Force label up when focused or has content */
-    .form-floating > .form-control:focus ~ label,
-    .form-floating > .form-control:not(:placeholder-shown) ~ label,
-    .form-floating > .form-select ~ label {
-        transform: scale(0.85) translateY(-0.95rem) translateX(0.15rem) !important;
-        opacity: 1 !important;
-        color: var(--elite-primary) !important;
-        font-weight: 800 !important;
-    }
 
     /* Image Upload Elite */
     .elite-image-upload {
@@ -543,17 +585,21 @@
     .hover-lift:hover { transform: translateY(-3px); }
     .letter-spacing-1 { letter-spacing: 1px; }
 
-    [dir="rtl"] .form-floating > label { 
-        right: 0 !important; 
-        left: auto !important; 
-        padding-right: 1.5rem !important; 
-        transform-origin: top right !important;
+    [dir="rtl"] .elite-input-group .form-control,
+    [dir="rtl"] .elite-input-group .form-select {
+        text-align: right;
+    }
+
+    [dir="rtl"] .elite-input-group label { 
+        right: 0; 
+        left: auto;
+        transform-origin: 100% 0;
     }
     
-    [dir="rtl"] .form-floating > .form-control:focus ~ label,
-    [dir="rtl"] .form-floating > .form-control:not(:placeholder-shown) ~ label,
-    [dir="rtl"] .form-floating > .form-select ~ label {
-        transform: scale(0.85) translateY(-0.95rem) translateX(-0.15rem) !important;
+    [dir="rtl"] .elite-input-group .form-control:focus ~ label,
+    [dir="rtl"] .elite-input-group .form-control:not(:placeholder-shown) ~ label,
+    [dir="rtl"] .elite-input-group .form-select ~ label {
+        transform: scale(0.85) translateY(-0.85rem) translateX(-0.15rem);
     }
 
     [dir="rtl"] .match-chip { right: 20px; left: auto; }
