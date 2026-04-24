@@ -360,6 +360,7 @@ $tenantRoutes = function () {
             Route::post('settings', [SettingsController::class, 'update'])->name('center.settings.update');
             Route::post('settings/academic', [SettingsController::class, 'updateAcademic'])->name('center.settings.update-academic');
             Route::post('settings/academic/template', [SettingsController::class, 'applyAcademicTemplate'])->name('center.settings.apply-template');
+            Route::post('settings/email-templates/reset', [SettingsController::class, 'resetEmailTemplates'])->name('center.settings.reset-email-templates');
             Route::get('activity-logs', [\Modules\Center\Http\Controllers\ActivityLogController::class, 'index'])->name('center.activity-logs.index');
         });
 

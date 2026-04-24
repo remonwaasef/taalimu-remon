@@ -462,125 +462,338 @@
                         </div>
 
                         <!-- Email Templates Settings -->
-                        <div class="tab-pane fade {{ $activeTab == 'email_templates' ? 'show active' : '' }}" id="email_templates" role="tabpanel" aria-labelledby="email_templates-tab">
+{{-- Tab 3: Email Templates --}}
+                        <div class="tab-pane fade {{ $activeTab == 'email_templates' ? 'show active' : '' }}" id="email_templates" role="tabpanel">
+                            @php
+                                $emailSettings = $tenant->settings['email_templates'] ?? [];
+                                $presets = config('email_templates.presets', []);
+                                $defaultPresetKey = config('email_templates.default_preset', 'formal');
+                                $defaultPreset = $presets[$defaultPresetKey] ?? [];
+                            @endphp
                             <form action="{{ route('center.settings.update', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST">
                                 @csrf
 
                                 {{-- Header --}}
-                                <div class="d-flex align-items-center mb-4">
-                                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-3 me-3">
-                                        <i class="fas fa-envelope fa-2x"></i>
-                                    </div>
-                                    <div>
-                                        <h5 class="fw-bold mb-1">قوالب البريد الإلكتروني</h5>
-                                        <p class="text-muted small mb-0">تخصيص رسائل الترحيب التي تُرسل تلقائياً عند تسجيل طالب جديد.</p>
+                                <div class="d-flex align-items-center justify-content-between mb-4">
+                                    <h5 class="fw-bold mb-0 text-primary"><i class="fas fa-envelope me-2"></i> إعدادات البريد الإلكتروني</h5>
+                                </div>
+                                <p class="text-muted small mb-4">تحكم في رسائل الترحيب التلقائية التي يتم إرسالها عند تسجيل طالب جديد.</p>
+
+                                {{-- Quick Preset Selector --}}
+                                <div class="card border bg-light shadow-none rounded-4 mb-4">
+                                    <div class="card-body p-4">
+                                        <h6 class="fw-bold mb-3"><i class="fas fa-magic me-2 text-warning"></i> اختر قالب جاهز</h6>
+                                        <div class="row g-3">
+                                            @foreach($presets as $key => $preset)
+                                                <div class="col-md-4">
+                                                    <div class="bg-white border rounded-3 p-3 h-100 text-center cursor-pointer preset-card" data-preset="{{ $key }}" style="cursor: pointer; transition: all 0.2s;">
+                                                        <div class="mb-2">
+                                                            <i class="{{ $preset['icon'] ?? 'fas fa-file-alt' }} fa-2x text-primary"></i>
+                                                        </div>
+                                                        <span class="fw-bold small">{{ $preset['name'] ?? $key }}</span>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </div>
                                 </div>
 
-                                {{-- Preset Templates Selector --}}
-                                @php $emailPresets = config('email_templates.presets', []); @endphp
-                                <div class="card border-0 bg-primary bg-opacity-10 mb-4 rounded-4">
-                                    <div class="card-body p-3">
-                                        <div class="row align-items-center">
-                                            <div class="col-md-7">
-                                                <h6 class="fw-bold text-primary mb-1"><i class="fas fa-magic me-2"></i>قوالب جاهزة</h6>
-                                                <p class="text-muted small mb-0">اختر قالباً جاهزاً لتعبئة الحقول تلقائياً، ويمكنك التعديل بعد ذلك.</p>
+                                {{-- Student Welcome Email --}}
+                                <div class="row g-4">
+                                    <div class="col-lg-7">
+                                        <div class="card border bg-white shadow-none rounded-4 mb-4">
+                                            <div class="card-body p-4">
+                                                <div class="d-flex align-items-center justify-content-between mb-4">
+                                                    <h6 class="fw-bold mb-0"><i class="fas fa-user-graduate me-2 text-info"></i> رسالة ترحيب الطالب</h6>
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="student_subject" data-body-id="student_body" data-default-subject="{{ $defaultPreset['student_subject'] ?? '' }}" data-default-body="{{ $defaultPreset['student_body'] ?? '' }}">
+                                                            <i class="fas fa-undo"></i> للافتراضي
+                                                        </button>
+                                                        <div class="form-check form-switch custom-switch mb-0">
+                                                            <input type="hidden" name="settings[email_templates][welcome_student_enabled]" value="0">
+                                                            <input class="form-check-input" type="checkbox" name="settings[email_templates][welcome_student_enabled]" value="1" id="studentEmailEnabled" {{ ($emailSettings['welcome_student_enabled'] ?? true) ? 'checked' : '' }}>
+                                                            <label class="form-check-label fw-bold small ms-2" for="studentEmailEnabled">تفعيل</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
+                                                    <input type="text" name="settings[email_templates][welcome_student_subject]" id="student_subject" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['welcome_student_subject'] ?? $defaultPreset['student_subject'] ?? '' }}" placeholder="مرحباً بك في {اسم_المركز}">
+                                                </div>
+
+                                                <div class="mb-2 d-flex flex-wrap gap-1">
+                                                    @php
+                                                        $vars = [
+                                                            'اسم_الطالب' => 'اسم الطالب',
+                                                            'اسم_المركز' => 'اسم المركز',
+                                                            'رابط_الدخول' => 'رابط الدخول',
+                                                            'كلمة_المرور' => 'كلمة المرور',
+                                                            'رقم_الهاتف' => 'رقم الهاتف',
+                                                        ];
+                                                    @endphp
+                                                    @foreach($vars as $key => $label)
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary border-dashed py-1 px-2 x-small var-btn" data-target="student_body" data-var="{{ '{' . $key . '}' }}">
+                                                            <i class="fas fa-plus-circle me-1 opacity-50"></i> {{ $label }}
+                                                        </button>
+                                                    @endforeach
+                                                </div>
+
+                                                <div class="mb-0">
+                                                    <label class="form-label fw-bold small text-muted">نص الرسالة</label>
+                                                    <textarea name="settings[email_templates][welcome_student_body]" id="student_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="8" placeholder="اكتب رسالة الترحيب هنا...">{{ $emailSettings['welcome_student_body'] ?? $defaultPreset['student_body'] ?? '' }}</textarea>
+                                                </div>
                                             </div>
-                                            <div class="col-md-5">
-                                                <div class="d-flex gap-2">
-                                                    <select id="emailPresetSelector" class="form-select form-select-sm rounded-pill">
-                                                        <option value="">اختر قالباً...</option>
-                                                        @foreach($emailPresets as $key => $preset)
-                                                            <option value="{{ $key }}">{{ $preset['name'] }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 text-nowrap" onclick="applyEmailPreset()">
-                                                        تطبيق
-                                                    </button>
+                                        </div>
+
+                                        {{-- Guardian Welcome Email --}}
+                                        <div class="card border bg-white shadow-none rounded-4 mb-4">
+                                            <div class="card-body p-4">
+                                                <div class="d-flex align-items-center justify-content-between mb-4">
+                                                    <h6 class="fw-bold mb-0"><i class="fas fa-user-shield me-2 text-success"></i> رسالة ترحيب ولي الأمر</h6>
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="guardian_subject" data-body-id="guardian_body" data-default-subject="{{ $defaultPreset['guardian_subject'] ?? '' }}" data-default-body="{{ $defaultPreset['guardian_body'] ?? '' }}">
+                                                            <i class="fas fa-undo"></i> للافتراضي
+                                                        </button>
+                                                        <div class="form-check form-switch custom-switch mb-0">
+                                                            <input type="hidden" name="settings[email_templates][welcome_guardian_enabled]" value="0">
+                                                            <input class="form-check-input" type="checkbox" name="settings[email_templates][welcome_guardian_enabled]" value="1" id="guardianEmailEnabled" {{ ($emailSettings['welcome_guardian_enabled'] ?? true) ? 'checked' : '' }}>
+                                                            <label class="form-check-label fw-bold small ms-2" for="guardianEmailEnabled">تفعيل</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
+                                                    <input type="text" name="settings[email_templates][welcome_guardian_subject]" id="guardian_subject" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['welcome_guardian_subject'] ?? $defaultPreset['guardian_subject'] ?? '' }}" placeholder="تم تسجيل {اسم_الطالب} في {اسم_المركز}">
+                                                </div>
+
+                                                <div class="mb-2 d-flex flex-wrap gap-1">
+                                                    @php
+                                                        $gVars = array_merge($vars, ['اسم_ولي_الأمر' => 'اسم ولي الأمر', 'المرحلة' => 'المرحلة الدراسية']);
+                                                    @endphp
+                                                    @foreach($gVars as $key => $label)
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary border-dashed py-1 px-2 x-small var-btn" data-target="guardian_body" data-var="{{ '{' . $key . '}' }}">
+                                                            <i class="fas fa-plus-circle me-1 opacity-50"></i> {{ $label }}
+                                                        </button>
+                                                    @endforeach
+                                                </div>
+
+                                                <div class="mb-0">
+                                                    <label class="form-label fw-bold small text-muted">نص الرسالة</label>
+                                                    <textarea name="settings[email_templates][welcome_guardian_body]" id="guardian_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="8" placeholder="اكتب رسالة ولي الأمر هنا...">{{ $emailSettings['welcome_guardian_body'] ?? $defaultPreset['guardian_body'] ?? '' }}</textarea>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                @php
-                                    $etSettings = $tenant->settings['email_templates'] ?? [];
-                                    $defaultPresetKey = config('email_templates.default_preset', 'formal');
-                                    $defaultPreset = config("email_templates.presets.{$defaultPresetKey}", []);
-                                @endphp
+                                    <div class="col-lg-5">
+                                        {{-- Live Preview --}}
+                                        <div class="sticky-top" style="top: 2rem; z-index: 5;">
+                                            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                                                <div class="card-header bg-dark py-3 px-4">
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <div class="d-flex gap-1">
+                                                            <span class="rounded-circle bg-danger" style="width:10px; height:10px;"></span>
+                                                            <span class="rounded-circle bg-warning" style="width:10px; height:10px;"></span>
+                                                            <span class="rounded-circle bg-success" style="width:10px; height:10px;"></span>
+                                                        </div>
+                                                        <span class="text-white x-small opacity-50 ms-2">معاينة الرسالة (الآن)</span>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body p-0 bg-white">
+                                                    <div class="p-3 border-bottom bg-light">
+                                                        <div class="small text-muted mb-1">الموضوع:</div>
+                                                        <div id="preview-subject" class="fw-bold">...</div>
+                                                    </div>
+                                                    <div class="p-4" style="min-height: 400px; font-family: sans-serif; line-height: 1.6;">
+                                                        <div id="preview-body" style="white-space: pre-wrap;">...</div>
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer bg-light border-0 text-center py-3">
+                                                    <span class="text-muted x-small italic"><i class="fas fa-magic me-1 text-primary"></i> تظهر الرموز في المعاينة كبيانات تجريبية للتوضيح فقط</span>
+                                                </div>
+                                            </div>
 
-                                {{-- Student Email Section --}}
-                                <div class="card border bg-light shadow-none mb-4 rounded-4">
-                                    <div class="card-body p-4">
-                                        <div class="d-flex align-items-center justify-content-between mb-3">
-                                            <h6 class="fw-bold text-success mb-0"><i class="fas fa-user-graduate me-2"></i>بريد الترحيب للطالب</h6>
-                                            <div class="form-check form-switch">
-                                                <input type="hidden" name="settings[email_templates][welcome_student_enabled]" value="0">
-                                                <input class="form-check-input" type="checkbox" name="settings[email_templates][welcome_student_enabled]" value="1" id="welcomeStudentEnabled" {{ ($etSettings['welcome_student_enabled'] ?? true) ? 'checked' : '' }}>
-                                                <label class="form-check-label fw-bold small" for="welcomeStudentEnabled">مفعّل</label>
-                                            </div>
-                                        </div>
-                                        <div class="row g-3">
-                                            <div class="col-12">
-                                                <label class="form-label fw-bold small text-muted">موضوع الرسالة (Subject)</label>
-                                                <input type="text" name="settings[email_templates][welcome_student_subject]" id="studentSubject" class="form-control" value="{{ $etSettings['welcome_student_subject'] ?? $defaultPreset['student_subject'] ?? '' }}" placeholder="مرحباً بك في {center_name}" dir="rtl">
-                                            </div>
-                                            <div class="col-12">
-                                                <label class="form-label fw-bold small text-muted">نص الرسالة</label>
-                                                <textarea name="settings[email_templates][welcome_student_body]" id="studentBody" class="form-control" rows="8" placeholder="اكتب نص الترحيب هنا..." dir="rtl" style="line-height: 1.8;">{{ $etSettings['welcome_student_body'] ?? $defaultPreset['student_body'] ?? '' }}</textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {{-- Guardian Email Section --}}
-                                <div class="card border bg-light shadow-none mb-4 rounded-4">
-                                    <div class="card-body p-4">
-                                        <div class="d-flex align-items-center justify-content-between mb-3">
-                                            <h6 class="fw-bold text-info mb-0"><i class="fas fa-users me-2"></i>بريد إشعار ولي الأمر</h6>
-                                            <div class="form-check form-switch">
-                                                <input type="hidden" name="settings[email_templates][welcome_guardian_enabled]" value="0">
-                                                <input class="form-check-input" type="checkbox" name="settings[email_templates][welcome_guardian_enabled]" value="1" id="welcomeGuardianEnabled" {{ ($etSettings['welcome_guardian_enabled'] ?? true) ? 'checked' : '' }}>
-                                                <label class="form-check-label fw-bold small" for="welcomeGuardianEnabled">مفعّل</label>
-                                            </div>
-                                        </div>
-                                        <div class="row g-3">
-                                            <div class="col-12">
-                                                <label class="form-label fw-bold small text-muted">موضوع الرسالة (Subject)</label>
-                                                <input type="text" name="settings[email_templates][welcome_guardian_subject]" id="guardianSubject" class="form-control" value="{{ $etSettings['welcome_guardian_subject'] ?? $defaultPreset['guardian_subject'] ?? '' }}" placeholder="تم تسجيل {student_name} في {center_name}" dir="rtl">
-                                            </div>
-                                            <div class="col-12">
-                                                <label class="form-label fw-bold small text-muted">نص الرسالة</label>
-                                                <textarea name="settings[email_templates][welcome_guardian_body]" id="guardianBody" class="form-control" rows="8" placeholder="اكتب نص الإشعار هنا..." dir="rtl" style="line-height: 1.8;">{{ $etSettings['welcome_guardian_body'] ?? $defaultPreset['guardian_body'] ?? '' }}</textarea>
+                                            <div class="mt-4 p-4 bg-primary-soft rounded-4 border border-primary border-opacity-10">
+                                                <h6 class="fw-bold mb-3 text-primary"><i class="fas fa-lightbulb me-2"></i> نصيحة احترافية</h6>
+                                                <p class="small text-dark mb-0">استخدم الرموز التلقائية لجعل رسائلك شخصية أكثر. الرسائل التي تبدأ باسم الطالب تحقق تفاعلاً أعلى بنسبة 40%!</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                {{-- Variables Reference --}}
-                                <div class="alert alert-info border-0 rounded-4 mb-4">
-                                    <h6 class="fw-bold"><i class="fas fa-code me-2"></i>المتغيرات المتاحة</h6>
-                                    <p class="small mb-2">يمكنك استخدام هذه المتغيرات في الموضوع والنص وسيتم استبدالها تلقائياً ببيانات الطالب:</p>
-                                    <div class="row g-2">
-                                        <div class="col-md-6 col-lg-3"><code class="bg-white px-2 py-1 rounded d-block text-center">{student_name}</code><small class="text-muted d-block text-center">اسم الطالب</small></div>
-                                        <div class="col-md-6 col-lg-3"><code class="bg-white px-2 py-1 rounded d-block text-center">{center_name}</code><small class="text-muted d-block text-center">اسم المركز</small></div>
-                                        <div class="col-md-6 col-lg-3"><code class="bg-white px-2 py-1 rounded d-block text-center">{login_url}</code><small class="text-muted d-block text-center">رابط الدخول</small></div>
-                                        <div class="col-md-6 col-lg-3"><code class="bg-white px-2 py-1 rounded d-block text-center">{password}</code><small class="text-muted d-block text-center">كلمة المرور</small></div>
-                                        <div class="col-md-6 col-lg-3"><code class="bg-white px-2 py-1 rounded d-block text-center">{phone}</code><small class="text-muted d-block text-center">رقم الهاتف</small></div>
-                                        <div class="col-md-6 col-lg-3"><code class="bg-white px-2 py-1 rounded d-block text-center">{guardian_name}</code><small class="text-muted d-block text-center">اسم ولي الأمر</small></div>
-                                        <div class="col-md-6 col-lg-3"><code class="bg-white px-2 py-1 rounded d-block text-center">{grade}</code><small class="text-muted d-block text-center">المرحلة الدراسية</small></div>
+                                {{-- ═══════════════════════════════════════════════ --}}
+                                {{-- Section 2: Event-Based Email Notifications    --}}
+                                {{-- ═══════════════════════════════════════════════ --}}
+                                <div class="mt-5 pt-4 border-top">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <h5 class="fw-bold mb-0 text-primary"><i class="fas fa-bell me-2"></i> إشعارات البريد التلقائية</h5>
+                                    </div>
+                                    <p class="text-muted small mb-4">فعّل أو عطّل إرسال بريد إلكتروني تلقائي عند حدوث أحداث معينة. يمكنك تخصيص نص كل رسالة.</p>
+
+                                    {{-- Accordion for each notification type --}}
+                                    <div class="accordion" id="emailNotificationsAccordion">
+
+                                        {{-- 1. Payment Reminder --}}
+                                        <div class="accordion-item border rounded-4 mb-3 overflow-hidden">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed fw-bold bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#notif_payment_reminder">
+                                                    <span class="d-flex align-items-center gap-3 w-100">
+                                                        <span class="rounded-circle bg-warning bg-opacity-10 p-2 d-flex align-items-center justify-content-center" style="width:40px;height:40px;">
+                                                            <i class="fas fa-clock text-warning"></i>
+                                                        </span>
+                                                        <span>
+                                                            <span class="d-block">تذكير بموعد الدفع</span>
+                                                            <small class="text-muted fw-normal">يُرسل للطالب أو ولي الأمر قبل موعد السداد</small>
+                                                        </span>
+                                                    </span>
+                                                </button>
+                                            </h2>
+                                            <div id="notif_payment_reminder" class="accordion-collapse collapse" data-bs-parent="#emailNotificationsAccordion">
+                                                <div class="accordion-body p-4">
+                                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                                        <span class="fw-bold small text-muted">حالة الإشعار</span>
+                                                        <div class="d-flex align-items-center gap-3">
+                                                            <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="notif_payment_reminder_subject" data-body-id="notif_payment_reminder_body" data-default-subject="تذكير بسداد مصروفات {اسم_الطالب} - {اسم_المركز}" data-default-body="نذكركم بأن مصروفات الطالب/ة {اسم_الطالب} بمبلغ {المبلغ} مستحقة بتاريخ {تاريخ_الاستحقاق}.\n\nيرجى السداد في الموعد المحدد لضمان استمرار الخدمة.\n\nشكراً لتعاونكم,\n{اسم_المركز}">
+                                                                <i class="fas fa-undo"></i> للافتراضي
+                                                            </button>
+                                                            <div class="form-check form-switch custom-switch mb-0">
+                                                                <input type="hidden" name="settings[email_templates][notif_payment_reminder_enabled]" value="0">
+                                                                <input class="form-check-input" type="checkbox" name="settings[email_templates][notif_payment_reminder_enabled]" value="1" id="notifPaymentReminder" {{ ($emailSettings['notif_payment_reminder_enabled'] ?? false) ? 'checked' : '' }}>
+                                                                <label class="form-check-label fw-bold small ms-2" for="notifPaymentReminder">مفعّل</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
+                                                        <input type="text" id="notif_payment_reminder_subject" name="settings[email_templates][notif_payment_reminder_subject]" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['notif_payment_reminder_subject'] ?? 'تذكير بسداد مصروفات {اسم_الطالب} - {اسم_المركز}' }}">
+                                                    </div>
+                                                    <div class="mb-2 d-flex flex-wrap gap-1">
+                                                        @php $payVars = ['اسم_الطالب'=>'اسم الطالب','اسم_المركز'=>'اسم المركز','المبلغ'=>'المبلغ المستحق','تاريخ_الاستحقاق'=>'تاريخ الاستحقاق','رابط_الدخول'=>'رابط الدخول']; @endphp
+                                                        @foreach($payVars as $k=>$l)
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary border-dashed py-1 px-2 x-small var-btn" data-target="notif_payment_reminder_body" data-var="{{ '{'.$k.'}' }}"><i class="fas fa-plus-circle me-1 opacity-50"></i> {{ $l }}</button>
+                                                        @endforeach
+                                                    </div>
+                                                    <div class="mb-0">
+                                                        <label class="form-label fw-bold small text-muted">نص الرسالة</label>
+                                                        <textarea name="settings[email_templates][notif_payment_reminder_body]" id="notif_payment_reminder_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="5">{{ $emailSettings['notif_payment_reminder_body'] ?? "نذكركم بأن مصروفات الطالب/ة {اسم_الطالب} بمبلغ {المبلغ} مستحقة بتاريخ {تاريخ_الاستحقاق}.\n\nيرجى السداد في الموعد المحدد لضمان استمرار الخدمة.\n\nشكراً لتعاونكم,\n{اسم_المركز}" }}</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{-- 2. New Group Enrollment --}}
+                                        <div class="accordion-item border rounded-4 mb-3 overflow-hidden">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed fw-bold bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#notif_group_enrollment">
+                                                    <span class="d-flex align-items-center gap-3 w-100">
+                                                        <span class="rounded-circle bg-info bg-opacity-10 p-2 d-flex align-items-center justify-content-center" style="width:40px;height:40px;">
+                                                            <i class="fas fa-user-plus text-info"></i>
+                                                        </span>
+                                                        <span>
+                                                            <span class="d-block">الاشتراك في مجموعة جديدة</span>
+                                                            <small class="text-muted fw-normal">يُرسل عند إضافة طالب لمجموعة أو كورس جديد</small>
+                                                        </span>
+                                                    </span>
+                                                </button>
+                                            </h2>
+                                            <div id="notif_group_enrollment" class="accordion-collapse collapse" data-bs-parent="#emailNotificationsAccordion">
+                                                <div class="accordion-body p-4">
+                                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                                        <span class="fw-bold small text-muted">حالة الإشعار</span>
+                                                        <div class="d-flex align-items-center gap-3">
+                                                            <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="notif_group_enrollment_subject" data-body-id="notif_group_enrollment_body" data-default-subject="تم تسجيلك في مجموعة جديدة - {اسم_المركز}" data-default-body="مرحباً {اسم_الطالب}،\n\nتم تسجيلك في مجموعة جديدة: {اسم_المجموعة}\n\nيمكنك الدخول للمنصة من خلال:\n{رابط_الدخول}\n\nنتمنى لك التوفيق!\n{اسم_المركز}">
+                                                                <i class="fas fa-undo"></i> للافتراضي
+                                                            </button>
+                                                            <div class="form-check form-switch custom-switch mb-0">
+                                                                <input type="hidden" name="settings[email_templates][notif_group_enrollment_enabled]" value="0">
+                                                                <input class="form-check-input" type="checkbox" name="settings[email_templates][notif_group_enrollment_enabled]" value="1" id="notifGroupEnrollment" {{ ($emailSettings['notif_group_enrollment_enabled'] ?? false) ? 'checked' : '' }}>
+                                                                <label class="form-check-label fw-bold small ms-2" for="notifGroupEnrollment">مفعّل</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
+                                                        <input type="text" id="notif_group_enrollment_subject" name="settings[email_templates][notif_group_enrollment_subject]" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['notif_group_enrollment_subject'] ?? 'تم تسجيلك في مجموعة جديدة - {اسم_المركز}' }}">
+                                                    </div>
+                                                    <div class="mb-2 d-flex flex-wrap gap-1">
+                                                        @php $grpVars = ['اسم_الطالب'=>'اسم الطالب','اسم_المركز'=>'اسم المركز','اسم_المجموعة'=>'اسم المجموعة','سعر_الدورة'=>'سعر الدورة','رابط_الدخول'=>'رابط الدخول']; @endphp
+                                                        @foreach($grpVars as $k=>$l)
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary border-dashed py-1 px-2 x-small var-btn" data-target="notif_group_enrollment_body" data-var="{{ '{'.$k.'}' }}"><i class="fas fa-plus-circle me-1 opacity-50"></i> {{ $l }}</button>
+                                                        @endforeach
+                                                    </div>
+                                                    <div class="mb-0">
+                                                        <label class="form-label fw-bold small text-muted">نص الرسالة</label>
+                                                        <textarea name="settings[email_templates][notif_group_enrollment_body]" id="notif_group_enrollment_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="5">{{ $emailSettings['notif_group_enrollment_body'] ?? "مرحباً {اسم_الطالب}،\n\nتم تسجيلك في مجموعة جديدة: {اسم_المجموعة}\n\nيمكنك الدخول للمنصة من خلال:\n{رابط_الدخول}\n\nنتمنى لك التوفيق!\n{اسم_المركز}" }}</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{-- 3. Payment Confirmation --}}
+                                        <div class="accordion-item border rounded-4 mb-3 overflow-hidden">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed fw-bold bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#notif_payment_confirmed">
+                                                    <span class="d-flex align-items-center gap-3 w-100">
+                                                        <span class="rounded-circle bg-success bg-opacity-10 p-2 d-flex align-items-center justify-content-center" style="width:40px;height:40px;">
+                                                            <i class="fas fa-check-circle text-success"></i>
+                                                        </span>
+                                                        <span>
+                                                            <span class="d-block">تأكيد استلام مبلغ</span>
+                                                            <small class="text-muted fw-normal">يُرسل عند تسجيل دفعة مالية جديدة للطالب</small>
+                                                        </span>
+                                                    </span>
+                                                </button>
+                                            </h2>
+                                            <div id="notif_payment_confirmed" class="accordion-collapse collapse" data-bs-parent="#emailNotificationsAccordion">
+                                                <div class="accordion-body p-4">
+                                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                                        <span class="fw-bold small text-muted">حالة الإشعار</span>
+                                                        <div class="d-flex align-items-center gap-3">
+                                                            <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="notif_payment_confirmed_subject" data-body-id="notif_payment_confirmed_body" data-default-subject="تأكيد استلام دفعة - {اسم_المركز}" data-default-body="مرحباً {اسم_الطالب}،\n\nنؤكد استلام دفعة مالية بالتفاصيل التالية:\n• المبلغ: {المبلغ_المدفوع}\n• التاريخ: {تاريخ_الدفع}\n• طريقة الدفع: {طريقة_الدفع}\n• المتبقي: {المتبقي}\n\nشكراً لالتزامكم.\n{اسم_المركز}">
+                                                                <i class="fas fa-undo"></i> للافتراضي
+                                                            </button>
+                                                            <div class="form-check form-switch custom-switch mb-0">
+                                                                <input type="hidden" name="settings[email_templates][notif_payment_confirmed_enabled]" value="0">
+                                                                <input class="form-check-input" type="checkbox" name="settings[email_templates][notif_payment_confirmed_enabled]" value="1" id="notifPaymentConfirmed" {{ ($emailSettings['notif_payment_confirmed_enabled'] ?? false) ? 'checked' : '' }}>
+                                                                <label class="form-check-label fw-bold small ms-2" for="notifPaymentConfirmed">مفعّل</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
+                                                        <input type="text" id="notif_payment_confirmed_subject" name="settings[email_templates][notif_payment_confirmed_subject]" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['notif_payment_confirmed_subject'] ?? 'تأكيد استلام دفعة - {اسم_المركز}' }}">
+                                                    </div>
+                                                    <div class="mb-2 d-flex flex-wrap gap-1">
+                                                        @php $confVars = ['اسم_الطالب'=>'اسم الطالب','اسم_المركز'=>'اسم المركز','المبلغ_المدفوع'=>'المبلغ المدفوع','تاريخ_الدفع'=>'تاريخ الدفع','المتبقي'=>'المبلغ المتبقي','طريقة_الدفع'=>'طريقة الدفع']; @endphp
+                                                        @foreach($confVars as $k=>$l)
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary border-dashed py-1 px-2 x-small var-btn" data-target="notif_payment_confirmed_body" data-var="{{ '{'.$k.'}' }}"><i class="fas fa-plus-circle me-1 opacity-50"></i> {{ $l }}</button>
+                                                        @endforeach
+                                                    </div>
+                                                    <div class="mb-0">
+                                                        <label class="form-label fw-bold small text-muted">نص الرسالة</label>
+                                                        <textarea name="settings[email_templates][notif_payment_confirmed_body]" id="notif_payment_confirmed_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="5">{{ $emailSettings['notif_payment_confirmed_body'] ?? "مرحباً {اسم_الطالب}،\n\nنؤكد استلام دفعة مالية بالتفاصيل التالية:\n• المبلغ: {المبلغ_المدفوع}\n• التاريخ: {تاريخ_الدفع}\n• طريقة الدفع: {طريقة_الدفع}\n• المتبقي: {المتبقي}\n\nشكراً لالتزامكم.\n{اسم_المركز}" }}</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
 
-                                <div class="alert alert-warning border-0 rounded-4 py-2">
-                                    <small><i class="fas fa-info-circle me-1"></i> <strong>ملاحظة:</strong> لن يتم إرسال البريد إلا إذا كان للطالب بريد إلكتروني حقيقي (ليس مولّداً تلقائياً).</small>
-                                </div>
-
-                                <div class="mt-4 pt-3 border-top d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-primary px-5 shadow-sm rounded-pill">
-                                        <i class="fas fa-save me-2"></i> حفظ قوالب البريد
+                                <div class="text-start mt-4 pt-3 border-top d-flex gap-2">
+                                    <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm">
+                                        <i class="fas fa-save me-2"></i> حفظ إعدادات البريد
                                     </button>
                                 </div>
+                            </form>
+                            
+                            <form action="{{ route('center.settings.reset-email-templates', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST" class="d-inline-block mt-3" onsubmit="return confirm('هل أنت متأكد أنك تريد مسح جميع التعديلات وإعادة النصوص للوضع الافتراضي؟');">
+                                @csrf
+                                <button type="submit" class="btn btn-light text-danger rounded-pill px-4 fw-bold shadow-sm border">
+                                    <i class="fas fa-undo me-2"></i> إعادة الضبط للافتراضي
+                                </button>
                             </form>
                         </div>
 
@@ -664,6 +877,74 @@
     </div>
 </div>
 @endsection
+
+<style>
+    .animate-fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .nav-tabs .nav-link {
+        color: #64748b;
+        background: #f8fafc;
+        border-bottom: 2px solid transparent !important;
+        transition: all 0.3s;
+    }
+    .nav-tabs .nav-link:hover {
+        background: #f1f5f9;
+        color: var(--primary-color);
+    }
+    .nav-tabs .nav-link.active {
+        background: white !important;
+        color: var(--primary-color) !important;
+        border-bottom: 3px solid var(--primary-color) !important;
+    }
+    .form-control:focus {
+        background: white !important;
+        box-shadow: 0 0 0 4px rgba(58, 12, 163, 0.1);
+    }
+    .custom-switch .form-check-input {
+        width: 3rem;
+        height: 1.5rem;
+    }
+    .custom-switch .form-check-input:checked {
+        background-color: #22c55e;
+        border-color: #22c55e;
+    }
+    .x-small { font-size: 0.75rem; }
+    .preset-card:hover {
+        border-color: var(--primary-color, #3A0CA3) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(58, 12, 163, 0.15);
+    }
+    .preset-card.active-preset {
+        border-color: var(--primary-color, #3A0CA3) !important;
+        border-width: 2px;
+        background: #f0f0ff !important;
+    }
+    .bg-primary-soft { background-color: rgba(58, 12, 163, 0.05) !important; }
+    .border-dashed { border-style: dashed !important; }
+    .italic { font-style: italic; }
+    .var-btn:hover {
+        background-color: var(--primary-color) !important;
+        color: white !important;
+        border-color: var(--primary-color) !important;
+    }
+    #preview-body span.text-primary {
+        background: rgba(58, 12, 163, 0.1);
+        padding: 0 4px;
+        border-radius: 4px;
+    }
+    .accordion-button:not(.collapsed) {
+        background-color: #f8f9ff !important;
+        color: var(--primary-color) !important;
+        box-shadow: none;
+    }
+    .accordion-button:focus { box-shadow: none; }
+    .accordion-item { border-color: #e2e8f0 !important; }
+</style>
 
 @push('scripts')
 <script>
@@ -847,5 +1128,88 @@
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 2500);
     }
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const previewSubject = document.getElementById('preview-subject');
+    const previewBody = document.getElementById('preview-body');
+    const templateInputs = document.querySelectorAll('.template-input');
+    const varBtns = document.querySelectorAll('.var-btn');
+    const presetCards = document.querySelectorAll('.preset-card');
+    
+    const sampleData = {
+        '{اسم_الطالب}': 'أحمد محمد علي',
+        '{اسم_المركز}': 'أكاديمية التعليم',
+        '{رابط_الدخول}': 'https://taalimu.com/login',
+        '{كلمة_المرور}': '123456',
+        '{رقم_الهاتف}': '01012345678',
+        '{اسم_ولي_الأمر}': 'أستاذ محمد علي',
+        '{المرحلة}': 'الصف الأول الثانوي'
+    };
+
+    function updatePreview() {
+        const activeField = document.activeElement;
+        let isGuardian = activeField && activeField.id.includes('guardian');
+        
+        let subject = document.getElementById(isGuardian ? 'guardian_subject' : 'student_subject').value;
+        let body = document.getElementById(isGuardian ? 'guardian_body' : 'student_body').value;
+
+        Object.keys(sampleData).forEach(key => {
+            const regex = new RegExp(key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+            subject = subject.replace(regex, `<span class="text-primary">${sampleData[key]}</span>`);
+            body = body.replace(regex, `<span class="text-primary">${sampleData[key]}</span>`);
+        });
+
+        previewSubject.innerHTML = subject || '<span class="text-muted italic">بدون عنوان...</span>';
+        previewBody.innerHTML = body || '<span class="text-muted italic">اكتب نص الرسالة لتظهر المعاينة هنا...</span>';
+    }
+
+    templateInputs.forEach(input => {
+        input.addEventListener('input', updatePreview);
+        input.addEventListener('focus', updatePreview);
+    });
+
+    varBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const targetId = this.dataset.target;
+            const variable = this.dataset.var;
+            const textarea = document.getElementById(targetId);
+            
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            
+            textarea.value = text.substring(0, start) + variable + text.substring(end);
+            textarea.focus();
+            textarea.selectionStart = textarea.selectionEnd = start + variable.length;
+            
+            updatePreview();
+        });
+    });
+
+    const presets = @json(config('email_templates.presets', []));
+    
+    presetCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const presetKey = this.dataset.preset;
+            const preset = presets[presetKey];
+            
+            if (preset) {
+                document.getElementById('student_subject').value = preset.student_subject;
+                document.getElementById('student_body').value = preset.student_body;
+                document.getElementById('guardian_subject').value = preset.guardian_subject;
+                document.getElementById('guardian_body').value = preset.guardian_body;
+                
+                presetCards.forEach(c => c.classList.remove('active-preset'));
+                this.classList.add('active-preset');
+                
+                updatePreview();
+            }
+        });
+    });
+
+    updatePreview();
+});
 </script>
 @endpush
