@@ -213,6 +213,51 @@
                 alertBox.classList.add('d-none');
             }
         });
+        const mainSelect = document.getElementById('main_grade_select');
+        const trigger = document.getElementById('gradePickerTrigger');
+        const chip = document.getElementById('selected-grade-chip');
+        const chipText = document.getElementById('chip-text');
+
+        window.selectGrade = function(id, name, stageName) {
+            mainSelect.value = id;
+            updateGradeUI(id, name, stageName);
+            bootstrap.Modal.getInstance(document.getElementById('gradePickerModal')).hide();
+        };
+
+        function updateGradeUI(id, name, stageName) {
+            if (id) {
+                trigger.classList.remove('pulse-btn', 'btn-outline-primary');
+                trigger.classList.add('btn-primary', 'text-white');
+                chip.classList.remove('d-none');
+                chipText.textContent = `${stageName} - ${name}`;
+                
+                // Highlight active card in modal
+                document.querySelectorAll('.grade-card').forEach(card => {
+                    card.classList.toggle('active', card.dataset.gradeId == id);
+                });
+            } else {
+                trigger.classList.add('pulse-btn', 'btn-outline-primary');
+                trigger.classList.remove('btn-primary', 'text-white');
+                chip.classList.add('d-none');
+            }
+        }
+
+        mainSelect.addEventListener('change', function() {
+            const selected = this.options[this.selectedIndex];
+            if (selected.value) {
+                updateGradeUI(selected.value, selected.text, selected.dataset.stage);
+            } else {
+                updateGradeUI('', '', '');
+            }
+        });
+
+        // Initial Check
+        if (mainSelect.value) {
+            const selected = mainSelect.options[mainSelect.selectedIndex];
+            updateGradeUI(mainSelect.value, selected.text, selected.dataset.stage);
+        } else {
+            updateGradeUI('', '', '');
+        }
     });
 </script>
 @endsection
