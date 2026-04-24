@@ -311,6 +311,7 @@ $tenantRoutes = function () {
                 Route::get('sales/student-statement/{id}', [SaleController::class, 'downloadStatement'])->name('center.sales.statement');
                 Route::get('sales/student-summary/{id}', [SaleController::class, 'getStudentSummary'])->name('center.sales.student-summary');
                 Route::post('sales/{sale}/payment', [SaleController::class, 'addPayment'])->name('center.sales.payment');
+                Route::post('sales/mark-paid', [SaleController::class, 'markPaid'])->name('center.sales.mark-paid');
                 Route::post('sales/{sale}/refund', [SaleController::class, 'refund'])->name('center.sales.refund');
                 Route::get('sales/{sale}/checkout', [SaleController::class, 'checkout'])->name('center.sales.checkout');
                 Route::get('sales/{sale}/checkout/success', [SaleController::class, 'checkoutSuccess'])->name('center.sales.checkout.success');
