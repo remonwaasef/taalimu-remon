@@ -443,6 +443,7 @@
 
     /* Floating Inputs Elite */
     .elite-input-group { position: relative; }
+    .elite-input-group label { pointer-events: none; transition: all 0.2s ease; }
 
     .form-control, .form-select {
         border: 2px solid #f1f5f9 !important;
@@ -474,6 +475,16 @@
 
     .is-elite-valid .validation-indicator { width: 100%; }
     .is-elite-valid .form-control { border-color: rgba(16, 185, 129, 0.3) !important; }
+
+    /* Force label up when focused or has content */
+    .form-floating > .form-control:focus ~ label,
+    .form-floating > .form-control:not(:placeholder-shown) ~ label,
+    .form-floating > .form-select ~ label {
+        transform: scale(0.85) translateY(-0.95rem) translateX(0.15rem) !important;
+        opacity: 1 !important;
+        color: var(--elite-primary) !important;
+        font-weight: 800 !important;
+    }
 
     /* Image Upload Elite */
     .elite-image-upload {
@@ -532,7 +543,19 @@
     .hover-lift:hover { transform: translateY(-3px); }
     .letter-spacing-1 { letter-spacing: 1px; }
 
-    [dir="rtl"] .form-floating > label { right: 0; left: auto; padding-right: 1.5rem; }
+    [dir="rtl"] .form-floating > label { 
+        right: 0 !important; 
+        left: auto !important; 
+        padding-right: 1.5rem !important; 
+        transform-origin: top right !important;
+    }
+    
+    [dir="rtl"] .form-floating > .form-control:focus ~ label,
+    [dir="rtl"] .form-floating > .form-control:not(:placeholder-shown) ~ label,
+    [dir="rtl"] .form-floating > .form-select ~ label {
+        transform: scale(0.85) translateY(-0.95rem) translateX(-0.15rem) !important;
+    }
+
     [dir="rtl"] .match-chip { right: 20px; left: auto; }
 </style>
 @endsection
