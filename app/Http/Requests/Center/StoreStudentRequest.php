@@ -32,6 +32,7 @@ class StoreStudentRequest extends FormRequest
             'email' => 'nullable|email|unique:users,email',
             'phone' => ['required', 'string', 'max:20', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
             'parent_phone' => ['nullable', 'string', 'max:20', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
+            'parent_email' => 'nullable|email|max:255',
             'grade_id' => 'required|exists:grades,id',
             'birth_date' => 'nullable|date|before:today',
             'gender' => 'nullable|in:male,female',
