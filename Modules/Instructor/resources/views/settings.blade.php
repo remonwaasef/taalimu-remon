@@ -193,65 +193,117 @@
                                 </div>
 
                                 {{-- Student Welcome Email --}}
-                                <div class="card border bg-light shadow-none rounded-4 mb-4">
-                                    <div class="card-body p-4">
-                                        <div class="d-flex align-items-center justify-content-between mb-3">
-                                            <h6 class="fw-bold mb-0"><i class="fas fa-user-graduate me-2 text-info"></i> رسالة ترحيب الطالب</h6>
-                                            <div class="form-check form-switch custom-switch">
-                                                <input type="hidden" name="welcome_student_enabled" value="0">
-                                                <input class="form-check-input" type="checkbox" name="welcome_student_enabled" value="1" id="studentEmailEnabled" {{ ($emailSettings['welcome_student_enabled'] ?? true) ? 'checked' : '' }}>
-                                                <label class="form-check-label fw-bold small ms-2" for="studentEmailEnabled">تفعيل</label>
+                                <div class="row g-4">
+                                    <div class="col-lg-7">
+                                        <div class="card border bg-white shadow-none rounded-4 mb-4">
+                                            <div class="card-body p-4">
+                                                <div class="d-flex align-items-center justify-content-between mb-4">
+                                                    <h6 class="fw-bold mb-0"><i class="fas fa-user-graduate me-2 text-info"></i> رسالة ترحيب الطالب</h6>
+                                                    <div class="form-check form-switch custom-switch">
+                                                        <input type="hidden" name="welcome_student_enabled" value="0">
+                                                        <input class="form-check-input" type="checkbox" name="welcome_student_enabled" value="1" id="studentEmailEnabled" {{ ($emailSettings['welcome_student_enabled'] ?? true) ? 'checked' : '' }}>
+                                                        <label class="form-check-label fw-bold small ms-2" for="studentEmailEnabled">تفعيل</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
+                                                    <input type="text" name="welcome_student_subject" id="student_subject" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['welcome_student_subject'] ?? $defaultPreset['student_subject'] ?? '' }}" placeholder="مرحباً بك في {اسم_المركز}">
+                                                </div>
+
+                                                <div class="mb-2 d-flex flex-wrap gap-1">
+                                                    @php
+                                                        $vars = [
+                                                            'اسم_الطالب' => 'اسم الطالب',
+                                                            'اسم_المركز' => 'اسم المركز',
+                                                            'رابط_الدخول' => 'رابط الدخول',
+                                                            'كلمة_المرور' => 'كلمة المرور',
+                                                            'رقم_الهاتف' => 'رقم الهاتف',
+                                                        ];
+                                                    @endphp
+                                                    @foreach($vars as $key => $label)
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary border-dashed py-1 px-2 x-small var-btn" data-target="student_body" data-var="{{ '{' . $key . '}' }}">
+                                                            <i class="fas fa-plus-circle me-1 opacity-50"></i> {{ $label }}
+                                                        </button>
+                                                    @endforeach
+                                                </div>
+
+                                                <div class="mb-0">
+                                                    <label class="form-label fw-bold small text-muted">نص الرسالة</label>
+                                                    <textarea name="welcome_student_body" id="student_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="8" placeholder="اكتب رسالة الترحيب هنا...">{{ $emailSettings['welcome_student_body'] ?? $defaultPreset['student_body'] ?? '' }}</textarea>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="row g-3">
-                                            <div class="col-md-12">
-                                                <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
-                                                <input type="text" name="welcome_student_subject" id="student_subject" class="form-control bg-white border rounded-3" value="{{ $emailSettings['welcome_student_subject'] ?? $defaultPreset['student_subject'] ?? '' }}" placeholder="مرحباً بك في {اسم_المركز}">
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label class="form-label fw-bold small text-muted">نص الرسالة</label>
-                                                <textarea name="welcome_student_body" id="student_body" class="form-control bg-white border rounded-3" rows="6" placeholder="اكتب رسالة الترحيب هنا...">{{ $emailSettings['welcome_student_body'] ?? $defaultPreset['student_body'] ?? '' }}</textarea>
+
+                                        {{-- Guardian Welcome Email --}}
+                                        <div class="card border bg-white shadow-none rounded-4 mb-4">
+                                            <div class="card-body p-4">
+                                                <div class="d-flex align-items-center justify-content-between mb-4">
+                                                    <h6 class="fw-bold mb-0"><i class="fas fa-user-shield me-2 text-success"></i> رسالة ترحيب ولي الأمر</h6>
+                                                    <div class="form-check form-switch custom-switch">
+                                                        <input type="hidden" name="welcome_guardian_enabled" value="0">
+                                                        <input class="form-check-input" type="checkbox" name="welcome_guardian_enabled" value="1" id="guardianEmailEnabled" {{ ($emailSettings['welcome_guardian_enabled'] ?? true) ? 'checked' : '' }}>
+                                                        <label class="form-check-label fw-bold small ms-2" for="guardianEmailEnabled">تفعيل</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
+                                                    <input type="text" name="welcome_guardian_subject" id="guardian_subject" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['welcome_guardian_subject'] ?? $defaultPreset['guardian_subject'] ?? '' }}" placeholder="تم تسجيل {اسم_الطالب} في {اسم_المركز}">
+                                                </div>
+
+                                                <div class="mb-2 d-flex flex-wrap gap-1">
+                                                    @php
+                                                        $gVars = array_merge($vars, ['اسم_ولي_الأمر' => 'اسم ولي الأمر', 'المرحلة' => 'المرحلة الدراسية']);
+                                                    @endphp
+                                                    @foreach($gVars as $key => $label)
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary border-dashed py-1 px-2 x-small var-btn" data-target="guardian_body" data-var="{{ '{' . $key . '}' }}">
+                                                            <i class="fas fa-plus-circle me-1 opacity-50"></i> {{ $label }}
+                                                        </button>
+                                                    @endforeach
+                                                </div>
+
+                                                <div class="mb-0">
+                                                    <label class="form-label fw-bold small text-muted">نص الرسالة</label>
+                                                    <textarea name="welcome_guardian_body" id="guardian_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="8" placeholder="اكتب رسالة ولي الأمر هنا...">{{ $emailSettings['welcome_guardian_body'] ?? $defaultPreset['guardian_body'] ?? '' }}</textarea>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                {{-- Guardian Welcome Email --}}
-                                <div class="card border bg-light shadow-none rounded-4 mb-4">
-                                    <div class="card-body p-4">
-                                        <div class="d-flex align-items-center justify-content-between mb-3">
-                                            <h6 class="fw-bold mb-0"><i class="fas fa-user-shield me-2 text-success"></i> رسالة ترحيب ولي الأمر</h6>
-                                            <div class="form-check form-switch custom-switch">
-                                                <input type="hidden" name="welcome_guardian_enabled" value="0">
-                                                <input class="form-check-input" type="checkbox" name="welcome_guardian_enabled" value="1" id="guardianEmailEnabled" {{ ($emailSettings['welcome_guardian_enabled'] ?? true) ? 'checked' : '' }}>
-                                                <label class="form-check-label fw-bold small ms-2" for="guardianEmailEnabled">تفعيل</label>
+                                    <div class="col-lg-5">
+                                        {{-- Live Preview --}}
+                                        <div class="sticky-top" style="top: 2rem; z-index: 5;">
+                                            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                                                <div class="card-header bg-dark py-3 px-4">
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <div class="d-flex gap-1">
+                                                            <span class="rounded-circle bg-danger" style="width:10px; height:10px;"></span>
+                                                            <span class="rounded-circle bg-warning" style="width:10px; height:10px;"></span>
+                                                            <span class="rounded-circle bg-success" style="width:10px; height:10px;"></span>
+                                                        </div>
+                                                        <span class="text-white x-small opacity-50 ms-2">معاينة الرسالة (الآن)</span>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body p-0 bg-white">
+                                                    <div class="p-3 border-bottom bg-light">
+                                                        <div class="small text-muted mb-1">الموضوع:</div>
+                                                        <div id="preview-subject" class="fw-bold">...</div>
+                                                    </div>
+                                                    <div class="p-4" style="min-height: 400px; font-family: sans-serif; line-height: 1.6;">
+                                                        <div id="preview-body" style="white-space: pre-wrap;">...</div>
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer bg-light border-0 text-center py-3">
+                                                    <span class="text-muted x-small italic"><i class="fas fa-magic me-1 text-primary"></i> تظهر الرموز في المعاينة كبيانات تجريبية للتوضيح فقط</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="mt-4 p-4 bg-primary-soft rounded-4 border border-primary border-opacity-10">
+                                                <h6 class="fw-bold mb-3 text-primary"><i class="fas fa-lightbulb me-2"></i> نصيحة احترافية</h6>
+                                                <p class="small text-dark mb-0">استخدم الرموز التلقائية لجعل رسائلك شخصية أكثر. الرسائل التي تبدأ باسم الطالب تحقق تفاعلاً أعلى بنسبة 40%!</p>
                                             </div>
                                         </div>
-                                        <div class="row g-3">
-                                            <div class="col-md-12">
-                                                <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
-                                                <input type="text" name="welcome_guardian_subject" id="guardian_subject" class="form-control bg-white border rounded-3" value="{{ $emailSettings['welcome_guardian_subject'] ?? $defaultPreset['guardian_subject'] ?? '' }}" placeholder="تم تسجيل {اسم_الطالب} في {اسم_المركز}">
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label class="form-label fw-bold small text-muted">نص الرسالة</label>
-                                                <textarea name="welcome_guardian_body" id="guardian_body" class="form-control bg-white border rounded-3" rows="6" placeholder="اكتب رسالة ولي الأمر هنا...">{{ $emailSettings['welcome_guardian_body'] ?? $defaultPreset['guardian_body'] ?? '' }}</textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {{-- Available Variables Reference --}}
-                                <div class="alert alert-info border-0 shadow-none rounded-4 py-3 px-4 mb-4">
-                                    <h6 class="fw-bold mb-2"><i class="fas fa-info-circle me-2"></i> الرموز التلقائية</h6>
-                                    <p class="small mb-2">يمكنك استخدام الرموز التالية في نص الرسالة وسيتم استبدالها تلقائياً ببيانات الطالب:</p>
-                                    <div class="small">
-                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{اسم_الطالب} = اسم الطالب</span>
-                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{اسم_المركز} = اسم المركز</span>
-                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{رابط_الدخول} = رابط الدخول</span>
-                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{كلمة_المرور} = كلمة المرور</span>
-                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{رقم_الهاتف} = رقم الهاتف</span>
-                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{اسم_ولي_الأمر} = اسم ولي الأمر</span>
-                                        <span class="badge bg-light text-dark border me-1 mb-1 py-1 px-2">{المرحلة} = المرحلة الدراسية</span>
                                     </div>
                                 </div>
 
@@ -649,30 +701,102 @@
         border-width: 2px;
         background: #f0f0ff !important;
     }
+    .bg-primary-soft { background-color: rgba(58, 12, 163, 0.05) !important; }
+    .border-dashed { border-style: dashed !important; }
+    .italic { font-style: italic; }
+    .var-btn:hover {
+        background-color: var(--primary-color) !important;
+        color: white !important;
+        border-color: var(--primary-color) !important;
+    }
+    #preview-body span.text-primary {
+        background: rgba(58, 12, 163, 0.1);
+        padding: 0 4px;
+        border-radius: 4px;
+    }
 </style>
 
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const presets = @json(config('email_templates.presets', []));
+    const previewSubject = document.getElementById('preview-subject');
+    const previewBody = document.getElementById('preview-body');
+    const templateInputs = document.querySelectorAll('.template-input');
+    const varBtns = document.querySelectorAll('.var-btn');
+    const presetCards = document.querySelectorAll('.preset-card');
+    
+    const sampleData = {
+        '{اسم_الطالب}': 'أحمد محمد علي',
+        '{اسم_المركز}': 'أكاديمية التعليم',
+        '{رابط_الدخول}': 'https://taalimu.com/login',
+        '{كلمة_المرور}': '123456',
+        '{رقم_الهاتف}': '01012345678',
+        '{اسم_ولي_الأمر}': 'أستاذ محمد علي',
+        '{المرحلة}': 'الصف الأول الثانوي'
+    };
 
-    document.querySelectorAll('.preset-card').forEach(function(card) {
-        card.addEventListener('click', function() {
-            const key = this.dataset.preset;
-            const preset = presets[key];
-            if (!preset) return;
+    function updatePreview() {
+        const activeField = document.activeElement;
+        let isGuardian = activeField && activeField.id.includes('guardian');
+        
+        let subject = document.getElementById(isGuardian ? 'guardian_subject' : 'student_subject').value;
+        let body = document.getElementById(isGuardian ? 'guardian_body' : 'student_body').value;
 
-            // Fill fields
-            document.getElementById('student_subject').value = preset.student_subject || '';
-            document.getElementById('student_body').value = preset.student_body || '';
-            document.getElementById('guardian_subject').value = preset.guardian_subject || '';
-            document.getElementById('guardian_body').value = preset.guardian_body || '';
+        Object.keys(sampleData).forEach(key => {
+            const regex = new RegExp(key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+            subject = subject.replace(regex, `<span class="text-primary">${sampleData[key]}</span>`);
+            body = body.replace(regex, `<span class="text-primary">${sampleData[key]}</span>`);
+        });
 
-            // Visual feedback
-            document.querySelectorAll('.preset-card').forEach(c => c.classList.remove('active-preset'));
-            this.classList.add('active-preset');
+        previewSubject.innerHTML = subject || '<span class="text-muted italic">بدون عنوان...</span>';
+        previewBody.innerHTML = body || '<span class="text-muted italic">اكتب نص الرسالة لتظهر المعاينة هنا...</span>';
+    }
+
+    templateInputs.forEach(input => {
+        input.addEventListener('input', updatePreview);
+        input.addEventListener('focus', updatePreview);
+    });
+
+    varBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const targetId = this.dataset.target;
+            const variable = this.dataset.var;
+            const textarea = document.getElementById(targetId);
+            
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            
+            textarea.value = text.substring(0, start) + variable + text.substring(end);
+            textarea.focus();
+            textarea.selectionStart = textarea.selectionEnd = start + variable.length;
+            
+            updatePreview();
         });
     });
+
+    const presets = @json(config('email_templates.presets', []));
+    
+    presetCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const presetKey = this.dataset.preset;
+            const preset = presets[presetKey];
+            
+            if (preset) {
+                document.getElementById('student_subject').value = preset.student_subject;
+                document.getElementById('student_body').value = preset.student_body;
+                document.getElementById('guardian_subject').value = preset.guardian_subject;
+                document.getElementById('guardian_body').value = preset.guardian_body;
+                
+                presetCards.forEach(c => c.classList.remove('active-preset'));
+                this.classList.add('active-preset');
+                
+                updatePreview();
+            }
+        });
+    });
+
+    updatePreview();
 });
 </script>
 @endpush
