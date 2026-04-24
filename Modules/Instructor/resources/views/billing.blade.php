@@ -179,6 +179,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const resultCount = document.getElementById('resultCount');
     const tableContainer = document.getElementById('billingTableContainer');
 
+    // Auto-select filter from URL if present
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('status')) {
+        const urlStatus = urlParams.get('status');
+        if (filterStatus.querySelector(`option[value="${urlStatus}"]`)) {
+            filterStatus.value = urlStatus;
+        }
+    }
+
     function applyFilters() {
         const query = searchInput.value.trim().toLowerCase();
         const filter = filterStatus.value;
@@ -224,6 +233,9 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('modal_balance_hint').textContent = '{{ __('instructor::billing.current_balance') }}' + new Intl.NumberFormat().format(balance);
         });
     }
+
+    // Apply filters on initial load
+    applyFilters();
 });
 </script>
 @endsection

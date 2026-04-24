@@ -14,7 +14,15 @@
     
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto  navbar-list mb-2 mb-lg-0">
-        
+        <!-- Urgent Payments / Debts -->
+        <li class="nav-item me-2 d-flex align-items-center">
+          <a href="{{ route('instructor.billing') }}?status=unpaid" class="nav-link position-relative" title="المدفوعات العاجلة / المديونيات">
+             <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                 <i class="fas fa-file-invoice-dollar"></i>
+             </div>
+          </a>
+        </li>
+
         <!-- Language Switcher -->
         <li class="nav-item dropdown">
           <a href="#" class="nav-link" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false">
