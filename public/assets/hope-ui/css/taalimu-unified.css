@@ -488,11 +488,16 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Fix dropdown clipping in responsive tables */
 .table-responsive {
+    overflow: visible !important;
     min-height: 350px !important;
-    padding-bottom: 120px !important; /* Ensure enough space at the bottom for the last row's dropdown */
+}
+.table td .dropdown,
+.table td .btn-group {
+    position: static;
 }
 .table td .dropdown-menu {
     z-index: 1060 !important;
+    position: absolute !important;
 }
 .table thead th, .table thead td {
     background-color: transparent !important;
@@ -685,6 +690,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Nuclear Fix for Numbers and Text inside Cards - forcing visibility */
+/* Scoped to exclude dropdown elements to preserve their styling */
 .content-inner .card h2, 
 .content-inner .card .h2,
 .content-inner .card h1,
@@ -692,14 +698,51 @@ h1, h2, h3, h4, h5, h6 {
 .content-inner .card h4,
 .content-inner .card h5,
 .content-inner .card h6,
-.content-inner .card p,
-.content-inner .card span:not(.badge),
-.content-inner .card div:not(.badge) {
+.content-inner .card > .card-body > p,
+.content-inner .card > .card-body > span:not(.badge):not(.dropdown-item),
+.content-inner .card > .card-body > div:not(.dropdown-menu):not(.dropdown):not(.btn-group):not(.table-responsive) > span:not(.badge) {
     color: #000000 !important;
     text-shadow: none !important;
     opacity: 1 !important;
     visibility: visible !important;
     -webkit-text-fill-color: #000000 !important;
+}
+
+/* Restore dropdown item colors */
+.dropdown-menu,
+.dropdown-menu * {
+    -webkit-text-fill-color: unset !important;
+}
+.dropdown-item {
+    color: #475569 !important;
+    -webkit-text-fill-color: #475569 !important;
+}
+.dropdown-item:hover, .dropdown-item:focus {
+    color: #059669 !important;
+    -webkit-text-fill-color: #059669 !important;
+}
+.dropdown-item.text-danger {
+    color: #dc2626 !important;
+    -webkit-text-fill-color: #dc2626 !important;
+}
+.dropdown-item.text-warning {
+    color: #d97706 !important;
+    -webkit-text-fill-color: #d97706 !important;
+}
+.dropdown-item.text-success {
+    color: #059669 !important;
+    -webkit-text-fill-color: #059669 !important;
+}
+.dropdown-item.text-primary {
+    color: #10b981 !important;
+    -webkit-text-fill-color: #10b981 !important;
+}
+.dropdown-item.text-info {
+    color: #0284c7 !important;
+    -webkit-text-fill-color: #0284c7 !important;
+}
+.dropdown-item i {
+    -webkit-text-fill-color: inherit !important;
 }
 
 .content-inner .card h2, .content-inner .card .h2 {
@@ -715,16 +758,4 @@ h1, h2, h3, h4, h5, h6 {
     direction: rtl !important;
     text-align: right !important;
 }
- / *   N u c l e a r   f i x   f o r   n u m b e r s   i n s i d e   c a r d s   -   m a k i n g   t h e m   e x t r e m e l y   v i s i b l e   * / 
- . c o n t e n t - i n n e r   . c a r d   h 2 ,   
- . c o n t e n t - i n n e r   . c a r d   . h 2 ,   
- . c o n t e n t - i n n e r   . c a r d   h 1 ,   
- . c o n t e n t - i n n e r   . c a r d   . d i s p l a y - 4   { 
-         c o l o r :   # 0 0 0 0 0 0   ! i m p o r t a n t ; 
-         o p a c i t y :   1   ! i m p o r t a n t ; 
-         d i s p l a y :   b l o c k   ! i m p o r t a n t ; 
-         v i s i b i l i t y :   v i s i b l e   ! i m p o r t a n t ; 
-         f o n t - w e i g h t :   9 0 0   ! i m p o r t a n t ; 
-         t e x t - s h a d o w :   n o n e   ! i m p o r t a n t ; 
- }  
- 
+
