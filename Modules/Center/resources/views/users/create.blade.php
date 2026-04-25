@@ -80,7 +80,7 @@
                         @enderror
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-4" id="permissionsSection" style="display: none;">
                         <label class="form-label fw-bold mb-3"><i class="fas fa-shield-alt text-warning me-2"></i>تخصيص صلاحيات إضافية (اختياري)</label>
                         <div class="row g-3 p-3 bg-light rounded border">
                             @php
@@ -96,6 +96,7 @@
                                     'manage' => 'إدارة',
                                     'edit' => 'تعديل',
                                     'suspend' => 'إيقاف',
+                                    'publish' => 'نشر',
                                     'students' => 'الطلاب',
                                     'courses' => 'الدورات',
                                     'users' => 'المستخدمين',
@@ -107,6 +108,7 @@
                                     'attendance' => 'الحضور',
                                     'centers' => 'المراكز',
                                     'instructors' => 'المحاضرين',
+                                    'billing' => 'الفواتير والاشتراكات',
                                     'other' => 'أخرى',
                                 ];
                                 
@@ -158,12 +160,14 @@
     function showRoleDescription(selectElement) {
         const descBox = document.getElementById('roleDescription');
         const descText = document.getElementById('roleDescText');
+        const permissionsSection = document.getElementById('permissionsSection');
         const selectedOption = selectElement.options[selectElement.selectedIndex];
         const roleName = selectedOption.value;
         
         if (roleName) {
             descText.textContent = selectedOption.getAttribute('data-desc');
             descBox.style.display = 'block';
+            permissionsSection.style.display = 'block';
             
             // Check default permissions for this role
             const permissions = rolePermissions[roleName] || [];
@@ -175,6 +179,7 @@
             
         } else {
             descBox.style.display = 'none';
+            permissionsSection.style.display = 'none';
         }
     }
 
