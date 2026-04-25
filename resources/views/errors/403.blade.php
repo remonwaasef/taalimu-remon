@@ -1,195 +1,82 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تعذر الوصول - Taalimu</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+@php
+    $tenantData = $tenant ?? app('tenant') ?? null;
+    $layout = 'center::layouts.hope-master';
     
-    <style>
-        :root {
-            --primary-color: #0f8b65; /* Premium Emerald */
-            --secondary-color: #0b664a;
-            --accent-color: #1abc9c;
-            --text-main: #2b3445;
-            --text-muted: #7d879c;
-            --bg-light: #f8f9fa;
-        }
+    if (request()->is('campus*') || (auth()->check() && auth()->user()->role === 'student')) {
+        $layout = 'campus::layouts.master';
+    } elseif (request()->is('instructor*') || (auth()->check() && auth()->user()->role === 'instructor')) {
+        $layout = 'instructor::components.layouts.hope-master';
+    }
+    
+    $hasLayout = $tenantData !== null;
+@endphp
 
-        body {
-            font-family: 'Cairo', sans-serif;
-            background-color: var(--bg-light);
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-            overflow: hidden;
-            position: relative;
-        }
+@if($hasLayout)
+    @extends($layout)
 
-        /* Abstract Premium Background Shapes */
-        .bg-shape {
-            position: absolute;
-            z-index: 0;
-            opacity: 0.1;
-        }
-        
-        .shape-1 {
-            width: 400px;
-            height: 400px;
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            border-radius: 50%;
-            top: -100px;
-            right: -100px;
-            filter: blur(60px);
-        }
+    @section('title', 'تعذر الوصول')
+    @section('page-title', 'صلاحيات غير كافية')
 
-        .shape-2 {
-            width: 300px;
-            height: 300px;
-            background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
-            border-radius: 50%;
-            bottom: -50px;
-            left: -50px;
-            filter: blur(50px);
-        }
+    @section('content')
+    <div class="row justify-content-center align-items-center" style="min-height: 60vh;">
+        <div class="col-lg-6 col-md-8 text-center">
+            <div class="card border-0 shadow-sm rounded-4 text-center p-5 position-relative overflow-hidden">
+                
+                <!-- Decorative element -->
+                <div class="position-absolute top-0 end-0 p-3 opacity-10">
+                    <i class="fas fa-lock" style="font-size: 15rem; transform: rotate(15deg); margin-top: -50px; margin-right: -50px; color: #0f8b65;"></i>
+                </div>
 
-        .error-container {
-            position: relative;
-            z-index: 10;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 4rem 3rem;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.03);
-            max-width: 500px;
-            width: 90%;
-            border: 1px solid rgba(255,255,255,0.8);
-            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .icon-wrapper {
-            width: 100px;
-            height: 100px;
-            background: rgba(15, 139, 101, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 2rem;
-            color: var(--primary-color);
-            font-size: 3rem;
-            position: relative;
-            box-shadow: inset 0 0 0 2px rgba(15, 139, 101, 0.2);
-            animation: pulse 2s infinite;
-        }
-
-        .error-code {
-            font-size: 5rem;
-            font-weight: 800;
-            color: var(--text-main);
-            line-height: 1;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, var(--text-main), var(--text-muted));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .error-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 1rem;
-        }
-
-        .error-desc {
-            color: var(--text-muted);
-            font-size: 1rem;
-            margin-bottom: 2.5rem;
-            line-height: 1.6;
-        }
-
-        .btn-premium {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            box-shadow: 0 4px 15px rgba(15, 139, 101, 0.3);
-        }
-
-        .btn-premium:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(15, 139, 101, 0.4);
-            color: white;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(15, 139, 101, 0.4); }
-            70% { box-shadow: 0 0 0 20px rgba(15, 139, 101, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(15, 139, 101, 0); }
-        }
-
-        .system-branding {
-            position: absolute;
-            bottom: 2rem;
-            left: 0;
-            right: 0;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            z-index: 10;
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Background Decoration -->
-    <div class="bg-shape shape-1"></div>
-    <div class="bg-shape shape-2"></div>
-
-    <div class="error-container">
-        <div class="icon-wrapper">
-            <i class="fas fa-user-shield"></i>
+                <div class="position-relative z-index-1">
+                    <div class="mb-4">
+                        <div class="d-inline-flex p-4 rounded-circle mb-3 shadow-sm" style="background: rgba(15, 139, 101, 0.05); border: 1px solid rgba(15, 139, 101, 0.1);">
+                            <i class="fas fa-user-shield" style="font-size: 4rem; color: #0f8b65;"></i>
+                        </div>
+                    </div>
+                    <h1 class="display-1 fw-bold mb-0" style="color: #2b3445; letter-spacing: -2px;">403</h1>
+                    <h3 class="fw-bold mb-3" style="color: #0f8b65;">عفواً، لا تملك الصلاحية</h3>
+                    
+                    <p class="text-muted mb-4 mx-auto" style="max-width: 450px; font-size: 1.1rem; line-height: 1.6;">
+                        يبدو أنك تحاول الوصول إلى صفحة أو تنفيذ إجراء يتطلب صلاحيات أعلى في النظام.<br>
+                        يرجى التواصل مع الإدارة إذا كنت تعتقد أن هذا الإجراء يجب أن يكون متاحاً لك.
+                    </p>
+                    
+                    <div class="d-flex gap-3 justify-content-center mt-2">
+                        <a href="javascript:history.back()" class="btn btn-primary px-4 py-2.5 rounded-3 fw-bold shadow-sm" style="background: #0f8b65; border-color: #0f8b65;">
+                            <i class="fas fa-arrow-right me-2"></i> العودة للصفحة السابقة
+                        </a>
+                        <a href="/" class="btn btn-light px-4 py-2.5 rounded-3 fw-bold border">
+                            <i class="fas fa-home me-2"></i> لوحة التحكم
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <div class="error-code">403</div>
-        <h1 class="error-title">عفواً، لا تملك الصلاحية</h1>
-        
-        <p class="error-desc">
-            يبدو أنك تحاول الوصول إلى صفحة أو تنفيذ إجراء يتطلب صلاحيات أعلى. يرجى التواصل مع مدير النظام إذا كنت تعتقد أن هذا خطأ.
-        </p>
-
-        <a href="javascript:history.back()" class="btn-premium">
-            <i class="fas fa-arrow-right"></i>
-            العودة للصفحة السابقة
-        </a>
     </div>
-
-    <div class="system-branding">
-        Powered by <span style="color: var(--primary-color);">Taalimu</span> System
-    </div>
-
-</body>
-</html>
+    @endsection
+@else
+    <!DOCTYPE html>
+    <html lang="ar" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>تعذر الوصول - 403</title>
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+        <style>
+            body { font-family: 'Cairo', sans-serif; background-color: #f8f9fa; height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; }
+            .error-card { background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; max-width: 500px; width: 90%; }
+        </style>
+    </head>
+    <body>
+        <div class="error-card">
+            <i class="fas fa-user-shield mb-4" style="font-size: 4rem; color: #0f8b65;"></i>
+            <h1 class="display-3 fw-bold mb-2">403</h1>
+            <h4 class="fw-bold mb-3">عفواً، لا تملك الصلاحية</h4>
+            <p class="text-muted mb-4">أنت لا تملك الصلاحيات الكافية للوصول إلى هذه الصفحة.</p>
+            <a href="javascript:history.back()" class="btn btn-primary" style="background: #0f8b65; border-color: #0f8b65;"><i class="fas fa-arrow-right me-2"></i> العودة</a>
+        </div>
+    </body>
+    </html>
+@endif
