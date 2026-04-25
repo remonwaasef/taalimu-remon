@@ -484,15 +484,17 @@
             @php 
                 $canInstructors = ($tenant->getFeatureValue('max_instructors') != '0' && $tenant->getFeatureValue('max_instructors') !== false) && auth()->user()->can('view instructors');
                 $canCourses = ($tenant->getFeatureValue('max_courses') != '0' && $tenant->getFeatureValue('max_courses') !== false) && auth()->user()->can('view courses');
-                $canClassrooms = ($tenant->getFeatureValue('max_classrooms') != '0' && $tenant->getFeatureValue('max_classrooms') !== false) && auth()->user()->can('manage schedule');
-                $canSchedules = $tenant->getFeatureValue('daily_schedules') === true && auth()->user()->can('manage schedule');
+                $canClassrooms = ($tenant->getFeatureValue('max_classrooms') != '0' && $tenant->getFeatureValue('max_classrooms') !== false) && auth()->user()->can('view schedule');
+                $canSchedules = $tenant->getFeatureValue('daily_schedules') === true && auth()->user()->can('view schedule');
+                $canOnlineClasses = auth()->user()->can('view schedule');
 
                 $isSchoolMgmtActive = request()->routeIs('center.classrooms.*') || 
                                       request()->routeIs('center.instructors.*') || 
                                       request()->routeIs('center.courses.*') || 
+                                      request()->routeIs('center.online_classes.*') || 
                                       request()->routeIs('center.schedules.*');
                 
-                $showSchoolMgmt = ($canInstructors || $canCourses || $canClassrooms || $canSchedules) && ($tenant->type !== 'instructor');
+                $showSchoolMgmt = ($canInstructors || $canCourses || $canClassrooms || $canSchedules || $canOnlineClasses) && ($tenant->type !== 'instructor');
             @endphp
             
             @if($showSchoolMgmt)
@@ -520,6 +522,11 @@
                     @if($canSchedules)
                     <a href="{{ route('center.schedules.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.schedules.*') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.schedules') }}
+                    </a>
+                    @endif
+                    @if($canOnlineClasses)
+                    <a href="{{ route('center.online_classes.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.online_classes.*') ? 'active' : '' }}">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <span class="text-success fw-bold">الدروس المباشرة</span>
                     </a>
                     @endif
                 </div>
@@ -584,7 +591,7 @@
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.expenses') }}
                     </a>
                     @endcan
-                    @can('view reports')
+                    @canany(['view reports', 'view analytics'])
                     <a href="{{ route('center.analytics.finance') }}" class="sidebar-sub-link {{ request()->routeIs('center.analytics.finance') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.financial_analytics') }}
                     </a>
@@ -597,7 +604,7 @@
                     <a href="{{ route('center.analytics.discounts') }}" class="sidebar-sub-link {{ request()->routeIs('center.analytics.discounts') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.financial_discounts') }}
                     </a>
-                    @endcan
+                    @endcanany
                     @endif
 
                     @if($hasAdvancedReports)
@@ -609,29 +616,14 @@
             </div>
             @endif
 
-            {{-- ─── SUBSCRIPTION ─────────────────────────── --}}
-            <a href="{{ route('center.subscription.index', ['tenant' => $tenant->domain ?? 'center']) }}"
-               class="sidebar-nav-link mb-1 {{ request()->routeIs('center.subscription.*') ? 'active' : '' }}">
-                <span>
-                    <i class="fas fa-credit-card me-2 {{ request()->routeIs('center.subscription.*') ? 'text-warning' : 'opacity-75' }}"></i>
-                    {{ __('center::sidebar.subscription') }}
-                </span>
-                @php
-                    $subEndsAt = app('tenant')->subscriptions?->last()?->ends_at;
-                    $daysLeft  = $subEndsAt ? max(0, now()->diffInDays($subEndsAt, false)) : null;
-                @endphp
-                @if($daysLeft !== null && $daysLeft <= 7)
-                    <span class="badge bg-danger rounded-pill" style="font-size:0.65rem;">{{ $daysLeft }}d</span>
-                @endif
-            </a>
-
-            @canany(['manage users', 'manage settings'])
+            @canany(['manage users', 'manage settings', 'manage billing'])
             @php 
                 $isSettingsActive = request()->routeIs('center.assets.*') || 
                                     request()->routeIs('center.settings.*') || 
                                     request()->routeIs('center.users.*') || 
                                     request()->routeIs('center.roles.*') || 
-                                    request()->routeIs('center.tickets.*'); 
+                                    request()->routeIs('center.tickets.*') ||
+                                    request()->routeIs('center.subscription.*'); 
             @endphp
             <a href="#settingsCollapse" data-bs-toggle="collapse" class="sidebar-nav-link mb-1 {{ $isSettingsActive ? 'sidebar-section-active' : '' }}" role="button" aria-expanded="{{ $isSettingsActive ? 'true' : 'false' }}">
                 <span><i class="fas fa-cogs me-2 {{ $isSettingsActive ? 'text-secondary' : 'opacity-75' }}"></i> {{ __('center::sidebar.settings') }}</span>
@@ -639,6 +631,18 @@
             </a>
             <div class="collapse {{ $isSettingsActive ? 'show' : '' }}" id="settingsCollapse">
                 <div class="sidebar-submenu">
+                    @can('manage billing')
+                    <a href="{{ route('center.subscription.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.subscription.*') ? 'active' : '' }}">
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.subscription') }}
+                        @php
+                            $subEndsAt = app('tenant')->subscriptions?->last()?->ends_at;
+                            $daysLeft  = $subEndsAt ? max(0, now()->diffInDays($subEndsAt, false)) : null;
+                        @endphp
+                        @if($daysLeft !== null && $daysLeft <= 7)
+                            <span class="badge bg-danger rounded-pill ms-2" style="font-size:0.65rem;">{{ $daysLeft }}d</span>
+                        @endif
+                    </a>
+                    @endcan
                     @can('manage settings')
                     <a href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'general']) }}" class="sidebar-sub-link {{ request()->routeIs('center.settings.index') && (request('tab') == 'general' || !request('tab')) ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::settings.tabs.general') }} (والمطبعة)
@@ -667,14 +671,18 @@
                     </a>
                     @endcan
                     @if($tenant->getFeatureValue('advanced_roles'))
+                    @can('manage users')
                     <a href="{{ route('center.roles.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.roles.*') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.permissions') }}
                     </a>
+                    @endcan
                     @endif
                     @if($tenant->getFeatureValue('multi_branch'))
+                    @can('manage settings')
                     <a href="{{ route('center.branches.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.branches.*') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.branches') }}
                     </a>
+                    @endcan
                     @endif
                     <a href="{{ route('center.tickets.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.tickets.*') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.support') }}
