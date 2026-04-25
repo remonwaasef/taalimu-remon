@@ -389,9 +389,12 @@
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a class="dropdown-item rounded-3 text-primary" href="mailto:{{ $student->email }}?subject={{ urlencode('تقرير حالة الطالب: ' . $student->name) }}&body={{ rawurlencode($reportMsg) }}">
-                                                        <i class="fas fa-envelope me-2"></i> بريد إلكتروني
-                                                    </a>
+                                                    <button type="button" class="dropdown-item rounded-3 text-primary direct-email-btn" 
+                                                            data-id="{{ $student->id }}" 
+                                                            data-subject="تقرير حالة الطالب: {{ $student->name }}" 
+                                                            data-message="{{ $reportMsg }}">
+                                                        <i class="fas fa-envelope me-2"></i> بريد إلكتروني (إرسال مباشر)
+                                                    </button>
                                                 </li>
                                             </ul>
                                         </div>
@@ -508,8 +511,14 @@
                     </div>
                 </form>
             </div>
-        </div>
     </div>
+
+    {{-- Hidden Form for Direct Email --}}
+    <form id="directEmailForm" method="POST" style="display:none;">
+        @csrf
+        <input type="hidden" name="subject" id="directEmailSubject">
+        <textarea name="message" id="directEmailMessage"></textarea>
+    </form>
 @endpush
 
 @push('scripts')
@@ -673,6 +682,24 @@
                     alert('Processing [' + action + '] for IDs: ' + selectedIds.join(', '));
                 }
             };
+
+            // Direct Email Logic
+            document.querySelectorAll('.direct-email-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const studentId = this.dataset.id;
+                    const subject = this.dataset.subject;
+                    const message = this.dataset.message;
+                    
+                    const form = document.getElementById('directEmailForm');
+                    form.action = `/students/${studentId}/send-email`;
+                    document.getElementById('directEmailSubject').value = subject;
+                    document.getElementById('directEmailMessage').value = message;
+                    
+                    if (confirm('هل تريد إرسال هذا التقرير بالبريد الإلكتروني للطالب الآن؟')) {
+                        form.submit();
+                    }
+                });
+            });
 
             function filterStudents() {
                 const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
