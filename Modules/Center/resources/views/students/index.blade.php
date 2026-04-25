@@ -474,9 +474,13 @@
                     <div class="modal-body p-4">
                         <p class="small text-muted mb-4">اختر الكورس الذي ترغب في تسجيل الطالب <span class="fw-bold text-dark" id="enrollStudentName"></span> به.</p>
                         <div class="mb-3">
-                            <label class="form-label fw-bold small">الكورسات المتاحة</label>
-                            <select id="courseSelect" class="form-select rounded-pill" required>
-                                <option value="">اختر الكورس...</option>
+                            <label class="form-label fw-bold small">ابحث عن الكورس</label>
+                            <div class="input-group input-group-sm mb-2">
+                                <span class="input-group-text bg-white border-end-0 rounded-start-pill"><i class="fas fa-search text-muted"></i></span>
+                                <input type="text" id="courseSearch" class="form-control border-start-0 rounded-end-pill" placeholder="اكتب اسم الكورس للبحث...">
+                            </div>
+                            <select id="courseSelect" class="form-select rounded-pill" required size="5" style="height: auto;">
+                                <option value="" selected disabled>اختر الكورس...</option>
                                 @foreach($courses as $course)
                                     <option value="{{ $course->id }}">{{ $course->title }} ({{ number_format($course->price, 0) }} ج.م)</option>
                                 @endforeach
@@ -548,6 +552,8 @@
             const courseSelect = document.getElementById('courseSelect');
             const enrollForm = document.getElementById('enrollForm');
 
+            const courseSearch = document.getElementById('courseSearch');
+
             document.querySelectorAll('.quick-enroll-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     if (enrollModal) {
@@ -555,13 +561,18 @@
                         document.getElementById('enrollStudentId').value = this.dataset.id;
                         document.getElementById('enrollStudentName').textContent = this.dataset.name;
                         
+                        // Reset search
+                        if (courseSearch) courseSearch.value = "";
+                        
                         // Hide already enrolled courses
                         const options = courseSelect.querySelectorAll('option');
                         options.forEach(opt => {
                             if (opt.value && enrolledIds.includes(opt.value)) {
-                                opt.style.display = 'none';
+                                opt.classList.add('d-none');
+                                opt.disabled = true;
                             } else {
-                                opt.style.display = '';
+                                opt.classList.remove('d-none');
+                                opt.disabled = false;
                             }
                         });
                         courseSelect.value = ""; // Reset selection
@@ -570,6 +581,28 @@
                     }
                 });
             });
+
+            if (courseSearch) {
+                courseSearch.addEventListener('input', function() {
+                    const term = this.value.toLowerCase();
+                    const options = courseSelect.querySelectorAll('option');
+                    const enrolledIds = document.querySelector('.quick-enroll-btn[data-id="' + document.getElementById('enrollStudentId').value + '"]').dataset.enrolled.split(',');
+
+                    options.forEach(opt => {
+                        if (!opt.value) return; // Skip placeholder
+                        const isEnrolled = enrolledIds.includes(opt.value);
+                        const matchesSearch = opt.textContent.toLowerCase().includes(term);
+                        
+                        if (!isEnrolled && matchesSearch) {
+                            opt.classList.remove('d-none');
+                            opt.disabled = false;
+                        } else {
+                            opt.classList.add('d-none');
+                            opt.disabled = true;
+                        }
+                    });
+                });
+            }
 
             document.getElementById('submitEnrollBtn').addEventListener('click', function() {
                 const courseId = courseSelect.value;
