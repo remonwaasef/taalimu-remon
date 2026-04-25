@@ -572,6 +572,21 @@ h1, h2, h3, h4, h5, h6 {
     color: #ffffff !important;
     text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
+
+.content-inner .card h2, 
+.content-inner .card h1,
+.content-inner .card h3,
+.content-inner .card h4,
+.content-inner .card h5,
+.content-inner .card h6,
+.content-inner .card p,
+.content-inner .card span,
+.content-inner .card div,
+.content-inner .card .h2 {
+    text-shadow: none !important;
+    color: inherit !important;
+}
+
 .content-inner > .d-flex:first-child .text-muted,
 .content-inner > .d-flex:first-child p,
 .content-inner > .mb-4:first-child .breadcrumb-item a,
