@@ -16,7 +16,7 @@ class StudentPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $this->hasAnyRole($user, ['center_admin', 'instructor', 'secretary']);
+        return $this->hasAnyRole($user, ['center_admin', 'instructor', 'secretary']) || $user->hasPermissionTo('view students');
     }
 
     /**
@@ -24,10 +24,12 @@ class StudentPolicy
      */
     public function view(User $user, Student $student): bool
     {
-        // Allow if tenant matches AND user has appropriate role
+        // Allow if tenant matches AND user has appropriate role or permission
         // Also allow the student themselves (if they had a user account)
         return $student->tenant_id === $user->tenant_id && 
-               ($this->hasAnyRole($user, ['center_admin', 'instructor', 'secretary']) || $user->id === $student->user_id);
+               ($this->hasAnyRole($user, ['center_admin', 'instructor', 'secretary']) || 
+                $user->hasPermissionTo('view students') || 
+                $user->id === $student->user_id);
     }
 
     /**
@@ -35,7 +37,7 @@ class StudentPolicy
      */
     public function create(User $user): bool
     {
-        return $this->hasAnyRole($user, ['center_admin', 'secretary']);
+        return $this->hasAnyRole($user, ['center_admin', 'secretary']) || $user->hasPermissionTo('create students');
     }
 
     /**
@@ -44,7 +46,7 @@ class StudentPolicy
     public function update(User $user, Student $student): bool
     {
         return $student->tenant_id === $user->tenant_id && 
-               $this->hasAnyRole($user, ['center_admin', 'secretary']);
+               ($this->hasAnyRole($user, ['center_admin', 'secretary']) || $user->hasPermissionTo('update students'));
     }
 
     /**
@@ -53,6 +55,6 @@ class StudentPolicy
     public function delete(User $user, Student $student): bool
     {
         return $student->tenant_id === $user->tenant_id && 
-               $this->hasAnyRole($user, 'center_admin');
+               ($this->hasAnyRole($user, 'center_admin') || $user->hasPermissionTo('delete students'));
     }
 }
