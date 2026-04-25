@@ -25,7 +25,7 @@
 
         <!-- Language Switcher -->
         <li class="nav-item dropdown">
-          <a href="#" class="nav-link" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <a href="#" class="nav-link" id="langDropdown" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
              <i class="fas fa-language me-2 text-primary"></i>
              {{ strtoupper(app()->getLocale()) }}
           </a>
@@ -37,7 +37,7 @@
         </li>
 
         <li class="nav-item dropdown">
-          <a class="nav-link py-0 d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link py-0 d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
               <div class="avatar avatar-50 avatar-rounded bg-primary d-flex align-items-center justify-content-center text-white fw-bold">
                   {{ substr(auth()->user()->name ?? 'I', 0, 1) }}
               </div>

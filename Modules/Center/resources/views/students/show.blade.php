@@ -288,7 +288,7 @@
                                         
                                         <!-- WhatsApp Dropdown (Student) -->
                                         <div class="dropdown">
-                                            <button class="btn btn-sm btn-light text-success rounded-circle shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="{{ __('center::students.wa_student') }}">
+                                            <button class="btn btn-sm btn-light text-success rounded-circle shadow-sm" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false" title="{{ __('center::students.wa_student') }}">
                                                 <i class="fab fa-whatsapp"></i>
                                             </button>
                                             <ul class="dropdown-menu shadow-sm border-0 rounded-4">
@@ -332,7 +332,7 @@
                                         
                                         <!-- WhatsApp Dropdown (Guardian) -->
                                         <div class="dropdown">
-                                            <button class="btn btn-sm btn-light text-success rounded-circle shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="{{ __('center::students.wa_guardian') }}">
+                                            <button class="btn btn-sm btn-light text-success rounded-circle shadow-sm" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false" title="{{ __('center::students.wa_guardian') }}">
                                                 <i class="fab fa-whatsapp"></i>
                                             </button>
                                             <ul class="dropdown-menu shadow-sm border-0 rounded-4">

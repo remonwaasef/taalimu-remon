@@ -160,7 +160,7 @@
                             </td>
                             <td>
                                 <div class="dropdown">
-                                    <button class="btn btn-light btn-sm rounded-circle" data-bs-toggle="dropdown">
+                                    <button class="btn btn-light btn-sm rounded-circle" data-bs-toggle="dropdown" data-bs-boundary="viewport">
                                         <i class="fas fa-ellipsis-v text-muted"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end border-0 shadow rounded-4 p-2">

@@ -71,7 +71,7 @@
                                     </td>
                                     <td class="text-end pe-4">
                                         <div class="dropdown">
-                                            <button class="btn btn-sm btn-light rounded-circle" type="button" data-bs-toggle="dropdown">
+                                            <button class="btn btn-sm btn-light rounded-circle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport">
                                                 ⋮
                                             </button>
                                             <ul class="dropdown-menu border-0 shadow">
