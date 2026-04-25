@@ -212,7 +212,7 @@
                             </i>
                         </a>
                         <ul class="sub-nav collapse {{ $isSettingsActive ? 'show' : '' }}" id="settingsCollapse" data-bs-parent="#sidebar-menu">
-                            {{-- Moved Subscription here --}}
+                            {{-- 1. Subscription --}}
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('center.subscription.*') ? 'active' : '' }}" href="{{ route('center.subscription.index', ['tenant' => $tenant->domain ?? 'center']) }}">
                                     <i class="sidenav-mini-icon">S</i><span class="item-name">{{ __('center::sidebar.subscription') }}</span>
@@ -226,22 +226,11 @@
                                 </a>
                             </li>
                             
+                            {{-- 2. General Settings --}}
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.settings.index') && (request('tab') == 'general' || !request('tab')) ? 'active' : '' }}" href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'general']) }}"><i class="sidenav-mini-icon">G</i><span class="item-name">{{ __('center::settings.tabs.general') }} (والمطبعة)</span></a></li>
-                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.settings.index') && request('tab') == 'academic' ? 'active' : '' }}" href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'academic']) }}"><i class="sidenav-mini-icon">A</i><span class="item-name">{{ __('center::settings.tabs.academic') }}</span></a></li>
-                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.settings.index') && request('tab') == 'financial' ? 'active' : '' }}" href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'financial']) }}"><i class="sidenav-mini-icon">F</i><span class="item-name">{{ __('center::settings.tabs.financial') }}</span></a></li>
-                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.settings.index') && request('tab') == 'appearance' ? 'active' : '' }}" href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'appearance']) }}"><i class="sidenav-mini-icon">A</i><span class="item-name">{{ __('center::settings.tabs.appearance') }}</span></a></li>
-                            @if($tenant->getFeatureValue('whatsapp_alerts'))
-                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.settings.index') && request('tab') == 'whatsapp' ? 'active' : '' }}" href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'whatsapp']) }}"><i class="sidenav-mini-icon">W</i><span class="item-name">{{ __('center::settings.tabs.whatsapp') }}</span></a></li>
-                            @endif
-                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.settings.index') && request('tab') == 'privacy' ? 'active' : '' }}" href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'privacy']) }}"><i class="sidenav-mini-icon">P</i><span class="item-name">{{ __('center::settings.tabs.privacy') }}</span></a></li>
+                            
+                            {{-- 3. Users --}}
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.users.*') ? 'active' : '' }}" href="{{ route('center.users.index', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="sidenav-mini-icon">U</i><span class="item-name">{{ __('center::sidebar.users') }}</span></a></li>
-                            @if($tenant->getFeatureValue('advanced_roles'))
-                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.roles.*') ? 'active' : '' }}" href="{{ route('center.roles.index', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="sidenav-mini-icon">P</i><span class="item-name">{{ __('center::sidebar.permissions') }}</span></a></li>
-                            @endif
-                            @if($tenant->getFeatureValue('multi_branch'))
-                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.branches.*') ? 'active' : '' }}" href="{{ route('center.branches.index', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="sidenav-mini-icon">B</i><span class="item-name">{{ __('center::sidebar.branches') }}</span></a></li>
-                            @endif
-                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.tickets.*') ? 'active' : '' }}" href="{{ route('center.tickets.index', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="sidenav-mini-icon">S</i><span class="item-name">{{ __('center::sidebar.support') }}</span></a></li>
                         </ul>
                     </li>
                 @endcanany
