@@ -3,9 +3,14 @@
 @section('page-title', __('center::messages.blade_0027'))
 
 @section('page-actions')
-    <a href="{{ route('center.analytics.index') }}" class="btn btn-glass shadow-sm">
-        <i class="fas fa-arrow-right me-2"></i>{{ __('center::analytics.back_to_finance') }}
-    </a>
+    <div class="d-flex gap-2">
+        <a href="{{ route('center.analytics.profit_loss') }}" class="btn btn-primary shadow-sm">
+            <i class="fas fa-file-invoice-dollar me-2"></i>{{ __('center::analytics.profit_loss_report') }}
+        </a>
+        <a href="{{ route('center.analytics.index') }}" class="btn btn-glass shadow-sm">
+            <i class="fas fa-arrow-right me-2"></i>{{ __('center::analytics.back_to_finance') }}
+        </a>
+    </div>
 @endsection
 
 @section('content')

@@ -223,6 +223,75 @@ class AnalyticsController extends Controller
         ));
     }
 
+    public function profitLoss(Request $request)
+    {
+        $this->authorize('viewAny', Sale::class);
+        
+        $year = $request->get('year', now()->year);
+        
+        // 1. Revenue by Month
+        $monthlyRevenue = Sale::select(
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('SUM(paid_amount) as total')
+        )->whereYear('created_at', $year)
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get()
+        ->pluck('total', 'month');
+
+        // 2. Expenses by Month & Category
+        $monthlyExpenses = Expense::select(
+            DB::raw('MONTH(date) as month'),
+            DB::raw('SUM(amount) as total')
+        )->whereYear('date', $year)
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get()
+        ->pluck('total', 'month');
+
+        $expenseCategories = Expense::select('category', DB::raw('SUM(amount) as total'))
+            ->whereYear('date', $year)
+            ->groupBy('category')
+            ->get();
+
+        // 3. Commissions by Month
+        $monthlyCommissions = \App\Models\Commission::select(
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('SUM(amount) as total')
+        )->whereYear('created_at', $year)
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get()
+        ->pluck('total', 'month');
+
+        // Prepare data for 12 months
+        $reportData = [];
+        for ($m = 1; $m <= 12; $m++) {
+            $revenue = $monthlyRevenue[$m] ?? 0;
+            $opExpenses = $monthlyExpenses[$m] ?? 0;
+            $commissions = $monthlyCommissions[$m] ?? 0;
+            $totalExpenses = $opExpenses + $commissions;
+            $profit = $revenue - $totalExpenses;
+            
+            $reportData[$m] = [
+                'month_name' => \Carbon\Carbon::create()->month($m)->translatedFormat('F'),
+                'revenue' => (float)$revenue,
+                'op_expenses' => (float)$opExpenses,
+                'commissions' => (float)$commissions,
+                'total_expenses' => (float)$totalExpenses,
+                'profit' => (float)$profit,
+            ];
+        }
+
+        $totalYearlyRevenue = $monthlyRevenue->sum();
+        $totalYearlyExpenses = $monthlyExpenses->sum() + $monthlyCommissions->sum();
+        $totalYearlyProfit = $totalYearlyRevenue - $totalYearlyExpenses;
+
+        return view('center::analytics.profit_loss', compact(
+            'reportData', 'year', 'totalYearlyRevenue', 'totalYearlyExpenses', 'totalYearlyProfit', 'expenseCategories'
+        ));
+    }
+
     public function commissions()
     {
         $this->authorize('viewAny', Sale::class);

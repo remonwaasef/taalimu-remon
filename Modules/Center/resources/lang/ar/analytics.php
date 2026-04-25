@@ -68,4 +68,13 @@ return [
     'late' => 'متأخر',
     'absent' => 'غائب',
     'new_students' => 'الطلاب الجدد',
+    'profit_loss_report' => 'تقرير الربح والخسارة',
+    'yearly_profit_loss' => 'ملخص الربح والخسارة السنوي',
+    'monthly_breakdown' => 'التفصيل الشهري',
+    'operating_expenses' => 'المصروفات التشغيلية',
+    'instructor_commissions' => 'عمولات المحاضرين',
+    'net_result' => 'النتيجة الصافية',
+    'month' => 'الشهر',
+    'profit' => 'الربح',
+    'loss' => 'الخسارة',
 ];

@@ -334,6 +334,7 @@ $tenantRoutes = function () {
             
             Route::middleware(['feature:financial_reports', 'throttle:60,1'])->group(function() {
                 Route::get('analytics/finance', [AnalyticsController::class, 'finance'])->name('center.analytics.finance');
+                Route::get('analytics/finance/profit-loss', [AnalyticsController::class, 'profitLoss'])->name('center.analytics.profit_loss');
                 Route::get('analytics/finance/commissions', [AnalyticsController::class, 'commissions'])->name('center.analytics.commissions');
                 Route::get('analytics/finance/discounts', [AnalyticsController::class, 'discounts'])->name('center.analytics.discounts');
                 Route::get('analytics/finance/taxes', [AnalyticsController::class, 'taxes'])->name('center.analytics.taxes');
