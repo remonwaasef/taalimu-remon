@@ -55,7 +55,11 @@ class UserController extends Controller
             
         $permissions = \Spatie\Permission\Models\Permission::all();
         
-        return view('center::users.create', compact('roles', 'permissions'));
+        $rolePermissions = $roles->mapWithKeys(function ($role) {
+            return [$role->name => $role->permissions->pluck('name')->toArray()];
+        });
+        
+        return view('center::users.create', compact('roles', 'permissions', 'rolePermissions'));
     }
 
     /**
@@ -119,8 +123,12 @@ class UserController extends Controller
             });
 
         $permissions = \Spatie\Permission\Models\Permission::all();
+        
+        $rolePermissions = $roles->mapWithKeys(function ($role) {
+            return [$role->name => $role->permissions->pluck('name')->toArray()];
+        });
 
-        return view('center::users.edit', compact('user', 'roles', 'permissions'));
+        return view('center::users.edit', compact('user', 'roles', 'permissions', 'rolePermissions'));
     }
 
     /**
