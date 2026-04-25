@@ -113,15 +113,17 @@
 
         .qr-code-badge {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 85px;
-            height: 85px;
+            top: 105px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90px;
+            height: 90px;
             background: white;
             padding: 5px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             z-index: 10;
+            border: 2px solid white;
         }
 
         .qr-code-badge img {
@@ -171,12 +173,12 @@
             </div>
             <div class="extra-small opacity-75">بطاقة تعريف الطالب الرقمية</div>
             
-            <div style="position: absolute; top: 15px; right: 15px; width: 85px; height: 85px; background: white; padding: 5px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); z-index: 10;">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(url('/login?student_id='.$student->id)) }}" alt="QR Code" style="width: 100%; height: 100%; display: block;">
+            <div class="qr-code-badge">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(url('/login?student_id='.$student->id)) }}" alt="QR Code">
             </div>
         </div>
 
-        <div class="student-photo-wrapper">
+        <div class="student-photo-wrapper" style="margin-top: 15px;">
             @if($student->profile_photo)
                 <img src="{{ asset('storage/'.$student->profile_photo) }}" alt="{{ $student->name }}" class="student-photo">
             @else
