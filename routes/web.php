@@ -154,7 +154,7 @@ Route::get('/fix-storage', function () {
             storage_path('framework/cache/data'),
             storage_path('framework/sessions'),
             storage_path('logs'),
-            bootstrap_path('cache')
+            base_path('bootstrap/cache')
         ];
         
         $messages = [];
