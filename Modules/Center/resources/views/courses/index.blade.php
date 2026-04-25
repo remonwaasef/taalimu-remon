@@ -61,7 +61,7 @@
                                 <td>
                                     @if($course->schedules->count() > 0)
                                         <div class="{{ ($loop->remaining < 2 && $courses->count() > 2) ? 'dropup' : 'dropdown' }}">
-                                            <button class="btn btn-light btn-sm rounded-pill border shadow-sm dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <button class="btn btn-light btn-sm rounded-pill border shadow-sm dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
                                                 <i class="far fa-calendar-alt text-primary"></i>
                                                 <span class="fw-bold">{{ $course->schedules->count() }} {{ __('center::schedules.schedules_count') }}</span>
                                             </button>
@@ -125,7 +125,7 @@
                                             <i class="fas fa-user-plus me-1"></i> {{ __('center::courses.enroll_student') }}
                                         </button>
                                         <div class="{{ ($loop->remaining < 2 && $courses->count() > 2) ? 'dropup' : 'dropdown' }}">
-                                            <button class="btn btn-sm btn-light rounded-circle" type="button" data-bs-toggle="dropdown">
+                                            <button class="btn btn-sm btn-light rounded-circle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport">
                                                 ⋮
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
@@ -277,8 +277,8 @@
         <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
         <style>
             .ts-control { border-radius: 0.75rem !important; padding: 0.85rem 1rem !important; border-width: 2px !important; background-color: #f8f9fa !important; }
-            .ts-dropdown { border-radius: 0.75rem !important; box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important; padding: 0.5rem; }
-            .modal-content.rounded-5 { border-radius: 1.5rem !important; overflow: hidden; }
+            .ts-dropdown { border-radius: 0.75rem !important; box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important; padding: 0.5rem; z-index: 2000 !important; }
+            .modal-content.rounded-5 { border-radius: 1.5rem !important; }
         </style>
     @endpush
 
@@ -293,6 +293,10 @@
                     plugins: ['dropdown_input'],
                     sortField: { field: "text", direction: "asc" },
                     maxOptions: 50,
+                    dropdownParent: 'body',
+                    @if(app()->isLocale('ar'))
+                    direction: 'rtl',
+                    @endif
                     render: {
                         no_results: function(data, escape) {
                             return '<div class="no-results p-3 text-muted text-center">{{ __('center::messages.blade_0352') }}</div>';

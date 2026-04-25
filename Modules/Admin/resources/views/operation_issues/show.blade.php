@@ -33,7 +33,7 @@
         <!-- Status Actions -->
         <div class="col-md-4 text-end">
             <div class="dropdown d-inline-block">
-                <button class="btn btn-{{ $issue->status == 'resolved' ? 'success' : 'secondary' }} dropdown-toggle btn-lg shadow-sm" type="button" id="statusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn btn-{{ $issue->status == 'resolved' ? 'success' : 'secondary' }} dropdown-toggle btn-lg shadow-sm" type="button" id="statusDropdown" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
                     <i class="fas fa-tasks me-2"></i>
                     {{ __('admin.operation_issues.statuses.' . $issue->status) }}
                 </button>

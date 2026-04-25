@@ -72,7 +72,7 @@
                                 <td class="text-muted">{{ $classroom->created_at->format('Y-m-d') }}</td>
                                 <td>
                                     <div class="{{ ($loop->remaining < 2 && $classrooms->count() > 2) ? 'dropup' : 'dropdown' }}">
-                                        <button class="btn btn-sm btn-light rounded-circle" type="button" data-bs-toggle="dropdown">
+                                        <button class="btn btn-sm btn-light rounded-circle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport">
                                             ⋮
                                         </button>
                                         <ul class="dropdown-menu border-0 shadow">

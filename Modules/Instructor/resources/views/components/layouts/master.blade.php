@@ -263,7 +263,7 @@
             <div class="d-flex align-items-center gap-3">
                 <!-- Language Switcher -->
                 <div class="dropdown">
-                    <button class="btn btn-white bg-white shadow-sm rounded-pill px-3 dropdown-toggle border-0" type="button" data-bs-toggle="dropdown">
+                    <button class="btn btn-white bg-white shadow-sm rounded-pill px-3 dropdown-toggle border-0" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport">
                         <i class="fas fa-language me-2 text-primary"></i>
                         {{ strtoupper(app()->getLocale()) }}
                     </button>
@@ -275,7 +275,7 @@
                 </div>
 
                 <div class="dropdown">
-                    <button class="btn btn-white bg-white shadow-sm rounded-pill px-4 dropdown-toggle border-0" type="button" data-bs-toggle="dropdown">
+                    <button class="btn btn-white bg-white shadow-sm rounded-pill px-4 dropdown-toggle border-0" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport">
                         <i class="fas fa-user-circle me-2 text-primary"></i>
                         {{ auth()->user()->name ?? __('instructor::sidebar.instructor') }}
                     </button>
