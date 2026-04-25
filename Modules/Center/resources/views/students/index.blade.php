@@ -425,9 +425,11 @@
             </div>
         </div>
     </div>
+@endsection
 
+@push('modals')
     {{-- Quick Payment Modal --}}
-    <div class="modal fade" id="quickPayModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="quickPayModal" tabindex="-1" aria-labelledby="quickPayModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content border-0 rounded-4 shadow">
                 <form action="{{ route('center.sales.mark-paid') }}" method="POST">
@@ -457,7 +459,7 @@
     </div>
 
     {{-- Quick Enroll Modal --}}
-    <div class="modal fade" id="quickEnrollModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="quickEnrollModal" tabindex="-1" aria-labelledby="quickEnrollModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 rounded-4 shadow">
                 <form id="enrollForm" method="POST">
@@ -489,93 +491,92 @@
             </div>
         </div>
     </div>
+@endpush
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Stage filter buttons
-        const stageBtns = document.querySelectorAll('.stage-btn');
-        const subGradeContainers = document.querySelectorAll('.sub-grades-container');
-        const searchInput = document.getElementById('search-input');
-        const finFilters = document.querySelectorAll('.financial-filter');
-        let currentStageGrades = null;
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const stageBtns = document.querySelectorAll('.stage-btn');
+            const subGradeContainers = document.querySelectorAll('.sub-grades-container');
+            const searchInput = document.getElementById('search-input');
+            const finFilters = document.querySelectorAll('.financial-filter');
+            let currentStageGrades = null;
 
-        stageBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                stageBtns.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-
-                subGradeContainers.forEach(c => c.style.display = 'none');
-                
-                const stage = this.getAttribute('data-stage');
-                if (stage === 'all') {
-                    currentStageGrades = null;
-                } else {
-                    const gradesAttr = this.getAttribute('data-grades');
-                    currentStageGrades = gradesAttr ? gradesAttr.split(',') : [];
-                    const subGradeContainer = document.getElementById(stage + '-grades');
-                    if (subGradeContainer) {
-                        subGradeContainer.style.display = 'block';
+            stageBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    stageBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    subGradeContainers.forEach(c => c.style.display = 'none');
+                    
+                    const stage = this.getAttribute('data-stage');
+                    if (stage === 'all') {
+                        currentStageGrades = null;
+                    } else {
+                        const gradesAttr = this.getAttribute('data-grades');
+                        currentStageGrades = gradesAttr ? gradesAttr.split(',') : [];
+                        const subGradeContainer = document.getElementById(stage + '-grades');
+                        if (subGradeContainer) {
+                            subGradeContainer.style.display = 'block';
+                        }
                     }
-                }
-                filterStudents();
+                    filterStudents();
+                });
             });
-        });
 
-        finFilters.forEach(f => f.addEventListener('change', filterStudents));
+            finFilters.forEach(f => f.addEventListener('change', filterStudents));
 
-        // Quick Payment Logic
-        const payModalEl = document.getElementById('quickPayModal');
-        const payModal = payModalEl ? new bootstrap.Modal(payModalEl) : null;
-        document.querySelectorAll('.quick-pay-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                if (payModal) {
-                    document.getElementById('payStudentId').value = this.dataset.id;
-                    document.getElementById('payStudentName').textContent = this.dataset.name;
-                    document.getElementById('payAmountInput').value = this.dataset.balance;
-                    document.getElementById('payBalanceHint').textContent = 'المستحق الحالي: ' + this.dataset.balance + ' ج.م';
-                    payModal.show();
-                }
+            // Quick Payment Logic
+            const payModalEl = document.getElementById('quickPayModal');
+            const payModal = payModalEl ? new bootstrap.Modal(payModalEl) : null;
+            document.querySelectorAll('.quick-pay-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (payModal) {
+                        document.getElementById('payStudentId').value = this.dataset.id;
+                        document.getElementById('payStudentName').textContent = this.dataset.name;
+                        document.getElementById('payAmountInput').value = this.dataset.balance;
+                        document.getElementById('payBalanceHint').textContent = 'المستحق الحالي: ' + this.dataset.balance + ' ج.م';
+                        payModal.show();
+                    }
+                });
             });
-        });
 
-        // Quick Enroll Logic
-        const enrollModalEl = document.getElementById('quickEnrollModal');
-        const enrollModal = enrollModalEl ? new bootstrap.Modal(enrollModalEl) : null;
-        const courseSelect = document.getElementById('courseSelect');
-        const enrollForm = document.getElementById('enrollForm');
+            // Quick Enroll Logic
+            const enrollModalEl = document.getElementById('quickEnrollModal');
+            const enrollModal = enrollModalEl ? new bootstrap.Modal(enrollModalEl) : null;
+            const courseSelect = document.getElementById('courseSelect');
+            const enrollForm = document.getElementById('enrollForm');
 
-        document.querySelectorAll('.quick-enroll-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                if (enrollModal) {
-                    document.getElementById('enrollStudentId').value = this.dataset.id;
-                    document.getElementById('enrollStudentName').textContent = this.dataset.name;
-                    enrollModal.show();
-                }
+            document.querySelectorAll('.quick-enroll-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (enrollModal) {
+                        document.getElementById('enrollStudentId').value = this.dataset.id;
+                        document.getElementById('enrollStudentName').textContent = this.dataset.name;
+                        enrollModal.show();
+                    }
+                });
             });
-        });
 
-        document.getElementById('submitEnrollBtn').addEventListener('click', function() {
-            const courseId = courseSelect.value;
-            if (!courseId) return alert('برجاء اختيار كورس أولاً');
-            enrollForm.action = `/center/courses/${courseId}/enroll`;
-            enrollForm.submit();
-        });
-
-        // Grade filter buttons
-        document.querySelectorAll('.grade-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentStageGrades = [this.getAttribute('data-grade')];
-                filterStudents();
+            document.getElementById('submitEnrollBtn').addEventListener('click', function() {
+                const courseId = courseSelect.value;
+                if (!courseId) return alert('برجاء اختيار كورس أولاً');
+                enrollForm.action = `/center/courses/${courseId}/enroll`;
+                enrollForm.submit();
             });
-        });
 
-        if (searchInput) {
-            searchInput.addEventListener('input', filterStudents);
-        }
+            document.querySelectorAll('.grade-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentStageGrades = [this.getAttribute('data-grade')];
+                    filterStudents();
+                });
+            });
 
-        // Bulk Action logic
+            if (searchInput) {
+                searchInput.addEventListener('input', filterStudents);
+            }
+
+            // Bulk Action logic
             const selectAll = document.getElementById('select-all');
             const studentCheckboxes = document.querySelectorAll('.student-checkbox');
             const bulkToolbar = document.getElementById('bulk-actions-toolbar');
@@ -608,18 +609,15 @@
             window.bulkAction = function(action) {
                 const selectedIds = Array.from(studentCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
                 if (selectedIds.length === 0) return;
-
                 if (confirm('{{ __('center::students.bulk_confirm', ['count' => "'+selectedIds.length+'"]) }}'.replace("'+selectedIds.length+'", selectedIds.length))) {
                     alert('Processing [' + action + '] for IDs: ' + selectedIds.join(', '));
                 }
             };
 
-            // Filter function
             function filterStudents() {
                 const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
                 const activeFinFilterEl = document.querySelector('.financial-filter:checked');
                 const activeFinFilter = activeFinFilterEl ? activeFinFilterEl.value : 'all';
-
                 const studentRows = document.querySelectorAll('.student-row');
                 const tbody = document.querySelector('tbody');
                 let emptyRow = document.getElementById('empty-state-row');
@@ -641,16 +639,13 @@
                 }
                 
                 let visibleCount = 0;
-                
                 studentRows.forEach(row => {
                     const rowGrade = row.getAttribute('data-grade');
                     const finStatus = row.getAttribute('data-fin-status');
                     const text = row.textContent.toLowerCase();
-                    
                     const gradeMatch = !currentStageGrades || currentStageGrades.includes(rowGrade);
                     const searchMatch = !searchTerm || text.includes(searchTerm);
                     const finMatch = activeFinFilter === 'all' || finStatus === activeFinFilter;
-                    
                     if (gradeMatch && searchMatch && finMatch) {
                         row.style.display = '';
                         visibleCount++;
@@ -669,7 +664,9 @@
             }
         });
     </script>
-    
+@endpush
+
+@push('styles')
     <style>
         .custom-table thead th {
             font-size: 0.8rem;
@@ -678,52 +675,23 @@
             color: #6c757d;
             padding-bottom: 15px;
         }
-
-        .student-row {
-            transition: all 0.2s ease;
-        }
-
-        .student-row:hover {
-            background-color: #f8fbff;
-        }
-
-        .student-row td {
-            height: 70px;
-        }
-
-        .btn-icon {
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-        }
-
-        .x-small {
-            font-size: 0.75rem;
-        }
-
+        .student-row { transition: all 0.2s ease; }
+        .student-row:hover { background-color: #f8fbff; }
+        .student-row td { height: 70px; }
+        .btn-icon { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; padding: 0; }
+        .x-small { font-size: 0.75rem; }
         .stage-btn.active {
             background-color: var(--bs-primary);
             color: white;
             border-color: var(--bs-primary);
             box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2);
         }
+        .grade-btn.active { background-color: var(--bs-secondary); color: white; border-color: var(--bs-secondary); }
+        .sub-grades-container { padding: 10px 0; border-top: 1px dashed #dee2e6; }
+        .animate__animated { --animate-duration: 0.5s; }
         
-        .grade-btn.active {
-            background-color: var(--bs-secondary);
-            color: white;
-            border-color: var(--bs-secondary);
-        }
-        
-        .sub-grades-container {
-            padding: 10px 0;
-            border-top: 1px dashed #dee2e6;
-        }
-
-        .animate__animated {
-            --animate-duration: 0.5s;
-        }
+        /* Modal Fix for z-index issues */
+        .modal { z-index: 1060 !important; }
+        .modal-backdrop { z-index: 1050 !important; }
     </style>
-@endsection
+@endpush
