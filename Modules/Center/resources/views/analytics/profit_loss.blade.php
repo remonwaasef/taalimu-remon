@@ -21,16 +21,16 @@
 
     <!-- Yearly Summary Cards -->
     <div class="row g-4 mb-5 animate__animated animate__fadeIn">
-        <div class="col-md-4">
-            <div class="card border-0 shadow-elite rounded-5 overflow-hidden bg-white">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-elite rounded-5 overflow-hidden bg-white h-100">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center gap-3 mb-3">
-                        <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
+                        <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
                             <i class="fas fa-hand-holding-usd fa-lg"></i>
                         </div>
                         <div>
-                            <p class="text-muted small fw-bold mb-0 text-uppercase">{{ __('center::analytics.revenue') }} ({{ $year }})</p>
-                            <h2 class="fw-bold text-dark mb-0">{{ format_price($totalYearlyRevenue) }}</h2>
+                            <p class="text-muted small fw-bold mb-0 text-uppercase">{{ __('center::analytics.revenue') }}</p>
+                            <h3 class="fw-bold text-dark mb-0">{{ format_price($totalYearlyRevenue) }}</h3>
                         </div>
                     </div>
                 </div>
@@ -38,16 +38,33 @@
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card border-0 shadow-elite rounded-5 overflow-hidden bg-white">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-elite rounded-5 overflow-hidden bg-white h-100">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center gap-3 mb-3">
-                        <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
+                        <div class="bg-info bg-opacity-10 text-info rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                            <i class="fas fa-chalkboard-teacher fa-lg"></i>
+                        </div>
+                        <div>
+                            <p class="text-muted small fw-bold mb-0 text-uppercase">{{ __('center::analytics.instructor_commissions') }}</p>
+                            <h3 class="fw-bold text-dark mb-0">{{ format_price($totalYearlyExpenses - $expenseCategories->sum('total')) }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-info opacity-50" style="height: 4px;"></div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-elite rounded-5 overflow-hidden bg-white h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
                             <i class="fas fa-file-invoice-dollar fa-lg"></i>
                         </div>
                         <div>
-                            <p class="text-muted small fw-bold mb-0 text-uppercase">{{ __('center::analytics.total_expenses') }} ({{ $year }})</p>
-                            <h2 class="fw-bold text-dark mb-0">{{ format_price($totalYearlyExpenses) }}</h2>
+                            <p class="text-muted small fw-bold mb-0 text-uppercase">{{ __('center::analytics.total_expenses') }}</p>
+                            <h3 class="fw-bold text-dark mb-0">{{ format_price($totalYearlyExpenses) }}</h3>
                         </div>
                     </div>
                 </div>
@@ -55,16 +72,16 @@
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card border-0 shadow-elite rounded-5 overflow-hidden bg-white">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-elite rounded-5 overflow-hidden bg-white h-100">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center gap-3 mb-3">
-                        <div class="bg-{{ $totalYearlyProfit >= 0 ? 'primary' : 'warning' }} bg-opacity-10 text-{{ $totalYearlyProfit >= 0 ? 'primary' : 'warning' }} rounded-circle d-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
+                        <div class="bg-{{ $totalYearlyProfit >= 0 ? 'primary' : 'warning' }} bg-opacity-10 text-{{ $totalYearlyProfit >= 0 ? 'primary' : 'warning' }} rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
                             <i class="fas fa-chart-line fa-lg"></i>
                         </div>
                         <div>
-                            <p class="text-muted small fw-bold mb-0 text-uppercase">{{ __('center::analytics.net_result') }} ({{ $year }})</p>
-                            <h2 class="fw-bold text-dark mb-0">{{ format_price($totalYearlyProfit) }}</h2>
+                            <p class="text-muted small fw-bold mb-0 text-uppercase">{{ __('center::analytics.net_result') }}</p>
+                            <h3 class="fw-bold text-dark mb-0">{{ format_price($totalYearlyProfit) }}</h3>
                         </div>
                     </div>
                 </div>
@@ -87,7 +104,8 @@
                                 <tr>
                                     <th class="border-0 px-4 py-3">{{ __('center::analytics.month') }}</th>
                                     <th class="border-0">{{ __('center::analytics.revenue') }}</th>
-                                    <th class="border-0">{{ __('center::analytics.total_expenses') }}</th>
+                                    <th class="border-0">{{ __('center::analytics.operating_expenses') }}</th>
+                                    <th class="border-0">{{ __('center::analytics.instructor_commissions') }}</th>
                                     <th class="border-0 px-4 text-end">{{ __('center::analytics.net_result') }}</th>
                                 </tr>
                             </thead>
@@ -96,7 +114,8 @@
                                     <tr>
                                         <td class="px-4 fw-bold text-dark">{{ $data['month_name'] }}</td>
                                         <td class="text-success fw-bold">{{ format_price($data['revenue']) }}</td>
-                                        <td class="text-danger small">{{ format_price($data['total_expenses']) }}</td>
+                                        <td class="text-muted small">{{ format_price($data['op_expenses']) }}</td>
+                                        <td class="text-muted small">{{ format_price($data['commissions']) }}</td>
                                         <td class="px-4 text-end">
                                             <span class="badge {{ $data['profit'] >= 0 ? 'bg-success' : 'bg-danger' }} bg-opacity-10 text-{{ $data['profit'] >= 0 ? 'success' : 'danger' }} rounded-pill px-3 py-2 fw-bold">
                                                 {{ format_price($data['profit']) }}
