@@ -406,7 +406,7 @@
                                         <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2 rounded-4">
                                             <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('center.students.show', $student->id) }}"><i class="fas fa-eye me-2 text-primary opacity-75"></i> {{ __('center::students.view_details') }}</a></li>
                                             <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('center.students.edit', $student->id) }}"><i class="fas fa-edit me-2 text-info opacity-75"></i> {{ __('center::students.edit') }}</a></li>
-                                            <li><a class="dropdown-item rounded-3 mb-1" href="javascript:window.print()"><i class="fas fa-print me-2 text-secondary opacity-75"></i> طباعة الكارنيه</a></li>
+                                            <li><a class="dropdown-item rounded-3 mb-1" target="_blank" href="{{ route('center.students.id-card', $student->id) }}"><i class="fas fa-print me-2 text-secondary opacity-75"></i> طباعة الكارنيه</a></li>
                                             <li><hr class="dropdown-divider opacity-10"></li>
                                             <li>
                                                 <form action="{{ route('center.students.destroy', $student->id) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('center::students.confirm_delete_student') }}');">

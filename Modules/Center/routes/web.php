@@ -152,6 +152,7 @@ $tenantRoutes = function () {
                  ->name('center.students.reset-password');
             Route::post('students/{student}/remind-debt', [StudentController::class, 'remindDebt'])->name('center.students.remind-debt');
             Route::post('students/{student}/send-email', [StudentController::class, 'sendEmail'])->name('center.students.send-email');
+            Route::get('students/{student}/id-card', [StudentController::class, 'idCard'])->name('center.students.id-card');
             Route::get('students/{student}/statement', [StudentController::class, 'statement'])->name('center.students.statement');
         });
 

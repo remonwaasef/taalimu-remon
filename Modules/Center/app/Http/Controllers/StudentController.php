@@ -411,5 +411,9 @@ class StudentController extends Controller
             \Log::error("Failed to send email to student {$student->id}: " . $e->getMessage());
             return redirect()->back()->with('error', 'حدث خطأ أثناء الإرسال: ' . $e->getMessage());
         }
+    public function idCard($id)
+    {
+        $student = Student::where('tenant_id', $this->tenant->id)->findOrFail($id);
+        return view('center::students.id_card', compact('student'));
     }
 }
