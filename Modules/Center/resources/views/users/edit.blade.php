@@ -98,6 +98,8 @@
                                     'update' => 'تعديل',
                                     'delete' => 'حذف',
                                     'manage' => 'إدارة',
+                                    'edit' => 'تعديل',
+                                    'suspend' => 'إيقاف',
                                     'students' => 'الطلاب',
                                     'courses' => 'الدورات',
                                     'users' => 'المستخدمين',
@@ -107,6 +109,9 @@
                                     'expenses' => 'المصروفات',
                                     'reports' => 'التقارير',
                                     'attendance' => 'الحضور',
+                                    'centers' => 'المراكز',
+                                    'instructors' => 'المحاضرين',
+                                    'other' => 'أخرى',
                                 ];
                                 
                                 function translatePerm($name, $translations) {
@@ -128,7 +133,7 @@
                                         <div class="card-body p-2">
                                             @foreach($perms as $permission)
                                                 <div class="form-check form-switch mb-1">
-                                                    <input class="form-check-input" type="checkbox" name="permissions[]" value="{{ $permission->name }}" id="perm_{{ $permission->id }}" {{ in_array($permission->name, old('permissions', $userPermissions)) ? 'checked' : '' }}>
+                                                    <input class="form-check-input permission-checkbox" type="checkbox" name="permissions[]" value="{{ $permission->name }}" id="perm_{{ $permission->id }}" {{ in_array($permission->name, old('permissions', $userPermissions)) ? 'checked' : '' }}>
                                                     <label class="form-check-label small text-dark" for="perm_{{ $permission->id }}">
                                                         {{ translatePerm($permission->name, $translations) }}
                                                     </label>
@@ -139,7 +144,7 @@
                                 </div>
                             @endforeach
                         </div>
-                        <div class="form-text mt-2 text-muted small"><i class="fas fa-info-circle me-1"></i> عند اختيار دور، سيحصل المستخدم على صلاحيات الدور الأساسية تلقائياً. يمكنك تحديد هذه المربعات لمنحه صلاحيات إضافية غير موجودة في دوره. إزالة علامة الصح لن تلغي صلاحية يمتلكها بناءً على دوره الأساسي.</div>
+                        <div class="form-text mt-2 text-muted small"><i class="fas fa-info-circle me-1"></i> يتم تحديد الصلاحيات الأساسية تلقائياً بناءً على الدور المختار. يمكنك تخصيص الصلاحيات بزيادتها أو إنقاصها باستخدام هذه المربعات.</div>
                     </div>
 
                     <div class="d-flex gap-2 justify-content-end mt-4">
@@ -154,14 +159,28 @@
 
 @push('scripts')
 <script>
-    function showRoleDescription(selectElement) {
+    const rolePermissions = @json($rolePermissions ?? []);
+
+    function showRoleDescription(selectElement, isInitialLoad = false) {
         const descBox = document.getElementById('roleDescription');
         const descText = document.getElementById('roleDescText');
         const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const roleName = selectedOption.value;
         
-        if (selectedOption && selectedOption.value) {
+        if (roleName) {
             descText.textContent = selectedOption.getAttribute('data-desc');
             descBox.style.display = 'block';
+            
+            // Only update checkboxes automatically if the user manually changes the role
+            if (!isInitialLoad) {
+                const permissions = rolePermissions[roleName] || [];
+                const checkboxes = document.querySelectorAll('.permission-checkbox');
+                
+                checkboxes.forEach(cb => {
+                    cb.checked = permissions.includes(cb.value);
+                });
+            }
+            
         } else {
             descBox.style.display = 'none';
         }
@@ -171,7 +190,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         const roleSelect = document.getElementById('role');
         if (roleSelect) {
-            showRoleDescription(roleSelect);
+            showRoleDescription(roleSelect, true);
         }
     });
 </script>
