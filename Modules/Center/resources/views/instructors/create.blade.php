@@ -55,12 +55,7 @@
 
                         <!-- Identifiers & Finance -->
                         <div class="row g-3 mb-4">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('center::instructors.national_id') }}</label>
-                                <input type="text" name="national_id" value="{{ old('national_id') }}" class="form-control bg-white border" placeholder="{{ __('center::messages.blade_0429') }}">
-                                @error('national_id')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
-                            </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <label class="form-label fw-bold">{{ __('center::instructors.commission_rate') }} <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <select name="commission_type" class="form-select bg-white border" style="max-width: 140px; border-radius: 0 10px 10px 0 !important;" required>
@@ -95,11 +90,7 @@
                             @error('bio')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                         </div>
 
-                        <div class="mb-5">
-                            <label class="form-label fw-bold">{{ __('center::messages.blade_0425') }}</label>
-                            <input type="file" name="image" class="form-control bg-white border" accept="image/*">
-                            @error('image')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
-                        </div>
+
 
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm py-3 fw-bold">{{ __('center::messages.blade_0426') }}</button>

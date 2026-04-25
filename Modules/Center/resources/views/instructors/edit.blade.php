@@ -54,21 +54,17 @@
 
                         <!-- Identifiers & Finance -->
                         <div class="row g-3 mb-4">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('center::instructors.national_id') }}</label>
-                                <input type="text" name="national_id" value="{{ old('national_id', $instructor->national_id) }}" class="form-control bg-white border" placeholder="{{ __('center::messages.blade_0441') }}">
-                            </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <label class="form-label fw-bold">{{ __('center::instructors.commission_rate') }} <span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <select name="commission_type" class="form-select bg-white border" style="max-width: 140px; border-radius: 0 10px 10px 0 !important;" required>
-                                        <option value="percentage" {{ old('commission_type', $instructor->commission_type) == 'percentage' ? 'selected' : '' }}>{{ __('center::instructors.commission_percentage') }}</option>
-                                        <option value="fixed" {{ old('commission_type', $instructor->commission_type) == 'fixed' ? 'selected' : '' }}>{{ __('center::instructors.commission_fixed') }}</option>
-                                    </select>
-                                    <input type="number" step="0.01" name="commission_rate" value="{{ old('commission_rate', $instructor->commission_rate) }}" class="form-control bg-white border" placeholder="0.00" style="border-radius: 10px 0 0 10px !important;" required>
-                                </div>
-                                @error('commission_rate')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
-                                @error('commission_type')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                 <div class="input-group">
+                                     <select name="commission_type" class="form-select bg-white border" style="max-width: 140px; border-radius: 0 10px 10px 0 !important;" required>
+                                         <option value="percentage" {{ old('commission_type', $instructor->commission_type) == 'percentage' ? 'selected' : '' }}>{{ __('center::instructors.commission_percentage') }}</option>
+                                         <option value="fixed" {{ old('commission_type', $instructor->commission_type) == 'fixed' ? 'selected' : '' }}>{{ __('center::instructors.commission_fixed') }}</option>
+                                     </select>
+                                     <input type="number" step="0.01" name="commission_rate" value="{{ old('commission_rate', $instructor->commission_rate) }}" class="form-control bg-white border" placeholder="0.00" style="border-radius: 10px 0 0 10px !important;" required>
+                                 </div>
+                                 @error('commission_rate')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                 @error('commission_type')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                         </div>
 
@@ -91,19 +87,7 @@
                             <textarea name="bio" class="form-control bg-white border" rows="3">{{ old('bio', $instructor->bio) }}</textarea>
                         </div>
 
-                        <div class="mb-5">
-                            <label class="form-label fw-bold">{{ __('center::messages.blade_0435') }}</label>
-                            @if($instructor->image)
-                                <div class="mb-3">
-                                    <div class="position-relative d-inline-block">
-                                        <img src="{{ Storage::url($instructor->image) }}" class="rounded-4 shadow-sm" style="width: 120px; height: 120px; object-fit: cover;">
-                                        <div class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary border border-light">{{ __('center::messages.blade_0436') }}</div>
-                                    </div>
-                                </div>
-                            @endif
-                            <input type="file" name="image" class="form-control bg-white border" accept="image/*">
-                            <small class="text-muted">{{ __('center::messages.blade_0437') }}</small>
-                        </div>
+
 
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm py-3 fw-bold">{{ __('center::messages.blade_0438') }}</button>
