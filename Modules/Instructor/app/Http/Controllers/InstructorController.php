@@ -463,49 +463,58 @@ class InstructorController extends Controller
         }
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'required|string|digits:11',
-            'parent_phone' => 'required|string|digits:11',
+            'name' => 'required_without:student_id|string|max:255',
+            'phone' => 'required_without:student_id|string|digits:11',
+            'parent_phone' => 'required_without:student_id|string|digits:11',
             'parent_email' => 'nullable|email|max:255',
             'email' => 'nullable|email|max:255',
             'course_ids' => 'required|array|min:1',
             'course_ids.*' => 'exists:courses,id',
+            'student_id' => 'nullable|exists:students,id',
         ]);
 
         try {
             \DB::beginTransaction();
 
-            // 1. Check if user already exists by phone
-            $user = \App\Models\User::where('phone', $validated['phone'])->first();
+            if ($request->filled('student_id')) {
+                $student = Student::findOrFail($request->student_id);
+                $this->authorizeInstructor($student);
+                $user = $student->user;
+            } else {
+                // 1. Check if user already exists by phone
+                $user = \App\Models\User::where('phone', $validated['phone'])->first();
 
-            if (!$user) {
-                $email = $validated['email'] ?: ($validated['phone'] . '@' . ($this->tenant->domain ?? 'taalimu') . '.com');
-                
-                // Safety check for generated email collisions
-                if (\App\Models\User::where('email', $email)->exists() && !$validated['email']) {
-                    $email = $validated['phone'] . '_' . \Illuminate\Support\Str::random(4) . '@' . ($this->tenant->domain ?? 'taalimu') . '.com';
+                if (!$user) {
+                    $email = $validated['email'] ?: ($validated['phone'] . '@' . ($this->tenant->domain ?? 'taalimu') . '.com');
+                    
+                    // Safety check for generated email collisions
+                    if (\App\Models\User::where('email', $email)->exists() && !$validated['email']) {
+                        $email = $validated['phone'] . '_' . \Illuminate\Support\Str::random(4) . '@' . ($this->tenant->domain ?? 'taalimu') . '.com';
+                    }
+
+                    $user = \App\Models\User::create([
+                        'tenant_id' => $instructor->tenant_id,
+                        'name' => $validated['name'],
+                        'email' => $email,
+                        'phone' => $validated['phone'],
+                        'password' => \Illuminate\Support\Facades\Hash::make($validated['phone']),
+                        'role' => 'student',
+                        'qr_identifier' => \Illuminate\Support\Str::random(12),
+                    ]);
+                    $user->assignRole('student');
+
+                    $student = Student::create([
+                        'tenant_id' => $instructor->tenant_id,
+                        'user_id' => $user->id,
+                        'name' => $validated['name'],
+                        'phone' => $validated['phone'],
+                        'parent_phone' => $validated['parent_phone'],
+                        'parent_email' => $validated['parent_email'],
+                        'status' => 'active',
+                    ]);
+                } else {
+                    $student = $user->student;
                 }
-
-                $user = \App\Models\User::create([
-                    'tenant_id' => $instructor->tenant_id,
-                    'name' => $validated['name'],
-                    'email' => $email,
-                    'phone' => $validated['phone'],
-                    'password' => \Illuminate\Support\Facades\Hash::make($validated['phone']),
-                    'role' => 'student',
-                    'qr_identifier' => \Illuminate\Support\Str::random(12),
-                ]);
-                $user->assignRole('student');
-
-                Student::create([
-                    'tenant_id' => $instructor->tenant_id,
-                    'user_id' => $user->id,
-                    'name' => $validated['name'],
-                    'phone' => $validated['phone'],
-                    'parent_phone' => $validated['parent_phone'],
-                    'parent_email' => $validated['parent_email'],
-                    'status' => 'active',
-                ]);
             }
 
             // 2. Enroll in courses via FinanceService to ensure sales & commissions are recorded
@@ -517,7 +526,6 @@ class InstructorController extends Controller
                 }
 
                 if (!empty($items)) {
-                    $student = Student::where('user_id', $user->id)->first();
                     app(\App\Services\FinanceService::class)->createSale([
                         'student_id' => $student->id,
                         'items' => $items,

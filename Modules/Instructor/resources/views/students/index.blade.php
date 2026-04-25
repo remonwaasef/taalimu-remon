@@ -97,14 +97,14 @@
     {{-- Search & Group Filter Bar --}}
     <div class="card border-0 shadow-sm rounded-4 mb-3">
         <div class="card-body p-3">
-            <div class="row g-2 align-items-center">
-                <div class="col-md-5">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-4">
                     <div class="input-group">
                         <span class="input-group-text bg-white border-end-0 rounded-start-pill"><i class="fas fa-search text-muted"></i></span>
                         <input type="text" id="studentSearchInput" class="form-control border-start-0 rounded-end-pill" placeholder="{{ __('instructor::students.search_placeholder') }}">
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <select id="groupFilter" class="form-select rounded-pill">
                         <option value="all">{{ __('instructor::students.all_groups') }}</option>
                         @php
@@ -122,7 +122,19 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-3 text-end">
+                <div class="col-md-3">
+                    <div class="btn-group w-100 p-1 bg-light rounded-pill" role="group">
+                        <input type="radio" class="btn-check financial-filter" name="finFilter" id="finAll" value="all" checked>
+                        <label class="btn btn-sm btn-outline-primary border-0 rounded-pill px-3" for="finAll">الكل</label>
+                        
+                        <input type="radio" class="btn-check financial-filter" name="finFilter" id="finDebt" value="debt">
+                        <label class="btn btn-sm btn-outline-danger border-0 rounded-pill px-3" for="finDebt">مديون</label>
+                        
+                        <input type="radio" class="btn-check financial-filter" name="finFilter" id="finPaid" value="paid">
+                        <label class="btn btn-sm btn-outline-success border-0 rounded-pill px-3" for="finPaid">مسدد</label>
+                    </div>
+                </div>
+                <div class="col-md-2 text-end">
                     <span id="studentResultCount" class="badge rounded-pill px-3 py-2" style="background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);"></span>
                 </div>
             </div>
@@ -153,8 +165,14 @@
                         @forelse($students as $student)
                         @php
                             $courseIds = $student->enrollments->pluck('course_id')->filter()->toArray();
+                            
+                            // Pre-calculate status for filtering
+                            $tDue = $student->enrollments->sum(fn($e) => $e->course->price ?? 0);
+                            $tPaid = $student->sales->sum('paid_amount');
+                            $bal = $tDue - $tPaid;
+                            $finStatus = $bal <= 0 ? 'paid' : 'debt';
                         @endphp
-                        <tr class="student-row" data-name="{{ $student->name }}" data-phone="{{ $student->phone }}" data-groups="{{ json_encode($courseIds) }}">
+                        <tr class="student-row" data-name="{{ $student->name }}" data-phone="{{ $student->phone }}" data-groups="{{ json_encode($courseIds) }}" data-fin-status="{{ $finStatus }}">
                             <td class="px-4">
                                 <div class="form-check">
                                     <input class="form-check-input student-checkbox" type="checkbox" value="{{ $student->id }}">
@@ -170,8 +188,14 @@
                                             <a href="{{ route('instructor.students.show', $student->id) }}" class="text-decoration-none text-dark" style="color: var(--primary-color) !important;">
                                                 {{ $student->name }}
                                             </a>
+                                            @if($attendanceRate < 40 && $totalSessions > 0)
+                                                <span class="ms-1 text-danger animate__animated animate__flash animate__infinite" title="غياب متكرر!"><i class="fas fa-exclamation-circle"></i></span>
+                                            @endif
                                         </div>
-                                        <div class="text-muted small"><i class="fas fa-mobile-alt me-1"></i> {{ $student->phone }}</div>
+                                        <div class="text-muted small">
+                                            <i class="fas fa-mobile-alt me-1"></i> {{ $student->phone }}
+                                            <a href="tel:{{ $student->phone }}" class="ms-1 text-primary"><i class="fas fa-phone-flip small"></i></a>
+                                        </div>
                                     </div>
                                 </div>
                             </td>
@@ -251,6 +275,23 @@
                                     <a href="https://api.whatsapp.com/send?phone={{ $phoneForWa }}" target="_blank" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-success shadow-sm" title="{{ __('instructor::students.whatsapp_parent') }}">
                                         <i class="fab fa-whatsapp fa-lg"></i>
                                     </a>
+
+                                    <button type="button" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-primary shadow-sm quick-pay-btn" 
+                                            data-id="{{ $student->id }}" data-name="{{ $student->name }}" data-balance="{{ $balance }}" title="تسجيل دفع سريع">
+                                        <i class="fas fa-dollar-sign fa-lg"></i>
+                                    </button>
+
+                                    <button type="button" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-info shadow-sm quick-enroll-btn" 
+                                            data-id="{{ $student->id }}" data-name="{{ $student->name }}" title="إضافة لمجموعة">
+                                        <i class="fas fa-plus-circle fa-lg"></i>
+                                    </button>
+
+                                    @php
+                                        $reportMsg = "تقرير الطالب: {$student->name}\nحالة الحضور: {$attendanceRate}%\nالمبلغ المتبقي: " . number_format($balance, 0) . " ج.م\nشكراً لمتابعتكم.";
+                                    @endphp
+                                    <a href="https://api.whatsapp.com/send?phone={{ $phoneForWa }}&text={{ urlencode($reportMsg) }}" target="_blank" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-secondary shadow-sm" title="مشاركة تقرير سريع">
+                                        <i class="fas fa-share-nodes fa-lg"></i>
+                                    </a>
                                     
                                     {{-- Management Dropdown --}}
                                     <div class="dropdown d-inline-block">
@@ -262,6 +303,11 @@
                                                 <button type="button" class="dropdown-item py-2 show-qr-btn" data-name="{{ $student->name }}" data-qr="{{ $qrUrl }}" data-portal="{{ $portalUrl }}">
                                                     <i class="fas fa-qrcode me-2 text-primary"></i> {{ __('instructor::students.qr_and_portal') }}
                                                 </button>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:window.print()" class="dropdown-item py-2">
+                                                    <i class="fas fa-print me-2 text-secondary"></i> طباعة الكارنيه
+                                                </a>
                                             </li>
                                             <li>
                                                 <button type="button" class="dropdown-item py-2 transfer-student-btn" data-id="{{ $student->id }}" data-name="{{ $student->name }}" data-groups="{{ json_encode($student->enrollments->pluck('course_id')) }}">
@@ -430,6 +476,70 @@
     </div>
 </div>
 
+{{-- Quick Payment Modal --}}
+<div class="modal fade" id="quickPayModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <form action="{{ route('instructor.students.mark-paid') }}" method="POST">
+                @csrf
+                <input type="hidden" name="student_id" id="payStudentId">
+                <div class="modal-body p-4 text-center">
+                    <div class="rounded-circle bg-success bg-opacity-10 text-success p-3 mb-3 d-inline-block">
+                        <i class="fas fa-money-bill-wave fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold mb-1" id="payStudentName"></h5>
+                    <p class="text-muted small mb-4">تسجيل دفعة نقدية سريعة</p>
+                    
+                    <div class="mb-3 text-start">
+                        <label class="form-label fw-bold small text-muted">المبلغ المدفوع</label>
+                        <div class="input-group">
+                            <input type="number" name="amount" id="payAmountInput" class="form-control rounded-start-pill" required>
+                            <span class="input-group-text rounded-end-pill">ج.م</span>
+                        </div>
+                        <div id="payBalanceHint" class="x-small text-danger mt-1"></div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 rounded-pill py-2 fw-bold">تأكيد الدفع</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- Quick Enroll Modal --}}
+<div class="modal fade" id="quickEnrollModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <form action="{{ route('instructor.students.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="student_id" id="enrollStudentId">
+                <input type="hidden" name="is_quick_enroll" value="1">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="fw-bold"><i class="fas fa-plus-circle me-2 text-info"></i>إلحاق بمجموعة إضافية</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="small text-muted mb-4">اختر المجموعة التي ترغب في إضافة الطالب <span class="fw-bold text-dark" id="enrollStudentName"></span> إليها.</p>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small">المجموعة المستهدفة</label>
+                        <select name="course_ids[]" class="form-select rounded-pill" required>
+                            @foreach($uniqueCourses as $id => $title)
+                                <option value="{{ $id }}">{{ $title }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="alert alert-soft-info x-small border-0 rounded-3">
+                        سيتم إنشاء فاتورة جديدة للطالب بهذا الكورس تلقائياً.
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="submit" class="btn btn-info text-white w-100 rounded-pill py-2 fw-bold">إتمام الإلحاق</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 {{-- Notes Modal --}}
 <div class="modal fade" id="notesModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -458,6 +568,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('studentSearchInput');
     const groupFilter = document.getElementById('groupFilter');
+    const finFilters = document.querySelectorAll('.financial-filter');
     const rows = document.querySelectorAll('.student-row');
     const noResults = document.getElementById('noStudentsResults');
     const resultCount = document.getElementById('studentResultCount');
@@ -525,8 +636,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             if (selectedPhones.length > 0) {
-                // WhatsApp bulk is limited by URL length, so we usually open one by one or use a tool.
-                // For now, we'll open the first one and alert if multiple.
                 const first = selectedPhones[0];
                 window.open(`https://api.whatsapp.com/send?phone=${first}`, '_blank');
                 if (selectedPhones.length > 1) {
@@ -539,17 +648,21 @@ document.addEventListener('DOMContentLoaded', function() {
     function applyStudentFilters() {
         const query = searchInput.value.trim().toLowerCase();
         const filterGroupId = groupFilter.value;
+        const activeFinFilterEl = document.querySelector('.financial-filter:checked');
+        const activeFinFilter = activeFinFilterEl ? activeFinFilterEl.value : 'all';
         let visibleCount = 0;
 
         rows.forEach(row => {
             const name = row.dataset.name.toLowerCase();
             const phone = row.dataset.phone.toLowerCase();
             const groups = JSON.parse(row.dataset.groups);
+            const finStatus = row.dataset.finStatus;
 
             let matchSearch = !query || name.includes(query) || phone.includes(query);
             let matchGroup = filterGroupId === 'all' || groups.includes(parseInt(filterGroupId));
+            let matchFin = activeFinFilter === 'all' || finStatus === activeFinFilter;
 
-            if (matchSearch && matchGroup) {
+            if (matchSearch && matchGroup && matchFin) {
                 row.style.display = '';
                 visibleCount++;
             } else {
@@ -566,6 +679,34 @@ document.addEventListener('DOMContentLoaded', function() {
             noResults.classList.toggle('d-none', visibleCount > 0 || rows.length === 0);
         }
     }
+
+    // Quick Payment Logic
+    const payModalEl = document.getElementById('quickPayModal');
+    const payModal = payModalEl ? new bootstrap.Modal(payModalEl) : null;
+    document.querySelectorAll('.quick-pay-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (payModal) {
+                document.getElementById('payStudentId').value = this.dataset.id;
+                document.getElementById('payStudentName').textContent = this.dataset.name;
+                document.getElementById('payAmountInput').value = this.dataset.balance;
+                document.getElementById('payBalanceHint').textContent = 'المستحق الحالي: ' + this.dataset.balance + ' ج.م';
+                payModal.show();
+            }
+        });
+    });
+
+    // Quick Enroll Logic
+    const enrollModalEl = document.getElementById('quickEnrollModal');
+    const enrollModal = enrollModalEl ? new bootstrap.Modal(enrollModalEl) : null;
+    document.querySelectorAll('.quick-enroll-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (enrollModal) {
+                document.getElementById('enrollStudentId').value = this.dataset.id;
+                document.getElementById('enrollStudentName').textContent = this.dataset.name;
+                enrollModal.show();
+            }
+        });
+    });
 
     // QR & Portal Modal Logic
     const qrModalEl = document.getElementById('qrModal');
@@ -637,6 +778,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (searchInput) searchInput.addEventListener('input', applyStudentFilters);
     if (groupFilter) groupFilter.addEventListener('change', applyStudentFilters);
+    finFilters.forEach(f => f.addEventListener('change', applyStudentFilters));
 
     // Initial count
     applyStudentFilters();
