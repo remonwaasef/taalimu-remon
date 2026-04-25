@@ -137,5 +137,8 @@
     <script src="{{ asset('assets/hope-ui/js/hope-ui.js') }}"></script>
     
     @stack('scripts')
+    
+    <!-- Beta Bug Report Widget -->
+    @include('center::partials.bug-report-widget')
 </body>
 </html>

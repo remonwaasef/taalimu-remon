@@ -83,6 +83,10 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
     Route::middleware(['auth', 'role:super_admin'])->group(function () {
         Route::get('/admin/consent-report', [App\Http\Controllers\ConsentReportController::class, 'index'])->name('consent.report');
         Route::get('/admin/consent-export', [App\Http\Controllers\ConsentReportController::class, 'export'])->name('consent.export');
+        
+        // Bug Reports Admin
+        Route::get('/admin/bug-reports', [App\Http\Controllers\AdminBugReportController::class, 'index'])->name('admin.bug_reports.index');
+        Route::put('/admin/bug-reports/{bugReport}/status', [App\Http\Controllers\AdminBugReportController::class, 'updateStatus'])->name('admin.bug_reports.status');
     });
     
     // API endpoint for saving cookie consent

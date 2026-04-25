@@ -48,8 +48,22 @@ class RedirectIfAuthenticated
                 }
                 
                 // Logic for Main Domain
-                if (Auth::user()->role === 'super_admin') {
+                $user = Auth::user();
+                if ($user->role === 'super_admin') {
                     return redirect()->route('admin.dashboard');
+                }
+
+                if ($user->tenant_id) {
+                    $tenant = \App\Models\Tenant::find($user->tenant_id);
+                    if ($tenant) {
+                        if ($user->role === 'student') {
+                            return redirect()->away(tenant_url('campus', $tenant));
+                        }
+                        if ($user->role === 'instructor' || $tenant->type === 'instructor') {
+                            return redirect()->away(tenant_url('instructor', $tenant));
+                        }
+                        return redirect()->away(tenant_url('dashboard', $tenant));
+                    }
                 }
 
                 // Default Home
