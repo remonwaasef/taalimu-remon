@@ -187,8 +187,8 @@
                             @if($report->screenshot)
                                 <div class="mb-3">
                                     <span class="fw-bold small">صورة الشاشة المرفقة:</span>
-                                    <a href="{{ asset('storage/'.$report->screenshot) }}" target="_blank" class="d-block mt-1">
-                                        <img src="{{ asset('storage/'.$report->screenshot) }}" class="img-fluid rounded border shadow-sm" style="max-height: 150px;">
+                                    <a href="{{ asset($report->screenshot) }}" target="_blank" class="d-block mt-1">
+                                        <img src="{{ asset($report->screenshot) }}" class="img-fluid rounded border shadow-sm" style="max-height: 150px;">
                                     </a>
                                 </div>
                             @endif
