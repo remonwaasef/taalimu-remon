@@ -378,9 +378,23 @@
                                                 title="تسجيل في كورس">
                                             <i class="fas fa-plus"></i>
                                         </button>
-                                        <a href="https://api.whatsapp.com/send?phone={{ $phoneForWa }}&text={{ urlencode($reportMsg) }}" target="_blank" class="btn btn-sm btn-light rounded-circle text-secondary shadow-none p-2" title="تقرير سريع">
-                                            <i class="fas fa-share-nodes"></i>
-                                        </a>
+                                        <div class="dropdown d-inline-block">
+                                            <button type="button" class="btn btn-sm btn-light rounded-circle text-secondary shadow-none p-2" data-bs-toggle="dropdown" aria-expanded="false" title="تقرير سريع">
+                                                <i class="fas fa-share-nodes"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end border-0 shadow rounded-3">
+                                                <li>
+                                                    <a class="dropdown-item rounded-3 mb-1 text-success" href="https://api.whatsapp.com/send?phone={{ $phoneForWa }}&text={{ urlencode($reportMsg) }}" target="_blank">
+                                                        <i class="fab fa-whatsapp me-2"></i> واتساب
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item rounded-3 text-primary" href="mailto:{{ $student->email }}?subject={{ urlencode('تقرير حالة الطالب: ' . $student->name) }}&body={{ rawurlencode($reportMsg) }}">
+                                                        <i class="fas fa-envelope me-2"></i> بريد إلكتروني
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                     <div class="dropdown d-inline-block">
                                         <button class="btn btn-icon btn-light rounded-circle shadow-none" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
