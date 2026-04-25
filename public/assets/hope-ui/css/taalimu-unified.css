@@ -486,11 +486,13 @@ h1, h2, h3, h4, h5, h6 {
     border-spacing: 0 0.5rem !important;
 }
 
-/* Fix dropdown clipping in responsive tables */
+/* Fix dropdown clipping in responsive tables by ensuring enough physical space */
 .table-responsive {
+    min-height: 380px !important; /* Provide enough space for dropdowns to open without hitting the card edge */
     overflow: visible !important;
 }
 .card-body {
+    min-height: 450px !important;
     overflow: visible !important;
 }
 .dropdown-menu {
