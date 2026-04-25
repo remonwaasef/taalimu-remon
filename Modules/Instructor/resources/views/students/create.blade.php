@@ -19,19 +19,21 @@
                             <div class="col-12">
                                 <label class="form-label fw-bold">{{ __('instructor::students.student') }}</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-white"><i class="fas fa-user" style="color: var(--primary-color);"></i></span>
+                                    <span class="input-group-text bg-white"><i class="fas fa-user" style="color: var(--bs-primary);"></i></span>
                                     <input type="text" name="name" class="form-control bg-white focus-ring-primary" placeholder="{{ __('instructor::students.name_placeholder') }}" required value="{{ old('name') }}">
                                 </div>
+                                @error('name') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                             </div>
 
                             <!-- Phone -->
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('instructor::students.phone') }}</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-white"><i class="fas fa-phone" style="color: var(--primary-color);"></i></span>
+                                    <span class="input-group-text bg-white"><i class="fas fa-phone" style="color: var(--bs-primary);"></i></span>
                                     <input type="tel" name="phone" id="phone_input" class="form-control bg-white focus-ring-primary" placeholder="01XXXXXXXXX" required minlength="11" maxlength="11" pattern="[0-9]{11}" title="{{ __('instructor::students.phone_length_error') }}" value="{{ old('phone') }}">
                                 </div>
                                 <div id="phone-feedback" class="mt-1 small"></div>
+                                @error('phone') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                                 <small class="text-muted mt-1 d-block">{{ __('instructor::students.phone_hint') }}</small>
                             </div>
 
@@ -39,7 +41,7 @@
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('instructor::students.email') }}</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-white"><i class="fas fa-envelope" style="color: var(--primary-color);"></i></span>
+                                    <span class="input-group-text bg-white"><i class="fas fa-envelope" style="color: var(--bs-primary);"></i></span>
                                     <input type="email" name="email" class="form-control bg-white focus-ring-primary" placeholder="example@mail.com" value="{{ old('email') }}">
                                 </div>
                             </div>
@@ -48,16 +50,17 @@
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('instructor::students.parent_phone') }}</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-white"><i class="fas fa-users" style="color: var(--primary-color);"></i></span>
+                                    <span class="input-group-text bg-white"><i class="fas fa-users" style="color: var(--bs-primary);"></i></span>
                                     <input type="tel" name="parent_phone" class="form-control bg-white focus-ring-primary" placeholder="01XXXXXXXXX" required minlength="11" maxlength="11" pattern="[0-9]{11}" title="{{ __('instructor::students.phone_length_error') }}" value="{{ old('parent_phone') }}">
                                 </div>
+                                @error('parent_phone') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                             </div>
 
                             <!-- Parent Email -->
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('instructor::students.parent_email') }}</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-white"><i class="fas fa-envelope" style="color: var(--primary-color);"></i></span>
+                                    <span class="input-group-text bg-white"><i class="fas fa-envelope" style="color: var(--bs-primary);"></i></span>
                                     <input type="email" name="parent_email" class="form-control bg-white focus-ring-primary" placeholder="parent@mail.com" value="{{ old('parent_email') }}">
                                 </div>
                             </div>
@@ -90,7 +93,7 @@
 
                             <!-- Actions -->
                             <div class="col-12 mt-5">
-                                <button type="submit" class="btn btn-primary w-100 rounded-pill py-3 fw-bold border-0" style="background: var(--primary-color); box-shadow: 0 4px 12px rgba(58, 12, 163, 0.2);">
+                                <button type="submit" class="btn btn-primary w-100 rounded-pill py-3 fw-bold border-0 shadow-sm">
                                     <i class="fas fa-user-plus me-2"></i> {{ __('instructor::students.save_and_register') }}
                                 </button>
                                 <a href="{{ route('instructor.students.list') }}" class="btn btn-light w-100 rounded-pill py-3 mt-2 text-muted fw-bold border-0">

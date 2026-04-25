@@ -53,7 +53,7 @@
             @include('center::layouts.hope-header')
             
             <!-- Sub Header Banner -->
-            <div class="iq-navbar-header" style="height: 240px;">
+            <div class="iq-navbar-header" style="height: 260px;">
                 <div class="container-fluid iq-container">
                     <div class="row">
                         <div class="col-md-12">

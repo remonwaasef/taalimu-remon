@@ -508,23 +508,24 @@ class InstructorController extends Controller
                 ]);
             }
 
-            // 2. Enroll in courses
-            $newEnrollments = [];
-            foreach ($validated['course_ids'] as $course_id) {
-                $isEnrolled = Enrollment::where('user_id', $user->id)
-                    ->where('course_id', $course_id)
-                    ->exists();
-    
-                if (!$isEnrolled) {
-                    Enrollment::create([
-                        'tenant_id' => $instructor->tenant_id,
-                        'user_id' => $user->id,
-                        'course_id' => $course_id,
-                        'status' => 'active',
-                        'enrolled_at' => now(),
-                    ]);
-                    $newEnrollments[] = $course_id;
+            // 2. Enroll in courses via FinanceService to ensure sales & commissions are recorded
+            if (!empty($validated['course_ids'])) {
+                $items = [];
+                $courses = \App\Models\Course::whereIn('id', $validated['course_ids'])->get();
+                foreach ($courses as $course) {
+                    $items[] = ['id' => $course->id, 'price' => $course->price];
                 }
+
+                if (!empty($items)) {
+                    $student = Student::where('user_id', $user->id)->first();
+                    app(\App\Services\FinanceService::class)->createSale([
+                        'student_id' => $student->id,
+                        'items' => $items,
+                        'payment_method' => 'cash',
+                        'paid_amount' => 0, // Unpaid by default
+                    ]);
+                }
+                $newEnrollments = $validated['course_ids'];
             }
 
             \DB::commit();

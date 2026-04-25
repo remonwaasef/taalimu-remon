@@ -46,7 +46,7 @@
             <!-- Header Component -->
             @include('instructor::components.layouts.hope-header')
             
-            <div class="iq-navbar-header" style="height: 200px;">
+            <div class="iq-navbar-header" style="height: 260px;">
                 <div class="container-fluid iq-container">
                     <div class="row">
                         <div class="col-md-12">

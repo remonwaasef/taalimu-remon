@@ -13,14 +13,17 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use App\Services\FinanceService;
 
 class StudentService
 {
     protected $adminNotificationService;
+    protected $financeService;
 
-    public function __construct(AdminNotificationService $adminNotificationService)
+    public function __construct(AdminNotificationService $adminNotificationService, FinanceService $financeService)
     {
         $this->adminNotificationService = $adminNotificationService;
+        $this->financeService = $financeService;
     }
 
     /**
@@ -104,15 +107,20 @@ class StudentService
                 'generated_password' => $generatedPassword,
             ];
 
-            // Enroll in selected courses
+            // Enroll in selected courses via FinanceService to ensure sales & commissions are recorded
             if (!empty($data->course_ids)) {
-                foreach ($data->course_ids as $courseId) {
-                    \App\Models\Enrollment::create([
-                        'tenant_id' => app('tenant')->id,
-                        'user_id' => $user->id,
-                        'course_id' => $courseId,
-                        'status' => 'active',
-                        'enrolled_at' => now(),
+                $items = [];
+                $courses = \App\Models\Course::whereIn('id', $data->course_ids)->get();
+                foreach ($courses as $course) {
+                    $items[] = ['id' => $course->id, 'price' => $course->price];
+                }
+
+                if (!empty($items)) {
+                    $this->financeService->createSale([
+                        'student_id' => $student->id,
+                        'items' => $items,
+                        'payment_method' => 'cash',
+                        'paid_amount' => 0, // Unpaid by default during registration
                     ]);
                 }
             }
