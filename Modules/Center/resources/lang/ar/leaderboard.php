@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'title' => 'قائمة المتصدرين',
+    'subtitle' => 'الطلاب الأكثر تميزاً ونشاطاً في المركز',
+    'rank' => '#',
+    'student' => 'الطالب',
+    'level' => 'المستوى',
+    'points' => 'النقاط',
+    'no_students' => 'لا يوجد طلاب في قائمة المتصدرين حالياً.',
+    'levels_guide' => 'دليل المستويات',
+    'legend' => 'كيف يتم احتساب النقاط؟',
+    'attendance_points' => 'نقاط الحضور',
+    'attendance_desc' => 'حضور الحصص في موعدها',
+    'quiz_points' => 'نقاط الاختبارات',
+    'quiz_desc' => 'الحصول على درجات مرتفعة',
+    'activity_points' => 'نقاط التفاعل',
+    'activity_desc' => 'المشاركة والنشاط المستمر',
+    'your_rank' => 'ترتيبك الحالي',
+    'system_user' => 'مستخدم النظام',
+    'points_history' => 'سجل النقاط الأخير',
+    'level_bronze' => 'برونزي',
+    'level_silver' => 'فضي',
+    'level_gold' => 'ذهبي',
+    'level_diamond' => 'ماسي',
+];

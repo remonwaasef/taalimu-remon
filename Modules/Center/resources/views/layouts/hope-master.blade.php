@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', __('center::messages.blade_0457'))</title>
+    <title>@yield('title', __('center::dashboard.header.dashboard_title'))</title>
 
     @if($tenant->favicon)
         <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $tenant->favicon) }}">

@@ -71,12 +71,12 @@
             <!-- Quick Stats -->
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-body p-4 text-center">
-                    <h6 class="fw-bold mb-4">{{ __('center::messages.blade_0447') }}</h6>
+                    <h6 class="fw-bold mb-4">{{ __('center::instructors.contact_info') }}</h6>
                     <div class="row g-3">
                         <div class="col-4">
                             <div class="bg-light rounded-3 p-3">
                                 <h4 class="fw-bold mb-0 text-primary">{{ $instructor->courses_count }}</h4>
-                                <small class="text-muted d-block mt-1">{{ __('center::messages.blade_0448') }}</small>
+                                <small class="text-muted d-block mt-1">{{ __('center::instructors.registered_phone') }}</small>
                             </div>
                         </div>
                         <div class="col-8">
@@ -99,7 +99,7 @@
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm rounded-4 mb-4">
                 <div class="card-header bg-white border-0 py-4 px-4">
-                    <h5 class="fw-bold mb-0">{{ __('center::messages.blade_0450') }}</h5>
+                    <h5 class="fw-bold mb-0">{{ __('center::instructors.biography') }}</h5>
                 </div>
                 <div class="card-body px-4 pb-4">
                     <div class="row g-4">
@@ -122,7 +122,7 @@
                         <div class="col-12">
                             <hr class="opacity-10 my-2">
                             <label class="text-muted small d-block mb-2">{{ __('center::instructors.bio') }}</label>
-                            <p class="text-dark bg-light p-3 rounded-3 mb-0" style="white-space: pre-line;">{{ $instructor->bio ?? __('center::messages.blade_0453') }}</p>
+                            <p class="text-dark bg-light p-3 rounded-3 mb-0" style="white-space: pre-line;">{{ $instructor->bio ?? __('center::instructors.no_bio') }}</p>
                         </div>
                     </div>
                 </div>
@@ -131,7 +131,7 @@
             <!-- Financial Records / History -->
             <div class="card border-0 shadow-sm rounded-4 mb-4">
                 <div class="card-header bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
-                    <h5 class="fw-bold mb-0">{{ __('center::messages.blade_0451') }}</h5>
+                    <h5 class="fw-bold mb-0">{{ __('center::instructors.course_statistics') }}</h5>
                     <div class="d-flex align-items-center gap-2">
                         <div class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 me-2">{{ format_price($instructor->outstanding_balance) }}</div>
                         <a href="{{ route('center.instructors.statement', $instructor->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">

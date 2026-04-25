@@ -1,10 +1,10 @@
 @extends('center::layouts.hope-master')
 
-@section('title', __('center::messages.blade_0807'))
+@section('title', __('center::students.import.title'))
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark">{{ __('center::messages.blade_0796') }}</h2>
+        <h2 class="fw-bold text-dark">{{ __('center::students.import.header') }}</h2>
         <a href="{{ route('center.students.index', ['tenant' => app('tenant')->domain]) }}" class="btn btn-outline-secondary rounded-pill px-4">
             ← العودة للقائمة
         </a>
@@ -41,9 +41,9 @@
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
                                     <h6 class="fw-bold mb-1">📥 تحميل ملف نموذجي</h6>
-                                    <small class="text-muted">{{ __('center::messages.blade_0797') }}</small>
+                                    <small class="text-muted">{{ __('center::students.import.desc') }}</small>
                                 </div>
-                                <a href="{{ asset('sample-students.csv') }}" download="students-template.csv" class="btn btn-outline-primary rounded-pill px-4">{{ __('center::messages.blade_0798') }}</a>
+                                <a href="{{ asset('sample-students.csv') }}" download="students-template.csv" class="btn btn-outline-primary rounded-pill px-4">{{ __('center::students.import.download_template') }}</a>
                             </div>
                         </div>
                         
@@ -59,22 +59,22 @@
                             <h6 class="fw-bold text-info mb-2">📋 صيغة الملف المطلوبة:</h6>
                             <div class="bg-white p-3 rounded-3 border">
                                 <div class="mb-2">
-                                    <strong>{{ __('center::messages.blade_0799') }}</strong><br>
+                                    <strong>{{ __('center::students.import.first_row_headers') }}</strong><br>
                                     <code class="text-dark">name,email,phone,grade_level</code>
                                 </div>
                                 <div>
-                                    <strong>{{ __('center::messages.blade_0800') }}</strong><br>
+                                    <strong>{{ __('center::students.import.data_example') }}</strong><br>
                                     <code class="text-dark">أحمد محمد,ahmed@example.com,0501234567,1</code><br>
                                     <code class="text-dark">فاطمة علي,fatima@example.com,0559876543,7</code>
                                 </div>
                             </div>
                             <small class="text-muted mt-2 d-block">
-                                <strong>{{ __('center::messages.blade_0801') }}</strong> grade_level من 1-12 (1-6 ابتدائي، 7-9 إعدادي، 10-12 ثانوي)
+                                <strong>{{ __('center::students.import.note') }}</strong> {{ __('center::students.import.grade_level') ?? 'grade_level' }} من 1-12 (1-6 ابتدائي، 7-9 إعدادي، 10-12 ثانوي)
                             </small>
                         </div>
 
                         <button type="submit" class="btn btn-primary rounded-pill px-5 py-2">
-                            <span class="me-2">📤</span>{{ __('center::messages.blade_0802') }}</button>
+                            <span class="me-2">📤</span>{{ __('center::students.import.start_import') }}</button>
                     </form>
                 </div>
             </div>
@@ -84,10 +84,10 @@
                 <div class="card-body p-4">
                     <h6 class="fw-bold mb-3">💡 إرشادات سريعة</h6>
                     <ul class="mb-0">
-                        <li class="mb-2">{{ __('center::messages.blade_0803') }}<code>.csv</code></li>
-                        <li class="mb-2">{{ __('center::messages.blade_0804') }}</li>
-                        <li class="mb-2">{{ __('center::messages.blade_0805') }}</li>
-                        <li>{{ __('center::messages.blade_0806') }}<code>password123</code></li>
+                        <li class="mb-2">{{ __('center::students.import.ensure_csv_format') }}<code>.csv</code></li>
+                        <li class="mb-2">{{ __('center::students.import.headers_must_match') }}</li>
+                        <li class="mb-2">{{ __('center::students.import.unique_email_tip') }}</li>
+                        <li>{{ __('center::students.import.default_password_tip') }}<code>password123</code></li>
                     </ul>
                 </div>
             </div>

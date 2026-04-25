@@ -36,7 +36,7 @@
                 $overdueCount = $tenant->getOverdueStudentsCount();
             @endphp
             <li class="nav-item me-3">
-              <a href="{{ route('center.sales.overdue', ['tenant' => $tenant->domain ?? 'center']) }}" class="btn btn-outline-danger d-flex align-items-center" aria-current="page" style="top: 4px;" title="{{ __('center::messages.blade_0558') }}">
+              <a href="{{ route('center.sales.overdue', ['tenant' => $tenant->domain ?? 'center']) }}" class="btn btn-outline-danger d-flex align-items-center" aria-current="page" style="top: 4px;" title="{{ __('center::dashboard.header.overdue_invoices') }}">
                   <i class="fas fa-wallet me-2"></i>
                   @if($overdueCount > 0)
                       <span class="badge rounded-pill bg-danger ms-1 animate__animated animate__pulse animate__infinite">
@@ -158,10 +158,10 @@
 @if(session()->has('impersonator_id'))
     <div class="alert alert-warning mb-0 rounded-0 border-0 p-2 d-flex justify-content-between align-items-center" style="z-index: 1050; position: relative;">
         <div>
-            <i class="fas fa-user-secret me-2"></i>{{ __('center::messages.blade_0454') }}<strong>{{ auth()->user()->name }}</strong>
+            <i class="fas fa-user-secret me-2"></i>{{ __('center::dashboard.header.browsing_as') }}<strong>{{ auth()->user()->name }}</strong>
         </div>
         <a href="{{ route('admin.impersonate.stop') }}" class="btn btn-dark btn-sm rounded-pill px-3">
-            <i class="fas fa-sign-out-alt me-1"></i>{{ __('center::messages.blade_0455') }}
+            <i class="fas fa-sign-out-alt me-1"></i>{{ __('center::dashboard.header.logout') }}
         </a>
     </div>
 @endif

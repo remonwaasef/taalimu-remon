@@ -89,36 +89,36 @@
         <table class="info-table">
             <tr>
                 <td class="text-right">
-                    <strong>{{ $reshaper->reshape(__('center::messages.blade_0606')) }}</strong> #{{ $payment->id }}<br>
-                    <strong>{{ $reshaper->reshape(__('center::messages.blade_0607')) }}</strong> {{ $payment->paid_at ? $payment->paid_at->format('Y/m/d') : $payment->created_at->format('Y/m/d') }}
+                    <strong>{{ $reshaper->reshape(__('center::sales.receipt_no')) }}</strong> #{{ $payment->id }}<br>
+                    <strong>{{ $reshaper->reshape(__('center::sales.payment_date')) }}</strong> {{ $payment->paid_at ? $payment->paid_at->format('Y/m/d') : $payment->created_at->format('Y/m/d') }}
                 </td>
                 <td class="text-left">
-                    <strong>{{ $reshaper->reshape(__('center::messages.blade_0608')) }}</strong> #{{ $payment->sale_id }}
+                    <strong>{{ $reshaper->reshape(__('center::sales.invoice_no')) }}</strong> #{{ $payment->sale_id }}
                 </td>
             </tr>
         </table>
 
         <div style="margin-bottom: 15px; font-size: 13px;">
             <strong>{{ $reshaper->reshape(__('center::sales.received_from')) }}</strong> {{ $payment->sale->student->name }}<br>
-            <strong>{{ $reshaper->reshape(__('center::messages.blade_0609')) }}</strong> {{ number_format($payment->amount, 2) }} {{ $reshaper->reshape(__('center::messages.blade_0610', ['currency' => get_currency_symbol()])) }}
+            <strong>{{ $reshaper->reshape(__('center::sales.paid_amount_label_alt')) }}</strong> {{ number_format($payment->amount, 2) }} {{ $reshaper->reshape(__('center::sales.currency_label', ['currency' => get_currency_symbol()])) }}
         </div>
 
         <table class="table">
             <thead>
                 <tr>
                     <th>{{ $reshaper->reshape(__('center::sales.description')) }}</th>
-                    <th style="width: 100px;">{{ $reshaper->reshape(__('center::messages.blade_0611')) }}</th>
+                    <th style="width: 100px;">{{ $reshaper->reshape(__('center::sales.amount')) }}</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ $reshaper->reshape(__('center::messages.blade_0612')) }} 
-                        {{ $payment->sale->items->first()->reshaped_title ?? $reshaper->reshape(__('center::messages.blade_0613')) }}
+                    <td>{{ $reshaper->reshape(__('center::sales.payment_for')) }} 
+                        {{ $payment->sale->items->first()->reshaped_title ?? $reshaper->reshape(__('center::sales.educational_course')) }}
                         @if($payment->sale->items->count() > 1)
-                            {{ $reshaper->reshape(__('center::messages.blade_0614')) }}
+                            {{ $reshaper->reshape(__('center::sales.other_items')) }}
                         @endif
                     </td>
-                    <td>{{ number_format($payment->amount, 2) }} {{ $reshaper->reshape(__('center::messages.blade_0615', ['currency' => get_currency_symbol()])) }}</td>
+                    <td>{{ number_format($payment->amount, 2) }} {{ $reshaper->reshape(__('center::sales.currency_label', ['currency' => get_currency_symbol()])) }}</td>
                 </tr>
             </tbody>
         </table>
@@ -126,12 +126,12 @@
         <table class="info-table">
             <tr>
                 <td class="text-right" style="width: 60%;">
-                    <strong>{{ $reshaper->reshape(__('center::messages.blade_0616')) }}</strong> 
+                    <strong>{{ $reshaper->reshape(__('center::sales.payment_method_label')) }}</strong> 
                     @php
-                        $method = $payment->payment_method == 'cash' ? __('center::messages.blade_0617') : ($payment->payment_method == 'card' ? __('center::messages.blade_0618') : __('center::messages.blade_0619'));
+                        $method = $payment->payment_method == 'cash' ? __('center::sales.cash') : ($payment->payment_method == 'card' ? __('center::sales.card') : __('center::sales.other'));
                     @endphp
                     {{ $reshaper->reshape($method) }}<br>
-                    <strong>{{ $reshaper->reshape(__('center::messages.blade_0620')) }}</strong> {{ number_format($payment->sale->total_amount - $payment->sale->paid_amount, 2) }} {{ $reshaper->reshape(__('center::messages.blade_0621', ['currency' => get_currency_symbol()])) }}
+                    <strong>{{ $reshaper->reshape(__('center::sales.remaining_amount_label')) }}</strong> {{ number_format($payment->sale->total_amount - $payment->sale->paid_amount, 2) }} {{ $reshaper->reshape(__('center::sales.currency_label', ['currency' => get_currency_symbol()])) }}
                     <br>
                     <span style="font-size: 10px; color: #666;">
                         <strong>{{ $reshaper->reshape(__('center::sales.invoice_total')) }}</strong> {{ number_format($payment->sale->total_amount, 2) }}
@@ -140,7 +140,7 @@
                     </span>
                 </td>
                 <td class="text-center" style="width: 40%;">
-                    <p style="margin-bottom: 5px;">{{ $reshaper->reshape(__('center::messages.blade_0622')) }}</p>
+                    <p style="margin-bottom: 5px;">{{ $reshaper->reshape(__('center::sales.center_stamp')) }}</p>
                     <div class="stamp">{{ $reshaper->reshape(__('center::sales.paid_stamp')) }}</div>
                 </td>
             </tr>

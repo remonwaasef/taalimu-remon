@@ -2,11 +2,11 @@
 
 @section('content')
     <div class="mb-4">
-        <h2 class="fw-bold text-dark">{{ isset($schedule) ? __('center::messages.blade_0694') : __('center::messages.blade_0695') }}</h2>
+        <h2 class="fw-bold text-dark">{{ isset($schedule) ? __('center::schedules.edit_schedule') : __('center::schedules.add_new') }}</h2>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('center.schedules.index') }}">{{ __('center::messages.blade_0677') }}</a></li>
-                <li class="breadcrumb-item active">{{ isset($schedule) ? __('center::messages.blade_0696') : __('center::messages.blade_0697') }}</li>
+                <li class="breadcrumb-item"><a href="{{ route('center.schedules.index') }}">{{ __('center::schedules.schedules_list') }}</a></li>
+                <li class="breadcrumb-item active">{{ isset($schedule) ? __('center::schedules.edit') : __('center::schedules.new') }}</li>
             </ol>
         </nav>
     </div>
@@ -28,9 +28,9 @@
 
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0678') }}</label>
+                                <label class="form-label fw-bold">{{ __('center::schedules.course') }}</label>
                                 <select name="course_id" class="form-select @error('course_id') is-invalid @enderror">
-                                    <option value="">{{ __('center::messages.blade_0679') }}</option>
+                                    <option value="">{{ __('center::schedules.choose_course') }}</option>
                                     @foreach($courses as $course)
                                         <option value="{{ $course->id }}" {{ old('course_id', $schedule->course_id ?? request()->course_id) == $course->id ? 'selected' : '' }}>
                                             {{ $course->title }}
@@ -41,9 +41,9 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0680') }}</label>
+                                <label class="form-label fw-bold">{{ __('center::schedules.classroom') }}</label>
                                 <select name="classroom_id" class="form-select @error('classroom_id') is-invalid @enderror">
-                                    <option value="">{{ __('center::messages.blade_0681') }}</option>
+                                    <option value="">{{ __('center::schedules.choose_classroom') }}</option>
                                     @foreach($classrooms as $classroom)
                                         <option value="{{ $classroom->id }}" {{ old('classroom_id', $schedule->classroom_id ?? '') == $classroom->id ? 'selected' : '' }}>
                                             {{ $classroom->name }} (سعة: {{ $classroom->capacity ?? '∞' }})
@@ -54,9 +54,9 @@
                             </div>
 
                             <div class="col-md-12">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0682') }}</label>
+                                <label class="form-label fw-bold">{{ __('center::schedules.instructor') }}</label>
                                 <select name="instructor_id" class="form-select @error('instructor_id') is-invalid @enderror">
-                                    <option value="">{{ __('center::messages.blade_0683') }}</option>
+                                    <option value="">{{ __('center::schedules.choose_instructor') }}</option>
                                     @foreach($instructors as $instructor)
                                         <option value="{{ $instructor->id }}" {{ old('instructor_id', $schedule->instructor_id ?? '') == $instructor->id ? 'selected' : '' }}>
                                             {{ $instructor->name }}
@@ -64,21 +64,21 @@
                                     @endforeach
                                 </select>
                                 @error('instructor_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                <small class="text-muted">{{ __('center::messages.blade_0684') }}</small>
+                                <small class="text-muted">{{ __('center::schedules.instructor_change_hint') }}</small>
                             </div>
 
                             <div class="col-md-4">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0685') }}</label>
+                                <label class="form-label fw-bold">{{ __('center::schedules.day') }}</label>
                                 <select name="day_of_week" class="form-select @error('day_of_week') is-invalid @enderror">
                                     @php
                                         $days = [
-                                            0 => __('center::messages.blade_0698'),
-                                            1 => __('center::messages.blade_0699'),
-                                            2 => __('center::messages.blade_0700'),
-                                            3 => __('center::messages.blade_0701'),
-                                            4 => __('center::messages.blade_0702'),
-                                            5 => __('center::messages.blade_0703'),
-                                            6 => __('center::messages.blade_0704'),
+                                            0 => __('center::schedules.sunday'),
+                                            1 => __('center::schedules.monday'),
+                                            2 => __('center::schedules.tuesday'),
+                                            3 => __('center::schedules.wednesday'),
+                                            4 => __('center::schedules.thursday'),
+                                            5 => __('center::schedules.friday'),
+                                            6 => __('center::schedules.saturday'),
                                         ];
                                     @endphp
                                     @foreach($days as $value => $label)
@@ -91,27 +91,27 @@
                             </div>
 
                             <div class="col-md-4">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0686') }}</label>
+                                <label class="form-label fw-bold">{{ __('center::schedules.start_time') }}</label>
                                 <input type="time" name="start_time" class="form-control @error('start_time') is-invalid @enderror" value="{{ old('start_time', $schedule->start_time ?? '') }}">
                                 @error('start_time') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
 
                             <div class="col-md-4">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0687') }}</label>
+                                <label class="form-label fw-bold">{{ __('center::schedules.end_time') }}</label>
                                 <input type="time" name="end_time" class="form-control @error('end_time') is-invalid @enderror" value="{{ old('end_time', $schedule->end_time ?? '') }}">
                                 @error('end_time') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
 
                             <div class="col-md-6 mb-4">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0688') }}</label>
-                                <input type="number" name="max_students" class="form-control @error('max_students') is-invalid @enderror" value="{{ old('max_students', $schedule->max_students ?? '') }}" placeholder="{{ __('center::messages.blade_0693') }}">
+                                <label class="form-label fw-bold">{{ __('center::schedules.max_students') }}</label>
+                                <input type="number" name="max_students" class="form-control @error('max_students') is-invalid @enderror" value="{{ old('max_students', $schedule->max_students ?? '') }}" placeholder="{{ __('center::schedules.max_students_placeholder') }}">
                                 @error('max_students') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                         </div>
 
                         <div class="d-flex gap-2 pb-5">
-                            <button type="submit" class="btn btn-primary px-4 rounded-pill">{{ __('center::messages.blade_0689') }}</button>
-                            <a href="{{ route('center.schedules.index') }}" class="btn btn-light px-4 rounded-pill">{{ __('center::messages.blade_0690') }}</a>
+                            <button type="submit" class="btn btn-primary px-4 rounded-pill">{{ __('center::schedules.save') }}</button>
+                            <a href="{{ route('center.schedules.index') }}" class="btn btn-light px-4 rounded-pill">{{ __('center::schedules.cancel') }}</a>
                         </div>
                     </form>
                 </div>
@@ -121,11 +121,11 @@
         <div class="col-md-4">
             <div class="card border-0 shadow-sm rounded-4 bg-primary text-white">
                 <div class="card-body p-4">
-                    <h5 class="fw-bold mb-3"><i class="bi bi-info-circle me-2"></i>{{ __('center::messages.blade_0691') }}</h5>
+                    <h5 class="fw-bold mb-3"><i class="bi bi-info-circle me-2"></i>{{ __('center::schedules.important_instructions') }}</h5>
                     <ul class="list-unstyled mb-0">
-                        <li class="mb-2 small">• سيقوم النظام تلقائياً بمنع أي تعارض في حجز نفس القاعة في نفس الوقت.</li>
-                        <li class="mb-2 small">• سيتم التأكد أيضاً من تفرغ المعلم في هذا الوقت قبل الحفظ.</li>
-                        <li class="small">• هذا الجدول سيرتبط تلقائياً بقسم الحضور والغياب لتسهيل تحضير الطلاب.</li>
+                        <li class="mb-2 small">• {{ __('center::schedules.info_1') }}</li>
+                        <li class="mb-2 small">• {{ __('center::schedules.info_2') }}</li>
+                        <li class="small">• {{ __('center::schedules.info_3') }}</li>
                     </ul>
                 </div>
             </div>
@@ -174,7 +174,7 @@
                     },
                     render:{
                         no_results:function(data,escape){
-                            return '<div class="no-results p-2 text-muted">{{ __('center::messages.blade_0692') }}</div>';
+                            return '<div class="no-results p-2 text-muted">{{ __('center::schedules.no_results') }}</div>';
                         }
                     }
                 });

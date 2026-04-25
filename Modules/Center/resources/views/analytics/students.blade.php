@@ -1,20 +1,20 @@
 @extends('center::layouts.hope-master')
 
-@section('title', __('center::messages.blade_0098'))
+@section('title', __('center::analytics.student_analytics_title'))
 
 @section('content')
 <div class="container-fluid">
     <!-- Header -->
     <div class="d-flex align-items-center justify-content-between mb-4">
         <div>
-            <h1 class="h3 mb-1 text-gray-800 fw-bold">{{ __('center::messages.blade_0079') }}</h1>
-            <p class="text-muted mb-0">{{ __('center::messages.blade_0080') }}</p>
+            <h1 class="h3 mb-1 text-gray-800 fw-bold">{{ __('center::analytics.student_analytics_title') }}</h1>
+            <p class="text-muted mb-0">{{ __('center::analytics.student_analytics_subtitle') }}</p>
         </div>
         <div class="d-flex gap-2">
             <button class="btn btn-sm btn-white border shadow-sm rounded-pill px-3" onclick="window.print()">
-                <i class="fas fa-print me-2"></i>{{ __('center::messages.blade_0081') }}</button>
+                <i class="fas fa-print me-2"></i>{{ __('center::analytics.print_report') }}</button>
             <a href="{{ route('center.analytics.index') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                <i class="fas fa-arrow-left me-2"></i>{{ __('center::messages.blade_0082') }}</a>
+                <i class="fas fa-arrow-left me-2"></i>{{ __('center::messages.back') }}</a>
         </div>
     </div>
 
@@ -26,7 +26,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col me-2">
-                            <div class="text-xs fw-bold text-primary text-uppercase mb-1">{{ __('center::messages.blade_0083') }}</div>
+                            <div class="text-xs fw-bold text-primary text-uppercase mb-1">{{ __('center::analytics.total_students') }}</div>
                             <div class="h3 mb-0 fw-bold text-gray-800">{{ $totalStudents }}</div>
                         </div>
                         <div class="col-auto">
@@ -45,9 +45,9 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col me-2">
-                            <div class="text-xs fw-bold text-success text-uppercase mb-1">{{ __('center::messages.blade_0084') }}</div>
+                            <div class="text-xs fw-bold text-success text-uppercase mb-1">{{ __('center::analytics.active_students') }}</div>
                             <div class="h3 mb-0 fw-bold text-gray-800">{{ $activeStudents }}</div>
-                            <small class="text-muted">الذين لديهم حالة "نشط"</small>
+                            <small class="text-muted">{{ __('center::analytics.active_students_hint') }}</small>
                         </div>
                         <div class="col-auto">
                             <div class="icon-circle bg-success bg-opacity-10 text-success">
@@ -65,9 +65,9 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col me-2">
-                            <div class="text-xs fw-bold text-danger text-uppercase mb-1">{{ __('center::messages.blade_0085') }}</div>
+                            <div class="text-xs fw-bold text-danger text-uppercase mb-1">{{ __('center::analytics.inactive_students') }}</div>
                             <div class="h3 mb-0 fw-bold text-gray-800">{{ $inactiveStudents }}</div>
-                            <small class="text-muted">{{ __('center::messages.blade_0086') }}</small>
+                            <small class="text-muted">{{ __('center::analytics.inactive_students_hint') }}</small>
                         </div>
                         <div class="col-auto">
                             <div class="icon-circle bg-danger bg-opacity-10 text-danger">
@@ -86,7 +86,7 @@
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-header py-3 bg-white border-0 rounded-top-4 d-flex justify-content-between align-items-center">
-                    <h6 class="m-0 fw-bold text-primary">{{ __('center::messages.blade_0087') }}</h6>
+                    <h6 class="m-0 fw-bold text-primary">{{ __('center::analytics.student_growth') }}</h6>
                 </div>
                 <div class="card-body">
                     <div class="chart-area" style="height: 320px;">
@@ -100,13 +100,13 @@
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-header py-3 bg-white border-0 rounded-top-4">
-                    <h6 class="m-0 fw-bold text-primary">{{ __('center::messages.blade_0088') }}</h6>
+                    <h6 class="m-0 fw-bold text-primary">{{ __('center::analytics.grade_distribution') }}</h6>
                 </div>
                 <div class="card-body">
                     <div class="chart-pie pt-2 pb-2" style="height: 250px;">
                         <canvas id="gradeDistributionChart"></canvas>
                     </div>
-                    <div class="mt-4 text-center small text-muted">{{ __('center::messages.blade_0089') }}</div>
+                    <div class="mt-4 text-center small text-muted">{{ __('center::analytics.grade_distribution_hint') }}</div>
                 </div>
             </div>
         </div>
@@ -119,15 +119,15 @@
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-header py-3 bg-white border-0 rounded-top-4">
                     <h6 class="m-0 fw-bold text-success">
-                        <i class="fas fa-crown me-2"></i>{{ __('center::messages.blade_0090') }}</h6>
+                        <i class="fas fa-crown me-2"></i>{{ __('center::analytics.top_spenders') }}</h6>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table align-middle mb-0 table-hover">
                             <thead class="bg-light">
                                 <tr>
-                                    <th class="border-0 p-3">{{ __('center::messages.blade_0091') }}</th>
-                                    <th class="border-0 p-3 text-end">{{ __('center::messages.blade_0092') }}</th>
+                                    <th class="border-0 p-3">{{ __('center::analytics.student_name') ?? __('center::messages.blade_0091') }}</th>
+                                    <th class="border-0 p-3 text-end">{{ __('center::analytics.total_payments') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -165,15 +165,15 @@
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-header py-3 bg-white border-0 rounded-top-4">
                     <h6 class="m-0 fw-bold text-danger">
-                        <i class="fas fa-exclamation-triangle me-2"></i>{{ __('center::messages.blade_0094') }}</h6>
+                        <i class="fas fa-exclamation-triangle me-2"></i>{{ __('center::analytics.debtors') }}</h6>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table align-middle mb-0 table-hover">
                             <thead class="bg-light">
                                 <tr>
-                                    <th class="border-0 p-3">{{ __('center::messages.blade_0095') }}</th>
-                                    <th class="border-0 p-3 text-end">{{ __('center::messages.blade_0096') }}</th>
+                                    <th class="border-0 p-3">{{ __('center::analytics.student_name') ?? __('center::messages.blade_0095') }}</th>
+                                    <th class="border-0 p-3 text-end">{{ __('center::analytics.due_amount') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -197,7 +197,7 @@
                                         </td>
                                     </tr>
                                 @empty
-                                    <tr><td colspan="2" class="text-center py-4 text-muted">{{ __('center::messages.blade_0097') }}</td></tr>
+                                    <tr><td colspan="2" class="text-center py-4 text-muted">{{ __('center::analytics.no_debtors') }}</td></tr>
                                 @endforelse
                             </tbody>
                         </table>
@@ -235,7 +235,7 @@
         data: {
             labels: @json($studentGrowth->pluck('months')),
             datasets: [{
-                label: "طلاب جدد",
+                label: "{{ __('center::analytics.new_students_chart_label') }}",
                 backgroundColor: "#4e73df",
                 hoverBackgroundColor: "#2e59d9",
                 borderRadius: 5,
@@ -261,16 +261,8 @@
     var gradeData = [];
     
     @foreach($studentsByGrade as $grade)
-        // Simple mapping for demonstration, ideally done in backend or with a robust JS map
-        var label = "{{ $grade->grade_level }}"; 
-        // Try to map numeric to text if simple 1-12
-        const gradesMap = {
-            '1': 'أولى ابتدائي', '2': 'ثانية ابتدائي', '3': 'ثالثة ابتدائي',
-            '4': 'رابعة ابتدائي', '5': 'خامسة ابتدائي', '6': 'سادسة ابتدائي',
-            '7': 'أولى إعدادي', '8': 'ثانية إعدادي', '9': 'ثالثة إعدادي',
-            '10': 'أولى ثانوي', '11': 'ثانية ثانوي', '12': 'ثالثة ثانوي'
-        };
-        if(gradesMap[label]) label = gradesMap[label];
+        // Use centralized grade names from academic lang file
+        var label = "{{ __('center::academic.grades.' . $grade->grade_level) }}"; 
         
         gradeLabels.push(label);
         gradeData.push({{ $grade->count }});

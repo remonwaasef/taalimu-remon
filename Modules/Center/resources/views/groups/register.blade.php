@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل طالب جديد - {{ $course->title }}</title>
+    <title>{{ __('center::registration.title', ['course' => $course->title]) }}</title>
     
     <!-- Google Fonts (Cairo) -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
@@ -66,7 +66,7 @@
             border-radius: 24px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
             padding: 40px;
-            text-align: right;
+            text-align: start;
             transition: transform 0.3s ease;
         }
 
@@ -111,7 +111,7 @@
 
         .input-group-custom i {
             position: absolute;
-            right: 16px;
+            {{ app()->getLocale() == 'ar' ? 'right' : 'left' }}: 16px;
             top: 50%;
             transform: translateY(-50%);
             color: #a0aec0;
@@ -120,7 +120,7 @@
 
         .form-control {
             border-radius: 14px;
-            padding: 14px 45px 14px 16px !important;
+            padding: 14px {{ app()->getLocale() == 'ar' ? '45px 14px 16px' : '16px 14px 45px' }} !important;
             border: 2px solid #edf2f7;
             background: #f8fafc;
             font-size: 0.95rem;
@@ -193,53 +193,53 @@
             </div>
             
             <div class="register-header text-center">
-                <h2>تسجيل طالب جديد</h2>
-                <p>انضم الآن للمجموعة وابدأ رحلة تعلم ممتعة</p>
+                <h2>{{ __('center::registration.header_title') }}</h2>
+                <p>{{ __('center::registration.header_subtitle') }}</p>
             </div>
 
             <form action="{{ route('group.register.submit', $course->registration_token) }}" method="POST">
                 @csrf
                 
                 <div class="mb-4">
-                    <label for="name" class="form-label">اسم الطالب بالكامل</label>
+                    <label for="name" class="form-label">{{ __('center::registration.full_name') }}</label>
                     <div class="input-group-custom">
-                        <input type="text" class="form-control" id="name" name="name" required placeholder="أدخل اسمك كما في الهوية">
+                        <input type="text" class="form-control" id="name" name="name" required placeholder="{{ __('center::registration.full_name_placeholder') }}">
                         <i class="fas fa-user"></i>
                     </div>
                 </div>
 
                 <div class="mb-4">
-                    <label for="phone" class="form-label">رقم الهاتف (واتساب)</label>
+                    <label for="phone" class="form-label">{{ __('center::registration.phone') }}</label>
                     <div class="input-group-custom">
-                        <input type="tel" class="form-control" id="phone" name="phone" required minlength="11" maxlength="11" pattern="[0-9]{11}" title="يجب أن يكون رقم الهاتف مكون من 11 رقم" placeholder="01xxxxxxxxx">
+                        <input type="tel" class="form-control" id="phone" name="phone" required minlength="11" maxlength="11" pattern="[0-9]{11}" placeholder="{{ __('center::registration.phone_placeholder') }}">
                         <i class="fas fa-phone"></i>
                     </div>
                     <div id="phone-feedback" class="mt-1 small"></div>
                 </div>
 
                 <div class="mb-4">
-                    <label for="email" class="form-label">البريد الإلكتروني (اختياري)</label>
+                    <label for="email" class="form-label">{{ __('center::registration.email') }}</label>
                     <div class="input-group-custom">
-                        <input type="email" class="form-control" id="email" name="email" placeholder="example@mail.com">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="{{ __('center::registration.email_placeholder') }}">
                         <i class="fas fa-envelope"></i>
                     </div>
                 </div>
 
                 <div class="mb-4">
-                    <label for="parent_phone" class="form-label">رقم هاتف ولي الأمر</label>
+                    <label for="parent_phone" class="form-label">{{ __('center::registration.parent_phone') }}</label>
                     <div class="input-group-custom">
-                        <input type="tel" class="form-control" id="parent_phone" name="parent_phone" required minlength="11" maxlength="11" pattern="[0-9]{11}" title="يجب أن يكون رقم الهاتف مكون من 11 رقم" placeholder="01xxxxxxxxx">
+                        <input type="tel" class="form-control" id="parent_phone" name="parent_phone" required minlength="11" maxlength="11" pattern="[0-9]{11}" placeholder="{{ __('center::registration.phone_placeholder') }}">
                         <i class="fas fa-user-friends"></i>
                     </div>
                 </div>
 
                 <button type="submit" class="btn btn-register">
-                    <i class="fas fa-user-plus me-2"></i> تأكيد الانضمام للمجموعة
+                    <i class="fas fa-user-plus me-2"></i> {{ __('center::registration.confirm_join') }}
                 </button>
             </form>
 
             <div class="text-center mt-4">
-                <p class="text-muted small">لديك حساب بالفعل؟ <a href="/login" class="text-primary fw-bold text-decoration-none">تسجيل الدخول</a></p>
+                <p class="text-muted small">{{ __('center::registration.already_have_account') }} <a href="/login" class="text-primary fw-bold text-decoration-none">{{ __('center::registration.login') }}</a></p>
             </div>
         </div>
     </div>
@@ -254,17 +254,17 @@
                 phoneInput.addEventListener('input', function() {
                     const phone = this.value;
                     if (phone.length === 11) {
-                        feedback.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> جارِ التحقق...';
+                        feedback.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> {{ __('center::registration.checking') }}';
                         feedback.className = 'mt-1 small text-primary';
 
                         fetch(`{{ route('instructor.students.check-phone') }}?phone=${phone}`)
                             .then(response => response.json())
                             .then(data => {
                                 if (data.status === 'exists') {
-                                    feedback.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i> هذا الرقم مسجل بالفعل مسبقاً.';
+                                    feedback.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i> {{ __('center::registration.phone_exists') }}';
                                     feedback.className = 'mt-1 small text-danger fw-bold fadeIn';
                                 } else if (data.status === 'available') {
-                                    feedback.innerHTML = '<i class="fas fa-check-circle me-1"></i> رقم هاتف متاح للتسجيل.';
+                                    feedback.innerHTML = '<i class="fas fa-check-circle me-1"></i> {{ __('center::registration.phone_available') }}';
                                     feedback.className = 'mt-1 small text-success fw-bold fadeIn';
                                 }
                             })

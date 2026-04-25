@@ -12,7 +12,7 @@
     </div>
     <div class="d-flex gap-2">
         <button onclick="window.print()" class="btn btn-outline-primary rounded-pill px-4">
-            <i class="fas fa-print me-2"></i>{{ __('center::messages.blade_0623') }}</button>
+            <i class="fas fa-print me-2"></i>{{ __('center::sales.print_invoice') }}</button>
     </div>
 </div>
 
@@ -33,13 +33,13 @@
                     </div>
                     <div class="col-sm-6 text-end">
                         <div class="bg-light p-4 rounded-4 d-inline-block text-start" style="min-width: 250px;">
-                            <h6 class="text-muted text-uppercase small fw-bold mb-3">{{ __('center::messages.blade_0624') }}</h6>
+                            <h6 class="text-muted text-uppercase small fw-bold mb-3">{{ __('center::sales.invoice_details') }}</h6>
                             <div class="mb-2">
-                                <span class="text-muted">{{ __('center::messages.blade_0625') }}</span>
+                                <span class="text-muted">{{ __('center::sales.invoice_date_label') }}</span>
                                 <span class="fw-bold ms-2">{{ $sale->created_at->format('Y/m/d') }}</span>
                             </div>
                             <div class="mb-0">
-                                <span class="text-muted">{{ __('center::messages.blade_0626') }}</span>
+                                <span class="text-muted">{{ __('center::sales.invoice_status_label') }}</span>
                                 <span class="badge bg-{{ $sale->status == 'paid' ? 'success' : ($sale->status == 'partial' ? 'warning' : 'danger') }} bg-opacity-10 text-{{ $sale->status == 'paid' ? 'success' : ($sale->status == 'partial' ? 'warning' : 'danger') }} ms-2 px-3 rounded-pill">
                                     {{ __('center::sales.status_' . ($sale->status == 'pending' ? 'unpaid' : $sale->status)) }}
                                 </span>
@@ -50,7 +50,7 @@
 
                 <!-- Billing To -->
                 <div class="mb-5">
-                    <h6 class="text-muted text-uppercase small fw-bold mb-3">{{ __('center::messages.blade_0627') }}</h6>
+                    <h6 class="text-muted text-uppercase small fw-bold mb-3">{{ __('center::sales.billing_to') }}</h6>
                     <h5 class="fw-bold text-dark mb-1">{{ $sale->student->name }}</h5>
                     <div class="text-muted small">
                         <p class="mb-1">{{ $sale->student->phone }}</p>
@@ -64,15 +64,15 @@
                         <thead class="bg-light">
                             <tr>
                                 <th class="border-0 rounded-start">{{ __('center::sales.item_course') }}</th>
-                                <th class="border-0 text-center">{{ __('center::messages.blade_0628') }}</th>
-                                <th class="border-0 text-center">{{ __('center::messages.blade_0629') }}</th>
-                                <th class="border-0 text-end rounded-end">{{ __('center::messages.blade_0630') }}</th>
+                                <th class="border-0 text-center">{{ __('center::sales.unit_price') }}</th>
+                                <th class="border-0 text-center">{{ __('center::sales.quantity') }}</th>
+                                <th class="border-0 text-end rounded-end">{{ __('center::sales.total_label') }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($sale->items as $item)
                             <tr>
-                                <td class="fw-bold">{{ $item->item->title ?? __('center::messages.blade_0648') }}</td>
+                                <td class="fw-bold">{{ $item->item->title ?? __('center::sales.unknown_item') }}</td>
                                 <td class="text-center">{{ number_format($item->price, 2) }} {{ __('center::sales.currency') }}</td>
                                 <td class="text-center">{{ $item->quantity }}</td>
                                 <td class="text-end fw-bold">{{ number_format($item->price * $item->quantity, 2) }} {{ __('center::sales.currency') }}</td>
@@ -103,15 +103,15 @@
                             </div>
                             @endif
                             <div class="d-flex justify-content-between mb-2 border-top pt-2 mt-2">
-                                <span class="fw-bold">{{ __('center::messages.blade_0631') }}:</span>
+                                <span class="fw-bold">{{ __('center::sales.final_total') }}:</span>
                                 <span class="fw-bold">{{ number_format($sale->total_amount, 2) }} {{ __('center::sales.currency') }}</span>
                             </div>
                             <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
-                                <span class="text-muted">{{ __('center::messages.blade_0632') }}:</span>
+                                <span class="text-muted">{{ __('center::sales.paid_amount_val') }}:</span>
                                 <span class="text-success fw-bold">{{ number_format($sale->paid_amount, 2) }} {{ __('center::sales.currency') }}</span>
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="fw-bold mb-0">{{ __('center::messages.blade_0633') }}</h5>
+                                <h5 class="fw-bold mb-0">{{ __('center::sales.remaining_label') }}</h5>
                                 <h4 class="fw-bold text-primary mb-0">{{ number_format($sale->total_amount - $sale->paid_amount, 2) }} {{ __('center::sales.currency') }}</h4>
                             </div>
                         </div>
@@ -129,11 +129,11 @@
                 <table class="table align-middle mb-0">
                     <thead class="bg-light">
                         <tr>
-                            <th class="border-0 ps-4">{{ __('center::messages.blade_0634') }}</th>
-                            <th class="border-0">{{ __('center::messages.blade_0635') }}</th>
-                            <th class="border-0">{{ __('center::messages.blade_0636') }}</th>
-                            <th class="border-0">{{ __('center::messages.blade_0637') }}</th>
-                            <th class="border-0">{{ __('center::messages.blade_0638') }}</th>
+                            <th class="border-0 ps-4">{{ __('center::sales.date_label') }}</th>
+                            <th class="border-0">{{ __('center::sales.amount_label') }}</th>
+                            <th class="border-0">{{ __('center::sales.method_label') }}</th>
+                            <th class="border-0">{{ __('center::sales.by_label') }}</th>
+                            <th class="border-0">{{ __('center::sales.notes') }}</th>
                             <th class="border-0 text-end pe-4"></th>
                         </tr>
                     </thead>
@@ -146,7 +146,7 @@
                             <td><small class="text-muted"><i class="fas fa-user-edit me-1"></i> {{ $payment->receiver->name ?? '-' }}</small></td>
                             <td><small>{{ $payment->notes }}</small></td>
                             <td class="text-end pe-4">
-                                <a href="{{ route('center.payments.receipt', $payment->id) }}" class="btn btn-sm btn-light border-0 rounded-pill" title="{{ __('center::messages.blade_0647') }}">
+                                <a href="{{ route('center.payments.receipt', $payment->id) }}" class="btn btn-sm btn-light border-0 rounded-pill" title="{{ __('center::sales.download_receipt') }}">
                                     <i class="fas fa-download text-primary"></i>
                                 </a>
                             </td>
@@ -166,7 +166,7 @@
 
                         @if($sale->payments->isEmpty() && $sale->refunds->isEmpty())
                         <tr>
-                            <td colspan="5" class="text-center py-4 text-muted">{{ __('center::messages.blade_0639') }}</td>
+                            <td colspan="5" class="text-center py-4 text-muted">{{ __('center::sales.no_payment_records') }}</td>
                         </tr>
                         @endif
                     </tbody>
@@ -179,18 +179,18 @@
     <div class="col-lg-4 no-print">
         <div class="card border-0 shadow-sm rounded-4 position-sticky" style="top: 20px;">
             <div class="card-header bg-white border-0 py-3">
-                <h5 class="fw-bold mb-0 text-primary"><i class="fas fa-wallet me-2"></i>{{ __('center::messages.blade_0640') }}</h5>
+                <h5 class="fw-bold mb-0 text-primary"><i class="fas fa-wallet me-2"></i>{{ __('center::sales.manage_payments') }}</h5>
             </div>
             <div class="card-body p-4">
                 @if($sale->status !== 'paid')
-                    <p class="text-muted small mb-4">{{ __('center::messages.blade_0641') }}</p>
+                    <p class="text-muted small mb-4">{{ __('center::sales.add_payment_hint') }}</p>
                     <form action="{{ route('center.sales.payment', $sale->id) }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label class="form-label fw-bold">{{ __('center::sales.paid_amount') }}</label>
                             <div class="input-group">
                                 <input type="number" step="0.01" name="amount" class="form-control rounded-3 shadow-none border" 
-                                       placeholder="{{ __('center::messages.blade_0645') }}" required max="{{ $sale->total_amount - $sale->paid_amount }}" 
+                                       placeholder="{{ __('center::sales.record_payment') }}" required max="{{ $sale->total_amount - $sale->paid_amount }}" 
                                        value="{{ $sale->total_amount - $sale->paid_amount }}">
                                 <span class="input-group-text bg-white border">{{ __('center::sales.currency') }}</span>
                             </div>
@@ -207,11 +207,11 @@
 
                         <div class="mb-4">
                             <label class="form-label fw-bold">{{ __('center::sales.notes') }}</label>
-                            <textarea name="notes" class="form-control rounded-3 shadow-none border" rows="2" placeholder="{{ __('center::messages.blade_0646') }}"></textarea>
+                            <textarea name="notes" class="form-control rounded-3 shadow-none border" rows="2" placeholder="{{ __('center::sales.payment_notes_placeholder') }}"></textarea>
                         </div>
 
                         <button type="submit" class="btn btn-success w-100 rounded-pill py-2 fw-bold">
-                            <i class="fas fa-check-circle me-2"></i> {{ __('center::messages.blade_0645') }}
+                            <i class="fas fa-check-circle me-2"></i> {{ __('center::sales.record_payment') }}
                         </button>
                     </form>
 
@@ -225,8 +225,8 @@
                 @else
                     <div class="alert alert-success border-0 rounded-4 text-center p-4">
                         <i class="fas fa-check-circle fa-2x mb-2 d-block mx-auto"></i>
-                        <h5 class="fw-bold text-success">{{ __('center::messages.blade_0643') }}</h5>
-                        <p class="text-muted small">{{ __('center::messages.blade_0644') }}</p>
+                        <h5 class="fw-bold text-success">{{ __('center::sales.invoice_fully_paid') }}</h5>
+                        <p class="text-muted small">{{ __('center::sales.invoice_fully_paid_hint') }}</p>
                     </div>
                 @endif
 

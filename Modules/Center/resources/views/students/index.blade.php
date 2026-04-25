@@ -19,7 +19,7 @@
 @section('page-actions')
     <div class="d-flex gap-2">
         <a href="{{ route('center.students.export') }}" class="btn btn-glass" id="export-students-btn">
-            <i class="fas fa-file-export me-2"></i> {{ __('center::students.export_file') ?? __('center::messages.blade_0808') }}
+            <i class="fas fa-file-export me-2"></i> {{ __('center::students.export_file') }}
         </a>
         <a href="{{ route('center.students.import') }}" class="btn btn-glass">
             <i class="fas fa-file-import me-2"></i> {{ __('center::students.import_file') }}
@@ -82,7 +82,7 @@
                                     'password' => session('generated_password')
                                 ]);
                                 $whatsappUrl = "https://wa.me/" . sanitizePhoneForWhatsApp(session('student_phone')) . "?text=" . urlencode($msg);
-                                $mailtoUrl = "mailto:" . session('student_email') . "?subject=" . urlencode(__('center::messages.blade_0744')) . "&body=" . rawurlencode($msg);
+                                $mailtoUrl = "mailto:" . session('student_email') . "?subject=" . urlencode(__('center::students.login_credentials_subject')) . "&body=" . rawurlencode($msg);
                             @endphp
 
                             <button onclick="copyAllDetails()" class="btn btn-outline-dark rounded-pill px-4">
@@ -227,13 +227,13 @@
 
                 <div class="btn-group p-1 bg-light rounded-pill" role="group" style="min-width: 250px;">
                     <input type="radio" class="btn-check financial-filter" name="finFilter" id="finAll" value="all" checked>
-                    <label class="btn btn-sm btn-outline-primary border-0 rounded-pill px-3" for="finAll">الكل</label>
+                    <label class="btn btn-sm btn-outline-primary border-0 rounded-pill px-3" for="finAll">{{ __('center::students.all') }}</label>
                     
                     <input type="radio" class="btn-check financial-filter" name="finFilter" id="finDebt" value="debt">
-                    <label class="btn btn-sm btn-outline-danger border-0 rounded-pill px-3" for="finDebt">مديون</label>
+                    <label class="btn btn-sm btn-outline-danger border-0 rounded-pill px-3" for="finDebt">{{ __('center::students.debtor') }}</label>
                     
                     <input type="radio" class="btn-check financial-filter" name="finFilter" id="finPaid" value="paid">
-                    <label class="btn btn-sm btn-outline-success border-0 rounded-pill px-3" for="finPaid">مسدد</label>
+                    <label class="btn btn-sm btn-outline-success border-0 rounded-pill px-3" for="finPaid">{{ __('center::students.paid') }}</label>
                 </div>
             </div>
 
@@ -340,7 +340,7 @@
                                             {{ $student->status == 'active' ? __('center::students.active') : __('center::students.stopped') }}
                                         </span>
                                         @if($student->total_balance > 0)
-                                            <span class="text-danger extra-small fw-bold mt-1">{{ number_format($student->total_balance, 0) }} ج.م</span>
+                                            <span class="text-danger extra-small fw-bold mt-1">{{ number_format($student->total_balance, 0) }} {{ __('center::dashboard.currency') }}</span>
                                         @endif
                                     </div>
                                 </td>
@@ -350,35 +350,35 @@
                                             $phoneForWa = sanitizePhoneForWhatsApp($student->phone);
                                             $reportMsg = "تقرير الطالب: {$student->name}\nالمبلغ المتبقي: " . number_format($student->total_balance, 0) . " ج.م\nشكراً لمتابعتكم.";
                                         @endphp
-                                        <a href="https://api.whatsapp.com/send?phone={{ $phoneForWa }}" target="_blank" class="btn btn-sm btn-light rounded-circle text-success shadow-none p-2" title="واتساب">
+                                        <a href="https://api.whatsapp.com/send?phone={{ $phoneForWa }}" target="_blank" class="btn btn-sm btn-light rounded-circle text-success shadow-none p-2" title="{{ __('center::students.whatsapp') }}">
                                             <i class="fab fa-whatsapp"></i>
                                         </a>
                                         <button type="button" class="btn btn-sm btn-light rounded-circle text-primary shadow-none p-2 quick-pay-btn" 
-                                                data-id="{{ $student->id }}" data-name="{{ $student->name }}" data-balance="{{ $student->total_balance }}" title="تحصيل سريع">
+                                                data-id="{{ $student->id }}" data-name="{{ $student->name }}" data-balance="{{ $student->total_balance }}" title="{{ __('center::students.quick_pay') }}">
                                             <i class="fas fa-dollar-sign"></i>
                                         </button>
                                         <button type="button" class="btn btn-sm btn-light rounded-circle text-info shadow-none p-2 quick-enroll-btn" 
                                                 data-id="{{ $student->id }}" data-name="{{ $student->name }}" 
                                                 data-enrolled="{{ $student->enrollments->pluck('course_id')->implode(',') }}"
-                                                title="تسجيل في كورس">
+                                                title="{{ __('center::students.enroll_in_course') }}">
                                             <i class="fas fa-plus"></i>
                                         </button>
                                         <div class="dropdown d-inline-block">
-                                            <button type="button" class="btn btn-sm btn-light rounded-circle text-secondary shadow-none p-2" data-bs-toggle="dropdown" aria-expanded="false" title="تقرير سريع">
+                                            <button type="button" class="btn btn-sm btn-light rounded-circle text-secondary shadow-none p-2" data-bs-toggle="dropdown" aria-expanded="false" title="{{ __('center::students.quick_report') }}">
                                                 <i class="fas fa-share-nodes"></i>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end border-0 shadow rounded-3">
                                                 <li>
                                                     <a class="dropdown-item rounded-3 mb-1 text-success" href="https://api.whatsapp.com/send?phone={{ $phoneForWa }}&text={{ urlencode($reportMsg) }}" target="_blank">
-                                                        <i class="fab fa-whatsapp me-2"></i> واتساب
+                                                        <i class="fab fa-whatsapp me-2"></i> {{ __('center::students.whatsapp') }}
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <button type="button" class="dropdown-item rounded-3 text-primary direct-email-btn" 
                                                             data-id="{{ $student->id }}" 
-                                                            data-subject="تقرير حالة الطالب: {{ $student->name }}" 
+                                                            data-subject="{{ __('center::students.student_report_title', ['name' => $student->name]) }}" 
                                                             data-message="{{ $reportMsg }}">
-                                                        <i class="fas fa-envelope me-2"></i> بريد إلكتروني (إرسال مباشر)
+                                                        <i class="fas fa-envelope me-2"></i> {{ __('center::students.direct_email') }}
                                                     </button>
                                                 </li>
                                             </ul>
@@ -391,7 +391,7 @@
                                         <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2 rounded-4">
                                             <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('center.students.show', $student->id) }}"><i class="fas fa-eye me-2 text-primary opacity-75"></i> {{ __('center::students.view_details') }}</a></li>
                                             <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('center.students.edit', $student->id) }}"><i class="fas fa-edit me-2 text-info opacity-75"></i> {{ __('center::students.edit') }}</a></li>
-                                            <li><a class="dropdown-item rounded-3 mb-1" target="_blank" href="{{ route('center.students.id-card', $student->id) }}"><i class="fas fa-print me-2 text-secondary opacity-75"></i> طباعة الكارنيه</a></li>
+                                            <li><a class="dropdown-item rounded-3 mb-1" target="_blank" href="{{ route('center.students.id-card', $student->id) }}"><i class="fas fa-print me-2 text-secondary opacity-75"></i> {{ __('center::students.print_id_card') }}</a></li>
                                             <li><hr class="dropdown-divider opacity-10"></li>
                                             <li>
                                                 <form action="{{ route('center.students.destroy', $student->id) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('center::students.confirm_delete_student') }}');">
@@ -415,7 +415,7 @@
                                         </div>
                                     </div>
                                     <h5 class="text-muted fw-bold">{{ __('center::students.no_students') }}</h5>
-                                    <p class="text-muted small">قم بإضافة طلاب جدد أو استيرادهم من ملف اكسيل للبدء.</p>
+                                    <p class="text-muted small">{{ __('center::students.add_import_hint') }}</p>
                                 </td>
                             </tr>
                         @endforelse
@@ -444,18 +444,18 @@
                             <i class="fas fa-money-bill-wave fa-2x"></i>
                         </div>
                         <h5 class="fw-bold mb-1" id="payStudentName"></h5>
-                        <p class="text-muted small mb-4">تحصيل سريع للمستحقات</p>
+                        <p class="text-muted small mb-4">{{ __('center::students.quick_pay_desc') }}</p>
                         
                         <div class="mb-3 text-start">
-                            <label class="form-label fw-bold small text-muted">المبلغ المحصل</label>
+                            <label class="form-label fw-bold small text-muted">{{ __('center::students.collected_amount') }}</label>
                             <div class="input-group">
                                 <input type="number" name="amount" id="payAmountInput" class="form-control rounded-start-pill" required>
-                                <span class="input-group-text rounded-end-pill">ج.م</span>
+                                <span class="input-group-text rounded-end-pill">{{ __('center::dashboard.currency') }}</span>
                             </div>
                             <div id="payBalanceHint" class="x-small text-danger mt-1"></div>
                         </div>
 
-                        <button type="submit" class="btn btn-success w-100 rounded-pill py-2 fw-bold">تأكيد الاستلام</button>
+                        <button type="submit" class="btn btn-success w-100 rounded-pill py-2 fw-bold">{{ __('center::students.confirm_payment') }}</button>
                     </div>
                 </form>
             </div>
@@ -470,29 +470,29 @@
                     @csrf
                     <input type="hidden" name="student_id" id="enrollStudentId">
                     <div class="modal-header border-0 pb-0">
-                        <h5 class="fw-bold"><i class="fas fa-plus-circle me-2 text-info"></i>تسجيل الطالب في كورس</h5>
+                        <h5 class="fw-bold"><i class="fas fa-plus-circle me-2 text-info"></i>{{ __('center::students.enroll_in_course') }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body p-4">
-                        <p class="small text-muted mb-4">اختر الكورس الذي ترغب في تسجيل الطالب <span class="fw-bold text-dark" id="enrollStudentName"></span> به.</p>
+                        <p class="small text-muted mb-4">{{ __('center::students.quick_enroll_desc', ['name' => '<span class="fw-bold text-dark" id="enrollStudentName"></span>']) }}</p>
                         <div class="mb-3">
-                            <label class="form-label fw-bold small">الكورسات المتاحة</label>
+                            <label class="form-label fw-bold small">{{ __('center::students.available_courses') }}</label>
                             <select id="courseSelect" class="form-select rounded-pill" required>
-                                <option value="">اختر الكورس...</option>
+                                <option value="">{{ __('center::students.choose_course') }}</option>
                                 @foreach($courses as $course)
-                                    <option value="{{ $course->id }}">{{ $course->title }} ({{ number_format($course->price, 0) }} ج.م)</option>
+                                    <option value="{{ $course->id }}">{{ $course->title }} ({{ number_format($course->price, 0) }} {{ __('center::dashboard.currency') }})</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="alert alert-soft-info x-small border-0 rounded-3">
-                            سيتم إنشاء فاتورة "غير مدفوعة" تلقائياً لهذا الطالب.
+                            {{ __('center::students.auto_invoice_hint') }}
                         </div>
                         <div id="enrollWarning" class="alert alert-soft-danger x-small border-0 rounded-3 mt-2 d-none">
-                            <i class="fas fa-exclamation-circle me-2"></i> هذا الطالب مسجل بالفعل في هذه الدورة.
+                            <i class="fas fa-exclamation-circle me-2"></i> {{ __('center::students.already_enrolled_warning') }}
                         </div>
                     </div>
                     <div class="modal-footer border-0 pt-0">
-                        <button type="button" id="submitEnrollBtn" class="btn btn-info text-white w-100 rounded-pill py-2 fw-bold">إتمام التسجيل</button>
+                        <button type="button" id="submitEnrollBtn" class="btn btn-info text-white w-100 rounded-pill py-2 fw-bold">{{ __('center::students.complete_enrollment') }}</button>
                     </div>
                 </form>
             </div>
@@ -547,7 +547,7 @@
                         document.getElementById('payStudentId').value = this.dataset.id;
                         document.getElementById('payStudentName').textContent = this.dataset.name;
                         document.getElementById('payAmountInput').value = this.dataset.balance;
-                        document.getElementById('payBalanceHint').textContent = 'المستحق الحالي: ' + this.dataset.balance + ' ج.م';
+                        document.getElementById('payBalanceHint').textContent = '{{ __('center::students.current_balance') }}: ' + this.dataset.balance + ' {{ __('center::dashboard.currency') }}';
                         payModal.show();
                     }
                 });
@@ -570,12 +570,12 @@
                         options.forEach(opt => {
                             if (opt.value && enrolledIds.includes(opt.value)) {
                                 opt.setAttribute('data-enrolled', 'true');
-                                if (!opt.textContent.includes('(مسجل بالفعل)')) {
-                                    opt.textContent = opt.textContent + ' (مسجل بالفعل)';
+                                if (!opt.textContent.includes('{{ __('center::students.already_enrolled_label') }}')) {
+                                    opt.textContent = opt.textContent + ' {{ __('center::students.already_enrolled_label') }}';
                                 }
                             } else {
                                 opt.removeAttribute('data-enrolled');
-                                opt.textContent = opt.textContent.replace(' (مسجل بالفعل)', '');
+                                opt.textContent = opt.textContent.replace(' {{ __('center::students.already_enrolled_label') }}', '');
                             }
                         });
                         
@@ -612,7 +612,7 @@
 
             document.getElementById('submitEnrollBtn').addEventListener('click', function() {
                 const courseId = courseSelect.value;
-                if (!courseId) return alert('برجاء اختيار كورس أولاً');
+                if (!courseId) return alert('{{ __('center::students.choose_course_first') }}');
                 enrollForm.action = `/courses/${courseId}/enroll`;
                 enrollForm.submit();
             });
@@ -680,7 +680,7 @@
                     document.getElementById('directEmailSubject').value = subject;
                     document.getElementById('directEmailMessage').value = message;
                     
-                    if (confirm('هل تريد إرسال هذا التقرير بالبريد الإلكتروني للطالب الآن؟')) {
+                    if (confirm('{{ __('center::students.send_report_confirm') }}')) {
                         form.submit();
                     }
                 });
@@ -744,7 +744,7 @@
                     dropdownParent: $('#quickEnrollModal'),
                     width: '100%',
                     language: {
-                        noResults: function() { return "لا توجد نتائج"; }
+                        noResults: function() { return "{{ __('center::students.no_results') }}"; }
                     }
                 });
             }

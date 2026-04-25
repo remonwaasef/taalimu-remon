@@ -21,4 +21,23 @@ return [
         'myp' => 'Middle Years Programme (MYP)',
         'dp' => 'Diploma Programme (DP)',
     ],
+    'grades' => [
+        '1' => '1st Primary',
+        '2' => '2nd Primary',
+        '3' => '3rd Primary',
+        '4' => '4th Primary',
+        '5' => '5th Primary',
+        '6' => '6th Primary',
+        '7' => '1st Preparatory',
+        '8' => '2nd Preparatory',
+        '9' => '3rd Preparatory',
+        '10' => '1st Secondary',
+        '11' => '2nd Secondary',
+        '12' => '3rd Secondary',
+    ],
+    'late_rules' => [
+        'slight_delay' => 'Slight delay',
+        'half_hour_delay' => 'Delay (half hour)',
+        'hour_delay' => 'Big delay (hour)',
+    ],
 ];

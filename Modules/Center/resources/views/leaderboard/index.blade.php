@@ -3,8 +3,8 @@
 @section('content')
 <div class="container-fluid p-0">
     <div class="mb-4">
-        <h4 class="fw-bold mb-1"><i class="fas fa-trophy me-2 text-warning"></i>{{ __('center::messages.blade_0458') }}</h4>
-        <p class="text-muted small mb-0">{{ __('center::messages.blade_0459') }}</p>
+        <h4 class="fw-bold mb-1"><i class="fas fa-trophy me-2 text-warning"></i>{{ __('center::leaderboard.title') }}</h4>
+        <p class="text-muted small mb-0">{{ __('center::leaderboard.subtitle') }}</p>
     </div>
 
     <div class="row">
@@ -15,10 +15,10 @@
                         <table class="table table-hover align-middle mb-0">
                             <thead class="bg-light">
                                 <tr>
-                                    <th class="border-0 ps-4" style="width: 80px;">{{ __('center::messages.blade_0460') }}</th>
-                                    <th class="border-0">{{ __('center::messages.blade_0461') }}</th>
-                                    <th class="border-0">{{ __('center::messages.blade_0462') }}</th>
-                                    <th class="border-0 text-end pe-4">{{ __('center::messages.blade_0463') }}</th>
+                                    <th class="border-0 ps-4" style="width: 80px;">{{ __('center::leaderboard.rank') }}</th>
+                                    <th class="border-0">{{ __('center::leaderboard.student') }}</th>
+                                    <th class="border-0">{{ __('center::leaderboard.level') }}</th>
+                                    <th class="border-0 text-end pe-4">{{ __('center::leaderboard.points') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -54,18 +54,18 @@
                                     </td>
                                     <td class="text-end pe-4">
                                         @php
-                                            $level = __('center::messages.blade_0474');
+                                            $level = __('center::leaderboard.level_bronze');
                                             $badgeClass = 'bg-secondary';
-                                            if ($user->points >= 1000) { $level = __('center::messages.blade_0475'); $badgeClass = 'bg-danger'; }
-                                            elseif ($user->points >= 500) { $level = __('center::messages.blade_0476'); $badgeClass = 'bg-primary'; }
-                                            elseif ($user->points >= 200) { $level = __('center::messages.blade_0477'); $badgeClass = 'bg-success'; }
+                                            if ($user->points >= 1000) { $level = __('center::leaderboard.level_diamond'); $badgeClass = 'bg-danger'; }
+                                            elseif ($user->points >= 500) { $level = __('center::leaderboard.level_gold'); $badgeClass = 'bg-primary'; }
+                                            elseif ($user->points >= 200) { $level = __('center::leaderboard.level_silver'); $badgeClass = 'bg-success'; }
                                         @endphp
                                         <span class="badge {{ $badgeClass }} rounded-pill px-3">{{ $level }}</span>
                                     </td>
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="4" class="text-center py-5 text-muted">{{ __('center::messages.blade_0464') }}</td>
+                                    <td colspan="4" class="text-center py-5 text-muted">{{ __('center::leaderboard.no_students') }}</td>
                                 </tr>
                                 @endforelse
                             </tbody>
@@ -78,27 +78,27 @@
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm rounded-4 bg-primary text-white mb-4 overflow-hidden">
                 <div class="card-body p-4 position-relative" style="z-index: 1;">
-                    <h5 class="fw-bold mb-3">{{ __('center::messages.blade_0465') }}</h5>
+                    <h5 class="fw-bold mb-3">{{ __('center::leaderboard.legend') }}</h5>
                     <div class="d-flex flex-column gap-3">
                         <div class="d-flex align-items-start gap-3">
                             <i class="fas fa-check-circle mt-1"></i>
                             <div>
-                                <div class="fw-bold">{{ __('center::messages.blade_0466') }}</div>
-                                <small class="text-white-50">{{ __('center::messages.blade_0467') }}</small>
+                                <div class="fw-bold">{{ __('center::leaderboard.attendance_points') }}</div>
+                                <small class="text-white-50">{{ __('center::leaderboard.attendance_desc') }}</small>
                             </div>
                         </div>
                         <div class="d-flex align-items-start gap-3">
                             <i class="fas fa-graduation-cap mt-1"></i>
                             <div>
-                                <div class="fw-bold">{{ __('center::messages.blade_0468') }}</div>
-                                <small class="text-white-50">{{ __('center::messages.blade_0469') }}</small>
+                                <div class="fw-bold">{{ __('center::leaderboard.quiz_points') }}</div>
+                                <small class="text-white-50">{{ __('center::leaderboard.quiz_desc') }}</small>
                             </div>
                         </div>
                         <div class="d-flex align-items-start gap-3">
                             <i class="fas fa-tasks mt-1"></i>
                             <div>
-                                <div class="fw-bold">{{ __('center::messages.blade_0470') }}</div>
-                                <small class="text-white-50">{{ __('center::messages.blade_0471') }}</small>
+                                <div class="fw-bold">{{ __('center::leaderboard.activity_points') }}</div>
+                                <small class="text-white-50">{{ __('center::leaderboard.activity_desc') }}</small>
                             </div>
                         </div>
                     </div>
@@ -108,7 +108,7 @@
 
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-header bg-white border-0 pt-4 px-4">
-                    <h6 class="fw-bold mb-0">{{ __('center::messages.blade_0472') }}</h6>
+                    <h6 class="fw-bold mb-0">{{ __('center::leaderboard.points_history') }}</h6>
                 </div>
                 <div class="card-body p-4">
                     <div class="d-flex flex-column gap-3">
@@ -121,13 +121,13 @@
                                 {{ strtoupper(substr($log->user->name ?? '?', 0, 1)) }}
                             </div>
                             <div class="flex-grow-1 overflow-hidden">
-                                <div class="small fw-bold text-truncate">{{ $log->user->name ?? __('center::messages.blade_0478') }}</div>
+                                <div class="small fw-bold text-truncate">{{ $log->user->name ?? __('center::leaderboard.system_user') }}</div>
                                 <div class="text-muted" style="font-size: 0.7rem;">{{ $log->reason }}</div>
                             </div>
                             <div class="text-success small fw-bold">+{{ $log->points }}</div>
                         </div>
                         @empty
-                        <p class="small text-muted mb-0">{{ __('center::messages.blade_0473') }}</p>
+                        <p class="small text-muted mb-0">{{ __('center::leaderboard.your_rank') }}</p>
                         @endforelse
                     </div>
                 </div>

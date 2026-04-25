@@ -67,7 +67,7 @@
                         <td>
                             <span class="small text-dark fw-medium">
                                 <i class="fas {{ $expense->payment_method == 'cash' ? 'fa-money-bill-wave text-success' : 'fa-credit-card text-info' }} me-1"></i>
-                                {{ $expense->payment_method }}
+                                {{ __('center::expenses.' . $expense->payment_method) }}
                             </span>
                         </td>
                         <td>
@@ -86,7 +86,7 @@
                                 <form action="{{ route('center.expenses.destroy', $expense->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-light border-0 rounded-pill" onclick="return confirm('{{ __('center::messages.blade_0420') }}')">
+                                    <button type="submit" class="btn btn-sm btn-light border-0 rounded-pill" onclick="return confirm('{{ __('center::expenses.delete_confirm') }}')">
                                         <i class="fas fa-trash text-danger opacity-75"></i>
                                     </button>
                                 </form>

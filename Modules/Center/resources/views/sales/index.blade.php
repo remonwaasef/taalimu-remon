@@ -60,8 +60,8 @@
                                         <i class="fas fa-file-invoice-dollar text-primary" style="font-size: 3rem; opacity: 0.5;"></i>
                                     </div>
                                 </div>
-                                <h5 class="text-muted fw-bold">{{ __('center::sales.no_sales') ?? 'لا توجد فواتير حالياً' }}</h5>
-                                <p class="text-muted small">ابدأ بتسجيل مبيعات جديدة للطلاب.</p>
+                                <h5 class="text-muted fw-bold">{{ __('center::sales.no_sales') }}</h5>
+                                <p class="text-muted small">{{ __('center::sales.start_selling_hint') }}</p>
                             </td>
                         </tr>
                     @endforelse

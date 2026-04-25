@@ -39,7 +39,7 @@
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link {{ $activeTab == 'email_templates' ? 'active' : '' }} py-3 fw-bold" id="email_templates-tab" data-bs-toggle="tab" data-bs-target="#email_templates" type="button" role="tab" aria-selected="{{ $activeTab == 'email_templates' ? 'true' : 'false' }}">
-                                <i class="fas fa-envelope me-2 text-primary"></i> قوالب البريد
+                                <i class="fas fa-envelope me-2 text-primary"></i> {{ __('center::settings.tabs.email_templates') }}
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -145,7 +145,7 @@
                                             </option>
                                         @endforeach
                                     </select>
-                                    <small class="text-muted">{{ __('center::settings.general.timezone_help') ?? __('center::messages.blade_0709') }}</small>
+                                    <small class="text-muted">{{ __('center::settings.general_timezone_help') }}</small>
                                 </div>
 
                                 <!-- Social Media Links -->
@@ -302,13 +302,13 @@
                                     
                                     @if(!$hasCustomLevels)
                                         <div class="alert alert-info py-2 px-3 small border-0 mb-3 bg-opacity-10 text-info" id="system-defaults-alert">
-                                            <i class="fas fa-info-circle me-2"></i>{{ __('center::messages.blade_0705') }}</div>
+                                            <i class="fas fa-info-circle me-2"></i>{{ __('center::settings.academic_system_defaults_alert') }}</div>
                                     @endif
 
                                     @foreach($lateLevels as $lIndex => $level)
                                         <div class="late-level-item d-flex align-items-center gap-2 mb-2 bg-light p-2 rounded-3">
                                             <input type="number" name="settings[academic][late_levels][{{ $lIndex }}][minutes]" class="form-control form-control-sm" style="width: 100px;" value="{{ $level['minutes'] }}" placeholder="{{ __('center::settings.academic.threshold_minutes') }}" required>
-                                            <input type="text" name="settings[academic][late_levels][{{ $lIndex }}][label]" class="form-control form-control-sm" value="{{ $level['label'] }}" placeholder="{{ __('center::settings.academic.level_label') }}" required>
+                                            <input type="text" name="settings[academic][late_levels][{{ $lIndex }}][label]" class="form-control form-control-sm" value="{{ __($level['label']) }}" placeholder="{{ __('center::settings.academic.level_label') }}" required>
                                             <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeLateLevel(this)">
                                                 <i class="fas fa-times"></i>
                                             </button>
@@ -317,7 +317,7 @@
                                 </div>
                                 <div class="text-start mt-2">
                                     <button type="button" class="btn btn-link btn-sm text-muted p-0" onclick="restoreLateDefaults()">
-                                        <i class="fas fa-undo-alt me-1"></i>{{ __('center::messages.blade_0706') }}</button>
+                                        <i class="fas fa-undo-alt me-1"></i>{{ __('center::settings.academic_restore_defaults') }}</button>
                                 </div>
                             </div>
 
@@ -460,7 +460,6 @@
                                 </div>
                             </form>
                         </div>
-
                         <!-- Email Templates Settings -->
 {{-- Tab 3: Email Templates --}}
                         <div class="tab-pane fade {{ $activeTab == 'email_templates' ? 'show active' : '' }}" id="email_templates" role="tabpanel">
@@ -475,14 +474,14 @@
 
                                 {{-- Header --}}
                                 <div class="d-flex align-items-center justify-content-between mb-4">
-                                    <h5 class="fw-bold mb-0 text-primary"><i class="fas fa-envelope me-2"></i> إعدادات البريد الإلكتروني</h5>
+                                    <h5 class="fw-bold mb-0 text-primary"><i class="fas fa-envelope me-2"></i> {{ __('center::settings.email_templates.title') }}</h5>
                                 </div>
-                                <p class="text-muted small mb-4">تحكم في رسائل الترحيب التلقائية التي يتم إرسالها عند تسجيل طالب جديد.</p>
+                                <p class="text-muted small mb-4">{{ __('center::settings.email_templates.desc') }}</p>
 
                                 {{-- Quick Preset Selector --}}
                                 <div class="card border bg-light shadow-none rounded-4 mb-4">
                                     <div class="card-body p-4">
-                                        <h6 class="fw-bold mb-3"><i class="fas fa-magic me-2 text-warning"></i> اختر قالب جاهز</h6>
+                                        <h6 class="fw-bold mb-3"><i class="fas fa-magic me-2 text-warning"></i> {{ __('center::settings.email_templates.choose_preset') }}</h6>
                                         <div class="row g-3">
                                             @foreach($presets as $key => $preset)
                                                 <div class="col-md-4">
@@ -504,32 +503,32 @@
                                         <div class="card border bg-white shadow-none rounded-4 mb-4">
                                             <div class="card-body p-4">
                                                 <div class="d-flex align-items-center justify-content-between mb-4">
-                                                    <h6 class="fw-bold mb-0"><i class="fas fa-user-graduate me-2 text-info"></i> رسالة ترحيب الطالب</h6>
+                                                    <h6 class="fw-bold mb-0"><i class="fas fa-user-graduate me-2 text-info"></i> {{ __('center::settings.email_templates.student_welcome') }}</h6>
                                                     <div class="d-flex align-items-center gap-3">
                                                         <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="student_subject" data-body-id="student_body" data-default-subject="{{ $defaultPreset['student_subject'] ?? '' }}" data-default-body="{{ $defaultPreset['student_body'] ?? '' }}">
-                                                            <i class="fas fa-undo"></i> للافتراضي
+                                                            <i class="fas fa-undo"></i> {{ __('center::settings.email_templates.to_default') }}
                                                         </button>
                                                         <div class="form-check form-switch custom-switch mb-0">
                                                             <input type="hidden" name="settings[email_templates][welcome_student_enabled]" value="0">
                                                             <input class="form-check-input" type="checkbox" name="settings[email_templates][welcome_student_enabled]" value="1" id="studentEmailEnabled" {{ ($emailSettings['welcome_student_enabled'] ?? true) ? 'checked' : '' }}>
-                                                            <label class="form-check-label fw-bold small ms-2" for="studentEmailEnabled">تفعيل</label>
+                                                            <label class="form-check-label fw-bold small ms-2" for="studentEmailEnabled">{{ __('center::settings.email_templates.activate') }}</label>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="mb-3">
-                                                    <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
-                                                    <input type="text" name="settings[email_templates][welcome_student_subject]" id="student_subject" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['welcome_student_subject'] ?? $defaultPreset['student_subject'] ?? '' }}" placeholder="مرحباً بك في {اسم_المركز}">
+                                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.email_templates.subject') }}</label>
+                                                    <input type="text" name="settings[email_templates][welcome_student_subject]" id="student_subject" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['welcome_student_subject'] ?? $defaultPreset['student_subject'] ?? '' }}" placeholder="{{ __('center::settings.email_templates.subject') }}">
                                                 </div>
 
                                                 <div class="mb-2 d-flex flex-wrap gap-1">
                                                     @php
                                                         $vars = [
-                                                            'اسم_الطالب' => 'اسم الطالب',
-                                                            'اسم_المركز' => 'اسم المركز',
-                                                            'رابط_الدخول' => 'رابط الدخول',
-                                                            'كلمة_المرور' => 'كلمة المرور',
-                                                            'رقم_الهاتف' => 'رقم الهاتف',
+                                                            'اسم_الطالب' => __('center::settings.email_templates.placeholders.student_name'),
+                                                            'اسم_المركز' => __('center::settings.email_templates.placeholders.center_name'),
+                                                            'رابط_الدخول' => __('center::settings.email_templates.placeholders.login_link'),
+                                                            'كلمة_المرور' => __('center::settings.email_templates.placeholders.password'),
+                                                            'رقم_الهاتف' => __('center::settings.email_templates.placeholders.phone'),
                                                         ];
                                                     @endphp
                                                     @foreach($vars as $key => $label)
@@ -540,8 +539,8 @@
                                                 </div>
 
                                                 <div class="mb-0">
-                                                    <label class="form-label fw-bold small text-muted">نص الرسالة</label>
-                                                    <textarea name="settings[email_templates][welcome_student_body]" id="student_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="8" placeholder="اكتب رسالة الترحيب هنا...">{{ $emailSettings['welcome_student_body'] ?? $defaultPreset['student_body'] ?? '' }}</textarea>
+                                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.email_templates.body') }}</label>
+                                                    <textarea name="settings[email_templates][welcome_student_body]" id="student_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="8" placeholder="{{ __('center::settings.email_templates.body') }}">{{ $emailSettings['welcome_student_body'] ?? $defaultPreset['student_body'] ?? '' }}</textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -550,27 +549,27 @@
                                         <div class="card border bg-white shadow-none rounded-4 mb-4">
                                             <div class="card-body p-4">
                                                 <div class="d-flex align-items-center justify-content-between mb-4">
-                                                    <h6 class="fw-bold mb-0"><i class="fas fa-user-shield me-2 text-success"></i> رسالة ترحيب ولي الأمر</h6>
+                                                    <h6 class="fw-bold mb-0"><i class="fas fa-user-shield me-2 text-success"></i> {{ __('center::settings.email_templates.guardian_welcome') }}</h6>
                                                     <div class="d-flex align-items-center gap-3">
                                                         <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="guardian_subject" data-body-id="guardian_body" data-default-subject="{{ $defaultPreset['guardian_subject'] ?? '' }}" data-default-body="{{ $defaultPreset['guardian_body'] ?? '' }}">
-                                                            <i class="fas fa-undo"></i> للافتراضي
+                                                            <i class="fas fa-undo"></i> {{ __('center::settings.email_templates.to_default') }}
                                                         </button>
                                                         <div class="form-check form-switch custom-switch mb-0">
                                                             <input type="hidden" name="settings[email_templates][welcome_guardian_enabled]" value="0">
                                                             <input class="form-check-input" type="checkbox" name="settings[email_templates][welcome_guardian_enabled]" value="1" id="guardianEmailEnabled" {{ ($emailSettings['welcome_guardian_enabled'] ?? true) ? 'checked' : '' }}>
-                                                            <label class="form-check-label fw-bold small ms-2" for="guardianEmailEnabled">تفعيل</label>
+                                                            <label class="form-check-label fw-bold small ms-2" for="guardianEmailEnabled">{{ __('center::settings.email_templates.activate') }}</label>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="mb-3">
-                                                    <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
-                                                    <input type="text" name="settings[email_templates][welcome_guardian_subject]" id="guardian_subject" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['welcome_guardian_subject'] ?? $defaultPreset['guardian_subject'] ?? '' }}" placeholder="تم تسجيل {اسم_الطالب} في {اسم_المركز}">
+                                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.email_templates.subject') }}</label>
+                                                    <input type="text" name="settings[email_templates][welcome_guardian_subject]" id="guardian_subject" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['welcome_guardian_subject'] ?? $defaultPreset['guardian_subject'] ?? '' }}" placeholder="{{ __('center::settings.email_templates.subject') }}">
                                                 </div>
 
                                                 <div class="mb-2 d-flex flex-wrap gap-1">
                                                     @php
-                                                        $gVars = array_merge($vars, ['اسم_ولي_الأمر' => 'اسم ولي الأمر', 'المرحلة' => 'المرحلة الدراسية']);
+                                                        $gVars = array_merge($vars, ['اسم_ولي_الأمر' => __('center::settings.email_templates.placeholders.parent_name'), 'المرحلة' => __('center::settings.email_templates.placeholders.stage')]);
                                                     @endphp
                                                     @foreach($gVars as $key => $label)
                                                         <button type="button" class="btn btn-sm btn-outline-secondary border-dashed py-1 px-2 x-small var-btn" data-target="guardian_body" data-var="{{ '{' . $key . '}' }}">
@@ -580,8 +579,8 @@
                                                 </div>
 
                                                 <div class="mb-0">
-                                                    <label class="form-label fw-bold small text-muted">نص الرسالة</label>
-                                                    <textarea name="settings[email_templates][welcome_guardian_body]" id="guardian_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="8" placeholder="اكتب رسالة ولي الأمر هنا...">{{ $emailSettings['welcome_guardian_body'] ?? $defaultPreset['guardian_body'] ?? '' }}</textarea>
+                                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.email_templates.body') }}</label>
+                                                    <textarea name="settings[email_templates][welcome_guardian_body]" id="guardian_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="8" placeholder="{{ __('center::settings.email_templates.body') }}">{{ $emailSettings['welcome_guardian_body'] ?? $defaultPreset['guardian_body'] ?? '' }}</textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -598,12 +597,12 @@
                                                             <span class="rounded-circle bg-warning" style="width:10px; height:10px;"></span>
                                                             <span class="rounded-circle bg-success" style="width:10px; height:10px;"></span>
                                                         </div>
-                                                        <span class="text-white x-small opacity-50 ms-2">معاينة الرسالة (الآن)</span>
+                                                        <span class="text-white x-small opacity-50 ms-2">{{ __('center::settings.email_templates.preview_title') }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="card-body p-0 bg-white">
                                                     <div class="p-3 border-bottom bg-light">
-                                                        <div class="small text-muted mb-1">الموضوع:</div>
+                                                        <div class="small text-muted mb-1">{{ __('center::settings.email_templates.subject') }}:</div>
                                                         <div id="preview-subject" class="fw-bold">...</div>
                                                     </div>
                                                     <div class="p-4" style="min-height: 400px; font-family: sans-serif; line-height: 1.6;">
@@ -611,13 +610,13 @@
                                                     </div>
                                                 </div>
                                                 <div class="card-footer bg-light border-0 text-center py-3">
-                                                    <span class="text-muted x-small italic"><i class="fas fa-magic me-1 text-primary"></i> تظهر الرموز في المعاينة كبيانات تجريبية للتوضيح فقط</span>
+                                                    <span class="text-muted x-small italic"><i class="fas fa-magic me-1 text-primary"></i> {{ __('center::settings.email_templates.preview_help') }}</span>
                                                 </div>
                                             </div>
 
                                             <div class="mt-4 p-4 bg-primary-soft rounded-4 border border-primary border-opacity-10">
-                                                <h6 class="fw-bold mb-3 text-primary"><i class="fas fa-lightbulb me-2"></i> نصيحة احترافية</h6>
-                                                <p class="small text-dark mb-0">استخدم الرموز التلقائية لجعل رسائلك شخصية أكثر. الرسائل التي تبدأ باسم الطالب تحقق تفاعلاً أعلى بنسبة 40%!</p>
+                                                <h6 class="fw-bold mb-3 text-primary"><i class="fas fa-lightbulb me-2"></i> {{ __('center::settings.email_templates.pro_tip') }}</h6>
+                                                <p class="small text-dark mb-0">{{ __('center::settings.email_templates.pro_tip_desc') }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -628,9 +627,9 @@
                                 {{-- ═══════════════════════════════════════════════ --}}
                                 <div class="mt-5 pt-4 border-top">
                                     <div class="d-flex align-items-center justify-content-between mb-3">
-                                        <h5 class="fw-bold mb-0 text-primary"><i class="fas fa-bell me-2"></i> إشعارات البريد التلقائية</h5>
+                                        <h5 class="fw-bold mb-0 text-primary"><i class="fas fa-bell me-2"></i> {{ __('center::settings.email_templates.notif_title') }}</h5>
                                     </div>
-                                    <p class="text-muted small mb-4">فعّل أو عطّل إرسال بريد إلكتروني تلقائي عند حدوث أحداث معينة. يمكنك تخصيص نص كل رسالة.</p>
+                                    <p class="text-muted small mb-4">{{ __('center::settings.email_templates.notif_desc') }}</p>
 
                                     {{-- Accordion for each notification type --}}
                                     <div class="accordion" id="emailNotificationsAccordion">
@@ -644,8 +643,8 @@
                                                             <i class="fas fa-clock text-warning"></i>
                                                         </span>
                                                         <span>
-                                                            <span class="d-block">تذكير بموعد الدفع</span>
-                                                            <small class="text-muted fw-normal">يُرسل للطالب أو ولي الأمر قبل موعد السداد</small>
+                                                            <span class="d-block">{{ __('center::settings.email_templates.payment_reminder') }}</span>
+                                                            <small class="text-muted fw-normal">{{ __('center::settings.email_templates.payment_reminder_desc') }}</small>
                                                         </span>
                                                     </span>
                                                 </button>
@@ -653,31 +652,31 @@
                                             <div id="notif_payment_reminder" class="accordion-collapse collapse" data-bs-parent="#emailNotificationsAccordion">
                                                 <div class="accordion-body p-4">
                                                     <div class="d-flex align-items-center justify-content-between mb-3">
-                                                        <span class="fw-bold small text-muted">حالة الإشعار</span>
+                                                        <span class="fw-bold small text-muted">{{ __('center::settings.email_templates.notif_status') }}</span>
                                                         <div class="d-flex align-items-center gap-3">
-                                                            <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="notif_payment_reminder_subject" data-body-id="notif_payment_reminder_body" data-default-subject="تذكير بسداد مصروفات {اسم_الطالب} - {اسم_المركز}" data-default-body="نذكركم بأن مصروفات الطالب/ة {اسم_الطالب} بمبلغ {المبلغ} مستحقة بتاريخ {تاريخ_الاستحقاق}.\n\nيرجى السداد في الموعد المحدد لضمان استمرار الخدمة.\n\nشكراً لتعاونكم,\n{اسم_المركز}">
-                                                                <i class="fas fa-undo"></i> للافتراضي
+                                                            <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="notif_payment_reminder_subject" data-body-id="notif_payment_reminder_body" data-default-subject="{{ __('center::settings.email_templates.defaults.payment_reminder_subject') }}" data-default-body="{{ __('center::settings.email_templates.defaults.payment_reminder_body') }}">
+                                                                <i class="fas fa-undo"></i> {{ __('center::settings.email_templates.to_default') }}
                                                             </button>
                                                             <div class="form-check form-switch custom-switch mb-0">
                                                                 <input type="hidden" name="settings[email_templates][notif_payment_reminder_enabled]" value="0">
                                                                 <input class="form-check-input" type="checkbox" name="settings[email_templates][notif_payment_reminder_enabled]" value="1" id="notifPaymentReminder" {{ ($emailSettings['notif_payment_reminder_enabled'] ?? false) ? 'checked' : '' }}>
-                                                                <label class="form-check-label fw-bold small ms-2" for="notifPaymentReminder">مفعّل</label>
+                                                                <label class="form-check-label fw-bold small ms-2" for="notifPaymentReminder">{{ __('center::settings.email_templates.notif_active') }}</label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
-                                                        <input type="text" id="notif_payment_reminder_subject" name="settings[email_templates][notif_payment_reminder_subject]" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['notif_payment_reminder_subject'] ?? 'تذكير بسداد مصروفات {اسم_الطالب} - {اسم_المركز}' }}">
+                                                        <label class="form-label fw-bold small text-muted">{{ __('center::settings.email_templates.subject') }}</label>
+                                                        <input type="text" id="notif_payment_reminder_subject" name="settings[email_templates][notif_payment_reminder_subject]" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['notif_payment_reminder_subject'] ?? __('center::settings.email_templates.defaults.payment_reminder_subject') }}">
                                                     </div>
                                                     <div class="mb-2 d-flex flex-wrap gap-1">
-                                                        @php $payVars = ['اسم_الطالب'=>'اسم الطالب','اسم_المركز'=>'اسم المركز','المبلغ'=>'المبلغ المستحق','تاريخ_الاستحقاق'=>'تاريخ الاستحقاق','رابط_الدخول'=>'رابط الدخول']; @endphp
+                                                        @php $payVars = ['اسم_الطالب' => __('center::settings.email_templates.placeholders.student_name'), 'اسم_المركز' => __('center::settings.email_templates.placeholders.center_name'), 'المبلغ' => __('center::settings.email_templates.placeholders.amount'), 'تاريخ_الاستحقاق' => __('center::settings.email_templates.placeholders.due_date'), 'رابط_الدخول' => __('center::settings.email_templates.placeholders.login_link')]; @endphp
                                                         @foreach($payVars as $k=>$l)
                                                             <button type="button" class="btn btn-sm btn-outline-secondary border-dashed py-1 px-2 x-small var-btn" data-target="notif_payment_reminder_body" data-var="{{ '{'.$k.'}' }}"><i class="fas fa-plus-circle me-1 opacity-50"></i> {{ $l }}</button>
                                                         @endforeach
                                                     </div>
                                                     <div class="mb-0">
-                                                        <label class="form-label fw-bold small text-muted">نص الرسالة</label>
-                                                        <textarea name="settings[email_templates][notif_payment_reminder_body]" id="notif_payment_reminder_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="5">{{ $emailSettings['notif_payment_reminder_body'] ?? "نذكركم بأن مصروفات الطالب/ة {اسم_الطالب} بمبلغ {المبلغ} مستحقة بتاريخ {تاريخ_الاستحقاق}.\n\nيرجى السداد في الموعد المحدد لضمان استمرار الخدمة.\n\nشكراً لتعاونكم,\n{اسم_المركز}" }}</textarea>
+                                                        <label class="form-label fw-bold small text-muted">{{ __('center::settings.email_templates.body') }}</label>
+                                                        <textarea name="settings[email_templates][notif_payment_reminder_body]" id="notif_payment_reminder_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="5">{{ $emailSettings['notif_payment_reminder_body'] ?? __('center::settings.email_templates.defaults.payment_reminder_body') }}</textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -692,8 +691,8 @@
                                                             <i class="fas fa-user-plus text-info"></i>
                                                         </span>
                                                         <span>
-                                                            <span class="d-block">الاشتراك في مجموعة جديدة</span>
-                                                            <small class="text-muted fw-normal">يُرسل عند إضافة طالب لمجموعة أو كورس جديد</small>
+                                                            <span class="d-block">{{ __('center::settings.email_templates.group_enrollment') }}</span>
+                                                            <small class="text-muted fw-normal">{{ __('center::settings.email_templates.group_enrollment_desc') }}</small>
                                                         </span>
                                                     </span>
                                                 </button>
@@ -701,31 +700,31 @@
                                             <div id="notif_group_enrollment" class="accordion-collapse collapse" data-bs-parent="#emailNotificationsAccordion">
                                                 <div class="accordion-body p-4">
                                                     <div class="d-flex align-items-center justify-content-between mb-3">
-                                                        <span class="fw-bold small text-muted">حالة الإشعار</span>
+                                                        <span class="fw-bold small text-muted">{{ __('center::settings.email_templates.notif_status') }}</span>
                                                         <div class="d-flex align-items-center gap-3">
-                                                            <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="notif_group_enrollment_subject" data-body-id="notif_group_enrollment_body" data-default-subject="تم تسجيلك في مجموعة جديدة - {اسم_المركز}" data-default-body="مرحباً {اسم_الطالب}،\n\nتم تسجيلك في مجموعة جديدة: {اسم_المجموعة}\n\nيمكنك الدخول للمنصة من خلال:\n{رابط_الدخول}\n\nنتمنى لك التوفيق!\n{اسم_المركز}">
-                                                                <i class="fas fa-undo"></i> للافتراضي
+                                                            <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="notif_group_enrollment_subject" data-body-id="notif_group_enrollment_body" data-default-subject="{{ __('center::settings.email_templates.defaults.group_enrollment_subject') }}" data-default-body="{{ __('center::settings.email_templates.defaults.group_enrollment_body') }}">
+                                                                <i class="fas fa-undo"></i> {{ __('center::settings.email_templates.to_default') }}
                                                             </button>
                                                             <div class="form-check form-switch custom-switch mb-0">
                                                                 <input type="hidden" name="settings[email_templates][notif_group_enrollment_enabled]" value="0">
                                                                 <input class="form-check-input" type="checkbox" name="settings[email_templates][notif_group_enrollment_enabled]" value="1" id="notifGroupEnrollment" {{ ($emailSettings['notif_group_enrollment_enabled'] ?? false) ? 'checked' : '' }}>
-                                                                <label class="form-check-label fw-bold small ms-2" for="notifGroupEnrollment">مفعّل</label>
+                                                                <label class="form-check-label fw-bold small ms-2" for="notifGroupEnrollment">{{ __('center::settings.email_templates.notif_active') }}</label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
-                                                        <input type="text" id="notif_group_enrollment_subject" name="settings[email_templates][notif_group_enrollment_subject]" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['notif_group_enrollment_subject'] ?? 'تم تسجيلك في مجموعة جديدة - {اسم_المركز}' }}">
+                                                        <label class="form-label fw-bold small text-muted">{{ __('center::settings.email_templates.subject') }}</label>
+                                                        <input type="text" id="notif_group_enrollment_subject" name="settings[email_templates][notif_group_enrollment_subject]" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['notif_group_enrollment_subject'] ?? __('center::settings.email_templates.defaults.group_enrollment_subject') }}">
                                                     </div>
                                                     <div class="mb-2 d-flex flex-wrap gap-1">
-                                                        @php $grpVars = ['اسم_الطالب'=>'اسم الطالب','اسم_المركز'=>'اسم المركز','اسم_المجموعة'=>'اسم المجموعة','سعر_الدورة'=>'سعر الدورة','رابط_الدخول'=>'رابط الدخول']; @endphp
+                                                        @php $grpVars = ['اسم_الطالب' => __('center::settings.email_templates.placeholders.student_name'), 'اسم_المركز' => __('center::settings.email_templates.placeholders.center_name'), 'اسم_المجموعة' => __('center::settings.email_templates.placeholders.group_name'), 'سعر_الدورة' => __('center::settings.email_templates.placeholders.course_price'), 'رابط_الدخول' => __('center::settings.email_templates.placeholders.login_link')]; @endphp
                                                         @foreach($grpVars as $k=>$l)
                                                             <button type="button" class="btn btn-sm btn-outline-secondary border-dashed py-1 px-2 x-small var-btn" data-target="notif_group_enrollment_body" data-var="{{ '{'.$k.'}' }}"><i class="fas fa-plus-circle me-1 opacity-50"></i> {{ $l }}</button>
                                                         @endforeach
                                                     </div>
                                                     <div class="mb-0">
-                                                        <label class="form-label fw-bold small text-muted">نص الرسالة</label>
-                                                        <textarea name="settings[email_templates][notif_group_enrollment_body]" id="notif_group_enrollment_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="5">{{ $emailSettings['notif_group_enrollment_body'] ?? "مرحباً {اسم_الطالب}،\n\nتم تسجيلك في مجموعة جديدة: {اسم_المجموعة}\n\nيمكنك الدخول للمنصة من خلال:\n{رابط_الدخول}\n\nنتمنى لك التوفيق!\n{اسم_المركز}" }}</textarea>
+                                                        <label class="form-label fw-bold small text-muted">{{ __('center::settings.email_templates.body') }}</label>
+                                                        <textarea name="settings[email_templates][notif_group_enrollment_body]" id="notif_group_enrollment_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="5">{{ $emailSettings['notif_group_enrollment_body'] ?? __('center::settings.email_templates.defaults.group_enrollment_body') }}</textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -740,8 +739,8 @@
                                                             <i class="fas fa-check-circle text-success"></i>
                                                         </span>
                                                         <span>
-                                                            <span class="d-block">تأكيد استلام مبلغ</span>
-                                                            <small class="text-muted fw-normal">يُرسل عند تسجيل دفعة مالية جديدة للطالب</small>
+                                                            <span class="d-block">{{ __('center::settings.email_templates.payment_confirmation') }}</span>
+                                                            <small class="text-muted fw-normal">{{ __('center::settings.email_templates.payment_confirmation_desc') }}</small>
                                                         </span>
                                                     </span>
                                                 </button>
@@ -749,31 +748,31 @@
                                             <div id="notif_payment_confirmed" class="accordion-collapse collapse" data-bs-parent="#emailNotificationsAccordion">
                                                 <div class="accordion-body p-4">
                                                     <div class="d-flex align-items-center justify-content-between mb-3">
-                                                        <span class="fw-bold small text-muted">حالة الإشعار</span>
+                                                        <span class="fw-bold small text-muted">{{ __('center::settings.email_templates.notif_status') }}</span>
                                                         <div class="d-flex align-items-center gap-3">
-                                                            <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="notif_payment_confirmed_subject" data-body-id="notif_payment_confirmed_body" data-default-subject="تأكيد استلام دفعة - {اسم_المركز}" data-default-body="مرحباً {اسم_الطالب}،\n\nنؤكد استلام دفعة مالية بالتفاصيل التالية:\n• المبلغ: {المبلغ_المدفوع}\n• التاريخ: {تاريخ_الدفع}\n• طريقة الدفع: {طريقة_الدفع}\n• المتبقي: {المتبقي}\n\nشكراً لالتزامكم.\n{اسم_المركز}">
-                                                                <i class="fas fa-undo"></i> للافتراضي
+                                                            <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="notif_payment_confirmed_subject" data-body-id="notif_payment_confirmed_body" data-default-subject="{{ __('center::settings.email_templates.defaults.payment_confirmation_subject') }}" data-default-body="{{ __('center::settings.email_templates.defaults.payment_confirmation_body') }}">
+                                                                <i class="fas fa-undo"></i> {{ __('center::settings.email_templates.to_default') }}
                                                             </button>
                                                             <div class="form-check form-switch custom-switch mb-0">
                                                                 <input type="hidden" name="settings[email_templates][notif_payment_confirmed_enabled]" value="0">
                                                                 <input class="form-check-input" type="checkbox" name="settings[email_templates][notif_payment_confirmed_enabled]" value="1" id="notifPaymentConfirmed" {{ ($emailSettings['notif_payment_confirmed_enabled'] ?? false) ? 'checked' : '' }}>
-                                                                <label class="form-check-label fw-bold small ms-2" for="notifPaymentConfirmed">مفعّل</label>
+                                                                <label class="form-check-label fw-bold small ms-2" for="notifPaymentConfirmed">{{ __('center::settings.email_templates.notif_active') }}</label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label class="form-label fw-bold small text-muted">عنوان الرسالة</label>
-                                                        <input type="text" id="notif_payment_confirmed_subject" name="settings[email_templates][notif_payment_confirmed_subject]" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['notif_payment_confirmed_subject'] ?? 'تأكيد استلام دفعة - {اسم_المركز}' }}">
+                                                        <label class="form-label fw-bold small text-muted">{{ __('center::settings.email_templates.subject') }}</label>
+                                                        <input type="text" id="notif_payment_confirmed_subject" name="settings[email_templates][notif_payment_confirmed_subject]" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['notif_payment_confirmed_subject'] ?? __('center::settings.email_templates.defaults.payment_confirmation_subject') }}">
                                                     </div>
                                                     <div class="mb-2 d-flex flex-wrap gap-1">
-                                                        @php $confVars = ['اسم_الطالب'=>'اسم الطالب','اسم_المركز'=>'اسم المركز','المبلغ_المدفوع'=>'المبلغ المدفوع','تاريخ_الدفع'=>'تاريخ الدفع','المتبقي'=>'المبلغ المتبقي','طريقة_الدفع'=>'طريقة الدفع']; @endphp
+                                                        @php $confVars = ['اسم_الطالب' => __('center::settings.email_templates.placeholders.student_name'), 'اسم_المركز' => __('center::settings.email_templates.placeholders.center_name'), 'المبلغ_المدفوع' => __('center::settings.email_templates.placeholders.amount_paid'), 'تاريخ_الدفع' => __('center::settings.email_templates.placeholders.payment_date'), 'المتبقي' => __('center::settings.email_templates.placeholders.remaining'), 'طريقة_الدفع' => __('center::settings.email_templates.placeholders.payment_method')]; @endphp
                                                         @foreach($confVars as $k=>$l)
                                                             <button type="button" class="btn btn-sm btn-outline-secondary border-dashed py-1 px-2 x-small var-btn" data-target="notif_payment_confirmed_body" data-var="{{ '{'.$k.'}' }}"><i class="fas fa-plus-circle me-1 opacity-50"></i> {{ $l }}</button>
                                                         @endforeach
                                                     </div>
                                                     <div class="mb-0">
-                                                        <label class="form-label fw-bold small text-muted">نص الرسالة</label>
-                                                        <textarea name="settings[email_templates][notif_payment_confirmed_body]" id="notif_payment_confirmed_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="5">{{ $emailSettings['notif_payment_confirmed_body'] ?? "مرحباً {اسم_الطالب}،\n\nنؤكد استلام دفعة مالية بالتفاصيل التالية:\n• المبلغ: {المبلغ_المدفوع}\n• التاريخ: {تاريخ_الدفع}\n• طريقة الدفع: {طريقة_الدفع}\n• المتبقي: {المتبقي}\n\nشكراً لالتزامكم.\n{اسم_المركز}" }}</textarea>
+                                                        <label class="form-label fw-bold small text-muted">{{ __('center::settings.email_templates.body') }}</label>
+                                                        <textarea name="settings[email_templates][notif_payment_confirmed_body]" id="notif_payment_confirmed_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="5">{{ $emailSettings['notif_payment_confirmed_body'] ?? __('center::settings.email_templates.defaults.payment_confirmation_body') }}</textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -784,15 +783,15 @@
 
                                 <div class="text-start mt-4 pt-3 border-top d-flex gap-2">
                                     <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm">
-                                        <i class="fas fa-save me-2"></i> حفظ إعدادات البريد
+                                        <i class="fas fa-save me-2"></i> {{ __('center::settings.email_templates.save') }}
                                     </button>
                                 </div>
                             </form>
                             
-                            <form action="{{ route('center.settings.reset-email-templates', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST" class="d-inline-block mt-3" onsubmit="return confirm('هل أنت متأكد أنك تريد مسح جميع التعديلات وإعادة النصوص للوضع الافتراضي؟');">
+                            <form action="{{ route('center.settings.reset-email-templates', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST" class="d-inline-block mt-3" onsubmit="return confirm('{{ __('center::settings.email_templates.confirm_reset') }}');">
                                 @csrf
                                 <button type="submit" class="btn btn-light text-danger rounded-pill px-4 fw-bold shadow-sm border">
-                                    <i class="fas fa-undo me-2"></i> إعادة الضبط للافتراضي
+                                    <i class="fas fa-undo me-2"></i> {{ __('center::settings.email_templates.reset') }}
                                 </button>
                             </form>
                         </div>
@@ -946,240 +945,6 @@
     .accordion-item { border-color: #e2e8f0 !important; }
 </style>
 
-@push('scripts')
-<script>
-    let stageCount = {{ count($stages) }};
-
-    function addStage() {
-        const container = document.getElementById('stages-container');
-        const stageHtml = `
-            <div class="stage-card card border bg-light mb-3 rounded-3 overflow-hidden shadow-none" data-index="${stageCount}">
-                <div class="card-header bg-white d-flex align-items-center gap-3 py-2 border-bottom">
-                    <input type="text" name="stages[${stageCount}][name]" class="form-control form-control-sm fw-bold border-0 bg-light" placeholder="{{ __('center::settings.academic.stage_name_placeholder') }}">
-                    <div class="ms-auto d-flex gap-2">
-                        <button type="button" class="btn btn-sm btn-light text-primary" onclick="addGrade(${stageCount})" title="{{ __('center::settings.academic.add_grade') }}">
-                            <i class="fas fa-plus-circle"></i>
-                        </button>
-                        <button type="button" class="btn btn-sm btn-light text-danger" onclick="removeStage(this)" title="{{ __('center::settings.academic.remove_stage') }}">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body p-3">
-                    <div class="grades-container d-flex flex-wrap gap-2">
-                        <!-- Grades will be added here -->
-                    </div>
-                </div>
-            </div>
-        `;
-        container.insertAdjacentHTML('beforeend', stageHtml);
-        stageCount++;
-    }
-
-    function addGrade(stageIndex) {
-        const stageCard = document.querySelector(`.stage-card[data-index="${stageIndex}"]`);
-        const container = stageCard.querySelector('.grades-container');
-        const gradeIndex = container.children.length;
-        const gradeHtml = `
-            <div class="grade-item d-flex align-items-center bg-white border rounded-pill px-3 py-1 shadow-sm">
-                <input type="text" name="stages[${stageIndex}][grades][${gradeIndex}][name]" class="form-control form-control-sm border-0 p-0 text-center" style="width: 100px; font-size: 0.85rem;" placeholder="{{ __('center::settings.academic.grade_name_placeholder') }}">
-                <button type="button" class="btn btn-link btn-sm text-danger p-0 ms-2" onclick="removeGrade(this)">
-                    <i class="fas fa-times-circle"></i>
-                </button>
-            </div>
-        `;
-        container.insertAdjacentHTML('beforeend', gradeHtml);
-    }
-
-    function removeStage(btn, id = null) {
-        if (confirm("{{ __('center::settings.academic.confirm_delete_stage') }}")) {
-            if (id) {
-                const deletionInputs = document.getElementById('deletion-inputs');
-                deletionInputs.insertAdjacentHTML('beforeend', `<input type="hidden" name="deleted_stages[]" value="${id}">`);
-            }
-            btn.closest('.stage-card').remove();
-        }
-    }
-
-    function confirmTemplate() {
-        const select = document.querySelector('select[name="template_key"]');
-        const form = document.getElementById('applyTemplateForm');
-        
-        if (!select || select.value === "") {
-            alert("{{ __('center::settings.academic.select_template_first') }}");
-            return;
-        }
-        
-        console.log('Applying template:', select.value);
-        
-        if (confirm("{{ __('center::settings.academic.confirm_template') }}")) {
-            if (form) {
-                form.submit();
-            } else {
-                console.error('Form applyTemplateForm not found!');
-                alert("{{ __('center::settings.academic.tech_error') }}");
-            }
-        }
-    }
-
-    function removeGrade(btn, id = null) {
-        if (id) {
-            const deletionInputs = document.getElementById('deletion-inputs');
-            deletionInputs.insertAdjacentHTML('beforeend', `<input type="hidden" name="deleted_grades[]" value="${id}">`);
-        }
-        btn.closest('.grade-item').remove();
-    }
-
-    function removeLateLevel(btn) {
-        btn.closest('.late-level-item').remove();
-        // Show defaults alert if empty (optional enhancement)
-        const container = document.getElementById('late-levels-container');
-        if (container.querySelectorAll('.late-level-item').length === 0) {
-            // We could show a message or just leave it empty
-        }
-    }
-
-    const systemLateDefaults = @json(config('academic.late_rules.defaults', []));
-
-    function restoreLateDefaults() {
-        if (!confirm('{{ __('center::messages.blade_0708') }}')) {
-            return;
-        }
-
-        const container = document.getElementById('late-levels-container');
-        container.innerHTML = '';
-
-        // Remove the system-defaults-alert if it exists
-        const alert = document.getElementById('system-defaults-alert');
-        if (alert) alert.remove();
-
-        systemLateDefaults.forEach((level, index) => {
-            const html = `
-                <div class="late-level-item d-flex align-items-center gap-2 mb-2 bg-light p-2 rounded-3">
-                    <input type="number" name="settings[academic][late_levels][${index}][minutes]" class="form-control form-control-sm" style="width: 100px;" value="${level.minutes}" required>
-                    <input type="text" name="settings[academic][late_levels][${index}][label]" class="form-control form-control-sm" value="${level.label}" required>
-                    <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeLateLevel(this)">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            `;
-            container.insertAdjacentHTML('beforeend', html);
-        });
-    }
-
-    function addLateLevel() {
-        const container = document.getElementById('late-levels-container');
-        const index = container.querySelectorAll('.late-level-item').length;
-        
-        // Remove the system-defaults-alert if it exists (first customization)
-        const alert = document.getElementById('system-defaults-alert');
-        if (alert) alert.remove();
-
-        const html = `
-            <div class="late-level-item d-flex align-items-center gap-2 mb-2 bg-light p-2 rounded-3">
-                <input type="number" name="settings[academic][late_levels][${index}][minutes]" class="form-control form-control-sm" style="width: 100px;" placeholder="{{ __('center::settings.academic.threshold_minutes') }}" required>
-                <input type="text" name="settings[academic][late_levels][${index}][label]" class="form-control form-control-sm" placeholder="{{ __('center::settings.academic.level_label') }}" required>
-                <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeLateLevel(this)">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        `;
-        container.insertAdjacentHTML('beforeend', html);
-    }
-
-    // Tab Activation Fix
-    document.addEventListener('DOMContentLoaded', function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const tab = urlParams.get('tab');
-        if (tab) {
-            const tabEl = document.querySelector(`#${tab}-tab`);
-            if (tabEl) {
-                // Ensure Bootstrap is available
-                const bsTab = new bootstrap.Tab(tabEl);
-                bsTab.show();
-            }
-        }
-    });
-
-    // Email Template Presets
-    const emailPresets = @json(config('email_templates.presets', []));
-
-    function applyEmailPreset() {
-        const selector = document.getElementById('emailPresetSelector');
-        const key = selector.value;
-        if (!key || !emailPresets[key]) {
-            alert('يرجى اختيار قالب أولاً.');
-            return;
-        }
-        if (!confirm('سيتم استبدال المحتوى الحالي بالقالب المختار. هل أنت متأكد؟')) {
-            return;
-        }
-        const preset = emailPresets[key];
-        document.getElementById('studentSubject').value = preset.student_subject || '';
-        document.getElementById('studentBody').value = preset.student_body || '';
-        document.getElementById('guardianSubject').value = preset.guardian_subject || '';
-        document.getElementById('guardianBody').value = preset.guardian_body || '';
-
-        // Flash success
-        const toast = document.createElement('div');
-        toast.className = 'position-fixed bottom-0 start-50 translate-middle-x mb-5 bg-success text-white p-3 rounded-4 shadow animate__animated animate__fadeInUp fw-bold';
-        toast.style.zIndex = '9999';
-        toast.innerHTML = '<i class="fas fa-check-circle me-2"></i> تم تطبيق القالب: ' + preset.name;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 2500);
-    }
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const previewSubject = document.getElementById('preview-subject');
-    const previewBody = document.getElementById('preview-body');
-    const templateInputs = document.querySelectorAll('.template-input');
-    const varBtns = document.querySelectorAll('.var-btn');
-    const presetCards = document.querySelectorAll('.preset-card');
-    
-    const sampleData = {
-        '{اسم_الطالب}': 'أحمد محمد علي',
-        '{اسم_المركز}': 'أكاديمية التعليم',
-        '{رابط_الدخول}': 'https://taalimu.com/login',
-        '{كلمة_المرور}': '123456',
-        '{رقم_الهاتف}': '01012345678',
-        '{اسم_ولي_الأمر}': 'أستاذ محمد علي',
-        '{المرحلة}': 'الصف الأول الثانوي'
-    };
-
-    function updatePreview() {
-        const activeField = document.activeElement;
-        let isGuardian = activeField && activeField.id.includes('guardian');
-        
-        let subject = document.getElementById(isGuardian ? 'guardian_subject' : 'student_subject').value;
-        let body = document.getElementById(isGuardian ? 'guardian_body' : 'student_body').value;
-
-        Object.keys(sampleData).forEach(key => {
-            const regex = new RegExp(key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
-            subject = subject.replace(regex, `<span class="text-primary">${sampleData[key]}</span>`);
-            body = body.replace(regex, `<span class="text-primary">${sampleData[key]}</span>`);
-        });
-
-        previewSubject.innerHTML = subject || '<span class="text-muted italic">بدون عنوان...</span>';
-        previewBody.innerHTML = body || '<span class="text-muted italic">اكتب نص الرسالة لتظهر المعاينة هنا...</span>';
-    }
-
-    templateInputs.forEach(input => {
-        input.addEventListener('input', updatePreview);
-        input.addEventListener('focus', updatePreview);
-    });
-
-    varBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const targetId = this.dataset.target;
-            const variable = this.dataset.var;
-            const textarea = document.getElementById(targetId);
-            
-            const start = textarea.selectionStart;
-            const end = textarea.selectionEnd;
-            const text = textarea.value;
-            
             textarea.value = text.substring(0, start) + variable + text.substring(end);
             textarea.focus();
             textarea.selectionStart = textarea.selectionEnd = start + variable.length;

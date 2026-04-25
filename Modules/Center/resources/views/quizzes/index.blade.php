@@ -1,14 +1,14 @@
 @extends('center::layouts.hope-master')
 
-@section('page-title', __('center::messages.blade_0536'))
-@section('page-subtitle', __('center::messages.blade_0537'))
+@section('page-title', __('center::quizzes.title'))
+@section('page-subtitle', __('center::quizzes.subtitle'))
 
 @section('page-actions')
     <a href="{{ route('center.questions.index') }}" class="btn btn-light shadow-sm">
-        <i class="fas fa-database me-2"></i>{{ __('center::messages.blade_0538') }}
+        <i class="fas fa-database me-2"></i>{{ __('center::quizzes.question_bank') }}
     </a>
-    <a href="{{ route('center.courses.index') }}" class="btn btn-primary shadow-sm" title="{{ __('center::messages.blade_0551') }}">
-        <i class="fas fa-plus-circle me-2"></i>{{ __('center::messages.blade_0539') }}
+    <a href="{{ route('center.courses.index') }}" class="btn btn-primary shadow-sm" title="{{ __('center::quizzes.add_quiz_hint') }}">
+        <i class="fas fa-plus-circle me-2"></i>{{ __('center::quizzes.add_quiz') }}
     </a>
 @endsection
 
@@ -21,7 +21,7 @@
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <p class="text-muted small fw-bold mb-1 text-uppercase" style="letter-spacing: 0.5px;">{{ __('center::messages.blade_0540') }}</p>
+                            <p class="text-muted small fw-bold mb-1 text-uppercase" style="letter-spacing: 0.5px;">{{ __('center::quizzes.total_quizzes') }}</p>
                             <h2 class="fw-bolder text-dark mb-0">{{ number_format($totalQuizzesCount) }}</h2>
                         </div>
                         <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 56px; height: 56px; background: #ecfdf5;">
@@ -36,7 +36,7 @@
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <p class="text-muted small fw-bold mb-1 text-uppercase" style="letter-spacing: 0.5px;">{{ __('center::messages.blade_0541') }}</p>
+                            <p class="text-muted small fw-bold mb-1 text-uppercase" style="letter-spacing: 0.5px;">{{ __('center::quizzes.student_attempts') }}</p>
                             <h2 class="fw-bolder text-dark mb-0">{{ number_format($totalAttemptsCount) }}</h2>
                         </div>
                         <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 56px; height: 56px; background: #f0f9ff;">
@@ -51,7 +51,7 @@
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <p class="text-muted small fw-bold mb-1 text-uppercase" style="letter-spacing: 0.5px;">{{ __('center::messages.blade_0542') }}</p>
+                            <p class="text-muted small fw-bold mb-1 text-uppercase" style="letter-spacing: 0.5px;">{{ __('center::quizzes.avg_passing_rate') }}</p>
                             <h2 class="fw-bolder text-dark mb-0">{{ number_format($avgPassingRate, 1) }}%</h2>
                         </div>
                         <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 56px; height: 56px; background: #fffbeb;">
@@ -74,17 +74,17 @@
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm h-100" style="border-radius: 1.25rem;">
                 <div class="card-header bg-white border-0 p-4 pb-3 d-flex justify-content-between align-items-center" style="border-radius: 1.25rem 1.25rem 0 0;">
-                    <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-clipboard-list me-2" style="color: #10b981;"></i>{{ __('center::messages.blade_0543') }}</h5>
+                    <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-clipboard-list me-2" style="color: #10b981;"></i>{{ __('center::quizzes.current_quizzes_list') }}</h5>
                 </div>
                 <div class="card-body p-4 pt-0">
                     <div class="table-responsive">
                         <table class="table align-middle mb-0">
                             <thead>
                                 <tr>
-                                    <th>{{ __('center::messages.blade_1078') }}</th>
-                                    <th>{{ __('center::messages.blade_0544') }}</th>
-                                    <th>{{ __('center::messages.blade_0545') }}</th>
-                                    <th class="text-center">{{ __('center::messages.blade_0546') }}</th>
+                                    <th>{{ __('center::quizzes.quiz_title') }}</th>
+                                    <th>{{ __('center::quizzes.passing_score') }}</th>
+                                    <th>{{ __('center::quizzes.duration') }}</th>
+                                    <th class="text-center">{{ __('center::quizzes.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -109,15 +109,15 @@
                                         <td>
                                             <span class="text-muted fw-medium small">
                                                 <i class="fas fa-clock me-1" style="color: #10b981;"></i>
-                                                {{ $quiz->duration_minutes ?? __('center::messages.blade_0554') }} {{ __('center::messages.blade_1079') }}
+                                                {{ $quiz->duration_minutes ?? __('center::quizzes.no_time_limit') }} {{ __('center::quizzes.minutes') }}
                                             </span>
                                         </td>
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center gap-2">
-                                                <a href="{{ route('center.quizzes.edit', $quiz) }}" class="btn btn-sm btn-light" title="{{ __('center::messages.blade_0552') }}">
+                                                <a href="{{ route('center.quizzes.edit', $quiz) }}" class="btn btn-sm btn-light" title="{{ __('center::quizzes.edit') }}">
                                                     <i class="fas fa-pen" style="color: #10b981;"></i>
                                                 </a>
-                                                <a href="{{ route('center.quizzes.show', $quiz) }}" class="btn btn-sm btn-light" title="{{ __('center::messages.blade_0553') }}">
+                                                <a href="{{ route('center.quizzes.show', $quiz) }}" class="btn btn-sm btn-light" title="{{ __('center::quizzes.view_results') }}">
                                                     <i class="fas fa-eye" style="color: #64748b;"></i>
                                                 </a>
                                             </div>
@@ -130,9 +130,9 @@
                                                 <div class="rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px; background: #f1f5f9;">
                                                     <i class="fas fa-inbox fa-2x" style="color: #cbd5e1;"></i>
                                                 </div>
-                                                <p class="text-muted fw-medium mb-2">{{ __('center::messages.blade_0547') }}</p>
+                                                <p class="text-muted fw-medium mb-2">{{ __('center::quizzes.no_quizzes') }}</p>
                                                 <a href="{{ route('center.courses.index') }}" class="btn btn-sm btn-primary">
-                                                    <i class="fas fa-plus me-1"></i>{{ __('center::messages.blade_0548') }}
+                                                    <i class="fas fa-plus me-1"></i>{{ __('center::quizzes.add_quiz_from_courses') }}
                                                 </a>
                                             </div>
                                         </td>
@@ -149,7 +149,7 @@
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm h-100" style="border-radius: 1.25rem;">
                 <div class="card-header bg-white border-0 p-4 pb-3" style="border-radius: 1.25rem 1.25rem 0 0;">
-                    <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-bolt me-2" style="color: #f59e0b;"></i>{{ __('center::messages.blade_0549') }}</h5>
+                    <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-bolt me-2" style="color: #f59e0b;"></i>{{ __('center::quizzes.recent_attempts') }}</h5>
                 </div>
                 <div class="card-body p-4 pt-0">
                     @forelse($recentAttempts as $attempt)
@@ -162,9 +162,9 @@
                                 <div class="text-muted text-truncate" style="font-size: 0.75rem; max-width: 140px;">{{ $attempt->quiz->title }}</div>
                                 <div class="d-flex align-items-center gap-2 mt-1">
                                     <span class="badge rounded-pill px-2" style="font-size: 0.65rem; background: {{ $attempt->passed ? '#ecfdf5' : '#fef2f2' }}; color: {{ $attempt->passed ? '#059669' : '#dc2626' }};">
-                                        {{ $attempt->passed ? __('center::messages.blade_0555') : __('center::messages.blade_0556') }}
+                                        {{ $attempt->passed ? __('center::quizzes.passed') : __('center::quizzes.failed') }}
                                     </span>
-                                    <small class="text-muted" style="font-size: 0.65rem;"><i class="fas fa-clock me-1"></i>{{ $attempt->completed_at ? $attempt->completed_at->diffForHumans() : __('center::messages.blade_0557') }}</small>
+                                    <small class="text-muted" style="font-size: 0.65rem;"><i class="fas fa-clock me-1"></i>{{ $attempt->completed_at ? $attempt->completed_at->diffForHumans() : __('center::quizzes.incomplete') }}</small>
                                 </div>
                             </div>
                             <div class="text-end flex-shrink-0">
@@ -176,7 +176,7 @@
                             <div class="rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px; background: #f1f5f9;">
                                 <i class="fas fa-chart-bar fa-2x" style="color: #cbd5e1;"></i>
                             </div>
-                            <p class="text-muted small fw-medium mb-0">{{ __('center::messages.blade_0550') }}</p>
+                            <p class="text-muted small fw-medium mb-0">{{ __('center::quizzes.no_attempts') }}</p>
                         </div>
                     @endforelse
                 </div>

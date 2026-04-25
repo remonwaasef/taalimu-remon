@@ -33,7 +33,7 @@
                     @endphp
 
                     @if($hasDemoData)
-                        <form action="{{ route('center.demo.reset') }}" method="POST" id="demoDataResetForm" onsubmit="return confirm('{{ __('center::messages.blade_0483') }}');">
+                        <form action="{{ route('center.demo.reset') }}" method="POST" id="demoDataResetForm" onsubmit="return confirm('{{ __('center::launchpad.confirm_reset') }}');">
                             @csrf
                             <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1 border-dotted" 
                                     style="border-style: dashed !important; font-size: 0.7rem;"
@@ -114,7 +114,7 @@
                             <!-- Button -->
                             @if($isCompleted)
                                 <div class="text-success fw-bold x-small">
-                                    <i class="fas fa-check-circle me-1"></i>{{ __('center::messages.blade_0479') }}</div>
+                                    <i class="fas fa-check-circle me-1"></i>{{ __('center::launchpad.demo_data_ready') }}</div>
                             @elseif($key === 'education_system')
                                 <button type="button" 
                                         class="btn {{ $isCurrent ? 'btn-'.$data['color'] : 'btn-outline-light text-muted border-0' }} rounded-pill btn-sm fw-bold px-3 py-1 mt-auto"
@@ -155,24 +155,24 @@
                         {{ __('center::dashboard.launchpad.steps.education_system.desc') }}
                     </p>
                     
-                    <label class="form-label fw-bold small text-muted mb-2">{{ __('center::messages.blade_0480') }}</label>
+                    <label class="form-label fw-bold small text-muted mb-2">{{ __('center::launchpad.select_data_type') }}</label>
                     <select name="template_key" class="form-select rounded-pill mb-3" required>
-                        <option value="">{{ __('center::messages.blade_0481') }}</option>
+                        <option value="">{{ __('center::launchpad.select_placeholder') }}</option>
                         @foreach(config('academic.templates', []) as $tKey => $template)
                             <option value="{{ $tKey }}">{{ __($template['name']) }}</option>
                         @endforeach
                     </select>
 
                     <div class="alert alert-soft-primary border-0 rounded-3 small py-2 px-3 mb-0">
-                        <i class="fas fa-info-circle me-1"></i>{{ __('center::messages.blade_0482') }}</div>
+                        <i class="fas fa-info-circle me-1"></i>{{ __('center::launchpad.demo_data_hint') }}</div>
                 </div>
                 <div class="modal-footer border-top-0 px-4 pb-4 gap-2">
-                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">{{ __('center::messages.blade_0483') }}</button>
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">{{ __('center::launchpad.cancel') }}</button>
                     <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm" id="submitTemplateBtn">
                         <span class="normal-state">
-                            <i class="fas fa-check-circle me-1"></i>{{ __('center::messages.blade_0484') }}</span>
+                            <i class="fas fa-check-circle me-1"></i>{{ __('center::launchpad.start_generation') }}</span>
                         <span class="loading-state d-none">
-                            <i class="fas fa-spinner fa-spin me-1"></i>{{ __('center::messages.blade_0485') }}</span>
+                            <i class="fas fa-spinner fa-spin me-1"></i>{{ __('center::launchpad.generating') }}</span>
                     </button>
                 </div>
             </form>

@@ -9,7 +9,7 @@
                     <h3 class="mb-0">{{ $quiz->title }}</h3>
                     @if($quiz->duration_minutes > 0 && isset($endTime))
                         <div class="text-center">
-                            <small class="text-muted d-block">Time Remaining</small>
+                            <small class="text-muted d-block">{{ __('center::quizzes.time_remaining') }}</small>
                             <span id="timer" class="badge bg-danger fs-5">
                                 <i class="fas fa-clock"></i> --:--
                             </span>
@@ -45,7 +45,7 @@
 
                         <div class="d-grid gap-2 mt-4">
                             <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
-                                <i class="fas fa-paper-plane me-2"></i> Submit Quiz
+                                <i class="fas fa-paper-plane me-2"></i> {{ __('center::quizzes.submit_quiz') }}
                             </button>
                         </div>
                     </form>
@@ -69,9 +69,9 @@
                 
                 if (distance < 0) {
                     clearInterval(timerInterval);
-                    timerElement.innerHTML = "EXPIRED";
+                    timerElement.innerHTML = "{{ __('center::quizzes.expired') }}";
                     // Auto submit
-                    alert('Time is up! Your quiz will be submitted automatically.');
+                    alert('{{ __('center::quizzes.time_up_alert') }}');
                     form.submit();
                     return;
                 }
@@ -91,7 +91,7 @@
 
         // Prevent accidental navigation
         window.onbeforeunload = function() {
-            return "Are you sure you want to leave? Your progress might be lost.";
+            return "{{ __('center::quizzes.leave_confirm') }}";
         };
 
         document.getElementById('quizForm').onsubmit = function() {

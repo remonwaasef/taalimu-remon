@@ -1,7 +1,7 @@
 @extends('center::layouts.hope-master')
 
-@section('page-title', __('center::messages.blade_0111'))
-@section('page-subtitle', __('center::messages.blade_0112'))
+@section('page-title', __('center::attendance.management'))
+@section('page-subtitle', __('center::attendance.subtitle'))
 
 @section('content')
 
@@ -10,16 +10,16 @@
         <div class="col-md-8">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-header bg-white border-0 p-4 pb-0">
-                    <h5 class="fw-bold mb-0"><i class="bi bi-clock-history me-2 text-primary"></i>{{ __('center::messages.blade_1070') }} ({{ now()->format('Y-m-d') }})</h5>
+                    <h5 class="fw-bold mb-0"><i class="bi bi-clock-history me-2 text-primary"></i>{{ __('center::attendance.today_sessions') }} ({{ now()->format('Y-m-d') }})</h5>
                 </div>
                 <div class="card-body p-4">
                     <div class="table-responsive">
                         <table class="table align-middle">
                             <thead class="bg-light">
                                 <tr>
-                                    <th class="border-0 rounded-start">{{ __('center::messages.blade_1071') }}</th>
-                                    <th class="border-0">{{ __('center::messages.blade_1072') }}</th>
-                                    <th class="border-0 text-center">{{ __('center::messages.blade_0113') }}</th>
+                                    <th class="border-0 rounded-start">{{ __('center::attendance.session_course') }}</th>
+                                    <th class="border-0">{{ __('center::attendance.instructor_classroom') }}</th>
+                                    <th class="border-0 text-center">{{ __('center::attendance.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -33,7 +33,7 @@
                                             </small>
                                         </td>
                                         <td>
-                                            <div class="small mb-1"><i class="bi bi-person me-1"></i>{{ $session->instructor->name ?? __('center::messages.blade_0119') }}</div>
+                                            <div class="small mb-1"><i class="bi bi-person me-1"></i>{{ $session->instructor->name ?? __('center::attendance.unassigned_instructor') }}</div>
                                             <div class="small text-muted"><i class="bi bi-geo-alt me-1"></i>{{ $session->classroom->name ?? __('center::schedules.classroom') }}</div>
                                         </td>
                                         <td class="text-center">
@@ -44,12 +44,12 @@
                                             <div class="d-flex justify-content-center gap-2">
                                                 @if($isEnded)
                                                     <a href="{{ route('center.attendance.show', $session) }}" class="btn btn-sm btn-outline-danger rounded-pill px-3">
-                                                        <i class="bi bi-person-x me-1"></i>{{ __('center::messages.blade_0114') }}</a>
+                                                        <i class="bi bi-person-x me-1"></i>{{ __('center::attendance.view_absentees') }}</a>
                                                 @else
                                                     <a href="{{ route('center.attendance.show', $session) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                                        <i class="bi bi-card-checklist me-1"></i>{{ __('center::messages.blade_0115') }}</a>
+                                                        <i class="bi bi-card-checklist me-1"></i>{{ __('center::attendance.mark_attendance') }}</a>
                                                     <a href="{{ route('center.attendance.qr', $session) }}" class="btn btn-sm btn-primary rounded-pill px-3">
-                                                        <i class="bi bi-qr-code me-1"></i> {{ __('center::messages.blade_1073') }}
+                                                        <i class="bi bi-qr-code me-1"></i> {{ __('center::attendance.qr_code_btn') }}
                                                     </a>
                                                 @endif
                                             </div>
@@ -57,7 +57,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3" class="text-center py-5 text-muted">{{ __('center::messages.blade_0116') }}</td>
+                                        <td colspan="3" class="text-center py-5 text-muted">{{ __('center::attendance.no_sessions_today') }}</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -74,7 +74,7 @@
         <div class="col-md-4">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-header bg-white border-0 p-4 pb-0">
-                    <h5 class="fw-bold mb-0"><i class="bi bi-ui-checks me-2 text-success"></i>{{ __('center::messages.blade_0117') }}</h5>
+                    <h5 class="fw-bold mb-0"><i class="bi bi-ui-checks me-2 text-success"></i>{{ __('center::attendance.recent_activity') }}</h5>
                 </div>
                 <div class="card-body p-4">
                     <div class="list-group list-group-flush">
@@ -93,13 +93,13 @@
                                     </div>
                                     <div class="ms-auto">
                                         <span class="badge bg-{{ $record->status == 'present' ? 'success' : ($record->status == 'late' ? 'warning' : 'danger') }} bg-opacity-10 text-{{ $record->status == 'present' ? 'success' : ($record->status == 'late' ? 'warning' : 'danger') }} rounded-pill" style="font-size: 0.65rem;">
-                                            {{ $record->status == 'present' ? __('center::messages.blade_0120') : ($record->status == 'late' ? __('center::messages.blade_0121') : __('center::messages.blade_0122')) }}
+                                            {{ $record->status == 'present' ? __('center::attendance.present') : ($record->status == 'late' ? __('center::attendance.late') : __('center::attendance.absent')) }}
                                         </span>
                                     </div>
                                 </div>
                             </div>
                         @empty
-                            <div class="text-center py-4 text-muted small">{{ __('center::messages.blade_0118') }}</div>
+                            <div class="text-center py-4 text-muted small">{{ __('center::attendance.no_recent_activity') }}</div>
                         @endforelse
                     </div>
                 </div>
