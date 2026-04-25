@@ -42,10 +42,10 @@
                 
                 {{-- SCHOOL MANAGEMENT --}}
                 @php 
-                    $canInstructors = (($tenant->getFeatureValue('max_instructors') != '0' && $tenant->getFeatureValue('max_instructors') !== false) || auth()->user()->can('view instructors')) && auth()->user()->can('view instructors');
-                    $canCourses = (($tenant->getFeatureValue('max_courses') != '0' && $tenant->getFeatureValue('max_courses') !== false) || auth()->user()->can('view courses')) && auth()->user()->can('view courses');
-                    $canClassrooms = (($tenant->getFeatureValue('max_classrooms') != '0' && $tenant->getFeatureValue('max_classrooms') !== false) || auth()->user()->can('manage schedule')) && auth()->user()->can('manage schedule');
-                    $canSchedules = ($tenant->getFeatureValue('daily_schedules') === true || auth()->user()->can('manage schedule')) && auth()->user()->can('manage schedule');
+                    $canInstructors = ($tenant->getFeatureValue('max_instructors') != '0' && $tenant->getFeatureValue('max_instructors') !== false) && auth()->user()->can('view instructors');
+                    $canCourses = ($tenant->getFeatureValue('max_courses') != '0' && $tenant->getFeatureValue('max_courses') !== false) && auth()->user()->can('view courses');
+                    $canClassrooms = ($tenant->getFeatureValue('max_classrooms') != '0' && $tenant->getFeatureValue('max_classrooms') !== false) && auth()->user()->can('manage schedule');
+                    $canSchedules = $tenant->getFeatureValue('daily_schedules') === true && auth()->user()->can('manage schedule');
                     $canOnlineClasses = auth()->user()->can('manage schedule');
 
                     $isSchoolMgmtActive = request()->routeIs('center.classrooms.*') || 
@@ -116,8 +116,8 @@
                 
                 {{-- STUDENTS --}}
                 @php 
-                    $canStudents = (($tenant->getFeatureValue('max_students') != '0' && $tenant->getFeatureValue('max_students') !== false) || auth()->user()->can('view students')) && auth()->user()->can('view students');
-                    $canAttendance = ($tenant->getFeatureValue('attendance_tracking') || auth()->user()->canAny(['view students', 'manage schedule'])) && auth()->user()->canAny(['view students', 'manage schedule']);
+                    $canStudents = ($tenant->getFeatureValue('max_students') != '0' && $tenant->getFeatureValue('max_students') !== false) && auth()->user()->can('view students');
+                    $canAttendance = $tenant->getFeatureValue('attendance_tracking') && auth()->user()->can('view attendance');
                     $isStudentsActive = request()->routeIs('center.students.*') || request()->routeIs('center.attendance.*'); 
                     $showStudents = $canStudents || $canAttendance;
                 @endphp
@@ -155,8 +155,8 @@
 
                 {{-- FINANCE --}}
                 @php 
-                    $hasFinancialReports = ($tenant->getFeatureValue('financial_reports') || auth()->user()->canAny(['view sales', 'manage billing'])) && auth()->user()->canAny(['view sales', 'manage billing']);
-                    $hasAdvancedReports = ($tenant->getFeatureValue('advanced_reports') || auth()->user()->can('view reports')) && auth()->user()->can('view reports');
+                    $hasFinancialReports = $tenant->getFeatureValue('financial_reports') && auth()->user()->canAny(['view sales', 'view expenses']);
+                    $hasAdvancedReports = $tenant->getFeatureValue('advanced_reports') && auth()->user()->can('view reports');
                     $isFinanceActive = request()->routeIs('center.sales.*') || request()->routeIs('center.expenses.*') || request()->routeIs('center.analytics.*'); 
                 @endphp
                 @if($hasFinancialReports || $hasAdvancedReports)
@@ -175,7 +175,7 @@
                             {{-- <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.sales.index') ? 'active' : '' }}" href="{{ route('center.sales.index', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="sidenav-mini-icon">S</i><span class="item-name">{{ __('center::sidebar.sales') }}</span></a></li> --}}
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.sales.account') ? 'active' : '' }}" href="{{ route('center.sales.account', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="sidenav-mini-icon">A</i><span class="item-name">{{ __('center::sidebar.student_accounts') }}</span></a></li>
                             @endcan
-                            @can('manage billing')
+                            @can('view expenses')
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.expenses.*') ? 'active' : '' }}" href="{{ route('center.expenses.index', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="sidenav-mini-icon">E</i><span class="item-name">{{ __('center::sidebar.expenses') }}</span></a></li>
                             @endcan
                             @can('view reports')
