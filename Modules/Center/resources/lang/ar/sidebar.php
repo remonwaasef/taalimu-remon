@@ -52,5 +52,5 @@ return [
     'school_management' => 'إدارة المدرسة',
     'subscription'       => 'اشتراكي',
     'list' => 'القائمة',
-
+    'online_classes' => 'الدروس المباشرة',
 ];

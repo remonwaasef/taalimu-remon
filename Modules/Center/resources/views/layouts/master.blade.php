@@ -526,7 +526,7 @@
                     @endif
                     @if($canOnlineClasses)
                     <a href="{{ route('center.online_classes.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.online_classes.*') ? 'active' : '' }}">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <span class="text-success fw-bold">الدروس المباشرة</span>
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> <span class="text-success fw-bold">{{ __('center::sidebar.online_classes') }}</span>
                     </a>
                     @endif
                 </div>
@@ -645,7 +645,7 @@
                     @endcan
                     @can('manage settings')
                     <a href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'general']) }}" class="sidebar-sub-link {{ request()->routeIs('center.settings.index') && (request('tab') == 'general' || !request('tab')) ? 'active' : '' }}">
-                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::settings.tabs.general') }} (والمطبعة)
+                        <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::settings.tabs.general') }}
                     </a>
                     <a href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'academic']) }}" class="sidebar-sub-link {{ request()->routeIs('center.settings.index') && request('tab') == 'academic' ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::settings.tabs.academic') }}

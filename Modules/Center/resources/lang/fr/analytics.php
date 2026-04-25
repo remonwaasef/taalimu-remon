@@ -69,4 +69,15 @@ return [
     'late' => 'En retard',
     'absent' => 'Absent',
     'new_students' => 'Nouveaux étudiants',
+
+    'commission_log' => 'Journal des commissions',
+    'profit_loss_report' => 'Rapport des pertes et profits',
+    'yearly_profit_loss' => 'Résumé annuel des profits et pertes',
+    'monthly_breakdown' => 'Répartition mensuelle',
+    'operating_expenses' => 'Dépenses d'exploitation',
+    'instructor_commissions' => 'Commissions des instructeurs',
+    'net_result' => 'Résultat net',
+    'month' => 'Mois',
+    'profit' => 'Profit',
+    'loss' => 'Perte',
 ];
