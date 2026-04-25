@@ -482,18 +482,16 @@
 
             <!-- SCHOOL MANAGEMENT (Collapsible Section) -->
             @php 
-                $canInstructors = $tenant->getFeatureValue('max_instructors') != '0' && $tenant->getFeatureValue('max_instructors') !== false;
-                $canCourses = $tenant->getFeatureValue('max_courses') != '0' && $tenant->getFeatureValue('max_courses') !== false;
-                $canClassrooms = $tenant->getFeatureValue('max_classrooms') != '0' && $tenant->getFeatureValue('max_classrooms') !== false;
-                $canSchedules = $tenant->getFeatureValue('daily_schedules') === true;
+                $canInstructors = ($tenant->getFeatureValue('max_instructors') != '0' && $tenant->getFeatureValue('max_instructors') !== false) && auth()->user()->can('view instructors');
+                $canCourses = ($tenant->getFeatureValue('max_courses') != '0' && $tenant->getFeatureValue('max_courses') !== false) && auth()->user()->can('view courses');
+                $canClassrooms = ($tenant->getFeatureValue('max_classrooms') != '0' && $tenant->getFeatureValue('max_classrooms') !== false) && auth()->user()->can('manage schedule');
+                $canSchedules = $tenant->getFeatureValue('daily_schedules') === true && auth()->user()->can('manage schedule');
 
                 $isSchoolMgmtActive = request()->routeIs('center.classrooms.*') || 
                                       request()->routeIs('center.instructors.*') || 
                                       request()->routeIs('center.courses.*') || 
                                       request()->routeIs('center.schedules.*');
                 
-                // If Instructor mode, we only show courses/schedules if they exist (usually hidden as they are in instructor module)
-                // But for now, we follow the user request: if they are a center, they see full center mgmt.
                 $showSchoolMgmt = ($canInstructors || $canCourses || $canClassrooms || $canSchedules) && ($tenant->type !== 'instructor');
             @endphp
             
@@ -530,8 +528,8 @@
 
             <!-- 2. STUDENTS (Includes Attendance) -->
             @php 
-                $canStudents = $tenant->getFeatureValue('max_students') != '0' && $tenant->getFeatureValue('max_students') !== false;
-                $canAttendance = $tenant->getFeatureValue('attendance_tracking');
+                $canStudents = ($tenant->getFeatureValue('max_students') != '0' && $tenant->getFeatureValue('max_students') !== false) && auth()->user()->can('view students');
+                $canAttendance = $tenant->getFeatureValue('attendance_tracking') && auth()->user()->canAny(['view students', 'manage schedule']);
                 $isStudentsActive = request()->routeIs('center.students.*') || request()->routeIs('center.attendance.*'); 
                 $showStudents = $canStudents || $canAttendance;
             @endphp
@@ -560,8 +558,8 @@
             
 
             @php 
-                $hasFinancialReports = $tenant->getFeatureValue('financial_reports');
-                $hasAdvancedReports = $tenant->getFeatureValue('advanced_reports');
+                $hasFinancialReports = $tenant->getFeatureValue('financial_reports') && auth()->user()->canAny(['view sales', 'manage billing']);
+                $hasAdvancedReports = $tenant->getFeatureValue('advanced_reports') && auth()->user()->can('view reports');
                 $isFinanceActive = request()->routeIs('center.sales.*') || request()->routeIs('center.expenses.*') || request()->routeIs('center.analytics.*'); 
             @endphp
 
@@ -573,15 +571,20 @@
             <div class="collapse {{ $isFinanceActive ? 'show' : '' }}" id="financeCollapse">
                 <div class="sidebar-submenu">
                     @if($hasFinancialReports)
+                    @can('view sales')
                     <a href="{{ route('center.sales.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.sales.index') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.sales') }}
                     </a>
                     <a href="{{ route('center.sales.account', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.sales.account') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.student_accounts') }}
                     </a>
+                    @endcan
+                    @can('manage billing')
                     <a href="{{ route('center.expenses.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.expenses.*') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.expenses') }}
                     </a>
+                    @endcan
+                    @can('view reports')
                     <a href="{{ route('center.analytics.finance') }}" class="sidebar-sub-link {{ request()->routeIs('center.analytics.finance') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.financial_analytics') }}
                     </a>
@@ -594,6 +597,7 @@
                     <a href="{{ route('center.analytics.discounts') }}" class="sidebar-sub-link {{ request()->routeIs('center.analytics.discounts') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.financial_discounts') }}
                     </a>
+                    @endcan
                     @endif
 
                     @if($hasAdvancedReports)
@@ -635,6 +639,7 @@
             </a>
             <div class="collapse {{ $isSettingsActive ? 'show' : '' }}" id="settingsCollapse">
                 <div class="sidebar-submenu">
+                    @can('manage settings')
                     <a href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'general']) }}" class="sidebar-sub-link {{ request()->routeIs('center.settings.index') && (request('tab') == 'general' || !request('tab')) ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::settings.tabs.general') }} (والمطبعة)
                     </a>
@@ -655,9 +660,12 @@
                     <a href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'privacy']) }}" class="sidebar-sub-link {{ request()->routeIs('center.settings.index') && request('tab') == 'privacy' ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::settings.tabs.privacy') }}
                     </a>
+                    @endcan
+                    @can('manage users')
                     <a href="{{ route('center.users.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.users.*') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.users') }}
                     </a>
+                    @endcan
                     @if($tenant->getFeatureValue('advanced_roles'))
                     <a href="{{ route('center.roles.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="sidebar-sub-link {{ request()->routeIs('center.roles.*') ? 'active' : '' }}">
                         <i class="fas fa-circle fa-2xs me-2 opacity-50" style="font-size: 6px;"></i> {{ __('center::sidebar.permissions') }}
