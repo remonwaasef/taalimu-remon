@@ -63,8 +63,8 @@
                             <i class="fas fa-file-invoice-dollar fa-lg"></i>
                         </div>
                         <div>
-                            <p class="text-muted small fw-bold mb-0 text-uppercase">{{ __('center::analytics.total_expenses') }}</p>
-                            <h3 class="fw-bold text-dark mb-0">{{ format_price($totalYearlyExpenses) }}</h3>
+                            <p class="text-muted small fw-bold mb-0 text-uppercase">{{ __('center::analytics.operating_expenses') }}</p>
+                            <h3 class="fw-bold text-dark mb-0">{{ format_price($expenseCategories->sum('total')) }}</h3>
                         </div>
                     </div>
                 </div>
