@@ -141,7 +141,8 @@
         if(nameInput) {
             nameInput.addEventListener('input', function() {
                 let original = this.value;
-                let clean = original.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g, '');
+                // Looser: allow letters, spaces, and dots (for titles like Dr.)
+                let clean = original.replace(/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?]/g, '');
                 
                 if (original !== clean) {
                     this.value = clean;
@@ -155,9 +156,7 @@
         if(specInput) {
             specInput.addEventListener('input', function() {
                 let original = this.value;
-                // Allow letters, spaces, dots, dashes.
-                // Regex matches what we want to REMOVE.
-                // Remove digits and most symbols, but keep . and -
+                // Allow letters, spaces, dots, dashes, and parentheses.
                 let clean = original.replace(/[0-9!@#$%^&*()_+\=\[\]{};':"\\|,<>\/?]/g, '');
                 
                 if (original !== clean) {
