@@ -52,8 +52,10 @@ class UserController extends Controller
             ->filter(function($role) {
                 return $role->name !== 'super_admin';
             });
+            
+        $permissions = \Spatie\Permission\Models\Permission::all();
         
-        return view('center::users.create', compact('roles'));
+        return view('center::users.create', compact('roles', 'permissions'));
     }
 
     /**
@@ -77,6 +79,8 @@ class UserController extends Controller
                 'confirmed',
             ],
             'role' => ['nullable', Rule::in($validRoles)],
+            'permissions' => 'nullable|array',
+            'permissions.*' => 'string|exists:permissions,name',
         ]);
 
         $user = new User([
@@ -91,6 +95,10 @@ class UserController extends Controller
 
         if (!empty($validated['role'])) {
             $user->assignRole($validated['role']);
+        }
+
+        if (isset($validated['permissions'])) {
+            $user->syncPermissions($validated['permissions']);
         }
 
         return redirect()->route('center.users.index', ['tenant' => $this->tenant->domain])
@@ -110,7 +118,9 @@ class UserController extends Controller
                 return $role->name !== 'super_admin';
             });
 
-        return view('center::users.edit', compact('user', 'roles'));
+        $permissions = \Spatie\Permission\Models\Permission::all();
+
+        return view('center::users.edit', compact('user', 'roles', 'permissions'));
     }
 
     /**
@@ -135,6 +145,8 @@ class UserController extends Controller
                 'confirmed',
             ],
             'role' => ['nullable', Rule::in($validRoles)],
+            'permissions' => 'nullable|array',
+            'permissions.*' => 'string|exists:permissions,name',
         ]);
 
         $user->name = $validated['name'] ?? $user->name;
@@ -150,6 +162,8 @@ class UserController extends Controller
         }
 
         $user->save();
+
+        $user->syncPermissions($request->input('permissions', []));
 
         return redirect()->route('center.users.index')
             ->with('success', __('User updated successfully.'));

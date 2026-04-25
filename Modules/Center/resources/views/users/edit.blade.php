@@ -51,16 +51,95 @@
 
                     <div class="mb-3">
                         <label for="role" class="form-label">{{ __('center::messages.blade_0944') }}</label>
-                        <select class="form-select @error('role') is-invalid @enderror" id="role" name="role">
+                        @php
+                            $roleData = [
+                                'center_admin' => ['title' => 'مدير المركز', 'desc' => 'صلاحيات كاملة على كل النظام (الإعدادات، التقارير، حذف وتعديل أي شيء).'],
+                                'instructor' => ['title' => 'محاضر / مدرس', 'desc' => 'إدارة الدورات الخاصة به فقط، متابعة طلابه، وإضافة حصص واختبارات.'],
+                                'student' => ['title' => 'طالب', 'desc' => 'تصفح دوراته، حضور الحصص، وأداء الاختبارات (لا يمكنه الدخول كإداري).'],
+                                'secretary' => ['title' => 'سكرتارية', 'desc' => 'إضافة طلاب، تحصيل مدفوعات، تسجيل حضور وغياب.'],
+                                'accountant' => ['title' => 'محاسب', 'desc' => 'إدارة الشؤون المالية، تسجيل المصروفات، متابعة الإيرادات والفواتير.'],
+                                'staff' => ['title' => 'موظف عام', 'desc' => 'صلاحيات محدودة للمهام الأساسية (استعلامات بسيطة).'],
+                                'support_agent' => ['title' => 'دعم فني', 'desc' => 'الرد على استفسارات وتذاكر الطلاب.'],
+                                'finance_manager' => ['title' => 'مدير مالي', 'desc' => 'الاطلاع على تقارير الربح والخسارة، التحليلات المالية، والمصروفات.'],
+                                'content_manager' => ['title' => 'مدير محتوى', 'desc' => 'إنشاء دورات، إضافة فيديوهات وبنك أسئلة (بدون صلاحيات مالية).'],
+                            ];
+                        @endphp
+                        <select class="form-select @error('role') is-invalid @enderror" id="role" name="role" onchange="showRoleDescription(this)">
                             @foreach($roles as $r)
-                                <option value="{{ $r->name }}" {{ old('role', $user->role) == $r->name ? 'selected' : '' }}>
-                                    {{ ucfirst(str_replace('_', ' ', $r->name)) }}
+                                @php
+                                    $normalizedName = strtolower(str_replace(' ', '_', $r->name));
+                                    $title = $roleData[$normalizedName]['title'] ?? ucfirst(str_replace('_', ' ', $r->name));
+                                    $desc = $roleData[$normalizedName]['desc'] ?? 'صلاحيات هذا المستخدم تحدد بناء على الدور المختار.';
+                                @endphp
+                                <option value="{{ $r->name }}" data-desc="{{ $desc }}" {{ old('role', $user->role) == $r->name ? 'selected' : '' }}>
+                                    {{ $title }}
                                 </option>
                             @endforeach
                         </select>
+                        <div class="form-text mt-2 p-2 rounded bg-light border border-info border-start border-4 text-dark fw-bold" id="roleDescription" style="display: none;">
+                            <i class="fas fa-info-circle text-info me-2"></i> <span id="roleDescText"></span>
+                        </div>
                         @error('role')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold mb-3"><i class="fas fa-shield-alt text-warning me-2"></i>تخصيص صلاحيات إضافية (اختياري)</label>
+                        <div class="row g-3 p-3 bg-light rounded border">
+                            @php
+                                $groupedPermissions = $permissions->groupBy(function($perm) {
+                                    return explode(' ', $perm->name)[1] ?? 'other';
+                                });
+                                
+                                $translations = [
+                                    'view' => 'عرض',
+                                    'create' => 'إضافة',
+                                    'update' => 'تعديل',
+                                    'delete' => 'حذف',
+                                    'manage' => 'إدارة',
+                                    'students' => 'الطلاب',
+                                    'courses' => 'الدورات',
+                                    'users' => 'المستخدمين',
+                                    'roles' => 'الأدوار',
+                                    'settings' => 'الإعدادات',
+                                    'sales' => 'المبيعات',
+                                    'expenses' => 'المصروفات',
+                                    'reports' => 'التقارير',
+                                    'attendance' => 'الحضور',
+                                ];
+                                
+                                function translatePerm($name, $translations) {
+                                    $parts = explode(' ', $name);
+                                    $action = $translations[$parts[0]] ?? $parts[0];
+                                    $resource = $translations[$parts[1] ?? ''] ?? ($parts[1] ?? '');
+                                    return $action . ' ' . $resource;
+                                }
+
+                                $userPermissions = $user->permissions->pluck('name')->toArray();
+                            @endphp
+
+                            @foreach($groupedPermissions as $group => $perms)
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="card border-0 shadow-sm h-100">
+                                        <div class="card-header bg-white py-2 border-bottom">
+                                            <span class="fw-bold text-primary small">{{ $translations[$group] ?? ucfirst($group) }}</span>
+                                        </div>
+                                        <div class="card-body p-2">
+                                            @foreach($perms as $permission)
+                                                <div class="form-check form-switch mb-1">
+                                                    <input class="form-check-input" type="checkbox" name="permissions[]" value="{{ $permission->name }}" id="perm_{{ $permission->id }}" {{ in_array($permission->name, old('permissions', $userPermissions)) ? 'checked' : '' }}>
+                                                    <label class="form-check-label small text-dark" for="perm_{{ $permission->id }}">
+                                                        {{ translatePerm($permission->name, $translations) }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                        <div class="form-text mt-2 text-muted small"><i class="fas fa-info-circle me-1"></i> عند اختيار دور، سيحصل المستخدم على صلاحيات الدور الأساسية تلقائياً. يمكنك تحديد هذه المربعات لمنحه صلاحيات إضافية غير موجودة في دوره. إزالة علامة الصح لن تلغي صلاحية يمتلكها بناءً على دوره الأساسي.</div>
                     </div>
 
                     <div class="d-flex gap-2 justify-content-end mt-4">
@@ -72,4 +151,29 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    function showRoleDescription(selectElement) {
+        const descBox = document.getElementById('roleDescription');
+        const descText = document.getElementById('roleDescText');
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        
+        if (selectedOption && selectedOption.value) {
+            descText.textContent = selectedOption.getAttribute('data-desc');
+            descBox.style.display = 'block';
+        } else {
+            descBox.style.display = 'none';
+        }
+    }
+
+    // Trigger on load
+    document.addEventListener('DOMContentLoaded', function() {
+        const roleSelect = document.getElementById('role');
+        if (roleSelect) {
+            showRoleDescription(roleSelect);
+        }
+    });
+</script>
+@endpush
 @endsection
