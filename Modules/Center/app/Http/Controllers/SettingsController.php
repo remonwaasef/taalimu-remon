@@ -2,7 +2,7 @@
 
 namespace Modules\Center\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Modules\Center\Http\Controllers\CenterBaseController as Controller;
 use App\Models\Stage;
 use Modules\Center\Http\Requests\UpdateSettingsRequest;
 use Modules\Center\Http\Requests\UpdateAcademicRequest;
@@ -16,12 +16,13 @@ class SettingsController extends Controller
 
     public function __construct(SettingsService $settingsService)
     {
+        parent::__construct();
         $this->settingsService = $settingsService;
     }
 
     public function index()
     {
-        $this->authorize('update', app('tenant'));
+        $this->authorize('update', $this->tenant);
         $stages = Stage::with('grades')->orderBy('order')->get();
         $templates = config('academic.templates', []);
         return view('center::settings.index', compact('stages', 'templates'));
@@ -29,7 +30,7 @@ class SettingsController extends Controller
 
     public function update(UpdateSettingsRequest $request)
     {
-        $tenant = Tenant::findOrFail(app('tenant')->id);
+        $tenant = Tenant::findOrFail($this->tenant->id);
         
         $this->settingsService->updateBasicSettings(
             $tenant,
@@ -43,7 +44,7 @@ class SettingsController extends Controller
 
     public function updateAcademic(UpdateAcademicRequest $request)
     {
-        $tenant = Tenant::findOrFail(app('tenant')->id);
+        $tenant = Tenant::findOrFail($this->tenant->id);
 
         $this->settingsService->updateAcademicStructure($tenant, $request->validated());
 
@@ -53,7 +54,7 @@ class SettingsController extends Controller
     public function applyAcademicTemplate(ApplyTemplateRequest $request)
     {
         try {
-            $this->settingsService->applyTemplate(app('tenant'), $request->template_key);
+            $this->settingsService->applyTemplate($this->tenant, $request->template_key);
             return back()->with('success', __('center::messages.msg_080'));
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error("Failed to apply academic template: " . $e->getMessage());
@@ -63,7 +64,7 @@ class SettingsController extends Controller
 
     public function resetEmailTemplates()
     {
-        $tenant = Tenant::findOrFail(app('tenant')->id);
+        $tenant = Tenant::findOrFail($this->tenant->id);
         $settings = $tenant->settings ?? [];
 
         if (isset($settings['email_templates'])) {

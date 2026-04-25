@@ -2,7 +2,7 @@
 
 namespace Modules\Center\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Modules\Center\Http\Controllers\CenterBaseController as Controller;
 use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\Schedule;
@@ -19,6 +19,7 @@ class AttendanceController extends Controller
 
     public function __construct(\App\Services\AttendanceService $attendanceService)
     {
+        parent::__construct();
         $this->attendanceService = $attendanceService;
     }
 
@@ -114,13 +115,13 @@ class AttendanceController extends Controller
 
         // If student_id is not provided, try to find by code
         if (!$studentId && $request->student_code) {
-            $student = \App\Models\Student::where('tenant_id', app('tenant')->id)
+            $student = \App\Models\Student::where('tenant_id', $this->tenant->id)
                 ->where('code', $request->student_code)
                 ->first();
             
             if (!$student) {
                 // Try finding by ID directly just in case the code is actually an ID
-                $student = \App\Models\Student::where('tenant_id', app('tenant')->id)
+                $student = \App\Models\Student::where('tenant_id', $this->tenant->id)
                     ->where('id', $request->student_code)
                     ->first();
             }
@@ -153,7 +154,7 @@ class AttendanceController extends Controller
         }
 
         $this->attendanceService->markAttendance(array_merge($validated, [
-            'tenant_id' => app('tenant')->id,
+            'tenant_id' => $this->tenant->id,
             'student_id' => $studentId, // Ensure the resolved student ID is used
         ]));
 
@@ -180,7 +181,7 @@ class AttendanceController extends Controller
             $student = $enrollment->user->student ?? null;
             if ($student && !in_array($student->id, $recordedStudentIds)) {
                 $this->attendanceService->markAttendance([
-                    'tenant_id' => app('tenant')->id,
+                    'tenant_id' => $this->tenant->id,
                     'student_id' => $student->id,
                     'course_id' => $schedule->course_id,
                     'schedule_id' => $schedule->id,
@@ -200,7 +201,7 @@ class AttendanceController extends Controller
     public function showQr(Request $request, Schedule $schedule)
     {
         $this->authorize('viewAny', Attendance::class);
-        $url = $this->attendanceService->generateQrUrl($schedule->id, app('tenant')->domain);
+        $url = $this->attendanceService->generateQrUrl($schedule->id, $this->tenant->domain);
 
         return view('center::attendance.qr', compact('schedule', 'url'));
     }
@@ -274,7 +275,7 @@ class AttendanceController extends Controller
         $lateData = $this->attendanceService->determineStatus($schedule);
 
         $this->attendanceService->markAttendance([
-            'tenant_id' => app('tenant')->id,
+            'tenant_id' => $this->tenant->id,
             'student_id' => $student->id,
             'course_id' => $schedule->course_id,
             'schedule_id' => $schedule->id,

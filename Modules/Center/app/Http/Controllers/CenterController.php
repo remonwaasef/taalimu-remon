@@ -3,7 +3,7 @@
 namespace Modules\Center\Http\Controllers;
 
 use App\Models\Instructor;
-use App\Http\Controllers\Controller;
+use Modules\Center\Http\Controllers\CenterBaseController as Controller;
 use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Models\Course;
@@ -45,7 +45,7 @@ class CenterController extends Controller
         }
 
         // 1. Summary Metrics & Setup Progress (Cached for 15 minutes)
-        $tenant = app('tenant');
+        $tenant = $this->tenant;
         $tenantId = $tenant->id;
         $cacheKey = "dashboard_stats_v3";
 

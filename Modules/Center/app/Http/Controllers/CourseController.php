@@ -2,7 +2,7 @@
 
 namespace Modules\Center\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Modules\Center\Http\Controllers\CenterBaseController as Controller;
 use App\Models\Course;
 use App\Models\Instructor;
 use Illuminate\Http\RedirectResponse;
@@ -29,6 +29,7 @@ class CourseController extends Controller
 
     public function __construct(CourseService $courseService, CourseQuery $courseQuery, CertificateService $certificateService, FinanceService $financeService)
     {
+        parent::__construct();
         $this->courseService = $courseService;
         $this->courseQuery = $courseQuery;
         $this->certificateService = $certificateService;
@@ -68,7 +69,7 @@ class CourseController extends Controller
     {
         $this->authorize('create', Course::class);
 
-        if (!app('tenant')->hasFeature('max_courses')) {
+        if (!$this->tenant->hasFeature('max_courses')) {
             return redirect()->back()->with('error', __('center::messages.msg_025'));
         }
 
@@ -83,7 +84,7 @@ class CourseController extends Controller
         }
 
         // Smart Onboarding Routing: If this is the first course, guide them to register a student
-        $courseCount = Course::where('tenant_id', app('tenant')->id)->count();
+        $courseCount = Course::where('tenant_id', $this->tenant->id)->count();
         if ($courseCount === 1) {
             return redirect()->route('center.students.create')->with('success', __('center::messages.first_course_onboarding'));
         }
@@ -119,7 +120,7 @@ class CourseController extends Controller
             'student_id' => 'required|exists:students,id',
         ]);
 
-        $student = \App\Models\Student::where('tenant_id', app('tenant')->id)
+        $student = \App\Models\Student::where('tenant_id', $this->tenant->id)
             ->findOrFail($request->student_id);
 
         // Prevent duplicate enrollment

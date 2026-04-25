@@ -2,7 +2,7 @@
 
 namespace Modules\Center\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Modules\Center\Http\Controllers\CenterBaseController as Controller;
 use App\Models\Student;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -27,6 +27,7 @@ class StudentController extends Controller
 
     public function __construct(StudentService $studentService, StudentQuery $studentQuery)
     {
+        parent::__construct();
         $this->studentService = $studentService;
         $this->studentQuery = $studentQuery;
     }
@@ -66,7 +67,7 @@ class StudentController extends Controller
     {
         $this->authorize('create', Student::class);
 
-        if (!app('tenant')->hasFeature('max_students')) {
+        if (!$this->tenant->hasFeature('max_students')) {
             return redirect()->back()->with('error', __('center::students.max_limit_reached'));
         }
 
@@ -89,12 +90,12 @@ class StudentController extends Controller
         session()->flash('student_email', $result['student']->email);
 
         // Smart Onboarding Routing: If this is the first student, guide them back to the dashboard
-        $studentCount = Student::where('tenant_id', app('tenant')->id)->count();
+        $studentCount = Student::where('tenant_id', $this->tenant->id)->count();
         if ($studentCount === 1) {
             return redirect()->route('center.dashboard')->with('success', 'مرحباً بك! اكتمل الإعداد الأساسي لمركزك بنجاح. يمكنك الآن البدء بتسجيل الحضور وتحصيل الرسوم.');
         }
 
-        return redirect()->route('center.students.index', ['tenant' => app('tenant')->domain])->with('success', __('center::messages.msg_081'));
+        return redirect()->route('center.students.index', ['tenant' => $this->tenant->domain])->with('success', __('center::messages.msg_081'));
     }
 
 
@@ -103,7 +104,7 @@ class StudentController extends Controller
      */
     public function show($id)
     {
-        $student = Student::where('tenant_id', app('tenant')->id)
+        $student = Student::where('tenant_id', $this->tenant->id)
             ->with(['grade.stage', 'user', 'tenant'])
             ->findOrFail($id);
             
@@ -119,7 +120,7 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        $student = Student::where('tenant_id', app('tenant')->id)->findOrFail($id);
+        $student = Student::where('tenant_id', $this->tenant->id)->findOrFail($id);
         $this->authorize('update', $student);
         
         $stages = \App\Models\Stage::getCached();
@@ -133,7 +134,7 @@ class StudentController extends Controller
      */
     public function update(UpdateStudentRequest $request, $id): RedirectResponse
     {
-        $student = Student::where('tenant_id', app('tenant')->id)->findOrFail($id);
+        $student = Student::where('tenant_id', $this->tenant->id)->findOrFail($id);
         $this->authorize('update', $student);
 
         // Pass user_id to exclude to the request validator
@@ -151,12 +152,12 @@ class StudentController extends Controller
 
         $this->studentService->updateStudent($student, StudentData::fromArray($data), auth()->user());
 
-        return redirect()->route('center.students.index', ['tenant' => app('tenant')->domain])->with('success', __('center::messages.msg_082'));
+        return redirect()->route('center.students.index', ['tenant' => $this->tenant->domain])->with('success', __('center::messages.msg_082'));
     }
 
     public function resetPassword($id): RedirectResponse
     {
-        $student = Student::where('tenant_id', app('tenant')->id)->findOrFail($id);
+        $student = Student::where('tenant_id', $this->tenant->id)->findOrFail($id);
         $this->authorize('update', $student);
 
         $newPassword = $this->studentService->resetPassword($student->user);
@@ -171,7 +172,7 @@ class StudentController extends Controller
      */
     public function remindDebt($id, \App\Services\WhatsAppService $whatsappService)
     {
-        $student = Student::where('tenant_id', app('tenant')->id)->findOrFail($id);
+        $student = Student::where('tenant_id', $this->tenant->id)->findOrFail($id);
         $this->authorize('update', $student);
 
         $totalDebt = Sale::where('student_id', $student->id)->sum(\Illuminate\Support\Facades\DB::raw('total_amount - paid_amount'));
@@ -180,7 +181,7 @@ class StudentController extends Controller
             return redirect()->back()->with('info', 'الطالب ليس عليه أي مديونيات متأخرة.');
         }
 
-        $success = $whatsappService->sendDebtReminder(app('tenant'), $student, $totalDebt);
+        $success = $whatsappService->sendDebtReminder($this->tenant, $student, $totalDebt);
 
         if ($success) {
             return redirect()->back()->with('success', 'تم إرسال تذكير السداد عبر الواتساب بنجاح.');
@@ -196,7 +197,7 @@ class StudentController extends Controller
     {
         $student = Student::findOrFail($id);
         $this->authorize('view', $student);
-        $tenantId = app('tenant')->id;
+        $tenantId = $this->tenant->id;
 
         // Fetch Sales (Invoices) - Debits (Money student owes)
         $sales = Sale::where('student_id', $student->id)
@@ -262,7 +263,7 @@ class StudentController extends Controller
             return $transaction;
         });
 
-        $tenant = app('tenant');
+        $tenant = $this->tenant;
 
         // Current real debt
         $totalDebt = Sale::where('student_id', $student->id)->sum(\DB::raw('total_amount - paid_amount'));
@@ -275,7 +276,7 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        $student = Student::where('tenant_id', app('tenant')->id)->findOrFail($id);
+        $student = Student::where('tenant_id', $this->tenant->id)->findOrFail($id);
         $this->authorize('delete', $student);
 
         // Delete profile photo
@@ -285,7 +286,7 @@ class StudentController extends Controller
 
         $this->studentService->deleteStudent($student, auth()->user());
 
-        return redirect()->route('center.students.index', ['tenant' => app('tenant')->domain])->with('success', __('center::messages.msg_084'));
+        return redirect()->route('center.students.index', ['tenant' => $this->tenant->domain])->with('success', __('center::messages.msg_084'));
     }
 
     public function export()
@@ -327,7 +328,7 @@ class StudentController extends Controller
         // Authorization: ensure user can create students
         $this->authorize('create', Student::class);
         
-        if (!app('tenant')->hasFeature('max_students')) {
+        if (!$this->tenant->hasFeature('max_students')) {
             return redirect()->back()->with('error', __('center::messages.msg_085'));
         }
 
@@ -337,9 +338,9 @@ class StudentController extends Controller
 
         $path = $request->file('file')->store('temp/imports');
         
-        \App\Jobs\ImportStudentsJob::dispatch($path, app('tenant')->id, auth()->id());
+        \App\Jobs\ImportStudentsJob::dispatch($path, $this->tenant->id, auth()->id());
 
-        return redirect()->route('center.students.index', ['tenant' => app('tenant')->domain])
+        return redirect()->route('center.students.index', ['tenant' => $this->tenant->domain])
             ->with('success', __('center::messages.msg_086'));
     }
 
@@ -352,7 +353,7 @@ class StudentController extends Controller
             'phone' => 'required|string',
         ]);
 
-        $guardian = \App\Models\Guardian::where('tenant_id', app('tenant')->id)
+        $guardian = \App\Models\Guardian::where('tenant_id', $this->tenant->id)
             ->where('phone', $request->phone)
             ->first();
 
@@ -371,7 +372,7 @@ class StudentController extends Controller
      */
     public function sendEmail(Request $request, $id)
     {
-        $student = Student::where('tenant_id', app('tenant')->id)->findOrFail($id);
+        $student = Student::where('tenant_id', $this->tenant->id)->findOrFail($id);
         $this->authorize('update', $student);
 
         $request->validate([
@@ -390,7 +391,7 @@ class StudentController extends Controller
                 $student, 
                 $request->subject, 
                 $request->message,
-                app('tenant')->name
+                $this->tenant->name
             ));
             
             return redirect()->back()->with('success', 'تم إرسال البريد الإلكتروني للطالب بنجاح.');

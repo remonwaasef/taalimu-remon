@@ -19,6 +19,37 @@ use App\Mail\WelcomeGuardianMail;
 
 class InstructorController extends Controller
 {
+    protected $instructor;
+    protected $tenant;
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->instructor = $this->resolveInstructor();
+            $this->tenant = app('tenant');
+
+            // Share globally with all views
+            view()->share('instructor', $this->instructor);
+            view()->share('tenant', $this->tenant);
+
+            return $next($request);
+        });
+    }
+
+    protected function authorizeCourse($course)
+    {
+        if ($this->instructor && $course->instructor_id !== $this->instructor->id) {
+            abort(403, 'غير مصرح لك بإدارة هذا الكورس');
+        }
+    }
+
+    protected function authorizeSchedule($schedule)
+    {
+        if ($this->instructor && $schedule->instructor_id !== $this->instructor->id) {
+            abort(403, 'غير مصرح لك بإدارة هذا الموعد');
+        }
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -34,7 +65,7 @@ class InstructorController extends Controller
             // Ignore errors if already migrated or other issues for now
         }
 
-        $instructor = $this->resolveInstructor();
+        $instructor = $this->instructor;
         
         if (!$instructor) {
             // Fallback for demo or admin
@@ -150,7 +181,7 @@ class InstructorController extends Controller
         $msg = __('instructor::messages.attendance_notification', [
             'student' => $student->name,
             'course' => $course->title,
-            'center' => app('tenant')->name
+            'center' => $this->tenant->name
         ]);
         $phoneToNotify = $student->parent_phone ?: $student->phone;
         $whatsappUrl = "https://wa.me/" . preg_replace('/[^0-9]/', '', $phoneToNotify) . "?text=" . urlencode($msg);
@@ -169,7 +200,7 @@ class InstructorController extends Controller
      */
     public function billing()
     {
-        $instructor = auth()->user()->instructor;
+        $instructor = $this->instructor;
         
         if (!$instructor) {
             $students = Student::with(['user', 'sales', 'enrollments.course'])->take(10)->get();
@@ -187,7 +218,7 @@ class InstructorController extends Controller
      */
     public function students()
     {
-        $instructor = auth()->user()->instructor;
+        $instructor = $this->instructor;
 
         if (!$instructor) {
             $students = Student::with(['user', 'enrollments.course', 'sales'])->take(20)->get();
@@ -212,7 +243,7 @@ class InstructorController extends Controller
      */
     public function exportStudents()
     {
-        $instructor = auth()->user()->instructor;
+        $instructor = $this->instructor;
         
         if (!$instructor) {
             $students = Student::with(['enrollments.course'])->get();
@@ -273,7 +304,7 @@ class InstructorController extends Controller
             'course_id' => 'required|exists:courses,id'
         ]);
 
-        $instructor = auth()->user()->instructor;
+        $instructor = $this->instructor;
         $course = \App\Models\Course::findOrFail($request->course_id);
 
         if ($course->instructor_id !== $instructor->id) {
@@ -394,7 +425,7 @@ class InstructorController extends Controller
 
     private function authorizeInstructor($student)
     {
-        $instructor = auth()->user()->instructor;
+        $instructor = $this->instructor;
         $isRelated = $student->enrollments()->whereIn('course_id', $instructor->courses->pluck('id'))->exists();
         
         if (!$isRelated) {
@@ -407,7 +438,7 @@ class InstructorController extends Controller
      */
     public function createStudent()
     {
-        $instructor = $this->resolveInstructor();
+        $instructor = $this->instructor;
         $courses = $instructor ? $instructor->courses : Course::all();
 
         // Enforce group-first: redirect to create a group if none exist
@@ -424,7 +455,7 @@ class InstructorController extends Controller
      */
     public function storeStudent(Request $request)
     {
-        $instructor = $this->resolveInstructor();
+        $instructor = $this->instructor;
         if (!$instructor) {
             return back()->with('error', __('instructor::messages.not_instructor_error'));
         }
@@ -446,11 +477,11 @@ class InstructorController extends Controller
             $user = \App\Models\User::where('phone', $validated['phone'])->first();
 
             if (!$user) {
-                $email = $validated['email'] ?: ($validated['phone'] . '@' . (app('tenant')->domain ?? 'taalimu') . '.com');
+                $email = $validated['email'] ?: ($validated['phone'] . '@' . ($this->tenant->domain ?? 'taalimu') . '.com');
                 
                 // Safety check for generated email collisions
                 if (\App\Models\User::where('email', $email)->exists() && !$validated['email']) {
-                    $email = $validated['phone'] . '_' . \Illuminate\Support\Str::random(4) . '@' . (app('tenant')->domain ?? 'taalimu') . '.com';
+                    $email = $validated['phone'] . '_' . \Illuminate\Support\Str::random(4) . '@' . ($this->tenant->domain ?? 'taalimu') . '.com';
                 }
 
                 $user = \App\Models\User::create([
@@ -503,7 +534,7 @@ class InstructorController extends Controller
                 $hasValidParentEmail = !empty($validated['parent_email']);
 
                 if ($student && ($hasValidStudentEmail || $hasValidParentEmail)) {
-                    $tenant = app('tenant');
+                    $tenant = $this->tenant;
                     $tenantSettings = $tenant->settings['email_templates'] ?? [];
                     $defaultPresetKey = config('email_templates.default_preset', 'formal');
                     $defaultPreset = config("email_templates.presets.{$defaultPresetKey}", []);
@@ -590,7 +621,7 @@ class InstructorController extends Controller
      */
     public function destroyStudent(Student $student)
     {
-        $instructor = $this->resolveInstructor();
+        $instructor = $this->instructor;
         
         // Ownership check: If instructor exists, verify student is in one of their courses
         if ($instructor) {
@@ -646,7 +677,7 @@ class InstructorController extends Controller
      */
     public function groups()
     {
-        $instructor = $this->resolveInstructor();
+        $instructor = $this->instructor;
 
         if (!$instructor) {
             $courses = Course::withCount('enrollments')->with('schedules')->get();
@@ -670,7 +701,7 @@ class InstructorController extends Controller
      */
     public function storeGroup(Request $request)
     {
-        $instructor = $this->resolveInstructor();
+        $instructor = $this->instructor;
         
         if (!$instructor) {
             return back()->with('error', __('instructor::messages.not_instructor_error'));
@@ -687,7 +718,7 @@ class InstructorController extends Controller
             \Log::info('Attempting to create course for instructor: ' . $instructor->id, [
                 'validated' => $validated,
                 'tenant_bound' => app()->bound('tenant'),
-                'current_tenant_id' => app()->bound('tenant') ? app('tenant')->id : 'none',
+                'current_tenant_id' => app()->bound('tenant') ? $this->tenant->id : 'none',
                 'instructor_tenant_id' => $instructor->tenant_id
             ]);
 
@@ -718,10 +749,8 @@ class InstructorController extends Controller
      */
     public function editGroup(Course $course)
     {
-        $instructor = $this->resolveInstructor();
-        if ($instructor && $course->instructor_id !== $instructor->id) {
-            abort(403);
-        }
+        $instructor = $this->instructor;
+        $this->authorizeCourse($course);
 
         return view('instructor::groups.edit', compact('course'));
     }
@@ -731,10 +760,8 @@ class InstructorController extends Controller
      */
     public function updateGroup(Request $request, Course $course)
     {
-        $instructor = $this->resolveInstructor();
-        if ($instructor && $course->instructor_id !== $instructor->id) {
-            abort(403);
-        }
+        $instructor = $this->instructor;
+        $this->authorizeCourse($course);
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -793,7 +820,7 @@ class InstructorController extends Controller
 
         // Send Payment Confirmation Email
         try {
-            $tenant = app('tenant');
+            $tenant = $this->tenant;
             $tenantSettings = $tenant->settings['email_templates'] ?? [];
             
             // Determine real email
@@ -841,10 +868,8 @@ class InstructorController extends Controller
      */
     public function rotateGroupLink(Course $course)
     {
-        $instructor = $this->resolveInstructor();
-        if ($instructor && $course->instructor_id !== $instructor->id) {
-            abort(403);
-        }
+        $instructor = $this->instructor;
+        $this->authorizeCourse($course);
 
         $course->update([
             'registration_token' => \Illuminate\Support\Str::random(16)
@@ -858,10 +883,8 @@ class InstructorController extends Controller
      */
     public function duplicateGroup(Course $course)
     {
-        $instructor = $this->resolveInstructor();
-        if ($instructor && $course->instructor_id !== $instructor->id) {
-            abort(403);
-        }
+        $instructor = $this->instructor;
+        $this->authorizeCourse($course);
 
         $newCourse = $course->replicate();
         $newCourse->title = $course->title . __('instructor::messages.copy_suffix');
@@ -876,10 +899,8 @@ class InstructorController extends Controller
      */
     public function destroyGroup(Course $course)
     {
-        $instructor = $this->resolveInstructor();
-        if ($instructor && $course->instructor_id !== $instructor->id) {
-            abort(403);
-        }
+        $instructor = $this->instructor;
+        $this->authorizeCourse($course);
 
         $course->delete();
 
@@ -891,7 +912,7 @@ class InstructorController extends Controller
      */
     public function showStudent(Student $student)
     {
-        $instructor = $this->resolveInstructor();
+        $instructor = $this->instructor;
         
         // Ensure student is enrolled in at least one of instructor's courses
         if ($instructor) {
@@ -926,7 +947,7 @@ class InstructorController extends Controller
      */
     public function sendEmail(Request $request, Student $student)
     {
-        $instructor = $this->resolveInstructor();
+        $instructor = $this->instructor;
         
         // Exclude unauthorized
         if ($instructor) {
@@ -950,7 +971,7 @@ class InstructorController extends Controller
         }
 
         try {
-            $senderName = $instructor ? $instructor->name : app('tenant')->name;
+            $senderName = $instructor ? $instructor->name : $this->tenant->name;
             \Illuminate\Support\Facades\Mail::to($email)->send(new \App\Mail\CustomStudentMail(
                 $student, 
                 $request->subject, 
@@ -969,7 +990,7 @@ class InstructorController extends Controller
 
     public function schedules()
     {
-        $instructor = $this->resolveInstructor();
+        $instructor = $this->instructor;
         $query = Schedule::with(['course', 'classroom', 'instructor', 'bookings'])->latest();
         
         if ($instructor) {
@@ -982,7 +1003,7 @@ class InstructorController extends Controller
 
     public function createSchedule()
     {
-        $instructor = $this->resolveInstructor();
+        $instructor = $this->instructor;
         $courses = $instructor ? $instructor->courses()->select('id', 'title', 'instructor_id')->get() : Course::select('id', 'title', 'instructor_id')->get();
         $classrooms = \App\Models\Classroom::select('id', 'name', 'capacity')->get();
         
@@ -991,7 +1012,7 @@ class InstructorController extends Controller
 
     public function storeSchedule(Request $request)
     {
-        $instructor = $this->resolveInstructor();
+        $instructor = $this->instructor;
         if (!$instructor) {
             return back()->with('error', __('instructor::messages.not_instructor_error'));
         }
@@ -1047,7 +1068,7 @@ class InstructorController extends Controller
         ]);
 
         $classroom = \App\Models\Classroom::create([
-            'tenant_id' => app('tenant')->id,
+            'tenant_id' => $this->tenant->id,
             'name' => $request->name,
             'capacity' => $request->capacity,
             'is_active' => true,
@@ -1067,10 +1088,8 @@ class InstructorController extends Controller
 
     public function editSchedule(Schedule $schedule)
     {
-        $instructor = $this->resolveInstructor();
-        if ($instructor && $schedule->instructor_id !== $instructor->id) {
-            abort(403);
-        }
+        $instructor = $this->instructor;
+        $this->authorizeSchedule($schedule);
 
         $courses = $instructor ? $instructor->courses()->select('id', 'title', 'instructor_id')->get() : Course::select('id', 'title', 'instructor_id')->get();
         $classrooms = \App\Models\Classroom::select('id', 'name', 'capacity')->get();
@@ -1080,10 +1099,8 @@ class InstructorController extends Controller
 
     public function updateSchedule(Request $request, Schedule $schedule)
     {
-        $instructor = $this->resolveInstructor();
-        if ($instructor && $schedule->instructor_id !== $instructor->id) {
-            abort(403);
-        }
+        $instructor = $this->instructor;
+        $this->authorizeSchedule($schedule);
 
         $validated = $request->validate([
             'course_id' => 'required|exists:courses,id',
@@ -1125,10 +1142,8 @@ class InstructorController extends Controller
 
     public function destroySchedule(Schedule $schedule)
     {
-        $instructor = $this->resolveInstructor();
-        if ($instructor && $schedule->instructor_id !== $instructor->id) {
-            abort(403);
-        }
+        $instructor = $this->instructor;
+        $this->authorizeSchedule($schedule);
 
         $schedule->delete();
 
@@ -1140,7 +1155,7 @@ class InstructorController extends Controller
 
     public function attendance()
     {
-        $instructor = $this->resolveInstructor();
+        $instructor = $this->instructor;
         $dayOfWeek = now()->dayOfWeek;
 
         $query = Schedule::with(['course', 'classroom', 'instructor'])
@@ -1175,10 +1190,8 @@ class InstructorController extends Controller
 
     public function attendanceShow(Schedule $schedule)
     {
-        $instructor = $this->resolveInstructor();
-        if ($instructor && $schedule->instructor_id !== $instructor->id) {
-            abort(403);
-        }
+        $instructor = $this->instructor;
+        $this->authorizeSchedule($schedule);
 
         $schedule->load('course.enrollments.user.student', 'classroom');
         
@@ -1200,12 +1213,10 @@ class InstructorController extends Controller
             'session_date' => 'required|date',
         ]);
 
-        $instructor = $this->resolveInstructor();
+        $instructor = $this->instructor;
         $schedule = Schedule::findOrFail($validated['schedule_id']);
         
-        if ($instructor && $schedule->instructor_id !== $instructor->id) {
-            abort(403);
-        }
+        $this->authorizeSchedule($schedule);
 
         $attendanceService = app(AttendanceService::class);
         $attendanceService->markAttendance($validated);
@@ -1215,10 +1226,8 @@ class InstructorController extends Controller
 
     public function bulkAbsent(Schedule $schedule)
     {
-        $instructor = $this->resolveInstructor();
-        if ($instructor && $schedule->instructor_id !== $instructor->id) {
-            abort(403);
-        }
+        $instructor = $this->instructor;
+        $this->authorizeSchedule($schedule);
 
         $enrolledIds = $schedule->course->enrollments()
             ->with('user.student')
@@ -1241,7 +1250,7 @@ class InstructorController extends Controller
                     'session_date' => today(),
                 ],
                 [
-                    'tenant_id' => app('tenant')->id,
+                    'tenant_id' => $this->tenant->id,
                     'course_id' => $schedule->course_id,
                     'status' => 'absent',
                     'check_in_time' => now(),
@@ -1254,7 +1263,7 @@ class InstructorController extends Controller
 
     public function studentReports()
     {
-        $instructor = $this->resolveInstructor();
+        $instructor = $this->instructor;
         $courseIds = $instructor ? $instructor->courses->pluck('id') : Course::pluck('id');
 
         $students = Student::whereHas('enrollments', function($q) use ($courseIds) {
@@ -1280,7 +1289,7 @@ class InstructorController extends Controller
 
     public function paymentReports()
     {
-        $instructor = $this->resolveInstructor();
+        $instructor = $this->instructor;
         $courseIds = $instructor ? $instructor->courses->pluck('id') : Course::pluck('id');
 
         // Get ALL students enrolled in instructor's courses with their financial data
@@ -1400,7 +1409,7 @@ class InstructorController extends Controller
             \Log::error('Settings Price Fix Failed: ' . $e->getMessage());
         }
 
-        $tenant = app('tenant');
+        $tenant = $this->tenant;
         $settings = $tenant->settings['whatsapp'] ?? [];
         $packages = \App\Models\Package::with('features')->where('is_active', true)->orderBy('sort_order')->get();
         return view('instructor::settings', compact('tenant', 'settings', 'packages'));
@@ -1420,7 +1429,7 @@ class InstructorController extends Controller
             'logo' => 'nullable|image|max:2048'
         ]);
 
-        $tenant = \App\Models\Tenant::findOrFail(app('tenant')->id);
+        $tenant = \App\Models\Tenant::findOrFail($this->tenant->id);
         
         $tenant->name = $request->name;
         $tenant->phone = $request->phone;
@@ -1445,7 +1454,7 @@ class InstructorController extends Controller
      */
     public function whatsappSettings()
     {
-        $tenant = app('tenant');
+        $tenant = $this->tenant;
         $settings = $tenant->settings['whatsapp'] ?? [
             'enabled' => false,
             'instance_id' => '',
@@ -1471,7 +1480,7 @@ class InstructorController extends Controller
             'debt_template' => 'nullable|string'
         ]);
 
-        $tenant = \App\Models\Tenant::findOrFail(app('tenant')->id);
+        $tenant = \App\Models\Tenant::findOrFail($this->tenant->id);
         $settings = $tenant->settings ?? [];
         
         $settings['whatsapp'] = [
@@ -1524,7 +1533,7 @@ class InstructorController extends Controller
             'whatsapp_template' => 'nullable|string|max:2000',
         ]);
 
-        $tenant = \App\Models\Tenant::findOrFail(app('tenant')->id);
+        $tenant = \App\Models\Tenant::findOrFail($this->tenant->id);
         $settings = $tenant->settings ?? [];
 
         $settings['payment_reminders'] = [
@@ -1598,7 +1607,7 @@ class InstructorController extends Controller
             'notif_payment_confirmed_body'     => 'nullable|string|max:5000',
         ]);
 
-        $tenant = \App\Models\Tenant::findOrFail(app('tenant')->id);
+        $tenant = \App\Models\Tenant::findOrFail($this->tenant->id);
         $settings = $tenant->settings ?? [];
 
         $settings['email_templates'] = [
@@ -1631,7 +1640,7 @@ class InstructorController extends Controller
 
     public function resetEmailTemplateSettings(Request $request)
     {
-        $tenant = \App\Models\Tenant::findOrFail(app('tenant')->id);
+        $tenant = \App\Models\Tenant::findOrFail($this->tenant->id);
         $settings = $tenant->settings ?? [];
 
         if (isset($settings['email_templates'])) {
