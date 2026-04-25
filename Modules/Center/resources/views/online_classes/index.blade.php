@@ -1,13 +1,13 @@
 @extends('center::layouts.master')
 
-@section('title', 'تقارير الدروس الأونلاين')
+@section('title', __('center::online_classes.title'))
 
 @section('content')
 <div class="container-fluid">
     <div class="row align-items-center mb-4">
         <div class="col-12 col-md-auto mb-3 mb-md-0">
-            <h3 class="fw-bold mb-1">الدروس الأونلاين (Live Classes)</h3>
-            <p class="text-muted small mb-0">مراقبة وإدارة الجلسات المباشرة لجميع المعلمين في المركز</p>
+            <h3 class="fw-bold mb-1">{{ __('center::online_classes.live_classes') }}</h3>
+            <p class="text-muted small mb-0">{{ __('center::online_classes.subtitle') }}</p>
         </div>
     </div>
 
@@ -21,7 +21,7 @@
                             <i class="fas fa-video fs-4"></i>
                         </div>
                         <div>
-                            <p class="text-muted small mb-0">إجمالي الدروس</p>
+                            <p class="text-muted small mb-0">{{ __('center::online_classes.total_classes') }}</p>
                             <h4 class="fw-bold mb-0 text-dark">{{ $stats['total'] }}</h4>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
                             <i class="fas fa-calendar-alt fs-4"></i>
                         </div>
                         <div>
-                            <p class="text-muted small mb-0">مجدولة</p>
+                            <p class="text-muted small mb-0">{{ __('center::online_classes.scheduled') }}</p>
                             <h4 class="fw-bold mb-0 text-dark">{{ $stats['scheduled'] }}</h4>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                             <i class="fas fa-signal fs-4"></i>
                         </div>
                         <div>
-                            <p class="text-muted small mb-0">قيد الانعقاد</p>
+                            <p class="text-muted small mb-0">{{ __('center::online_classes.in_progress') }}</p>
                             <h4 class="fw-bold mb-0 text-dark">{{ $stats['in_progress'] }}</h4>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
                             <i class="fas fa-check-circle fs-4"></i>
                         </div>
                         <div>
-                            <p class="text-muted small mb-0">مكتملة</p>
+                            <p class="text-muted small mb-0">{{ __('center::online_classes.completed') }}</p>
                             <h4 class="fw-bold mb-0 text-dark">{{ $stats['completed'] }}</h4>
                         </div>
                     </div>
@@ -80,30 +80,30 @@
         <div class="card-body p-3">
             <form action="{{ route('center.online_classes.index') }}" method="GET" class="row g-2 align-items-end">
                 <div class="col-md-3">
-                    <label class="form-label small text-muted">تصفية بالمعلم</label>
+                    <label class="form-label small text-muted">{{ __('center::online_classes.filter_by_instructor') }}</label>
                     <select name="instructor_id" class="form-select rounded-pill">
-                        <option value="">جميع المعلمين</option>
+                        <option value="">{{ __('center::online_classes.all_instructors') }}</option>
                         @foreach($instructors as $inst)
                             <option value="{{ $inst->id }}" {{ request('instructor_id') == $inst->id ? 'selected' : '' }}>{{ $inst->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label small text-muted">حالة الدرس</label>
+                    <label class="form-label small text-muted">{{ __('center::online_classes.class_status') }}</label>
                     <select name="status" class="form-select rounded-pill">
-                        <option value="">كافة الحالات</option>
-                        <option value="scheduled" {{ request('status') == 'scheduled' ? 'selected' : '' }}>مجدول</option>
-                        <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>قيد الانعقاد</option>
-                        <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>منتهي</option>
-                        <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>ملغي</option>
+                        <option value="">{{ __('center::online_classes.all_statuses') }}</option>
+                        <option value="scheduled" {{ request('status') == 'scheduled' ? 'selected' : '' }}>{{ __('center::online_classes.scheduled_badge') }}</option>
+                        <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>{{ __('center::online_classes.in_progress') }}</option>
+                        <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>{{ __('center::online_classes.completed_badge') }}</option>
+                        <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>{{ __('center::online_classes.cancelled') }}</option>
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label small text-muted">التاريخ</label>
+                    <label class="form-label small text-muted">{{ __('center::online_classes.date') }}</label>
                     <input type="date" name="date" class="form-control rounded-pill" value="{{ request('date') }}">
                 </div>
                 <div class="col-md-3">
-                    <button type="submit" class="btn btn-primary rounded-pill w-100"><i class="fas fa-filter me-2"></i> تصفية النتائج</button>
+                    <button type="submit" class="btn btn-primary rounded-pill w-100"><i class="fas fa-filter me-2"></i> {{ __('center::online_classes.filter_results') }}</button>
                 </div>
             </form>
         </div>
@@ -116,12 +116,12 @@
                 <table class="table table-hover align-middle mb-0 text-center text-nowrap">
                     <thead class="bg-light">
                         <tr>
-                            <th class="border-0 px-4 py-3 text-start">تفاصيل الدرس</th>
-                            <th class="border-0">المعلم والمجموعة</th>
-                            <th class="border-0">توقيت البدء</th>
-                            <th class="border-0">الرابط والبيانات</th>
-                            <th class="border-0">الحالة</th>
-                            <th class="border-0">إجراءات</th>
+                            <th class="border-0 px-4 py-3 text-start">{{ __('center::online_classes.class_details') }}</th>
+                            <th class="border-0">{{ __('center::online_classes.instructor_group') }}</th>
+                            <th class="border-0">{{ __('center::online_classes.start_time') }}</th>
+                            <th class="border-0">{{ __('center::online_classes.link_data') }}</th>
+                            <th class="border-0">{{ __('center::online_classes.status') }}</th>
+                            <th class="border-0">{{ __('center::online_classes.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -137,11 +137,11 @@
                             </td>
                             <td>
                                 <div>{{ $lesson->start_time->format('Y-m-d') }}</div>
-                                <div class="text-muted small fw-bold">{{ $lesson->start_time->format('h:i A') }} ({{ $lesson->duration_minutes }} دقيقة)</div>
+                                <div class="text-muted small fw-bold">{{ $lesson->start_time->format('h:i A') }} ({{ $lesson->duration_minutes }} {{ __('center::online_classes.minutes') }})</div>
                             </td>
                             <td>
                                 <a href="{{ $lesson->meeting_link }}" target="_blank" class="btn btn-sm btn-light rounded-pill px-3 text-primary border">
-                                    <i class="fas fa-external-link-alt me-1"></i> فتح الرابط
+                                    <i class="fas fa-external-link-alt me-1"></i> {{ __('center::online_classes.open_link') }}
                                 </a>
                                 @if($lesson->meeting_id)
                                     <div class="text-muted small mt-1">ID: {{ $lesson->meeting_id }}</div>
@@ -149,13 +149,13 @@
                             </td>
                             <td>
                                 @if($lesson->status == 'scheduled')
-                                    <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3">مجدول</span>
+                                    <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3">{{ __('center::online_classes.scheduled_badge') }}</span>
                                 @elseif($lesson->status == 'in_progress')
-                                    <span class="badge bg-info bg-opacity-10 text-info rounded-pill px-3">قيد الانعقاد</span>
+                                    <span class="badge bg-info bg-opacity-10 text-info rounded-pill px-3">{{ __('center::online_classes.in_progress') }}</span>
                                 @elseif($lesson->status == 'completed')
-                                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">منتهي</span>
+                                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{ __('center::online_classes.completed_badge') }}</span>
                                 @else
-                                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">ملغي</span>
+                                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">{{ __('center::online_classes.cancelled') }}</span>
                                 @endif
                             </td>
                             <td>
@@ -168,8 +168,8 @@
                                             <form action="{{ route('center.online_classes.destroy', $lesson->id) }}" method="POST" id="deleteForm_{{ $lesson->id }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" class="dropdown-item text-danger" onclick="if(confirm('هل أنت متأكد من حذف هذه الجلسة؟ سيؤدي ذلك لإلغائها للمرحلة والطلاب.')) document.getElementById('deleteForm_{{ $lesson->id }}').submit();">
-                                                    <i class="fas fa-trash me-2"></i> إلغاء وحذف الدرس
+                                                <button type="button" class="dropdown-item text-danger" onclick="if(confirm('{{ __('center::online_classes.delete_confirm') }}')) document.getElementById('deleteForm_{{ $lesson->id }}').submit();">
+                                                    <i class="fas fa-trash me-2"></i> {{ __('center::online_classes.delete_and_cancel') }}
                                                 </button>
                                             </form>
                                         </li>
@@ -181,7 +181,7 @@
                         <tr>
                             <td colspan="6" class="text-center py-5">
                                 <img src="https://illustrations.popsy.co/gray/fogg-searching.png" alt="No data" style="width: 150px;" class="mb-3 opacity-50">
-                                <h6 class="text-muted">لا توجد دروس مطابقة لشروط البحث.</h6>
+                                <h6 class="text-muted">{{ __('center::online_classes.no_classes_found') }}</h6>
                             </td>
                         </tr>
                         @endforelse
