@@ -277,7 +277,9 @@
         <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
         <style>
             .ts-control { border-radius: 0.75rem !important; padding: 0.85rem 1rem !important; border-width: 2px !important; background-color: #f8f9fa !important; }
-            .ts-dropdown { border-radius: 0.75rem !important; box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important; padding: 0.5rem; z-index: 2000 !important; }
+            .ts-dropdown { border-radius: 0.75rem !important; box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important; padding: 0.5rem; z-index: 2000 !important; background-color: #fff !important; border: 1px solid #dee2e6 !important; color: #1a1a1a !important; }
+            .ts-dropdown .option { color: #1a1a1a !important; padding: 8px 12px !important; }
+            .ts-dropdown .active { background-color: #f8f9fa !important; color: var(--bs-primary) !important; }
             .modal-content.rounded-5 { border-radius: 1.5rem !important; }
         </style>
     @endpush
@@ -290,10 +292,8 @@
             document.addEventListener('DOMContentLoaded', function() {
                 // Initialize TomSelect only once
                 unifiedTomSelect = new TomSelect('#unifiedStudentSelect', {
-                    plugins: ['dropdown_input'],
                     sortField: { field: "text", direction: "asc" },
                     maxOptions: 50,
-                    dropdownParent: 'body',
                     @if(app()->isLocale('ar'))
                     direction: 'rtl',
                     @endif
