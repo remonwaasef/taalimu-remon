@@ -46,15 +46,35 @@
 
                     <div class="mb-3">
                         <label for="role" class="form-label">{{ __('center::messages.blade_0932') }}</label>
-                        <select class="form-select @error('role') is-invalid @enderror" id="role" name="role">
+                        @php
+                            $roleData = [
+                                'center_admin' => ['title' => 'مدير المركز', 'desc' => 'صلاحيات كاملة على كل النظام (الإعدادات، التقارير، حذف وتعديل أي شيء).'],
+                                'instructor' => ['title' => 'محاضر / مدرس', 'desc' => 'إدارة الدورات الخاصة به فقط، متابعة طلابه، وإضافة حصص واختبارات.'],
+                                'student' => ['title' => 'طالب', 'desc' => 'تصفح دوراته، حضور الحصص، وأداء الاختبارات (لا يمكنه الدخول كإداري).'],
+                                'secretary' => ['title' => 'سكرتارية', 'desc' => 'إضافة طلاب، تحصيل مدفوعات، تسجيل حضور وغياب.'],
+                                'accountant' => ['title' => 'محاسب', 'desc' => 'إدارة الشؤون المالية، تسجيل المصروفات، متابعة الإيرادات والفواتير.'],
+                                'staff' => ['title' => 'موظف عام', 'desc' => 'صلاحيات محدودة للمهام الأساسية (استعلامات بسيطة).'],
+                                'support_agent' => ['title' => 'دعم فني', 'desc' => 'الرد على استفسارات وتذاكر الطلاب.'],
+                                'finance_manager' => ['title' => 'مدير مالي', 'desc' => 'الاطلاع على تقارير الربح والخسارة، التحليلات المالية، والمصروفات.'],
+                                'content_manager' => ['title' => 'مدير محتوى', 'desc' => 'إنشاء دورات، إضافة فيديوهات وبنك أسئلة (بدون صلاحيات مالية).'],
+                            ];
+                        @endphp
+                        <select class="form-select @error('role') is-invalid @enderror" id="role" name="role" onchange="showRoleDescription(this)">
                             <option value="" selected disabled>{{ __('center::messages.blade_0933') }}</option>
                             @foreach($roles as $r)
-                                <option value="{{ $r->name }}" {{ old('role') == $r->name ? 'selected' : '' }}>
-                                    {{ ucfirst(str_replace('_', ' ', $r->name)) }}
+                                @php
+                                    $normalizedName = strtolower(str_replace(' ', '_', $r->name));
+                                    $title = $roleData[$normalizedName]['title'] ?? ucfirst(str_replace('_', ' ', $r->name));
+                                    $desc = $roleData[$normalizedName]['desc'] ?? 'صلاحيات هذا المستخدم تحدد بناء على الدور المختار.';
+                                @endphp
+                                <option value="{{ $r->name }}" data-desc="{{ $desc }}" {{ old('role') == $r->name ? 'selected' : '' }}>
+                                    {{ $title }}
                                 </option>
                             @endforeach
                         </select>
-                        <div class="form-text">{{ __('center::messages.blade_0934') }}</div>
+                        <div class="form-text mt-2 p-2 rounded bg-light border border-info border-start border-4 text-dark fw-bold" id="roleDescription" style="display: none;">
+                            <i class="fas fa-info-circle text-info me-2"></i> <span id="roleDescText"></span>
+                        </div>
                         @error('role')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -69,4 +89,29 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    function showRoleDescription(selectElement) {
+        const descBox = document.getElementById('roleDescription');
+        const descText = document.getElementById('roleDescText');
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        
+        if (selectedOption.value) {
+            descText.textContent = selectedOption.getAttribute('data-desc');
+            descBox.style.display = 'block';
+        } else {
+            descBox.style.display = 'none';
+        }
+    }
+
+    // Trigger on load if old value exists
+    document.addEventListener('DOMContentLoaded', function() {
+        const roleSelect = document.getElementById('role');
+        if (roleSelect && roleSelect.value) {
+            showRoleDescription(roleSelect);
+        }
+    });
+</script>
+@endpush
 @endsection
