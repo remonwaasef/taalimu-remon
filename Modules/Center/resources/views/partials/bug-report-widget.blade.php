@@ -1,6 +1,9 @@
 {{-- Bug Report Floating Widget (Beta Feedback System) --}}
 {{-- This widget appears on every page to allow centers to report issues --}}
 
+<!-- Include html2canvas for automatic screenshots -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 <style>
     /* Floating Bug Report Button */
     .bug-report-fab {
@@ -115,6 +118,33 @@
         margin-top: 8px;
     }
 
+    .auto-screenshot-container {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .auto-screenshot-container img {
+        max-height: 120px;
+        border-radius: 8px;
+        border: 2px solid #059669;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .auto-screenshot-container .badge {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #059669;
+        color: white;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+    }
+
     .bug-info-badge {
         background: #f0fdf4;
         border: 1px solid #bbf7d0;
@@ -126,7 +156,7 @@
 </style>
 
 {{-- Floating Button --}}
-<button type="button" class="bug-report-fab" onclick="document.getElementById('bugReportModal').classList.add('show'); document.getElementById('bugReportModal').style.display='block'; document.body.classList.add('modal-open');" id="bugReportFab">
+<button type="button" class="bug-report-fab" onclick="openBugReportModal()" id="bugReportFab">
     🐛
     <span class="fab-tooltip">{{ __('center::bug_report.report_bug') }}</span>
 </button>
@@ -172,9 +202,19 @@
                         <textarea name="description" class="form-control" rows="4" placeholder="{{ __('center::bug_report.report_description_placeholder') }}" required maxlength="5000" id="bugDescription"></textarea>
                     </div>
 
-                    {{-- Screenshot --}}
+                    {{-- Auto Captured Screenshot --}}
+                    <div class="mb-3 d-none" id="autoScreenshotContainer">
+                        <label class="form-label fw-bold small">لقطة الشاشة التلقائية:</label>
+                        <div class="auto-screenshot-container">
+                            <img id="autoScreenshotPreview" src="" alt="Auto Captured Screenshot">
+                            <span class="badge"><i class="fas fa-camera"></i></span>
+                        </div>
+                        <div class="small text-muted mt-1">تم التقاط صورة للشاشة تلقائياً. يمكنك اختيار صورة أخرى إذا أردت.</div>
+                    </div>
+
+                    {{-- Custom Screenshot --}}
                     <div class="mb-3">
-                        <label class="form-label fw-bold small">{{ __('center::bug_report.screenshot') }}</label>
+                        <label class="form-label fw-bold small">تغيير الصورة المرفقة (اختياري)</label>
                         <input type="file" name="screenshot" class="form-control" accept="image/*" id="bugScreenshot">
                         <img id="screenshotPreview" class="screenshot-preview d-none" alt="preview">
                     </div>
@@ -188,6 +228,7 @@
                     {{-- Hidden Fields (auto-filled by JS) --}}
                     <input type="hidden" name="page_url" id="bugPageUrl">
                     <input type="hidden" name="browser_info" id="bugBrowserInfo">
+                    <input type="hidden" name="auto_screenshot" id="autoScreenshotValue">
 
                     {{-- Submit --}}
                     <button type="submit" class="btn btn-success w-100 rounded-pill py-2 fw-bold" id="bugSubmitBtn">
@@ -212,6 +253,53 @@
 </div>
 
 <script>
+// Open modal with auto screenshot
+function openBugReportModal() {
+    const btn = document.getElementById('bugReportFab');
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size: 20px;"></i>';
+    btn.style.pointerEvents = 'none';
+
+    // Capture screenshot (excluding the modal and button)
+    html2canvas(document.body, {
+        logging: false,
+        useCORS: true,
+        ignoreElements: (node) => {
+            return node.id === 'bugReportFab' || node.id === 'bugReportModal';
+        }
+    }).then(canvas => {
+        const base64image = canvas.toDataURL("image/png");
+        document.getElementById('autoScreenshotValue').value = base64image;
+        
+        // Show preview
+        const preview = document.getElementById('autoScreenshotPreview');
+        preview.src = base64image;
+        document.getElementById('autoScreenshotContainer').classList.remove('d-none');
+
+        showModal();
+    }).catch(err => {
+        console.error("Screenshot capture failed", err);
+        showModal(); // Show anyway
+    }).finally(() => {
+        btn.innerHTML = originalContent;
+        btn.style.pointerEvents = 'auto';
+    });
+
+    function showModal() {
+        const modal = document.getElementById('bugReportModal');
+        modal.classList.add('show');
+        modal.style.display = 'block';
+        document.body.classList.add('modal-open');
+        
+        // Add backdrop
+        if (!document.querySelector('.modal-backdrop')) {
+            const backdrop = document.createElement('div');
+            backdrop.className = 'modal-backdrop fade show';
+            document.body.appendChild(backdrop);
+        }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // Collect browser info automatically
     const browserInfo = {

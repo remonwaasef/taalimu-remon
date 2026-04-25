@@ -149,30 +149,41 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <div class="row">
-                                                <div class="col-md-8">
-                                                    <h6 class="fw-bold">{{ $report->title }}</h6>
-                                                    <p class="text-muted">{{ $report->description }}</p>
+                                            <div class="row g-4">
+                                                <div class="col-md-7">
+                                                    <h5 class="fw-bold text-primary">{{ $report->title }}</h5>
+                                                    <p class="text-muted" style="white-space: pre-wrap;">{{ $report->description }}</p>
                                                     
+                                                    @if($report->page_url)
+                                                        <div class="mb-3">
+                                                            <span class="fw-bold small">رابط الصفحة:</span>
+                                                            <a href="{{ $report->page_url }}" target="_blank" class="d-block small mt-1" style="word-break: break-all;">{{ $report->page_url }}</a>
+                                                        </div>
+                                                    @endif
+
                                                     @if($report->browser_info)
                                                         <hr>
-                                                        <h6 class="fw-bold text-muted small">المتصفح والنظام:</h6>
-                                                        <code class="d-block bg-light p-2 rounded small">{{ json_encode($report->browser_info, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</code>
+                                                        <h6 class="fw-bold text-muted small mb-2"><i class="fas fa-laptop-code me-1"></i> معلومات المتصفح والنظام:</h6>
+                                                        <div class="bg-light rounded border p-3" dir="ltr" style="max-height: 250px; overflow-y: auto;">
+                                                            <pre class="mb-0 small" style="white-space: pre-wrap; word-break: break-word; text-align: left; color: #e83e8c;"><code>{{ json_encode($report->browser_info, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) }}</code></pre>
+                                                        </div>
                                                     @endif
                                                 </div>
-                                                <div class="col-md-4 bg-light rounded p-3">
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-bold small">تحديث الحالة</label>
-                                                        <select name="status" class="form-select">
-                                                            <option value="open" {{ $report->status == 'open' ? 'selected' : '' }}>مفتوح (Open)</option>
-                                                            <option value="in_progress" {{ $report->status == 'in_progress' ? 'selected' : '' }}>قيد المعالجة (In Progress)</option>
-                                                            <option value="resolved" {{ $report->status == 'resolved' ? 'selected' : '' }}>تم الحل (Resolved)</option>
-                                                            <option value="closed" {{ $report->status == 'closed' ? 'selected' : '' }}>مغلق (Closed)</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-bold small">ملاحظات الإدارة (للمطور فقط)</label>
-                                                        <textarea name="admin_notes" class="form-control" rows="4">{{ $report->admin_notes }}</textarea>
+                                                <div class="col-md-5">
+                                                    <div class="bg-light border rounded p-3 h-100">
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-bold small text-dark"><i class="fas fa-tasks me-1"></i> تحديث الحالة</label>
+                                                            <select name="status" class="form-select shadow-sm">
+                                                                <option value="open" {{ $report->status == 'open' ? 'selected' : '' }}>مفتوح (Open)</option>
+                                                                <option value="in_progress" {{ $report->status == 'in_progress' ? 'selected' : '' }}>قيد المعالجة (In Progress)</option>
+                                                                <option value="resolved" {{ $report->status == 'resolved' ? 'selected' : '' }}>تم الحل (Resolved)</option>
+                                                                <option value="closed" {{ $report->status == 'closed' ? 'selected' : '' }}>مغلق (Closed)</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-bold small text-dark"><i class="fas fa-sticky-note me-1"></i> ملاحظات الإدارة (للمطور فقط)</label>
+                                                            <textarea name="admin_notes" class="form-control shadow-sm" rows="6" placeholder="اكتب ملاحظاتك هنا لحفظ ما تم إصلاحه...">{{ $report->admin_notes }}</textarea>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
