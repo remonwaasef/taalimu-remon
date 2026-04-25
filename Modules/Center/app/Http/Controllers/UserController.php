@@ -25,7 +25,7 @@ class UserController extends Controller
     {
         $this->authorize('viewAny', User::class);
         $query = User::where('tenant_id', $this->tenant->id)
-                     ->whereIn('role', ['center_admin', 'staff', 'secretary', 'accountant']); // Exclude students/instructors
+                     ->whereNotIn('role', ['student', 'instructor']); // Show all admin/staff roles, only exclude students and instructors handled in other modules
 
         if ($request->has('search')) {
             $search = \App\Helpers\QueryHelper::escapeLike($request->search);
