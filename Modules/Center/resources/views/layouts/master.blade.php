@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', __('center::messages.blade_0457'))</title>
+    <title>@yield('title', __('center::dashboard.header.dashboard_title'))</title>
     
     @if($tenant->favicon)
         <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $tenant->favicon) }}">
@@ -360,10 +360,10 @@
     @if(session()->has('impersonator_id'))
         <div class="alert alert-warning mb-0 rounded-0 border-0 p-2 d-flex justify-content-between align-items-center" style="z-index: 1050; position: relative;">
             <div>
-                <i class="fas fa-user-secret me-2"></i>{{ __('center::messages.blade_0454') }}<strong>{{ auth()->user()->name }}</strong>
+                <i class="fas fa-user-secret me-2"></i>{{ __('center::dashboard.header.browsing_as') }}<strong>{{ auth()->user()->name }}</strong>
             </div>
             <a href="{{ route('admin.impersonate.stop') }}" class="btn btn-dark btn-sm rounded-pill px-3">
-                <i class="fas fa-sign-out-alt me-1"></i>{{ __('center::messages.blade_0455') }}</a>
+                <i class="fas fa-sign-out-alt me-1"></i>{{ __('center::dashboard.header.logout') }}</a>
         </div>
     @endif
 
@@ -715,7 +715,7 @@
                     $overdueCount = $tenant->getOverdueStudentsCount();
                 @endphp
                 <div class="dropdown">
-                    <a href="{{ route('center.sales.overdue', ['tenant' => $tenant->domain ?? 'center']) }}" class="btn btn-white bg-white border shadow-sm rounded-pill px-3 position-relative" title="{{ __('center::messages.blade_0558') }}">
+                    <a href="{{ route('center.sales.overdue', ['tenant' => $tenant->domain ?? 'center']) }}" class="btn btn-white bg-white border shadow-sm rounded-pill px-3 position-relative" title="{{ __('center::dashboard.header.overdue_invoices') }}">
                         <i class="fas fa-wallet text-danger"></i>
                         @if($overdueCount > 0)
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger animate__animated animate__pulse animate__infinite" style="font-size: 0.6rem;">

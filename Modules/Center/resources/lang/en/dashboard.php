@@ -112,4 +112,10 @@ return [
             ],
         ],
     ],
+    'header' => [
+        'dashboard_title' => 'Dashboard',
+        'logout' => 'Logout',
+        'browsing_as' => 'You are browsing as: ',
+        'overdue_invoices' => 'Overdue Invoices',
+    ],
 ];

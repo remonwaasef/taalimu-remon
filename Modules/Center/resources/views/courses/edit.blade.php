@@ -2,8 +2,8 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark">تعديل الدورة: {{ $course->title }}</h2>
-        <a href="{{ route('center.courses.index') }}" class="btn btn-outline-secondary rounded-pill px-4">{{ __('center::messages.blade_0298') }}</a>
+        <h2 class="fw-bold text-dark">{{ __('center::courses.edit_title', ['title' => $course->title]) }}</h2>
+        <a href="{{ route('center.courses.index') }}" class="btn btn-outline-secondary rounded-pill px-4">{{ __('center::courses.cancel') }}</a>
     </div>
 
     <div class="row justify-content-center">
@@ -25,7 +25,7 @@
                         @endif
                         
                         <div class="mb-4">
-                            <label class="form-label fw-bold">{{ __('center::messages.blade_0299') }}</label>
+                            <label class="form-label fw-bold">{{ __('center::courses.course_name') }}</label>
                             <input type="text" name="title" value="{{ old('title', $course->title) }}" class="form-control form-control-lg bg-light border-0 @error('title') is-invalid border-danger @enderror">
                             @error('title')
                                 <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
@@ -33,9 +33,9 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label fw-bold">{{ __('center::messages.blade_0300') }}</label>
+                            <label class="form-label fw-bold">{{ __('center::courses.instructor') }}</label>
                             <select name="instructor_id" class="form-select form-select-lg bg-light border-0 @error('instructor_id') is-invalid border-danger @enderror">
-                                <option value="">{{ __('center::messages.blade_0301') }}</option>
+                                <option value="">{{ __('center::courses.choose_instructor') }}</option>
                                 @foreach($instructors as $instructor)
                                     <option value="{{ $instructor->id }}" {{ old('instructor_id', $course->instructor_id) == $instructor->id ? 'selected' : '' }}>{{ $instructor->name }}</option>
                                 @endforeach
@@ -47,28 +47,28 @@
 
                         <div class="row mb-4">
                             <div class="col-md-4">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0302', ['currency' => get_currency_symbol()]) }}</label>
+                                <label class="form-label fw-bold">{{ __('center::courses.price') }} ({{ get_currency_symbol() }})</label>
                                 <input type="number" name="price" value="{{ old('price', $course->price) }}" class="form-control form-control-lg bg-light border-0 @error('price') is-invalid border-danger @enderror" min="0" step="0.01">
                                 @error('price')
                                     <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0303') }}</label>
+                                <label class="form-label fw-bold">{{ __('center::courses.sessions_count') }}</label>
                                 <input type="number" name="sessions_count" value="{{ old('sessions_count', $course->sessions_count) }}" class="form-control form-control-lg bg-light border-0 @error('sessions_count') is-invalid border-danger @enderror" min="0">
                                 @error('sessions_count')
                                     <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0304') }}</label>
+                                <label class="form-label fw-bold">{{ __('center::courses.status_label') }}</label>
                                 <div class="d-flex gap-2">
                                     <input type="radio" class="btn-check" name="status" id="status_draft" value="draft" {{ old('status', $course->status) == 'draft' ? 'checked' : '' }}>
                                     <label class="btn btn-outline-secondary flex-grow-1 rounded-pill" for="status_draft">
-                                        <i class="fas fa-pencil-alt me-1"></i>{{ __('center::messages.blade_0305') }}</label>
+                                        <i class="fas fa-pencil-alt me-1"></i>{{ __('center::courses.status_draft') }}</label>
                                     <input type="radio" class="btn-check" name="status" id="status_published" value="published" {{ old('status', $course->status) == 'published' ? 'checked' : '' }}>
                                     <label class="btn btn-outline-success flex-grow-1 rounded-pill" for="status_published">
-                                        <i class="fas fa-check-circle me-1"></i>{{ __('center::messages.blade_0306') }}</label>
+                                        <i class="fas fa-check-circle me-1"></i>{{ __('center::courses.status_published') }}</label>
                                 </div>
                                 @error('status')
                                     <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
@@ -77,7 +77,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label fw-bold">{{ __('center::messages.blade_0307') }}</label>
+                            <label class="form-label fw-bold">{{ __('center::courses.course_image') }}</label>
                             @if($course->image)
                                 <div class="mb-2">
                                     <img src="{{ Storage::url($course->image) }}" alt="Current Image" class="img-thumbnail rounded" style="height: 100px;">
@@ -90,7 +90,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label fw-bold">{{ __('center::messages.blade_0308') }}</label>
+                            <label class="form-label fw-bold">{{ __('center::courses.description') }}</label>
                             <textarea name="description" class="form-control form-control-lg bg-light border-0 @error('description') is-invalid border-danger @enderror" rows="4">{{ old('description', $course->description) }}</textarea>
                             @error('description')
                                 <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</div>
@@ -100,9 +100,9 @@
                         <!-- Schedule Section -->
                         <div class="mb-4">
                             <label class="form-label fw-bold d-flex justify-content-between align-items-center">
-                                <span>{{ __('center::messages.blade_0309') }}</span>
+                                <span>{{ __('center::courses.course_schedules') }}</span>
                                 <button type="button" id="add-schedule-btn" class="btn btn-sm btn-outline-primary rounded-pill">
-                                    <i class="fas fa-plus"></i>{{ __('center::messages.blade_0310') }}</button>
+                                    <i class="fas fa-plus"></i>{{ __('center::courses.add_schedule') }}</button>
                             </label>
                             
                             <!-- Schedule Count Info Bar -->
@@ -199,7 +199,7 @@
                         </template>
 
                         <div class="d-grid">
-                            <button type="submit" id="submit-btn" class="btn btn-primary btn-lg rounded-pill shadow-sm">{{ __('center::messages.blade_0336') }}</button>
+                            <button type="submit" id="submit-btn" class="btn btn-primary btn-lg rounded-pill shadow-sm">{{ __('center::courses.save_course') }}</button>
                         </div>
                     </form>
                 </div>

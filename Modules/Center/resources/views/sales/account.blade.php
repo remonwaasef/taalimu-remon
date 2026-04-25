@@ -1,11 +1,11 @@
 @extends('center::layouts.hope-master')
 
-@section('page-title', __('instructor::billing.title'))
-@section('page-subtitle', __('instructor::billing.subtitle'))
+@section('page-title', __('center::sales.title'))
+@section('page-subtitle', __('center::sales.subtitle'))
 
 @section('page-actions')
     <div id="resultCount" class="btn btn-glass cursor-default opacity-100">
-        <i class="fas fa-user-graduate me-2"></i> {{ $students->count() }} {{ __('instructor::billing.student_count') }}
+        <i class="fas fa-user-graduate me-2"></i> {{ $students->count() }} {{ __('center::sales.student_count') }}
     </div>
 @endsection
 
@@ -19,14 +19,14 @@
                 <div class="col-md-6">
                     <div class="input-group">
                         <span class="input-group-text bg-white rounded-start-pill px-3"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" id="searchInput" class="form-control bg-white rounded-end-pill py-2" placeholder="{{ __('instructor::billing.search_placeholder') }}">
+                        <input type="text" id="searchInput" class="form-control bg-white rounded-end-pill py-2" placeholder="{{ __('center::sales.search_placeholder') }}">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <select id="filterStatus" class="form-select bg-white rounded-pill py-2">
-                        <option value="all">{{ __('instructor::billing.all_students') }}</option>
-                        <option value="unpaid">{{ __('instructor::billing.has_balance') }}</option>
-                        <option value="paid">{{ __('instructor::billing.fully_paid') }}</option>
+                        <option value="all">{{ __('center::sales.all_students') }}</option>
+                        <option value="unpaid">{{ __('center::sales.has_balance') }}</option>
+                        <option value="fully_paid">{{ __('center::sales.fully_paid') }}</option>
                     </select>
                 </div>
             </div>
@@ -38,14 +38,14 @@
             <div class="mb-4">
                 <i class="fas fa-users fs-1 text-muted opacity-25"></i>
             </div>
-            <h5 class="text-muted">{{ __('instructor::billing.no_students_registered') }}</h5>
+            <h5 class="text-muted">{{ __('center::sales.no_students_registered') }}</h5>
         </div>
     @else
         <div id="noResults" class="stats-card p-5 text-center d-none">
             <div class="mb-4">
                 <i class="fas fa-search fs-1 text-muted opacity-25"></i>
             </div>
-            <h5 class="text-muted">{{ __('instructor::billing.no_search_results') }}</h5>
+            <h5 class="text-muted">{{ __('center::sales.no_search_results') }}</h5>
         </div>
 
         <div class="stats-card p-0 overflow-hidden shadow-sm border-0" id="billingTableContainer">
@@ -53,11 +53,11 @@
                 <table class="table table-hover align-middle mb-0" id="billingTable">
                     <thead class="bg-light">
                         <tr>
-                            <th class="px-4 py-3 border-0">{{ __('instructor::billing.student_name') }}</th>
-                            <th class="border-0">{{ __('instructor::billing.total_due') }}</th>
-                            <th class="border-0">{{ __('instructor::billing.total_paid') }}</th>
-                            <th class="border-0">{{ __('instructor::billing.balance') }}</th>
-                            <th class="px-4 border-0 text-end">{{ __('instructor::billing.actions') }}</th>
+                            <th class="px-4 py-3 border-0">{{ __('center::sales.student_name') }}</th>
+                            <th class="border-0">{{ __('center::sales.total_due') }}</th>
+                            <th class="border-0">{{ __('center::sales.total_paid') }}</th>
+                            <th class="border-0">{{ __('center::sales.balance') }}</th>
+                            <th class="px-4 border-0 text-end">{{ __('center::sales.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -83,7 +83,7 @@
                                     @if($balance > 0)
                                         <span class="text-danger fw-bold">{{ number_format($balance) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }}</span>
                                     @else
-                                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{ __('instructor::billing.paid') }}</span>
+                                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{ __('center::sales.paid') }}</span>
                                     @endif
                                 </td>
                                 <td class="px-4 text-end">
@@ -92,20 +92,25 @@
                                             <button type="button" class="btn btn-primary btn-sm rounded-pill px-3" 
                                                 data-bs-toggle="modal" data-bs-target="#collectModal" 
                                                 data-id="{{ $student->id }}" data-name="{{ $student->name }}" data-balance="{{ $balance }}">
-                                                <i class="fas fa-hand-holding-usd me-1"></i> {{ __('instructor::billing.collect') }}
+                                                <i class="fas fa-hand-holding-usd me-1"></i> {{ __('center::sales.collect') }}
                                             </button>
                                             @php
                                                 // Customize message for Center context
-                                                $reminderMsg = "تحية طيبة، نود تذكيركم بأن الطالب {$student->name} لديه مديونية متبقية قدرها {$balance} ج.م في " . (app('tenant')->name ?? 'المركز') . ". يرجى السداد في أقرب وقت. شكراً لكم.";
+                                                $reminderMsg = __('center::sales.billing_reminder', [
+                                                    'name' => $student->name,
+                                                    'balance' => $balance,
+                                                    'currency' => app('tenant')->settings['currency'] ?? 'EGP',
+                                                    'center' => app('tenant')->name ?? 'المركز'
+                                                ]);
                                                 $phone = $student->phone;
                                                 if (str_starts_with($phone, '0')) $phone = '2' . $phone;
                                                 $whatsappUri = "https://api.whatsapp.com/send?phone=" . preg_replace('/[^0-9]/', '', $phone) . "&text=" . urlencode($reminderMsg);
                                             @endphp
                                             <a href="{{ $whatsappUri }}" target="_blank" class="btn btn-success btn-sm rounded-pill px-3">
-                                                <i class="fab fa-whatsapp me-1"></i> {{ __('instructor::billing.whatsapp_reminder') }}
+                                                <i class="fab fa-whatsapp me-1"></i> {{ __('center::sales.whatsapp_reminder') }}
                                             </a>
                                         @else
-                                            <span class="text-success small fw-medium"><i class="fas fa-check-circle me-1"></i> {{ __('instructor::billing.collected') }}</span>
+                                            <span class="text-success small fw-medium"><i class="fas fa-check-circle me-1"></i> {{ __('center::sales.collected') }}</span>
                                         @endif
                                     </div>
                                 </td>
@@ -124,7 +129,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg rounded-4">
             <div class="modal-header border-0 pb-0">
-                <h5 class="modal-title fw-bold">{{ __('instructor::billing.record_payment') }}</h5>
+                <h5 class="modal-title fw-bold">{{ __('center::sales.record_payment') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form action="{{ route('center.sales.mark-paid') }}" method="POST">
@@ -133,12 +138,12 @@
                     <input type="hidden" name="student_id" id="modal_student_id">
                     
                     <div class="mb-4 text-center">
-                        <p class="text-muted mb-1">{{ __('instructor::billing.collect_from') }}</p>
+                        <p class="text-muted mb-1">{{ __('center::sales.collect_from') }}</p>
                         <h4 class="fw-bold mb-0" id="modal_student_name"></h4>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">{{ __('instructor::billing.amount_received') }}</label>
+                        <label class="form-label small fw-bold text-muted">{{ __('center::sales.amount_received') }}</label>
                         <div class="input-group">
                             <input type="number" name="amount" id="modal_amount" class="form-control bg-white border py-2" required>
                             <span class="input-group-text bg-white border">{{ app('tenant')->settings['currency'] ?? 'EGP' }}</span>
@@ -147,13 +152,13 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">{{ __('instructor::billing.notes') }}</label>
-                        <textarea name="notes" class="form-control bg-white border" rows="3" placeholder="{{ __('instructor::billing.notes_placeholder') }}"></textarea>
+                        <label class="form-label small fw-bold text-muted">{{ __('center::sales.notes') }}</label>
+                        <textarea name="notes" class="form-control bg-white border" rows="3" placeholder="{{ __('center::sales.notes_placeholder_alt') }}"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer border-0 pt-0 p-4">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">{{ __('instructor::billing.cancel') }}</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4">{{ __('instructor::billing.confirm_collection') }}</button>
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">{{ __('center::sales.cancel') }}</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">{{ __('center::sales.confirm_collection') }}</button>
                 </div>
             </form>
         </div>
@@ -198,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        if (resultCount) resultCount.textContent = visible + ' {{ __('instructor::billing.student_count') }}';
+        if (resultCount) resultCount.textContent = visible + ' {{ __('center::sales.student_count') }}';
         if (noResults) noResults.classList.toggle('d-none', visible > 0);
         if (tableContainer) tableContainer.classList.toggle('d-none', visible === 0);
     }
@@ -219,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('modal_student_name').textContent = name;
             document.getElementById('modal_amount').value = balance;
             document.getElementById('modal_amount').max = balance;
-            document.getElementById('modal_balance_hint').textContent = '{{ __('instructor::billing.current_balance') }}' + new Intl.NumberFormat().format(balance);
+            document.getElementById('modal_balance_hint').textContent = '{{ __('center::sales.current_balance_hint') }}' + new Intl.NumberFormat().format(balance);
         });
     }
 });

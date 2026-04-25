@@ -14,7 +14,7 @@
         <div class="col-md-3">
             <div class="card border-0 shadow-sm rounded-4" style="background-color: #ecfdf5; color: #064e3b;">
                 <div class="card-body p-4">
-                    <h6 class="opacity-75 small fw-bold" style="color: #065f46;">{{ __('center::messages.blade_0443') }}</h6>
+                    <h6 class="opacity-75 small fw-bold" style="color: #065f46;">{{ __('center::instructors.total_instructors') }}</h6>
                     <h2 class="fw-bold mb-0">{{ $instructors->total() }}</h2>
                 </div>
             </div>
@@ -22,7 +22,7 @@
         <div class="col-md-3">
             <div class="card border-0 shadow-sm rounded-4 bg-white">
                 <div class="card-body p-4">
-                    <h6 class="text-muted small fw-bold">{{ __('center::messages.blade_0444') }}</h6>
+                    <h6 class="text-muted small fw-bold">{{ __('center::instructors.available_balance_alt') }}</h6>
                     <h2 class="fw-bold mb-0">{{ $activeCount }}</h2>
                 </div>
             </div>
@@ -114,7 +114,7 @@
                                             <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('center.instructors.edit', $instructor->id) }}"><i class="far fa-edit me-2 text-success opacity-75"></i> {{ __('center::instructors.edit') }}</a></li>
                                             <li><hr class="dropdown-divider opacity-10"></li>
                                             <li>
-                                                <form action="{{ route('center.instructors.destroy', $instructor->id) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('center::instructors.confirm_delete_instructor') ?? __('center::messages.blade_0446') }}');">
+                                                <form action="{{ route('center.instructors.destroy', $instructor->id) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('center::instructors.confirm_delete_instructor') }}');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="dropdown-item rounded-3 text-danger mb-0">

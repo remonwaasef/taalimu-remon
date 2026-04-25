@@ -2,8 +2,8 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark">{{ __('center::messages.blade_0719') }}</h2>
-        <a href="{{ route('center.students.index') }}" class="btn btn-outline-secondary rounded-pill px-4">{{ __('center::messages.blade_0721') }}</a>
+        <h2 class="fw-bold text-dark">{{ __('center::students.form.add_new_student') }}</h2>
+        <a href="{{ route('center.students.index') }}" class="btn btn-outline-secondary rounded-pill px-4">{{ __('center::students.form.back_to_list') }}</a>
     </div>
 
     <div class="row justify-content-center">
@@ -15,27 +15,27 @@
                         
                         {{-- 1. Student Info --}}
                         <div class="row mb-4">
-                            <h5 class="text-secondary mb-3"><i class="bi bi-person me-2"></i>{{ __('center::messages.blade_0722') }}</h5>
+                            <h5 class="text-secondary mb-3"><i class="bi bi-person me-2"></i>{{ __('center::students.form.basic_info') }}</h5>
                             
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0724') }} <span class="text-danger">*</span></label>
-                                <input type="text" name="name" value="{{ old('name') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0751') }}">
+                                <label class="form-label fw-bold">{{ __('center::students.form.full_name') }} <span class="text-danger">*</span></label>
+                                <input type="text" name="name" value="{{ old('name') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::students.form.name_placeholder') }}">
                                 @error('name')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
                             
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0725') }} <span class="text-danger">*</span></label>
-                                <input type="tel" name="phone" value="{{ old('phone') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0752') }}" pattern="[0-9\+\-\s\(\)]*" title="أرقام فقط (+ - مسافات)">
+                                <label class="form-label fw-bold">{{ __('center::students.form.phone_number') }} <span class="text-danger">*</span></label>
+                                <input type="tel" name="phone" value="{{ old('phone') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::students.form.phone_placeholder') }}" pattern="[0-9\+\-\s\(\)]*" title="{{ __('center::students.numbers_only') }}">
                                 @error('phone')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
                             
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0726') }}</label>
-                                <input type="email" name="email" value="{{ old('email') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0753') }}">
+                                <label class="form-label fw-bold">{{ __('center::students.form.email_optional') }}</label>
+                                <input type="email" name="email" value="{{ old('email') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::students.form.email_placeholder') }}">
                                 @error('email')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
@@ -52,11 +52,11 @@
 
                         {{-- 2. Parent Info --}}
                         <div class="row mb-4">
-                            <h5 class="text-secondary mb-3"><i class="bi bi-people me-2"></i>{{ __('center::messages.blade_0737') }}</h5>
+                            <h5 class="text-secondary mb-3"><i class="bi bi-people me-2"></i>{{ __('center::students.form.parent_info') }}</h5>
                             
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0741') }}</label>
-                                <input type="text" name="parent_name" value="{{ old('parent_name') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0758') }}">
+                                <label class="form-label fw-bold">{{ __('center::students.form.parent_name') }}</label>
+                                <input type="text" name="parent_name" value="{{ old('parent_name') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::students.form.parent_name_placeholder') }}">
                                 @error('parent_name')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
@@ -64,15 +64,15 @@
                             
                             
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0739') }}</label>
+                                <label class="form-label fw-bold">{{ __('center::students.form.parent_phone') }}</label>
                                 <div class="input-group">
-                                    <input type="tel" name="parent_phone" id="parent_phone" value="{{ old('parent_phone') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::messages.blade_0757') }}" pattern="[0-9\+\-\s\(\)]*" title="أرقام فقط (+ - مسافات)">
+                                    <input type="tel" name="parent_phone" id="parent_phone" value="{{ old('parent_phone') }}" class="form-control form-control-lg bg-light border-0" placeholder="{{ __('center::students.form.parent_phone_placeholder') }}" pattern="[0-9\+\-\s\(\)]*" title="{{ __('center::students.numbers_only') }}">
                                     <span class="input-group-text bg-light border-0 d-none" id="guardian-found-badge">
-                                        <span class="badge bg-success rounded-pill"><i class="bi bi-check-circle-fill"></i>{{ __('center::messages.blade_0783') }}</span>
+                                        <span class="badge bg-success rounded-pill"><i class="bi bi-check-circle-fill"></i> {{ __('center::students.form.guardian_found') }}</span>
                                     </span>
                                 </div>
                                 <div id="guardian-info-alert" class="alert alert-success border-0 rounded-4 small mt-2 d-none">
-                                    <i class="bi bi-info-circle-fill me-1"></i>{{ __('center::messages.blade_0784') }}<b><span id="found-guardian-name"></span></b>{{ __('center::messages.blade_0785') }}</div>
+                                    <i class="bi bi-info-circle-fill me-1"></i> {{ __('center::students.form.guardian_recognized', ['name' => '<span id="found-guardian-name"></span>']) }}</div>
                                 @error('parent_phone')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
@@ -80,8 +80,8 @@
                             
                             
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold"><i class="fas fa-envelope me-1 text-info opacity-50"></i> بريد ولي الأمر</label>
-                                <input type="email" name="parent_email" value="{{ old('parent_email') }}" class="form-control form-control-lg bg-light border-0" placeholder="example@email.com">
+                                <label class="form-label fw-bold"><i class="fas fa-envelope me-1 text-info opacity-50"></i> {{ __('center::students.parent_email') }}</label>
+                                <input type="email" name="parent_email" value="{{ old('parent_email') }}" class="form-control form-control-lg bg-light border-0" placeholder="parent@email.com">
                                 @error('parent_email')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
@@ -94,17 +94,17 @@
                         {{-- 3. Academic Info --}}
                         <div class="row mb-4">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="text-secondary mb-0"><i class="bi bi-mortarboard me-2"></i>{{ __('center::messages.blade_0745') }}</h5>
+                                <h5 class="text-secondary mb-0"><i class="bi bi-mortarboard me-2"></i>{{ __('center::students.form.academic_stage') }}</h5>
                                 <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#gradePickerModal" id="gradePickerTrigger">
-                                    <i class="bi bi-grid-3x3-gap me-1"></i> اختر من القائمة
+                                    <i class="bi bi-grid-3x3-gap me-1"></i> {{ __('center::students.choose_from_list') }}
                                 </button>
                             </div>
                             
                             <div class="col-md-12 mb-3">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0748') }} <span class="text-danger">*</span></label>
+                                <label class="form-label fw-bold">{{ __('center::students.form.grade_level') }} <span class="text-danger">*</span></label>
                                 <div class="position-relative">
                                     <select name="grade_id" id="main_grade_select" class="form-select form-select-lg bg-light border-0 shadow-none">
-                                        <option value="">{{ __('center::messages.blade_0747') }}</option>
+                                        <option value="">{{ __('center::students.form.choose_grade') }}</option>
                                         @foreach($stages as $stage)
                                             <optgroup label="📂 {{ $stage->name }}">
                                                 @foreach($stage->grades as $grade)
@@ -130,11 +130,11 @@
                         {{-- 4. Course Enrollment --}}
                         <div class="row mb-4">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="text-secondary mb-0"><i class="bi bi-collection-play me-2"></i>التسجيل المبدئي (اختياري)</h5>
+                                <h5 class="text-secondary mb-0"><i class="bi bi-collection-play me-2"></i>{{ __('center::students.initial_registration_optional') }}</h5>
                             </div>
                             
                             <div class="col-md-12 mb-3">
-                                <label class="form-label fw-bold mb-3">اختر المجموعات أو الدورات <span class="text-muted fw-normal">(يمكنك اختيار أكثر من واحدة)</span></label>
+                                <label class="form-label fw-bold mb-3">{{ __('center::students.choose_groups_courses') }} <span class="text-muted fw-normal">({{ __('center::students.choose_more_than_one') }})</span></label>
                                 @if($courses->count() > 0)
                                     <div class="row g-3">
                                         @foreach($courses as $course)
@@ -150,7 +150,7 @@
                                     </div>
                                 @else
                                     <div class="alert alert-light border-0 rounded-4 small text-muted">
-                                        <i class="bi bi-info-circle me-1"></i> لا توجد مجموعات أو دورات متاحة حالياً.
+                                        <i class="bi bi-info-circle me-1"></i> {{ __('center::students.no_available_groups') }}
                                     </div>
                                 @endif
                                 @error('course_ids')
@@ -160,7 +160,7 @@
                         </div>
 
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">{{ __('center::messages.blade_0750') }}</button>
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">{{ __('center::students.form.save_student') }}</button>
                         </div>
                     </form>
                 </div>
@@ -201,7 +201,7 @@
                 
                 if (original !== clean) {
                     this.value = clean;
-                    showWarning(this, 'أرقام فقط (0-9)');
+                    showWarning(this, "{{ __('center::students.numbers_only') }}");
                 }
             });
         });
@@ -216,7 +216,7 @@
                 
                 if (original !== clean) {
                     this.value = clean;
-                    showWarning(this, 'حروف فقط (أ-ي, A-Z)');
+                    showWarning(this, "{{ __('center::students.letters_only') }}");
                 }
             });
         });
@@ -312,7 +312,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg rounded-5">
             <div class="modal-header border-0 p-4">
-                <h5 class="modal-title fw-bold" id="gradePickerModalLabel">اختر الصف الدراسي</h5>
+                <h5 class="modal-title fw-bold" id="gradePickerModalLabel">{{ __('center::students.choose_from_list') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4 pt-0">

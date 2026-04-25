@@ -7,7 +7,7 @@
     <a href="{{ route('center.sales.index') }}" class="btn btn-light rounded-circle me-3">
         <i class="fas fa-arrow-right"></i>
     </a>
-    <h2 class="fw-bold text-dark mb-0">{{ __('center::sales.new_sale') }} <span class="badge bg-info bg-opacity-10 text-info fs-6 fw-normal rounded-pill ms-2">بيئة التطوير</span></h2>
+    <h2 class="fw-bold text-dark mb-0">{{ __('center::sales.new_sale') }} <span class="badge bg-info bg-opacity-10 text-info fs-6 fw-normal rounded-pill ms-2">{{ __('center::sales.dev_env') }}</span></h2>
 </div>
 
 <div class="row g-4">
@@ -32,8 +32,8 @@
                                 <div class="text-primary fw-bold">{{ number_format($course->price, 2) }} {{ get_currency_symbol() }}</div>
                                 @if($course->sessions_count > 0)
                                 <div class="text-muted small mt-1">
-                                    <i class="fas fa-layer-group me-1"></i> {{ $course->sessions_count }} حصة
-                                    <span class="text-success">({{ number_format($course->price / $course->sessions_count, 2) }} {{ get_currency_symbol() }} / حصة)</span>
+                                    <i class="fas fa-layer-group me-1"></i> {{ $course->sessions_count }} {{ __('center::sales.session') }}
+                                    <span class="text-success">({{ number_format($course->price / $course->sessions_count, 2) }} {{ get_currency_symbol() }} / {{ __('center::sales.session') }})</span>
                                 </div>
                                 @endif
                             </div>
@@ -67,12 +67,12 @@
                     <!-- Student Summary Card (Hidden by default) -->
                     <div id="studentSummaryCard" class="bg-light rounded-4 p-3 mb-4 d-none">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="fw-bold mb-0 text-dark">{{ __('center::messages.blade_0582') }}</h6>
-                            <span id="summaryStatus" class="badge rounded-pill px-3">{{ __('center::messages.blade_0583') }}</span>
+                            <h6 class="fw-bold mb-0 text-dark">{{ __('center::sales.student_summary') }}</h6>
+                            <span id="summaryStatus" class="badge rounded-pill px-3">{{ __('center::sales.account_status') }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="small text-muted">{{ __('center::messages.blade_0584') }}</span>
-                            <span id="summaryDebt" class="badge bg-danger">{{ __('center::messages.blade_0585', ['currency' => get_currency_symbol()]) }}</span>
+                            <span class="small text-muted">{{ __('center::sales.total_debt_label') }}</span>
+                            <span id="summaryDebt" class="badge bg-danger">{{ __('center::sales.current_balance_hint') }}{{ get_currency_symbol() }}</span>
                         </div>
                         <hr class="my-2 opacity-25">
                         <div id="summaryCourses" class="small text-muted mb-3">
@@ -83,7 +83,7 @@
                         </div>
                         <div class="text-center">
                             <a id="summaryProfileLink" href="{{ route('center.students.index') }}" class="btn btn-sm btn-outline-primary w-100 rounded-pill small mb-2">
-                                <i class="fas fa-user-circle me-1"></i>{{ __('center::messages.blade_0586') }}</a>
+                                <i class="fas fa-user-circle me-1"></i>{{ __('center::sales.view_profile') }}</a>
                         </div>
                     </div>
 
@@ -126,7 +126,7 @@
                             <div class="form-check form-switch d-flex align-items-center justify-content-between p-0 mb-2">
                                 <div>
                                     <label class="form-check-label fw-bold small text-dark" for="installmentToggle">
-                                        <i class="fas fa-calendar-alt me-1 text-warning"></i> تقسيط على الحصص
+                                        <i class="fas fa-calendar-alt me-1 text-warning"></i> {{ __('center::sales.installment_mode') }}
                                     </label>
                                 </div>
                                 <input class="form-check-input ms-0" type="checkbox" id="installmentToggle" onchange="toggleInstallment()">
@@ -134,16 +134,16 @@
                             <div id="installmentDetails" class="d-none">
                                 <div class="bg-white rounded-3 p-2 small">
                                     <div class="d-flex justify-content-between mb-1">
-                                        <span class="text-muted">عدد الحصص:</span>
+                                        <span class="text-muted">{{ __('center::sales.sessions_count_label') }}</span>
                                         <span id="installmentSessions" class="fw-bold">-</span>
                                     </div>
                                     <div class="d-flex justify-content-between mb-1">
-                                        <span class="text-muted">قسط الحصة الواحدة:</span>
+                                        <span class="text-muted">{{ __('center::sales.installment_per_session') }}</span>
                                         <span id="installmentPerSession" class="fw-bold text-success">-</span>
                                     </div>
                                     <hr class="my-1 opacity-25">
                                     <div class="d-flex justify-content-between">
-                                        <span class="text-muted">المتبقي بعد الدفعة الأولى:</span>
+                                        <span class="text-muted">{{ __('center::sales.remaining_after_first_pay') }}</span>
                                         <span id="installmentRemaining" class="fw-bold text-danger">-</span>
                                     </div>
                                 </div>
@@ -233,29 +233,29 @@
                         statusEl.className = 'badge bg-danger bg-opacity-10 text-danger rounded-pill px-3';
                     }
 
-                    coursesDiv.innerHTML = '<div class="fw-bold mb-1 small text-dark"><i class="fas fa-book me-1"></i>{{ __('center::messages.blade_0587') }}</div>';
+                    coursesDiv.innerHTML = '<div class="fw-bold mb-1 small text-dark"><i class="fas fa-book me-1"></i>{{ __('center::sales.enrolled_courses') }}</div>';
                     if (data.courses.length > 0) {
                         data.courses.forEach(c => {
                             coursesDiv.innerHTML += `<div class="ms-2">• ${c.title} <span class="badge bg-light text-dark py-0 small">${c.status}</span></div>`;
                         });
                     } else {
-                        coursesDiv.innerHTML += '<div class="ms-2">{{ __('center::messages.blade_0588') }}</div>';
+                        coursesDiv.innerHTML += '<div class="ms-2">{{ __('center::sales.no_courses') }}</div>';
                     }
 
-                    invoicesDiv.innerHTML = '<div class="fw-bold mb-1 small text-danger"><i class="fas fa-exclamation-circle me-1"></i>{{ __('center::messages.blade_0589') }}</div>';
+                    invoicesDiv.innerHTML = '<div class="fw-bold mb-1 small text-danger"><i class="fas fa-exclamation-circle me-1"></i>{{ __('center::sales.unpaid_invoices_list') }}</div>';
                     if (data.unpaid_invoices.length > 0) {
                         data.unpaid_invoices.forEach(inv => {
                             invoicesDiv.innerHTML += `
                                 <div class="d-flex justify-content-between align-items-center mb-2 ms-2 p-2 bg-white rounded-3 border">
-                                    <span class="small">فاتورة #${inv.id} (${inv.remaining.toFixed(2)})</span>
+                                    <span class="small">{{ __('center::sales.invoice_id') }}{{ inv.id }} (${inv.remaining.toFixed(2)})</span>
                                     <div class="d-flex gap-1">
-                                        <button type="button" class="btn btn-xs btn-success py-0 px-2 small rounded-pill" onclick="quickPay(${inv.id}, ${inv.remaining}, ${studentId})">{{ __('center::messages.blade_0590') }}</button>
-                                        <a href="/sales/${inv.id}" target="_blank" class="btn btn-xs btn-light py-0 px-2 small rounded-pill border">{{ __('center::messages.blade_0591') }}</a>
+                                        <button type="button" class="btn btn-xs btn-success py-0 px-2 small rounded-pill" onclick="quickPay(${inv.id}, ${inv.remaining}, ${studentId})">{{ __('center::sales.pay') }}</button>
+                                        <a href="/sales/${inv.id}" target="_blank" class="btn btn-xs btn-light py-0 px-2 small rounded-pill border">{{ __('center::sales.view') }}</a>
                                     </div>
                                 </div>`;
                         });
                     } else {
-                        invoicesDiv.innerHTML += '<div class="ms-2">{{ __('center::messages.blade_0592') }}</div>';
+                        invoicesDiv.innerHTML += '<div class="ms-2">{{ __('center::sales.no_outstanding_debts') }}</div>';
                     }
                 }
             });
@@ -263,7 +263,7 @@
 
     function quickPay(saleId, remaining, studentId) {
         Swal.fire({
-            title: '{{ __('center::messages.blade_0590') }} - فاتورة #' + saleId,
+            title: '{{ __('center::sales.pay') }} - {{ __('center::sales.invoice_id') }}' + saleId,
             text: 'هل أنت متأكد من تحصيل المبلغ المتبقي؟ ' + remaining.toFixed(2) + ' ' + currency,
             input: 'number',
             inputAttributes: {
@@ -273,14 +273,14 @@
             },
             inputValue: remaining,
             showCancelButton: true,
-            confirmButtonText: '{{ __('center::messages.blade_0595') }}',
-            cancelButtonText: '{{ __('center::messages.blade_0596') }}',
+            confirmButtonText: '{{ __('center::sales.confirm_pay_now_btn') }}',
+            cancelButtonText: '{{ __('center::sales.cancel') }}',
             showLoaderOnConfirm: true,
             preConfirm: (amount) => {
                 const data = {
                     amount: amount,
                     payment_method: 'cash',
-                    notes: '{{ __('center::messages.blade_0597') }}',
+                    notes: '{{ __('center::sales.quick_pay_notes') }}',
                     _token: '{{ csrf_token() }}'
                 };
                 return fetch(`/sales/${saleId}/payment`, {
@@ -293,13 +293,13 @@
                     return response.json();
                 })
                 .catch(error => {
-                    Swal.showValidationMessage(`فشل الطلب: ${error}`);
+                    Swal.showValidationMessage(`{{ __('center::sales.request_failed') }} ${error}`);
                 });
             },
             allowOutsideClick: () => !Swal.isLoading()
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire({ icon: 'success', title: '{{ __('center::messages.blade_0598') }}' });
+                Swal.fire({ icon: 'success', title: '{{ __('center::sales.success') }}' });
                 fetchStudentSummary(studentId);
             }
         });
@@ -361,7 +361,7 @@
         if (installmentMode && total > 0) {
             const totalSessions = getTotalSessions();
             const perSession = total / totalSessions;
-            document.getElementById('installmentSessions').innerText = totalSessions + ' حصة';
+            document.getElementById('installmentSessions').innerText = totalSessions + ' {{ __('center::sales.session') }}';
             document.getElementById('installmentPerSession').innerText = perSession.toFixed(2) + ' ' + currency;
             document.getElementById('installmentRemaining').innerText = (total - perSession).toFixed(2) + ' ' + currency;
         }
@@ -384,7 +384,7 @@
                 let sessionInfo = '';
                 if (item.sessionsCount > 0) {
                     const perSession = (item.price / item.sessionsCount).toFixed(2);
-                    sessionInfo = `<div class="text-muted" style="font-size: 0.7rem;"><i class="fas fa-layer-group me-1"></i>${item.sessionsCount} حصة (${perSession} ${currency}/حصة)</div>`;
+                    sessionInfo = `<div class="text-muted" style="font-size: 0.7rem;"><i class="fas fa-layer-group me-1"></i>${item.sessionsCount} {{ __('center::sales.session') }} (${perSession} ${currency}/{{ __('center::sales.session') }})</div>`;
                 }
                 container.innerHTML += `
                     <div class="d-flex justify-content-between align-items-center mb-3 bg-white p-2 rounded-3 border">
@@ -479,19 +479,19 @@
             if (data.success) {
                 Swal.fire({
                     icon: 'success',
-                    title: '{{ __('center::messages.blade_0598') }}',
+                    title: '{{ __('center::sales.success') }}',
                     text: '{{ __('center::sales.sale_recorded_success') }}',
-                    confirmButtonText: '{{ __('center::messages.blade_0599') }}'
+                    confirmButtonText: '{{ __('center::sales.ok') }}'
                 }).then(() => {
                     window.location.href = '{{ route("center.sales.index") }}';
                 });
             } else {
-                Swal.fire({ icon: 'error', text: 'فشل الحفظ: ' + (data.message || 'خطأ غير معروف') });
+                Swal.fire({ icon: 'error', text: '{{ __('center::sales.save_failed') }} ' + (data.message || '{{ __('center::sales.unknown_error') }}') });
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            Swal.fire({ icon: 'error', text: 'حدث خطأ غير متوقع، يرجى المحاولة مرة أخرى' });
+            Swal.fire({ icon: 'error', text: '{{ __('center::sales.unexpected_error') }}' });
         });
     }
 </script>

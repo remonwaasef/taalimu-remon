@@ -2,8 +2,8 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark">{{ __('center::messages.blade_0431') }}</h2>
-        <a href="{{ route('center.instructors.index') }}" class="btn btn-outline-secondary rounded-pill px-4">{{ __('center::messages.blade_0432') }}</a>
+        <h2 class="fw-bold text-dark">{{ __('center::instructors.edit_instructor_title') }}</h2>
+        <a href="{{ route('center.instructors.index') }}" class="btn btn-outline-secondary rounded-pill px-4">{{ __('center::instructors.back_to_list') }}</a>
     </div>
 
     <div class="row justify-content-center">
@@ -23,7 +23,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::instructors.specialization') }} <span class="text-danger">*</span></label>
-                                <input type="text" name="specialization" value="{{ old('specialization', $instructor->specialization) }}" class="form-control bg-white border" placeholder="{{ __('center::messages.blade_0440') }}" required>
+                                <input type="text" name="specialization" value="{{ old('specialization', $instructor->specialization) }}" class="form-control bg-white border" placeholder="{{ __('center::instructors.specialization_placeholder') }}" required>
                                 @error('specialization')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                         </div>
@@ -41,7 +41,7 @@
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">{{ __('center::instructors.gender') }}</label>
                                 <select name="gender" class="form-select bg-white border">
-                                    <option value="">{{ __('center::messages.blade_0433') }}</option>
+                                    <option value="">{{ __('center::instructors.select_gender') }}</option>
                                     <option value="male" {{ old('gender', $instructor->gender) == 'male' ? 'selected' : '' }}>{{ __('center::instructors.male') }}</option>
                                     <option value="female" {{ old('gender', $instructor->gender) == 'female' ? 'selected' : '' }}>{{ __('center::instructors.female') }}</option>
                                 </select>
@@ -90,8 +90,8 @@
 
 
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm py-3 fw-bold">{{ __('center::messages.blade_0438') }}</button>
-                            <a href="{{ route('center.instructors.index') }}" class="btn btn-light rounded-pill py-3">{{ __('center::messages.blade_0439') }}</a>
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm py-3 fw-bold">{{ __('center::instructors.save_changes') }}</button>
+                            <a href="{{ route('center.instructors.index') }}" class="btn btn-light rounded-pill py-3">{{ __('center::instructors.cancel') }}</a>
                         </div>
                     </form>
                 </div>

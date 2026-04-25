@@ -2,8 +2,8 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark">{{ __('center::messages.blade_0421') }}</h2>
-        <a href="{{ route('center.instructors.index') }}" class="btn btn-outline-secondary rounded-pill px-4">{{ __('center::messages.blade_0422') }}</a>
+        <h2 class="fw-bold text-dark">{{ __('center::instructors.add_new') }}</h2>
+        <a href="{{ route('center.instructors.index') }}" class="btn btn-outline-secondary rounded-pill px-4">{{ __('center::instructors.back_to_list') }}</a>
     </div>
 
     <div class="row justify-content-center">
@@ -22,7 +22,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::instructors.specialization') }} <span class="text-danger">*</span></label>
-                                <input type="text" name="specialization" value="{{ old('specialization') }}" class="form-control bg-white border" placeholder="{{ __('center::messages.blade_0428') }}" required>
+                                <input type="text" name="specialization" value="{{ old('specialization') }}" class="form-control bg-white border" placeholder="{{ __('center::instructors.specialization_placeholder') }}" required>
                                 @error('specialization')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">{{ __('center::instructors.gender') }}</label>
                                 <select name="gender" class="form-select bg-white border">
-                                    <option value="">{{ __('center::messages.blade_0423') }}</option>
+                                    <option value="">{{ __('center::instructors.select_placeholder') }}</option>
                                     <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>{{ __('center::instructors.male') }}</option>
                                     <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>{{ __('center::instructors.female') }}</option>
                                 </select>
@@ -59,7 +59,7 @@
                                 <label class="form-label fw-bold">{{ __('center::instructors.commission_rate') }} <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <select name="commission_type" class="form-select bg-white border" style="max-width: 140px; border-radius: 0 10px 10px 0 !important;" required>
-                                        <option value="">{{ __('center::messages.blade_0423') }}</option>
+                                        <option value="">{{ __('center::instructors.select_placeholder') }}</option>
                                         <option value="percentage" {{ old('commission_type') == 'percentage' ? 'selected' : '' }}>{{ __('center::instructors.commission_percentage') }}</option>
                                         <option value="fixed" {{ old('commission_type') == 'fixed' ? 'selected' : '' }}>{{ __('center::instructors.commission_fixed') }}</option>
                                     </select>
@@ -93,8 +93,8 @@
 
 
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm py-3 fw-bold">{{ __('center::messages.blade_0426') }}</button>
-                            <a href="{{ route('center.instructors.index') }}" class="btn btn-light rounded-pill py-3">{{ __('center::messages.blade_0427') }}</a>
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm py-3 fw-bold">{{ __('center::instructors.save_instructor') }}</button>
+                            <a href="{{ route('center.instructors.index') }}" class="btn btn-light rounded-pill py-3">{{ __('center::instructors.cancel') }}</a>
                         </div>
                     </form>
                 </div>

@@ -14,9 +14,9 @@
     <!-- Course Resources Section -->
     <div class="card mb-4 border-0 shadow-sm rounded-4">
         <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
-            <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-paperclip text-primary me-2"></i>{{ __('center::messages.blade_0402') }}</h5>
+            <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-paperclip text-primary me-2"></i>{{ __('center::curriculum.course_resources') }}</h5>
             <button class="btn btn-sm btn-primary rounded-pill px-3" data-bs-toggle="collapse" data-bs-target="#resourceForm">
-                <i class="fas fa-plus me-1"></i>{{ __('center::messages.blade_0403') }}</button>
+                <i class="fas fa-plus me-1"></i>{{ __('center::curriculum.add_file') }}</button>
         </div>
         <div class="collapse" id="resourceForm">
             <div class="card-body bg-light border-top">
@@ -24,13 +24,13 @@
                     @csrf
                     <div class="row g-3">
                         <div class="col-md-5">
-                            <input type="text" name="title" class="form-control" placeholder="{{ __('center::messages.blade_0407') }}" required>
+                            <input type="text" name="title" class="form-control" placeholder="{{ __('center::curriculum.file_title_placeholder') }}" required>
                         </div>
                         <div class="col-md-4">
                             <input type="file" name="file" class="form-control" required>
                         </div>
                         <div class="col-md-3">
-                            <button type="submit" class="btn btn-primary w-100">{{ __('center::messages.blade_0404') }}</button>
+                            <button type="submit" class="btn btn-primary w-100">{{ __('center::curriculum.upload') }}</button>
                         </div>
                     </div>
                 </form>
@@ -51,14 +51,14 @@
                             <form action="{{ route('center.resources.destroy', $res) }}" method="POST" class="ms-2">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-link text-danger p-0" onclick="return confirm('{{ __('center::messages.blade_0409') }}')">
+                                <button type="submit" class="btn btn-link text-danger p-0" onclick="return confirm('{{ __('center::curriculum.confirm_delete_file') }}')">
                                     <i class="fas fa-times"></i>
                                 </button>
                             </form>
                         </div>
                     </div>
                 @empty
-                    <div class="col-12 text-center text-muted py-3">{{ __('center::messages.blade_0405') }}</div>
+                    <div class="col-12 text-center text-muted py-3">{{ __('center::curriculum.no_files') }}</div>
                 @endforelse
             </div>
         </div>
@@ -70,10 +70,10 @@
             <form action="{{ route('center.sections.store', $course) }}" method="POST" class="row g-3 align-items-center">
                 @csrf
                 <div class="col-auto flex-grow-1">
-                    <input type="text" name="title" class="form-control rounded-pill" placeholder="{{ __('center::messages.blade_0408') }}" required>
+                    <input type="text" name="title" class="form-control rounded-pill" placeholder="{{ __('center::curriculum.section_title_placeholder') }}" required>
                 </div>
                 <div class="col-auto">
-                    <button type="submit" class="btn btn-primary rounded-pill px-4">{{ __('center::messages.blade_0406') }}</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">{{ __('center::curriculum.add_section') }}</button>
                 </div>
             </form>
         </div>

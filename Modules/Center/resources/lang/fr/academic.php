@@ -21,4 +21,23 @@ return [
         'myp' => 'Programme Intermédiaire (MYP)',
         'dp' => 'Programme du Diplôme (DP)',
     ],
+    'grades' => [
+        '1' => '1ère Primaire',
+        '2' => '2ème Primaire',
+        '3' => '3ème Primaire',
+        '4' => '4ème Primaire',
+        '5' => '5ème Primaire',
+        '6' => '6ème Primaire',
+        '7' => '1ère Préparatoire',
+        '8' => '2ème Préparatoire',
+        '9' => '3ème Préparatoire',
+        '10' => '1ère Secondaire',
+        '11' => '2ème Secondaire',
+        '12' => '3ème Secondaire',
+    ],
+    'late_rules' => [
+        'slight_delay' => 'Léger retard',
+        'half_hour_delay' => 'Retard (demi-heure)',
+        'hour_delay' => 'Grand retard (une heure)',
+    ],
 ];

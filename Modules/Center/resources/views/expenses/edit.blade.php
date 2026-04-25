@@ -52,8 +52,8 @@
                         <div class="col-md-6">
                             <label class="form-label fw-bold small">{{ __('center::expenses.payment_method') }}</label>
                             <select name="payment_method" class="form-select rounded-pill @error('payment_method') is-invalid @enderror">
-                                <option value="cash" {{ old('payment_method', $expense->payment_method) == 'cash' ? 'selected' : '' }}>نقدي (Cash)</option>
-                                <option value="bank" {{ old('payment_method', $expense->payment_method) == 'bank' ? 'selected' : '' }}>تحويل بنكي / فيزا</option>
+                                <option value="cash" {{ old('payment_method', $expense->payment_method) == 'cash' ? 'selected' : '' }}>{{ __('center::expenses.cash') }}</option>
+                                <option value="bank" {{ old('payment_method', $expense->payment_method) == 'bank' ? 'selected' : '' }}>{{ __('center::expenses.bank') }}</option>
                             </select>
                             @error('payment_method')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -73,15 +73,15 @@
                             @if($expense->attachment)
                                 <div class="mb-3 small d-flex align-items-center">
                                     <i class="fas fa-file-image text-primary me-2"></i>
-                                    <span>{{ __('center::messages.blade_0415') }}</span>
-                                    <a href="{{ asset('storage/' . $expense->attachment) }}" target="_blank" class="ms-1 text-primary">{{ __('center::messages.blade_0416') }}</a>
+                                    <span>{{ __('center::expenses.current_attachment') }}</span>
+                                    <a href="{{ asset('storage/' . $expense->attachment) }}" target="_blank" class="ms-1 text-primary">{{ __('center::expenses.view_file') }}</a>
                                 </div>
                             @endif
                             <div class="upload-box p-4 border-dashed rounded-4 text-center bg-light">
                                 <input type="file" name="attachment" id="attachment" class="d-none">
                                 <label for="attachment" class="cursor-pointer mb-0 w-100">
                                     <i class="fas fa-sync-alt fa-3x text-primary mb-2"></i>
-                                    <p class="mb-0 text-muted">{{ __('center::messages.blade_0417') }}</p>
+                                    <p class="mb-0 text-muted">{{ __('center::expenses.replace_attachment') }}</p>
                                     <small class="text-muted">JPG, PNG, PDF (Max 2MB)</small>
                                 </label>
                             </div>
@@ -89,8 +89,8 @@
 
                         <div class="col-12 text-end">
                             <hr class="my-4 opacity-10">
-                            <a href="{{ route('center.expenses.index') }}" class="btn btn-light rounded-pill px-4 me-2 border">{{ __('center::messages.blade_0418') }}</a>
-                            <button type="submit" class="btn btn-primary rounded-pill px-5">{{ __('center::messages.blade_0419') }}</button>
+                            <a href="{{ route('center.expenses.index') }}" class="btn btn-light rounded-pill px-4 me-2 border">{{ __('center::expenses.cancel') }}</a>
+                            <button type="submit" class="btn btn-primary rounded-pill px-5">{{ __('center::expenses.update_expense') }}</button>
                         </div>
                     </div>
                 </form>

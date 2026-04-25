@@ -7,7 +7,7 @@
         <form action="{{ route('center.analytics.finance') }}" method="GET" class="d-flex gap-2 align-items-center">
             <select name="year" class="form-select form-select-sm rounded-pill px-3 shadow-sm border-0" onchange="this.form.submit()" style="background: rgba(255,255,255,0.9);">
                 @for($y = now()->year; $y >= now()->year - 5; $y--)
-                    <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }} {{ __('center::analytics.year') ?? '' }}</option>
+                    <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }} {{ __('center::analytics.year') }}</option>
                 @endfor
             </select>
         </form>
@@ -74,7 +74,7 @@
                         <div class="bg-warning bg-opacity-10 text-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
                             <i class="fas fa-exclamation-triangle small"></i>
                         </div>
-                        <span class="text-muted fw-bold x-small">إيرادات متأخرة</span>
+                        <span class="text-muted fw-bold x-small">{{ __('center::analytics.delayed_revenue') }}</span>
                     </div>
                     <h4 class="fw-bold text-dark mb-0">{{ format_price($totalYearlyDue) }}</h4>
                 </div>
@@ -229,7 +229,7 @@
         <div class="col-xl-4">
             <div class="card border-0 shadow-sm rounded-5 overflow-hidden bg-white mb-4">
                 <div class="card-header bg-white p-4 border-bottom">
-                    <h5 class="fw-bold mb-0 text-dark small"><i class="fas fa-receipt text-danger me-2"></i>{{ __('center::analytics.operating_expenses') }} (أحدث 5)</h5>
+                    <h5 class="fw-bold mb-0 text-dark small"><i class="fas fa-receipt text-danger me-2"></i>{{ __('center::analytics.operating_expenses') }} {{ __('center::analytics.recent_count', ['count' => 5]) }}</h5>
                 </div>
                 <div class="card-body p-0">
                     <div class="list-group list-group-flush">
@@ -250,7 +250,7 @@
 
             <div class="card border-0 shadow-sm rounded-5 overflow-hidden bg-white">
                 <div class="card-header bg-white p-4 border-bottom">
-                    <h5 class="fw-bold mb-0 text-dark small"><i class="fas fa-chalkboard-teacher text-info me-2"></i>{{ __('center::analytics.instructor_commissions') }} (أحدث 5)</h5>
+                    <h5 class="fw-bold mb-0 text-dark small"><i class="fas fa-chalkboard-teacher text-info me-2"></i>{{ __('center::analytics.instructor_commissions') }} {{ __('center::analytics.recent_count', ['count' => 5]) }}</h5>
                 </div>
                 <div class="card-body p-0">
                     <div class="list-group list-group-flush">

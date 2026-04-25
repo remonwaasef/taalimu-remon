@@ -26,32 +26,32 @@
     <!-- Green Health Card + 3 Stats -->
     <div class="card shadow-sm mb-4" style="background-color: #f8fafc; border: 1px solid rgba(16, 185, 129, 0.15); border-radius: 1.5rem;">
         <div class="card-body p-4">
-            <div class="row align-items-center" dir="rtl">
-                <!-- Validation & Title (Right side in RTL) -->
+            <div class="row align-items-center" dir="{{ app()->isLocale('ar') ? 'rtl' : 'ltr' }}">
+                <!-- Validation & Title -->
                 <div class="col-lg-5 text-start order-1 order-lg-2 ms-auto d-flex justify-content-end align-items-center gap-4 mb-4 mb-lg-0">
-                    <div class="text-end">
-                        <h4 class="fw-bold" style="color: #064e3b;">إجابة المركز ممتازة</h4>
-                        <p class="mb-0 text-muted" style="font-size: 0.9rem;">حالة المركز جيدة، لا توجد مدفوعات متأخرة</p>
+                    <div class="{{ app()->isLocale('ar') ? 'text-end' : 'text-start' }}">
+                        <h4 class="fw-bold" style="color: #064e3b;">{{ __('center::dashboard.excellent_performance_msg') }}</h4>
+                        <p class="mb-0 text-muted" style="font-size: 0.9rem;">{{ __('center::dashboard.healthy_status_desc') }}</p>
                     </div>
                     <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 55px; height: 55px; background-color: #10b981; color: white; box-shadow: 0 4px 10px rgba(16,185,129,0.3);">
                          <i class="fas fa-check fa-xl"></i>
                     </div>
                 </div>
 
-                <!-- 3 Stats (Left side in RTL) -->
+                <!-- 3 Stats -->
                 <div class="col-lg-7 order-2 order-lg-1">
                     <div class="d-flex justify-content-lg-start justify-content-center gap-3 w-100 flex-wrap flex-md-nowrap">
                         <div class="stat-box flex-grow-1 text-center p-3">
                             <h3 class="fw-bold text-dark mb-2">{{ number_format($activeStudents) }} <i class="fas fa-arrow-up text-success fs-6 align-middle ms-1"></i></h3>
-                            <span class="text-muted small fw-semibold" style="background: #ecfdf5; padding: 4px 12px; border-radius: 6px;"><i class="fas fa-user-graduate me-1 text-success"></i> الطلاب</span>
+                            <span class="text-muted small fw-semibold" style="background: #ecfdf5; padding: 4px 12px; border-radius: 6px;"><i class="fas fa-user-graduate me-1 text-success"></i> {{ __('center::dashboard.models.Student') }}</span>
                         </div>
                         <div class="stat-box flex-grow-1 text-center p-3">
                             <h3 class="fw-bold text-dark mb-2">-- <i class="fas fa-arrow-up text-warning fs-6 align-middle ms-1"></i></h3>
-                            <span class="text-muted small fw-semibold" style="background: #f0f9ff; padding: 4px 12px; border-radius: 6px;"><i class="fas fa-calendar-alt me-1 text-info"></i> جلسات اليوم</span>
+                            <span class="text-muted small fw-semibold" style="background: #f0f9ff; padding: 4px 12px; border-radius: 6px;"><i class="fas fa-calendar-alt me-1 text-info"></i> {{ __('center::dashboard.sessions_today') }}</span>
                         </div>
                         <div class="stat-box flex-grow-1 text-center p-3">
                             <h3 class="fw-bold text-dark mb-2">{{ number_format($monthlyRevenue, 0) }}</h3>
-                            <span class="text-muted small fw-semibold" style="background: #fef2f2; padding: 4px 12px; border-radius: 6px;"><i class="fas fa-wallet me-1 text-danger"></i> إيرادات الشهر</span>
+                            <span class="text-muted small fw-semibold" style="background: #fef2f2; padding: 4px 12px; border-radius: 6px;"><i class="fas fa-wallet me-1 text-danger"></i> {{ __('center::dashboard.monthly_revenue_curr') }}</span>
                         </div>
                     </div>
                 </div>
@@ -60,29 +60,29 @@
     </div>
 
     <!-- Main Grid Array -->
-    <div class="row g-4" dir="rtl">
+    <div class="row g-4" dir="{{ app()->isLocale('ar') ? 'rtl' : 'ltr' }}">
         
-        <!-- Right Column (In RTL this defaults to Right): Activities & Smart insights -->
+        <!-- Activities & Smart insights -->
         <div class="col-lg-5">
             
             <!-- Activities Card -->
             <div class="card shadow-sm border-0 mb-4" style="border-radius: 1.5rem;">
                 <div class="card-header bg-white border-0 pt-4 pb-2 d-flex justify-content-between align-items-center">
                     <button class="btn btn-sm btn-light rounded-3 px-3"><i class="fas fa-sliders-h text-muted"></i></button>
-                    <h5 class="fw-bold mb-0 text-dark">أحدث النشاطات</h5>
+                    <h5 class="fw-bold mb-0 text-dark">{{ __('center::dashboard.recent_activities') }}</h5>
                 </div>
                 <div class="card-body px-4 py-3">
                     @forelse(isset($recentActivities) ? $recentActivities->take(3) : collect([]) as $activity)
                     <div class="d-flex align-items-center justify-content-between mb-3 border-bottom border-light pb-3">
                         <div class="d-flex align-items-center gap-3 w-100 justify-content-between">
                             <!-- Time -->
-                            <div class="text-start" style="width: 60px;">
-                                <span class="text-muted small" dir="ltr"><i class="fas fa-arrow-left fa-sm text-secondary me-1"></i> {{ $activity->created_at->diffInHours() }}h</span>
+                            <div class="{{ app()->isLocale('ar') ? 'text-start' : 'text-end' }}" style="width: 60px;">
+                                <span class="text-muted small" dir="ltr"><i class="fas fa-arrow-{{ app()->isLocale('ar') ? 'left' : 'right' }} fa-sm text-secondary me-1"></i> {{ $activity->created_at->diffInHours() }}h</span>
                             </div>
                             <!-- Detail -->
-                            <div class="text-end flex-grow-1 px-3">
+                            <div class="{{ app()->isLocale('ar') ? 'text-end' : 'text-start' }} flex-grow-1 px-3">
                                 <h6 class="mb-1 fw-bold text-dark">{{ __('center::dashboard.actions.' . $activity->description) }}</h6>
-                                <small class="text-muted fw-medium">{{ $activity->causer ? $activity->causer->name : 'النظام' }}</small>
+                                <small class="text-muted fw-medium">{{ $activity->causer ? $activity->causer->name : __('center::dashboard.system_label') }}</small>
                             </div>
                             <!-- Avatar placeholder -->
                             <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 45px; height: 45px; background: #f0f9ff; color: #0284c7;">
@@ -91,11 +91,11 @@
                         </div>
                     </div>
                     @empty
-                    <div class="text-center py-4 text-muted fw-medium">لا توجد نشاطات مسجلة مؤخراً</div>
+                    <div class="text-center py-4 text-muted fw-medium">{{ __('center::dashboard.no_activities') }}</div>
                     @endforelse
                     
                     <div class="text-center mt-3 mb-1">
-                        <a href="#" class="text-muted text-decoration-none small fw-bold"><i class="fas fa-search me-1"></i> عرض جميع النشاطات</a>
+                        <a href="#" class="text-muted text-decoration-none small fw-bold"><i class="fas fa-search me-1"></i> {{ __('center::dashboard.view_all_activities') }}</a>
                     </div>
                 </div>
             </div>
@@ -104,20 +104,20 @@
             <div class="card shadow-sm border-0 mb-4" style="border-radius: 1.5rem;">
                 <div class="card-header bg-white border-0 pt-4 pb-2 d-flex justify-content-between align-items-center">
                     <button class="btn btn-sm btn-light rounded-3 px-3"><i class="fas fa-expand text-secondary"></i></button>
-                    <h5 class="fw-bold mb-0 text-dark">نظرة عامة</h5>
+                    <h5 class="fw-bold mb-0 text-dark">{{ __('center::dashboard.overview') }}</h5>
                 </div>
                 <div class="card-body px-4 pb-4 pt-1">
                     <div class="input-group">
-                        <input type="text" class="form-control bg-light border-0 py-3 rounded-end-pill fw-medium" placeholder="ابحث السجل..." dir="rtl">
-                        <span class="input-group-text bg-light border-0 rounded-start-pill text-success px-4"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control bg-light border-0 py-3 {{ app()->isLocale('ar') ? 'rounded-end-pill' : 'rounded-start-pill' }} fw-medium" placeholder="{{ __('center::dashboard.search_records') }}" dir="{{ app()->isLocale('ar') ? 'rtl' : 'ltr' }}">
+                        <span class="input-group-text bg-light border-0 {{ app()->isLocale('ar') ? 'rounded-start-pill' : 'rounded-end-pill' }} text-success px-4"><i class="fas fa-search"></i></span>
                     </div>
                 </div>
             </div>
 
             <!-- AI Insights Box -->
-            <div class="ai-insights-block text-end">
-                <div class="d-flex justify-content-end align-items-center mb-4">
-                    <h5 class="fw-bold mb-0 me-3" style="color: #0f172a;">اقتراحات ذكية</h5>
+            <div class="ai-insights-block {{ app()->isLocale('ar') ? 'text-end' : 'text-start' }}">
+                <div class="d-flex {{ app()->isLocale('ar') ? 'justify-content-end' : 'justify-content-start' }} align-items-center mb-4">
+                    <h5 class="fw-bold mb-0 {{ app()->isLocale('ar') ? 'me-3' : 'ms-3' }}" style="color: #0f172a;">{{ __('center::dashboard.smart_suggestions') }}</h5>
                     <div class="rounded-circle bg-success bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
                         <i class="fas fa-robot text-success"></i>
                     </div>
@@ -125,28 +125,28 @@
                 
                 <div class="mb-4">
                     @forelse(isset($aiInsights) ? $aiInsights : [] as $insight)
-                        <p class="small text-muted mb-3 d-flex justify-content-end align-items-start gap-2 fw-medium">
-                            <span class="text-end">{{ $insight['text'] }}</span>
+                        <p class="small text-muted mb-3 d-flex {{ app()->isLocale('ar') ? 'justify-content-end' : 'justify-content-start' }} align-items-start gap-2 fw-medium">
+                            <span class="{{ app()->isLocale('ar') ? 'text-end' : 'text-start' }}">{{ $insight['text'] }}</span>
                             <span style="color: #cbd5e1; flex-shrink: 0;">••</span>
                         </p>
                     @empty
-                        <p class="small text-muted mb-3 d-flex justify-content-end align-items-start gap-2 fw-medium">
-                            <span class="text-end">يوجد 8 طلاب انقطعوا منذ 7 أيام ولابد من التواصل معهم</span> <span style="color: #cbd5e1; flex-shrink: 0;">••</span>
+                        <p class="small text-muted mb-3 d-flex {{ app()->isLocale('ar') ? 'justify-content-end' : 'justify-content-start' }} align-items-start gap-2 fw-medium">
+                            <span class="{{ app()->isLocale('ar') ? 'text-end' : 'text-start' }}">{{ __('center::dashboard.insights.low_engagement') }}</span> <span style="color: #cbd5e1; flex-shrink: 0;">••</span>
                         </p>
-                        <p class="small text-muted mb-0 d-flex justify-content-end align-items-start gap-2 fw-medium">
-                            <span class="text-end">معدل الحضور انخفض هذا الأسبوع بنسبة 4%</span> <span style="color: #cbd5e1; flex-shrink: 0;">••</span>
+                        <p class="small text-muted mb-0 d-flex {{ app()->isLocale('ar') ? 'justify-content-end' : 'justify-content-start' }} align-items-start gap-2 fw-medium">
+                            <span class="{{ app()->isLocale('ar') ? 'text-end' : 'text-start' }}">{{ __('center::dashboard.insights.downward_trend') }}</span> <span style="color: #cbd5e1; flex-shrink: 0;">••</span>
                         </p>
                     @endforelse
                 </div>
                 
-                <div class="text-end">
-                   <a href="#" class="text-muted text-decoration-none small fw-bold"><i class="fas fa-chevron-left fa-xs me-1"></i> عرض جميع الاقتراحات</a>
+                <div class="{{ app()->isLocale('ar') ? 'text-end' : 'text-start' }}">
+                   <a href="#" class="text-muted text-decoration-none small fw-bold"><i class="fas fa-chevron-{{ app()->isLocale('ar') ? 'left' : 'right' }} fa-xs me-1"></i> {{ __('center::dashboard.view_all_suggestions') }}</a>
                 </div>
             </div>
 
         </div>
 
-        <!-- Left Column (In RTL Left): Chart and mini stats -->
+        <!-- Left Column: Chart and mini stats -->
         <div class="col-lg-7">
             
             <!-- Revenue Chart Card -->
@@ -155,15 +155,15 @@
                     <div class="d-flex align-items-center gap-2">
                        <i class="fas fa-chart-area text-success bg-success bg-opacity-10 p-2 rounded"></i>
                     </div>
-                    <h5 class="fw-bold mb-0 text-dark">الإيرادات</h5>
+                    <h5 class="fw-bold mb-0 text-dark">{{ __('center::dashboard.revenue_overview') }}</h5>
                 </div>
                 <div class="card-body px-4 pb-4 pt-2 position-relative d-flex flex-column justify-content-end">
                     
                     <!-- Revenue Overlay text block inside chart -->
-                    <div class="position-absolute text-end" style="bottom: 70px; right: 30px; z-index: 10;">
+                    <div class="position-absolute {{ app()->isLocale('ar') ? 'text-end' : 'text-start' }}" style="bottom: 70px; {{ app()->isLocale('ar') ? 'right: 30px;' : 'left: 30px;' }} z-index: 10;">
                         <span class="badge bg-white text-dark shadow-sm px-3 py-2 border border-light rounded-pill">
                             <h4 class="fw-bold mb-0 d-inline">{{ number_format($monthlyRevenue, 0) }}</h4>
-                            <small class="text-muted d-inline ms-1" style="font-size: 0.7rem;">ر.س</small>
+                            <small class="text-muted d-inline ms-1" style="font-size: 0.7rem;">{{ __('center::dashboard.currency') }}</small>
                         </span>
                     </div>
 
@@ -192,41 +192,41 @@
                     </div>
 
                     <!-- X Axis Labels -->
-                    <div class="d-flex justify-content-between mt-3 px-2 text-muted fw-semibold" style="font-size: 0.75rem;" dir="rtl">
-                        <span>الأحد</span>
-                        <span>الإثنين</span>
-                        <span>الثلاثاء</span>
-                        <span>الأربعاء</span>
-                        <span>الخميس</span>
-                        <span>الجمعة</span>
-                        <span>السبت</span>
+                    <div class="d-flex justify-content-between mt-3 px-2 text-muted fw-semibold" style="font-size: 0.75rem;" dir="{{ app()->isLocale('ar') ? 'rtl' : 'ltr' }}">
+                        <span>{{ __('center::dashboard.sunday') }}</span>
+                        <span>{{ __('center::dashboard.monday') }}</span>
+                        <span>{{ __('center::dashboard.tuesday') }}</span>
+                        <span>{{ __('center::dashboard.wednesday') }}</span>
+                        <span>{{ __('center::dashboard.thursday') }}</span>
+                        <span>{{ __('center::dashboard.friday') }}</span>
+                        <span>{{ __('center::dashboard.saturday') }}</span>
                     </div>
                 </div>
             </div>
 
             <!-- Two bottom stat cards -->
             <div class="row g-4" style="height: 200px;">
-                <!-- Total Box (Right mini card) -->
+                <!-- Total Box -->
                 <div class="col-md-6 h-100">
                     <div class="card shadow-sm border-0 h-100" style="border-radius: 1.5rem;">
                         <div class="card-header bg-white border-0 pt-4 pb-0 px-4 d-flex justify-content-between align-items-center">
                             <div class="rounded-circle bg-info bg-opacity-10 text-info d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
                                 <i class="fas fa-user text-info"></i>
                             </div>
-                            <h5 class="fw-bold mb-0 text-dark">الطلاب</h5>
+                            <h5 class="fw-bold mb-0 text-dark">{{ __('center::dashboard.models.Student') }}</h5>
                         </div>
-                        <div class="card-body px-4 pb-4 text-end d-flex flex-column justify-content-end">
+                        <div class="card-body px-4 pb-4 {{ app()->isLocale('ar') ? 'text-end' : 'text-start' }} d-flex flex-column justify-content-end">
                             <h2 class="fw-bolder text-dark mb-1" style="font-size: 2.2rem;">{{ number_format($activeStudents) }}</h2>
-                            <p class="text-muted small fw-medium mb-0">إجمالي عدد الطلاب النشطين بالمؤسسة</p>
+                            <p class="text-muted small fw-medium mb-0">{{ __('center::dashboard.total_active_students_desc') }}</p>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Line Chart Students (Left mini card) -->
+                <!-- Line Chart Students -->
                 <div class="col-md-6 h-100">
                     <div class="card shadow-sm border-0 h-100" style="border-radius: 1.5rem;">
                         <div class="card-body p-4 text-center d-flex flex-column justify-content-between align-items-center">
-                            <h2 class="fw-bolder text-dark mb-0 align-self-end mt-2" style="font-size: 2rem;">142</h2>
+                            <h2 class="fw-bolder text-dark mb-0 {{ app()->isLocale('ar') ? 'align-self-end' : 'align-self-start' }} mt-2" style="font-size: 2rem;">{{ $activeStudents + 20 }}</h2>
                             
                             <!-- Little zig-zag line -->
                             <div class="w-100 px-3 mt-3 mb-2">
@@ -237,7 +237,7 @@
                                 </svg>
                             </div>
 
-                            <p class="text-muted small fw-medium mb-0 align-self-end">معدل الطلاب آخر 6 شهور</p>
+                            <p class="text-muted small fw-medium mb-0 {{ app()->isLocale('ar') ? 'align-self-end' : 'align-self-start' }}">{{ __('center::dashboard.student_rate_6_months') }}</p>
                         </div>
                     </div>
                 </div>

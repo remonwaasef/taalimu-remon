@@ -1,11 +1,11 @@
 @extends('center::layouts.hope-master')
 
 @section('page-title', __('center::sidebar.schedules'))
-@section('page-subtitle', __('center::students.weekly_schedule_overview'))
+@section('page-subtitle', __('center::schedules.weekly_overview'))
 
 @section('page-actions')
     <a href="{{ route('center.schedules.create') }}" class="btn btn-glass">
-        <i class="fas fa-plus me-2"></i> {{ __('center::students.add_new_schedule') }}
+        <i class="fas fa-plus me-2"></i> {{ __('center::schedules.add_new') }}
     </a>
 @endsection
 
@@ -62,14 +62,14 @@
                                                     <i class="fas fa-ellipsis-v"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm">
-                                                    <li><a class="dropdown-item" href="{{ route('center.schedules.edit', $schedule) }}"><i class="fas fa-edit me-2"></i> {{ __('center::students.edit') }}</a></li>
-                                                    <li><a class="dropdown-item" href="{{ route('center.attendance.qr', $schedule->id) }}"><i class="fas fa-qrcode me-2"></i> {{ __('center::students.qr_code') }}</a></li>
+                                                    <li><a class="dropdown-item" href="{{ route('center.schedules.edit', $schedule) }}"><i class="fas fa-edit me-2"></i> {{ __('center::schedules.edit') }}</a></li>
+                                                    <li><a class="dropdown-item" href="{{ route('center.attendance.qr', $schedule->id) }}"><i class="fas fa-qrcode me-2"></i> {{ __('center::schedules.qr_code') }}</a></li>
                                                     <li><hr class="dropdown-divider"></li>
                                                     <li>
-                                                        <form action="{{ route('center.schedules.destroy', $schedule) }}" method="POST" onsubmit="return confirm('{{ __('center::students.confirm_delete') }}')">
+                                                        <form action="{{ route('center.schedules.destroy', $schedule) }}" method="POST" onsubmit="return confirm('{{ __('center::schedules.confirm_delete') }}')">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button class="dropdown-item text-danger"><i class="fas fa-trash me-2"></i> {{ __('center::students.delete') }}</button>
+                                                            <button class="dropdown-item text-danger"><i class="fas fa-trash me-2"></i> {{ __('center::schedules.delete') }}</button>
                                                         </form>
                                                     </li>
                                                 </ul>
@@ -113,10 +113,10 @@
                             <i class="fas fa-calendar-alt text-primary" style="font-size: 3rem; opacity: 0.5;"></i>
                         </div>
                     </div>
-                    <h5 class="text-muted fw-bold">{{ __('center::students.no_schedules_found') }}</h5>
+                    <h5 class="text-muted fw-bold">{{ __('center::schedules.no_schedules_found') }}</h5>
                     <div class="mt-3">
                         <a href="{{ route('center.schedules.create') }}" class="btn btn-primary rounded-pill px-4">
-                            {{ __('center::students.add_your_first_schedule') }}
+                            {{ __('center::schedules.add_your_first') }}
                         </a>
                     </div>
                 </div>
