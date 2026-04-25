@@ -113,17 +113,17 @@
 
         .qr-code-badge {
             position: absolute;
-            top: 105px;
+            top: 95px;
             left: 50%;
             transform: translateX(-50%);
-            width: 90px;
-            height: 90px;
+            width: 120px;
+            height: 120px;
             background: white;
-            padding: 5px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 8px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
             z-index: 10;
-            border: 2px solid white;
+            border: 3px solid white;
         }
 
         .qr-code-badge img {
@@ -178,7 +178,7 @@
             </div>
         </div>
 
-        <div class="student-photo-wrapper" style="margin-top: 15px;">
+        <div class="student-photo-wrapper" style="margin-top: 50px;">
             @if($student->profile_photo)
                 <img src="{{ asset('storage/'.$student->profile_photo) }}" alt="{{ $student->name }}" class="student-photo">
             @else
