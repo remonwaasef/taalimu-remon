@@ -101,6 +101,7 @@
                                     'edit' => 'تعديل',
                                     'suspend' => 'إيقاف',
                                     'publish' => 'نشر',
+                                    'take' => 'تسجيل', // For take attendance
                                     'students' => 'الطلاب',
                                     'courses' => 'الدورات',
                                     'users' => 'المستخدمين',
@@ -113,6 +114,9 @@
                                     'centers' => 'المراكز',
                                     'instructors' => 'المحاضرين',
                                     'billing' => 'الفواتير والاشتراكات',
+                                    'analytics' => 'التحليلات',
+                                    'exams' => 'الاختبارات',
+                                    'schedule' => 'الجدول',
                                     'other' => 'أخرى',
                                 ];
                                 
