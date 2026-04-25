@@ -87,4 +87,11 @@ return [
     'loading_data' => 'Chargement des données...',
     'select_invoice' => 'Sélectionnez la facture à payer',
     'no_unpaid_invoices' => 'Aucune facture impayée trouvée',
+
+    'status_active' => 'Actif',
+    'status_new_pending' => 'Nouveau (En attente)',
+    'status_inactive_expired' => 'Inactif / Expiré',
+    'saving' => 'Enregistrement en cours...',
+    'sale_recorded_success' => 'Vente enregistrée avec succès',
+    'cart_help' => 'Cochez la case pour sélectionner. Ajoutez le montant payé et toute remise éventuelle pour chaque sélection.',
 ];

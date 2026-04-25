@@ -106,7 +106,7 @@
                             @if($canOnlineClasses)
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('center.online_classes.*') ? 'active' : '' }}" href="{{ route('center.online_classes.index', ['tenant' => $tenant->domain ?? 'center']) }}">
-                                    <i class="sidenav-mini-icon">V</i><span class="item-name text-success fw-bold">الدروس المباشرة</span>
+                                    <i class="sidenav-mini-icon">V</i><span class="item-name text-success fw-bold">{{ __('center::sidebar.online_classes') }}</span>
                                 </a>
                             </li>
                             @endif
@@ -238,7 +238,7 @@
                             
                             {{-- 2. General Settings --}}
                             @can('manage settings')
-                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.settings.index') && (request('tab') == 'general' || !request('tab')) ? 'active' : '' }}" href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'general']) }}"><i class="sidenav-mini-icon">G</i><span class="item-name">{{ __('center::settings.tabs.general') }} (والمطبعة)</span></a></li>
+                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.settings.index') && (request('tab') == 'general' || !request('tab')) ? 'active' : '' }}" href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'general']) }}"><i class="sidenav-mini-icon">G</i><span class="item-name">{{ __('center::settings.tabs.general') }}</span></a></li>
                             @endcan
                             
                             {{-- 3. Users --}}

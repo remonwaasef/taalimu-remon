@@ -1080,4 +1080,9 @@ return [
     'blade_quiz_modal_step3' => '3. Cliquez sur \"Ajouter un quiz\" dans le contenu de la lecon.',
     'blade_quiz_modal_close' => 'Fermer',
     'blade_quiz_modal_go' => 'Aller aux cours',
+
+    'total_expenses' => 'Dépenses totales',
+    'net_profit' => 'Bénéfice net',
+    'blade_1078' => 'Enregistrer la présence/l'absence',
+    'blade_1079' => 'Suivi de la présence de vos étudiants',
 ];

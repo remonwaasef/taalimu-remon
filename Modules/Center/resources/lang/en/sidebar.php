@@ -52,4 +52,5 @@ return [
     'financial_discounts' => 'Discounts Granted',
     'financial_taxes' => 'Taxes Collected',
     'list' => 'List',
+    'online_classes' => 'Live Classes',
 ];

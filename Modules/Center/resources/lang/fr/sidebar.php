@@ -52,4 +52,5 @@ return [
     'financial_discounts' => 'Remises Accordées',
     'financial_taxes' => 'Taxes Perçues',
     'list' => 'Liste',
+    'online_classes' => 'Classes en direct',
 ];
