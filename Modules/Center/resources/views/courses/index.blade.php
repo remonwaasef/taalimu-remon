@@ -203,7 +203,7 @@
                                 @csrf
                                 <div class="mb-4">
                                     <label class="form-label fw-bold text-dark mb-2">{{ __('center::messages.blade_0341') }}</label>
-                                    <select name="student_id" class="form-select border-2" id="unifiedStudentSelect" required placeholder="{{ __('center::messages.blade_0353') }}">
+                                    <select name="student_id" class="form-select border-2" id="unifiedStudentSelect" placeholder="{{ __('center::messages.blade_0353') }}">
                                         <option value="">{{ __('center::messages.blade_0342') }}</option>
                                         @foreach($students as $student)
                                             <option value="{{ $student->id }}">{{ $student->name }} ({{ $student->phone }})</option>
@@ -288,35 +288,52 @@
         <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
         <script>
             let unifiedTomSelect = null;
+            let enrollModal = null;
             
             document.addEventListener('DOMContentLoaded', function() {
                 // Initialize TomSelect only once
-                unifiedTomSelect = new TomSelect('#unifiedStudentSelect', {
-                    sortField: { field: "text", direction: "asc" },
-                    maxOptions: 50,
-                    @if(app()->isLocale('ar'))
-                    direction: 'rtl',
-                    @endif
-                    render: {
-                        no_results: function(data, escape) {
-                            return '<div class="no-results p-3 text-muted text-center">{{ __('center::messages.blade_0352') }}</div>';
+                const selectEl = document.getElementById('unifiedStudentSelect');
+                if (selectEl) {
+                    unifiedTomSelect = new TomSelect('#unifiedStudentSelect', {
+                        sortField: { field: "text", direction: "asc" },
+                        maxOptions: 50,
+                        @if(app()->isLocale('ar'))
+                        direction: 'rtl',
+                        @endif
+                        render: {
+                            no_results: function(data, escape) {
+                                return '<div class="no-results p-3 text-muted text-center">{{ __('center::messages.blade_0352') }}</div>';
+                            }
                         }
-                    }
-                });
+                    });
+                }
                 
                 // Add loading state to the quick enroll form
-                document.getElementById('quickNewStudentForm').addEventListener('submit', function() {
-                    let btn = document.getElementById('quickEnrollSubmitBtn');
-                    btn.disabled = true;
-                    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> {{ __('center::schedules.saving') }}';
-                });
+                const quickForm = document.getElementById('quickNewStudentForm');
+                if (quickForm) {
+                    quickForm.addEventListener('submit', function(e) {
+                        let btn = document.getElementById('quickEnrollSubmitBtn');
+                        btn.disabled = true;
+                        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> {{ __('center::schedules.saving') }}';
+                    });
+                }
                 
                 // Also add loading to existing form
-                document.getElementById('existingStudentForm').addEventListener('submit', function() {
-                    let btn = this.querySelector('button[type="submit"]');
-                    btn.disabled = true;
-                    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> {{ __('center::schedules.registering') }}';
-                });
+                const existingForm = document.getElementById('existingStudentForm');
+                if (existingForm) {
+                    existingForm.addEventListener('submit', function(e) {
+                        // Special check for TomSelect required validation
+                        if (!document.getElementById('unifiedStudentSelect').value) {
+                            e.preventDefault();
+                            alert('{{ __('center::messages.blade_0342') }}');
+                            return false;
+                        }
+                        
+                        let btn = this.querySelector('button[type="submit"]');
+                        btn.disabled = true;
+                        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> {{ __('center::schedules.registering') }}';
+                    });
+                }
             });
 
             function openEnrollModal(courseId, courseTitle) {
@@ -340,12 +357,16 @@
                 document.getElementById('qGrade').value = '';
                 
                 // Ensure Existing Tab is shown by default
-                let existingTab = new bootstrap.Tab(document.getElementById('existing-tab'));
-                existingTab.show();
+                const tabEl = document.getElementById('existing-tab');
+                if (tabEl) {
+                    const tab = bootstrap.Tab.getOrCreateInstance(tabEl);
+                    tab.show();
+                }
                 
-                // Show modal
-                var myModal = new bootstrap.Modal(document.getElementById('unifiedEnrollModal'));
-                myModal.show();
+                // Show modal using instance to avoid multiple backdrops
+                const modalEl = document.getElementById('unifiedEnrollModal');
+                enrollModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                enrollModal.show();
             }
         </script>
     @endpush
