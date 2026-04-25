@@ -486,26 +486,18 @@ h1, h2, h3, h4, h5, h6 {
     border-spacing: 0 0.5rem !important;
 }
 
-/* Fix dropdown clipping and z-index issues in responsive tables globally */
+/* Fix dropdown clipping in responsive tables - Simple reliable approach */
 .table-responsive {
-    min-height: 450px !important; /* Increased for longer dropdowns */
-    overflow: visible !important; /* Try to allow overflow if possible */
+    overflow: visible !important;
 }
-
-@media (max-width: 991.98px) {
-    .table-responsive {
-        overflow-x: auto !important; /* Restore scroll on mobile */
-        min-height: 400px !important;
-    }
+.card-body {
+    overflow: visible !important;
 }
-
-.dropdown-menu {
-    z-index: 2000 !important; /* Ensure it stays above everything */
+.table td .dropdown {
+    position: static;
 }
-
-.table-responsive .dropdown:focus-within {
-    z-index: 1050;
-    position: relative;
+.table td .dropdown-menu {
+    z-index: 1060 !important;
 }
 .table td .btn {
     z-index: auto !important;

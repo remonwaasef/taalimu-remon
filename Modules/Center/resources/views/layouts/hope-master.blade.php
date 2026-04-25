@@ -103,22 +103,5 @@
     <script src="{{ asset('assets/hope-ui/js/hope-ui.js') }}"></script>
     
     @stack('scripts')
-    <script>
-        // Global fix for dropdown clipping in tables/cards
-        document.addEventListener('DOMContentLoaded', function() {
-            const dropdownElementList = [].slice.call(document.querySelectorAll('[data-bs-toggle="dropdown"]'))
-            dropdownElementList.map(function (dropdownToggleEl) {
-                return new bootstrap.Dropdown(dropdownToggleEl, {
-                    boundary: 'viewport',
-                    popperConfig: (defaultConfig) => {
-                        return {
-                            ...defaultConfig,
-                            strategy: 'fixed'
-                        };
-                    }
-                })
-            })
-        });
-    </script>
 </body>
 </html>
