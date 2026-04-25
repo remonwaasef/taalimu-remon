@@ -185,21 +185,6 @@
                     </li>
                 @endif
                 
-                {{-- SUBSCRIPTION --}}
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('center.subscription.*') ? 'active' : '' }}" href="{{ route('center.subscription.index', ['tenant' => $tenant->domain ?? 'center']) }}">
-                        <i class="icon"><i class="fas fa-credit-card text-warning"></i></i>
-                        <span class="item-name">{{ __('center::sidebar.subscription') }}</span>
-                        @php
-                            $subEndsAt = app('tenant')->subscriptions?->last()?->ends_at;
-                            $daysLeft  = $subEndsAt ? max(0, now()->diffInDays($subEndsAt, false)) : null;
-                        @endphp
-                        @if($daysLeft !== null && $daysLeft <= 7)
-                            <span class="badge bg-danger rounded-pill" style="font-size:0.65rem;">{{ $daysLeft }}d</span>
-                        @endif
-                    </a>
-                </li>
-                
                 {{-- SETTINGS --}}
                 @canany(['manage users', 'manage settings'])
                 @php 
@@ -207,7 +192,8 @@
                                         request()->routeIs('center.settings.*') || 
                                         request()->routeIs('center.users.*') || 
                                         request()->routeIs('center.roles.*') || 
-                                        request()->routeIs('center.tickets.*'); 
+                                        request()->routeIs('center.tickets.*') ||
+                                        request()->routeIs('center.subscription.*'); 
                 @endphp
                     <li class="nav-item static-item">
                         <a class="nav-link static-item disabled" href="#" tabindex="-1">
@@ -226,6 +212,20 @@
                             </i>
                         </a>
                         <ul class="sub-nav collapse {{ $isSettingsActive ? 'show' : '' }}" id="settingsCollapse" data-bs-parent="#sidebar-menu">
+                            {{-- Moved Subscription here --}}
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('center.subscription.*') ? 'active' : '' }}" href="{{ route('center.subscription.index', ['tenant' => $tenant->domain ?? 'center']) }}">
+                                    <i class="sidenav-mini-icon">S</i><span class="item-name">{{ __('center::sidebar.subscription') }}</span>
+                                    @php
+                                        $subEndsAt = app('tenant')->subscriptions?->last()?->ends_at;
+                                        $daysLeft  = $subEndsAt ? max(0, now()->diffInDays($subEndsAt, false)) : null;
+                                    @endphp
+                                    @if($daysLeft !== null && $daysLeft <= 7)
+                                        <span class="badge bg-danger rounded-pill ms-auto" style="font-size:0.65rem; padding: 2px 6px;">{{ $daysLeft }}d</span>
+                                    @endif
+                                </a>
+                            </li>
+                            
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.settings.index') && (request('tab') == 'general' || !request('tab')) ? 'active' : '' }}" href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'general']) }}"><i class="sidenav-mini-icon">G</i><span class="item-name">{{ __('center::settings.tabs.general') }} (والمطبعة)</span></a></li>
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.settings.index') && request('tab') == 'academic' ? 'active' : '' }}" href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'academic']) }}"><i class="sidenav-mini-icon">A</i><span class="item-name">{{ __('center::settings.tabs.academic') }}</span></a></li>
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.settings.index') && request('tab') == 'financial' ? 'active' : '' }}" href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center', 'tab' => 'financial']) }}"><i class="sidenav-mini-icon">F</i><span class="item-name">{{ __('center::settings.tabs.financial') }}</span></a></li>
