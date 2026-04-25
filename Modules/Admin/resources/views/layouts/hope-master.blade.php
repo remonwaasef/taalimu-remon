@@ -28,8 +28,11 @@
     
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
 
+    <!-- Taalimu Unified Premium Emerald Theme -->
+    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/taalimu-unified.css?v=' . time()) }}">
+
     <style>
-        /* ===== Global Emerald Green Theme Override (Taalimu Unified) ===== */
+        /* ===== Admin Specific Overrides (Bento Pro Palette) ===== */
         :root {
             /* Bento Pro Palette (High Contrast) */
             --bs-primary: #10b981 !important;
