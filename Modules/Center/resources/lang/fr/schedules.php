@@ -27,7 +27,7 @@ return [
     'from' => 'De',
     'to' => 'À',
     'choose_classroom' => 'Choisir une salle',
-    'internal_conflict' => 'Conflit: l'horaire du jour :day de :from à :to chevauche un autre de vos horaires.',
+    'internal_conflict' => 'Conflit: l\'horaire du jour :day de :from à :to chevauche un autre de vos horaires.',
     'conflict_error' => 'Il y a un conflit avec cet horaire (Même salle, ou même instructeur, ou même jour/heure).',
     'incomplete_schedules' => 'Horaires incomplets',
 ];

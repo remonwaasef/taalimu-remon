@@ -143,6 +143,6 @@ return [
     'val_email_unique' => 'L\'adresse e-mail est déjà utilisée.',
     'val_grade_id_exists' => 'La classe sélectionnée n\'est pas valide.',
 
-    'student_details' => 'Détails de l'étudiant',
-    'status_finance' => 'Finance de l'étudiant',
+    'student_details' => 'Détails de l\'étudiant',
+    'status_finance' => 'Finance de l\'étudiant',
 ];
