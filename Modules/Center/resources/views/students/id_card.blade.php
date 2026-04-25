@@ -157,10 +157,17 @@
 
     <div class="id-card-container">
         <div class="card-header">
-            <div class="academy-logo">
-                <i class="fas fa-graduation-cap me-2"></i> {{ app('tenant')->name ?? 'أكاديمية تعليم' }}
+            <div class="d-flex justify-content-between align-items-start px-2">
+                <div class="text-end">
+                    <div class="academy-logo">
+                        <i class="fas fa-graduation-cap me-1"></i> {{ app('tenant')->name ?? 'أكاديمية تعليم' }}
+                    </div>
+                    <div class="extra-small opacity-75">بطاقة تعريف الطالب الرقمية</div>
+                </div>
+                <div class="qr-code" style="width: 70px; height: 70px; margin-top: -5px;">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(url('/login?student_id='.$student->id)) }}" alt="QR Code" style="width: 100%; height: 100%;">
+                </div>
             </div>
-            <div class="small opacity-75">بطاقة تعريف الطالب الرقمية</div>
         </div>
 
         <div class="student-photo-wrapper">
@@ -168,7 +175,7 @@
                 <img src="{{ asset('storage/'.$student->profile_photo) }}" alt="{{ $student->name }}" class="student-photo">
             @else
                 <div class="student-photo d-flex align-items-center justify-content-center text-primary">
-                    <i class="fas fa-user fa-4x opacity-25"></i>
+                    <i class="fas fa-user fa-3x opacity-25"></i>
                 </div>
             @endif
         </div>
@@ -190,12 +197,10 @@
             </div>
         </div>
 
-        <div class="card-footer">
-            <div class="qr-code">
-                {{-- Using a placeholder QR for now --}}
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(url('/login?student_id='.$student->id)) }}" alt="QR Code" style="width: 100%; height: 100%;">
+        <div class="mt-4 px-3">
+            <div class="p-2 rounded-pill bg-light x-small text-muted border">
+                <i class="fas fa-info-circle me-1"></i> امسح الكود لتسجيل الحضور المباشر
             </div>
-            <div class="mt-2 x-small text-muted">امسح الكود لتسجيل الحضور</div>
         </div>
     </div>
 
