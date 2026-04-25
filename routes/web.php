@@ -145,3 +145,35 @@ Route::get('lang/{locale}', function ($locale) {
     }
     return redirect()->back();
 })->middleware('throttle:60,1')->name('lang.switch');
+
+// Temporary route to fix storage permissions automatically
+Route::get('/fix-storage', function () {
+    try {
+        $paths = [
+            storage_path('framework/views'),
+            storage_path('framework/cache/data'),
+            storage_path('framework/sessions'),
+            storage_path('logs'),
+            bootstrap_path('cache')
+        ];
+        
+        $messages = [];
+        foreach ($paths as $path) {
+            if (!is_dir($path)) {
+                mkdir($path, 0775, true);
+                $messages[] = "Created directory: $path";
+            } else {
+                chmod($path, 0775);
+                $messages[] = "Updated permissions: $path";
+            }
+        }
+        
+        \Illuminate\Support\Facades\Artisan::call('cache:clear');
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        \Illuminate\Support\Facades\Artisan::call('config:clear');
+        
+        return "تم إصلاح مجلدات التخزين بنجاح والتنظيف! يمكنك الآن تحديث صفحة المركز (قم بالعودة للصفحة السابقة). <br><br>" . implode("<br>", $messages);
+    } catch (\Exception $e) {
+        return "حدث خطأ أثناء الإصلاح التلقائي: " . $e->getMessage();
+    }
+});
