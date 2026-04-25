@@ -44,9 +44,9 @@
                 @php 
                     $canInstructors = ($tenant->getFeatureValue('max_instructors') != '0' && $tenant->getFeatureValue('max_instructors') !== false) && auth()->user()->can('view instructors');
                     $canCourses = ($tenant->getFeatureValue('max_courses') != '0' && $tenant->getFeatureValue('max_courses') !== false) && auth()->user()->can('view courses');
-                    $canClassrooms = ($tenant->getFeatureValue('max_classrooms') != '0' && $tenant->getFeatureValue('max_classrooms') !== false) && auth()->user()->can('manage schedule');
-                    $canSchedules = $tenant->getFeatureValue('daily_schedules') === true && auth()->user()->can('manage schedule');
-                    $canOnlineClasses = auth()->user()->can('manage schedule');
+                    $canClassrooms = ($tenant->getFeatureValue('max_classrooms') != '0' && $tenant->getFeatureValue('max_classrooms') !== false) && auth()->user()->can('view schedule');
+                    $canSchedules = $tenant->getFeatureValue('daily_schedules') === true && auth()->user()->can('view schedule');
+                    $canOnlineClasses = auth()->user()->can('view schedule');
 
                     $isSchoolMgmtActive = request()->routeIs('center.classrooms.*') || 
                                           request()->routeIs('center.instructors.*') || 
@@ -178,12 +178,12 @@
                             @can('view expenses')
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.expenses.*') ? 'active' : '' }}" href="{{ route('center.expenses.index', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="sidenav-mini-icon">E</i><span class="item-name">{{ __('center::sidebar.expenses') }}</span></a></li>
                             @endcan
-                            @can('view reports')
+                            @canany(['view reports', 'view analytics'])
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.analytics.finance') ? 'active' : '' }}" href="{{ route('center.analytics.finance') }}"><i class="sidenav-mini-icon">F</i><span class="item-name">{{ __('center::sidebar.financial_analytics') }}</span></a></li>
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.analytics.commissions') ? 'active' : '' }}" href="{{ route('center.analytics.commissions') }}"><i class="sidenav-mini-icon">C</i><span class="item-name">{{ __('center::sidebar.financial_commissions') }}</span></a></li>
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.analytics.taxes') ? 'active' : '' }}" href="{{ route('center.analytics.taxes') }}"><i class="sidenav-mini-icon">T</i><span class="item-name">{{ __('center::sidebar.financial_taxes') }}</span></a></li>
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.analytics.discounts') ? 'active' : '' }}" href="{{ route('center.analytics.discounts') }}"><i class="sidenav-mini-icon">D</i><span class="item-name">{{ __('center::sidebar.financial_discounts') }}</span></a></li>
-                            @endcan
+                            @endcanany
 
                             @if($hasAdvancedReports)
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.analytics.index') ? 'active' : '' }}" href="{{ route('center.analytics.index') }}"><i class="sidenav-mini-icon">G</i><span class="item-name">{{ __('center::analytics.general') }}</span></a></li>
@@ -193,12 +193,13 @@
                 @endif
                 
                 {{-- SETTINGS --}}
-                @canany(['manage users', 'manage settings'])
+                @canany(['manage users', 'manage settings', 'manage billing'])
                 @php 
                     $isSettingsActive = request()->routeIs('center.assets.*') || 
                                         request()->routeIs('center.settings.*') || 
                                         request()->routeIs('center.users.*') || 
                                         request()->routeIs('center.roles.*') || 
+                                        request()->routeIs('center.branches.*') ||
                                         request()->routeIs('center.tickets.*') ||
                                         request()->routeIs('center.subscription.*'); 
                 @endphp
@@ -220,6 +221,7 @@
                         </a>
                         <ul class="sub-nav collapse {{ $isSettingsActive ? 'show' : '' }}" id="settingsCollapse" data-bs-parent="#sidebar-menu">
                             {{-- 1. Subscription --}}
+                            @can('manage billing')
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('center.subscription.*') ? 'active' : '' }}" href="{{ route('center.subscription.index', ['tenant' => $tenant->domain ?? 'center']) }}">
                                     <i class="sidenav-mini-icon">S</i><span class="item-name">{{ __('center::sidebar.subscription') }}</span>
@@ -232,6 +234,7 @@
                                     @endif
                                 </a>
                             </li>
+                            @endcan
                             
                             {{-- 2. General Settings --}}
                             @can('manage settings')
@@ -241,7 +244,19 @@
                             {{-- 3. Users --}}
                             @can('manage users')
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.users.*') ? 'active' : '' }}" href="{{ route('center.users.index', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="sidenav-mini-icon">U</i><span class="item-name">{{ __('center::sidebar.users') }}</span></a></li>
+                            
+                            @if($tenant->getFeatureValue('advanced_roles'))
+                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.roles.*') ? 'active' : '' }}" href="{{ route('center.roles.index', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="sidenav-mini-icon">R</i><span class="item-name">{{ __('center::sidebar.permissions') }}</span></a></li>
+                            @endif
                             @endcan
+
+                            @can('manage settings')
+                            @if($tenant->getFeatureValue('multi_branch'))
+                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.branches.*') ? 'active' : '' }}" href="{{ route('center.branches.index', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="sidenav-mini-icon">B</i><span class="item-name">{{ __('center::sidebar.branches') }}</span></a></li>
+                            @endif
+                            @endcan
+
+                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.tickets.*') ? 'active' : '' }}" href="{{ route('center.tickets.index', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="sidenav-mini-icon">T</i><span class="item-name">{{ __('center::sidebar.support') }}</span></a></li>
                         </ul>
                     </li>
                 @endcanany
