@@ -373,7 +373,9 @@
                                             <i class="fas fa-dollar-sign"></i>
                                         </button>
                                         <button type="button" class="btn btn-sm btn-light rounded-circle text-info shadow-none p-2 quick-enroll-btn" 
-                                                data-id="{{ $student->id }}" data-name="{{ $student->name }}" title="تسجيل في كورس">
+                                                data-id="{{ $student->id }}" data-name="{{ $student->name }}" 
+                                                data-enrolled="{{ $student->enrollments->pluck('course_id')->implode(',') }}"
+                                                title="تسجيل في كورس">
                                             <i class="fas fa-plus"></i>
                                         </button>
                                         <a href="https://api.whatsapp.com/send?phone={{ $phoneForWa }}&text={{ urlencode($reportMsg) }}" target="_blank" class="btn btn-sm btn-light rounded-circle text-secondary shadow-none p-2" title="تقرير سريع">
@@ -549,8 +551,21 @@
             document.querySelectorAll('.quick-enroll-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     if (enrollModal) {
+                        const enrolledIds = this.dataset.enrolled ? this.dataset.enrolled.split(',') : [];
                         document.getElementById('enrollStudentId').value = this.dataset.id;
                         document.getElementById('enrollStudentName').textContent = this.dataset.name;
+                        
+                        // Hide already enrolled courses
+                        const options = courseSelect.querySelectorAll('option');
+                        options.forEach(opt => {
+                            if (opt.value && enrolledIds.includes(opt.value)) {
+                                opt.style.display = 'none';
+                            } else {
+                                opt.style.display = '';
+                            }
+                        });
+                        courseSelect.value = ""; // Reset selection
+                        
                         enrollModal.show();
                     }
                 });
