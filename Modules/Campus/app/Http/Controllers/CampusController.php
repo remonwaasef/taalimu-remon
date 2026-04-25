@@ -6,28 +6,35 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\CertificateService;
 use App\Models\Certificate;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class CampusController extends Controller
+class CampusController extends Controller implements HasMiddleware
 {
     protected $studentProgressService;
 
     public function __construct(CertificateService $certificateService, \App\Services\StudentProgressService $studentProgressService)
     {
         $this->studentProgressService = $studentProgressService;
+    }
 
-        // Ensure only actual students can access the Campus
-        $this->middleware(function ($request, $next) {
-            $user = auth()->user();
-            if ($user && !$user->student) {
-                // If they are not a student but reached here, redirect them back to their appropriate dashboard
-                if ($user->hasRole('instructor')) {
-                    return redirect()->route('instructor.dashboard')->with('error', 'هذه الصفحة مخصصة للطلاب فقط.');
+    /**
+     * Get the middleware that should be assigned to the controller.
+     */
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(function ($request, $next) {
+                $user = auth()->user();
+                if ($user && !$user->student) {
+                    if ($user->hasRole('instructor')) {
+                        return redirect()->route('instructor.dashboard')->with('error', 'هذه الصفحة مخصصة للطلاب فقط.');
+                    }
+                    return redirect()->route('center.dashboard')->with('error', 'هذه الصفحة مخصصة للطلاب فقط.');
                 }
-                // Default fallback for center admins and staff
-                return redirect()->route('center.dashboard')->with('error', 'هذه الصفحة مخصصة للطلاب فقط.');
-            }
-            return $next($request);
-        });
+                return $next($request);
+            }),
+        ];
     }
 
     /**
