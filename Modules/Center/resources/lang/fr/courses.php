@@ -39,7 +39,7 @@ return [
     'validation_end_time_after' => 'L\'heure de fin doit être après l\'heure de début.',
     'validation_classroom_required' => 'Veuillez sélectionner une salle de classe.',
 
-    'validation_schedules_count_mismatch' => 'Le nombre d'horaires doit être égal au nombre de séances (:count).',
+    'validation_schedules_count_mismatch' => 'Le nombre d\'horaires doit être égal au nombre de séances (:count).',
     'schedules_count_info' => 'Vous devez ajouter :required horaire(s) (actuellement :current)',
     'schedules_count_complete' => 'Tous les horaires requis ont été ajoutés ✓',
 ];

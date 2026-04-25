@@ -74,7 +74,7 @@ return [
     'profit_loss_report' => 'Rapport des pertes et profits',
     'yearly_profit_loss' => 'Résumé annuel des profits et pertes',
     'monthly_breakdown' => 'Répartition mensuelle',
-    'operating_expenses' => 'Dépenses d'exploitation',
+    'operating_expenses' => 'Dépenses d\'exploitation',
     'instructor_commissions' => 'Commissions des instructeurs',
     'net_result' => 'Résultat net',
     'month' => 'Mois',
