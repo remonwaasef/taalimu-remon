@@ -22,18 +22,20 @@ class InstructorController extends Controller
     protected $instructor;
     protected $tenant;
 
-    public function __construct()
+    public function callAction($method, $parameters)
     {
-        $this->middleware(function ($request, $next) {
-            $this->instructor = $this->resolveInstructor();
+        // At this point, route middleware (like session/auth) has run
+        if (app()->bound('tenant')) {
             $this->tenant = app('tenant');
-
-            // Share globally with all views
-            view()->share('instructor', $this->instructor);
             view()->share('tenant', $this->tenant);
+        }
 
-            return $next($request);
-        });
+        if (auth()->check()) {
+            $this->instructor = $this->resolveInstructor();
+            view()->share('instructor', $this->instructor);
+        }
+
+        return $this->{$method}(...array_values($parameters));
     }
 
     protected function authorizeCourse($course)

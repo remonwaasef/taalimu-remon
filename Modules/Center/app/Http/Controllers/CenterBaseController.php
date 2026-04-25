@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 class CenterBaseController extends Controller
 {
     /**
+    /**
      * The current tenant (center) instance.
      * @var \App\Models\Tenant
      */
@@ -18,16 +19,18 @@ class CenterBaseController extends Controller
 
     public function __construct()
     {
-        // Use middleware to ensure the tenant is resolved before accessing it
-        $this->middleware(function ($request, $next) {
+        // Reserved for future base initialization.
+        // Properties depending on middleware (like tenant) are initialized in callAction.
+    }
+
+    public function callAction($method, $parameters)
+    {
+        // Tenant is already bound by the IdentifyTenant middleware before the controller method executes.
+        if (app()->bound('tenant')) {
             $this->tenant = app('tenant');
+            view()->share('tenant', $this->tenant);
+        }
 
-            // Share the tenant globally with all views in the center module
-            if ($this->tenant) {
-                view()->share('tenant', $this->tenant);
-            }
-
-            return $next($request);
-        });
+        return $this->{$method}(...array_values($parameters));
     }
 }
