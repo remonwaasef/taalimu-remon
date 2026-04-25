@@ -1,14 +1,15 @@
 @extends('center::layouts.hope-master')
 
-@section('title', __('center::expenses.title'))
+@section('page-title', __('center::expenses.title'))
 
-@section('content')
-<div class="mb-4 d-flex align-items-center justify-content-between">
-    <h2 class="fw-bold text-dark mb-0"><i class="fas fa-wallet me-2 text-primary"></i>{{ __('center::expenses.title') }}</h2>
-    <a href="{{ route('center.expenses.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
+@section('page-actions')
+    <a href="{{ route('center.expenses.create') }}" class="btn btn-glass shadow-sm">
         <i class="fas fa-plus me-2"></i> {{ __('center::expenses.new_expense') }}
     </a>
-</div>
+@endsection
+
+@section('content')
+<div class="container-fluid">
 
 <div class="card border-0 shadow-sm rounded-4 mb-4">
     <div class="card-body">

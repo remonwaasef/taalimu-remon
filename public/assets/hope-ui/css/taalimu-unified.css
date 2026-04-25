@@ -24,7 +24,7 @@ body {
 /* Unified Header Banner - Premium Emerald */
 .iq-navbar-header {
     padding: 0 !important;
-    height: 215px !important;
+    height: 240px !important;
     background: linear-gradient(135deg, #065f46 0%, #10b981 100%) !important;
     position: relative;
     overflow: hidden;
@@ -560,7 +560,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Content layout (Premium Overlap effect) */
 .content-inner {
-    margin-top: -4rem !important; /* Pull content up to overlap header */
+    margin-top: -3.5rem !important; /* Pull content up to overlap header slightly less */
     position: relative;
     z-index: 10;
 }
