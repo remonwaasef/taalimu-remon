@@ -482,10 +482,10 @@
 
             <!-- SCHOOL MANAGEMENT (Collapsible Section) -->
             @php 
-                $canInstructors = ($tenant->getFeatureValue('max_instructors') != '0' && $tenant->getFeatureValue('max_instructors') !== false) && auth()->user()->can('view instructors');
-                $canCourses = ($tenant->getFeatureValue('max_courses') != '0' && $tenant->getFeatureValue('max_courses') !== false) && auth()->user()->can('view courses');
-                $canClassrooms = ($tenant->getFeatureValue('max_classrooms') != '0' && $tenant->getFeatureValue('max_classrooms') !== false) && auth()->user()->can('manage schedule');
-                $canSchedules = $tenant->getFeatureValue('daily_schedules') === true && auth()->user()->can('manage schedule');
+                $canInstructors = (($tenant->getFeatureValue('max_instructors') != '0' && $tenant->getFeatureValue('max_instructors') !== false) || auth()->user()->can('view instructors')) && auth()->user()->can('view instructors');
+                $canCourses = (($tenant->getFeatureValue('max_courses') != '0' && $tenant->getFeatureValue('max_courses') !== false) || auth()->user()->can('view courses')) && auth()->user()->can('view courses');
+                $canClassrooms = (($tenant->getFeatureValue('max_classrooms') != '0' && $tenant->getFeatureValue('max_classrooms') !== false) || auth()->user()->can('manage schedule')) && auth()->user()->can('manage schedule');
+                $canSchedules = ($tenant->getFeatureValue('daily_schedules') === true || auth()->user()->can('manage schedule')) && auth()->user()->can('manage schedule');
 
                 $isSchoolMgmtActive = request()->routeIs('center.classrooms.*') || 
                                       request()->routeIs('center.instructors.*') || 
@@ -528,8 +528,8 @@
 
             <!-- 2. STUDENTS (Includes Attendance) -->
             @php 
-                $canStudents = ($tenant->getFeatureValue('max_students') != '0' && $tenant->getFeatureValue('max_students') !== false) && auth()->user()->can('view students');
-                $canAttendance = $tenant->getFeatureValue('attendance_tracking') && auth()->user()->canAny(['view students', 'manage schedule']);
+                $canStudents = (($tenant->getFeatureValue('max_students') != '0' && $tenant->getFeatureValue('max_students') !== false) || auth()->user()->can('view students')) && auth()->user()->can('view students');
+                $canAttendance = ($tenant->getFeatureValue('attendance_tracking') || auth()->user()->canAny(['view students', 'manage schedule'])) && auth()->user()->canAny(['view students', 'manage schedule']);
                 $isStudentsActive = request()->routeIs('center.students.*') || request()->routeIs('center.attendance.*'); 
                 $showStudents = $canStudents || $canAttendance;
             @endphp
@@ -558,8 +558,8 @@
             
 
             @php 
-                $hasFinancialReports = $tenant->getFeatureValue('financial_reports') && auth()->user()->canAny(['view sales', 'manage billing']);
-                $hasAdvancedReports = $tenant->getFeatureValue('advanced_reports') && auth()->user()->can('view reports');
+                $hasFinancialReports = ($tenant->getFeatureValue('financial_reports') || auth()->user()->canAny(['view sales', 'manage billing'])) && auth()->user()->canAny(['view sales', 'manage billing']);
+                $hasAdvancedReports = ($tenant->getFeatureValue('advanced_reports') || auth()->user()->can('view reports')) && auth()->user()->can('view reports');
                 $isFinanceActive = request()->routeIs('center.sales.*') || request()->routeIs('center.expenses.*') || request()->routeIs('center.analytics.*'); 
             @endphp
 
