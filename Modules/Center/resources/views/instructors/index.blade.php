@@ -106,7 +106,7 @@
                                 <td class="text-muted">{{ $instructor->courses_count ?? 0 }}</td>
                                 <td class="text-end px-4">
                                     <div class="dropdown">
-                                        <button class="btn btn-icon btn-light rounded-circle shadow-none" type="button" data-bs-toggle="dropdown">
+                                        <button class="btn btn-icon btn-light rounded-circle shadow-none" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2 rounded-4">
