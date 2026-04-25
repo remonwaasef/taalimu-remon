@@ -14,6 +14,20 @@ class CampusController extends Controller
     public function __construct(CertificateService $certificateService, \App\Services\StudentProgressService $studentProgressService)
     {
         $this->studentProgressService = $studentProgressService;
+
+        // Ensure only actual students can access the Campus
+        $this->middleware(function ($request, $next) {
+            $user = auth()->user();
+            if ($user && !$user->student) {
+                // If they are not a student but reached here, redirect them back to their appropriate dashboard
+                if ($user->hasRole('instructor')) {
+                    return redirect()->route('instructor.dashboard')->with('error', 'هذه الصفحة مخصصة للطلاب فقط.');
+                }
+                // Default fallback for center admins and staff
+                return redirect()->route('center.dashboard')->with('error', 'هذه الصفحة مخصصة للطلاب فقط.');
+            }
+            return $next($request);
+        });
     }
 
     /**
