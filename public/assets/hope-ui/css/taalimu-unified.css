@@ -488,8 +488,21 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Fix dropdown clipping and z-index issues in responsive tables globally */
 .table-responsive {
-    min-height: 350px;
+    min-height: 450px !important; /* Increased for longer dropdowns */
+    overflow: visible !important; /* Try to allow overflow if possible */
 }
+
+@media (max-width: 991.98px) {
+    .table-responsive {
+        overflow-x: auto !important; /* Restore scroll on mobile */
+        min-height: 400px !important;
+    }
+}
+
+.dropdown-menu {
+    z-index: 2000 !important; /* Ensure it stays above everything */
+}
+
 .table-responsive .dropdown:focus-within {
     z-index: 1050;
     position: relative;
