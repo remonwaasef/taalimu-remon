@@ -53,7 +53,9 @@ class UserController extends Controller
                 return $role->name !== 'super_admin';
             });
             
-        $permissions = \Spatie\Permission\Models\Permission::where('name', 'not like', '%centers%')->get();
+        $permissions = \Spatie\Permission\Models\Permission::where('name', 'not like', '%centers%')
+            ->where('name', 'not like', 'admin.%')
+            ->get();
         
         $rolePermissions = $roles->mapWithKeys(function ($role) {
             return [$role->name => $role->permissions->pluck('name')->toArray()];
@@ -122,7 +124,9 @@ class UserController extends Controller
                 return $role->name !== 'super_admin';
             });
 
-        $permissions = \Spatie\Permission\Models\Permission::where('name', 'not like', '%centers%')->get();
+        $permissions = \Spatie\Permission\Models\Permission::where('name', 'not like', '%centers%')
+            ->where('name', 'not like', 'admin.%')
+            ->get();
         
         $rolePermissions = $roles->mapWithKeys(function ($role) {
             return [$role->name => $role->permissions->pluck('name')->toArray()];
