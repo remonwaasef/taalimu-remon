@@ -52,7 +52,7 @@ class StudentController extends Controller
         });
 
         $stages = \App\Models\Stage::getCached();
-        $courses = \App\Models\Course::where('tenant_id', $this->tenant->id)->where('status', 'active')->get();
+        $courses = \App\Models\Course::where('tenant_id', $this->tenant->id)->orderBy('title')->get();
 
         return view('center::students.index', compact('students', 'stages', 'courses'));
     }
@@ -66,7 +66,7 @@ class StudentController extends Controller
         $this->authorize('create', Student::class);
         
         $stages = \App\Models\Stage::getCached();
-        $courses = \App\Models\Course::where('status', 'active')->orderBy('title')->get();
+        $courses = \App\Models\Course::where('tenant_id', $this->tenant->id)->orderBy('title')->get();
         
         return view('center::students.create', compact('stages', 'courses'));
     }
