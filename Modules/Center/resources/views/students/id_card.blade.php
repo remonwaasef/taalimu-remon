@@ -164,7 +164,7 @@
                     </div>
                     <div class="extra-small opacity-75">بطاقة تعريف الطالب الرقمية</div>
                 </div>
-                <div class="qr-code" style="width: 70px; height: 70px; margin-top: -5px;">
+                <div class="bg-white p-1 rounded-3 shadow-sm" style="width: 80px; height: 80px;">
                     <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(url('/login?student_id='.$student->id)) }}" alt="QR Code" style="width: 100%; height: 100%;">
                 </div>
             </div>
