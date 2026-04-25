@@ -2,11 +2,15 @@
     $tenantData = $tenant ?? app('tenant') ?? null;
     $layout = 'center::layouts.hope-master';
     
-    if (request()->is('campus*') || (auth()->check() && auth()->user()->role === 'student')) {
+    // Use precise path matching to avoid confusing /instructors (center) with /instructor/ (instructor module)
+    $currentPath = request()->path();
+    
+    if (str_starts_with($currentPath, 'campus') || (auth()->check() && auth()->user()->hasRole('student'))) {
         $layout = 'campus::layouts.master';
-    } elseif (request()->is('instructor*') || (auth()->check() && auth()->user()->role === 'instructor')) {
+    } elseif (str_starts_with($currentPath, 'instructor/') || $currentPath === 'instructor') {
         $layout = 'instructor::components.layouts.hope-master';
     }
+    // All other paths (including /instructors, /students, /courses, etc.) default to center layout
     
     $hasLayout = $tenantData !== null;
 @endphp
@@ -42,10 +46,10 @@
                     </p>
                     
                     <div class="d-flex gap-3 justify-content-center mt-2">
-                        <a href="javascript:history.back()" class="btn btn-primary px-4 py-2.5 rounded-3 fw-bold shadow-sm" style="background: #0f8b65; border-color: #0f8b65;">
+                        <a href="javascript:history.back()" class="btn btn-primary px-4 py-2 rounded-3 fw-bold shadow-sm" style="background: #0f8b65; border-color: #0f8b65;">
                             <i class="fas fa-arrow-right me-2"></i> العودة للصفحة السابقة
                         </a>
-                        <a href="/" class="btn btn-light px-4 py-2.5 rounded-3 fw-bold border">
+                        <a href="/" class="btn btn-light px-4 py-2 rounded-3 fw-bold border">
                             <i class="fas fa-home me-2"></i> لوحة التحكم
                         </a>
                     </div>
