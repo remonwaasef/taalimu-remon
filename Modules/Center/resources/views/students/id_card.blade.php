@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كارنيه الطالب | {{ $student->name }}</title>
+    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/hope-ui.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .id-card-container {
+            position: relative;
+            width: 350px;
+            height: 550px;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            height: 180px;
+            padding: 30px;
+            color: white;
+            position: relative;
+        }
+
+        .card-header::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .academy-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .student-photo-wrapper {
+            position: relative;
+            z-index: 2;
+            margin-top: -60px;
+        }
+
+        .student-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid white;
+            object-fit: cover;
+            background-color: #f8f9fa;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .student-name {
+            margin-top: 20px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1f2937;
+            padding: 0 20px;
+        }
+
+        .student-info {
+            margin-top: 25px;
+            padding: 0 30px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .info-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .info-value {
+            color: #111827;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .card-footer {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9fafb;
+        }
+
+        .qr-code {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+            background: white;
+            padding: 5px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+        }
+
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s;
+        }
+
+        .print-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4);
+        }
+
+        @media print {
+            body { background: white; }
+            .print-btn { display: none; }
+            .id-card-container { box-shadow: none; border: 1px solid #eee; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">
+        <i class="fas fa-print me-2"></i> طباعة الكارنيه
+    </button>
+
+    <div class="id-card-container">
+        <div class="card-header">
+            <div class="academy-logo">
+                <i class="fas fa-graduation-cap me-2"></i> {{ app('tenant')->name ?? 'أكاديمية تعليم' }}
+            </div>
+            <div class="small opacity-75">بطاقة تعريف الطالب الرقمية</div>
+        </div>
+
+        <div class="student-photo-wrapper">
+            @if($student->profile_photo)
+                <img src="{{ asset('storage/'.$student->profile_photo) }}" alt="{{ $student->name }}" class="student-photo">
+            @else
+                <div class="student-photo d-flex align-items-center justify-content-center text-primary">
+                    <i class="fas fa-user fa-4x opacity-25"></i>
+                </div>
+            @endif
+        </div>
+
+        <div class="student-name">{{ $student->name }}</div>
+        
+        <div class="student-info">
+            <div class="info-row">
+                <span class="info-label">المرحلة / الصف</span>
+                <span class="info-value">{{ $student->grade->stage->name ?? '-' }} / {{ $student->grade->name ?? '-' }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">رقم الهاتف</span>
+                <span class="info-value" dir="ltr">{{ $student->phone }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">كود الطالب</span>
+                <span class="info-value">#{{ $student->id }}</span>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <div class="qr-code">
+                {{-- Using a placeholder QR for now --}}
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(url('/login?student_id='.$student->id)) }}" alt="QR Code" style="width: 100%; height: 100%;">
+            </div>
+            <div class="mt-2 x-small text-muted">امسح الكود لتسجيل الحضور</div>
+        </div>
+    </div>
+
+    <script>
+        // Optional: Auto-trigger print
+        // window.onload = function() { window.print(); }
+    </script>
+</body>
+</html>
