@@ -22,7 +22,7 @@
         .id-card-container {
             position: relative;
             width: 350px;
-            height: 580px;
+            height: 620px;
             background: white;
             border-radius: 25px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.15);
@@ -178,14 +178,16 @@
             </div>
         </div>
 
-        <div class="student-photo-wrapper" style="margin-top: 50px;">
-            @if($student->profile_photo)
-                <img src="{{ asset('storage/'.$student->profile_photo) }}" alt="{{ $student->name }}" class="student-photo">
-            @else
-                <div class="student-photo d-flex align-items-center justify-content-center text-primary">
-                    <i class="fas fa-user fa-3x opacity-25"></i>
-                </div>
-            @endif
+        <div class="student-photo-wrapper" style="margin-top: 65px; margin-bottom: 10px;">
+            <div class="d-flex align-items-center justify-content-center">
+                @if($student->profile_photo)
+                    <img src="{{ asset('storage/'.$student->profile_photo) }}" alt="{{ $student->name }}" class="student-photo" style="width: 100px; height: 100px;">
+                @else
+                    <div class="student-photo d-flex align-items-center justify-content-center text-primary" style="width: 100px; height: 100px;">
+                        <i class="fas fa-user fa-2x opacity-25"></i>
+                    </div>
+                @endif
+            </div>
         </div>
 
         <div class="student-name">{{ $student->name }}</div>
