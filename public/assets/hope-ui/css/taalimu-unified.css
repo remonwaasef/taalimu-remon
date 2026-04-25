@@ -4,6 +4,7 @@
     --bs-primary-rgb: 16, 185, 129 !important;
     --bs-link-color: #10b981 !important;
     --bs-link-hover-color: #059669 !important;
+    --primary-color: #10b981 !important;
     --primary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
 }
 
@@ -24,7 +25,7 @@ body {
 /* Unified Header Banner - Premium Emerald */
 .iq-navbar-header {
     padding: 0 !important;
-    height: 240px !important;
+    height: 260px !important;
     background: linear-gradient(135deg, #065f46 0%, #10b981 100%) !important;
     position: relative;
     overflow: hidden;
@@ -71,6 +72,11 @@ body {
     filter: grayscale(100%);
     mix-blend-mode: overlay;
     object-fit: cover;
+}
+
+/* Ensure banner content has enough space at the bottom for the overlap */
+.iq-navbar-header .iq-container {
+    padding-bottom: 4rem !important;
 }
 
 .iq-navbar-header .container-fluid {
@@ -560,7 +566,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Content layout (Premium Overlap effect) */
 .content-inner {
-    margin-top: -3.5rem !important; /* Pull content up to overlap header slightly less */
+    margin-top: -3rem !important; /* Pull content up slightly less */
     position: relative;
     z-index: 10;
 }
