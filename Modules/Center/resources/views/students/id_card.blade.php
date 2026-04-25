@@ -156,17 +156,14 @@
     </button>
 
     <div class="id-card-container">
-        <div class="card-header">
-            <div class="d-flex justify-content-between align-items-start px-2">
-                <div class="text-end">
-                    <div class="academy-logo">
-                        <i class="fas fa-graduation-cap me-1"></i> {{ app('tenant')->name ?? 'أكاديمية تعليم' }}
-                    </div>
-                    <div class="extra-small opacity-75">بطاقة تعريف الطالب الرقمية</div>
-                </div>
-                <div class="bg-white p-1 rounded-3 shadow-sm" style="width: 80px; height: 80px;">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(url('/login?student_id='.$student->id)) }}" alt="QR Code" style="width: 100%; height: 100%;">
-                </div>
+        <div class="card-header position-relative">
+            <div class="academy-logo pt-2">
+                <i class="fas fa-graduation-cap me-1"></i> {{ app('tenant')->name ?? 'أكاديمية تعليم' }}
+            </div>
+            <div class="extra-small opacity-75">بطاقة تعريف الطالب الرقمية</div>
+            
+            <div class="qr-code-badge">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(url('/login?student_id='.$student->id)) }}" alt="QR Code">
             </div>
         </div>
 
