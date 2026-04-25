@@ -64,6 +64,7 @@
                                 <label class="form-label fw-bold">{{ __('center::instructors.commission_rate') }} <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <select name="commission_type" class="form-select bg-white border" style="max-width: 140px; border-radius: 0 10px 10px 0 !important;" required>
+                                        <option value="">{{ __('center::messages.blade_0423') }}</option>
                                         <option value="percentage" {{ old('commission_type') == 'percentage' ? 'selected' : '' }}>{{ __('center::instructors.commission_percentage') }}</option>
                                         <option value="fixed" {{ old('commission_type') == 'fixed' ? 'selected' : '' }}>{{ __('center::instructors.commission_fixed') }}</option>
                                     </select>
@@ -83,7 +84,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('center::instructors.phone') }} <span class="text-danger">*</span></label>
-                                <input type="tel" name="phone" value="{{ old('phone') }}" class="form-control bg-white border">
+                                <input type="tel" name="phone" value="{{ old('phone') }}" class="form-control bg-white border" required>
                                 @error('phone')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                         </div>

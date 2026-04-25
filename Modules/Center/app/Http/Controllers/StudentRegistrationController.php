@@ -12,9 +12,16 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
+use App\Services\FinanceService;
 
 class StudentRegistrationController extends Controller
 {
+    protected $financeService;
+
+    public function __construct(FinanceService $financeService)
+    {
+        $this->financeService = $financeService;
+    }
     public function index($token)
     {
         $course = Course::where('registration_token', $token)->firstOrFail();
@@ -89,12 +96,11 @@ class StudentRegistrationController extends Controller
             ->exists();
 
         if (!$isEnrolled) {
-            Enrollment::create([
-                'user_id' => $user->id,
-                'course_id' => $course->id,
-                'tenant_id' => $course->tenant_id,
-                'status' => 'active',
-                'enrolled_at' => now(),
+            $this->financeService->createSale([
+                'student_id' => $user->student->id,
+                'items' => [['id' => $course->id, 'price' => $course->price]],
+                'payment_method' => 'cash',
+                'paid_amount' => 0,
             ]);
         }
 
