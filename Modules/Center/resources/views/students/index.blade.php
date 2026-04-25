@@ -314,10 +314,16 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="d-flex flex-column">
-                                        <span class="text-dark small" dir="ltr">{{ $student->phone }}</span>
+                                    <div class="d-flex flex-column gap-1">
+                                        <div class="d-flex align-items-center text-dark small" dir="ltr">
+                                            <i class="fas fa-mobile-screen-button me-2 text-primary opacity-50" style="font-size: 0.8rem;"></i>
+                                            {{ $student->phone }}
+                                        </div>
                                         @if($student->parent_phone)
-                                            <span class="text-muted extra-small">{{ __('center::students.parent_phone') }}: {{ $student->parent_phone }}</span>
+                                            <div class="d-flex align-items-center text-muted extra-small" dir="ltr">
+                                                <i class="fas fa-user-shield me-2 opacity-50" style="font-size: 0.7rem;"></i>
+                                                {{ $student->parent_phone }}
+                                            </div>
                                         @endif
                                     </div>
                                 </td>
