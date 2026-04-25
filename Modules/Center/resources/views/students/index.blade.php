@@ -559,7 +559,7 @@
             document.getElementById('submitEnrollBtn').addEventListener('click', function() {
                 const courseId = courseSelect.value;
                 if (!courseId) return alert('برجاء اختيار كورس أولاً');
-                enrollForm.action = `/center/courses/${courseId}/enroll`;
+                enrollForm.action = `/courses/${courseId}/enroll`;
                 enrollForm.submit();
             });
 
