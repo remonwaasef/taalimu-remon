@@ -475,6 +475,12 @@
                     <span>{{ __('admin::admin.sidebar.cookie_reports') }}</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('admin.bug_reports.index') }}" class="nav-link {{ request()->routeIs('admin.bug_reports.index') ? 'active' : '' }}">
+                    <span>🐛</span>
+                    <span>تقارير الأخطاء (Beta)</span>
+                </a>
+            </li>
         </ul>
 
     </aside>
