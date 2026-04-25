@@ -174,6 +174,9 @@
         </div>
     </div>
 
+
+
+    @push('modals')
     <!-- Unified Enroll Student Modal -->
     <div class="modal fade" id="unifiedEnrollModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
@@ -272,6 +275,7 @@
             </div>
         </div>
     </div>
+    @endpush
 
     @push('styles')
         <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
