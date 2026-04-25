@@ -281,9 +281,10 @@
                                     <input class="form-check-input" type="checkbox" id="select-all">
                                 </div>
                             </th>
-                            <th class="border-0 bg-transparent">{{ __('center::students.student_details') }}</th>
-                            <th class="border-0 bg-transparent">{{ __('center::students.grade') }}</th>
-                            <th class="border-0 bg-transparent">{{ __('center::students.status_finance') }}</th>
+                            <th class="border-0 bg-transparent">{{ __('center::students.name') }}</th>
+                            <th class="border-0 bg-transparent">{{ __('center::students.phone') }}</th>
+                            <th class="border-0 bg-transparent d-none d-lg-table-cell">{{ __('center::students.grade') }}</th>
+                            <th class="border-0 bg-transparent">{{ __('center::students.status') }}</th>
                             <th class="border-0 bg-transparent text-end px-4">{{ __('center::students.actions') }}</th>
                         </tr>
                     </thead>
@@ -299,56 +300,41 @@
                                     <div class="d-flex align-items-center">
                                         <div class="student-avatar me-3">
                                             @if($student->profile_photo)
-                                                <img src="{{ Storage::url($student->profile_photo) }}" alt="Avatar" class="rounded-circle shadow-sm" style="width: 42px; height: 42px; object-fit: cover;">
+                                                <img src="{{ Storage::url($student->profile_photo) }}" alt="Avatar" class="rounded-circle shadow-sm" style="width: 38px; height: 38px; object-fit: cover;">
                                             @else
-                                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 42px; height: 42px;">
-                                                    <span class="fw-bold">{{ mb_substr($student->name, 0, 1) }}</span>
+                                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 38px; height: 38px;">
+                                                    <span class="fw-bold small">{{ mb_substr($student->name, 0, 1) }}</span>
                                                 </div>
                                             @endif
                                         </div>
                                         <div>
-                                            <div class="fw-bold text-dark mb-0">
-                                                {{ $student->name }}
-                                                @if($student->total_balance > 500)
-                                                    <span class="ms-1 text-danger small" title="مديونية مرتفعة!"><i class="fas fa-exclamation-triangle"></i></span>
-                                                @endif
-                                            </div>
-                                            <div class="text-muted x-small d-flex flex-wrap gap-2">
-                                                <span dir="ltr"><i class="fas fa-phone-flip me-1"></i>{{ $student->phone }}</span>
-                                                @if($student->email)
-                                                    <span class="d-none d-md-inline"><i class="fas fa-envelope me-1"></i>{{ $student->email }}</span>
-                                                @endif
-                                            </div>
-                                            @if($student->parent_phone)
-                                                <div class="text-muted extra-small mt-1">
-                                                    <i class="fas fa-user-shield me-1"></i>{{ __('center::students.parent_phone') }}: {{ $student->parent_phone }}
-                                                </div>
-                                            @endif
+                                            <div class="fw-bold text-dark small mb-0">{{ $student->name }}</div>
+                                            <div class="text-muted extra-small d-lg-none">{{ $student->phone }}</div>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="d-flex flex-column">
-                                        <span class="badge bg-light text-dark fw-normal rounded-pill px-2 py-1 border mb-1">
-                                            {{ $student->grade_level_name }}
-                                        </span>
-                                        @if($student->school_name || $student->section_type)
-                                            <span class="text-muted extra-small">
-                                                {{ $student->school_name }}{{ $student->school_name && $student->section_type ? ' - ' : '' }}{{ $student->section_type }}
-                                            </span>
+                                        <span class="text-dark small" dir="ltr">{{ $student->phone }}</span>
+                                        @if($student->parent_phone)
+                                            <span class="text-muted extra-small">{{ __('center::students.parent_phone') }}: {{ $student->parent_phone }}</span>
                                         @endif
                                     </div>
                                 </td>
+                                <td class="d-none d-lg-table-cell">
+                                    <div class="d-flex flex-column">
+                                        <span class="badge bg-light text-dark fw-normal rounded-pill px-2 py-1 border mb-1" style="font-size: 0.75rem;">
+                                            {{ $student->grade_level_name }}
+                                        </span>
+                                    </div>
+                                </td>
                                 <td>
-                                    <span class="badge bg-{{ $student->status == 'active' ? 'success' : 'danger' }} bg-opacity-10 text-{{ $student->status == 'active' ? 'success' : 'danger' }} rounded-pill px-3">
-                                        <i class="fas {{ $student->status == 'active' ? 'fa-check' : 'fa-times' }} me-1 small"></i>
-                                        {{ $student->status == 'active' ? __('center::students.active') : __('center::students.stopped') }}
-                                    </span>
-                                    <div class="mt-1">
+                                    <div class="d-flex flex-column align-items-start">
+                                        <span class="badge bg-{{ $student->status == 'active' ? 'success' : 'danger' }} bg-opacity-10 text-{{ $student->status == 'active' ? 'success' : 'danger' }} rounded-pill px-2 py-1" style="font-size: 0.7rem;">
+                                            {{ $student->status == 'active' ? __('center::students.active') : __('center::students.stopped') }}
+                                        </span>
                                         @if($student->total_balance > 0)
-                                            <span class="badge bg-danger bg-opacity-10 text-danger x-small rounded-pill">{{ number_format($student->total_balance, 0) }} ج.م متبقي</span>
-                                        @else
-                                            <span class="badge bg-success bg-opacity-10 text-success x-small rounded-pill">مسدد بالكامل</span>
+                                            <span class="text-danger extra-small fw-bold mt-1">{{ number_format($student->total_balance, 0) }} ج.م</span>
                                         @endif
                                     </div>
                                 </td>
