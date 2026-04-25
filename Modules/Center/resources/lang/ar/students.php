@@ -144,4 +144,6 @@ return [
     'val_section_type_regex' => 'الشعبة يجب أن تحتوي على حروف فقط.',
     'val_email_unique' => 'البريد الإلكتروني مستخدم بالفعل.',
     'val_grade_id_exists' => 'الصف الدراسي المختار غير صحيح.',
+    'student_details' => 'تفاصيل الطالب',
+    'status_finance' => 'الحالة والمالية',
 ];
