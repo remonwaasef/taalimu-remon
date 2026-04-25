@@ -1,15 +1,9 @@
-@extends('center::layouts.master')
+@extends('center::layouts.hope-master')
 
-@section('title', __('center::online_classes.title'))
+@section('page-title', __('center::online_classes.live_classes'))
+@section('page-subtitle', __('center::online_classes.subtitle'))
 
 @section('content')
-<div class="container-fluid">
-    <div class="row align-items-center mb-4">
-        <div class="col-12 col-md-auto mb-3 mb-md-0">
-            <h3 class="fw-bold mb-1">{{ __('center::online_classes.live_classes') }}</h3>
-            <p class="text-muted small mb-0">{{ __('center::online_classes.subtitle') }}</p>
-        </div>
-    </div>
 
     <!-- Stats Cards -->
     <div class="row g-3 mb-4">
@@ -180,7 +174,7 @@
                         @empty
                         <tr>
                             <td colspan="6" class="text-center py-5">
-                                <img src="https://illustrations.popsy.co/gray/fogg-searching.png" alt="No data" style="width: 150px;" class="mb-3 opacity-50">
+                                <i class="fas fa-video-slash fa-3x text-muted mb-3 opacity-50"></i>
                                 <h6 class="text-muted">{{ __('center::online_classes.no_classes_found') }}</h6>
                             </td>
                         </tr>
@@ -190,10 +184,9 @@
             </div>
             @if($onlineClasses->hasPages())
                 <div class="p-3 border-top">
-                    {{ $onlineClasses->links() }}
+                    {{ $onlineClasses->links('components.ui.pagination') }}
                 </div>
             @endif
         </div>
     </div>
-</div>
 @endsection

@@ -25,16 +25,26 @@ class RedirectIfAuthenticated
                 
                 // Logic for Tenant Subdomains
                 $host = $request->getHost();
-                $parts = explode('.', $host);
+                $mainHost = config('app.tenant_domain') ?: parse_url(config('app.url'), PHP_URL_HOST);
 
-                // Check if we are on a tenant subdomain (e.g. ra3y.localhost)
-                if (count($parts) > 1 && $parts[0] !== 'www') {
-                    $user = Auth::user();
-                    if ($user->role === 'student') {
-                        return redirect()->route('campus.index', ['tenant' => $parts[0]]);
+                // Check if we are on a tenant subdomain
+                if ($host !== $mainHost && $host !== 'www.' . $mainHost && $host !== 'localhost') {
+                    $tenantDomain = null;
+                    if (str_ends_with($host, '.' . $mainHost)) {
+                        $tenantDomain = str_replace('.' . $mainHost, '', $host);
+                    } else {
+                        $parts = explode('.', $host);
+                        $tenantDomain = $parts[0];
                     }
-                    // Redirect to Center Dashboard for admins/others
-                    return redirect()->route('center.dashboard', ['tenant' => $parts[0]]);
+
+                    if ($tenantDomain && !in_array($tenantDomain, ['www', 'admin', 'api', 'app'])) {
+                        $user = Auth::user();
+                        if ($user->role === 'student') {
+                            return redirect()->route('campus.index', ['tenant' => $tenantDomain]);
+                        }
+                        // Redirect to Center Dashboard for admins/others
+                        return redirect()->route('center.dashboard', ['tenant' => $tenantDomain]);
+                    }
                 }
                 
                 // Logic for Main Domain

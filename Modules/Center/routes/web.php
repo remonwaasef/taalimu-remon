@@ -389,6 +389,11 @@ $tenantRoutes = function () {
         Route::get('notifications/read/{id}', [NotificationController::class, 'markAsRead'])->name('center.notifications.read');
         Route::post('notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('center.notifications.readAll');
 
+        // Bug Reports (Beta Feedback)
+        Route::post('bug-report', [\Modules\Center\Http\Controllers\BugReportController::class, 'store'])
+            ->middleware('throttle:5,10')
+            ->name('center.bug-report.store');
+
         // User Management
         Route::middleware(['can:manage users'])->group(function() {
             Route::resource('users', \Modules\Center\Http\Controllers\UserController::class)->names('center.users');
