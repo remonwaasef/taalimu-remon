@@ -27,6 +27,20 @@ class BugReportController extends Controller
         $screenshotPath = null;
         if ($request->hasFile('screenshot')) {
             $screenshotPath = $request->file('screenshot')->store('bug-reports', 'public');
+        } elseif ($request->filled('auto_screenshot')) {
+            $image = $request->input('auto_screenshot');
+            if (preg_match('/^data:image\/(\w+);base64,/', $image, $type)) {
+                $image = substr($image, strpos($image, ',') + 1);
+                $type = strtolower($type[1]);
+                if (in_array($type, ['png', 'jpg', 'jpeg', 'gif'])) {
+                    $image = base64_decode($image);
+                    if ($image) {
+                        $fileName = 'bug-reports/' . uniqid() . '_auto.' . $type;
+                        \Illuminate\Support\Facades\Storage::disk('public')->put($fileName, $image);
+                        $screenshotPath = $fileName;
+                    }
+                }
+            }
         }
 
         $tenantId = app('tenant')->id ?? auth()->user()->tenant_id ?? null;
