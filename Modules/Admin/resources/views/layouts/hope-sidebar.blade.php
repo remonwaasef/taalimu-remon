@@ -79,6 +79,12 @@
                         <span class="item-name">{{ __('admin::admin.sidebar.cookie_reports') }}</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.bug_reports.index') ? 'active' : '' }}" href="{{ route('admin.bug_reports.index') }}">
+                        <i class="icon"><i class="bi bi-bug"></i></i>
+                        <span class="item-name">Beta Bugs</span>
+                    </a>
+                </li>
 
                 <!-- Category: Resources -->
                 <li class="nav-item static-item">
