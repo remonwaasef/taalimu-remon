@@ -260,7 +260,7 @@ class AnalyticsController extends Controller
         $totalYearlyRequired = DB::table('enrollments')
             ->join('courses', 'enrollments.course_id', '=', 'courses.id')
             ->whereYear('enrollments.enrolled_at', $year)
-            ->where('enrollments.tenant_id', $this->tenant->id)
+            ->where('enrollments.tenant_id', app('tenant')->id)
             ->sum('courses.price');
 
         $totalYearlyDue = max(0, $totalYearlyRequired - $totalYearlyRevenue);
