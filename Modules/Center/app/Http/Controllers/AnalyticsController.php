@@ -257,8 +257,13 @@ class AnalyticsController extends Controller
         $totalYearlyCommissions = $monthlyCommissions->sum();
         $totalYearlyProfit = $totalYearlyRevenue - ($totalYearlyOpExpenses + $totalYearlyCommissions);
         
-        $totalYearlyDue = Sale::whereYear('created_at', $year)
-            ->sum(DB::raw('total_amount - paid_amount'));
+        $totalYearlyRequired = DB::table('enrollments')
+            ->join('courses', 'enrollments.course_id', '=', 'courses.id')
+            ->whereYear('enrollments.enrolled_at', $year)
+            ->where('enrollments.tenant_id', $this->tenant->id)
+            ->sum('courses.price');
+
+        $totalYearlyDue = max(0, $totalYearlyRequired - $totalYearlyRevenue);
 
         // 3. Recent Transactions
         $sales = Sale::with('student')->latest()->paginate(10);
