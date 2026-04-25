@@ -22,10 +22,10 @@ class StoreInstructorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', 'regex:/^[\pL\s]+$/u'],
+            'name' => ['required', 'string', 'max:255'],
             'email' => 'nullable|email|max:255',
             'phone' => ['required', 'string', 'max:20', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
-            'specialization' => ['required', 'string', 'max:100', 'regex:/^[\pL\s\-\.]+$/u'],
+            'specialization' => ['required', 'string', 'max:100'],
             'status' => 'required|in:active,inactive,on_hold',
             'commission_rate' => 'required|numeric|min:0',
             'commission_type' => 'required|in:percentage,fixed',
