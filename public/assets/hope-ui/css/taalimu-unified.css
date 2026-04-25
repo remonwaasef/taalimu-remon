@@ -486,21 +486,15 @@ h1, h2, h3, h4, h5, h6 {
     border-spacing: 0 0.5rem !important;
 }
 
-/* Fix dropdown clipping in responsive tables - Simple reliable approach */
+/* Fix dropdown clipping in responsive tables */
 .table-responsive {
     overflow: visible !important;
 }
 .card-body {
     overflow: visible !important;
 }
-.table td .dropdown {
-    position: static;
-}
-.table td .dropdown-menu {
+.dropdown-menu {
     z-index: 1060 !important;
-}
-.table td .btn {
-    z-index: auto !important;
 }
 .table thead th, .table thead td {
     background-color: transparent !important;
@@ -519,7 +513,6 @@ h1, h2, h3, h4, h5, h6 {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .table tbody tr:hover {
-    transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     background-color: #f8fafc;
 }
