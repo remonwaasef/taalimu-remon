@@ -25,33 +25,35 @@ class BugReportController extends Controller
         ]);
 
         $screenshotPath = null;
+        $errorDebug = null;
         
-        if ($request->hasFile('screenshot')) {
-            // Save to public/bug-reports directly
-            $file = $request->file('screenshot');
-            $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('bug-reports'), $fileName);
-            $screenshotPath = 'bug-reports/' . $fileName;
-        } elseif ($request->filled('auto_screenshot')) {
-            $image = $request->input('auto_screenshot');
-            
-            if (preg_match('/^data:image\/(\w+);base64,/', $image, $type)) {
-                $type = strtolower($type[1]);
-                $image = substr($image, strpos($image, ',') + 1);
-                $image = base64_decode($image);
+        try {
+            if ($request->hasFile('screenshot')) {
+                $screenshotPath = $request->file('screenshot')->store('bug-reports', 'public');
+            } elseif ($request->filled('auto_screenshot')) {
+                $imageData = $request->input('auto_screenshot');
                 
-                if ($image) {
-                    $dir = public_path('bug-reports');
-                    if (!file_exists($dir)) {
-                        mkdir($dir, 0777, true);
-                    }
+                if (preg_match('/^data:image\/(\w+);base64,/', $imageData, $type)) {
+                    $extension = strtolower($type[1]);
+                    $image = base64_decode(substr($imageData, strpos($imageData, ',') + 1));
                     
-                    $fileName = uniqid() . '_auto.' . $type;
-                    if (file_put_contents($dir . '/' . $fileName, $image)) {
-                        $screenshotPath = 'bug-reports/' . $fileName;
+                    if ($image) {
+                        $fileName = 'bug-reports/' . uniqid() . '_auto.' . $extension;
+                        if (\Illuminate\Support\Facades\Storage::disk('public')->put($fileName, $image)) {
+                            $screenshotPath = $fileName;
+                        } else {
+                            $errorDebug = "Storage::put failed";
+                        }
+                    } else {
+                        $errorDebug = "Base64 decode failed";
                     }
+                } else {
+                    $errorDebug = "Regex match failed";
                 }
             }
+        } catch (\Exception $e) {
+            $errorDebug = "Exception: " . $e->getMessage();
+            Log::error("Bug Report Image Save Error: " . $e->getMessage());
         }
 
         $tenantId = app('tenant')->id ?? auth()->user()->tenant_id ?? null;
@@ -67,12 +69,11 @@ class BugReportController extends Controller
             'browser_info' => $request->input('browser_info') ? json_decode($request->input('browser_info'), true) : null,
             'screenshot' => $screenshotPath,
             'status' => 'open',
+            'admin_notes' => $errorDebug ? "Error saving screenshot: " . $errorDebug : null,
         ]);
 
-        file_put_contents($debugLog, "Bug Report created in DB. ID: " . $report->id . " | Path: " . $screenshotPath . "\n", FILE_APPEND);
-
-        // Send notifications asynchronously (best effort - don't fail the request)
-        $this->sendTelegramNotification($report);
+        // Send notifications
+        $this->sendTelegramNotification($report, $errorDebug);
         $this->sendEmailNotification($report);
 
         return response()->json([
@@ -108,7 +109,7 @@ class BugReportController extends Controller
     /**
      * Send notification to Telegram.
      */
-    private function sendTelegramNotification(BugReport $report): void
+    private function sendTelegramNotification(BugReport $report, ?string $debugError = null): void
     {
         try {
             $botToken = config('services.telegram.bot_token', env('TELEGRAM_BOT_TOKEN'));
@@ -144,6 +145,11 @@ class BugReportController extends Controller
             $message .= "{$priorityEmoji} *الأولوية:* {$report->priority}\n\n";
             $message .= "📌 *العنوان:* {$report->title}\n\n";
             $message .= "📝 *الوصف:*\n{$report->description}\n\n";
+            
+            if ($debugError) {
+                $message .= "⚠️ *خطأ في الصورة:* `{$debugError}`\n\n";
+            }
+
             $message .= "━━━━━━━━━━━━━━━━━━━━\n";
             $message .= "🏢 *المركز:* " . ($tenant->name ?? 'N/A') . "\n";
             $message .= "👤 *المستخدم:* " . ($user->name ?? 'N/A') . "\n";
