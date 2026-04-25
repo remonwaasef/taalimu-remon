@@ -546,6 +546,7 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 1rem;
     background-color: #ffffff !important;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    overflow: visible !important; /* Allow dropdowns to escape card boundaries */
 }
 .card-header, .card-footer {
     border-color: #f1f5f9 !important;
