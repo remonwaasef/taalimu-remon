@@ -474,13 +474,9 @@
                     <div class="modal-body p-4">
                         <p class="small text-muted mb-4">اختر الكورس الذي ترغب في تسجيل الطالب <span class="fw-bold text-dark" id="enrollStudentName"></span> به.</p>
                         <div class="mb-3">
-                            <label class="form-label fw-bold small">ابحث عن الكورس</label>
-                            <div class="input-group input-group-sm mb-2">
-                                <span class="input-group-text bg-white border-end-0 rounded-start-pill"><i class="fas fa-search text-muted"></i></span>
-                                <input type="text" id="courseSearch" class="form-control border-start-0 rounded-end-pill" placeholder="اكتب اسم الكورس للبحث...">
-                            </div>
-                            <select id="courseSelect" class="form-select rounded-pill" required size="5" style="height: auto;">
-                                <option value="" selected disabled>اختر الكورس...</option>
+                            <label class="form-label fw-bold small">الكورسات المتاحة</label>
+                            <select id="courseSelect" class="form-select rounded-pill" required>
+                                <option value="">اختر الكورس...</option>
                                 @foreach($courses as $course)
                                     <option value="{{ $course->id }}">{{ $course->title }} ({{ number_format($course->price, 0) }} ج.م)</option>
                                 @endforeach
@@ -552,8 +548,6 @@
             const courseSelect = document.getElementById('courseSelect');
             const enrollForm = document.getElementById('enrollForm');
 
-            const courseSearch = document.getElementById('courseSearch');
-
             document.querySelectorAll('.quick-enroll-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     if (enrollModal) {
@@ -561,18 +555,13 @@
                         document.getElementById('enrollStudentId').value = this.dataset.id;
                         document.getElementById('enrollStudentName').textContent = this.dataset.name;
                         
-                        // Reset search
-                        if (courseSearch) courseSearch.value = "";
-                        
                         // Hide already enrolled courses
                         const options = courseSelect.querySelectorAll('option');
                         options.forEach(opt => {
                             if (opt.value && enrolledIds.includes(opt.value)) {
-                                opt.classList.add('d-none');
-                                opt.disabled = true;
+                                opt.style.display = 'none';
                             } else {
-                                opt.classList.remove('d-none');
-                                opt.disabled = false;
+                                opt.style.display = '';
                             }
                         });
                         courseSelect.value = ""; // Reset selection
@@ -581,28 +570,6 @@
                     }
                 });
             });
-
-            if (courseSearch) {
-                courseSearch.addEventListener('input', function() {
-                    const term = this.value.toLowerCase();
-                    const options = courseSelect.querySelectorAll('option');
-                    const enrolledIds = document.querySelector('.quick-enroll-btn[data-id="' + document.getElementById('enrollStudentId').value + '"]').dataset.enrolled.split(',');
-
-                    options.forEach(opt => {
-                        if (!opt.value) return; // Skip placeholder
-                        const isEnrolled = enrolledIds.includes(opt.value);
-                        const matchesSearch = opt.textContent.toLowerCase().includes(term);
-                        
-                        if (!isEnrolled && matchesSearch) {
-                            opt.classList.remove('d-none');
-                            opt.disabled = false;
-                        } else {
-                            opt.classList.add('d-none');
-                            opt.disabled = true;
-                        }
-                    });
-                });
-            }
 
             document.getElementById('submitEnrollBtn').addEventListener('click', function() {
                 const courseId = courseSelect.value;
@@ -712,6 +679,20 @@
             }
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            if ($.fn.select2) {
+                $('#courseSelect').select2({
+                    dropdownParent: $('#quickEnrollModal'),
+                    width: '100%',
+                    language: {
+                        noResults: function() { return "لا توجد نتائج"; }
+                    }
+                });
+            }
+        });
+    </script>
 @endpush
 
 @push('styles')
@@ -741,5 +722,29 @@
         /* Modal Fix for z-index issues */
         .modal { z-index: 1060 !important; }
         .modal-backdrop { z-index: 1050 !important; }
+
+        /* Select2 Premium Emerald Styling */
+        .select2-container--default .select2-selection--single {
+            border-radius: 50px !important;
+            height: 45px !important;
+            border: 1px solid #eee !important;
+            padding-top: 8px !important;
+            padding-left: 15px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            top: 10px !important;
+            right: 15px !important;
+        }
+        .select2-dropdown {
+            border-radius: 15px !important;
+            border: 1px solid #eee !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05) !important;
+            overflow: hidden !important;
+        }
+        .select2-search__field {
+            border-radius: 50px !important;
+            padding: 8px 15px !important;
+        }
     </style>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
