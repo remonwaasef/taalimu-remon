@@ -488,12 +488,10 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Fix dropdown clipping in responsive tables */
 .table-responsive {
-    overflow: visible !important;
+    min-height: 350px !important;
+    padding-bottom: 120px !important; /* Ensure enough space at the bottom for the last row's dropdown */
 }
-.card-body {
-    overflow: visible !important;
-}
-.dropdown-menu {
+.table td .dropdown-menu {
     z-index: 1060 !important;
 }
 .table thead th, .table thead td {
@@ -546,7 +544,6 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 1rem;
     background-color: #ffffff !important;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    overflow: visible !important; /* Allow dropdowns to escape card boundaries */
 }
 .card-header, .card-footer {
     border-color: #f1f5f9 !important;
