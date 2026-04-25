@@ -25,16 +25,15 @@ class BugReportController extends Controller
         ]);
 
         $screenshotPath = null;
-        $debugLog = storage_path('logs/bug_debug.log');
-        file_put_contents($debugLog, "[" . date('Y-m-d H:i:s') . "] New submission request\n", FILE_APPEND);
-
+        
         if ($request->hasFile('screenshot')) {
-            file_put_contents($debugLog, "Manual screenshot detected\n", FILE_APPEND);
-            $screenshotPath = $request->file('screenshot')->store('bug-reports', 'public');
-            file_put_contents($debugLog, "Manual screenshot saved to: " . $screenshotPath . "\n", FILE_APPEND);
+            // Save to public/bug-reports directly
+            $file = $request->file('screenshot');
+            $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('bug-reports'), $fileName);
+            $screenshotPath = 'bug-reports/' . $fileName;
         } elseif ($request->filled('auto_screenshot')) {
             $image = $request->input('auto_screenshot');
-            file_put_contents($debugLog, "Auto screenshot detected. Length: " . strlen($image) . "\n", FILE_APPEND);
             
             if (preg_match('/^data:image\/(\w+);base64,/', $image, $type)) {
                 $type = strtolower($type[1]);
@@ -42,27 +41,17 @@ class BugReportController extends Controller
                 $image = base64_decode($image);
                 
                 if ($image) {
-                    $fileName = 'bug-reports/' . uniqid() . '_auto.' . $type;
-                    $fullPath = storage_path('app/public/' . $fileName);
-                    
-                    if (!file_exists(dirname($fullPath))) {
-                        mkdir(dirname($fullPath), 0777, true);
+                    $dir = public_path('bug-reports');
+                    if (!file_exists($dir)) {
+                        mkdir($dir, 0777, true);
                     }
                     
-                    if (file_put_contents($fullPath, $image)) {
-                        $screenshotPath = $fileName;
-                        file_put_contents($debugLog, "Auto screenshot saved successfully to: " . $fullPath . "\n", FILE_APPEND);
-                    } else {
-                        file_put_contents($debugLog, "Failed to save auto screenshot to: " . $fullPath . "\n", FILE_APPEND);
+                    $fileName = uniqid() . '_auto.' . $type;
+                    if (file_put_contents($dir . '/' . $fileName, $image)) {
+                        $screenshotPath = 'bug-reports/' . $fileName;
                     }
-                } else {
-                    file_put_contents($debugLog, "Base64 decode failed\n", FILE_APPEND);
                 }
-            } else {
-                file_put_contents($debugLog, "Preg_match failed for pattern\n", FILE_APPEND);
             }
-        } else {
-            file_put_contents($debugLog, "No screenshot in request\n", FILE_APPEND);
         }
 
         $tenantId = app('tenant')->id ?? auth()->user()->tenant_id ?? null;
