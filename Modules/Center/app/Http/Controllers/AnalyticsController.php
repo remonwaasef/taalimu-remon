@@ -256,6 +256,9 @@ class AnalyticsController extends Controller
         $totalYearlyOpExpenses = $monthlyExpenses->sum();
         $totalYearlyCommissions = $monthlyCommissions->sum();
         $totalYearlyProfit = $totalYearlyRevenue - ($totalYearlyOpExpenses + $totalYearlyCommissions);
+        
+        $totalYearlyDue = Sale::whereYear('created_at', $year)
+            ->sum(DB::raw('total_amount - paid_amount'));
 
         // 3. Recent Transactions
         $sales = Sale::with('student')->latest()->paginate(10);
@@ -264,7 +267,7 @@ class AnalyticsController extends Controller
 
         return view('center::analytics.finance', compact(
             'year', 'reportData', 'expenseCategories',
-            'totalYearlyRevenue', 'totalYearlyOpExpenses', 'totalYearlyCommissions', 'totalYearlyProfit',
+            'totalYearlyRevenue', 'totalYearlyOpExpenses', 'totalYearlyCommissions', 'totalYearlyProfit', 'totalYearlyDue',
             'totalRevenueAllTime', 'netProfitAllTime', 'sales', 'recentExpenses', 'recentCommissions'
         ));
     }
