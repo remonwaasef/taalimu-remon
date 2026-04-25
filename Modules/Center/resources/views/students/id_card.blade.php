@@ -111,14 +111,23 @@
             background: #f9fafb;
         }
 
-        .qr-code {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto;
+        .qr-code-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 85px;
+            height: 85px;
             background: white;
             padding: 5px;
-            border: 1px solid #eee;
-            border-radius: 10px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .qr-code-badge img {
+            width: 100%;
+            height: 100%;
+            display: block;
         }
 
         .print-btn {
@@ -162,8 +171,8 @@
             </div>
             <div class="extra-small opacity-75">بطاقة تعريف الطالب الرقمية</div>
             
-            <div class="qr-code-badge">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(url('/login?student_id='.$student->id)) }}" alt="QR Code">
+            <div style="position: absolute; top: 15px; right: 15px; width: 85px; height: 85px; background: white; padding: 5px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); z-index: 10;">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(url('/login?student_id='.$student->id)) }}" alt="QR Code" style="width: 100%; height: 100%; display: block;">
             </div>
         </div>
 
