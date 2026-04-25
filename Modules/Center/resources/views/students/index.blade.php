@@ -485,6 +485,9 @@
                         <div class="alert alert-soft-info x-small border-0 rounded-3">
                             سيتم إنشاء فاتورة "غير مدفوعة" تلقائياً لهذا الطالب.
                         </div>
+                        <div id="enrollWarning" class="alert alert-soft-danger x-small border-0 rounded-3 mt-2 d-none">
+                            <i class="fas fa-exclamation-circle me-2"></i> هذا الطالب مسجل بالفعل في هذه الدورة.
+                        </div>
                     </div>
                     <div class="modal-footer border-0 pt-0">
                         <button type="button" id="submitEnrollBtn" class="btn btn-info text-white w-100 rounded-pill py-2 fw-bold">إتمام التسجيل</button>
@@ -555,20 +558,48 @@
                         document.getElementById('enrollStudentId').value = this.dataset.id;
                         document.getElementById('enrollStudentName').textContent = this.dataset.name;
                         
-                        // Hide already enrolled courses
                         const options = courseSelect.querySelectorAll('option');
                         options.forEach(opt => {
                             if (opt.value && enrolledIds.includes(opt.value)) {
-                                opt.style.display = 'none';
+                                opt.setAttribute('data-enrolled', 'true');
+                                if (!opt.textContent.includes('(مسجل بالفعل)')) {
+                                    opt.textContent = opt.textContent + ' (مسجل بالفعل)';
+                                }
                             } else {
-                                opt.style.display = '';
+                                opt.removeAttribute('data-enrolled');
+                                opt.textContent = opt.textContent.replace(' (مسجل بالفعل)', '');
                             }
                         });
-                        courseSelect.value = ""; // Reset selection
+                        
+                        if ($.fn.select2) {
+                            $(courseSelect).val("").trigger('change');
+                        } else {
+                            courseSelect.value = "";
+                        }
+                        
+                        document.getElementById('enrollWarning').classList.add('d-none');
+                        document.getElementById('submitEnrollBtn').disabled = false;
                         
                         enrollModal.show();
                     }
                 });
+            });
+
+            $(courseSelect).on('change', function() {
+                const selectedOpt = this.options[this.selectedIndex];
+                const isEnrolled = selectedOpt && selectedOpt.getAttribute('data-enrolled') === 'true';
+                const warning = document.getElementById('enrollWarning');
+                const submitBtn = document.getElementById('submitEnrollBtn');
+                
+                if (isEnrolled) {
+                    warning.classList.remove('d-none');
+                    submitBtn.disabled = true;
+                    submitBtn.classList.replace('btn-info', 'btn-secondary');
+                } else {
+                    warning.classList.add('d-none');
+                    submitBtn.disabled = false;
+                    submitBtn.classList.replace('btn-secondary', 'btn-info');
+                }
             });
 
             document.getElementById('submitEnrollBtn').addEventListener('click', function() {
