@@ -2,7 +2,7 @@
 
 namespace Modules\Center\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Modules\Center\Http\Controllers\CenterBaseController as Controller;
 use App\Models\Package;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
@@ -15,7 +15,7 @@ class SubscriptionController extends Controller
      */
     public function index()
     {
-        $tenant = app('tenant');
+        $tenant = $this->tenant;
 
         // Current active subscription
         $subscription = Subscription::where('tenant_id', $tenant->id)
@@ -66,9 +66,9 @@ class SubscriptionController extends Controller
      */
     public function checkout(Request $request, $packageId)
     {
-        $this->authorize('update', app('tenant'));
+        $this->authorize('update', $this->tenant);
         $package = Package::findOrFail($packageId);
-        $tenant  = app('tenant');
+        $tenant  = $this->tenant;
 
         if ($package->price <= 0 && $package->yearly_price <= 0) {
             return back()->with('error', __('center::messages.msg_087'));
@@ -117,7 +117,7 @@ class SubscriptionController extends Controller
      */
     public function cancel()
     {
-        return redirect()->route('center.subscription.index', ['tenant' => app('tenant')->domain])
+        return redirect()->route('center.subscription.index', ['tenant' => $this->tenant->domain])
             ->with('info', __('center::messages.msg_088'));
     }
 }

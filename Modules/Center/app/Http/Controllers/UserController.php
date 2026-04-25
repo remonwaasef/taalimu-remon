@@ -2,7 +2,7 @@
 
 namespace Modules\Center\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Modules\Center\Http\Controllers\CenterBaseController as Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -14,6 +14,7 @@ class UserController extends Controller
 
     public function __construct(\App\Repositories\RoleRepository $roleRepository)
     {
+        parent::__construct();
         $this->roleRepository = $roleRepository;
     }
 
@@ -23,7 +24,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $this->authorize('viewAny', User::class);
-        $query = User::where('tenant_id', app('tenant')->id)
+        $query = User::where('tenant_id', $this->tenant->id)
                      ->whereIn('role', ['center_admin', 'staff', 'secretary', 'accountant']); // Exclude students/instructors
 
         if ($request->has('search')) {
@@ -47,7 +48,7 @@ class UserController extends Controller
         $this->authorize('create', User::class);
         
         // Fetch ALL available roles (System + Custom) via Repository
-        $roles = $this->roleRepository->getAllForTenant(app('tenant')->id)
+        $roles = $this->roleRepository->getAllForTenant($this->tenant->id)
             ->filter(function($role) {
                 return $role->name !== 'super_admin';
             });
@@ -63,7 +64,7 @@ class UserController extends Controller
         $this->authorize('create', User::class);
         
         // Get valid role names from Repository
-        $validRoles = $this->roleRepository->getAllForTenant(app('tenant')->id)
+        $validRoles = $this->roleRepository->getAllForTenant($this->tenant->id)
             ->pluck('name')
             ->toArray();
                 
@@ -85,14 +86,14 @@ class UserController extends Controller
         ]);
         
         $user->role = $validated['role'] ?? 'staff'; 
-        $user->tenant_id = app('tenant')->id;
+        $user->tenant_id = $this->tenant->id;
         $user->save();
 
         if (!empty($validated['role'])) {
             $user->assignRole($validated['role']);
         }
 
-        return redirect()->route('center.users.index', ['tenant' => app('tenant')->domain])
+        return redirect()->route('center.users.index', ['tenant' => $this->tenant->domain])
                          ->with('success', __('User created successfully.'));
     }
 
@@ -101,10 +102,10 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::where('tenant_id', app('tenant')->id)->findOrFail($id);
+        $user = User::where('tenant_id', $this->tenant->id)->findOrFail($id);
         $this->authorize('update', $user);
         
-        $roles = $this->roleRepository->getAllForTenant(app('tenant')->id)
+        $roles = $this->roleRepository->getAllForTenant($this->tenant->id)
             ->filter(function($role) {
                 return $role->name !== 'super_admin';
             });
@@ -117,11 +118,11 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::where('tenant_id', app('tenant')->id)->findOrFail($id);
+        $user = User::where('tenant_id', $this->tenant->id)->findOrFail($id);
         $this->authorize('update', $user);
 
         // Get valid role names from Repository
-        $validRoles = $this->roleRepository->getAllForTenant(app('tenant')->id)
+        $validRoles = $this->roleRepository->getAllForTenant($this->tenant->id)
             ->pluck('name')
             ->toArray();
 
@@ -159,7 +160,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::where('tenant_id', app('tenant')->id)->findOrFail($id);
+        $user = User::where('tenant_id', $this->tenant->id)->findOrFail($id);
         $this->authorize('delete', $user);
         
         if ($user->id === auth()->id()) {

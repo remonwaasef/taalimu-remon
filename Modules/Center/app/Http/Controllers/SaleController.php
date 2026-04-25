@@ -2,7 +2,7 @@
 
 namespace Modules\Center\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Modules\Center\Http\Controllers\CenterBaseController as Controller;
 use App\Models\Sale;
 use App\Models\SaleItem;
 use App\Models\Student;
@@ -23,13 +23,14 @@ class SaleController extends Controller
 
     public function __construct(FinanceService $financeService, \App\Services\ArabicReshaper $arabicReshaper)
     {
+        parent::__construct();
         $this->financeService = $financeService;
         $this->arabicReshaper = $arabicReshaper;
     }
     public function index()
     {
         $this->authorize('viewAny', Sale::class);
-        $tenant = app('tenant');
+        $tenant = $this->tenant;
         $sales = Sale::where('tenant_id', $tenant->id)
             ->with('student')
             ->latest()
@@ -41,7 +42,7 @@ class SaleController extends Controller
     public function overdue()
     {
         $this->authorize('viewAny', Sale::class);
-        $tenant = app('tenant');
+        $tenant = $this->tenant;
         
         // Fetch students who have at least one sale with a remaining balance
         $students = Student::where('tenant_id', $tenant->id)
@@ -66,7 +67,7 @@ class SaleController extends Controller
     public function account()
     {
         $this->authorize('viewAny', Sale::class);
-        $tenant = app('tenant');
+        $tenant = $this->tenant;
         
         $students = Student::where('tenant_id', $tenant->id)
             ->with(['user', 'sales', 'enrollments.course'])
@@ -78,7 +79,7 @@ class SaleController extends Controller
     public function markPaid(Request $request)
     {
         $this->authorize('create', Sale::class);
-        $tenant = app('tenant');
+        $tenant = $this->tenant;
 
         $request->validate([
             'student_id' => [
@@ -130,7 +131,7 @@ class SaleController extends Controller
     public function lookupStudents(Request $request)
     {
         $this->authorize('viewAny', Sale::class);
-        $tenant = app('tenant');
+        $tenant = $this->tenant;
         $query = $request->get('q');
 
         if (empty($query)) {
@@ -163,7 +164,7 @@ class SaleController extends Controller
     public function create()
     {
         $this->authorize('create', Sale::class);
-        $tenant = app('tenant');
+        $tenant = $this->tenant;
         $students = Student::where('tenant_id', $tenant->id)->get();
         $courses = Course::where('tenant_id', $tenant->id)->get();
         
@@ -176,12 +177,12 @@ class SaleController extends Controller
         $request->validate([
             'student_id' => [
                 'required',
-                Rule::exists('students', 'id')->where('tenant_id', app('tenant')->id)
+                Rule::exists('students', 'id')->where('tenant_id', $this->tenant->id)
             ],
             'items' => 'required|array|min:1',
             'items.*.id' => [
                 'required', 
-                Rule::exists('courses', 'id')->where('tenant_id', app('tenant')->id)
+                Rule::exists('courses', 'id')->where('tenant_id', $this->tenant->id)
             ],
             'items.*.price' => 'required|numeric|min:0',
             'payment_method' => 'required|string',
@@ -200,7 +201,7 @@ class SaleController extends Controller
 
     public function show($id)
     {
-        $tenant = app('tenant');
+        $tenant = $this->tenant;
         $sale = Sale::where('tenant_id', $tenant->id)
             ->with(['student', 'items.item', 'payments.receiver', 'refunds.processor'])
             ->findOrFail($id);
@@ -212,7 +213,7 @@ class SaleController extends Controller
 
     public function addPayment(Request $request, $id)
     {
-        $tenant = app('tenant');
+        $tenant = $this->tenant;
         $sale = Sale::where('tenant_id', $tenant->id)->findOrFail($id);
         $this->authorize('update', $sale);
 
@@ -233,7 +234,7 @@ class SaleController extends Controller
 
     public function getStudentSummary($id)
     {
-        $tenant = app('tenant');
+        $tenant = $this->tenant;
         $student = Student::with(['grade.stage'])->where('tenant_id', $tenant->id)->findOrFail($id);
         
         // Active Enrollments
@@ -348,7 +349,7 @@ class SaleController extends Controller
 
     public function downloadStatement($id)
     {
-        $tenant = app('tenant');
+        $tenant = $this->tenant;
         $student = Student::where('tenant_id', $tenant->id)->findOrFail($id);
         
         $sales = Sale::where('student_id', $student->id)
@@ -370,7 +371,7 @@ class SaleController extends Controller
 
     public function downloadReceipt($paymentId)
     {
-        $tenant = app('tenant');
+        $tenant = $this->tenant;
         $payment = \App\Models\Payment::where('tenant_id', $tenant->id)
             ->with(['sale.student', 'receiver'])
             ->findOrFail($paymentId);
@@ -401,7 +402,7 @@ class SaleController extends Controller
      */
     public function refund(Request $request, $id, RefundService $refundService)
     {
-        $tenant = app('tenant');
+        $tenant = $this->tenant;
         $sale = Sale::where('tenant_id', $tenant->id)->findOrFail($id);
         $this->authorize('update', $sale);
 
@@ -425,7 +426,7 @@ class SaleController extends Controller
      */
     public function checkout($id)
     {
-        $tenant = app('tenant');
+        $tenant = $this->tenant;
         $sale = Sale::where('tenant_id', $tenant->id)->findOrFail($id);
         
         // Ensure invoice is not fully paid
@@ -441,7 +442,7 @@ class SaleController extends Controller
      */
     public function checkoutSuccess(Request $request, $id)
     {
-        $tenant = app('tenant');
+        $tenant = $this->tenant;
         $sale = Sale::where('tenant_id', $tenant->id)->findOrFail($id);
 
         if ($sale->status === 'paid') {
