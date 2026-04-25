@@ -191,45 +191,19 @@ class AnalyticsController extends Controller
         return view('center::analytics.courses', compact('courses'));
     }
 
-    public function finance()
-    {
-        $this->authorize('viewAny', Sale::class);
-        $totalRevenue = Sale::sum('paid_amount');
-        $totalDue = Sale::sum(DB::raw('total_amount - paid_amount'));
-        
-        // Advanced Metrics
-        $totalDiscounts = Sale::sum('discount_amount');
-        $totalTaxes = Sale::sum('tax_amount');
-        $totalExpenses = Expense::sum('amount');
-        $totalCommissions = \App\Models\Commission::sum('amount');
-        $netProfit = $totalRevenue - ($totalExpenses + $totalCommissions);
-
-        $sales = Sale::with('student')->latest()->paginate(20);
-        $monthlyRevenue = \App\Support\TenantCache::remember("analytics_monthly_revenue", 600, function () {
-            return $this->analyticsQuery->getMonthlyRevenue(12);
-        });
-
-        // Summary Cards Data
-        $recentExpenses = Expense::latest()->take(5)->get();
-        $recentCommissions = \App\Models\Commission::with(['instructor', 'sale'])->latest()->take(5)->get();
-        $recentDiscounts = Sale::where('discount_amount', '>', 0)->with('student')->latest()->take(5)->get();
-        $recentTaxes = Sale::where('tax_amount', '>', 0)->with('student')->latest()->take(5)->get();
-
-        return view('center::analytics.finance', compact(
-            'totalRevenue', 'totalDue', 'totalDiscounts', 'totalTaxes', 
-            'totalExpenses', 'totalCommissions', 'netProfit', 
-            'recentExpenses', 'recentCommissions', 'recentDiscounts', 'recentTaxes',
-            'sales', 'monthlyRevenue'
-        ));
-    }
-
-    public function profitLoss(Request $request)
+    public function finance(Request $request)
     {
         $this->authorize('viewAny', Sale::class);
         
         $year = $request->get('year', now()->year);
         
-        // 1. Revenue by Month
+        // 1. Core Summary (All Time or Current Settings)
+        $totalRevenueAllTime = Sale::sum('paid_amount');
+        $totalExpensesAllTime = Expense::sum('amount');
+        $totalCommissionsAllTime = \App\Models\Commission::sum('amount');
+        $netProfitAllTime = $totalRevenueAllTime - ($totalExpensesAllTime + $totalCommissionsAllTime);
+
+        // 2. Yearly Breakdown Logic (For the Profit/Loss Table)
         $monthlyRevenue = Sale::select(
             DB::raw('MONTH(created_at) as month'),
             DB::raw('SUM(paid_amount) as total')
@@ -239,11 +213,19 @@ class AnalyticsController extends Controller
         ->get()
         ->pluck('total', 'month');
 
-        // 2. Expenses by Month & Category
         $monthlyExpenses = Expense::select(
             DB::raw('MONTH(date) as month'),
             DB::raw('SUM(amount) as total')
         )->whereYear('date', $year)
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get()
+        ->pluck('total', 'month');
+
+        $monthlyCommissions = \App\Models\Commission::select(
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('SUM(amount) as total')
+        )->whereYear('created_at', $year)
         ->groupBy('month')
         ->orderBy('month')
         ->get()
@@ -254,42 +236,42 @@ class AnalyticsController extends Controller
             ->groupBy('category')
             ->get();
 
-        // 3. Commissions by Month
-        $monthlyCommissions = \App\Models\Commission::select(
-            DB::raw('MONTH(created_at) as month'),
-            DB::raw('SUM(amount) as total')
-        )->whereYear('created_at', $year)
-        ->groupBy('month')
-        ->orderBy('month')
-        ->get()
-        ->pluck('total', 'month');
-
-        // Prepare data for 12 months
         $reportData = [];
         for ($m = 1; $m <= 12; $m++) {
             $revenue = $monthlyRevenue[$m] ?? 0;
             $opExpenses = $monthlyExpenses[$m] ?? 0;
             $commissions = $monthlyCommissions[$m] ?? 0;
-            $totalExpenses = $opExpenses + $commissions;
-            $profit = $revenue - $totalExpenses;
+            $profit = $revenue - ($opExpenses + $commissions);
             
             $reportData[$m] = [
                 'month_name' => \Carbon\Carbon::create()->month($m)->translatedFormat('F'),
                 'revenue' => (float)$revenue,
                 'op_expenses' => (float)$opExpenses,
                 'commissions' => (float)$commissions,
-                'total_expenses' => (float)$totalExpenses,
                 'profit' => (float)$profit,
             ];
         }
 
         $totalYearlyRevenue = $monthlyRevenue->sum();
-        $totalYearlyExpenses = $monthlyExpenses->sum() + $monthlyCommissions->sum();
-        $totalYearlyProfit = $totalYearlyRevenue - $totalYearlyExpenses;
+        $totalYearlyOpExpenses = $monthlyExpenses->sum();
+        $totalYearlyCommissions = $monthlyCommissions->sum();
+        $totalYearlyProfit = $totalYearlyRevenue - ($totalYearlyOpExpenses + $totalYearlyCommissions);
 
-        return view('center::analytics.profit_loss', compact(
-            'reportData', 'year', 'totalYearlyRevenue', 'totalYearlyExpenses', 'totalYearlyProfit', 'expenseCategories'
+        // 3. Recent Transactions
+        $sales = Sale::with('student')->latest()->paginate(10);
+        $recentExpenses = Expense::latest()->take(5)->get();
+        $recentCommissions = \App\Models\Commission::with(['instructor', 'sale'])->latest()->take(5)->get();
+
+        return view('center::analytics.finance', compact(
+            'year', 'reportData', 'expenseCategories',
+            'totalYearlyRevenue', 'totalYearlyOpExpenses', 'totalYearlyCommissions', 'totalYearlyProfit',
+            'totalRevenueAllTime', 'netProfitAllTime', 'sales', 'recentExpenses', 'recentCommissions'
         ));
+    }
+
+    public function profitLoss(Request $request)
+    {
+        return redirect()->route('center.analytics.finance', $request->all());
     }
 
     public function commissions()
