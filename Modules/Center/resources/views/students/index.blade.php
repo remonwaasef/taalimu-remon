@@ -281,11 +281,9 @@
                                     <input class="form-check-input" type="checkbox" id="select-all">
                                 </div>
                             </th>
-                            <th class="border-0 bg-transparent">{{ __('center::students.name') }}</th>
-                            <th class="border-0 bg-transparent">{{ __('center::students.phone') }}</th>
-                            <th class="border-0 bg-transparent d-none d-lg-table-cell">{{ __('center::students.email') }}</th>
+                            <th class="border-0 bg-transparent">{{ __('center::students.student_details') }}</th>
                             <th class="border-0 bg-transparent">{{ __('center::students.grade') }}</th>
-                            <th class="border-0 bg-transparent">{{ __('center::students.status') }}</th>
+                            <th class="border-0 bg-transparent">{{ __('center::students.status_finance') }}</th>
                             <th class="border-0 bg-transparent text-end px-4">{{ __('center::students.actions') }}</th>
                         </tr>
                     </thead>
@@ -312,28 +310,23 @@
                                             <div class="fw-bold text-dark mb-0">
                                                 {{ $student->name }}
                                                 @if($student->total_balance > 500)
-                                                    <span class="ms-1 text-danger small animate__animated animate__flash animate__infinite" title="مديونية مرتفعة!"><i class="fas fa-exclamation-triangle"></i></span>
+                                                    <span class="ms-1 text-danger small" title="مديونية مرتفعة!"><i class="fas fa-exclamation-triangle"></i></span>
                                                 @endif
                                             </div>
-                                            <div class="text-muted x-small d-lg-none">{{ $student->email }}</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-flex flex-column">
-                                        <div class="d-flex align-items-center gap-1">
-                                            <span class="text-dark small fw-medium">{{ $student->phone }}</span>
-                                            <a href="tel:{{ $student->phone }}" class="text-primary small"><i class="fas fa-phone-flip x-small"></i></a>
-                                        </div>
-                                        @if($student->parent_phone)
-                                            <div class="d-flex align-items-center gap-1 text-muted x-small">
-                                                <span>{{ __('center::students.parent_phone') }}: {{ $student->parent_phone }}</span>
-                                                <a href="tel:{{ $student->parent_phone }}" class="text-muted"><i class="fas fa-phone-flip extra-small"></i></a>
+                                            <div class="text-muted x-small d-flex flex-wrap gap-2">
+                                                <span dir="ltr"><i class="fas fa-phone-flip me-1"></i>{{ $student->phone }}</span>
+                                                @if($student->email)
+                                                    <span class="d-none d-md-inline"><i class="fas fa-envelope me-1"></i>{{ $student->email }}</span>
+                                                @endif
                                             </div>
-                                        @endif
+                                            @if($student->parent_phone)
+                                                <div class="text-muted extra-small mt-1">
+                                                    <i class="fas fa-user-shield me-1"></i>{{ __('center::students.parent_phone') }}: {{ $student->parent_phone }}
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
                                 </td>
-                                <td class="text-muted small d-none d-lg-table-cell">{{ $student->email }}</td>
                                 <td>
                                     <div class="d-flex flex-column">
                                         <span class="badge bg-light text-dark fw-normal rounded-pill px-2 py-1 border mb-1">

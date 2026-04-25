@@ -22,7 +22,7 @@
         .id-card-container {
             position: relative;
             width: 350px;
-            height: 550px;
+            height: 580px;
             background: white;
             border-radius: 25px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.15);
@@ -32,8 +32,8 @@
 
         .card-header {
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            height: 180px;
-            padding: 30px;
+            height: 150px;
+            padding: 20px;
             color: white;
             position: relative;
         }
@@ -41,56 +41,56 @@
         .card-header::after {
             content: '';
             position: absolute;
-            bottom: -50px;
+            bottom: -40px;
             left: 0;
             width: 100%;
-            height: 100px;
+            height: 80px;
             background: white;
             border-radius: 50%;
             z-index: 1;
         }
 
         .academy-logo {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
             letter-spacing: 1px;
         }
 
         .student-photo-wrapper {
             position: relative;
             z-index: 2;
-            margin-top: -60px;
+            margin-top: -50px;
         }
 
         .student-photo {
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
-            border: 5px solid white;
+            border: 4px solid white;
             object-fit: cover;
             background-color: #f8f9fa;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
         .student-name {
-            margin-top: 20px;
-            font-size: 1.4rem;
+            margin-top: 15px;
+            font-size: 1.3rem;
             font-weight: 700;
             color: #1f2937;
             padding: 0 20px;
         }
 
         .student-info {
-            margin-top: 25px;
+            margin-top: 15px;
             padding: 0 30px;
         }
 
         .info-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
+            margin-bottom: 8px;
+            padding-bottom: 5px;
             border-bottom: 1px dashed #eee;
         }
 
@@ -106,14 +106,14 @@
         }
 
         .card-footer {
-            margin-top: 30px;
-            padding: 20px;
+            margin-top: 20px;
+            padding: 15px;
             background: #f9fafb;
         }
 
         .qr-code {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             margin: 0 auto;
             background: white;
             padding: 5px;
