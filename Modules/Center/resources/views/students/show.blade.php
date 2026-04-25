@@ -1327,19 +1327,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
     window.printIDCard = function() {
-        console.log('Starting ID Card Print...');
-        document.body.classList.add('print-id-card');
-        
-        // Small delay to ensure class is applied before print dialog opens
-        setTimeout(() => {
-            window.print();
-            
-            // Remove class after print dialog is closed (or after a timeout)
-            // Note: print() blocks in many browsers, so this timeout runs after.
-            setTimeout(() => {
-                document.body.classList.remove('print-id-card');
-            }, 1000);
-        }, 100);
+        window.open("{{ route('center.students.id-card', $student->id) }}", '_blank');
     }
 
     document.addEventListener('DOMContentLoaded', function() {
