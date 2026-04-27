@@ -70,6 +70,6 @@ return [
   'retake_quiz' => 'إعادة الاختبار',
   'start_quiz' => 'ابدأ الاختبار الآن',
   'no_questions_prepared' => 'لم يتم إعداد أسئلة هذا الاختبار بعد.',
-  'delete_option_confirm' => 'Delete Option Confirm',
-  'time_up_alert' => 'Time Up Alert',
+  'delete_option_confirm' => 'هل أنت متأكد من حذف هذا الخيار؟',
+  'time_up_alert' => 'انتهى الوقت المحدد للاختبار!',
 ];

@@ -53,6 +53,6 @@ return [
   'subscription' => 'اشتراكي',
   'list' => 'القائمة',
   'online_classes' => 'الدروس المباشرة',
-  'admin' => 'Admin',
-  'login' => 'Login',
+  'admin' => 'المشرف',
+  'login' => 'تسجيل الدخول',
 ];
