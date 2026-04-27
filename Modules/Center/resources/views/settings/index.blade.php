@@ -1,3 +1,11 @@
+@push('styles')
+<style>
+    .bg-info-soft { background-color: rgba(23, 162, 184, 0.1) !important; border-color: rgba(23, 162, 184, 0.2) !important; }
+    .bg-danger-soft { background-color: rgba(220, 53, 69, 0.1) !important; border-color: rgba(220, 53, 69, 0.2) !important; }
+    .active-reminder-info { background-color: rgba(0, 180, 216, 0.15) !important; border-color: #00b4d8 !important; }
+    .active-reminder-danger { background-color: rgba(231, 76, 60, 0.15) !important; border-color: #e74c3c !important; }
+</style>
+@endpush
 @extends('center::layouts.hope-master')
 
 @section('title', __('center::settings.title'))
@@ -641,10 +649,10 @@
 
                                         <div class="reminder-timeline position-relative" style="padding-right: 20px;">
                                             @foreach ($emailReminders as $index => $reminder)
-                                                <div class="d-flex align-items-center gap-3 mb-3 p-3 rounded-3 border {{ $reminder['enabled'] ? 'border-info bg-info bg-opacity-10' : 'bg-light' }} transition-all" id="preReminder{{ $index }}">
+                                                <div class="d-flex align-items-center gap-3 mb-3 p-3 rounded-3 border {{ $reminder['enabled'] ? 'active-reminder-info' : 'bg-light' }} transition-all" id="preReminder{{ $index }}">
                                                     <div class="form-check form-switch">
                                                         <input type="hidden" name="email_reminders[{{ $index }}][enabled]" value="0">
-                                                        <input class="form-check-input" type="checkbox" name="email_reminders[{{ $index }}][enabled]" value="1" id="emailReminderToggle{{ $index }}" {{ $reminder['enabled'] ? 'checked' : '' }} style="width: 3em; height: 1.5em;" onchange="toggleReminderStyle(this, 'preReminder{{ $index }}', 'border-info bg-info')">
+                                                        <input class="form-check-input" type="checkbox" name="email_reminders[{{ $index }}][enabled]" value="1" id="emailReminderToggle{{ $index }}" {{ $reminder['enabled'] ? 'checked' : '' }} style="width: 3em; height: 1.5em;" onchange="toggleReminderStyle(this, 'preReminder{{ $index }}', 'active-reminder-info')">
                                                     </div>
                                                     <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px; background: {{ $reminder['enabled'] ? 'linear-gradient(135deg, #00b4d8, #0077b6)' : '#dee2e6' }};">
                                                         <i class="fas fa-bell text-white"></i>
@@ -698,10 +706,10 @@
 
                                         <div class="reminder-timeline position-relative" style="padding-right: 20px;">
                                             @foreach ($whatsappReminders as $index => $reminder)
-                                                <div class="d-flex align-items-center gap-3 mb-3 p-3 rounded-3 border {{ $reminder['enabled'] ? 'border-danger bg-danger bg-opacity-10' : 'bg-light' }} transition-all" id="postReminder{{ $index }}">
+                                                <div class="d-flex align-items-center gap-3 mb-3 p-3 rounded-3 border {{ $reminder['enabled'] ? 'active-reminder-danger' : 'bg-light' }} transition-all" id="postReminder{{ $index }}">
                                                     <div class="form-check form-switch">
                                                         <input type="hidden" name="whatsapp_reminders[{{ $index }}][enabled]" value="0">
-                                                        <input class="form-check-input" type="checkbox" name="whatsapp_reminders[{{ $index }}][enabled]" value="1" id="whatsappReminderToggle{{ $index }}" {{ $reminder['enabled'] ? 'checked' : '' }} style="width: 3em; height: 1.5em;" onchange="toggleReminderStyle(this, 'postReminder{{ $index }}', 'border-danger bg-danger')">
+                                                        <input class="form-check-input" type="checkbox" name="whatsapp_reminders[{{ $index }}][enabled]" value="1" id="whatsappReminderToggle{{ $index }}" {{ $reminder['enabled'] ? 'checked' : '' }} style="width: 3em; height: 1.5em;" onchange="toggleReminderStyle(this, 'postReminder{{ $index }}', 'active-reminder-danger')">
                                                     </div>
                                                     <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px; background: {{ $reminder['enabled'] ? 'linear-gradient(135deg, #e74c3c, #c0392b)' : '#dee2e6' }};">
                                                         <i class="fab fa-whatsapp text-white"></i>
@@ -1389,12 +1397,13 @@ document.addEventListener('DOMContentLoaded', function() {
 function toggleReminderStyle(checkbox, elementId, colorClass) {
     const el = document.getElementById(elementId);
     if (!el) return;
+    const classes = colorClass.split(' ');
     if (checkbox.checked) {
         el.classList.remove('bg-light');
-        el.classList.add(colorClass.split(' ')[0], colorClass.split(' ')[1], 'bg-opacity-10');
+        el.classList.add(...classes);
     } else {
         el.classList.add('bg-light');
-        el.classList.remove(colorClass.split(' ')[0], colorClass.split(' ')[1], 'bg-opacity-10');
+        el.classList.remove(...classes);
     }
 }
 
