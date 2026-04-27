@@ -150,8 +150,10 @@ class BugReportController extends Controller
             if ($debugError) {
                 $message .= "⚠️ *خطأ في الصورة:* `{$debugError}`\n\n";
             } else {
-                $fullRealPath = $report->screenshot ? (\Illuminate\Support\Facades\Storage::disk('public')->path($report->screenshot)) : 'No screenshot';
-                $message .= "✅ *المسار الحقيقي:* `{$fullRealPath}`\n\n";
+                $fullRealPath = $report->screenshot ? (\Illuminate\Support\Facades\Storage::disk('public')->path($report->screenshot)) : null;
+                if ($fullRealPath && file_exists($fullRealPath)) {
+                    $message .= "📸 *تم إرفاق لقطة الشاشة أدناه*\n\n";
+                }
             }
 
             $message .= "━━━━━━━━━━━━━━━━━━━━\n";
@@ -163,13 +165,25 @@ class BugReportController extends Controller
             $message .= "🆔 *رقم البلاغ:* #{$report->id}\n";
             $message .= "━━━━━━━━━━━━━━━━━━━━";
 
-            Http::post("https://api.telegram.org/bot{$botToken}/sendMessage", [
-                'chat_id' => $chatId,
-                'text' => $message,
-                'parse_mode' => 'Markdown',
-                'disable_web_page_preview' => true,
-            ]);
+            $fullRealPath = $report->screenshot ? (\Illuminate\Support\Facades\Storage::disk('public')->path($report->screenshot)) : null;
 
+            if ($fullRealPath && file_exists($fullRealPath)) {
+                // Send as Photo
+                \Illuminate\Support\Facades\Http::attach(
+                    'photo', file_get_contents($fullRealPath), basename($fullRealPath)
+                )->post("https://api.telegram.org/bot{$botToken}/sendPhoto", [
+                    'chat_id' => $chatId,
+                    'caption' => $message,
+                    'parse_mode' => 'Markdown',
+                ]);
+            } else {
+                // Send as Text only
+                \Illuminate\Support\Facades\Http::post("https://api.telegram.org/bot{$botToken}/sendMessage", [
+                    'chat_id' => $chatId,
+                    'text' => $message,
+                    'parse_mode' => 'Markdown',
+                ]);
+            }
         } catch (\Exception $e) {
             Log::warning('Telegram bug report notification failed: ' . $e->getMessage());
         }

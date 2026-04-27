@@ -170,7 +170,7 @@
                 <h5 class="modal-title fw-bold">
                     <i class="fas fa-bug me-2"></i>{{ __('center::bug_report.report_bug') }}
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" onclick="closeBugReportModal()" aria-label="Close"></button>
             </div>
 
             {{-- Form Body --}}
@@ -243,7 +243,7 @@
                     <div class="success-icon">✅</div>
                     <h4 class="fw-bold mt-3">{{ __('center::bug_report.thank_you_title') }}</h4>
                     <p class="text-muted">{{ __('center::bug_report.thank_you_message') }}</p>
-                    <button type="button" class="btn btn-outline-success rounded-pill px-4 mt-2" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-outline-success rounded-pill px-4 mt-2" onclick="closeBugReportModal()">
                         {{ __('center::bug_report.close') }}
                     </button>
                 </div>
@@ -286,17 +286,35 @@ function openBugReportModal() {
     });
 
     function showModal() {
-        const modal = document.getElementById('bugReportModal');
-        modal.classList.add('show');
-        modal.style.display = 'block';
-        document.body.classList.add('modal-open');
-        
-        // Add backdrop
-        if (!document.querySelector('.modal-backdrop')) {
-            const backdrop = document.createElement('div');
-            backdrop.className = 'modal-backdrop fade show';
-            document.body.appendChild(backdrop);
+        const modalEl = document.getElementById('bugReportModal');
+        if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+            const modal = new bootstrap.Modal(modalEl);
+            modal.show();
+        } else {
+            // Fallback for older environments
+            modalEl.classList.add('show');
+            modalEl.style.display = 'block';
+            document.body.classList.add('modal-open');
+            if (!document.querySelector('.modal-backdrop')) {
+                const backdrop = document.createElement('div');
+                backdrop.className = 'modal-backdrop fade show';
+                document.body.appendChild(backdrop);
+            }
         }
+    }
+}
+
+function closeBugReportModal() {
+    const modalEl = document.getElementById('bugReportModal');
+    if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+        const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+        modal.hide();
+    } else {
+        modalEl.classList.remove('show');
+        modalEl.style.display = 'none';
+        document.body.classList.remove('modal-open');
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) backdrop.remove();
     }
 }
 
