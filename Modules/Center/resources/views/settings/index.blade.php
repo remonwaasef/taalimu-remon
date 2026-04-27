@@ -567,14 +567,14 @@
                                     @php
                                         $reminderPresets = [
                                             'email' => [
-                                                'formal' => "نحيطكم علماً بأن مصروفات الطالب/ة {student_name} بمبلغ {amount} مستحقة بتاريخ {due_date}.\nيرجى التكرم بالسداد في الموعد المحدد لضمان استمرارية الخدمة التعليمية دون انقطاع.\nشاكرين لكم حسن تعاونكم.\n{center_name}",
-                                                'friendly' => "أهلاً بكم في {center_name}،\nنود تذكيركم بأن موعد سداد مصروفات {student_name} هو {due_date} (المبلغ: {amount}).\nنسعد دائماً بوجودكم معنا ونتمنى للطالب دوام التوفيق.\nمع تحيات إدارة {center_name}",
-                                                'urgent' => "تنبيه هام:\nنود إبلاغكم بأن مصروفات {student_name} بقيمة {amount} قد استحقت بالفعل بتاريخ {due_date}.\nيرجى سرعة السداد لتجنب توقف الحساب أو الخدمات.\nإذا كنتم قد سددتم بالفعل، يرجى تجاهل هذه الرسالة.\n{center_name}"
+                                                'formal' => "نحيطكم علماً بأن مصروفات الطالب/ة {اسم_الطالب} بمبلغ {المبلغ} مستحقة بتاريخ {تاريخ_الاستحقاق}.\nيرجى التكرم بالسداد في الموعد المحدد لضمان استمرارية الخدمة التعليمية دون انقطاع.\nشاكرين لكم حسن تعاونكم.\n{اسم_المركز}",
+                                                'friendly' => "أهلاً بكم في {اسم_المركز}،\nنود تذكيركم بأن موعد سداد مصروفات {اسم_الطالب} هو {تاريخ_الاستحقاق} (المبلغ: {المبلغ}).\nنسعد دائماً بوجودكم معنا ونتمنى للطالب دوام التوفيق.\nمع تحيات إدارة {اسم_المركز}",
+                                                'urgent' => "تنبيه هام:\nنود إبلاغكم بأن مصروفات {اسم_الطالب} بقيمة {المبلغ} قد استحقت بالفعل بتاريخ {تاريخ_الاستحقاق}.\nيرجى سرعة السداد لتجنب توقف الحساب أو الخدمات.\nإذا كنتم قد سددتم بالفعل، يرجى تجاهل هذه الرسالة.\n{اسم_المركز}"
                                             ],
                                             'whatsapp' => [
-                                                'formal' => "تذكير رسمي: مصروفات {student_name} بمبلغ {amount} مستحقة بتاريخ {due_date}. يرجى السداد لضمان استمرار الخدمة. {center_name}",
-                                                'friendly' => "أهلاً بك! نود تذكيرك بموعد سداد مصروفات {student_name} بتاريخ {due_date}. نتمنى لكم يوماً سعيداً! 🌸 {center_name}",
-                                                'urgent' => "تنبيه عاجل: مصروفات {student_name} مستحقة منذ {due_date}. يرجى السداد في أقرب وقت لتجنب انقطاع الخدمة. شكراً لك. {center_name}"
+                                                'formal' => "تذكير رسمي: مصروفات {اسم_الطالب} بمبلغ {المبلغ} مستحقة بتاريخ {تاريخ_الاستحقاق}. يرجى السداد لضمان استمرار الخدمة. {اسم_المركز}",
+                                                'friendly' => "أهلاً بك! نود تذكيرك بموعد سداد مصروفات {اسم_الطالب} بتاريخ {تاريخ_الاستحقاق}. نتمنى لكم يوماً سعيداً! 🌸 {اسم_المركز}",
+                                                'urgent' => "تنبيه عاجل: مصروفات {اسم_الطالب} مستحقة منذ {تاريخ_الاستحقاق}. يرجى السداد في أقرب وقت لتجنب انقطاع الخدمة. شكراً لك. {اسم_المركز}"
                                             ]
                                         ];
                                     @endphp
@@ -807,7 +807,7 @@
                                                     <div class="col-md-7 border-end">
                                                         <small class="fw-bold text-muted d-block mb-1">{{ __('center::settings.reminders.template_variables') }}</small>
                                                         <div class="d-flex flex-wrap gap-1 mt-1">
-                                                            @foreach (['{student_name}', '{center_name}', '{amount}', '{due_date}', '{remaining}', '{group_name}', '{course_price}'] as $var)
+                                                            @foreach (['{اسم_الطالب}', '{اسم_المركز}', '{المبلغ}', '{تاريخ_الاستحقاق}', '{المبلغ_المتبقي}', '{اسم_المجموعة}', '{سعر_الدورة}', '{رابط_الدخول}', '{كلمة_المرور}'] as $var)
                                                                 <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-2 py-1 small cursor-pointer" onclick="insertVariable(this, 'emailTemplateArea')">{{ $var }}</span>
                                                             @endforeach
                                                         </div>
@@ -837,7 +837,7 @@
                                                     <div class="col-md-7 border-end">
                                                         <small class="fw-bold text-muted d-block mb-1">{{ __('center::settings.reminders.template_variables') }}</small>
                                                         <div class="d-flex flex-wrap gap-1 mt-1">
-                                                            @foreach (['{student_name}', '{center_name}', '{amount}', '{due_date}', '{remaining}'] as $var)
+                                                            @foreach (['{اسم_الطالب}', '{اسم_المركز}', '{المبلغ}', '{تاريخ_الاستحقاق}', '{المبلغ_المتبقي}'] as $var)
                                                                 <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1 small cursor-pointer" onclick="insertVariable(this, 'whatsappTemplateArea')">{{ $var }}</span>
                                                             @endforeach
                                                         </div>
@@ -852,7 +852,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <textarea name="whatsapp_template" id="whatsappTemplateArea" class="form-control rounded-3" rows="4" dir="auto" placeholder="تذكير: مصروفات الطالب/ة {student_name} بمبلغ {amount} مستحقة بتاريخ {due_date}. يرجى السداد. {center_name}">{{ $whatsappTemplate }}</textarea>
+                                            <textarea name="whatsapp_template" id="whatsappTemplateArea" class="form-control rounded-3" rows="4" dir="auto" placeholder="تذكير: مصروفات الطالب/ة {اسم_الطالب} بمبلغ {المبلغ} مستحقة بتاريخ {تاريخ_الاستحقاق}. يرجى السداد. {اسم_المركز}">{{ $whatsappTemplate }}</textarea>
                                         </div>
                                     </div>
                                 </div>
