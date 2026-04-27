@@ -29,7 +29,8 @@ class BugReportController extends Controller
         
         try {
             if ($request->hasFile('screenshot')) {
-                $screenshotPath = $request->file('screenshot')->store('bug-reports', 'public');
+                // Save to 'logos' disk/folder because we know it works and is public
+                $screenshotPath = $request->file('screenshot')->store('logos/bug-reports', 'public');
             } elseif ($request->filled('auto_screenshot')) {
                 $imageData = $request->input('auto_screenshot');
                 
@@ -38,12 +39,11 @@ class BugReportController extends Controller
                     $image = base64_decode(substr($imageData, strpos($imageData, ',') + 1));
                     
                     if ($image) {
-                        $fileName = 'bug-reports/' . uniqid() . '_auto.' . $extension;
-                        // Storage::disk('public') now points correctly thanks to the symlink
+                        $fileName = 'logos/bug-reports/' . uniqid() . '_auto.' . $extension;
                         if (\Illuminate\Support\Facades\Storage::disk('public')->put($fileName, $image)) {
                             $screenshotPath = $fileName;
                         } else {
-                            $errorDebug = "Storage::disk('public')->put failed";
+                            $errorDebug = "Storage::put failed to logos/bug-reports";
                         }
                     } else {
                         $errorDebug = "Base64 decode failed";
