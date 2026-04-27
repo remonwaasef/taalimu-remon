@@ -190,10 +190,33 @@
 
                         <!-- Combined Tab: Email Templates & Reminders -->
                         <div class="tab-pane fade {{ in_array($activeTab, ['reminders', 'email_templates']) ? 'show active' : '' }}" id="reminders" role="tabpanel" aria-labelledby="reminders-tab">
-                            <div class="mb-4">
-                                <h4 class="fw-bold" style="color: #3A0CA3;"><i class="fas fa-envelope-open-text me-2"></i> {{ __('center::settings.tabs.email_templates') }}</h4>
-                                <p class="text-muted">قوالب البريد الإلكتروني الخاصة بالنظام والإشعارات</p>
-                            </div>
+                            
+                            <!-- Sub Tabs Nav -->
+                            <ul class="nav nav-pills mb-4 bg-light p-2 rounded-4 d-flex justify-content-center gap-2" id="remindersSubTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active rounded-pill px-4 fw-bold" id="welcome-emails-tab" data-bs-toggle="pill" data-bs-target="#welcome-emails" type="button" role="tab">
+                                        <i class="fas fa-handshake me-2"></i> رسائل الترحيب
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link rounded-pill px-4 fw-bold" id="system-notifs-tab" data-bs-toggle="pill" data-bs-target="#system-notifs" type="button" role="tab">
+                                        <i class="fas fa-bell me-2"></i> إشعارات النظام
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link rounded-pill px-4 fw-bold" id="payment-reminders-tab" data-bs-toggle="pill" data-bs-target="#payment-reminders" type="button" role="tab">
+                                        <i class="fas fa-calendar-check me-2"></i> تذكيرات الدفع
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content" id="remindersSubTabsContent">
+                                <!-- Welcome Emails Sub Tab -->
+                                <div class="tab-pane fade show active" id="welcome-emails" role="tabpanel">
+                                    <div class="mb-4">
+                                        <h4 class="fw-bold" style="color: #3A0CA3;"><i class="fas fa-envelope-open-text me-2"></i> {{ __('center::settings.tabs.email_templates') }}</h4>
+                                        <p class="text-muted">قوالب البريد الإلكتروني الخاصة بالنظام والإشعارات</p>
+                                    </div>
                             @php
                                 $emailSettings = $tenant->settings['email_templates'] ?? [];
                                 $presets = config('email_templates.presets', []);
@@ -353,9 +376,13 @@
                                     </div>
                                 </div>
 
-                                {{-- ═══════════════════════════════════════════════ --}}
-                                {{-- Section 2: Event-Based Email Notifications    --}}
-                                {{-- ═══════════════════════════════════════════════ --}}
+                                                                </div> <!-- Close welcome-emails sub tab -->
+                                
+                                <!-- System Notifications Sub Tab -->
+                                <div class="tab-pane fade" id="system-notifs" role="tabpanel">
+                                    {{-- ═══════════════════════════════════════════════ --}}
+                                    {{-- Section 2: Event-Based Email Notifications    --}}
+                                    {{-- ═══════════════════════════════════════════════ --}}
                                 <div class="mt-5 pt-4 border-top">
                                     <div class="d-flex align-items-center justify-content-between mb-3">
                                         <h5 class="fw-bold mb-0 text-primary"><i class="fas fa-bell me-2"></i> {{ __('center::settings.email_templates.notif_title') }}</h5>
@@ -524,13 +551,15 @@
                                 <button type="submit" class="btn btn-light text-danger rounded-pill px-4 fw-bold shadow-sm border">
                                     <i class="fas fa-undo me-2"></i> {{ __('center::settings.email_templates.reset') }}
                                 </button>
-                            </form>
-                            <hr class="my-5 border-secondary opacity-25">
-                            
-                            <!-- Payment Reminder Scheduling -->
-                            <div class="mb-4 mt-5">
-                                <h4 class="fw-bold text-warning"><i class="fas fa-calendar-check me-2"></i> {{ __('center::settings.tabs.reminders') }}</h4>
-                            </div>
+                                                        </form>
+                                </div> <!-- Close system-notifs sub tab -->
+                                
+                                <!-- Payment Reminders Sub Tab -->
+                                <div class="tab-pane fade" id="payment-reminders" role="tabpanel">
+                                    <!-- Payment Reminder Scheduling -->
+                                    <div class="mb-4 mt-2">
+                                        <h4 class="fw-bold text-warning"><i class="fas fa-calendar-check me-2"></i> {{ __('center::settings.tabs.reminders') }}</h4>
+                                    </div>
                             @php
                                 $reminderSettings = $tenant->settings['payment_reminders'] ?? [];
                                 $defaultDueDay = $reminderSettings['default_due_day'] ?? 1;
@@ -856,7 +885,9 @@
                                         <i class="fas fa-save me-2"></i> {{ __('center::settings.reminders.save_settings') }}
                                     </button>
                                 </div>
-                            </form>
+                                                        </form>
+                                </div> <!-- Close payment-reminders sub tab -->
+                            </div> <!-- Close tab-content -->
                         </div>
 
                         <!-- Academic Settings -->
