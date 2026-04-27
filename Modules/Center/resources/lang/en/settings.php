@@ -108,6 +108,7 @@ return [
       'tr' => 'Turkey',
     ],
     'payment_msg' => 'Payment Notification: When a payment is received: \\"Received [Amount)... Remaining [Balance)\\".',
+    'official_note' => 'Official Note',
   ],
   'privacy' => [
     'title' => 'Data Control Center (GDPR)',
@@ -123,6 +124,7 @@ return [
     'understand_checkbox' => 'I understand that this action is permanent and data cannot be recovered.',
     'cancel' => 'Cancel',
     'delete_perm' => 'Delete Permanently',
+    'confirm_delete_title' => 'Confirm Delete Title',
   ],
   'email_templates' => [
     'title' => 'Email Settings',
