@@ -132,6 +132,30 @@ class SendPaymentRemindersCommand extends Command
                             $processedCount++;
                         }
                     }
+
+                    // Auto-repeat overdue reminders (every N days until paid)
+                    $overdueRepeatEnabled = $settings['overdue_repeat_enabled'] ?? false;
+                    if ($overdueRepeatEnabled && $daysOverdue > 0) {
+                        $repeatInterval = (int) ($settings['overdue_repeat_interval'] ?? 7);
+                        $maxReminders = $settings['overdue_max_reminders'] ?? null;
+
+                        // Only trigger on days that match the interval
+                        if ($repeatInterval > 0 && ($daysOverdue % $repeatInterval) === 0) {
+                            $repeatNumber = intdiv($daysOverdue, $repeatInterval);
+
+                            // Respect max reminders limit
+                            if ($maxReminders === null || $repeatNumber <= $maxReminders) {
+                                $stage = "overdue_repeat_{$daysOverdue}d";
+
+                                // Check that this specific repeat stage hasn't been sent already
+                                if (!PaymentReminder::alreadySent($tenant->id, $student->id, "email_{$stage}", $currentYear, $currentMonth)) {
+                                    $this->sendEmailReminder($tenant, $student, $fee, $dueDay, $stage, $emailTemplate, $emailSubject, $currentYear, $currentMonth);
+                                    $this->sendWhatsAppReminder($whatsappService, $tenant, $student, $fee, $dueDay, $stage, $whatsappTemplate, $currentYear, $currentMonth);
+                                    $processedCount++;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
