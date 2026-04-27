@@ -565,18 +565,13 @@
                                 <!-- Payment Reminders Sub Tab -->
                                 <div class="tab-pane fade" id="payment-reminders" role="tabpanel">
                                     @php
-                                        $reminderPresets = [
-                                            'email' => [
-                                                'formal' => "نحيطكم علماً بأن مصروفات الطالب/ة {اسم_الطالب} بمبلغ {المبلغ} مستحقة بتاريخ {تاريخ_الاستحقاق}.\nيرجى التكرم بالسداد في الموعد المحدد لضمان استمرارية الخدمة التعليمية دون انقطاع.\nشاكرين لكم حسن تعاونكم.\n{اسم_المركز}",
-                                                'friendly' => "أهلاً بكم في {اسم_المركز}،\nنود تذكيركم بأن موعد سداد مصروفات {اسم_الطالب} هو {تاريخ_الاستحقاق} (المبلغ: {المبلغ}).\nنسعد دائماً بوجودكم معنا ونتمنى للطالب دوام التوفيق.\nمع تحيات إدارة {اسم_المركز}",
-                                                'urgent' => "تنبيه هام:\nنود إبلاغكم بأن مصروفات {اسم_الطالب} بقيمة {المبلغ} قد استحقت بالفعل بتاريخ {تاريخ_الاستحقاق}.\nيرجى سرعة السداد لتجنب توقف الحساب أو الخدمات.\nإذا كنتم قد سددتم بالفعل، يرجى تجاهل هذه الرسالة.\n{اسم_المركز}"
-                                            ],
-                                            'whatsapp' => [
-                                                'formal' => "تذكير رسمي: مصروفات {اسم_الطالب} بمبلغ {المبلغ} مستحقة بتاريخ {تاريخ_الاستحقاق}. يرجى السداد لضمان استمرار الخدمة. {اسم_المركز}",
-                                                'friendly' => "أهلاً بك! نود تذكيرك بموعد سداد مصروفات {اسم_الطالب} بتاريخ {تاريخ_الاستحقاق}. نتمنى لكم يوماً سعيداً! 🌸 {اسم_المركز}",
-                                                'urgent' => "تنبيه عاجل: مصروفات {اسم_الطالب} مستحقة منذ {تاريخ_الاستحقاق}. يرجى السداد في أقرب وقت لتجنب انقطاع الخدمة. شكراً لك. {اسم_المركز}"
-                                            ]
-                                        ];
+                                        $reminderPresets = __('center::settings.reminders.presets_data');
+                                        if (!is_array($reminderPresets)) {
+                                            $reminderPresets = [
+                                                'email' => ['formal' => '', 'friendly' => '', 'urgent' => ''],
+                                                'whatsapp' => ['formal' => '', 'friendly' => '', 'urgent' => '']
+                                            ];
+                                        }
                                     @endphp
                                     <!-- Payment Reminder Scheduling -->
                                     <div class="mb-4 mt-2">
@@ -807,8 +802,21 @@
                                                     <div class="col-md-7 border-end">
                                                         <small class="fw-bold text-muted d-block mb-1">{{ __('center::settings.reminders.template_variables') }}</small>
                                                         <div class="d-flex flex-wrap gap-1 mt-1">
-                                                            @foreach (['{اسم_الطالب}', '{اسم_المركز}', '{المبلغ}', '{تاريخ_الاستحقاق}', '{المبلغ_المتبقي}', '{اسم_المجموعة}', '{سعر_الدورة}', '{رابط_الدخول}', '{كلمة_المرور}'] as $var)
-                                                                <button type="button" class="btn btn-xs btn-outline-primary rounded-pill px-2 py-0 small" onclick="insertVariable(this, 'emailTemplateArea')">{{ $var }}</button>
+                                                            @php
+                                                                $remVars = [
+                                                                    'اسم_الطالب' => __('center::settings.email_templates.placeholders.student_name'),
+                                                                    'اسم_المركز' => __('center::settings.email_templates.placeholders.center_name'),
+                                                                    'المبلغ' => __('center::settings.email_templates.placeholders.amount'),
+                                                                    'تاريخ_الاستحقاق' => __('center::settings.email_templates.placeholders.due_date'),
+                                                                    'المبلغ_المتبقي' => __('center::settings.email_templates.placeholders.remaining'),
+                                                                    'اسم_المجموعة' => __('center::settings.email_templates.placeholders.group_name'),
+                                                                    'سعر_الدورة' => __('center::settings.email_templates.placeholders.course_price'),
+                                                                    'رابط_الدخول' => __('center::settings.email_templates.placeholders.login_link'),
+                                                                    'كلمة_المرور' => __('center::settings.email_templates.placeholders.password'),
+                                                                ];
+                                                            @endphp
+                                                            @foreach ($remVars as $key => $label)
+                                                                <button type="button" class="btn btn-xs btn-outline-primary rounded-pill px-2 py-0 small" onclick="insertVariable(this, 'emailTemplateArea')" data-var="{{ '{' . $key . '}' }}">{{ $label }}</button>
                                                             @endforeach
                                                         </div>
                                                     </div>
@@ -837,8 +845,17 @@
                                                     <div class="col-md-7 border-end">
                                                         <small class="fw-bold text-muted d-block mb-1">{{ __('center::settings.reminders.template_variables') }}</small>
                                                         <div class="d-flex flex-wrap gap-1 mt-1">
-                                                            @foreach (['{اسم_الطالب}', '{اسم_المركز}', '{المبلغ}', '{تاريخ_الاستحقاق}', '{المبلغ_المتبقي}'] as $var)
-                                                                <button type="button" class="btn btn-xs btn-outline-success rounded-pill px-2 py-0 small" onclick="insertVariable(this, 'whatsappTemplateArea')">{{ $var }}</button>
+                                                            @php
+                                                                $waVars = [
+                                                                    'اسم_الطالب' => __('center::settings.email_templates.placeholders.student_name'),
+                                                                    'اسم_المركز' => __('center::settings.email_templates.placeholders.center_name'),
+                                                                    'المبلغ' => __('center::settings.email_templates.placeholders.amount'),
+                                                                    'تاريخ_الاستحقاق' => __('center::settings.email_templates.placeholders.due_date'),
+                                                                    'المبلغ_المتبقي' => __('center::settings.email_templates.placeholders.remaining'),
+                                                                ];
+                                                            @endphp
+                                                            @foreach ($waVars as $key => $label)
+                                                                <button type="button" class="btn btn-xs btn-outline-success rounded-pill px-2 py-0 small" onclick="insertVariable(this, 'whatsappTemplateArea')" data-var="{{ '{' . $key . '}' }}">{{ $label }}</button>
                                                             @endforeach
                                                         </div>
                                                     </div>
@@ -1384,12 +1401,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     const presetCards = document.querySelectorAll('.preset-card');
-    const presets = {!! json_encode(config('email_templates.presets', [])) !!};
+    const presets = {!! json_encode(__('center::settings.email_templates.presets_data')) !!};
+    const defaultPresets = {!! json_encode(config('email_templates.presets', [])) !!};
     
     presetCards.forEach(card => {
         card.addEventListener('click', function() {
             const presetKey = this.dataset.preset;
-            const preset = presets[presetKey];
+            let preset = (presets && presets[presetKey]) ? presets[presetKey] : (defaultPresets[presetKey] || null);
             
             if (preset) {
                 const sSubj = document.getElementById('student_subject');
@@ -1466,7 +1484,7 @@ function fillPreset(textareaId, text) {
 function insertVariable(badge, textareaId) {
     const textarea = document.getElementById(textareaId);
     if (!textarea) return;
-    const variable = badge.textContent.trim();
+    const variable = badge.dataset.var || badge.textContent.trim();
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const text = textarea.value;
