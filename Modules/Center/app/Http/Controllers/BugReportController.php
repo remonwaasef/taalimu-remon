@@ -149,6 +149,9 @@ class BugReportController extends Controller
             
             if ($debugError) {
                 $message .= "⚠️ *خطأ في الصورة:* `{$debugError}`\n\n";
+            } else {
+                $fullRealPath = $report->screenshot ? (\Illuminate\Support\Facades\Storage::disk('public')->path($report->screenshot)) : 'No screenshot';
+                $message .= "✅ *المسار الحقيقي:* `{$fullRealPath}`\n\n";
             }
 
             $message .= "━━━━━━━━━━━━━━━━━━━━\n";
