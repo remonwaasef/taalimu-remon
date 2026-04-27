@@ -175,7 +175,7 @@ return [
   'payment_method_label' => 'طريقة الدفع:',
   'remaining_amount_label' => 'المبلغ المتبقي:',
   'center_stamp' => 'ختم المركز',
-  'status_' => 'Status ',
-  'currency_label' => 'Currency Label',
-  'other' => 'Other',
+  'status_' => 'الحالة: ',
+  'currency_label' => 'العملة',
+  'other' => 'أخرى',
 ];
