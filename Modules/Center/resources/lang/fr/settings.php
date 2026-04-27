@@ -108,6 +108,7 @@ return [
       'us' => 'États-Unis',
       'tr' => 'Turquie',
     ],
+    'official_note' => 'Official Note',
   ],
   'privacy' => [
     'title' => 'Centre de Contrôle des Données (RGPD)',
