@@ -173,7 +173,7 @@ return [
     'presets' => [
       'formal' => 'Formal Welcome',
       'friendly' => 'Friendly Welcome',
-      'minimal' => 'Minimal Notification',
+      'minimal' => 'Simple Notification',
     ],
     'defaults' => [
       'payment_reminder_subject' => 'Payment Reminder for {student_name} - {center_name}',
@@ -301,6 +301,9 @@ Please settle the payment quickly to avoid any service interruption.
         'urgent' => 'URGENT ALERT: Fees for {اسم_الطالب} are overdue since {تاريخ_الاستحقاق}. Please pay as soon as possible. {اسم_المركز}',
       ],
     ],
+    'timeline_preview' => 'Timeline Preview',
+    'timeline_desc' => 'Visualization of automatic reminders.',
+    'whatsapp_placeholder' => 'Reminder: Student {اسم_الطالب}\'s fees ({المبلغ}) are due on {تاريخ_الاستحقاق}. Please pay. {اسم_المركز}',
   ],
   'general_timezone_help' => 'Affects the date and time display in reports',
   'academic_system_defaults_alert' => 'System default settings are currently being used. Custom settings will be saved once you click Save.',
