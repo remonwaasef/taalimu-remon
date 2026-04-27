@@ -1213,6 +1213,7 @@
 </div>
 @endsection
 
+@push('styles')
 <style>
     .animate-fade-in {
         animation: fadeIn 0.3s ease-in-out;
@@ -1280,16 +1281,33 @@
     .accordion-button:focus { box-shadow: none; }
     .accordion-item { border-color: #e2e8f0 !important; }
 </style>
+@endpush
 
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const varBtns = document.querySelectorAll('.var-btn');
+    varBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const targetId = this.dataset.target;
+            const textarea = document.getElementById(targetId);
+            if (!textarea) return;
+            const variable = this.dataset.var;
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
             textarea.value = text.substring(0, start) + variable + text.substring(end);
             textarea.focus();
             textarea.selectionStart = textarea.selectionEnd = start + variable.length;
             
-            updatePreview();
+            if (typeof updatePreview === 'function') {
+                updatePreview();
+            }
         });
     });
 
-    const presets = @json(config('email_templates.presets', []));
+    const presetCards = document.querySelectorAll('.preset-card');
+    const presets = @json(config('email_templates.presets', [])); // Config doesn't strictly inject here properly via @json if empty, but usually it works if defined
     
     presetCards.forEach(card => {
         card.addEventListener('click', function() {
@@ -1297,56 +1315,78 @@
             const preset = presets[presetKey];
             
             if (preset) {
-                document.getElementById('student_subject').value = preset.student_subject;
-                document.getElementById('student_body').value = preset.student_body;
-                document.getElementById('guardian_subject').value = preset.guardian_subject;
-                document.getElementById('guardian_body').value = preset.guardian_body;
+                const sSubj = document.getElementById('student_subject');
+                const sBody = document.getElementById('student_body');
+                const gSubj = document.getElementById('guardian_subject');
+                const gBody = document.getElementById('guardian_body');
+
+                if (sSubj) sSubj.value = preset.student_subject || '';
+                if (sBody) sBody.value = preset.student_body || '';
+                if (gSubj) gSubj.value = preset.guardian_subject || '';
+                if (gBody) gBody.value = preset.guardian_body || '';
                 
                 presetCards.forEach(c => c.classList.remove('active-preset'));
                 this.classList.add('active-preset');
                 
+                if (typeof updatePreview === 'function') {
+                    updatePreview();
+                }
+            }
+        });
+    });
+
+    const resetBtns = document.querySelectorAll('.reset-email-btn');
+    resetBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const subjectInput = document.getElementById(this.dataset.subjectId);
+            const bodyInput = document.getElementById(this.dataset.bodyId);
+            if (subjectInput) subjectInput.value = this.dataset.defaultSubject;
+            if (bodyInput) bodyInput.value = this.dataset.defaultBody;
+            
+            if (typeof updatePreview === 'function') {
                 updatePreview();
             }
         });
     });
 
-    updatePreview();
+    if (typeof updatePreview === 'function') {
+        updatePreview();
+    }
 });
-</script>
-<script>
-    // Reminder Scheduling Tab JS
-    function toggleReminderStyle(checkbox, elementId, colorClass) {
-        const el = document.getElementById(elementId);
-        if (!el) return;
-        if (checkbox.checked) {
-            el.classList.remove('bg-light');
-            el.classList.add(colorClass.split(' ')[0], colorClass.split(' ')[1], 'bg-opacity-10');
-        } else {
-            el.classList.add('bg-light');
-            el.classList.remove(colorClass.split(' ')[0], colorClass.split(' ')[1], 'bg-opacity-10');
-        }
-    }
 
-    function toggleOverdueSettings(checkbox) {
-        const panel = document.getElementById('overdueSettingsPanel');
-        if (!panel) return;
-        if (checkbox.checked) {
-            panel.classList.remove('d-none');
-        } else {
-            panel.classList.add('d-none');
-        }
+// Reminder Scheduling Tab JS
+function toggleReminderStyle(checkbox, elementId, colorClass) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    if (checkbox.checked) {
+        el.classList.remove('bg-light');
+        el.classList.add(colorClass.split(' ')[0], colorClass.split(' ')[1], 'bg-opacity-10');
+    } else {
+        el.classList.add('bg-light');
+        el.classList.remove(colorClass.split(' ')[0], colorClass.split(' ')[1], 'bg-opacity-10');
     }
+}
 
-    function insertVariable(badge, textareaId) {
-        const textarea = document.getElementById(textareaId);
-        if (!textarea) return;
-        const variable = badge.textContent.trim();
-        const start = textarea.selectionStart;
-        const end = textarea.selectionEnd;
-        const text = textarea.value;
-        textarea.value = text.substring(0, start) + variable + text.substring(end);
-        textarea.focus();
-        textarea.selectionStart = textarea.selectionEnd = start + variable.length;
+function toggleOverdueSettings(checkbox) {
+    const panel = document.getElementById('overdueSettingsPanel');
+    if (!panel) return;
+    if (checkbox.checked) {
+        panel.classList.remove('d-none');
+    } else {
+        panel.classList.add('d-none');
     }
+}
+
+function insertVariable(badge, textareaId) {
+    const textarea = document.getElementById(textareaId);
+    if (!textarea) return;
+    const variable = badge.textContent.trim();
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    textarea.value = text.substring(0, start) + variable + text.substring(end);
+    textarea.focus();
+    textarea.selectionStart = textarea.selectionEnd = start + variable.length;
+}
 </script>
 @endpush
