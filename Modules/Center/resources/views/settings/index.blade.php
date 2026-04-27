@@ -203,17 +203,17 @@
                             <ul class="nav nav-pills mb-4 bg-light p-2 rounded-4 d-flex justify-content-center gap-2" id="remindersSubTabs" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link active rounded-pill px-4 fw-bold" id="welcome-emails-tab" data-bs-toggle="pill" data-bs-target="#welcome-emails" type="button" role="tab">
-                                        <i class="fas fa-handshake me-2"></i> رسائل الترحيب
+                                        <i class="fas fa-handshake me-2"></i> {{ __('center::settings.reminders.sub_tabs.welcome') }}
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link rounded-pill px-4 fw-bold" id="system-notifs-tab" data-bs-toggle="pill" data-bs-target="#system-notifs" type="button" role="tab">
-                                        <i class="fas fa-bell me-2"></i> إشعارات النظام
+                                        <i class="fas fa-bell me-2"></i> {{ __('center::settings.reminders.sub_tabs.system') }}
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link rounded-pill px-4 fw-bold" id="payment-reminders-tab" data-bs-toggle="pill" data-bs-target="#payment-reminders" type="button" role="tab">
-                                        <i class="fas fa-calendar-check me-2"></i> تذكيرات الدفع
+                                        <i class="fas fa-calendar-check me-2"></i> {{ __('center::settings.reminders.sub_tabs.payment') }}
                                     </button>
                                 </li>
                             </ul>
@@ -223,7 +223,7 @@
                                 <div class="tab-pane fade show active" id="welcome-emails" role="tabpanel">
                                     <div class="mb-4">
                                         <h4 class="fw-bold" style="color: #3A0CA3;"><i class="fas fa-envelope-open-text me-2"></i> {{ __('center::settings.tabs.email_templates') }}</h4>
-                                        <p class="text-muted">قوالب البريد الإلكتروني الخاصة بالنظام والإشعارات</p>
+                                        <p class="text-muted">{{ __('center::settings.email_templates.desc') }}</p>
                                     </div>
                             @php
                                 $emailSettings = $tenant->settings['email_templates'] ?? [];
@@ -813,11 +813,11 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-5">
-                                                        <small class="fw-bold text-muted d-block mb-1">نماذج سريعة للبريد:</small>
+                                                        <small class="fw-bold text-muted d-block mb-1">{{ __('center::settings.reminders.quick_templates_email') }}</small>
                                                         <div class="d-flex flex-wrap gap-1 mt-1">
-                                                            <button type="button" class="btn btn-xs btn-outline-primary py-0 px-2 small rounded-pill" onclick="fillPreset('emailTemplateArea', `{{ $reminderPresets['email']['formal'] }}`)">رسمي</button>
-                                                            <button type="button" class="btn btn-xs btn-outline-success py-0 px-2 small rounded-pill" onclick="fillPreset('emailTemplateArea', `{{ $reminderPresets['email']['friendly'] }}`)">ودي</button>
-                                                            <button type="button" class="btn btn-xs btn-outline-danger py-0 px-2 small rounded-pill" onclick="fillPreset('emailTemplateArea', `{{ $reminderPresets['email']['urgent'] }}`)">عاجل</button>
+                                                            <button type="button" class="btn btn-xs btn-outline-primary py-0 px-2 small rounded-pill" onclick="fillPreset('emailTemplateArea', `{{ $reminderPresets['email']['formal'] }}`)">{{ __('center::settings.reminders.presets.formal') }}</button>
+                                                            <button type="button" class="btn btn-xs btn-outline-success py-0 px-2 small rounded-pill" onclick="fillPreset('emailTemplateArea', `{{ $reminderPresets['email']['friendly'] }}`)">{{ __('center::settings.reminders.presets.friendly') }}</button>
+                                                            <button type="button" class="btn btn-xs btn-outline-danger py-0 px-2 small rounded-pill" onclick="fillPreset('emailTemplateArea', `{{ $reminderPresets['email']['urgent'] }}`)">{{ __('center::settings.reminders.presets.urgent') }}</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -843,11 +843,11 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-5">
-                                                        <small class="fw-bold text-muted d-block mb-1">نماذج سريعة للواتساب:</small>
+                                                        <small class="fw-bold text-muted d-block mb-1">{{ __('center::settings.reminders.quick_templates_whatsapp') }}</small>
                                                         <div class="d-flex flex-wrap gap-1 mt-1">
-                                                            <button type="button" class="btn btn-xs btn-outline-primary py-0 px-2 small rounded-pill" onclick="fillPreset('whatsappTemplateArea', `{{ $reminderPresets['whatsapp']['formal'] }}`)">رسمي</button>
-                                                            <button type="button" class="btn btn-xs btn-outline-success py-0 px-2 small rounded-pill" onclick="fillPreset('whatsappTemplateArea', `{{ $reminderPresets['whatsapp']['friendly'] }}`)">ودي</button>
-                                                            <button type="button" class="btn btn-xs btn-outline-danger py-0 px-2 small rounded-pill" onclick="fillPreset('whatsappTemplateArea', `{{ $reminderPresets['whatsapp']['urgent'] }}`)">عاجل</button>
+                                                            <button type="button" class="btn btn-xs btn-outline-primary py-0 px-2 small rounded-pill" onclick="fillPreset('whatsappTemplateArea', `{{ $reminderPresets['whatsapp']['formal'] }}`)">{{ __('center::settings.reminders.presets.formal') }}</button>
+                                                            <button type="button" class="btn btn-xs btn-outline-success py-0 px-2 small rounded-pill" onclick="fillPreset('whatsappTemplateArea', `{{ $reminderPresets['whatsapp']['friendly'] }}`)">{{ __('center::settings.reminders.presets.friendly') }}</button>
+                                                            <button type="button" class="btn btn-xs btn-outline-danger py-0 px-2 small rounded-pill" onclick="fillPreset('whatsappTemplateArea', `{{ $reminderPresets['whatsapp']['urgent'] }}`)">{{ __('center::settings.reminders.presets.urgent') }}</button>
                                                         </div>
                                                     </div>
                                                 </div>
