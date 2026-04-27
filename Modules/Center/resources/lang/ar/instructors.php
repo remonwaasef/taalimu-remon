@@ -97,7 +97,7 @@ return [
   'biography' => 'السيرة الذاتية',
   'course_statistics' => 'إحصائيات الدورات',
   'no_bio' => 'لا توجد سيرة ذاتية لهذا المدرس.',
-  'select_placeholder' => 'Select Placeholder',
-  'save_instructor' => 'Save Instructor',
-  'total_instructors' => 'Total Instructors',
+  'select_placeholder' => 'اختر من القائمة...',
+  'save_instructor' => 'حفظ بيانات المدرس',
+  'total_instructors' => 'إجمالي المدرسين',
 ];

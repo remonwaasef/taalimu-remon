@@ -135,5 +135,5 @@ return [
     'browsing_as' => 'أنت تتصفح بصفتك: ',
     'overdue_invoices' => 'الفواتير المتأخرة',
   ],
-  'revenue_overview' => 'Revenue Overview',
+  'revenue_overview' => 'نظرة عامة على الإيرادات',
 ];

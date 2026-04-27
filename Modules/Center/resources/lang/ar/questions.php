@@ -43,5 +43,5 @@ return [
   'false' => 'خطأ',
   'option_1' => 'الخيار الأول...',
   'option_2' => 'الخيار الثاني...',
-  'option_placeholder' => 'Option Placeholder',
+  'option_placeholder' => 'اكتب نص الخيار هنا...',
 ];
