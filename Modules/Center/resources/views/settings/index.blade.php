@@ -37,14 +37,10 @@
                                 <i class="fab fa-whatsapp me-2 text-success"></i> {{ __('center::settings.tabs.whatsapp') }}
                             </button>
                         </li>
+                        
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link {{ $activeTab == 'email_templates' ? 'active' : '' }} py-3 fw-bold" id="email_templates-tab" data-bs-toggle="tab" data-bs-target="#email_templates" type="button" role="tab" aria-selected="{{ $activeTab == 'email_templates' ? 'true' : 'false' }}">
-                                <i class="fas fa-envelope me-2 text-primary"></i> {{ __('center::settings.tabs.email_templates') }}
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link {{ $activeTab == 'reminders' ? 'active' : '' }} py-3 fw-bold" id="reminders-tab" data-bs-toggle="tab" data-bs-target="#reminders" type="button" role="tab" aria-selected="{{ $activeTab == 'reminders' ? 'true' : 'false' }}">
-                                <i class="fas fa-calendar-check me-2 text-warning"></i> {{ __('center::settings.tabs.reminders') }}
+                            <button class="nav-link {{ in_array($activeTab, ['reminders', 'email_templates']) ? 'active' : '' }} py-3 fw-bold" id="reminders-tab" data-bs-toggle="tab" data-bs-target="#reminders" type="button" role="tab" aria-selected="{{ in_array($activeTab, ['reminders', 'email_templates']) ? 'true' : 'false' }}">
+                                <i class="fas fa-bullhorn me-2 text-warning"></i> {{ __('center::settings.tabs.email_templates') }} / {{ __('center::settings.tabs.reminders') }}
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -190,284 +186,14 @@
                                     </button>
                                 </div>
                             </form>
-                        </div>
+                        </div> <!-- Closes general tab -->
 
-                        <!-- Academic Settings -->
-                        <div class="tab-pane fade {{ $activeTab == 'academic' ? 'show active' : '' }}" id="academic" role="tabpanel" aria-labelledby="academic-tab">
-                            
-                            <!-- 1. Templates Section (STANDALONE FORM) -->
-                            <div class="card border-0 bg-primary bg-opacity-10 mb-4 rounded-4">
-                                <div class="card-body p-3">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-7">
-                                            <h6 class="fw-bold text-primary mb-1"><i class="fas fa-magic me-2"></i>{{ __('center::settings.academic.templates_title') }}</h6>
-                                            <p class="text-muted small mb-0">{{ __('center::settings.academic.templates_desc') }}</p>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <form action="{{ route('center.settings.apply-template', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST" id="applyTemplateForm" class="d-flex gap-2">
-                                                @csrf
-                                                <select name="template_key" class="form-select form-select-sm rounded-pill" required>
-                                                    <option value="">{{ __('center::settings.academic.select_template') }}</option>
-                                                    @foreach($templates as $key => $template)
-                                                        <option value="{{ $key }}">{{ __($template['name']) }}</option>
-                                                    @endforeach
-                                                </select>
-                                                <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 text-nowrap" onclick="confirmTemplate()">
-                                                    {{ __('center::settings.academic.apply') }}
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
+                        <!-- Combined Tab: Email Templates & Reminders -->
+                        <div class="tab-pane fade {{ in_array($activeTab, ['reminders', 'email_templates']) ? 'show active' : '' }}" id="reminders" role="tabpanel" aria-labelledby="reminders-tab">
+                            <div class="mb-4">
+                                <h4 class="fw-bold" style="color: #3A0CA3;"><i class="fas fa-envelope-open-text me-2"></i> {{ __('center::settings.tabs.email_templates') }}</h4>
+                                <p class="text-muted">قوالب البريد الإلكتروني الخاصة بالنظام والإشعارات</p>
                             </div>
-
-                            <!-- 2. Main Academic Settings Form -->
-                            <form action="{{ route('center.settings.update-academic', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST" id="academicStructureForm">
-                                @csrf
-                                <h6 class="fw-bold text-primary mb-3">{{ __('center::settings.academic.year_grading') }}</h6>
-                                <div class="row g-3 pb-4 border-bottom mb-4">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.academic.current_year') }}</label>
-                                    <select name="settings[academic][year]" class="form-select">
-                                        <option value="2024-2025" {{ ($tenant->settings['academic']['year'] ?? '') == '2024-2025' ? 'selected' : '' }}>2024-2025</option>
-                                        <option value="2025-2026" {{ ($tenant->settings['academic']['year'] ?? '') == '2025-2026' ? 'selected' : '' }}>2025-2026</option>
-                                        <option value="2026-2027" {{ ($tenant->settings['academic']['year'] ?? '') == '2026-2027' ? 'selected' : '' }}>2026-2027</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.academic.grading_system') }}</label>
-                                    <select name="settings[academic][grading]" class="form-select">
-                                        <option value="100" {{ ($tenant->settings['academic']['grading'] ?? '') == '100' ? 'selected' : '' }}>{{ __('center::settings.academic.percentage') }}</option>
-                                        <option value="GPA" {{ ($tenant->settings['academic']['grading'] ?? '') == 'GPA' ? 'selected' : '' }}>{{ __('center::settings.academic.gpa') }}</option>
-                                    </select>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-check form-switch mt-3">
-                                        <input type="hidden" name="settings[academic][attendance_alert]" value="0">
-                                        <input class="form-check-input" type="checkbox" name="settings[academic][attendance_alert]" value="1" id="attendanceAlert" {{ ($tenant->settings['academic']['attendance_alert'] ?? false) ? 'checked' : '' }}>
-                                        <label class="form-check-label user-select-none" for="attendanceAlert">{{ __('center::settings.academic.attendance_alert') }}</label>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="fw-bold text-primary mb-0"><i class="fas fa-layer-group me-2"></i>{{ __('center::settings.academic.structure_title') }}</h6>
-                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="addStage()">
-                                    <i class="fas fa-plus me-1"></i> {{ __('center::settings.academic.add_stage') }}
-                                </button>
-                            </div>
-
-                            <div id="stages-container">
-                                @foreach($stages as $sIndex => $stage)
-                                    <div class="stage-card card border bg-light mb-3 rounded-3 overflow-hidden shadow-none" data-index="{{ $sIndex }}">
-                                        <div class="card-header bg-white d-flex align-items-center gap-3 py-2 border-bottom">
-                                            <input type="hidden" name="stages[{{ $sIndex }}][id]" value="{{ $stage->id }}">
-                                            <input type="text" name="stages[{{ $sIndex }}][name]" class="form-control form-control-sm fw-bold border-0 bg-light" value="{{ $stage->name }}" placeholder="{{ __('center::settings.academic.stage_name_placeholder') }}">
-                                            <div class="ms-auto d-flex gap-2">
-                                                <button type="button" class="btn btn-sm btn-light text-primary" onclick="addGrade({{ $sIndex }})" title="{{ __('center::settings.academic.add_grade') }}">
-                                                    <i class="fas fa-plus-circle"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-sm btn-light text-danger" onclick="removeStage(this, {{ $stage->id }})" title="{{ __('center::settings.academic.remove_stage') }}">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="card-body p-3">
-                                            <div class="grades-container d-flex flex-wrap gap-2">
-                                                @foreach($stage->grades as $gIndex => $grade)
-                                                    <div class="grade-item d-flex align-items-center bg-white border rounded-pill px-3 py-1 shadow-sm">
-                                                        <input type="hidden" name="stages[{{ $sIndex }}][grades][{{ $gIndex }}][id]" value="{{ $grade->id }}">
-                                                        <input type="text" name="stages[{{ $sIndex }}][grades][{{ $gIndex }}][name]" class="form-control form-control-sm border-0 p-0 text-center" style="width: 100px; font-size: 0.85rem;" value="{{ $grade->name }}" placeholder="{{ __('center::settings.academic.grade_name_placeholder') }}">
-                                                        <button type="button" class="btn btn-link btn-sm text-danger p-0 ms-2" onclick="removeGrade(this, {{ $grade->id }})">
-                                                            <i class="fas fa-times-circle"></i>
-                                                        </button>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-
-                            <div class="mt-5 mb-3 border-top pt-4">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h6 class="fw-bold text-danger mb-0"><i class="fas fa-clock me-2"></i>{{ __('center::settings.academic.attendance_rules') }}</h6>
-                                    <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="addLateLevel()">
-                                        <i class="fas fa-plus me-1"></i> {{ __('center::settings.academic.add_level') }}
-                                    </button>
-                                </div>
-                                <p class="text-muted small mb-3">{{ __('center::settings.academic.late_levels_help') }}</p>
-                                
-                                <div id="late-levels-container">
-                                    @php 
-                                        $hasCustomLevels = isset($tenant->settings['academic']['late_levels']);
-                                        $lateLevels = $tenant->settings['academic']['late_levels'] ?? config('academic.late_rules.defaults', []); 
-                                    @endphp
-                                    
-                                    @if(!$hasCustomLevels)
-                                        <div class="alert alert-info py-2 px-3 small border-0 mb-3 bg-opacity-10 text-info" id="system-defaults-alert">
-                                            <i class="fas fa-info-circle me-2"></i>{{ __('center::settings.academic_system_defaults_alert') }}</div>
-                                    @endif
-
-                                    @foreach($lateLevels as $lIndex => $level)
-                                        <div class="late-level-item d-flex align-items-center gap-2 mb-2 bg-light p-2 rounded-3">
-                                            <input type="number" name="settings[academic][late_levels][{{ $lIndex }}][minutes]" class="form-control form-control-sm" style="width: 100px;" value="{{ $level['minutes'] }}" placeholder="{{ __('center::settings.academic.threshold_minutes') }}" required>
-                                            <input type="text" name="settings[academic][late_levels][{{ $lIndex }}][label]" class="form-control form-control-sm" value="{{ __($level['label']) }}" placeholder="{{ __('center::settings.academic.level_label') }}" required>
-                                            <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeLateLevel(this)">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    @endforeach
-                                </div>
-                                <div class="text-start mt-2">
-                                    <button type="button" class="btn btn-link btn-sm text-muted p-0" onclick="restoreLateDefaults()">
-                                        <i class="fas fa-undo-alt me-1"></i>{{ __('center::settings.academic_restore_defaults') }}</button>
-                                </div>
-                            </div>
-
-
-                                <div id="deletion-inputs"></div>
-
-                                <div class="mt-4 text-center">
-                                    <button type="submit" form="academicStructureForm" class="btn btn-primary px-5 rounded-pill shadow-sm">
-                                        <i class="fas fa-save me-2"></i> {{ __('center::settings.academic.save_structure') }}
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <!-- Financial Settings -->
-                        <div class="tab-pane fade {{ $activeTab == 'financial' ? 'show active' : '' }}" id="financial" role="tabpanel" aria-labelledby="financial-tab">
-                            <form action="{{ route('center.settings.update', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST">
-                                @csrf
-                                <h6 class="fw-bold text-primary mb-3">{{ __('center::settings.financial.title') }}</h6>
-                            <div class="row g-3">
-                                <div class="col-md-4">
-                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.financial.currency') }}</label>
-                                    <select name="settings[financial][currency]" class="form-select">
-                                        <option value="EGP" {{ ($tenant->settings['financial']['currency'] ?? '') == 'EGP' ? 'selected' : '' }}>{{ __('center::settings.financial.currencies.egp') }}</option>
-                                        <option value="SAR" {{ ($tenant->settings['financial']['currency'] ?? '') == 'SAR' ? 'selected' : '' }}>{{ __('center::settings.financial.currencies.sar') }}</option>
-                                        <option value="USD" {{ ($tenant->settings['financial']['currency'] ?? '') == 'USD' ? 'selected' : '' }}>{{ __('center::settings.financial.currencies.usd') }}</option>
-                                        <option value="EUR" {{ ($tenant->settings['financial']['currency'] ?? '') == 'EUR' ? 'selected' : '' }}>{{ __('center::settings.financial.currencies.eur') }}</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.financial.tax_rate') }}</label>
-                                    <input type="number" name="settings[financial][tax_rate]" class="form-control" value="{{ $tenant->settings['financial']['tax_rate'] ?? '0' }}" min="0" max="100">
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.financial.invoice_prefix') }}</label>
-                                    <input type="text" name="settings[financial][invoice_prefix]" class="form-control" value="{{ $tenant->settings['financial']['invoice_prefix'] ?? 'INV-' }}" placeholder="INV-">
-                                </div>
-                                </div>
-                                <div class="mt-4 pt-3 border-top d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-primary px-5 shadow-sm rounded-pill">
-                                        <i class="fas fa-save me-2"></i> {{ __('center::settings.general.save') }}
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <!-- Appearance Settings -->
-                        <div class="tab-pane fade {{ $activeTab == 'appearance' ? 'show active' : '' }}" id="appearance" role="tabpanel" aria-labelledby="appearance-tab">
-                            <form action="{{ route('center.settings.update', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST">
-                                @csrf
-                                <h6 class="fw-bold text-primary mb-3">{{ __('center::settings.appearance.title') }}</h6>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.appearance.primary_color') }}</label>
-                                    <input type="color" name="settings[appearance][primary_color]" class="form-control form-control-color w-100" value="{{ $tenant->settings['appearance']['primary_color'] ?? '#10b981' }}">
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-check form-switch mt-3">
-                                        <input type="hidden" name="settings[appearance][dark_mode]" value="0">
-                                        <input class="form-check-input" type="checkbox" name="settings[appearance][dark_mode]" value="1" id="darkMode" {{ ($tenant->settings['appearance']['dark_mode'] ?? false) ? 'checked' : '' }}>
-                                        <label class="form-check-label user-select-none" for="darkMode">{{ __('center::settings.appearance.dark_mode') }}</label>
-                                    </div>
-                                </div>
-                                </div>
-                                <div class="mt-4 pt-3 border-top d-flex justify-content-end gap-2">
-                                    <button type="submit" class="btn btn-primary px-5 shadow-sm rounded-pill">
-                                        <i class="fas fa-save me-2"></i> {{ __('center::settings.general.save') }}
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <!-- WhatsApp Settings -->
-                        <div class="tab-pane fade {{ $activeTab == 'whatsapp' ? 'show active' : '' }}" id="whatsapp" role="tabpanel" aria-labelledby="whatsapp-tab">
-                            <form action="{{ route('center.settings.update', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST">
-                                @csrf
-                                <div class="d-flex align-items-center mb-4">
-                                    <div class="bg-success bg-opacity-10 text-success rounded-circle p-3 me-3">
-                                        <i class="fab fa-whatsapp fa-2x"></i>
-                                    </div>
-                                    <div>
-                                        <h5 class="fw-bold mb-1">{{ __('center::settings.whatsapp.title') }}</h5>
-                                        <p class="text-muted small mb-0">{{ __('center::settings.whatsapp.desc') }}</p>
-                                    </div>
-                                </div>
-
-                                <div class="card border bg-light shadow-none mb-4">
-                                    <div class="card-body">
-                                        <div class="form-check form-switch mb-4">
-                                            <input type="hidden" name="settings[whatsapp][enabled]" value="0">
-                                            <input class="form-check-input" type="checkbox" name="settings[whatsapp][enabled]" value="1" id="whatsappEnabled" {{ ($tenant->settings['whatsapp']['enabled'] ?? false) ? 'checked' : '' }}>
-                                            <label class="form-check-label fw-bold" for="whatsappEnabled">{{ __('center::settings.whatsapp.enabled') }}</label>
-                                        </div>
-
-                                        <div class="row g-3">
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-bold small text-muted">Phone Number ID</label>
-                                                <input type="text" name="settings[whatsapp][phone_number_id]" class="form-control" value="{{ $tenant->settings['whatsapp']['phone_number_id'] ?? '' }}" placeholder="1234567890">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-bold small text-muted">Access Token</label>
-                                                <input type="password" name="settings[whatsapp][access_token]" class="form-control" value="{{ $tenant->settings['whatsapp']['access_token'] ?? '' }}" placeholder="EAAG...">
-                                            </div>
-                                            <div class="col-md-6 mt-3">
-                                                <label class="form-label fw-bold small text-muted"><i class="fas fa-globe me-1"></i> {{ __('center::settings.whatsapp.default_country_code') }}</label>
-                                                <select name="settings[whatsapp][country_code]" class="form-select">
-                                                    @php $cc = $tenant->settings['whatsapp']['country_code'] ?? '20'; @endphp
-                                                    <option value="20"  {{ $cc == '20'  ? 'selected' : '' }}>🇪🇬 (+20)</option>
-                                                    <option value="966" {{ $cc == '966' ? 'selected' : '' }}>🇸🇦 (+966)</option>
-                                                </select>
-                                                <small class="text-muted">{{ __('center::settings.whatsapp.default_country_code_help') }}</small>
-                                            </div>
-                                            <div class="col-md-6 mt-3">
-                                                <label class="form-label fw-bold small text-muted">API Version</label>
-                                                <input type="text" name="settings[whatsapp][api_version]" class="form-control" value="{{ $tenant->settings['whatsapp']['api_version'] ?? 'v21.0' }}" placeholder="v21.0">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="alert alert-success border-0 rounded-4 bg-opacity-10 py-3">
-                                    <h6 class="fw-bold"><i class="fas fa-lightbulb me-2 text-success"></i> WhatsApp Official Setup</h6>
-                                    <p class="small mb-0 mt-2">
-                                        {{ __('center::settings.whatsapp.official_note') ?? 'Ensure templates are approved in Meta Business Suite.' }}
-                                    </p>
-                                </div>
-                                <div class="alert alert-info border-0 rounded-4">
-                                    <h6 class="fw-bold"><i class="fas fa-lightbulb me-2"></i>{{ __('center::settings.whatsapp.info_title') }}</h6>
-                                    <ul class="small mb-0 mt-2">
-                                        <li><strong>{{ __('center::settings.whatsapp.attendance_msg') }}</strong></li>
-                                        <li><strong>{{ __('center::settings.whatsapp.payment_msg') }}</strong></li>
-                                    </ul>
-                                </div>
-
-
-                                <div class="mt-4 pt-3 border-top d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-primary px-5 shadow-sm rounded-pill">
-                                        <i class="fas fa-save me-2"></i> {{ __('center::settings.general.save') }}
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                        <!-- Email Templates Settings -->
-{{-- Tab 3: Email Templates --}}
-                        <div class="tab-pane fade {{ $activeTab == 'email_templates' ? 'show active' : '' }}" id="email_templates" role="tabpanel">
                             @php
                                 $emailSettings = $tenant->settings['email_templates'] ?? [];
                                 $presets = config('email_templates.presets', []);
@@ -799,11 +525,12 @@
                                     <i class="fas fa-undo me-2"></i> {{ __('center::settings.email_templates.reset') }}
                                 </button>
                             </form>
-                        </div>
-
-
-                        <!-- Payment Reminder Scheduling -->
-                        <div class="tab-pane fade {{ $activeTab == 'reminders' ? 'show active' : '' }}" id="reminders" role="tabpanel" aria-labelledby="reminders-tab">
+                            <hr class="my-5 border-secondary opacity-25">
+                            
+                            <!-- Payment Reminder Scheduling -->
+                            <div class="mb-4 mt-5">
+                                <h4 class="fw-bold text-warning"><i class="fas fa-calendar-check me-2"></i> {{ __('center::settings.tabs.reminders') }}</h4>
+                            </div>
                             @php
                                 $reminderSettings = $tenant->settings['payment_reminders'] ?? [];
                                 $defaultDueDay = $reminderSettings['default_due_day'] ?? 1;
@@ -1132,6 +859,279 @@
                             </form>
                         </div>
 
+                        <!-- Academic Settings -->
+                        <div class="tab-pane fade {{ $activeTab == 'academic' ? 'show active' : '' }}" id="academic" role="tabpanel" aria-labelledby="academic-tab">
+                            
+                            <!-- 1. Templates Section (STANDALONE FORM) -->
+                            <div class="card border-0 bg-primary bg-opacity-10 mb-4 rounded-4">
+                                <div class="card-body p-3">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-7">
+                                            <h6 class="fw-bold text-primary mb-1"><i class="fas fa-magic me-2"></i>{{ __('center::settings.academic.templates_title') }}</h6>
+                                            <p class="text-muted small mb-0">{{ __('center::settings.academic.templates_desc') }}</p>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <form action="{{ route('center.settings.apply-template', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST" id="applyTemplateForm" class="d-flex gap-2">
+                                                @csrf
+                                                <select name="template_key" class="form-select form-select-sm rounded-pill" required>
+                                                    <option value="">{{ __('center::settings.academic.select_template') }}</option>
+                                                    @foreach($templates as $key => $template)
+                                                        <option value="{{ $key }}">{{ __($template['name']) }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 text-nowrap" onclick="confirmTemplate()">
+                                                    {{ __('center::settings.academic.apply') }}
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2. Main Academic Settings Form -->
+                            <form action="{{ route('center.settings.update-academic', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST" id="academicStructureForm">
+                                @csrf
+                                <h6 class="fw-bold text-primary mb-3">{{ __('center::settings.academic.year_grading') }}</h6>
+                                <div class="row g-3 pb-4 border-bottom mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.academic.current_year') }}</label>
+                                    <select name="settings[academic][year]" class="form-select">
+                                        <option value="2024-2025" {{ ($tenant->settings['academic']['year'] ?? '') == '2024-2025' ? 'selected' : '' }}>2024-2025</option>
+                                        <option value="2025-2026" {{ ($tenant->settings['academic']['year'] ?? '') == '2025-2026' ? 'selected' : '' }}>2025-2026</option>
+                                        <option value="2026-2027" {{ ($tenant->settings['academic']['year'] ?? '') == '2026-2027' ? 'selected' : '' }}>2026-2027</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.academic.grading_system') }}</label>
+                                    <select name="settings[academic][grading]" class="form-select">
+                                        <option value="100" {{ ($tenant->settings['academic']['grading'] ?? '') == '100' ? 'selected' : '' }}>{{ __('center::settings.academic.percentage') }}</option>
+                                        <option value="GPA" {{ ($tenant->settings['academic']['grading'] ?? '') == 'GPA' ? 'selected' : '' }}>{{ __('center::settings.academic.gpa') }}</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check form-switch mt-3">
+                                        <input type="hidden" name="settings[academic][attendance_alert]" value="0">
+                                        <input class="form-check-input" type="checkbox" name="settings[academic][attendance_alert]" value="1" id="attendanceAlert" {{ ($tenant->settings['academic']['attendance_alert'] ?? false) ? 'checked' : '' }}>
+                                        <label class="form-check-label user-select-none" for="attendanceAlert">{{ __('center::settings.academic.attendance_alert') }}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="fw-bold text-primary mb-0"><i class="fas fa-layer-group me-2"></i>{{ __('center::settings.academic.structure_title') }}</h6>
+                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="addStage()">
+                                    <i class="fas fa-plus me-1"></i> {{ __('center::settings.academic.add_stage') }}
+                                </button>
+                            </div>
+
+                            <div id="stages-container">
+                                @foreach($stages as $sIndex => $stage)
+                                    <div class="stage-card card border bg-light mb-3 rounded-3 overflow-hidden shadow-none" data-index="{{ $sIndex }}">
+                                        <div class="card-header bg-white d-flex align-items-center gap-3 py-2 border-bottom">
+                                            <input type="hidden" name="stages[{{ $sIndex }}][id]" value="{{ $stage->id }}">
+                                            <input type="text" name="stages[{{ $sIndex }}][name]" class="form-control form-control-sm fw-bold border-0 bg-light" value="{{ $stage->name }}" placeholder="{{ __('center::settings.academic.stage_name_placeholder') }}">
+                                            <div class="ms-auto d-flex gap-2">
+                                                <button type="button" class="btn btn-sm btn-light text-primary" onclick="addGrade({{ $sIndex }})" title="{{ __('center::settings.academic.add_grade') }}">
+                                                    <i class="fas fa-plus-circle"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-light text-danger" onclick="removeStage(this, {{ $stage->id }})" title="{{ __('center::settings.academic.remove_stage') }}">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-3">
+                                            <div class="grades-container d-flex flex-wrap gap-2">
+                                                @foreach($stage->grades as $gIndex => $grade)
+                                                    <div class="grade-item d-flex align-items-center bg-white border rounded-pill px-3 py-1 shadow-sm">
+                                                        <input type="hidden" name="stages[{{ $sIndex }}][grades][{{ $gIndex }}][id]" value="{{ $grade->id }}">
+                                                        <input type="text" name="stages[{{ $sIndex }}][grades][{{ $gIndex }}][name]" class="form-control form-control-sm border-0 p-0 text-center" style="width: 100px; font-size: 0.85rem;" value="{{ $grade->name }}" placeholder="{{ __('center::settings.academic.grade_name_placeholder') }}">
+                                                        <button type="button" class="btn btn-link btn-sm text-danger p-0 ms-2" onclick="removeGrade(this, {{ $grade->id }})">
+                                                            <i class="fas fa-times-circle"></i>
+                                                        </button>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <div class="mt-5 mb-3 border-top pt-4">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="fw-bold text-danger mb-0"><i class="fas fa-clock me-2"></i>{{ __('center::settings.academic.attendance_rules') }}</h6>
+                                    <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="addLateLevel()">
+                                        <i class="fas fa-plus me-1"></i> {{ __('center::settings.academic.add_level') }}
+                                    </button>
+                                </div>
+                                <p class="text-muted small mb-3">{{ __('center::settings.academic.late_levels_help') }}</p>
+                                
+                                <div id="late-levels-container">
+                                    @php 
+                                        $hasCustomLevels = isset($tenant->settings['academic']['late_levels']);
+                                        $lateLevels = $tenant->settings['academic']['late_levels'] ?? config('academic.late_rules.defaults', []); 
+                                    @endphp
+                                    
+                                    @if(!$hasCustomLevels)
+                                        <div class="alert alert-info py-2 px-3 small border-0 mb-3 bg-opacity-10 text-info" id="system-defaults-alert">
+                                            <i class="fas fa-info-circle me-2"></i>{{ __('center::settings.academic_system_defaults_alert') }}</div>
+                                    @endif
+
+                                    @foreach($lateLevels as $lIndex => $level)
+                                        <div class="late-level-item d-flex align-items-center gap-2 mb-2 bg-light p-2 rounded-3">
+                                            <input type="number" name="settings[academic][late_levels][{{ $lIndex }}][minutes]" class="form-control form-control-sm" style="width: 100px;" value="{{ $level['minutes'] }}" placeholder="{{ __('center::settings.academic.threshold_minutes') }}" required>
+                                            <input type="text" name="settings[academic][late_levels][{{ $lIndex }}][label]" class="form-control form-control-sm" value="{{ __($level['label']) }}" placeholder="{{ __('center::settings.academic.level_label') }}" required>
+                                            <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeLateLevel(this)">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <div class="text-start mt-2">
+                                    <button type="button" class="btn btn-link btn-sm text-muted p-0" onclick="restoreLateDefaults()">
+                                        <i class="fas fa-undo-alt me-1"></i>{{ __('center::settings.academic_restore_defaults') }}</button>
+                                </div>
+                            </div>
+
+
+                                <div id="deletion-inputs"></div>
+
+                                <div class="mt-4 text-center">
+                                    <button type="submit" form="academicStructureForm" class="btn btn-primary px-5 rounded-pill shadow-sm">
+                                        <i class="fas fa-save me-2"></i> {{ __('center::settings.academic.save_structure') }}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Financial Settings -->
+                        <div class="tab-pane fade {{ $activeTab == 'financial' ? 'show active' : '' }}" id="financial" role="tabpanel" aria-labelledby="financial-tab">
+                            <form action="{{ route('center.settings.update', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST">
+                                @csrf
+                                <h6 class="fw-bold text-primary mb-3">{{ __('center::settings.financial.title') }}</h6>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.financial.currency') }}</label>
+                                    <select name="settings[financial][currency]" class="form-select">
+                                        <option value="EGP" {{ ($tenant->settings['financial']['currency'] ?? '') == 'EGP' ? 'selected' : '' }}>{{ __('center::settings.financial.currencies.egp') }}</option>
+                                        <option value="SAR" {{ ($tenant->settings['financial']['currency'] ?? '') == 'SAR' ? 'selected' : '' }}>{{ __('center::settings.financial.currencies.sar') }}</option>
+                                        <option value="USD" {{ ($tenant->settings['financial']['currency'] ?? '') == 'USD' ? 'selected' : '' }}>{{ __('center::settings.financial.currencies.usd') }}</option>
+                                        <option value="EUR" {{ ($tenant->settings['financial']['currency'] ?? '') == 'EUR' ? 'selected' : '' }}>{{ __('center::settings.financial.currencies.eur') }}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.financial.tax_rate') }}</label>
+                                    <input type="number" name="settings[financial][tax_rate]" class="form-control" value="{{ $tenant->settings['financial']['tax_rate'] ?? '0' }}" min="0" max="100">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.financial.invoice_prefix') }}</label>
+                                    <input type="text" name="settings[financial][invoice_prefix]" class="form-control" value="{{ $tenant->settings['financial']['invoice_prefix'] ?? 'INV-' }}" placeholder="INV-">
+                                </div>
+                                </div>
+                                <div class="mt-4 pt-3 border-top d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary px-5 shadow-sm rounded-pill">
+                                        <i class="fas fa-save me-2"></i> {{ __('center::settings.general.save') }}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Appearance Settings -->
+                        <div class="tab-pane fade {{ $activeTab == 'appearance' ? 'show active' : '' }}" id="appearance" role="tabpanel" aria-labelledby="appearance-tab">
+                            <form action="{{ route('center.settings.update', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST">
+                                @csrf
+                                <h6 class="fw-bold text-primary mb-3">{{ __('center::settings.appearance.title') }}</h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.appearance.primary_color') }}</label>
+                                    <input type="color" name="settings[appearance][primary_color]" class="form-control form-control-color w-100" value="{{ $tenant->settings['appearance']['primary_color'] ?? '#10b981' }}">
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check form-switch mt-3">
+                                        <input type="hidden" name="settings[appearance][dark_mode]" value="0">
+                                        <input class="form-check-input" type="checkbox" name="settings[appearance][dark_mode]" value="1" id="darkMode" {{ ($tenant->settings['appearance']['dark_mode'] ?? false) ? 'checked' : '' }}>
+                                        <label class="form-check-label user-select-none" for="darkMode">{{ __('center::settings.appearance.dark_mode') }}</label>
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="mt-4 pt-3 border-top d-flex justify-content-end gap-2">
+                                    <button type="submit" class="btn btn-primary px-5 shadow-sm rounded-pill">
+                                        <i class="fas fa-save me-2"></i> {{ __('center::settings.general.save') }}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- WhatsApp Settings -->
+                        <div class="tab-pane fade {{ $activeTab == 'whatsapp' ? 'show active' : '' }}" id="whatsapp" role="tabpanel" aria-labelledby="whatsapp-tab">
+                            <form action="{{ route('center.settings.update', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST">
+                                @csrf
+                                <div class="d-flex align-items-center mb-4">
+                                    <div class="bg-success bg-opacity-10 text-success rounded-circle p-3 me-3">
+                                        <i class="fab fa-whatsapp fa-2x"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="fw-bold mb-1">{{ __('center::settings.whatsapp.title') }}</h5>
+                                        <p class="text-muted small mb-0">{{ __('center::settings.whatsapp.desc') }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="card border bg-light shadow-none mb-4">
+                                    <div class="card-body">
+                                        <div class="form-check form-switch mb-4">
+                                            <input type="hidden" name="settings[whatsapp][enabled]" value="0">
+                                            <input class="form-check-input" type="checkbox" name="settings[whatsapp][enabled]" value="1" id="whatsappEnabled" {{ ($tenant->settings['whatsapp']['enabled'] ?? false) ? 'checked' : '' }}>
+                                            <label class="form-check-label fw-bold" for="whatsappEnabled">{{ __('center::settings.whatsapp.enabled') }}</label>
+                                        </div>
+
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold small text-muted">Phone Number ID</label>
+                                                <input type="text" name="settings[whatsapp][phone_number_id]" class="form-control" value="{{ $tenant->settings['whatsapp']['phone_number_id'] ?? '' }}" placeholder="1234567890">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold small text-muted">Access Token</label>
+                                                <input type="password" name="settings[whatsapp][access_token]" class="form-control" value="{{ $tenant->settings['whatsapp']['access_token'] ?? '' }}" placeholder="EAAG...">
+                                            </div>
+                                            <div class="col-md-6 mt-3">
+                                                <label class="form-label fw-bold small text-muted"><i class="fas fa-globe me-1"></i> {{ __('center::settings.whatsapp.default_country_code') }}</label>
+                                                <select name="settings[whatsapp][country_code]" class="form-select">
+                                                    @php $cc = $tenant->settings['whatsapp']['country_code'] ?? '20'; @endphp
+                                                    <option value="20"  {{ $cc == '20'  ? 'selected' : '' }}>🇪🇬 (+20)</option>
+                                                    <option value="966" {{ $cc == '966' ? 'selected' : '' }}>🇸🇦 (+966)</option>
+                                                </select>
+                                                <small class="text-muted">{{ __('center::settings.whatsapp.default_country_code_help') }}</small>
+                                            </div>
+                                            <div class="col-md-6 mt-3">
+                                                <label class="form-label fw-bold small text-muted">API Version</label>
+                                                <input type="text" name="settings[whatsapp][api_version]" class="form-control" value="{{ $tenant->settings['whatsapp']['api_version'] ?? 'v21.0' }}" placeholder="v21.0">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="alert alert-success border-0 rounded-4 bg-opacity-10 py-3">
+                                    <h6 class="fw-bold"><i class="fas fa-lightbulb me-2 text-success"></i> WhatsApp Official Setup</h6>
+                                    <p class="small mb-0 mt-2">
+                                        {{ __('center::settings.whatsapp.official_note') ?? 'Ensure templates are approved in Meta Business Suite.' }}
+                                    </p>
+                                </div>
+                                <div class="alert alert-info border-0 rounded-4">
+                                    <h6 class="fw-bold"><i class="fas fa-lightbulb me-2"></i>{{ __('center::settings.whatsapp.info_title') }}</h6>
+                                    <ul class="small mb-0 mt-2">
+                                        <li><strong>{{ __('center::settings.whatsapp.attendance_msg') }}</strong></li>
+                                        <li><strong>{{ __('center::settings.whatsapp.payment_msg') }}</strong></li>
+                                    </ul>
+                                </div>
+
+
+                                <div class="mt-4 pt-3 border-top d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary px-5 shadow-sm rounded-pill">
+                                        <i class="fas fa-save me-2"></i> {{ __('center::settings.general.save') }}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                         <!-- Privacy & GDPR Settings -->
                         <div class="tab-pane fade {{ $activeTab == 'privacy' ? 'show active' : '' }}" id="privacy" role="tabpanel" aria-labelledby="privacy-tab">
                             <div class="alert alert-warning border-0 rounded-4 mb-4">
