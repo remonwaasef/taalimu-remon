@@ -205,6 +205,34 @@ Nous confirmons la réception d\\\'un paiement avec les détails suivants :
 Merci de votre engagement.
 {center_name}',
     ],
+    'presets_data' => [
+      'formal' => [
+        'student_subject' => 'Bienvenue chez {اسم_المركز} - Informations de connexion',
+        'student_body' => 'Nous sommes heureux de vous informer que vous avez été inscrit avec succès chez {اسم_المركز}.
+
+Vos informations de connexion :
+• Lien de la plateforme : {رابط_الدخول}
+• Nom d\'utilisateur : {رقم_الهاتف}
+• Mot de passe : {كلمة_المرور}
+
+Veuillez changer votre mot de passe lors de votre première connexion pour assurer la sécurité de votre compte.
+
+Nous vous souhaitons une expérience d\'apprentissage fructueuse.',
+        'guardian_subject' => 'Inscription de {اسم_الطالب} chez {اسم_المركز}',
+        'guardian_body' => 'Nous souhaitons vous informer que l\'étudiant(e) {اسم_الطالب} a été inscrit(e) avec succès chez {اسم_المركز}.
+
+Niveau académique : {المرحلة}
+
+Informations de connexion de l\'étudiant(e) :
+• Lien de la plateforme : {رابط_الدخول}
+• Nom d\'utilisateur : {رقم_الهاتف}
+• Mot de passe : {كلمة_المرور}
+
+Veuillez conserver ces informations en lieu sûr. L\'étudiant devra changer son mot de passe lors de sa première connexion.
+
+Pour toute question, n\'hésitez pas à nous contacter.',
+      ],
+    ],
   ],
   'reminders' => [
     'title' => 'Planification des Rappels de Paiement',
@@ -251,6 +279,27 @@ Merci de votre engagement.
       'formal' => 'Formel',
       'friendly' => 'Amical',
       'urgent' => 'Urgent',
+    ],
+    'presets_data' => [
+      'email' => [
+        'formal' => 'Nous vous informons que les frais pour l\'étudiant(e) {اسم_الطالب} d\'un montant de {المبلغ} sont dus le {تاريخ_الاستحقاق}.
+Veuillez effectuer le paiement à temps pour assurer la continuité du service éducatif sans interruption.
+Merci de votre coopération.
+{اسم_المركز}',
+        'friendly' => 'Bienvenue chez {اسم_المركز},
+Nous vous rappelons que la date de paiement des frais de {اسم_الطالب} est le {تاريخ_الاستحقاق} (Montant : {المبلغ}).
+Nous sommes ravis de vous avoir parmi nous.
+Cordialement, l\'administration de {اسم_المركز}',
+        'urgent' => 'ALERTE IMPORTANTE :
+Nous vous informons que les frais de {اسم_الطالب} d\'un montant de {المبلغ} sont déjà échus depuis le {تاريخ_الاستحقاق}.
+Veuillez régulariser la situation rapidement pour éviter toute interruption de service.
+{اسم_المركز}',
+      ],
+      'whatsapp' => [
+        'formal' => 'Rappel officiel : Les frais de {اسم_الطالب} ({المبلغ}) sont dus le {تاريخ_الاستحقاق}. Merci de régulariser. {اسم_المركز}',
+        'friendly' => 'Bonjour ! Nous vous rappelons le paiement des frais de {اسم_الطالب} pour le {تاريخ_الاستحقاق}. Bonne journée ! 🌸 {اسم_المركز}',
+        'urgent' => 'ALERTE : Les frais de {اسم_الطالب} sont en retard depuis {تاريخ_الاستحقاق}. Merci de payer dès que possible. {اسم_المركز}',
+      ],
     ],
   ],
   'general_timezone_help' => 'Affecte l\'affichage de la date et de l\'heure dans les rapports',

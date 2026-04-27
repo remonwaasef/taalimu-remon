@@ -205,6 +205,34 @@ We confirm receipt of a payment with the following details:
 Thank you for your commitment.
 {center_name}',
     ],
+    'presets_data' => [
+      'formal' => [
+        'student_subject' => 'Welcome to {اسم_المركز} - Login Details',
+        'student_body' => 'We are pleased to inform you that you have been successfully registered at {اسم_المركز}.
+
+Your login details:
+• Platform Link: {رابط_الدخول}
+• Username: {رقم_الهاتف}
+• Password: {كلمة_المرور}
+
+Please change your password upon first login to ensure account security.
+
+We wish you a successful educational journey.',
+        'guardian_subject' => '{اسم_الطالب} Registered at {اسم_المركز}',
+        'guardian_body' => 'We wish to inform you that the student {اسم_الطالب} has been successfully registered at {اسم_المركز}.
+
+Academic Stage: {المرحلة}
+
+Student Login Details:
+• Platform Link: {رابط_الدخول}
+• Username: {رقم_الهاتف}
+• Password: {كلمة_المرور}
+
+Please keep these details safe. The student will be asked to change the password upon first login.
+
+For any inquiries, feel free to contact us.',
+      ],
+    ],
   ],
   'reminders' => [
     'title' => 'Payment Reminder Schedule',
@@ -251,6 +279,27 @@ Thank you for your commitment.
       'formal' => 'Formal',
       'friendly' => 'Friendly',
       'urgent' => 'Urgent',
+    ],
+    'presets_data' => [
+      'email' => [
+        'formal' => 'We inform you that the fees for the student {اسم_الطالب} in the amount of {المبلغ} are due on {تاريخ_الاستحقاق}.
+Please make the payment on time to ensure the continuity of the educational service without interruption.
+Thank you for your cooperation.
+{اسم_المركز}',
+        'friendly' => 'Welcome to {اسم_المركز},
+We remind you that the payment due date for {اسم_الطالب} is {تاريخ_الاستحقاق} (Amount: {المبلغ}).
+We are happy to have you with us.
+Best regards, {اسم_المركز} management',
+        'urgent' => 'IMPORTANT ALERT:
+We inform you that the fees for {اسم_الطالب} in the amount of {المبلغ} are already overdue since {تاريخ_الاستحقاق}.
+Please settle the payment quickly to avoid any service interruption.
+{اسم_المركز}',
+      ],
+      'whatsapp' => [
+        'formal' => 'Official Reminder: Fees for {اسم_الطالب} ({المبلغ}) are due on {تاريخ_الاستحقاق}. Please settle. {اسم_المركز}',
+        'friendly' => 'Hello! We remind you of the payment due date for {اسم_الطالب} on {تاريخ_الاستحقاق}. Have a great day! 🌸 {اسم_المركز}',
+        'urgent' => 'URGENT ALERT: Fees for {اسم_الطالب} are overdue since {تاريخ_الاستحقاق}. Please pay as soon as possible. {اسم_المركز}',
+      ],
     ],
   ],
   'general_timezone_help' => 'Affects the date and time display in reports',
