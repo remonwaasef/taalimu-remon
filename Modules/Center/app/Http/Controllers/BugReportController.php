@@ -29,12 +29,7 @@ class BugReportController extends Controller
         
         try {
             if ($request->hasFile('screenshot')) {
-                $file = $request->file('screenshot');
-                $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
-                $dir = public_path('uploads/bugs');
-                if (!file_exists($dir)) mkdir($dir, 0775, true);
-                $file->move($dir, $fileName);
-                $screenshotPath = 'uploads/bugs/' . $fileName;
+                $screenshotPath = $request->file('screenshot')->store('bug-reports', 'public');
             } elseif ($request->filled('auto_screenshot')) {
                 $imageData = $request->input('auto_screenshot');
                 
@@ -43,24 +38,18 @@ class BugReportController extends Controller
                     $image = base64_decode(substr($imageData, strpos($imageData, ',') + 1));
                     
                     if ($image) {
-                        $dir = public_path('uploads/bugs');
-                        if (!file_exists($dir)) {
-                            mkdir($dir, 0775, true);
-                        }
-                        
-                        $fileName = uniqid() . '_auto.' . $extension;
-                        $fullPath = $dir . '/' . $fileName;
-                        if (file_put_contents($fullPath, $image)) {
-                            chmod($fullPath, 0664);
-                            $screenshotPath = 'uploads/bugs/' . $fileName;
+                        $fileName = 'bug-reports/' . uniqid() . '_auto.' . $extension;
+                        // Storage::disk('public') now points correctly thanks to the symlink
+                        if (\Illuminate\Support\Facades\Storage::disk('public')->put($fileName, $image)) {
+                            $screenshotPath = $fileName;
                         } else {
-                            $errorDebug = "Failed to write file to public/uploads/bugs";
+                            $errorDebug = "Storage::disk('public')->put failed";
                         }
                     } else {
                         $errorDebug = "Base64 decode failed";
                     }
                 } else {
-                    $errorDebug = "Regex match failed";
+                    $errorDebug = "Regex match failed for image data";
                 }
             }
         } catch (\Exception $e) {
