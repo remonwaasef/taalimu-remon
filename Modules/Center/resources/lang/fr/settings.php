@@ -171,9 +171,9 @@ return [
     'notif_status' => 'Statut de Notification',
     'notif_active' => 'Actif',
     'presets' => [
-      'formal' => 'Bienvenue Formelle',
-      'friendly' => 'Bienvenue Amicale',
-      'minimal' => 'Notification Minimale',
+      'formal' => 'Accueil Formel',
+      'friendly' => 'Accueil Amical',
+      'minimal' => 'Notification Simple',
     ],
     'defaults' => [
       'payment_reminder_subject' => 'Rappel de paiement pour {student_name} - {center_name}',
@@ -301,6 +301,9 @@ Veuillez régulariser la situation rapidement pour éviter toute interruption de
         'urgent' => 'ALERTE : Les frais de {اسم_الطالب} sont en retard depuis {تاريخ_الاستحقاق}. Merci de payer dès que possible. {اسم_المركز}',
       ],
     ],
+    'timeline_preview' => 'Aperçu du Calendrier',
+    'timeline_desc' => 'Visualisation des rappels automatiques.',
+    'whatsapp_placeholder' => 'Rappel : Les frais de l\'étudiant {اسم_الطالب} ({المبلغ}) sont dus le {تاريخ_الاستحقاق}. Merci de payer. {اسم_المركز}',
   ],
   'general_timezone_help' => 'Affecte l\'affichage de la date et de l\'heure dans les rapports',
   'academic_system_defaults_alert' => 'Les paramètres par défaut du système sont actuellement utilisés. Les paramètres personnalisés seront enregistrés une fois que vous aurez cliqué sur Enregistrer.',

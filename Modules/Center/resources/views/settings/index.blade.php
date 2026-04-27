@@ -251,7 +251,7 @@
                                                         <div class="mb-2">
                                                             <i class="{{ $preset['icon'] ?? 'fas fa-file-alt' }} fa-2x text-primary"></i>
                                                         </div>
-                                                        <span class="fw-bold small">{{ $preset['name'] ?? $key }}</span>
+                                                        <span class="fw-bold small">{{ __('center::settings.email_templates.presets.' . $key) }}</span>
                                                     </div>
                                                 </div>
                                             @endforeach
@@ -869,7 +869,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <textarea name="whatsapp_template" id="whatsappTemplateArea" class="form-control rounded-3" rows="4" dir="auto" placeholder="تذكير: مصروفات الطالب/ة {اسم_الطالب} بمبلغ {المبلغ} مستحقة بتاريخ {تاريخ_الاستحقاق}. يرجى السداد. {اسم_المركز}">{{ $whatsappTemplate }}</textarea>
+                                            <textarea name="whatsapp_template" id="whatsappTemplateArea" class="form-control rounded-3" rows="4" dir="auto" placeholder="{{ __('center::settings.reminders.whatsapp_placeholder') }}">{{ $whatsappTemplate }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -878,7 +878,7 @@
                                 <div class="card border-0 shadow-sm rounded-4 mb-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
                                     <div class="card-body p-4">
                                         <h6 class="fw-bold text-dark mb-3">
-                                            <i class="fas fa-stream me-2 text-primary"></i> معاينة الجدول الزمني
+                                            <i class="fas fa-stream me-2 text-primary"></i> {{ __('center::settings.reminders.timeline_preview') }}
                                         </h6>
                                         <div class="position-relative" style="padding-right: 30px;">
                                             <div class="position-absolute" style="right: 14px; top: 0; bottom: 0; width: 3px; background: linear-gradient(to bottom, #00b4d8, #f39c12, #e74c3c); border-radius: 2px;"></div>
