@@ -1307,7 +1307,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     const presetCards = document.querySelectorAll('.preset-card');
-    const presets = @json(config('email_templates.presets', [])); // Config doesn't strictly inject here properly via @json if empty, but usually it works if defined
+    const presets = {!! json_encode(config('email_templates.presets', [])) !!};
     
     presetCards.forEach(card => {
         card.addEventListener('click', function() {
