@@ -808,7 +808,7 @@
                                                         <small class="fw-bold text-muted d-block mb-1">{{ __('center::settings.reminders.template_variables') }}</small>
                                                         <div class="d-flex flex-wrap gap-1 mt-1">
                                                             @foreach (['{اسم_الطالب}', '{اسم_المركز}', '{المبلغ}', '{تاريخ_الاستحقاق}', '{المبلغ_المتبقي}', '{اسم_المجموعة}', '{سعر_الدورة}', '{رابط_الدخول}', '{كلمة_المرور}'] as $var)
-                                                                <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-2 py-1 small cursor-pointer" onclick="insertVariable(this, 'emailTemplateArea')">{{ $var }}</span>
+                                                                <button type="button" class="btn btn-xs btn-outline-primary rounded-pill px-2 py-0 small" onclick="insertVariable(this, 'emailTemplateArea')">{{ $var }}</button>
                                                             @endforeach
                                                         </div>
                                                     </div>
@@ -838,7 +838,7 @@
                                                         <small class="fw-bold text-muted d-block mb-1">{{ __('center::settings.reminders.template_variables') }}</small>
                                                         <div class="d-flex flex-wrap gap-1 mt-1">
                                                             @foreach (['{اسم_الطالب}', '{اسم_المركز}', '{المبلغ}', '{تاريخ_الاستحقاق}', '{المبلغ_المتبقي}'] as $var)
-                                                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1 small cursor-pointer" onclick="insertVariable(this, 'whatsappTemplateArea')">{{ $var }}</span>
+                                                                <button type="button" class="btn btn-xs btn-outline-success rounded-pill px-2 py-0 small" onclick="insertVariable(this, 'whatsappTemplateArea')">{{ $var }}</button>
                                                             @endforeach
                                                         </div>
                                                     </div>
