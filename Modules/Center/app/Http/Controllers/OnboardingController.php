@@ -11,11 +11,16 @@ class OnboardingController extends Controller
 {
     protected $studentService;
     protected $financeService;
+    protected $settingsService;
 
-    public function __construct(StudentService $studentService, FinanceService $financeService)
-    {
+    public function __construct(
+        \App\Services\StudentService $studentService, 
+        \App\Services\FinanceService $financeService,
+        \Modules\Center\Services\SettingsService $settingsService
+    ) {
         $this->studentService = $studentService;
         $this->financeService = $financeService;
+        $this->settingsService = $settingsService;
     }
 
     /**
@@ -93,7 +98,13 @@ class OnboardingController extends Controller
             return redirect()->route('center.dashboard');
         }
 
-        return view('center::onboarding.wizard', compact('status', 'tenant'));
+        // Fetch stages and grades for student registration step
+        $stages = \App\Models\Stage::where('tenant_id', $tenant->id)
+            ->with('grades')
+            ->orderBy('order')
+            ->get();
+
+        return view('center::onboarding.wizard', compact('status', 'tenant', 'stages'));
     }
 
     public function updateLocale(Request $request)
@@ -114,14 +125,23 @@ class OnboardingController extends Controller
         $settings = $tenant->settings ?? [];
         $settings['default_locale'] = $request->locale;
         
-        // Map language to default currency
+        // Map language to default currency and education system
         $currencyMap = [
             'ar' => 'EGP',
             'fr' => 'EUR',
             'en' => 'USD',
         ];
+        $systemMap = [
+            'ar' => 'egyptian_national',
+            'fr' => 'french_system',
+            'en' => 'european_system',
+        ];
+
         if (isset($currencyMap[$request->locale])) {
             $settings['currency'] = $currencyMap[$request->locale];
+        }
+        if (isset($systemMap[$request->locale])) {
+            $settings['education_system'] = $systemMap[$request->locale];
         }
 
         $tenant->settings = $settings;
@@ -139,6 +159,7 @@ class OnboardingController extends Controller
             $request->validate([
                 'locale' => 'required|in:ar,en,fr',
                 'currency' => 'required|string|max:3',
+                'education_system' => 'required|string|in:egyptian_national,egyptian_azhar,french_system,european_system',
                 // other academic settings validations can go here
             ]);
 
@@ -146,10 +167,18 @@ class OnboardingController extends Controller
             $settings = $tenant->settings ?? [];
             $settings['default_locale'] = $request->locale;
             $settings['currency'] = $request->currency;
+            $settings['education_system'] = $request->education_system;
             
             $tenant->settings = $settings;
             $tenant->onboarding_status = 'step_2';
             $tenant->save();
+
+            // Apply Academic Template
+            try {
+                $this->settingsService->applyTemplate($tenant, $request->education_system);
+            } catch (\Exception $e) {
+                \Log::error("Onboarding Template Application Error: " . $e->getMessage());
+            }
 
             // Set user locale too
             auth()->user()->update(['locale' => $request->locale]);
@@ -274,6 +303,7 @@ class OnboardingController extends Controller
                 $request->validate([
                     'student_name' => 'required|string|max:255',
                     'student_phone' => 'required|string|max:20',
+                    'grade_id' => 'nullable|exists:grades,id',
                 ]);
 
                 // 1. Register Student using natural StudentService
@@ -281,6 +311,7 @@ class OnboardingController extends Controller
                 $studentData = \App\DTOs\StudentData::fromArray([
                     'name' => $request->student_name,
                     'phone' => $request->student_phone,
+                    'grade_id' => $request->grade_id,
                 ]);
 
                 $result = $this->studentService->registerStudent($studentData, auth()->user());

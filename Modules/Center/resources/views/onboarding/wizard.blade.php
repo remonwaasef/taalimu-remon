@@ -114,15 +114,26 @@
                         </div>
 
                         <form @submit.prevent="submitStep('step_1')" class="space-y-8">
-                            <div>
-                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_1.currency_label') }}</label>
-                                <select x-model="formData.step_1.currency" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all hover:bg-white focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5 appearance-none cursor-pointer">
-                                    <option value="EGP">{{ __('onboarding.currencies.egp') }}</option>
-                                    <option value="SAR">{{ __('onboarding.currencies.sar') }}</option>
-                                    <option value="AED">{{ __('onboarding.currencies.aed') }}</option>
-                                    <option value="USD">{{ __('onboarding.currencies.usd') }}</option>
-                                    <option value="EUR">{{ __('onboarding.currencies.eur') }}</option>
-                                </select>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_1.currency_label') }}</label>
+                                    <select x-model="formData.step_1.currency" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all hover:bg-white focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5 appearance-none cursor-pointer">
+                                        <option value="EGP">{{ __('onboarding.currencies.egp') }}</option>
+                                        <option value="SAR">{{ __('onboarding.currencies.sar') }}</option>
+                                        <option value="AED">{{ __('onboarding.currencies.aed') }}</option>
+                                        <option value="USD">{{ __('onboarding.currencies.usd') }}</option>
+                                        <option value="EUR">{{ __('onboarding.currencies.eur') }}</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_1.education_system_label') }}</label>
+                                    <select x-model="formData.step_1.education_system" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all hover:bg-white focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5 appearance-none cursor-pointer">
+                                        @foreach(__('onboarding.education_systems') as $key => $name)
+                                            <option value="{{ $key }}">{{ $name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                             
                             <div class="pt-6 flex justify-end">
@@ -298,6 +309,20 @@
                                 </div>
                             </div>
 
+                            <div>
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_4.grade_label') }}</label>
+                                <select x-model="formData.step_4.grade_id" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all hover:bg-white focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5 appearance-none cursor-pointer">
+                                    <option value="">{{ __('onboarding.step_4.grade_label') }}...</option>
+                                    @foreach($stages as $stage)
+                                        <optgroup label="{{ $stage->name }}">
+                                            @foreach($stage->grades as $grade)
+                                                <option value="{{ $grade->id }}">{{ $grade->name }}</option>
+                                            @endforeach
+                                        </optgroup>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <div class="p-6 bg-emerald-50/50 rounded-2xl border-2 border-emerald-100/50 flex items-center gap-4 transition-all hover:bg-emerald-50 group cursor-pointer" @click="formData.step_4.enroll_in_course = !formData.step_4.enroll_in_course">
                                 <div class="relative flex items-center">
                                     <input type="checkbox" x-model="formData.step_4.enroll_in_course" class="w-6 h-6 rounded-lg border-emerald-200 text-emerald-500 focus:ring-emerald-500 cursor-pointer transition-all">
@@ -369,10 +394,14 @@
                 ],
                 
                 formData: {
-                    step_1: { locale: '{{ app()->getLocale() }}', currency: '{{ $tenant->settings['currency'] ?? session('suggested_currency', 'EGP') }}' },
+                    step_1: { 
+                        locale: '{{ app()->getLocale() }}', 
+                        currency: '{{ $tenant->settings['currency'] ?? session('suggested_currency', 'EGP') }}',
+                        education_system: '{{ $tenant->settings['education_system'] ?? 'egyptian_national' }}'
+                    },
                     step_2: { instructor_name: '', instructor_phone: '', instructor_specialization: '', instructor_email: '' },
                     step_3: { course_name: '', price: '', sessions_count: '1', schedules: [{day: '0', time: '16:00', time_end: '18:00'}] },
-                    step_4: { student_name: '', student_phone: '', enroll_in_course: true }
+                    step_4: { student_name: '', student_phone: '', grade_id: '', enroll_in_course: true }
                 },
                 
                 syncSchedules(count) {
