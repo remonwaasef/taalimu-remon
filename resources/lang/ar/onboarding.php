@@ -18,7 +18,15 @@ return [
         'subtitle' => 'دعنا نبدأ بضبط خيارات عرض منصتك.',
         'language_label' => 'لغة النظام الافتراضية',
         'currency_label' => 'العملة المحلية',
+        'education_system_label' => 'النظام التعليمي',
         'btn_submit' => 'حفظ والمتابعة',
+    ],
+    
+    'education_systems' => [
+        'egyptian_national' => 'النظام المصري - التعليم العام',
+        'egyptian_azhar' => 'النظام الأزهري',
+        'french_system' => 'النظام الفرنسي (Mission Française)',
+        'european_system' => 'النظام الأوروبي (International/IB)',
     ],
     
     'step_2' => [
@@ -59,6 +67,7 @@ return [
         'name_label' => 'اسم الطالب',
         'name_placeholder' => 'مثال: عمر ممدوح',
         'phone_label' => 'رقم هاتف الطالب',
+        'grade_label' => 'الصف الدراسي',
         'enroll_checkbox' => 'تسجيل الطالب في الدورة التي أنشأتها ( :course )',
         'btn_skip' => 'تخطي والذهاب للوحة التحكم',
         'btn_submit' => 'إنهاء الإعداد والبدء!',

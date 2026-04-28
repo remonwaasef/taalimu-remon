@@ -18,7 +18,15 @@ return [
         'subtitle' => 'Commençons par configurer les options d\'affichage de votre plateforme.',
         'language_label' => 'Langue système par défaut',
         'currency_label' => 'Devise locale',
+        'education_system_label' => 'Système Éducatif',
         'btn_submit' => 'Enregistrer et continuer',
+    ],
+    
+    'education_systems' => [
+        'egyptian_national' => 'Système National Égyptien',
+        'egyptian_azhar' => 'Système Al-Azhar',
+        'french_system' => 'Système Français (Mission Française)',
+        'european_system' => 'Système Européen (International/IB)',
     ],
     
     'step_2' => [
@@ -59,6 +67,7 @@ return [
         'name_label' => 'Nom de l\'étudiant',
         'name_placeholder' => 'ex: Alex Martin',
         'phone_label' => 'Numéro de téléphone de l\'étudiant',
+        'grade_label' => 'Niveau / Classe',
         'enroll_checkbox' => 'Inscrire l\'étudiant au cours que vous avez créé ( :course )',
         'btn_skip' => 'Ignorer et aller au tableau de bord',
         'btn_submit' => 'Terminer la configuration !',

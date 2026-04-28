@@ -18,7 +18,15 @@ return [
         'subtitle' => 'Let\'s start by configuring your platform\'s display options.',
         'language_label' => 'Default System Language',
         'currency_label' => 'Local Currency',
+        'education_system_label' => 'Educational System',
         'btn_submit' => 'Save & Continue',
+    ],
+    
+    'education_systems' => [
+        'egyptian_national' => 'Egyptian National System',
+        'egyptian_azhar' => 'Al-Azhar System',
+        'french_system' => 'French System (Mission Française)',
+        'european_system' => 'European System (International/IB)',
     ],
     
     'step_2' => [
@@ -59,6 +67,7 @@ return [
         'name_label' => 'Student Name',
         'name_placeholder' => 'e.g., Alex Smith',
         'phone_label' => 'Student Phone Number',
+        'grade_label' => 'Grade / Class',
         'enroll_checkbox' => 'Enroll the student in the course you created ( :course )',
         'btn_skip' => 'Skip & Go to Dashboard',
         'btn_submit' => 'Finish Setup & Start!',
