@@ -207,26 +207,26 @@ Merci de votre engagement.
     ],
     'presets_data' => [
       'formal' => [
-        'student_subject' => 'Bienvenue chez {اسم_المركز} - Informations de connexion',
-        'student_body' => 'Nous sommes heureux de vous informer que vous avez été inscrit avec succès chez {اسم_المركز}.
+        'student_subject' => 'Bienvenue chez {center_name} - Informations de connexion',
+        'student_body' => 'Nous sommes heureux de vous informer que vous avez été inscrit avec succès chez {center_name}.
 
 Vos informations de connexion :
-• Lien de la plateforme : {رابط_الدخول}
-• Nom d\'utilisateur : {رقم_الهاتف}
-• Mot de passe : {كلمة_المرور}
+• Lien de la plateforme : {login_link}
+• Nom d\'utilisateur : {phone}
+• Mot de passe : {password}
 
 Veuillez changer votre mot de passe lors de votre première connexion pour assurer la sécurité de votre compte.
 
 Nous vous souhaitons une expérience d\'apprentissage fructueuse.',
-        'guardian_subject' => 'Inscription de {اسم_الطالب} chez {اسم_المركز}',
-        'guardian_body' => 'Nous souhaitons vous informer que l\'étudiant(e) {اسم_الطالب} a été inscrit(e) avec succès chez {اسم_المركز}.
+        'guardian_subject' => 'Inscription de {student_name} chez {center_name}',
+        'guardian_body' => 'Nous souhaitons vous informer que l\'étudiant(e) {student_name} a été inscrit(e) avec succès chez {center_name}.
 
-Niveau académique : {المرحلة}
+Niveau académique : {stage}
 
 Informations de connexion de l\'étudiant(e) :
-• Lien de la plateforme : {رابط_الدخول}
-• Nom d\'utilisateur : {رقم_الهاتف}
-• Mot de passe : {كلمة_المرور}
+• Lien de la plateforme : {login_link}
+• Nom d\'utilisateur : {phone}
+• Mot de passe : {password}
 
 Veuillez conserver ces informations en lieu sûr. L\'étudiant devra changer son mot de passe lors de sa première connexion.
 
@@ -282,28 +282,28 @@ Pour toute question, n\'hésitez pas à nous contacter.',
     ],
     'presets_data' => [
       'email' => [
-        'formal' => 'Nous vous informons que les frais pour l\'étudiant(e) {اسم_الطالب} d\'un montant de {المبلغ} sont dus le {تاريخ_الاستحقاق}.
+        'formal' => 'Nous vous informons que les frais pour l\'étudiant(e) {student_name} d\'un montant de {amount} sont dus le {due_date}.
 Veuillez effectuer le paiement à temps pour assurer la continuité du service éducatif sans interruption.
 Merci de votre coopération.
-{اسم_المركز}',
-        'friendly' => 'Bienvenue chez {اسم_المركز},
-Nous vous rappelons que la date de paiement des frais de {اسم_الطالب} est le {تاريخ_الاستحقاق} (Montant : {المبلغ}).
+{center_name}',
+        'friendly' => 'Bienvenue chez {center_name},
+Nous vous rappelons que la date de paiement des frais de {student_name} est le {due_date} (Montant : {amount}).
 Nous sommes ravis de vous avoir parmi nous.
-Cordialement, l\'administration de {اسم_المركز}',
+Cordialement, l\'administration de {center_name}',
         'urgent' => 'ALERTE IMPORTANTE :
-Nous vous informons que les frais de {اسم_الطالب} d\'un montant de {المبلغ} sont déjà échus depuis le {تاريخ_الاستحقاق}.
+Nous vous informons que les frais de {student_name} d\'un montant de {amount} sont déjà échus depuis le {due_date}.
 Veuillez régulariser la situation rapidement pour éviter toute interruption de service.
-{اسم_المركز}',
+{center_name}',
       ],
       'whatsapp' => [
-        'formal' => 'Rappel officiel : Les frais de {اسم_الطالب} ({المبلغ}) sont dus le {تاريخ_الاستحقاق}. Merci de régulariser. {اسم_المركز}',
-        'friendly' => 'Bonjour ! Nous vous rappelons le paiement des frais de {اسم_الطالب} pour le {تاريخ_الاستحقاق}. Bonne journée ! 🌸 {اسم_المركز}',
-        'urgent' => 'ALERTE : Les frais de {اسم_الطالب} sont en retard depuis {تاريخ_الاستحقاق}. Merci de payer dès que possible. {اسم_المركز}',
+        'formal' => 'Rappel officiel : Les frais de {student_name} ({amount}) sont dus le {due_date}. Merci de régulariser. {center_name}',
+        'friendly' => 'Bonjour ! Nous vous rappelons le paiement des frais de {student_name} pour le {due_date}. Bonne journée ! 🌸 {center_name}',
+        'urgent' => 'ALERTE : Les frais de {student_name} sont en retard depuis {due_date}. Merci de payer dès que possible. {center_name}',
       ],
     ],
     'timeline_preview' => 'Aperçu du Calendrier',
     'timeline_desc' => 'Visualisation des rappels automatiques.',
-    'whatsapp_placeholder' => 'Rappel : Les frais de l\'étudiant {اسم_الطالب} ({المبلغ}) sont dus le {تاريخ_الاستحقاق}. Merci de payer. {اسم_المركز}',
+    'whatsapp_placeholder' => 'Rappel : Les frais de l\'étudiant {student_name} ({amount}) sont dus le {due_date}. Merci de payer. {center_name}',
   ],
   'general_timezone_help' => 'Affecte l\'affichage de la date et de l\'heure dans les rapports',
   'academic_system_defaults_alert' => 'Les paramètres par défaut du système sont actuellement utilisés. Les paramètres personnalisés seront enregistrés une fois que vous aurez cliqué sur Enregistrer.',

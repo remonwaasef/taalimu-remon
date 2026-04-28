@@ -211,15 +211,15 @@ class SendPaymentRemindersCommand extends Command
         try {
             // Transform variables to match the new template structure
             $variables = [
-                'اسم_الطالب' => $student->name,
-                'اسم_المركز' => $tenant->name,
-                'المبلغ' => $fee,
-                'تاريخ_الاستحقاق' => $dueDay . ' من كل شهر',
-                'المبلغ_المتبقي' => $fee, // Fallback
-                'اسم_المجموعة' => 'المجموعة الدراسية', // Generic
-                'سعر_الدورة' => $fee,
-                'رابط_الدخول' => url('/login'),
-                'كلمة_المرور' => '******',
+                'student_name' => $student->name,
+                'center_name' => $tenant->name,
+                'amount' => $fee,
+                'due_date' => $dueDay . ' من كل شهر',
+                'remaining' => $fee, // Fallback
+                'group_name' => 'المجموعة الدراسية', // Generic
+                'course_price' => $fee,
+                'login_link' => url('/login'),
+                'password' => '******',
             ];
             
             // Reusing NotifGroupEnrollmentMail or a dedicated generic one. 
@@ -284,12 +284,12 @@ class SendPaymentRemindersCommand extends Command
         $currency = $tenant->settings['currency'] ?? 'ج.م';
         if (!empty($template)) {
             $variables = [
-                'اسم_الطالب' => $student->name,
-                'اسم_المركز' => $tenant->name,
-                'المبلغ' => number_format($fee, 2) . ' ' . $currency,
-                'تاريخ_الاستحقاق' => $dueDay . ' من كل شهر',
-                'المبلغ_المتبقي' => number_format($fee, 2) . ' ' . $currency,
-                'رابط_الدخول' => url('/login'),
+                'student_name' => $student->name,
+                'center_name' => $tenant->name,
+                'amount' => number_format($fee, 2) . ' ' . $currency,
+                'due_date' => $dueDay . ' من كل شهر',
+                'remaining' => number_format($fee, 2) . ' ' . $currency,
+                'login_link' => url('/login'),
             ];
             
             $message = $template;
@@ -299,7 +299,7 @@ class SendPaymentRemindersCommand extends Command
         } else {
             // Default WhatsApp message
             if (str_starts_with($stage, 'overdue')) {
-                $message = "⚠️ تنبيه من {$tenant->name}\n\nالسلام عليكم،\nنود إبلاغكم بأن مصروفات الطالب/ة {$student->name} بمبلغ " . number_format($fee, 2) . " {$currency} قد تأخر سدادها.\nنرجو التواصل مع الإدارة لتسوية المبلغ.\n\nشكراً لتعاونكم.";
+                $message = "⚠️ تنبيه من {$tenant->name}\n\nالسلام عليكم،\nنود إبلاغكم بأن مصروفات الطالب/ة {$student->name} بمبلغ " . number_format($fee, 2) . " {$currency} قد تأخر سدادها.\nنرجو التواصل مع الإدارة لتسوية amount.\n\nشكراً لتعاونكم.";
             } else {
                 $message = "📋 تذكير من {$tenant->name}\n\nالسلام عليكم،\nنذكّركم بأن مصروفات الطالب/ة {$student->name} بمبلغ " . number_format($fee, 2) . " {$currency} مستحقة يوم {$dueDay} من الشهر الحالي.\n\nشكراً لتعاونكم.";
             }

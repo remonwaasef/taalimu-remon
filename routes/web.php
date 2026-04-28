@@ -145,6 +145,24 @@ Route::get('lang/{locale}', function ($locale) {
 
         if (auth()->check()) {
             auth()->user()->update(['locale' => $locale]);
+
+            // Auto-apply French education system when switching to French
+            if ($locale === 'fr' && auth()->user()->tenant_id) {
+                try {
+                    $tenant = \App\Models\Tenant::find(auth()->user()->tenant_id);
+                    if ($tenant) {
+                        $hasStages = \App\Models\Stage::where('tenant_id', $tenant->id)->exists();
+                        if (!$hasStages) {
+                            $settingsService = app(\Modules\Center\Services\SettingsService::class);
+                            $settingsService->applyTemplate($tenant, 'french_system');
+                        }
+                    }
+                } catch (\Exception $e) {
+                    \Illuminate\Support\Facades\Log::warning(
+                        'Auto-apply French education system failed: ' . $e->getMessage()
+                    );
+                }
+            }
         }
     }
     return redirect()->back();

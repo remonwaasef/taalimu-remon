@@ -207,26 +207,26 @@ Thank you for your commitment.
     ],
     'presets_data' => [
       'formal' => [
-        'student_subject' => 'Welcome to {اسم_المركز} - Login Details',
-        'student_body' => 'We are pleased to inform you that you have been successfully registered at {اسم_المركز}.
+        'student_subject' => 'Welcome to {center_name} - Login Details',
+        'student_body' => 'We are pleased to inform you that you have been successfully registered at {center_name}.
 
 Your login details:
-• Platform Link: {رابط_الدخول}
-• Username: {رقم_الهاتف}
-• Password: {كلمة_المرور}
+• Platform Link: {login_link}
+• Username: {phone}
+• Password: {password}
 
 Please change your password upon first login to ensure account security.
 
 We wish you a successful educational journey.',
-        'guardian_subject' => '{اسم_الطالب} Registered at {اسم_المركز}',
-        'guardian_body' => 'We wish to inform you that the student {اسم_الطالب} has been successfully registered at {اسم_المركز}.
+        'guardian_subject' => '{student_name} Registered at {center_name}',
+        'guardian_body' => 'We wish to inform you that the student {student_name} has been successfully registered at {center_name}.
 
-Academic Stage: {المرحلة}
+Academic Stage: {stage}
 
 Student Login Details:
-• Platform Link: {رابط_الدخول}
-• Username: {رقم_الهاتف}
-• Password: {كلمة_المرور}
+• Platform Link: {login_link}
+• Username: {phone}
+• Password: {password}
 
 Please keep these details safe. The student will be asked to change the password upon first login.
 
@@ -282,28 +282,28 @@ For any inquiries, feel free to contact us.',
     ],
     'presets_data' => [
       'email' => [
-        'formal' => 'We inform you that the fees for the student {اسم_الطالب} in the amount of {المبلغ} are due on {تاريخ_الاستحقاق}.
+        'formal' => 'We inform you that the fees for the student {student_name} in the amount of {amount} are due on {due_date}.
 Please make the payment on time to ensure the continuity of the educational service without interruption.
 Thank you for your cooperation.
-{اسم_المركز}',
-        'friendly' => 'Welcome to {اسم_المركز},
-We remind you that the payment due date for {اسم_الطالب} is {تاريخ_الاستحقاق} (Amount: {المبلغ}).
+{center_name}',
+        'friendly' => 'Welcome to {center_name},
+We remind you that the payment due date for {student_name} is {due_date} (Amount: {amount}).
 We are happy to have you with us.
-Best regards, {اسم_المركز} management',
+Best regards, {center_name} management',
         'urgent' => 'IMPORTANT ALERT:
-We inform you that the fees for {اسم_الطالب} in the amount of {المبلغ} are already overdue since {تاريخ_الاستحقاق}.
+We inform you that the fees for {student_name} in the amount of {amount} are already overdue since {due_date}.
 Please settle the payment quickly to avoid any service interruption.
-{اسم_المركز}',
+{center_name}',
       ],
       'whatsapp' => [
-        'formal' => 'Official Reminder: Fees for {اسم_الطالب} ({المبلغ}) are due on {تاريخ_الاستحقاق}. Please settle. {اسم_المركز}',
-        'friendly' => 'Hello! We remind you of the payment due date for {اسم_الطالب} on {تاريخ_الاستحقاق}. Have a great day! 🌸 {اسم_المركز}',
-        'urgent' => 'URGENT ALERT: Fees for {اسم_الطالب} are overdue since {تاريخ_الاستحقاق}. Please pay as soon as possible. {اسم_المركز}',
+        'formal' => 'Official Reminder: Fees for {student_name} ({amount}) are due on {due_date}. Please settle. {center_name}',
+        'friendly' => 'Hello! We remind you of the payment due date for {student_name} on {due_date}. Have a great day! 🌸 {center_name}',
+        'urgent' => 'URGENT ALERT: Fees for {student_name} are overdue since {due_date}. Please pay as soon as possible. {center_name}',
       ],
     ],
     'timeline_preview' => 'Timeline Preview',
     'timeline_desc' => 'Visualization of automatic reminders.',
-    'whatsapp_placeholder' => 'Reminder: Student {اسم_الطالب}\'s fees ({المبلغ}) are due on {تاريخ_الاستحقاق}. Please pay. {اسم_المركز}',
+    'whatsapp_placeholder' => 'Reminder: Student {student_name}\'s fees ({amount}) are due on {due_date}. Please pay. {center_name}',
   ],
   'general_timezone_help' => 'Affects the date and time display in reports',
   'academic_system_defaults_alert' => 'System default settings are currently being used. Custom settings will be saved once you click Save.',
