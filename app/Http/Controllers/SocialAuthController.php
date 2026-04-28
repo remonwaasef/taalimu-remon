@@ -282,6 +282,15 @@ class SocialAuthController extends Controller
                 'status' => 'active',
             ]);
 
+            // Save locale and currency into tenant settings from session/GeoIP
+            $registrationLocale = session('locale', 'ar');
+            $registrationCurrency = session('suggested_currency', 'EGP');
+            $tenant->settings = array_merge($tenant->settings ?? [], [
+                'default_locale' => $registrationLocale,
+                'currency' => $registrationCurrency,
+            ]);
+            $tenant->save();
+
             // 2. Create User (no password needed for Google users)
             $user = new User([
                 'name' => $googleData['name'],

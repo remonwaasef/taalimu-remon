@@ -224,6 +224,15 @@ class RegistrationController extends Controller
                 'status' => 'active', 
             ]);
 
+            // Save locale and currency into tenant settings from session/GeoIP
+            $registrationLocale = session('locale', 'ar');
+            $registrationCurrency = session('suggested_currency', $currency);
+            $tenant->settings = array_merge($tenant->settings ?? [], [
+                'default_locale' => $registrationLocale,
+                'currency' => $registrationCurrency,
+            ]);
+            $tenant->save();
+
             // 2. Create Admin User for this Tenant
             $user = new User([
                 'name' => $request->name,
