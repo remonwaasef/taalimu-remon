@@ -46,11 +46,14 @@ class SetLocale
         App::setLocale($locale);
 
         // Determine Suggested Currency based on Locale + GeoIP
-        if (!Session::has('suggested_currency')) {
+        // Recalculate if not set yet, or if locale changed since last calculation
+        $previousLocale = Session::get('suggested_currency_locale');
+        if (!Session::has('suggested_currency') || $previousLocale !== $locale) {
             $geoIP = app(\App\Services\GeoIPService::class);
-            $countryCode = $geoIP->getCountryCode($request->ip());
+            $countryCode = Session::get('user_country_code') ?: $geoIP->getCountryCode($request->ip());
             $currency = $geoIP->getCurrencyFromLocale($locale, $countryCode);
             Session::put('suggested_currency', $currency);
+            Session::put('suggested_currency_locale', $locale);
             Session::put('user_country_code', $countryCode);
         }
 
