@@ -627,18 +627,18 @@ class StudentService
                 
             $groupBody = !empty($tenantSettings['notif_group_enrollment_body']) 
                 ? $tenantSettings['notif_group_enrollment_body'] 
-                : "مرحباً {اسم_الطالب}،\n\nلقد تم تسجيلك بنجاح في {اسم_المجموعة}.\nنتمنى لك التوفيق!\n\n{اسم_المركز}";
+                : "مرحباً {student_name}،\n\nلقد تم تسجيلك بنجاح في {group_name}.\nنتمنى لك التوفيق!\n\n{center_name}";
 
             foreach ($courseIds as $courseId) {
                 $course = \App\Models\Course::find($courseId);
                 if (!$course) continue;
 
                 $groupVariables = [
-                    'اسم_الطالب' => $student->name,
-                    'اسم_المركز' => $tenant->name,
-                    'اسم_المجموعة' => $course->title,
-                    'سعر_الدورة' => $course->price . ' ج.م',
-                    'رابط_الدخول' => url('/login'),
+                    'student_name' => $student->name,
+                    'center_name' => $tenant->name,
+                    'group_name' => $course->title,
+                    'course_price' => $course->price . ' ج.م',
+                    'login_link' => url('/login'),
                 ];
 
                 if ($hasValidStudentEmail) {
@@ -757,13 +757,13 @@ class StudentService
     protected function buildTemplateVariables(Student $student, $tenant, ?string $password): array
     {
         return [
-            'اسم_الطالب'    => $student->name,
-            'اسم_المركز'    => $tenant->name,
-            'رابط_الدخول'   => url('/login'),
-            'كلمة_المرور'   => $password ?? '',
-            'رقم_الهاتف'    => $student->phone ?? '',
-            'اسم_ولي_الأمر' => $student->guardian?->name ?? $student->parent_name ?? '',
-            'المرحلة'       => $student->grade_level_name ?? '',
+            'student_name'    => $student->name,
+            'center_name'    => $tenant->name,
+            'login_link'   => url('/login'),
+            'password'   => $password ?? '',
+            'phone'    => $student->phone ?? '',
+            'parent_name' => $student->guardian?->name ?? $student->parent_name ?? '',
+            'stage'       => $student->grade_level_name ?? '',
         ];
     }
 

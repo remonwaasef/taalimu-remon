@@ -286,11 +286,11 @@
                                                 <div class="mb-2 d-flex flex-wrap gap-1">
                                                     @php
                                                         $vars = [
-                                                            'اسم_الطالب' => __('center::settings.email_templates.placeholders.student_name'),
-                                                            'اسم_المركز' => __('center::settings.email_templates.placeholders.center_name'),
-                                                            'رابط_الدخول' => __('center::settings.email_templates.placeholders.login_link'),
-                                                            'كلمة_المرور' => __('center::settings.email_templates.placeholders.password'),
-                                                            'رقم_الهاتف' => __('center::settings.email_templates.placeholders.phone'),
+                                                            'student_name' => __('center::settings.email_templates.placeholders.student_name'),
+                                                            'center_name' => __('center::settings.email_templates.placeholders.center_name'),
+                                                            'login_link' => __('center::settings.email_templates.placeholders.login_link'),
+                                                            'password' => __('center::settings.email_templates.placeholders.password'),
+                                                            'phone' => __('center::settings.email_templates.placeholders.phone'),
                                                         ];
                                                     @endphp
                                                     @foreach($vars as $key => $label)
@@ -331,7 +331,7 @@
 
                                                 <div class="mb-2 d-flex flex-wrap gap-1">
                                                     @php
-                                                        $gVars = array_merge($vars, ['اسم_ولي_الأمر' => __('center::settings.email_templates.placeholders.parent_name'), 'المرحلة' => __('center::settings.email_templates.placeholders.stage')]);
+                                                        $gVars = array_merge($vars, ['parent_name' => __('center::settings.email_templates.placeholders.parent_name'), 'stage' => __('center::settings.email_templates.placeholders.stage')]);
                                                     @endphp
                                                     @foreach($gVars as $key => $label)
                                                         <button type="button" class="btn btn-sm btn-outline-secondary border-dashed py-1 px-2 x-small var-btn" data-target="guardian_body" data-var="{{ '{' . $key . '}' }}">
@@ -435,7 +435,7 @@
                                                         <input type="text" id="notif_payment_reminder_subject" name="settings[email_templates][notif_payment_reminder_subject]" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['notif_payment_reminder_subject'] ?? __('center::settings.email_templates.defaults.payment_reminder_subject') }}">
                                                     </div>
                                                     <div class="mb-2 d-flex flex-wrap gap-1">
-                                                        @php $payVars = ['اسم_الطالب' => __('center::settings.email_templates.placeholders.student_name'), 'اسم_المركز' => __('center::settings.email_templates.placeholders.center_name'), 'المبلغ' => __('center::settings.email_templates.placeholders.amount'), 'تاريخ_الاستحقاق' => __('center::settings.email_templates.placeholders.due_date'), 'رابط_الدخول' => __('center::settings.email_templates.placeholders.login_link')]; @endphp
+                                                        @php $payVars = ['student_name' => __('center::settings.email_templates.placeholders.student_name'), 'center_name' => __('center::settings.email_templates.placeholders.center_name'), 'amount' => __('center::settings.email_templates.placeholders.amount'), 'due_date' => __('center::settings.email_templates.placeholders.due_date'), 'login_link' => __('center::settings.email_templates.placeholders.login_link')]; @endphp
                                                         @foreach($payVars as $k=>$l)
                                                             <button type="button" class="btn btn-sm btn-outline-secondary border-dashed py-1 px-2 x-small var-btn" data-target="notif_payment_reminder_body" data-var="{{ '{'.$k.'}' }}"><i class="fas fa-plus-circle me-1 opacity-50"></i> {{ $l }}</button>
                                                         @endforeach
@@ -483,7 +483,7 @@
                                                         <input type="text" id="notif_group_enrollment_subject" name="settings[email_templates][notif_group_enrollment_subject]" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['notif_group_enrollment_subject'] ?? __('center::settings.email_templates.defaults.group_enrollment_subject') }}">
                                                     </div>
                                                     <div class="mb-2 d-flex flex-wrap gap-1">
-                                                        @php $grpVars = ['اسم_الطالب' => __('center::settings.email_templates.placeholders.student_name'), 'اسم_المركز' => __('center::settings.email_templates.placeholders.center_name'), 'اسم_المجموعة' => __('center::settings.email_templates.placeholders.group_name'), 'سعر_الدورة' => __('center::settings.email_templates.placeholders.course_price'), 'رابط_الدخول' => __('center::settings.email_templates.placeholders.login_link')]; @endphp
+                                                        @php $grpVars = ['student_name' => __('center::settings.email_templates.placeholders.student_name'), 'center_name' => __('center::settings.email_templates.placeholders.center_name'), 'group_name' => __('center::settings.email_templates.placeholders.group_name'), 'course_price' => __('center::settings.email_templates.placeholders.course_price'), 'login_link' => __('center::settings.email_templates.placeholders.login_link')]; @endphp
                                                         @foreach($grpVars as $k=>$l)
                                                             <button type="button" class="btn btn-sm btn-outline-secondary border-dashed py-1 px-2 x-small var-btn" data-target="notif_group_enrollment_body" data-var="{{ '{'.$k.'}' }}"><i class="fas fa-plus-circle me-1 opacity-50"></i> {{ $l }}</button>
                                                         @endforeach
@@ -531,7 +531,7 @@
                                                         <input type="text" id="notif_payment_confirmed_subject" name="settings[email_templates][notif_payment_confirmed_subject]" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['notif_payment_confirmed_subject'] ?? __('center::settings.email_templates.defaults.payment_confirmation_subject') }}">
                                                     </div>
                                                     <div class="mb-2 d-flex flex-wrap gap-1">
-                                                        @php $confVars = ['اسم_الطالب' => __('center::settings.email_templates.placeholders.student_name'), 'اسم_المركز' => __('center::settings.email_templates.placeholders.center_name'), 'المبلغ_المدفوع' => __('center::settings.email_templates.placeholders.amount_paid'), 'تاريخ_الدفع' => __('center::settings.email_templates.placeholders.payment_date'), 'المتبقي' => __('center::settings.email_templates.placeholders.remaining'), 'طريقة_الدفع' => __('center::settings.email_templates.placeholders.payment_method')]; @endphp
+                                                        @php $confVars = ['student_name' => __('center::settings.email_templates.placeholders.student_name'), 'center_name' => __('center::settings.email_templates.placeholders.center_name'), 'amount_paid' => __('center::settings.email_templates.placeholders.amount_paid'), 'payment_date' => __('center::settings.email_templates.placeholders.payment_date'), 'المتبقي' => __('center::settings.email_templates.placeholders.remaining'), 'payment_method' => __('center::settings.email_templates.placeholders.payment_method')]; @endphp
                                                         @foreach($confVars as $k=>$l)
                                                             <button type="button" class="btn btn-sm btn-outline-secondary border-dashed py-1 px-2 x-small var-btn" data-target="notif_payment_confirmed_body" data-var="{{ '{'.$k.'}' }}"><i class="fas fa-plus-circle me-1 opacity-50"></i> {{ $l }}</button>
                                                         @endforeach
@@ -804,15 +804,15 @@
                                                         <div class="d-flex flex-wrap gap-1 mt-1">
                                                             @php
                                                                 $remVars = [
-                                                                    'اسم_الطالب' => __('center::settings.email_templates.placeholders.student_name'),
-                                                                    'اسم_المركز' => __('center::settings.email_templates.placeholders.center_name'),
-                                                                    'المبلغ' => __('center::settings.email_templates.placeholders.amount'),
-                                                                    'تاريخ_الاستحقاق' => __('center::settings.email_templates.placeholders.due_date'),
-                                                                    'المبلغ_المتبقي' => __('center::settings.email_templates.placeholders.remaining'),
-                                                                    'اسم_المجموعة' => __('center::settings.email_templates.placeholders.group_name'),
-                                                                    'سعر_الدورة' => __('center::settings.email_templates.placeholders.course_price'),
-                                                                    'رابط_الدخول' => __('center::settings.email_templates.placeholders.login_link'),
-                                                                    'كلمة_المرور' => __('center::settings.email_templates.placeholders.password'),
+                                                                    'student_name' => __('center::settings.email_templates.placeholders.student_name'),
+                                                                    'center_name' => __('center::settings.email_templates.placeholders.center_name'),
+                                                                    'amount' => __('center::settings.email_templates.placeholders.amount'),
+                                                                    'due_date' => __('center::settings.email_templates.placeholders.due_date'),
+                                                                    'remaining' => __('center::settings.email_templates.placeholders.remaining'),
+                                                                    'group_name' => __('center::settings.email_templates.placeholders.group_name'),
+                                                                    'course_price' => __('center::settings.email_templates.placeholders.course_price'),
+                                                                    'login_link' => __('center::settings.email_templates.placeholders.login_link'),
+                                                                    'password' => __('center::settings.email_templates.placeholders.password'),
                                                                 ];
                                                             @endphp
                                                             @foreach ($remVars as $key => $label)
@@ -847,11 +847,11 @@
                                                         <div class="d-flex flex-wrap gap-1 mt-1">
                                                             @php
                                                                 $waVars = [
-                                                                    'اسم_الطالب' => __('center::settings.email_templates.placeholders.student_name'),
-                                                                    'اسم_المركز' => __('center::settings.email_templates.placeholders.center_name'),
-                                                                    'المبلغ' => __('center::settings.email_templates.placeholders.amount'),
-                                                                    'تاريخ_الاستحقاق' => __('center::settings.email_templates.placeholders.due_date'),
-                                                                    'المبلغ_المتبقي' => __('center::settings.email_templates.placeholders.remaining'),
+                                                                    'student_name' => __('center::settings.email_templates.placeholders.student_name'),
+                                                                    'center_name' => __('center::settings.email_templates.placeholders.center_name'),
+                                                                    'amount' => __('center::settings.email_templates.placeholders.amount'),
+                                                                    'due_date' => __('center::settings.email_templates.placeholders.due_date'),
+                                                                    'remaining' => __('center::settings.email_templates.placeholders.remaining'),
                                                                 ];
                                                             @endphp
                                                             @foreach ($waVars as $key => $label)
