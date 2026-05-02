@@ -237,7 +237,7 @@ class OnboardingController extends Controller
                 $request->validate([
                     'instructors' => 'required|array|min:1',
                     'instructors.*.instructor_name' => 'required|string|max:255',
-                    'instructors.*.instructor_phone' => 'required|string|max:20',
+                    'instructors.*.instructor_phone' => ['required', 'string', 'max:20', 'regex:/^[0-9\+\-\s\(\)]+$/'],
                     'instructors.*.instructor_specialization' => 'nullable|string|max:255',
                     'instructors.*.instructor_email' => 'nullable|email|max:255',
                 ]);
@@ -372,7 +372,7 @@ class OnboardingController extends Controller
             if (!$request->boolean('skip')) {
                 $request->validate([
                     'student_name' => 'required|string|max:255',
-                    'student_phone' => 'required|string|max:20',
+                    'student_phone' => ['required', 'string', 'max:20', 'regex:/^[0-9\+\-\s\(\)]+$/'],
                     'grade_id' => 'nullable|exists:grades,id',
                 ]);
 

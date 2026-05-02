@@ -131,7 +131,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-bold small text-muted">{{ __('center::settings.general.phone') }}</label>
-                                    <input type="tel" name="phone" class="form-control" value="{{ old('phone', $tenant->phone) }}" placeholder="01xxxxxxxxx">
+                                    <input type="tel" name="phone" class="form-control" value="{{ old('phone', $tenant->phone) }}" oninput="this.value = this.value.replace(/[^0-9\+\-\(\)\s]/g, '')" placeholder="01xxxxxxxxx">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-bold small text-muted">{{ __('center::settings.general.email') }}</label>
