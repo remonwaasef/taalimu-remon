@@ -29,8 +29,16 @@ class BugReportController extends Controller
         
         try {
             if ($request->hasFile('screenshot')) {
-                // Save to 'logos' disk/folder because we know it works and is public
-                $screenshotPath = $request->file('screenshot')->store('logos/bug-reports', 'public');
+                $file = $request->file('screenshot');
+                $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+                $dir = public_path('storage/bug-reports');
+                
+                if (!file_exists($dir)) {
+                    mkdir($dir, 0777, true);
+                }
+                
+                $file->move($dir, $fileName);
+                $screenshotPath = 'bug-reports/' . $fileName;
             } elseif ($request->filled('auto_screenshot')) {
                 $imageData = $request->input('auto_screenshot');
                 
@@ -39,11 +47,18 @@ class BugReportController extends Controller
                     $image = base64_decode(substr($imageData, strpos($imageData, ',') + 1));
                     
                     if ($image) {
-                        $fileName = 'logos/bug-reports/' . uniqid() . '_auto.' . $extension;
-                        if (\Illuminate\Support\Facades\Storage::disk('public')->put($fileName, $image)) {
-                            $screenshotPath = $fileName;
+                        $dir = public_path('storage/bug-reports');
+                        if (!file_exists($dir)) {
+                            mkdir($dir, 0777, true);
+                        }
+                        
+                        $fileName = uniqid() . '_auto.' . $extension;
+                        $fullPath = $dir . '/' . $fileName;
+                        
+                        if (file_put_contents($fullPath, $image)) {
+                            $screenshotPath = 'bug-reports/' . $fileName;
                         } else {
-                            $errorDebug = "Storage::put failed to logos/bug-reports";
+                            $errorDebug = "file_put_contents failed to " . $dir;
                         }
                     } else {
                         $errorDebug = "Base64 decode failed";
@@ -157,9 +172,9 @@ class BugReportController extends Controller
             }
 
             $message .= "━━━━━━━━━━━━━━━━━━━━\n";
-            $message .= "🏢 *المركز:* " . ($tenant->name ?? 'N/A') . "\n";
-            $message .= "👤 *المستخدم:* " . ($user->name ?? 'N/A') . "\n";
-            $message .= "📧 *الإيميل:* " . ($user->email ?? 'N/A') . "\n";
+            $message .= "🏢 *المركز:* " . ($tenant?->name ?? 'N/A') . "\n";
+            $message .= "👤 *المستخدم:* " . ($user?->name ?? 'N/A') . "\n";
+            $message .= "📧 *الإيميل:* " . ($user?->email ?? 'N/A') . "\n";
             $message .= "🔗 *الصفحة:* {$report->page_url}\n";
             $message .= "📱 *المتصفح:* " . ($report->browser_info['browser'] ?? 'N/A') . "\n";
             $message .= "🆔 *رقم البلاغ:* #{$report->id}\n";
@@ -217,8 +232,8 @@ class BugReportController extends Controller
             $body .= "<p style='color: #475569; line-height: 1.8;'>{$report->description}</p>";
             $body .= "<hr style='border: none; border-top: 1px solid #e2e8f0;'>";
             $body .= "<table style='width: 100%; color: #64748b; font-size: 14px;'>";
-            $body .= "<tr><td><strong>🏢 المركز:</strong></td><td>" . ($tenant->name ?? 'N/A') . "</td></tr>";
-            $body .= "<tr><td><strong>👤 المستخدم:</strong></td><td>" . ($user->name ?? 'N/A') . " ({$user->email})</td></tr>";
+            $body .= "<tr><td><strong>🏢 المركز:</strong></td><td>" . ($tenant?->name ?? 'N/A') . "</td></tr>";
+            $body .= "<tr><td><strong>👤 المستخدم:</strong></td><td>" . ($user?->name ?? 'N/A') . " (" . ($user?->email ?? 'N/A') . ")</td></tr>";
             $body .= "<tr><td><strong>🔗 الصفحة:</strong></td><td><a href='{$report->page_url}'>{$report->page_url}</a></td></tr>";
             $body .= "<tr><td><strong>📱 المتصفح:</strong></td><td>" . ($report->browser_info['browser'] ?? 'N/A') . " / " . ($report->browser_info['os'] ?? 'N/A') . "</td></tr>";
             $body .= "<tr><td><strong>🕐 الوقت:</strong></td><td>{$report->created_at}</td></tr>";
