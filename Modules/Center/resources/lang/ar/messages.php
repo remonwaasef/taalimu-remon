@@ -1094,6 +1094,4 @@ return [
   'no_student_email' => 'هذا الطالب لا يمتلك بريداً إلكترونياً مسجلاً.',
   'email_sent_success' => 'تم إرسال البريد الإلكتروني للطالب بنجاح.',
   'email_send_error' => 'حدث خطأ أثناء الإرسال',
-  'first_payment_note' => 'الدفعة الأولى عند البيع',
-  'subsequent_payment_note' => 'إضافة دفعة لاحقة',
 ];
