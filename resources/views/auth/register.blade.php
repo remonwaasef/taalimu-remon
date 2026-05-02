@@ -266,7 +266,7 @@ document.addEventListener('alpine:init', () => {
                     </h1>
                     <div class="flex items-center justify-center gap-2 mb-2 bg-brand-secondary/5 py-0.5 px-3 rounded-full w-fit mx-auto">
                         <i class="bi bi-gift text-brand-secondary text-[10px]"></i>
-                        <span class="text-[9px] font-black text-brand-secondary uppercase tracking-widest">{{ app()->isLocale('ar') ? 'تجربة مجانية لمدة 14 يوم' : '14-Day Free Trial' }}</span>
+                        <span class="text-[9px] font-black text-brand-secondary uppercase tracking-widest" x-text="currentPlan.trial_days > 0 ? ({{ app()->isLocale('ar') ? 'currentPlan.trial_days + \' يوم مجاناً\'' : 'currentPlan.trial_days + \'-Day Free Trial\'' }}) : ({{ app()->isLocale('ar') ? '\'ابدأ الآن\'' : '\'Start Now\'' }})"></span>
                     </div>
                     <p class="text-slate-500 text-xs font-arabic font-medium opacity-80 max-w-[280px] mx-auto">
                         {{ app()->isLocale('ar') ? 'خطوات بسيطة لامتلاك منصتك التعليمية المتكاملة' : 'Simple steps to own your integrated platform' }}
@@ -298,7 +298,7 @@ document.addEventListener('alpine:init', () => {
                              ]">
                             <!-- Trial Badge -->
                             <div class="absolute top-0 right-0 bg-brand-secondary text-white text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded-bl-lg rounded-tr-xl z-20 shadow-md">
-                                {{ app()->isLocale('ar') ? '14 يوم مجاناً' : '14-Day Free' }}
+                                {{ app()->isLocale('ar') ? '30 يوم مجاناً' : '30-Day Free' }}
                             </div>
 
                             <!-- Background Accent -->
@@ -338,7 +338,7 @@ document.addEventListener('alpine:init', () => {
                              ]">
                             <!-- Trial Badge -->
                             <div class="absolute top-0 right-0 bg-brand-secondary text-white text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded-bl-lg rounded-tr-xl z-20 shadow-md">
-                                {{ app()->isLocale('ar') ? '14 يوم مجاناً' : '14-Day Free' }}
+                                {{ app()->isLocale('ar') ? '30 يوم مجاناً' : '30-Day Free' }}
                             </div>
 
                             <!-- Background Accent -->
@@ -663,7 +663,7 @@ document.addEventListener('alpine:init', () => {
                     <div class="mt-4 flex flex-col items-center gap-2">
                         <div class="flex items-center justify-center gap-2 text-slate-600 bg-emerald-50/50 px-4 py-2 rounded-xl border border-emerald-100/50 w-full text-center">
                             <i class="bi bi-shield-fill-check text-emerald-500 text-base"></i>
-                            <p class="text-[11px] font-bold font-arabic">{{ app()->getLocale() == 'ar' ? 'ضمان استرجاع الأموال خلال 14 يوماً.' : '14-Day Money-Back Guarantee.' }}</p>
+                            <p class="text-[11px] font-bold font-arabic">{{ app()->getLocale() == 'ar' ? 'ضمان استرجاع الأموال خلال 30 يوماً.' : '30-Day Money-Back Guarantee.' }}</p>
                         </div>
                     </div>
                 </div>

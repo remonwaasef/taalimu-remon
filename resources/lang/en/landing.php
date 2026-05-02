@@ -133,7 +133,7 @@ return [
         'title' => 'Flexible <span class=\"gradient-text\">Pricing Plans</span>',
         'subtitle' => 'Choose the plan that fits your educational center size and needs',
         'most_popular' => 'Most Popular',
-        'per_14_days' => '/ 14 Days',
+        'per_30_days' => '/ 30 Days',
         'per_month' => '/ Month',
         'per_term' => '/ Term',
         'per_year' => '/ Year',
