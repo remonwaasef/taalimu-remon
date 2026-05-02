@@ -268,57 +268,65 @@ class OnboardingController extends Controller
         if ($step === 'step_3') {
             if (!$request->boolean('skip')) {
                 $request->validate([
-                    'course_name' => 'required|string|max:255',
-                    'price' => 'required|numeric|min:0',
-                    'sessions_count' => 'required|integer|min:1',
-                    'schedules' => 'required|array|min:1',
-                    'schedules.*.day' => 'required|integer|between:0,6',
-                    'schedules.*.time' => 'required',
+                    'courses' => 'required|array|min:1',
+                    'courses.*.course_name' => 'required|string|max:255',
+                    'courses.*.price' => 'required|numeric|min:0',
+                    'courses.*.sessions_count' => 'required|integer|min:1',
+                    'courses.*.schedules' => 'required|array|min:1',
+                    'courses.*.schedules.*.day' => 'required|integer|between:0,6',
+                    'courses.*.schedules.*.time' => 'required',
+                    'courses.*.instructor_index' => 'required',
                 ]);
 
-                $instructorIndex = $request->input('instructor_index', 0);
-                $instructor = \App\Models\Instructor::where('tenant_id', $tenant->id)
-                    ->orderBy('id', 'asc')
-                    ->skip($instructorIndex)
-                    ->first();
+                $existingCourses = \App\Models\Course::where('tenant_id', $tenant->id)->orderBy('id', 'asc')->get();
+                $coursesInput = $request->input('courses');
                 
-                // Prevent duplicates: check if an onboarding course already exists
-                $existingCourse = \App\Models\Course::where('tenant_id', $tenant->id)->first();
-                if ($existingCourse) {
-                    // Update existing course
-                    $existingCourse->update([
-                        'instructor_id' => $instructor?->id,
-                        'title' => $request->course_name,
-                        'price' => $request->price,
-                        'sessions_count' => $request->sessions_count,
-                    ]);
-                    // Delete old schedules and recreate
-                    \App\Models\Schedule::where('course_id', $existingCourse->id)->delete();
-                    $course = $existingCourse;
-                } else {
-                    $course = \App\Models\Course::create([
-                        'tenant_id' => $tenant->id,
-                        'instructor_id' => $instructor?->id,
-                        'title' => $request->course_name,
-                        'price' => $request->price,
-                        'sessions_count' => $request->sessions_count,
-                        'status' => 'active',
-                    ]);
-                }
-
-                // Create Schedules (fresh)
-                foreach ($request->input('schedules') as $sched) {
-                    $startTime = \Carbon\Carbon::createFromFormat('H:i', $sched['time']);
-                    $endTime = isset($sched['time_end']) ? \Carbon\Carbon::createFromFormat('H:i', $sched['time_end']) : (clone $startTime)->addHours(2);
+                foreach ($coursesInput as $index => $courseData) {
+                    $instructorIndex = $courseData['instructor_index'] ?? 0;
+                    $instructor = \App\Models\Instructor::where('tenant_id', $tenant->id)
+                        ->orderBy('id', 'asc')
+                        ->skip($instructorIndex)
+                        ->first();
+                        
+                    if (isset($existingCourses[$index])) {
+                        $course = $existingCourses[$index];
+                        $course->update([
+                            'instructor_id' => $instructor?->id,
+                            'title' => $courseData['course_name'],
+                            'price' => $courseData['price'],
+                            'sessions_count' => $courseData['sessions_count'],
+                        ]);
+                        \App\Models\Schedule::where('course_id', $course->id)->delete();
+                    } else {
+                        $course = \App\Models\Course::create([
+                            'tenant_id' => $tenant->id,
+                            'instructor_id' => $instructor?->id,
+                            'title' => $courseData['course_name'],
+                            'price' => $courseData['price'],
+                            'sessions_count' => $courseData['sessions_count'],
+                            'status' => 'active',
+                        ]);
+                    }
                     
-                    \App\Models\Schedule::create([
-                        'tenant_id' => $tenant->id,
-                        'course_id' => $course->id,
-                        'instructor_id' => $instructor?->user_id,
-                        'day_of_week' => $sched['day'],
-                        'start_time' => $startTime->format('H:i:s'),
-                        'end_time' => $endTime->format('H:i:s'),
-                    ]);
+                    foreach ($courseData['schedules'] as $sched) {
+                        $startTime = \Carbon\Carbon::createFromFormat('H:i', $sched['time']);
+                        $endTime = isset($sched['time_end']) ? \Carbon\Carbon::createFromFormat('H:i', $sched['time_end']) : (clone $startTime)->addHours(2);
+                        
+                        \App\Models\Schedule::create([
+                            'tenant_id' => $tenant->id,
+                            'course_id' => $course->id,
+                            'instructor_id' => $instructor?->user_id,
+                            'day_of_week' => $sched['day'],
+                            'start_time' => $startTime->format('H:i:s'),
+                            'end_time' => $endTime->format('H:i:s'),
+                        ]);
+                    }
+                }
+                
+                if ($existingCourses->count() > count($coursesInput)) {
+                    for ($i = count($coursesInput); $i < $existingCourses->count(); $i++) {
+                        $existingCourses[$i]->delete();
+                    }
                 }
             }
             
@@ -346,10 +354,13 @@ class OnboardingController extends Controller
                 $student = $result['student'];
 
                 // 2. Enroll in course if requested using FinanceService
-                // Note: enroll_in_course comes as boolean from Alpine.js JSON
-                $shouldEnroll = filter_var($request->input('enroll_in_course', false), FILTER_VALIDATE_BOOLEAN);
-                if ($shouldEnroll) {
-                    $course = \App\Models\Course::where('tenant_id', $tenant->id)->latest()->first();
+                $enrollCourseIndex = $request->input('enroll_course_index');
+                if ($enrollCourseIndex !== null && $enrollCourseIndex !== '') {
+                    $course = \App\Models\Course::where('tenant_id', $tenant->id)
+                        ->orderBy('id', 'asc')
+                        ->skip((int)$enrollCourseIndex)
+                        ->first();
+                        
                     if ($course) {
                         try {
                             $this->financeService->createSale([

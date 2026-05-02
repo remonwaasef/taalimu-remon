@@ -243,62 +243,87 @@
                         </div>
 
                         <form @submit.prevent="submitStep('step_3', false)" class="space-y-6">
-                            <div x-show="formData.step_2.instructors.length > 0">
-                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">اختر المدرس</label>
-                                <select x-model="formData.step_3.instructor_index" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all hover:bg-white focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5 appearance-none cursor-pointer">
-                                    <template x-for="(instructor, index) in formData.step_2.instructors" :key="index">
-                                        <option :value="index" x-text="instructor.instructor_name || 'مدرس ' + (index + 1)"></option>
-                                    </template>
-                                </select>
-                            </div>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <div>
-                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_3.name_label') }}</label>
-                                    <input type="text" x-model="formData.step_3.course_name" placeholder="{{ __('onboarding.step_3.name_placeholder') }}" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5" required>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_3.price_label') }}</label>
-                                    <div class="relative">
-                                        <input type="number" x-model="formData.step_3.price" placeholder="0.00" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5" required>
-                                        <div class="absolute inset-y-0 ltr:right-6 rtl:left-6 flex items-center pointer-events-none text-slate-400 font-bold text-xs">
-                                            <span x-text="formData.step_1.currency"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="p-8 bg-slate-50 rounded-[2rem] border border-slate-100 space-y-6">
-                                <div class="flex items-center justify-between mb-2">
-                                    <h3 class="font-black text-slate-900 text-xs uppercase tracking-widest flex items-center gap-2">
-                                        <i class="fa-solid fa-calendar-days text-brand-primary"></i> {{ __('onboarding.step_3.schedule_section') }}
-                                    </h3>
-                                    <button type="button" @click="formData.step_3.schedules.push({day: '0', time: '16:00', time_end: '18:00'})" class="text-[10px] font-black uppercase text-brand-primary hover:underline transition-all">
-                                        + {{ __('onboarding.step_3.btn_add_schedule') }}
-                                    </button>
-                                </div>
-
-                                <template x-for="(schedule, index) in formData.step_3.schedules" :key="index">
-                                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-end pb-4 border-b border-white last:border-0 last:pb-0">
-                                        <div class="sm:col-span-10 grid grid-cols-3 gap-3">
-                                            <select x-model="schedule.day" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold">
-                                                <option value="0">{{ __('onboarding.days.0') }}</option>
-                                                <option value="1">{{ __('onboarding.days.1') }}</option>
-                                                <option value="2">{{ __('onboarding.days.2') }}</option>
-                                                <option value="3">{{ __('onboarding.days.3') }}</option>
-                                                <option value="4">{{ __('onboarding.days.4') }}</option>
-                                                <option value="5">{{ __('onboarding.days.5') }}</option>
-                                                <option value="6">{{ __('onboarding.days.6') }}</option>
-                                            </select>
-                                            <input type="time" x-model="schedule.time" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold">
-                                            <input type="time" x-model="schedule.time_end" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold">
-                                        </div>
-                                        <div class="sm:col-span-2 flex justify-end">
-                                            <button type="button" x-show="formData.step_3.schedules.length > 1" @click="formData.step_3.schedules.splice(index, 1)" class="w-10 h-10 rounded-xl bg-white text-red-400 hover:text-red-500 hover:shadow-md transition-all flex items-center justify-center border border-slate-100">
-                                                <i class="fa-solid fa-trash-can text-sm"></i>
+                            <div class="space-y-6">
+                                <template x-for="(course, courseIndex) in formData.step_3.courses" :key="courseIndex">
+                                    <div class="p-6 bg-slate-50 rounded-[2rem] border border-slate-100 relative">
+                                        <div class="absolute top-4 rtl:left-4 ltr:right-4">
+                                            <button type="button" x-show="formData.step_3.courses.length > 1" @click="formData.step_3.courses.splice(courseIndex, 1)" class="w-8 h-8 rounded-full bg-white text-red-400 hover:text-red-500 hover:shadow-md transition-all flex items-center justify-center border border-slate-100">
+                                                <i class="fa-solid fa-trash-can text-xs"></i>
                                             </button>
+                                        </div>
+                                        <div class="mb-4">
+                                            <h3 class="font-black text-slate-900 text-xs uppercase tracking-widest flex items-center gap-2">
+                                                <i class="fa-solid fa-book text-brand-primary"></i> الدورة <span x-text="courseIndex + 1"></span>
+                                            </h3>
+                                        </div>
+
+                                        <div class="space-y-6">
+                                            <div x-show="formData.step_2.instructors.length > 0">
+                                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">اختر المدرس</label>
+                                                <select x-model="course.instructor_index" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5 appearance-none cursor-pointer">
+                                                    <template x-for="(instructor, index) in formData.step_2.instructors" :key="index">
+                                                        <option :value="index" x-text="instructor.instructor_name || 'مدرس ' + (index + 1)"></option>
+                                                    </template>
+                                                </select>
+                                            </div>
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                                <div>
+                                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_3.name_label') }}</label>
+                                                    <input type="text" x-model="course.course_name" placeholder="{{ __('onboarding.step_3.name_placeholder') }}" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
+                                                </div>
+                                                <div>
+                                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_3.price_label') }}</label>
+                                                    <div class="relative">
+                                                        <input type="number" x-model="course.price" placeholder="0.00" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
+                                                        <div class="absolute inset-y-0 ltr:right-6 rtl:left-6 flex items-center pointer-events-none text-slate-400 font-bold text-xs">
+                                                            <span x-text="formData.step_1.currency"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="p-6 bg-white rounded-2xl border border-slate-100 space-y-4">
+                                                <div class="flex items-center justify-between mb-2">
+                                                    <h3 class="font-black text-slate-900 text-[10px] uppercase tracking-widest flex items-center gap-2">
+                                                        <i class="fa-solid fa-calendar-days text-brand-primary"></i> {{ __('onboarding.step_3.schedule_section') }}
+                                                    </h3>
+                                                    <button type="button" @click="course.schedules.push({day: '0', time: '16:00', time_end: '18:00'})" class="text-[10px] font-black uppercase text-brand-primary hover:underline transition-all">
+                                                        + {{ __('onboarding.step_3.btn_add_schedule') }}
+                                                    </button>
+                                                </div>
+
+                                                <template x-for="(schedule, sIndex) in course.schedules" :key="sIndex">
+                                                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-end pb-4 border-b border-slate-50 last:border-0 last:pb-0">
+                                                        <div class="sm:col-span-10 grid grid-cols-3 gap-3">
+                                                            <select x-model="schedule.day" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-3 py-2.5 text-xs font-bold">
+                                                                <option value="0">{{ __('onboarding.days.0') }}</option>
+                                                                <option value="1">{{ __('onboarding.days.1') }}</option>
+                                                                <option value="2">{{ __('onboarding.days.2') }}</option>
+                                                                <option value="3">{{ __('onboarding.days.3') }}</option>
+                                                                <option value="4">{{ __('onboarding.days.4') }}</option>
+                                                                <option value="5">{{ __('onboarding.days.5') }}</option>
+                                                                <option value="6">{{ __('onboarding.days.6') }}</option>
+                                                            </select>
+                                                            <input type="time" x-model="schedule.time" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-3 py-2.5 text-xs font-bold">
+                                                            <input type="time" x-model="schedule.time_end" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-3 py-2.5 text-xs font-bold">
+                                                        </div>
+                                                        <div class="sm:col-span-2 flex justify-end">
+                                                            <button type="button" x-show="course.schedules.length > 1" @click="course.schedules.splice(sIndex, 1)" class="w-10 h-10 rounded-xl bg-slate-50 text-red-400 hover:text-red-500 hover:shadow-md transition-all flex items-center justify-center border border-slate-100">
+                                                                <i class="fa-solid fa-trash-can text-sm"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </div>
                                         </div>
                                     </div>
                                 </template>
+
+                                <div class="flex justify-center">
+                                    <button type="button" @click="formData.step_3.courses.push({ instructor_index: '0', course_name: '', price: '', sessions_count: '1', schedules: [{day: '0', time: '16:00', time_end: '18:00'}] })" class="text-xs font-black uppercase text-brand-primary hover:underline transition-all flex items-center gap-2">
+                                        <i class="fa-solid fa-plus"></i> إضافة دورة أخرى
+                                    </button>
+                                </div>
                             </div>
 
                             <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-6">
@@ -361,14 +386,16 @@
                                 </select>
                             </div>
 
-                            <div class="p-6 bg-emerald-50/50 rounded-2xl border-2 border-emerald-100/50 flex items-center gap-4 transition-all hover:bg-emerald-50 group cursor-pointer" @click="formData.step_4.enroll_in_course = !formData.step_4.enroll_in_course">
-                                <div class="relative flex items-center">
-                                    <input type="checkbox" x-model="formData.step_4.enroll_in_course" class="w-6 h-6 rounded-lg border-emerald-200 text-emerald-500 focus:ring-emerald-500 cursor-pointer transition-all">
-                                </div>
-                                <label class="text-sm font-bold text-slate-800 cursor-pointer select-none">
-                                    {{ __('onboarding.step_4.enroll_checkbox', ['course' => '']) }}
-                                    <span class="text-emerald-600 font-black" x-text="formData.step_3.course_name"></span>
+                            <div class="p-6 bg-emerald-50/50 rounded-2xl border-2 border-emerald-100/50 flex flex-col gap-3 transition-all hover:bg-emerald-50">
+                                <label class="text-sm font-bold text-slate-800 select-none">
+                                    اختر الدورة التي ترغب بتسجيل الطالب بها (اختياري)
                                 </label>
+                                <select x-model="formData.step_4.enroll_course_index" class="w-full bg-white border-2 border-white rounded-xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-4 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5 cursor-pointer">
+                                    <option value="">-- لا تقم بتسجيله في أي دورة الآن --</option>
+                                    <template x-for="(course, index) in formData.step_3.courses" :key="index">
+                                        <option :value="index" x-text="course.course_name || 'الدورة ' + (index + 1)"></option>
+                                    </template>
+                                </select>
                             </div>
 
                             <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-6">
@@ -438,21 +465,21 @@
                         education_system: '{{ $tenant->settings['education_system'] ?? 'egyptian_national' }}'
                     },
                     step_2: { instructors: [{ instructor_name: '', instructor_phone: '', instructor_specialization: '', instructor_email: '' }] },
-                    step_3: { instructor_index: '0', course_name: '', price: '', sessions_count: '1', schedules: [{day: '0', time: '16:00', time_end: '18:00'}] },
-                    step_4: { student_name: '', student_phone: '', grade_id: '', enroll_in_course: true }
+                    step_3: { courses: [{ instructor_index: '0', course_name: '', price: '', sessions_count: '1', schedules: [{day: '0', time: '16:00', time_end: '18:00'}] }] },
+                    step_4: { student_name: '', student_phone: '', grade_id: '', enroll_course_index: '0' }
                 },
                 
                 syncSchedules(count) {
                     const n = parseInt(count) || 0;
                     if (n < 1) return;
                     const finalCount = Math.min(n, 12);
-                    const currentCount = this.formData.step_3.schedules.length;
+                    const currentCount = this.formData.step_3.courses[0].schedules.length;
                     if (finalCount > currentCount) {
                         for (let i = 0; i < (finalCount - currentCount); i++) {
-                            this.formData.step_3.schedules.push({day: '0', time: '16:00', time_end: '18:00'});
+                            this.formData.step_3.courses[0].schedules.push({day: '0', time: '16:00', time_end: '18:00'});
                         }
                     } else if (finalCount < currentCount) {
-                        this.formData.step_3.schedules.splice(finalCount);
+                        this.formData.step_3.courses[0].schedules.splice(finalCount);
                     }
                 },
 
