@@ -195,7 +195,7 @@ class OnboardingController extends Controller
             auth()->user()->update(['locale' => $request->locale]);
             session(['locale' => $request->locale]);
 
-            return response()->json(['success' => true, 'next_step' => 'step_2']);
+            return response()->json(['success' => true, 'redirect' => route('center.onboarding.show') . '?step=step_2']);
         }
 
         if ($step === 'step_2') {
