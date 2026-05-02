@@ -51,16 +51,45 @@ class StudentService
             $email = $data->email ?? $this->generateUniqueEmail();
             $code = $data->code ?? $this->generateUniqueCode();
 
-            // 4. Create User account
-            $user = User::create([
-                'name' => $data->name,
-                'email' => $email,
-                'phone' => $data->phone, // Synchronize phone for authentication
-                'password' => Hash::make($generatedPassword),
-                'role' => 'student',
-                'tenant_id' => app('tenant')->id,
-                'must_change_password' => true,
-            ]);
+            // 4. Handle User account (Check if email already exists)
+            $existingUser = User::where('email', $email)->first();
+            
+            if ($existingUser) {
+                // If user exists in a DIFFERENT tenant, we cannot register them here (Global Email Unique constraint)
+                if ($existingUser->tenant_id != app('tenant')->id) {
+                    throw new \Exception(__('auth.email_already_taken'));
+                }
+                
+                // If user exists in SAME tenant, check if they are already a student
+                $student = Student::where('user_id', $existingUser->id)->first();
+                if ($student) {
+                    // Update existing student instead of creating a new one
+                    $student->update([
+                        'grade_id' => $data->grade_id,
+                        'name' => $data->name,
+                        'phone' => $data->phone,
+                    ]);
+                    
+                    return [
+                        'user' => $existingUser,
+                        'student' => $student,
+                        'generated_password' => null, // Password not changed
+                    ];
+                }
+                
+                $user = $existingUser;
+            } else {
+                // Create new User account
+                $user = User::create([
+                    'name' => $data->name,
+                    'email' => $email,
+                    'phone' => $data->phone,
+                    'password' => Hash::make($generatedPassword),
+                    'role' => 'student',
+                    'tenant_id' => app('tenant')->id,
+                    'must_change_password' => true,
+                ]);
+            }
 
             // 4.5 Handle Guardian
             $guardianId = null;
