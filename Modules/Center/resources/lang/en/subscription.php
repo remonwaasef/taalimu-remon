@@ -58,10 +58,6 @@ return [
   ],
   'currency' => 'EGP',
   'plans' => [
-    'free-trial' => [
-      'name' => 'Free Trial',
-      'desc' => 'Perfect for testing the platform features',
-    ],
     'basic' => [
       'name' => 'Starter',
       'desc' => 'For independent teachers and small groups',

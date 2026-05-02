@@ -65,7 +65,7 @@ class ExperimentalDataSeeder extends Seeder
                     'quantity' => 1,
                     'status' => 'active',
                     'ends_at' => now()->addYear(),
-                    'stripe_price' => 'price_basic', // Starter plan for independent teachers
+                    'stripe_price' => 'basic', // Starter plan for independent teachers
                 ]
             );
 
