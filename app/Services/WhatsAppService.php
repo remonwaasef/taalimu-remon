@@ -5,8 +5,11 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
+use App\Traits\HasLocaleResolution;
+
 class WhatsAppService
 {
+    use HasLocaleResolution;
     /**
      * Send a WhatsApp message.
      * For now, this is a mock/placeholder for UltraMsg or similar APIs.
@@ -65,6 +68,7 @@ class WhatsAppService
         return false;
     }
 
+
     /**
      * Send student attendance notification.
      */
@@ -73,8 +77,9 @@ class WhatsAppService
         $to = $student->parent_phone ?: $student->phone;
         if (!$to) return false;
 
+        $locale = $this->getTargetLocale($tenant, $student);
         $settings = $tenant->settings['whatsapp'] ?? [];
-        $template = $settings['attendance_template'] ?? null;
+        $template = $settings["attendance_template_{$locale}"] ?? $settings['attendance_template'] ?? null;
 
         if ($template) {
             $message = strtr($template, [
@@ -87,7 +92,7 @@ class WhatsAppService
                 'student_name' => $student->name,
                 'course_name' => $course->title,
                 'tenant_name' => $tenant->name
-            ]);
+            ], $locale);
         }
         
         return $this->sendMessageByTenant($tenant, $to, $message);
@@ -101,8 +106,9 @@ class WhatsAppService
         $to = $student->parent_phone ?: $student->phone;
         if (!$to) return false;
 
+        $locale = $this->getTargetLocale($tenant, $student);
         $settings = $tenant->settings['whatsapp'] ?? [];
-        $template = $settings['payment_template'] ?? null;
+        $template = $settings["payment_template_{$locale}"] ?? $settings['payment_template'] ?? null;
 
         if ($template) {
             $message = strtr($template, [
@@ -119,7 +125,7 @@ class WhatsAppService
                 'student_name' => $student->name,
                 'remaining' => $remaining,
                 'tenant_name' => $tenant->name
-            ]);
+            ], $locale);
         }
         
         return $this->sendMessageByTenant($tenant, $to, $message);
@@ -133,8 +139,9 @@ class WhatsAppService
         $to = $student->parent_phone ?: $student->phone;
         if (!$to) return false;
 
+        $locale = $this->getTargetLocale($tenant, $student);
         $settings = $tenant->settings['whatsapp'] ?? [];
-        $template = $settings['debt_template'] ?? null;
+        $template = $settings["debt_template_{$locale}"] ?? $settings['debt_template'] ?? null;
 
         if ($template) {
             $message = strtr($template, [
@@ -149,7 +156,7 @@ class WhatsAppService
                 'currency' => get_currency_symbol(),
                 'student_name' => $student->name,
                 'tenant_name' => $tenant->name
-            ]);
+            ], $locale);
         }
         
         return $this->sendMessageByTenant($tenant, $to, $message);

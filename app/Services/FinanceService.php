@@ -12,10 +12,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use App\Mail\NotifPaymentConfirmedMail;
+use App\Traits\HasLocaleResolution;
 
 
 class FinanceService
 {
+    use HasLocaleResolution;
     protected $courseService;
     protected $whatsappService;
 
@@ -240,15 +242,22 @@ class FinanceService
             $hasParentEmail = !empty($student->parent_email);
 
             if (!empty($tenantSettings['notif_payment_confirmed_enabled']) && ($realEmail || $hasParentEmail)) {
-                $subject = $tenantSettings['notif_payment_confirmed_subject'] ?? 'تأكيد استلام دفعة';
-                $body = $tenantSettings['notif_payment_confirmed_body'] ?? '';
+                $locale = $this->getTargetLocale($tenant, $student);
+                
+                $subjectKey = "notif_payment_confirmed_subject_{$locale}";
+                $bodyKey = "notif_payment_confirmed_body_{$locale}";
+                
+                $subject = $tenantSettings[$subjectKey] ?? $tenantSettings['notif_payment_confirmed_subject'] ?? 'تأكيد استلام دفعة';
+                $body = $tenantSettings[$bodyKey] ?? $tenantSettings['notif_payment_confirmed_body'] ?? '';
                 
                 $variables = [
+                    'student_name' => $student->name, // Standardized key
                     'اسم_الطالب' => $student->name,
                     'اسم_المركز' => $tenant->name,
                     'المبلغ_المدفوع' => $amount . ' ' . ($tenant->settings['currency'] ?? 'ج.م'),
                     'تاريخ_الدفع' => now()->format('Y-m-d'),
                     'المتبقي' => max(0, $balance) . ' ' . ($tenant->settings['currency'] ?? 'ج.م'),
+                    'payment_method' => $method,
                     'طريقة_الدفع' => $method,
                 ];
 
