@@ -11,10 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            // Drop global unique constraints
-            $table->dropUnique('users_email_unique');
+        // Drop global unique constraint on email safely (handles different index names and ignores if not exists)
+        try {
+            \Illuminate\Support\Facades\DB::statement('ALTER TABLE users DROP INDEX users_email_unique');
+        } catch (\Exception $e) {
+            // ignore
+        }
+        try {
+            \Illuminate\Support\Facades\DB::statement('ALTER TABLE users DROP INDEX email');
+        } catch (\Exception $e) {
+            // ignore
+        }
 
+        Schema::table('users', function (Blueprint $table) {
             // Add tenant-specific unique constraints
             $table->unique(['tenant_id', 'email'], 'tenant_email_unique');
             $table->unique(['tenant_id', 'phone'], 'tenant_phone_unique');
