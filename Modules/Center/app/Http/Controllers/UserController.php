@@ -78,7 +78,13 @@ class UserController extends Controller
                 
         $validated = $request->validate([
             'name' => 'nullable|string|max:255',
-            'email' => 'nullable|string|email|max:255|unique:users',
+            'email' => [
+                'nullable',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users')->where('tenant_id', $this->tenant->id)
+            ],
             'password' => [
                 'nullable', 
                 'string', 
@@ -150,7 +156,7 @@ class UserController extends Controller
 
         $validated = $request->validate([
             'name' => 'nullable|string|max:255',
-            'email' => ['nullable', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'email' => ['nullable', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)->where('tenant_id', $this->tenant->id)],
             'password' => [
                 'nullable', 
                 'string', 
@@ -218,7 +224,7 @@ class UserController extends Controller
         
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)->where('tenant_id', auth()->user()->tenant_id)],
             'password' => [
                 'nullable', 
                 'string', 

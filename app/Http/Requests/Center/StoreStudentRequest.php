@@ -29,8 +29,19 @@ class StoreStudentRequest extends FormRequest
                 'max:20',
                 \Illuminate\Validation\Rule::unique('students', 'national_id')->where('tenant_id', $tenantId)
             ],
-            'email' => 'nullable|email|unique:users,email',
-            'phone' => ['required', 'string', 'max:20', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
+            'email' => [
+                'nullable',
+                'email',
+                \Illuminate\Validation\Rule::unique('users', 'email')->where('tenant_id', $tenantId)
+            ],
+            'phone' => [
+                'required', 
+                'string', 
+                'max:20', 
+                'regex:/^([0-9\s\-\+\(\)]*)$/', 
+                'min:10',
+                \Illuminate\Validation\Rule::unique('users', 'phone')->where('tenant_id', $tenantId)
+            ],
             'parent_phone' => ['nullable', 'string', 'max:20', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
             'parent_email' => 'nullable|email|max:255',
             'grade_id' => 'required|exists:grades,id',
