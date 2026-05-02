@@ -276,7 +276,11 @@ class OnboardingController extends Controller
                     'schedules.*.time' => 'required',
                 ]);
 
-                $instructor = \App\Models\Instructor::where('tenant_id', $tenant->id)->first();
+                $instructorIndex = $request->input('instructor_index', 0);
+                $instructor = \App\Models\Instructor::where('tenant_id', $tenant->id)
+                    ->orderBy('id', 'asc')
+                    ->skip($instructorIndex)
+                    ->first();
                 
                 // Prevent duplicates: check if an onboarding course already exists
                 $existingCourse = \App\Models\Course::where('tenant_id', $tenant->id)->first();
