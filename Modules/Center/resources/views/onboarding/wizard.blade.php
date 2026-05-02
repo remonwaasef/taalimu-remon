@@ -361,41 +361,62 @@
                         </div>
 
                         <form @submit.prevent="submitStep('step_4', false)" class="space-y-8">
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <div>
-                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_4.name_label') }}</label>
-                                    <input type="text" x-model="formData.step_4.student_name" placeholder="{{ __('onboarding.step_4.name_placeholder') }}" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5" required>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_4.phone_label') }}</label>
-                                    <input type="text" x-model="formData.step_4.student_phone" @input="formData.step_4.student_phone = $event.target.value.replace(/[^0-9\+\-\(\)\s]/g, '')" dir="ltr" placeholder="01xxxxxxxxx" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5" required>
-                                </div>
-                            </div>
+                            <div class="space-y-6">
+                                <template x-for="(student, index) in formData.step_4.students" :key="index">
+                                    <div class="p-6 bg-slate-50 rounded-[2rem] border border-slate-100 relative">
+                                        <div class="absolute top-4 rtl:left-4 ltr:right-4">
+                                            <button type="button" x-show="formData.step_4.students.length > 1" @click="formData.step_4.students.splice(index, 1)" class="w-8 h-8 rounded-full bg-white text-red-400 hover:text-red-500 hover:shadow-md transition-all flex items-center justify-center border border-slate-100">
+                                                <i class="fa-solid fa-trash-can text-xs"></i>
+                                            </button>
+                                        </div>
+                                        <div class="mb-4">
+                                            <h3 class="font-black text-slate-900 text-xs uppercase tracking-widest flex items-center gap-2">
+                                                <i class="fa-solid fa-user-graduate text-brand-primary"></i> الطالب <span x-text="index + 1"></span>
+                                            </h3>
+                                        </div>
 
-                            <div>
-                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_4.grade_label') }}</label>
-                                <select x-model="formData.step_4.grade_id" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all hover:bg-white focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5 appearance-none cursor-pointer">
-                                    <option value="">{{ __('onboarding.step_4.grade_label') }}...</option>
-                                    @foreach($stages as $stage)
-                                        <optgroup label="{{ $stage->name }}">
-                                            @foreach($stage->grades as $grade)
-                                                <option value="{{ $grade->id }}">{{ $grade->name }}</option>
-                                            @endforeach
-                                        </optgroup>
-                                    @endforeach
-                                </select>
-                            </div>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                                            <div>
+                                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_4.name_label') }}</label>
+                                                <input type="text" x-model="student.student_name" placeholder="{{ __('onboarding.step_4.name_placeholder') }}" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
+                                            </div>
+                                            <div>
+                                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_4.phone_label') }}</label>
+                                                <input type="text" x-model="student.student_phone" @input="student.student_phone = $event.target.value.replace(/[^0-9\+\-\(\)\s]/g, '')" dir="ltr" placeholder="01xxxxxxxxx" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
+                                            </div>
+                                        </div>
 
-                            <div class="p-6 bg-emerald-50/50 rounded-2xl border-2 border-emerald-100/50 flex flex-col gap-3 transition-all hover:bg-emerald-50">
-                                <label class="text-sm font-bold text-slate-800 select-none">
-                                    اختر الدورة التي ترغب بتسجيل الطالب بها (اختياري)
-                                </label>
-                                <select x-model="formData.step_4.enroll_course_index" class="w-full bg-white border-2 border-white rounded-xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-4 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5 cursor-pointer">
-                                    <option value="">-- لا تقم بتسجيله في أي دورة الآن --</option>
-                                    <template x-for="(course, index) in formData.step_3.courses" :key="index">
-                                        <option :value="index" x-text="course.course_name || 'الدورة ' + (index + 1)"></option>
-                                    </template>
-                                </select>
+                                        <div class="mb-6">
+                                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_4.grade_label') }}</label>
+                                            <select x-model="student.grade_id" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5 appearance-none cursor-pointer">
+                                                <option value="">{{ __('onboarding.step_4.grade_label') }}...</option>
+                                                @foreach($stages as $stage)
+                                                    <optgroup label="{{ $stage->name }}">
+                                                        @foreach($stage->grades as $grade)
+                                                            <option value="{{ $grade->id }}">{{ $grade->name }}</option>
+                                                        @endforeach
+                                                    </optgroup>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="p-6 bg-emerald-50/50 rounded-2xl border-2 border-emerald-100/50 flex flex-col gap-3 transition-all hover:bg-emerald-50">
+                                            <label class="text-sm font-bold text-slate-800 select-none">
+                                                اختر الدورة التي ترغب بتسجيل الطالب بها (اختياري)
+                                            </label>
+                                            <select x-model="student.enroll_course_index" class="w-full bg-white border-2 border-white rounded-xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-4 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5 cursor-pointer">
+                                                <option value="">-- لا تقم بتسجيله في أي دورة الآن --</option>
+                                                <template x-for="(course, idx) in formData.step_3.courses" :key="idx">
+                                                    <option :value="idx" x-text="course.course_name || 'الدورة ' + (idx + 1)"></option>
+                                                </template>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <button type="button" @click="formData.step_4.students.push({ student_name: '', student_phone: '', grade_id: '', enroll_course_index: '' })" class="w-full py-4 border-2 border-dashed border-emerald-200 rounded-2xl text-emerald-500 font-bold hover:bg-emerald-50 hover:border-emerald-300 transition-all flex justify-center items-center gap-2">
+                                    <i class="fa-solid fa-plus"></i> إضافة طالب آخر
+                                </button>
                             </div>
 
                             <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-6">
@@ -469,7 +490,7 @@
                     },
                     step_2: { instructors: [{ instructor_name: '', instructor_phone: '', instructor_specialization: '', instructor_email: '' }] },
                     step_3: { courses: [{ instructor_index: '0', course_name: '', price: '', sessions_count: '1', schedules: [{day: '0', time: '16:00', time_end: '18:00'}] }] },
-                    step_4: { student_name: '', student_phone: '', grade_id: '', enroll_course_index: '0' }
+                    step_4: { students: [{ student_name: '', student_phone: '', grade_id: '', enroll_course_index: '' }] }
                 },
                 
                 syncSchedules(count) {
@@ -513,6 +534,11 @@
                     const savedCourses = @json($existingCourses ?? []);
                     if (savedCourses.length > 0) {
                         this.formData.step_3.courses = savedCourses;
+                    }
+
+                    const savedStudents = @json($existingStudents ?? []);
+                    if (savedStudents.length > 0) {
+                        this.formData.step_4.students = savedStudents;
                     }
 
                     if (!this.steps.find(s => s.id === this.currentStep)) {
