@@ -265,10 +265,10 @@ function openBugReportModal() {
         logging: false,
         useCORS: true,
         ignoreElements: (node) => {
-            return node.id === 'bugReportFab' || node.id === 'bugReportModal';
+            return node.id === 'bugReportFab' || node.id === 'bugReportModal' || node.classList.contains('modal-backdrop');
         }
     }).then(canvas => {
-        const base64image = canvas.toDataURL("image/png");
+        const base64image = canvas.toDataURL("image/jpeg", 0.6);
         document.getElementById('autoScreenshotValue').value = base64image;
         
         // Show preview
