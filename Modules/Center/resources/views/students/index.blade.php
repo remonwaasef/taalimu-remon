@@ -340,7 +340,7 @@
                                             {{ $student->status == 'active' ? __('center::students.active') : __('center::students.stopped') }}
                                         </span>
                                         @if($student->total_balance > 0)
-                                            <span class="text-danger extra-small fw-bold mt-1">{{ number_format($student->total_balance, 0) }} {{ __('center::dashboard.currency') }}</span>
+                                            <span class="text-danger extra-small fw-bold mt-1">{{ number_format($student->total_balance, 0) }} {{ get_currency_symbol() }}</span>
                                         @endif
                                     </div>
                                 </td>
@@ -348,7 +348,7 @@
                                     <div class="d-inline-flex gap-1 me-2">
                                         @php
                                             $phoneForWa = sanitizePhoneForWhatsApp($student->phone);
-                                            $reportMsg = "تقرير الطالب: {$student->name}\nالمبلغ المتبقي: " . number_format($student->total_balance, 0) . " ج.م\nشكراً لمتابعتكم.";
+                                            $reportMsg = "تقرير الطالب: {$student->name}\nالمبلغ المتبقي: " . number_format($student->total_balance, 0) . " " . get_currency_symbol() . "\nشكراً لمتابعتكم.";
                                         @endphp
                                         <a href="https://api.whatsapp.com/send?phone={{ $phoneForWa }}" target="_blank" class="btn btn-sm btn-light rounded-circle text-success shadow-none p-2" title="{{ __('center::students.whatsapp') }}">
                                             <i class="fab fa-whatsapp"></i>
@@ -450,7 +450,7 @@
                             <label class="form-label fw-bold small text-muted">{{ __('center::students.collected_amount') }}</label>
                             <div class="input-group">
                                 <input type="number" name="amount" id="payAmountInput" class="form-control rounded-start-pill" required>
-                                <span class="input-group-text rounded-end-pill">{{ __('center::dashboard.currency') }}</span>
+                                <span class="input-group-text rounded-end-pill">{{ get_currency_symbol() }}</span>
                             </div>
                             <div id="payBalanceHint" class="x-small text-danger mt-1"></div>
                         </div>
@@ -480,7 +480,7 @@
                             <select id="courseSelect" class="form-select rounded-pill" required>
                                 <option value="">{{ __('center::students.choose_course') }}</option>
                                 @foreach($courses as $course)
-                                    <option value="{{ $course->id }}">{{ $course->title }} ({{ number_format($course->price, 0) }} {{ __('center::dashboard.currency') }})</option>
+                                    <option value="{{ $course->id }}">{{ $course->title }} ({{ number_format($course->price, 0) }} {{ get_currency_symbol() }})</option>
                                 @endforeach
                             </select>
                         </div>
@@ -547,7 +547,7 @@
                         document.getElementById('payStudentId').value = this.dataset.id;
                         document.getElementById('payStudentName').textContent = this.dataset.name;
                         document.getElementById('payAmountInput').value = this.dataset.balance;
-                        document.getElementById('payBalanceHint').textContent = '{{ __('center::students.current_balance') }}: ' + this.dataset.balance + ' {{ __('center::dashboard.currency') }}';
+                        document.getElementById('payBalanceHint').textContent = '{{ __('center::students.current_balance') }}: ' + this.dataset.balance + ' {{ get_currency_symbol() }}';
                         payModal.show();
                     }
                 });

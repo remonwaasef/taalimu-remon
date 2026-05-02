@@ -101,7 +101,7 @@
                                         <span class="text-muted small fst-italic">{{ __('center::courses.not_specified') }}</span>
                                     @endif
                                 </td>
-                                <td class="fw-bold text-success">{{ number_format($course->price, 2) }} {{ __('center::courses.currency') }}</td>
+                                <td class="fw-bold text-success">{{ number_format($course->price, 2) }} {{ get_currency_symbol() }}</td>
                                 <td>
                                     @php
                                         $badges = [

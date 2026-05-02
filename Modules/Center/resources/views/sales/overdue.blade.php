@@ -43,7 +43,7 @@
                             </td>
                             <td class="text-muted">{{ $student->phone }}</td>
                             <td>
-                                <span class="fw-bold text-danger">{{ number_format($student->total_debt, 2) }} {{ __('center::sales.currency') }}</span>
+                                <span class="fw-bold text-danger">{{ number_format($student->total_debt, 2) }} {{ get_currency_symbol() }}</span>
                             </td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-2">

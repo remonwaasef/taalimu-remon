@@ -163,7 +163,7 @@
                     <div class="position-absolute {{ app()->isLocale('ar') ? 'text-end' : 'text-start' }}" style="bottom: 70px; {{ app()->isLocale('ar') ? 'right: 30px;' : 'left: 30px;' }} z-index: 10;">
                         <span class="badge bg-white text-dark shadow-sm px-3 py-2 border border-light rounded-pill">
                             <h4 class="fw-bold mb-0 d-inline">{{ number_format($monthlyRevenue, 0) }}</h4>
-                            <small class="text-muted d-inline ms-1" style="font-size: 0.7rem;">{{ __('center::dashboard.currency') }}</small>
+                            <small class="text-muted d-inline ms-1" style="font-size: 0.7rem;">{{ get_currency_symbol() }}</small>
                         </span>
                     </div>
 

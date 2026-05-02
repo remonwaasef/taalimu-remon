@@ -38,8 +38,8 @@
                                 <span class="fw-bold">{{ $sale->student->name }}</span>
                             </div>
                         </td>
-                        <td class="fw-bold text-dark">{{ number_format($sale->total_amount, 2) }} {{ __('center::sales.currency') }}</td>
-                        <td class="text-success fw-bold">{{ number_format($sale->paid_amount, 2) }} {{ __('center::sales.currency') }}</td>
+                        <td class="fw-bold text-dark">{{ number_format($sale->total_amount, 2) }} {{ get_currency_symbol() }}</td>
+                        <td class="text-success fw-bold">{{ number_format($sale->paid_amount, 2) }} {{ get_currency_symbol() }}</td>
                         <td>
                             <span class="badge bg-{{ $sale->status == 'paid' ? 'success' : ($sale->status == 'partial' ? 'warning' : 'danger') }} bg-opacity-10 text-{{ $sale->status == 'paid' ? 'success' : ($sale->status == 'partial' ? 'warning' : 'danger') }} rounded-pill px-3">
                                 {{ __('center::sales.status_' . ($sale->status == 'pending' ? 'unpaid' : $sale->status)) }}

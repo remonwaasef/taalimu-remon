@@ -35,7 +35,7 @@
                         @endphp
                         <h5 class="card-title">{{ $pkgName }}</h5>
                         <p class="card-text">{{ $package->description }}</p>
-                        <h6 class="card-subtitle mb-2 text-muted">{{ $package->price }} {{ __('center::billing.currency') }} / {{ $package->duration_in_days }} {{ __('center::billing.days') }}</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ $package->price }} {{ get_currency_symbol() }} / {{ $package->duration_in_days }} {{ __('center::billing.days') }}</h6>
                         <ul>
                             @foreach($package->features as $feature)
                                 @php
