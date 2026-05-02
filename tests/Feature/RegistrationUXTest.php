@@ -22,7 +22,7 @@ class RegistrationUXTest extends TestCase
             'email' => 'john@example.com',
             'password' => 'Str0ngP@ssw0rd!1', // Meets complexity
             'password_confirmation' => 'Str0ngP@ssw0rd!1',
-            'plan' => 'free-trial',
+            'plan' => 'basic',
             'billing_cycle' => 'monthly',
         ]);
 
@@ -59,7 +59,7 @@ class RegistrationUXTest extends TestCase
             'email' => 'jane@example.com', // Different email
             'password' => 'Str0ngP@ssw0rd!2',
             'password_confirmation' => 'Str0ngP@ssw0rd!2',
-            'plan' => 'free-trial',
+            'plan' => 'basic',
             'billing_cycle' => 'monthly',
         ]);
 

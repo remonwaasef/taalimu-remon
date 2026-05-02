@@ -58,10 +58,6 @@ return [
   ],
   'currency' => 'EGP',
   'plans' => [
-    'free-trial' => [
-      'name' => 'Essai Gratuit',
-      'desc' => 'Idéal pour tester la plateforme',
-    ],
     'basic' => [
       'name' => 'Starter',
       'desc' => 'Pour les enseignants indépendants et les petits groupes',

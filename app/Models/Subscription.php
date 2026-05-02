@@ -91,9 +91,9 @@ class Subscription extends CashierSubscription
             return Package::where('slug', $slug)->first();
         }
 
-        // Fallback for free trial: price_free
+        // Fallback for free trial: price_free -> basic
         if ($this->stripe_price === 'price_free') {
-            return Package::where('slug', 'free-trial')->first();
+            return Package::where('slug', 'basic')->first();
         }
 
         // Robust Fallback for configuration mismatches or old data

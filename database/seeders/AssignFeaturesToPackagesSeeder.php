@@ -12,31 +12,26 @@ class AssignFeaturesToPackagesSeeder extends Seeder
     {
         $newFeatures = [
             'manage_exams' => [
-                'free-trial' => 'true',
                 'basic' => 'true',
                 'pro' => 'true',
                 'enterprise' => 'true',
             ],
             'advanced_roles' => [
-                'free-trial' => 'false',
                 'basic' => 'false',
                 'pro' => 'true',
                 'enterprise' => 'true',
             ],
             'daily_schedules' => [
-                'free-trial' => 'true',
                 'basic' => 'true',
                 'pro' => 'true',
                 'enterprise' => 'true',
             ],
             'attendance_tracking' => [
-                'free-trial' => 'true',
                 'basic' => 'true',
                 'pro' => 'true',
                 'enterprise' => 'true',
             ],
             'multi_branch' => [
-                'free-trial' => 'false',
                 'basic' => 'false',
                 'pro' => 'false',
                 'enterprise' => 'true',
