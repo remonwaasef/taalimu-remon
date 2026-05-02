@@ -225,7 +225,7 @@ window.addEventListener('pageshow', (event) => {
         
         <div class="grid grid-cols-1 lg:grid-cols-12">
             <!-- Left Info Panel (Hidden on Mobile or as Sidebar) -->
-            <div class="lg:col-span-4 bg-slate-50/50 border-e border-slate-100 p-6 lg:p-8 flex flex-col gap-8">
+            <div class="lg:col-span-4 bg-slate-50/50 border-e border-slate-100 p-6 lg:p-10 flex flex-col justify-between">
                 <div>
                     {{-- Verified Account Pill --}}
                     <div class="mb-8 animate-fade-in">
@@ -268,7 +268,7 @@ window.addEventListener('pageshow', (event) => {
 
                         <!-- Mini Features List -->
                         <div x-data="{ openFeatures: false }" class="py-3 border-y border-slate-50">
-                            <button type="button" @click="openFeatures = !openFeatures" class="w-full flex items-center justify-between text-[12px] font-black text-slate-700 font-arabic hover:text-brand-secondary transition-colors pb-2 cursor-pointer">
+                            <button type="button" @click="openFeatures = !openFeatures" class="w-full flex items-center justify-center gap-2 text-[12px] font-black text-slate-700 font-arabic hover:text-brand-secondary transition-colors pb-2 cursor-pointer">
                                 <span>{{ app()->isLocale('ar') ? 'عرض المميزات' : 'View Features' }}</span>
                                 <i class="bi bi-chevron-down transition-transform duration-300 transform" :class="openFeatures ? 'rotate-180' : ''"></i>
                             </button>
@@ -340,7 +340,7 @@ window.addEventListener('pageshow', (event) => {
                     </div>
                 </div>
 
-                <div class="mt-auto pt-6 flex items-center gap-3 text-slate-400 text-[10px] font-bold opacity-60">
+                <div class="hidden lg:flex items-center gap-3 text-slate-400 text-[10px] font-bold opacity-40 px-6">
                     <i class="bi bi-shield-check text-emerald-500 text-sm"></i>
                     <span>{{ app()->getLocale() == 'ar' ? 'جميع البيانات مشفرة وآمنة تماماً' : 'All data is encrypted and secure' }}</span>
                 </div>
@@ -376,10 +376,10 @@ window.addEventListener('pageshow', (event) => {
                             <span x-text="accountType === 'center' ? '{{ __('auth.register.center_name') }}' : ({{ Js::from(app()->isLocale('ar') ? 'اسم المدرس / المنصة' : 'Teacher / Platform Name') }})"></span>
                         </label>
                         <div class="relative group">
-                            <div class="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none text-slate-300 group-focus-within:text-brand-secondary transition-colors"><i class="bi bi-building"></i></div>
+                            <div class="absolute inset-y-0 start-0 ps-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-brand-secondary transition-colors"><i class="bi bi-building"></i></div>
                             <input type="text" name="center_name" x-model="centerName"
                                 @input="if(!manuallyEditedSubdomain) { subdomain = generateSlug(centerName); checkSubdomain(); }"
-                                class="w-full h-12 ps-11 pe-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold font-arabic focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
+                                class="w-full h-11 ps-10 pe-5 bg-slate-50/50 border-2 border-slate-100 rounded-xl text-base font-bold font-arabic focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
                                 placeholder="{{ __('auth.register.center_name_placeholder') }}" required autofocus>
                         </div>
                     </div>
@@ -388,14 +388,14 @@ window.addEventListener('pageshow', (event) => {
                     <div class="space-y-1">
                         <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ app()->isLocale('ar') ? 'رابط المنصة' : 'Platform Link' }}</label>
                         <div class="relative flex items-center w-full group" dir="ltr">
-                            <div class="absolute left-0 inset-y-0 flex items-center px-4 pointer-events-none text-brand-secondary font-black text-[11px] bg-brand-secondary/5 border-e border-brand-secondary/10 rounded-s-2xl">https://</div>
+                            <div class="absolute left-0 inset-y-0 flex items-center px-3 pointer-events-none text-brand-secondary font-black text-[10px] bg-brand-secondary/5 border-r border-brand-secondary/10 rounded-l-xl">https://</div>
                             <input type="text" name="subdomain" x-model="subdomain"
                                 @input="manuallyEditedSubdomain = true; subdomain = cleanSlug(subdomain);"
                                 @input.debounce.500ms="checkSubdomain()"
-                                class="w-full h-12 pl-[80px] pr-[120px] bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold font-sans focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
+                                class="w-full h-11 pl-[70px] pr-[110px] bg-slate-50/50 border-2 border-slate-100 rounded-xl text-base font-bold font-sans focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
                                 placeholder="center-name" required>
-                            <div class="absolute right-0 inset-y-0 flex items-center pr-4 pointer-events-none text-slate-400 font-bold text-[11px] gap-2">
-                                <span class="opacity-60">.taalimu.com</span>
+                            <div class="absolute right-0 inset-y-0 flex items-center pr-3 pointer-events-none text-slate-400 font-bold text-[10px] gap-2">
+                                <span>.taalimu.com</span>
                                 <div class="flex items-center justify-center w-4 h-4">
                                     <template x-if="subdomainStatus === 'loading'"><div class="w-3 h-3 border-2 border-brand-secondary border-t-transparent rounded-full animate-spin"></div></template>
                                     <template x-if="subdomainStatus === 'valid'"><i class="bi bi-check-circle-fill text-emerald-500 text-base"></i></template>
@@ -411,9 +411,9 @@ window.addEventListener('pageshow', (event) => {
                     <div class="space-y-1">
                         <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.phone') }}</label>
                         <div class="relative group">
-                            <div class="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none text-slate-300 group-focus-within:text-brand-secondary transition-colors"><i class="bi bi-telephone"></i></div>
+                            <div class="absolute inset-y-0 start-0 ps-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-brand-secondary transition-colors"><i class="bi bi-telephone"></i></div>
                             <input type="text" name="phone" value="{{ old('phone') }}"
-                                class="w-full h-12 ps-11 pe-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
+                                class="w-full h-11 ps-10 pe-5 bg-slate-50/50 border-2 border-slate-100 rounded-xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
                                 placeholder="010xxxxxxx" required>
                         </div>
                     </div>

@@ -697,138 +697,113 @@
     <!-- Main Content -->
     <main class="main-content">
         <!-- Header -->
-        <!-- Header -->
-        <header class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
-            <div class="d-flex align-items-center gap-2">
+        <header class="d-flex justify-content-between align-items-center mb-4 gap-2 flex-nowrap">
+            <div class="d-flex align-items-center gap-2 min-w-0">
                 @auth
-                <button class="btn btn-white bg-white border shadow-sm rounded-circle d-lg-none p-0 d-flex align-items-center justify-content-center" id="sidebarToggle" style="width: 40px; height: 40px;">
+                <button class="btn btn-white bg-white border shadow-sm rounded-circle d-lg-none p-0 d-flex align-items-center justify-content-center flex-shrink-0" id="sidebarToggle" style="width: 40px; height: 40px;">
                     <i class="fas fa-bars text-primary"></i>
                 </button>
                 @endauth
-                <h2 class="fw-bold mb-0 d-none d-sm-block" style="font-size: 1.25rem;">@yield('page-title', __('sidebar.overview'))</h2>
+                <h2 class="fw-bold mb-0 text-truncate" style="font-size: 1.15rem; max-width: 250px;">@yield('page-title', __('sidebar.overview'))</h2>
             </div>
-            <div class="d-flex align-items-center gap-2">
-                <!-- Notifications Dropdown -->
+
+            <div class="d-flex align-items-center gap-2 flex-shrink-0">
                 @auth
                 @can('view sales')
                 @php
                     $overdueCount = $tenant->getOverdueStudentsCount();
                 @endphp
-                <div class="dropdown">
-                    <a href="{{ route('center.sales.overdue', ['tenant' => $tenant->domain ?? 'center']) }}" class="btn btn-white bg-white border shadow-sm rounded-pill px-3 position-relative" title="{{ __('center::dashboard.header.overdue_invoices') }}">
-                        <i class="fas fa-wallet text-danger"></i>
-                        @if($overdueCount > 0)
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger animate__animated animate__pulse animate__infinite" style="font-size: 0.6rem;">
-                                {{ $overdueCount }}
-                            </span>
-                        @endif
-                    </a>
-                </div>
+                @if($overdueCount > 0)
+                <a href="{{ route('center.sales.overdue', ['tenant' => $tenant->domain ?? 'center']) }}" class="btn btn-white bg-white border shadow-sm rounded-pill px-3 d-none d-md-flex align-items-center gap-2" title="{{ __('center::dashboard.header.overdue_invoices') }}">
+                    <i class="fas fa-wallet text-danger"></i>
+                    <span class="badge rounded-pill bg-danger" style="font-size: 0.6rem;">{{ $overdueCount }}</span>
+                </a>
+                @endif
                 @endcan
 
+                <!-- Notifications Dropdown -->
                 <div class="dropdown">
-                    <button class="btn btn-white bg-white border shadow-sm rounded-pill px-3 dropdown-toggle no-caret position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-bell text-primary"></i>
+                    <button class="btn btn-white bg-white border shadow-sm rounded-circle p-0 d-flex align-items-center justify-content-center position-relative" type="button" data-bs-toggle="dropdown" style="width: 40px; height: 40px;">
+                        <i class="fas fa-bell text-muted"></i>
                         @if(auth()->user()->unreadNotifications->count() > 0)
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
-                                {{ auth()->user()->unreadNotifications->count() }}
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white p-1">
+                                <span class="visually-hidden">unread notifications</span>
                             </span>
                         @endif
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end p-0 shadow-lg border-0" style="width: 320px; max-height: 400px; overflow-y: auto;">
+                    <ul class="dropdown-menu dropdown-menu-end p-0 shadow-lg border-0 rounded-4 overflow-hidden mt-2" style="width: 320px;">
                         <li class="p-3 border-bottom d-flex justify-content-between align-items-center bg-light">
-                            <h6 class="mb-0 fw-bold">{{ __('center::sidebar.notifications') }}</h6>
+                            <h6 class="mb-0 fw-bold small">{{ __('center::sidebar.notifications') }}</h6>
                             @if(auth()->user()->unreadNotifications->count() > 0)
                                 <form action="{{ route('center.notifications.readAll') }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="btn btn-link btn-sm text-decoration-none p-0" style="font-size: 0.8rem;">
+                                    <button type="submit" class="btn btn-link btn-sm text-decoration-none p-0 text-primary" style="font-size: 0.75rem;">
                                         {{ __('center::sidebar.mark_all_read') }}
                                     </button>
                                 </form>
                             @endif
                         </li>
-
-
-                        <li class="p-2 text-center bg-light border-bottom">
-                            <a href="{{ route('center.notifications.index') }}" class="text-decoration-none small fw-bold text-primary">
+                        <div style="max-height: 350px; overflow-y: auto;">
+                            @forelse(auth()->user()->notifications->take(5) as $notification)
+                                <li>
+                                    <a class="dropdown-item p-3 border-bottom d-flex gap-3 {{ $notification->read_at ? '' : 'bg-light' }}" href="{{ route('center.notifications.read', $notification->id) }}">
+                                        @php
+                                            $titleKey = $notification->data['title'] ?? 'notification';
+                                            $iconColor = 'primary';
+                                            $iconClass = $notification->data['icon'] ?? 'fas fa-bell';
+                                            
+                                            if (str_contains($titleKey, 'registered') || str_contains($titleKey, 'created')) $iconColor = 'success';
+                                            elseif (str_contains($titleKey, 'updated') || str_contains($titleKey, 'edited')) $iconColor = 'info';
+                                            elseif (str_contains($titleKey, 'deleted') || str_contains($titleKey, 'removed')) $iconColor = 'danger';
+                                        @endphp
+                                        <div class="rounded-circle bg-{{ $iconColor }} bg-opacity-10 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 35px; height: 35px;">
+                                            <i class="{{ $iconClass }} text-{{ $iconColor }}" style="font-size: 0.8rem;"></i>
+                                        </div>
+                                        <div class="flex-grow-1 min-w-0">
+                                            <p class="mb-0 text-dark small fw-bold text-truncate">
+                                                {{ __('center::sidebar.' . $titleKey) != 'center::sidebar.' . $titleKey ? __('center::sidebar.' . $titleKey) : $titleKey }}
+                                            </p>
+                                            <p class="mb-0 text-muted x-small text-truncate">{{ $notification->data['message'] ?? '' }}</p>
+                                            <small class="text-muted" style="font-size: 0.65rem;">{{ $notification->created_at->diffForHumans() }}</small>
+                                        </div>
+                                    </a>
+                                </li>
+                            @empty
+                                <li class="p-4 text-center text-muted">
+                                    <i class="fas fa-bell-slash fa-2x mb-2 opacity-20"></i>
+                                    <p class="mb-0 small">{{ __('center::sidebar.no_notifications') }}</p>
+                                </li>
+                            @endforelse
+                        </div>
+                        <li class="bg-light border-top">
+                            <a href="{{ route('center.notifications.index') }}" class="dropdown-item text-center py-2 small fw-bold text-primary">
                                 {{ __('center::sidebar.view_all') }}
                             </a>
                         </li>
-                        @forelse(auth()->user()->notifications->take(5) as $notification)
-                            <li>
-                                <a class="dropdown-item p-3 border-bottom d-flex gap-3 {{ $notification->read_at ? '' : 'bg-light' }}" href="{{ route('center.notifications.read', $notification->id) }}">
-                                    @php
-                                        $titleKey = $notification->data['title'];
-                                        $iconColor = 'primary';
-                                        $iconClass = $notification->data['icon'] ?? 'fas fa-bell';
-                                        
-                                        // Custom logic for colors and translations
-                                        if (str_contains($titleKey, 'registered') || str_contains($titleKey, 'created')) {
-                                            $iconColor = 'success'; // Green for addition
-                                        } elseif (str_contains($titleKey, 'updated') || str_contains($titleKey, 'edited')) {
-                                            $iconColor = 'info';    // Blue/Info for updates
-                                        } elseif (str_contains($titleKey, 'deleted') || str_contains($titleKey, 'removed')) {
-                                            $iconColor = 'danger';  // Red for deletion
-                                        }
-                                        
-                                        // Translation lookup with fallback
-                                        $translatedTitle = __('center::sidebar.' . $titleKey);
-                                        if ($translatedTitle === 'center::sidebar.' . $titleKey) {
-                                            $translatedTitle = $titleKey;
-                                        }
-                                    @endphp
-                                    
-                                    <div class="rounded-circle bg-{{ $iconColor }} bg-opacity-10 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px;">
-                                        <i class="{{ $iconClass }} text-{{ $iconColor }}"></i>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <p class="mb-1 fw-bold text-dark" style="font-size: 0.9rem;">
-                                            {{ $translatedTitle }}
-                                        </p>
-                                        <p class="mb-1 text-muted text-truncate" style="font-size: 0.8rem; max-width: 200px;">{{ $notification->data['message'] ?? '' }}</p>
-                                        <small class="text-muted" style="font-size: 0.7rem;">{{ $notification->created_at->diffForHumans() }}</small>
-                                    </div>
-                                    @if(!$notification->read_at)
-                                        <span class="d-inline-block rounded-circle bg-primary" style="width: 8px; height: 8px;"></span>
-                                    @endif
-                                </a>
-                            </li>
-                        @empty
-                            <li class="p-4 text-center text-muted">
-                                <i class="fas fa-bell-slash fa-2x mb-2 text-secondary"></i>
-                                <p class="mb-0 small">{{ __('center::sidebar.no_notifications') }}</p>
-                            </li>
-                        @endforelse
+                    </ul>
+                </div>
 
+                <!-- User Dropdown -->
+                <div class="dropdown">
+                    <button class="btn btn-white bg-white border shadow-sm rounded-pill px-2 px-md-3 dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; font-size: 0.75rem;">
+                            {{ substr(auth()->user()->name ?? 'A', 0, 1) }}
+                        </div>
+                        <span class="d-none d-md-inline-block small fw-bold">{{ auth()->user()->name ?? 'Admin' }}</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 p-2 mt-2">
+                        <li><a class="dropdown-item rounded-3" href="{{ route('center.settings.index') }}"><i class="fas fa-cog me-2"></i>{{ __('sidebar.settings') }}</a></li>
+                        <li><hr class="dropdown-divider mx-2"></li>
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="dropdown-item rounded-3 text-danger"><i class="fas fa-sign-out-alt me-2"></i>{{ __('auth.logout') }}</button>
+                            </form>
+                        </li>
                     </ul>
                 </div>
                 @endauth
-
-
-                @auth
-                <div class="dropdown">
-                <button class="btn btn-white bg-white border shadow-sm rounded-pill px-3 dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                    <i class="fas fa-user-circle me-2"></i>
-                    {{ auth()->user()->name ?? 'Admin' }}
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="{{ route('center.profile') }}"><i class="fas fa-user"></i> {{ __('center::sidebar.profile') }}</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                        <form action="{{ route('center.logout', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST" class="d-inline">
-                            @csrf
-                            <button type="submit" class="dropdown-item text-danger">
-                                <i class="fas fa-sign-out-alt"></i> {{ __('center::sidebar.logout') }}
-                            </button>
-                        </form>
-                    </li>
-                </ul>
             </div>
-            @else
-            <a href="{{ route('center.login') }}" class="btn btn-primary rounded-pill px-4">
-                <i class="fas fa-sign-in-alt me-2"></i> {{ __('center::sidebar.login') }}
-            </a>
-            @endauth
         </header>
 
         <!-- Flash Messages (Handled by SweetAlert2) -->
