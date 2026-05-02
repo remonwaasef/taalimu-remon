@@ -366,6 +366,32 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            <!-- Student Email -->
+                            <div class="col-sm-6 mt-4">
+                                <div class="contact-item">
+                                    <small class="text-muted d-block mb-1">{{ __('center::students.profile.student_email') ?? 'البريد الإلكتروني للطالب' }}</small>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="fw-bold fs-6 text-dark text-truncate" title="{{ $student->user->email ?? $student->email }}">{{ $student->user->email ?? $student->email ?? '---' }}</span>
+                                        @if($student->user?->email || $student->email)
+                                            <a href="mailto:{{ $student->user->email ?? $student->email }}" class="btn btn-sm btn-light rounded-circle shadow-sm text-primary" title="إرسال بريد"><i class="fas fa-envelope"></i></a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Parent Email -->
+                            <div class="col-sm-6 mt-4">
+                                <div class="contact-item">
+                                    <small class="text-muted d-block mb-1">{{ __('center::students.profile.parent_email') ?? 'البريد الإلكتروني لولي الأمر' }}</small>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="fw-bold fs-6 text-dark text-truncate" title="{{ $student->guardian?->email ?? $student->parent_email }}">{{ $student->guardian?->email ?? $student->parent_email ?? '---' }}</span>
+                                        @if($student->guardian?->email || $student->parent_email)
+                                            <a href="mailto:{{ $student->guardian?->email ?? $student->parent_email }}" class="btn btn-sm btn-light rounded-circle shadow-sm text-primary" title="إرسال بريد"><i class="fas fa-envelope"></i></a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         @if($siblings->count() > 0)
