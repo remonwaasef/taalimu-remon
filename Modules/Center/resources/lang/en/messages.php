@@ -1092,4 +1092,6 @@ return [
   'no_student_email' => 'This student does not have a registered email address.',
   'email_sent_success' => 'Email sent to the student successfully.',
   'email_send_error' => 'An error occurred while sending',
+  'first_payment_note' => 'Initial payment at sale',
+  'subsequent_payment_note' => 'Additional payment',
 ];

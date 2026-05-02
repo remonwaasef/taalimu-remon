@@ -1096,4 +1096,6 @@ return [
   'no_student_email' => 'Cet élève n\'a pas d\'adresse e-mail enregistrée.',
   'email_sent_success' => 'E-mail envoyé à l\'élève avec succès.',
   'email_send_error' => 'Une erreur s\'est produite lors de l\'envoi',
+  'first_payment_note' => 'Premier paiement à la vente',
+  'subsequent_payment_note' => 'Paiement supplémentaire',
 ];

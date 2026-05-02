@@ -142,7 +142,7 @@ class FinanceService
                     'payment_method' => $data['payment_method'],
                     'received_by' => auth()->id(),
                     'paid_at' => now(),
-                    'notes' => $data['notes'] ?? 'الدفعة الأولى عند البيع',
+                    'notes' => $data['notes'] ?? __('center::messages.first_payment_note'),
                 ]);
 
                 // Notifications
@@ -183,7 +183,7 @@ class FinanceService
                 'payment_method' => $method ?? $sale->payment_method,
                 'received_by' => auth()->id(),
                 'paid_at' => now(),
-                'notes' => $notes ?? 'إضافة دفعة لاحقة',
+                'notes' => $notes ?? __('center::messages.subsequent_payment_note'),
             ]);
 
             // Notifications
