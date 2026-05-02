@@ -382,12 +382,23 @@
 
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                                             <div>
-                                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">البريد الإلكتروني (اختياري)</label>
+                                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">البريد الإلكتروني للطلاب (اختياري)</label>
                                                 <input type="email" x-model="student.student_email" placeholder="example@email.com" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5">
                                             </div>
                                             <div>
                                                 <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_4.phone_label') }}</label>
                                                 <input type="text" x-model="student.student_phone" @input="student.student_phone = $event.target.value.replace(/[^0-9\+\-\(\)\s]/g, '')" dir="ltr" placeholder="01xxxxxxxxx" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                                            <div>
+                                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">اسم ولي الأمر (اختياري)</label>
+                                                <input type="text" x-model="student.parent_name" placeholder="مثال: محمد أحمد" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5">
+                                            </div>
+                                            <div>
+                                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">رقم هاتف ولي الأمر (اختياري)</label>
+                                                <input type="text" x-model="student.parent_phone" @input="student.parent_phone = $event.target.value.replace(/[^0-9\+\-\(\)\s]/g, '')" dir="ltr" placeholder="01xxxxxxxxx" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5">
                                             </div>
                                         </div>
 
@@ -422,7 +433,7 @@
                                     </div>
                                 </template>
 
-                                <button type="button" @click="formData.step_4.students.push({ student_name: '', student_email: '', student_phone: '', grade_id: '', enroll_course_indices: [] })" class="w-full py-4 border-2 border-dashed border-emerald-200 rounded-2xl text-emerald-500 font-bold hover:bg-emerald-50 hover:border-emerald-300 transition-all flex justify-center items-center gap-2">
+                                <button type="button" @click="formData.step_4.students.push({ student_name: '', student_email: '', student_phone: '', parent_name: '', parent_phone: '', grade_id: '', enroll_course_indices: [] })" class="w-full py-4 border-2 border-dashed border-emerald-200 rounded-2xl text-emerald-500 font-bold hover:bg-emerald-50 hover:border-emerald-300 transition-all flex justify-center items-center gap-2">
                                     <i class="fa-solid fa-plus"></i> إضافة طالب آخر
                                 </button>
                             </div>
@@ -498,7 +509,7 @@
                     },
                     step_2: { instructors: [{ instructor_name: '', instructor_phone: '', instructor_specialization: '', instructor_email: '' }] },
                     step_3: { courses: [{ instructor_index: '0', course_name: '', price: '', sessions_count: '1', schedules: [{day: '0', time: '16:00', time_end: '18:00'}] }] },
-                    step_4: { students: [{ student_name: '', student_email: '', student_phone: '', grade_id: '', enroll_course_indices: [] }] }
+                    step_4: { students: [{ student_name: '', student_email: '', student_phone: '', parent_name: '', parent_phone: '', grade_id: '', enroll_course_indices: [] }] }
                 },
                 
                 syncSchedules(count) {
