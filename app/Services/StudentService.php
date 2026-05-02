@@ -100,6 +100,7 @@ class StudentService
                         'name' => $data->parent_name ?? 'N/A',
                         'job' => $data->parent_job,
                         'address' => $data->address,
+                        'email' => $data->parent_email ?? null,
                     ]
                 );
                 $guardianId = $guardian->id;
