@@ -402,19 +402,22 @@
 
                                         <div class="p-6 bg-emerald-50/50 rounded-2xl border-2 border-emerald-100/50 flex flex-col gap-3 transition-all hover:bg-emerald-50">
                                             <label class="text-sm font-bold text-slate-800 select-none">
-                                                اختر الدورة التي ترغب بتسجيل الطالب بها (اختياري)
+                                                اختر الدورات التي ترغب بتسجيل الطالب بها (اختياري)
                                             </label>
-                                            <select x-model="student.enroll_course_index" class="w-full bg-white border-2 border-white rounded-xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-4 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5 cursor-pointer">
-                                                <option value="">-- لا تقم بتسجيله في أي دورة الآن --</option>
+                                            <div class="space-y-2">
                                                 <template x-for="(course, idx) in formData.step_3.courses" :key="idx">
-                                                    <option :value="idx" x-text="course.course_name || 'الدورة ' + (idx + 1)"></option>
+                                                    <label class="flex items-center gap-3 p-3 bg-white rounded-xl border-2 border-white hover:border-emerald-200 transition-all cursor-pointer select-none" :class="student.enroll_course_indices.includes(idx) ? 'border-emerald-400 bg-emerald-50/50' : ''">
+                                                        <input type="checkbox" :value="idx" @change="toggleCourseEnroll(student, idx)" :checked="student.enroll_course_indices.includes(idx)" class="w-5 h-5 rounded-md border-2 border-slate-300 text-emerald-500 focus:ring-emerald-500 transition-all">
+                                                        <span class="text-sm font-bold text-slate-700" x-text="course.course_name || 'الدورة ' + (idx + 1)"></span>
+                                                        <span class="text-xs text-slate-400 mr-auto" x-show="course.price" x-text="course.price + ' ' + formData.step_1.currency"></span>
+                                                    </label>
                                                 </template>
-                                            </select>
+                                            </div>
                                         </div>
                                     </div>
                                 </template>
 
-                                <button type="button" @click="formData.step_4.students.push({ student_name: '', student_phone: '', grade_id: '', enroll_course_index: '' })" class="w-full py-4 border-2 border-dashed border-emerald-200 rounded-2xl text-emerald-500 font-bold hover:bg-emerald-50 hover:border-emerald-300 transition-all flex justify-center items-center gap-2">
+                                <button type="button" @click="formData.step_4.students.push({ student_name: '', student_phone: '', grade_id: '', enroll_course_indices: [] })" class="w-full py-4 border-2 border-dashed border-emerald-200 rounded-2xl text-emerald-500 font-bold hover:bg-emerald-50 hover:border-emerald-300 transition-all flex justify-center items-center gap-2">
                                     <i class="fa-solid fa-plus"></i> إضافة طالب آخر
                                 </button>
                             </div>
@@ -490,7 +493,7 @@
                     },
                     step_2: { instructors: [{ instructor_name: '', instructor_phone: '', instructor_specialization: '', instructor_email: '' }] },
                     step_3: { courses: [{ instructor_index: '0', course_name: '', price: '', sessions_count: '1', schedules: [{day: '0', time: '16:00', time_end: '18:00'}] }] },
-                    step_4: { students: [{ student_name: '', student_phone: '', grade_id: '', enroll_course_index: '' }] }
+                    step_4: { students: [{ student_name: '', student_phone: '', grade_id: '', enroll_course_indices: [] }] }
                 },
                 
                 syncSchedules(count) {
@@ -504,6 +507,18 @@
                         }
                     } else if (finalCount < currentCount) {
                         this.formData.step_3.courses[0].schedules.splice(finalCount);
+                    }
+                },
+
+                toggleCourseEnroll(student, idx) {
+                    if (!Array.isArray(student.enroll_course_indices)) {
+                        student.enroll_course_indices = [];
+                    }
+                    const pos = student.enroll_course_indices.indexOf(idx);
+                    if (pos === -1) {
+                        student.enroll_course_indices.push(idx);
+                    } else {
+                        student.enroll_course_indices.splice(pos, 1);
                     }
                 },
 

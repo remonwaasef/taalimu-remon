@@ -143,7 +143,7 @@ class OnboardingController extends Controller
                 'student_name' => $student->name,
                 'student_phone' => $student->phone,
                 'grade_id' => $student->grade_id ?? '',
-                'enroll_course_index' => ''
+                'enroll_course_indices' => []
             ];
         })->toArray();
 
@@ -384,8 +384,14 @@ class OnboardingController extends Controller
                     'students.*.student_name' => 'required|string|max:255',
                     'students.*.student_phone' => ['required', 'string', 'max:20', 'regex:/^[0-9\+\-\s\(\)]+$/'],
                     'students.*.grade_id' => 'nullable|exists:grades,id',
-                    'students.*.enroll_course_index' => 'nullable|integer',
+                    'students.*.enroll_course_indices' => 'nullable|array',
+                    'students.*.enroll_course_indices.*' => 'integer|min:0',
                 ]);
+
+                // Pre-fetch all tenant courses ordered by ID for index-based lookup
+                $allCourses = \App\Models\Course::where('tenant_id', $tenant->id)
+                    ->orderBy('id', 'asc')
+                    ->get();
 
                 foreach ($request->students as $studentInput) {
                     $studentData = \App\DTOs\StudentData::fromArray([
@@ -397,20 +403,17 @@ class OnboardingController extends Controller
                     $result = $this->studentService->registerStudent($studentData, auth()->user());
                     $student = $result['student'];
 
-                    $enrollCourseIndex = $studentInput['enroll_course_index'] ?? null;
-                    if ($enrollCourseIndex !== null && $enrollCourseIndex !== '') {
-                        $course = \App\Models\Course::where('tenant_id', $tenant->id)
-                            ->orderBy('id', 'asc')
-                            ->skip((int)$enrollCourseIndex)
-                            ->first();
-                            
+                    // Enroll student in each selected course
+                    $courseIndices = $studentInput['enroll_course_indices'] ?? [];
+                    foreach ($courseIndices as $courseIndex) {
+                        $course = $allCourses->get((int)$courseIndex);
                         if ($course) {
                             try {
                                 $this->financeService->createSale([
                                     'student_id' => $student->id,
                                     'items' => [['id' => $course->id, 'price' => $course->price]],
                                     'payment_method' => 'cash',
-                                    'paid_amount' => 0, // Unpaid invoice = due amount
+                                    'paid_amount' => 0,
                                     'notes' => 'Onboarding Enrollment',
                                 ]);
                             } catch (\Exception $e) {
