@@ -695,27 +695,51 @@
                                 </a>
                             </div>
                         </div>
+
+                        <!-- Financial Summary Cards -->
+                        <div class="row g-4 mb-5">
+                            <div class="col-md-4">
+                                <div class="bg-primary bg-opacity-10 rounded-4 p-4 text-center border border-primary border-opacity-10 h-100">
+                                    <div class="text-primary small fw-bold mb-2 text-uppercase">{{ __('center::students.profile.financial.total') }}</div>
+                                    <div class="h3 fw-bold text-dark mb-0">{{ number_format($sales->sum('total_amount'), 2) }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="bg-success bg-opacity-10 rounded-4 p-4 text-center border border-success border-opacity-10 h-100">
+                                    <div class="text-success small fw-bold mb-2 text-uppercase">{{ __('center::students.profile.financial.paid') }}</div>
+                                    <div class="h3 fw-bold text-dark mb-0">{{ number_format($sales->sum('paid_amount'), 2) }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                @php $debt = $sales->sum('total_amount') - $sales->sum('paid_amount'); @endphp
+                                <div class="{{ $debt > 0 ? 'bg-danger bg-opacity-10 border-danger' : 'bg-light border-secondary' }} rounded-4 p-4 text-center border border-opacity-10 h-100">
+                                    <div class="{{ $debt > 0 ? 'text-danger' : 'text-muted' }} small fw-bold mb-2 text-uppercase">{{ __('center::students.profile.financial.remaining') }}</div>
+                                    <div class="h3 fw-bold {{ $debt > 0 ? 'text-danger' : 'text-dark' }} mb-0">{{ number_format($debt, 2) }}</div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle">
+                            <table class="table table-hover align-middle border-top">
                                 <thead>
                                     <tr class="text-muted small">
-                                        <th class="px-3">{{ __('center::students.profile.financial.invoice_id') }}</th>
+                                        <th class="px-3 py-3">{{ __('center::students.profile.financial.invoice_id') }}</th>
                                         <th>{{ __('center::students.profile.financial.total') }}</th>
                                         <th>{{ __('center::students.profile.financial.paid') }}</th>
                                         <th>{{ __('center::students.profile.financial.remaining') }}</th>
                                         <th>{{ __('center::students.profile.financial.date') }}</th>
-                                        <th>{{ __('center::students.profile.financial.status') }}</th>
+                                        <th class="text-center">{{ __('center::students.profile.financial.status') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse($sales as $sale)
-                                        <tr class="cursor-pointer" onclick="window.location='{{ route('center.sales.show', $sale->id) }}'">
-                                            <td class="px-3 fw-bold">#{{ $sale->id }}</td>
+                                        <tr class="cursor-pointer hover-bg-light transition-all" onclick="window.location='{{ route('center.sales.show', $sale->id) }}'">
+                                            <td class="px-3 fw-bold"><span class="text-primary">#{{ $sale->id }}</span></td>
                                             <td class="fw-bold text-dark">{{ number_format($sale->total_amount, 2) }}</td>
                                             <td class="text-success fw-bold">{{ number_format($sale->paid_amount, 2) }}</td>
                                             <td class="text-danger fw-bold">{{ number_format($sale->total_amount - $sale->paid_amount, 2) }}</td>
                                             <td class="small text-muted">{{ $sale->created_at->format('Y-m-d') }}</td>
-                                            <td>
+                                            <td class="text-center">
                                                 <span class="badge bg-{{ $sale->status == 'paid' ? 'success' : ($sale->status == 'partial' ? 'warning' : 'danger') }} bg-opacity-10 text-{{ $sale->status == 'paid' ? 'success' : ($sale->status == 'partial' ? 'warning' : 'danger') }} rounded-pill px-3 fw-bold">
                                                     {{ __('center::sales.status_' . ($sale->status == 'pending' ? 'unpaid' : $sale->status)) }}
                                                 </span>
