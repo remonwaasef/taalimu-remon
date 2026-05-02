@@ -109,12 +109,12 @@
                                     <a href="{{ $report->page_url }}" target="_blank" class="small text-primary"><i class="fas fa-external-link-alt me-1"></i>الرابط</a>
                                 @endif
                                 @if($report->screenshot)
-                                    <a href="{{ asset('storage/'.$report->screenshot) }}" target="_blank" class="small text-info ms-2"><i class="fas fa-image me-1"></i>صورة</a>
+                                    <a href="{{ route('admin.bug_reports.screenshot', $report->id) }}" target="_blank" class="small text-info ms-2"><i class="fas fa-image me-1"></i>صورة</a>
                                 @endif
                             </td>
                             <td>
-                                <div class="fw-bold">{{ $report->tenant->name ?? 'غير معروف' }}</div>
-                                <div class="small text-muted">{{ $report->user->name ?? 'غير معروف' }} ({{ $report->user->email ?? '' }})</div>
+                                <div class="fw-bold">{{ $report->tenant?->name ?? 'غير معروف' }}</div>
+                                <div class="small text-muted">{{ $report->user?->name ?? 'غير معروف' }} ({{ $report->user?->email ?? '' }})</div>
                             </td>
                             <td>
                                 <div>{{ $report->category_label }}</div>
@@ -187,9 +187,14 @@
                             @if($report->screenshot)
                                 <div class="mb-3">
                                     <span class="fw-bold small">صورة الشاشة المرفقة:</span>
-                                    <a href="{{ asset('storage/'.$report->screenshot) }}" target="_blank" class="d-block mt-1">
-                                        <img src="{{ asset('storage/'.$report->screenshot) }}" class="img-fluid rounded border shadow-sm" style="max-height: 150px;">
+                                    <a href="{{ route('admin.bug_reports.screenshot', $report->id) }}" target="_blank" class="d-block mt-1">
+                                        <img src="{{ route('admin.bug_reports.screenshot', $report->id) }}" 
+                                             class="img-fluid rounded border shadow-sm" 
+                                             style="max-height: 200px;"
+                                             alt="Screenshot for report #{{ $report->id }}"
+                                             onerror="this.parentElement.innerHTML='<div class=\'alert alert-warning small p-2 mt-1\'><i class=\'fas fa-exclamation-triangle me-1\'></i>تعذر تحميل الصورة</div>'">
                                     </a>
+                                    <div class="small text-muted mt-1" dir="ltr">{{ $report->screenshot }}</div>
                                 </div>
                             @endif
 
