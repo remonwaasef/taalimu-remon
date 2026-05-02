@@ -177,9 +177,15 @@
                                             </h3>
                                         </div>
                                         <div class="space-y-4">
-                                            <div>
-                                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">{{ __('onboarding.step_2.name_label') }}</label>
-                                                <input type="text" x-model="instructor.instructor_name" placeholder="{{ __('onboarding.step_2.name_placeholder') }}" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-5 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                <div>
+                                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">{{ __('onboarding.step_2.name_label') }}</label>
+                                                    <input type="text" x-model="instructor.instructor_name" placeholder="{{ __('onboarding.step_2.name_placeholder') }}" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-5 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
+                                                </div>
+                                                <div>
+                                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">{{ __('onboarding.step_2.email_label') }}</label>
+                                                    <input type="email" x-model="instructor.instructor_email" placeholder="{{ __('onboarding.step_2.email_placeholder') }}" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-5 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5">
+                                                </div>
                                             </div>
                                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                 <div>
