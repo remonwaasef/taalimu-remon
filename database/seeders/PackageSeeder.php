@@ -52,7 +52,7 @@ class PackageSeeder extends Seeder
                 'yearly_price' => 2500.00, // 365 days
                 'old_price' => 1800.00,
                 'duration_in_days' => 150,
-                'trial_days' => 14,
+                'trial_days' => 30,
                 'description' => 'للمدرسين المستقلين والمجموعات الصغيرة.',
                 'description_en' => 'Perfect for individual tutors.',
                 'description_fr' => 'Parfait pour les tuteurs individuels.',
@@ -92,7 +92,7 @@ class PackageSeeder extends Seeder
                 'yearly_price' => 6000.00, // 365 days
                 'old_price' => 4200.00,
                 'duration_in_days' => 150,
-                'trial_days' => 14,
+                'trial_days' => 30,
                 'badge' => 'الأكثر طلباً',
                 'description' => 'للمراكز التعليمية المتنامية.',
                 'description_en' => 'Best for growing centers.',
@@ -135,7 +135,7 @@ class PackageSeeder extends Seeder
                 'yearly_price' => 12000.00, // 365 days
                 'old_price' => 8500.00,
                 'duration_in_days' => 150,
-                'trial_days' => 14,
+                'trial_days' => 30,
                 'description' => 'للرشكات التعليمية الكبرى والفروع.',
                 'description_en' => 'For large chains and organizations.',
                 'description_fr' => 'Pour les grandes chaînes et organisations.',
