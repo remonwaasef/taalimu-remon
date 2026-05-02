@@ -33,8 +33,19 @@ class UpdateStudentRequest extends FormRequest
                 'max:20',
                 \Illuminate\Validation\Rule::unique('students', 'national_id')->ignore($id)->where('tenant_id', $tenantId)
             ],
-            'email' => 'nullable|email|unique:users,email,' . $userId,
-            'phone' => ['nullable', 'string', 'max:20', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
+            'email' => [
+                'nullable',
+                'email',
+                \Illuminate\Validation\Rule::unique('users', 'email')->ignore($userId)->where('tenant_id', $tenantId)
+            ],
+            'phone' => [
+                'nullable', 
+                'string', 
+                'max:20', 
+                'regex:/^([0-9\s\-\+\(\)]*)$/', 
+                'min:10',
+                \Illuminate\Validation\Rule::unique('users', 'phone')->ignore($userId)->where('tenant_id', $tenantId)
+            ],
             'parent_phone' => ['nullable', 'string', 'max:20', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
             'parent_email' => 'nullable|email|max:255',
             'grade_id' => 'nullable|exists:grades,id',
