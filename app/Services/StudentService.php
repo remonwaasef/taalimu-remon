@@ -15,8 +15,11 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\Services\FinanceService;
 
+use App\Traits\HasLocaleResolution;
+
 class StudentService
 {
+    use HasLocaleResolution;
     protected $adminNotificationService;
     protected $financeService;
 
@@ -562,13 +565,17 @@ class StudentService
             $settings = $this->getEmailTemplateSettings($tenant);
 
             $variables = $this->buildTemplateVariables($student, $tenant, $generatedPassword);
+            $locale = $this->getTargetLocale($tenant, $student);
 
             // Send to Student
             if ($settings['welcome_student_enabled'] && $this->isRealEmail($student->email)) {
+                $subject = $settings["welcome_student_subject_{$locale}"] ?? $settings['welcome_student_subject'];
+                $body = $settings["welcome_student_body_{$locale}"] ?? $settings['welcome_student_body'];
+
                 Mail::to($student->email)->queue(new WelcomeStudentMail(
                     $student,
-                    $settings['welcome_student_subject'],
-                    $settings['welcome_student_body'],
+                    $subject,
+                    $body,
                     $variables,
                     $tenant->name
                 ));
@@ -581,11 +588,14 @@ class StudentService
                 $guardianName = $student->parent_name ?? $student->guardian?->name ?? '';
 
                 if ($guardianEmail && $this->isRealEmail($guardianEmail)) {
+                    $gSubject = $settings["welcome_guardian_subject_{$locale}"] ?? $settings['welcome_guardian_subject'];
+                    $gBody = $settings["welcome_guardian_body_{$locale}"] ?? $settings['welcome_guardian_body'];
+
                     Mail::to($guardianEmail)->queue(new WelcomeGuardianMail(
                         $guardianName,
                         $student->name,
-                        $settings['welcome_guardian_subject'],
-                        $settings['welcome_guardian_body'],
+                        $gSubject,
+                        $gBody,
                         $variables,
                         $tenant->name
                     ));
@@ -621,13 +631,13 @@ class StudentService
                 return;
             }
 
-            $groupSubject = !empty($tenantSettings['notif_group_enrollment_subject']) 
-                ? $tenantSettings['notif_group_enrollment_subject'] 
-                : 'تم تسجيلك في مجموعة جديدة';
-                
-            $groupBody = !empty($tenantSettings['notif_group_enrollment_body']) 
-                ? $tenantSettings['notif_group_enrollment_body'] 
-                : "مرحباً {student_name}،\n\nلقد تم تسجيلك بنجاح في {group_name}.\nنتمنى لك التوفيق!\n\n{center_name}";
+            $locale = $this->getTargetLocale($tenant, $student);
+
+            $groupSubjectKey = "notif_group_enrollment_subject_{$locale}";
+            $groupBodyKey = "notif_group_enrollment_body_{$locale}";
+
+            $groupSubject = $tenantSettings[$groupSubjectKey] ?? $tenantSettings['notif_group_enrollment_subject'] ?? 'تم تسجيلك في مجموعة جديدة';
+            $groupBody = $tenantSettings[$groupBodyKey] ?? $tenantSettings['notif_group_enrollment_body'] ?? "مرحباً {student_name}،\n\nلقد تم تسجيلك بنجاح في {group_name}.\nنتمنى لك التوفيق!\n\n{center_name}";
 
             foreach ($courseIds as $courseId) {
                 $course = \App\Models\Course::find($courseId);
@@ -637,7 +647,7 @@ class StudentService
                     'student_name' => $student->name,
                     'center_name' => $tenant->name,
                     'group_name' => $course->title,
-                    'course_price' => $course->price . ' ج.م',
+                    'course_price' => $course->price . ' ' . ($tenant->settings['financial']['currency'] ?? 'ج.م'),
                     'login_link' => url('/login'),
                 ];
 
@@ -686,12 +696,16 @@ class StudentService
                 // For bulk imports we don't have the raw password (only the hash),
                 // so we indicate the student should use "forgot password"
                 $variables = $this->buildTemplateVariables($student, $tenant, null);
+                $locale = $this->getTargetLocale($tenant, $student);
 
                 if ($settings['welcome_student_enabled']) {
+                    $subject = $settings["welcome_student_subject_{$locale}"] ?? $settings['welcome_student_subject'];
+                    $body = $settings["welcome_student_body_{$locale}"] ?? $settings['welcome_student_body'];
+                    
                     Mail::to($student->email)->queue(new WelcomeStudentMail(
                         $student,
-                        $settings['welcome_student_subject'],
-                        str_replace('{password}', '(يرجى استخدام "نسيت كلمة المرور" لتعيين كلمة مرور جديدة)', $settings['welcome_student_body']),
+                        $subject,
+                        str_replace('{password}', '(يرجى استخدام "نسيت كلمة المرور" لتعيين كلمة مرور جديدة)', $body),
                         $variables,
                         $tenant->name
                     ));
@@ -702,11 +716,14 @@ class StudentService
                     $guardianName = $student->parent_name ?? $student->guardian?->name ?? '';
 
                     if ($guardianEmail && $this->isRealEmail($guardianEmail)) {
+                        $gSubject = $settings["welcome_guardian_subject_{$locale}"] ?? $settings['welcome_guardian_subject'];
+                        $gBody = $settings["welcome_guardian_body_{$locale}"] ?? $settings['welcome_guardian_body'];
+
                         Mail::to($guardianEmail)->queue(new WelcomeGuardianMail(
                             $guardianName,
                             $student->name,
-                            $settings['welcome_guardian_subject'],
-                            str_replace('{password}', '(يرجى التواصل مع المركز للحصول على بيانات الدخول)', $settings['welcome_guardian_body']),
+                            $gSubject,
+                            str_replace('{password}', '(يرجى التواصل مع المركز للحصول على بيانات الدخول)', $gBody),
                             $variables,
                             $tenant->name
                         ));
@@ -732,10 +749,30 @@ class StudentService
         return [
             'welcome_student_enabled'  => (bool) ($tenantSettings['welcome_student_enabled'] ?? true),
             'welcome_guardian_enabled' => (bool) ($tenantSettings['welcome_guardian_enabled'] ?? true),
+            
             'welcome_student_subject'  => $tenantSettings['welcome_student_subject'] ?? $defaultPreset['student_subject'] ?? '',
             'welcome_student_body'     => $tenantSettings['welcome_student_body'] ?? $defaultPreset['student_body'] ?? '',
             'welcome_guardian_subject' => $tenantSettings['welcome_guardian_subject'] ?? $defaultPreset['guardian_subject'] ?? '',
             'welcome_guardian_body'    => $tenantSettings['welcome_guardian_body'] ?? $defaultPreset['guardian_body'] ?? '',
+
+            // Multi-lingual subjects
+            'welcome_student_subject_ar' => $tenantSettings['welcome_student_subject_ar'] ?? null,
+            'welcome_student_subject_en' => $tenantSettings['welcome_student_subject_en'] ?? null,
+            'welcome_student_subject_fr' => $tenantSettings['welcome_student_subject_fr'] ?? null,
+            
+            // Multi-lingual bodies
+            'welcome_student_body_ar' => $tenantSettings['welcome_student_body_ar'] ?? null,
+            'welcome_student_body_en' => $tenantSettings['welcome_student_body_en'] ?? null,
+            'welcome_student_body_fr' => $tenantSettings['welcome_student_body_fr'] ?? null,
+
+            // Guardian Multi-lingual
+            'welcome_guardian_subject_ar' => $tenantSettings['welcome_guardian_subject_ar'] ?? null,
+            'welcome_guardian_subject_en' => $tenantSettings['welcome_guardian_subject_en'] ?? null,
+            'welcome_guardian_subject_fr' => $tenantSettings['welcome_guardian_subject_fr'] ?? null,
+
+            'welcome_guardian_body_ar' => $tenantSettings['welcome_guardian_body_ar'] ?? null,
+            'welcome_guardian_body_en' => $tenantSettings['welcome_guardian_body_en'] ?? null,
+            'welcome_guardian_body_fr' => $tenantSettings['welcome_guardian_body_fr'] ?? null,
         ];
     }
 

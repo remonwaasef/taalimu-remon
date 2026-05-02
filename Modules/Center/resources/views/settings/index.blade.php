@@ -261,15 +261,12 @@
 
                                 {{-- Student Welcome Email --}}
                                 <div class="row g-4">
-                                    <div class="col-lg-7">
+                                    <div class="col-lg-12">
                                         <div class="card border bg-white shadow-none rounded-4 mb-4">
                                             <div class="card-body p-4">
                                                 <div class="d-flex align-items-center justify-content-between mb-4">
-                                                    <h6 class="fw-bold mb-0"><i class="fas fa-user-graduate me-2 text-info"></i> {{ __('center::settings.email_templates.student_welcome') }}</h6>
+                                                    <h6 class="fw-bold mb-0"><i class="fas fa-user-graduate me-2 text-info"></i> {{ __('center::settings.email_templates.student_welcome') }} (Multi-Lingual)</h6>
                                                     <div class="d-flex align-items-center gap-3">
-                                                        <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="student_subject" data-body-id="student_body" data-default-subject="{{ $defaultPreset['student_subject'] ?? '' }}" data-default-body="{{ $defaultPreset['student_body'] ?? '' }}">
-                                                            <i class="fas fa-undo"></i> {{ __('center::settings.email_templates.to_default') }}
-                                                        </button>
                                                         <div class="form-check form-switch custom-switch mb-0">
                                                             <input type="hidden" name="settings[email_templates][welcome_student_enabled]" value="0">
                                                             <input class="form-check-input" type="checkbox" name="settings[email_templates][welcome_student_enabled]" value="1" id="studentEmailEnabled" {{ ($emailSettings['welcome_student_enabled'] ?? true) ? 'checked' : '' }}>
@@ -278,44 +275,59 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="mb-3">
-                                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.email_templates.subject') }}</label>
-                                                    <input type="text" name="settings[email_templates][welcome_student_subject]" id="student_subject" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['welcome_student_subject'] ?? $defaultPreset['student_subject'] ?? '' }}" placeholder="{{ __('center::settings.email_templates.subject') }}">
+                                                <div class="row g-4">
+                                                    <!-- Arabic -->
+                                                    <div class="col-md-4 border-end">
+                                                        <label class="form-label fw-bold small text-primary">العربية (ar)</label>
+                                                        <div class="mb-3">
+                                                            <input type="text" name="settings[email_templates][welcome_student_subject_ar]" class="form-control text-end mb-2" value="{{ $emailSettings['welcome_student_subject_ar'] ?? $emailSettings['welcome_student_subject'] ?? '' }}" placeholder="الموضوع">
+                                                            <textarea name="settings[email_templates][welcome_student_body_ar]" class="form-control text-end" rows="6" dir="rtl" placeholder="نص الرسالة">{{ $emailSettings['welcome_student_body_ar'] ?? $emailSettings['welcome_student_body'] ?? '' }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                    <!-- English -->
+                                                    <div class="col-md-4 border-end">
+                                                        <label class="form-label fw-bold small text-primary">English (en)</label>
+                                                        <div class="mb-3">
+                                                            <input type="text" name="settings[email_templates][welcome_student_subject_en]" class="form-control text-start mb-2" value="{{ $emailSettings['welcome_student_subject_en'] ?? '' }}" placeholder="Subject">
+                                                            <textarea name="settings[email_templates][welcome_student_body_en]" class="form-control text-start" rows="6" dir="ltr" placeholder="Message body">{{ $emailSettings['welcome_student_body_en'] ?? '' }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                    <!-- French -->
+                                                    <div class="col-md-4">
+                                                        <label class="form-label fw-bold small text-primary">Français (fr)</label>
+                                                        <div class="mb-3">
+                                                            <input type="text" name="settings[email_templates][welcome_student_subject_fr]" class="form-control text-start mb-2" value="{{ $emailSettings['welcome_student_subject_fr'] ?? '' }}" placeholder="Objet">
+                                                            <textarea name="settings[email_templates][welcome_student_body_fr]" class="form-control text-start" rows="6" dir="ltr" placeholder="Corps du message">{{ $emailSettings['welcome_student_body_fr'] ?? '' }}</textarea>
+                                                        </div>
+                                                    </div>
                                                 </div>
 
-                                                <div class="mb-2 d-flex flex-wrap gap-1">
-                                                    @php
-                                                        $vars = [
-                                                            'student_name' => __('center::settings.email_templates.placeholders.student_name'),
-                                                            'center_name' => __('center::settings.email_templates.placeholders.center_name'),
-                                                            'login_link' => __('center::settings.email_templates.placeholders.login_link'),
-                                                            'password' => __('center::settings.email_templates.placeholders.password'),
-                                                            'phone' => __('center::settings.email_templates.placeholders.phone'),
-                                                        ];
-                                                    @endphp
-                                                    @foreach($vars as $key => $label)
-                                                        <button type="button" class="btn btn-sm btn-outline-secondary border-dashed py-1 px-2 x-small var-btn" data-target="student_body" data-var="{{ '{' . $key . '}' }}">
-                                                            <i class="fas fa-plus-circle me-1 opacity-50"></i> {{ $label }}
-                                                        </button>
-                                                    @endforeach
-                                                </div>
-
-                                                <div class="mb-0">
-                                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.email_templates.body') }}</label>
-                                                    <textarea name="settings[email_templates][welcome_student_body]" id="student_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="8" placeholder="{{ __('center::settings.email_templates.body') }}">{{ $emailSettings['welcome_student_body'] ?? $defaultPreset['student_body'] ?? '' }}</textarea>
+                                                <div class="mt-3 pt-3 border-top">
+                                                    <small class="fw-bold text-muted d-block mb-2">{{ __('center::settings.email_templates.placeholders_title') }}</small>
+                                                    <div class="d-flex flex-wrap gap-1">
+                                                        @php
+                                                            $vars = [
+                                                                'student_name' => __('center::settings.email_templates.placeholders.student_name'),
+                                                                'center_name' => __('center::settings.email_templates.placeholders.center_name'),
+                                                                'login_link' => __('center::settings.email_templates.placeholders.login_link'),
+                                                                'password' => __('center::settings.email_templates.placeholders.password'),
+                                                                'phone' => __('center::settings.email_templates.placeholders.phone'),
+                                                            ];
+                                                        @endphp
+                                                        @foreach($vars as $key => $label)
+                                                            <span class="badge bg-light text-dark border py-2 px-3 rounded-pill small">{{ '{' . $key . '}' }} : {{ $label }}</span>
+                                                        @endforeach
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        {{-- Guardian Welcome Email --}}
+                                        {{-- Guardian Welcome Email Multi-Lingual --}}
                                         <div class="card border bg-white shadow-none rounded-4 mb-4">
                                             <div class="card-body p-4">
                                                 <div class="d-flex align-items-center justify-content-between mb-4">
-                                                    <h6 class="fw-bold mb-0"><i class="fas fa-user-shield me-2 text-success"></i> {{ __('center::settings.email_templates.guardian_welcome') }}</h6>
+                                                    <h6 class="fw-bold mb-0"><i class="fas fa-user-shield me-2 text-success"></i> {{ __('center::settings.email_templates.guardian_welcome') }} (Multi-Lingual)</h6>
                                                     <div class="d-flex align-items-center gap-3">
-                                                        <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="guardian_subject" data-body-id="guardian_body" data-default-subject="{{ $defaultPreset['guardian_subject'] ?? '' }}" data-default-body="{{ $defaultPreset['guardian_body'] ?? '' }}">
-                                                            <i class="fas fa-undo"></i> {{ __('center::settings.email_templates.to_default') }}
-                                                        </button>
                                                         <div class="form-check form-switch custom-switch mb-0">
                                                             <input type="hidden" name="settings[email_templates][welcome_guardian_enabled]" value="0">
                                                             <input class="form-check-input" type="checkbox" name="settings[email_templates][welcome_guardian_enabled]" value="1" id="guardianEmailEnabled" {{ ($emailSettings['welcome_guardian_enabled'] ?? true) ? 'checked' : '' }}>
@@ -324,25 +336,48 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="mb-3">
-                                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.email_templates.subject') }}</label>
-                                                    <input type="text" name="settings[email_templates][welcome_guardian_subject]" id="guardian_subject" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['welcome_guardian_subject'] ?? $defaultPreset['guardian_subject'] ?? '' }}" placeholder="{{ __('center::settings.email_templates.subject') }}">
+                                                <div class="row g-4">
+                                                    <!-- Arabic -->
+                                                    <div class="col-md-4 border-end">
+                                                        <label class="form-label fw-bold small text-success">العربية (ar)</label>
+                                                        <div class="mb-3">
+                                                            <input type="text" name="settings[email_templates][welcome_guardian_subject_ar]" class="form-control text-end mb-2" value="{{ $emailSettings['welcome_guardian_subject_ar'] ?? $emailSettings['welcome_guardian_subject'] ?? '' }}" placeholder="الموضوع">
+                                                            <textarea name="settings[email_templates][welcome_guardian_body_ar]" class="form-control text-end" rows="6" dir="rtl" placeholder="نص الرسالة">{{ $emailSettings['welcome_guardian_body_ar'] ?? $emailSettings['welcome_guardian_body'] ?? '' }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                    <!-- English -->
+                                                    <div class="col-md-4 border-end">
+                                                        <label class="form-label fw-bold small text-success">English (en)</label>
+                                                        <div class="mb-3">
+                                                            <input type="text" name="settings[email_templates][welcome_guardian_subject_en]" class="form-control text-start mb-2" value="{{ $emailSettings['welcome_guardian_subject_en'] ?? '' }}" placeholder="Subject">
+                                                            <textarea name="settings[email_templates][welcome_guardian_body_en]" class="form-control text-start" rows="6" dir="ltr" placeholder="Message body">{{ $emailSettings['welcome_guardian_body_en'] ?? '' }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                    <!-- French -->
+                                                    <div class="col-md-4">
+                                                        <label class="form-label fw-bold small text-success">Français (fr)</label>
+                                                        <div class="mb-3">
+                                                            <input type="text" name="settings[email_templates][welcome_guardian_subject_fr]" class="form-control text-start mb-2" value="{{ $emailSettings['welcome_guardian_subject_fr'] ?? '' }}" placeholder="Objet">
+                                                            <textarea name="settings[email_templates][welcome_guardian_body_fr]" class="form-control text-start" rows="6" dir="ltr" placeholder="Corps du message">{{ $emailSettings['welcome_guardian_body_fr'] ?? '' }}</textarea>
+                                                        </div>
+                                                    </div>
                                                 </div>
 
-                                                <div class="mb-2 d-flex flex-wrap gap-1">
-                                                    @php
-                                                        $gVars = array_merge($vars, ['parent_name' => __('center::settings.email_templates.placeholders.parent_name'), 'stage' => __('center::settings.email_templates.placeholders.stage')]);
-                                                    @endphp
-                                                    @foreach($gVars as $key => $label)
-                                                        <button type="button" class="btn btn-sm btn-outline-secondary border-dashed py-1 px-2 x-small var-btn" data-target="guardian_body" data-var="{{ '{' . $key . '}' }}">
-                                                            <i class="fas fa-plus-circle me-1 opacity-50"></i> {{ $label }}
-                                                        </button>
-                                                    @endforeach
-                                                </div>
-
-                                                <div class="mb-0">
-                                                    <label class="form-label fw-bold small text-muted">{{ __('center::settings.email_templates.body') }}</label>
-                                                    <textarea name="settings[email_templates][welcome_guardian_body]" id="guardian_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="8" placeholder="{{ __('center::settings.email_templates.body') }}">{{ $emailSettings['welcome_guardian_body'] ?? $defaultPreset['guardian_body'] ?? '' }}</textarea>
+                                                <div class="mt-3 pt-3 border-top">
+                                                    <small class="fw-bold text-muted d-block mb-2">{{ __('center::settings.email_templates.placeholders_title') }}</small>
+                                                    <div class="d-flex flex-wrap gap-1">
+                                                        @php
+                                                            $gVars = [
+                                                                'student_name' => __('center::settings.email_templates.placeholders.student_name'),
+                                                                'center_name' => __('center::settings.email_templates.placeholders.center_name'),
+                                                                'parent_name' => __('center::settings.email_templates.placeholders.parent_name'),
+                                                                'stage' => __('center::settings.email_templates.placeholders.stage'),
+                                                            ];
+                                                        @endphp
+                                                        @foreach($gVars as $key => $label)
+                                                            <span class="badge bg-light text-dark border py-2 px-3 rounded-pill small">{{ '{' . $key . '}' }} : {{ $label }}</span>
+                                                        @endforeach
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -448,7 +483,7 @@
                                             </div>
                                         </div>
 
-                                        {{-- 2. New Group Enrollment --}}
+                                        {{-- Group Enrollment Multi-Lingual --}}
                                         <div class="accordion-item border rounded-4 mb-3 overflow-hidden">
                                             <h2 class="accordion-header">
                                                 <button class="accordion-button collapsed fw-bold bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#notif_group_enrollment">
@@ -457,7 +492,7 @@
                                                             <i class="fas fa-user-plus text-info"></i>
                                                         </span>
                                                         <span>
-                                                            <span class="d-block">{{ __('center::settings.email_templates.group_enrollment') }}</span>
+                                                            <span class="d-block">{{ __('center::settings.email_templates.group_enrollment') }} (Multi-Lingual)</span>
                                                             <small class="text-muted fw-normal">{{ __('center::settings.email_templates.group_enrollment_desc') }}</small>
                                                         </span>
                                                     </span>
@@ -467,36 +502,55 @@
                                                 <div class="accordion-body p-4">
                                                     <div class="d-flex align-items-center justify-content-between mb-3">
                                                         <span class="fw-bold small text-muted">{{ __('center::settings.email_templates.notif_status') }}</span>
-                                                        <div class="d-flex align-items-center gap-3">
-                                                            <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="notif_group_enrollment_subject" data-body-id="notif_group_enrollment_body" data-default-subject="{{ __('center::settings.email_templates.defaults.group_enrollment_subject') }}" data-default-body="{{ __('center::settings.email_templates.defaults.group_enrollment_body') }}">
-                                                                <i class="fas fa-undo"></i> {{ __('center::settings.email_templates.to_default') }}
-                                                            </button>
-                                                            <div class="form-check form-switch custom-switch mb-0">
-                                                                <input type="hidden" name="settings[email_templates][notif_group_enrollment_enabled]" value="0">
-                                                                <input class="form-check-input" type="checkbox" name="settings[email_templates][notif_group_enrollment_enabled]" value="1" id="notifGroupEnrollment" {{ ($emailSettings['notif_group_enrollment_enabled'] ?? false) ? 'checked' : '' }}>
-                                                                <label class="form-check-label fw-bold small ms-2" for="notifGroupEnrollment">{{ __('center::settings.email_templates.notif_active') }}</label>
+                                                        <div class="form-check form-switch custom-switch mb-0">
+                                                            <input type="hidden" name="settings[email_templates][notif_group_enrollment_enabled]" value="0">
+                                                            <input class="form-check-input" type="checkbox" name="settings[email_templates][notif_group_enrollment_enabled]" value="1" id="notifGroupEnrollment" {{ ($emailSettings['notif_group_enrollment_enabled'] ?? false) ? 'checked' : '' }}>
+                                                            <label class="form-check-label fw-bold small ms-2" for="notifGroupEnrollment">{{ __('center::settings.email_templates.notif_active') }}</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row g-4">
+                                                        <!-- Arabic -->
+                                                        <div class="col-md-4 border-end">
+                                                            <label class="form-label fw-bold small text-info">العربية (ar)</label>
+                                                            <div class="mb-3">
+                                                                <input type="text" name="settings[email_templates][notif_group_enrollment_subject_ar]" class="form-control text-end mb-2" value="{{ $emailSettings['notif_group_enrollment_subject_ar'] ?? $emailSettings['notif_group_enrollment_subject'] ?? '' }}" placeholder="الموضوع">
+                                                                <textarea name="settings[email_templates][notif_group_enrollment_body_ar]" class="form-control text-end" rows="5" dir="rtl" placeholder="نص الرسالة">{{ $emailSettings['notif_group_enrollment_body_ar'] ?? $emailSettings['notif_group_enrollment_body'] ?? '' }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                        <!-- English -->
+                                                        <div class="col-md-4 border-end">
+                                                            <label class="form-label fw-bold small text-info">English (en)</label>
+                                                            <div class="mb-3">
+                                                                <input type="text" name="settings[email_templates][notif_group_enrollment_subject_en]" class="form-control text-start mb-2" value="{{ $emailSettings['notif_group_enrollment_subject_en'] ?? '' }}" placeholder="Subject">
+                                                                <textarea name="settings[email_templates][notif_group_enrollment_body_en]" class="form-control text-start" rows="5" dir="ltr" placeholder="Message body">{{ $emailSettings['notif_group_enrollment_body_en'] ?? '' }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                        <!-- French -->
+                                                        <div class="col-md-4">
+                                                            <label class="form-label fw-bold small text-info">Français (fr)</label>
+                                                            <div class="mb-3">
+                                                                <input type="text" name="settings[email_templates][notif_group_enrollment_subject_fr]" class="form-control text-start mb-2" value="{{ $emailSettings['notif_group_enrollment_subject_fr'] ?? '' }}" placeholder="Objet">
+                                                                <textarea name="settings[email_templates][notif_group_enrollment_body_fr]" class="form-control text-start" rows="5" dir="ltr" placeholder="Corps du message">{{ $emailSettings['notif_group_enrollment_body_fr'] ?? '' }}</textarea>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-bold small text-muted">{{ __('center::settings.email_templates.subject') }}</label>
-                                                        <input type="text" id="notif_group_enrollment_subject" name="settings[email_templates][notif_group_enrollment_subject]" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['notif_group_enrollment_subject'] ?? __('center::settings.email_templates.defaults.group_enrollment_subject') }}">
-                                                    </div>
-                                                    <div class="mb-2 d-flex flex-wrap gap-1">
-                                                        @php $grpVars = ['student_name' => __('center::settings.email_templates.placeholders.student_name'), 'center_name' => __('center::settings.email_templates.placeholders.center_name'), 'group_name' => __('center::settings.email_templates.placeholders.group_name'), 'course_price' => __('center::settings.email_templates.placeholders.course_price'), 'login_link' => __('center::settings.email_templates.placeholders.login_link')]; @endphp
-                                                        @foreach($grpVars as $k=>$l)
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary border-dashed py-1 px-2 x-small var-btn" data-target="notif_group_enrollment_body" data-var="{{ '{'.$k.'}' }}"><i class="fas fa-plus-circle me-1 opacity-50"></i> {{ $l }}</button>
-                                                        @endforeach
-                                                    </div>
-                                                    <div class="mb-0">
-                                                        <label class="form-label fw-bold small text-muted">{{ __('center::settings.email_templates.body') }}</label>
-                                                        <textarea name="settings[email_templates][notif_group_enrollment_body]" id="notif_group_enrollment_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="5">{{ $emailSettings['notif_group_enrollment_body'] ?? __('center::settings.email_templates.defaults.group_enrollment_body') }}</textarea>
+
+                                                    <div class="mt-3 pt-3 border-top">
+                                                        <small class="fw-bold text-muted d-block mb-2">{{ __('center::settings.email_templates.placeholders_title') }}</small>
+                                                        <div class="d-flex flex-wrap gap-1">
+                                                            @php $grpVars = ['student_name' => __('center::settings.email_templates.placeholders.student_name'), 'center_name' => __('center::settings.email_templates.placeholders.center_name'), 'group_name' => __('center::settings.email_templates.placeholders.group_name'), 'course_price' => __('center::settings.email_templates.placeholders.course_price'), 'login_link' => __('center::settings.email_templates.placeholders.login_link')]; @endphp
+                                                            @foreach($grpVars as $k=>$l)
+                                                                <span class="badge bg-light text-dark border py-2 px-3 rounded-pill small">{{ '{'.$k.'}' }} : {{ $l }}</span>
+                                                            @endforeach
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
                                         {{-- 3. Payment Confirmation --}}
+                                        {{-- Payment Confirmation Multi-Lingual --}}
                                         <div class="accordion-item border rounded-4 mb-3 overflow-hidden">
                                             <h2 class="accordion-header">
                                                 <button class="accordion-button collapsed fw-bold bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#notif_payment_confirmed">
@@ -505,7 +559,7 @@
                                                             <i class="fas fa-check-circle text-success"></i>
                                                         </span>
                                                         <span>
-                                                            <span class="d-block">{{ __('center::settings.email_templates.payment_confirmation') }}</span>
+                                                            <span class="d-block">{{ __('center::settings.email_templates.payment_confirmation') }} (Multi-Lingual)</span>
                                                             <small class="text-muted fw-normal">{{ __('center::settings.email_templates.payment_confirmation_desc') }}</small>
                                                         </span>
                                                     </span>
@@ -515,30 +569,48 @@
                                                 <div class="accordion-body p-4">
                                                     <div class="d-flex align-items-center justify-content-between mb-3">
                                                         <span class="fw-bold small text-muted">{{ __('center::settings.email_templates.notif_status') }}</span>
-                                                        <div class="d-flex align-items-center gap-3">
-                                                            <button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 x-small reset-email-btn" data-subject-id="notif_payment_confirmed_subject" data-body-id="notif_payment_confirmed_body" data-default-subject="{{ __('center::settings.email_templates.defaults.payment_confirmation_subject') }}" data-default-body="{{ __('center::settings.email_templates.defaults.payment_confirmation_body') }}">
-                                                                <i class="fas fa-undo"></i> {{ __('center::settings.email_templates.to_default') }}
-                                                            </button>
-                                                            <div class="form-check form-switch custom-switch mb-0">
-                                                                <input type="hidden" name="settings[email_templates][notif_payment_confirmed_enabled]" value="0">
-                                                                <input class="form-check-input" type="checkbox" name="settings[email_templates][notif_payment_confirmed_enabled]" value="1" id="notifPaymentConfirmed" {{ ($emailSettings['notif_payment_confirmed_enabled'] ?? false) ? 'checked' : '' }}>
-                                                                <label class="form-check-label fw-bold small ms-2" for="notifPaymentConfirmed">{{ __('center::settings.email_templates.notif_active') }}</label>
+                                                        <div class="form-check form-switch custom-switch mb-0">
+                                                            <input type="hidden" name="settings[email_templates][notif_payment_confirmed_enabled]" value="0">
+                                                            <input class="form-check-input" type="checkbox" name="settings[email_templates][notif_payment_confirmed_enabled]" value="1" id="notifPaymentConfirmed" {{ ($emailSettings['notif_payment_confirmed_enabled'] ?? false) ? 'checked' : '' }}>
+                                                            <label class="form-check-label fw-bold small ms-2" for="notifPaymentConfirmed">{{ __('center::settings.email_templates.notif_active') }}</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row g-4">
+                                                        <!-- Arabic -->
+                                                        <div class="col-md-4 border-end">
+                                                            <label class="form-label fw-bold small text-success">العربية (ar)</label>
+                                                            <div class="mb-3">
+                                                                <input type="text" name="settings[email_templates][notif_payment_confirmed_subject_ar]" class="form-control text-end mb-2" value="{{ $emailSettings['notif_payment_confirmed_subject_ar'] ?? $emailSettings['notif_payment_confirmed_subject'] ?? '' }}" placeholder="الموضوع">
+                                                                <textarea name="settings[email_templates][notif_payment_confirmed_body_ar]" class="form-control text-end" rows="5" dir="rtl" placeholder="نص الرسالة">{{ $emailSettings['notif_payment_confirmed_body_ar'] ?? $emailSettings['notif_payment_confirmed_body'] ?? '' }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                        <!-- English -->
+                                                        <div class="col-md-4 border-end">
+                                                            <label class="form-label fw-bold small text-success">English (en)</label>
+                                                            <div class="mb-3">
+                                                                <input type="text" name="settings[email_templates][notif_payment_confirmed_subject_en]" class="form-control text-start mb-2" value="{{ $emailSettings['notif_payment_confirmed_subject_en'] ?? '' }}" placeholder="Subject">
+                                                                <textarea name="settings[email_templates][notif_payment_confirmed_body_en]" class="form-control text-start" rows="5" dir="ltr" placeholder="Message body">{{ $emailSettings['notif_payment_confirmed_body_en'] ?? '' }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                        <!-- French -->
+                                                        <div class="col-md-4">
+                                                            <label class="form-label fw-bold small text-success">Français (fr)</label>
+                                                            <div class="mb-3">
+                                                                <input type="text" name="settings[email_templates][notif_payment_confirmed_subject_fr]" class="form-control text-start mb-2" value="{{ $emailSettings['notif_payment_confirmed_subject_fr'] ?? '' }}" placeholder="Objet">
+                                                                <textarea name="settings[email_templates][notif_payment_confirmed_body_fr]" class="form-control text-start" rows="5" dir="ltr" placeholder="Corps du message">{{ $emailSettings['notif_payment_confirmed_body_fr'] ?? '' }}</textarea>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-bold small text-muted">{{ __('center::settings.email_templates.subject') }}</label>
-                                                        <input type="text" id="notif_payment_confirmed_subject" name="settings[email_templates][notif_payment_confirmed_subject]" class="form-control bg-light border-0 rounded-3 py-2 template-input" value="{{ $emailSettings['notif_payment_confirmed_subject'] ?? __('center::settings.email_templates.defaults.payment_confirmation_subject') }}">
-                                                    </div>
-                                                    <div class="mb-2 d-flex flex-wrap gap-1">
-                                                        @php $confVars = ['student_name' => __('center::settings.email_templates.placeholders.student_name'), 'center_name' => __('center::settings.email_templates.placeholders.center_name'), 'amount_paid' => __('center::settings.email_templates.placeholders.amount_paid'), 'payment_date' => __('center::settings.email_templates.placeholders.payment_date'), 'المتبقي' => __('center::settings.email_templates.placeholders.remaining'), 'payment_method' => __('center::settings.email_templates.placeholders.payment_method')]; @endphp
-                                                        @foreach($confVars as $k=>$l)
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary border-dashed py-1 px-2 x-small var-btn" data-target="notif_payment_confirmed_body" data-var="{{ '{'.$k.'}' }}"><i class="fas fa-plus-circle me-1 opacity-50"></i> {{ $l }}</button>
-                                                        @endforeach
-                                                    </div>
-                                                    <div class="mb-0">
-                                                        <label class="form-label fw-bold small text-muted">{{ __('center::settings.email_templates.body') }}</label>
-                                                        <textarea name="settings[email_templates][notif_payment_confirmed_body]" id="notif_payment_confirmed_body" class="form-control bg-light border-0 rounded-3 py-3 template-input" rows="5">{{ $emailSettings['notif_payment_confirmed_body'] ?? __('center::settings.email_templates.defaults.payment_confirmation_body') }}</textarea>
+
+                                                    <div class="mt-3 pt-3 border-top">
+                                                        <small class="fw-bold text-muted d-block mb-2">{{ __('center::settings.email_templates.placeholders_title') }}</small>
+                                                        <div class="d-flex flex-wrap gap-1">
+                                                            @php $confVars = ['student_name' => __('center::settings.email_templates.placeholders.student_name'), 'center_name' => __('center::settings.email_templates.placeholders.center_name'), 'amount_paid' => __('center::settings.email_templates.placeholders.amount_paid'), 'payment_date' => __('center::settings.email_templates.placeholders.payment_date'), 'المتبقي' => __('center::settings.email_templates.placeholders.remaining'), 'payment_method' => __('center::settings.email_templates.placeholders.payment_method')]; @endphp
+                                                            @foreach($confVars as $k=>$l)
+                                                                <span class="badge bg-light text-dark border py-2 px-3 rounded-pill small">{{ '{'.$k.'}' }} : {{ $l }}</span>
+                                                            @endforeach
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1218,6 +1290,81 @@
                                     </ul>
                                 </div>
 
+
+                                <h5 class="fw-bold mt-4 mb-3"><i class="fas fa-language me-2 text-primary"></i> قوالب الرسائل متعددة اللغات</h5>
+                                <p class="text-muted small">يمكنك تخصيص رسائل الواتساب لكل لغة. اترك الحقل فارغاً لاستخدام النص الافتراضي للنظام.</p>
+                                
+                                <!-- Attendance Templates -->
+                                <div class="card border bg-white shadow-sm mb-3">
+                                    <div class="card-header bg-light fw-bold py-2">
+                                        <i class="fas fa-user-check text-success me-2"></i> إشعار الحضور (Attendance)
+                                        <div class="small fw-normal text-muted mt-1" dir="ltr" style="text-align: right;">Variables: :student_name, :course_name, :tenant_name</div>
+                                    </div>
+                                    <div class="card-body p-3">
+                                        <div class="row g-3">
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-bold small text-muted">العربية (ar)</label>
+                                                <textarea name="settings[whatsapp][attendance_template_ar]" class="form-control text-end" rows="3" dir="rtl">{{ $tenant->settings['whatsapp']['attendance_template_ar'] ?? '' }}</textarea>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-bold small text-muted">English (en)</label>
+                                                <textarea name="settings[whatsapp][attendance_template_en]" class="form-control text-start" rows="3" dir="ltr">{{ $tenant->settings['whatsapp']['attendance_template_en'] ?? '' }}</textarea>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-bold small text-muted">Français (fr)</label>
+                                                <textarea name="settings[whatsapp][attendance_template_fr]" class="form-control text-start" rows="3" dir="ltr">{{ $tenant->settings['whatsapp']['attendance_template_fr'] ?? '' }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Payment Templates -->
+                                <div class="card border bg-white shadow-sm mb-3">
+                                    <div class="card-header bg-light fw-bold py-2">
+                                        <i class="fas fa-money-bill-wave text-success me-2"></i> إشعار الدفع (Payment)
+                                        <div class="small fw-normal text-muted mt-1" dir="ltr" style="text-align: right;">Variables: :amount, :currency, :student_name, :remaining, :tenant_name</div>
+                                    </div>
+                                    <div class="card-body p-3">
+                                        <div class="row g-3">
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-bold small text-muted">العربية (ar)</label>
+                                                <textarea name="settings[whatsapp][payment_template_ar]" class="form-control text-end" rows="3" dir="rtl">{{ $tenant->settings['whatsapp']['payment_template_ar'] ?? '' }}</textarea>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-bold small text-muted">English (en)</label>
+                                                <textarea name="settings[whatsapp][payment_template_en]" class="form-control text-start" rows="3" dir="ltr">{{ $tenant->settings['whatsapp']['payment_template_en'] ?? '' }}</textarea>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-bold small text-muted">Français (fr)</label>
+                                                <textarea name="settings[whatsapp][payment_template_fr]" class="form-control text-start" rows="3" dir="ltr">{{ $tenant->settings['whatsapp']['payment_template_fr'] ?? '' }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Debt Reminder Templates -->
+                                <div class="card border bg-white shadow-sm mb-4">
+                                    <div class="card-header bg-light fw-bold py-2">
+                                        <i class="fas fa-exclamation-circle text-danger me-2"></i> تذكير بالديون (Debt Reminder)
+                                        <div class="small fw-normal text-muted mt-1" dir="ltr" style="text-align: right;">Variables: :amount, :currency, :student_name, :tenant_name</div>
+                                    </div>
+                                    <div class="card-body p-3">
+                                        <div class="row g-3">
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-bold small text-muted">العربية (ar)</label>
+                                                <textarea name="settings[whatsapp][debt_template_ar]" class="form-control text-end" rows="3" dir="rtl">{{ $tenant->settings['whatsapp']['debt_template_ar'] ?? '' }}</textarea>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-bold small text-muted">English (en)</label>
+                                                <textarea name="settings[whatsapp][debt_template_en]" class="form-control text-start" rows="3" dir="ltr">{{ $tenant->settings['whatsapp']['debt_template_en'] ?? '' }}</textarea>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-bold small text-muted">Français (fr)</label>
+                                                <textarea name="settings[whatsapp][debt_template_fr]" class="form-control text-start" rows="3" dir="ltr">{{ $tenant->settings['whatsapp']['debt_template_fr'] ?? '' }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="mt-4 pt-3 border-top d-flex justify-content-end">
                                     <button type="submit" class="btn btn-primary px-5 shadow-sm rounded-pill">
