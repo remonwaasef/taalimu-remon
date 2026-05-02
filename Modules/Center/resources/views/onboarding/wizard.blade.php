@@ -163,18 +163,42 @@
                         </div>
 
                         <form @submit.prevent="submitStep('step_2', false)" class="space-y-6">
-                            <div>
-                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_2.name_label') }}</label>
-                                <input type="text" x-model="formData.step_2.instructor_name" placeholder="{{ __('onboarding.step_2.name_placeholder') }}" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5" required>
-                            </div>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <div>
-                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_2.specialization_label') }}</label>
-                                    <input type="text" x-model="formData.step_2.instructor_specialization" placeholder="{{ __('onboarding.step_2.specialization_placeholder') }}" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_2.phone_label') }}</label>
-                                    <input type="tel" x-model="formData.step_2.instructor_phone" dir="ltr" placeholder="01xxxxxxxxx" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5" required>
+                            <div class="space-y-6">
+                                <template x-for="(instructor, index) in formData.step_2.instructors" :key="index">
+                                    <div class="p-6 bg-slate-50 rounded-[2rem] border border-slate-100 relative">
+                                        <div class="absolute top-4 rtl:left-4 ltr:right-4">
+                                            <button type="button" x-show="formData.step_2.instructors.length > 1" @click="formData.step_2.instructors.splice(index, 1)" class="w-8 h-8 rounded-full bg-white text-red-400 hover:text-red-500 hover:shadow-md transition-all flex items-center justify-center border border-slate-100">
+                                                <i class="fa-solid fa-trash-can text-xs"></i>
+                                            </button>
+                                        </div>
+                                        <div class="mb-4">
+                                            <h3 class="font-black text-slate-900 text-xs uppercase tracking-widest flex items-center gap-2">
+                                                <i class="fa-solid fa-user text-brand-primary"></i> المدرس <span x-text="index + 1"></span>
+                                            </h3>
+                                        </div>
+                                        <div class="space-y-4">
+                                            <div>
+                                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">{{ __('onboarding.step_2.name_label') }}</label>
+                                                <input type="text" x-model="instructor.instructor_name" placeholder="{{ __('onboarding.step_2.name_placeholder') }}" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-5 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
+                                            </div>
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                <div>
+                                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">{{ __('onboarding.step_2.specialization_label') }}</label>
+                                                    <input type="text" x-model="instructor.instructor_specialization" placeholder="{{ __('onboarding.step_2.specialization_placeholder') }}" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-5 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">{{ __('onboarding.step_2.phone_label') }}</label>
+                                                    <input type="tel" x-model="instructor.instructor_phone" dir="ltr" placeholder="01xxxxxxxxx" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-5 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                                
+                                <div class="flex justify-center">
+                                    <button type="button" @click="formData.step_2.instructors.push({ instructor_name: '', instructor_phone: '', instructor_specialization: '', instructor_email: '' })" class="text-xs font-black uppercase text-brand-primary hover:underline transition-all flex items-center gap-2">
+                                        <i class="fa-solid fa-plus"></i> إضافة مدرس آخر
+                                    </button>
                                 </div>
                             </div>
 
@@ -399,7 +423,7 @@
                         currency: '{{ $tenant->settings['currency'] ?? session('suggested_currency', 'EGP') }}',
                         education_system: '{{ $tenant->settings['education_system'] ?? 'egyptian_national' }}'
                     },
-                    step_2: { instructor_name: '', instructor_phone: '', instructor_specialization: '', instructor_email: '' },
+                    step_2: { instructors: [{ instructor_name: '', instructor_phone: '', instructor_specialization: '', instructor_email: '' }] },
                     step_3: { course_name: '', price: '', sessions_count: '1', schedules: [{day: '0', time: '16:00', time_end: '18:00'}] },
                     step_4: { student_name: '', student_phone: '', grade_id: '', enroll_in_course: true }
                 },
