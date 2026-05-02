@@ -40,7 +40,7 @@
 
     .bug-report-fab .fab-tooltip {
         position: absolute;
-        {{ app()->getLocale() == 'ar' ? 'right' : 'left' }}: -999px;
+        {{ app()->getLocale() == 'ar' ? 'left' : 'right' }}: -999px;
         bottom: 50%;
         transform: translateY(50%);
         background: #1e293b;
@@ -55,7 +55,7 @@
     }
 
     .bug-report-fab:hover .fab-tooltip {
-        {{ app()->getLocale() == 'ar' ? 'right' : 'left' }}: calc(100% + 12px);
+        {{ app()->getLocale() == 'ar' ? 'left' : 'right' }}: calc(100% + 12px);
         opacity: 1;
     }
 
