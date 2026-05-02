@@ -243,6 +243,14 @@
                         </div>
 
                         <form @submit.prevent="submitStep('step_3', false)" class="space-y-6">
+                            <div x-show="formData.step_2.instructors.length > 0">
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">اختر المدرس</label>
+                                <select x-model="formData.step_3.instructor_index" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all hover:bg-white focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5 appearance-none cursor-pointer">
+                                    <template x-for="(instructor, index) in formData.step_2.instructors" :key="index">
+                                        <option :value="index" x-text="instructor.instructor_name || 'مدرس ' + (index + 1)"></option>
+                                    </template>
+                                </select>
+                            </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_3.name_label') }}</label>
@@ -430,7 +438,7 @@
                         education_system: '{{ $tenant->settings['education_system'] ?? 'egyptian_national' }}'
                     },
                     step_2: { instructors: [{ instructor_name: '', instructor_phone: '', instructor_specialization: '', instructor_email: '' }] },
-                    step_3: { course_name: '', price: '', sessions_count: '1', schedules: [{day: '0', time: '16:00', time_end: '18:00'}] },
+                    step_3: { instructor_index: '0', course_name: '', price: '', sessions_count: '1', schedules: [{day: '0', time: '16:00', time_end: '18:00'}] },
                     step_4: { student_name: '', student_phone: '', grade_id: '', enroll_in_course: true }
                 },
                 
