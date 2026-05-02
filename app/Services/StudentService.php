@@ -51,14 +51,25 @@ class StudentService
             $email = $data->email ?? $this->generateUniqueEmail();
             $code = $data->code ?? $this->generateUniqueCode();
 
-            // 4. Handle User account (Check if email already exists)
-            $existingUser = User::where('email', $email)->first();
+            // 4. Handle User account (Check if email or phone already exists globally)
+            $existingUser = User::withoutGlobalScopes()->where('email', $email)->first();
             
             if ($existingUser) {
                 // If user exists in a DIFFERENT tenant, we cannot register them here (Global Email Unique constraint)
                 if ($existingUser->tenant_id != app('tenant')->id) {
                     throw new \Exception(__('auth.email_already_taken'));
                 }
+            } elseif (!empty($data->phone)) {
+                $existingUserByPhone = User::withoutGlobalScopes()->where('phone', $data->phone)->first();
+                if ($existingUserByPhone) {
+                    if ($existingUserByPhone->tenant_id != app('tenant')->id) {
+                        throw new \Exception('رقم الهاتف هذا مسجل مسبقاً في نظام آخر. يرجى استخدام رقم مختلف.');
+                    }
+                    $existingUser = $existingUserByPhone;
+                }
+            }
+
+            if ($existingUser) {
                 
                 // If user exists in SAME tenant, check if they are already a student
                 $student = Student::where('user_id', $existingUser->id)->first();
