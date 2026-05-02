@@ -141,6 +141,7 @@ class OnboardingController extends Controller
         $existingStudents = \App\Models\Student::where('tenant_id', $tenant->id)->orderBy('id')->get()->map(function($student) {
             return [
                 'student_name' => $student->name,
+                'student_email' => $student->email ?? '',
                 'student_phone' => $student->phone,
                 'grade_id' => $student->grade_id ?? '',
                 'enroll_course_indices' => []
@@ -382,6 +383,7 @@ class OnboardingController extends Controller
                 $request->validate([
                     'students' => 'required|array|min:1',
                     'students.*.student_name' => 'required|string|max:255',
+                    'students.*.student_email' => 'nullable|email|max:255',
                     'students.*.student_phone' => ['required', 'string', 'max:20', 'regex:/^[0-9\+\-\s\(\)]+$/'],
                     'students.*.grade_id' => 'nullable|exists:grades,id',
                     'students.*.enroll_course_indices' => 'nullable|array',
@@ -396,6 +398,7 @@ class OnboardingController extends Controller
                 foreach ($request->students as $studentInput) {
                     $studentData = \App\DTOs\StudentData::fromArray([
                         'name' => $studentInput['student_name'],
+                        'email' => $studentInput['student_email'] ?? null,
                         'phone' => $studentInput['student_phone'],
                         'grade_id' => $studentInput['grade_id'] ?? null,
                     ]);
