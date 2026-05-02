@@ -1,0 +1,73 @@
+<nav class="nav navbar navbar-expand-lg navbar-light iq-navbar">
+  <div class="container-fluid navbar-inner">
+    <a href="<?php echo e(route('instructor.dashboard')); ?>" class="navbar-brand">
+       <img src="<?php echo e(asset('images/brand/logo-full.png')); ?>" class="rounded-3 shadow-sm p-1" style="max-height: 45px; max-width: 100%;">
+       <h4 class="logo-title ms-2 text-truncate" style="max-width: 150px;">Taalimu</h4>
+    </a>
+    <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
+      <i class="icon">
+        <svg width="20px" height="20px" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" />
+      </svg>
+      </i>
+    </div>
+    
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto  navbar-list mb-2 mb-lg-0">
+        <!-- Urgent Payments / Debts -->
+        <li class="nav-item me-2 d-flex align-items-center">
+          <a href="<?php echo e(route('instructor.billing')); ?>?status=unpaid" class="nav-link position-relative" title="المدفوعات العاجلة / المديونيات">
+             <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                 <i class="fas fa-file-invoice-dollar"></i>
+             </div>
+          </a>
+        </li>
+
+        <!-- Language Switcher -->
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link" id="langDropdown" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
+             <i class="fas fa-language me-2 text-primary"></i>
+             <?php echo e(strtoupper(app()->getLocale())); ?>
+
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="langDropdown">
+              <li><a class="dropdown-item" href="<?php echo e(route('instructor.set-locale', 'ar')); ?>">العربية</a></li>
+              <li><a class="dropdown-item" href="<?php echo e(route('instructor.set-locale', 'en')); ?>">English</a></li>
+              <li><a class="dropdown-item" href="<?php echo e(route('instructor.set-locale', 'fr')); ?>">Français</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link py-0 d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
+              <div class="avatar avatar-50 avatar-rounded bg-primary d-flex align-items-center justify-content-center text-white fw-bold">
+                  <?php echo e(substr(auth()->user()->name ?? 'I', 0, 1)); ?>
+
+              </div>
+              <div class="caption mx-3 d-none d-md-block ">
+                <h6 class="mb-0 caption-title"><?php echo e(auth()->user()->name ?? __('instructor::sidebar.instructor')); ?></h6>
+                <p class="mb-0 caption-sub-title text-capitalize"><?php echo e(__('instructor::sidebar.instructor')); ?></p>
+              </div>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end py-2" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="<?php echo e(route('instructor.settings')); ?>">
+                <i class="fas fa-cog me-2"></i> <?php echo e(__('instructor::sidebar.settings')); ?>
+
+            </a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <form method="POST" action="<?php echo e(route('center.logout')); ?>">
+                <?php echo csrf_field(); ?>
+                <a href="javascript:void(0)" class="dropdown-item text-danger" onclick="event.preventDefault(); this.closest('form').submit();">
+                    <i class="fas fa-sign-out-alt me-2"></i> <?php echo e(__('instructor::sidebar.logout')); ?>
+
+                </a>
+              </form>
+            </li>
+          </ul>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+<?php /**PATH D:\new project\antigravty\edu\edu\Modules\Instructor\resources\views\components\layouts\hope-header.blade.php ENDPATH**/ ?>

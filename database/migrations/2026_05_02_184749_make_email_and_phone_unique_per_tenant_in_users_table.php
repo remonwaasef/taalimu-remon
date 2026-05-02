@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             // Drop global unique constraints
             $table->dropUnique('users_email_unique');
-            $table->dropUnique('users_phone_unique');
 
             // Add tenant-specific unique constraints
             $table->unique(['tenant_id', 'email'], 'tenant_email_unique');
@@ -34,7 +33,6 @@ return new class extends Migration
 
             // Restore global unique constraints
             $table->unique('email', 'users_email_unique');
-            $table->unique('phone', 'users_phone_unique');
         });
     }
 };
