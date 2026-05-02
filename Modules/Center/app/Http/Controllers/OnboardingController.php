@@ -201,50 +201,63 @@ class OnboardingController extends Controller
         if ($step === 'step_2') {
             if (!$request->boolean('skip')) {
                 $request->validate([
-                    'instructor_name' => 'required|string|max:255',
-                    'instructor_phone' => 'required|string|max:20',
-                    'instructor_specialization' => 'nullable|string|max:255',
-                    'instructor_email' => 'nullable|email|max:255',
+                    'instructors' => 'required|array|min:1',
+                    'instructors.*.instructor_name' => 'required|string|max:255',
+                    'instructors.*.instructor_phone' => 'required|string|max:20',
+                    'instructors.*.instructor_specialization' => 'nullable|string|max:255',
+                    'instructors.*.instructor_email' => 'nullable|email|max:255',
                 ]);
                 
-                // Prevent duplicates: check if an onboarding instructor already exists
-                $existingInstructor = \App\Models\Instructor::where('tenant_id', $tenant->id)->first();
-                if ($existingInstructor) {
-                    // Update existing records instead of creating new ones
-                    $existingInstructor->update([
-                        'name' => $request->instructor_name,
-                        'phone' => $request->instructor_phone,
-                        'email' => $request->instructor_email ?: $existingInstructor->email,
-                        'specialization' => $request->instructor_specialization,
-                    ]);
-                    // Also update associated user
-                    if ($existingInstructor->user) {
-                        $existingInstructor->user->update([
-                            'name' => $request->instructor_name,
-                            'phone' => $request->instructor_phone,
+                $existingInstructors = \App\Models\Instructor::where('tenant_id', $tenant->id)->get();
+                $instructorsInput = $request->input('instructors');
+
+                foreach ($instructorsInput as $index => $instructorData) {
+                    if (isset($existingInstructors[$index])) {
+                        $existingInstructor = $existingInstructors[$index];
+                        $existingInstructor->update([
+                            'name' => $instructorData['instructor_name'],
+                            'phone' => $instructorData['instructor_phone'],
+                            'email' => $instructorData['instructor_email'] ?: $existingInstructor->email,
+                            'specialization' => $instructorData['instructor_specialization'],
+                        ]);
+                        if ($existingInstructor->user) {
+                            $existingInstructor->user->update([
+                                'name' => $instructorData['instructor_name'],
+                                'phone' => $instructorData['instructor_phone'],
+                            ]);
+                        }
+                    } else {
+                        $user = \App\Models\User::create([
+                            'tenant_id' => $tenant->id,
+                            'name' => $instructorData['instructor_name'],
+                            'phone' => $instructorData['instructor_phone'],
+                            'email' => $instructorData['instructor_email'] ?: 'instructor_' . time() . '_' . $index . '@' . $tenant->domain,
+                            'password' => 'password123',
+                            'role' => 'instructor',
+                            'email_verified_at' => now(),
+                            'phone_verified_at' => now(),
+                        ]);
+
+                        \App\Models\Instructor::create([
+                            'tenant_id' => $tenant->id,
+                            'user_id' => $user->id,
+                            'name' => $instructorData['instructor_name'],
+                            'phone' => $instructorData['instructor_phone'],
+                            'email' => $user->email,
+                            'specialization' => $instructorData['instructor_specialization'],
+                            'status' => 'active',
                         ]);
                     }
-                } else {
-                    $user = \App\Models\User::create([
-                        'tenant_id' => $tenant->id,
-                        'name' => $request->instructor_name,
-                        'phone' => $request->instructor_phone,
-                        'email' => $request->instructor_email ?: 'instructor_' . time() . '@' . $tenant->domain,
-                        'password' => 'password123',
-                        'role' => 'instructor',
-                        'email_verified_at' => now(),
-                        'phone_verified_at' => now(),
-                    ]);
+                }
 
-                    \App\Models\Instructor::create([
-                        'tenant_id' => $tenant->id,
-                        'user_id' => $user->id,
-                        'name' => $request->instructor_name,
-                        'phone' => $request->instructor_phone,
-                        'email' => $user->email,
-                        'specialization' => $request->instructor_specialization,
-                        'status' => 'active',
-                    ]);
+                if ($existingInstructors->count() > count($instructorsInput)) {
+                    for ($i = count($instructorsInput); $i < $existingInstructors->count(); $i++) {
+                        $instructorToRemove = $existingInstructors[$i];
+                        if ($instructorToRemove->user) {
+                            $instructorToRemove->user->delete();
+                        }
+                        $instructorToRemove->delete();
+                    }
                 }
             }
             
