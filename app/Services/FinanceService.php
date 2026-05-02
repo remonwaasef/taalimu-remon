@@ -68,6 +68,21 @@ class FinanceService
             $taxAmount = $data['tax_amount'] ?? 0;
             $totalAmount = $subtotalAmount - $discountAmount + $taxAmount;
 
+            // 1.5 Validation: Check if student is already enrolled in any of these courses
+            // This prevents duplicate sales on page refresh or double-submissions
+            foreach ($data['items'] as $item) {
+                if (($item['type'] ?? Course::class) === Course::class) {
+                    $course = $courses->get($item['id']);
+                    $isEnrolled = Enrollment::where('user_id', $student->user_id)
+                        ->where('course_id', $course->id)
+                        ->exists();
+                    
+                    if ($isEnrolled) {
+                        throw new \Exception("الطالب مسجل بالفعل في دورة: " . $course->title);
+                    }
+                }
+            }
+
             // 2. Determine Initial Status
             $status = $this->determineStatus($totalAmount, $data['paid_amount']);
 
@@ -86,9 +101,6 @@ class FinanceService
             ]);
 
             // 4. Create Sale Items — reuse already loaded courses
-            $student = Student::where('id', $data['student_id'])
-                ->where('tenant_id', $tenantId)
-                ->firstOrFail();
             foreach ($itemsToCreate as $itemData) {
                 $itemData['sale_id'] = $sale->id;
                 $saleItem = SaleItem::create($itemData);
@@ -116,18 +128,15 @@ class FinanceService
                 if ($itemData['item_type'] === Course::class && $student) {
                     $course = $courses->get($itemData['item_id']); // Use cached collection instead of N+1
                     if ($course) {
-                        try {
-                            $enrollment = $this->courseService->enrollStudent($course, $student);
-                            
-                            // Add sessions to balance
-                            if ($course->sessions_count > 0) {
-                                $enrollment->update([
-                                    'remaining_sessions' => $enrollment->remaining_sessions + $course->sessions_count
-                                ]);
-                            }
-                        } catch (\Exception $e) {
-                            // Already enrolled or other minor error, log it or ignore
-                            \Illuminate\Support\Facades\Log::warning("Auto-enrollment failed: " . $e->getMessage());
+                        // No try-catch here anymore, we want it to fail if it somehow got past the first check
+                        // but actually we already checked at the top.
+                        $enrollment = $this->courseService->enrollStudent($course, $student);
+                        
+                        // Add sessions to balance
+                        if ($course->sessions_count > 0) {
+                            $enrollment->update([
+                                'remaining_sessions' => $enrollment->remaining_sessions + $course->sessions_count
+                            ]);
                         }
                     }
                 }
