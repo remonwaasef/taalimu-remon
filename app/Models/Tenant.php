@@ -18,7 +18,7 @@ class Tenant extends Model
 
         // High-Scale: Cache Table Schema
         if (app()->environment('production') && extension_loaded('redis')) {
-            static::$appColumns = \Illuminate\Support\Facades\Cache::remember(
+            static::$appColumns = \Illuminate\Support\Facades\Cache::store('redis')->remember(
                 'schema_columns_tenants', 
                 86400, 
                 fn() => \Illuminate\Support\Facades\Schema::getColumnListing('tenants')
@@ -28,7 +28,7 @@ class Tenant extends Model
         static::saved(function ($tenant) {
             try {
                 if (extension_loaded('redis')) {
-                    \Illuminate\Support\Facades\Cache::forget("taalimu:tenancy:domain:{$tenant->domain}");
+                    \Illuminate\Support\Facades\Cache::store('redis')->forget("taalimu:tenancy:domain:{$tenant->domain}");
                 }
             } catch (\Throwable $e) {
                 // Fail silently if Redis is down or extension missing
@@ -40,7 +40,7 @@ class Tenant extends Model
         static::deleted(function ($tenant) {
             try {
                 if (extension_loaded('redis')) {
-                    \Illuminate\Support\Facades\Cache::forget("taalimu:tenancy:domain:{$tenant->domain}");
+                    \Illuminate\Support\Facades\Cache::store('redis')->forget("taalimu:tenancy:domain:{$tenant->domain}");
                 }
             } catch (\Throwable $e) {
                 // Fail silently

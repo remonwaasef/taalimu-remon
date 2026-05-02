@@ -23,7 +23,7 @@ class User extends Authenticatable
 
         // High-Scale: Cache Table Schema to prevent DESCRIBE queries
         if (app()->environment('production') && extension_loaded('redis')) {
-            static::$appColumns = \Illuminate\Support\Facades\Cache::remember(
+            static::$appColumns = \Illuminate\Support\Facades\Cache::store('redis')->remember(
                 'schema_columns_users', 
                 86400, 
                 fn() => \Illuminate\Support\Facades\Schema::getColumnListing('users')
