@@ -443,8 +443,11 @@ class OnboardingController extends Controller
                 }
             }
             
+            \Log::info('Onboarding completed for tenant: ' . $tenant->domain);
             $tenant->update(['onboarding_status' => 'completed']);
-            return response()->json(['success' => true, 'redirect' => route('center.dashboard')]);
+            $redirectUrl = route('center.dashboard');
+            \Log::info('Redirecting to: ' . $redirectUrl);
+            return response()->json(['success' => true, 'redirect' => $redirectUrl]);
         }
 
         return response()->json(['success' => false, 'message' => 'Invalid step.'], 400);
