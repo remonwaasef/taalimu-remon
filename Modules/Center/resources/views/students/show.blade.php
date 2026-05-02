@@ -278,118 +278,102 @@
                     <div class="card border-0 shadow-sm rounded-5 p-4 h-100">
                         <h6 class="fw-bold text-primary mb-4"><i class="fas fa-users-cog me-2"></i>{{ __('center::students.profile.contact_info') }}</h6>
                         
-                        <div class="row g-4">
+                        <div class="row g-3">
+                            <!-- Student Phone -->
                             <div class="col-sm-6">
-                                <div class="contact-item">
-                                    <small class="text-muted d-block mb-1">{{ __('center::students.profile.student_phone') }}</small>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span class="fw-bold fs-6">{{ $student->phone }}</span>
-                                        <a href="tel:{{ $student->phone }}" class="btn btn-sm btn-light rounded-circle shadow-sm" title="اتصال"><i class="fas fa-phone-alt"></i></a>
-                                        
-                                        <!-- WhatsApp Dropdown (Student) -->
+                                <div class="p-3 border rounded-4 d-flex align-items-center justify-content-between hover-lift transition-all h-100 bg-white">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px;">
+                                            <i class="fas fa-mobile-alt"></i>
+                                        </div>
+                                        <div>
+                                            <small class="text-muted d-block mb-1">{{ __('center::students.profile.student_phone') }}</small>
+                                            <span class="fw-bold fs-6 text-dark" dir="ltr">{{ $student->phone }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <a href="tel:{{ $student->phone }}" class="btn btn-sm btn-light rounded-circle text-primary" title="اتصال"><i class="fas fa-phone-alt"></i></a>
                                         <div class="dropdown">
-                                            <button class="btn btn-sm btn-light text-success rounded-circle shadow-sm" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false" title="{{ __('center::students.wa_student') }}">
+                                            <button class="btn btn-sm btn-light text-success rounded-circle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="واتساب">
                                                 <i class="fab fa-whatsapp"></i>
                                             </button>
                                             <ul class="dropdown-menu shadow-sm border-0 rounded-4">
-                                                <li>
-                                                    <a class="dropdown-item d-flex align-items-center gap-2" href="https://wa.me/{{ sanitizePhoneForWhatsApp($student->phone) }}" target="_blank">
-                                                        <i class="fas fa-comment text-muted"></i> {{ __('center::students.wa_general_msg') }}
-                                                    </a>
-                                                </li>
+                                                <li><a class="dropdown-item d-flex align-items-center gap-2" href="https://wa.me/{{ sanitizePhoneForWhatsApp($student->phone) }}" target="_blank"><i class="fas fa-comment text-muted"></i> {{ __('center::students.wa_general_msg') }}</a></li>
                                                 <li><hr class="dropdown-divider"></li>
-                                                @php
-                                                    $paymentMsg = __('center::students.wa_student_payment_msg', ['name' => $student->name]);
-                                                    $paymentUrl = "https://wa.me/" . sanitizePhoneForWhatsApp($student->phone) . "?text=" . urlencode($paymentMsg);
-                                                @endphp
-                                                <li>
-                                                    <a class="dropdown-item text-danger d-flex align-items-center gap-2" href="{{ $paymentUrl }}" target="_blank">
-                                                        <i class="fas fa-file-invoice-dollar"></i> {{ __('center::students.wa_payment_reminder') }}
-                                                    </a>
-                                                </li>
-                                                @php
-                                                    $attendanceMsg = __('center::students.wa_student_attendance_msg', ['name' => $student->name]);
-                                                    $attendanceUrl = "https://wa.me/" . sanitizePhoneForWhatsApp($student->phone) . "?text=" . urlencode($attendanceMsg);
-                                                @endphp
-                                                <li>
-                                                    <a class="dropdown-item text-warning d-flex align-items-center gap-2" href="{{ $attendanceUrl }}" target="_blank">
-                                                        <i class="fas fa-user-clock"></i> {{ __('center::students.wa_attendance_alert') }}
-                                                    </a>
-                                                </li>
+                                                <li><a class="dropdown-item text-danger d-flex align-items-center gap-2" href="https://wa.me/{{ sanitizePhoneForWhatsApp($student->phone) }}?text={{ urlencode(__('center::students.wa_student_payment_msg', ['name' => $student->name])) }}" target="_blank"><i class="fas fa-file-invoice-dollar"></i> {{ __('center::students.wa_payment_reminder') }}</a></li>
+                                                <li><a class="dropdown-item text-warning d-flex align-items-center gap-2" href="https://wa.me/{{ sanitizePhoneForWhatsApp($student->phone) }}?text={{ urlencode(__('center::students.wa_student_attendance_msg', ['name' => $student->name])) }}" target="_blank"><i class="fas fa-user-clock"></i> {{ __('center::students.wa_attendance_alert') }}</a></li>
                                             </ul>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Guardian Phone -->
                             <div class="col-sm-6">
-                                <div class="contact-item">
-                                    <small class="text-muted d-block mb-1">{{ __('center::students.guardian_relation', ['relation' => $student->parent_relation ?? __('center::students.profile.basic_info.parent_default')]) }}</small>
-                                    <div class="fw-bold fs-6 mb-1 text-dark">{{ $student->guardian?->name ?? $student->parent_name }}</div>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span class="text-muted small">{{ $student->guardian?->phone ?? $student->parent_phone }}</span>
-                                        <a href="tel:{{ $student->guardian?->phone ?? $student->parent_phone }}" class="btn btn-sm btn-light rounded-circle shadow-sm" title="اتصال"><i class="fas fa-phone-alt"></i></a>
-                                        
-                                        <!-- WhatsApp Dropdown (Guardian) -->
+                                <div class="p-3 border rounded-4 d-flex align-items-center justify-content-between hover-lift transition-all h-100 bg-white">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="bg-info bg-opacity-10 text-info rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px;">
+                                            <i class="fas fa-user-shield"></i>
+                                        </div>
+                                        <div>
+                                            <small class="text-muted d-block mb-1">{{ __('center::students.guardian_relation', ['relation' => $student->parent_relation ?? __('center::students.profile.basic_info.parent_default')]) }}</small>
+                                            <span class="fw-bold fs-6 text-dark" dir="ltr">{{ $student->guardian?->phone ?? $student->parent_phone }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <a href="tel:{{ $student->guardian?->phone ?? $student->parent_phone }}" class="btn btn-sm btn-light rounded-circle text-primary" title="اتصال"><i class="fas fa-phone-alt"></i></a>
                                         <div class="dropdown">
-                                            <button class="btn btn-sm btn-light text-success rounded-circle shadow-sm" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false" title="{{ __('center::students.wa_guardian') }}">
+                                            <button class="btn btn-sm btn-light text-success rounded-circle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="واتساب">
                                                 <i class="fab fa-whatsapp"></i>
                                             </button>
                                             <ul class="dropdown-menu shadow-sm border-0 rounded-4">
-                                                <li>
-                                                    <a class="dropdown-item d-flex align-items-center gap-2" href="https://wa.me/{{ sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone) }}" target="_blank">
-                                                        <i class="fas fa-comment text-muted"></i> {{ __('center::students.wa_general_msg') }}
-                                                    </a>
-                                                </li>
+                                                <li><a class="dropdown-item d-flex align-items-center gap-2" href="https://wa.me/{{ sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone) }}" target="_blank"><i class="fas fa-comment text-muted"></i> {{ __('center::students.wa_general_msg') }}</a></li>
                                                 <li><hr class="dropdown-divider"></li>
-                                                @php
-                                                    $parentPaymentMsg = __('center::students.wa_guardian_payment_msg', ['name' => $student->name]);
-                                                    $parentPaymentUrl = "https://wa.me/" . sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone) . "?text=" . urlencode($parentPaymentMsg);
-                                                @endphp
-                                                <li>
-                                                    <a class="dropdown-item text-danger d-flex align-items-center gap-2" href="{{ $parentPaymentUrl }}" target="_blank">
-                                                        <i class="fas fa-file-invoice-dollar"></i> {{ __('center::students.wa_payment_reminder') }}
-                                                    </a>
-                                                </li>
-                                                @php
-                                                    $parentAttendanceMsg = __('center::students.wa_guardian_attendance_msg', ['name' => $student->name]);
-                                                    $parentAttendanceUrl = "https://wa.me/" . sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone) . "?text=" . urlencode($parentAttendanceMsg);
-                                                @endphp
-                                                <li>
-                                                    <a class="dropdown-item text-warning d-flex align-items-center gap-2" href="{{ $parentAttendanceUrl }}" target="_blank">
-                                                        <i class="fas fa-user-clock"></i> {{ __('center::students.wa_attendance_alert') }}
-                                                    </a>
-                                                </li>
+                                                <li><a class="dropdown-item text-danger d-flex align-items-center gap-2" href="https://wa.me/{{ sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone) }}?text={{ urlencode(__('center::students.wa_guardian_payment_msg', ['name' => $student->name])) }}" target="_blank"><i class="fas fa-file-invoice-dollar"></i> {{ __('center::students.wa_payment_reminder') }}</a></li>
+                                                <li><a class="dropdown-item text-warning d-flex align-items-center gap-2" href="https://wa.me/{{ sanitizePhoneForWhatsApp($student->guardian?->phone ?? $student->parent_phone) }}?text={{ urlencode(__('center::students.wa_guardian_attendance_msg', ['name' => $student->name])) }}" target="_blank"><i class="fas fa-user-clock"></i> {{ __('center::students.wa_attendance_alert') }}</a></li>
                                             </ul>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Student Email -->
-                            <div class="col-sm-6 mt-4">
-                                <div class="contact-item">
-                                    <small class="text-muted d-block mb-1">{{ __('center::students.profile.student_email') ?? 'البريد الإلكتروني للطالب' }}</small>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span class="fw-bold fs-6 text-dark text-truncate" title="{{ $student->user->email ?? $student->email }}">{{ $student->user->email ?? $student->email ?? '---' }}</span>
-                                        @if($student->user?->email || $student->email)
-                                            <a href="mailto:{{ $student->user->email ?? $student->email }}" class="btn btn-sm btn-light rounded-circle shadow-sm text-primary" title="إرسال بريد"><i class="fas fa-envelope"></i></a>
-                                        @endif
+                            <div class="col-sm-6">
+                                <div class="p-3 border rounded-4 d-flex align-items-center justify-content-between hover-lift transition-all h-100 bg-white">
+                                    <div class="d-flex align-items-center gap-3 w-100 overflow-hidden">
+                                        <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px;">
+                                            <i class="fas fa-envelope"></i>
+                                        </div>
+                                        <div class="text-truncate w-100 pe-2">
+                                            <small class="text-muted d-block mb-1">{{ __('center::students.profile.student_email') }}</small>
+                                            <span class="fw-bold fs-6 text-dark text-truncate d-block" title="{{ $student->user->email ?? $student->email }}">{{ $student->user->email ?? $student->email ?? '---' }}</span>
+                                        </div>
                                     </div>
+                                    @if($student->user?->email || $student->email)
+                                        <div class="flex-shrink-0">
+                                            <a href="mailto:{{ $student->user->email ?? $student->email }}" class="btn btn-sm btn-light rounded-circle text-primary" title="إرسال بريد"><i class="fas fa-paper-plane"></i></a>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
-                            
+
                             <!-- Parent Email -->
-                            <div class="col-sm-6 mt-4">
-                                <div class="contact-item">
-                                    <small class="text-muted d-block mb-1">{{ __('center::students.profile.parent_email') ?? 'البريد الإلكتروني لولي الأمر' }}</small>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span class="fw-bold fs-6 text-dark text-truncate" title="{{ $student->guardian?->email ?? $student->parent_email }}">{{ $student->guardian?->email ?? $student->parent_email ?? '---' }}</span>
-                                        @if($student->guardian?->email || $student->parent_email)
-                                            <a href="mailto:{{ $student->guardian?->email ?? $student->parent_email }}" class="btn btn-sm btn-light rounded-circle shadow-sm text-primary" title="إرسال بريد"><i class="fas fa-envelope"></i></a>
-                                        @endif
+                            <div class="col-sm-6">
+                                <div class="p-3 border rounded-4 d-flex align-items-center justify-content-between hover-lift transition-all h-100 bg-white">
+                                    <div class="d-flex align-items-center gap-3 w-100 overflow-hidden">
+                                        <div class="bg-secondary bg-opacity-10 text-secondary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px;">
+                                            <i class="fas fa-envelope-open-text"></i>
+                                        </div>
+                                        <div class="text-truncate w-100 pe-2">
+                                            <small class="text-muted d-block mb-1">{{ __('center::students.profile.parent_email') }}</small>
+                                            <span class="fw-bold fs-6 text-dark text-truncate d-block" title="{{ $student->guardian?->email ?? $student->parent_email }}">{{ $student->guardian?->email ?? $student->parent_email ?? '---' }}</span>
+                                        </div>
                                     </div>
+                                    @if($student->guardian?->email || $student->parent_email)
+                                        <div class="flex-shrink-0">
+                                            <a href="mailto:{{ $student->guardian?->email ?? $student->parent_email }}" class="btn btn-sm btn-light rounded-circle text-primary" title="إرسال بريد"><i class="fas fa-paper-plane"></i></a>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -473,42 +457,61 @@
                                 <i class="fas fa-print me-2"></i>{{ __('center::students.profile.print_id_card') }}</button>
                         </div>
 
-                        <div class="row g-4">
+                        <div class="row g-3">
                             <div class="col-md-6">
-                                <div class="info-block p-4 rounded-5 bg-light border border-white h-100">
-                                    <div class="icon-circle bg-primary bg-opacity-10 text-primary mb-3">
-                                        <i class="fas fa-school"></i>
+                                <div class="d-flex align-items-center p-3 border rounded-4 bg-white h-100 shadow-sm hover-lift transition-all">
+                                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 ms-3" style="width: 50px; height: 50px;">
+                                        <i class="fas fa-school fs-5"></i>
                                     </div>
-                                    <h6 class="fw-bold text-muted small">{{ __('center::students.profile.basic_info.school_info') }}</h6>
-                                    <div class="fw-bold text-dark fs-5">{{ $student->school_name ?? __('center::students.profile.basic_info.no_school') }}</div>
-                                    <div class="text-primary fw-bold">{{ $student->section_type ?? __('center::students.profile.basic_info.general_section') }}</div>
+                                    <div>
+                                        <small class="text-muted d-block mb-1">{{ __('center::students.profile.basic_info.school_info') }}</small>
+                                        <div class="fw-bold text-dark fs-6">{{ $student->school_name ?? __('center::students.profile.basic_info.no_school') }}</div>
+                                        <div class="badge bg-light text-dark mt-1 border">{{ $student->section_type ?? __('center::students.profile.basic_info.general_section') }}</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="info-block p-4 rounded-5 bg-light border border-white h-100">
-                                    <div class="icon-circle bg-danger bg-opacity-10 text-danger mb-3">
-                                        <i class="fas fa-map-marker-alt"></i>
+                                <div class="d-flex align-items-center p-3 border rounded-4 bg-white h-100 shadow-sm hover-lift transition-all">
+                                    <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 ms-3" style="width: 50px; height: 50px;">
+                                        <i class="fas fa-map-marker-alt fs-5"></i>
                                     </div>
-                                    <h6 class="fw-bold text-muted small">{{ __('center::students.profile.basic_info.address') }}</h6>
-                                    <div class="fw-bold text-dark fs-6">{{ $student->address ?? __('center::students.profile.basic_info.no_address') }}</div>
+                                    <div>
+                                        <small class="text-muted d-block mb-1">{{ __('center::students.profile.basic_info.address') }}</small>
+                                        <div class="fw-bold text-dark fs-6">{{ $student->address ?? __('center::students.profile.basic_info.no_address') }}</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="p-4 rounded-4 bg-white shadow-sm border h-100 text-center">
-                                    <h6 class="text-muted small mb-2">{{ __('center::students.profile.basic_info.birth_date') }}</h6>
-                                    <div class="fw-bold">{{ $student->birth_date ? $student->birth_date->format('Y/m/d') : '---' }}</div>
+                                <div class="d-flex align-items-center p-3 border rounded-4 bg-white h-100 shadow-sm hover-lift transition-all">
+                                    <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 ms-3" style="width: 45px; height: 45px;">
+                                        <i class="fas fa-birthday-cake"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted d-block mb-1">{{ __('center::students.profile.basic_info.birth_date') }}</small>
+                                        <div class="fw-bold text-dark">{{ $student->birth_date ? $student->birth_date->format('Y/m/d') : '---' }}</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="p-4 rounded-4 bg-white shadow-sm border h-100 text-center">
-                                    <h6 class="text-muted small mb-2">{{ __('center::students.profile.basic_info.national_id') }}</h6>
-                                    <div class="fw-bold">{{ $student->national_id ?? '---' }}</div>
+                                <div class="d-flex align-items-center p-3 border rounded-4 bg-white h-100 shadow-sm hover-lift transition-all">
+                                    <div class="bg-indigo bg-opacity-10 text-indigo rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 ms-3" style="width: 45px; height: 45px;">
+                                        <i class="fas fa-id-card"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted d-block mb-1">{{ __('center::students.profile.basic_info.national_id') }}</small>
+                                        <div class="fw-bold text-dark" dir="ltr">{{ $student->national_id ?? '---' }}</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="p-4 rounded-4 bg-white shadow-sm border h-100 text-center">
-                                    <h6 class="text-muted small mb-2">{{ __('center::students.profile.basic_info.joined_at') }}</h6>
-                                    <div class="fw-bold text-success">{{ $student->joined_at ? $student->joined_at->format('Y/m/d') : $student->created_at->format('Y/m/d') }}</div>
+                                <div class="d-flex align-items-center p-3 border rounded-4 bg-white h-100 shadow-sm hover-lift transition-all">
+                                    <div class="bg-warning bg-opacity-10 text-warning rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 ms-3" style="width: 45px; height: 45px;">
+                                        <i class="fas fa-calendar-alt"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted d-block mb-1">{{ __('center::students.profile.basic_info.joined_at') }}</small>
+                                        <div class="fw-bold text-dark">{{ $student->joined_at ? $student->joined_at->format('Y/m/d') : $student->created_at->format('Y/m/d') }}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
