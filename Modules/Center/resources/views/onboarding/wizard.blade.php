@@ -450,6 +450,9 @@
             Alpine.data('onboardingWizard', (initialStatus) => ({
                 currentStep: (new URLSearchParams(window.location.search).get('step')) || (initialStatus === 'pending' ? 'step_1' : initialStatus),
                 loading: false,
+                init() {
+                    this.initWizard();
+                },
                 
                 steps: [
                     { id: 'step_1', label: '{{ __('onboarding.steps.step_1') }}' },
@@ -502,6 +505,16 @@
                 },
 
                 initWizard() {
+                    const savedInstructors = @json($existingInstructors ?? []);
+                    if (savedInstructors.length > 0) {
+                        this.formData.step_2.instructors = savedInstructors;
+                    }
+
+                    const savedCourses = @json($existingCourses ?? []);
+                    if (savedCourses.length > 0) {
+                        this.formData.step_3.courses = savedCourses;
+                    }
+
                     if (!this.steps.find(s => s.id === this.currentStep)) {
                         this.currentStep = 'step_1';
                     }

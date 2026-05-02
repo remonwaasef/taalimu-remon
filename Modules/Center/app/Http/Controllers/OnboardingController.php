@@ -104,7 +104,41 @@ class OnboardingController extends Controller
             ->orderBy('order')
             ->get();
 
-        return view('center::onboarding.wizard', compact('status', 'tenant', 'stages'));
+        $existingInstructors = \App\Models\Instructor::where('tenant_id', $tenant->id)->orderBy('id')->get()->map(function($inst) {
+            return [
+                'instructor_name' => $inst->name,
+                'instructor_phone' => $inst->phone,
+                'instructor_specialization' => $inst->specialization ?? '',
+                'instructor_email' => $inst->email ?? '',
+            ];
+        })->toArray();
+
+        $instructorsListIds = \App\Models\Instructor::where('tenant_id', $tenant->id)->orderBy('id')->pluck('id')->toArray();
+        $existingCourses = \App\Models\Course::where('tenant_id', $tenant->id)->orderBy('id')->with('schedules')->get()->map(function($course) use ($instructorsListIds) {
+            $idx = array_search($course->instructor_id, $instructorsListIds);
+            
+            $schedules = $course->schedules->map(function($s) {
+                return [
+                    'day' => (string)$s->day_of_week,
+                    'time' => substr($s->start_time, 0, 5),
+                    'time_end' => substr($s->end_time, 0, 5),
+                ];
+            })->toArray();
+
+            if (empty($schedules)) {
+                $schedules = [['day' => '0', 'time' => '16:00', 'time_end' => '18:00']];
+            }
+
+            return [
+                'instructor_index' => $idx !== false ? (string)$idx : '0',
+                'course_name' => $course->title,
+                'price' => $course->price,
+                'sessions_count' => $course->sessions_count,
+                'schedules' => $schedules,
+            ];
+        })->toArray();
+
+        return view('center::onboarding.wizard', compact('status', 'tenant', 'stages', 'existingInstructors', 'existingCourses'));
     }
 
     public function updateLocale(Request $request)
