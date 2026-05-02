@@ -143,6 +143,8 @@ class OnboardingController extends Controller
                 'student_name' => $student->name,
                 'student_email' => $student->email ?? '',
                 'student_phone' => $student->phone,
+                'parent_name' => $student->parent_name ?? '',
+                'parent_phone' => $student->parent_phone ?? '',
                 'grade_id' => $student->grade_id ?? '',
                 'enroll_course_indices' => []
             ];
@@ -385,6 +387,8 @@ class OnboardingController extends Controller
                     'students.*.student_name' => 'required|string|max:255',
                     'students.*.student_email' => 'nullable|email|max:255',
                     'students.*.student_phone' => ['required', 'string', 'max:20', 'regex:/^[0-9\+\-\s\(\)]+$/'],
+                    'students.*.parent_name' => 'nullable|string|max:255',
+                    'students.*.parent_phone' => ['nullable', 'string', 'max:20', 'regex:/^[0-9\+\-\s\(\)]+$/'],
                     'students.*.grade_id' => 'nullable|exists:grades,id',
                     'students.*.enroll_course_indices' => 'nullable|array',
                     'students.*.enroll_course_indices.*' => 'integer|min:0',
@@ -400,6 +404,8 @@ class OnboardingController extends Controller
                         'name' => $studentInput['student_name'],
                         'email' => $studentInput['student_email'] ?? null,
                         'phone' => $studentInput['student_phone'],
+                        'parent_name' => $studentInput['parent_name'] ?? null,
+                        'parent_phone' => $studentInput['parent_phone'] ?? null,
                         'grade_id' => $studentInput['grade_id'] ?? null,
                     ]);
 
