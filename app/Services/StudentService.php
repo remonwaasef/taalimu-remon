@@ -587,7 +587,7 @@ class StudentService
      * Send welcome emails to the student and their guardian after registration.
      * Only sends to real email addresses (not auto-generated ones).
      */
-    protected function sendWelcomeEmails(Student $student, string $generatedPassword): void
+    protected function sendWelcomeEmails(Student $student, ?string $generatedPassword): void
     {
         try {
             $tenant = app('tenant');
