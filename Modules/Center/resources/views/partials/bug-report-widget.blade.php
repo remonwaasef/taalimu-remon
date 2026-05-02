@@ -260,29 +260,33 @@ function openBugReportModal() {
     btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size: 20px;"></i>';
     btn.style.pointerEvents = 'none';
 
-    // Capture screenshot (excluding the modal and button)
-    html2canvas(document.body, {
-        logging: false,
-        useCORS: true,
-        ignoreElements: (node) => {
-            return node.id === 'bugReportFab' || node.id === 'bugReportModal' || node.classList.contains('modal-backdrop');
-        }
-    }).then(canvas => {
-        const base64image = canvas.toDataURL("image/jpeg", 0.6);
-        document.getElementById('autoScreenshotValue').value = base64image;
-        
-        // Show preview
-        const preview = document.getElementById('autoScreenshotPreview');
-        preview.src = base64image;
-        document.getElementById('autoScreenshotContainer').classList.remove('d-none');
+    // Wait for all fonts (especially Arabic) to load before capturing
+    document.fonts.ready.then(() => {
+        html2canvas(document.body, {
+            logging: false,
+            useCORS: true,
+            allowTaint: true,
+            scale: window.devicePixelRatio || 1,
+            ignoreElements: (node) => {
+                return node.id === 'bugReportFab' || node.id === 'bugReportModal' || node.classList.contains('modal-backdrop');
+            }
+        }).then(canvas => {
+            const base64image = canvas.toDataURL("image/jpeg", 0.7);
+            document.getElementById('autoScreenshotValue').value = base64image;
+            
+            // Show preview
+            const preview = document.getElementById('autoScreenshotPreview');
+            preview.src = base64image;
+            document.getElementById('autoScreenshotContainer').classList.remove('d-none');
 
-        showModal();
-    }).catch(err => {
-        console.error("Screenshot capture failed", err);
-        showModal(); // Show anyway
-    }).finally(() => {
-        btn.innerHTML = originalContent;
-        btn.style.pointerEvents = 'auto';
+            showModal();
+        }).catch(err => {
+            console.error("Screenshot capture failed", err);
+            showModal(); // Show anyway
+        }).finally(() => {
+            btn.innerHTML = originalContent;
+            btn.style.pointerEvents = 'auto';
+        });
     });
 
     function showModal() {
