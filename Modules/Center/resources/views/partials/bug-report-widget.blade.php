@@ -1,5 +1,9 @@
 {{-- Bug Report Floating Widget (Beta Feedback System) --}}
-{{-- This widget appears on every page to allow centers to report issues --}}
+{{-- Uses dom-to-image-more for auto-screenshots (proper Arabic font support) --}}
+{{-- Also supports paste/drag/upload as manual alternatives --}}
+
+<!-- dom-to-image-more: Handles Arabic fonts correctly by embedding them as base64 -->
+<script src="https://cdn.jsdelivr.net/npm/dom-to-image-more@3/dist/dom-to-image-more.min.js"></script>
 
 <style>
     /* Floating Bug Report Button */
@@ -108,86 +112,50 @@
         100% { transform: scale(1); }
     }
 
-    .screenshot-preview {
-        max-height: 120px;
-        border-radius: 8px;
+    /* Screenshot Container Styles */
+    .screenshot-box {
         border: 2px solid #e2e8f0;
-        margin-top: 8px;
-    }
-
-    /* Paste Zone Styles */
-    .paste-zone {
-        border: 2px dashed #cbd5e1;
         border-radius: 12px;
-        padding: 20px;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
+        overflow: hidden;
         background: #f8fafc;
         position: relative;
     }
 
-    .paste-zone:hover,
-    .paste-zone.drag-over {
+    .screenshot-box.has-image {
         border-color: #059669;
-        background: #f0fdf4;
     }
 
-    .paste-zone.has-image {
-        border-color: #059669;
-        border-style: solid;
-        background: #f0fdf4;
-        padding: 10px;
+    .screenshot-box .screenshot-img {
+        max-height: 140px;
+        width: 100%;
+        object-fit: contain;
+        display: block;
     }
 
-    .paste-zone .paste-icon {
-        font-size: 28px;
+    .screenshot-box .screenshot-loading {
+        padding: 20px;
+        text-align: center;
         color: #94a3b8;
-        margin-bottom: 8px;
     }
 
-    .paste-zone:hover .paste-icon {
-        color: #059669;
+    .screenshot-box .screenshot-loading i {
+        font-size: 24px;
+        margin-bottom: 6px;
     }
 
-    .paste-zone .paste-text {
-        color: #64748b;
-        font-size: 13px;
-        line-height: 1.6;
-    }
-
-    .paste-zone .paste-text kbd {
-        background: #e2e8f0;
-        border-radius: 4px;
-        padding: 2px 6px;
-        font-size: 11px;
-        color: #334155;
-    }
-
-    .paste-zone img {
-        max-height: 150px;
-        max-width: 100%;
-        border-radius: 8px;
-        border: 2px solid #059669;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .paste-zone .remove-btn {
-        position: absolute;
-        top: 5px;
-        {{ app()->getLocale() == 'ar' ? 'left' : 'right' }}: 5px;
-        background: #ef4444;
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 24px;
-        height: 24px;
-        font-size: 12px;
-        cursor: pointer;
+    .screenshot-box .screenshot-actions {
         display: flex;
-        align-items: center;
+        gap: 6px;
+        padding: 8px;
+        background: rgba(248, 250, 252, 0.95);
+        border-top: 1px solid #e2e8f0;
         justify-content: center;
-        z-index: 5;
+    }
+
+    .screenshot-box .screenshot-actions .btn {
+        font-size: 11px;
+        padding: 4px 10px;
+        border-radius: 8px;
     }
 
     .bug-info-badge {
@@ -247,32 +215,39 @@
                         <textarea name="description" class="form-control" rows="3" placeholder="{{ __('center::bug_report.report_description_placeholder') }}" required maxlength="5000" id="bugDescription"></textarea>
                     </div>
 
-                    {{-- Screenshot Paste/Upload Zone --}}
+                    {{-- Auto Screenshot Box --}}
                     <div class="mb-3">
                         <label class="form-label fw-bold small">
                             <i class="fas fa-camera me-1 text-success"></i>
-                            {{ app()->getLocale() == 'ar' ? 'لقطة الشاشة' : (app()->getLocale() == 'fr' ? "Capture d'écran" : 'Screenshot') }}
+                            @if(app()->getLocale() == 'ar') لقطة الشاشة
+                            @elseif(app()->getLocale() == 'fr') Capture d'écran
+                            @else Screenshot @endif
                         </label>
-                        <div class="paste-zone" id="pasteZone" tabindex="0">
-                            <div id="pasteZonePlaceholder">
-                                <div class="paste-icon"><i class="fas fa-paste"></i></div>
-                                <div class="paste-text">
-                                    @if(app()->getLocale() == 'ar')
-                                        اضغط <kbd>Print Screen</kbd> ثم <kbd>Ctrl+V</kbd> هنا للصق لقطة الشاشة
-                                        <br><span class="text-muted">أو اسحب صورة هنا أو اضغط لاختيار ملف</span>
-                                    @elseif(app()->getLocale() == 'fr')
-                                        Appuyez sur <kbd>Print Screen</kbd> puis <kbd>Ctrl+V</kbd> ici
-                                        <br><span class="text-muted">ou glissez une image ici ou cliquez pour choisir</span>
-                                    @else
-                                        Press <kbd>Print Screen</kbd> then <kbd>Ctrl+V</kbd> here
-                                        <br><span class="text-muted">or drag an image here or click to choose a file</span>
-                                    @endif
-                                </div>
+                        <div class="screenshot-box" id="screenshotBox">
+                            {{-- Loading state --}}
+                            <div id="screenshotLoading" class="screenshot-loading">
+                                <div><i class="fas fa-spinner fa-spin"></i></div>
+                                <small>
+                                    @if(app()->getLocale() == 'ar') جاري التقاط الشاشة...
+                                    @elseif(app()->getLocale() == 'fr') Capture en cours...
+                                    @else Capturing screenshot... @endif
+                                </small>
                             </div>
-                            <div id="pasteZonePreview" class="d-none">
-                                <img id="pastedScreenshot" src="" alt="Screenshot">
-                                <button type="button" class="remove-btn" onclick="removePastedImage(event)">
-                                    <i class="fas fa-times"></i>
+                            {{-- Image preview --}}
+                            <img id="screenshotPreview" class="screenshot-img d-none" src="" alt="Screenshot">
+                            {{-- Action buttons --}}
+                            <div class="screenshot-actions d-none" id="screenshotActions">
+                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeScreenshot()">
+                                    <i class="fas fa-trash me-1"></i>
+                                    @if(app()->getLocale() == 'ar') حذف @elseif(app()->getLocale() == 'fr') Supprimer @else Remove @endif
+                                </button>
+                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="document.getElementById('bugScreenshot').click()">
+                                    <i class="fas fa-exchange-alt me-1"></i>
+                                    @if(app()->getLocale() == 'ar') تغيير @elseif(app()->getLocale() == 'fr') Changer @else Change @endif
+                                </button>
+                                <button type="button" class="btn btn-outline-success btn-sm" onclick="retakeScreenshot()">
+                                    <i class="fas fa-redo me-1"></i>
+                                    @if(app()->getLocale() == 'ar') إعادة التقاط @elseif(app()->getLocale() == 'fr') Reprendre @else Retake @endif
                                 </button>
                             </div>
                         </div>
@@ -285,7 +260,7 @@
                         {{ __('center::bug_report.auto_info_notice') }}
                     </div>
 
-                    {{-- Hidden Fields (auto-filled by JS) --}}
+                    {{-- Hidden Fields --}}
                     <input type="hidden" name="page_url" id="bugPageUrl">
                     <input type="hidden" name="browser_info" id="bugBrowserInfo">
                     <input type="hidden" name="auto_screenshot" id="autoScreenshotValue">
@@ -297,7 +272,7 @@
                 </form>
             </div>
 
-            {{-- Success Body (hidden initially) --}}
+            {{-- Success Body --}}
             <div class="modal-body d-none" id="bugReportSuccessBody">
                 <div class="bug-report-success">
                     <div class="success-icon">✅</div>
@@ -313,8 +288,149 @@
 </div>
 
 <script>
-// Open modal (no more html2canvas - just open directly)
+// ========== Screenshot Capture ==========
+
+function captureScreenshot() {
+    const loading = document.getElementById('screenshotLoading');
+    const preview = document.getElementById('screenshotPreview');
+    const actions = document.getElementById('screenshotActions');
+    const box = document.getElementById('screenshotBox');
+
+    // Show loading
+    loading.classList.remove('d-none');
+    preview.classList.add('d-none');
+    actions.classList.add('d-none');
+    box.classList.remove('has-image');
+
+    // Hide the FAB and modal before capturing
+    const fab = document.getElementById('bugReportFab');
+    const modal = document.getElementById('bugReportModal');
+    const backdrops = document.querySelectorAll('.modal-backdrop');
+    
+    fab.style.display = 'none';
+    modal.style.display = 'none';
+    backdrops.forEach(b => b.style.display = 'none');
+    document.body.classList.remove('modal-open');
+
+    // Wait a frame for DOM to update, then capture
+    requestAnimationFrame(() => {
+        setTimeout(() => {
+            domtoimage.toJpeg(document.body, { 
+                quality: 0.75,
+                bgcolor: '#ffffff',
+                style: {
+                    'overflow': 'visible'
+                },
+                filter: (node) => {
+                    if (!node.classList) return true;
+                    return !node.classList.contains('modal-backdrop');
+                }
+            })
+            .then(function(dataUrl) {
+                setScreenshot(dataUrl);
+            })
+            .catch(function(error) {
+                console.error('Screenshot capture failed:', error);
+                // Show the box without an image
+                loading.classList.add('d-none');
+            })
+            .finally(function() {
+                // Restore modal visibility
+                fab.style.display = '';
+                modal.style.display = '';
+                backdrops.forEach(b => b.style.display = '');
+                document.body.classList.add('modal-open');
+                
+                // Re-show the modal
+                if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                    const bsModal = bootstrap.Modal.getInstance(modal);
+                    if (!bsModal) {
+                        new bootstrap.Modal(modal).show();
+                    }
+                }
+            });
+        }, 100);
+    });
+}
+
+function setScreenshot(dataUrl) {
+    const preview = document.getElementById('screenshotPreview');
+    const actions = document.getElementById('screenshotActions');
+    const loading = document.getElementById('screenshotLoading');
+    const box = document.getElementById('screenshotBox');
+
+    document.getElementById('autoScreenshotValue').value = dataUrl;
+    preview.src = dataUrl;
+    preview.classList.remove('d-none');
+    actions.classList.remove('d-none');
+    loading.classList.add('d-none');
+    box.classList.add('has-image');
+}
+
+function removeScreenshot() {
+    const preview = document.getElementById('screenshotPreview');
+    const actions = document.getElementById('screenshotActions');
+    const loading = document.getElementById('screenshotLoading');
+    const box = document.getElementById('screenshotBox');
+
+    document.getElementById('autoScreenshotValue').value = '';
+    document.getElementById('bugScreenshot').value = '';
+    preview.src = '';
+    preview.classList.add('d-none');
+    actions.classList.add('d-none');
+    loading.classList.add('d-none');
+    box.classList.remove('has-image');
+
+    // Show a simple "no screenshot" placeholder
+    loading.innerHTML = '<div><i class="fas fa-camera" style="opacity:0.3"></i></div><small style="color:#94a3b8">{{ app()->getLocale() == "ar" ? "لم يتم إرفاق صورة" : "No screenshot attached" }}</small>';
+    loading.classList.remove('d-none');
+}
+
+function retakeScreenshot() {
+    captureScreenshot();
+}
+
+// ========== Modal Controls ==========
+
 function openBugReportModal() {
+    const btn = document.getElementById('bugReportFab');
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size: 20px;"></i>';
+    btn.style.pointerEvents = 'none';
+
+    // First capture the screenshot (while modal is hidden)
+    const fab = btn;
+    fab.style.display = 'none';
+
+    // Small delay to hide the button first
+    setTimeout(() => {
+        domtoimage.toJpeg(document.body, { 
+            quality: 0.75,
+            bgcolor: '#ffffff',
+            filter: (node) => {
+                if (!node.classList) return true;
+                return !node.classList.contains('bug-report-fab') && 
+                       !node.classList.contains('modal-backdrop');
+            }
+        })
+        .then(function(dataUrl) {
+            // Show the modal with the captured screenshot
+            fab.style.display = '';
+            btn.innerHTML = originalContent;
+            btn.style.pointerEvents = 'auto';
+            showModalWithScreenshot(dataUrl);
+        })
+        .catch(function(error) {
+            console.error('Auto screenshot failed:', error);
+            fab.style.display = '';
+            btn.innerHTML = originalContent;
+            btn.style.pointerEvents = 'auto';
+            showModalWithScreenshot(null);
+        });
+    }, 150);
+}
+
+function showModalWithScreenshot(dataUrl) {
     const modalEl = document.getElementById('bugReportModal');
     if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
         const modal = new bootstrap.Modal(modalEl);
@@ -324,10 +440,12 @@ function openBugReportModal() {
         modalEl.style.display = 'block';
         document.body.classList.add('modal-open');
     }
-    // Focus the paste zone so user can immediately paste
-    setTimeout(() => {
-        document.getElementById('pasteZone').focus();
-    }, 500);
+
+    if (dataUrl) {
+        setScreenshot(dataUrl);
+    } else {
+        document.getElementById('screenshotLoading').classList.add('d-none');
+    }
 }
 
 function closeBugReportModal() {
@@ -342,28 +460,10 @@ function closeBugReportModal() {
     }
 }
 
-// Handle pasted image from clipboard
-function handlePastedImage(dataUrl) {
-    document.getElementById('autoScreenshotValue').value = dataUrl;
-    document.getElementById('pastedScreenshot').src = dataUrl;
-    document.getElementById('pasteZonePlaceholder').classList.add('d-none');
-    document.getElementById('pasteZonePreview').classList.remove('d-none');
-    document.getElementById('pasteZone').classList.add('has-image');
-}
-
-// Remove pasted image
-function removePastedImage(event) {
-    event.stopPropagation();
-    document.getElementById('autoScreenshotValue').value = '';
-    document.getElementById('pastedScreenshot').src = '';
-    document.getElementById('pasteZonePlaceholder').classList.remove('d-none');
-    document.getElementById('pasteZonePreview').classList.add('d-none');
-    document.getElementById('pasteZone').classList.remove('has-image');
-    document.getElementById('bugScreenshot').value = '';
-}
+// ========== Event Listeners ==========
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Collect browser info automatically
+    // Collect browser info
     const browserInfo = {
         browser: navigator.userAgent.match(/(Chrome|Firefox|Safari|Edge|Opera)[\/\s](\d+)/)?.[0] || navigator.userAgent.substring(0, 80),
         os: navigator.platform,
@@ -371,25 +471,20 @@ document.addEventListener('DOMContentLoaded', function() {
         screen: window.innerWidth + 'x' + window.innerHeight,
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     };
-
     document.getElementById('bugBrowserInfo').value = JSON.stringify(browserInfo);
     document.getElementById('bugPageUrl').value = window.location.href;
 
-    const pasteZone = document.getElementById('pasteZone');
-    const fileInput = document.getElementById('bugScreenshot');
-
-    // 1. Handle paste (Ctrl+V) anywhere in the modal
+    // Handle paste (Ctrl+V) inside the modal
     document.getElementById('bugReportModal').addEventListener('paste', function(e) {
         const items = e.clipboardData?.items;
         if (!items) return;
-
         for (let i = 0; i < items.length; i++) {
             if (items[i].type.indexOf('image') !== -1) {
                 e.preventDefault();
                 const blob = items[i].getAsFile();
                 const reader = new FileReader();
                 reader.onload = function(ev) {
-                    handlePastedImage(ev.target.result);
+                    setScreenshot(ev.target.result);
                 };
                 reader.readAsDataURL(blob);
                 break;
@@ -397,48 +492,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 2. Handle drag & drop on paste zone
-    pasteZone.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        pasteZone.classList.add('drag-over');
-    });
-
-    pasteZone.addEventListener('dragleave', function(e) {
-        pasteZone.classList.remove('drag-over');
-    });
-
-    pasteZone.addEventListener('drop', function(e) {
-        e.preventDefault();
-        pasteZone.classList.remove('drag-over');
-        const file = e.dataTransfer.files[0];
-        if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = function(ev) {
-                handlePastedImage(ev.target.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    // 3. Handle click to open file picker
-    pasteZone.addEventListener('click', function() {
-        if (!pasteZone.classList.contains('has-image')) {
-            fileInput.click();
-        }
-    });
-
-    // 4. Handle file input change
-    fileInput.addEventListener('change', function() {
+    // Handle file input change
+    document.getElementById('bugScreenshot').addEventListener('change', function() {
         if (this.files && this.files[0]) {
             const reader = new FileReader();
             reader.onload = function(ev) {
-                handlePastedImage(ev.target.result);
+                setScreenshot(ev.target.result);
             };
             reader.readAsDataURL(this.files[0]);
         }
     });
 
-    // Capture JS errors to include in report
+    // Capture JS errors
     window._jsErrors = [];
     window.addEventListener('error', function(e) {
         if (window._jsErrors.length < 5) {
@@ -451,7 +516,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Form submission via AJAX
+    // Form submission
     document.getElementById('bugReportForm').addEventListener('submit', function(e) {
         e.preventDefault();
 
@@ -460,7 +525,6 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>{{ __("center::bug_report.submitting") }}';
         btn.disabled = true;
 
-        // Add JS errors to browser info
         const infoField = document.getElementById('bugBrowserInfo');
         const info = JSON.parse(infoField.value);
         info.js_errors = window._jsErrors;
@@ -483,7 +547,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('bugReportFormBody').classList.add('d-none');
                 document.getElementById('bugReportSuccessBody').classList.remove('d-none');
                 document.getElementById('bugReportForm').reset();
-                removePastedImage(new Event('reset'));
+                removeScreenshot();
             } else {
                 throw new Error(data.message || 'Unknown error');
             }
@@ -503,8 +567,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Reset modal state when closed
-    const modal = document.getElementById('bugReportModal');
-    modal.addEventListener('hidden.bs.modal', function() {
+    document.getElementById('bugReportModal').addEventListener('hidden.bs.modal', function() {
         document.getElementById('bugReportFormBody').classList.remove('d-none');
         document.getElementById('bugReportSuccessBody').classList.add('d-none');
         document.getElementById('bugPageUrl').value = window.location.href;
