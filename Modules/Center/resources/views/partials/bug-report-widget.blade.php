@@ -1,9 +1,6 @@
 {{-- Bug Report Floating Widget (Beta Feedback System) --}}
 {{-- This widget appears on every page to allow centers to report issues --}}
 
-<!-- Include html2canvas for automatic screenshots -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
 <style>
     /* Floating Bug Report Button */
     .bug-report-fab {
@@ -112,37 +109,85 @@
     }
 
     .screenshot-preview {
-        max-height: 100px;
+        max-height: 120px;
         border-radius: 8px;
         border: 2px solid #e2e8f0;
         margin-top: 8px;
     }
 
-    .auto-screenshot-container {
+    /* Paste Zone Styles */
+    .paste-zone {
+        border: 2px dashed #cbd5e1;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #f8fafc;
         position: relative;
-        display: inline-block;
     }
-    
-    .auto-screenshot-container img {
-        max-height: 120px;
+
+    .paste-zone:hover,
+    .paste-zone.drag-over {
+        border-color: #059669;
+        background: #f0fdf4;
+    }
+
+    .paste-zone.has-image {
+        border-color: #059669;
+        border-style: solid;
+        background: #f0fdf4;
+        padding: 10px;
+    }
+
+    .paste-zone .paste-icon {
+        font-size: 28px;
+        color: #94a3b8;
+        margin-bottom: 8px;
+    }
+
+    .paste-zone:hover .paste-icon {
+        color: #059669;
+    }
+
+    .paste-zone .paste-text {
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .paste-zone .paste-text kbd {
+        background: #e2e8f0;
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 11px;
+        color: #334155;
+    }
+
+    .paste-zone img {
+        max-height: 150px;
+        max-width: 100%;
         border-radius: 8px;
         border: 2px solid #059669;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    .auto-screenshot-container .badge {
+    .paste-zone .remove-btn {
         position: absolute;
-        top: -8px;
-        right: -8px;
-        background: #059669;
+        top: 5px;
+        {{ app()->getLocale() == 'ar' ? 'left' : 'right' }}: 5px;
+        background: #ef4444;
         color: white;
+        border: none;
         border-radius: 50%;
         width: 24px;
         height: 24px;
+        font-size: 12px;
+        cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 10px;
+        z-index: 5;
     }
 
     .bug-info-badge {
@@ -199,24 +244,39 @@
                     {{-- Description --}}
                     <div class="mb-3">
                         <label class="form-label fw-bold small">{{ __('center::bug_report.report_description') }}</label>
-                        <textarea name="description" class="form-control" rows="4" placeholder="{{ __('center::bug_report.report_description_placeholder') }}" required maxlength="5000" id="bugDescription"></textarea>
+                        <textarea name="description" class="form-control" rows="3" placeholder="{{ __('center::bug_report.report_description_placeholder') }}" required maxlength="5000" id="bugDescription"></textarea>
                     </div>
 
-                    {{-- Auto Captured Screenshot --}}
-                    <div class="mb-3 d-none" id="autoScreenshotContainer">
-                        <label class="form-label fw-bold small">لقطة الشاشة التلقائية:</label>
-                        <div class="auto-screenshot-container">
-                            <img id="autoScreenshotPreview" src="" alt="Auto Captured Screenshot">
-                            <span class="badge"><i class="fas fa-camera"></i></span>
-                        </div>
-                        <div class="small text-muted mt-1">تم التقاط صورة للشاشة تلقائياً. يمكنك اختيار صورة أخرى إذا أردت.</div>
-                    </div>
-
-                    {{-- Custom Screenshot --}}
+                    {{-- Screenshot Paste/Upload Zone --}}
                     <div class="mb-3">
-                        <label class="form-label fw-bold small">تغيير الصورة المرفقة (اختياري)</label>
-                        <input type="file" name="screenshot" class="form-control" accept="image/*" id="bugScreenshot">
-                        <img id="screenshotPreview" class="screenshot-preview d-none" alt="preview">
+                        <label class="form-label fw-bold small">
+                            <i class="fas fa-camera me-1 text-success"></i>
+                            {{ app()->getLocale() == 'ar' ? 'لقطة الشاشة' : (app()->getLocale() == 'fr' ? "Capture d'écran" : 'Screenshot') }}
+                        </label>
+                        <div class="paste-zone" id="pasteZone" tabindex="0">
+                            <div id="pasteZonePlaceholder">
+                                <div class="paste-icon"><i class="fas fa-paste"></i></div>
+                                <div class="paste-text">
+                                    @if(app()->getLocale() == 'ar')
+                                        اضغط <kbd>Print Screen</kbd> ثم <kbd>Ctrl+V</kbd> هنا للصق لقطة الشاشة
+                                        <br><span class="text-muted">أو اسحب صورة هنا أو اضغط لاختيار ملف</span>
+                                    @elseif(app()->getLocale() == 'fr')
+                                        Appuyez sur <kbd>Print Screen</kbd> puis <kbd>Ctrl+V</kbd> ici
+                                        <br><span class="text-muted">ou glissez une image ici ou cliquez pour choisir</span>
+                                    @else
+                                        Press <kbd>Print Screen</kbd> then <kbd>Ctrl+V</kbd> here
+                                        <br><span class="text-muted">or drag an image here or click to choose a file</span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div id="pasteZonePreview" class="d-none">
+                                <img id="pastedScreenshot" src="" alt="Screenshot">
+                                <button type="button" class="remove-btn" onclick="removePastedImage(event)">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <input type="file" name="screenshot" class="d-none" accept="image/*" id="bugScreenshot">
                     </div>
 
                     {{-- Auto-info Notice --}}
@@ -253,59 +313,21 @@
 </div>
 
 <script>
-// Open modal with auto screenshot
+// Open modal (no more html2canvas - just open directly)
 function openBugReportModal() {
-    const btn = document.getElementById('bugReportFab');
-    const originalContent = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size: 20px;"></i>';
-    btn.style.pointerEvents = 'none';
-
-    // Wait for all fonts (especially Arabic) to load before capturing
-    document.fonts.ready.then(() => {
-        html2canvas(document.body, {
-            logging: false,
-            useCORS: true,
-            allowTaint: true,
-            scale: window.devicePixelRatio || 1,
-            ignoreElements: (node) => {
-                return node.id === 'bugReportFab' || node.id === 'bugReportModal' || node.classList.contains('modal-backdrop');
-            }
-        }).then(canvas => {
-            const base64image = canvas.toDataURL("image/jpeg", 0.7);
-            document.getElementById('autoScreenshotValue').value = base64image;
-            
-            // Show preview
-            const preview = document.getElementById('autoScreenshotPreview');
-            preview.src = base64image;
-            document.getElementById('autoScreenshotContainer').classList.remove('d-none');
-
-            showModal();
-        }).catch(err => {
-            console.error("Screenshot capture failed", err);
-            showModal(); // Show anyway
-        }).finally(() => {
-            btn.innerHTML = originalContent;
-            btn.style.pointerEvents = 'auto';
-        });
-    });
-
-    function showModal() {
-        const modalEl = document.getElementById('bugReportModal');
-        if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
-            const modal = new bootstrap.Modal(modalEl);
-            modal.show();
-        } else {
-            // Fallback for older environments
-            modalEl.classList.add('show');
-            modalEl.style.display = 'block';
-            document.body.classList.add('modal-open');
-            if (!document.querySelector('.modal-backdrop')) {
-                const backdrop = document.createElement('div');
-                backdrop.className = 'modal-backdrop fade show';
-                document.body.appendChild(backdrop);
-            }
-        }
+    const modalEl = document.getElementById('bugReportModal');
+    if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+    } else {
+        modalEl.classList.add('show');
+        modalEl.style.display = 'block';
+        document.body.classList.add('modal-open');
     }
+    // Focus the paste zone so user can immediately paste
+    setTimeout(() => {
+        document.getElementById('pasteZone').focus();
+    }, 500);
 }
 
 function closeBugReportModal() {
@@ -317,9 +339,27 @@ function closeBugReportModal() {
         modalEl.classList.remove('show');
         modalEl.style.display = 'none';
         document.body.classList.remove('modal-open');
-        const backdrop = document.querySelector('.modal-backdrop');
-        if (backdrop) backdrop.remove();
     }
+}
+
+// Handle pasted image from clipboard
+function handlePastedImage(dataUrl) {
+    document.getElementById('autoScreenshotValue').value = dataUrl;
+    document.getElementById('pastedScreenshot').src = dataUrl;
+    document.getElementById('pasteZonePlaceholder').classList.add('d-none');
+    document.getElementById('pasteZonePreview').classList.remove('d-none');
+    document.getElementById('pasteZone').classList.add('has-image');
+}
+
+// Remove pasted image
+function removePastedImage(event) {
+    event.stopPropagation();
+    document.getElementById('autoScreenshotValue').value = '';
+    document.getElementById('pastedScreenshot').src = '';
+    document.getElementById('pasteZonePlaceholder').classList.remove('d-none');
+    document.getElementById('pasteZonePreview').classList.add('d-none');
+    document.getElementById('pasteZone').classList.remove('has-image');
+    document.getElementById('bugScreenshot').value = '';
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -335,18 +375,66 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('bugBrowserInfo').value = JSON.stringify(browserInfo);
     document.getElementById('bugPageUrl').value = window.location.href;
 
-    // Screenshot preview
-    document.getElementById('bugScreenshot').addEventListener('change', function(e) {
-        const preview = document.getElementById('screenshotPreview');
+    const pasteZone = document.getElementById('pasteZone');
+    const fileInput = document.getElementById('bugScreenshot');
+
+    // 1. Handle paste (Ctrl+V) anywhere in the modal
+    document.getElementById('bugReportModal').addEventListener('paste', function(e) {
+        const items = e.clipboardData?.items;
+        if (!items) return;
+
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf('image') !== -1) {
+                e.preventDefault();
+                const blob = items[i].getAsFile();
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    handlePastedImage(ev.target.result);
+                };
+                reader.readAsDataURL(blob);
+                break;
+            }
+        }
+    });
+
+    // 2. Handle drag & drop on paste zone
+    pasteZone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        pasteZone.classList.add('drag-over');
+    });
+
+    pasteZone.addEventListener('dragleave', function(e) {
+        pasteZone.classList.remove('drag-over');
+    });
+
+    pasteZone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        pasteZone.classList.remove('drag-over');
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                handlePastedImage(ev.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // 3. Handle click to open file picker
+    pasteZone.addEventListener('click', function() {
+        if (!pasteZone.classList.contains('has-image')) {
+            fileInput.click();
+        }
+    });
+
+    // 4. Handle file input change
+    fileInput.addEventListener('change', function() {
         if (this.files && this.files[0]) {
             const reader = new FileReader();
             reader.onload = function(ev) {
-                preview.src = ev.target.result;
-                preview.classList.remove('d-none');
+                handlePastedImage(ev.target.result);
             };
             reader.readAsDataURL(this.files[0]);
-        } else {
-            preview.classList.add('d-none');
         }
     });
 
@@ -392,12 +480,10 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Show success state
                 document.getElementById('bugReportFormBody').classList.add('d-none');
                 document.getElementById('bugReportSuccessBody').classList.remove('d-none');
-                // Reset form
                 document.getElementById('bugReportForm').reset();
-                document.getElementById('screenshotPreview').classList.add('d-none');
+                removePastedImage(new Event('reset'));
             } else {
                 throw new Error(data.message || 'Unknown error');
             }
