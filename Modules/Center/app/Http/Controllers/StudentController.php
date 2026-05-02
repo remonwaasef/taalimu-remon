@@ -104,7 +104,7 @@ class StudentController extends Controller
         // Smart Onboarding Routing: If this is the first student, guide them back to the dashboard
         $studentCount = Student::where('tenant_id', $this->tenant->id)->count();
         if ($studentCount === 1) {
-            return redirect()->route('center.dashboard')->with('success', 'مرحباً بك! اكتمل الإعداد الأساسي لمركزك بنجاح. يمكنك الآن البدء بتسجيل الحضور وتحصيل الرسوم.');
+            return redirect()->route('center.dashboard')->with('success', __('center::messages.first_student_onboarding'));
         }
 
         return redirect()->route('center.students.index', ['tenant' => $this->tenant->domain])->with('success', __('center::messages.msg_081'));
@@ -190,15 +190,15 @@ class StudentController extends Controller
         $totalDebt = Sale::where('student_id', $student->id)->sum(\Illuminate\Support\Facades\DB::raw('total_amount - paid_amount'));
 
         if ($totalDebt <= 0) {
-            return redirect()->back()->with('info', 'الطالب ليس عليه أي مديونيات متأخرة.');
+            return redirect()->back()->with('info', __('center::messages.no_outstanding_debts'));
         }
 
         $success = $whatsappService->sendDebtReminder($this->tenant, $student, $totalDebt);
 
         if ($success) {
-            return redirect()->back()->with('success', 'تم إرسال تذكير السداد عبر الواتساب بنجاح.');
+            return redirect()->back()->with('success', __('center::messages.debt_reminder_sent'));
         } else {
-            return redirect()->back()->with('warning', 'تعذر إرسال التذكير. تأكد من إعداد خدمة الواتساب للمركز وأن للطالب رقم هاتف صحيح.');
+            return redirect()->back()->with('warning', __('center::messages.debt_reminder_failed'));
         }
     }
 
@@ -395,7 +395,7 @@ class StudentController extends Controller
         $email = $student->email ?: ($student->user ? $student->user->email : null);
 
         if (!$email) {
-            return redirect()->back()->with('error', 'هذا الطالب لا يمتلك بريداً إلكترونياً مسجلاً.');
+            return redirect()->back()->with('error', __('center::messages.no_student_email'));
         }
 
         try {
@@ -406,10 +406,10 @@ class StudentController extends Controller
                 $this->tenant->name
             ));
             
-            return redirect()->back()->with('success', 'تم إرسال البريد الإلكتروني للطالب بنجاح.');
+            return redirect()->back()->with('success', __('center::messages.email_sent_success'));
         } catch (\Exception $e) {
             \Log::error("Failed to send email to student {$student->id}: " . $e->getMessage());
-            return redirect()->back()->with('error', 'حدث خطأ أثناء الإرسال: ' . $e->getMessage());
+            return redirect()->back()->with('error', __('center::messages.email_send_error') . ': ' . $e->getMessage());
         }
     }
 

@@ -1085,4 +1085,11 @@ return [
   'thursday' => 'Thursday',
   'friday' => 'Friday',
   'saturday' => 'Saturday',
+  'first_student_onboarding' => 'Welcome! Your center setup is complete. You can now start recording attendance and collecting fees.',
+  'no_outstanding_debts' => 'This student has no outstanding debts.',
+  'debt_reminder_sent' => 'Debt reminder sent via WhatsApp successfully.',
+  'debt_reminder_failed' => 'Failed to send reminder. Make sure WhatsApp is configured and the student has a valid phone number.',
+  'no_student_email' => 'This student does not have a registered email address.',
+  'email_sent_success' => 'Email sent to the student successfully.',
+  'email_send_error' => 'An error occurred while sending',
 ];

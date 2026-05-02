@@ -636,8 +636,21 @@ class StudentService
             $groupSubjectKey = "notif_group_enrollment_subject_{$locale}";
             $groupBodyKey = "notif_group_enrollment_body_{$locale}";
 
-            $groupSubject = $tenantSettings[$groupSubjectKey] ?? $tenantSettings['notif_group_enrollment_subject'] ?? 'تم تسجيلك في مجموعة جديدة';
-            $groupBody = $tenantSettings[$groupBodyKey] ?? $tenantSettings['notif_group_enrollment_body'] ?? "مرحباً {student_name}،\n\nلقد تم تسجيلك بنجاح في {group_name}.\nنتمنى لك التوفيق!\n\n{center_name}";
+            $defaultGroupSubjects = [
+                'ar' => 'تم تسجيلك في مجموعة جديدة',
+                'en' => 'You have been enrolled in a new group',
+                'fr' => 'Vous avez été inscrit dans un nouveau groupe',
+            ];
+            $defaultGroupBodies = [
+                'ar' => "مرحباً {student_name}،\n\nلقد تم تسجيلك بنجاح في {group_name}.\nنتمنى لك التوفيق!\n\n{center_name}",
+                'en' => "Hello {student_name},\n\nYou have been successfully enrolled in {group_name}.\nWe wish you the best of luck!\n\n{center_name}",
+                'fr' => "Bonjour {student_name},\n\nVous avez été inscrit avec succès dans {group_name}.\nNous vous souhaitons bonne chance !\n\n{center_name}",
+            ];
+
+            $groupSubject = $tenantSettings[$groupSubjectKey] ?? $tenantSettings['notif_group_enrollment_subject'] ?? ($defaultGroupSubjects[$locale] ?? $defaultGroupSubjects['en']);
+            $groupBody = $tenantSettings[$groupBodyKey] ?? $tenantSettings['notif_group_enrollment_body'] ?? ($defaultGroupBodies[$locale] ?? $defaultGroupBodies['en']);
+
+            $currencySymbol = function_exists('get_currency_symbol') ? get_currency_symbol() : ($tenant->settings['financial']['currency'] ?? 'EGP');
 
             foreach ($courseIds as $courseId) {
                 $course = \App\Models\Course::find($courseId);
@@ -647,7 +660,7 @@ class StudentService
                     'student_name' => $student->name,
                     'center_name' => $tenant->name,
                     'group_name' => $course->title,
-                    'course_price' => $course->price . ' ' . ($tenant->settings['financial']['currency'] ?? 'ج.م'),
+                    'course_price' => $course->price . ' ' . $currencySymbol,
                     'login_link' => url('/login'),
                 ];
 
@@ -702,10 +715,17 @@ class StudentService
                     $subject = $settings["welcome_student_subject_{$locale}"] ?? $settings['welcome_student_subject'];
                     $body = $settings["welcome_student_body_{$locale}"] ?? $settings['welcome_student_body'];
                     
+                    $passwordHints = [
+                        'ar' => '(يرجى استخدام "نسيت كلمة المرور" لتعيين كلمة مرور جديدة)',
+                        'en' => '(Please use "Forgot Password" to set a new password)',
+                        'fr' => '(Veuillez utiliser « Mot de passe oublié » pour définir un nouveau mot de passe)',
+                    ];
+                    $passwordHint = $passwordHints[$locale] ?? $passwordHints['en'];
+
                     Mail::to($student->email)->queue(new WelcomeStudentMail(
                         $student,
                         $subject,
-                        str_replace('{password}', '(يرجى استخدام "نسيت كلمة المرور" لتعيين كلمة مرور جديدة)', $body),
+                        str_replace('{password}', $passwordHint, $body),
                         $variables,
                         $tenant->name
                     ));
@@ -719,11 +739,18 @@ class StudentService
                         $gSubject = $settings["welcome_guardian_subject_{$locale}"] ?? $settings['welcome_guardian_subject'];
                         $gBody = $settings["welcome_guardian_body_{$locale}"] ?? $settings['welcome_guardian_body'];
 
+                        $guardianPasswordHints = [
+                            'ar' => '(يرجى التواصل مع المركز للحصول على بيانات الدخول)',
+                            'en' => '(Please contact the center to get the login credentials)',
+                            'fr' => '(Veuillez contacter le centre pour obtenir les identifiants de connexion)',
+                        ];
+                        $guardianPasswordHint = $guardianPasswordHints[$locale] ?? $guardianPasswordHints['en'];
+
                         Mail::to($guardianEmail)->queue(new WelcomeGuardianMail(
                             $guardianName,
                             $student->name,
                             $gSubject,
-                            str_replace('{password}', '(يرجى التواصل مع المركز للحصول على بيانات الدخول)', $gBody),
+                            str_replace('{password}', $guardianPasswordHint, $gBody),
                             $variables,
                             $tenant->name
                         ));
@@ -755,24 +782,25 @@ class StudentService
             'welcome_guardian_subject' => $tenantSettings['welcome_guardian_subject'] ?? $defaultPreset['guardian_subject'] ?? '',
             'welcome_guardian_body'    => $tenantSettings['welcome_guardian_body'] ?? $defaultPreset['guardian_body'] ?? '',
 
-            // Multi-lingual subjects
+            // Multi-lingual student subjects (tenant overrides → config defaults)
             'welcome_student_subject_ar' => $tenantSettings['welcome_student_subject_ar'] ?? null,
-            'welcome_student_subject_en' => $tenantSettings['welcome_student_subject_en'] ?? null,
-            'welcome_student_subject_fr' => $tenantSettings['welcome_student_subject_fr'] ?? null,
+            'welcome_student_subject_en' => $tenantSettings['welcome_student_subject_en'] ?? $defaultPreset['student_subject_en'] ?? null,
+            'welcome_student_subject_fr' => $tenantSettings['welcome_student_subject_fr'] ?? $defaultPreset['student_subject_fr'] ?? null,
             
-            // Multi-lingual bodies
+            // Multi-lingual student bodies (tenant overrides → config defaults)
             'welcome_student_body_ar' => $tenantSettings['welcome_student_body_ar'] ?? null,
-            'welcome_student_body_en' => $tenantSettings['welcome_student_body_en'] ?? null,
-            'welcome_student_body_fr' => $tenantSettings['welcome_student_body_fr'] ?? null,
+            'welcome_student_body_en' => $tenantSettings['welcome_student_body_en'] ?? $defaultPreset['student_body_en'] ?? null,
+            'welcome_student_body_fr' => $tenantSettings['welcome_student_body_fr'] ?? $defaultPreset['student_body_fr'] ?? null,
 
-            // Guardian Multi-lingual
+            // Guardian Multi-lingual subjects (tenant overrides → config defaults)
             'welcome_guardian_subject_ar' => $tenantSettings['welcome_guardian_subject_ar'] ?? null,
-            'welcome_guardian_subject_en' => $tenantSettings['welcome_guardian_subject_en'] ?? null,
-            'welcome_guardian_subject_fr' => $tenantSettings['welcome_guardian_subject_fr'] ?? null,
+            'welcome_guardian_subject_en' => $tenantSettings['welcome_guardian_subject_en'] ?? $defaultPreset['guardian_subject_en'] ?? null,
+            'welcome_guardian_subject_fr' => $tenantSettings['welcome_guardian_subject_fr'] ?? $defaultPreset['guardian_subject_fr'] ?? null,
 
+            // Guardian Multi-lingual bodies (tenant overrides → config defaults)
             'welcome_guardian_body_ar' => $tenantSettings['welcome_guardian_body_ar'] ?? null,
-            'welcome_guardian_body_en' => $tenantSettings['welcome_guardian_body_en'] ?? null,
-            'welcome_guardian_body_fr' => $tenantSettings['welcome_guardian_body_fr'] ?? null,
+            'welcome_guardian_body_en' => $tenantSettings['welcome_guardian_body_en'] ?? $defaultPreset['guardian_body_en'] ?? null,
+            'welcome_guardian_body_fr' => $tenantSettings['welcome_guardian_body_fr'] ?? $defaultPreset['guardian_body_fr'] ?? null,
         ];
     }
 
