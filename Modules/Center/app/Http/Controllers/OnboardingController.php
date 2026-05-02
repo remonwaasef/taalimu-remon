@@ -402,36 +402,43 @@ class OnboardingController extends Controller
                     ->get();
 
                 foreach ($request->students as $studentInput) {
-                    $studentData = \App\DTOs\StudentData::fromArray([
-                        'name' => $studentInput['student_name'],
-                        'email' => $studentInput['student_email'] ?? null,
-                        'phone' => $studentInput['student_phone'],
-                        'parent_name' => $studentInput['parent_name'] ?? null,
-                        'parent_phone' => $studentInput['parent_phone'] ?? null,
-                        'parent_email' => $studentInput['parent_email'] ?? null,
-                        'grade_id' => $studentInput['grade_id'] ?? null,
-                    ]);
+                    try {
+                        $studentData = \App\DTOs\StudentData::fromArray([
+                            'name' => $studentInput['student_name'],
+                            'email' => $studentInput['student_email'] ?? null,
+                            'phone' => $studentInput['student_phone'],
+                            'parent_name' => $studentInput['parent_name'] ?? null,
+                            'parent_phone' => $studentInput['parent_phone'] ?? null,
+                            'parent_email' => $studentInput['parent_email'] ?? null,
+                            'grade_id' => $studentInput['grade_id'] ?? null,
+                        ]);
 
-                    $result = $this->studentService->registerStudent($studentData, auth()->user());
-                    $student = $result['student'];
+                        $result = $this->studentService->registerStudent($studentData, auth()->user());
+                        $student = $result['student'];
 
-                    // Enroll student in each selected course
-                    $courseIndices = $studentInput['enroll_course_indices'] ?? [];
-                    foreach ($courseIndices as $courseIndex) {
-                        $course = $allCourses->get((int)$courseIndex);
-                        if ($course) {
-                            try {
-                                $this->financeService->createSale([
-                                    'student_id' => $student->id,
-                                    'items' => [['id' => $course->id, 'price' => $course->price]],
-                                    'payment_method' => 'cash',
-                                    'paid_amount' => 0,
-                                    'notes' => 'Onboarding Enrollment',
-                                ]);
-                            } catch (\Exception $e) {
-                                \Log::error("Onboarding Finance Error: " . $e->getMessage());
+                        // Enroll student in each selected course
+                        $courseIndices = $studentInput['enroll_course_indices'] ?? [];
+                        foreach ($courseIndices as $courseIndex) {
+                            $course = $allCourses->get((int)$courseIndex);
+                            if ($course) {
+                                try {
+                                    $this->financeService->createSale([
+                                        'student_id' => $student->id,
+                                        'items' => [['id' => $course->id, 'price' => $course->price]],
+                                        'payment_method' => 'cash',
+                                        'paid_amount' => 0,
+                                        'notes' => 'Onboarding Enrollment',
+                                    ]);
+                                } catch (\Exception $e) {
+                                    \Log::error("Onboarding Finance Error: " . $e->getMessage());
+                                }
                             }
                         }
+                    } catch (\Exception $e) {
+                        return response()->json([
+                            'success' => false, 
+                            'message' => "خطأ في تسجيل الطالب ({$studentInput['student_name']}): " . $e->getMessage()
+                        ], 422);
                     }
                 }
             }
