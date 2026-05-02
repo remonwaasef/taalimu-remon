@@ -359,12 +359,48 @@ function setScreenshot(dataUrl) {
     const loading = document.getElementById('screenshotLoading');
     const box = document.getElementById('screenshotBox');
 
-    document.getElementById('autoScreenshotValue').value = dataUrl;
-    preview.src = dataUrl;
-    preview.classList.remove('d-none');
-    actions.classList.remove('d-none');
-    loading.classList.add('d-none');
-    box.classList.add('has-image');
+    // Compress and resize the image before storing
+    const img = new Image();
+    img.onload = function() {
+        const maxWidth = 1280;
+        const maxHeight = 900;
+        let width = img.width;
+        let height = img.height;
+
+        // Scale down if too large
+        if (width > maxWidth) {
+            height = Math.round(height * maxWidth / width);
+            width = maxWidth;
+        }
+        if (height > maxHeight) {
+            width = Math.round(width * maxHeight / height);
+            height = maxHeight;
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.5);
+        document.getElementById('autoScreenshotValue').value = compressedDataUrl;
+        preview.src = compressedDataUrl;
+        preview.classList.remove('d-none');
+        actions.classList.remove('d-none');
+        loading.classList.add('d-none');
+        box.classList.add('has-image');
+    };
+    img.onerror = function() {
+        // Fallback: use original data
+        document.getElementById('autoScreenshotValue').value = dataUrl;
+        preview.src = dataUrl;
+        preview.classList.remove('d-none');
+        actions.classList.remove('d-none');
+        loading.classList.add('d-none');
+        box.classList.add('has-image');
+    };
+    img.src = dataUrl;
 }
 
 function removeScreenshot() {
@@ -541,7 +577,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Accept': 'application/json',
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                // Server returned an error status (413, 422, 500, etc.)
+                return response.text().then(text => {
+                    let errorMsg = 'Server Error: ' + response.status;
+                    try {
+                        const json = JSON.parse(text);
+                        errorMsg = json.message || json.error || errorMsg;
+                    } catch(e) {
+                        // If response is HTML (like 413), extract a short message
+                        if (response.status === 413) {
+                            errorMsg = 'الصورة كبيرة جداً. حاول بدون صورة أو بصورة أصغر.';
+                        }
+                    }
+                    throw new Error(errorMsg);
+                });
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.success) {
                 document.getElementById('bugReportFormBody').classList.add('d-none');
@@ -553,10 +607,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         })
         .catch(error => {
+            console.error('Bug report submit error:', error);
             Swal.fire({
                 icon: 'error',
                 title: 'Oops!',
-                text: '{{ __("center::bug_report.submit_error") }}',
+                text: error.message || '{{ __("center::bug_report.submit_error") }}',
                 confirmButtonColor: '#059669',
             });
         })
