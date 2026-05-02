@@ -21,6 +21,7 @@ class CenterController extends Controller
      */
     public function index()
     {
+        \Log::info('Entering CenterController@index');
         $user = auth()->user();
         
         // Redirect instructors to their specific dashboard
