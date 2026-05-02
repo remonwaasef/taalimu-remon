@@ -87,6 +87,7 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
         // Bug Reports Admin
         Route::get('/admin/bug-reports', [App\Http\Controllers\AdminBugReportController::class, 'index'])->name('admin.bug_reports.index');
         Route::put('/admin/bug-reports/{bugReport}/status', [App\Http\Controllers\AdminBugReportController::class, 'updateStatus'])->name('admin.bug_reports.status');
+        Route::get('/admin/bug-reports/{bugReport}/screenshot', [App\Http\Controllers\AdminBugReportController::class, 'showScreenshot'])->name('admin.bug_reports.screenshot');
     });
     
     // API endpoint for saving cookie consent

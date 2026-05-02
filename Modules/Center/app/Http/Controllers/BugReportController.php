@@ -30,15 +30,18 @@ class BugReportController extends Controller
         try {
             if ($request->hasFile('screenshot')) {
                 $file = $request->file('screenshot');
-                $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
-                $dir = public_path('storage/bug-reports');
+                $fileName = 'bug-reports/' . uniqid() . '.' . $file->getClientOriginalExtension();
                 
-                if (!file_exists($dir)) {
-                    mkdir($dir, 0777, true);
-                }
+                // Save to Laravel's internal storage (storage/app/public)
+                \Illuminate\Support\Facades\Storage::disk('public')->put(
+                    $fileName,
+                    file_get_contents($file->getRealPath())
+                );
+                $screenshotPath = $fileName;
                 
-                $file->move($dir, $fileName);
-                $screenshotPath = 'bug-reports/' . $fileName;
+                // Also try saving to public/storage as fallback
+                $this->copyToPublicStorage($fileName);
+                
             } elseif ($request->filled('auto_screenshot')) {
                 $imageData = $request->input('auto_screenshot');
                 
@@ -47,18 +50,16 @@ class BugReportController extends Controller
                     $image = base64_decode(substr($imageData, strpos($imageData, ',') + 1));
                     
                     if ($image) {
-                        $dir = public_path('storage/bug-reports');
-                        if (!file_exists($dir)) {
-                            mkdir($dir, 0777, true);
-                        }
+                        $fileName = 'bug-reports/' . uniqid() . '_auto.' . $extension;
                         
-                        $fileName = uniqid() . '_auto.' . $extension;
-                        $fullPath = $dir . '/' . $fileName;
-                        
-                        if (file_put_contents($fullPath, $image)) {
-                            $screenshotPath = 'bug-reports/' . $fileName;
+                        // Save to Laravel's internal storage (storage/app/public)
+                        if (\Illuminate\Support\Facades\Storage::disk('public')->put($fileName, $image)) {
+                            $screenshotPath = $fileName;
+                            
+                            // Also try saving to public/storage as fallback
+                            $this->copyToPublicStorage($fileName);
                         } else {
-                            $errorDebug = "file_put_contents failed to " . $dir;
+                            $errorDebug = "Storage::put failed for " . $fileName;
                         }
                     } else {
                         $errorDebug = "Base64 decode failed";
@@ -247,6 +248,29 @@ class BugReportController extends Controller
 
         } catch (\Exception $e) {
             Log::warning('Email bug report notification failed: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Copy a stored file to public/storage as a fallback for direct URL access.
+     * This handles servers where the storage symlink may not be working.
+     */
+    private function copyToPublicStorage(string $fileName): void
+    {
+        try {
+            $sourcePath = storage_path('app/public/' . $fileName);
+            $destPath = public_path('storage/' . $fileName);
+            $destDir = dirname($destPath);
+
+            if (!file_exists($destDir)) {
+                mkdir($destDir, 0777, true);
+            }
+
+            if (file_exists($sourcePath)) {
+                copy($sourcePath, $destPath);
+            }
+        } catch (\Exception $e) {
+            Log::warning('Failed to copy screenshot to public storage: ' . $e->getMessage());
         }
     }
 }

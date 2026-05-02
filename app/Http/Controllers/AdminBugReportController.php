@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BugReport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AdminBugReportController extends Controller
 {
@@ -57,5 +58,42 @@ class AdminBugReportController extends Controller
         $bugReport->update($updateData);
 
         return back()->with('success', 'تم تحديث حالة البلاغ بنجاح.');
+    }
+
+    /**
+     * Serve a bug report screenshot directly from storage.
+     * This bypasses symlink issues by reading the file and returning it as a response.
+     */
+    public function showScreenshot(BugReport $bugReport)
+    {
+        if (!$bugReport->screenshot) {
+            abort(404, 'No screenshot attached to this report.');
+        }
+
+        // Try multiple possible storage locations
+        $possiblePaths = [
+            storage_path('app/public/' . $bugReport->screenshot),
+            public_path('storage/' . $bugReport->screenshot),
+            storage_path('app/public/logos/' . $bugReport->screenshot),
+        ];
+
+        $filePath = null;
+        foreach ($possiblePaths as $path) {
+            if (file_exists($path)) {
+                $filePath = $path;
+                break;
+            }
+        }
+
+        if (!$filePath) {
+            abort(404, 'Screenshot file not found. Paths checked: ' . implode(', ', $possiblePaths));
+        }
+
+        $mimeType = mime_content_type($filePath) ?: 'image/jpeg';
+
+        return response()->file($filePath, [
+            'Content-Type' => $mimeType,
+            'Cache-Control' => 'public, max-age=86400',
+        ]);
     }
 }
