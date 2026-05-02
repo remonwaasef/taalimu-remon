@@ -53,8 +53,10 @@ class SendPaymentRemindersCommand extends Command
                 // If the new email toggle is off, don't send emails even if the cron runs
                 $emailReminders = []; 
             }
-            $emailTemplate = $emailSettings['notif_payment_reminder_body'] ?? ($settings['email_template'] ?? '');
-            $emailSubject = $emailSettings['notif_payment_reminder_subject'] ?? 'تذكير بموعد الدفع';
+            $tenantLocale = $tenant->settings['locale'] ?? 'ar';
+            $emailTemplate = $emailSettings["notif_payment_reminder_body_{$tenantLocale}"] ?? $emailSettings['notif_payment_reminder_body'] ?? ($settings['email_template'] ?? '');
+            $defaultSubjects = ['ar' => 'تذكير بموعد الدفع', 'en' => 'Payment Reminder', 'fr' => 'Rappel de paiement'];
+            $emailSubject = $emailSettings["notif_payment_reminder_subject_{$tenantLocale}"] ?? $emailSettings['notif_payment_reminder_subject'] ?? ($defaultSubjects[$tenantLocale] ?? $defaultSubjects['en']);
 
             $today = now()->day;
             $currentYear = now()->year;
@@ -209,22 +211,10 @@ class SendPaymentRemindersCommand extends Command
         }
 
         try {
-            // Transform variables to match the new template structure
-            $variables = [
-                'student_name' => $student->name,
-                'center_name' => $tenant->name,
-                'amount' => $fee,
-                'due_date' => $dueDay . ' من كل شهر',
-                'remaining' => $fee, // Fallback
-                'group_name' => 'المجموعة الدراسية', // Generic
-                'course_price' => $fee,
-                'login_link' => url('/login'),
-                'password' => '******',
-            ];
-            
-            // Reusing NotifGroupEnrollmentMail or a dedicated generic one. 
-            // We will use a generic mailer since PaymentReminderMail was built for the legacy system.
-            $mailable = new \App\Mail\NotifGroupEnrollmentMail($subject, $template, $variables, $tenant->name, $student->name);
+            $currencySymbol = function_exists('get_currency_symbol') ? get_currency_symbol() : ($tenant->settings['financial']['currency'] ?? 'EGP');
+
+            // Use the dedicated PaymentReminderMail for proper localized rendering
+            $mailable = new PaymentReminderMail($student, $tenant, $fee, $dueDay, $stage, $template);
 
             Mail::to($emails->toArray())->send($mailable);
 
@@ -281,13 +271,15 @@ class SendPaymentRemindersCommand extends Command
         }
 
         // Build message
-        $currency = $tenant->settings['currency'] ?? 'ج.م';
+        $currency = function_exists('get_currency_symbol') ? get_currency_symbol() : ($tenant->settings['financial']['currency'] ?? 'EGP');
+        $tenantLocale = $tenant->settings['locale'] ?? 'ar';
+
         if (!empty($template)) {
             $variables = [
                 'student_name' => $student->name,
                 'center_name' => $tenant->name,
                 'amount' => number_format($fee, 2) . ' ' . $currency,
-                'due_date' => $dueDay . ' من كل شهر',
+                'due_date' => $dueDay,
                 'remaining' => number_format($fee, 2) . ' ' . $currency,
                 'login_link' => url('/login'),
             ];
@@ -297,11 +289,22 @@ class SendPaymentRemindersCommand extends Command
                 $message = str_replace('{' . $key . '}', (string) $value, $message);
             }
         } else {
-            // Default WhatsApp message
+            // Default WhatsApp messages by locale
+            $overdueMessages = [
+                'ar' => "⚠️ تنبيه من {$tenant->name}\n\nالسلام عليكم،\nنود إبلاغكم بأن مصروفات الطالب/ة {$student->name} بمبلغ " . number_format($fee, 2) . " {$currency} قد تأخر سدادها.\nنرجو التواصل مع الإدارة لتسوية المبلغ.\n\nشكراً لتعاونكم.",
+                'en' => "⚠️ Alert from {$tenant->name}\n\nHello,\nWe would like to inform you that the tuition fees for student {$student->name} amounting to " . number_format($fee, 2) . " {$currency} are overdue.\nPlease contact the administration to settle the amount.\n\nThank you for your cooperation.",
+                'fr' => "⚠️ Alerte de {$tenant->name}\n\nBonjour,\nNous souhaitons vous informer que les frais de scolarité de l'élève {$student->name} d'un montant de " . number_format($fee, 2) . " {$currency} sont en retard.\nVeuillez contacter l'administration pour régler le montant.\n\nMerci pour votre coopération.",
+            ];
+            $preMessages = [
+                'ar' => "📋 تذكير من {$tenant->name}\n\nالسلام عليكم،\nنذكّركم بأن مصروفات الطالب/ة {$student->name} بمبلغ " . number_format($fee, 2) . " {$currency} مستحقة يوم {$dueDay} من الشهر الحالي.\n\nشكراً لتعاونكم.",
+                'en' => "📋 Reminder from {$tenant->name}\n\nHello,\nThis is a reminder that the tuition fees for student {$student->name} amounting to " . number_format($fee, 2) . " {$currency} are due on day {$dueDay} of this month.\n\nThank you for your cooperation.",
+                'fr' => "📋 Rappel de {$tenant->name}\n\nBonjour,\nNous vous rappelons que les frais de scolarité de l'élève {$student->name} d'un montant de " . number_format($fee, 2) . " {$currency} sont dus le {$dueDay} de ce mois.\n\nMerci pour votre coopération.",
+            ];
+
             if (str_starts_with($stage, 'overdue')) {
-                $message = "⚠️ تنبيه من {$tenant->name}\n\nالسلام عليكم،\nنود إبلاغكم بأن مصروفات الطالب/ة {$student->name} بمبلغ " . number_format($fee, 2) . " {$currency} قد تأخر سدادها.\nنرجو التواصل مع الإدارة لتسوية amount.\n\nشكراً لتعاونكم.";
+                $message = $overdueMessages[$tenantLocale] ?? $overdueMessages['en'];
             } else {
-                $message = "📋 تذكير من {$tenant->name}\n\nالسلام عليكم،\nنذكّركم بأن مصروفات الطالب/ة {$student->name} بمبلغ " . number_format($fee, 2) . " {$currency} مستحقة يوم {$dueDay} من الشهر الحالي.\n\nشكراً لتعاونكم.";
+                $message = $preMessages[$tenantLocale] ?? $preMessages['en'];
             }
         }
 
