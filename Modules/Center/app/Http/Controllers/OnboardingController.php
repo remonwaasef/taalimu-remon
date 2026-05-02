@@ -138,7 +138,16 @@ class OnboardingController extends Controller
             ];
         })->toArray();
 
-        return view('center::onboarding.wizard', compact('status', 'tenant', 'stages', 'existingInstructors', 'existingCourses'));
+        $existingStudents = \App\Models\Student::where('tenant_id', $tenant->id)->orderBy('id')->get()->map(function($student) {
+            return [
+                'student_name' => $student->name,
+                'student_phone' => $student->phone,
+                'grade_id' => $student->grade_id ?? '',
+                'enroll_course_index' => ''
+            ];
+        })->toArray();
+
+        return view('center::onboarding.wizard', compact('status', 'tenant', 'stages', 'existingInstructors', 'existingCourses', 'existingStudents'));
     }
 
     public function updateLocale(Request $request)
@@ -371,41 +380,42 @@ class OnboardingController extends Controller
         if ($step === 'step_4') {
             if (!$request->boolean('skip')) {
                 $request->validate([
-                    'student_name' => 'required|string|max:255',
-                    'student_phone' => ['required', 'string', 'max:20', 'regex:/^[0-9\+\-\s\(\)]+$/'],
-                    'grade_id' => 'nullable|exists:grades,id',
+                    'students' => 'required|array|min:1',
+                    'students.*.student_name' => 'required|string|max:255',
+                    'students.*.student_phone' => ['required', 'string', 'max:20', 'regex:/^[0-9\+\-\s\(\)]+$/'],
+                    'students.*.grade_id' => 'nullable|exists:grades,id',
+                    'students.*.enroll_course_index' => 'nullable|integer',
                 ]);
 
-                // 1. Register Student using natural StudentService
-                // This handles unique email, unique code, and admin notifications
-                $studentData = \App\DTOs\StudentData::fromArray([
-                    'name' => $request->student_name,
-                    'phone' => $request->student_phone,
-                    'grade_id' => $request->grade_id,
-                ]);
+                foreach ($request->students as $studentInput) {
+                    $studentData = \App\DTOs\StudentData::fromArray([
+                        'name' => $studentInput['student_name'],
+                        'phone' => $studentInput['student_phone'],
+                        'grade_id' => $studentInput['grade_id'] ?? null,
+                    ]);
 
-                $result = $this->studentService->registerStudent($studentData, auth()->user());
-                $student = $result['student'];
+                    $result = $this->studentService->registerStudent($studentData, auth()->user());
+                    $student = $result['student'];
 
-                // 2. Enroll in course if requested using FinanceService
-                $enrollCourseIndex = $request->input('enroll_course_index');
-                if ($enrollCourseIndex !== null && $enrollCourseIndex !== '') {
-                    $course = \App\Models\Course::where('tenant_id', $tenant->id)
-                        ->orderBy('id', 'asc')
-                        ->skip((int)$enrollCourseIndex)
-                        ->first();
-                        
-                    if ($course) {
-                        try {
-                            $this->financeService->createSale([
-                                'student_id' => $student->id,
-                                'items' => [['id' => $course->id, 'price' => $course->price]],
-                                'payment_method' => 'cash',
-                                'paid_amount' => 0, // Unpaid invoice = due amount
-                                'notes' => 'Onboarding Enrollment',
-                            ]);
-                        } catch (\Exception $e) {
-                            \Log::error("Onboarding Finance Error: " . $e->getMessage());
+                    $enrollCourseIndex = $studentInput['enroll_course_index'] ?? null;
+                    if ($enrollCourseIndex !== null && $enrollCourseIndex !== '') {
+                        $course = \App\Models\Course::where('tenant_id', $tenant->id)
+                            ->orderBy('id', 'asc')
+                            ->skip((int)$enrollCourseIndex)
+                            ->first();
+                            
+                        if ($course) {
+                            try {
+                                $this->financeService->createSale([
+                                    'student_id' => $student->id,
+                                    'items' => [['id' => $course->id, 'price' => $course->price]],
+                                    'payment_method' => 'cash',
+                                    'paid_amount' => 0, // Unpaid invoice = due amount
+                                    'notes' => 'Onboarding Enrollment',
+                                ]);
+                            } catch (\Exception $e) {
+                                \Log::error("Onboarding Finance Error: " . $e->getMessage());
+                            }
                         }
                     }
                 }
