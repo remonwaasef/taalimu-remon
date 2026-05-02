@@ -73,9 +73,9 @@
                             @foreach($sale->items as $item)
                             <tr>
                                 <td class="fw-bold">{{ $item->item->title ?? __('center::sales.unknown_item') }}</td>
-                                <td class="text-center">{{ number_format($item->price, 2) }} {{ __('center::sales.currency') }}</td>
+                                <td class="text-center">{{ number_format($item->price, 2) }} {{ get_currency_symbol() }}</td>
                                 <td class="text-center">{{ $item->quantity }}</td>
-                                <td class="text-end fw-bold">{{ number_format($item->price * $item->quantity, 2) }} {{ __('center::sales.currency') }}</td>
+                                <td class="text-end fw-bold">{{ number_format($item->price * $item->quantity, 2) }} {{ get_currency_symbol() }}</td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -88,31 +88,31 @@
                         <div class="bg-light rounded-4 p-4">
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="text-muted">{{ __('center::sales.subtotal') }}:</span>
-                                <span>{{ number_format($sale->subtotal_amount > 0 ? $sale->subtotal_amount : $sale->total_amount, 2) }} {{ __('center::sales.currency') }}</span>
+                                <span>{{ number_format($sale->subtotal_amount > 0 ? $sale->subtotal_amount : $sale->total_amount, 2) }} {{ get_currency_symbol() }}</span>
                             </div>
                             @if($sale->discount_amount > 0)
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="text-danger">{{ __('center::sales.discount') }}:</span>
-                                <span class="text-danger">-{{ number_format($sale->discount_amount, 2) }} {{ __('center::sales.currency') }}</span>
+                                <span class="text-danger">-{{ number_format($sale->discount_amount, 2) }} {{ get_currency_symbol() }}</span>
                             </div>
                             @endif
                             @if($sale->tax_amount > 0)
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="text-muted">{{ __('center::sales.tax') }}:</span>
-                                <span>+{{ number_format($sale->tax_amount, 2) }} {{ __('center::sales.currency') }}</span>
+                                <span>+{{ number_format($sale->tax_amount, 2) }} {{ get_currency_symbol() }}</span>
                             </div>
                             @endif
                             <div class="d-flex justify-content-between mb-2 border-top pt-2 mt-2">
                                 <span class="fw-bold">{{ __('center::sales.final_total') }}:</span>
-                                <span class="fw-bold">{{ number_format($sale->total_amount, 2) }} {{ __('center::sales.currency') }}</span>
+                                <span class="fw-bold">{{ number_format($sale->total_amount, 2) }} {{ get_currency_symbol() }}</span>
                             </div>
                             <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
                                 <span class="text-muted">{{ __('center::sales.paid_amount_val') }}:</span>
-                                <span class="text-success fw-bold">{{ number_format($sale->paid_amount, 2) }} {{ __('center::sales.currency') }}</span>
+                                <span class="text-success fw-bold">{{ number_format($sale->paid_amount, 2) }} {{ get_currency_symbol() }}</span>
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="fw-bold mb-0">{{ __('center::sales.remaining_label') }}</h5>
-                                <h4 class="fw-bold text-primary mb-0">{{ number_format($sale->total_amount - $sale->paid_amount, 2) }} {{ __('center::sales.currency') }}</h4>
+                                <h4 class="fw-bold text-primary mb-0">{{ number_format($sale->total_amount - $sale->paid_amount, 2) }} {{ get_currency_symbol() }}</h4>
                             </div>
                         </div>
                     </div>
@@ -141,7 +141,7 @@
                         @foreach($sale->payments as $payment)
                         <tr>
                             <td class="ps-4">{{ $payment->paid_at ? $payment->paid_at->format('Y/m/d H:i') : $payment->created_at->format('Y/m/d H:i') }}</td>
-                            <td class="fw-bold text-success">+{{ number_format($payment->amount, 2) }} {{ __('center::sales.currency') }}</td>
+                            <td class="fw-bold text-success">+{{ number_format($payment->amount, 2) }} {{ get_currency_symbol() }}</td>
                             <td><span class="badge bg-light text-dark rounded-pill px-3">{{ __('center::sales.' . $payment->payment_method) }}</span></td>
                             <td><small class="text-muted"><i class="fas fa-user-edit me-1"></i> {{ $payment->receiver->name ?? '-' }}</small></td>
                             <td><small>{{ $payment->notes }}</small></td>
@@ -156,7 +156,7 @@
                         @foreach($sale->refunds as $refund)
                         <tr>
                             <td class="ps-4 text-muted">{{ $refund->created_at->format('Y/m/d H:i') }}</td>
-                            <td class="fw-bold text-danger">-{{ number_format($refund->amount, 2) }} {{ __('center::sales.currency') }}</td>
+                            <td class="fw-bold text-danger">-{{ number_format($refund->amount, 2) }} {{ get_currency_symbol() }}</td>
                             <td><span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">{{ __('center::sales.refund_transaction') }}</span></td>
                             <td><small class="text-muted"><i class="fas fa-user-shield me-1"></i> {{ $refund->processor->name ?? '-' }}</small></td>
                             <td><small class="text-danger">{{ $refund->reason }}</small></td>
@@ -192,7 +192,7 @@
                                 <input type="number" step="0.01" name="amount" class="form-control rounded-3 shadow-none border" 
                                        placeholder="{{ __('center::sales.record_payment') }}" required max="{{ $sale->total_amount - $sale->paid_amount }}" 
                                        value="{{ $sale->total_amount - $sale->paid_amount }}">
-                                <span class="input-group-text bg-white border">{{ __('center::sales.currency') }}</span>
+                                <span class="input-group-text bg-white border">{{ get_currency_symbol() }}</span>
                             </div>
                         </div>
 
@@ -259,7 +259,7 @@
 
                     <div class="mb-4 text-center p-3 bg-light rounded-3">
                         <small class="text-muted d-block mb-1">{{ __('center::sales.refundable_amount') }}</small>
-                        <h4 class="fw-bold mb-0 text-dark">{{ number_format($sale->paid_amount, 2) }} {{ __('center::sales.currency') }}</h4>
+                        <h4 class="fw-bold mb-0 text-dark">{{ number_format($sale->paid_amount, 2) }} {{ get_currency_symbol() }}</h4>
                     </div>
 
                     <div class="mb-3">
@@ -267,7 +267,7 @@
                         <div class="input-group">
                             <input type="number" name="amount" step="0.01" class="form-control rounded-start-3" 
                                 max="{{ $sale->paid_amount }}" min="0.01" value="{{ $sale->paid_amount }}" required>
-                            <span class="input-group-text bg-light border-start-0 rounded-end-3">{{ __('center::sales.currency') }}</span>
+                            <span class="input-group-text bg-light border-start-0 rounded-end-3">{{ get_currency_symbol() }}</span>
                         </div>
                     </div>
 

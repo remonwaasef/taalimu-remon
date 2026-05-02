@@ -83,7 +83,7 @@
 
     <div class="total-box">
         <p>إجمالي المديونية المتبقية:</p>
-        <div class="total-amount">{{ number_format($totalDebt, 2) }} {{ __('center::sales.currency') }}</div>
+        <div class="total-amount">{{ number_format($totalDebt, 2) }} {{ get_currency_symbol() }}</div>
     </div>
 
     <div class="footer">

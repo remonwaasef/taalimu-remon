@@ -242,7 +242,7 @@
                     <div class="info-tile text-center">
                         <div class="fw-black fs-4">
                             {{ number_format($subscription?->total_amount ?? 0, 0) }}
-                            <small class="fs-6">{{ __('center::subscription.currency') }}</small>
+                            <small class="fs-6">{{ get_currency_symbol() }}</small>
                         </div>
                         <div class="small opacity-70">{{ __('center::subscription.total_amount') }}</div>
                     </div>
@@ -390,7 +390,7 @@
                                      data-monthly="{{ $package->old_price }}" 
                                      data-term="{{ $package->old_price * 5 }}"
                                      data-yearly="{{ $package->old_price * 12 }}">
-                                    {{ number_format((float)$oldPriceValue, 0) }} <span class="plan-currency">{{ __('center::subscription.currency') }}</span>
+                                    {{ number_format((float)$oldPriceValue, 0) }} <span class="plan-currency">{{ get_currency_symbol() }}</span>
                                 </div>
                             @endif
                             <div class="fw-black text-primary plan-price-display" style="font-size:1.6rem; line-height:1;" 
@@ -399,7 +399,7 @@
                                  data-yearly="{{ $package->yearly_price ?: ($package->price * 12) }}">
                                 {{ number_format((float)$currentPrice, 0) }}
                             </div>
-                            <small class="text-muted"><span class="plan-currency">{{ __('center::subscription.currency') }}</span> / <span class="plan-cycle-text">{{ $cycleText }}</span></small>
+                            <small class="text-muted"><span class="plan-currency">{{ get_currency_symbol() }}</span> / <span class="plan-cycle-text">{{ $cycleText }}</span></small>
                             @if($package->old_price && $package->old_price > $package->price)
                                 <div class="mt-1">
                                     <span class="badge bg-warning text-white rounded-pill px-2 py-1 shadow-sm" style="font-size: 0.7rem; background-color: #f59e0b !important;">

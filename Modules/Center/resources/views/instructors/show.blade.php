@@ -216,7 +216,7 @@
                         <div class="mb-3">
                             <label class="form-label small fw-bold">{{ __('center::instructors.amount_to_payout') }}</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-light border-end-0 rounded-start-3">EGP</span>
+                                <span class="input-group-text bg-light border-end-0 rounded-start-3">{{ get_currency_symbol() }}</span>
                                 <input type="number" name="amount" step="0.01" class="form-control border-start-0 rounded-end-3" 
                                     max="{{ $instructor->outstanding_balance }}" min="1" value="{{ $instructor->outstanding_balance }}" required>
                             </div>

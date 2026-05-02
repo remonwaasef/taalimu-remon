@@ -138,6 +138,11 @@ class OnboardingController extends Controller
         ];
 
         if (isset($currencyMap[$request->locale])) {
+            if (!isset($settings['financial'])) {
+                $settings['financial'] = [];
+            }
+            $settings['financial']['currency'] = $currencyMap[$request->locale];
+            // Also keep a legacy/flat version if other parts of the system depend on it
             $settings['currency'] = $currencyMap[$request->locale];
         }
         if (isset($systemMap[$request->locale])) {
@@ -166,7 +171,13 @@ class OnboardingController extends Controller
             // Save Settings
             $settings = $tenant->settings ?? [];
             $settings['default_locale'] = $request->locale;
-            $settings['currency'] = $request->currency;
+            
+            if (!isset($settings['financial'])) {
+                $settings['financial'] = [];
+            }
+            $settings['financial']['currency'] = $request->currency;
+            $settings['currency'] = $request->currency; // Legacy support
+            
             $settings['education_system'] = $request->education_system;
             
             $tenant->settings = $settings;
