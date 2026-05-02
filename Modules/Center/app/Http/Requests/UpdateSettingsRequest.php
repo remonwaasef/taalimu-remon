@@ -15,7 +15,7 @@ class UpdateSettingsRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|required|string|max:255',
-            'phone' => 'nullable|string|max:20',
+            'phone' => ['nullable', 'string', 'max:20', 'regex:/^[0-9\+\-\s\(\)]+$/'],
             'address' => 'nullable|string|max:500',
             'description' => 'nullable|string',
             'facebook_url' => 'nullable|url',

@@ -194,7 +194,7 @@
                                                 </div>
                                                 <div>
                                                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">{{ __('onboarding.step_2.phone_label') }}</label>
-                                                    <input type="tel" x-model="instructor.instructor_phone" dir="ltr" placeholder="01xxxxxxxxx" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-5 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
+                                                    <input type="tel" x-model="instructor.instructor_phone" @input="instructor.instructor_phone = $event.target.value.replace(/[^0-9\+\-\(\)\s]/g, '')" dir="ltr" placeholder="01xxxxxxxxx" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-5 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -274,7 +274,7 @@
                                                 <div>
                                                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_3.price_label') }}</label>
                                                     <div class="relative">
-                                                        <input type="number" x-model="course.price" placeholder="0.00" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
+                                                        <input type="number" x-model="course.price" placeholder="0.00" min="0" step="0.01" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
                                                         <div class="absolute inset-y-0 ltr:right-6 rtl:left-6 flex items-center pointer-events-none text-slate-400 font-bold text-xs">
                                                             <span x-text="formData.step_1.currency"></span>
                                                         </div>
@@ -368,7 +368,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">{{ __('onboarding.step_4.phone_label') }}</label>
-                                    <input type="text" x-model="formData.step_4.student_phone" dir="ltr" placeholder="01xxxxxxxxx" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5" required>
+                                    <input type="text" x-model="formData.step_4.student_phone" @input="formData.step_4.student_phone = $event.target.value.replace(/[^0-9\+\-\(\)\s]/g, '')" dir="ltr" placeholder="01xxxxxxxxx" class="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-14 px-6 text-base font-bold transition-all focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5" required>
                                 </div>
                             </div>
 
