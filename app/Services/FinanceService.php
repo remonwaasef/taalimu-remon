@@ -246,17 +246,29 @@ class FinanceService
                 
                 $subjectKey = "notif_payment_confirmed_subject_{$locale}";
                 $bodyKey = "notif_payment_confirmed_body_{$locale}";
+
+                $defaultSubjects = [
+                    'ar' => 'تأكيد استلام دفعة',
+                    'en' => 'Payment Confirmation',
+                    'fr' => 'Confirmation de paiement',
+                ];
                 
-                $subject = $tenantSettings[$subjectKey] ?? $tenantSettings['notif_payment_confirmed_subject'] ?? 'تأكيد استلام دفعة';
+                $subject = $tenantSettings[$subjectKey] ?? $tenantSettings['notif_payment_confirmed_subject'] ?? ($defaultSubjects[$locale] ?? $defaultSubjects['en']);
                 $body = $tenantSettings[$bodyKey] ?? $tenantSettings['notif_payment_confirmed_body'] ?? '';
                 
+                $currencySymbol = function_exists('get_currency_symbol') ? get_currency_symbol() : ($tenant->settings['financial']['currency'] ?? 'EGP');
+
                 $variables = [
                     'student_name' => $student->name, // Standardized key
                     'اسم_الطالب' => $student->name,
+                    'center_name' => $tenant->name,
                     'اسم_المركز' => $tenant->name,
-                    'المبلغ_المدفوع' => $amount . ' ' . ($tenant->settings['currency'] ?? 'ج.م'),
+                    'المبلغ_المدفوع' => $amount . ' ' . $currencySymbol,
+                    'paid_amount' => $amount . ' ' . $currencySymbol,
                     'تاريخ_الدفع' => now()->format('Y-m-d'),
-                    'المتبقي' => max(0, $balance) . ' ' . ($tenant->settings['currency'] ?? 'ج.م'),
+                    'payment_date' => now()->format('Y-m-d'),
+                    'المتبقي' => max(0, $balance) . ' ' . $currencySymbol,
+                    'remaining' => max(0, $balance) . ' ' . $currencySymbol,
                     'payment_method' => $method,
                     'طريقة_الدفع' => $method,
                 ];

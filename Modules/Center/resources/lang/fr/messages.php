@@ -1089,4 +1089,11 @@ return [
   'thursday' => 'Thursday',
   'friday' => 'Friday',
   'saturday' => 'Saturday',
+  'first_student_onboarding' => 'Bienvenue ! La configuration de votre centre est terminée. Vous pouvez maintenant enregistrer les présences et percevoir les frais.',
+  'no_outstanding_debts' => 'Cet élève n\'a aucune dette impayée.',
+  'debt_reminder_sent' => 'Rappel de dette envoyé via WhatsApp avec succès.',
+  'debt_reminder_failed' => 'Échec de l\'envoi du rappel. Assurez-vous que WhatsApp est configuré et que l\'élève a un numéro de téléphone valide.',
+  'no_student_email' => 'Cet élève n\'a pas d\'adresse e-mail enregistrée.',
+  'email_sent_success' => 'E-mail envoyé à l\'élève avec succès.',
+  'email_send_error' => 'Une erreur s\'est produite lors de l\'envoi',
 ];
