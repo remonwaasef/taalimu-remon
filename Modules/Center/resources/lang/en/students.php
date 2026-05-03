@@ -122,7 +122,7 @@ We are happy to have you with us! 🎉
 Your login details:
 Platform link: :url
 Email: :email
-Password: :password
+Password: (Sent to you or ask administration)
 
 Tip: You will be asked to change your password upon your first login for security.',
   'debt_reminder_msg' => 'Hello, please settle the outstanding fees for the student: :name',
