@@ -336,12 +336,9 @@ class StudentController extends Controller
             // Add BOM for Excel compatibility with Arabic
             fputs($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
             
-            // Force Excel to recognize comma separator
-            fputs($handle, "sep=,\n");
-            
-            // CSV Header
+            // CSV Header (using semicolon for Arabic/European Excel default)
             $headers = ['name', 'email', 'phone', 'grade_level'];
-            fputcsv($handle, $headers);
+            fputcsv($handle, $headers, ';');
 
             // Fetch a few real grades for this tenant to use as realistic examples
             $grades = \App\Models\Grade::where('tenant_id', $this->tenant->id)->limit(3)->get();
@@ -362,7 +359,7 @@ class StudentController extends Controller
             }
 
             foreach ($data as $row) {
-                fputcsv($handle, $row);
+                fputcsv($handle, $row, ';');
             }
             
             fclose($handle);
