@@ -88,11 +88,11 @@
                                 <!-- Live Preview -->
                                 <div id="previewSection" class="mb-4 d-none">
                                     <h6 class="fw-bold mb-2">👀 معاينة البيانات (<span id="previewCount">0</span> طالب):</h6>
-                                    <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
-                                        <table class="table table-sm table-bordered table-hover" id="previewTable">
-                                            <thead class="table-dark">
+                                    <div class="border rounded" style="max-height: 250px; overflow-y: auto; overflow-x: hidden; position: relative;">
+                                        <table class="table table-sm table-bordered table-hover mb-0" id="previewTable" style="table-layout: fixed; width: 100%; font-size: 14px;">
+                                            <thead class="table-dark" style="position: sticky; top: 0; z-index: 1;">
                                                 <tr>
-                                                    <th>#</th>
+                                                    <th style="width: 50px;">#</th>
                                                     <th>الاسم</th>
                                                     <th>الإيميل</th>
                                                     <th>الهاتف</th>
