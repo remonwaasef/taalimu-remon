@@ -431,10 +431,12 @@ class StudentService
         
         // 1. Pre-fetch Data for Validation (Memory Optimization)
         $inputEmails = collect($csvData)->pluck(1)->filter()->unique()->toArray();
+        $inputPhones = collect($csvData)->pluck(2)->filter()->unique()->toArray();
         $inputGradeNames = collect($csvData)->pluck(3)->filter()->unique()->toArray();
         
-        // Fetch existing emails in one query
+        // Fetch existing emails and phones in one query
         $existingEmails = User::whereIn('email', $inputEmails)->pluck('email')->flip(); 
+        $existingPhones = User::whereIn('phone', $inputPhones)->pluck('phone')->flip(); 
         
         // Fetch Grades in one query
         $grades = \App\Models\Grade::where('tenant_id', $tenantId)
@@ -450,6 +452,7 @@ class StudentService
         $usersToInsert = [];
         $studentsToInsert = [];
         $seenEmails = [];
+        $seenPhones = [];
         $now = now();
         $passwordHash = Hash::make(Str::random(12)); // Common hash for initial import, users change it later
 
@@ -476,14 +479,21 @@ class StudentService
                 }
             }
 
-            // Check Duplicate Email (Memory Check)
+            // Check Duplicate Email
             if ($existingEmails->has($email) || isset($seenEmails[$email])) {
                 $errors[] = "Row {$rowIndex}: Email {$email} already exists or is duplicated in file.";
                 continue;
             }
             
-            // Mark email as seen to prevent duplicates in the same batch
+            // Check Duplicate Phone
+            if ($existingPhones->has($phone) || isset($seenPhones[$phone])) {
+                $errors[] = "Row {$rowIndex}: Phone {$phone} already exists or is duplicated in file.";
+                continue;
+            }
+            
+            // Mark email and phone as seen to prevent duplicates in the same batch
             $seenEmails[$email] = true;
+            $seenPhones[$phone] = true;
             
             // Resolve Grade
             $gradeId = $gradesMap->get($gradeLevel);
