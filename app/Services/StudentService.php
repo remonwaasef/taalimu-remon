@@ -449,6 +449,7 @@ class StudentService
         // Prepare chunks for bulk insertion
         $usersToInsert = [];
         $studentsToInsert = [];
+        $seenEmails = [];
         $now = now();
         $passwordHash = Hash::make(Str::random(12)); // Common hash for initial import, users change it later
 
@@ -476,10 +477,13 @@ class StudentService
             }
 
             // Check Duplicate Email (Memory Check)
-            if ($existingEmails->has($email)) {
-                $errors[] = "Row {$rowIndex}: Email {$email} already exists.";
+            if ($existingEmails->has($email) || isset($seenEmails[$email])) {
+                $errors[] = "Row {$rowIndex}: Email {$email} already exists or is duplicated in file.";
                 continue;
             }
+            
+            // Mark email as seen to prevent duplicates in the same batch
+            $seenEmails[$email] = true;
             
             // Resolve Grade
             $gradeId = $gradesMap->get($gradeLevel);
