@@ -330,35 +330,52 @@ class StudentController extends Controller
     {
         $this->authorize('create', Student::class);
 
-        // Fetch a few real grades for this tenant to use as realistic examples
+        // Fetch real grades for this tenant
         $grades = \App\Models\Grade::where('tenant_id', $this->tenant->id)->limit(3)->get();
         
-        $data = [];
-        $data[] = ['name', 'email', 'phone', 'grade_level']; // headers
-        
+        $sampleData = [];
         if ($grades->isEmpty()) {
-            $data[] = ['Ahmed Ali', 'ahmed1@example.com', '01012345678', 'Primary 1'];
-            $data[] = ['Sara Khaled', 'sara2@example.com', '01023456789', 'Primary 2'];
+            $sampleData[] = ['Ahmed Ali', 'ahmed1@example.com', '01012345678', 'Primary 1'];
+            $sampleData[] = ['Sara Khaled', 'sara2@example.com', '01023456789', 'Primary 2'];
         } else {
-            $data[] = ['Ahmed Ali', 'ahmed1@example.com', '01012345678', $grades->first()->name];
+            $sampleData[] = ['Ahmed Ali', 'ahmed1@example.com', '01012345678', $grades->first()->name];
             if ($grades->count() > 1) {
-                $data[] = ['Sara Khaled', 'sara2@example.com', '01023456789', $grades->skip(1)->first()->name];
+                $sampleData[] = ['Sara Khaled', 'sara2@example.com', '01023456789', $grades->skip(1)->first()->name];
             }
         }
 
-        $csv = chr(0xEF) . chr(0xBB) . chr(0xBF); // UTF-8 BOM
+        // Generate HTML table that Excel reads natively with full Arabic support
+        $html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">';
+        $html .= '<head><meta charset="UTF-8">';
+        $html .= '<!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>';
+        $html .= '<x:Name>Students</x:Name>';
+        $html .= '<x:WorksheetOptions><x:DisplayRightToLeft/><x:DisplayGridlines/></x:WorksheetOptions>';
+        $html .= '</x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->';
+        $html .= '<style>td{mso-number-format:\@;padding:5px;border:1px solid #ccc;font-family:Arial,sans-serif;font-size:12pt;} th{background:#4CAF50;color:#fff;padding:8px;border:1px solid #388E3C;font-family:Arial,sans-serif;font-size:12pt;font-weight:bold;}</style>';
+        $html .= '</head><body>';
+        $html .= '<table>';
         
-        $fp = fopen('php://temp', 'r+');
-        foreach ($data as $fields) {
-            fputcsv($fp, $fields);
+        // Header row
+        $html .= '<tr>';
+        foreach (['name', 'email', 'phone', 'grade_level'] as $header) {
+            $html .= '<th>' . e($header) . '</th>';
         }
-        rewind($fp);
-        $csv .= stream_get_contents($fp);
-        fclose($fp);
+        $html .= '</tr>';
+        
+        // Data rows
+        foreach ($sampleData as $row) {
+            $html .= '<tr>';
+            foreach ($row as $cell) {
+                $html .= '<td>' . e($cell) . '</td>';
+            }
+            $html .= '</tr>';
+        }
+        
+        $html .= '</table></body></html>';
 
-        return response($csv)
-            ->header('Content-Type', 'text/csv; charset=UTF-8')
-            ->header('Content-Disposition', 'attachment; filename="students-template.csv"');
+        return response($html)
+            ->header('Content-Type', 'application/vnd.ms-excel; charset=UTF-8')
+            ->header('Content-Disposition', 'attachment; filename="students-template.xls"');
     }
 
     /**
