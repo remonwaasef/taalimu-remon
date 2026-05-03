@@ -602,10 +602,15 @@
                     if (this.loading) return;
                     this.loading = true;
                     try {
+                        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                         const response = await fetch('{{ route('center.onboarding.submit') }}', {
                             method: 'POST',
-                            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                            body: JSON.stringify({ _token: '{{ csrf_token() }}', step: stepId, skip: skip, ...this.formData[stepId] })
+                            headers: { 
+                                'Content-Type': 'application/json', 
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken
+                            },
+                            body: JSON.stringify({ step: stepId, skip: skip, ...this.formData[stepId] })
                         });
                         const data = await response.json();
                         if (!response.ok) throw new Error(data.message || 'Error');
@@ -617,7 +622,20 @@
                             window.scrollTo({ top: 0, behavior: 'smooth' });
                         }
                     } catch (error) {
-                        Swal.fire({ icon: 'error', title: 'Error', text: error.message, confirmButtonColor: '#10b981' });
+                        let errorMessage = error.message;
+                        let errorTitle = '{{ app()->getLocale() === 'ar' ? 'عذراً، حدث خطأ' : (app()->getLocale() === 'fr' ? 'Oups, une erreur est survenue' : 'Oops, an error occurred') }}';
+                        
+                        if (errorMessage.includes('CSRF token mismatch') || errorMessage.includes('419')) {
+                            errorMessage = '{{ app()->getLocale() === 'ar' ? 'انتهت مدة الجلسة بسبب عدم النشاط. يرجى تحديث الصفحة والمحاولة مرة أخرى.' : (app()->getLocale() === 'fr' ? 'La session a expiré pour cause d\'inactivité. Veuillez actualiser la page et réessayer.' : 'Session expired due to inactivity. Please refresh the page and try again.') }}';
+                        }
+                        
+                        Swal.fire({ 
+                            icon: 'error', 
+                            title: errorTitle, 
+                            text: errorMessage, 
+                            confirmButtonColor: '#10b981',
+                            confirmButtonText: '{{ app()->getLocale() === 'ar' ? 'حسناً' : 'OK' }}'
+                        });
                     } finally { this.loading = false; }
                 }
             }));
