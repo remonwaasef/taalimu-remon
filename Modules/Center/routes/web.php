@@ -133,7 +133,7 @@ $tenantRoutes = function () {
             Route::post('students', [StudentController::class, 'store'])->name('center.students.store');
             Route::get('students/import', [StudentController::class, 'importForm'])->name('center.students.import');
             Route::post('students/import', [StudentController::class, 'import'])
-                ->middleware('throttle:5,1')
+                ->middleware('throttle:20,1')
                 ->name('center.students.import.post');
         });
 
