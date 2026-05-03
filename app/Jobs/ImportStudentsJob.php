@@ -94,6 +94,13 @@ class ImportStudentsJob implements ShouldQueue
             }
 
             while (($data = fgetcsv($handle, 1000, $delimiter)) !== false) {
+                // Convert each column from Windows-1256 (or ANSI) to UTF-8 if necessary
+                $data = array_map(function($val) {
+                    if (empty($val)) return $val;
+                    $encoding = mb_detect_encoding($val, 'UTF-8, Windows-1256, ISO-8859-1', true);
+                    return $encoding !== 'UTF-8' ? @mb_convert_encoding($val, 'UTF-8', $encoding ?: 'Windows-1256') : $val;
+                }, $data);
+                
                 yield $data;
             }
             fclose($handle);

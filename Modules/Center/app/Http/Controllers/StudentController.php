@@ -333,8 +333,7 @@ class StudentController extends Controller
         return response()->streamDownload(function () {
             $handle = fopen('php://output', 'w');
             
-            // Add BOM for Excel compatibility with Arabic
-            fputs($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
+            // NO BOM - we will use Windows-1256 for native Excel support in Arab regions
             
             // CSV Header (using comma for standard Excel default)
             $headers = ['name', 'email', 'phone', 'grade_level'];
@@ -359,7 +358,11 @@ class StudentController extends Controller
             }
 
             foreach ($data as $row) {
-                fputcsv($handle, $row);
+                // Convert UTF-8 to Windows-1256 so legacy Excel reads and saves it correctly
+                $encodedRow = array_map(function($val) {
+                    return @mb_convert_encoding($val, 'Windows-1256', 'UTF-8');
+                }, $row);
+                fputcsv($handle, $encodedRow);
             }
             
             fclose($handle);
