@@ -8,6 +8,7 @@ use App\Models\Course;
 use App\Models\Student;
 use App\Models\Payment;
 use App\Models\Commission;
+use App\Models\Enrollment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
@@ -36,6 +37,7 @@ class FinanceService
     {
         return DB::transaction(function () use ($data) {
             $tenantId = app('tenant')->id;
+            $student = Student::find($data['student_id']);
 
             // 1. Fetch actual prices from DB — scoped to current tenant to prevent cross-tenant manipulation
             $courseIds = collect($data['items'])->pluck('id')->toArray();

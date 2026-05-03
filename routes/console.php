@@ -27,3 +27,6 @@ Schedule::command('app:send-weekly-telegram-report')->weeklyOn(0, '08:00');
 Schedule::command('app:check-inactive-tenants')->dailyAt('11:00');
 // Daily Issue Digest (Daily at 08:30 AM)
 Schedule::call(fn() => app(\App\Services\IssueNotifier::class)->sendDailyDigest())->dailyAt('08:30');
+
+// Onboarding Emails Sequence (Draft mode, controlled by env ENABLE_ONBOARDING_EMAILS)
+Schedule::command('onboarding:send-emails')->dailyAt('10:00');
