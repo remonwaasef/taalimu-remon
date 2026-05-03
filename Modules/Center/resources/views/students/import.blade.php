@@ -43,7 +43,7 @@
                                     <h6 class="fw-bold mb-1">📥 تحميل ملف نموذجي</h6>
                                     <small class="text-muted">{{ __('center::students.import.desc') }}</small>
                                 </div>
-                                <a href="{{ route('center.students.template', ['tenant' => tenant()->domain]) }}" class="btn btn-outline-primary rounded-pill px-4">{{ __('center::students.import.download_template') }}</a>
+                                <a href="{{ route('center.students.template', ['tenant' => app('tenant')->domain]) }}" class="btn btn-outline-primary rounded-pill px-4">{{ __('center::students.import.download_template') }}</a>
                             </div>
                         </div>
                         
