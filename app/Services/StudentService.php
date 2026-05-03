@@ -284,7 +284,7 @@ class StudentService
                     $student->id,
                     $student->name,
                     $student->email,
-                    $student->phone,
+                    " " . $student->phone,
                     $student->grade_level_name, // Accessor
                     $student->school_name ?? '---',
                     $student->section_type ?? '---',
