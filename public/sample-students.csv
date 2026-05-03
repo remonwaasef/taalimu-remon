@@ -1,6 +1,6 @@
-﻿name,email,phone,grade_level
-"أحمد محمد",ahmed1@example.com,01012345678,1
-"سارة خالد",sara2@example.com,01023456789,2
-"محمد علي",mohamed3@example.com,01034567890,3
-"فاطمة سعيد",fatima4@example.com,01045678901,4
-"خالد عبد الله",khaled5@example.com,01056789012,5
+name,email,phone,grade_level
+"Ahmed Ali",ahmed1@example.com,01012345678,1
+"Sara Khaled",sara2@example.com,01023456789,2
+"Mohamed Omar",mohamed3@example.com,01034567890,3
+"Fatima Saeed",fatima4@example.com,01045678901,4
+"John Doe",john5@example.com,01056789012,5

@@ -43,7 +43,7 @@
                                     <h6 class="fw-bold mb-1">📥 تحميل ملف نموذجي</h6>
                                     <small class="text-muted">{{ __('center::students.import.desc') }}</small>
                                 </div>
-                                <a href="{{ asset('sample-students.csv') }}" download="students-template.csv" class="btn btn-outline-primary rounded-pill px-4">{{ __('center::students.import.download_template') }}</a>
+                                <a href="{{ asset('sample-students.csv?v=' . time()) }}" download="students-template.csv" class="btn btn-outline-primary rounded-pill px-4">{{ __('center::students.import.download_template') }}</a>
                             </div>
                         </div>
                         
