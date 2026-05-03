@@ -460,7 +460,7 @@
                                                             </button>
                                                             <div class="form-check form-switch custom-switch mb-0">
                                                                 <input type="hidden" name="settings[email_templates][notif_payment_reminder_enabled]" value="0">
-                                                                <input class="form-check-input" type="checkbox" name="settings[email_templates][notif_payment_reminder_enabled]" value="1" id="notifPaymentReminder" {{ ($emailSettings['notif_payment_reminder_enabled'] ?? false) ? 'checked' : '' }}>
+                                                                <input class="form-check-input" type="checkbox" name="settings[email_templates][notif_payment_reminder_enabled]" value="1" id="notifPaymentReminder" {{ ($emailSettings['notif_payment_reminder_enabled'] ?? true) ? 'checked' : '' }}>
                                                                 <label class="form-check-label fw-bold small ms-2" for="notifPaymentReminder">{{ __('center::settings.email_templates.notif_active') }}</label>
                                                             </div>
                                                         </div>
@@ -504,7 +504,7 @@
                                                         <span class="fw-bold small text-muted">{{ __('center::settings.email_templates.notif_status') }}</span>
                                                         <div class="form-check form-switch custom-switch mb-0">
                                                             <input type="hidden" name="settings[email_templates][notif_group_enrollment_enabled]" value="0">
-                                                            <input class="form-check-input" type="checkbox" name="settings[email_templates][notif_group_enrollment_enabled]" value="1" id="notifGroupEnrollment" {{ ($emailSettings['notif_group_enrollment_enabled'] ?? false) ? 'checked' : '' }}>
+                                                            <input class="form-check-input" type="checkbox" name="settings[email_templates][notif_group_enrollment_enabled]" value="1" id="notifGroupEnrollment" {{ ($emailSettings['notif_group_enrollment_enabled'] ?? true) ? 'checked' : '' }}>
                                                             <label class="form-check-label fw-bold small ms-2" for="notifGroupEnrollment">{{ __('center::settings.email_templates.notif_active') }}</label>
                                                         </div>
                                                     </div>
@@ -571,7 +571,7 @@
                                                         <span class="fw-bold small text-muted">{{ __('center::settings.email_templates.notif_status') }}</span>
                                                         <div class="form-check form-switch custom-switch mb-0">
                                                             <input type="hidden" name="settings[email_templates][notif_payment_confirmed_enabled]" value="0">
-                                                            <input class="form-check-input" type="checkbox" name="settings[email_templates][notif_payment_confirmed_enabled]" value="1" id="notifPaymentConfirmed" {{ ($emailSettings['notif_payment_confirmed_enabled'] ?? false) ? 'checked' : '' }}>
+                                                            <input class="form-check-input" type="checkbox" name="settings[email_templates][notif_payment_confirmed_enabled]" value="1" id="notifPaymentConfirmed" {{ ($emailSettings['notif_payment_confirmed_enabled'] ?? true) ? 'checked' : '' }}>
                                                             <label class="form-check-label fw-bold small ms-2" for="notifPaymentConfirmed">{{ __('center::settings.email_templates.notif_active') }}</label>
                                                         </div>
                                                     </div>

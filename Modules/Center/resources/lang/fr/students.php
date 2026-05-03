@@ -122,7 +122,7 @@ Nous sommes ravis de vous avoir parmi nous ! 🎉
 Vos identifiants de connexion :
 Lien de la plateforme : :url
 Email : :email
-Mot de passe : :password
+Mot de passe : (Envoyé ou demandez à l\'administration)
 
 Conseil : Il vous sera demandé de modifier votre mot de passe lors de votre première connexion pour plus de sécurité.',
   'debt_reminder_msg' => 'Bonjour, veuillez régler les frais impayés pour l\'étudiant : :name',
