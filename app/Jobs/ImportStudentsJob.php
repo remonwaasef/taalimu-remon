@@ -9,7 +9,7 @@ class ImportStudentsJob implements ShouldQueue
 {
     use Queueable;
 
-    protected $csvData;
+    protected $filePath;
     protected $tenantId;
     protected $adminId;
     
