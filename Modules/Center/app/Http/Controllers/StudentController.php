@@ -388,7 +388,7 @@ class StudentController extends Controller
     }
 
     /**
-     * Handle the CSV import.
+     * Handle the file import (CSV or XLS).
      */
     public function import(Request $request)
     {
@@ -400,10 +400,47 @@ class StudentController extends Controller
         }
 
         $request->validate([
-            'file' => 'required|file|mimes:csv,txt|max:5120', // Up to 5MB
+            'file' => 'required|file|max:5120', // Up to 5MB
         ]);
 
-        $path = $request->file('file')->store('temp/imports');
+        $file = $request->file('file');
+        $extension = strtolower($file->getClientOriginalExtension());
+        
+        // If XLS/HTML file, convert it to CSV first
+        if (in_array($extension, ['xls', 'xlsx'])) {
+            $htmlContent = file_get_contents($file->getRealPath());
+            
+            // Parse the HTML table into CSV
+            $csvPath = 'temp/imports/' . uniqid('import_') . '.csv';
+            $fullCsvPath = storage_path('app/' . $csvPath);
+            
+            // Ensure directory exists
+            if (!is_dir(dirname($fullCsvPath))) {
+                mkdir(dirname($fullCsvPath), 0755, true);
+            }
+            
+            $fp = fopen($fullCsvPath, 'w');
+            // Add UTF-8 BOM
+            fputs($fp, chr(0xEF) . chr(0xBB) . chr(0xBF));
+            
+            // Extract table rows from HTML
+            if (preg_match_all('/<tr[^>]*>(.*?)<\/tr>/si', $htmlContent, $rows)) {
+                foreach ($rows[1] as $row) {
+                    // Extract cells (both th and td)
+                    if (preg_match_all('/<(?:td|th)[^>]*>(.*?)<\/(?:td|th)>/si', $row, $cells)) {
+                        $rowData = array_map(function($cell) {
+                            return trim(strip_tags(html_entity_decode($cell, ENT_QUOTES, 'UTF-8')));
+                        }, $cells[1]);
+                        fputcsv($fp, $rowData);
+                    }
+                }
+            }
+            fclose($fp);
+            
+            $path = $csvPath;
+        } else {
+            $path = $file->store('temp/imports');
+        }
         
         \App\Jobs\ImportStudentsJob::dispatchSync($path, $this->tenant->id, auth()->id());
 
