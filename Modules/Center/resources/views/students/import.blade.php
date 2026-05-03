@@ -14,7 +14,7 @@
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-header bg-white border-0 py-3 px-4">
-                    <h5 class="fw-bold mb-0">رفع ملف CSV</h5>
+                    <h5 class="fw-bold mb-0">رفع ملف بيانات الطلاب</h5>
                 </div>
                 <div class="card-body p-4">
                     @if(session('success'))
@@ -48,10 +48,10 @@
                         </div>
                         
                         <div class="mb-4">
-                            <label for="file" class="form-label fw-bold">اختر ملف CSV</label>
-                            <input type="file" class="form-control rounded-pill" id="file" name="file" required accept=".csv, .txt">
+                            <label for="file" class="form-label fw-bold">اختر ملف بيانات الطلاب</label>
+                            <input type="file" class="form-control rounded-pill" id="file" name="file" required accept=".csv,.xls,.xlsx,.txt">
                             <small class="form-text text-muted mt-2 d-block">
-                                يجب أن يكون الملف بصيغة CSV. الحقول الإلزامية: <strong>name, email</strong>. الحقول الاختيارية: phone, parent_phone, grade_level.
+                                يمكنك رفع ملف Excel (.xls) أو CSV. الحقول الإلزامية: <strong>name, email</strong>. الحقول الاختيارية: phone, grade_level.
                             </small>
                         </div>
 
@@ -84,7 +84,7 @@
                 <div class="card-body p-4">
                     <h6 class="fw-bold mb-3">💡 إرشادات سريعة</h6>
                     <ul class="mb-0">
-                        <li class="mb-2">{{ __('center::students.import.ensure_csv_format') }}<code>.csv</code></li>
+                        <li class="mb-2">{{ __('center::students.import.ensure_csv_format') }}<code>.xls</code> أو <code>.csv</code></li>
                         <li class="mb-2">{{ __('center::students.import.headers_must_match') }}</li>
                         <li class="mb-2">{{ __('center::students.import.unique_email_tip') }}</li>
                         <li>{{ __('center::students.import.default_password_tip') }}<code>password123</code></li>
