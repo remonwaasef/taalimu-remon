@@ -62,8 +62,23 @@ class ImportStudentsJob implements ShouldQueue
 
             // Auto-detect delimiter
             $firstLine = fgets($handle);
-            $delimiter = strpos($firstLine, ';') !== false ? ';' : ',';
+            
+            // Handle Excel's sep=, hint
+            if (strpos(trim($firstLine), 'sep=') === 0) {
+                // The separator is explicitly defined, extract it
+                $delimiter = substr(trim($firstLine), 4, 1);
+                $firstLine = fgets($handle); // Read the actual first line (header)
+            } else {
+                $delimiter = strpos($firstLine, ';') !== false ? ';' : ',';
+            }
+            
+            // Go back to the beginning to read properly with fgetcsv
             rewind($handle);
+            
+            // Skip the sep= line if we found it
+            if (strpos(trim(fgets($handle)), 'sep=') !== 0) {
+                rewind($handle); // If no sep=, go back to start
+            }
 
             // Skip header if present (heuristic)
             $header = fgetcsv($handle, 1000, $delimiter);
