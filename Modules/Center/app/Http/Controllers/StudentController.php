@@ -324,6 +324,51 @@ class StudentController extends Controller
         ]);
     }
     /**
+     * Download dynamic import template with real grades.
+     */
+    public function downloadTemplate()
+    {
+        $this->authorize('create', Student::class);
+
+        return response()->streamDownload(function () {
+            $handle = fopen('php://output', 'w');
+            
+            // Add BOM for Excel compatibility with Arabic
+            fputs($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
+            
+            // CSV Header
+            $headers = ['name', 'email', 'phone', 'grade_level'];
+            fputcsv($handle, $headers);
+
+            // Fetch a few real grades for this tenant to use as realistic examples
+            $grades = \App\Models\Grade::where('tenant_id', $this->tenant->id)->limit(3)->get();
+            
+            if ($grades->isEmpty()) {
+                // Fallback generic data
+                $data = [
+                    ['Ahmed Ali', 'ahmed1@example.com', '01012345678', 'Primary 1'],
+                    ['Sara Khaled', 'sara2@example.com', '01023456789', 'Primary 2'],
+                ];
+            } else {
+                $data = [
+                    ['Ahmed Ali', 'ahmed1@example.com', '01012345678', $grades->first()->name],
+                ];
+                if ($grades->count() > 1) {
+                    $data[] = ['Sara Khaled', 'sara2@example.com', '01023456789', $grades->skip(1)->first()->name];
+                }
+            }
+
+            foreach ($data as $row) {
+                fputcsv($handle, $row);
+            }
+            
+            fclose($handle);
+        }, 'students-template.csv', [
+            'Content-Type' => 'text/csv',
+        ]);
+    }
+
+    /**
      * Show the import form.
      */
     public function importForm()
