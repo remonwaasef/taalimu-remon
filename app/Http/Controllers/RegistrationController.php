@@ -261,6 +261,17 @@ class RegistrationController extends Controller
             
             event(new Registered($user));
             
+            // Send Onboarding Email 1 (Welcome) if enabled
+            if (env('ENABLE_ONBOARDING_EMAILS', false)) {
+                try {
+                    \Illuminate\Support\Facades\Mail::to($user->email)->send(
+                        new \App\Mail\TenantOnboardingMail($tenant, $user, 1)
+                    );
+                } catch (\Exception $e) {
+                    \Log::error('Failed to send onboarding email 1: ' . $e->getMessage());
+                }
+            }
+            
             // Set Spatie Team Context
             app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
             $user->assignRole($user->role);
