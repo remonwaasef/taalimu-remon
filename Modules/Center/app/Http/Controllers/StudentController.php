@@ -350,7 +350,7 @@ class StudentController extends Controller
 
         $path = $request->file('file')->store('temp/imports');
         
-        \App\Jobs\ImportStudentsJob::dispatch($path, $this->tenant->id, auth()->id());
+        \App\Jobs\ImportStudentsJob::dispatchSync($path, $this->tenant->id, auth()->id());
 
         return redirect()->route('center.students.index', ['tenant' => $this->tenant->domain])
             ->with('success', __('center::messages.msg_086'));
