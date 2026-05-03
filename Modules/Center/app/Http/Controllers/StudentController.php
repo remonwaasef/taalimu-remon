@@ -388,7 +388,7 @@ class StudentController extends Controller
     }
 
     /**
-     * Handle the file import (CSV or XLS).
+     * Handle the file import (CSV or Paste from Excel).
      */
     public function import(Request $request)
     {
@@ -399,47 +399,62 @@ class StudentController extends Controller
             return redirect()->back()->with('error', __('center::messages.msg_085'));
         }
 
-        $request->validate([
-            'file' => 'required|file|max:5120', // Up to 5MB
-        ]);
+        $method = $request->input('import_method', 'file');
 
-        $file = $request->file('file');
-        $extension = strtolower($file->getClientOriginalExtension());
-        
-        // If XLS/HTML file, convert it to CSV first
-        if (in_array($extension, ['xls', 'xlsx'])) {
-            $htmlContent = file_get_contents($file->getRealPath());
-            
-            // Parse the HTML table into CSV
-            $csvPath = 'temp/imports/' . uniqid('import_') . '.csv';
+        if ($method === 'paste') {
+            // Paste from Excel method
+            $request->validate([
+                'paste_data' => 'required|string|min:5',
+            ]);
+
+            $pasteData = $request->input('paste_data');
+            $lines = array_filter(explode("\n", $pasteData), fn($line) => trim($line) !== '');
+
+            if (empty($lines)) {
+                return redirect()->back()->withErrors(['paste_data' => 'لا توجد بيانات صالحة للاستيراد.']);
+            }
+
+            // Convert pasted data to CSV file
+            $csvPath = 'temp/imports/' . uniqid('paste_') . '.csv';
             $fullCsvPath = storage_path('app/' . $csvPath);
-            
-            // Ensure directory exists
+
             if (!is_dir(dirname($fullCsvPath))) {
                 mkdir(dirname($fullCsvPath), 0755, true);
             }
-            
+
             $fp = fopen($fullCsvPath, 'w');
-            // Add UTF-8 BOM
-            fputs($fp, chr(0xEF) . chr(0xBB) . chr(0xBF));
-            
-            // Extract table rows from HTML
-            if (preg_match_all('/<tr[^>]*>(.*?)<\/tr>/si', $htmlContent, $rows)) {
-                foreach ($rows[1] as $row) {
-                    // Extract cells (both th and td)
-                    if (preg_match_all('/<(?:td|th)[^>]*>(.*?)<\/(?:td|th)>/si', $row, $cells)) {
-                        $rowData = array_map(function($cell) {
-                            return trim(strip_tags(html_entity_decode($cell, ENT_QUOTES, 'UTF-8')));
-                        }, $cells[1]);
-                        fputcsv($fp, $rowData);
-                    }
+            // Write header
+            fputcsv($fp, ['name', 'email', 'phone', 'grade_level']);
+
+            foreach ($lines as $line) {
+                $line = trim($line);
+                // Split by tab (Excel clipboard default) or comma
+                $cols = str_contains($line, "\t") ? explode("\t", $line) : str_getcsv($line);
+                $cols = array_map('trim', $cols);
+
+                // Skip header rows
+                if (isset($cols[0]) && strtolower($cols[0]) === 'name') continue;
+
+                if (count($cols) >= 2 && !empty($cols[0]) && !empty($cols[1])) {
+                    fputcsv($fp, [
+                        $cols[0] ?? '',        // name
+                        $cols[1] ?? '',        // email
+                        $cols[2] ?? '',        // phone
+                        $cols[3] ?? '',        // grade_level
+                    ]);
                 }
             }
             fclose($fp);
-            
+
             $path = $csvPath;
+
         } else {
-            $path = $file->store('temp/imports');
+            // File upload method (CSV only)
+            $request->validate([
+                'file' => 'required|file|mimes:csv,txt|max:5120',
+            ]);
+
+            $path = $request->file('file')->store('temp/imports');
         }
         
         \App\Jobs\ImportStudentsJob::dispatchSync($path, $this->tenant->id, auth()->id());
