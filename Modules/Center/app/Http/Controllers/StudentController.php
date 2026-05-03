@@ -336,6 +336,9 @@ class StudentController extends Controller
             // Add BOM for Excel compatibility with Arabic
             fputs($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
             
+            // Force Excel to recognize comma separator
+            fputs($handle, "sep=,\n");
+            
             // CSV Header
             $headers = ['name', 'email', 'phone', 'grade_level'];
             fputcsv($handle, $headers);
