@@ -60,15 +60,25 @@ class ImportStudentsJob implements ShouldQueue
             $handle = fopen($path, 'r');
             if ($handle === false) return;
 
+            // Auto-detect delimiter
+            $firstLine = fgets($handle);
+            $delimiter = strpos($firstLine, ';') !== false ? ';' : ',';
+            rewind($handle);
+
             // Skip header if present (heuristic)
-            $header = fgetcsv($handle, 1000, ",");
-            // If it DOESN'T look like a header (e.g. contains '@'), prepend it back effectively or just yield it
+            $header = fgetcsv($handle, 1000, $delimiter);
+            
+            // Clean BOM from first header item if exists
+            if ($header && isset($header[0])) {
+                $header[0] = preg_replace('/^[\xEF\xBB\xBF]+/', '', $header[0]);
+            }
+
             // Simple heuristic: if 'email' is in the first row, skip it.
             if ($header && !in_array('email', array_map('strtolower', $header))) {
                 yield $header; 
             }
 
-            while (($data = fgetcsv($handle, 1000, ",")) !== false) {
+            while (($data = fgetcsv($handle, 1000, $delimiter)) !== false) {
                 yield $data;
             }
             fclose($handle);
@@ -79,6 +89,11 @@ class ImportStudentsJob implements ShouldQueue
             $totalSuccess += $result['success_count'];
             $allErrors = array_merge($allErrors, $result['errors']);
         });
+
+        // Log errors for debugging if any
+        if (!empty($allErrors)) {
+            \Illuminate\Support\Facades\Log::warning('Import Students Errors:', $allErrors);
+        }
 
         // Cleanup file
         @unlink($path);

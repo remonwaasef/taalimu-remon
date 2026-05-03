@@ -131,6 +131,7 @@ $tenantRoutes = function () {
         Route::middleware(['can:create students'])->group(function() {
             Route::get('students/create', [StudentController::class, 'create'])->name('center.students.create');
             Route::post('students', [StudentController::class, 'store'])->name('center.students.store');
+            Route::get('students/template', [StudentController::class, 'downloadTemplate'])->name('center.students.template');
             Route::get('students/import', [StudentController::class, 'importForm'])->name('center.students.import');
             Route::post('students/import', [StudentController::class, 'import'])
                 ->middleware('throttle:20,1')
