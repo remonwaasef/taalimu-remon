@@ -330,45 +330,35 @@ class StudentController extends Controller
     {
         $this->authorize('create', Student::class);
 
-        return response()->streamDownload(function () {
-            $handle = fopen('php://output', 'w');
-            
-            // NO BOM - we will use Windows-1256 for native Excel support in Arab regions
-            
-            // CSV Header (using comma for standard Excel default)
-            $headers = ['name', 'email', 'phone', 'grade_level'];
-            fputcsv($handle, $headers);
-
-            // Fetch a few real grades for this tenant to use as realistic examples
-            $grades = \App\Models\Grade::where('tenant_id', $this->tenant->id)->limit(3)->get();
-            
-            if ($grades->isEmpty()) {
-                // Fallback generic data
-                $data = [
-                    ['Ahmed Ali', 'ahmed1@example.com', '01012345678', 'Primary 1'],
-                    ['Sara Khaled', 'sara2@example.com', '01023456789', 'Primary 2'],
-                ];
-            } else {
-                $data = [
-                    ['Ahmed Ali', 'ahmed1@example.com', '01012345678', $grades->first()->name],
-                ];
-                if ($grades->count() > 1) {
-                    $data[] = ['Sara Khaled', 'sara2@example.com', '01023456789', $grades->skip(1)->first()->name];
-                }
+        // Fetch a few real grades for this tenant to use as realistic examples
+        $grades = \App\Models\Grade::where('tenant_id', $this->tenant->id)->limit(3)->get();
+        
+        $data = [];
+        $data[] = ['name', 'email', 'phone', 'grade_level']; // headers
+        
+        if ($grades->isEmpty()) {
+            $data[] = ['Ahmed Ali', 'ahmed1@example.com', '01012345678', 'Primary 1'];
+            $data[] = ['Sara Khaled', 'sara2@example.com', '01023456789', 'Primary 2'];
+        } else {
+            $data[] = ['Ahmed Ali', 'ahmed1@example.com', '01012345678', $grades->first()->name];
+            if ($grades->count() > 1) {
+                $data[] = ['Sara Khaled', 'sara2@example.com', '01023456789', $grades->skip(1)->first()->name];
             }
+        }
 
-            foreach ($data as $row) {
-                // Convert UTF-8 to Windows-1256 so legacy Excel reads and saves it correctly
-                $encodedRow = array_map(function($val) {
-                    return @mb_convert_encoding($val, 'Windows-1256', 'UTF-8');
-                }, $row);
-                fputcsv($handle, $encodedRow);
-            }
-            
-            fclose($handle);
-        }, 'students-template.csv', [
-            'Content-Type' => 'text/csv',
-        ]);
+        $csv = chr(0xEF) . chr(0xBB) . chr(0xBF); // UTF-8 BOM
+        
+        $fp = fopen('php://temp', 'r+');
+        foreach ($data as $fields) {
+            fputcsv($fp, $fields);
+        }
+        rewind($fp);
+        $csv .= stream_get_contents($fp);
+        fclose($fp);
+
+        return response($csv)
+            ->header('Content-Type', 'text/csv; charset=UTF-8')
+            ->header('Content-Disposition', 'attachment; filename="students-template.csv"');
     }
 
     /**
