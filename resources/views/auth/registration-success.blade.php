@@ -9,12 +9,12 @@
     <div class="max-w-lg w-full relative z-10">
         <!-- Success Icon - Compact -->
         <div class="text-center mb-5 animate-fade-in-up">
-            <div class="inline-flex items-center justify-center w-12 h-12 bg-emerald-500 rounded-full mb-3 shadow-xl shadow-emerald-500/20 animate-scale-in">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3.5">
+            <div class="inline-flex items-center justify-center w-10 h-10 bg-emerald-500 rounded-full mb-3 shadow-xl shadow-emerald-500/20 animate-scale-in">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                 </svg>
             </div>
-            <h1 class="text-lg md:text-xl font-extrabold text-slate-900 mb-1.5 tracking-tight leading-tight">
+            <h1 class="text-base md:text-lg font-extrabold text-slate-900 mb-1.5 tracking-tight leading-tight">
                 <span class="gradient-text">{{ __('auth.registration.success_title') }}</span>
             </h1>
             <p class="text-slate-500 text-xs md:text-sm font-medium max-w-xs mx-auto">
