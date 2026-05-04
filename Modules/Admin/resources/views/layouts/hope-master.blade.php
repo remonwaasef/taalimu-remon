@@ -219,7 +219,7 @@
             <!-- Header Component -->
             @include('admin::layouts.hope-header')
             
-            <div class="iq-navbar-header" style="height: 200px; background: linear-gradient(135deg, var(--emerald-600) 0%, var(--emerald-700) 100%) !important;">
+            <div class="iq-navbar-header">
                 <div class="container-fluid iq-container">
                     <div class="row">
                         <div class="col-md-12">
