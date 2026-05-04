@@ -66,7 +66,7 @@
     <div class="container mx-auto px-4 lg:px-12">
         <!-- Header -->
         <div class="text-center mb-16" data-animate>
-            <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
+            <h2 class="text-2xl md:text-4xl font-extrabold text-slate-900 mb-6 tracking-tight leading-tight">
                 {!! __('landing.pricing.title') !!}
             </h2>
             <p class="text-lg text-slate-500 max-w-2xl mx-auto font-medium">
@@ -109,7 +109,7 @@
                 <div
                     class="group relative rounded-2xl p-8 border transition-all duration-300 flex flex-col
                     {{ $isFeatured 
-                        ? 'bg-white border-emerald-500 shadow-2xl shadow-emerald-500/10 scale-105 z-10' 
+                        ? 'bg-white border-emerald-500 shadow-2xl shadow-emerald-500/10 scale-102 z-10' 
                         : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-lg hover:-translate-y-1' }}"
                 >
                     @if($isFeatured)
@@ -154,7 +154,7 @@
                             <div class="flex items-baseline gap-1.5">
                                 @if(app()->getLocale() == 'ar')
                                     <span class="text-sm font-bold text-emerald-500" x-text="localPrice.currency"></span>
-                                    <span class="text-5xl font-black text-slate-900 tracking-tighter" 
+                                    <span class="text-4xl font-extrabold text-slate-900 tracking-tighter" 
                                           x-text="billingCycle === 'monthly' ? localPrice.amount : (billingCycle === 'term' ? localPrice.term_price : localPrice.yearly_price)">
                                     </span>
                                 @else

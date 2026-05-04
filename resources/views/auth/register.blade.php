@@ -236,7 +236,7 @@ document.addEventListener('alpine:init', () => {
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
     
     <!-- Main Centered Card Container (Simplified Single Column) -->
-    <div class="w-full transition-all duration-500 bg-white rounded-3xl shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100/50 animate-fade-in-up md:backdrop-blur-xl relative"
+    <div class="w-full transition-all duration-500 bg-white rounded-2xl shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100/50 animate-fade-in-up md:backdrop-blur-xl relative"
          x-cloak
          :class="currentStep === 2 ? 'max-w-4xl' : 'max-w-xl'">
         
@@ -261,7 +261,7 @@ document.addEventListener('alpine:init', () => {
             <!-- Contextual Header -->
             <div class="mb-4 text-center transition-all duration-700 ease-in-out" :class="!accountType ? 'transform scale-110 translate-y-[3vh] mb-8' : ''">
                 <div x-show="currentStep === 1" x-cloak>
-                    <h1 class="text-xl lg:text-2xl font-black text-slate-900 mb-1 font-arabic leading-tight">
+                    <h1 class="text-lg lg:text-xl font-black text-slate-900 mb-1 font-arabic leading-tight">
                         {{ app()->isLocale('ar') ? 'ابدأ رحلتك التعليمية' : 'Start Your Journey' }}
                     </h1>
                     <div class="flex items-center justify-center gap-2 mb-2 bg-brand-secondary/5 py-0.5 px-3 rounded-full w-fit mx-auto">
@@ -273,7 +273,7 @@ document.addEventListener('alpine:init', () => {
                     </p>
                 </div>
                 <div x-show="currentStep === 2" x-cloak>
-                    <h1 class="text-xl lg:text-2xl font-black text-slate-900 mb-1 font-arabic leading-tight">
+                    <h1 class="text-lg lg:text-xl font-black text-slate-900 mb-1 font-arabic leading-tight">
                         {{ app()->isLocale('ar') ? 'تأكيد الهوية' : 'Confirm Identity' }}
                     </h1>
                     <p class="text-slate-500 text-xs font-arabic font-medium opacity-80">
@@ -427,7 +427,7 @@ document.addEventListener('alpine:init', () => {
                             <div class="absolute inset-y-0 start-0 ps-5 flex items-center pointer-events-none text-slate-300 group-focus-within:text-brand-secondary transition-colors"><i class="bi bi-building"></i></div>
                             <input type="text" name="center_name" x-model="centerName"
                                 @input="if(!manuallyEditedSubdomain) { subdomain = generateSlug(centerName); checkSubdomain(); }"
-                                class="w-full h-11 ps-12 pe-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold font-arabic focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
+                                class="w-full h-10 ps-12 pe-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold font-arabic focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
                                 placeholder="{{ __('auth.register.center_name_placeholder') }}" :required="currentStep === 1">
                         </div>
                     </div>
@@ -439,7 +439,7 @@ document.addEventListener('alpine:init', () => {
                             <input type="text" name="subdomain" x-model="subdomain"
                                 @input="manuallyEditedSubdomain = true; subdomain = cleanSlug(subdomain);"
                                 @input.debounce.500ms="checkSubdomain()"
-                                class="w-full h-11 pl-[80px] pr-[115px] bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold font-sans focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
+                                class="w-full h-10 pl-[80px] pr-[115px] bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold font-sans focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
                                 placeholder="center-name" :required="currentStep === 1">
                             <div class="absolute right-0 inset-y-0 flex items-center pr-4 pointer-events-none text-slate-400 font-bold text-xs gap-3">
                                 <span>.taalimu.com</span>
@@ -456,7 +456,7 @@ document.addEventListener('alpine:init', () => {
 
                     <div class="pt-2">
                         <button type="button" @click="nextStep()"
-                            class="w-full h-12 rounded-full flex items-center justify-center gap-3 group bg-brand-secondary text-white shadow-xl shadow-brand-secondary/20 hover:shadow-brand-secondary/30 hover:-translate-y-1 active:scale-95 transition-all">
+                            class="w-full h-11 rounded-full flex items-center justify-center gap-3 group bg-brand-secondary text-white shadow-xl shadow-brand-secondary/20 hover:shadow-brand-secondary/30 hover:-translate-y-1 active:scale-95 transition-all">
                             <span class="text-base font-black font-arabic">{{ app()->isLocale('ar') ? 'استمرار' : 'Continue' }}</span>
                             <i class="bi bi-arrow-right-short text-xl group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform"></i>
                         </button>

@@ -5,13 +5,13 @@
         isMenuOpen: false
     }"
     @scroll.window="scrolled = window.pageYOffset > 20"
-    :class="scrolled ? 'bg-white/80 backdrop-blur-xl border-b border-slate-200/50 py-3 shadow-sm' : 'bg-transparent py-5'"
+    :class="scrolled ? 'bg-white/80 backdrop-blur-xl border-b border-slate-200/50 py-2 shadow-sm' : 'bg-transparent py-4'"
 >
     <div class="container mx-auto px-4 lg:px-12">
         <div class="flex items-center justify-between gap-4">
             <!-- Logo -->
             <a href="{{ route('home') }}" class="flex items-center gap-2 lg:gap-3 group shrink-0">
-                <img src="{{ asset('images/brand/logo-full.png?v=3') }}" alt="Logo" class="h-7 sm:h-8 lg:h-10 w-auto group-hover:scale-105 transition-transform">
+                <img src="{{ asset('images/brand/logo-full.png?v=3') }}" alt="Logo" class="h-6 sm:h-7 lg:h-9 w-auto group-hover:scale-105 transition-transform">
                 <div class="hidden md:flex flex-col">
                     <span class="font-black text-base lg:text-lg text-slate-900 leading-tight tracking-tight whitespace-nowrap">
                         {{ \App\Models\SiteSetting::get('site_name', 'Taalimu') }}

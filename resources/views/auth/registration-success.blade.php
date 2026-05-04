@@ -8,16 +8,16 @@
 
     <div class="max-w-lg w-full relative z-10">
         <!-- Success Icon - Compact -->
-        <div class="text-center mb-6 animate-fade-in-up">
-            <div class="inline-flex items-center justify-center w-14 h-14 bg-emerald-500 rounded-full mb-4 shadow-xl shadow-emerald-500/20 animate-scale-in">
-                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3.5">
+        <div class="text-center mb-5 animate-fade-in-up">
+            <div class="inline-flex items-center justify-center w-12 h-12 bg-emerald-500 rounded-full mb-3 shadow-xl shadow-emerald-500/20 animate-scale-in">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                 </svg>
             </div>
-            <h1 class="text-xl md:text-2xl font-black text-slate-900 mb-2 tracking-tight leading-tight">
+            <h1 class="text-lg md:text-xl font-extrabold text-slate-900 mb-1.5 tracking-tight leading-tight">
                 <span class="gradient-text">{{ __('auth.registration.success_title') }}</span>
             </h1>
-            <p class="text-slate-500 text-sm md:text-base font-medium max-w-xs mx-auto">
+            <p class="text-slate-500 text-xs md:text-sm font-medium max-w-xs mx-auto">
                 {{ __('auth.registration.success_subtitle') }}
             </p>
         </div>
@@ -36,9 +36,9 @@
         @endphp
 
         <!-- Center Details Glass Card - Professional Compact -->
-        <div class="glass-premium rounded-[1.5rem] p-5 md:p-6 space-y-5 animate-scale-in border border-white/60 shadow-xl shadow-slate-200/40" style="animation-delay: 0.1s;">
+        <div class="glass-premium rounded-[1.25rem] p-4 md:p-5 space-y-4 animate-scale-in border border-white/60 shadow-xl shadow-slate-200/40" style="animation-delay: 0.1s;">
             <!-- Center Name -->
-            <div class="text-center pb-5 border-b border-slate-100/60">
+            <div class="text-center pb-4 border-b border-slate-100/60">
                 <div class="inline-flex flex-col items-center gap-2">
                     <div class="w-10 h-10 rounded-xl bg-brand-primary/10 flex items-center justify-center text-brand-primary shadow-inner">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -97,10 +97,10 @@
                 </div>
             </div>
 
-            <div class="pt-3">
+            <div class="pt-2">
                 <a 
                     href="{{ $accessUrl }}"
-                    class="group relative flex items-center justify-center gap-2 w-full py-3.5 px-6 bg-slate-900 text-white rounded-[1.2rem] font-bold text-base hover:bg-slate-800 transition-all shadow-lg hover:shadow-slate-900/30 transform hover:-translate-y-0.5 overflow-hidden"
+                    class="group relative flex items-center justify-center gap-2 w-full py-3 px-6 bg-slate-900 text-white rounded-[1rem] font-bold text-sm hover:bg-slate-800 transition-all shadow-lg hover:shadow-slate-900/30 transform hover:-translate-y-0.5 overflow-hidden"
                 >
                     <span class="absolute inset-0 w-full h-full -mt-1 rounded-xl opacity-20 bg-gradient-to-b from-transparent via-transparent to-black"></span>
                     <span class="relative z-10 flex items-center gap-2">
