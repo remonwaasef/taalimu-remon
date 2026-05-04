@@ -1,23 +1,23 @@
 @extends('layouts.landing-new')
 
 @section('content')
-<div class="min-h-screen flex items-center justify-center relative overflow-hidden bg-white py-8 px-4 pt-24">
-    <!-- Hero Orbs Decoration -->
-    <div class="hero-orb orb-1 opacity-60"></div>
-    <div class="hero-orb orb-2 opacity-40"></div>
+<div class="min-h-screen flex items-center justify-center relative overflow-hidden bg-slate-50/50 py-6 px-4 pt-16">
+    <!-- Hero Orbs Decoration - Subtle -->
+    <div class="hero-orb orb-1 opacity-40 scale-75"></div>
+    <div class="hero-orb orb-2 opacity-20 scale-75"></div>
 
-    <div class="max-w-2xl w-full relative z-10">
-        <!-- Success Icon -->
-        <div class="text-center mb-8 animate-fade-in-up">
-            <div class="inline-flex items-center justify-center w-20 h-20 bg-emerald-500 rounded-full mb-5 shadow-2xl shadow-emerald-500/20 animate-scale-in">
-                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
+    <div class="max-w-lg w-full relative z-10">
+        <!-- Success Icon - Compact -->
+        <div class="text-center mb-6 animate-fade-in-up">
+            <div class="inline-flex items-center justify-center w-14 h-14 bg-emerald-500 rounded-full mb-4 shadow-xl shadow-emerald-500/20 animate-scale-in">
+                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                 </svg>
             </div>
-            <h1 class="text-2xl md:text-4xl font-black text-slate-900 mb-3 tracking-tight leading-tight">
+            <h1 class="text-xl md:text-2xl font-black text-slate-900 mb-2 tracking-tight leading-tight">
                 <span class="gradient-text">{{ __('auth.registration.success_title') }}</span>
             </h1>
-            <p class="text-slate-500 text-base md:text-lg font-medium max-w-lg mx-auto">
+            <p class="text-slate-500 text-sm md:text-base font-medium max-w-xs mx-auto">
                 {{ __('auth.registration.success_subtitle') }}
             </p>
         </div>
@@ -35,39 +35,39 @@
             }
         @endphp
 
-        <!-- Center Details Glass Card -->
-        <div class="glass-premium rounded-[2rem] p-6 md:p-8 space-y-6 animate-scale-in border border-white/60 shadow-2xl shadow-slate-200/50" style="animation-delay: 0.1s;">
+        <!-- Center Details Glass Card - Professional Compact -->
+        <div class="glass-premium rounded-[1.5rem] p-5 md:p-6 space-y-5 animate-scale-in border border-white/60 shadow-xl shadow-slate-200/40" style="animation-delay: 0.1s;">
             <!-- Center Name -->
-            <div class="text-center pb-6 border-b border-slate-100/80">
-                <div class="inline-flex flex-col items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-brand-primary/10 flex items-center justify-center text-brand-primary shadow-inner">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+            <div class="text-center pb-5 border-b border-slate-100/60">
+                <div class="inline-flex flex-col items-center gap-2">
+                    <div class="w-10 h-10 rounded-xl bg-brand-primary/10 flex items-center justify-center text-brand-primary shadow-inner">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                         </svg>
                     </div>
-                    <h2 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight">
+                    <h2 class="text-lg font-bold text-slate-900 tracking-tight">
                         {{ session('center_name') }}
                     </h2>
                 </div>
             </div>
 
             <!-- Access URL -->
-            <div class="space-y-3">
-                <label class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] px-1">
+            <div class="space-y-2">
+                <label class="flex items-center gap-2 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] px-1">
                     {{ __('auth.registration.your_center_url') }}
                 </label>
-                <div class="flex flex-col sm:flex-row items-center gap-2 p-1.5 bg-white/60 backdrop-blur-md rounded-[1.5rem] border-2 border-slate-100/80 shadow-inner group-focus-within:border-brand-primary/30 transition-all transition-all duration-500">
+                <div class="flex flex-col sm:flex-row items-center gap-2 p-1 bg-white/60 backdrop-blur-md rounded-[1.2rem] border border-slate-200/80 shadow-inner group-focus-within:border-brand-primary/30 transition-all">
                     <input 
                         type="text" 
                         readonly 
                         value="{{ $accessUrl }}"
-                        class="flex-1 bg-transparent border-0 text-base font-mono font-bold text-slate-600 px-4 py-2 focus:outline-none select-all w-full sm:w-auto"
+                        class="flex-1 bg-transparent border-0 text-sm font-mono font-bold text-slate-600 px-3 py-1.5 focus:outline-none select-all w-full sm:w-auto"
                         id="centerUrl"
                         dir="ltr"
                     >
                     <button 
                         onclick="copyUrl()"
-                        class="w-full sm:w-auto px-6 py-2.5 bg-slate-900 text-white rounded-[1.2rem] hover:bg-slate-800 transition-all shadow-xl hover:shadow-slate-900/30 flex items-center justify-center gap-2 font-black text-sm"
+                        class="w-full sm:w-auto px-4 py-2 bg-slate-900 text-white rounded-[1rem] hover:bg-slate-800 transition-all shadow-md flex items-center justify-center gap-2 font-bold text-xs"
                         id="copyBtn"
                     >
                         <i class="fas fa-copy"></i>
@@ -76,37 +76,37 @@
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-4">
-                <div class="bg-white/50 backdrop-blur-md p-5 rounded-2xl border border-white/80 shadow-sm transition-all hover:shadow-md hover:border-brand-primary/20 group">
-                    <label class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 group-hover:text-brand-primary transition-colors">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="bg-white/40 backdrop-blur-sm p-4 rounded-xl border border-white/60 shadow-sm transition-all group">
+                    <label class="flex items-center gap-2 text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">
                         <i class="fas fa-envelope opacity-70"></i>
                         {{ __('auth.registration.email') }}
                     </label>
-                    <div class="text-slate-900 font-extrabold break-all text-sm tracking-tight">
+                    <div class="text-slate-900 font-bold break-all text-xs tracking-tight">
                         {{ session('admin_email') }}
                     </div>
                 </div>
-                <div class="bg-white/50 backdrop-blur-md p-5 rounded-2xl border border-white/80 shadow-sm transition-all hover:shadow-md hover:border-brand-primary/20 group">
-                    <label class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 group-hover:text-brand-primary transition-colors">
+                <div class="bg-white/40 backdrop-blur-sm p-4 rounded-xl border border-white/60 shadow-sm transition-all group">
+                    <label class="flex items-center gap-2 text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">
                         <i class="fas fa-key opacity-70"></i>
                         {{ __('auth.registration.password') }}
                     </label>
-                    <div class="text-slate-500 font-bold text-xs leading-relaxed">
+                    <div class="text-slate-500 font-semibold text-[10px] leading-relaxed">
                         {{ __('auth.registration.password_hint') }}
                     </div>
                 </div>
             </div>
 
-            <div class="pt-4">
+            <div class="pt-3">
                 <a 
                     href="{{ $accessUrl }}"
-                    class="group relative flex items-center justify-center gap-3 w-full py-4 px-6 bg-slate-900 text-white rounded-[1.5rem] font-black text-lg hover:bg-slate-800 transition-all shadow-xl hover:shadow-slate-900/40 transform hover:-translate-y-1 overflow-hidden"
+                    class="group relative flex items-center justify-center gap-2 w-full py-3.5 px-6 bg-slate-900 text-white rounded-[1.2rem] font-bold text-base hover:bg-slate-800 transition-all shadow-lg hover:shadow-slate-900/30 transform hover:-translate-y-0.5 overflow-hidden"
                 >
-                    <span class="absolute inset-0 w-full h-full -mt-1 rounded-xl opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
-                    <span class="relative z-10 flex items-center gap-3">
-                        <i class="fas fa-rocket text-emerald-400 animate-pulse"></i>
+                    <span class="absolute inset-0 w-full h-full -mt-1 rounded-xl opacity-20 bg-gradient-to-b from-transparent via-transparent to-black"></span>
+                    <span class="relative z-10 flex items-center gap-2">
+                        <i class="fas fa-rocket text-emerald-400"></i>
                         {{ __('auth.registration.access_center') }}
-                        <i class="fas {{ app()->getLocale() == 'ar' ? 'fa-arrow-left group-hover:-translate-x-2' : 'fa-arrow-right group-hover:translate-x-2' }} transition-transform duration-300"></i>
+                        <i class="fas {{ app()->getLocale() == 'ar' ? 'fa-arrow-left group-hover:-translate-x-1' : 'fa-arrow-right group-hover:translate-x-1' }} transition-transform duration-300"></i>
                     </span>
                 </a>
             </div>
