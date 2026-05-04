@@ -280,24 +280,24 @@
                                                     <div class="col-md-4 border-end">
                                                         <label class="form-label fw-bold small text-primary">العربية (ar)</label>
                                                         <div class="mb-3">
-                                                            <input type="text" name="settings[email_templates][welcome_student_subject_ar]" class="form-control text-end mb-2" value="{{ $emailSettings['welcome_student_subject_ar'] ?? $emailSettings['welcome_student_subject'] ?? '' }}" placeholder="الموضوع">
-                                                            <textarea name="settings[email_templates][welcome_student_body_ar]" class="form-control text-end" rows="6" dir="rtl" placeholder="نص الرسالة">{{ $emailSettings['welcome_student_body_ar'] ?? $emailSettings['welcome_student_body'] ?? '' }}</textarea>
+                                                            <input type="text" name="settings[email_templates][welcome_student_subject_ar]" class="form-control text-end mb-2" value="{{ $emailSettings['welcome_student_subject_ar'] ?? $emailSettings['welcome_student_subject'] ?? $defaultPreset['student_subject'] ?? 'مرحباً بك في {center_name} - بيانات الدخول' }}" placeholder="الموضوع">
+                                                            <textarea name="settings[email_templates][welcome_student_body_ar]" class="form-control text-end" rows="6" dir="rtl" placeholder="نص الرسالة">{{ $emailSettings['welcome_student_body_ar'] ?? $emailSettings['welcome_student_body'] ?? $defaultPreset['student_body'] ?? '' }}</textarea>
                                                         </div>
                                                     </div>
                                                     <!-- English -->
                                                     <div class="col-md-4 border-end">
                                                         <label class="form-label fw-bold small text-primary">English (en)</label>
                                                         <div class="mb-3">
-                                                            <input type="text" name="settings[email_templates][welcome_student_subject_en]" class="form-control text-start mb-2" value="{{ $emailSettings['welcome_student_subject_en'] ?? '' }}" placeholder="Subject">
-                                                            <textarea name="settings[email_templates][welcome_student_body_en]" class="form-control text-start" rows="6" dir="ltr" placeholder="Message body">{{ $emailSettings['welcome_student_body_en'] ?? '' }}</textarea>
+                                                            <input type="text" name="settings[email_templates][welcome_student_subject_en]" class="form-control text-start mb-2" value="{{ $emailSettings['welcome_student_subject_en'] ?? $defaultPreset['student_subject_en'] ?? 'Welcome to {center_name} - Login Details' }}" placeholder="Subject">
+                                                            <textarea name="settings[email_templates][welcome_student_body_en]" class="form-control text-start" rows="6" dir="ltr" placeholder="Message body">{{ $emailSettings['welcome_student_body_en'] ?? $defaultPreset['student_body_en'] ?? '' }}</textarea>
                                                         </div>
                                                     </div>
                                                     <!-- French -->
                                                     <div class="col-md-4">
                                                         <label class="form-label fw-bold small text-primary">Français (fr)</label>
                                                         <div class="mb-3">
-                                                            <input type="text" name="settings[email_templates][welcome_student_subject_fr]" class="form-control text-start mb-2" value="{{ $emailSettings['welcome_student_subject_fr'] ?? '' }}" placeholder="Objet">
-                                                            <textarea name="settings[email_templates][welcome_student_body_fr]" class="form-control text-start" rows="6" dir="ltr" placeholder="Corps du message">{{ $emailSettings['welcome_student_body_fr'] ?? '' }}</textarea>
+                                                            <input type="text" name="settings[email_templates][welcome_student_subject_fr]" class="form-control text-start mb-2" value="{{ $emailSettings['welcome_student_subject_fr'] ?? $defaultPreset['student_subject_fr'] ?? 'Bienvenue à {center_name} - Identifiants de connexion' }}" placeholder="Objet">
+                                                            <textarea name="settings[email_templates][welcome_student_body_fr]" class="form-control text-start" rows="6" dir="ltr" placeholder="Corps du message">{{ $emailSettings['welcome_student_body_fr'] ?? $defaultPreset['student_body_fr'] ?? '' }}</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -341,24 +341,24 @@
                                                     <div class="col-md-4 border-end">
                                                         <label class="form-label fw-bold small text-success">العربية (ar)</label>
                                                         <div class="mb-3">
-                                                            <input type="text" name="settings[email_templates][welcome_guardian_subject_ar]" class="form-control text-end mb-2" value="{{ $emailSettings['welcome_guardian_subject_ar'] ?? $emailSettings['welcome_guardian_subject'] ?? '' }}" placeholder="الموضوع">
-                                                            <textarea name="settings[email_templates][welcome_guardian_body_ar]" class="form-control text-end" rows="6" dir="rtl" placeholder="نص الرسالة">{{ $emailSettings['welcome_guardian_body_ar'] ?? $emailSettings['welcome_guardian_body'] ?? '' }}</textarea>
+                                                            <input type="text" name="settings[email_templates][welcome_guardian_subject_ar]" class="form-control text-end mb-2" value="{{ $emailSettings['welcome_guardian_subject_ar'] ?? $emailSettings['welcome_guardian_subject'] ?? $defaultPreset['guardian_subject'] ?? 'تم تسجيل {student_name} في {center_name}' }}" placeholder="الموضوع">
+                                                            <textarea name="settings[email_templates][welcome_guardian_body_ar]" class="form-control text-end" rows="6" dir="rtl" placeholder="نص الرسالة">{{ $emailSettings['welcome_guardian_body_ar'] ?? $emailSettings['welcome_guardian_body'] ?? $defaultPreset['guardian_body'] ?? '' }}</textarea>
                                                         </div>
                                                     </div>
                                                     <!-- English -->
                                                     <div class="col-md-4 border-end">
                                                         <label class="form-label fw-bold small text-success">English (en)</label>
                                                         <div class="mb-3">
-                                                            <input type="text" name="settings[email_templates][welcome_guardian_subject_en]" class="form-control text-start mb-2" value="{{ $emailSettings['welcome_guardian_subject_en'] ?? '' }}" placeholder="Subject">
-                                                            <textarea name="settings[email_templates][welcome_guardian_body_en]" class="form-control text-start" rows="6" dir="ltr" placeholder="Message body">{{ $emailSettings['welcome_guardian_body_en'] ?? '' }}</textarea>
+                                                            <input type="text" name="settings[email_templates][welcome_guardian_subject_en]" class="form-control text-start mb-2" value="{{ $emailSettings['welcome_guardian_subject_en'] ?? $defaultPreset['guardian_subject_en'] ?? '{student_name} has been registered at {center_name}' }}" placeholder="Subject">
+                                                            <textarea name="settings[email_templates][welcome_guardian_body_en]" class="form-control text-start" rows="6" dir="ltr" placeholder="Message body">{{ $emailSettings['welcome_guardian_body_en'] ?? $defaultPreset['guardian_body_en'] ?? '' }}</textarea>
                                                         </div>
                                                     </div>
                                                     <!-- French -->
                                                     <div class="col-md-4">
                                                         <label class="form-label fw-bold small text-success">Français (fr)</label>
                                                         <div class="mb-3">
-                                                            <input type="text" name="settings[email_templates][welcome_guardian_subject_fr]" class="form-control text-start mb-2" value="{{ $emailSettings['welcome_guardian_subject_fr'] ?? '' }}" placeholder="Objet">
-                                                            <textarea name="settings[email_templates][welcome_guardian_body_fr]" class="form-control text-start" rows="6" dir="ltr" placeholder="Corps du message">{{ $emailSettings['welcome_guardian_body_fr'] ?? '' }}</textarea>
+                                                            <input type="text" name="settings[email_templates][welcome_guardian_subject_fr]" class="form-control text-start mb-2" value="{{ $emailSettings['welcome_guardian_subject_fr'] ?? $defaultPreset['guardian_subject_fr'] ?? '{student_name} a été inscrit à {center_name}' }}" placeholder="Objet">
+                                                            <textarea name="settings[email_templates][welcome_guardian_body_fr]" class="form-control text-start" rows="6" dir="ltr" placeholder="Corps du message">{{ $emailSettings['welcome_guardian_body_fr'] ?? $defaultPreset['guardian_body_fr'] ?? '' }}</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -514,24 +514,24 @@
                                                         <div class="col-md-4 border-end">
                                                             <label class="form-label fw-bold small text-info">العربية (ar)</label>
                                                             <div class="mb-3">
-                                                                <input type="text" name="settings[email_templates][notif_group_enrollment_subject_ar]" class="form-control text-end mb-2" value="{{ $emailSettings['notif_group_enrollment_subject_ar'] ?? $emailSettings['notif_group_enrollment_subject'] ?? '' }}" placeholder="الموضوع">
-                                                                <textarea name="settings[email_templates][notif_group_enrollment_body_ar]" class="form-control text-end" rows="5" dir="rtl" placeholder="نص الرسالة">{{ $emailSettings['notif_group_enrollment_body_ar'] ?? $emailSettings['notif_group_enrollment_body'] ?? '' }}</textarea>
+                                                                <input type="text" name="settings[email_templates][notif_group_enrollment_subject_ar]" class="form-control text-end mb-2" value="{{ $emailSettings['notif_group_enrollment_subject_ar'] ?? $emailSettings['notif_group_enrollment_subject'] ?? 'تم تسجيلك في مجموعة جديدة' }}" placeholder="الموضوع">
+                                                                <textarea name="settings[email_templates][notif_group_enrollment_body_ar]" class="form-control text-end" rows="5" dir="rtl" placeholder="نص الرسالة">{{ $emailSettings['notif_group_enrollment_body_ar'] ?? $emailSettings['notif_group_enrollment_body'] ?? "مرحباً {student_name}،\n\nلقد تم تسجيلك بنجاح في {group_name}.\nنتمنى لك التوفيق!\n\n{center_name}" }}</textarea>
                                                             </div>
                                                         </div>
                                                         <!-- English -->
                                                         <div class="col-md-4 border-end">
                                                             <label class="form-label fw-bold small text-info">English (en)</label>
                                                             <div class="mb-3">
-                                                                <input type="text" name="settings[email_templates][notif_group_enrollment_subject_en]" class="form-control text-start mb-2" value="{{ $emailSettings['notif_group_enrollment_subject_en'] ?? '' }}" placeholder="Subject">
-                                                                <textarea name="settings[email_templates][notif_group_enrollment_body_en]" class="form-control text-start" rows="5" dir="ltr" placeholder="Message body">{{ $emailSettings['notif_group_enrollment_body_en'] ?? '' }}</textarea>
+                                                                <input type="text" name="settings[email_templates][notif_group_enrollment_subject_en]" class="form-control text-start mb-2" value="{{ $emailSettings['notif_group_enrollment_subject_en'] ?? 'You have been enrolled in a new group' }}" placeholder="Subject">
+                                                                <textarea name="settings[email_templates][notif_group_enrollment_body_en]" class="form-control text-start" rows="5" dir="ltr" placeholder="Message body">{{ $emailSettings['notif_group_enrollment_body_en'] ?? "Hello {student_name},\n\nYou have been successfully enrolled in {group_name}.\nWe wish you the best of luck!\n\n{center_name}" }}</textarea>
                                                             </div>
                                                         </div>
                                                         <!-- French -->
                                                         <div class="col-md-4">
                                                             <label class="form-label fw-bold small text-info">Français (fr)</label>
                                                             <div class="mb-3">
-                                                                <input type="text" name="settings[email_templates][notif_group_enrollment_subject_fr]" class="form-control text-start mb-2" value="{{ $emailSettings['notif_group_enrollment_subject_fr'] ?? '' }}" placeholder="Objet">
-                                                                <textarea name="settings[email_templates][notif_group_enrollment_body_fr]" class="form-control text-start" rows="5" dir="ltr" placeholder="Corps du message">{{ $emailSettings['notif_group_enrollment_body_fr'] ?? '' }}</textarea>
+                                                                <input type="text" name="settings[email_templates][notif_group_enrollment_subject_fr]" class="form-control text-start mb-2" value="{{ $emailSettings['notif_group_enrollment_subject_fr'] ?? 'Vous avez été inscrit dans un nouveau groupe' }}" placeholder="Objet">
+                                                                <textarea name="settings[email_templates][notif_group_enrollment_body_fr]" class="form-control text-start" rows="5" dir="ltr" placeholder="Corps du message">{{ $emailSettings['notif_group_enrollment_body_fr'] ?? "Bonjour {student_name},\n\nVous avez été inscrit avec succès dans {group_name}.\nNous vous souhaitons bonne chance !\n\n{center_name}" }}</textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -581,24 +581,24 @@
                                                         <div class="col-md-4 border-end">
                                                             <label class="form-label fw-bold small text-success">العربية (ar)</label>
                                                             <div class="mb-3">
-                                                                <input type="text" name="settings[email_templates][notif_payment_confirmed_subject_ar]" class="form-control text-end mb-2" value="{{ $emailSettings['notif_payment_confirmed_subject_ar'] ?? $emailSettings['notif_payment_confirmed_subject'] ?? '' }}" placeholder="الموضوع">
-                                                                <textarea name="settings[email_templates][notif_payment_confirmed_body_ar]" class="form-control text-end" rows="5" dir="rtl" placeholder="نص الرسالة">{{ $emailSettings['notif_payment_confirmed_body_ar'] ?? $emailSettings['notif_payment_confirmed_body'] ?? '' }}</textarea>
+                                                                <input type="text" name="settings[email_templates][notif_payment_confirmed_subject_ar]" class="form-control text-end mb-2" value="{{ $emailSettings['notif_payment_confirmed_subject_ar'] ?? $emailSettings['notif_payment_confirmed_subject'] ?? 'تأكيد استلام دفعة' }}" placeholder="الموضوع">
+                                                                <textarea name="settings[email_templates][notif_payment_confirmed_body_ar]" class="form-control text-end" rows="5" dir="rtl" placeholder="نص الرسالة">{{ $emailSettings['notif_payment_confirmed_body_ar'] ?? $emailSettings['notif_payment_confirmed_body'] ?? "مرحباً {student_name}،\n\nنؤكد استلام دفعة مالية بقيمة {paid_amount}.\nطريقة الدفع: {payment_method}\nالمبلغ المتبقي: {remaining}\n\nشكراً لك،\n{center_name}" }}</textarea>
                                                             </div>
                                                         </div>
                                                         <!-- English -->
                                                         <div class="col-md-4 border-end">
                                                             <label class="form-label fw-bold small text-success">English (en)</label>
                                                             <div class="mb-3">
-                                                                <input type="text" name="settings[email_templates][notif_payment_confirmed_subject_en]" class="form-control text-start mb-2" value="{{ $emailSettings['notif_payment_confirmed_subject_en'] ?? '' }}" placeholder="Subject">
-                                                                <textarea name="settings[email_templates][notif_payment_confirmed_body_en]" class="form-control text-start" rows="5" dir="ltr" placeholder="Message body">{{ $emailSettings['notif_payment_confirmed_body_en'] ?? '' }}</textarea>
+                                                                <input type="text" name="settings[email_templates][notif_payment_confirmed_subject_en]" class="form-control text-start mb-2" value="{{ $emailSettings['notif_payment_confirmed_subject_en'] ?? 'Payment Confirmation' }}" placeholder="Subject">
+                                                                <textarea name="settings[email_templates][notif_payment_confirmed_body_en]" class="form-control text-start" rows="5" dir="ltr" placeholder="Message body">{{ $emailSettings['notif_payment_confirmed_body_en'] ?? "Hello {student_name},\n\nWe confirm the receipt of {paid_amount}.\nPayment Method: {payment_method}\nRemaining Balance: {remaining}\n\nThank you,\n{center_name}" }}</textarea>
                                                             </div>
                                                         </div>
                                                         <!-- French -->
                                                         <div class="col-md-4">
                                                             <label class="form-label fw-bold small text-success">Français (fr)</label>
                                                             <div class="mb-3">
-                                                                <input type="text" name="settings[email_templates][notif_payment_confirmed_subject_fr]" class="form-control text-start mb-2" value="{{ $emailSettings['notif_payment_confirmed_subject_fr'] ?? '' }}" placeholder="Objet">
-                                                                <textarea name="settings[email_templates][notif_payment_confirmed_body_fr]" class="form-control text-start" rows="5" dir="ltr" placeholder="Corps du message">{{ $emailSettings['notif_payment_confirmed_body_fr'] ?? '' }}</textarea>
+                                                                <input type="text" name="settings[email_templates][notif_payment_confirmed_subject_fr]" class="form-control text-start mb-2" value="{{ $emailSettings['notif_payment_confirmed_subject_fr'] ?? 'Confirmation de paiement' }}" placeholder="Objet">
+                                                                <textarea name="settings[email_templates][notif_payment_confirmed_body_fr]" class="form-control text-start" rows="5" dir="ltr" placeholder="Corps du message">{{ $emailSettings['notif_payment_confirmed_body_fr'] ?? "Bonjour {student_name},\n\nNous confirmons la réception d'un paiement de {paid_amount}.\nMéthode de paiement: {payment_method}\nSolde restant: {remaining}\n\nMerci,\n{center_name}" }}</textarea>
                                                             </div>
                                                         </div>
                                                     </div>
