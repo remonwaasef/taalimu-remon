@@ -62,6 +62,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Register Tenant Model Observers for Caching
         \App\Models\User::observe(\App\Observers\TenantModelObserver::class);
+        \App\Models\User::observe(\App\Observers\UserObserver::class);
         \App\Models\Instructor::observe(\App\Observers\TenantModelObserver::class);
         \App\Models\Course::observe(\App\Observers\TenantModelObserver::class);
         \App\Models\Classroom::observe(\App\Observers\TenantModelObserver::class);
