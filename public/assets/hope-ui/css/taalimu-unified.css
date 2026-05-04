@@ -889,8 +889,8 @@ h6 {
 
 /* --- 1. Root Font Size Reduction (cascades to all rem values) --- */
 html {
-    font-size: 14px !important;
-    /* Down from 16px default = ~18.75% reduction */
+    font-size: 15px !important;
+    /* Adjusted from 14px to make it readable while keeping it compact */
 }
 
 /* --- 2. Body & Typography Tightening --- */
@@ -983,12 +983,12 @@ small {
 .table thead th,
 .table thead td {
     padding: 0.6rem 0.85rem !important;
-    font-size: 0.7rem !important;
+    font-size: 0.85rem !important;
 }
 
 .table tbody td {
     padding: 0.6rem 0.85rem !important;
-    font-size: 0.85rem !important;
+    font-size: 0.95rem !important;
 }
 
 .table {
