@@ -15,7 +15,7 @@
                 </div>
 
                 <!-- Massive Headline -->
-                <h1 class="text-3xl md:text-5xl lg:text-[4.2rem] font-black text-slate-900 leading-[1.2] lg:leading-[1.1] mb-6 lg:mb-8 tracking-tight">
+                <h1 class="text-2xl md:text-4xl lg:text-[3.5rem] font-extrabold text-slate-900 leading-[1.2] lg:leading-[1.1] mb-5 lg:mb-7 tracking-tight">
                     {!! __('landing.hero.title', ['highlight' => '<span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">' . __('landing.hero.title_highlight', [], app()->getLocale()) . '</span>']) !!}
                 </h1>
 
@@ -26,14 +26,13 @@
 
                 <!-- CTAs -->
                 <div class="flex flex-col sm:flex-row gap-3 lg:gap-4 items-center justify-center md:justify-start mb-10 lg:mb-16 mx-auto md:mx-0">
-                    <a href="{{ route('register') }}" class="group relative inline-flex items-center justify-center bg-slate-900 text-white px-10 py-5 lg:px-14 lg:py-6 rounded-2xl font-black text-xl lg:text-2xl transition-all hover:bg-slate-800 shadow-xl lg:shadow-2xl ring-4 ring-slate-900/10 hover:shadow-slate-900/30 hover:-translate-y-1.5 overflow-hidden w-full sm:w-auto">
-                        <span class="absolute inset-0 w-full h-full -mt-1 rounded-2xl opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
+                    <a href="{{ route('register') }}" class="group relative inline-flex items-center justify-center bg-slate-900 text-white px-8 py-4 lg:px-12 lg:py-5 rounded-xl font-extrabold text-lg lg:text-xl transition-all hover:bg-slate-800 shadow-xl lg:shadow-2xl ring-4 ring-slate-900/10 hover:shadow-slate-900/30 hover:-translate-y-1.5 overflow-hidden w-full sm:w-auto">
+                        <span class="absolute inset-0 w-full h-full -mt-1 rounded-xl opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
                         <span class="relative flex items-center gap-3 lg:gap-4">
                             {{ __('landing.hero.cta_primary') }}
-                            <i class="fas {{ app()->getLocale() == 'ar' ? 'fa-arrow-left group-hover:-translate-x-2' : 'fa-arrow-right group-hover:translate-x-2' }} text-lg lg:text-2xl opacity-70 transition-transform duration-300"></i>
+                            <i class="fas {{ app()->getLocale() == 'ar' ? 'fa-arrow-left group-hover:-translate-x-2' : 'fa-arrow-right group-hover:translate-x-2' }} text-lg lg:text-xl opacity-70 transition-transform duration-300"></i>
                         </span>
                     </a>
-
                 </div>
                 
 

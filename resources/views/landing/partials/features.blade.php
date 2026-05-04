@@ -9,7 +9,7 @@
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 border border-emerald-100 mb-8">
                 <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest">{{ __('landing.features.badge') }}</span>
             </div>
-            <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
+            <h2 class="text-2xl md:text-4xl font-extrabold text-slate-900 mb-6 tracking-tight leading-tight">
                 {!! __('landing.features.title') !!}
             </h2>
             <p class="text-lg text-slate-600 max-w-2xl mx-auto font-medium leading-relaxed">
