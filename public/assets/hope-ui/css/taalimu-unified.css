@@ -765,3 +765,245 @@ h1, h2, h3, h4, h5, h6 {
     text-align: right !important;
 }
 
+/* ============================================================
+   PLATFORM COMPACT MODE
+   Reduces overall UI scale for a more professional, compact look.
+   Applied globally across Center, Admin, and Instructor modules.
+   ============================================================ */
+
+/* --- 1. Root Font Size Reduction (cascades to all rem values) --- */
+html {
+    font-size: 14px !important; /* Down from 16px default = ~12.5% reduction */
+}
+
+/* --- 2. Body & Typography Tightening --- */
+body {
+    line-height: 1.5 !important;
+}
+
+h1, .h1 { font-size: 1.75rem !important; }
+h2, .h2 { font-size: 1.5rem !important; }
+h3, .h3 { font-size: 1.25rem !important; }
+h4, .h4 { font-size: 1.1rem !important; }
+h5, .h5 { font-size: 1rem !important; }
+h6, .h6 { font-size: 0.875rem !important; }
+.lead { font-size: 1.05rem !important; }
+.small, small { font-size: 0.8125rem !important; }
+
+/* --- 3. Header Banner Compact --- */
+.iq-navbar-header {
+    height: 200px !important;
+}
+.iq-navbar-header h1 {
+    font-size: 1.6rem !important;
+}
+.iq-navbar-header p {
+    font-size: 0.9rem !important;
+}
+.iq-navbar-header .iq-container {
+    padding-bottom: 2.5rem !important;
+}
+
+/* --- 4. Content Overlap Adjustment --- */
+.content-inner {
+    margin-top: -2.5rem !important;
+}
+
+/* --- 5. Card Compact Styling --- */
+.card .card-body {
+    padding: 1rem !important;
+}
+.card .card-header {
+    padding: 0.75rem 1rem !important;
+}
+.card .card-footer {
+    padding: 0.75rem 1rem !important;
+}
+
+/* Dashboard stat numbers - still prominent but not oversized */
+.content-inner .card h2, 
+.content-inner .card .h2 {
+    font-size: 2rem !important;
+    font-weight: 800 !important;
+}
+
+/* --- 6. Table Compact Styling --- */
+.table thead th, .table thead td {
+    padding: 0.6rem 0.85rem !important;
+    font-size: 0.7rem !important;
+}
+.table tbody td {
+    padding: 0.6rem 0.85rem !important;
+    font-size: 0.85rem !important;
+}
+.table {
+    border-spacing: 0 0.35rem !important;
+}
+
+/* --- 7. Form Controls Compact --- */
+.form-control, .form-select {
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.85rem !important;
+    border-radius: 10px !important;
+}
+textarea.form-control {
+    min-height: 80px;
+}
+.form-label, label {
+    font-size: 0.8rem !important;
+    margin-bottom: 0.35rem !important;
+}
+.input-group-text {
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.85rem !important;
+    border-radius: 10px !important;
+}
+
+/* --- 8. Buttons Compact --- */
+.btn {
+    padding: 0.45rem 1rem !important;
+    font-size: 0.8rem !important;
+    border-radius: 10px !important;
+}
+.btn-sm {
+    padding: 0.3rem 0.7rem !important;
+    font-size: 0.75rem !important;
+    border-radius: 8px !important;
+}
+.btn-lg {
+    padding: 0.65rem 1.4rem !important;
+    font-size: 0.9rem !important;
+    border-radius: 12px !important;
+}
+
+/* --- 9. Modal Compact --- */
+.modal-header {
+    padding: 1rem 1.25rem !important;
+}
+.modal-header .modal-title {
+    font-size: 1rem !important;
+}
+.modal-body {
+    padding: 1.25rem !important;
+}
+.modal-footer {
+    padding: 0.75rem 1.25rem !important;
+}
+
+/* --- 10. Alert Compact --- */
+.alert {
+    padding: 0.75rem 1rem !important;
+    font-size: 0.825rem !important;
+    border-radius: 10px !important;
+}
+
+/* --- 11. Badge Compact --- */
+.badge {
+    padding: 0.25rem 0.6rem !important;
+    font-size: 0.68rem !important;
+    border-radius: 6px !important;
+}
+
+/* --- 12. Dropdown Compact --- */
+.dropdown-menu {
+    border-radius: 10px !important;
+    padding: 0.35rem !important;
+}
+.dropdown-item {
+    padding: 0.45rem 0.85rem !important;
+    font-size: 0.8rem !important;
+    border-radius: 8px !important;
+}
+
+/* --- 13. Tabs & Pills Compact --- */
+.nav-tabs .nav-link, .nav-pills .nav-link {
+    padding: 0.45rem 1rem !important;
+    font-size: 0.8rem !important;
+}
+
+/* --- 14. Pagination Compact --- */
+.page-item .page-link {
+    padding: 0.35rem 0.7rem !important;
+    font-size: 0.8rem !important;
+}
+
+/* --- 15. Sidebar Compact --- */
+.sidebar .nav-item .nav-link {
+    padding: 0.5rem 0.85rem !important;
+    font-size: 0.825rem !important;
+    padding-left: 38px !important;
+    padding-right: 12px !important;
+}
+.sidebar .static-item {
+    padding: 1.25rem 1rem 0.35rem !important;
+}
+.sidebar .static-item .default-icon {
+    font-size: 0.6rem !important;
+}
+.sidebar .icon {
+    font-size: 1.05rem !important;
+}
+
+/* --- 16. Spacing Overrides (reduce overall gaps) --- */
+.row {
+    --bs-gutter-x: 1rem;
+}
+.mb-4 { margin-bottom: 1rem !important; }
+.mb-5 { margin-bottom: 1.5rem !important; }
+.mt-4 { margin-top: 1rem !important; }
+.mt-5 { margin-top: 1.5rem !important; }
+.py-4 { padding-top: 1rem !important; padding-bottom: 1rem !important; }
+.py-5 { padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }
+.p-4 { padding: 1rem !important; }
+.p-5 { padding: 1.5rem !important; }
+.gap-3 { gap: 0.75rem !important; }
+.gap-4 { gap: 1rem !important; }
+
+/* --- 17. Footer Compact --- */
+.footer .footer-body {
+    padding: 0.75rem 1rem !important;
+    font-size: 0.8rem !important;
+}
+
+/* --- 18. Breadcrumb Compact --- */
+.breadcrumb {
+    font-size: 0.78rem !important;
+}
+
+/* --- 19. Container Padding Compact --- */
+.container-fluid.content-inner {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}
+
+/* --- 20. Responsive Adjustments --- */
+@media (min-width: 1200px) {
+    .container-fluid.iq-container {
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
+    }
+}
+
+@media (max-width: 991.98px) {
+    html {
+        font-size: 13.5px !important;
+    }
+    .iq-navbar-header {
+        height: 160px !important;
+    }
+    .iq-navbar-header h1 {
+        font-size: 1.3rem !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    html {
+        font-size: 13px !important;
+    }
+    .iq-navbar-header {
+        height: 140px !important;
+    }
+    .card .card-body {
+        padding: 0.75rem !important;
+    }
+}
