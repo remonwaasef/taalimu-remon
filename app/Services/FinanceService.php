@@ -144,6 +144,17 @@ class FinanceService
                 }
             }
 
+            // 4.5 Send Group Enrollment Emails for newly enrolled courses
+            $enrolledCourseIds = [];
+            foreach ($itemsToCreate as $itemData) {
+                if ($itemData['item_type'] === Course::class) {
+                    $enrolledCourseIds[] = $itemData['item_id'];
+                }
+            }
+            if (!empty($enrolledCourseIds) && $student) {
+                app(\App\Services\StudentService::class)->sendGroupEnrollmentEmails($student, $enrolledCourseIds);
+            }
+
             // 5. Create First Payment Record in Ledger
             if ($data['paid_amount'] > 0) {
                 Payment::create([
@@ -252,7 +263,9 @@ class FinanceService
 
             $hasParentEmail = !empty($student->parent_email);
 
-            if (!empty($tenantSettings['notif_payment_confirmed_enabled']) && ($realEmail || $hasParentEmail)) {
+            $paymentEmailEnabled = !isset($tenantSettings['notif_payment_confirmed_enabled']) || $tenantSettings['notif_payment_confirmed_enabled'];
+
+            if ($paymentEmailEnabled && ($realEmail || $hasParentEmail)) {
                 $locale = $this->getTargetLocale($tenant, $student);
                 
                 $subjectKey = "notif_payment_confirmed_subject_{$locale}";
