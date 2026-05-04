@@ -276,9 +276,15 @@ class FinanceService
                     'en' => 'Payment Confirmation',
                     'fr' => 'Confirmation de paiement',
                 ];
+
+                $defaultBodies = [
+                    'ar' => "مرحباً {student_name}،\n\nنؤكد استلام دفعة مالية بقيمة {paid_amount}.\nطريقة الدفع: {payment_method}\nالمبلغ المتبقي: {remaining}\n\nشكراً لك،\n{center_name}",
+                    'en' => "Hello {student_name},\n\nWe confirm the receipt of {paid_amount}.\nPayment Method: {payment_method}\nRemaining Balance: {remaining}\n\nThank you,\n{center_name}",
+                    'fr' => "Bonjour {student_name},\n\nNous confirmons la réception d'un paiement de {paid_amount}.\nMéthode de paiement: {payment_method}\nSolde restant: {remaining}\n\nMerci,\n{center_name}",
+                ];
                 
                 $subject = $tenantSettings[$subjectKey] ?? $tenantSettings['notif_payment_confirmed_subject'] ?? ($defaultSubjects[$locale] ?? $defaultSubjects['en']);
-                $body = $tenantSettings[$bodyKey] ?? $tenantSettings['notif_payment_confirmed_body'] ?? '';
+                $body = $tenantSettings[$bodyKey] ?? $tenantSettings['notif_payment_confirmed_body'] ?? ($defaultBodies[$locale] ?? $defaultBodies['en']);
                 
                 $currencySymbol = function_exists('get_currency_symbol') ? get_currency_symbol() : ($tenant->settings['financial']['currency'] ?? 'EGP');
 
