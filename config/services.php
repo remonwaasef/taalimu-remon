@@ -73,4 +73,8 @@ return [
         'iframe_id' => env('PAYMOB_IFRAME_ID'),
     ],
 
+    'klaviyo' => [
+        'key' => env('KLAVIYO_API_KEY'),
+    ],
+
 ];
