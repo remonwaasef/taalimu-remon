@@ -13,6 +13,13 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
 
     // Email Verification Routes (Disabled in favor of WhatsApp OTP)
     /*
+    Route::get('/clear-server-cache', function () {
+        \Illuminate\Support\Facades\Artisan::call('config:clear');
+        \Illuminate\Support\Facades\Artisan::call('config:cache');
+        \Illuminate\Support\Facades\Artisan::call('queue:restart');
+        return 'Server caches cleared successfully! Please try sending an email now.';
+    });
+
     Route::get('/email/verify', function () {
         return view('auth.verify-email');
     })->middleware('auth')->name('verification.notice');
