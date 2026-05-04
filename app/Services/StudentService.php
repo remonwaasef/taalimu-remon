@@ -654,7 +654,7 @@ class StudentService
     /**
      * Send group enrollment emails to the student and their guardian.
      */
-    protected function sendGroupEnrollmentEmails(Student $student, array $courseIds): void
+    public function sendGroupEnrollmentEmails(Student $student, array $courseIds): void
     {
         try {
             $tenant = app('tenant');
