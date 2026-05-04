@@ -19,7 +19,7 @@ git push origin ${currentBranch}:main
 
 Write-Host "--- 3. Updating Production Server ---" -ForegroundColor Cyan
 # Configuration
-$userToken = "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"
+$userToken = "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"
 $repoName = "remonwaasef/taalimu-remon"
 $remotePath = "/home/taalimu/htdocs/taalimu.com"
 $gitUrl = "https://x-access-token:${userToken}@github.com/${repoName}.git"
