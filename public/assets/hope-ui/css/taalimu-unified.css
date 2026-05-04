@@ -773,7 +773,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* --- 1. Root Font Size Reduction (cascades to all rem values) --- */
 html {
-    font-size: 14px !important; /* Down from 16px default = ~12.5% reduction */
+    font-size: 13px !important; /* Down from 16px default = ~18.75% reduction */
 }
 
 /* --- 2. Body & Typography Tightening --- */
@@ -970,10 +970,14 @@ textarea.form-control {
     font-size: 0.78rem !important;
 }
 
-/* --- 19. Container Padding Compact --- */
-.container-fluid.content-inner {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
+/* --- 19. Container Padding & Max-Width Compact --- */
+.container-fluid.content-inner,
+.container-fluid.iq-container {
+    max-width: 1280px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
 }
 
 /* --- 20. Responsive Adjustments --- */
