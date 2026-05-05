@@ -90,40 +90,33 @@ class SaleController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        $student = Student::with(['enrollments.course', 'sales'])->findOrFail($request->student_id);
+        $student = Student::with(['sales' => function($query) {
+            $query->whereRaw('paid_amount < total_amount')->orderBy('created_at', 'asc');
+        }])->findOrFail($request->student_id);
 
-        // Calculate balance
-        $totalDue = $student->enrollments->sum(function($enrollment) {
-            return $enrollment->course->price ?? 0;
+        // Calculate balance directly from unpaid sales to be perfectly accurate
+        $totalDebt = $student->sales->sum(function($sale) {
+            return $sale->total_amount - $sale->paid_amount;
         });
-        $totalPaid = $student->sales->sum('paid_amount');
-        $balance = $totalDue - $totalPaid;
 
-        if ($request->amount > $balance) {
+        if ($request->amount > $totalDebt) {
             return back()->with('error', __('center::messages.msg_071') . " (المبلغ أكبر من المديونية)"); // Using existing error or custom message
         }
 
-        $sale = Sale::create([
-            'tenant_id' => $tenant->id,
-            'student_id' => $student->id,
-            'total_amount' => $request->amount,
-            'paid_amount' => $request->amount,
-            'status' => 'paid',
-            'payment_method' => 'cash',
-            'notes' => $request->notes ?? 'تحصيل سريع للمستحقات',
-        ]);
+        $amountToDistribute = $request->amount;
+        $notes = $request->notes ?? 'تحصيل سريع للمستحقات';
 
-        Payment::create([
-            'tenant_id' => $tenant->id,
-            'sale_id' => $sale->id,
-            'amount' => $request->amount,
-            'payment_method' => 'cash',
-            'received_by' => auth()->id(),
-            'paid_at' => now(),
-        ]);
-        
-        // Trigger Notifications (WhatsApp & Email)
-        $this->financeService->notifyPayment($tenant, $student, $request->amount, $balance - $request->amount, 'cash');
+        foreach ($student->sales as $sale) {
+            if ($amountToDistribute <= 0) break;
+
+            $remainingOnSale = $sale->total_amount - $sale->paid_amount;
+            $payAmount = min($remainingOnSale, $amountToDistribute);
+
+            // Add payment via FinanceService (which also handles notifications)
+            $this->financeService->addPayment($sale, $payAmount, 'cash', $notes);
+
+            $amountToDistribute -= $payAmount;
+        }
  
         return redirect()->back()->with('success', __('center::messages.msg_074'));
     }
