@@ -719,8 +719,8 @@
                             </div>
                         </div>
 
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle border-top">
+                        <div class="table-responsive mb-0">
+                            <table class="table table-hover align-middle border-top mb-0">
                                 <thead>
                                     <tr class="text-muted small">
                                         <th class="px-3 py-3">{{ __('center::students.profile.financial.invoice_id') }}</th>
@@ -753,10 +753,7 @@
                         </div>
 
                         <!-- Payments History Section -->
-                        <div class="mt-0">
-                            <h6 class="fw-bold text-dark mb-2">
-                                <i class="fas fa-receipt me-2 text-success"></i>{{ __('center::students.profile.financial.payments_history') ?? 'سجل المدفوعات (الإيصالات)' }}
-                            </h6>
+                        <div class="mt-0 pt-0">
                             <div class="table-responsive">
                                 <table class="table table-hover table-sm align-middle">
                                     <thead class="bg-light">

@@ -152,6 +152,9 @@ return [
       'payment_date' => 'Date de Paiement',
       'remaining' => 'Reste',
       'payment_method' => 'Mode de Paiement',
+      'course_name' => 'Nom de la Session/Cours',
+      'status' => 'Statut de Présence',
+      'date' => 'Date',
     ],
     'save' => 'Enregistrer les Paramètres',
     'reset' => 'Réinitialiser',
@@ -168,6 +171,8 @@ return [
     'group_enrollment_desc' => 'Envoyé lorsqu\'un étudiant est ajouté à un groupe ou à un cours',
     'payment_confirmation' => 'Confirmation de Paiement',
     'payment_confirmation_desc' => 'Envoyé lorsqu\'un nouveau paiement est enregistré pour l\'étudiant',
+    'attendance_notif' => 'Notification de présence',
+    'attendance_notif_desc' => 'Envoyé à l\'étudiant ou au parent immédiatement après l\'enregistrement de la présence',
     'notif_status' => 'Statut de Notification',
     'notif_active' => 'Actif',
     'presets' => [

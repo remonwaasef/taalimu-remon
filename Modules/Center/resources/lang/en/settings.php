@@ -152,6 +152,9 @@ return [
       'payment_date' => 'Payment Date',
       'remaining' => 'Remaining',
       'payment_method' => 'Payment Method',
+      'course_name' => 'Session/Course Name',
+      'status' => 'Attendance Status',
+      'date' => 'Date',
     ],
     'save' => 'Save Email Settings',
     'reset' => 'Reset to Defaults',
@@ -168,6 +171,8 @@ return [
     'group_enrollment_desc' => 'Sent when a student is added to a group or course',
     'payment_confirmation' => 'Payment Confirmation',
     'payment_confirmation_desc' => 'Sent when a new payment is recorded for the student',
+    'attendance_notif' => 'Attendance Notification',
+    'attendance_notif_desc' => 'Sent to student or guardian immediately upon recording attendance',
     'notif_status' => 'Notification Status',
     'notif_active' => 'Active',
     'presets' => [
