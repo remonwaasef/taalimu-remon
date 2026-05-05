@@ -4,54 +4,162 @@
 
 @section('content')
 <style>
-/* AI Insights Block */
-.ai-insights-block {
-    background: #f8fafc;
-    border-radius: 1.25rem;
-    padding: 1.5rem;
-    border: 1px solid #f1f5f9;
-}
-.stat-box { 
-    background: white; 
-    border: 1px solid #f1f5f9; 
-    border-radius: 1rem; 
-    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-}
+    /* Premium Dashboard Styles */
+    .dashboard-card {
+        border-radius: 20px !important;
+        border: 1px solid rgba(0,0,0,0.04) !important;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.02) !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+    }
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.05) !important;
+    }
+    .kpi-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+    }
+    .quick-action-btn {
+        background: #ffffff;
+        border: 1px solid #f1f5f9;
+        border-radius: 16px;
+        padding: 1rem;
+        text-align: center;
+        transition: all 0.2s ease;
+        text-decoration: none !important;
+        display: block;
+    }
+    .quick-action-btn:hover {
+        background: #f8fafc;
+        border-color: #10b981;
+        transform: scale(1.02);
+    }
+    .quick-action-btn i {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+    .activity-item {
+        padding: 1rem;
+        border-radius: 12px;
+        transition: background 0.2s ease;
+    }
+    .activity-item:hover {
+        background: #f8fafc;
+    }
+    .glass-badge {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+    }
+    .ai-bubble {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border-radius: 20px 20px 0 20px;
+        padding: 1.25rem;
+        position: relative;
+    }
+    [dir="ltr"] .ai-bubble {
+        border-radius: 20px 20px 20px 0;
+    }
 </style>
 
 <div class="container-fluid">
-    <!-- Top Greeting Container Removed as it moved to Banner -->
+    
+    <!-- Quick Actions Row -->
+    <div class="row mb-4 g-3" dir="{{ app()->isLocale('ar') ? 'rtl' : 'ltr' }}">
+        <div class="col-6 col-md-3">
+            <a href="{{ route('center.students.index', ['tenant' => $tenant->domain ?? 'center']) }}#add" class="quick-action-btn shadow-sm">
+                <i class="fas fa-user-plus text-primary"></i>
+                <span class="fw-bold text-dark small">{{ __('center::dashboard.add_student') ?? 'إضافة طالب' }}</span>
+            </a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a href="{{ route('center.attendance.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="quick-action-btn shadow-sm">
+                <i class="fas fa-calendar-check text-success"></i>
+                <span class="fw-bold text-dark small">{{ __('center::sidebar.attendance') }}</span>
+            </a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a href="{{ route('center.sales.account', ['tenant' => $tenant->domain ?? 'center']) }}" class="quick-action-btn shadow-sm">
+                <i class="fas fa-file-invoice-dollar text-warning"></i>
+                <span class="fw-bold text-dark small">{{ __('center::sidebar.student_accounts') }}</span>
+            </a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="quick-action-btn shadow-sm">
+                <i class="fas fa-cog text-secondary"></i>
+                <span class="fw-bold text-dark small">{{ __('center::sidebar.settings') }}</span>
+            </a>
+        </div>
+    </div>
 
-
-    <!-- Green Health Card + 3 Stats -->
-    <div class="card shadow-sm mb-4" style="background-color: #f8fafc; border: 1px solid rgba(16, 185, 129, 0.15); border-radius: 1.5rem;">
-        <div class="card-body p-4">
-            <div class="row align-items-center" dir="{{ app()->isLocale('ar') ? 'rtl' : 'ltr' }}">
-                <!-- Validation & Title -->
-                <div class="col-lg-5 text-start order-1 order-lg-2 ms-auto d-flex justify-content-end align-items-center gap-4 mb-4 mb-lg-0">
-                    <div class="{{ app()->isLocale('ar') ? 'text-end' : 'text-start' }}">
-                        <h4 class="fw-bold" style="color: #064e3b;">{{ __('center::dashboard.excellent_performance_msg') }}</h4>
-                        <p class="mb-0 text-muted" style="font-size: 0.9rem;">{{ __('center::dashboard.healthy_status_desc') }}</p>
+    <!-- KPI Section -->
+    <div class="row mb-4 g-4" dir="{{ app()->isLocale('ar') ? 'rtl' : 'ltr' }}">
+        <div class="col-md-6 col-xl-3">
+            <div class="card dashboard-card h-100">
+                <div class="card-body p-4">
+                    <div class="kpi-icon bg-success bg-opacity-10 text-success">
+                        <i class="fas fa-user-graduate"></i>
                     </div>
-                    <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 55px; height: 55px; background-color: #10b981; color: white; box-shadow: 0 4px 10px rgba(16,185,129,0.3);">
-                         <i class="fas fa-check fa-xl"></i>
+                    <h3 class="fw-extrabold mb-1">{{ number_format($activeStudents) }}</h3>
+                    <p class="text-muted small fw-bold mb-0">{{ __('center::dashboard.models.Student') }}</p>
+                    <div class="mt-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-success-subtle text-success rounded-pill px-2 py-1" style="font-size: 0.7rem;">+12%</span>
+                        <small class="text-muted" style="font-size: 0.7rem;">{{ __('center::dashboard.since_last_month') ?? 'منذ الشهر الماضي' }}</small>
                     </div>
                 </div>
-
-                <!-- 3 Stats -->
-                <div class="col-lg-7 order-2 order-lg-1">
-                    <div class="d-flex justify-content-lg-start justify-content-center gap-3 w-100 flex-wrap flex-md-nowrap">
-                        <div class="stat-box flex-grow-1 text-center p-3">
-                            <h3 class="fw-bold text-dark mb-2">{{ number_format($activeStudents) }} <i class="fas fa-arrow-up text-success fs-6 align-middle ms-1"></i></h3>
-                            <span class="text-muted small fw-semibold" style="background: #ecfdf5; padding: 4px 12px; border-radius: 6px;"><i class="fas fa-user-graduate me-1 text-success"></i> {{ __('center::dashboard.models.Student') }}</span>
-                        </div>
-                        <div class="stat-box flex-grow-1 text-center p-3">
-                            <h3 class="fw-bold text-dark mb-2">-- <i class="fas fa-arrow-up text-warning fs-6 align-middle ms-1"></i></h3>
-                            <span class="text-muted small fw-semibold" style="background: #f0f9ff; padding: 4px 12px; border-radius: 6px;"><i class="fas fa-calendar-alt me-1 text-info"></i> {{ __('center::dashboard.sessions_today') }}</span>
-                        </div>
-                        <div class="stat-box flex-grow-1 text-center p-3">
-                            <h3 class="fw-bold text-dark mb-2">{{ number_format($monthlyRevenue, 0) }}</h3>
-                            <span class="text-muted small fw-semibold" style="background: #fef2f2; padding: 4px 12px; border-radius: 6px;"><i class="fas fa-wallet me-1 text-danger"></i> {{ __('center::dashboard.monthly_revenue_curr') }}</span>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card dashboard-card h-100">
+                <div class="card-body p-4">
+                    <div class="kpi-icon bg-info bg-opacity-10 text-info">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3 class="fw-extrabold mb-1">--</h3>
+                    <p class="text-muted small fw-bold mb-0">{{ __('center::dashboard.sessions_today') }}</p>
+                    <div class="mt-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-info-subtle text-info rounded-pill px-2 py-1" style="font-size: 0.7rem;">Active</span>
+                        <small class="text-muted" style="font-size: 0.7rem;">{{ __('center::dashboard.running_now') ?? 'جاري الآن' }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card dashboard-card h-100" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                <div class="card-body p-4 text-white">
+                    <div class="kpi-icon glass-badge">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h3 class="fw-extrabold mb-1 text-white">{{ number_format($monthlyRevenue, 0) }}</h3>
+                    <p class="text-white-50 small fw-bold mb-0">{{ __('center::dashboard.monthly_revenue_curr') }}</p>
+                    <div class="mt-3 d-flex align-items-center gap-2">
+                        <span class="badge glass-badge rounded-pill px-2 py-1" style="font-size: 0.7rem;">+{{ get_currency_symbol() }}</span>
+                        <small class="text-white-50" style="font-size: 0.7rem;">{{ __('center::dashboard.target_reached') ?? 'تم تحقيق الهدف' }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card dashboard-card h-100">
+                <div class="card-body p-4">
+                    <div class="kpi-icon bg-warning bg-opacity-10 text-warning">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3 class="fw-extrabold mb-1">98%</h3>
+                    <p class="text-muted small fw-bold mb-0">{{ __('center::dashboard.center_rating') ?? 'تقييم الأداء' }}</p>
+                    <div class="mt-3 d-flex align-items-center gap-2">
+                        <div class="progress w-100" style="height: 6px;">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 98%" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                     </div>
                 </div>
@@ -59,140 +167,32 @@
         </div>
     </div>
 
-    <!-- Main Grid Array -->
     <div class="row g-4" dir="{{ app()->isLocale('ar') ? 'rtl' : 'ltr' }}">
-        
-        <!-- Activities & Smart insights -->
-        <div class="col-lg-5">
-            
-            <!-- Activities Card -->
-            <div class="card shadow-sm border-0 mb-4" style="border-radius: 1.5rem;">
-                <div class="card-header bg-white border-0 pt-4 pb-2 d-flex justify-content-between align-items-center">
-                    <button class="btn btn-sm btn-light rounded-3 px-3"><i class="fas fa-sliders-h text-muted"></i></button>
-                    <h5 class="fw-bold mb-0 text-dark">{{ __('center::dashboard.recent_activities') }}</h5>
-                </div>
-                <div class="card-body px-4 py-3">
-                    @forelse(isset($recentActivities) ? $recentActivities->take(3) : collect([]) as $activity)
-                    <div class="d-flex align-items-center justify-content-between mb-3 border-bottom border-light pb-3">
-                        <div class="d-flex align-items-center gap-3 w-100 justify-content-between">
-                            <!-- Time -->
-                            <div class="{{ app()->isLocale('ar') ? 'text-start' : 'text-end' }}" style="width: 60px;">
-                                <span class="text-muted small" dir="ltr"><i class="fas fa-arrow-{{ app()->isLocale('ar') ? 'left' : 'right' }} fa-sm text-secondary me-1"></i> {{ $activity->created_at->diffInHours() }}h</span>
-                            </div>
-                            <!-- Detail -->
-                            <div class="{{ app()->isLocale('ar') ? 'text-end' : 'text-start' }} flex-grow-1 px-3">
-                                <h6 class="mb-1 fw-bold text-dark">{{ __('center::dashboard.actions.' . $activity->description) }}</h6>
-                                <small class="text-muted fw-medium">{{ $activity->causer ? $activity->causer->name : __('center::dashboard.system_label') }}</small>
-                            </div>
-                            <!-- Avatar placeholder -->
-                            <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 45px; height: 45px; background: #f0f9ff; color: #0284c7;">
-                                <i class="fas fa-user"></i>
-                            </div>
-                        </div>
-                    </div>
-                    @empty
-                    <div class="text-center py-4 text-muted fw-medium">{{ __('center::dashboard.no_activities') }}</div>
-                    @endforelse
-                    
-                    <div class="text-center mt-3 mb-1">
-                        <a href="#" class="text-muted text-decoration-none small fw-bold"><i class="fas fa-search me-1"></i> {{ __('center::dashboard.view_all_activities') }}</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Overview Input box -->
-            <div class="card shadow-sm border-0 mb-4" style="border-radius: 1.5rem;">
-                <div class="card-header bg-white border-0 pt-4 pb-2 d-flex justify-content-between align-items-center">
-                    <button class="btn btn-sm btn-light rounded-3 px-3"><i class="fas fa-expand text-secondary"></i></button>
-                    <h5 class="fw-bold mb-0 text-dark">{{ __('center::dashboard.overview') }}</h5>
-                </div>
-                <div class="card-body px-4 pb-4 pt-1">
-                    <div class="input-group">
-                        <input type="text" class="form-control bg-light border-0 py-3 {{ app()->isLocale('ar') ? 'rounded-end-pill' : 'rounded-start-pill' }} fw-medium" placeholder="{{ __('center::dashboard.search_records') }}" dir="{{ app()->isLocale('ar') ? 'rtl' : 'ltr' }}">
-                        <span class="input-group-text bg-light border-0 {{ app()->isLocale('ar') ? 'rounded-start-pill' : 'rounded-end-pill' }} text-success px-4"><i class="fas fa-search"></i></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- AI Insights Box -->
-            <div class="ai-insights-block {{ app()->isLocale('ar') ? 'text-end' : 'text-start' }}">
-                <div class="d-flex {{ app()->isLocale('ar') ? 'justify-content-end' : 'justify-content-start' }} align-items-center mb-4">
-                    <h5 class="fw-bold mb-0 {{ app()->isLocale('ar') ? 'me-3' : 'ms-3' }}" style="color: #0f172a;">{{ __('center::dashboard.smart_suggestions') }}</h5>
-                    <div class="rounded-circle bg-success bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                        <i class="fas fa-robot text-success"></i>
-                    </div>
-                </div>
-                
-                <div class="mb-4">
-                    @forelse(isset($aiInsights) ? $aiInsights : [] as $insight)
-                        <p class="small text-muted mb-3 d-flex {{ app()->isLocale('ar') ? 'justify-content-end' : 'justify-content-start' }} align-items-start gap-2 fw-medium">
-                            <span class="{{ app()->isLocale('ar') ? 'text-end' : 'text-start' }}">{{ $insight['text'] }}</span>
-                            <span style="color: #cbd5e1; flex-shrink: 0;">••</span>
-                        </p>
-                    @empty
-                        <p class="small text-muted mb-3 d-flex {{ app()->isLocale('ar') ? 'justify-content-end' : 'justify-content-start' }} align-items-start gap-2 fw-medium">
-                            <span class="{{ app()->isLocale('ar') ? 'text-end' : 'text-start' }}">{{ __('center::dashboard.insights.low_engagement') }}</span> <span style="color: #cbd5e1; flex-shrink: 0;">••</span>
-                        </p>
-                        <p class="small text-muted mb-0 d-flex {{ app()->isLocale('ar') ? 'justify-content-end' : 'justify-content-start' }} align-items-start gap-2 fw-medium">
-                            <span class="{{ app()->isLocale('ar') ? 'text-end' : 'text-start' }}">{{ __('center::dashboard.insights.downward_trend') }}</span> <span style="color: #cbd5e1; flex-shrink: 0;">••</span>
-                        </p>
-                    @endforelse
-                </div>
-                
-                <div class="{{ app()->isLocale('ar') ? 'text-end' : 'text-start' }}">
-                   <a href="#" class="text-muted text-decoration-none small fw-bold"><i class="fas fa-chevron-{{ app()->isLocale('ar') ? 'left' : 'right' }} fa-xs me-1"></i> {{ __('center::dashboard.view_all_suggestions') }}</a>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Left Column: Chart and mini stats -->
-        <div class="col-lg-7">
-            
-            <!-- Revenue Chart Card -->
-            <div class="card shadow-sm border-0 mb-4" style="border-radius: 1.5rem; height: calc(100% - 240px); min-height: 380px;">
+        <!-- Main Chart Section -->
+        <div class="col-lg-8">
+            <div class="card dashboard-card h-100">
                 <div class="card-header bg-white border-0 pt-4 pb-0 px-4 d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center gap-2">
-                       <i class="fas fa-chart-area text-success bg-success bg-opacity-10 p-2 rounded"></i>
-                    </div>
                     <h5 class="fw-bold mb-0 text-dark">{{ __('center::dashboard.revenue_overview') }}</h5>
-                </div>
-                <div class="card-body px-4 pb-4 pt-2 position-relative d-flex flex-column justify-content-end">
-                    
-                    <!-- Revenue Overlay text block inside chart -->
-                    <div class="position-absolute {{ app()->isLocale('ar') ? 'text-end' : 'text-start' }}" style="bottom: 70px; {{ app()->isLocale('ar') ? 'right: 30px;' : 'left: 30px;' }} z-index: 10;">
-                        <span class="badge bg-white text-dark shadow-sm px-3 py-2 border border-light rounded-pill">
-                            <h4 class="fw-bold mb-0 d-inline">{{ number_format($monthlyRevenue, 0) }}</h4>
-                            <small class="text-muted d-inline ms-1" style="font-size: 0.7rem;">{{ get_currency_symbol() }}</small>
-                        </span>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light rounded-pill px-3" type="button" data-bs-toggle="dropdown">{{ __('center::dashboard.this_week') ?? 'هذا الأسبوع' }} <i class="fas fa-chevron-down ms-1 fa-xs"></i></button>
                     </div>
-
-                    <div style="height: 250px; width: 100%; position: relative;">
-                        <!-- Mock Area Chart -->
+                </div>
+                <div class="card-body p-4">
+                    <div style="height: 300px; width: 100%; position: relative;">
+                        <!-- Enhanced Mock Chart -->
                         <svg viewBox="0 0 400 150" class="w-100 h-100" style="overflow: visible;" preserveAspectRatio="none">
                             <defs>
-                                <linearGradient id="chartGradNew" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" style="stop-color:rgba(16, 185, 129, 0.15);stop-opacity:1" />
+                                <linearGradient id="premiumGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:rgba(16, 185, 129, 0.2);stop-opacity:1" />
                                     <stop offset="100%" style="stop-color:rgba(16, 185, 129, 0);stop-opacity:1" />
                                 </linearGradient>
                             </defs>
-                            <!-- Baseline Grid Lines -->
-                            <line x1="0" y1="120" x2="400" y2="120" stroke="#f8fafc" stroke-width="1"></line>
-                            <line x1="0" y1="80" x2="400" y2="80" stroke="#f8fafc" stroke-width="1"></line>
-                            <line x1="0" y1="40" x2="400" y2="40" stroke="#f8fafc" stroke-width="1"></line>
-
-                            <!-- Smooth Curve Path -->
-                            @php
-                                $d = "M 0,100 T 50,90 T 100,100 T 150,80 T 200,90 T 250,70 T 300,80 T 350,50 T 380,20 L 400,15";
-                            @endphp
-                            <path d="{{ $d }} L 400,150 L 0,150 Z" fill="url(#chartGradNew)" />
-                            <path d="{{ $d }}" fill="none" stroke="#10b981" stroke-width="2.5" />
-                            <circle cx="380" cy="20" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
+                            <path d="M 0,110 Q 50,120 100,90 T 200,80 T 300,40 T 400,20 L 400,150 L 0,150 Z" fill="url(#premiumGrad)" />
+                            <path d="M 0,110 Q 50,120 100,90 T 200,80 T 300,40 T 400,20" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" />
+                            <circle cx="400" cy="20" r="5" fill="#10b981" stroke="#fff" stroke-width="2" />
                         </svg>
                     </div>
-
-                    <!-- X Axis Labels -->
-                    <div class="d-flex justify-content-between mt-3 px-2 text-muted fw-semibold" style="font-size: 0.75rem;" dir="{{ app()->isLocale('ar') ? 'rtl' : 'ltr' }}">
+                    <div class="d-flex justify-content-between mt-3 text-muted small fw-bold">
                         <span>{{ __('center::dashboard.sunday') }}</span>
                         <span>{{ __('center::dashboard.monday') }}</span>
                         <span>{{ __('center::dashboard.tuesday') }}</span>
@@ -203,48 +203,53 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Two bottom stat cards -->
-            <div class="row g-4" style="height: 200px;">
-                <!-- Total Box -->
-                <div class="col-md-6 h-100">
-                    <div class="card shadow-sm border-0 h-100" style="border-radius: 1.5rem;">
-                        <div class="card-header bg-white border-0 pt-4 pb-0 px-4 d-flex justify-content-between align-items-center">
-                            <div class="rounded-circle bg-info bg-opacity-10 text-info d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
-                                <i class="fas fa-user text-info"></i>
-                            </div>
-                            <h5 class="fw-bold mb-0 text-dark">{{ __('center::dashboard.models.Student') }}</h5>
-                        </div>
-                        <div class="card-body px-4 pb-4 {{ app()->isLocale('ar') ? 'text-end' : 'text-start' }} d-flex flex-column justify-content-end">
-                            <h2 class="fw-bolder text-dark mb-1" style="font-size: 2.2rem;">{{ number_format($activeStudents) }}</h2>
-                            <p class="text-muted small fw-medium mb-0">{{ __('center::dashboard.total_active_students_desc') }}</p>
-                        </div>
+        <!-- Activities & Suggestions -->
+        <div class="col-lg-4">
+            <!-- AI Suggestions Bubble -->
+            <div class="ai-bubble shadow-lg mb-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="rounded-circle bg-white bg-opacity-20 d-flex align-items-center justify-content-center me-2 ms-2" style="width: 32px; height: 32px;">
+                        <i class="fas fa-robot text-white small"></i>
                     </div>
+                    <h6 class="mb-0 text-white fw-bold">{{ __('center::dashboard.smart_suggestions') }}</h6>
                 </div>
-                
-                <!-- Line Chart Students -->
-                <div class="col-md-6 h-100">
-                    <div class="card shadow-sm border-0 h-100" style="border-radius: 1.5rem;">
-                        <div class="card-body p-4 text-center d-flex flex-column justify-content-between align-items-center">
-                            <h2 class="fw-bolder text-dark mb-0 {{ app()->isLocale('ar') ? 'align-self-end' : 'align-self-start' }} mt-2" style="font-size: 2rem;">{{ $activeStudents + 20 }}</h2>
-                            
-                            <!-- Little zig-zag line -->
-                            <div class="w-100 px-3 mt-3 mb-2">
-                                <svg viewBox="0 0 100 35" class="w-100 h-100" preserveAspectRatio="none">
-                                    <path d="M 0,25 L 15,20 L 30,28 L 45,15 L 60,22 L 75,5 L 100,10" fill="none" stroke="#93c5fd" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    <!-- Light shadow under -->
-                                    <path d="M 0,25 L 15,20 L 30,28 L 45,15 L 60,22 L 75,5 L 100,10 L 100,35 L 0,35 Z" fill="#eff6ff" />
-                                </svg>
-                            </div>
-
-                            <p class="text-muted small fw-medium mb-0 {{ app()->isLocale('ar') ? 'align-self-end' : 'align-self-start' }}">{{ __('center::dashboard.student_rate_6_months') }}</p>
-                        </div>
-                    </div>
+                <p class="text-white-50 small mb-2 fw-medium">
+                    {{ __('center::dashboard.insights.low_engagement') }}
+                </p>
+                <div class="text-end">
+                    <button class="btn btn-sm glass-badge rounded-pill px-3" style="font-size: 0.7rem;">{{ __('center::dashboard.details') ?? 'التفاصيل' }}</button>
                 </div>
-
             </div>
 
+            <!-- Recent Activities -->
+            <div class="card dashboard-card">
+                <div class="card-header bg-white border-0 pt-4 pb-2 px-4 d-flex justify-content-between align-items-center">
+                    <h6 class="fw-bold mb-0 text-dark">{{ __('center::dashboard.recent_activities') }}</h6>
+                    <a href="#" class="text-muted small text-decoration-none fw-bold">{{ __('center::dashboard.view_all') ?? 'الكل' }}</a>
+                </div>
+                <div class="card-body p-2">
+                    @forelse(isset($recentActivities) ? $recentActivities->take(4) : collect([]) as $activity)
+                    <div class="activity-item d-flex align-items-center gap-3">
+                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px;">
+                            <i class="fas fa-bolt text-warning small"></i>
+                        </div>
+                        <div class="flex-grow-1 min-width-0">
+                            <h6 class="mb-0 text-dark small fw-bold text-truncate">{{ __('center::dashboard.actions.' . $activity->description) }}</h6>
+                            <small class="text-muted" style="font-size: 0.7rem;">{{ $activity->created_at->diffForHumans() }}</small>
+                        </div>
+                    </div>
+                    @empty
+                    <div class="text-center py-4 text-muted small fw-medium">{{ __('center::dashboard.no_activities') }}</div>
+                    @endforelse
+                </div>
+            </div>
         </div>
+    </div>
+</div>
+@endsection
+       </div>
     </div>
 </div>
 @endsection
