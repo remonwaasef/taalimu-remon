@@ -753,8 +753,8 @@
                         </div>
 
                         <!-- Payments History Section -->
-                        <div class="mt-4">
-                            <h6 class="fw-bold text-dark mb-4">
+                        <div class="mt-0">
+                            <h6 class="fw-bold text-dark mb-2">
                                 <i class="fas fa-receipt me-2 text-success"></i>{{ __('center::students.profile.financial.payments_history') ?? 'سجل المدفوعات (الإيصالات)' }}
                             </h6>
                             <div class="table-responsive">
