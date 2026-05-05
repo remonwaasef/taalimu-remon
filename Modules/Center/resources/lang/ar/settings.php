@@ -152,6 +152,9 @@ return [
       'payment_date' => 'تاريخ الدفع',
       'remaining' => 'المتبقي',
       'payment_method' => 'طريقة الدفع',
+      'course_name' => 'اسم الحصة/الكورس',
+      'status' => 'حالة الحضور',
+      'date' => 'التاريخ',
     ],
     'save' => 'حفظ إعدادات البريد',
     'reset' => 'إعادة الضبط للافتراضي',
@@ -168,6 +171,8 @@ return [
     'group_enrollment_desc' => 'يُرسل عند إضافة طالب لمجموعة أو كورس جديد',
     'payment_confirmation' => 'تأكيد استلام مبلغ',
     'payment_confirmation_desc' => 'يُرسل عند تسجيل دفعة مالية جديدة للطالب',
+    'attendance_notif' => 'إشعار حضور الحصص',
+    'attendance_notif_desc' => 'يُرسل للطالب أو ولي الأمر فور تسجيل الحضور في حصة',
     'notif_status' => 'حالة الإشعار',
     'notif_active' => 'مفعّل',
     'presets' => [

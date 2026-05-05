@@ -616,6 +616,72 @@
                                             </div>
                                         </div>
 
+                                        {{-- 4. Attendance Notification --}}
+                                        <div class="accordion-item border rounded-4 mb-3 overflow-hidden">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed fw-bold bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#notif_attendance">
+                                                    <span class="d-flex align-items-center gap-3 w-100">
+                                                        <span class="rounded-circle bg-primary bg-opacity-10 p-2 d-flex align-items-center justify-content-center" style="width:40px;height:40px;">
+                                                            <i class="fas fa-user-check text-primary"></i>
+                                                        </span>
+                                                        <span>
+                                                            <span class="d-block">{{ __('center::settings.email_templates.attendance_notif') }} (Multi-Lingual)</span>
+                                                            <small class="text-muted fw-normal">{{ __('center::settings.email_templates.attendance_notif_desc') }}</small>
+                                                        </span>
+                                                    </span>
+                                                </button>
+                                            </h2>
+                                            <div id="notif_attendance" class="accordion-collapse collapse" data-bs-parent="#emailNotificationsAccordion">
+                                                <div class="accordion-body p-4">
+                                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                                        <span class="fw-bold small text-muted">{{ __('center::settings.email_templates.notif_status') }}</span>
+                                                        <div class="form-check form-switch custom-switch mb-0">
+                                                            <input type="hidden" name="settings[email_templates][notif_attendance_enabled]" value="0">
+                                                            <input class="form-check-input" type="checkbox" name="settings[email_templates][notif_attendance_enabled]" value="1" id="notifAttendance" {{ ($emailSettings['notif_attendance_enabled'] ?? true) ? 'checked' : '' }}>
+                                                            <label class="form-check-label fw-bold small ms-2" for="notifAttendance">{{ __('center::settings.email_templates.notif_active') }}</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row g-4">
+                                                        <!-- Arabic -->
+                                                        <div class="col-md-4 border-end">
+                                                            <label class="form-label fw-bold small text-primary">العربية (ar)</label>
+                                                            <div class="mb-3">
+                                                                <input type="text" name="settings[email_templates][notif_attendance_subject_ar]" class="form-control text-end mb-2" value="{{ $emailSettings['notif_attendance_subject_ar'] ?? 'إشعار حضور حصة - {center_name}' }}" placeholder="الموضوع">
+                                                                <textarea name="settings[email_templates][notif_attendance_body_ar]" class="form-control text-end" rows="5" dir="rtl" placeholder="نص الرسالة">{{ $emailSettings['notif_attendance_body_ar'] ?? "مرحباً {student_name}،\n\nنود إبلاغك بأنه تم تسجيل حضورك لحصة {course_name} بنجاح.\nالحالة: {status}\n\nنتمنى لك التوفيق،\n{center_name}" }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                        <!-- English -->
+                                                        <div class="col-md-4 border-end">
+                                                            <label class="form-label fw-bold small text-primary">English (en)</label>
+                                                            <div class="mb-3">
+                                                                <input type="text" name="settings[email_templates][notif_attendance_subject_en]" class="form-control text-start mb-2" value="{{ $emailSettings['notif_attendance_subject_en'] ?? 'Attendance Notification - {center_name}' }}" placeholder="Subject">
+                                                                <textarea name="settings[email_templates][notif_attendance_body_en]" class="form-control text-start" rows="5" dir="ltr" placeholder="Message body">{{ $emailSettings['notif_attendance_body_en'] ?? "Hello {student_name},\n\nWe would like to inform you that your attendance for {course_name} has been recorded.\nStatus: {status}\n\nBest regards,\n{center_name}" }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                        <!-- French -->
+                                                        <div class="col-md-4">
+                                                            <label class="form-label fw-bold small text-primary">Français (fr)</label>
+                                                            <div class="mb-3">
+                                                                <input type="text" name="settings[email_templates][notif_attendance_subject_fr]" class="form-control text-start mb-2" value="{{ $emailSettings['notif_attendance_subject_fr'] ?? 'Notification de présence - {center_name}' }}" placeholder="Objet">
+                                                                <textarea name="settings[email_templates][notif_attendance_body_fr]" class="form-control text-start" rows="5" dir="ltr" placeholder="Corps du message">{{ $emailSettings['notif_attendance_body_fr'] ?? "Bonjour {student_name},\n\nVous avez été inscrit avec succès dans {group_name}.\nNous vous souhaitons bonne chance !\n\n{center_name}" }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mt-3 pt-3 border-top">
+                                                        <small class="fw-bold text-muted d-block mb-2">{{ __('center::settings.email_templates.placeholders_title') }}</small>
+                                                        <div class="d-flex flex-wrap gap-1">
+                                                            @php $attVars = ['student_name' => __('center::settings.email_templates.placeholders.student_name'), 'center_name' => __('center::settings.email_templates.placeholders.center_name'), 'course_name' => __('center::settings.email_templates.placeholders.course_name'), 'status' => __('center::settings.email_templates.placeholders.status'), 'date' => __('center::settings.email_templates.placeholders.date')]; @endphp
+                                                            @foreach($attVars as $k=>$l)
+                                                                <span class="badge bg-light text-dark border py-2 px-3 rounded-pill small">{{ '{'.$k.'}' }} : {{ $l }}</span>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
 

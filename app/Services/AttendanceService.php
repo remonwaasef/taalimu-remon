@@ -7,9 +7,14 @@ use Illuminate\Support\Facades\URL;
 use Carbon\Carbon;
 use App\Models\Student;
 use App\Models\Schedule;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+use App\Mail\AttendanceNotificationMail;
+use App\Traits\HasLocaleResolution;
 
 class AttendanceService
 {
+    use HasLocaleResolution;
     protected $whatsappService;
     protected $gamificationService;
 
@@ -55,8 +60,11 @@ class AttendanceService
             ]
         );
 
-        // Send WhatsApp Notification if student arrived
-        if ($attendance->wasRecentlyCreated && in_array($status, ['present', 'late'])) {
+        // Send WhatsApp Notification if student arrived (even if previously marked as absent)
+        $isArriving = in_array($status, ['present', 'late']);
+        $wasAlreadyPresent = !$attendance->wasRecentlyCreated && in_array($attendance->getOriginal('status'), ['present', 'late']);
+
+        if ($isArriving && !$wasAlreadyPresent) {
             $student = Student::with('user')->find($data['student_id']);
             $schedule = Schedule::with('course')->find($data['schedule_id']);
             $tenant = app('tenant');
@@ -84,6 +92,9 @@ class AttendanceService
                 // Dispatch Sync for immediate reliability (avoids queue worker dependency)
                 \App\Jobs\SendWhatsAppNotification::dispatchSync($tenant, $student, $schedule->course);
                 
+                // Send Email Notification if enabled
+                $this->sendEmailNotification($tenant, $student, $schedule->course, $status);
+
                 // Award points for attendance (maybe reduction for late?)
                 if ($student->user) {
                     $points = $status === 'late' ? 5 : 10;
@@ -166,6 +177,71 @@ class AttendanceService
                 'schedule' => $scheduleId,
             ]
         );
+    }
+
+    /**
+     * Send attendance email notification.
+     */
+    public function sendEmailNotification($tenant, $student, $course, $status)
+    {
+        try {
+            $tenantSettings = $tenant->settings['email_templates'] ?? [];
+            $notifEnabled = !isset($tenantSettings['notif_attendance_enabled']) || $tenantSettings['notif_attendance_enabled'];
+
+            if (!$notifEnabled) return;
+
+            // Determine real email
+            $realEmail = null;
+            $studentEmail = $student->email ?? ($student->user ? $student->user->email : null);
+            if ($studentEmail && !preg_match('/^std\d+\..+@taalimu\.com$/', $studentEmail)) {
+                $realEmail = $studentEmail;
+            }
+            $hasParentEmail = !empty($student->parent_email);
+
+            if ($realEmail || $hasParentEmail) {
+                $locale = $this->getTargetLocale($tenant, $student);
+                
+                $subjectKey = "notif_attendance_subject_{$locale}";
+                $bodyKey = "notif_attendance_body_{$locale}";
+
+                $defaultSubjects = [
+                    'ar' => 'إشعار حضور حصة - {center_name}',
+                    'en' => 'Attendance Notification - {center_name}',
+                    'fr' => 'Notification de présence - {center_name}',
+                ];
+
+                $defaultBodies = [
+                    'ar' => "مرحباً {student_name}،\n\nنود إبلاغك بأنه تم تسجيل حضورك لحصة {course_name} بنجاح.\nالحالة: {status}\n\nنتمنى لك التوفيق،\n{center_name}",
+                    'en' => "Hello {student_name},\n\nWe would like to inform you that your attendance for {course_name} has been recorded.\nStatus: {status}\n\nBest regards,\n{center_name}",
+                    'fr' => "Bonjour {student_name},\n\nNous vous informons que votre présence pour {course_name} a été enregistrée.\nStatut: {status}\n\nCordialement,\n{center_name}",
+                ];
+                
+                $subject = $tenantSettings[$subjectKey] ?? $tenantSettings['notif_attendance_subject'] ?? ($defaultSubjects[$locale] ?? $defaultSubjects['en']);
+                $body = $tenantSettings[$bodyKey] ?? $tenantSettings['notif_attendance_body'] ?? ($defaultBodies[$locale] ?? $defaultBodies['en']);
+                
+                $variables = [
+                    'student_name' => $student->name,
+                    'course_name' => $course->title,
+                    'center_name' => $tenant->name,
+                    'status' => __('center::students.' . $status, [], $locale),
+                    'date' => now()->format('Y-m-d'),
+                ];
+
+                if ($realEmail) {
+                    Mail::to($realEmail)->queue(new AttendanceNotificationMail(
+                        $subject, $body, $variables, $tenant->name, $student->name
+                    ));
+                }
+                
+                if ($hasParentEmail) {
+                    Mail::to($student->parent_email)->queue(new AttendanceNotificationMail(
+                        $subject, $body, $variables, $tenant->name, $student->name
+                    ));
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error('AttendanceService email notification failed: ' . $e->getMessage());
+        }
     }
 
     /**
