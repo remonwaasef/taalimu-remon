@@ -751,6 +751,45 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        <!-- Payments History Section -->
+                        <div class="mt-5">
+                            <h6 class="fw-bold text-dark border-start border-4 border-success ps-3 mb-4">
+                                <i class="fas fa-history me-2"></i>{{ __('center::students.profile.financial.payments_history') ?? 'سجل المدفوعات (الإيصالات)' }}
+                            </h6>
+                            <div class="table-responsive">
+                                <table class="table table-sm align-middle border-top">
+                                    <thead>
+                                        <tr class="text-muted small">
+                                            <th>{{ __('center::students.profile.financial.date') ?? 'التاريخ' }}</th>
+                                            <th>{{ __('center::students.profile.financial.invoice_id') ?? 'رقم الفاتورة' }}</th>
+                                            <th>{{ __('center::students.profile.financial.method') ?? 'طريقة الدفع' }}</th>
+                                            <th>{{ __('center::students.profile.financial.amount') ?? 'المبلغ' }}</th>
+                                            <th>{{ __('center::students.profile.financial.received_by') ?? 'استلام بواسطة' }}</th>
+                                            <th class="text-end">{{ __('center::students.profile.financial.receipt') ?? 'الإيصال' }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($payments as $payment)
+                                            <tr class="small">
+                                                <td>{{ ($payment->paid_at ?? $payment->created_at)->format('Y-m-d') }}</td>
+                                                <td><span class="badge bg-light text-primary">#{{ $payment->sale_id }}</span></td>
+                                                <td>{{ $payment->payment_method }}</td>
+                                                <td class="fw-bold text-success">{{ number_format($payment->amount, 2) }}</td>
+                                                <td class="text-muted">{{ $payment->receiver->name ?? '---' }}</td>
+                                                <td class="text-end">
+                                                    <a href="{{ route('center.payments.receipt', $payment->id) }}" class="btn btn-link btn-sm text-primary p-0">
+                                                        <i class="fas fa-download me-1"></i>{{ __('center::students.profile.financial.download_receipt') ?? 'تحميل الإيصال' }}
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr><td colspan="6" class="text-center py-4 text-muted small">{{ __('center::students.profile.financial.no_payments') ?? 'لا يوجد سجل مدفوعات حالياً' }}</td></tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

@@ -368,6 +368,9 @@ class StudentService
             'quiz_attempts' => $quizAttempts,
             'assignments' => $assignments,
             'point_logs' => \App\Models\PointLog::where('user_id', $userId)->latest()->get(),
+            'payments' => \App\Models\Payment::whereHas('sale', function($q) use ($student) {
+                $q->where('student_id', $student->id);
+            })->with('receiver')->latest()->get(),
         ];
 
         if ($student->guardian_id) {

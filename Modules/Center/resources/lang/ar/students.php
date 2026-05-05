@@ -259,6 +259,12 @@ return [
       'date' => 'التاريخ',
       'status' => 'الحالة',
       'no_records' => 'لا توجد سجلات مالية',
+      'payments_history' => 'سجل المدفوعات (الإيصالات)',
+      'method' => 'طريقة الدفع',
+      'received_by' => 'استلام بواسطة',
+      'receipt' => 'الإيصال',
+      'no_payments' => 'لا يوجد سجل مدفوعات حالياً',
+      'download_receipt' => 'تحميل الإيصال',
     ],
     'activity' => [
       'title' => 'تتبع النشاطات',
