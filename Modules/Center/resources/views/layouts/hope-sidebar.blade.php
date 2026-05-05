@@ -1,22 +1,22 @@
 <aside class="sidebar sidebar-default navs-rounded-all sidebar-base">
-    <div class="sidebar-header d-flex align-items-center justify-content-between">
+    <div class="sidebar-header d-flex align-items-center justify-content-between px-4 py-3">
         <a href="{{ route('center.dashboard', ['tenant' => $tenant->domain ?? 'center']) }}" class="navbar-brand d-flex align-items-center m-0">
             @if($tenant->logo)
-                <div class="brand-logo-container">
-                    <img src="{{ asset('storage/' . $tenant->logo) }}" class="rounded-4 shadow-sm" style="max-height: 40px; width: auto; object-fit: contain;">
+                <div class="brand-logo-container bg-white rounded-3 shadow-sm d-flex align-items-center justify-content-center p-1" style="width: 38px; height: 38px; border: 1px solid rgba(0,0,0,0.05);">
+                    <img src="{{ asset('storage/' . $tenant->logo) }}" style="max-height: 28px; width: auto; object-fit: contain;">
                 </div>
             @else
-                <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 40px; height: 40px; font-size: 1.2rem; background: linear-gradient(135deg, #fff 0%, #f0fdf4 100%) !important;">
+                <div class="bg-primary text-white rounded-3 d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 38px; height: 38px; font-size: 1.1rem; background: var(--primary-gradient) !important;">
                     {{ substr($tenant->name ?? 'T', 0, 1) }}
                 </div>
             @endif
             <div class="ms-3 line-height">
-                <h4 class="logo-title fw-bold mb-0 text-dark" style="font-family: 'Cairo', 'Outfit', sans-serif; font-size: 1.15rem; letter-spacing: -0.5px;">
+                <h4 class="logo-title fw-bold mb-0" style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; letter-spacing: -0.5px;">
                     {{ $tenant->name ?? __('sidebar.center_name') }}
                 </h4>
             </div>
         </a>
-        <div class="sidebar-toggle" data-toggle="sidebar" data-active="true" style="color: #059669;">
+        <div class="sidebar-toggle border-0" data-toggle="sidebar" data-active="true">
             <i class="icon">
                 <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4.25 12.2744L19.25 12.2744" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>

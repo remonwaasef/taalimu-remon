@@ -89,11 +89,15 @@ class AttendanceService
                     }
                 }
 
-                // Dispatch Sync for immediate reliability (avoids queue worker dependency)
-                \App\Jobs\SendWhatsAppNotification::dispatchSync($tenant, $student, $schedule->course);
-                
-                // Send Email Notification if enabled
-                $this->sendEmailNotification($tenant, $student, $schedule->course, $status);
+                $attendanceAlertEnabled = !isset($tenant->settings['academic']['attendance_alert']) || $tenant->settings['academic']['attendance_alert'];
+
+                if ($attendanceAlertEnabled) {
+                    // Dispatch Sync for immediate reliability (avoids queue worker dependency)
+                    \App\Jobs\SendWhatsAppNotification::dispatchSync($tenant, $student, $schedule->course);
+                    
+                    // Send Email Notification if enabled
+                    $this->sendEmailNotification($tenant, $student, $schedule->course, $status);
+                }
 
                 // Award points for attendance (maybe reduction for late?)
                 if ($student->user) {
