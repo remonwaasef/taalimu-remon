@@ -1143,7 +1143,7 @@
                                 <div class="col-12">
                                     <div class="form-check form-switch mt-3">
                                         <input type="hidden" name="settings[academic][attendance_alert]" value="0">
-                                        <input class="form-check-input" type="checkbox" name="settings[academic][attendance_alert]" value="1" id="attendanceAlert" {{ ($tenant->settings['academic']['attendance_alert'] ?? false) ? 'checked' : '' }}>
+                                        <input class="form-check-input" type="checkbox" name="settings[academic][attendance_alert]" value="1" id="attendanceAlert" {{ ($tenant->settings['academic']['attendance_alert'] ?? true) ? 'checked' : '' }}>
                                         <label class="form-check-label user-select-none" for="attendanceAlert">{{ __('center::settings.academic.attendance_alert') }}</label>
                                     </div>
                                 </div>
