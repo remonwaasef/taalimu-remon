@@ -1221,192 +1221,154 @@ label {
 /* ===== Premium Sidebar Overhaul (Taalimu Unified) ===== */
 .sidebar {
     background: #ffffff !important;
-    border-left: 1px solid rgba(0, 0, 0, 0.04) !important;
-    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.01) !important;
+    border-left: 1px solid rgba(0, 0, 0, 0.05) !important;
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.01) !important;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    width: 260px !important;
+    width: 260px !important; /* Standard width */
 }
 
 /* Sidebar Header Refinement */
 .sidebar .sidebar-header {
-    padding: 1.5rem 1.25rem !important;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.015) !important;
-    margin-bottom: 0.75rem !important;
-    background: linear-gradient(to bottom, #ffffff 0%, #fcfdfd 100%);
+    padding: 1.25rem 1rem !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.02) !important;
+    margin-bottom: 0.5rem !important;
 }
 
 .sidebar .sidebar-header .logo-title {
-    font-size: 1.1rem !important;
+    font-size: 1rem !important; /* Smaller logo title */
     color: #0f172a !important;
-    font-weight: 800 !important;
-    letter-spacing: -0.5px;
+    letter-spacing: -0.3px;
 }
 
 /* Nav Item Spacing */
 .sidebar-body .sidebar-list .navbar-nav .nav-item {
-    margin: 0.1rem 0.6rem !important;
+    margin: 0.15rem 0.5rem !important; /* More compact */
 }
 
 /* Nav Link Styling */
 .sidebar .nav-item .nav-link {
     display: flex !important;
     align-items: center !important;
-    padding: 0.7rem 0.85rem !important;
-    border-radius: 12px !important;
-    color: #475569 !important; /* Darker slate for professionalism */
+    padding: 0.65rem 0.75rem !important; /* Smaller padding */
+    border-radius: 10px !important;
+    color: #64748b !important;
     font-weight: 600 !important;
-    font-size: 0.87rem !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    border: 1px solid transparent !important;
+    font-size: 0.85rem !important; /* Professional smaller font */
+    transition: all 0.25s ease !important;
 }
 
-/* Nav Icons Styling - Professional Tints */
+/* Nav Icons Styling */
 .sidebar .nav-item .nav-link .icon {
-    width: 32px !important;
-    height: 32px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    margin-left: 12px !important; /* Space in RTL */
+    width: 24px !important; /* Smaller icons */
+    height: 24px !important;
+    font-size: 0.95rem !important;
+    margin-left: 10px !important; /* Space in RTL */
     margin-right: 0 !important;
-    font-size: 1rem !important;
-    transition: all 0.3s ease !important;
-    border-radius: 10px !important;
-    background: #f1f5f9; /* Default soft tint */
-    color: #64748b;
 }
 
 /* Hover State */
 .sidebar .nav-item .nav-link:hover:not(.active) {
-    background: #f8fafc !important;
+    background: #f1f5f9 !important;
     color: #10b981 !important;
-    transform: translateX(-3px) !important; /* Elegant shift */
 }
 
-.sidebar .nav-item .nav-link:hover .icon {
-    background: #ecfdf5 !important;
-    color: #10b981 !important;
-    transform: rotate(-5deg);
-}
-
-/* Active State - High End Glass Emerald */
+/* Active State - Refined Emerald */
 .sidebar .nav-item .nav-link.active {
-    background: #ffffff !important;
+    background: #ecfdf5 !important; /* Solid subtle background */
     color: #059669 !important;
-    font-weight: 800 !important;
-    border: 1px solid rgba(16, 185, 129, 0.15) !important;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.08) !important;
-    position: relative;
-}
-
-.sidebar .nav-item .nav-link.active .icon {
-    background: #10b981 !important;
-    color: #ffffff !important;
-    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3) !important;
+    font-weight: 700 !important;
+    border: none !important;
 }
 
 .sidebar .nav-item .nav-link.active::after {
     content: '';
     position: absolute;
-    right: -10px;
-    top: 25%;
-    bottom: 25%;
-    width: 3px;
+    right: -8px;
+    top: 15%;
+    bottom: 15%;
+    width: 3px; /* Thinner indicator */
     background: #10b981;
     border-radius: 4px 0 0 4px;
-    box-shadow: -2px 0 8px rgba(16, 185, 129, 0.4);
+}
+
+.sidebar .nav-item .nav-link.active .icon {
+    color: #059669 !important;
 }
 
 /* Category/Static Labels */
 .sidebar .nav-item.static-item {
-    margin-top: 1.5rem !important;
-    margin-bottom: 0.5rem !important;
-    padding: 0 1.25rem !important;
-    position: relative;
-}
-
-.sidebar .nav-item.static-item::before {
-    content: '';
-    position: absolute;
-    right: 1.25rem;
-    left: 1.25rem;
-    top: -0.75rem;
-    height: 1px;
-    background: linear-gradient(to left, rgba(0,0,0,0.05), transparent);
+    margin-top: 1.25rem !important;
+    margin-bottom: 0.25rem !important;
+    padding: 0 1rem !important;
 }
 
 .sidebar .nav-item.static-item .default-icon {
-    font-size: 0.7rem !important;
-    font-weight: 800 !important;
+    font-size: 0.68rem !important; /* Very small labels */
+    font-weight: 700 !important;
     text-transform: uppercase !important;
-    letter-spacing: 1.2px !important;
+    letter-spacing: 1px !important;
     color: #94a3b8 !important;
 }
 
-/* Sub-nav Styling (Premium Nested Look) */
+/* Sub-nav Styling (Compact & Clean) */
 .sidebar .sub-nav {
-    background: #fcfdfd !important;
-    border-radius: 12px !important;
-    margin: 0.25rem 1rem !important;
-    padding: 0.4rem 0 !important;
-    border: 1px solid rgba(0,0,0,0.02) !important;
+    background: transparent !important;
+    margin: 0 !important;
+    padding: 0 0.5rem 0.5rem 0.5rem !important;
+}
+
+.sidebar .sub-nav .nav-item {
+    margin: 0.1rem 0 !important;
 }
 
 .sidebar .sub-nav .nav-link {
-    padding: 0.6rem 1rem !important;
-    font-size: 0.84rem !important;
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.82rem !important;
     font-weight: 500 !important;
     color: #64748b !important;
 }
 
 .sidebar .sub-nav .nav-link::before {
     content: '';
-    width: 5px;
-    height: 1px;
+    width: 4px;
+    height: 4px;
     background: #cbd5e1;
-    margin-left: 10px;
-    transition: all 0.3s ease;
+    border-radius: 50%;
+    margin-left: 8px; /* Indentation */
 }
 
 .sidebar .sub-nav .nav-link.active {
-    background: transparent !important;
-    color: #10b981 !important;
-    font-weight: 700 !important;
+    background: #f0fdf4 !important;
+    color: #059669 !important;
+    font-weight: 600 !important;
 }
 
 .sidebar .sub-nav .nav-link.active::before {
-    width: 12px;
     background: #10b981;
+    transform: scale(1.2);
 }
 
-/* Toggle & Footer */
+.sidebar .sub-nav .nav-link.active::after {
+    right: -13px; /* Adjust for sub-nav indentation */
+    width: 2px;
+}
+
+/* Toggle & Misc */
 .sidebar-toggle {
-    background: #ffffff !important;
-    border: 1px solid #f1f5f9 !important;
-    border-radius: 8px !important;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
+    padding: 4px !important;
 }
 
-/* Custom Scrollbar */
-.sidebar .data-scrollbar::-webkit-scrollbar {
-    width: 4px;
+.sidebar .hr-horizontal {
+    margin: 0.75rem 1rem !important;
 }
 
-.sidebar .data-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(0,0,0,0.05);
-    border-radius: 10px;
-}
-
-/* RTL Arrow Fixes */
+/* Sidebar Toggle Arrow fix for RTL */
 [dir="rtl"] .sidebar .nav-item .nav-link .right-icon {
-    left: 12px !important;
+    left: 10px !important;
     right: auto !important;
-    opacity: 0.4;
-    transition: transform 0.3s ease;
+    transform: rotate(180deg); /* Point left in RTL */
 }
 
 [dir="rtl"] .sidebar .nav-item .nav-link[aria-expanded="true"] .right-icon {
-    transform: rotate(90deg);
-    opacity: 1;
-    color: #10b981;
+    transform: rotate(270deg); /* Point down when open */
 }
