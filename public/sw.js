@@ -1,49 +1,68 @@
-const CACHE_NAME = 'taalimu-sw-v5';
+const CACHE_NAME = 'taalimu-v1';
+const OFFLINE_URL = '/offline';
 
-self.addEventListener('install', () => {
-    console.log('[ServiceWorker] Installing v5...');
+const URLS_TO_CACHE = [
+    '/',
+    OFFLINE_URL,
+    '/css/app.css',
+    '/js/app.js',
+    '/images/logo.png',
+    '/images/icons/icon-192x192.png',
+    '/images/icons/icon-512x512.png'
+];
+
+self.addEventListener('install', (event) => {
+    event.waitUntil(
+        caches.open(CACHE_NAME).then((cache) => {
+            return cache.addAll(URLS_TO_CACHE);
+        })
+    );
     self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
-    console.log('[ServiceWorker] Activating v5...');
     event.waitUntil(
-        caches.keys().then((keyList) => {
-            return Promise.all(keyList.map((key) => {
-                if (key !== CACHE_NAME) {
-                    return caches.delete(key);
-                }
-            }));
+        caches.keys().then((cacheNames) => {
+            return Promise.all(
+                cacheNames.map((name) => {
+                    if (name !== CACHE_NAME) {
+                        return caches.delete(name);
+                    }
+                })
+            );
         })
     );
     self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {
-    if (event.request.method !== 'GET') return;
+    if (event.request.method !== 'GET') {
+        return;
+    }
 
-    const url = new URL(event.request.url);
-    if (url.origin !== self.location.origin) return;
-
-    event.respondWith((async () => {
-        try {
-            const response = await fetch(event.request);
-            if (response && response.status === 200) {
-                const cache = await caches.open(CACHE_NAME);
-                cache.put(event.request, response.clone());
-            }
-            return response;
-        } catch (error) {
-            const cachedResponse = await caches.match(event.request);
-            if (cachedResponse) return cachedResponse;
-
-            if (event.request.headers.get('accept')?.includes('text/html')) {
-                return new Response(
-                    '<html dir="rtl"><body style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:Cairo,sans-serif;background:#f0f2f5;"><div style="text-align:center;"><h1>📡 لا يوجد اتصال</h1><p>يرجى التحقق من اتصالك بالإنترنت</p></div></body></html>',
-                    { headers: { 'Content-Type': 'text/html; charset=utf-8' } }
-                );
-            }
-            return new Response('', { status: 408, statusText: 'Network Error' });
-        }
-    })());
+    event.respondWith(
+        fetch(event.request)
+            .then((networkResponse) => {
+                // Update cache with fresh response if possible
+                if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+                    const responseToCache = networkResponse.clone();
+                    caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(event.request, responseToCache);
+                    });
+                }
+                return networkResponse;
+            })
+            .catch(() => {
+                // Network failed, serve from cache
+                return caches.match(event.request).then((cachedResponse) => {
+                    if (cachedResponse) {
+                        return cachedResponse;
+                    }
+                    // If it's a page request and not in cache, show offline page
+                    if (event.request.headers.get('accept').includes('text/html')) {
+                        return caches.match(OFFLINE_URL);
+                    }
+                });
+            })
+    );
 });

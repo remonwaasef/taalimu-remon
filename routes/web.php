@@ -2,6 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 
+// PWA Offline Route
+Route::get('/offline', function () {
+    return view('offline');
+});
+
 // Main domain routes (without tenant subdomain)
 Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain', 'localhost'))->group(function () {
     Route::get('/', [App\Http\Controllers\LandingController::class, 'index'])->name('home');

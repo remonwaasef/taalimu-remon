@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', __('center::dashboard.header.dashboard_title'))</title>
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="apple-touch-icon" href="{{ asset('images/icons/icon-192x192.png') }}">
     
     @if($tenant->favicon)
         <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $tenant->favicon) }}">
@@ -915,6 +919,18 @@
     
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     @stack('scripts')
+    
+    <!-- PWA Service Worker & Offline Sync -->
+    <script src="{{ asset('js/offline-sync.js') }}"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => console.log('ServiceWorker registered with scope:', registration.scope))
+                    .catch(error => console.error('ServiceWorker registration failed:', error));
+            });
+        }
+    </script>
     <x-cookie-consent />
 </body>
 </html>

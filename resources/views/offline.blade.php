@@ -1,18 +1,24 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لا يوجد اتصال بالإنترنت - EduCenter</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/offline.css') }}">
-</head>
-<body>
-    <div class="offline-container">
-        <div class="icon">📡</div>
-        <h1>لا يوجد اتصال بالإنترنت</h1>
-        <p>يبدو أنك فقدت الاتصال بالإنترنت. يرجى التحقق من الشبكة والمحاولة مرة أخرى.</p>
-        <button onclick="window.location.reload()" class="btn btn-primary btn-lg">إعادة المحاولة</button>
+@extends('layouts.landing-new')
+
+@section('title', 'You are Offline')
+
+@section('content')
+<div class="container py-5 mt-5 text-center">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6 bg-white p-5 rounded shadow-sm text-dark text-center">
+            <h1 class="display-1 text-muted">🔌</h1>
+            <h2 class="mt-4 fw-bold">You are currently offline</h2>
+            <p class="text-muted mt-3">It seems your device has lost internet connection. Taalimu has saved your actions locally and will sync them automatically once the connection is restored.</p>
+            <button class="btn btn-primary mt-4 px-4 py-2" onclick="window.location.reload()">
+                <i class="fas fa-sync-alt me-2"></i> Try Again
+            </button>
+        </div>
     </div>
-</body>
-</html>
+</div>
+
+<script>
+    window.addEventListener('online', () => {
+        window.location.href = '/';
+    });
+</script>
+@endsection
