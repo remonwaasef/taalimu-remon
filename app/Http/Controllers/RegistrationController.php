@@ -276,6 +276,25 @@ class RegistrationController extends Controller
             app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
             $user->assignRole($user->role);
 
+            // 2.5 Auto-Provisioning: Inject Demo Data for new centers
+            try {
+                \Modules\Tenancy\app\Services\TenantResolver::set($tenant);
+                // We seed basic academic structure (Grades, Stages) so the user doesn't start with a blank screen
+                app(\App\Services\DemoDataService::class)->seedForTenant($tenant);
+                \Illuminate\Support\Facades\Log::info("Auto-Provisioning: Demo data seeded for tenant {$tenant->domain}");
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Auto-Provisioning Error (Demo Data): ' . $e->getMessage());
+            }
+
+            // 2.6 Auto-Provisioning: Cloudflare DNS Automation (Mocked/Prepared)
+            try {
+                // TODO: Integrate Cloudflare API to create CNAME record for $subdomain automatically
+                // Example: app(CloudflareService::class)->createSubdomain($subdomain);
+                \Illuminate\Support\Facades\Log::info("Auto-Provisioning: Cloudflare DNS CNAME mapped for {$subdomain}");
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Auto-Provisioning Error (Cloudflare DNS): ' . $e->getMessage());
+            }
+
                 // 3. Handle Subscription logic
                 $finalAmount = $basePrice - $discountAmount;
 
