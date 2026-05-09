@@ -28,7 +28,7 @@ class StudentNotificationService
         $this->adminNotificationService->notifyAdmins(
             'student_registered',
             "تم تسجيل طالب جديد: {$student->name}",
-            route('center.students.show', ['tenant' => app('tenant')->domain, 'student' => $student->id]),
+            route('center.students.show', ['tenant' => \Modules\Tenancy\app\Services\TenantResolver::get()->domain, 'student' => $student->id]),
             'fas fa-user-plus',
             $creator->name
         );
@@ -39,7 +39,7 @@ class StudentNotificationService
         $this->adminNotificationService->notifyAdmins(
             'student_updated',
             "تم تحديث بيانات الطالب: {$student->name}",
-            route('center.students.show', ['tenant' => app('tenant')->domain, 'student' => $student->id]),
+            route('center.students.show', ['tenant' => \Modules\Tenancy\app\Services\TenantResolver::get()->domain, 'student' => $student->id]),
             'fas fa-user-edit',
             $modifier->name
         );
@@ -50,7 +50,7 @@ class StudentNotificationService
         $this->adminNotificationService->notifyAdmins(
             'student_deleted',
             "تم حذف الطالب: {$studentName}",
-            route('center.students.index', ['tenant' => app('tenant')->domain]),
+            route('center.students.index', ['tenant' => \Modules\Tenancy\app\Services\TenantResolver::get()->domain]),
             'fas fa-user-times',
             $deleter->name
         );
@@ -59,7 +59,7 @@ class StudentNotificationService
     public function sendWelcomeEmails(Student $student, ?string $generatedPassword): void
     {
         try {
-            $tenant = app('tenant');
+            $tenant = \Modules\Tenancy\app\Services\TenantResolver::get();
             $settings = $this->getEmailTemplateSettings($tenant);
 
             $variables = $this->buildTemplateVariables($student, $tenant, $generatedPassword);
@@ -95,7 +95,7 @@ class StudentNotificationService
     public function sendGroupEnrollmentEmails(Student $student, array $courseIds): void
     {
         try {
-            $tenant = app('tenant');
+            $tenant = \Modules\Tenancy\app\Services\TenantResolver::get();
             $tenantSettings = $tenant->settings['email_templates'] ?? [];
             $groupEnrollmentEnabled = !isset($tenantSettings['notif_group_enrollment_enabled']) || $tenantSettings['notif_group_enrollment_enabled'];
             
@@ -159,7 +159,7 @@ class StudentNotificationService
     public function sendBulkWelcomeEmails(array $emails, string $passwordHash): void
     {
         try {
-            $tenant = app('tenant');
+            $tenant = \Modules\Tenancy\app\Services\TenantResolver::get();
             $settings = $this->getEmailTemplateSettings($tenant);
 
             if (!$settings['welcome_student_enabled'] && !$settings['welcome_guardian_enabled']) {

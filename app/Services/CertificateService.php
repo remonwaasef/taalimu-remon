@@ -37,7 +37,7 @@ class CertificateService
             'metadata' => [
                 'student_name' => $enrollment->student->user->name,
                 'course_title' => $enrollment->course->title,
-                'tenant_name' => app('tenant')->name ?? 'Edu Platform',
+                'tenant_name' => \Modules\Tenancy\app\Services\TenantResolver::get()->name ?? 'Edu Platform',
             ],
         ]);
     }
@@ -51,7 +51,7 @@ class CertificateService
             'certificate' => $certificate,
             'student' => $certificate->student,
             'course' => $certificate->course,
-            'tenant' => app('tenant'),
+            'tenant' => \Modules\Tenancy\app\Services\TenantResolver::get(),
         ];
 
         return Pdf::loadView('center::certificates.template', $data)

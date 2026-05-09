@@ -194,7 +194,7 @@ class CourseService
             $dayValue = $dayMapping[$dayInput] ?? $dayInput;
 
             $schedules[] = new Schedule([
-                'tenant_id' => app('tenant')->id,
+                'tenant_id' => \Modules\Tenancy\app\Services\TenantResolver::get()->id,
                 'instructor_id' => $instructorId,
                 'classroom_id' => $scheduleData['classroom_id'] ?? null,
                 'day_of_week' => $dayValue,
@@ -211,7 +211,7 @@ class CourseService
      */
     protected function notifyAdmins(Course $course)
     {
-        $admins = \App\Models\User::where('tenant_id', app('tenant')->id)
+        $admins = \App\Models\User::where('tenant_id', \Modules\Tenancy\app\Services\TenantResolver::get()->id)
             ->whereIn('role', ['admin', 'center_admin'])
             ->get();
             

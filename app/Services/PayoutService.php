@@ -16,7 +16,7 @@ class PayoutService
     public function processPayout(Instructor $instructor, array $data)
     {
         return DB::transaction(function () use ($instructor, $data) {
-            $tenantId = app('tenant')->id;
+            $tenantId = \Modules\Tenancy\app\Services\TenantResolver::get()->id;
             $amount = $data['amount'];
 
             // 1. Create Payout Record
