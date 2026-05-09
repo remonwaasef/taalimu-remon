@@ -1,18 +1,28 @@
 {
-    "name": "Taalimu - منصة تعليمية",
+    "name": "Taalimu Educational Platform",
     "short_name": "Taalimu",
-    "description": "منصة إدارة المراكز التعليمية المتكاملة",
-    "start_url": "/login",
+    "description": "Your centralized educational hub",
+    "start_url": "/",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#3A0CA3",
-    "orientation": "portrait",
+    "background_color": "#111827",
+    "theme_color": "#4f46e5",
+    "orientation": "portrait-primary",
     "icons": [
         {
-            "src": "/images/brand/logo-icon.png",
-            "sizes": "192x192 512x512",
+            "src": "/images/icons/icon-72x72.png",
+            "sizes": "72x72",
+            "type": "image/png"
+        },
+        {
+            "src": "/images/icons/icon-192x192.png",
+            "sizes": "192x192",
             "type": "image/png",
             "purpose": "any maskable"
+        },
+        {
+            "src": "/images/icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
         }
     ]
 }
