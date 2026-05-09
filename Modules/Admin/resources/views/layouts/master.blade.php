@@ -649,5 +649,6 @@
             });
         }
     </script>
+    <x-cookie-consent />
 </body>
 </html>
