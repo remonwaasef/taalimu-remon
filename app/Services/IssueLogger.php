@@ -35,7 +35,7 @@ class IssueLogger
             // Create new issue
             $issue = OperationIssue::create([
                 'uuid' => Str::uuid(),
-                'tenant_id' => app()->bound('tenant') ? app('tenant')->id : null,
+                'tenant_id' => \Modules\Tenancy\app\Services\TenantResolver::id(),
                 'user_id' => auth()->id(),
                 'title' => $this->categorizer->generateTitle($e),
                 'action' => $request?->route()?->getName() ?? $this->guessActionFromRequest($request),
@@ -89,7 +89,7 @@ class IssueLogger
             
             $issue = OperationIssue::create([
                 'uuid' => Str::uuid(),
-                'tenant_id' => $options['tenant_id'] ?? (app()->bound('tenant') ? app('tenant')->id : null),
+                'tenant_id' => $options['tenant_id'] ?? (\Modules\Tenancy\app\Services\TenantResolver::id()),
                 'user_id' => $options['user_id'] ?? auth()->id(),
                 'title' => $options['title'] ?? "[Manual] {$message}",
                 'action' => $action,

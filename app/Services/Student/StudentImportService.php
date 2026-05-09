@@ -19,7 +19,7 @@ class StudentImportService
 
     public function importStudents(array $csvData)
     {
-        $tenantId = app('tenant')->id;
+        $tenantId = \Modules\Tenancy\app\Services\TenantResolver::get()->id;
         $successCount = 0;
         $errors = [];
         $creator = auth()->user();
@@ -132,7 +132,7 @@ class StudentImportService
              app(\App\Services\AdminNotificationService::class)->notifyAdmins(
                 'bulk_import',
                 "تم استيراد {$successCount} طالب بنجاح",
-                route('center.students.index', ['tenant' => app('tenant')->domain]),
+                route('center.students.index', ['tenant' => \Modules\Tenancy\app\Services\TenantResolver::get()->domain]),
                 'fas fa-file-import',
                 $creator->name
             );

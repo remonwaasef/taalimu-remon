@@ -27,7 +27,7 @@ class AdminNotificationService
         string $causer,
         ?int $tenantId = null
     ): void {
-        $tenantId = $tenantId ?? app('tenant')->id;
+        $tenantId = $tenantId ?? \Modules\Tenancy\app\Services\TenantResolver::get()->id;
 
         $admins = User::where('tenant_id', $tenantId)
             ->whereIn('role', ['admin', 'center_admin'])

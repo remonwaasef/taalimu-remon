@@ -58,7 +58,7 @@ class StudentRegistrationService
                     'phone' => $data->phone,
                     'password' => Hash::make($generatedPassword),
                     'role' => 'student',
-                    'tenant_id' => app('tenant')->id,
+                    'tenant_id' => \Modules\Tenancy\app\Services\TenantResolver::get()->id,
                     'must_change_password' => true,
                 ]);
             }
@@ -66,7 +66,7 @@ class StudentRegistrationService
             $guardianId = null;
             if ($data->parent_phone) {
                 $guardian = Guardian::updateOrCreate(
-                    ['tenant_id' => app('tenant')->id, 'phone' => $data->parent_phone],
+                    ['tenant_id' => \Modules\Tenancy\app\Services\TenantResolver::get()->id, 'phone' => $data->parent_phone],
                     [
                         'name' => $data->parent_name ?? 'N/A',
                         'job' => $data->parent_job,
@@ -78,7 +78,7 @@ class StudentRegistrationService
             }
 
             $student = Student::create([
-                'tenant_id' => app('tenant')->id,
+                'tenant_id' => \Modules\Tenancy\app\Services\TenantResolver::get()->id,
                 'user_id' => $user->id,
                 'grade_id' => $data->grade_id,
                 'guardian_id' => $guardianId,
@@ -146,7 +146,7 @@ class StudentRegistrationService
 
     public function generateUniqueCode()
     {
-        $tenantId = app('tenant')->id;
+        $tenantId = \Modules\Tenancy\app\Services\TenantResolver::get()->id;
         $prefix = 'S-' . ($tenantId % 1000);
         
         $lastStudent = Student::where('tenant_id', $tenantId)
@@ -172,7 +172,7 @@ class StudentRegistrationService
 
     public function generateUniqueEmail()
     {
-        $tenant = app('tenant');
+        $tenant = \Modules\Tenancy\app\Services\TenantResolver::get();
         $subdomain = $tenant->domain;
         
         $lastStudent = User::where('tenant_id', $tenant->id)
