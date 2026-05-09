@@ -28,3 +28,25 @@ frankenphp
 frankenphp-worker.php
 rr
 .rr.yaml
+
+# Temporary & Backup files
+*.bak
+temp_*
+tmp_*
+test_output*
+filtered_log*
+extracted_*.json
+missing_translations.json
+schema_dump*
+roles_schema*
+routes.json
+regional_dump*
+packages_with_features.json
+packages.json
+features.json
+*.sql
+/scratch
+/docs/internal
+/playwright-report
+/test-results
+/Homepage*.pdf
