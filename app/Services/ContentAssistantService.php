@@ -85,14 +85,14 @@ class ContentAssistantService
             Log::error('Gemini API Error', ['response' => $response->body()]);
             return [
                 'success' => false,
-                'content' => 'حدث خطأ في توليد المحتوى.',
+                __('services.string_55'),
             ];
 
         } catch (\Exception $e) {
             Log::error('Content Assistant Error', ['error' => $e->getMessage()]);
             return [
                 'success' => false,
-                'content' => 'حدث خطأ غير متوقع.',
+                __('services.string_56'),
             ];
         }
     }

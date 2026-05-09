@@ -28,7 +28,7 @@ class PayoutService
                 'transaction_reference' => $data['transaction_reference'] ?? null,
                 'payout_date' => $data['payout_date'] ?? now(),
                 'processed_by' => auth()->id(),
-                'notes' => $data['notes'] ?? 'صرف مستحقات مدرس',
+                __('services.string_91'),
             ]);
 
             // 2. Mark Commissions as Paid
@@ -62,7 +62,7 @@ class PayoutService
                 'tenant_id' => $tenantId,
                 'category' => 'salaries',
                 'amount' => $amount,
-                'description' => "صرف مستحقات للمدرس: {$instructor->name} (Payout #{$payout->id})",
+                'description' => __('services.string_92', ['instructor_name' => $instructor->name, 'payout_id' => $payout->id]),
                 'date' => $data['payout_date'] ?? now(),
                 'payment_method' => $data['payment_method'] ?? 'cash',
                 'created_by' => auth()->id(),
