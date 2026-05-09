@@ -24,7 +24,7 @@ class RefundService
                 'tenant_id' => $tenantId,
                 'sale_id' => $sale->id,
                 'amount' => $refundAmount,
-                'reason' => $data['reason'] ?? 'طلب استرداد',
+                __('services.string_93'),
                 'refund_method' => $data['refund_method'] ?? 'cash',
                 'processed_by' => auth()->id(),
             ]);

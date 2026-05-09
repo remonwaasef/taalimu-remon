@@ -49,7 +49,7 @@ class ChatbotService
 
             if ($response->successful()) {
                 $data = $response->json();
-                $reply = $data['candidates'][0]['content']['parts'][0]['text'] ?? 'عذراً، لم أتمكن من معالجة طلبك.';
+                $reply = $data[__('services.string_52');
                 
                 return [
                     'success' => true,
@@ -60,14 +60,14 @@ class ChatbotService
             Log::error('Gemini API Error', ['response' => $response->body()]);
             return [
                 'success' => false,
-                'message' => 'عذراً، حدث خطأ في الاتصال بالخادم.',
+                __('services.string_53'),
             ];
 
         } catch (\Exception $e) {
             Log::error('Chatbot Error', ['error' => $e->getMessage()]);
             return [
                 'success' => false,
-                'message' => 'عذراً، حدث خطأ غير متوقع.',
+                __('services.string_54'),
             ];
         }
     }
