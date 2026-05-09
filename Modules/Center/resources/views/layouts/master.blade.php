@@ -915,5 +915,6 @@
     
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     @stack('scripts')
+    <x-cookie-consent />
 </body>
 </html>

@@ -166,5 +166,6 @@
         });
     </script>
     @stack('scripts')
+    <x-cookie-consent />
 </body>
 </html>
