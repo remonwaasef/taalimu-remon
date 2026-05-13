@@ -54,8 +54,13 @@ html[dir="rtl"] .sidebar-base .nav-link.active {
     font-weight: 500;
 }
 html[dir="rtl"] .sidebar-base .sub-nav .nav-link {
-    padding-right: 2rem !important;
-    margin-right: 1.5rem !important;
+    padding-right: 1.5rem !important;
+    margin-right: 0.5rem !important;
+}
+/* Ensure the text is allowed to wrap or take more space if needed */
+.sidebar-base .item-name {
+    white-space: normal !important;
+    line-height: 1.2 !important;
 }
 .sidebar-base .hr-horizontal {
     border-color: rgba(0,0,0,0.05) !important;
