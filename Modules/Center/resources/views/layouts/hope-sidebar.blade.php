@@ -1,4 +1,76 @@
-<aside class="sidebar sidebar-default navs-rounded-all sidebar-base">
+<aside class="sidebar sidebar-default navs-rounded-all sidebar-base" style="background: linear-gradient(180deg, #022c22 0%, #064e3b 100%) !important; border-right: 1px solid rgba(255,255,255,0.05) !important;">
+<style>
+/* Premium Emerald Sidebar Theme */
+.sidebar-base {
+    box-shadow: 4px 0 24px rgba(0,0,0,0.08) !important;
+}
+.sidebar-base .sidebar-header {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.sidebar-base .logo-title {
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.5px;
+}
+.sidebar-base .nav-link {
+    color: rgba(255, 255, 255, 0.65) !important;
+    border-radius: 12px !important;
+    margin: 4px 16px !important;
+    padding: 12px 16px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    font-weight: 500;
+}
+.sidebar-base .nav-link:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #ffffff !important;
+    transform: translateX(4px);
+}
+html[dir="rtl"] .sidebar-base .nav-link:hover {
+    transform: translateX(-4px);
+}
+.sidebar-base .nav-link.active {
+    background: rgba(16, 185, 129, 0.15) !important;
+    color: #34d399 !important;
+    box-shadow: inset 3px 0 0 #34d399;
+    backdrop-filter: blur(8px);
+}
+html[dir="rtl"] .sidebar-base .nav-link.active {
+    box-shadow: inset -3px 0 0 #34d399;
+}
+.sidebar-base .nav-link i, .sidebar-base .nav-link svg {
+    color: rgba(255,255,255,0.5) !important;
+    transition: color 0.3s ease;
+}
+.sidebar-base .nav-link:hover i, .sidebar-base .nav-link.active i {
+    color: inherit !important;
+}
+.sidebar-base .sub-nav .nav-link {
+    font-size: 0.85rem !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+}
+html[dir="rtl"] .sidebar-base .sub-nav .nav-link {
+    padding-right: 3.5rem !important;
+}
+.sidebar-base .hr-horizontal {
+    border-color: rgba(255,255,255,0.1) !important;
+    margin: 1rem 0;
+}
+/* Glassmorphism for Logo */
+.brand-logo-container {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.brand-logo-fallback {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    color: white !important;
+}
+</style>
     <div class="sidebar-header d-flex align-items-center justify-content-between px-4 py-3">
         <a href="{{ route('center.dashboard', ['tenant' => $tenant->domain ?? 'center']) }}" class="navbar-brand d-flex align-items-center m-0">
             @if($tenant->logo)
@@ -6,7 +78,7 @@
                     <img src="{{ asset('storage/' . $tenant->logo) }}" style="max-height: 28px; width: auto; object-fit: contain;">
                 </div>
             @else
-                <div class="bg-primary text-white rounded-3 d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 38px; height: 38px; font-size: 1.1rem; background: var(--primary-gradient) !important;">
+                <div class="brand-logo-fallback rounded-3 d-flex align-items-center justify-content-center fw-bold text-uppercase" style="width: 38px; height: 38px; font-size: 1.2rem;">
                     {{ substr($tenant->name ?? 'T', 0, 1) }}
                 </div>
             @endif
