@@ -102,16 +102,28 @@
 </div>
 
 <div class="container-fluid py-4" id="dashboard-main-content" style="display: none; opacity: 0; transition: opacity 0.5s ease;">
-    {{-- Header Section --}}
-    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
-        <div>
-            <h4 class="fw-bold mb-1 text-dark">{{ __('center::dashboard.overview') }}</h4>
-            <p class="text-muted small mb-0">{{ $tenant->name }} - {{ now()->translatedFormat('l, d F Y') }}</p>
-        </div>
-        <div class="d-flex gap-2">
-            <a href="{{ route('center.students.create', ['tenant' => $tenant->domain ?? 'center']) }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
-                <i class="fas fa-plus me-1"></i> {{ __('center::sidebar.add_student') ?? 'طالب جديد' }}
-            </a>
+    {{-- Premium Hero Section --}}
+    <div class="card border-0 shadow-sm mb-4 rounded-4 overflow-hidden position-relative" style="background: #ffffff;">
+        <div class="position-absolute top-0 end-0 h-100 w-50" style="background: linear-gradient(90deg, rgba(16,185,129,0) 0%, rgba(16,185,129,0.05) 100%); pointer-events: none;"></div>
+        <div class="card-body p-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 54px; height: 54px;">
+                    <i class="fas fa-hand-sparkles fa-lg"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-1 text-dark" style="letter-spacing: -0.5px;">مرحباً بك، {{ auth()->user()->name ?? 'مدير المركز' }} 👋</h4>
+                    <p class="text-muted mb-0" style="font-size: 0.9rem;">
+                        <i class="fas fa-building ms-1 text-black-50"></i> <span class="fw-medium text-dark">{{ $tenant->name }}</span>
+                        <span class="mx-2 text-black-50">|</span> 
+                        <i class="far fa-calendar-alt ms-1 text-black-50"></i> {{ now()->translatedFormat('l، d F Y') }}
+                    </p>
+                </div>
+            </div>
+            <div>
+                <a href="{{ route('center.students.create', ['tenant' => $tenant->domain ?? 'center']) }}" class="btn btn-success rounded-pill px-4 py-2 shadow-sm fw-bold d-inline-flex align-items-center transition-all hover-shadow">
+                    <i class="fas fa-plus me-2"></i> {{ __('center::sidebar.add_student') ?? 'طالب جديد' }}
+                </a>
+            </div>
         </div>
     </div>
 
