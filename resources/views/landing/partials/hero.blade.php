@@ -42,7 +42,7 @@
             <div class="col-span-12 md:col-span-6 relative w-full md:w-[95%] xl:w-[90%] md:ms-0 me-auto md:-mt-8 xl:-mt-16 order-1 md:order-2" data-animate="fade-image">
 
                 <!-- Floating WhatsApp Card -->
-                <div class="hidden sm:block absolute -top-10 -left-2 lg:-top-12 lg:-left-6 z-30 animate-float-slow w-56 lg:w-72" data-animate="fade-up">
+                <div class="hidden sm:block absolute top-6 -left-2 lg:top-10 lg:-left-6 z-30 animate-float-slow w-56 lg:w-72" data-animate="fade-up">
                     <div class="bg-white/95 backdrop-blur-xl border border-emerald-100 rounded-2xl shadow-2xl overflow-hidden ring-1 ring-emerald-500/10">
                         <div class="bg-emerald-500 px-3 py-2 lg:px-4 lg:py-2.5 flex items-center justify-between">
                             <div class="flex items-center gap-1.5 lg:gap-2">
