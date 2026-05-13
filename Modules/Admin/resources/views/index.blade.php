@@ -128,7 +128,7 @@
     <div class="mb-5">
         <h5 class="fw-bold mb-4 text-dark d-flex align-items-center">
             <i class="bi bi-pie-chart-fill me-2 text-primary"></i>
-            تحليل باقات الاشتراك
+            {{ __('admin::admin.dashboard.subscription_analytics') ?? 'تحليل باقات الاشتراك' }}
         </h5>
         <div class="row g-4">
             @foreach($planAnalytics as $plan)
@@ -149,13 +149,13 @@
                             <div class="row g-0 align-items-center">
                                 <div class="col-6 border-end">
                                     <div class="px-2">
-                                        <div class="text-muted small mb-1">المراكز</div>
+                                        <div class="text-muted small mb-1">{{ __('admin::admin.dashboard.centers') ?? 'المراكز' }}</div>
                                         <div class="h4 fw-bold mb-0 text-dark">{{ $plan['centers_count'] }}</div>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="px-2 text-end">
-                                        <div class="text-muted small mb-1">صافي الأرباح</div>
+                                        <div class="text-muted small mb-1">{{ __('admin::admin.dashboard.net_profits') ?? 'صافي الأرباح' }}</div>
                                         <div class="h4 fw-bold mb-0 text-success">
                                             {{ number_format($plan['total_profits'], 0) }}
                                             <span class="small fw-normal text-muted" style="font-size: 0.7rem;">{{ __('admin::admin.egp') }}</span>
@@ -172,7 +172,7 @@
                                     <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $percentage }}%" aria-valuenow="{{ $percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                                 <div class="d-flex justify-content-between mt-2">
-                                    <small class="text-muted">نسبة الاستحواذ</small>
+                                    <small class="text-muted">{{ __('admin::admin.dashboard.acquisition_rate') ?? 'نسبة الاستحواذ' }}</small>
                                     <small class="fw-bold">{{ number_format($percentage, 1) }}%</small>
                                 </div>
                             </div>
@@ -193,10 +193,10 @@
             <table class="table align-middle mb-0">
                 <thead class="bg-light">
                     <tr>
-                        <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.name') }}</th>
-                        <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.domain') }}</th>
-                        <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.joined_on') }}</th>
-                        <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.status') }}</th>
+                        <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.name') ?? 'اسم المركز' }}</th>
+                        <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.domain') ?? 'النطاق' }}</th>
+                        <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.joined_on') ?? 'تاريخ الانضمام' }}</th>
+                        <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.status') ?? 'الحالة' }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -251,22 +251,22 @@
                             <td class="px-4 fw-bold position-relative">
                                 <a href="{{ route('admin.tickets.show', $ticket->id) }}" class="text-decoration-none text-dark stretched-link">{{ $ticket->subject }}</a>
                             </td>
-                            <td class="px-4">{{ $ticket->user ? $ticket->user->name : 'غير محدد' }}</td>
-                            <td class="px-4 text-muted">{{ $ticket->tenant ? $ticket->tenant->name : 'نظام' }}</td>
+                            <td class="px-4">{{ $ticket->user ? $ticket->user->name : __('admin::admin.tenants.table.not_specified') }}</td>
+                            <td class="px-4 text-muted">{{ $ticket->tenant ? $ticket->tenant->name : __('admin::admin.sidebar.admin') }}</td>
                             <td class="px-4 text-muted">{{ $ticket->created_at->format('Y-m-d') }}</td>
                             <td class="px-4">
                                 @if($ticket->status == 'open')
-                                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">مفتوحة</span>
+                                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">{{ __('admin::admin.dashboard.ticket_open') ?? 'مفتوحة' }}</span>
                                 @elseif($ticket->status == 'pending')
-                                    <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3">قيد الانتظار</span>
+                                    <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3">{{ __('admin::admin.dashboard.ticket_pending') ?? 'قيد الانتظار' }}</span>
                                 @else
-                                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">مغلقة</span>
+                                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{ __('admin::admin.dashboard.ticket_closed') ?? 'مغلقة' }}</span>
                                 @endif
                             </td>
                         </tr>
                     @empty
                         <tr>
-                             <td colspan="5" class="text-center py-5 text-muted">{{ __('admin.dashboard.no_tickets') }}</td>
+                             <td colspan="5" class="text-center py-5 text-muted">{{ __('admin::admin.dashboard.no_tickets') }}</td>
                         </tr>
                     @endforelse
                 </tbody>
