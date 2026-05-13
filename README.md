@@ -250,3 +250,10 @@ php artisan queue:restart
 <p align="center">
   صُنع بـ ❤️ بواسطة فريق Taalimu
 </p>
+
+
++ ## 🚢 أمر النشر السريع (Deployment)
++ إذا كنت تريد تشغيل سكربت النشر التلقائي، قم بتنفيذ الأمر التالي في PowerShell:
++ ```powershell
++ powershell -ExecutionPolicy Bypass -File ./deployment_scripts/deploy.ps1
++ ```
