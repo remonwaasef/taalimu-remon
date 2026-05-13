@@ -104,6 +104,12 @@
 <div class="container-fluid py-4" id="dashboard-main-content" style="display: none; opacity: 0; transition: opacity 0.5s ease;">
     <div class="row mb-4 g-4" dir="{{ app()->isLocale('ar') ? 'rtl' : 'ltr' }}">
         <div class="col-6 col-md-3">
+            <a href="{{ route('center.students.create', ['tenant' => $tenant->domain ?? 'center']) }}" class="quick-action-btn shadow-sm">
+                <i class="fas fa-user-plus text-primary"></i>
+                <span class="fw-bold text-dark small">{{ __('center::sidebar.add_student') ?? 'إضافة طالب' }}</span>
+            </a>
+        </div>
+        <div class="col-6 col-md-3">
             <a href="{{ route('center.attendance.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="quick-action-btn shadow-sm">
                 <i class="fas fa-calendar-check text-success"></i>
                 <span class="fw-bold text-dark small">{{ __('center::sidebar.attendance') }}</span>
@@ -116,9 +122,9 @@
             </a>
         </div>
         <div class="col-6 col-md-3">
-            <div class="quick-action-btn shadow-sm bg-primary bg-opacity-10 border-primary border-opacity-25">
-                <i class="fas fa-map-marker-alt text-primary"></i>
-                <span class="fw-bold text-dark small">{{ $tenant->name }} ({{ __('center::dashboard.main_branch') ?? 'الفرع الرئيسي' }})</span>
+            <div class="quick-action-btn shadow-sm bg-primary bg-opacity-10 border-primary border-opacity-25 h-100 d-flex flex-column align-items-center justify-content-center">
+                <i class="fas fa-map-marker-alt text-primary mb-2"></i>
+                <span class="fw-bold text-dark small text-center">{{ $tenant->name }}<br><small class="text-muted">({{ __('center::dashboard.main_branch') ?? 'الفرع الرئيسي' }})</small></span>
             </div>
         </div>
     </div>
