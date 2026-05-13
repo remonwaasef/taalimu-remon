@@ -55,4 +55,5 @@ return [
   'online_classes' => 'الدروس المباشرة',
   'admin' => 'المشرف',
   'login' => 'تسجيل الدخول',
+  'add_student' => 'طالب جديد',
 ];

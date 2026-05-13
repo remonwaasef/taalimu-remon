@@ -198,13 +198,15 @@ html[dir="rtl"] .sidebar-base .sub-nav .nav-link {
                                 </a>
                             </li>
                             @endif
+                            {{-- 
                             @if($canOnlineClasses)
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('center.online_classes.*') ? 'active' : '' }}" href="{{ route('center.online_classes.index', ['tenant' => $tenant->domain ?? 'center']) }}">
                                     <i class="sidenav-mini-icon">V</i><span class="item-name text-success fw-bold">{{ __('center::sidebar.online_classes') }}</span>
                                 </a>
                             </li>
-                            @endif
+                            @endif 
+                            --}}
                         </ul>
                     </li>
                 @endif
