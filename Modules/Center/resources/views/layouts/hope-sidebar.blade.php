@@ -1,74 +1,82 @@
-<aside class="sidebar sidebar-default navs-rounded-all sidebar-base" style="background: linear-gradient(180deg, #022c22 0%, #064e3b 100%) !important; border-right: 1px solid rgba(255,255,255,0.05) !important;">
+<aside class="sidebar sidebar-default navs-rounded-all sidebar-base" style="background: #ffffff !important; border-left: 1px solid rgba(0,0,0,0.05) !important;">
 <style>
-/* Premium Emerald Sidebar Theme */
+/* Premium Light Sidebar Theme */
 .sidebar-base {
-    box-shadow: 4px 0 24px rgba(0,0,0,0.08) !important;
+    box-shadow: 2px 0 24px rgba(0,0,0,0.03) !important;
 }
 .sidebar-base .sidebar-header {
     background: transparent !important;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(0,0,0,0.04);
 }
 .sidebar-base .logo-title {
-    color: #ffffff !important;
+    color: #1e293b !important;
     font-weight: 800 !important;
     letter-spacing: -0.5px;
 }
 .sidebar-base .nav-link {
-    color: rgba(255, 255, 255, 0.65) !important;
+    color: #64748b !important;
     border-radius: 12px !important;
     margin: 4px 16px !important;
     padding: 12px 16px !important;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    font-weight: 500;
+    font-weight: 600;
 }
 .sidebar-base .nav-link:hover {
-    background: rgba(255, 255, 255, 0.08) !important;
-    color: #ffffff !important;
+    background: #f8fafc !important;
+    color: #0f172a !important;
     transform: translateX(4px);
 }
 html[dir="rtl"] .sidebar-base .nav-link:hover {
     transform: translateX(-4px);
 }
 .sidebar-base .nav-link.active {
-    background: rgba(16, 185, 129, 0.15) !important;
-    color: #34d399 !important;
-    box-shadow: inset 3px 0 0 #34d399;
-    backdrop-filter: blur(8px);
+    background: rgba(16, 185, 129, 0.08) !important;
+    color: #10b981 !important;
+    box-shadow: inset 3px 0 0 #10b981;
 }
 html[dir="rtl"] .sidebar-base .nav-link.active {
-    box-shadow: inset -3px 0 0 #34d399;
+    box-shadow: inset -3px 0 0 #10b981;
 }
 .sidebar-base .nav-link i, .sidebar-base .nav-link svg {
-    color: rgba(255,255,255,0.5) !important;
+    color: #94a3b8 !important;
     transition: color 0.3s ease;
 }
-.sidebar-base .nav-link:hover i, .sidebar-base .nav-link.active i {
-    color: inherit !important;
+.sidebar-base .nav-link:hover i {
+    color: #64748b !important;
+}
+.sidebar-base .nav-link.active i {
+    color: #10b981 !important;
 }
 .sidebar-base .sub-nav .nav-link {
-    font-size: 0.85rem !important;
+    font-size: 0.9rem !important;
     padding-top: 8px !important;
     padding-bottom: 8px !important;
+    font-weight: 500;
 }
 html[dir="rtl"] .sidebar-base .sub-nav .nav-link {
     padding-right: 3.5rem !important;
 }
 .sidebar-base .hr-horizontal {
-    border-color: rgba(255,255,255,0.1) !important;
+    border-color: rgba(0,0,0,0.05) !important;
     margin: 1rem 0;
 }
-/* Glassmorphism for Logo */
+/* Premium Logo Container */
 .brand-logo-container {
-    background: rgba(255, 255, 255, 0.1) !important;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.2) !important;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    background: #ffffff !important;
+    border: 1px solid rgba(0,0,0,0.08) !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
 }
 .brand-logo-fallback {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-    border: 1px solid rgba(255,255,255,0.2);
-    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
     color: white !important;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+}
+.sidebar-toggle .icon svg {
+    color: #64748b;
+    transition: color 0.3s ease;
+}
+.sidebar-toggle:hover .icon svg {
+    color: #0f172a;
 }
 </style>
     <div class="sidebar-header d-flex align-items-center justify-content-between px-4 py-3">
