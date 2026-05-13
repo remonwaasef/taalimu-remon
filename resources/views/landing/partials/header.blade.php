@@ -5,7 +5,7 @@
         isMenuOpen: false
     }"
     @scroll.window="scrolled = window.pageYOffset > 20"
-    :class="scrolled ? 'bg-white/80 backdrop-blur-xl border-b border-slate-200/50 py-2 shadow-sm' : 'bg-transparent py-4'"
+    :class="scrolled ? 'bg-white border-b border-slate-200/50 py-2 shadow-md' : 'bg-transparent py-4'"
 >
     <div class="container mx-auto px-4 lg:px-12">
         <div class="flex items-center justify-between gap-4">
