@@ -76,7 +76,7 @@ class Schedule extends Model
 
     public function attendances()
     {
-        return $this->hasMany(Attendance::class);
+        return $this->hasMany(\Modules\Center\Models\Attendance::class);
     }
 
     public function bookings()

@@ -56,7 +56,7 @@ class CenterController extends Controller
             $activeStudentsCount = Student::where('status', 'active')->count();
             
             // Attendance Rate for the current week
-            $thisWeekAttendance = \App\Models\Attendance::where('created_at', '>=', now()->startOfWeek())
+            $thisWeekAttendance = \Modules\Center\Models\Attendance::where('created_at', '>=', now()->startOfWeek())
                 ->count();
             $expectedAttendance = \App\Models\Enrollment::where('status', 'active')->count(); // Rough estimation
             $attendanceRate = $expectedAttendance > 0 ? round(($thisWeekAttendance / $expectedAttendance) * 100) : 0;
