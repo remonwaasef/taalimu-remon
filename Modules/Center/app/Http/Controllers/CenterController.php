@@ -72,7 +72,7 @@ class CenterController extends Controller
                     ->sum('amount'),
                 'sessionsToday' => \App\Models\Schedule::where('day_of_week', strtolower(now()->format('l')))->count(),
                 'attendanceRate' => min($attendanceRate, 100),
-                'overdueAmount' => Sale::where('remaining', '>', 0)->sum('remaining'),
+                'overdueAmount' => Sale::whereRaw('total_amount > paid_amount')->sum(DB::raw('total_amount - paid_amount')),
             ];
         });
 
