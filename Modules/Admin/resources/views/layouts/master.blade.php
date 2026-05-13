@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="rtl">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -421,7 +421,7 @@
             <li class="nav-item">
                 <a href="{{ route('admin.tenants.index') }}" class="nav-link {{ request()->routeIs('admin.tenants.*') || request()->routeIs('admin.subscriptions.*') ? 'active' : '' }}">
                     <span>🏢</span>
-                    <span>إدارة المراكز والاشتراكات</span>
+                    <span>{{ __('admin::admin.sidebar.tenants_subscriptions') ?? 'إدارة المراكز والاشتراكات' }}</span>
                 </a>
             </li>
 
@@ -434,7 +434,7 @@
             <li class="nav-item">
                 <a href="{{ route('admin.settings.index', ['tab' => 'coupons']) }}" class="nav-link {{ str_contains(request()->fullUrl(), 'tab=coupons') ? 'active' : '' }}">
                     <span>🎟️</span>
-                    {{ __('admin::admin.coupons_discounts') }}
+                    <span>{{ __('admin::admin.coupons_discounts') }}</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -458,7 +458,7 @@
             <li class="nav-item">
                 <a href="{{ route('admin.backups.index') }}" class="nav-link {{ request()->routeIs('admin.backups.*') ? 'active' : '' }}">
                     <span>💾</span>
-                    <span>النسخ الاحتياطي</span>
+                    <span>{{ __('admin::admin.sidebar.backups') ?? 'النسخ الاحتياطي' }}</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -470,7 +470,7 @@
             <li class="nav-item">
                 <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                     <span>👥</span>
-                    <span>فريق الإدارة</span>
+                    <span>{{ __('admin::admin.sidebar.admin_team') ?? 'فريق الإدارة' }}</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -482,7 +482,7 @@
             <li class="nav-item">
                 <a href="{{ route('admin.bug_reports.index') }}" class="nav-link {{ request()->routeIs('admin.bug_reports.index') ? 'active' : '' }}">
                     <span>🐛</span>
-                    <span>تقارير الأخطاء (Beta)</span>
+                    <span>{{ __('admin::admin.sidebar.bug_reports') ?? 'تقارير الأخطاء (Beta)' }}</span>
                 </a>
             </li>
         </ul>
