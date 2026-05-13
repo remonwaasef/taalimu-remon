@@ -2,25 +2,42 @@
 
 namespace App\Traits;
 
-use Illuminate\Support\Facades\Cache;
+use App\Queries\CenterAnalyticsQuery;
 
+/**
+ * Trait ClearsDashboardCache
+ * 
+ * يُمسح كاش لوحة التحكم تلقائياً عند إنشاء/تحديث/حذف نموذج.
+ * يُستخدم في Models التي تؤثر على بيانات لوحة التحكم (Sale, Student, Attendance).
+ * 
+ * Usage: use ClearsDashboardCache; في الـ Model المطلوب.
+ */
 trait ClearsDashboardCache
 {
-    /**
-     * Boot the trait and register model events.
-     */
-    protected static function bootClearsDashboardCache(): void
+    public static function bootClearsDashboardCache(): void
     {
-        static::saved(fn() => static::clearDashboardCache());
-        static::deleted(fn() => static::clearDashboardCache());
+        static::created(function ($model) {
+            static::clearAnalyticsCache($model);
+        });
+
+        static::updated(function ($model) {
+            static::clearAnalyticsCache($model);
+        });
+
+        static::deleted(function ($model) {
+            static::clearAnalyticsCache($model);
+        });
     }
 
     /**
-     * Clear the dashboard-related caches for the current tenant.
+     * مسح كاش التحليلات للمستأجر المرتبط بالنموذج.
      */
-    public static function clearDashboardCache(): void
+    protected static function clearAnalyticsCache($model): void
     {
-        \App\Support\TenantCache::forget("dashboard_stats_v3");
-        \App\Support\TenantCache::forget("recent_activities");
+        $tenantId = $model->tenant_id ?? (app()->bound('tenant') ? app('tenant')->id : null);
+        
+        if ($tenantId) {
+            CenterAnalyticsQuery::clearCacheForTenant($tenantId);
+        }
     }
 }

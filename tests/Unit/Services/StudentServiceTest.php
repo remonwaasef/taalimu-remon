@@ -35,10 +35,13 @@ class StudentServiceTest extends TestCase
         // Bind tenant
         app()->instance('tenant', $this->tenant);
         
-        // Create service with mocked notification service
+        // Use Laravel container to resolve StudentService with all new dependencies
+        $this->studentService = app(StudentService::class);
+        
+        // Mock the notification service if it's still used internally by one of the sub-services
         $notificationService = Mockery::mock(AdminNotificationService::class);
         $notificationService->shouldReceive('notifyAdmins')->andReturn(true);
-        $this->studentService = new StudentService($notificationService);
+        app()->instance(AdminNotificationService::class, $notificationService);
     }
 
     /** @test */
@@ -60,7 +63,7 @@ class StudentServiceTest extends TestCase
         
         $email = $method->invoke($this->studentService);
         
-        $this->assertEquals('student2@local.edu', $email);
+        $this->assertEquals('std2.test-center@taalimu.com', $email);
     }
 
     /** @test */

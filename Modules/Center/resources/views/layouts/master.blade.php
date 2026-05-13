@@ -32,6 +32,9 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
+    <!-- Skeleton Loading -->
+    <link rel="stylesheet" href="{{ asset('css/skeleton-loading.css') }}">
+    
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
@@ -922,6 +925,24 @@
     
     <!-- PWA Service Worker & Offline Sync -->
     <script src="{{ asset('js/offline-sync.js') }}"></script>
+    
+    <!-- Auto-Save Drafts -->
+    <script src="{{ asset('js/auto-save.js') }}"></script>
+    
+    <!-- Instant Search -->
+    <script src="{{ asset('js/instant-search.js') }}"></script>
+    
+    <!-- Crash Recovery -->
+    <script src="{{ asset('js/crash-recovery.js') }}"></script>
+    
+    <!-- Clear Status Indicators -->
+    <script src="{{ asset('js/status-indicators.js') }}"></script>
+    
+    <!-- Image Compression (Client-side) -->
+    <script src="{{ asset('js/image-compressor.js') }}"></script>
+    
+    <!-- Keyboard Shortcuts -->
+    <script src="{{ asset('js/keyboard-shortcuts.js') }}"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {

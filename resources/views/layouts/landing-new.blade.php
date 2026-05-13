@@ -80,6 +80,8 @@
 
     <!-- Scripts -->
     <link rel="stylesheet" href="{{ asset('css/landing-new.css') }}">
+    <!-- Network Monitor Styles -->
+    <link rel="stylesheet" href="{{ asset('css/network-monitor.css') }}">
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Custom CSS Variables -->
@@ -147,11 +149,20 @@
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js?v=6')
+                navigator.serviceWorker.register('/service-worker.js?v=7')
                     .then((reg) => console.log('SW registered:', reg.scope))
                     .catch((err) => console.log('SW failed:', err));
             });
         }
+    </script>
+
+    <!-- Network Monitor (Real Connectivity Detection) -->
+    <script src="{{ asset('js/network-monitor.js') }}"></script>
+    <script>
+        // Toggle body class for offline CSS effects
+        window.TaalimuNetwork.onStatusChange((isOnline) => {
+            document.body.classList.toggle('is-network-offline', !isOnline);
+        });
     </script>
 
     <!-- V2: Scroll Animation Observer -->

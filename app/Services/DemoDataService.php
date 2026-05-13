@@ -97,7 +97,7 @@ class DemoDataService
                     'email' => $studentEmail,
                     'phone' => '01' . rand(100000000, 999999999),
                     'grade_id' => $grade->id,
-                    'password' => 'password123',
+                    'password' => Str::random(12),
                 ]);
 
                 $result = $this->studentService->registerStudent($sData, auth()->user());

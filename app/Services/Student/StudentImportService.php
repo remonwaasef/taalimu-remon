@@ -19,7 +19,7 @@ class StudentImportService
 
     public function importStudents(array $csvData)
     {
-        $tenantId = \Modules\Tenancy\app\Services\TenantResolver::get()->id;
+        $tenantId = \Modules\Tenancy\Services\TenantResolver::get()->id;
         $successCount = 0;
         $errors = [];
         $creator = auth()->user();
@@ -132,7 +132,7 @@ class StudentImportService
              app(\App\Services\AdminNotificationService::class)->notifyAdmins(
                 'bulk_import',
                 __('services.string_105', ['successCount' => $successCount]),
-                route('center.students.index', ['tenant' => \Modules\Tenancy\app\Services\TenantResolver::get()->domain]),
+                route('center.students.index', ['tenant' => \Modules\Tenancy\Services\TenantResolver::get()->domain]),
                 'fas fa-file-import',
                 $creator->name
             );
@@ -149,3 +149,5 @@ class StudentImportService
         ];
     }
 }
+
+

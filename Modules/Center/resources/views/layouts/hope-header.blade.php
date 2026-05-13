@@ -28,7 +28,38 @@
       </span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ms-auto  navbar-list mb-2 mb-lg-0">
+        <!-- Global Search (Power UX) -->
+        <form class="me-auto d-none d-lg-flex ms-3" style="width: 350px;">
+            <div class="input-group input-group-sm bg-light rounded-pill border-0 px-3 py-1 align-items-center" style="transition: all 0.3s ease;">
+                <i class="fas fa-search text-muted opacity-50 me-2"></i>
+                <input type="text" class="form-control bg-transparent border-0 shadow-none global-search-input" placeholder="{{ __('center::dashboard.header.search_placeholder', [], 'ar') ?: 'بحث: طالب، فاتورة، دورة...' }}" aria-label="Search">
+                <span class="badge bg-secondary opacity-50 ms-2" style="font-size: 0.65rem;">Ctrl+Shift+F</span>
+            </div>
+        </form>
+
+      <ul class="navbar-nav ms-auto  navbar-list mb-2 mb-lg-0 align-items-center">
+
+        <!-- Quick Actions (Power UX) -->
+        <li class="nav-item dropdown me-3">
+            <a href="#" class="nav-link btn btn-primary text-white rounded-circle d-flex align-items-center justify-content-center p-0 shadow-sm transition-all" style="width: 38px; height: 38px; background: var(--bs-primary);" id="quick-actions-drop" data-bs-toggle="dropdown" aria-expanded="false" title="إجراءات سريعة">
+                <i class="fas fa-plus"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 mt-2" aria-labelledby="quick-actions-drop" style="min-width: 220px;">
+                <li><h6 class="dropdown-header text-muted fw-bold small text-uppercase">إجراء سريع</h6></li>
+                @can('add students')
+                <li><a class="dropdown-item rounded-3 py-2 mb-1 transition-all" href="{{ route('center.students.create', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="fas fa-user-plus me-3 text-primary opacity-75"></i> طالب جديد</a></li>
+                @endcan
+                @can('add sales')
+                <li><a class="dropdown-item rounded-3 py-2 mb-1 transition-all" href="{{ route('center.sales.create', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="fas fa-file-invoice-dollar me-3 text-success opacity-75"></i> فاتورة/سداد</a></li>
+                @endcan
+                @can('add attendance')
+                <li><a class="dropdown-item rounded-3 py-2 mb-1 transition-all" href="{{ route('center.attendance.index', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="fas fa-calendar-check me-3 text-warning opacity-75"></i> تسجيل حضور</a></li>
+                @endcan
+                @can('add messages')
+                <li><a class="dropdown-item rounded-3 py-2 mb-1 transition-all" href="{{ route('center.students.index', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="fab fa-whatsapp me-3 text-success opacity-75"></i> إرسال رسالة</a></li>
+                @endcan
+            </ul>
+        </li>
 
         @auth
           @can('view sales')

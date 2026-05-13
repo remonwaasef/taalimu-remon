@@ -2,21 +2,11 @@
 
 namespace App\Traits;
 
-use App\Scopes\TenantScope;
-
+/**
+ * @deprecated استخدم BelongsToTenant بدلاً من هذا الـ Trait.
+ * تم الإبقاء عليه مؤقتاً للتوافق مع الكود القديم.
+ */
 trait IdentifyTenant
 {
-    /**
-     * The "booted" method of the model.
-     */
-    protected static function bootIdentifyTenant(): void
-    {
-        static::addGlobalScope(new TenantScope);
-
-        static::creating(function ($model) {
-            if (app()->bound('tenant')) {
-                $model->tenant_id = app('tenant')->id;
-            }
-        });
-    }
+    use BelongsToTenant;
 }

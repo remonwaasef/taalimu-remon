@@ -81,6 +81,7 @@ return [
     'password' => 'Le mot de passe fourni est incorrect.',
     'throttle' => 'Trop de tentatives. Veuillez réessayer dans :seconds secondes.',
     'logout' => 'Se déconnecter',
+    'must_change_password' => 'Vous devez changer votre mot de passe avant de continuer.',
     'email' => 'Adresse e-mail',
     'remember_me' => 'Se souvenir de moi',
     'forgot_password' => 'Mot de passe oublié ?',

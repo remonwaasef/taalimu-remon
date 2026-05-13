@@ -40,10 +40,6 @@ use Modules\Center\Http\Controllers\CoursePlayerController;
 
 // Define the route group closure once to avoid duplication
 $tenantRoutes = function () {
-    Route::get('onboarding/run-migrate', function() {
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        return \Illuminate\Support\Facades\Artisan::output();
-    });
     // Guest Routes with rate limiting
     Route::middleware(['guest', 'prevent-back-history'])->group(function() {
         Route::get('login', [AuthController::class, 'showLoginForm'])->name('center.login');
@@ -155,6 +151,7 @@ $tenantRoutes = function () {
             Route::post('students/{student}/send-email', [StudentController::class, 'sendEmail'])->name('center.students.send-email');
             Route::get('students/{student}/id-card', [StudentController::class, 'idCard'])->name('center.students.id-card');
             Route::get('students/{student}/statement', [StudentController::class, 'statement'])->name('center.students.statement');
+            Route::post('students/{id}/restore', [StudentController::class, 'restore'])->name('center.students.restore');
         });
 
         Route::middleware(['can:delete students'])->group(function() {

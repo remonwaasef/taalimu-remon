@@ -26,6 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ], append: [
             \App\Http\Middleware\SetLocale::class,
             \App\Http\Middleware\ContentSecurityPolicy::class,
+            \App\Http\Middleware\SecurityHeaders::class,
             \App\Http\Middleware\BasicWAF::class,
             \App\Http\Middleware\PaginationLimit::class,
             'throttle:300,1',

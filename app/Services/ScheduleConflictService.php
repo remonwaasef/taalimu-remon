@@ -64,7 +64,7 @@ class ScheduleConflictService
     ): ?string {
         $query = Schedule::where('classroom_id', $classroomId)
             ->where('day_of_week', $dayOfWeek)
-            ->where('tenant_id', \Modules\Tenancy\app\Services\TenantResolver::get()->id)
+            ->where('tenant_id', \Modules\Tenancy\Services\TenantResolver::get()->id)
             ->where(function ($q) use ($startTime, $endTime) {
                 // Check for time overlap
                 $q->where(function ($inner) use ($startTime, $endTime) {
@@ -108,7 +108,7 @@ class ScheduleConflictService
     ): ?string {
         $query = Schedule::where('instructor_id', $instructorId)
             ->where('day_of_week', $dayOfWeek)
-            ->where('tenant_id', \Modules\Tenancy\app\Services\TenantResolver::get()->id)
+            ->where('tenant_id', \Modules\Tenancy\Services\TenantResolver::get()->id)
             ->where(function ($q) use ($startTime, $endTime) {
                 $q->where(function ($inner) use ($startTime, $endTime) {
                     $inner->where('start_time', '<', $endTime)
@@ -165,7 +165,7 @@ class ScheduleConflictService
     {
         $bookedSlots = Schedule::where('classroom_id', $classroomId)
             ->where('day_of_week', $dayOfWeek)
-            ->where('tenant_id', \Modules\Tenancy\app\Services\TenantResolver::get()->id)
+            ->where('tenant_id', \Modules\Tenancy\Services\TenantResolver::get()->id)
             ->orderBy('start_time')
             ->get(['start_time', 'end_time']);
 
@@ -202,3 +202,5 @@ class ScheduleConflictService
         return $allSlots;
     }
 }
+
+

@@ -36,7 +36,7 @@ class FinanceService
     public function createSale(array $data)
     {
         return DB::transaction(function () use ($data) {
-            $tenantId = \Modules\Tenancy\app\Services\TenantResolver::get()->id;
+            $tenantId = \Modules\Tenancy\Services\TenantResolver::get()->id;
             $student = Student::find($data['student_id']);
 
             // 1. Fetch actual prices from DB — scoped to current tenant to prevent cross-tenant manipulation
@@ -169,7 +169,7 @@ class FinanceService
 
                 // Notifications
                 if ($student) {
-                    $this->notifyPayment(\Modules\Tenancy\app\Services\TenantResolver::get(), $student, $data['paid_amount'], $totalAmount - $data['paid_amount'], $data['payment_method'] ?? 'cash');
+                    $this->notifyPayment(\Modules\Tenancy\Services\TenantResolver::get(), $student, $data['paid_amount'], $totalAmount - $data['paid_amount'], $data['payment_method'] ?? 'cash');
                 }
             }
 
@@ -209,7 +209,7 @@ class FinanceService
             ]);
 
             // Notifications
-            $this->notifyPayment(\Modules\Tenancy\app\Services\TenantResolver::get(), $sale->student, $amount, $sale->total_amount - $newPaidAmount, $method ?? $sale->payment_method);
+            $this->notifyPayment(\Modules\Tenancy\Services\TenantResolver::get(), $sale->student, $amount, $sale->total_amount - $newPaidAmount, $method ?? $sale->payment_method);
 
             return $sale;
         });

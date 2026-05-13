@@ -50,3 +50,15 @@ features.json
 /playwright-report
 /test-results
 /Homepage*.pdf
+
+# Archived Code (not tracked)
+/app/Console/Commands/_archived
+/database/seeders/_archived
+
+# Sensitive Files
+storage/logs/*.log
+storage/app/backups
+deployment_scripts/
+*.pem
+*.key
+!storage/*.key

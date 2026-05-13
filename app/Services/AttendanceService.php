@@ -51,7 +51,7 @@ class AttendanceService
                 'session_date' => $data['session_date'] ?? today(),
             ],
             [
-                'tenant_id' => $data['tenant_id'] ?? \Modules\Tenancy\app\Services\TenantResolver::get()->id,
+                'tenant_id' => $data['tenant_id'] ?? \Modules\Tenancy\Services\TenantResolver::get()->id,
                 'course_id' => $data['course_id'],
                 'check_in_time' => now(),
                 'status' => $status,
@@ -67,7 +67,7 @@ class AttendanceService
         if ($isArriving && !$wasAlreadyPresent) {
             $student = Student::with('user')->find($data['student_id']);
             $schedule = Schedule::with('course')->find($data['schedule_id']);
-            $tenant = \Modules\Tenancy\app\Services\TenantResolver::get();
+            $tenant = \Modules\Tenancy\Services\TenantResolver::get();
             
             if ($student && $schedule) {
                 // Deduct session from balance
@@ -152,7 +152,7 @@ class AttendanceService
      */
     public function getLateLevels(): array
     {
-        $lateLevels = \Modules\Tenancy\app\Services\TenantResolver::get()->settings['academic']['late_levels'] ?? config('academic.late_rules.defaults', []);
+        $lateLevels = \Modules\Tenancy\Services\TenantResolver::get()->settings['academic']['late_levels'] ?? config('academic.late_rules.defaults', []);
         
         usort($lateLevels, function($a, $b) {
             return $b['minutes'] <=> $a['minutes'];
@@ -170,7 +170,7 @@ class AttendanceService
     public function generateQrUrl(int $scheduleId, ?string $tenantDomain = null)
     {
         if (!$tenantDomain && app()->bound('tenant')) {
-            $tenantDomain = \Modules\Tenancy\app\Services\TenantResolver::get()->domain;
+            $tenantDomain = \Modules\Tenancy\Services\TenantResolver::get()->domain;
         }
 
         return URL::temporarySignedRoute(
@@ -259,3 +259,5 @@ class AttendanceService
             ->exists();
     }
 }
+
+

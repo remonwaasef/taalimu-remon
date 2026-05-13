@@ -28,7 +28,7 @@ class AssetController extends Controller
     public function create()
     {
         // $this->authorize('create', Asset::class);
-        $classrooms = Classroom::all();
+        $classrooms = Classroom::select('id', 'name')->get();
         return view('center::assets.create', compact('classrooms'));
     }
 
@@ -62,7 +62,7 @@ class AssetController extends Controller
     public function edit(Asset $asset)
     {
         // $this->authorize('update', $asset);
-        $classrooms = Classroom::all();
+        $classrooms = Classroom::select('id', 'name')->get();
         return view('center::assets.edit', compact('asset', 'classrooms'));
     }
 

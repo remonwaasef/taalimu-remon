@@ -65,7 +65,14 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created team member.
+     * 
+     * الأتمتة الكاملة:
+     * 1. توليد كلمة مرور آمنة تلقائياً (إذا لم تُحدد)
+     * 2. إرسال بيانات الدخول بالإيميل تلقائياً
+     * 3. فرض تغيير كلمة المرور عند أول دخول
+     * 4. إشعار المدير عبر Telegram
+     * 5. تسجيل العملية في Activity Log
      */
     public function store(Request $request)
     {
@@ -77,44 +84,86 @@ class UserController extends Controller
             ->toArray();
                 
         $validated = $request->validate([
-            'name' => 'nullable|string|max:255',
+            'name' => 'required|string|max:255',
             'email' => [
-                'nullable',
+                'required',
                 'string',
                 'email',
                 'max:255',
                 Rule::unique('users')->where('tenant_id', $this->tenant->id)
             ],
-            'password' => [
-                'nullable', 
-                'string', 
-                'confirmed',
-            ],
-            'role' => ['nullable', Rule::in($validRoles)],
+            'phone' => 'nullable|string|max:20',
+            'password' => 'nullable|string|min:8|confirmed',
+            'role' => ['required', Rule::in($validRoles)],
             'permissions' => 'nullable|array',
             'permissions.*' => 'string|exists:permissions,name',
         ]);
 
+        // Auto-generate secure password if not provided
+        $plainPassword = $validated['password'] ?? \Illuminate\Support\Str::random(12);
+
         $user = new User([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => !empty($validated['password']) ? Hash::make($validated['password']) : Hash::make(\Illuminate\Support\Str::random(12)),
+            'phone' => $validated['phone'] ?? null,
+            'password' => Hash::make($plainPassword),
+            'must_change_password' => true, // فرض تغيير كلمة المرور عند أول دخول
+            'email_verified_at' => now(),
         ]);
         
-        $user->role = $validated['role'] ?? 'staff'; 
+        $user->role = $validated['role'];
         $user->tenant_id = $this->tenant->id;
         $user->save();
 
-        if (!empty($validated['role'])) {
-            $user->assignRole($validated['role']);
-        }
+        // Assign Spatie role
+        app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($this->tenant->id);
+        $user->assignRole($validated['role']);
 
-        if (isset($validated['permissions'])) {
+        // Sync extra permissions if provided
+        if (!empty($validated['permissions'])) {
             $user->syncPermissions($validated['permissions']);
         }
 
+        // Auto-send welcome email with credentials (via Queue)
+        try {
+            $loginUrl = route('center.login', ['tenant' => $this->tenant->domain]);
+            $roleLabel = __('roles.' . $validated['role'], [], app()->getLocale());
+            $user->notify(new \App\Notifications\TeamMemberWelcome(
+                $plainPassword,
+                $this->tenant->name,
+                $loginUrl,
+                $roleLabel
+            ));
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Failed to send team welcome email: ' . $e->getMessage());
+        }
+
+        // Telegram alert to admin
+        try {
+            app(\App\Services\TelegramService::class)->sendAdminNotification(
+                "<b>👥 عضو فريق جديد</b>\n\n" .
+                "<b>🏢 المركز:</b> {$this->tenant->name}\n" .
+                "<b>👤 الاسم:</b> {$user->name}\n" .
+                "<b>📧 البريد:</b> <code>{$user->email}</code>\n" .
+                "<b>🔑 الدور:</b> {$validated['role']}\n" .
+                "<b>➕ أضافه:</b> " . auth()->user()->name
+            );
+        } catch (\Throwable $e) {
+            // Silent fail — Telegram is non-critical
+        }
+
+        // Activity log
+        activity('team')
+            ->performedOn($user)
+            ->causedBy(auth()->user())
+            ->withProperties([
+                'role' => $validated['role'],
+                'ip' => request()->ip(),
+            ])
+            ->log('Team member added: ' . $user->name);
+
         return redirect()->route('center.users.index', ['tenant' => $this->tenant->domain])
-                         ->with('success', __('User created successfully.'));
+                         ->with('success', __('تم إضافة العضو وإرسال بيانات الدخول تلقائياً.'));
     }
 
     /**
@@ -183,8 +232,15 @@ class UserController extends Controller
 
         $user->syncPermissions($request->input('permissions', []));
 
+        // Activity log
+        activity('team')
+            ->performedOn($user)
+            ->causedBy(auth()->user())
+            ->withProperties(['role' => $user->role, 'ip' => request()->ip()])
+            ->log('Team member updated: ' . $user->name);
+
         return redirect()->route('center.users.index')
-            ->with('success', __('User updated successfully.'));
+            ->with('success', __('تم تحديث بيانات العضو بنجاح.'));
     }
 
     /**
@@ -196,13 +252,31 @@ class UserController extends Controller
         $this->authorize('delete', $user);
         
         if ($user->id === auth()->id()) {
-            return back()->with('error', __('You cannot delete your own account.'));
+            return back()->with('error', __('لا يمكنك حذف حسابك الشخصي.'));
         }
 
+        $userName = $user->name;
+        $userRole = $user->role;
         $user->delete();
 
+        // Activity log
+        activity('team')
+            ->causedBy(auth()->user())
+            ->withProperties(['deleted_user' => $userName, 'role' => $userRole, 'ip' => request()->ip()])
+            ->log('Team member removed: ' . $userName);
+
+        // Telegram alert
+        try {
+            app(\App\Services\TelegramService::class)->sendAdminNotification(
+                "<b>🚫 حذف عضو فريق</b>\n\n" .
+                "<b>🏢 المركز:</b> {$this->tenant->name}\n" .
+                "<b>👤 العضو المحذوف:</b> {$userName} ({$userRole})\n" .
+                "<b>❌ حذفه:</b> " . auth()->user()->name
+            );
+        } catch (\Throwable $e) {}
+
         return redirect()->route('center.users.index')
-            ->with('success', __('User deleted successfully.'));
+            ->with('success', __('تم حذف العضو من الفريق.'));
     }
 
     /**

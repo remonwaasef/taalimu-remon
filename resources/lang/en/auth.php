@@ -5,6 +5,7 @@ return [
     'password' => 'The provided password is incorrect.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
     'email_already_taken' => 'This email is already registered in another system. Please use a different email.',
+    'must_change_password' => 'You must change your password before continuing.',
 
     // Standard Auth Keys
     'logout' => 'Logout',

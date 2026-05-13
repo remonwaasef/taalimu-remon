@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SubscriptionLog extends Model
 {
+    use \App\Traits\IdentifyTenant;
     protected $fillable = [
         'tenant_id',
         'operation_type',

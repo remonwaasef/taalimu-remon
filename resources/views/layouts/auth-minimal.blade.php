@@ -18,12 +18,21 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     
     <link rel="stylesheet" href="{{ asset('css/landing-new.css') }}">
+    <!-- Network Monitor Styles -->
+    <link rel="stylesheet" href="{{ asset('css/network-monitor.css') }}">
     @stack('styles')
 </head>
 <body class="auth-minimal-body">
     @yield('content')
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Network Monitor -->
+    <script src="{{ asset('js/network-monitor.js') }}"></script>
+    <script>
+        window.TaalimuNetwork.onStatusChange((isOnline) => {
+            document.body.classList.toggle('is-network-offline', !isOnline);
+        });
+    </script>
     @stack('scripts')
 </body>
 </html>

@@ -9,24 +9,32 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 // Execute daily at 10:00 AM
-Schedule::command('finance:remind-debts')->dailyAt('10:00');
+Schedule::command('finance:remind-debts')->dailyAt('10:00')->withoutOverlapping();
 
 // Payment Reminders: Email + WhatsApp (Daily at 08:00 AM)
-Schedule::command('reminders:send-payment')->dailyAt('08:00');
+Schedule::command('reminders:send-payment')->dailyAt('08:00')->withoutOverlapping();
 
 // Telegram Subscription Reminders (Daily)
-Schedule::command('app:send-subscription-reminders')->dailyAt('09:00');
+Schedule::command('app:send-subscription-reminders')->dailyAt('09:00')->withoutOverlapping();
 
 // Telegram Daily Platform Report (Daily at end of day)
-Schedule::command('app:send-daily-telegram-report')->dailyAt('23:55');
+Schedule::command('app:send-daily-telegram-report')->dailyAt('23:55')->withoutOverlapping();
 
 // Telegram Weekly Platform Report (Every Sunday)
-Schedule::command('app:send-weekly-telegram-report')->weeklyOn(0, '08:00');
+Schedule::command('app:send-weekly-telegram-report')->weeklyOn(0, '08:00')->withoutOverlapping();
 
 // Telegram Inactivity Check (Daily)
-Schedule::command('app:check-inactive-tenants')->dailyAt('11:00');
+Schedule::command('app:check-inactive-tenants')->dailyAt('11:00')->withoutOverlapping();
+
 // Daily Issue Digest (Daily at 08:30 AM)
-Schedule::call(fn() => app(\App\Services\IssueNotifier::class)->sendDailyDigest())->dailyAt('08:30');
+Schedule::call(fn() => app(\App\Services\IssueNotifier::class)->sendDailyDigest())
+    ->dailyAt('08:30')
+    ->name('daily-issue-digest')
+    ->withoutOverlapping();
 
 // Onboarding Emails Sequence (Draft mode, controlled by env ENABLE_ONBOARDING_EMAILS)
-Schedule::command('onboarding:send-emails')->dailyAt('10:00');
+Schedule::command('onboarding:send-emails')->dailyAt('10:00')->withoutOverlapping();
+
+// Automated Backups (Database + Files)
+Schedule::command('backup:clean')->dailyAt('01:00')->withoutOverlapping();
+Schedule::command('backup:run')->dailyAt('01:30')->withoutOverlapping();

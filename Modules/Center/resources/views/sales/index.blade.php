@@ -54,14 +54,12 @@
                     </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center py-5">
-                                <div class="mb-4">
-                                    <div class="d-inline-flex p-4 rounded-circle mb-3" style="background: rgba(16, 185, 129, 0.05);">
-                                        <i class="fas fa-file-invoice-dollar text-primary" style="font-size: 3rem; opacity: 0.5;"></i>
-                                    </div>
+                            <td colspan="7" class="text-center py-5 px-3">
+                                <div class="mb-3">
+                                    <img src="{{ asset('assets/images/empty-state.svg') }}" alt="No sales" style="width: 120px; opacity: 0.6;">
                                 </div>
-                                <h5 class="text-muted fw-bold">{{ __('center::sales.no_sales') }}</h5>
-                                <p class="text-muted small">{{ __('center::sales.start_selling_hint') }}</p>
+                                <h5 class="text-dark fw-bold mb-2">{{ __('center::sales.no_sales') }}</h5>
+                                <p class="text-muted small px-3 mx-auto" style="max-width: 400px;">{{ __('center::sales.start_selling_hint') ?? 'لم يتم تسجيل أي فواتير أو إيرادات حتى الآن. بمجرد إضافة مدفوعات الطلاب ستظهر هنا.' }}</p>
                             </td>
                         </tr>
                     @endforelse

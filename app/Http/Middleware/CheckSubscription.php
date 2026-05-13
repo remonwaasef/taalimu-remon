@@ -31,7 +31,7 @@ class CheckSubscription
         if (!$subscription) {
             // Redirect to billing/subscription page
             return redirect()->route('center.subscription.index', ['tenant' => $tenant->domain])
-                ->with('error', 'انتهى اشتراكك. يرجى التجديد للمتابعة.');
+                ->with('error', __('subscription.expired'));
         }
 
         return $next($request);

@@ -37,7 +37,7 @@ class OnlineClassController extends Controller
         if ($instructor) {
             $courses = $instructor->courses;
         } else {
-            $courses = Course::all();
+            $courses = Course::select('id', 'title')->get();
         }
 
         return view('instructor::online_classes.create', compact('courses'));
@@ -89,7 +89,7 @@ class OnlineClassController extends Controller
         if ($instructor) {
             $courses = $instructor->courses;
         } else {
-            $courses = Course::all();
+            $courses = Course::select('id', 'title')->get();
         }
 
         return view('instructor::online_classes.edit', compact('onlineClass', 'courses'));

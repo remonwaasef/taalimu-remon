@@ -53,7 +53,7 @@
                 <i class="fas fa-question-circle text-muted" data-bs-toggle="tooltip" title="{{ __('center::sales.cart_help') }}"></i>
             </div>
             <div class="card-body p-4">
-                <form id="posForm">
+                <form id="posForm" data-autosave="create-sale">
                     <div class="mb-4">
                         <label class="form-label fw-bold">{{ __('center::sales.student') }}</label>
                         <select name="student_id" id="student_id" class="form-select rounded-3 shadow-none p-2 border" required onchange="fetchStudentSummary(this.value)">

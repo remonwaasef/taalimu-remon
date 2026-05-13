@@ -70,18 +70,39 @@
     [dir="ltr"] .ai-bubble {
         border-radius: 20px 20px 20px 0;
     }
+    .skeleton { background: #e2e8f0; border-radius: 8px; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+    .skeleton-stat { background: #fff; padding: 1.5rem; border-radius: 20px; }
+    .skeleton-icon { width: 48px; height: 48px; margin-bottom: 1rem; }
+    .skeleton-number { width: 80%; height: 30px; margin-bottom: 10px; }
+    .skeleton-label { width: 60%; height: 15px; }
 </style>
 
-<div class="container-fluid">
-    
-    <!-- Quick Actions Row -->
-    <div class="row mb-4 g-3" dir="{{ app()->isLocale('ar') ? 'rtl' : 'ltr' }}">
-        <div class="col-6 col-md-3">
-            <a href="{{ route('center.students.index', ['tenant' => $tenant->domain ?? 'center']) }}#add" class="quick-action-btn shadow-sm">
-                <i class="fas fa-user-plus text-primary"></i>
-                <span class="fw-bold text-dark small">{{ __('center::dashboard.add_student') ?? 'إضافة طالب' }}</span>
-            </a>
+<div id="dashboard-skeleton" class="container-fluid py-4">
+    <div class="row g-4 mb-4">
+        @for($i=0; $i<4; $i++)
+        <div class="col-md-6 col-xl-3">
+            <div class="skeleton-stat">
+                <div class="skeleton skeleton-icon"></div>
+                <div class="skeleton skeleton-number"></div>
+                <div class="skeleton skeleton-label"></div>
+            </div>
         </div>
+        @endfor
+    </div>
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="skeleton" style="height: 400px;"></div>
+        </div>
+        <div class="col-lg-4">
+            <div class="skeleton mb-4" style="height: 180px;"></div>
+            <div class="skeleton" style="height: 200px;"></div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid py-4" id="dashboard-main-content" style="display: none; opacity: 0; transition: opacity 0.5s ease;">
+    <div class="row mb-4 g-4" dir="{{ app()->isLocale('ar') ? 'rtl' : 'ltr' }}">
         <div class="col-6 col-md-3">
             <a href="{{ route('center.attendance.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="quick-action-btn shadow-sm">
                 <i class="fas fa-calendar-check text-success"></i>
@@ -95,10 +116,10 @@
             </a>
         </div>
         <div class="col-6 col-md-3">
-            <a href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center']) }}" class="quick-action-btn shadow-sm">
-                <i class="fas fa-cog text-secondary"></i>
-                <span class="fw-bold text-dark small">{{ __('center::sidebar.settings') }}</span>
-            </a>
+            <div class="quick-action-btn shadow-sm bg-primary bg-opacity-10 border-primary border-opacity-25">
+                <i class="fas fa-map-marker-alt text-primary"></i>
+                <span class="fw-bold text-dark small">{{ $tenant->name }} ({{ __('center::dashboard.main_branch') ?? 'الفرع الرئيسي' }})</span>
+            </div>
         </div>
     </div>
 
@@ -125,7 +146,7 @@
                     <div class="kpi-icon bg-info bg-opacity-10 text-info">
                         <i class="fas fa-clock"></i>
                     </div>
-                    <h3 class="fw-extrabold mb-1">--</h3>
+                    <h3 class="fw-extrabold mb-1">{{ $sessionsToday }}</h3>
                     <p class="text-muted small fw-bold mb-0">{{ __('center::dashboard.sessions_today') }}</p>
                     <div class="mt-3 d-flex align-items-center gap-2">
                         <span class="badge bg-info-subtle text-info rounded-pill px-2 py-1" style="font-size: 0.7rem;">Active</span>
@@ -152,15 +173,15 @@
         <div class="col-md-6 col-xl-3">
             <div class="card dashboard-card h-100">
                 <div class="card-body p-4">
-                    <div class="kpi-icon bg-warning bg-opacity-10 text-warning">
-                        <i class="fas fa-star"></i>
+                    <div class="kpi-icon bg-danger bg-opacity-10 text-danger">
+                        <i class="fas fa-exclamation-circle"></i>
                     </div>
-                    <h3 class="fw-extrabold mb-1">98%</h3>
-                    <p class="text-muted small fw-bold mb-0">{{ __('center::dashboard.center_rating') ?? 'تقييم الأداء' }}</p>
+                    <h3 class="fw-extrabold mb-1 text-danger">{{ number_format($overdueAmount, 0) }}</h3>
+                    <p class="text-muted small fw-bold mb-0">{{ __('center::dashboard.overdue_amount') ?? 'متأخرات مالية' }}</p>
                     <div class="mt-3 d-flex align-items-center gap-2">
-                        <div class="progress w-100" style="height: 6px;">
-                            <div class="progress-bar bg-warning" role="progressbar" style="width: 98%" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
+                        <a href="{{ route('center.sales.overdue', ['tenant' => $tenant->domain ?? 'center']) }}" class="badge bg-danger-subtle text-danger rounded-pill px-3 py-2 text-decoration-none transition-all hover-shadow-sm">
+                            متابعة التحصيل <i class="fas fa-arrow-left ms-1"></i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -241,11 +262,37 @@
                         </div>
                     </div>
                     @empty
-                    <div class="text-center py-4 text-muted small fw-medium">{{ __('center::dashboard.no_activities') }}</div>
+                    <div class="text-center py-5 px-3">
+                        <div class="mb-3">
+                            <img src="{{ asset('assets/images/empty-state.svg') }}" alt="No activities" style="width: 80px; opacity: 0.6;">
+                        </div>
+                        <h6 class="text-dark fw-bold">{{ __('center::dashboard.no_activities') }}</h6>
+                        <p class="text-muted small px-3">{{ __('center::dashboard.no_activities_desc') ?? 'لا توجد أنشطة مسجلة حالياً في هذا المركز. بمجرد قيام الموظفين أو المعلمين بأي إجراء، ستظهر التفاصيل هنا.' }}</p>
+                    </div>
                     @endforelse
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Simulate a small delay for smooth skeleton transition
+        setTimeout(() => {
+            const skeleton = document.getElementById('dashboard-skeleton');
+            const content = document.getElementById('dashboard-main-content');
+            
+            if (skeleton && content) {
+                skeleton.style.display = 'none';
+                content.style.display = 'block';
+                setTimeout(() => {
+                    content.style.opacity = '1';
+                }, 50);
+            }
+        }, 800);
+    });
+</script>
+@endpush
 @endsection

@@ -196,7 +196,16 @@ class RolesAndPermissionsSeeder extends Seeder
             ['view reports', 'view analytics']
         ));
         
-        // 7. Staff (موظف عام) - صلاحيات محدودة جداً
+        // 7. Parent (ولي أمر) - متابعة أبنائه
+        $parentRole = Role::firstOrCreate(['name' => 'parent', 'guard_name' => 'web', 'tenant_id' => null]);
+        $parentRole->syncPermissions([
+            'view courses',
+            'view attendance',
+            'view exams',
+            'view reports',
+        ]);
+        
+        // 8. Staff (موظف عام) - صلاحيات محدودة جداً
         $staff = Role::firstOrCreate(['name' => 'staff', 'guard_name' => 'web', 'tenant_id' => null]);
         $staff->syncPermissions([
             'view students',
