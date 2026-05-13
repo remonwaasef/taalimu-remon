@@ -55,7 +55,10 @@ html[dir="rtl"] .sidebar-base .nav-link.active {
 }
 html[dir="rtl"] .sidebar-base .sub-nav .nav-link {
     padding-right: 1.5rem !important;
-    margin-right: 0.5rem !important;
+    margin-right: 0 !important;
+}
+.sidebar-base .sub-nav .sidenav-mini-icon {
+    display: none !important;
 }
 /* Ensure the text is allowed to wrap or take more space if needed */
 .sidebar-base .item-name {
