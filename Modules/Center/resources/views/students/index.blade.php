@@ -199,6 +199,7 @@
                         <input 
                             type="text" 
                             id="search-input"
+                            data-instant-search=".custom-table"
                             class="form-control ps-5 rounded-pill border-0 shadow-sm" 
                             placeholder="{{ __('center::students.search_placeholder') }}"
                             style="background-color: var(--color-light); height: 48px;"
@@ -394,7 +395,7 @@
                                             <li><a class="dropdown-item rounded-3 mb-1" target="_blank" href="{{ route('center.students.id-card', $student->id) }}"><i class="fas fa-print me-2 text-secondary opacity-75"></i> {{ __('center::students.print_id_card') }}</a></li>
                                             <li><hr class="dropdown-divider opacity-10"></li>
                                             <li>
-                                                <form action="{{ route('center.students.destroy', $student->id) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('center::students.confirm_delete_student') }}');">
+                                                <form action="{{ route('center.students.destroy', $student->id) }}" method="POST" class="d-inline delete-student-form" data-name="{{ $student->name }}">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="dropdown-item rounded-3 text-danger mb-0">
@@ -408,14 +409,22 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center py-5">
-                                    <div class="mb-4">
-                                        <div class="d-inline-flex p-4 rounded-circle mb-3" style="background: rgba(16, 185, 129, 0.05);">
-                                            <i class="fas fa-user-graduate text-primary" style="font-size: 3rem; opacity: 0.5;"></i>
+                                <td colspan="7" class="text-center py-5 px-3">
+                                    <div class="mb-3">
+                                        <!-- Replace generic img with a nice icon if image doesn't exist, to be safe -->
+                                        <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                            <i class="fas fa-user-graduate fa-2x text-primary opacity-75"></i>
                                         </div>
                                     </div>
-                                    <h5 class="text-muted fw-bold">{{ __('center::students.no_students') }}</h5>
-                                    <p class="text-muted small">{{ __('center::students.add_import_hint') }}</p>
+                                    <h5 class="text-dark fw-bold mb-2">لا يوجد طلاب مسجلون بعد</h5>
+                                    <p class="text-muted small px-3 mx-auto mb-4" style="max-width: 400px;">
+                                        ابدأ رحلتك بإضافة أول طالب للمنصة لتتمكن من تسجيل الحضور وإدارة الفواتير.
+                                    </p>
+                                    @can('add students')
+                                    <a href="{{ route('center.students.create', ['tenant' => $tenant->domain ?? 'center']) }}" class="btn btn-primary rounded-pill px-4 py-2 shadow-sm transition-all hover-shadow-lg">
+                                        <i class="fas fa-plus me-2"></i> إضافة أول طالب
+                                    </a>
+                                    @endcan
                                 </td>
                             </tr>
                         @endforelse
@@ -697,16 +706,12 @@
                 if (!emptyRow) {
                     emptyRow = document.createElement('tr');
                     emptyRow.id = 'empty-state-row';
-                    emptyRow.innerHTML = `<td colspan="8" class="text-center py-5">
+                    emptyRow.innerHTML = `<td colspan="8" class="text-center py-5 px-3">
                                     <div class="mb-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-muted opacity-50">
-                                            <circle cx="11" cy="11" r="8"></circle>
-                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                            <line x1="11" y1="8" x2="11" y2="14"></line>
-                                            <line x1="8" y1="11" x2="14" y2="11"></line>
-                                        </svg>
+                                        <img src="{{ asset('assets/images/empty-state.svg') }}" alt="No students" style="width: 120px; opacity: 0.6;">
                                     </div>
-                                    <p class="text-muted mt-3 mb-0">{{ __('center::students.no_students') }}</p>
+                                    <h5 class="text-dark fw-bold mb-2">{{ __('center::students.no_students') }}</h5>
+                                    <p class="text-muted small px-3 mx-auto" style="max-width: 400px;">{{ __('center::students.add_import_hint') ?? 'لا توجد نتائج مطابقة لعملية البحث الحالية.' }}</p>
                                 </td>`;
                 }
                 
@@ -735,6 +740,73 @@
                 }
             }
         });
+
+        // AJAX Deletion with Undo Functionality
+        $(document).on('submit', '.delete-student-form', function(e) {
+            e.preventDefault();
+            const form = $(this);
+            const studentName = form.data('name');
+            const row = form.closest('.student-row');
+
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: `سيتم حذف الطالب ${studentName}. يمكنك التراجع عن هذا الإجراء.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'نعم، احذف',
+                cancelButtonText: 'إلغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Hide row immediately for UX
+                    row.fadeOut();
+
+                    $.ajax({
+                        url: form.attr('action'),
+                        method: 'POST',
+                        data: form.serialize(),
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    title: 'تم الحذف بنجاح',
+                                    text: `تم نقل الطالب ${studentName} إلى سلة المهملات.`,
+                                    icon: 'success',
+                                    toast: true,
+                                    position: 'top-end',
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'تراجع (Undo)',
+                                    timer: 8000,
+                                    timerProgressBar: true
+                                }).then((undoResult) => {
+                                    if (undoResult.isConfirmed) {
+                                        // Trigger restore
+                                        $.post(response.restore_url, { _token: '{{ csrf_token() }}' }, function(restoreRes) {
+                                            if (restoreRes.success) {
+                                                row.fadeIn();
+                                                Swal.fire({
+                                                    title: 'تمت الاستعادة',
+                                                    text: 'تمت استعادة الطالب بنجاح.',
+                                                    icon: 'success',
+                                                    toast: true,
+                                                    position: 'top-end',
+                                                    timer: 3000
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        },
+                        error: function() {
+                            row.fadeIn();
+                            Swal.fire('خطأ', 'حدث خطأ أثناء الحذف.', 'error');
+                        }
+                    });
+                }
+            });
+        });
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>

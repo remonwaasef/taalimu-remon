@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 class IssueAttachment extends Model
 {
+    use \App\Traits\IdentifyTenant;
     use HasFactory;
 
     protected $fillable = [

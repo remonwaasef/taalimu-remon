@@ -27,7 +27,7 @@ class QuizService
             return $quiz->questions()->with('options')->get();
         }
 
-        $query = Question::where('tenant_id', $quiz->tenant_id ?? \Modules\Tenancy\app\Services\TenantResolver::get()->id)
+        $query = Question::where('tenant_id', $quiz->tenant_id ?? \Modules\Tenancy\Services\TenantResolver::get()->id)
             ->with(['options' => function($q) {
                 $q->inRandomOrder();
             }]);
@@ -107,3 +107,5 @@ class QuizService
             ->exists();
     }
 }
+
+

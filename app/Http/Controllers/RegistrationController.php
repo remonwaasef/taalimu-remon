@@ -262,7 +262,7 @@ class RegistrationController extends Controller
             event(new Registered($user));
             
             // Send Onboarding Email 1 (Welcome) if enabled
-            if (env('ENABLE_ONBOARDING_EMAILS', false)) {
+            if (config('services.onboarding.emails_enabled', false)) {
                 try {
                     \Illuminate\Support\Facades\Mail::to($user->email)->send(
                         new \App\Mail\TenantOnboardingMail($tenant, $user, 1)
@@ -278,7 +278,7 @@ class RegistrationController extends Controller
 
             // 2.5 Auto-Provisioning: Inject Demo Data for new centers
             try {
-                \Modules\Tenancy\app\Services\TenantResolver::set($tenant);
+                \Modules\Tenancy\Services\TenantResolver::set($tenant);
                 // We seed basic academic structure (Grades, Stages) so the user doesn't start with a blank screen
                 app(\App\Services\DemoDataService::class)->seedForTenant($tenant);
                 \Illuminate\Support\Facades\Log::info("Auto-Provisioning: Demo data seeded for tenant {$tenant->domain}");

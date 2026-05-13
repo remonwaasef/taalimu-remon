@@ -30,7 +30,7 @@ class StudentProfileService
             $guardianId = $student->guardian_id;
             if ($data->parent_phone) {
                 $guardian = Guardian::updateOrCreate(
-                    ['tenant_id' => \Modules\Tenancy\app\Services\TenantResolver::get()->id, 'phone' => $data->parent_phone],
+                    ['tenant_id' => \Modules\Tenancy\Services\TenantResolver::get()->id, 'phone' => $data->parent_phone],
                     [
                         'name' => $data->parent_name ?? 'N/A',
                         'job' => $data->parent_job,
@@ -71,7 +71,7 @@ class StudentProfileService
 
     public function getExportData()
     {
-        return Student::where('tenant_id', \Modules\Tenancy\app\Services\TenantResolver::get()->id)
+        return Student::where('tenant_id', \Modules\Tenancy\Services\TenantResolver::get()->id)
             ->with(['grade.stage'])
             ->lazy(1000)
             ->map(function ($student) {
@@ -90,7 +90,7 @@ class StudentProfileService
 
     public function getProfileData(Student $student)
     {
-        $tenantId = \Modules\Tenancy\app\Services\TenantResolver::get()->id;
+        $tenantId = \Modules\Tenancy\Services\TenantResolver::get()->id;
         $userId = $student->user_id;
 
         $attendanceLogs = \Modules\Center\Models\Attendance::where('student_id', $student->id)
@@ -203,3 +203,5 @@ class StudentProfileService
         });
     }
 }
+
+

@@ -1,0 +1,189 @@
+/**
+ * ============================================================
+ * Taalimu Skeleton Loading — Premium Loading Experience
+ * ============================================================
+ * بدل ما يشوف spinner بيلف... يشوف شكل الصفحة بتتحمل
+ * ============================================================
+ */
+
+/* ─── Skeleton Base ──────────────────────────────────────── */
+.skeleton {
+    position: relative;
+    overflow: hidden;
+    background: #e2e8f0;
+    border-radius: 6px;
+}
+
+.skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.5) 50%,
+        transparent 100%
+    );
+    animation: skeletonShimmer 1.8s ease-in-out infinite;
+}
+
+@keyframes skeletonShimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* ─── Skeleton Variants ──────────────────────────────────── */
+.skeleton-text {
+    height: 14px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.skeleton-text.short { width: 40%; }
+.skeleton-text.medium { width: 65%; }
+.skeleton-text.long { width: 90%; }
+.skeleton-text.full { width: 100%; }
+
+.skeleton-title {
+    height: 22px;
+    width: 50%;
+    margin-bottom: 16px;
+    border-radius: 5px;
+}
+
+.skeleton-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.skeleton-avatar.lg {
+    width: 64px;
+    height: 64px;
+}
+
+.skeleton-btn {
+    height: 38px;
+    width: 120px;
+    border-radius: 8px;
+}
+
+.skeleton-badge {
+    height: 24px;
+    width: 70px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+.skeleton-img {
+    width: 100%;
+    height: 180px;
+    border-radius: 10px;
+}
+
+/* ─── Skeleton Card ──────────────────────────────────────── */
+.skeleton-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.skeleton-card .skeleton-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+/* ─── Skeleton Table Row ─────────────────────────────────── */
+.skeleton-table-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.skeleton-table-row .skeleton-cell {
+    height: 14px;
+    border-radius: 4px;
+}
+
+.skeleton-table-row .skeleton-cell:nth-child(1) { width: 40px; }
+.skeleton-table-row .skeleton-cell:nth-child(2) { flex: 2; }
+.skeleton-table-row .skeleton-cell:nth-child(3) { flex: 1; }
+.skeleton-table-row .skeleton-cell:nth-child(4) { width: 80px; }
+
+/* ─── Skeleton Stat Card ─────────────────────────────────── */
+.skeleton-stat {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+}
+
+.skeleton-stat .skeleton-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    margin: 0 auto 12px;
+}
+
+.skeleton-stat .skeleton-number {
+    height: 28px;
+    width: 60%;
+    margin: 0 auto 8px;
+    border-radius: 5px;
+}
+
+.skeleton-stat .skeleton-label {
+    height: 12px;
+    width: 80%;
+    margin: 0 auto;
+    border-radius: 4px;
+}
+
+/* ─── Dark Mode Support ──────────────────────────────────── */
+[data-bs-theme="dark"] .skeleton,
+.dark-mode .skeleton {
+    background: #334155;
+}
+
+[data-bs-theme="dark"] .skeleton::after,
+.dark-mode .skeleton::after {
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.08) 50%,
+        transparent 100%
+    );
+}
+
+[data-bs-theme="dark"] .skeleton-card,
+.dark-mode .skeleton-card {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+/* ─── Fade transition when content loads ─────────────────── */
+.skeleton-container {
+    transition: opacity 0.3s ease;
+}
+
+.skeleton-container.loaded {
+    opacity: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.content-container-real {
+    animation: fadeInContent 0.4s ease forwards;
+}
+
+@keyframes fadeInContent {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}

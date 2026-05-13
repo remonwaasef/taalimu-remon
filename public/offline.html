@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>غير متصل بالإنترنت — Taalimu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0f172a;
+            color: #e2e8f0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background mesh */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+            animation: floatOrb 8s ease-in-out infinite;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 70%);
+            bottom: -150px;
+            left: -150px;
+            animation: floatOrb 10s ease-in-out infinite reverse;
+        }
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, -20px) scale(1.1); }
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+            max-width: 480px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* WiFi icon with animation */
+        .icon-wrap {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            animation: iconPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.2); }
+            50% { transform: scale(1.05); box-shadow: 0 0 40px 10px rgba(16, 185, 129, 0.1); }
+        }
+
+        .icon-wrap svg {
+            width: 56px;
+            height: 56px;
+            color: #f87171;
+            animation: iconShake 4s ease-in-out infinite;
+        }
+
+        @keyframes iconShake {
+            0%, 90%, 100% { transform: rotate(0deg); }
+            92% { transform: rotate(-5deg); }
+            94% { transform: rotate(5deg); }
+            96% { transform: rotate(-3deg); }
+            98% { transform: rotate(3deg); }
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #f1f5f9, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .retry-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 36px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .retry-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(16, 185, 129, 0.4);
+        }
+
+        .retry-btn:active {
+            transform: translateY(0);
+        }
+
+        .retry-btn svg {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.4s ease;
+        }
+
+        .retry-btn:hover svg {
+            transform: rotate(180deg);
+        }
+
+        .status {
+            margin-top: 30px;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        .status .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #f87171;
+            margin-left: 6px;
+            animation: dotBlink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes dotBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Glass card */
+        .info-cards {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .info-card {
+            flex: 1;
+            padding: 16px 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .info-card .emoji { font-size: 1.5rem; margin-bottom: 6px; }
+        .info-card .label { font-size: 0.7rem; color: #64748b; }
+        .info-card .value { font-size: 0.85rem; color: #cbd5e1; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+                <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+                <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+                <path d="M10.71 5.05A16 16 0 0 1 22.56 9"></path>
+                <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+                <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                <line x1="12" y1="20" x2="12.01" y2="20"></line>
+            </svg>
+        </div>
+
+        <h1>لا يوجد اتصال بالإنترنت</h1>
+        <p>
+            يبدو أنك غير متصل بالإنترنت حالياً.
+            <br>تأكد من اتصال Wi-Fi أو بيانات الهاتف، ثم حاول مرة أخرى.
+        </p>
+
+        <button class="retry-btn" onclick="tryReconnect()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+            </svg>
+            إعادة المحاولة
+        </button>
+
+        <div class="info-cards">
+            <div class="info-card">
+                <div class="emoji">💾</div>
+                <div class="value">محفوظة</div>
+                <div class="label">عملياتك السابقة</div>
+            </div>
+            <div class="info-card">
+                <div class="emoji">🔄</div>
+                <div class="value">تلقائياً</div>
+                <div class="label">المزامنة عند العودة</div>
+            </div>
+            <div class="info-card">
+                <div class="emoji">🔒</div>
+                <div class="value">آمنة</div>
+                <div class="label">بياناتك محمية</div>
+            </div>
+        </div>
+
+        <div class="status">
+            <span class="dot"></span>
+            جاري محاولة إعادة الاتصال تلقائياً...
+        </div>
+    </div>
+
+    <script>
+        // Auto-retry every 5 seconds
+        let retryTimer = setInterval(() => {
+            fetch('/api/health-check', { method: 'HEAD', cache: 'no-store' })
+                .then((r) => {
+                    if (r.ok) {
+                        clearInterval(retryTimer);
+                        window.location.reload();
+                    }
+                })
+                .catch(() => {});
+        }, 5000);
+
+        function tryReconnect() {
+            const btn = document.querySelector('.retry-btn');
+            btn.textContent = 'جاري المحاولة...';
+            btn.style.pointerEvents = 'none';
+
+            fetch('/api/health-check', { method: 'HEAD', cache: 'no-store' })
+                .then((r) => {
+                    if (r.ok) {
+                        window.location.reload();
+                    } else {
+                        showError();
+                    }
+                })
+                .catch(() => showError());
+
+            function showError() {
+                btn.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px">
+                        <polyline points="23 4 23 10 17 10"></polyline>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                    </svg>
+                    لا يزال غير متصل — حاول مرة أخرى
+                `;
+                btn.style.pointerEvents = 'auto';
+                setTimeout(() => {
+                    btn.innerHTML = `
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                        </svg>
+                        إعادة المحاولة
+                    `;
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>

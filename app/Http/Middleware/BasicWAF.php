@@ -40,7 +40,6 @@ class BasicWAF
         'payment/*',
         'webhooks/*',
         'stripe/*',
-        'admin/*',
     ];
 
     /**

@@ -57,16 +57,6 @@ class InstructorController extends Controller
      */
     public function index()
     {
-        try {
-            \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-            
-            // Temporary Cache Clearing
-            \Illuminate\Support\Facades\Artisan::call('view:clear');
-            \Illuminate\Support\Facades\Artisan::call('cache:clear');
-        } catch (\Exception $e) {
-            // Ignore errors if already migrated or other issues for now
-        }
-
         $instructor = $this->instructor;
         
         if (!$instructor) {
@@ -367,7 +357,7 @@ class InstructorController extends Controller
                 'name' => $student->name,
                 'phone' => $student->phone,
                 'email' => $student->phone . '@edu.com',
-                'password' => bcrypt('password'), // temporary
+                'password' => bcrypt(\Illuminate\Support\Str::random(12)),
                 'role' => 'student',
                 'tenant_id' => $student->tenant_id,
             ]);
@@ -441,7 +431,7 @@ class InstructorController extends Controller
     public function createStudent()
     {
         $instructor = $this->instructor;
-        $courses = $instructor ? $instructor->courses : Course::all();
+        $courses = $instructor ? $instructor->courses : Course::select('id', 'title', 'price')->get();
 
         // Enforce group-first: redirect to create a group if none exist
         if ($courses->isEmpty()) {

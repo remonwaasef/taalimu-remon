@@ -5,7 +5,7 @@ namespace Modules\Api\app\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use App\Models\Tenant;
-use Modules\Tenancy\app\Services\TenantResolver;
+use Modules\Tenancy\Services\TenantResolver;
 
 class ApiTenantMiddleware
 {

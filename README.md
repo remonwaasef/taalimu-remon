@@ -1,61 +1,252 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="public/images/logo.png" alt="Taalimu Logo" width="200">
 </p>
 
-## About Laravel
+<h1 align="center">Taalimu — منصة SaaS لإدارة المراكز التعليمية</h1>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<p align="center">
+  <strong>نظام متكامل متعدد المستأجرين لإدارة المراكز التعليمية والمدرسين المستقلين</strong>
+</p>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+<p align="center">
+  <img src="https://img.shields.io/badge/Laravel-12.x-FF2D20?style=flat-square&logo=laravel" alt="Laravel 12">
+  <img src="https://img.shields.io/badge/PHP-8.4-777BB4?style=flat-square&logo=php" alt="PHP 8.4">
+  <img src="https://img.shields.io/badge/License-Proprietary-blue?style=flat-square" alt="License">
+  <img src="https://img.shields.io/badge/Tenancy-Multi--Tenant-green?style=flat-square" alt="Multi-Tenant">
+</p>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 📋 نظرة عامة
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+**Taalimu** هي منصة SaaS تعليمية مبنية بـ Laravel، تمكّن المراكز التعليمية والمدرسين المستقلين من إدارة عملياتهم بالكامل: الطلاب، الدورات، الامتحانات، المالية، الحضور، وأكثر.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### ✨ أبرز الميزات
 
-## Laravel Sponsors
+- 🏢 **Multi-Tenancy** — نظام متعدد المستأجرين (Subdomain & Path modes)
+- 👨‍🎓 **إدارة الطلاب** — تسجيل فردي وجماعي (Excel Import)، حضور بـ QR
+- 📚 **إدارة الدورات** — مناهج هيكلية (دورات ← وحدات ← دروس ← مواد)
+- 📝 **نظام الامتحانات** — أسئلة متعددة الأنواع، بنك أسئلة، تصحيح تلقائي
+- 💳 **بوابات دفع متعددة** — Stripe, PayPal, Paymob (مصر)
+- 📊 **تحليلات متقدمة** — MRR, Churn Rate, LTV, Engagement Score
+- 🌍 **تعدد اللغات** — عربي، إنجليزي، فرنسي (RTL/LTR)
+- 🔒 **أمان متقدم** — 2FA, RBAC, WAF, CSP, Activity Logging
+- 📱 **PWA** — تطبيق ويب تقدمي يعمل offline
+- 🤖 **Telegram Bot** — إشعارات فورية للإدارة
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 🛠️ حزمة التقنيات
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+| الطبقة | التقنية |
+|:---|:---|
+| **Backend** | Laravel 12, PHP 8.4 |
+| **Frontend** | Blade Templates, Tailwind CSS, Alpine.js |
+| **Database** | MySQL / MariaDB |
+| **Modules** | nwidart/laravel-modules (6 وحدات) |
+| **Permissions** | spatie/laravel-permission |
+| **Activity Log** | spatie/laravel-activitylog |
+| **Payments** | Laravel Cashier (Stripe), PayPal SDK, Paymob |
+| **Auth** | Laravel Sanctum, Socialite (Google), 2FA |
+| **PDF** | barryvdh/laravel-dompdf |
+| **Monitoring** | Sentry |
+| **Build Tool** | Vite |
+| **Real-time** | Laravel Reverb |
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🏗️ هيكلية المشروع
 
-## Code of Conduct
+```
+├── app/
+│   ├── Console/Commands/     # Artisan commands (18+ أداة)
+│   ├── Helpers/              # Helper functions (tenant_url, etc.)
+│   ├── Http/
+│   │   ├── Controllers/      # Main controllers
+│   │   └── Middleware/       # 16 middleware (Tenant, WAF, CSP, etc.)
+│   ├── Models/               # 51 Eloquent model
+│   └── Services/             # 33 service class (Payment, Finance, etc.)
+├── Modules/
+│   ├── Admin/                # Super Admin panel
+│   ├── Api/                  # RESTful API endpoints
+│   ├── Campus/               # Campus management
+│   ├── Center/               # Tenant (Center) dashboard
+│   ├── Instructor/           # Instructor module
+│   └── Tenancy/              # Tenancy infrastructure
+├── database/
+│   ├── migrations/           # 81 migration files
+│   ├── seeders/              # Database seeders
+│   └── factories/            # Model factories
+├── resources/
+│   ├── views/                # 213+ Blade templates
+│   └── lang/                 # Translations (ar, en, fr)
+├── routes/
+│   ├── web.php               # Web routes
+│   └── api.php               # API routes
+├── tests/
+│   ├── Feature/              # 21 feature tests
+│   └── Unit/                 # 5 unit tests
+└── docs/                     # Project documentation
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🚀 إعداد بيئة التطوير
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### المتطلبات
 
-## License
+- PHP 8.2+ (مع extensions: mbstring, xml, curl, zip, gd, bcmath, intl)
+- Composer 2.x
+- Node.js 18+ & npm
+- MySQL 8.0+ أو MariaDB 10.6+
+- Redis (اختياري — مطلوب للإنتاج)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# Edu-saas
-# Edu-saas
+### خطوات التثبيت
+
+```bash
+# 1. استنساخ المشروع
+git clone https://github.com/remonwaasef/taalimu-remon.git
+cd taalimu-remon
+
+# 2. تثبيت المكتبات
+composer install
+npm install
+
+# 3. إعداد ملف البيئة
+cp .env.example .env
+# عدّل إعدادات قاعدة البيانات في .env
+
+# 4. توليد مفتاح التطبيق
+php artisan key:generate
+
+# 5. إعداد قاعدة البيانات
+php artisan migrate
+php artisan db:seed
+
+# 6. إنشاء رابط التخزين
+php artisan storage:link
+
+# 7. بناء الأصول
+npm run build
+```
+
+### التشغيل (وضع التطوير)
+
+```bash
+# تشغيل جميع الخدمات معاً (Server + Queue + Logs + Vite)
+composer dev
+
+# أو تشغيل كل خدمة بشكل منفصل:
+php artisan serve          # http://localhost:8000
+npm run dev                # Vite dev server
+php artisan queue:listen   # Queue worker
+```
+
+### الوصول المحلي
+
+| الصفحة | الرابط |
+|:---|:---|
+| الصفحة الرئيسية | `http://localhost:8000` |
+| تسجيل مركز جديد | `http://my.localhost:8000/register` |
+| دخول مستأجر | `http://{tenant}.localhost:8000/login` |
+
+---
+
+## 🏢 نظام Multi-Tenancy
+
+يدعم النظام وضعين للمستأجرين (يتم التبديل عبر `TENANCY_MODE` في `.env`):
+
+| الوضع | المثال | الاستخدام |
+|:---|:---|:---|
+| **Subdomain** | `center1.taalimu.com` | VPS / Cloud hosting |
+| **Path** | `taalimu.com/c/center1` | Shared hosting |
+
+**الملفات المهمة:**
+- Middleware: `app/Http/Middleware/IdentifyTenant.php`
+- Helpers: `app/Helpers/helpers.php` (`tenant_url()`, `current_tenant()`)
+- Config: `config/app.php` → `tenant_domain`
+
+---
+
+## 💳 بوابات الدفع
+
+| البوابة | المنطقة | الحالة |
+|:---|:---|:---|
+| **Stripe** | عالمي | ✅ يعمل (اشتراكات متكررة) |
+| **PayPal** | عالمي | ✅ يعمل |
+| **Paymob** | مصر | ✅ يعمل (بطاقات + محافظ) |
+
+---
+
+## 🧪 الاختبارات
+
+```bash
+# تشغيل جميع الاختبارات
+composer test
+
+# أو مباشرة
+php artisan test
+
+# تشغيل اختبار محدد
+php artisan test --filter=RegistrationFlowTest
+```
+
+**تغطية الاختبارات:** 29 ملف اختبار يغطي Registration, Subscription, Quiz, Sales, Security, Import/Export وأكثر.
+
+---
+
+## 🚢 النشر على الإنتاج
+
+راجع أدلة النشر التفصيلية:
+- 📖 [دليل الإعدادات الموحدة](DEPLOYMENT_GUIDE.md) — إعدادات التطوير والإنتاج
+- 📖 [دليل النشر على KVM2](DEPLOYMENT_GUIDE_KVM2.md) — خطوات النشر الكاملة
+
+### أوامر النشر السريعة
+
+```bash
+composer install --optimize-autoloader --no-dev
+npm install && npm run build
+php artisan migrate --force
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+php artisan queue:restart
+```
+
+---
+
+## 📚 التوثيق الإضافي
+
+| الملف | الوصف |
+|:---|:---|
+| [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) | إعدادات التطوير والإنتاج |
+| [DEPLOYMENT_GUIDE_KVM2.md](DEPLOYMENT_GUIDE_KVM2.md) | دليل النشر الكامل على KVM2 |
+| [MULTI_TENANCY.md](MULTI_TENANCY.md) | توثيق نظام Multi-Tenancy |
+| [docs/saas_plan_final.md](docs/saas_plan_final.md) | خطة المشروع التفصيلية |
+| [docs/roadmap_detailed.txt](docs/roadmap_detailed.txt) | خارطة الطريق المفصلة |
+
+---
+
+## 👥 الأدوار في النظام
+
+| الدور | الوصف |
+|:---|:---|
+| **Super Admin** | إدارة كل المراكز والاشتراكات والنظام |
+| **Center Admin** | إدارة المركز التعليمي (الطلاب، المدرسين، الدورات) |
+| **Instructor** | إدارة الدورات والمحتوى والامتحانات |
+| **Student** | الوصول للدورات والاختبارات ومتابعة التقدم |
+| **Secretary** | إدارة التسجيلات والحضور |
+| **Accountant** | إدارة المالية والفواتير |
+| **Guardian** | متابعة تقدم الطالب |
+
+---
+
+## 📄 الترخيص
+
+هذا المشروع مملوك ولا يخضع لترخيص مفتوح المصدر. جميع الحقوق محفوظة.
+
+---
+
+<p align="center">
+  صُنع بـ ❤️ بواسطة فريق Taalimu
+</p>

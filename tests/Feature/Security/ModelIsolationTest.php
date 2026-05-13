@@ -27,6 +27,7 @@ class ModelIsolationTest extends TestCase
             'Coupon', // System-wide coupons for subscriptions
             'SiteSetting', // Global platform settings
             'SaleItem', // Child of Sale (implicitly isolated)
+            'PersonalAccessToken', // Sanctum's token (managed by library)
         ];
 
         $failures = [];

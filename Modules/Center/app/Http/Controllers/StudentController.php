@@ -298,7 +298,29 @@ class StudentController extends Controller
 
         $this->studentService->deleteStudent($student, auth()->user());
 
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => __('center::messages.msg_084'),
+                'restore_url' => route('center.students.restore', ['tenant' => $this->tenant->domain, 'id' => $id])
+            ]);
+        }
+
         return redirect()->route('center.students.index', ['tenant' => $this->tenant->domain])->with('success', __('center::messages.msg_084'));
+    }
+
+    public function restore($id)
+    {
+        $student = Student::where('tenant_id', $this->tenant->id)->withTrashed()->findOrFail($id);
+        $this->authorize('update', $student);
+
+        $student->restore();
+
+        if (request()->ajax()) {
+            return response()->json(['success' => true, 'message' => __('center::messages.msg_082')]);
+        }
+
+        return redirect()->back()->with('success', __('center::messages.msg_082'));
     }
 
     public function export()

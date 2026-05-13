@@ -40,7 +40,7 @@
                 
                 <li><hr class="hr-horizontal"></li>
                 
-                {{-- SCHOOL MANAGEMENT --}}
+                {{-- CLASSES & STRUCTURE --}}
                 @php 
                     $canInstructors = ($tenant->getFeatureValue('max_instructors') != '0' && $tenant->getFeatureValue('max_instructors') !== false) && auth()->user()->can('view instructors');
                     $canCourses = ($tenant->getFeatureValue('max_courses') != '0' && $tenant->getFeatureValue('max_courses') !== false) && auth()->user()->can('view courses');
@@ -48,47 +48,27 @@
                     $canSchedules = $tenant->getFeatureValue('daily_schedules') === true && auth()->user()->can('view schedule');
                     $canOnlineClasses = auth()->user()->can('view schedule');
 
-                    $isSchoolMgmtActive = request()->routeIs('center.classrooms.*') || 
+                    $isClassesActive = request()->routeIs('center.classrooms.*') || 
                                           request()->routeIs('center.instructors.*') || 
                                           request()->routeIs('center.courses.*') || 
                                           request()->routeIs('center.online_classes.*') || 
                                           request()->routeIs('center.schedules.*');
                     
-                    $showSchoolMgmt = ($canInstructors || $canCourses || $canClassrooms || $canSchedules || $canOnlineClasses) && ($tenant->type !== 'instructor');
+                    $showClasses = ($canInstructors || $canCourses || $canClassrooms || $canSchedules || $canOnlineClasses) && ($tenant->type !== 'instructor');
                 @endphp
                 
-                @if($showSchoolMgmt)
-                    <li class="nav-item static-item">
-                        <a class="nav-link static-item disabled" href="#" tabindex="-1">
-                            <span class="default-icon">{{ __('center::sidebar.school_management') }}</span>
-                            <span class="mini-icon">-</span>
-                        </a>
-                    </li>
+                @if($showClasses)
                     <li class="nav-item">
-                        <a class="nav-link {{ $isSchoolMgmtActive ? 'active' : '' }}" data-bs-toggle="collapse" href="#schoolMgmtCollapse" role="button" aria-expanded="{{ $isSchoolMgmtActive ? 'true' : 'false' }}" aria-controls="schoolMgmtCollapse">
+                        <a class="nav-link {{ $isClassesActive ? 'active' : '' }}" data-bs-toggle="collapse" href="#classesCollapse" role="button" aria-expanded="{{ $isClassesActive ? 'true' : 'false' }}" aria-controls="classesCollapse">
                             <i class="icon"><i class="fas fa-university text-warning"></i></i>
-                            <span class="item-name">{{ __('center::sidebar.school_management') }}</span>
+                            <span class="item-name">إدارة الحصص</span>
                             <i class="right-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                 </svg>
                             </i>
                         </a>
-                        <ul class="sub-nav collapse {{ $isSchoolMgmtActive ? 'show' : '' }}" id="schoolMgmtCollapse" data-bs-parent="#sidebar-menu">
-                            @if($canInstructors)
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('center.instructors.*') ? 'active' : '' }}" href="{{ route('center.instructors.index', ['tenant' => $tenant->domain ?? 'center']) }}">
-                                    <i class="sidenav-mini-icon">I</i><span class="item-name">{{ __('center::sidebar.instructors') }}</span>
-                                </a>
-                            </li>
-                            @endif
-                            @if($canCourses)
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('center.courses.*') ? 'active' : '' }}" href="{{ route('center.courses.index', ['tenant' => $tenant->domain ?? 'center']) }}">
-                                    <i class="sidenav-mini-icon">C</i><span class="item-name">{{ __('center::sidebar.courses') }}</span>
-                                </a>
-                            </li>
-                            @endif
+                        <ul class="sub-nav collapse {{ $isClassesActive ? 'show' : '' }}" id="classesCollapse" data-bs-parent="#sidebar-menu">
                             @if($canClassrooms)
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('center.classrooms.*') ? 'active' : '' }}" href="{{ route('center.classrooms.index', ['tenant' => $tenant->domain ?? 'center']) }}">
@@ -103,6 +83,20 @@
                                 </a>
                             </li>
                             @endif
+                            @if($canCourses)
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('center.courses.*') ? 'active' : '' }}" href="{{ route('center.courses.index', ['tenant' => $tenant->domain ?? 'center']) }}">
+                                    <i class="sidenav-mini-icon">C</i><span class="item-name">{{ __('center::sidebar.courses') }}</span>
+                                </a>
+                            </li>
+                            @endif
+                            @if($canInstructors)
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('center.instructors.*') ? 'active' : '' }}" href="{{ route('center.instructors.index', ['tenant' => $tenant->domain ?? 'center']) }}">
+                                    <i class="sidenav-mini-icon">I</i><span class="item-name">{{ __('center::sidebar.instructors') }}</span>
+                                </a>
+                            </li>
+                            @endif
                             @if($canOnlineClasses)
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('center.online_classes.*') ? 'active' : '' }}" href="{{ route('center.online_classes.index', ['tenant' => $tenant->domain ?? 'center']) }}">
@@ -114,77 +108,68 @@
                     </li>
                 @endif
                 
-                {{-- STUDENTS --}}
+                {{-- STUDENTS (FLAT) --}}
                 @php 
                     $canStudents = ($tenant->getFeatureValue('max_students') != '0' && $tenant->getFeatureValue('max_students') !== false) && auth()->user()->can('view students');
                     $canAttendance = $tenant->getFeatureValue('attendance_tracking') && auth()->user()->can('view attendance');
-                    $isStudentsActive = request()->routeIs('center.students.*') || request()->routeIs('center.attendance.*'); 
-                    $showStudents = $canStudents || $canAttendance;
                 @endphp
-                @if($showStudents)
-                    <li class="nav-item">
-                        <a class="nav-link {{ $isStudentsActive ? 'active' : '' }}" data-bs-toggle="collapse" href="#studentsCollapse" role="button" aria-expanded="{{ $isStudentsActive ? 'true' : 'false' }}" aria-controls="studentsCollapse">
-                            <i class="icon"><i class="fas fa-user-graduate text-info"></i></i>
-                            <span class="item-name">{{ __('center::sidebar.students') }}</span>
-                            <i class="right-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                </svg>
-                            </i>
-                        </a>
-                        <ul class="sub-nav collapse {{ $isStudentsActive ? 'show' : '' }}" id="studentsCollapse" data-bs-parent="#sidebar-menu">
-                            @if($canStudents)
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('center.students.*') ? 'active' : '' }}" href="{{ route('center.students.index', ['tenant' => $tenant->domain ?? 'center']) }}">
-                                    <i class="sidenav-mini-icon">S</i><span class="item-name">{{ __('center::sidebar.list') }}</span>
-                                </a>
-                            </li>
-                            @endif
-                            @if($canAttendance)
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('center.attendance.*') ? 'active' : '' }}" href="{{ route('center.attendance.index', ['tenant' => $tenant->domain ?? 'center']) }}">
-                                    <i class="sidenav-mini-icon">A</i><span class="item-name">{{ __('center::sidebar.attendance') }}</span>
-                                </a>
-                            </li>
-                            @endif
-                        </ul>
-                    </li>
+                
+                @if($canStudents)
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('center.students.*') ? 'active' : '' }}" href="{{ route('center.students.index', ['tenant' => $tenant->domain ?? 'center']) }}">
+                        <i class="icon"><i class="fas fa-user-graduate text-info"></i></i>
+                        <span class="item-name">الطلاب</span>
+                    </a>
+                </li>
+                @endif
+                
+                {{-- ATTENDANCE (FLAT) --}}
+                @if($canAttendance)
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('center.attendance.*') ? 'active' : '' }}" href="{{ route('center.attendance.index', ['tenant' => $tenant->domain ?? 'center']) }}">
+                        <i class="icon"><i class="fas fa-calendar-check text-success"></i></i>
+                        <span class="item-name">الحضور والانصراف</span>
+                    </a>
+                </li>
                 @endif
                 
                 
 
-                {{-- FINANCE --}}
+                {{-- PAYMENTS (FLAT) --}}
+                @can('view sales')
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('center.sales.*') ? 'active' : '' }}" href="{{ route('center.sales.account', ['tenant' => $tenant->domain ?? 'center']) }}">
+                        <i class="icon"><i class="fas fa-wallet text-danger"></i></i>
+                        <span class="item-name">المدفوعات والفواتير</span>
+                    </a>
+                </li>
+                @endcan
+                
+                {{-- REPORTS --}}
                 @php 
                     $hasFinancialReports = $tenant->getFeatureValue('financial_reports') && auth()->user()->canAny(['view sales', 'view expenses']);
                     $hasAdvancedReports = $tenant->getFeatureValue('advanced_reports') && auth()->user()->can('view reports');
-                    $isFinanceActive = request()->routeIs('center.sales.*') || request()->routeIs('center.expenses.*') || request()->routeIs('center.analytics.*'); 
+                    $isReportsActive = request()->routeIs('center.analytics.*') || request()->routeIs('center.expenses.*'); 
                 @endphp
                 @if($hasFinancialReports || $hasAdvancedReports)
                     <li class="nav-item">
-                        <a class="nav-link {{ $isFinanceActive ? 'active' : '' }}" data-bs-toggle="collapse" href="#financeCollapse" role="button" aria-expanded="{{ $isFinanceActive ? 'true' : 'false' }}" aria-controls="financeCollapse">
-                            <i class="icon"><i class="fas fa-chart-line text-success"></i></i>
-                            <span class="item-name">{{ __('center::sidebar.financial') }}</span>
+                        <a class="nav-link {{ $isReportsActive ? 'active' : '' }}" data-bs-toggle="collapse" href="#reportsCollapse" role="button" aria-expanded="{{ $isReportsActive ? 'true' : 'false' }}" aria-controls="reportsCollapse">
+                            <i class="icon"><i class="fas fa-chart-bar text-primary"></i></i>
+                            <span class="item-name">التقارير والمصروفات</span>
                             <i class="right-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                 </svg>
                             </i>
                         </a>
-                        <ul class="sub-nav collapse {{ $isFinanceActive ? 'show' : '' }}" id="financeCollapse" data-bs-parent="#sidebar-menu">
-                            @can('view sales')
-                            {{-- <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.sales.index') ? 'active' : '' }}" href="{{ route('center.sales.index', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="sidenav-mini-icon">S</i><span class="item-name">{{ __('center::sidebar.sales') }}</span></a></li> --}}
-                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.sales.account') ? 'active' : '' }}" href="{{ route('center.sales.account', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="sidenav-mini-icon">A</i><span class="item-name">{{ __('center::sidebar.student_accounts') }}</span></a></li>
-                            @endcan
+                        <ul class="sub-nav collapse {{ $isReportsActive ? 'show' : '' }}" id="reportsCollapse" data-bs-parent="#sidebar-menu">
                             @can('view expenses')
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.expenses.*') ? 'active' : '' }}" href="{{ route('center.expenses.index', ['tenant' => $tenant->domain ?? 'center']) }}"><i class="sidenav-mini-icon">E</i><span class="item-name">{{ __('center::sidebar.expenses') }}</span></a></li>
                             @endcan
                             @canany(['view reports', 'view analytics'])
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.analytics.finance') ? 'active' : '' }}" href="{{ route('center.analytics.finance') }}"><i class="sidenav-mini-icon">F</i><span class="item-name">{{ __('center::sidebar.financial_analytics') }}</span></a></li>
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.analytics.commissions') ? 'active' : '' }}" href="{{ route('center.analytics.commissions') }}"><i class="sidenav-mini-icon">C</i><span class="item-name">{{ __('center::sidebar.financial_commissions') }}</span></a></li>
-                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.analytics.taxes') ? 'active' : '' }}" href="{{ route('center.analytics.taxes') }}"><i class="sidenav-mini-icon">T</i><span class="item-name">{{ __('center::sidebar.financial_taxes') }}</span></a></li>
-                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.analytics.discounts') ? 'active' : '' }}" href="{{ route('center.analytics.discounts') }}"><i class="sidenav-mini-icon">D</i><span class="item-name">{{ __('center::sidebar.financial_discounts') }}</span></a></li>
                             @endcanany
-
                             @if($hasAdvancedReports)
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('center.analytics.index') ? 'active' : '' }}" href="{{ route('center.analytics.index') }}"><i class="sidenav-mini-icon">G</i><span class="item-name">{{ __('center::analytics.general') }}</span></a></li>
                             @endif
@@ -203,16 +188,10 @@
                                         request()->routeIs('center.tickets.*') ||
                                         request()->routeIs('center.subscription.*'); 
                 @endphp
-                    <li class="nav-item static-item">
-                        <a class="nav-link static-item disabled" href="#" tabindex="-1">
-                            <span class="default-icon">{{ __('center::sidebar.settings') }}</span>
-                            <span class="mini-icon">-</span>
-                        </a>
-                    </li>
                     <li class="nav-item">
                         <a class="nav-link {{ $isSettingsActive ? 'active' : '' }}" data-bs-toggle="collapse" href="#settingsCollapse" role="button" aria-expanded="{{ $isSettingsActive ? 'true' : 'false' }}" aria-controls="settingsCollapse">
                             <i class="icon"><i class="fas fa-cogs text-secondary"></i></i>
-                            <span class="item-name">{{ __('center::sidebar.settings') }}</span>
+                            <span class="item-name">الإعدادات</span>
                             <i class="right-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />

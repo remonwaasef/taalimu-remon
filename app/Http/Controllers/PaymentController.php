@@ -4,98 +4,59 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tenant;
+use App\Models\Package;
 use App\Services\TelegramService;
+use App\Services\PaymentProcessingService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * PaymentController — يعالج نتائج الدفع (Callbacks/Redirects) من جميع البوابات.
+ * المنطق المشترك مفوّض لـ PaymentProcessingService لتطبيق مبدأ DRY.
+ */
 class PaymentController extends Controller
 {
+    public function __construct(
+        protected PaymentProcessingService $paymentService
+    ) {}
+
+    /**
+     * Stripe Success (Deprecated — redirects to home).
+     */
     public function success(Request $request, TelegramService $telegram)
     {
         return redirect()->route('home')->withErrors(['error' => 'Stripe is no longer supported. Please use Paymob.']);
     }
 
+    /**
+     * PayPal Success Callback.
+     */
     public function paypalSuccess(Request $request, \App\Services\PayPalService $paypal, TelegramService $telegram)
     {
-        $orderId = $request->get('token'); // PayPal uses 'token' for Order ID in redirect
+        $orderId = $request->get('token');
 
         if ($orderId) {
             $details = $paypal->captureOrder($orderId);
 
             if ($details && $details['status'] === 'COMPLETED') {
-                // Mark registration as successful for the view
                 session(['registration_success' => true]);
 
-                // Get tenant from session or auth
                 $tenantId = session('tenant_id');
-                $tenant = $tenantId ? \App\Models\Tenant::find($tenantId) : null;
+                $tenant = $tenantId ? Tenant::find($tenantId) : null;
 
                 if ($tenant) {
                     $planSlug = session('selected_plan', 'pro');
-                    $package = \App\Models\Package::where('slug', $planSlug)->first();
+                    $package = Package::where('slug', $planSlug)->first();
                     $billingCycle = session('billing_cycle', 'monthly');
 
-                    if ($billingCycle === 'monthly') {
-                        $days = 30;
-                    } elseif ($billingCycle === 'term') {
-                        $termDuration = \App\Models\SiteSetting::get('term_duration_days', 150);
-                        $days = $termDuration;
-                    } elseif ($billingCycle === 'yearly') {
-                        $days = 365;
-                    } elseif ($package) {
-                        $days = $package->duration_in_days; // Fallback to package default
-                    } else {
-                        $days = 30; // Absolute default
-                    }
-
-                    // Determine operation type
-                    $existingSub = $tenant->subscriptions()->where('name', 'default')->first();
-                    $operationType = $existingSub ? 'upgrade' : 'subscription';
-
-                    // Create or update the subscription NOW (payment is confirmed)
-                    $tenant->subscriptions()->updateOrCreate(
-                        ['name' => 'default'],
-                        [
-                            'paypal_id' => $orderId,
-                            'paypal_status' => 'COMPLETED',
-                            'gateway' => 'paypal',
-                            'stripe_id' => 'sub_paypal_' . \Illuminate\Support\Str::random(10),
-                            'stripe_status' => 'active',
-                            'stripe_price' => 'price_paypal_' . ($package->slug ?? 'unknown'),
-                            'quantity' => 1,
-                            'billing_cycle' => $billingCycle,
-                            'base_price' => session('base_price', 0),
-                            'total_amount' => session('total_amount', 0),
-                            'discount_amount' => 0,
-                            'status' => 'active',
-                            'ends_at' => now()->addDays($days),
-                        ]
-                    );
-
-                    // Log the subscription operation
-                    \App\Models\SubscriptionLog::logOperation(
-                        $tenant->id,
-                        $operationType,
-                        $package->slug ?? 'unknown',
-                        $package->name ?? 'مخصص',
-                        $billingCycle,
-                        'paypal',
+                    $this->paymentService->activateSubscription(
+                        $tenant, 'paypal', $orderId, $package, $billingCycle,
+                        session('base_price', 0),
                         session('total_amount', 0),
-                        $orderId,
-                        now(),
-                        now()->addDays($days)
+                        ['paypal_id' => $orderId, 'paypal_status' => 'COMPLETED']
                     );
-                    
-                    $user = \App\Models\User::where('tenant_id', $tenant->id)
-                        ->whereIn('role', ['center_admin', 'instructor'])
-                        ->first();
-                    
-                    $telegram->sendRegistrationAlert($tenant, $user, '******** (PayPal Order)');
 
-                    // Log in the user if not already logged in
-                    if (!Auth::check() && $user) {
-                        Auth::login($user, true);
-                    }
+                    $this->paymentService->loginAdminAndNotify($tenant, $telegram, '******** (PayPal Order)');
                 }
 
                 if (session('is_subscription_change')) {
@@ -107,199 +68,154 @@ class PaymentController extends Controller
             }
         }
 
-        return redirect()->route('home')->withErrors(['error' => 'فشل التحقق من عملية دفع PayPal.']);
+        return redirect()->route('home')->withErrors(['error' => __('payment.paypal_failed')]);
     }
 
+    /**
+     * Paymob Redirect Callback.
+     */
     public function paymobCallback(Request $request, TelegramService $telegram)
     {
         /** @var \App\Services\PaymentGateways\PaymobGateway $gateway */
         $gateway = \App\Services\PaymentFactory::make('paymob');
-        
-        // 1. Verify Redirect HMAC (Security First)
+
+        // 1. Verify Redirect HMAC
         $isHmacValid = $gateway->verifyRedirectHmac($request->all());
         if (!$isHmacValid) {
             Log::warning('Paymob Redirect HMAC Mismatch', [
                 'received_hmac' => $request->get('hmac'),
                 'payload' => $request->except(['hmac'])
             ]);
-            // return redirect()->route('home')->withErrors(['error' => 'فشل التحقق من أمان عملية الدفع.']);
         }
 
         $success = filter_var($request->get('success'), FILTER_VALIDATE_BOOLEAN);
         $transactionId = $request->get('id');
-        $merchantOrderId = $request->get('merchant_order_id') ?? $request->get('order'); 
+        $merchantOrderId = $request->get('merchant_order_id') ?? $request->get('order');
 
         Log::info('Paymob Redirect Received', [
-            'success' => $success,
-            'transaction_id' => $transactionId,
-            'merchant_order_id' => $merchantOrderId,
-            'hmac_valid' => $isHmacValid
+            'success' => $success, 'transaction_id' => $transactionId,
+            'merchant_order_id' => $merchantOrderId, 'hmac_valid' => $isHmacValid
         ]);
 
         if ($success && $transactionId) {
-             // 2. Context Restoration (Fall back to merchant_order_id if session is lost)
-             $tenantId = session('tenant_id');
-             $planSlug = session('selected_plan');
-             $billingCycle = session('billing_cycle', 'monthly');
-             $isChange = session('is_subscription_change', false);
-             $basePrice = session('base_price', 0);
-             $totalAmount = session('total_amount', 0);
+            // 2. Context Restoration
+            $tenantId = session('tenant_id');
+            $planSlug = session('selected_plan');
+            $billingCycle = session('billing_cycle', 'monthly');
+            $isChange = session('is_subscription_change', false);
+            $basePrice = session('base_price', 0);
+            $totalAmount = session('total_amount', 0);
 
-             if (!$tenantId && $merchantOrderId && str_starts_with($merchantOrderId, 'tx_')) {
-                 // Format: tx_{time}_{tenant_id}_{package_slug}_{billing_cycle}_{is_change}
-                 $parts = explode('_', $merchantOrderId);
-                 if (count($parts) >= 6) {
-                     $tenantId = $parts[2];
-                     $planSlug = $parts[3];
-                     $billingCycle = $parts[4];
-                     $isChange = $parts[5] === '1';
-                     
-                     \Log::info("Paymob Context Restored from merchant_order_id: {$merchantOrderId}");
-                 }
-             }
+            // Fallback: restore from merchant_order_id if session expired
+            if (!$tenantId && $merchantOrderId) {
+                $restored = $this->paymentService->restoreContextFromMerchantOrder($merchantOrderId);
+                if ($restored) {
+                    $tenantId = $restored['tenant_id'];
+                    $planSlug = $restored['plan_slug'];
+                    $billingCycle = $restored['billing_cycle'];
+                    $isChange = $restored['is_change'];
+                }
+            }
 
-             // Last Resort: If we still don't have a planSlug, try to guestimate or look up by transaction?
-             // But usually merchant_order_id restoration is enough.
+            $tenant = $tenantId ? Tenant::find($tenantId) : null;
 
-             $tenant = $tenantId ? \App\Models\Tenant::find($tenantId) : null;
+            // Fallback: find tenant via existing subscription
+            if (!$tenant) {
+                $existingSub = \App\Models\Subscription::where('stripe_id', 'sub_paymob_' . $transactionId)->first();
+                if ($existingSub) {
+                    $tenant = $existingSub->tenant;
+                    $isChange = true;
+                    Log::info("Paymob Context Restored via subscription for Trans ID: {$transactionId}");
+                }
+            }
 
-             if (!$tenant) {
-                 // Fallback: Try to find tenant through subscription created by webhook
-                 $existingSub = \App\Models\Subscription::where('stripe_id', 'sub_paymob_' . $transactionId)->first();
-                 if ($existingSub) {
-                     $tenant = $existingSub->tenant;
-                     $isChange = true; 
-                     Log::info("Paymob Context Restored via existing subscription for Trans ID: {$transactionId}");
-                 }
-             }
+            // Robust upgrade detection
+            if ($tenant && !$isChange) {
+                $isChange = $tenant->subscriptions()->where('name', 'default')->exists();
+            }
 
-             // Robust upgrade detection: if tenant exists and already has a sub, it's an upgrade redirect
-             if ($tenant && !$isChange) {
-                 $isChange = $tenant->subscriptions()->where('name', 'default')->exists();
-             }
+            if ($tenant) {
+                $package = Package::where('slug', $planSlug)->first();
 
-             if ($tenant) {
-                 $package = \App\Models\Package::where('slug', $planSlug)->first();
-                 
-                 // If prices were in session but lost, we fallback to package prices
-                 if ($totalAmount <= 0 && $package) {
-                     $totalAmount = ($billingCycle === 'yearly' ? $package->yearly_price : ($billingCycle === 'term' ? $package->term_price : $package->price));
-                     $basePrice = $totalAmount;
-                 }
+                // Fallback pricing from package if session was lost
+                if ($totalAmount <= 0 && $package) {
+                    $totalAmount = match ($billingCycle) {
+                        'yearly' => $package->yearly_price,
+                        'term' => $package->term_price,
+                        default => $package->price,
+                    };
+                    $basePrice = $totalAmount;
+                }
 
-                 if ($billingCycle === 'monthly') {
-                     $days = 30;
-                 } elseif ($billingCycle === 'term') {
-                     $termDuration = (int) \App\Models\SiteSetting::get('term_duration_days', 150);
-                     $days = $termDuration;
-                 } elseif ($billingCycle === 'yearly') {
-                     $days = 365;
-                 } elseif ($package) {
-                     $days = $package->duration_in_days; 
-                 } else {
-                     $days = 30;
-                 }
+                $this->paymentService->activateSubscription(
+                    $tenant, 'paymob', $transactionId, $package, $billingCycle,
+                    $basePrice, $totalAmount
+                );
 
-                 // Determine operation type
-                 $operationType = $isChange ? 'upgrade' : 'subscription';
+                $this->paymentService->loginAdminAndNotify($tenant, $telegram, "******** (Paymob ID: {$transactionId})");
 
-                 $tenant->subscriptions()->updateOrCreate(
-                     ['name' => 'default'],
-                     [
-                         'gateway' => 'paymob',
-                         'stripe_id' => 'sub_paymob_' . $transactionId,
-                         'stripe_status' => 'active',
-                         'stripe_price' => 'price_paymob_' . ($package->slug ?? ($planSlug ?: 'unknown')),
-                         'quantity' => 1,
-                         'billing_cycle' => $billingCycle,
-                         'base_price' => $basePrice,
-                         'total_amount' => $totalAmount,
-                         'discount_amount' => 0,
-                         'status' => 'active',
-                         'ends_at' => now()->addDays($days),
-                     ]
-                 );
+                session(['registration_success' => true]);
 
-                 // Log the subscription operation
-                 \App\Models\SubscriptionLog::logOperation(
-                     $tenant->id,
-                     $operationType,
-                     $package->slug ?? ($planSlug ?: 'unknown'),
-                     $package->name ?? 'مخصص',
-                     $billingCycle,
-                     'paymob',
-                     $totalAmount,
-                     $transactionId,
-                     now(),
-                     now()->addDays($days)
-                 );
+                if ($isChange) {
+                    return redirect()->route('center.subscription.success', ['tenant' => $tenant->domain]);
+                }
 
-                 $user = \App\Models\User::where('tenant_id', $tenant->id)
-                     ->whereIn('role', ['center_admin', 'instructor'])
-                     ->first();
-                 
-                  $telegram->sendRegistrationAlert($tenant, $user, "******** (Paymob ID: {$transactionId})");
+                return redirect()->route('registration.success');
+            }
 
-                  if (!Auth::check() && $user) {
-                      Auth::login($user, true);
-                  }
-                 
-                 // Enable success state for the view
-                 session(['registration_success' => true]);
-
-                 if ($isChange) {
-                     return redirect()->route('center.subscription.success', ['tenant' => $tenant->domain]);
-                 }
-
-                 return redirect()->route('registration.success');
-             }
-
-             // If we confirmed success but couldn't find the tenant, it's a critical error
-             \Log::error("Paymob Payment Success but Tenant not found", ['transaction_id' => $transactionId, 'merchant_order_id' => $merchantOrderId]);
-             return redirect()->route('home')->withErrors(['error' => 'تم الدفع بنجاح ولكن تعذر تحديث بيانات الحساب. يرجى التواصل مع الدعم الفني.']);
+            Log::error("Paymob Payment Success but Tenant not found", [
+                'transaction_id' => $transactionId, 'merchant_order_id' => $merchantOrderId
+            ]);
+            return redirect()->route('home')->withErrors(['error' => __('payment.success_but_tenant_not_found')]);
         }
 
         // Payment failed or was cancelled
-        // Try to redirect the user back to where they came from
+        return $this->handlePaymobFailure($request, $merchantOrderId);
+    }
+
+    /**
+     * معالجة فشل/إلغاء دفع Paymob.
+     */
+    private function handlePaymobFailure(Request $request, ?string $merchantOrderId)
+    {
         $tenantId = session('tenant_id');
         $isChange = session('is_subscription_change', false);
-        
-        // Also try merchant_order_id for context
-        if (!$tenantId && $merchantOrderId && str_starts_with($merchantOrderId, 'tx_')) {
-            $parts = explode('_', $merchantOrderId);
-            if (count($parts) >= 6) {
-                $tenantId = $parts[2];
-                $isChange = $parts[5] === '1';
+
+        if (!$tenantId && $merchantOrderId) {
+            $restored = $this->paymentService->restoreContextFromMerchantOrder($merchantOrderId);
+            if ($restored) {
+                $tenantId = $restored['tenant_id'];
+                $isChange = $restored['is_change'];
             }
         }
 
         Log::warning('Paymob Payment Failed/Cancelled', [
-            'success' => $success,
-            'transaction_id' => $transactionId,
-            'merchant_order_id' => $merchantOrderId,
-            'tenant_id' => $tenantId,
-            'is_change' => $isChange,
+            'tenant_id' => $tenantId, 'is_change' => $isChange,
             'all_params' => $request->all(),
         ]);
 
-        // If this was a subscription upgrade, redirect back to subscription page
         if ($isChange && $tenantId) {
-            $tenant = \App\Models\Tenant::find($tenantId);
+            $tenant = Tenant::find($tenantId);
             if ($tenant) {
                 return redirect()->route('center.subscription.index', ['tenant' => $tenant->domain])
-                    ->with('error', 'فشل الدفع عبر Paymob أو تم إلغاؤه. يرجى المحاولة مرة أخرى.');
+                    ->with('error', __('payment.paymob_failed'));
             }
         }
 
-        return redirect()->route('home')->withErrors(['error' => 'فشل الدفع عبر Paymob أو تم إلغاؤه.']);
+        return redirect()->route('home')->withErrors(['error' => __('payment.paymob_failed')]);
     }
 
-
+    /**
+     * Payment Cancel page.
+     */
     public function cancel()
     {
         return view('auth.payment-cancel');
     }
 
+    /**
+     * Demo Payment page (for testing).
+     */
     public function demo()
     {
         $planSlug = session('selected_plan');
@@ -309,8 +225,8 @@ class PaymentController extends Controller
             return redirect()->route('register')->withErrors(['error' => __('Your session has expired. Please register again.')]);
         }
 
-        $package = \App\Models\Package::where('slug', $planSlug)->first();
-        $tenant = \App\Models\Tenant::find($tenantId);
+        $package = Package::where('slug', $planSlug)->first();
+        $tenant = Tenant::find($tenantId);
 
         if (!$package || !$tenant) {
             return redirect()->route('register')->withErrors(['error' => __('Selected plan or tenant not found.')]);
@@ -322,177 +238,91 @@ class PaymentController extends Controller
         $totalAmount = session('total_amount', $package->price);
         $billingCycle = session('billing_cycle', 'monthly');
 
-        // Show a fake payment page for demo/testing
         return view('auth.payment-demo', compact('package', 'tenant', 'couponCode', 'discountAmount', 'totalAmount', 'basePrice', 'billingCycle'));
     }
 
+    /**
+     * Demo Payment Success (simulated).
+     */
     public function demoSuccess(TelegramService $telegram)
     {
-        // Simulate successful payment in demo mode
         if (!session('tenant_id')) {
             return redirect()->route('register');
         }
 
-        // Security: Validate session integrity to prevent bypass
+        // Security: Validate session integrity
         $userId = auth()->check() ? auth()->id() : \App\Models\User::where('tenant_id', session('tenant_id'))->where('role', 'center_admin')->value('id');
         $expectedHmac = hash_hmac('sha256', session('tenant_id') . '|' . $userId, config('app.key'));
         if (!hash_equals($expectedHmac, session('registration_hmac', ''))) {
-            \Log::warning('Demo payment bypass attempt detected', ['ip' => request()->ip()]);
-            return redirect()->route('register')->withErrors(['error' => 'جلسة غير صالحة. يرجى التسجيل مرة أخرى.']);
+            Log::warning('Demo payment bypass attempt detected', ['ip' => request()->ip()]);
+            return redirect()->route('register')->withErrors(['error' => __('payment.invalid_session')]);
         }
 
-        // Create a fake subscription only if doesn't exist
-        $tenant = \App\Models\Tenant::find(session('tenant_id'));
-        if ($tenant) {
-            $existingSub = \App\Models\Subscription::where('tenant_id', $tenant->id)
-                ->where('status', 'active')
-                ->where(function($q) {
-                    $q->whereNull('ends_at')->orWhere('ends_at', '>', now());
-                })
-                ->latest()
-                ->first();
-
-            if (!$existingSub) {
-                $planIdentifier = session('selected_plan', 'pro');
-                $package = \App\Models\Package::where('slug', $planIdentifier)->orWhere('id', $planIdentifier)->first();
-                $priceSlug = $package ? $package->slug : $planIdentifier;
-                
-                \App\Models\Subscription::create([
-                    'tenant_id' => $tenant->id,
-                    'name' => 'default',
-                    'stripe_id' => 'sub_demo_' . \Illuminate\Support\Str::random(10),
-                    'stripe_status' => 'active',
-                    'stripe_price' => 'price_demo_' . $priceSlug,
-                    'quantity' => 1,
-                    'ends_at' => session('billing_cycle') === 'yearly' ? now()->addYear() : (session('billing_cycle') === 'term' ? now()->addDays((int)\App\Models\SiteSetting::get('term_duration_days', 150)) : now()->addDays(30)),
-                    'status' => 'active',
-                    'billing_cycle' => session('billing_cycle', 'monthly'),
-                    'coupon_id' => session('applied_coupon_id'),
-                    'coupon_code' => session('applied_coupon_code'),
-                    'discount_amount' => session('discount_amount', 0),
-                    'total_amount' => session('total_amount', 0),
-                    'base_price' => session('base_price', 0),
-                ]);
-
-                // Log the subscription operation
-                $billingCycle = session('billing_cycle', 'monthly');
-                $termDays = (int) \App\Models\SiteSetting::get('term_duration_days', 150);
-                $daysForLog = $billingCycle === 'yearly' ? 365 : ($billingCycle === 'term' ? $termDays : 30);
-                \App\Models\SubscriptionLog::logOperation(
-                    $tenant->id,
-                    'subscription',
-                    $package->slug ?? 'unknown',
-                    $package->name ?? 'مخصص',
-                    $billingCycle,
-                    'demo',
-                    session('total_amount', 0),
-                    null,
-                    now(),
-                    now()->addDays($daysForLog)
-                );
-
-                // Increment usage if coupon was used
-                if (session('applied_coupon_id')) {
-                    $coupon = \App\Models\Coupon::find(session('applied_coupon_id'));
-                    if ($coupon) {
-                       $coupon->incrementUsage();
-                       // Notify Admin
-                       try {
-                           app(\App\Services\TelegramService::class)->sendCouponAlert($tenant, $coupon, session('discount_amount', 0));
-                       } catch (\Throwable $e) {}
-                    }
-                }
-            } else {
-                // Update existing subscription
-                $planIdentifier = session('selected_plan', 'pro');
-                $package = \App\Models\Package::where('slug', $planIdentifier)->orWhere('id', $planIdentifier)->first();
-                $priceSlug = $package ? $package->slug : $planIdentifier;
-
-                $existingSub->forceFill([
-                    'stripe_price' => 'price_demo_' . $priceSlug,
-                    'ends_at' => session('billing_cycle') === 'yearly' ? now()->addYear() : (session('billing_cycle') === 'term' ? now()->addDays((int)\App\Models\SiteSetting::get('term_duration_days', 150)) : now()->addDays(30)),
-                    'billing_cycle' => session('billing_cycle', 'monthly'),
-                    'coupon_id' => session('applied_coupon_id'),
-                    'coupon_code' => session('applied_coupon_code'),
-                    'discount_amount' => session('discount_amount', 0),
-                    'total_amount' => session('total_amount', 0),
-                    'base_price' => session('base_price', 0),
-                ])->save();
-
-                // Log the upgrade operation
-                $billingCycle = session('billing_cycle', 'monthly');
-                $termDays = (int) \App\Models\SiteSetting::get('term_duration_days', 150);
-                $daysForLog = $billingCycle === 'yearly' ? 365 : ($billingCycle === 'term' ? $termDays : 30);
-                \App\Models\SubscriptionLog::logOperation(
-                    $tenant->id,
-                    'upgrade',
-                    $package->slug ?? 'unknown',
-                    $package->name ?? 'مخصص',
-                    $billingCycle,
-                    'demo',
-                    session('total_amount', 0),
-                    null,
-                    now(),
-                    now()->addDays($daysForLog)
-                );
-
-                // Increment usage if coupon was used
-                if (session('applied_coupon_id')) {
-                    $coupon = \App\Models\Coupon::find(session('applied_coupon_id'));
-                    if ($coupon) {
-                       $coupon->incrementUsage();
-                       // Notify Admin
-                       try {
-                           app(\App\Services\TelegramService::class)->sendCouponAlert($tenant, $coupon, session('discount_amount', 0));
-                       } catch (\Throwable $e) {}
-                    }
-                }
-            }
+        $tenant = Tenant::find(session('tenant_id'));
+        if (!$tenant) {
+            return redirect()->route('register');
         }
 
+        $planSlug = session('selected_plan', 'pro');
+        $package = Package::where('slug', $planSlug)->orWhere('id', $planSlug)->first();
+        $billingCycle = session('billing_cycle', 'monthly');
+
+        $this->paymentService->activateSubscription(
+            $tenant, 'demo', '', $package, $billingCycle,
+            session('base_price', 0),
+            session('total_amount', 0),
+            [
+                'coupon_id' => session('applied_coupon_id'),
+                'coupon_code' => session('applied_coupon_code'),
+                'discount_amount' => session('discount_amount', 0),
+            ]
+        );
+
+        // Process coupon usage
+        $this->paymentService->processCoupon(
+            session('applied_coupon_id'),
+            $tenant,
+            session('discount_amount', 0)
+        );
+
+        // Handle subscription upgrade redirect
         if (session('is_subscription_change')) {
             session()->forget('is_subscription_change');
-
-            // Notify Admin for Upgrade/Change
-            try {
-                $user = Auth::user();
-                $userName = $user ? $user->name : 'مستخدم غير مسجل';
-                
-                $sub = \App\Models\Subscription::where('tenant_id', $tenant->id)->latest()->first();
-                $packageName = $sub ? $sub->type_label : 'غير محدد';
-                $endsAt = ($sub && $sub->ends_at) ? $sub->ends_at->format('Y-m-d') : 'غير محدد';
-                $amount = session('total_amount', 0) . ' ' . \App\Models\SiteSetting::get('currency_symbol', 'جنيه');
-                
-                $msg = "<b>🔄 ترقية / تغيير اشتراك!</b>\n\n";
-                $msg .= "<b>🏢 المركز:</b> {$tenant->name}\n";
-                $msg .= "<b>👤 المستخدم:</b> {$userName}\n";
-                $msg .= "<b>📦 الباقة الجديدة:</b> {$packageName}\n";
-                $msg .= "<b>💰 المبلغ المدفوع:</b> {$amount}\n";
-                $msg .= "<b>⏳ تاريخ الانتهاء الجديد:</b> {$endsAt}\n\n";
-                $msg .= "#SubscriptionUpgrade";
-                
-                app(\App\Services\TelegramService::class)->sendAdminNotification($msg);
-            } catch (\Throwable $e) {
-                \Log::error("Failed to send upgrade notification: " . $e->getMessage());
-            }
-
+            $this->sendUpgradeNotification($tenant);
             return redirect()->route('center.subscription.success', ['tenant' => $tenant->domain]);
         }
 
         session(['registration_success' => true]);
-
-        // Notify Admin
-        $user = \App\Models\User::where('tenant_id', $tenant->id)
-            ->whereIn('role', ['center_admin', 'instructor'])
-            ->first();
-            
-        $telegram->sendRegistrationAlert($tenant, $user, '********');
-
-        // Log in the user if not already logged in
-        if (!Auth::check() && $user) {
-            Auth::login($user, true);
-        }
+        $this->paymentService->loginAdminAndNotify($tenant, $telegram, '********');
 
         return redirect()->route('registration.success');
+    }
+
+    /**
+     * إرسال إشعار ترقية الاشتراك عبر Telegram.
+     */
+    private function sendUpgradeNotification(Tenant $tenant): void
+    {
+        try {
+            $user = Auth::user();
+            $userName = $user ? $user->name : __('payment.unknown_user');
+
+            $sub = \App\Models\Subscription::where('tenant_id', $tenant->id)->latest()->first();
+            $packageName = $sub ? $sub->type_label : __('payment.unspecified');
+            $endsAt = ($sub && $sub->ends_at) ? $sub->ends_at->format('Y-m-d') : __('payment.unspecified');
+            $amount = session('total_amount', 0) . ' ' . \App\Models\SiteSetting::get('currency_symbol', 'جنيه');
+
+            $msg = "<b>🔄 " . __('payment.subscription_upgrade') . "</b>\n\n";
+            $msg .= "<b>🏢 " . __('payment.center') . ":</b> {$tenant->name}\n";
+            $msg .= "<b>👤 " . __('payment.user') . ":</b> {$userName}\n";
+            $msg .= "<b>📦 " . __('payment.new_package') . ":</b> {$packageName}\n";
+            $msg .= "<b>💰 " . __('payment.amount_paid') . ":</b> {$amount}\n";
+            $msg .= "<b>⏳ " . __('payment.new_expiry') . ":</b> {$endsAt}\n\n";
+            $msg .= "#SubscriptionUpgrade";
+
+            app(TelegramService::class)->sendAdminNotification($msg);
+        } catch (\Throwable $e) {
+            Log::error("Failed to send upgrade notification: " . $e->getMessage());
+        }
     }
 }

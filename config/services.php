@@ -77,4 +77,15 @@ return [
         'key' => env('KLAVIYO_API_KEY'),
     ],
 
+    'whatsapp' => [
+        'system_token' => env('WHATSAPP_SYSTEM_TOKEN'),
+        'system_phone_id' => env('WHATSAPP_SYSTEM_PHONE_ID'),
+        'system_version' => env('WHATSAPP_SYSTEM_VERSION', 'v21.0'),
+        'system_country_code' => env('WHATSAPP_SYSTEM_COUNTRY_CODE', '20'),
+    ],
+
+    'onboarding' => [
+        'emails_enabled' => env('ENABLE_ONBOARDING_EMAILS', false),
+    ],
+
 ];

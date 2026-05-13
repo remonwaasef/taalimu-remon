@@ -10,7 +10,7 @@
         <div class="col-md-8">
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-body p-5">
-                    <form action="{{ route('center.courses.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('center.courses.store') }}" method="POST" enctype="multipart/form-data" data-autosave="create-course">
                         @csrf
 
                         @if ($errors->any())

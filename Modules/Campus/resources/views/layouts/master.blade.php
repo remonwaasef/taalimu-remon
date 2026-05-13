@@ -215,6 +215,8 @@
         .shadow-sm-soft { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05); }
         .rounded-4 { border-radius: 1rem !important; }
     </style>
+    <!-- Network Resilience Monitor -->
+    <link rel="stylesheet" href="{{ asset('css/network-monitor.css') }}">
 </head>
 <body>
 
@@ -326,6 +328,8 @@
             }
         });
     </script>
+    <!-- Network Resilience Monitor -->
+    <script src="{{ asset('js/network-monitor.js') }}"></script>
     <x-cookie-consent />
 </body>
 </html>

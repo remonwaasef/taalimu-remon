@@ -206,6 +206,8 @@
             top: 100%;
         }
     </style>
+    <!-- Network Resilience Monitor -->
+    <link rel="stylesheet" href="{{ asset('css/network-monitor.css') }}">
     @stack('styles')
 </head>
 
@@ -314,6 +316,8 @@
         }
     </script>
 
+    <!-- Network Resilience Monitor -->
+    <script src="{{ asset('js/network-monitor.js') }}"></script>
     @stack('scripts')
 </body>
 </html>

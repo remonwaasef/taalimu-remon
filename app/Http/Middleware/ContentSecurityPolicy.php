@@ -38,6 +38,8 @@ class ContentSecurityPolicy
                 "font-src 'self' data: https: fonts.gstatic.com",
                 "img-src 'self' data: blob: https:",
                 "connect-src 'self' https:",
+                "worker-src 'self'",
+                "manifest-src 'self'",
                 "frame-ancestors 'none'",
                 "frame-src 'self' https://www.youtube.com https://player.vimeo.com https://js.stripe.com",
                 "base-uri 'self'",

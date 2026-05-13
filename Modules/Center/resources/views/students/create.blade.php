@@ -10,10 +10,28 @@
         <div class="col-md-8">
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-body p-5">
-                    <form action="{{ route('center.students.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('center.students.store') }}" method="POST" enctype="multipart/form-data" data-autosave="create-student">
                         @csrf
                         
-                        {{-- 1. Student Info --}}
+                        <!-- Wizard Navigation -->
+                        <ul class="nav nav-pills nav-justified mb-5 pb-3 border-bottom" id="studentWizard" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active rounded-pill fw-bold shadow-sm" id="step1-tab" data-bs-toggle="pill" data-bs-target="#step1" type="button" role="tab" aria-controls="step1" aria-selected="true">
+                                    <i class="bi bi-person-badge me-2"></i> 1. البيانات الأساسية
+                                </button>
+                            </li>
+                            <li class="nav-item mx-3" role="presentation">
+                                <button class="nav-link rounded-pill fw-bold shadow-sm" id="step2-tab" data-bs-toggle="pill" data-bs-target="#step2" type="button" role="tab" aria-controls="step2" aria-selected="false">
+                                    <i class="bi bi-collection-play me-2"></i> 2. التسجيل والدورات
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="studentWizardContent">
+                            <!-- STEP 1: Basic Information -->
+                            <div class="tab-pane fade show active" id="step1" role="tabpanel" aria-labelledby="step1-tab">
+                                
+                                {{-- 1. Student Info --}}
                         <div class="row mb-4">
                             <h5 class="text-secondary mb-3"><i class="bi bi-person me-2"></i>{{ __('center::students.form.basic_info') }}</h5>
                             
@@ -125,9 +143,17 @@
                             </div>
                         </div>
 
-                        <hr class="my-4">
+                                <div class="d-flex justify-content-end mt-4 pt-3 border-top">
+                                    <button type="button" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm btn-next-step">
+                                        التالي <i class="fas fa-arrow-left ms-2"></i>
+                                    </button>
+                                </div>
+                            </div> <!-- End Step 1 -->
 
-                        {{-- 4. Course Enrollment --}}
+                            <!-- STEP 2: Courses & Confirmation -->
+                            <div class="tab-pane fade" id="step2" role="tabpanel" aria-labelledby="step2-tab">
+                                
+                                {{-- 4. Course Enrollment --}}
                         <div class="row mb-4">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h5 class="text-secondary mb-0"><i class="bi bi-collection-play me-2"></i>{{ __('center::students.initial_registration_optional') }}</h5>
@@ -159,9 +185,16 @@
                             </div>
                         </div>
 
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">{{ __('center::students.form.save_student') }}</button>
-                        </div>
+                                <div class="d-flex justify-content-between mt-5 pt-3 border-top">
+                                    <button type="button" class="btn btn-light btn-lg rounded-pill px-4 text-secondary btn-prev-step">
+                                        <i class="fas fa-arrow-right me-2"></i> السابق
+                                    </button>
+                                    <button type="submit" class="btn btn-success btn-lg rounded-pill px-5 shadow-sm">
+                                        <i class="fas fa-check-circle me-2"></i> {{ __('center::students.form.save_student') }}
+                                    </button>
+                                </div>
+                            </div> <!-- End Step 2 -->
+                        </div> <!-- End Tab Content -->
                     </form>
                 </div>
             </div>
@@ -173,6 +206,27 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         
+        // Wizard Navigation
+        const nextBtn = document.querySelector('.btn-next-step');
+        const prevBtn = document.querySelector('.btn-prev-step');
+        
+        if(nextBtn) {
+            nextBtn.addEventListener('click', function() {
+                // Trigger click on step 2 tab (Bootstrap 5 way)
+                const step2Tab = new bootstrap.Tab(document.querySelector('#step2-tab'));
+                step2Tab.show();
+                window.scrollTo(0, 0);
+            });
+        }
+        
+        if(prevBtn) {
+            prevBtn.addEventListener('click', function() {
+                const step1Tab = new bootstrap.Tab(document.querySelector('#step1-tab'));
+                step1Tab.show();
+                window.scrollTo(0, 0);
+            });
+        }
+
         function showWarning(input, msg) {
             // Remove existing warning if any
             let existing = input.parentNode.querySelector('.custom-validation-msg');

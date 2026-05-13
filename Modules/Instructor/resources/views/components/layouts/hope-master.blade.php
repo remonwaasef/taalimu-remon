@@ -33,6 +33,8 @@
     
     <!-- Taalimu Unified Premium Emerald Theme -->
     <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/taalimu-unified.css?v=' . time()) }}">
+    <!-- Network Monitor Styles -->
+    <link rel="stylesheet" href="{{ asset('css/network-monitor.css') }}">
     @stack('styles')
 </head>
 
@@ -112,5 +114,13 @@
     
     @stack('scripts')
     @stack('modals')
+
+    <!-- Network Monitor (Real Connectivity Detection) -->
+    <script src="{{ asset('js/network-monitor.js') }}"></script>
+    <script>
+        window.TaalimuNetwork.onStatusChange((isOnline) => {
+            document.body.classList.toggle('is-network-offline', !isOnline);
+        });
+    </script>
 </body>
 </html>

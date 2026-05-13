@@ -37,7 +37,7 @@ class CertificateService
             'metadata' => [
                 'student_name' => $enrollment->student->user->name,
                 'course_title' => $enrollment->course->title,
-                'tenant_name' => \Modules\Tenancy\app\Services\TenantResolver::get()->name ?? 'Edu Platform',
+                'tenant_name' => \Modules\Tenancy\Services\TenantResolver::get()->name ?? 'Edu Platform',
             ],
         ]);
     }
@@ -51,10 +51,12 @@ class CertificateService
             'certificate' => $certificate,
             'student' => $certificate->student,
             'course' => $certificate->course,
-            'tenant' => \Modules\Tenancy\app\Services\TenantResolver::get(),
+            'tenant' => \Modules\Tenancy\Services\TenantResolver::get(),
         ];
 
         return Pdf::loadView('center::certificates.template', $data)
             ->setPaper('a4', 'landscape');
     }
 }
+
+

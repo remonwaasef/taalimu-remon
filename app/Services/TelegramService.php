@@ -12,8 +12,8 @@ class TelegramService
 
     public function __construct()
     {
-        $this->token = config('services.telegram.bot_token') ?? env('TELEGRAM_BOT_TOKEN');
-        $this->chatId = config('services.telegram.admin_chat_id') ?? env('TELEGRAM_ADMIN_CHAT_ID');
+        $this->token = config('services.telegram.bot_token');
+        $this->chatId = config('services.telegram.admin_chat_id');
     }
 
     /**
@@ -49,9 +49,6 @@ class TelegramService
     /**
      * Send a welcome message with credentials to the admin for manual sharing.
      */
-    /**
-     * Send a welcome message with credentials to the admin for manual sharing.
-     */
     public function sendRegistrationAlert($tenant, $user, $password)
     {
         $domain = $tenant->domain . '.' . config('app.domain', 'taalimu.com');
@@ -61,8 +58,8 @@ class TelegramService
         $sub = \App\Models\Subscription::where('tenant_id', $tenant->id)->latest()->first();
         $packageName = $sub ? $sub->type_label : __('services.string_113');
         $subStatus = $sub ? ($sub->onTrial() ? __('services.string_114') : __('services.string_115')) : __('services.string_116');
-        $endsAt = ($sub && $sub->ends_at) ? $sub->ends_at->format(__('services.string_117');
-        $amount = ($sub && $sub->total_amount) ? $sub->total_amount . __('services.string_118')) : __('services.string_119');
+        $endsAt = ($sub && $sub->ends_at) ? $sub->ends_at->format(__('services.string_117')) : __('services.string_116');
+        $amount = ($sub && $sub->total_amount) ? $sub->total_amount . ' ' . __('services.string_118') : __('services.string_119');
 
         $userName = $user ? $user->name : __('services.string_120');
         $userEmail = $user ? $user->email : __('services.string_121');
@@ -146,8 +143,9 @@ class TelegramService
     /**
      * Send an alert for failed payments or renewals.
      */
-    public function sendFailedPaymentAlert($tenant, $reason = __('services.string_130'))
+    public function sendFailedPaymentAlert($tenant, $reason = null)
     {
+        $reason = $reason ?? __('services.string_130');
         $message = "<b>❌ فشل في عملية الدفع / التجديد!</b>\n\n";
         $message .= "<b>🏢 المركز:</b> {$tenant->name}\n";
         $message .= "<b>📧 البريد:</b> {$tenant->email}\n";
@@ -220,8 +218,8 @@ class TelegramService
      */
     public function sendCouponCreatedAlert($user, $coupon)
     {
-        $type = $coupon->type === __('services.string_134') : __('services.string_135');
-        $value = $coupon->type === __('services.string_136'));
+        $type = $coupon->type === 'percentage' ? __('services.string_134') : __('services.string_135');
+        $value = $coupon->reward;
         $package = $coupon->package ? $coupon->package->name : __('services.string_137');
         
         $message = "<b>🎫 إنشاء كوبون خصم جديد!</b>\n\n";
@@ -231,7 +229,7 @@ class TelegramService
         $message .= "<b>📉 النوع:</b> {$type}\n";
         $message .= "<b>💰 القيمة:</b> {$value}\n";
         $message .= "<b>📦 المخطط المستهدف:</b> {$package}\n";
-        $message .= "<b>📅 ينتهي في:</b> " . ($coupon->expires_at ? $coupon->expires_at->format(__('services.string_138')) . "\n\n";
+        $message .= "<b>📅 ينتهي في:</b> " . ($coupon->expires_at ? $coupon->expires_at->format(__('services.string_138')) : __('services.string_126')) . "\n\n";
         $message .= "#SalesAudit";
 
         return $this->sendAdminNotification($message);

@@ -54,6 +54,12 @@ class CenterController extends Controller
 
         $dashboardData = \App\Support\TenantCache::remember($cacheKey, now()->addMinutes(15), function () use ($tenantId) {
             $activeStudentsCount = Student::where('status', 'active')->count();
+            
+            // Attendance Rate for the current week
+            $thisWeekAttendance = \App\Models\Attendance::where('created_at', '>=', now()->startOfWeek())
+                ->count();
+            $expectedAttendance = \App\Models\Enrollment::where('status', 'active')->count(); // Rough estimation
+            $attendanceRate = $expectedAttendance > 0 ? round(($thisWeekAttendance / $expectedAttendance) * 100) : 0;
 
             return [
                 'activeStudents' => $activeStudentsCount,
@@ -64,6 +70,9 @@ class CenterController extends Controller
                 'monthlyExpenses' => Expense::whereMonth('date', now()->month)
                     ->whereYear('date', now()->year)
                     ->sum('amount'),
+                'sessionsToday' => \App\Models\Schedule::where('day_of_week', strtolower(now()->format('l')))->count(),
+                'attendanceRate' => min($attendanceRate, 100),
+                'overdueAmount' => Sale::where('remaining', '>', 0)->sum('remaining'),
             ];
         });
 
@@ -71,6 +80,9 @@ class CenterController extends Controller
         $activeCourses = $dashboardData['activeCourses'];
         $monthlyRevenue = $dashboardData['monthlyRevenue'];
         $monthlyExpenses = $dashboardData['monthlyExpenses'];
+        $sessionsToday = $dashboardData['sessionsToday'];
+        $attendanceRate = $dashboardData['attendanceRate'];
+        $overdueAmount = $dashboardData['overdueAmount'];
         $netProfit = $monthlyRevenue - $monthlyExpenses;
 
         // 1.1 Fetch Recent Activities (Cached for 5 minutes)
@@ -97,7 +109,10 @@ class CenterController extends Controller
             'recentActivities',
             'atRiskStudents',
             'aiInsights',
-            'performanceTrends'
+            'performanceTrends',
+            'sessionsToday',
+            'attendanceRate',
+            'overdueAmount'
         ));
     }
 

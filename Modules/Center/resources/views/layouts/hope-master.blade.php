@@ -38,6 +38,8 @@
 
     <!-- Taalimu Unified Premium Emerald Theme -->
     <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/taalimu-unified.css?v=' . time()) }}">
+    <!-- Network Monitor Styles -->
+    <link rel="stylesheet" href="{{ asset('css/network-monitor.css') }}">
     @stack('styles')
 </head>
 
@@ -137,6 +139,22 @@
     <script src="{{ asset('assets/hope-ui/js/hope-ui.js') }}"></script>
     
     @stack('scripts')
+
+    <!-- Network Monitor (Real Connectivity Detection) -->
+    <script src="{{ asset('js/network-monitor.js') }}"></script>
+    <script>
+        window.TaalimuNetwork.onStatusChange((isOnline) => {
+            document.body.classList.toggle('is-network-offline', !isOnline);
+        });
+    </script>
+    
+    <!-- Enterprise Reliability Scripts -->
+    <script src="{{ asset('js/auto-save.js') }}"></script>
+    <script src="{{ asset('js/instant-search.js') }}"></script>
+    <script src="{{ asset('js/crash-recovery.js') }}"></script>
+    <script src="{{ asset('js/status-indicators.js') }}"></script>
+    <script src="{{ asset('js/image-compressor.js') }}"></script>
+    <script src="{{ asset('js/keyboard-shortcuts.js') }}"></script>
     
     <!-- Beta Bug Report Widget -->
     @include('center::partials.bug-report-widget')

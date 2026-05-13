@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Tenancy\app\Services;
+namespace Modules\Tenancy\Services;
 
 use App\Models\Tenant;
 

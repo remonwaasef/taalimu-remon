@@ -40,7 +40,7 @@ class ForcePasswordChange
                 }
 
                 return redirect()->route('center.password.change', ['tenant' => $tenant])
-                    ->with('warning', 'يجب عليك تغيير كلمة المرور قبل المتابعة.');
+                    ->with('warning', __('auth.must_change_password'));
             }
         }
 

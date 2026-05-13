@@ -8,6 +8,23 @@ use Illuminate\Support\Facades\Storage;
 trait HandlesFileUploads
 {
     /**
+     * Allowed MIME types for file uploads.
+     */
+    protected array $allowedMimes = [
+        'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml',
+        'application/pdf',
+        'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'video/mp4', 'video/webm',
+        'audio/mpeg', 'audio/wav',
+    ];
+
+    /**
+     * Maximum file size in kilobytes (default: 10MB).
+     */
+    protected int $maxFileSizeKB = 10240;
+
+    /**
      * Handle file upload with automatic deletion of old file.
      *
      * @param Request $request
@@ -16,6 +33,7 @@ trait HandlesFileUploads
      * @param string $storagePath
      * @param string $disk
      * @return string|null
+     * @throws \Illuminate\Validation\ValidationException
      */
     protected function handleFileUpload(
         Request $request,
@@ -25,6 +43,22 @@ trait HandlesFileUploads
         string $disk = 'public'
     ): ?string {
         if ($request->hasFile($fieldName)) {
+            $file = $request->file($fieldName);
+
+            // Security: Validate MIME type to prevent malicious uploads
+            if (!in_array($file->getMimeType(), $this->allowedMimes)) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    $fieldName => __('validation.mimes', ['attribute' => $fieldName, 'values' => 'jpg, png, pdf, doc, xls, mp4']),
+                ]);
+            }
+
+            // Security: Validate file size
+            if ($file->getSize() / 1024 > $this->maxFileSizeKB) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    $fieldName => __('validation.max.file', ['attribute' => $fieldName, 'max' => $this->maxFileSizeKB]),
+                ]);
+            }
+
             // Delete old file if exists
             if ($currentFile) {
                 Storage::disk($disk)->delete($currentFile);
@@ -32,10 +66,7 @@ trait HandlesFileUploads
             
             // Store new file with Tenant Isolation
             $tenantPrefix = app()->bound('tenant') ? app('tenant')->id : 'global';
-            // Ensure path doesn't end with slash, but prefix does if needed.
-            // Actually, best to just put it in a folder: {tenant_id}/{path}
-            // If storagePath is 'courses', result is '1/courses/filename.jpg'
-            return $request->file($fieldName)->store("{$tenantPrefix}/{$storagePath}", $disk);
+            return $file->store("{$tenantPrefix}/{$storagePath}", $disk);
         }
         
         return $currentFile;

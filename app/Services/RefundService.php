@@ -16,7 +16,7 @@ class RefundService
     public function processRefund(Sale $sale, array $data)
     {
         return DB::transaction(function () use ($sale, $data) {
-            $tenantId = \Modules\Tenancy\app\Services\TenantResolver::get()->id;
+            $tenantId = \Modules\Tenancy\Services\TenantResolver::get()->id;
             $refundAmount = $data['amount'];
 
             // 1. Create Refund Record
@@ -66,3 +66,5 @@ class RefundService
         });
     }
 }
+
+

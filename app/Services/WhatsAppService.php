@@ -168,10 +168,10 @@ class WhatsAppService
      */
     public function sendSystemMessage($to, $message)
     {
-        $accessToken = env('WHATSAPP_SYSTEM_TOKEN');
-        $phoneNumberId = env('WHATSAPP_SYSTEM_PHONE_ID');
-        $apiVersion = env('WHATSAPP_SYSTEM_VERSION', 'v21.0');
-        $countryCode = env('WHATSAPP_SYSTEM_COUNTRY_CODE', '20');
+        $accessToken = config('services.whatsapp.system_token');
+        $phoneNumberId = config('services.whatsapp.system_phone_id');
+        $apiVersion = config('services.whatsapp.system_version', 'v21.0');
+        $countryCode = config('services.whatsapp.system_country_code', '20');
 
         if (!$accessToken || !$phoneNumberId) {
             // Fallback: Log the message instead of sending if keys are missing

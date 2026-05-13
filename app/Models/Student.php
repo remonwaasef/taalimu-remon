@@ -5,13 +5,14 @@ namespace App\Models;
 use App\Scopes\TenantScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 class Student extends Model
 {
-    use HasFactory, LogsActivity, \App\Traits\IdentifyTenant, \App\Traits\ClearsDashboardCache;
+    use HasFactory, LogsActivity, SoftDeletes, \App\Traits\IdentifyTenant, \App\Traits\ClearsDashboardCache;
 
     protected static function boot()
     {
