@@ -49,21 +49,31 @@ html[dir="rtl"] .sidebar-base .nav-link.active {
 }
 .sidebar-base .sub-nav .nav-link {
     font-size: 0.9rem !important;
-    padding-top: 8px !important;
-    padding-bottom: 8px !important;
+    padding: 8px 12px !important;
     font-weight: 500;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
 }
 html[dir="rtl"] .sidebar-base .sub-nav .nav-link {
-    padding-right: 1.5rem !important;
-    margin-right: 0 !important;
+    padding-right: 3.5rem !important;
+    padding-left: 1rem !important;
+    margin: 0 !important;
 }
-.sidebar-base .sub-nav .sidenav-mini-icon {
+.sidebar-base .sub-nav .sidenav-mini-icon,
+.sidebar-base .sub-nav .nav-link::before,
+.sidebar-base .sub-nav .nav-link::after {
     display: none !important;
+    content: none !important;
 }
-/* Ensure the text is allowed to wrap or take more space if needed */
-.sidebar-base .item-name {
+.sidebar-base .sub-nav .item-name {
     white-space: normal !important;
-    line-height: 1.2 !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: right !important;
+    width: 100% !important;
+    transform: none !important;
 }
 .sidebar-base .hr-horizontal {
     border-color: rgba(0,0,0,0.05) !important;
