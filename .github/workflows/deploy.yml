@@ -33,8 +33,10 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             SITE_PATH="/home/taalimu/htdocs/taalimu.com"
-            # مزامنة الملفات من المجلد المؤقت للموقع
+            # مزامنة الملفات
             rsync -rtv ~/deploy_tmp/ $SITE_PATH/
+            # إنشاء ملف اختبار للتأكد من المسار
+            echo "ANTIGRAVITY_DEPLOY_SUCCESS" > $SITE_PATH/public/test_check.txt
             # تنظيف
             rm -rf ~/deploy_tmp
             # مسح كاش لارافيل
