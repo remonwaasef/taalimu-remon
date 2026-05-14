@@ -24,3 +24,15 @@ jobs:
           source: "app,bootstrap,config,database,public,resources,routes,storage,artisan,composer.json,package.json"
           target: "/home/taalimu/htdocs/taalimu.com"
           strip_components: 0
+
+      - name: Clear Cache on Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd /home/taalimu/htdocs/taalimu.com
+            php artisan view:clear
+            php artisan config:clear
+            php artisan cache:clear
