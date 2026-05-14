@@ -143,9 +143,9 @@
                              x-effect="localPrice = getRegionalPrice({{ json_encode($package->regional_prices) }}, {{ $package->price }}, {{ $package->term_price }}, {{ $package->yearly_price }})"
                         >
                             @if($package->trial_days > 0)
-                                <div class="mb-3">
-                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase tracking-wider">
-                                        <i class="fas fa-gift"></i>
+                                <div class="mb-4">
+                                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600 text-xs font-black uppercase tracking-widest shadow-sm">
+                                        <i class="fas fa-gift animate-bounce"></i>
                                         {{ __('landing.pricing.trial_days', ['days' => $package->trial_days]) }}
                                     </span>
                                 </div>
@@ -205,8 +205,14 @@
                            {{ $isFeatured 
                                ? 'bg-emerald-500 text-white shadow-xl shadow-emerald-500/20 hover:bg-emerald-600 hover:scale-[1.02] active:scale-95' 
                                : 'bg-slate-900 text-white hover:bg-slate-800 hover:scale-[1.02] active:scale-95' }}">
-                            {{ __('landing.pricing.cta_paid') }}
+                            {{ $package->trial_days > 0 ? __('landing.pricing.cta_free') : __('landing.pricing.cta_paid') }}
                         </a>
+                        @if($package->trial_days > 0)
+                            <p class="text-center text-[10px] font-bold text-slate-400 mt-3 uppercase tracking-tighter opacity-80">
+                                <i class="fas fa-shield-alt text-emerald-500/50 me-1"></i>
+                                {{ __('landing.pricing.cta_note') ?? 'لا حاجة لبطاقة ائتمان' }}
+                            </p>
+                        @endif
                     </div>
                 </div>
             @endforeach
