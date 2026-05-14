@@ -1,4 +1,4 @@
-name: Deploy to Production (Home Sync Strategy)
+name: Deploy to Production (Auto-Discovery Strategy)
 
 on:
   push:
@@ -8,12 +8,32 @@ on:
 
 jobs:
   deploy:
-    name: Deploy via Home Sync
+    name: Auto-Discover and Deploy
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Discover and Sync
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            echo "Searching for the real site path..."
+            # البحث عن المجلد الذي يحتوي على ملفات لارافيل الحقيقية
+            REAL_PATH=$(find /home/taalimu/htdocs -name "artisan" | head -n 1 | xargs dirname)
+            echo "Found real path: $REAL_PATH"
+            
+            if [ -z "$REAL_PATH" ]; then
+              echo "Error: Could not find Laravel installation!"
+              exit 1
+            fi
+            
+            # حفظ المسار في ملف مؤقت لاستخدامه في الخطوات القادمة إذا لزم الأمر
+            echo "$REAL_PATH" > ~/site_path.txt
 
       - name: Upload to Home Directory
         uses: appleboy/scp-action@master
@@ -25,21 +45,18 @@ jobs:
           target: "deploy_tmp"
           strip_components: 0
 
-      - name: Sync to Site and Clear Cache
+      - name: Move to Real Path and Clear Cache
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            SITE_PATH="/home/taalimu/htdocs/taalimu.com"
-            # مزامنة الملفات
-            rsync -rtv ~/deploy_tmp/ $SITE_PATH/
-            # إنشاء ملف اختبار للتأكد من المسار
-            echo "ANTIGRAVITY_DEPLOY_SUCCESS" > $SITE_PATH/public/test_check.txt
-            # تنظيف
+            REAL_PATH=$(cat ~/site_path.txt)
+            echo "Syncing to $REAL_PATH..."
+            rsync -rtv ~/deploy_tmp/ $REAL_PATH/
             rm -rf ~/deploy_tmp
-            # مسح كاش لارافيل
-            cd $SITE_PATH
+            cd $REAL_PATH
             php artisan optimize:clear
-            echo "Deployment Successful!"
+            echo "ANTIGRAVITY_DEPLOY_SUCCESS" > $REAL_PATH/public/test_check.txt
+            echo "Deployment to $REAL_PATH Successful!"
