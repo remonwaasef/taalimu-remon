@@ -1,0 +1,39 @@
+name: Deploy to Production (FTP)
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  ftp-deploy:
+    name: Deploy via FTP
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Sync Files to FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: / # تم التعديل ليتناسب مع مسار الـ FTP في CloudPanel
+          # استثناء الملفات التي لا يجب رفعها (لتقليل وقت الرفع وحماية الموقع)
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/vendor/**
+            .env*
+            tests/**
+            deployment_scripts/**
+            playwright-report/**
+            test-results/**
+            docs/**
+            *.md
