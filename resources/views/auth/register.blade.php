@@ -260,15 +260,44 @@ document.addEventListener('alpine:init', () => {
 
             <!-- Contextual Header -->
             <div class="mb-4 text-center transition-all duration-700 ease-in-out" :class="!accountType ? 'transform scale-110 translate-y-[3vh] mb-8' : ''">
-                <div x-show="currentStep === 1" x-cloak>
-                    <h1 class="text-lg lg:text-xl font-black text-slate-900 mb-1 font-arabic leading-tight">
+                <div x-show="currentStep === 1" x-cloak class="flex flex-col items-center">
+                    <h1 class="text-xl lg:text-2xl font-black text-slate-900 mb-2 font-arabic leading-tight">
                         {{ app()->isLocale('ar') ? 'ابدأ رحلتك التعليمية' : 'Start Your Journey' }}
                     </h1>
-                    <div class="flex items-center justify-center gap-2 mb-2 bg-brand-secondary/5 py-0.5 px-3 rounded-full w-fit mx-auto">
-                        <i class="bi bi-gift text-brand-secondary text-[10px]"></i>
-                        <span class="text-[9px] font-black text-brand-secondary uppercase tracking-widest" x-text="currentPlan.trial_days > 0 ? ({{ app()->isLocale('ar') ? 'currentPlan.trial_days + \' يوم مجاناً\'' : 'currentPlan.trial_days + \'-Day Free Trial\'' }}) : ({{ app()->isLocale('ar') ? '\'ابدأ الآن\'' : '\'Start Now\'' }})"></span>
-                    </div>
-                    <p class="text-slate-500 text-xs font-arabic font-medium opacity-80 max-w-[280px] mx-auto">
+                    
+                    <!-- Premium Trial Badge -->
+                    <template x-if="currentPlan.trial_days > 0">
+                        <div class="flex flex-col items-center">
+                            <div class="inline-flex items-center gap-2.5 py-2 px-5 rounded-full bg-emerald-50 border border-emerald-100 mb-2 shadow-sm animate-fade-in hover:scale-105 transition-transform duration-300">
+                                <div class="relative flex h-2.5 w-2.5">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                                </div>
+                                <span class="text-sm font-black text-emerald-700 font-arabic tracking-tight">
+                                     <span x-text="currentPlan.trial_days"></span>
+                                     {{ app()->isLocale('ar') ? 'يوم تجربة مجانية بالكامل' : 'Days Full Free Trial' }}
+                                </span>
+                            </div>
+                            
+                            <div class="flex items-center gap-1.5 mb-4 opacity-80">
+                                <i class="bi bi-shield-check text-emerald-600 text-xs"></i>
+                                <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                                    {{ app()->isLocale('ar') ? 'لا يلزم وجود بطاقة ائتمان' : 'No Credit Card Required' }}
+                                </span>
+                            </div>
+                        </div>
+                    </template>
+
+                    <template x-if="!currentPlan.trial_days || currentPlan.trial_days <= 0">
+                        <div class="inline-flex items-center justify-center gap-2 mb-4 bg-brand-secondary/5 py-1 px-4 rounded-full w-fit mx-auto">
+                            <i class="bi bi-rocket-takeoff text-brand-secondary text-xs"></i>
+                            <span class="text-[10px] font-black text-brand-secondary uppercase tracking-widest">
+                                {{ app()->isLocale('ar') ? 'ابدأ الآن' : 'Start Now' }}
+                            </span>
+                        </div>
+                    </template>
+
+                    <p class="text-slate-500 text-xs font-arabic font-medium opacity-80 max-w-[320px] mx-auto">
                         {{ app()->isLocale('ar') ? 'خطوات بسيطة لامتلاك منصتك التعليمية المتكاملة' : 'Simple steps to own your integrated platform' }}
                     </p>
                 </div>
@@ -297,8 +326,9 @@ document.addEventListener('alpine:init', () => {
                                 accountType === 'instructor' ? 'border-brand-secondary ring-4 ring-brand-secondary/10 shadow-brand-secondary/10' : (accountType ? 'border-slate-100 opacity-60' : '')
                              ]">
                             <!-- Trial Badge -->
-                            <div class="absolute top-0 right-0 bg-brand-secondary text-white text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded-bl-lg rounded-tr-xl z-20 shadow-md">
-                                {{ app()->isLocale('ar') ? '30 يوم مجاناً' : '30-Day Free' }}
+                            <div class="absolute top-0 right-0 bg-emerald-500 text-white text-[9px] font-black uppercase tracking-wider px-3 py-1 rounded-bl-xl rounded-tr-2xl z-20 shadow-lg shadow-emerald-500/20">
+                                <i class="bi bi-lightning-fill me-1 text-[8px]"></i>
+                                <span x-text="currentPlan.trial_days > 0 ? currentPlan.trial_days : '30'"></span> {{ app()->isLocale('ar') ? 'يوم مجاناً' : 'Days Free' }}
                             </div>
 
                             <!-- Background Accent -->
@@ -337,8 +367,9 @@ document.addEventListener('alpine:init', () => {
                                 accountType === 'center' ? 'border-brand-secondary ring-4 ring-brand-secondary/10 shadow-brand-secondary/10' : (accountType ? 'border-slate-100 opacity-60' : '')
                              ]">
                             <!-- Trial Badge -->
-                            <div class="absolute top-0 right-0 bg-brand-secondary text-white text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded-bl-lg rounded-tr-xl z-20 shadow-md">
-                                {{ app()->isLocale('ar') ? '30 يوم مجاناً' : '30-Day Free' }}
+                            <div class="absolute top-0 right-0 bg-emerald-500 text-white text-[9px] font-black uppercase tracking-wider px-3 py-1 rounded-bl-xl rounded-tr-2xl z-20 shadow-lg shadow-emerald-500/20">
+                                <i class="bi bi-lightning-fill me-1 text-[8px]"></i>
+                                <span x-text="currentPlan.trial_days > 0 ? currentPlan.trial_days : '30'"></span> {{ app()->isLocale('ar') ? 'يوم مجاناً' : 'Days Free' }}
                             </div>
 
                             <!-- Background Accent -->
@@ -539,17 +570,17 @@ document.addEventListener('alpine:init', () => {
                                     </div>
                                     <div class="text-right">
                                         <template x-if="currentPlan.trial_days > 0">
-                                            <div class="text-[9px] font-black text-emerald-600 mb-1 animate-fade-in uppercase tracking-wider">
+                                            <div class="text-[11px] font-black text-emerald-600 mb-1 animate-fade-in uppercase tracking-wider bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-100 inline-block">
                                                 <i class="bi bi-gift-fill me-1"></i>
-                                                <span x-text="currentPlan.trial_days"></span> {{ app()->isLocale('ar') ? 'أيام مجانية' : 'Days Free' }}
+                                                <span x-text="currentPlan.trial_days"></span> {{ app()->isLocale('ar') ? 'يوم تجربة مجانية' : 'Days Free Trial' }}
                                             </div>
                                         </template>
                                         <template x-if="couponStatus === 'valid' && currentPlan.trial_days === 0">
                                             <div class="text-[10px] font-black text-emerald-600 mb-1 animate-fade-in">-<span x-text="couponDiscountAmount.toLocaleString()"></span> <span x-text="currentPriceData.currency"></span></div>
                                         </template>
-                                        <div class="flex items-baseline gap-1" :class="currentPlan.trial_days > 0 ? 'text-emerald-500' : 'text-brand-secondary'">
+                                        <div class="flex items-baseline gap-1 justify-end" :class="currentPlan.trial_days > 0 ? 'text-emerald-500' : 'text-brand-secondary'">
                                             <span class="text-2xl font-black tracking-tighter" x-text="currentPlan.trial_days > 0 ? '0' : finalPrice.toLocaleString()"></span>
-                                            <span class="text-xs font-bold opacity-60" x-text="currentPriceData.currency"></span>
+                                            <span class="text-xs font-bold opacity-60" x-text="currentPlan.trial_days > 0 ? ({{ app()->isLocale('ar') ? '\'مجاناً\'' : '\'FREE\'' }}) : currentPriceData.currency"></span>
                                         </div>
                                     </div>
                                 </div>
