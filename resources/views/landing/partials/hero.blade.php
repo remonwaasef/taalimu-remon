@@ -22,6 +22,7 @@
                 <!-- Refined Subtitle -->
                 <p class="text-[13px] md:text-xl text-slate-600 mb-8 lg:mb-12 max-w-xl mx-auto md:mx-0 font-medium leading-relaxed">
                     {{ __('landing.hero.subtitle') }}
+                    <span class="text-emerald-600 font-bold block mt-2">TEST BY ANTIGRAVITY 🚀</span>
                 </p>
 
                 <!-- CTAs -->
@@ -49,7 +50,7 @@
                                 <i class="fab fa-whatsapp text-white text-[11px] lg:text-sm"></i>
                                 <span class="text-white text-[10px] lg:text-[11px] font-bold uppercase tracking-wider">{{ __('landing.hero.mockup.whatsapp.title') }}</span>
                             </div>
-                            <span class="text-white/80 text-[9px] lg:text-[10px]">{{ __('landing.hero.mockup.whatsapp.now') }}عهاياعهاعهابغثقلبهقاثخهعبت</span>
+                            <span class="text-white/80 text-[9px] lg:text-[10px]">{{ __('landing.hero.mockup.whatsapp.now') }}</span>
                         </div>
                         <div class="p-3 lg:p-5">
                             <div class="flex items-start gap-2 lg:gap-3 mb-3 lg:mb-4">
