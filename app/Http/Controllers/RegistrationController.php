@@ -157,6 +157,14 @@ class RegistrationController extends Controller
             'payment_gateway' => 'required|in:paypal,paymob,test',
         ]);
 
+        // PHONE VERIFICATION GATE: Ensure phone was verified via OTP before account creation
+        $phoneVerified = session('phone_verified') && session('phone_verified_number') === $request->phone;
+        if (!$phoneVerified) {
+            return back()->withErrors(['phone' => app()->getLocale() == 'ar'
+                ? 'يرجى التحقق من رقم الهاتف أولاً عبر كود التحقق.'
+                : 'Please verify your phone number first via OTP.'])->withInput();
+        }
+
         $currency = $request->input('currency', 'EGP');
 
         // VPN/LOCATION SECURITY: Prevent EGP usage outside Egypt

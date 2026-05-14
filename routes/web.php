@@ -108,6 +108,15 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
     Route::get('/api/validate-subdomain', [App\Http\Controllers\SubdomainController::class, 'validateSubdomain'])
         ->middleware('throttle:60,1')
         ->name('api.subdomain.validate');
+    
+    // Phone OTP Verification (Pre-Registration)
+    Route::post('/api/phone/send-otp', [App\Http\Controllers\PhoneVerificationController::class, 'sendOtp'])
+        ->middleware('throttle:10,5')
+        ->name('api.phone.send-otp');
+    Route::post('/api/phone/verify-otp', [App\Http\Controllers\PhoneVerificationController::class, 'verifyOtp'])
+        ->middleware('throttle:20,5')
+        ->name('api.phone.verify-otp');
+
     Route::get('/login', [App\Http\Controllers\UnifiedAuthController::class, 'showLoginForm'])->name('login.portal');
     Route::post('/login', [App\Http\Controllers\UnifiedAuthController::class, 'login'])
         ->middleware('throttle:login') // Uses the 'login' rate limiter defined in AppServiceProvider
