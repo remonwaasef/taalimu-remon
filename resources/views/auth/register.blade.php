@@ -626,15 +626,26 @@ document.addEventListener('alpine:init', () => {
                                             class="text-[10px] font-black text-brand-secondary hover:underline flex items-center gap-1 font-arabic">
                                         <i class="bi bi-tag-fill"></i> {{ __('auth.register.have_coupon') ?? 'هل لديك كود خصم؟' }}
                                     </button>
-                                    <div x-show="showCouponInput || couponStatus === 'valid'" x-cloak class="relative">
-                                        <input type="text" name="coupon_code" x-model="couponCode" @input.debounce.500ms="validateCoupon()"
-                                            placeholder="{{ __('admin.coupon_code') }}"
-                                            class="w-full h-8 px-3 bg-white border-2 border-slate-100 rounded-lg text-[10px] font-black uppercase focus:outline-none focus:border-brand-secondary transition-all"
-                                            :class="couponStatus === 'valid' ? 'border-emerald-200 bg-emerald-50' : (couponStatus === 'invalid' ? 'border-red-200 bg-red-50' : '')">
-                                        <div class="absolute right-2 top-1/2 -translate-y-1/2">
-                                            <template x-if="couponStatus === 'loading'"><div class="w-3 h-3 border-2 border-brand-secondary border-t-transparent rounded-full animate-spin"></div></template>
-                                            <template x-if="couponStatus === 'valid'"><i class="bi bi-patch-check-fill text-emerald-500 text-xs"></i></template>
+                                    <div x-show="showCouponInput || couponStatus === 'valid'" x-cloak class="space-y-1.5">
+                                        <div class="relative flex gap-1.5">
+                                            <div class="relative flex-1">
+                                                <input type="text" name="coupon_code" x-model="couponCode" @keyup.enter="validateCoupon()"
+                                                    placeholder="{{ __('admin.coupon_code') }}"
+                                                    class="w-full h-9 px-3 bg-white border-2 border-slate-100 rounded-lg text-[10px] font-black uppercase focus:outline-none focus:border-brand-secondary transition-all"
+                                                    :class="couponStatus === 'valid' ? 'border-emerald-200 bg-emerald-50' : (couponStatus === 'invalid' ? 'border-red-200 bg-red-50' : '')">
+                                                <div class="absolute right-2 top-1/2 -translate-y-1/2">
+                                                    <template x-if="couponStatus === 'valid'"><i class="bi bi-patch-check-fill text-emerald-500 text-xs"></i></template>
+                                                    <template x-if="couponStatus === 'invalid'"><i class="bi bi-x-circle-fill text-red-500 text-xs"></i></template>
+                                                </div>
+                                            </div>
+                                            <button type="button" @click="validateCoupon()" :disabled="isApplyingCoupon || !couponCode"
+                                                    class="h-9 px-3 rounded-lg bg-slate-900 text-white font-black text-[9px] uppercase tracking-widest hover:bg-brand-secondary transition-all disabled:opacity-50 flex items-center justify-center min-w-[60px]">
+                                                <template x-if="isApplyingCoupon"><div class="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div></template>
+                                                <span x-show="!isApplyingCoupon">{{ app()->isLocale('ar') ? 'تطبيق' : 'Apply' }}</span>
+                                            </button>
                                         </div>
+                                        <p x-show="couponMessage" :class="couponStatus === 'valid' ? 'text-emerald-600' : 'text-red-500'" 
+                                           class="text-[9px] font-black px-1 animate-fade-in" x-text="couponMessage"></p>
                                     </div>
                                 </div>
 
