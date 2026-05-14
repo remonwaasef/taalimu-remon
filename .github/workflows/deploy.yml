@@ -23,6 +23,7 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftp
           server-dir: / # تم التعديل ليتناسب مع مسار الـ FTP في CloudPanel
           # استثناء الملفات التي لا يجب رفعها (لتقليل وقت الرفع وحماية الموقع)
           exclude: |
