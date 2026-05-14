@@ -1,6 +1,3 @@
-<p align="center">
-  <img src="public/images/logo.png" alt="Taalimu Logo" width="200">
-</p>
 
 <h1 align="center">Taalimu — منصة SaaS لإدارة المراكز التعليمية</h1>
 
