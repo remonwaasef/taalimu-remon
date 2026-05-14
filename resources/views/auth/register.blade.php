@@ -35,6 +35,15 @@ document.addEventListener('alpine:init', () => {
         accountType: config.accountType || null,
         showPlanModal: false,
         formSubmitted: false,
+        phoneVerified: false,
+        otpSent: false,
+        otpCode: '',
+        otpStatus: 'idle',
+        otpMessage: '',
+        otpCountdown: 0,
+        otpTimer: null,
+        isSendingOtp: false,
+        isVerifyingOtp: false,
 
         async init() {
             // Default select first plan if requested plan is invalid or missing
@@ -180,6 +189,85 @@ document.addEventListener('alpine:init', () => {
             } catch (e) {
                 this.subdomainStatus = 'idle';
             }
+        },
+
+        async sendPhoneOtp() {
+            if (!this.phone || this.phone.length < 10) {
+                this.otpMessage = {{ Js::from(app()->isLocale('ar') ? 'يرجى إدخال رقم هاتف صحيح' : 'Please enter a valid phone number') }};
+                this.otpStatus = 'error';
+                return;
+            }
+            this.isSendingOtp = true;
+            this.otpStatus = 'sending';
+            this.otpMessage = '';
+            try {
+                const response = await fetch('/api/phone/send-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content },
+                    body: JSON.stringify({ phone: this.phone })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    this.otpSent = true;
+                    this.otpStatus = 'sent';
+                    this.otpMessage = data.message;
+                    this.startOtpCountdown(120);
+                } else {
+                    this.otpStatus = 'error';
+                    this.otpMessage = data.message;
+                }
+            } catch (e) {
+                this.otpStatus = 'error';
+                this.otpMessage = {{ Js::from(app()->isLocale('ar') ? 'حدث خطأ. حاول مرة أخرى.' : 'An error occurred. Please try again.') }};
+            } finally {
+                this.isSendingOtp = false;
+            }
+        },
+
+        async verifyPhoneOtp() {
+            if (!this.otpCode || this.otpCode.length !== 6) return;
+            this.isVerifyingOtp = true;
+            this.otpStatus = 'verifying';
+            try {
+                const response = await fetch('/api/phone/verify-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content },
+                    body: JSON.stringify({ phone: this.phone, otp: this.otpCode })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    this.phoneVerified = true;
+                    this.otpStatus = 'verified';
+                    this.otpMessage = data.message;
+                    if (this.otpTimer) { clearInterval(this.otpTimer); this.otpTimer = null; }
+                } else {
+                    this.otpStatus = 'error';
+                    this.otpMessage = data.message;
+                }
+            } catch (e) {
+                this.otpStatus = 'error';
+                this.otpMessage = {{ Js::from(app()->isLocale('ar') ? 'حدث خطأ. حاول مرة أخرى.' : 'An error occurred. Please try again.') }};
+            } finally {
+                this.isVerifyingOtp = false;
+            }
+        },
+
+        startOtpCountdown(seconds) {
+            this.otpCountdown = seconds;
+            if (this.otpTimer) clearInterval(this.otpTimer);
+            this.otpTimer = setInterval(() => {
+                this.otpCountdown--;
+                if (this.otpCountdown <= 0) {
+                    clearInterval(this.otpTimer);
+                    this.otpTimer = null;
+                }
+            }, 1000);
+        },
+
+        get otpFormattedCountdown() {
+            const m = Math.floor(this.otpCountdown / 60);
+            const s = this.otpCountdown % 60;
+            return `${m}:${s.toString().padStart(2, '0')}`;
         },
 
         nextStep() {
@@ -510,9 +598,81 @@ document.addEventListener('alpine:init', () => {
                                     <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.email') }}</label>
                                     <input type="email" name="email" x-model="email" class="w-full h-11 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" placeholder="mail@example.com" :required="currentStep === 2">
                                 </div>
-                                <div class="space-y-1">
+                                <div class="space-y-1.5">
                                     <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.phone') }}</label>
-                                    <input type="text" name="phone" x-model="phone" class="w-full h-11 px-5 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner" placeholder="010xxxxxxx" :required="currentStep === 2">
+                                    
+                                    {{-- Phone Input + Send OTP Button --}}
+                                    <div class="relative flex gap-2">
+                                        <div class="relative flex-1 group">
+                                            <input type="text" name="phone" x-model="phone" 
+                                                :disabled="phoneVerified"
+                                                class="w-full h-11 px-5 bg-slate-50/50 border-2 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner disabled:opacity-60 disabled:cursor-not-allowed"
+                                                :class="phoneVerified ? 'border-emerald-300 bg-emerald-50/30' : 'border-slate-100'"
+                                                placeholder="010xxxxxxx" :required="currentStep === 2">
+                                            {{-- Verified Badge --}}
+                                            <div x-show="phoneVerified" class="absolute inset-y-0 end-0 pe-3 flex items-center">
+                                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-black">
+                                                    <i class="bi bi-check-circle-fill"></i>
+                                                    {{ app()->isLocale('ar') ? 'تم التحقق' : 'Verified' }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        {{-- Send OTP Button --}}
+                                        <button type="button" @click="sendPhoneOtp()" 
+                                                x-show="!phoneVerified"
+                                                :disabled="isSendingOtp || otpCountdown > 0 || !phone || phone.length < 10"
+                                                class="h-11 px-4 rounded-2xl font-black text-[11px] font-arabic transition-all whitespace-nowrap flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                :class="otpSent ? 'bg-slate-100 text-slate-600 hover:bg-slate-200' : 'bg-brand-secondary text-white shadow-lg shadow-brand-secondary/20 hover:shadow-brand-secondary/30'">
+                                            <template x-if="isSendingOtp">
+                                                <div class="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                                            </template>
+                                            <template x-if="!isSendingOtp && otpCountdown > 0">
+                                                <span x-text="otpFormattedCountdown"></span>
+                                            </template>
+                                            <template x-if="!isSendingOtp && otpCountdown <= 0">
+                                                <span>{{ app()->isLocale('ar') ? 'إرسال كود' : 'Send OTP' }}</span>
+                                            </template>
+                                        </button>
+                                    </div>
+
+                                    {{-- OTP Input (appears after sending) --}}
+                                    <div x-show="otpSent && !phoneVerified" x-cloak 
+                                         x-transition:enter="transition ease-out duration-300"
+                                         x-transition:enter-start="opacity-0 -translate-y-2"
+                                         x-transition:enter-end="opacity-100 translate-y-0"
+                                         class="space-y-2">
+                                        <div class="relative flex gap-2">
+                                            <div class="relative flex-1">
+                                                <input type="text" x-model="otpCode" maxlength="6" inputmode="numeric" pattern="[0-9]*"
+                                                    @input="otpCode = otpCode.replace(/[^0-9]/g, ''); if(otpCode.length === 6) verifyPhoneOtp()"
+                                                    class="w-full h-11 px-4 bg-amber-50/50 border-2 border-amber-200 rounded-2xl text-center text-xl font-black tracking-[0.5em] focus:outline-none focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all"
+                                                    placeholder="● ● ● ● ● ●">
+                                            </div>
+                                            <button type="button" @click="verifyPhoneOtp()" 
+                                                    :disabled="isVerifyingOtp || otpCode.length !== 6"
+                                                    class="h-11 px-4 rounded-2xl bg-emerald-500 text-white font-black text-[11px] font-arabic shadow-lg shadow-emerald-500/20 hover:bg-emerald-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5">
+                                                <template x-if="isVerifyingOtp">
+                                                    <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                </template>
+                                                <template x-if="!isVerifyingOtp">
+                                                    <span>{{ app()->isLocale('ar') ? 'تحقق' : 'Verify' }}</span>
+                                                </template>
+                                            </button>
+                                        </div>
+                                        <p class="text-[10px] font-bold font-arabic text-amber-600 flex items-center gap-1 px-1">
+                                            <i class="bi bi-whatsapp text-emerald-500"></i>
+                                            {{ app()->isLocale('ar') ? 'تم إرسال كود التحقق عبر واتساب' : 'Verification code sent via WhatsApp' }}
+                                        </p>
+                                    </div>
+
+                                    {{-- OTP Status Message --}}
+                                    <p x-show="otpMessage && otpStatus !== 'sent'" x-cloak
+                                       :class="{
+                                           'text-emerald-600': otpStatus === 'verified',
+                                           'text-red-500': otpStatus === 'error',
+                                           'text-amber-600': otpStatus === 'sending' || otpStatus === 'verifying'
+                                       }"
+                                       class="text-[11px] font-bold px-1 font-arabic animate-fade-in" x-text="otpMessage"></p>
                                 </div>
                             </div>
 
@@ -694,7 +854,7 @@ document.addEventListener('alpine:init', () => {
                         <button type="button" @click="prevStep()" class="flex-1 h-12 rounded-full font-black text-slate-500 bg-slate-50 hover:bg-slate-100 transition-all border-2 border-slate-100">
                             {{ app()->isLocale('ar') ? 'رجوع' : 'Back' }}
                         </button>
-                        <button type="submit" :disabled="password.length > 0 && !isPasswordMatch"
+                        <button type="submit" :disabled="(password.length > 0 && !isPasswordMatch) || !phoneVerified"
                                 class="flex-[2] h-12 rounded-full font-black text-base text-white bg-brand-secondary shadow-lg shadow-brand-secondary/20 hover:shadow-brand-secondary/30 hover:-translate-y-1 transition-all disabled:opacity-50 disabled:grayscale relative overflow-hidden group">
                             <!-- Button Shine Effect -->
                             <div class="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-white opacity-20 group-hover:animate-[shine_1s] group-hover:left-full transition-all duration-700 ease-in-out"></div>

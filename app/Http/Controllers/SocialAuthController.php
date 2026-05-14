@@ -272,6 +272,14 @@ class SocialAuthController extends Controller
             'coupon_code' => 'nullable|string|exists:coupons,code',
         ]);
 
+        // PHONE VERIFICATION GATE: Ensure phone was verified via OTP before account creation
+        $phoneVerified = session('phone_verified') && session('phone_verified_number') === $request->phone;
+        if (!$phoneVerified) {
+            return back()->withErrors(['phone' => app()->getLocale() == 'ar'
+                ? 'يرجى التحقق من رقم الهاتف أولاً عبر كود التحقق.'
+                : 'Please verify your phone number first via OTP.'])->withInput();
+        }
+
         // 1. Check if user already exists (safety check for race conditions)
         if (User::where('email', $googleData['email'])->exists()) {
              $existing = User::where('email', $googleData['email'])->first();
