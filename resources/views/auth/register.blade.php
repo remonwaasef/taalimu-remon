@@ -34,6 +34,7 @@ document.addEventListener('alpine:init', () => {
         selectedCurrency: config.selectedCurrency || 'EGP',
         accountType: config.accountType || null,
         showPlanModal: false,
+        formSubmitted: false,
 
         async init() {
             // Default select first plan if requested plan is invalid or missing
@@ -421,7 +422,7 @@ document.addEventListener('alpine:init', () => {
                 </div>
             </div>
 
-            <form action="{{ route('register.submit') }}" method="POST" class="space-y-4" @submit="if(currentStep === 1) { $event.preventDefault(); nextStep(); }">
+            <form action="{{ route('register.submit') }}" method="POST" class="space-y-4" @submit="if(currentStep === 1) { $event.preventDefault(); nextStep(); } else { if(formSubmitted) { $event.preventDefault(); return; } formSubmitted = true; const btn = $event.target.querySelector('button[type=submit]'); if(btn) btn.disabled = true; }">
                 @csrf
                 @if(request('google_id'))
                     <input type="hidden" name="google_id" value="{{ request('google_id') }}">

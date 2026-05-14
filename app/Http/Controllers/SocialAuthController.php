@@ -242,6 +242,25 @@ class SocialAuthController extends Controller
             return redirect()->route('login.portal')
                 ->withErrors(['email' => __('Session expired. Please try again with Google.')]);
         }
+
+        // DUPLICATE SUBMISSION GUARD: Prevent creating account twice on double-click
+        $submissionKey = 'google_registration_lock_' . md5($googleData['email']);
+        if (session()->has($submissionKey)) {
+            \Log::warning('Duplicate Google registration submission blocked', ['email' => $googleData['email']]);
+            // User already exists from the first submission, redirect them
+            $existingUser = User::where('email', $googleData['email'])->first();
+            if ($existingUser) {
+                Auth::login($existingUser, true);
+                session()->forget('google_user');
+                session()->forget($submissionKey);
+                if ($existingUser->role === 'instructor' || ($existingUser->tenant && $existingUser->tenant->type === 'instructor')) {
+                    return redirect()->route('instructor.dashboard', ['tenant' => $existingUser->tenant->domain]);
+                }
+                return redirect()->intended('/dashboard');
+            }
+            return redirect()->route('login.portal')
+                ->withErrors(['email' => __('Registration is being processed. Please wait.')]);
+        }
         
         $request->validate([
             'account_type' => 'required|in:center,instructor',
@@ -253,10 +272,9 @@ class SocialAuthController extends Controller
             'coupon_code' => 'nullable|string|exists:coupons,code',
         ]);
 
-        // 1. Check if user already exists (safety check)
+        // 1. Check if user already exists (safety check for race conditions)
         if (User::where('email', $googleData['email'])->exists()) {
              $existing = User::where('email', $googleData['email'])->first();
-             // Link if missing
              if (!$existing->google_id) {
                  $existing->update(['google_id' => $googleData['id']]);
              }
@@ -264,6 +282,10 @@ class SocialAuthController extends Controller
              session()->forget('google_user');
              return redirect()->intended('/dashboard');
         }
+
+        // Set submission lock BEFORE the transaction to prevent double-clicks
+        session([$submissionKey => true]);
+        session()->save();
 
         try {
             DB::beginTransaction();
@@ -311,15 +333,6 @@ class SocialAuthController extends Controller
             app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
             $user->assignRole($user->role);
 
-            // Generate and Send WhatsApp OTP
-            $otpCode = $user->generatePhoneVerificationCode();
-            $whatsapp = app(\App\Services\WhatsAppService::class);
-            $message = app()->getLocale() == 'ar' 
-                ? "مرحباً بك في منصة تعليمي! كود تفعيل حسابك هو: {$otpCode}"
-                : "Welcome to Taalimu! Your verification code is: {$otpCode}";
-            
-            $whatsapp->sendSystemMessage($user->phone, $message);
-
             // 3. Handle Subscription logic
             $billingCycle = $request->input('billing_cycle', 'monthly');
             $package = \App\Models\Package::where('slug', $request->plan)->first();
@@ -344,7 +357,9 @@ class SocialAuthController extends Controller
             }
             $finalAmount = max(0, $basePrice - $discountAmount);
 
-            if ($package->trial_days > 0) {
+            $isTrialPlan = $package->trial_days > 0;
+
+            if ($isTrialPlan) {
                 \App\Models\Subscription::create([
                     'tenant_id' => $tenant->id,
                     'package_id' => $package->id,
@@ -361,15 +376,37 @@ class SocialAuthController extends Controller
                     'total_amount' => $finalAmount,
                     'discount_amount' => $discountAmount,
                 ]);
+            }
 
-                // Send Telegram Notification
-                $telegram->sendRegistrationAlert($tenant, $user, '(Registration - Free Trial)');
+            // COMMIT the database transaction - everything critical is saved
+            DB::commit();
 
-                DB::commit();
+            // === POST-COMMIT SIDE EFFECTS (non-critical, won't rollback DB) ===
 
-                // Clear Google session data ONLY ON SUCCESS
-                session()->forget('google_user');
+            // Send WhatsApp OTP (non-critical - account is already created)
+            try {
+                $otpCode = $user->generatePhoneVerificationCode();
+                $whatsapp = app(\App\Services\WhatsAppService::class);
+                $message = app()->getLocale() == 'ar' 
+                    ? "مرحباً بك في منصة تعليمي! كود تفعيل حسابك هو: {$otpCode}"
+                    : "Welcome to Taalimu! Your verification code is: {$otpCode}";
+                $whatsapp->sendSystemMessage($user->phone, $message);
+            } catch (\Exception $otpEx) {
+                \Log::warning('WhatsApp OTP failed (non-critical): ' . $otpEx->getMessage());
+            }
 
+            // Send Telegram Notification (non-critical)
+            try {
+                $telegram->sendRegistrationAlert($tenant, $user, $isTrialPlan ? '(Registration - Free Trial)' : '(Registration - Paid Plan)');
+            } catch (\Exception $telegramEx) {
+                \Log::warning('Telegram notification failed (non-critical): ' . $telegramEx->getMessage());
+            }
+
+            // Clear session data ONLY after successful DB commit
+            session()->forget('google_user');
+            session()->forget($submissionKey);
+
+            if ($isTrialPlan) {
                 // Login the user
                 Auth::login($user, true);
 
@@ -388,11 +425,6 @@ class SocialAuthController extends Controller
                 return redirect()->route('registration.success');
             } else {
                 // Paid Plan Flow (Modular Payment Gateway)
-                DB::commit();
-
-                // Clear Google session data ONLY ON SUCCESS
-                session()->forget('google_user');
-                
                 session([
                     'tenant_domain' => $subdomain,
                     'admin_email' => $googleData['email'],
@@ -406,7 +438,7 @@ class SocialAuthController extends Controller
                     'registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . $user->id, config('app.key')),
                 ]);
 
-                // Determine Gateway (default to stripe or catch from request if added to form)
+                // Determine Gateway
                 $gatewayName = $request->input('payment_gateway', 'paymob');
                 $gateway = \App\Services\PaymentFactory::make($gatewayName);
                 
@@ -422,6 +454,8 @@ class SocialAuthController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
+            // Release submission lock on failure so user can try again
+            session()->forget($submissionKey);
             \Log::error('Google Registration Error: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
                 'session_id' => session()->getId(),
