@@ -259,9 +259,9 @@ window.addEventListener('pageshow', (event) => {
                                         {{ app()->getLocale() == 'ar' ? 'تغيير' : 'Change' }}
                                     </button>
                                 </div>
-                                <h3 class="text-lg font-black text-slate-900 font-arabic">
+                                <h3 class="text-xl font-black text-slate-900 font-arabic">
                                     <span x-text="currentPlan.name"></span>
-                                    <span class="text-xs font-bold text-slate-400 ms-1" x-text="'(' + (billingCycle === 'yearly' ? (currentPriceData.yearly || 0).toLocaleString() : (billingCycle === 'term' ? (currentPriceData.term || 0).toLocaleString() : (currentPriceData.amount || 0).toLocaleString())) + ' ' + currentPriceData.currency + ')'"></span>
+                                    <span class="text-sm font-bold text-slate-400 ms-1" x-text="'(' + (billingCycle === 'yearly' ? (currentPriceData.yearly || 0).toLocaleString() : (billingCycle === 'term' ? (currentPriceData.term || 0).toLocaleString() : (currentPriceData.amount || 0).toLocaleString())) + ' ' + currentPriceData.currency + ')'"></span>
                                 </h3>
                             </div>
                         </div>
@@ -284,24 +284,24 @@ window.addEventListener('pageshow', (event) => {
 
                         <!-- Price & Switcher -->
                         <div class="pt-2">
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">{{ app()->getLocale() == 'ar' ? 'الإجمالي' : 'Total' }}</span>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-sm font-black text-slate-500 uppercase tracking-wide">{{ app()->getLocale() == 'ar' ? 'الإجمالي' : 'Total' }}</span>
                                 <div class="text-right">
                                     <template x-if="currentPlan.trial_days > 0 && couponStatus !== 'valid'">
-                                        <div class="flex items-center justify-end gap-2 mb-1 animate-fade-in">
-                                            <span class="text-[9px] font-black bg-brand-secondary/10 text-brand-secondary px-2 py-0.5 rounded-md uppercase tracking-wider">
-                                                <i class="bi bi-gift-fill me-1"></i>
+                                        <div class="flex items-center justify-end mb-2 animate-fade-in">
+                                            <span class="text-[11px] font-black bg-emerald-50 text-emerald-600 px-3 py-1 rounded-lg border border-emerald-100 uppercase tracking-wider inline-flex items-center gap-1.5 shadow-sm">
+                                                <i class="bi bi-gift-fill text-[10px]"></i>
                                                 <span x-text="currentPlan.trial_days"></span> {{ app()->isLocale('ar') ? 'أيام مجانية' : 'Days Free' }}
                                             </span>
                                         </div>
                                     </template>
                                     <template x-if="(couponStatus === 'valid' || currentPriceData.old_price_raw > finalPrice) && currentPlan.trial_days === 0">
                                         <div class="flex items-center justify-end gap-2 mb-1 animate-fade-in">
-                                            <span class="text-[10px] font-bold text-slate-300 line-through">
+                                            <span class="text-[11px] font-bold text-slate-300 line-through">
                                                 <span x-text="((couponStatus === 'valid' ? currentPriceData.price_raw : currentPriceData.old_price_raw) || 0).toLocaleString()"></span>
                                                 <span x-text="currentPriceData.currency"></span>
                                             </span>
-                                            <span class="text-[9px] font-black bg-emerald-50 text-emerald-600 px-1.5 py-0.5 rounded-md">
+                                            <span class="text-[10px] font-black bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-md">
                                                 <template x-if="couponStatus === 'valid'">
                                                     <span>- <span x-text="couponDiscountAmount.toLocaleString()"></span></span>
                                                 </template>
@@ -311,27 +311,27 @@ window.addEventListener('pageshow', (event) => {
                                             </span>
                                         </div>
                                     </template>
-                                    <div class="flex items-baseline gap-1" :class="currentPlan.trial_days > 0 ? 'text-emerald-500' : 'text-brand-secondary'">
-                                        <span class="text-2xl font-black tracking-tighter" x-text="currentPlan.trial_days > 0 ? '0' : finalPrice.toLocaleString()"></span>
-                                        <span class="text-xs font-bold opacity-60" x-text="currentPriceData.currency"></span>
+                                    <div class="flex items-baseline gap-1 justify-end" :class="currentPlan.trial_days > 0 ? 'text-emerald-500' : 'text-brand-secondary'">
+                                        <span class="text-3xl font-black tracking-tighter" x-text="currentPlan.trial_days > 0 ? '0' : finalPrice.toLocaleString()"></span>
+                                        <span class="text-sm font-bold opacity-60" x-text="currentPlan.trial_days > 0 ? ({{ app()->isLocale('ar') ? '\'مجاناً\'' : '\'FREE\'' }}) : currentPriceData.currency"></span>
                                     </div>
-                                    <span class="text-[9px] font-bold text-slate-400" x-text="'/' + (billingCycle === 'yearly' ? '{{ app()->getLocale() == 'ar' ? 'سنة' : 'year' }}' : (billingCycle === 'term' ? '{{ app()->getLocale() == 'ar' ? 'ترم' : 'term' }}' : '{{ app()->getLocale() == 'ar' ? 'شهر' : 'month' }}'))"></span>
+                                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest" x-text="'/ ' + (billingCycle === 'yearly' ? '{{ app()->getLocale() == 'ar' ? 'سنة' : 'year' }}' : (billingCycle === 'term' ? '{{ app()->getLocale() == 'ar' ? 'ترم' : 'term' }}' : '{{ app()->getLocale() == 'ar' ? 'شهر' : 'month' }}'))"></span>
                                 </div>
                             </div>
                             
                             <div class="flex p-1 bg-slate-100 rounded-xl items-center">
                                 <button type="button" @click="billingCycle = 'monthly'" 
-                                        class="flex-1 py-1.5 text-[9px] font-black rounded-lg transition-all"
+                                        class="flex-1 py-1.5 text-[10px] font-black rounded-lg transition-all"
                                         :class="billingCycle === 'monthly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
                                     {{ app()->getLocale() == 'ar' ? 'شهري' : 'Month' }}
                                 </button>
                                 <button type="button" @click="billingCycle = 'term'" 
-                                        class="flex-1 py-1.5 text-[9px] font-black rounded-lg transition-all"
+                                        class="flex-1 py-1.5 text-[10px] font-black rounded-lg transition-all"
                                         :class="billingCycle === 'term' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
                                     {{ app()->getLocale() == 'ar' ? 'ترم' : 'Term' }}
                                 </button>
                                 <button type="button" @click="billingCycle = 'yearly'" 
-                                        class="flex-1 py-1.5 text-[9px] font-black rounded-lg transition-all"
+                                        class="flex-1 py-1.5 text-[10px] font-black rounded-lg transition-all"
                                         :class="billingCycle === 'yearly' ? 'bg-white text-brand-secondary shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
                                     {{ app()->getLocale() == 'ar' ? 'سنوي' : 'Yearly' }}
                                 </button>
