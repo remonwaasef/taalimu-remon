@@ -22,7 +22,7 @@
                 <!-- Refined Subtitle -->
                 <p class="text-[13px] md:text-xl text-slate-600 mb-8 lg:mb-12 max-w-xl mx-auto md:mx-0 font-medium leading-relaxed">
                     {{ __('landing.hero.subtitle') }}
-                    lpoaskdoisa
+                    lpoaskdoisaتشنسىنمسشنمتيعايبتاسيتا
                 </p>
 
                 <!-- CTAs -->
