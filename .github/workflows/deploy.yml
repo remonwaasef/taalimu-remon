@@ -1,4 +1,4 @@
-name: Deploy to Production (Reliable SFTP)
+name: Deploy to Production (Home Sync Strategy)
 
 on:
   push:
@@ -8,55 +8,36 @@ on:
 
 jobs:
   deploy:
-    name: Deploy Core Folders
+    name: Deploy via Home Sync
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Upload App Folder
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+      - name: Upload to Home Directory
+        uses: appleboy/scp-action@master
         with:
+          host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          server: ${{ secrets.SSH_HOST }}
           password: ${{ secrets.SSH_PASSWORD }}
-          local_path: './app'
-          remote_path: '/home/taalimu/htdocs/taalimu.com/app'
+          source: "app,bootstrap,config,database,public,resources,routes,storage,artisan,composer.json,package.json"
+          target: "deploy_tmp"
+          strip_components: 0
 
-      - name: Upload Resources Folder
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-        with:
-          username: ${{ secrets.SSH_USERNAME }}
-          server: ${{ secrets.SSH_HOST }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          local_path: './resources'
-          remote_path: '/home/taalimu/htdocs/taalimu.com/resources'
-
-      - name: Upload Routes Folder
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-        with:
-          username: ${{ secrets.SSH_USERNAME }}
-          server: ${{ secrets.SSH_HOST }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          local_path: './routes'
-          remote_path: '/home/taalimu/htdocs/taalimu.com/routes'
-
-      - name: Upload Config Folder
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-        with:
-          username: ${{ secrets.SSH_USERNAME }}
-          server: ${{ secrets.SSH_HOST }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          local_path: './config'
-          remote_path: '/home/taalimu/htdocs/taalimu.com/config'
-
-      - name: Clear Cache
+      - name: Sync to Site and Clear Cache
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd /home/taalimu/htdocs/taalimu.com
+            SITE_PATH="/home/taalimu/htdocs/taalimu.com"
+            # مزامنة الملفات من المجلد المؤقت للموقع
+            rsync -rtv ~/deploy_tmp/ $SITE_PATH/
+            # تنظيف
+            rm -rf ~/deploy_tmp
+            # مسح كاش لارافيل
+            cd $SITE_PATH
             php artisan optimize:clear
+            echo "Deployment Successful!"
