@@ -1,4 +1,4 @@
-name: Deploy to Production (SFTP)
+name: Deploy to Production (SSH)
 
 on:
   push:
@@ -8,29 +8,42 @@ on:
 
 jobs:
   deploy:
-    name: Deploy via SFTP
+    name: Deploy via SSH/SCP
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: SFTP Deploy
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: SSH SCP Deploy
+        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
         with:
-          server: ${{ secrets.SSH_HOST }}
+          host: ${{ secrets.SSH_HOST }}
+          user: ${{ secrets.SSH_USERNAME }}
+          pass: ${{ secrets.SSH_PASSWORD }}
+          port: 22
+          connect_timeout: 60s
+          local: './'
+          remote: '/home/taalimu/htdocs/taalimu.com'
+          # استثناء الملفات والمجلدات الثقيلة
+          filter: |
+            !**/.git*
+            !**/.git*/**
+            !**/node_modules/**
+            !**/vendor/**
+            !**/tests/**
+            !**/deployment_scripts/**
+            !.env*
+            !*.md
+
+      - name: Clear Cache
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
-          protocol: sftp
-          port: 22
-          local-dir: ./
-          server-dir: /home/taalimu/htdocs/taalimu.com/
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/vendor/**
-            **/tests/**
-            **/deployment_scripts/**
-            .env*
-            *.md
+          script: |
+            cd /home/taalimu/htdocs/taalimu.com
+            php artisan view:clear
+            php artisan config:clear
+            php artisan cache:clear
