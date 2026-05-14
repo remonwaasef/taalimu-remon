@@ -10,7 +10,7 @@ $instructorRoutes = function () {
         Route::get('/scanner/{course}', [InstructorController::class, 'scanner'])->name('instructor.scanner');
         Route::post('/scan/{course}', [InstructorController::class, 'scan'])->name('instructor.scan');
         Route::get('/billing', [InstructorController::class, 'billing'])->name('instructor.billing');
-        Route::post('/mark-paid', [InstructorController::class, 'markPaid'])->name('instructor.mark-paid');
+        Route::post('/mark-paid', [InstructorController::class, 'markPaid'])->name('instructor.students.mark-paid');
         Route::get('/students-list', [InstructorController::class, 'students'])->name('instructor.students.list');
         Route::get('/students-export', [InstructorController::class, 'exportStudents'])->name('instructor.students.export');
         Route::get('/groups-list', [InstructorController::class, 'groups'])->name('instructor.groups.list');
