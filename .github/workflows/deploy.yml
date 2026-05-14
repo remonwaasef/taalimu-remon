@@ -1,4 +1,4 @@
-name: Deploy to Production (FTP)
+name: Deploy to Production (SSH/SFTP)
 
 on:
   push:
@@ -7,34 +7,22 @@ on:
       - master
 
 jobs:
-  ftp-deploy:
-    name: Deploy via FTP
+  ssh-deploy:
+    name: Deploy via SSH
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
 
-      - name: Sync Files to FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      - name: Copy files via SCP
+        uses: appleboy/scp-action@v0.1.7
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftp
-          server-dir: / # تم التعديل ليتناسب مع مسار الـ FTP في CloudPanel
-          # استثناء الملفات التي لا يجب رفعها (لتقليل وقت الرفع وحماية الموقع)
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/vendor/**
-            .env*
-            tests/**
-            deployment_scripts/**
-            playwright-report/**
-            test-results/**
-            docs/**
-            *.md
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: "."
+          target: "htdocs/taalimu.com" # مسار الموقع النسبي للمستخدم الجديد في CloudPanel
+          strip_components: 0
+          # استثناء الملفات
+          exclude: ".git,node_modules,vendor,tests,deployment_scripts,playwright-report,test-results,docs,.env*,*.md"
