@@ -129,7 +129,7 @@
                 <h5 class="modal-title fw-bold">{{ __('instructor::billing.record_payment') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('instructor.mark-paid') }}" method="POST">
+            <form action="{{ route('instructor.students.mark-paid') }}" method="POST">
                 @csrf
                 <div class="modal-body p-4">
                     <input type="hidden" name="student_id" id="modal_student_id">
