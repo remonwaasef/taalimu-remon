@@ -183,12 +183,20 @@ document.addEventListener('alpine:init', () => {
         },
 
         handleSubmit(e) {
+            // Prevent double submission
+            if (this.isSubmitting) {
+                e.preventDefault();
+                return;
+            }
             if (this.subdomainStatus === 'invalid') {
                 e.preventDefault();
                 alert('{{ app()->getLocale() == 'ar' ? 'هذا الرابط مستخدم بالفعل' : 'This subdomain is already taken' }}');
                 return;
             }
             this.isSubmitting = true;
+            // Disable the form submit button via DOM as extra safety
+            const btn = e.target.querySelector('button[type="submit"]');
+            if (btn) btn.disabled = true;
         },
 
         handlePageShow(event) {

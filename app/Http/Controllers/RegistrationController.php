@@ -178,6 +178,19 @@ class RegistrationController extends Controller
             return back()->withErrors(['payment_gateway' => __('Paymob is only available for EGP payments.')])->withInput();
         }
 
+        // DUPLICATE SUBMISSION GUARD: Prevent creating account twice on double-click
+        $submissionKey = 'registration_lock_' . md5($request->email);
+        if (session()->has($submissionKey)) {
+            \Log::warning('Duplicate registration submission blocked', ['email' => $request->email]);
+            return back()->withErrors(['error' => app()->getLocale() == 'ar' 
+                ? 'جاري معالجة التسجيل. يرجى الانتظار.'
+                : 'Registration is being processed. Please wait.'])->withInput();
+        }
+
+        // Set submission lock BEFORE the transaction
+        session([$submissionKey => true]);
+        session()->save();
+
         try {
             DB::beginTransaction();
 
@@ -261,7 +274,49 @@ class RegistrationController extends Controller
             
             event(new Registered($user));
             
-            // Send Onboarding Email 1 (Welcome) if enabled
+            // Set Spatie Team Context
+            app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
+            $user->assignRole($user->role);
+
+            // 3. Handle Subscription logic
+            $finalAmount = $basePrice - $discountAmount;
+            $isTrialPlan = $package->trial_days > 0;
+
+            if ($isTrialPlan) {
+                \App\Models\Subscription::create([
+                    'tenant_id' => $tenant->id,
+                    'package_id' => $package->id,
+                    'name' => 'default',
+                    'stripe_id' => 'sub_trial_' . \Illuminate\Support\Str::random(10),
+                    'stripe_status' => 'trialing',
+                    'stripe_price' => $package->slug,
+                    'quantity' => 1,
+                    'trial_ends_at' => now()->addDays($package->trial_days),
+                    'ends_at' => now()->addDays($package->trial_days),
+                    'status' => 'trialing',
+                    'billing_cycle' => $request->billing_cycle,
+                    'base_price' => $basePrice,
+                    'total_amount' => $finalAmount,
+                    'discount_amount' => $discountAmount,
+                ]);
+            }
+
+            // COMMIT the database transaction - everything critical is saved
+            DB::commit();
+
+            // === POST-COMMIT SIDE EFFECTS (non-critical, won't rollback DB) ===
+
+            // Release submission lock
+            session()->forget($submissionKey);
+
+            // Send Telegram Notification (non-critical)
+            try {
+                $telegram->sendRegistrationAlert($tenant, $user, $isTrialPlan ? '(Registration - Free Trial)' : '(Registration - Paid Plan)');
+            } catch (\Exception $telegramEx) {
+                \Log::warning('Telegram notification failed (non-critical): ' . $telegramEx->getMessage());
+            }
+
+            // Send Onboarding Email 1 (Welcome) if enabled (non-critical)
             if (config('services.onboarding.emails_enabled', false)) {
                 try {
                     \Illuminate\Support\Facades\Mail::to($user->email)->send(
@@ -271,84 +326,30 @@ class RegistrationController extends Controller
                     \Log::error('Failed to send onboarding email 1: ' . $e->getMessage());
                 }
             }
-            
-            // Set Spatie Team Context
-            app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
-            $user->assignRole($user->role);
 
-            // 2.5 Auto-Provisioning: Inject Demo Data for new centers
+            // Auto-Provisioning: Inject Demo Data for new centers (non-critical)
             try {
                 \Modules\Tenancy\Services\TenantResolver::set($tenant);
-                // We seed basic academic structure (Grades, Stages) so the user doesn't start with a blank screen
                 app(\App\Services\DemoDataService::class)->seedForTenant($tenant);
                 \Illuminate\Support\Facades\Log::info("Auto-Provisioning: Demo data seeded for tenant {$tenant->domain}");
             } catch (\Exception $e) {
                 \Illuminate\Support\Facades\Log::error('Auto-Provisioning Error (Demo Data): ' . $e->getMessage());
             }
 
-            // 2.6 Auto-Provisioning: Cloudflare DNS Automation (Mocked/Prepared)
+            // Auto-Provisioning: Cloudflare DNS Automation (Mocked/Prepared)
             try {
                 // TODO: Integrate Cloudflare API to create CNAME record for $subdomain automatically
-                // Example: app(CloudflareService::class)->createSubdomain($subdomain);
                 \Illuminate\Support\Facades\Log::info("Auto-Provisioning: Cloudflare DNS CNAME mapped for {$subdomain}");
             } catch (\Exception $e) {
                 \Illuminate\Support\Facades\Log::error('Auto-Provisioning Error (Cloudflare DNS): ' . $e->getMessage());
             }
 
-                // 3. Handle Subscription logic
-                $finalAmount = $basePrice - $discountAmount;
+            // Set session integrity token to prevent payment bypass
+            session(['registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . $user->id, config('app.key'))]);
 
-                if ($package->trial_days > 0) {
-                    \App\Models\Subscription::create([
-                        'tenant_id' => $tenant->id,
-                        'package_id' => $package->id,
-                        'name' => 'default',
-                        'stripe_id' => 'sub_trial_' . \Illuminate\Support\Str::random(10),
-                        'stripe_status' => 'trialing',
-                        'stripe_price' => $package->slug,
-                        'quantity' => 1,
-                        'trial_ends_at' => now()->addDays($package->trial_days),
-                        'ends_at' => now()->addDays($package->trial_days),
-                        'status' => 'trialing',
-                        'billing_cycle' => $request->billing_cycle,
-                        'base_price' => $basePrice,
-                        'total_amount' => $finalAmount,
-                        'discount_amount' => $discountAmount,
-                    ]);
-
-                    $telegram->sendRegistrationAlert($tenant, $user, '(Registration - Free Trial)');
-
-                    DB::commit();
-
-                    // Set session integrity token to prevent payment bypass
-                    session(['registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . $user->id, config('app.key'))]);
-
-                    session([
-                        'registration_success' => true,
-                        'tenant_domain' => $subdomain,
-                        'admin_email' => $request->email,
-                        'center_name' => $request->center_name,
-                        'tenant_id' => $tenant->id,
-                        'selected_plan' => $request->plan,
-                        'billing_cycle' => $request->billing_cycle,
-                        'selected_currency' => $currency,
-                        'applied_coupon_id' => $coupon ? $coupon->id : null,
-                        'applied_coupon_code' => $coupon ? $coupon->code : null,
-                        'discount_amount' => $discountAmount,
-                        'base_price' => $basePrice,
-                        'total_amount' => $finalAmount,
-                    ]);
-
-                    return redirect()->route('registration.success');
-                }
-
-                // Paid Plan Flow (Modular Payment Gateway)
-                DB::commit();
-
-                // Set session integrity token to prevent payment bypass
-                session(['registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . $user->id, config('app.key'))]);
-                
+            if ($isTrialPlan) {
                 session([
+                    'registration_success' => true,
                     'tenant_domain' => $subdomain,
                     'admin_email' => $request->email,
                     'center_name' => $request->center_name,
@@ -363,21 +364,42 @@ class RegistrationController extends Controller
                     'total_amount' => $finalAmount,
                 ]);
 
-                // Modular Payment Gateway Logic
-                $gateway = \App\Services\PaymentFactory::make($request->payment_gateway);
-                
-                $redirectUrl = $gateway->createCheckoutSession($tenant, $package, $request->billing_cycle, [
-                    'coupon_id' => $coupon ? $coupon->id : null,
-                    'coupon_code' => $coupon ? $coupon->code : null,
-                    'discount_amount' => $discountAmount,
-                    'base_price' => $basePrice,
-                    'total_amount' => $finalAmount,
-                ]);
+                return redirect()->route('registration.success');
+            }
 
-                return redirect()->away($redirectUrl);
+            // Paid Plan Flow (Modular Payment Gateway)
+            session([
+                'tenant_domain' => $subdomain,
+                'admin_email' => $request->email,
+                'center_name' => $request->center_name,
+                'tenant_id' => $tenant->id,
+                'selected_plan' => $request->plan,
+                'billing_cycle' => $request->billing_cycle,
+                'selected_currency' => $currency,
+                'applied_coupon_id' => $coupon ? $coupon->id : null,
+                'applied_coupon_code' => $coupon ? $coupon->code : null,
+                'discount_amount' => $discountAmount,
+                'base_price' => $basePrice,
+                'total_amount' => $finalAmount,
+            ]);
+
+            // Modular Payment Gateway Logic
+            $gateway = \App\Services\PaymentFactory::make($request->payment_gateway);
+            
+            $redirectUrl = $gateway->createCheckoutSession($tenant, $package, $request->billing_cycle, [
+                'coupon_id' => $coupon ? $coupon->id : null,
+                'coupon_code' => $coupon ? $coupon->code : null,
+                'discount_amount' => $discountAmount,
+                'base_price' => $basePrice,
+                'total_amount' => $finalAmount,
+            ]);
+
+            return redirect()->away($redirectUrl);
 
         } catch (\Exception $e) {
             DB::rollBack();
+            // Release submission lock on failure so user can try again
+            session()->forget($submissionKey);
             \Log::error('Registration error: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString()
             ]);
