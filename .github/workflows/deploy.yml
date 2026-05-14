@@ -16,21 +16,21 @@ jobs:
         uses: actions/checkout@v4
 
       - name: SFTP Deploy
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          username: ${{ secrets.SSH_USERNAME }}
           server: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
-          local_path: './'
-          remote_path: '/home/taalimu/htdocs/taalimu.com'
-          # تحديد المجلدات الأساسية فقط لسرعة الرفع
-          sftpArgs: '-o ConnectTimeout=60'
-          delete_remote_files: false
+          protocol: sftp
+          port: 22
+          local-dir: ./
+          server-dir: /home/taalimu/htdocs/taalimu.com/
           exclude: |
-            .git/**
-            node_modules/**
-            vendor/**
-            tests/**
-            deployment_scripts/**
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/vendor/**
+            **/tests/**
+            **/deployment_scripts/**
             .env*
             *.md
