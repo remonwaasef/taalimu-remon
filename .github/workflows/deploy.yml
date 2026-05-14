@@ -1,4 +1,4 @@
-name: Deploy to Production (SSH)
+name: Deploy to Production (Professional Rsync)
 
 on:
   push:
@@ -8,35 +8,24 @@ on:
 
 jobs:
   deploy:
-    name: Deploy via SSH/SCP
+    name: Deploy via SCP & Rsync
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: SSH SCP Deploy
-        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+      - name: Upload to Temp Folder
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
-          user: ${{ secrets.SSH_USERNAME }}
-          pass: ${{ secrets.SSH_PASSWORD }}
-          port: 22
-          connect_timeout: 60s
-          local: './'
-          remote: '/home/taalimu/htdocs/taalimu.com'
-          # استثناء الملفات والمجلدات الثقيلة
-          filter: |
-            !**/.git*
-            !**/.git*/**
-            !**/node_modules/**
-            !**/vendor/**
-            !**/tests/**
-            !**/deployment_scripts/**
-            !.env*
-            !*.md
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: "app,bootstrap,config,database,public,resources,routes,storage,artisan,composer.json,package.json"
+          target: "/home/taalimu/htdocs/taalimu.com/deploy_tmp"
+          strip_components: 0
 
-      - name: Clear Cache
+      - name: Sync Files and Clear Cache
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -44,6 +33,10 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             cd /home/taalimu/htdocs/taalimu.com
-            php artisan view:clear
-            php artisan config:clear
-            php artisan cache:clear
+            # استخدام rsync لنقل الملفات وحل مشاكل الصلاحيات
+            rsync -rtv deploy_tmp/ .
+            # تنظيف المجلد المؤقت
+            rm -rf deploy_tmp
+            # مسح كاش لارافيل
+            php artisan optimize:clear
+            echo "Deployment successful!"
