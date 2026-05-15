@@ -43,7 +43,7 @@ document.addEventListener('alpine:init', () => {
         showPlanModal: false,
         formSubmitted: false,
         phoneVerified: false,
-        countryCode: '{{ old("country_code", "20") }}',
+        countryCode: '{{ old("country_code", app()->getLocale() === "fr" ? "33" : "20") }}',
         otpSent: false,
         otpCode: '',
         otpStatus: 'idle',
@@ -327,7 +327,7 @@ document.addEventListener('alpine:init', () => {
         subdomain: {{ Js::from(old('subdomain')) }},
         manuallyEditedSubdomain: {{ old('subdomain') ? 'true' : 'false' }},
         accountType: {{ Js::from(old('account_type', $accountType)) }},
-        selectedCurrency: {{ Js::from(old('currency', request('currency', session('suggested_currency', 'EGP')))) }},
+        selectedCurrency: {{ Js::from(old('currency', request('currency', session('suggested_currency', app()->getLocale() === 'fr' ? 'EUR' : 'EGP')))) }},
         userCountry: '{{ session('user_country_code', '') }}'
      })"
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
