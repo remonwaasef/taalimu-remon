@@ -79,24 +79,32 @@ class GeoIPService
      */
     public function getCurrencyFromLocale($locale, $countryCode = null)
     {
-        // 1. Explicit locale overrides
+        // 1. Prioritize Geographical logic (Strict Regional Pricing)
+        if ($countryCode === 'EG') {
+            return 'EGP';
+        }
+
+        if ($countryCode === 'SA') {
+            return 'SAR';
+        }
+
+        if ($countryCode === 'AE') {
+            return 'AED';
+        }
+
+        // European countries fallback to EUR
+        $euroCountries = ['FR', 'BE', 'MC', 'LU', 'CH', 'DE', 'IT', 'ES', 'NL', 'AT', 'PT', 'IE', 'FI', 'GR'];
+        if ($countryCode && in_array($countryCode, $euroCountries)) {
+            return 'EUR';
+        }
+
+        // 2. Fallback to locale-based logic only if country is unknown or doesn't have a specific regional price
         if ($locale === 'fr') {
             return 'EUR';
         }
         
         if ($locale === 'en') {
             return 'USD';
-        }
-
-        // 2. Fallback to Geographical logic (mostly for Arabic or other defaults)
-        if ($countryCode === 'EG') {
-            return 'EGP';
-        }
-
-        // European countries fallback to EUR even if locale is not FR
-        $euroCountries = ['FR', 'BE', 'MC', 'LU', 'CH', 'DE', 'IT', 'ES', 'NL', 'AT', 'PT', 'IE'];
-        if ($countryCode && in_array($countryCode, $euroCountries)) {
-            return 'EUR';
         }
 
         return 'USD'; // Global default
