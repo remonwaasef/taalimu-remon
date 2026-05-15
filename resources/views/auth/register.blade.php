@@ -59,19 +59,31 @@ document.addEventListener('alpine:init', () => {
                 this.selectedPlan = (this.packages && this.packages.length > 0) ? this.packages[0].slug : '';
             }
 
-            try {
-                const response = await fetch('https://get.geojs.io/v1/ip/country.json');
-                const data = await response.json();
-                this.userCountry = data.country || '';
-                
-                // If currency wasn't passed in URL, try to guess from country
-                const urlParams = new URLSearchParams(window.location.search);
-                if (!urlParams.has('currency')) {
-                    if (this.userCountry === 'EG') this.selectedCurrency = 'EGP';
-                    else if (['FR', 'DE', 'IT', 'ES', 'NL', 'BE', 'AT', 'PT', 'IE'].includes(this.userCountry)) this.selectedCurrency = 'EUR';
-                    else this.selectedCurrency = 'USD';
+            // Smart IP Auto-Detection for Currency and Country Code
+            if (!{{ Js::from(session()->has('suggested_currency') || request()->has('currency')) }}) {
+                try {
+                    const res = await fetch('https://ipapi.co/json/');
+                    if(res.ok) {
+                        const data = await res.json();
+                        const country = data.country_code;
+                        if (country === 'EG') this.selectedCurrency = 'EGP';
+                        else if (country === 'SA') this.selectedCurrency = 'SAR';
+                        else if (country === 'AE') this.selectedCurrency = 'AED';
+                        else if (['FR', 'DE', 'IT', 'ES', 'NL', 'BE', 'AT', 'GR', 'PT', 'FI', 'IE'].includes(country)) this.selectedCurrency = 'EUR';
+                        else this.selectedCurrency = 'USD';
+                        
+                        // Auto-set phone code if it exists in the list
+                        if (data.country_calling_code) {
+                            let phoneCode = data.country_calling_code.replace('+', '');
+                            this.countryCode = phoneCode;
+                        }
+                    }
+                } catch(e) {
+                    console.warn('IP detection failed, using defaults.');
                 }
-            } catch(e) { console.log('IP fetch failed', e); }
+            }
+
+
         },
 
         get currentPlan() {
@@ -344,7 +356,7 @@ document.addEventListener('alpine:init', () => {
         subdomain: {{ Js::from(old('subdomain')) }},
         manuallyEditedSubdomain: {{ old('subdomain') ? 'true' : 'false' }},
         accountType: {{ Js::from(old('account_type', $accountType)) }},
-        selectedCurrency: {{ Js::from(old('currency', request('currency', session('suggested_currency', app()->getLocale() === 'fr' ? 'EUR' : 'EGP')))) }},
+        selectedCurrency: {{ Js::from(old('currency', request('currency', session('suggested_currency', 'EGP')))) }},
         userCountry: '{{ session('user_country_code', '') }}'
      })"
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
@@ -561,6 +573,7 @@ document.addEventListener('alpine:init', () => {
                 <input type="hidden" name="account_type" x-model="accountType">
                 <input type="hidden" name="billing_cycle" x-model="billingCycle">
                 <input type="hidden" name="country_code" x-model="userCountry">
+                <input type="hidden" name="currency" x-model="selectedCurrency">
 
                 <!-- STEP 1: Center Details -->
                 <div x-show="currentStep === 1" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-4">
@@ -942,8 +955,26 @@ document.addEventListener('alpine:init', () => {
             <div @click.away="showPlanModal = false" 
                  class="bg-white rounded-[2.5rem] w-full max-w-lg shadow-2xl overflow-hidden animate-scale-in">
                 <div class="p-8 border-b border-slate-100 bg-slate-50/50">
-                    <div class="flex justify-between items-center mb-6">
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
                         <h3 class="text-xl font-black text-slate-900 font-arabic">{{ app()->getLocale() == 'ar' ? 'اختر الباقة المناسبة' : 'Select Plan' }}</h3>
+                        
+                        <!-- Billing Country Selector -->
+                        <div class="flex items-center gap-2 bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200">
+                            <span class="text-[10px] font-black text-slate-500 uppercase tracking-wider px-2 whitespace-nowrap"><i class="bi bi-globe-americas me-1"></i> {{ app()->getLocale() == 'ar' ? 'دولة الفوترة' : 'Billing Region' }}</span>
+                            <div class="relative" dir="ltr">
+                                <select x-model="selectedCurrency" class="h-8 pl-3 pr-8 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-secondary/20 focus:border-brand-secondary appearance-none cursor-pointer shadow-sm min-w-[120px]">
+                                    <option value="EGP">🇪🇬 Egypt (EGP)</option>
+                                    <option value="SAR">🇸🇦 Saudi Arabia (SAR)</option>
+                                    <option value="AED">🇦🇪 UAE (AED)</option>
+                                    <option value="EUR">🇪🇺 Europe (EUR)</option>
+                                    <option value="USD">🇺🇸 Global (USD)</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-2 flex items-center pointer-events-none">
+                                    <i class="bi bi-chevron-down text-[10px] text-slate-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <button type="button" @click="showPlanModal = false" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors">
                             <i class="bi bi-x-lg"></i>
                         </button>

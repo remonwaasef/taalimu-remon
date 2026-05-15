@@ -17,7 +17,7 @@ document.addEventListener('alpine:init', () => {
         subdomainMessage: '',
         isSubmitting: false,
         userCountry: 'default',
-        selectedCurrency: config.selectedCurrency || '{{ app()->getLocale() === 'fr' ? 'EUR' : 'EGP' }}',
+        selectedCurrency: config.selectedCurrency || 'EGP',
         accountType: config.accountType || 'center',
         paymentGateway: 'paymob', // Default to Paymob
 
@@ -44,28 +44,34 @@ document.addEventListener('alpine:init', () => {
         isApplyingCoupon: false,
 
         async init() {
-            try {
-                const response = await fetch('https://get.geojs.io/v1/ip/country.json');
-                const data = await response.json();
-                this.userCountry = data.country || '';
-                
-                // Refine currency based on detection if Arabic
-                const locale = '{{ app()->getLocale() }}';
-                if (locale === 'ar') {
-                    if (this.userCountry === 'EG') this.selectedCurrency = 'EGP';
-                    else this.selectedCurrency = 'USD';
-                } else if (locale === 'fr') {
-                    this.selectedCurrency = 'EUR';
+            // Smart IP Auto-Detection for Currency and Country Code
+            if (!{{ Js::from(session()->has('suggested_currency') || request()->has('currency')) }}) {
+                try {
+                    const res = await fetch('https://ipapi.co/json/');
+                    if(res.ok) {
+                        const data = await res.json();
+                        const country = data.country_code;
+                        if (country === 'EG') this.selectedCurrency = 'EGP';
+                        else if (country === 'SA') this.selectedCurrency = 'SAR';
+                        else if (country === 'AE') this.selectedCurrency = 'AED';
+                        else if (['FR', 'DE', 'IT', 'ES', 'NL', 'BE', 'AT', 'GR', 'PT', 'FI', 'IE'].includes(country)) this.selectedCurrency = 'EUR';
+                        else this.selectedCurrency = 'USD';
+                        
+                        // Auto-set phone code
+                        if (data.country_calling_code) {
+                            this.countryCode = data.country_calling_code.replace('+', '');
+                        }
+                    }
+                } catch(e) {
+                    console.warn('IP detection failed, using defaults.');
                 }
+            }
 
-                // Auto-select gateway based on country
-                if (this.userCountry === 'EG' || !this.userCountry) {
-                    this.paymentGateway = 'paymob';
-                } else {
-                    this.paymentGateway = 'paypal';
-                }
-            } catch(e) { 
-                console.log('IP fetch failed', e);
+            // Auto-select gateway based on detected currency/country
+            if (this.selectedCurrency === 'EGP') {
+                this.paymentGateway = 'paymob';
+            } else {
+                this.paymentGateway = 'paypal';
             }
         },
 
@@ -470,6 +476,7 @@ window.addEventListener('pageshow', (event) => {
                     <input type="hidden" name="plan" :value="selectedPlan">
                     <input type="hidden" name="account_type" :value="accountType">
                     <input type="hidden" name="billing_cycle" :value="billingCycle">
+                    <input type="hidden" name="currency" x-model="selectedCurrency">
 
                     {{-- Center Name --}}
                     <div class="space-y-1">
@@ -694,8 +701,26 @@ window.addEventListener('pageshow', (event) => {
         <div @click.away="showPlanModal = false" 
              class="bg-white rounded-[2.5rem] w-full max-w-lg shadow-2xl overflow-hidden animate-scale-in">
             <div class="p-8 border-b border-slate-100 bg-slate-50/50">
-                <div class="flex justify-between items-center mb-6">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
                     <h3 class="text-xl font-black text-slate-900 font-arabic">{{ app()->getLocale() == 'ar' ? 'اختر الباقة المناسبة' : 'Select Plan' }}</h3>
+                    
+                    <!-- Billing Country Selector -->
+                    <div class="flex items-center gap-2 bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200">
+                        <span class="text-[10px] font-black text-slate-500 uppercase tracking-wider px-2 whitespace-nowrap"><i class="bi bi-globe-americas me-1"></i> {{ app()->getLocale() == 'ar' ? 'دولة الفوترة' : 'Billing Region' }}</span>
+                        <div class="relative" dir="ltr">
+                            <select x-model="selectedCurrency" class="h-8 pl-3 pr-8 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-secondary/20 focus:border-brand-secondary appearance-none cursor-pointer shadow-sm min-w-[120px]">
+                                <option value="EGP">🇪🇬 Egypt (EGP)</option>
+                                <option value="SAR">🇸🇦 Saudi Arabia (SAR)</option>
+                                <option value="AED">🇦🇪 UAE (AED)</option>
+                                <option value="EUR">🇪🇺 Europe (EUR)</option>
+                                <option value="USD">🇺🇸 Global (USD)</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-2 flex items-center pointer-events-none">
+                                <i class="bi bi-chevron-down text-[10px] text-slate-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <button type="button" @click="showPlanModal = false" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors">
                         <i class="bi bi-x-lg"></i>
                     </button>
