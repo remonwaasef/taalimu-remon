@@ -3,21 +3,25 @@
             billingCycle: 'monthly',
             selectedCurrency: '{{ session('suggested_currency', 'EGP') }}',
             async init() {
-                // Smart IP Auto-Detection for Currency
-                // We only auto-detect if we haven't explicitly set a currency preference or if it's default
+                const locale = '{{ app()->getLocale() }}';
+                
+                // If it's already set by backend and it's not EGP (default), we might trust it
+                // But for Arabic, we always verify geographical location if possible
+                if (locale !== 'ar' && this.selectedCurrency !== 'EGP') {
+                    return;
+                }
+
+                // Default to Geographical logic if Arabic or fallback
                 try {
-                    const res = await fetch('https://ipapi.co/json/');
-                    if(res.ok) {
-                        const data = await res.json();
-                        const country = data.country_code;
-                        if (country === 'EG') this.selectedCurrency = 'EGP';
-                        else if (country === 'SA') this.selectedCurrency = 'SAR';
-                        else if (country === 'AE') this.selectedCurrency = 'AED';
-                        else if (['FR', 'DE', 'IT', 'ES', 'NL', 'BE', 'AT', 'GR', 'PT', 'FI', 'IE'].includes(country)) this.selectedCurrency = 'EUR';
-                        else this.selectedCurrency = 'USD';
-                    }
-                } catch(e) {
-                    console.warn('IP detection failed on landing.');
+                    const response = await fetch('https://get.geojs.io/v1/ip/country.json');
+                    const data = await response.json();
+                    const country = data.country;
+                    
+                    if (country === 'EG') this.selectedCurrency = 'EGP';
+                    else if (['FR', 'DE', 'IT', 'ES', 'NL', 'BE', 'AT', 'PT', 'IE'].includes(country)) this.selectedCurrency = 'EUR';
+                    else if (this.selectedCurrency === 'EGP') this.selectedCurrency = 'USD'; // If detected not EG and current is EGP, switch to USD
+                } catch(e) { 
+                    console.log('Geo fetch failed, keeping: ' + this.selectedCurrency);
                 }
             },
             getRegionalPrice(packageRegionalPrices, basePrice, baseTermPrice, baseYearlyPrice) {
@@ -90,22 +94,6 @@
                 </div>
 
 
-                <!-- Currency Selector -->
-                <div class="flex items-center gap-3 bg-slate-50 p-1.5 rounded-2xl border border-slate-200 shadow-sm">
-                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider px-2"><i class="bi bi-globe-americas me-1"></i> {{ app()->getLocale() == 'ar' ? 'دولة الفوترة' : 'Billing Region' }}</span>
-                    <div class="relative" dir="ltr">
-                        <select x-model="selectedCurrency" class="h-9 pl-3 pr-9 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 appearance-none cursor-pointer shadow-sm min-w-[140px]">
-                            <option value="EGP">🇪🇬 Egypt (EGP)</option>
-                            <option value="SAR">🇸🇦 Saudi Arabia (SAR)</option>
-                            <option value="AED">🇦🇪 UAE (AED)</option>
-                            <option value="EUR">🇪🇺 Europe (EUR)</option>
-                            <option value="USD">🇺🇸 Global (USD)</option>
-                        </select>
-                        <div class="absolute inset-y-0 right-2 flex items-center pointer-events-none">
-                            <i class="bi bi-chevron-down text-[10px] text-slate-400"></i>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
