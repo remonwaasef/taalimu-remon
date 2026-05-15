@@ -17,13 +17,13 @@ document.addEventListener('alpine:init', () => {
         subdomainMessage: '',
         isSubmitting: false,
         userCountry: 'default',
-        selectedCurrency: config.selectedCurrency || 'EGP',
+        selectedCurrency: config.selectedCurrency || '{{ app()->getLocale() === 'fr' ? 'EUR' : 'EGP' }}',
         accountType: config.accountType || 'center',
         paymentGateway: 'paymob', // Default to Paymob
 
         showPlanModal: false,
         phoneNumber: '{{ old("phone") }}',
-        countryCode: '{{ old("country_code", "20") }}',
+        countryCode: '{{ old("country_code", app()->getLocale() === "fr" ? "33" : "20") }}',
         phoneVerified: false,
         otpSent: false,
         otpCode: '',
@@ -54,6 +54,8 @@ document.addEventListener('alpine:init', () => {
                 if (locale === 'ar') {
                     if (this.userCountry === 'EG') this.selectedCurrency = 'EGP';
                     else this.selectedCurrency = 'USD';
+                } else if (locale === 'fr') {
+                    this.selectedCurrency = 'EUR';
                 }
 
                 // Auto-select gateway based on country
