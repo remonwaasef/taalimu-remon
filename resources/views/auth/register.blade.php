@@ -94,12 +94,29 @@ document.addEventListener('alpine:init', () => {
                  discount_label: pkg.discount_label
              };
 
-             if (prices[this.selectedCurrency]) {
-                 let r = prices[this.selectedCurrency];
+             const currencyToRegionKey = {
+                 'EGP': 'EG',
+                 'EUR': 'FR',
+                 'USD': 'default',
+                 'SAR': 'SA',
+                 'AED': 'AE'
+             };
+             const regionKey = currencyToRegionKey[this.selectedCurrency] || 'default';
+
+             if (prices[regionKey]) {
+                 let r = prices[regionKey];
                  data.currency = r.currency || data.currency;
                  data.amount = parseFloat(r.amount || data.amount);
                  data.term = parseFloat(r.term_price || (data.amount * 4));
                  data.yearly = parseFloat(r.yearly_price || (data.amount * 10));
+                 data.old = parseFloat(r.old_price || 0);
+                 data.discount_label = r.discount_label || data.discount_label;
+             } else if (prices['default']) {
+                 let r = prices['default'];
+                 data.currency = r.currency || data.currency;
+                 data.amount = parseFloat(r.amount || data.amount);
+                 data.yearly = parseFloat(r.yearly_price || (data.amount * 10));
+                 data.term = parseFloat(r.term_price || (data.amount * 4));
                  data.old = parseFloat(r.old_price || 0);
                  data.discount_label = r.discount_label || data.discount_label;
              }
@@ -967,7 +984,7 @@ document.addEventListener('alpine:init', () => {
                                         <span class="font-black text-slate-900 uppercase tracking-tight" x-text="pkg.name"></span>
                                     </div>
                                     <div class="text-right">
-                                        <span class="text-lg font-black text-brand-secondary" x-text="billingCycle === 'yearly' ? pkg.yearly_price : (billingCycle === 'term' ? pkg.term_price : pkg.price)"></span>
+                                        <span class="text-lg font-black text-brand-secondary" x-text="(billingCycle === 'yearly' ? getPriceData(pkg).yearly : (billingCycle === 'term' ? getPriceData(pkg).term : getPriceData(pkg).amount)).toLocaleString() + ' ' + getPriceData(pkg).currency"></span>
                                     </div>
                                 </div>
                             </div>
