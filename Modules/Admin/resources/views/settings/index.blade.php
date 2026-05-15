@@ -66,15 +66,15 @@
                                 <label class="form-label fw-bold">{{ __('admin::admin.admin_email') }}</label>
                                 <input type="email" class="form-control rounded-4 shadow-sm border-light" name="admin_email" value="{{ \App\Models\SiteSetting::get('admin_email', 'admin@educentral.com') }}">
                             </div>
-                            <div class="col-12">
+                            <div class="col-12" @if(app()->getLocale() != 'ar') style="display:none;" @endif>
                                 <label class="form-label fw-bold">{{ __('admin::admin.site_description') }} (العربية)</label>
                                 <textarea class="form-control rounded-4 shadow-sm border-light mb-3" name="site_description_ar" rows="2" dir="rtl">{{ \App\Models\SiteSetting::get('site_description_ar', \App\Models\SiteSetting::get('site_description', __('landing.hero.subtitle', [], 'ar'))) }}</textarea>
                             </div>
-                            <div class="col-12">
+                            <div class="col-12" @if(app()->getLocale() != 'en') style="display:none;" @endif>
                                 <label class="form-label fw-bold">{{ __('admin::admin.site_description') }} (English)</label>
                                 <textarea class="form-control rounded-4 shadow-sm border-light mb-3" name="site_description_en" rows="2" dir="ltr">{{ \App\Models\SiteSetting::get('site_description_en', __('landing.hero.subtitle', [], 'en')) }}</textarea>
                             </div>
-                            <div class="col-12">
+                            <div class="col-12" @if(app()->getLocale() != 'fr') style="display:none;" @endif>
                                 <label class="form-label fw-bold">{{ __('admin::admin.site_description') }} (Français)</label>
                                 <textarea class="form-control rounded-4 shadow-sm border-light" name="site_description_fr" rows="2" dir="ltr">{{ \App\Models\SiteSetting::get('site_description_fr', __('landing.hero.subtitle', [], 'fr')) }}</textarea>
                             </div>
@@ -175,15 +175,15 @@
                                                             <label class="small text-muted mb-0">Slug</label>
                                                             <input type="text" class="form-control form-control-sm bg-light fw-bold" name="packages[{{ $package->id }}][slug]" value="{{ $package->slug }}">
                                                         </div>
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-9" @if(app()->getLocale() != 'en') style="display:none;" @endif>
                                                             <label class="small text-muted mb-0">{{ __('admin.package_name_en') }}</label>
                                                             <input type="text" class="form-control form-control-sm text-end" dir="ltr" name="packages[{{ $package->id }}][name_en]" value="{{ $package->name_en }}">
                                                         </div>
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-9" @if(app()->getLocale() != 'fr') style="display:none;" @endif>
                                                             <label class="small text-muted mb-0">Nom (FR)</label>
                                                             <input type="text" class="form-control form-control-sm text-end" dir="ltr" name="packages[{{ $package->id }}][name_fr]" value="{{ $package->name_fr }}">
                                                         </div>
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-9" @if(app()->getLocale() != 'ar') style="display:none;" @endif>
                                                             <label class="small text-muted mb-0">{{ __('admin.package_name_ar') }}</label>
                                                             <input type="text" class="form-control form-control-sm" name="packages[{{ $package->id }}][name]" value="{{ $package->name }}">
                                                         </div>
@@ -244,22 +244,22 @@
                                                     </h2>
                                                     <div id="reg_eg_{{ $package->id }}" class="accordion-collapse collapse" data-bs-parent="#regionalAccordion{{ $package->id }}">
                                                         <div class="accordion-body p-3">
-                                                            <div class="row g-2">
+                                                            <div class="row g-2 d-none">
                                                                 <div class="col-3">
                                                                     <label class="small text-muted mb-0">Slug (ID Unique)</label>
-                                                                    <input type="text" class="form-control form-control-sm rounded-3 fw-bold bg-light" name="packages[{{ $package->id }}][slug]" value="{{ $package->slug }}">
+                                                                    <input type="text" class="form-control form-control-sm rounded-3 fw-bold bg-light" name="packages[{{ $package->id }}][slug]" value="{{ $package->slug }}" disabled>
                                                                 </div>
                                                                 <div class="col-3">
                                                                     <label class="small text-muted mb-0">Nom du Forfait (EN)</label>
-                                                                    <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][name_en]" value="{{ $package->name_en }}">
+                                                                    <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][name_en]" value="{{ $package->name_en }}" disabled>
                                                                 </div>
                                                                 <div class="col-3">
                                                                     <label class="small text-muted mb-0">Nom du Forfait (FR)</label>
-                                                                    <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][name_fr]" value="{{ $package->name_fr }}">
+                                                                    <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][name_fr]" value="{{ $package->name_fr }}" disabled>
                                                                 </div>
                                                                 <div class="col-3">
                                                                     <label class="small text-muted mb-0">اسم الباقة (AR)</label>
-                                                                    <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][name]" value="{{ $package->name }}">
+                                                                    <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][name]" value="{{ $package->name }}" disabled>
                                                                 </div>
                                                             </div>
                                                             <div class="row g-2 mt-2">
@@ -453,14 +453,20 @@
                                         <!-- Custom CTA & Payment IDs -->
                                         <div class="bg-light p-3 rounded-4 mb-4">
                                             <div class="mb-4 mt-3">
-                                                <label class="form-label small fw-bold text-primary mb-2"><i class="bi bi-card-text"></i> Description (AR)</label>
-                                                <textarea class="form-control rounded-4 shadow-sm" name="packages[{{ $package->id }}][description]" rows="3">{{ $package->description }}</textarea>
+                                                <div @if(app()->getLocale() != 'ar') style="display:none;" @endif>
+                                                    <label class="form-label small fw-bold text-primary mb-2"><i class="bi bi-card-text"></i> Description (AR)</label>
+                                                    <textarea class="form-control rounded-4 shadow-sm" name="packages[{{ $package->id }}][description]" rows="3">{{ $package->description }}</textarea>
+                                                </div>
 
-                                                <label class="form-label small fw-bold text-primary mb-2 mt-3"><i class="bi bi-card-text"></i> Description (EN)</label>
-                                                <textarea class="form-control rounded-4 shadow-sm" name="packages[{{ $package->id }}][description_en]" rows="2">{{ $package->description_en }}</textarea>
+                                                <div class="mt-3" @if(app()->getLocale() != 'en') style="display:none;" @endif>
+                                                    <label class="form-label small fw-bold text-primary mb-2"><i class="bi bi-card-text"></i> Description (EN)</label>
+                                                    <textarea class="form-control rounded-4 shadow-sm" name="packages[{{ $package->id }}][description_en]" rows="2">{{ $package->description_en }}</textarea>
+                                                </div>
 
-                                                <label class="form-label small fw-bold text-primary mb-2 mt-3"><i class="bi bi-card-text"></i> Description (FR)</label>
-                                                <textarea class="form-control rounded-4 shadow-sm" name="packages[{{ $package->id }}][description_fr]" rows="2">{{ $package->description_fr }}</textarea>
+                                                <div class="mt-3" @if(app()->getLocale() != 'fr') style="display:none;" @endif>
+                                                    <label class="form-label small fw-bold text-primary mb-2"><i class="bi bi-card-text"></i> Description (FR)</label>
+                                                    <textarea class="form-control rounded-4 shadow-sm" name="packages[{{ $package->id }}][description_fr]" rows="2">{{ $package->description_fr }}</textarea>
+                                                </div>
                                             </div>
                                             <div class="row g-3">
                                                 <div class="col-md-6 border-end border-light">
@@ -540,14 +546,14 @@
                                             </div>
                                         </div>
 
-                                        <div class="mb-3">
+                                        <div class="mb-3" @if(app()->getLocale() != 'ar') style="display:none;" @endif>
                                             <label class="form-label small fw-bold text-muted mb-1">{{ __('admin.description_ar') }}</label>
-                                            <textarea class="form-control rounded-3" name="packages[{{ $package->id }}][description]" rows="2">{{ $package->description }}</textarea>
+                                            <textarea class="form-control rounded-3" name="packages[{{ $package->id }}][description]" rows="2" disabled>{{ $package->description }}</textarea>
                                         </div>
 
-                                        <div class="mb-4">
+                                        <div class="mb-4" @if(app()->getLocale() != 'en') style="display:none;" @endif>
                                             <label class="form-label small fw-bold text-muted mb-1">{{ __('admin.description_en') }}</label>
-                                            <textarea class="form-control rounded-3 text-end" dir="ltr" name="packages[{{ $package->id }}][description_en]" rows="2">{{ $package->description_en }}</textarea>
+                                            <textarea class="form-control rounded-3 text-end" dir="ltr" name="packages[{{ $package->id }}][description_en]" rows="2" disabled>{{ $package->description_en }}</textarea>
                                         </div>
 
                                         <div class="d-flex justify-content-between align-items-center bg-light/50 p-2 rounded-3 border border-dashed">
@@ -1227,3 +1233,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @endsection
+
