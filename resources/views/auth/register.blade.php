@@ -4,8 +4,15 @@
 <!-- Import Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-
-
+<style>
+    /* Premium Identity Missing Classes (since Tailwind JIT isn't running) */
+    .bg-emerald-600 { background-color: #059669 !important; }
+    .shadow-emerald-600\/20 { box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.2), 0 4px 6px -4px rgba(5, 150, 105, 0.1) !important; }
+    .from-emerald-600 { --tw-gradient-from: #059669 !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(5, 150, 105, 0)) !important; }
+    .to-teal-500 { --tw-gradient-to: #14b8a6 !important; }
+    .hover\:from-emerald-700:hover { --tw-gradient-from: #047857 !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(4, 120, 87, 0)) !important; }
+    .hover\:to-teal-600:hover { --tw-gradient-to: #0d9488 !important; }
+</style>
 <script>
 document.addEventListener('alpine:init', () => {
     Alpine.data('registrationForm', (config) => ({
