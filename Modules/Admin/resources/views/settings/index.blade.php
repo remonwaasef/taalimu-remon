@@ -66,17 +66,38 @@
                                 <label class="form-label fw-bold">{{ __('admin::admin.admin_email') }}</label>
                                 <input type="email" class="form-control rounded-4 shadow-sm border-light" name="admin_email" value="{{ \App\Models\SiteSetting::get('admin_email', 'admin@educentral.com') }}">
                             </div>
-                            <div class="col-12" @if(app()->getLocale() != 'ar') style="display:none;" @endif>
-                                <label class="form-label fw-bold">{{ __('admin::admin.site_description') }} (العربية)</label>
-                                <textarea class="form-control rounded-4 shadow-sm border-light mb-3" name="site_description_ar" rows="2" dir="rtl">{{ \App\Models\SiteSetting::get('site_description_ar', \App\Models\SiteSetting::get('site_description', __('landing.hero.subtitle', [], 'ar'))) }}</textarea>
-                            </div>
-                            <div class="col-12" @if(app()->getLocale() != 'en') style="display:none;" @endif>
-                                <label class="form-label fw-bold">{{ __('admin::admin.site_description') }} (English)</label>
-                                <textarea class="form-control rounded-4 shadow-sm border-light mb-3" name="site_description_en" rows="2" dir="ltr">{{ \App\Models\SiteSetting::get('site_description_en', __('landing.hero.subtitle', [], 'en')) }}</textarea>
-                            </div>
-                            <div class="col-12" @if(app()->getLocale() != 'fr') style="display:none;" @endif>
-                                <label class="form-label fw-bold">{{ __('admin::admin.site_description') }} (Français)</label>
-                                <textarea class="form-control rounded-4 shadow-sm border-light" name="site_description_fr" rows="2" dir="ltr">{{ \App\Models\SiteSetting::get('site_description_fr', __('landing.hero.subtitle', [], 'fr')) }}</textarea>
+                            <div class="col-12" x-data="{ 
+                                activeLang: '{{ app()->getLocale() }}',
+                                arVal: {{ Js::from(\App\Models\SiteSetting::get('site_description_ar', \App\Models\SiteSetting::get('site_description', __('landing.hero.subtitle', [], 'ar')))) }},
+                                enVal: {{ Js::from(\App\Models\SiteSetting::get('site_description_en', __('landing.hero.subtitle', [], 'en'))) }},
+                                frVal: {{ Js::from(\App\Models\SiteSetting::get('site_description_fr', __('landing.hero.subtitle', [], 'fr'))) }}
+                            }">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <label class="form-label fw-bold mb-0">{{ __('admin::admin.site_description') }}</label>
+                                    <div class="d-flex gap-1 bg-light p-1 rounded-pill border">
+                                        <button type="button" @click="activeLang = 'ar'" :class="activeLang === 'ar' ? 'btn-primary shadow-sm' : 'btn-light text-muted border-0'" class="btn btn-sm py-0 px-3 rounded-pill position-relative transition-all" style="font-size: 0.75rem; font-weight: 700;">
+                                            AR
+                                            <span x-show="!arVal" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle" title="{{ __('admin.missing_translation') }}"></span>
+                                        </button>
+                                        <button type="button" @click="activeLang = 'en'" :class="activeLang === 'en' ? 'btn-primary shadow-sm' : 'btn-light text-muted border-0'" class="btn btn-sm py-0 px-3 rounded-pill position-relative transition-all" style="font-size: 0.75rem; font-weight: 700;">
+                                            EN
+                                            <span x-show="!enVal" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle" title="{{ __('admin.missing_translation') }}"></span>
+                                        </button>
+                                        <button type="button" @click="activeLang = 'fr'" :class="activeLang === 'fr' ? 'btn-primary shadow-sm' : 'btn-light text-muted border-0'" class="btn btn-sm py-0 px-3 rounded-pill position-relative transition-all" style="font-size: 0.75rem; font-weight: 700;">
+                                            FR
+                                            <span x-show="!frVal" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle" title="{{ __('admin.missing_translation') }}"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div x-show="activeLang === 'ar'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+                                    <textarea class="form-control rounded-4 shadow-sm border-light" name="site_description_ar" rows="2" dir="rtl" x-model="arVal"></textarea>
+                                </div>
+                                <div x-show="activeLang === 'en'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" style="display: none;">
+                                    <textarea class="form-control rounded-4 shadow-sm border-light" name="site_description_en" rows="2" dir="ltr" x-model="enVal"></textarea>
+                                </div>
+                                <div x-show="activeLang === 'fr'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" style="display: none;">
+                                    <textarea class="form-control rounded-4 shadow-sm border-light" name="site_description_fr" rows="2" dir="ltr" x-model="frVal"></textarea>
+                                </div>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">مدة باقة الترم (بالأيام)</label>
@@ -175,17 +196,38 @@
                                                             <label class="small text-muted mb-0">Slug</label>
                                                             <input type="text" class="form-control form-control-sm bg-light fw-bold" name="packages[{{ $package->id }}][slug]" value="{{ $package->slug }}">
                                                         </div>
-                                                        <div class="col-md-9" @if(app()->getLocale() != 'en') style="display:none;" @endif>
-                                                            <label class="small text-muted mb-0">{{ __('admin.package_name_en') }}</label>
-                                                            <input type="text" class="form-control form-control-sm text-end" dir="ltr" name="packages[{{ $package->id }}][name_en]" value="{{ $package->name_en }}">
-                                                        </div>
-                                                        <div class="col-md-9" @if(app()->getLocale() != 'fr') style="display:none;" @endif>
-                                                            <label class="small text-muted mb-0">Nom (FR)</label>
-                                                            <input type="text" class="form-control form-control-sm text-end" dir="ltr" name="packages[{{ $package->id }}][name_fr]" value="{{ $package->name_fr }}">
-                                                        </div>
-                                                        <div class="col-md-9" @if(app()->getLocale() != 'ar') style="display:none;" @endif>
-                                                            <label class="small text-muted mb-0">{{ __('admin.package_name_ar') }}</label>
-                                                            <input type="text" class="form-control form-control-sm" name="packages[{{ $package->id }}][name]" value="{{ $package->name }}">
+                                                        <div class="col-md-9" x-data="{ 
+                                                            activeLang: '{{ app()->getLocale() }}',
+                                                            arVal: {{ Js::from($package->name) }},
+                                                            enVal: {{ Js::from($package->name_en) }},
+                                                            frVal: {{ Js::from($package->name_fr) }}
+                                                        }">
+                                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                                <label class="small text-muted mb-0">{{ __('admin.package_name_ar') }}</label>
+                                                                <div class="d-flex gap-1 bg-light p-1 rounded-pill border">
+                                                                    <button type="button" @click="activeLang = 'ar'" :class="activeLang === 'ar' ? 'btn-primary shadow-sm' : 'btn-light text-muted border-0'" class="btn btn-sm py-0 px-2 rounded-pill position-relative transition-all" style="font-size: 0.65rem; font-weight: 700;">
+                                                                        AR
+                                                                        <span x-show="!arVal" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle" title="{{ __('admin.missing_translation') }}"></span>
+                                                                    </button>
+                                                                    <button type="button" @click="activeLang = 'en'" :class="activeLang === 'en' ? 'btn-primary shadow-sm' : 'btn-light text-muted border-0'" class="btn btn-sm py-0 px-2 rounded-pill position-relative transition-all" style="font-size: 0.65rem; font-weight: 700;">
+                                                                        EN
+                                                                        <span x-show="!enVal" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle" title="{{ __('admin.missing_translation') }}"></span>
+                                                                    </button>
+                                                                    <button type="button" @click="activeLang = 'fr'" :class="activeLang === 'fr' ? 'btn-primary shadow-sm' : 'btn-light text-muted border-0'" class="btn btn-sm py-0 px-2 rounded-pill position-relative transition-all" style="font-size: 0.65rem; font-weight: 700;">
+                                                                        FR
+                                                                        <span x-show="!frVal" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle" title="{{ __('admin.missing_translation') }}"></span>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <div x-show="activeLang === 'ar'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+                                                                <input type="text" class="form-control form-control-sm" name="packages[{{ $package->id }}][name]" x-model="arVal">
+                                                            </div>
+                                                            <div x-show="activeLang === 'en'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" style="display: none;">
+                                                                <input type="text" class="form-control form-control-sm text-end" dir="ltr" name="packages[{{ $package->id }}][name_en]" x-model="enVal">
+                                                            </div>
+                                                            <div x-show="activeLang === 'fr'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" style="display: none;">
+                                                                <input type="text" class="form-control form-control-sm text-end" dir="ltr" name="packages[{{ $package->id }}][name_fr]" x-model="frVal">
+                                                            </div>
                                                         </div>
                                                     </div>
  streams.
@@ -452,20 +494,38 @@
 
                                         <!-- Custom CTA & Payment IDs -->
                                         <div class="bg-light p-3 rounded-4 mb-4">
-                                            <div class="mb-4 mt-3">
-                                                <div @if(app()->getLocale() != 'ar') style="display:none;" @endif>
-                                                    <label class="form-label small fw-bold text-primary mb-2"><i class="bi bi-card-text"></i> Description (AR)</label>
-                                                    <textarea class="form-control rounded-4 shadow-sm" name="packages[{{ $package->id }}][description]" rows="3">{{ $package->description }}</textarea>
+                                            <div class="mb-4 mt-3" x-data="{ 
+                                                activeLang: '{{ app()->getLocale() }}',
+                                                arVal: {{ Js::from($package->description) }},
+                                                enVal: {{ Js::from($package->description_en) }},
+                                                frVal: {{ Js::from($package->description_fr) }}
+                                            }">
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <label class="form-label small fw-bold text-primary mb-0"><i class="bi bi-card-text"></i> {{ __('admin.description') ?? 'Description' }}</label>
+                                                    <div class="d-flex gap-1 bg-light p-1 rounded-pill border">
+                                                        <button type="button" @click="activeLang = 'ar'" :class="activeLang === 'ar' ? 'btn-primary shadow-sm' : 'btn-light text-muted border-0'" class="btn btn-sm py-0 px-2 rounded-pill position-relative transition-all" style="font-size: 0.65rem; font-weight: 700;">
+                                                            AR
+                                                            <span x-show="!arVal" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle" title="{{ __('admin.missing_translation') }}"></span>
+                                                        </button>
+                                                        <button type="button" @click="activeLang = 'en'" :class="activeLang === 'en' ? 'btn-primary shadow-sm' : 'btn-light text-muted border-0'" class="btn btn-sm py-0 px-2 rounded-pill position-relative transition-all" style="font-size: 0.65rem; font-weight: 700;">
+                                                            EN
+                                                            <span x-show="!enVal" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle" title="{{ __('admin.missing_translation') }}"></span>
+                                                        </button>
+                                                        <button type="button" @click="activeLang = 'fr'" :class="activeLang === 'fr' ? 'btn-primary shadow-sm' : 'btn-light text-muted border-0'" class="btn btn-sm py-0 px-2 rounded-pill position-relative transition-all" style="font-size: 0.65rem; font-weight: 700;">
+                                                            FR
+                                                            <span x-show="!frVal" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle" title="{{ __('admin.missing_translation') }}"></span>
+                                                        </button>
+                                                    </div>
                                                 </div>
-
-                                                <div class="mt-3" @if(app()->getLocale() != 'en') style="display:none;" @endif>
-                                                    <label class="form-label small fw-bold text-primary mb-2"><i class="bi bi-card-text"></i> Description (EN)</label>
-                                                    <textarea class="form-control rounded-4 shadow-sm" name="packages[{{ $package->id }}][description_en]" rows="2">{{ $package->description_en }}</textarea>
+                                                
+                                                <div x-show="activeLang === 'ar'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+                                                    <textarea class="form-control rounded-4 shadow-sm" name="packages[{{ $package->id }}][description]" rows="3" x-model="arVal"></textarea>
                                                 </div>
-
-                                                <div class="mt-3" @if(app()->getLocale() != 'fr') style="display:none;" @endif>
-                                                    <label class="form-label small fw-bold text-primary mb-2"><i class="bi bi-card-text"></i> Description (FR)</label>
-                                                    <textarea class="form-control rounded-4 shadow-sm" name="packages[{{ $package->id }}][description_fr]" rows="2">{{ $package->description_fr }}</textarea>
+                                                <div x-show="activeLang === 'en'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" style="display: none;">
+                                                    <textarea class="form-control rounded-4 shadow-sm text-end" dir="ltr" name="packages[{{ $package->id }}][description_en]" rows="3" x-model="enVal"></textarea>
+                                                </div>
+                                                <div x-show="activeLang === 'fr'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" style="display: none;">
+                                                    <textarea class="form-control rounded-4 shadow-sm text-end" dir="ltr" name="packages[{{ $package->id }}][description_fr]" rows="3" x-model="frVal"></textarea>
                                                 </div>
                                             </div>
                                             <div class="row g-3">
