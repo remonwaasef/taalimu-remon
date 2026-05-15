@@ -416,7 +416,7 @@ document.addEventListener('alpine:init', () => {
                                 accountType === 'instructor' ? 'border-brand-secondary ring-4 ring-brand-secondary/10 shadow-brand-secondary/10' : (accountType ? 'border-slate-100 opacity-60' : '')
                              ]">
                             <!-- Trial Badge -->
-                            <div class="absolute top-0 right-0 bg-emerald-500 text-white text-[9px] font-black uppercase tracking-wider px-3 py-1 rounded-bl-xl rounded-tr-2xl z-20 shadow-lg shadow-emerald-500/20">
+                            <div class="absolute top-0 right-0 bg-emerald-600 text-white text-[9px] font-black uppercase tracking-wider px-3 py-1 rounded-bl-xl rounded-tr-2xl z-20 shadow-lg shadow-emerald-600/20">
                                 <i class="bi bi-lightning-fill me-1 text-[8px]"></i>
                                 <span x-text="currentPlan.trial_days > 0 ? currentPlan.trial_days : '30'"></span> {{ app()->isLocale('ar') ? 'يوم مجاناً' : 'Days Free' }}
                             </div>
@@ -457,7 +457,7 @@ document.addEventListener('alpine:init', () => {
                                 accountType === 'center' ? 'border-brand-secondary ring-4 ring-brand-secondary/10 shadow-brand-secondary/10' : (accountType ? 'border-slate-100 opacity-60' : '')
                              ]">
                             <!-- Trial Badge -->
-                            <div class="absolute top-0 right-0 bg-emerald-500 text-white text-[9px] font-black uppercase tracking-wider px-3 py-1 rounded-bl-xl rounded-tr-2xl z-20 shadow-lg shadow-emerald-500/20">
+                            <div class="absolute top-0 right-0 bg-emerald-600 text-white text-[9px] font-black uppercase tracking-wider px-3 py-1 rounded-bl-xl rounded-tr-2xl z-20 shadow-lg shadow-emerald-600/20">
                                 <i class="bi bi-lightning-fill me-1 text-[8px]"></i>
                                 <span x-text="currentPlan.trial_days > 0 ? currentPlan.trial_days : '30'"></span> {{ app()->isLocale('ar') ? 'يوم مجاناً' : 'Days Free' }}
                             </div>
@@ -577,7 +577,7 @@ document.addEventListener('alpine:init', () => {
 
                     <div class="pt-2">
                         <button type="button" @click="nextStep()"
-                            class="w-full h-11 rounded-full flex items-center justify-center gap-3 group bg-brand-secondary text-white shadow-xl shadow-brand-secondary/20 hover:shadow-brand-secondary/30 hover:-translate-y-1 active:scale-95 transition-all">
+                            class="w-full h-11 rounded-full flex items-center justify-center gap-3 group bg-gradient-to-r from-emerald-600 to-teal-500 text-white shadow-lg shadow-emerald-600/20 hover:from-emerald-700 hover:to-teal-600 hover:-translate-y-1 active:scale-95 transition-all">
                             <span class="text-base font-black font-arabic">{{ app()->isLocale('ar') ? 'استمرار' : 'Continue' }}</span>
                             <i class="bi bi-arrow-right-short text-xl group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform"></i>
                         </button>
@@ -636,7 +636,7 @@ document.addEventListener('alpine:init', () => {
                                                 x-show="!phoneVerified"
                                                 :disabled="isSendingOtp || otpCountdown > 0 || !phone || phone.length < 7"
                                                 class="h-11 px-4 rounded-2xl font-black text-[11px] font-arabic transition-all whitespace-nowrap flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
-                                                :class="otpSent ? 'bg-slate-100 text-slate-600 hover:bg-slate-200' : 'bg-brand-secondary text-white shadow-lg shadow-brand-secondary/20 hover:shadow-brand-secondary/30'">
+                                                :class="otpSent ? 'bg-slate-100 text-slate-600 hover:bg-slate-200' : 'bg-gradient-to-r from-emerald-600 to-teal-500 text-white shadow-lg shadow-emerald-600/20 hover:from-emerald-700 hover:to-teal-600'">
                                             <template x-if="isSendingOtp">
                                                 <div class="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
                                             </template>
@@ -664,7 +664,7 @@ document.addEventListener('alpine:init', () => {
                                             </div>
                                             <button type="button" @click="verifyPhoneOtp()" 
                                                     :disabled="isVerifyingOtp || otpCode.length !== 6"
-                                                    class="h-11 px-4 rounded-2xl bg-emerald-500 text-white font-black text-[11px] font-arabic shadow-lg shadow-emerald-500/20 hover:bg-emerald-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5">
+                                                    class="h-11 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 text-white font-black text-[11px] font-arabic shadow-lg shadow-emerald-600/20 hover:from-emerald-700 hover:to-teal-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5">
                                                 <template x-if="isVerifyingOtp">
                                                     <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                                                 </template>
@@ -869,7 +869,7 @@ document.addEventListener('alpine:init', () => {
                             {{ app()->isLocale('ar') ? 'رجوع' : 'Back' }}
                         </button>
                         <button type="submit" :disabled="(password.length > 0 && !isPasswordMatch) || !phoneVerified"
-                                class="flex-[2] h-12 rounded-full font-black text-base text-white bg-brand-secondary shadow-lg shadow-brand-secondary/20 hover:shadow-brand-secondary/30 hover:-translate-y-1 transition-all disabled:opacity-50 disabled:grayscale relative overflow-hidden group">
+                                class="flex-[2] h-12 rounded-full font-black text-base text-white bg-gradient-to-r from-emerald-600 to-teal-500 shadow-lg shadow-emerald-600/20 hover:from-emerald-700 hover:to-teal-600 hover:-translate-y-1 transition-all disabled:opacity-50 disabled:grayscale relative overflow-hidden group">
                             <!-- Button Shine Effect -->
                             <div class="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-white opacity-20 group-hover:animate-[shine_1s] group-hover:left-full transition-all duration-700 ease-in-out"></div>
                             <span class="relative z-10" x-text="currentPlan.trial_days > 0 ? ({{ Js::from(app()->isLocale('ar') ? 'ابدأ الفترة التجريبية' : 'Start Free Trial') }}) : (finalPrice === 0 ? '{{ __('auth.register.cta_main') }}' : '{{ app()->isLocale('ar') ? 'ادفع واستكمل التسجيل' : 'Pay & Complete' }}')"></span>
