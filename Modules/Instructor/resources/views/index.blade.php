@@ -21,14 +21,14 @@
     }
     .hover-lift:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.1);
+        box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.1);
     }
     .action-card {
         background: #ffffff !important;
         border: 1px solid #f1f5f9 !important;
     }
     .action-card:hover {
-        border-color: rgba(16, 185, 129, 0.2) !important;
+        border-color: rgba(5, 150, 105, 0.2) !important;
     }
     .hover-lift i {
         background: #f8fafc;
@@ -52,11 +52,11 @@
                         <h6 class="text-muted mb-1">{{ __('instructor::dashboard.total_students') }}</h6>
                         <h2 class="fw-bold mb-0 count-up text-primary">{{ number_format($totalStudents) }}</h2>
                     </div>
-                    <div class="p-3 rounded-4" style="background: rgba(16, 185, 129, 0.08);">
+                    <div class="p-3 rounded-4" style="background: rgba(5, 150, 105, 0.08);">
                         <i class="fas fa-user-graduate text-primary fs-4"></i>
                     </div>
                 </div>
-                <div class="progress mt-3" style="height: 4px; background: rgba(16, 185, 129, 0.05);">
+                <div class="progress mt-3" style="height: 4px; background: rgba(5, 150, 105, 0.05);">
                     <div class="progress-bar bg-primary" style="width: 70%"></div>
                 </div>
             </div>
@@ -223,7 +223,7 @@
         @else
         <div class="text-center py-5 empty-state-container">
             <div class="mb-4">
-                <div class="d-inline-flex p-4 rounded-circle mb-3" style="background: rgba(16, 185, 129, 0.05);">
+                <div class="d-inline-flex p-4 rounded-circle mb-3" style="background: rgba(5, 150, 105, 0.05);">
                     <i class="fas fa-layer-group text-primary" style="font-size: 3.5rem; opacity: 0.8;"></i>
                 </div>
             </div>
@@ -252,7 +252,7 @@
         direction: {{ $isRtl ? 'rtl' : 'ltr' }};
     }
     .driver-popover-title {
-        color: #10b981 !important;
+        color: #059669 !important;
         font-weight: 700 !important;
         margin-bottom: 10px !important;
     }
@@ -348,12 +348,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 datasets: [{
                     label: '{{ __('instructor::dashboard.attendees_count') }}',
                     data: {!! json_encode($attendanceData) !!},
-                    borderColor: '#10b981',
-                    backgroundColor: 'rgba(16, 185, 129, 0.08)',
+                    borderColor: '#059669',
+                    backgroundColor: 'rgba(5, 150, 105, 0.08)',
                     fill: true,
                     tension: 0.4,
                     pointRadius: 5,
-                    pointBackgroundColor: '#10b981',
+                    pointBackgroundColor: '#059669',
                     borderWidth: 3,
                     pointHoverRadius: 7,
                     pointBorderColor: '#fff',
