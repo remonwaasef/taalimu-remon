@@ -136,11 +136,7 @@ Route::get('lang/{locale}', function ($locale) {
     if (in_array($locale, ['ar', 'en', 'fr'])) {
         session(['locale' => $locale]);
         
-        // Refresh suggested currency based on new language
-        $geoIP = app(\App\Services\GeoIPService::class);
-        $countryCode = session('user_country_code') ?: $geoIP->getCountryCode(request()->ip());
-        $currency = $geoIP->getCurrencyFromLocale($locale, $countryCode);
-        session(['suggested_currency' => $currency]);
+
 
         if (auth()->check()) {
             auth()->user()->update(['locale' => $locale]);
