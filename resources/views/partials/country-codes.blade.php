@@ -1,0 +1,129 @@
+{{-- Country Code Options - Shared partial for phone verification --}}
+{{-- Arab Countries (Priority) --}}
+<option value="20">🇪🇬 مصر +20</option>
+<option value="966">🇸🇦 السعودية +966</option>
+<option value="971">🇦🇪 الإمارات +971</option>
+<option value="965">🇰🇼 الكويت +965</option>
+<option value="974">🇶🇦 قطر +974</option>
+<option value="973">🇧🇭 البحرين +973</option>
+<option value="968">🇴🇲 عُمان +968</option>
+<option value="962">🇯🇴 الأردن +962</option>
+<option value="964">🇮🇶 العراق +964</option>
+<option value="961">🇱🇧 لبنان +961</option>
+<option value="963">🇸🇾 سوريا +963</option>
+<option value="970">🇵🇸 فلسطين +970</option>
+<option value="967">🇾🇪 اليمن +967</option>
+<option value="218">🇱🇾 ليبيا +218</option>
+<option value="216">🇹🇳 تونس +216</option>
+<option value="213">🇩🇿 الجزائر +213</option>
+<option value="212">🇲🇦 المغرب +212</option>
+<option value="249">🇸🇩 السودان +249</option>
+<option value="222">🇲🇷 موريتانيا +222</option>
+<option value="253">🇩🇯 جيبوتي +253</option>
+<option value="252">🇸🇴 الصومال +252</option>
+<option value="269">🇰🇲 جزر القمر +269</option>
+{{-- Separator --}}
+<option disabled>──── {{ app()->isLocale('ar') ? 'أفريقيا' : 'Africa' }} ────</option>
+<option value="27">🇿🇦 South Africa +27</option>
+<option value="234">🇳🇬 Nigeria +234</option>
+<option value="254">🇰🇪 Kenya +254</option>
+<option value="233">🇬🇭 Ghana +233</option>
+<option value="251">🇪🇹 Ethiopia +251</option>
+<option value="255">🇹🇿 Tanzania +255</option>
+<option value="256">🇺🇬 Uganda +256</option>
+<option value="237">🇨🇲 Cameroon +237</option>
+<option value="225">🇨🇮 Côte d'Ivoire +225</option>
+<option value="221">🇸🇳 Senegal +221</option>
+<option value="258">🇲🇿 Mozambique +258</option>
+<option value="260">🇿🇲 Zambia +260</option>
+<option value="263">🇿🇼 Zimbabwe +263</option>
+<option value="250">🇷🇼 Rwanda +250</option>
+<option value="226">🇧🇫 Burkina Faso +226</option>
+<option value="223">🇲🇱 Mali +223</option>
+<option value="227">🇳🇪 Niger +227</option>
+<option value="235">🇹🇩 Chad +235</option>
+<option value="224">🇬🇳 Guinea +224</option>
+<option value="261">🇲🇬 Madagascar +261</option>
+<option value="265">🇲🇼 Malawi +265</option>
+<option value="244">🇦🇴 Angola +244</option>
+<option value="230">🇲🇺 Mauritius +230</option>
+{{-- Separator --}}
+<option disabled>──── {{ app()->isLocale('ar') ? 'أوروبا' : 'Europe' }} ────</option>
+<option value="44">🇬🇧 UK +44</option>
+<option value="33">🇫🇷 France +33</option>
+<option value="49">🇩🇪 Germany +49</option>
+<option value="39">🇮🇹 Italy +39</option>
+<option value="34">🇪🇸 Spain +34</option>
+<option value="31">🇳🇱 Netherlands +31</option>
+<option value="32">🇧🇪 Belgium +32</option>
+<option value="41">🇨🇭 Switzerland +41</option>
+<option value="43">🇦🇹 Austria +43</option>
+<option value="46">🇸🇪 Sweden +46</option>
+<option value="47">🇳🇴 Norway +47</option>
+<option value="45">🇩🇰 Denmark +45</option>
+<option value="358">🇫🇮 Finland +358</option>
+<option value="48">🇵🇱 Poland +48</option>
+<option value="351">🇵🇹 Portugal +351</option>
+<option value="353">🇮🇪 Ireland +353</option>
+<option value="30">🇬🇷 Greece +30</option>
+<option value="420">🇨🇿 Czech Rep. +420</option>
+<option value="36">🇭🇺 Hungary +36</option>
+<option value="40">🇷🇴 Romania +40</option>
+<option value="359">🇧🇬 Bulgaria +359</option>
+<option value="380">🇺🇦 Ukraine +380</option>
+<option value="7">🇷🇺 Russia +7</option>
+<option value="381">🇷🇸 Serbia +381</option>
+<option value="385">🇭🇷 Croatia +385</option>
+<option value="421">🇸🇰 Slovakia +421</option>
+<option value="386">🇸🇮 Slovenia +386</option>
+<option value="370">🇱🇹 Lithuania +370</option>
+<option value="371">🇱🇻 Latvia +371</option>
+<option value="372">🇪🇪 Estonia +372</option>
+{{-- Separator --}}
+<option disabled>──── {{ app()->isLocale('ar') ? 'آسيا' : 'Asia' }} ────</option>
+<option value="90">🇹🇷 Turkey +90</option>
+<option value="98">🇮🇷 Iran +98</option>
+<option value="92">🇵🇰 Pakistan +92</option>
+<option value="91">🇮🇳 India +91</option>
+<option value="880">🇧🇩 Bangladesh +880</option>
+<option value="62">🇮🇩 Indonesia +62</option>
+<option value="60">🇲🇾 Malaysia +60</option>
+<option value="63">🇵🇭 Philippines +63</option>
+<option value="66">🇹🇭 Thailand +66</option>
+<option value="84">🇻🇳 Vietnam +84</option>
+<option value="82">🇰🇷 South Korea +82</option>
+<option value="81">🇯🇵 Japan +81</option>
+<option value="86">🇨🇳 China +86</option>
+<option value="852">🇭🇰 Hong Kong +852</option>
+<option value="886">🇹🇼 Taiwan +886</option>
+<option value="65">🇸🇬 Singapore +65</option>
+<option value="93">🇦🇫 Afghanistan +93</option>
+<option value="994">🇦🇿 Azerbaijan +994</option>
+<option value="995">🇬🇪 Georgia +995</option>
+<option value="996">🇰🇬 Kyrgyzstan +996</option>
+<option value="998">🇺🇿 Uzbekistan +998</option>
+<option value="977">🇳🇵 Nepal +977</option>
+<option value="94">🇱🇰 Sri Lanka +94</option>
+<option value="95">🇲🇲 Myanmar +95</option>
+<option value="855">🇰🇭 Cambodia +855</option>
+{{-- Separator --}}
+<option disabled>──── {{ app()->isLocale('ar') ? 'أمريكا' : 'Americas' }} ────</option>
+<option value="1">🇺🇸 USA / Canada +1</option>
+<option value="52">🇲🇽 Mexico +52</option>
+<option value="55">🇧🇷 Brazil +55</option>
+<option value="54">🇦🇷 Argentina +54</option>
+<option value="57">🇨🇴 Colombia +57</option>
+<option value="56">🇨🇱 Chile +56</option>
+<option value="51">🇵🇪 Peru +51</option>
+<option value="58">🇻🇪 Venezuela +58</option>
+<option value="593">🇪🇨 Ecuador +593</option>
+<option value="502">🇬🇹 Guatemala +502</option>
+<option value="53">🇨🇺 Cuba +53</option>
+<option value="809">🇩🇴 Dominican Rep. +809</option>
+<option value="507">🇵🇦 Panama +507</option>
+<option value="506">🇨🇷 Costa Rica +506</option>
+<option value="598">🇺🇾 Uruguay +598</option>
+{{-- Separator --}}
+<option disabled>──── {{ app()->isLocale('ar') ? 'أوقيانوسيا' : 'Oceania' }} ────</option>
+<option value="61">🇦🇺 Australia +61</option>
+<option value="64">🇳🇿 New Zealand +64</option>

@@ -1522,7 +1522,7 @@ class InstructorController extends Controller
     /**
      * Update payment reminder settings for the tenant.
      */
-    public function updateReminderSettings(Request $request)
+    public function updateReminderSettings(Request $request, \Modules\Center\Services\SettingsService $settingsService)
     {
         $request->validate([
             'default_due_day' => 'required|integer|min:1|max:28',
@@ -1535,30 +1535,8 @@ class InstructorController extends Controller
         ]);
 
         $tenant = \App\Models\Tenant::findOrFail($this->tenant->id);
-        $settings = $tenant->settings ?? [];
-
-        $settings['payment_reminders'] = [
-            'default_due_day' => (int) $request->default_due_day,
-            'default_monthly_fee' => $request->default_monthly_fee ? (float) $request->default_monthly_fee : null,
-            'email_reminders' => collect($request->email_reminders)->map(function ($item) {
-                return [
-                    'days_before' => (int) $item['days_before'],
-                    'enabled' => (bool) ($item['enabled'] ?? false),
-                ];
-            })->toArray(),
-            'whatsapp_reminders' => collect($request->whatsapp_reminders)->map(function ($item) {
-                return [
-                    'days_after' => (int) $item['days_after'],
-                    'enabled' => (bool) ($item['enabled'] ?? false),
-                ];
-            })->toArray(),
-            'whatsapp_before_due' => (bool) $request->whatsapp_before_due,
-            'email_template' => $request->email_template,
-            'whatsapp_template' => $request->whatsapp_template,
-        ];
-
-        $tenant->settings = $settings;
-        $tenant->save();
+        
+        $settingsService->updatePaymentReminders($tenant, $request->all());
 
         return back()->with('success', __('instructor::reminders.saved'));
     }

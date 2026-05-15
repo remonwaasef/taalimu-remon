@@ -75,12 +75,12 @@ class CourseController extends Controller
 
         $data = $request->validated();
         
-        $data['image'] = $this->handleFileUpload($request, 'image', null, 'courses');
-
         try {
+            $data['image'] = $this->handleFileUpload($request, 'image', null, 'courses');
             $this->courseService->createCourse(CourseData::fromArray($data));
         } catch (\Exception $e) {
-            return redirect()->back()->withInput()->with('error', $e->getMessage());
+            \Log::error('Course creation failed: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', __('center::messages.registration_failed') ?? 'حدث خطأ: ' . $e->getMessage());
         }
 
         // Smart Onboarding Routing: If this is the first course, guide them to register a student
@@ -177,7 +177,8 @@ class CourseController extends Controller
                 return back()->with('success', __('center::messages.msg_028'));
             });
         } catch (\Exception $e) {
-            return back()->with('error', 'حدث خطأ: ' . $e->getMessage());
+            \Log::error('Quick enroll failed: ' . $e->getMessage());
+            return back()->with('error', __('center::messages.registration_failed') ?? 'حدث خطأ أثناء التسجيل السريع.');
         }
     }
 

@@ -31,7 +31,7 @@ class SendOnboardingEmails extends Command
     public function handle()
     {
         // Check if onboarding emails are enabled via .env
-        if (!env('ENABLE_ONBOARDING_EMAILS', false)) {
+        if (!config('app.enable_onboarding_emails', false)) {
             $this->info('Onboarding emails are disabled in draft mode (ENABLE_ONBOARDING_EMAILS=false).');
             return;
         }

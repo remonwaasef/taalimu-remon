@@ -102,33 +102,8 @@ class SettingsController extends Controller
         ]);
 
         $tenant = Tenant::findOrFail($this->tenant->id);
-        $settings = $tenant->settings ?? [];
-
-        $settings['payment_reminders'] = [
-            'default_due_day'        => (int) $request->default_due_day,
-            'default_monthly_fee'    => $request->default_monthly_fee ? (float) $request->default_monthly_fee : null,
-            'email_reminders'        => collect($request->email_reminders)->map(function ($item) {
-                return [
-                    'days_before' => (int) $item['days_before'],
-                    'enabled'     => (bool) ($item['enabled'] ?? false),
-                ];
-            })->toArray(),
-            'whatsapp_reminders'     => collect($request->whatsapp_reminders)->map(function ($item) {
-                return [
-                    'days_after' => (int) $item['days_after'],
-                    'enabled'    => (bool) ($item['enabled'] ?? false),
-                ];
-            })->toArray(),
-            'whatsapp_before_due'    => (bool) ($request->whatsapp_before_due ?? false),
-            'overdue_repeat_enabled' => (bool) ($request->overdue_repeat_enabled ?? false),
-            'overdue_repeat_interval'=> (int) ($request->overdue_repeat_interval ?? 7),
-            'overdue_max_reminders'  => $request->overdue_max_reminders ? (int) $request->overdue_max_reminders : null,
-            'email_template'         => $request->email_template,
-            'whatsapp_template'      => $request->whatsapp_template,
-        ];
-
-        $tenant->settings = $settings;
-        $tenant->save();
+        
+        $this->settingsService->updatePaymentReminders($tenant, $request->all());
 
         return back()->with('success', __('center::settings.reminders.saved'));
     }

@@ -176,47 +176,7 @@ class SocialAuthController extends Controller
         }
         $currency = $symbols[$suggestedCurrency] ?? $suggestedCurrency;
         
-        $packagesData = $packages->map(function($p) use ($currency) {
-            $discountPercent = 0;
-            $savingsAmount = 0;
-            if ($p->old_price > 0 && $p->old_price > $p->price) {
-                $discountPercent = round((($p->old_price - $p->price) / $p->old_price) * 100);
-                $savingsAmount = $p->old_price - $p->price;
-            }
-
-            return [
-                'slug' => $p->slug,
-                'name' => app()->getLocale() == 'ar' ? $p->name : ($p->name_en ?: $p->name),
-                'price' => number_format($p->price, 0) . ' ' . $currency,
-                'price_value' => number_format($p->price, 0),
-                'price_raw' => (float)$p->price,
-                'old_price' => $p->old_price > 0 ? number_format($p->old_price, 0) . ' ' . $currency : null,
-                'old_price_value' => $p->old_price > 0 ? number_format($p->old_price, 0) : null,
-                'old_price_raw' => (float)$p->old_price,
-                'currency' => $currency,
-                'discount_percent' => $discountPercent > 0 ? $discountPercent : null,
-                'savings_amount' => $savingsAmount > 0 ? number_format($savingsAmount, 0) : null,
-                'discount_label' => $p->discount_label,
-                'yearly_price' => $p->yearly_price ? number_format($p->yearly_price, 0) . ' ' . $currency : number_format($p->price * 10, 0) . ' ' . $currency,
-                'yearly_price_value' => $p->yearly_price ? number_format($p->yearly_price, 0) : number_format($p->price * 10, 0),
-                'yearly_price_raw' => $p->yearly_price ?: ($p->price * 10),
-                'term_price' => $p->term_price ? number_format($p->term_price, 0) . ' ' . $currency : number_format($p->price * 4, 0) . ' ' . $currency,
-                'term_price_value' => $p->term_price ? number_format($p->term_price, 0) : number_format($p->price * 4, 0),
-                'term_price_raw' => $p->term_price ?: ($p->price * 4),
-                'regional_prices' => $p->regional_prices ?? [],
-                'trial_days' => (int)$p->trial_days,
-                'features' => ($p->display_features && is_array($p->display_features) && count($p->display_features) > 0) 
-                    ? $p->display_features 
-                    : $p->features->map(function($f) {
-                        $name = app()->getLocale() == 'ar' ? $f->name : ($f->name_en ?: $f->name);
-                        $value = $f->pivot->value;
-                        if ($value && !in_array(strtolower($value), ['true', '1', 'yes'])) {
-                            return (app()->getLocale() == 'ar' ? ($name . ': ' . $value) : ($name . ': ' . $value));
-                        }
-                        return $name;
-                    })->toArray(),
-            ];
-        })->values();
+        $packagesData = \App\Models\Package::getDisplayData($packages, $currency);
 
         $selectedPlanSlug = $request->query('plan', session('selected_plan', $packages->firstWhere('is_default', true)?->slug ?? $packages->first()?->slug));
         $selectedCycle = $request->query('cycle', session('billing_cycle', 'monthly'));
@@ -275,9 +235,7 @@ class SocialAuthController extends Controller
         // PHONE VERIFICATION GATE: Ensure phone was verified via OTP before account creation
         $phoneVerified = session('phone_verified') && session('phone_verified_number') === $request->phone;
         if (!$phoneVerified) {
-            return back()->withErrors(['phone' => app()->getLocale() == 'ar'
-                ? 'يرجى التحقق من رقم الهاتف أولاً عبر كود التحقق.'
-                : 'Please verify your phone number first via OTP.'])->withInput();
+            return back()->withErrors(['phone' => __('messages.verify_phone_first')])->withInput();
         }
 
         // 1. Check if user already exists (safety check for race conditions)
@@ -395,9 +353,7 @@ class SocialAuthController extends Controller
             try {
                 $otpCode = $user->generatePhoneVerificationCode();
                 $whatsapp = app(\App\Services\WhatsAppService::class);
-                $message = app()->getLocale() == 'ar' 
-                    ? "مرحباً بك في منصة تعليمي! كود تفعيل حسابك هو: {$otpCode}"
-                    : "Welcome to Taalimu! Your verification code is: {$otpCode}";
+                $message = __('messages.otp_sent_sms') . ": {$otpCode}";
                 $whatsapp->sendSystemMessage($user->phone, $message);
             } catch (\Exception $otpEx) {
                 \Log::warning('WhatsApp OTP failed (non-critical): ' . $otpEx->getMessage());
@@ -413,6 +369,7 @@ class SocialAuthController extends Controller
             // Clear session data ONLY after successful DB commit
             session()->forget('google_user');
             session()->forget($submissionKey);
+            session()->forget(['phone_verified', 'phone_verified_number', 'phone_verification_token', 'phone_verified_at']);
 
             if ($isTrialPlan) {
                 // Login the user

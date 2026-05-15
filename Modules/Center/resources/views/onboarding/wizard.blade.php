@@ -23,13 +23,13 @@
     <style>
         [x-cloak] { display: none !important; }
         .onboarding-gradient-text {
-            /* Landing Page Emerald-to-Green Gradient */
-            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            /* Premium Slate Gradient for Title */
+            background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         .step-line-active {
-            box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
+            box-shadow: 0 0 8px rgba(5, 150, 105, 0.25);
         }
     </style>
 </head>
@@ -67,7 +67,7 @@
                     <template x-for="(stepObj, index) in steps" :key="index">
                         <div class="space-y-3 group cursor-default">
                             <div class="h-1.5 rounded-full overflow-hidden bg-slate-100 relative shadow-inner">
-                                <div class="h-full bg-emerald-500 transition-all duration-700 ease-out shadow-[0_0_12px_rgba(34,197,94,0.3)]"
+                                <div class="h-full bg-emerald-600 transition-all duration-700 ease-out shadow-[0_0_10px_rgba(5,150,105,0.3)]"
                                      :class="currentStepIndex >= index ? 'step-line-active' : ''"
                                      :style="'width: ' + (currentStepIndex > index ? '100%' : (currentStepIndex === index ? '75%' : '0%'))">
                                 </div>
@@ -137,7 +137,7 @@
                             </div>
                             
                             <div class="pt-6 flex justify-end">
-                                <button type="submit" class="group bg-emerald-500 hover:bg-emerald-600 text-white px-10 py-5 rounded-2xl font-black text-base transition-all shadow-xl shadow-emerald-500/20 flex items-center gap-3 transform hover:-translate-y-1">
+                                <button type="submit" class="group bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white px-10 py-5 rounded-2xl font-black text-base transition-all shadow-lg shadow-emerald-600/20 flex items-center gap-3 transform hover:-translate-y-1">
                                     {{ __('onboarding.step_1.btn_submit') }} 
                                     <i class="fa-solid fa-arrow-right rtl:rotate-180 group-hover:translate-x-1 transition-transform"></i>
                                 </button>
@@ -217,7 +217,7 @@
                                         {{ __('onboarding.step_2.btn_skip') }}
                                     </button>
                                 </div>
-                                <button type="submit" class="group bg-emerald-500 hover:bg-emerald-600 text-white w-full sm:w-auto px-10 py-5 rounded-2xl font-black text-base transition-all shadow-xl shadow-emerald-500/20 flex justify-center items-center gap-3 transform hover:-translate-y-1">
+                                <button type="submit" class="group bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white w-full sm:w-auto px-10 py-5 rounded-2xl font-black text-base transition-all shadow-lg shadow-emerald-600/20 flex justify-center items-center gap-3 transform hover:-translate-y-1">
                                     {{ __('onboarding.step_2.btn_submit') }} 
                                     <i class="fa-solid fa-arrow-right rtl:rotate-180 group-hover:translate-x-1 transition-transform"></i>
                                 </button>
@@ -335,7 +335,7 @@
                                         {{ __('onboarding.step_3.btn_skip') }}
                                     </button>
                                 </div>
-                                <button type="submit" class="group bg-emerald-500 hover:bg-emerald-600 text-white w-full sm:w-auto px-10 py-5 rounded-2xl font-black text-base transition-all shadow-xl shadow-emerald-500/20 flex justify-center items-center gap-3 transform hover:-translate-y-1">
+                                <button type="submit" class="group bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white w-full sm:w-auto px-10 py-5 rounded-2xl font-black text-base transition-all shadow-lg shadow-emerald-600/20 flex justify-center items-center gap-3 transform hover:-translate-y-1">
                                     {{ __('onboarding.step_3.btn_submit') }} 
                                     <i class="fa-solid fa-arrow-right rtl:rotate-180 group-hover:translate-x-1 transition-transform"></i>
                                 </button>
@@ -452,7 +452,7 @@
                                         {{ __('onboarding.step_4.btn_skip') }}
                                     </button>
                                 </div>
-                                <button type="submit" class="group bg-emerald-500 hover:bg-emerald-600 text-white w-full sm:w-auto px-12 py-6 rounded-[2rem] font-black text-2xl transition-all shadow-[0_20px_50px_-12px_rgba(16,185,129,0.35)] flex justify-center items-center gap-4 transform hover:-translate-y-2 overflow-hidden">
+                                <button type="submit" class="group bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white w-full sm:w-auto px-12 py-6 rounded-[2rem] font-black text-2xl transition-all shadow-lg shadow-emerald-600/25 flex justify-center items-center gap-4 transform hover:-translate-y-2 overflow-hidden">
                                     <span class="relative z-10 flex items-center gap-4">
                                         <i class="fa-solid fa-rocket text-white animate-bounce-subtle"></i>
                                         {{ __('onboarding.step_4.btn_submit') }}
@@ -471,12 +471,12 @@
                 <!-- Language Switcher (Now at the bottom) -->
                 <div class="flex items-center gap-1 p-1 bg-white shadow-sm border border-slate-100 rounded-2xl">
                     <button @click="updateLanguage('ar')" 
-                            :class="formData.step_1.locale === 'ar' ? 'bg-emerald-500 text-white shadow-md' : 'text-slate-400 hover:bg-slate-50'" 
+                            :class="formData.step_1.locale === 'ar' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-400 hover:bg-slate-50'" 
                             class="px-4 py-2 rounded-xl text-[10px] font-black transition-all flex items-center gap-2">
                         <span class="text-sm">🇸🇦</span> العربية
                     </button>
                     <button @click="updateLanguage('fr')" 
-                            :class="formData.step_1.locale === 'fr' ? 'bg-emerald-500 text-white shadow-md' : 'text-slate-400 hover:bg-slate-50'" 
+                            :class="formData.step_1.locale === 'fr' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-400 hover:bg-slate-50'" 
                             class="px-4 py-2 rounded-xl text-[10px] font-black transition-all flex items-center gap-2">
                         <span class="text-sm">🇫🇷</span> Français
                     </button>

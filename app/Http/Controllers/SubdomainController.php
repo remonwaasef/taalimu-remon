@@ -29,7 +29,7 @@ class SubdomainController extends Controller
         if (empty($subdomain)) {
              return response()->json([
                 'available' => false,
-                'message' => app()->getLocale() == 'ar' ? 'النطاق لا يمكن أن يكون فارغاً' : 'Subdomain cannot be empty'
+                'message' => __('messages.subdomain_empty')
              ]);
         }
 
@@ -39,7 +39,7 @@ class SubdomainController extends Controller
         if (in_array($subdomain, $forbidden)) {
             return response()->json([
                 'available' => false,
-                'message' => app()->getLocale() == 'ar' ? 'هذا النطاق محجوز للنظام' : 'This subdomain is reserved by the system'
+                'message' => __('messages.subdomain_reserved')
             ]);
         }
 
@@ -52,19 +52,19 @@ class SubdomainController extends Controller
              if ($currentUserEmail && strtolower($tenant->email) === strtolower($currentUserEmail)) {
                  return response()->json([
                      'available' => true,
-                     'message' => app()->getLocale() == 'ar' ? 'هذا النطاق ملكك! يمكنك المتابعة.' : 'This domain is yours! You can proceed.'
+                     'message' => __('messages.subdomain_yours')
                  ]);
              }
 
             return response()->json([
                 'available' => false,
-                'message' => app()->getLocale() == 'ar' ? 'هذا النطاق مستخدم بالفعل' : 'This subdomain is already in use'
+                'message' => __('messages.subdomain_in_use')
             ]);
         }
 
         return response()->json([
             'available' => true,
-            'message' => app()->getLocale() == 'ar' ? 'النطاق متاح!' : 'Subdomain is available!'
+            'message' => __('messages.subdomain_available')
         ]);
     }
 }

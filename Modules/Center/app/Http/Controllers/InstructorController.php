@@ -57,43 +57,48 @@ class InstructorController extends Controller
             return redirect()->back()->with('error', __('center::messages.msg_048'));
         }
 
-        $imagePath = $this->handleFileUpload($request, 'image', null, 'instructors');
+        try {
+            $imagePath = $this->handleFileUpload($request, 'image', null, 'instructors');
 
-        $instructor = Instructor::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'specialization' => $request->specialization,
-            'status' => $request->status ?? 'active',
-            'commission_rate' => $request->commission_rate,
-            'commission_type' => $request->commission_type,
-            'national_id' => $request->national_id,
-            'gender' => $request->gender,
-            'hiring_date' => $request->hiring_date,
-            'bio' => $request->bio,
-            'image' => $imagePath ?? null,
-        ]);
+            $instructor = Instructor::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'specialization' => $request->specialization,
+                'status' => $request->status ?? 'active',
+                'commission_rate' => $request->commission_rate,
+                'commission_type' => $request->commission_type,
+                'national_id' => $request->national_id,
+                'gender' => $request->gender,
+                'hiring_date' => $request->hiring_date,
+                'bio' => $request->bio,
+                'image' => $imagePath ?? null,
+            ]);
 
-        // Notify Admins
-        $admins = \App\Models\User::where('tenant_id', app('tenant')->id)
-            ->whereIn('role', ['admin', 'center_admin'])
-            ->get();
-            
-        \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\GeneralNotification(
-            'instructor_registered', // Translation key
-            __('center::instructors.new_instructor_registered', ['name' => $request->name]),
-            route('center.instructors.index'), // Link to instructors list
-            'fas fa-chalkboard-teacher',
-            auth()->user()->name // Created By
-        ));
+            // Notify Admins
+            $admins = \App\Models\User::where('tenant_id', app('tenant')->id)
+                ->whereIn('role', ['admin', 'center_admin'])
+                ->get();
+                
+            \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\GeneralNotification(
+                'instructor_registered', // Translation key
+                __('center::instructors.new_instructor_registered', ['name' => $request->name]),
+                route('center.instructors.index'), // Link to instructors list
+                'fas fa-chalkboard-teacher',
+                auth()->user()->name // Created By
+            ));
 
-        // Smart Onboarding Routing: If this is the first instructor, guide them to create a course
-        $instructorCount = Instructor::where('tenant_id', app('tenant')->id)->count();
-        if ($instructorCount === 1) {
-            return redirect()->route('center.courses.create')->with('success', __('center::messages.first_instructor_onboarding'));
+            // Smart Onboarding Routing: If this is the first instructor, guide them to create a course
+            $instructorCount = Instructor::where('tenant_id', app('tenant')->id)->count();
+            if ($instructorCount === 1) {
+                return redirect()->route('center.courses.create')->with('success', __('center::messages.first_instructor_onboarding'));
+            }
+
+            return redirect()->route('center.instructors.index')->with('success', __('center::messages.msg_049'));
+        } catch (\Exception $e) {
+            \Log::error('Instructor creation failed: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', __('center::messages.error_unexpected') ?? 'حدث خطأ: ' . $e->getMessage());
         }
-
-        return redirect()->route('center.instructors.index')->with('success', __('center::messages.msg_049'));
     }
 
     /**
@@ -160,9 +165,7 @@ class InstructorController extends Controller
         $instructor = Instructor::findOrFail($id);
         $this->authorize('delete', $instructor);
 
-        if ($instructor->image) {
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($instructor->image);
-        }
+        $this->deleteFile($instructor->image, 'public');
 
         $instructor->delete();
 

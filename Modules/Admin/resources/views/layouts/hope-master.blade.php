@@ -257,7 +257,7 @@
                     <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
                 </ul>
                 <div class="right-panel">
-                    ©<script>document.write(new Date().getFullYear())</script> {{ env('APP_NAME') }}, Made with <span class="text-gray border-gray"> Hope UI</span>
+                    ©<script>document.write(new Date().getFullYear())</script> {{ config('app.name') }}, Made with <span class="text-gray border-gray"> Hope UI</span>
                 </div>
             </div>
         </footer>

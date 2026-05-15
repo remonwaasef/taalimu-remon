@@ -36,6 +36,7 @@ document.addEventListener('alpine:init', () => {
         showPlanModal: false,
         formSubmitted: false,
         phoneVerified: false,
+        countryCode: '{{ old("country_code", "20") }}',
         otpSent: false,
         otpCode: '',
         otpStatus: 'idle',
@@ -204,7 +205,7 @@ document.addEventListener('alpine:init', () => {
                 const response = await fetch('/api/phone/send-otp', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content },
-                    body: JSON.stringify({ phone: this.phone })
+                    body: JSON.stringify({ phone: this.phone, country_code: this.countryCode })
                 });
                 const data = await response.json();
                 if (data.success) {
@@ -601,14 +602,27 @@ document.addEventListener('alpine:init', () => {
                                 <div class="space-y-1.5">
                                     <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.phone') }}</label>
                                     
-                                    {{-- Phone Input + Send OTP Button --}}
+                                    {{-- Country Code + Phone Input + Send OTP Button --}}
                                     <div class="relative flex gap-2">
+                                        {{-- Country Code Selector --}}
+                                        <div class="relative" dir="ltr">
+                                            <select x-model="countryCode" name="country_code"
+                                                :disabled="phoneVerified"
+                                                class="h-11 pl-2 pr-7 bg-slate-50/50 border-2 border-slate-100 rounded-2xl text-sm font-black text-slate-700 focus:outline-none focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all appearance-none cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                                                :class="phoneVerified ? 'border-emerald-300 bg-emerald-50/30' : 'border-slate-100'">
+                                                @include('partials.country-codes')
+                                            </select>
+                                            <div class="absolute inset-y-0 right-1 flex items-center pointer-events-none">
+                                                <i class="bi bi-chevron-down text-[9px] text-slate-400"></i>
+                                            </div>
+                                        </div>
+                                        {{-- Phone Input --}}
                                         <div class="relative flex-1 group">
                                             <input type="text" name="phone" x-model="phone" 
                                                 :disabled="phoneVerified"
-                                                class="w-full h-11 px-5 bg-slate-50/50 border-2 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner disabled:opacity-60 disabled:cursor-not-allowed"
+                                                class="w-full h-11 px-4 bg-slate-50/50 border-2 rounded-2xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner disabled:opacity-60 disabled:cursor-not-allowed"
                                                 :class="phoneVerified ? 'border-emerald-300 bg-emerald-50/30' : 'border-slate-100'"
-                                                placeholder="010xxxxxxx" :required="currentStep === 2">
+                                                placeholder="10xxxxxxx" :required="currentStep === 2" dir="ltr">
                                             {{-- Verified Badge --}}
                                             <div x-show="phoneVerified" class="absolute inset-y-0 end-0 pe-3 flex items-center">
                                                 <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-black">
@@ -620,7 +634,7 @@ document.addEventListener('alpine:init', () => {
                                         {{-- Send OTP Button --}}
                                         <button type="button" @click="sendPhoneOtp()" 
                                                 x-show="!phoneVerified"
-                                                :disabled="isSendingOtp || otpCountdown > 0 || !phone || phone.length < 10"
+                                                :disabled="isSendingOtp || otpCountdown > 0 || !phone || phone.length < 7"
                                                 class="h-11 px-4 rounded-2xl font-black text-[11px] font-arabic transition-all whitespace-nowrap flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
                                                 :class="otpSent ? 'bg-slate-100 text-slate-600 hover:bg-slate-200' : 'bg-brand-secondary text-white shadow-lg shadow-brand-secondary/20 hover:shadow-brand-secondary/30'">
                                             <template x-if="isSendingOtp">

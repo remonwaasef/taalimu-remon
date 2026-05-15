@@ -129,8 +129,8 @@ class BugReportController extends Controller
     private function sendTelegramNotification(BugReport $report, ?string $debugError = null): void
     {
         try {
-            $botToken = config('services.telegram.bot_token', env('TELEGRAM_BOT_TOKEN'));
-            $chatId = config('services.telegram.admin_chat_id', env('TELEGRAM_ADMIN_CHAT_ID'));
+            $botToken = config('services.telegram.bot_token');
+            $chatId = config('services.telegram.admin_chat_id');
 
             if (!$botToken || !$chatId) {
                 return;
@@ -211,7 +211,7 @@ class BugReportController extends Controller
     private function sendEmailNotification(BugReport $report): void
     {
         try {
-            $developerEmail = env('BUG_REPORT_EMAIL', env('MAIL_FROM_ADDRESS'));
+            $developerEmail = config('mail.bug_report_address', config('mail.from.address'));
 
             if (!$developerEmail) {
                 return;
