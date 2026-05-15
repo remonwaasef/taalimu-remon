@@ -1,12 +1,11 @@
 /* ===== Global Emerald Green Theme Override (Taalimu Unified) ===== */
 :root {
-    --bs-primary: #10b981 !important;
-    /* Emerald 500 */
-    --bs-primary-rgb: 16, 185, 129 !important;
-    --bs-link-color: #10b981 !important;
-    --bs-link-hover-color: #059669 !important;
-    --primary-color: #10b981 !important;
-    --primary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    --bs-primary: #059669 !important; /* Emerald 600 */
+    --bs-primary-rgb: 5, 150, 105 !important;
+    --bs-link-color: #059669 !important;
+    --bs-link-hover-color: #047857 !important; /* Emerald 700 */
+    --primary-color: #059669 !important;
+    --primary-gradient: linear-gradient(to right, #059669 0%, #14b8a6 100%); /* Emerald 600 to Teal 500 */
 }
 
 body {
@@ -27,7 +26,7 @@ body {
 .iq-navbar-header {
     padding: 0 !important;
     height: 260px !important;
-    background: linear-gradient(135deg, #065f46 0%, #10b981 100%) !important;
+    background: linear-gradient(135deg, #047857 0%, #0d9488 100%) !important; /* Premium Dark Emerald to Teal */
     position: relative;
     overflow: hidden;
     border-bottom: none !important;
@@ -116,10 +115,10 @@ body {
 
 /* Premium Buttons in Header */
 .iq-navbar-header .btn-primary {
-    background-color: #10b981 !important;
+    background: linear-gradient(to right, #059669, #14b8a6) !important;
     color: #ffffff !important;
     border: none;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2) !important;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2) !important;
     font-weight: 700 !important;
     padding: 0.75rem 1.5rem !important;
     transition: all 0.3s ease !important;
@@ -127,58 +126,62 @@ body {
 
 .iq-navbar-header .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3) !important;
-    background-color: #059669 !important;
+    box-shadow: 0 8px 20px rgba(5, 150, 105, 0.3) !important;
+    background: linear-gradient(to right, #047857, #0d9488) !important;
 }
 
 /* Override Hope UI primary color classes */
 .bg-primary,
-.btn-primary,
 .badge-primary {
-    background-color: #10b981 !important;
-    border-color: #10b981 !important;
+    background-color: #059669 !important;
+    border-color: #059669 !important;
+}
+
+.btn-primary {
+    background: linear-gradient(to right, #059669, #14b8a6) !important;
+    border: none !important;
 }
 
 .btn-primary:hover,
 .btn-primary:focus {
-    background-color: #059669 !important;
-    border-color: #059669 !important;
-    box-shadow: 0 8px 15px rgba(16, 185, 129, 0.2) !important;
+    background: linear-gradient(to right, #047857, #0d9488) !important;
+    border: none !important;
+    box-shadow: 0 8px 15px rgba(5, 150, 105, 0.2) !important;
 }
 
 .btn-outline-primary {
-    color: #10b981 !important;
-    border-color: #10b981 !important;
+    color: #059669 !important;
+    border-color: #059669 !important;
 }
 
 .btn-outline-primary:hover {
-    background-color: #10b981 !important;
-    border-color: #10b981 !important;
+    background: linear-gradient(to right, #059669, #14b8a6) !important;
+    border-color: transparent !important;
     color: white !important;
 }
 
 .text-primary {
-    color: #10b981 !important;
+    color: #059669 !important;
 }
 
 .border-primary {
-    border-color: #10b981 !important;
+    border-color: #059669 !important;
 }
 
 a {
-    color: #10b981;
+    color: #059669;
     transition: all 0.2s ease;
 }
 
 a:hover {
-    color: #059669;
+    color: #047857;
 }
 
 /* Sidebar active item - Soft Premium (All Levels) */
 .sidebar .nav-item .nav-link.active,
 .sidebar-default .sidebar-list .nav-item li>.nav-link.active {
-    background: #ecfdf5 !important;
-    /* Soft Pastel Green */
+    background: linear-gradient(to right, rgba(5, 150, 105, 0.1), rgba(20, 184, 166, 0.1)) !important;
+    /* Soft Emerald/Teal Gradient */
     color: #059669 !important;
     /* Deep Emerald */
     box-shadow: none !important;
@@ -198,9 +201,9 @@ a:hover {
 }
 
 .sidebar .nav-item .nav-link:hover:not(.active) {
-    background: rgba(16, 185, 129, 0.05);
+    background: rgba(5, 150, 105, 0.05);
     /* Very light emerald tint on hover */
-    color: #10b981 !important;
+    color: #059669 !important;
 }
 
 /* Header banner */
@@ -239,8 +242,8 @@ a:hover {
 
 .form-control:focus,
 .form-select:focus {
-    border-color: #10b981 !important;
-    box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.1) !important;
+    border-color: #059669 !important;
+    box-shadow: 0 0 0 0.25rem rgba(5, 150, 105, 0.1) !important;
     background-color: #ffffff !important;
 }
 
@@ -257,8 +260,8 @@ label {
 }
 
 .form-check-input:checked {
-    background-color: #10b981 !important;
-    border-color: #10b981 !important;
+    background-color: #059669 !important;
+    border-color: #059669 !important;
 }
 
 .input-group-text {
@@ -291,8 +294,8 @@ label {
 }
 
 .nav-tabs .nav-link:hover:not(.active) {
-    color: #10b981 !important;
-    background: rgba(16, 185, 129, 0.05) !important;
+    color: #059669 !important;
+    background: rgba(5, 150, 105, 0.05) !important;
 }
 
 .nav-tabs .nav-link.active {
@@ -311,9 +314,9 @@ label {
 }
 
 .nav-pills .nav-link.active {
-    background: #10b981 !important;
+    background: linear-gradient(to right, #059669, #14b8a6) !important;
     color: #ffffff !important;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25) !important;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25) !important;
 }
 
 /* ===== Premium Breadcrumbs ===== */
@@ -331,7 +334,7 @@ label {
 }
 
 .breadcrumb-item a:hover {
-    color: #10b981 !important;
+    color: #059669 !important;
 }
 
 .breadcrumb-item.active {
@@ -362,21 +365,20 @@ label {
 }
 
 .btn-primary {
-    background: #10b981 !important;
-    border-color: #10b981 !important;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2) !important;
+    background: linear-gradient(to right, #059669, #14b8a6) !important;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2) !important;
 }
 
 .btn-primary:hover {
-    background: #059669 !important;
-    border-color: #059669 !important;
+    background: linear-gradient(to right, #047857, #0d9488) !important;
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3) !important;
+    box-shadow: 0 6px 16px rgba(5, 150, 105, 0.3) !important;
 }
 
 .btn-success {
-    background: #10b981 !important;
-    border-color: #10b981 !important;
+    background: #059669 !important;
+    border-color: #059669 !important;
 }
 
 .btn-light {
