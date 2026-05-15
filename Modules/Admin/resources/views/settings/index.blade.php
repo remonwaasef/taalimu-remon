@@ -73,7 +73,7 @@
                                 frVal: {{ Js::from(\App\Models\SiteSetting::get('site_description_fr', __('landing.hero.subtitle', [], 'fr'))) }}
                             }">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <label class="form-label fw-bold mb-0">{{ __('admin::admin.site_description') }}</label>
+                                    <label class="form-label fw-bold mb-0">{{ __('admin::admin.site_description') }} (<span x-text="activeLang.toUpperCase()"></span>)</label>
                                     <div class="d-flex gap-1 bg-light p-1 rounded-pill border">
                                         <button type="button" @click="activeLang = 'ar'" :class="activeLang === 'ar' ? 'btn-primary shadow-sm' : 'btn-light text-muted border-0'" class="btn btn-sm py-0 px-3 rounded-pill position-relative transition-all" style="font-size: 0.75rem; font-weight: 700;">
                                             AR
@@ -203,7 +203,7 @@
                                                             frVal: {{ Js::from($package->name_fr) }}
                                                         }">
                                                             <div class="d-flex justify-content-between align-items-center mb-1">
-                                                                <label class="small text-muted mb-0">{{ __('admin.package_name_ar') }}</label>
+                                                                <label class="small text-muted mb-0" x-text="activeLang === 'ar' ? '{{ __('admin.package_name_ar') }}' : (activeLang === 'en' ? '{{ __('admin.package_name_en') }}' : 'Nom (FR)')"></label>
                                                                 <div class="d-flex gap-1 bg-light p-1 rounded-pill border">
                                                                     <button type="button" @click="activeLang = 'ar'" :class="activeLang === 'ar' ? 'btn-primary shadow-sm' : 'btn-light text-muted border-0'" class="btn btn-sm py-0 px-2 rounded-pill position-relative transition-all" style="font-size: 0.65rem; font-weight: 700;">
                                                                         AR
@@ -501,7 +501,7 @@
                                                 frVal: {{ Js::from($package->description_fr) }}
                                             }">
                                                 <div class="d-flex justify-content-between align-items-center mb-2">
-                                                    <label class="form-label small fw-bold text-primary mb-0"><i class="bi bi-card-text"></i> {{ __('admin.description') ?? 'Description' }}</label>
+                                                    <label class="form-label small fw-bold text-primary mb-0"><i class="bi bi-card-text"></i> {{ __('admin.description') ?? 'Description' }} (<span x-text="activeLang.toUpperCase()"></span>)</label>
                                                     <div class="d-flex gap-1 bg-light p-1 rounded-pill border">
                                                         <button type="button" @click="activeLang = 'ar'" :class="activeLang === 'ar' ? 'btn-primary shadow-sm' : 'btn-light text-muted border-0'" class="btn btn-sm py-0 px-2 rounded-pill position-relative transition-all" style="font-size: 0.65rem; font-weight: 700;">
                                                             AR
