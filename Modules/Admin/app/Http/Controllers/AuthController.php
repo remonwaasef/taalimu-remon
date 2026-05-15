@@ -20,7 +20,17 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
+        $throttleKey = 'admin_login.' . \Illuminate\Support\Str::lower($request->input('email')) . '|' . $request->ip();
+
+        if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = \Illuminate\Support\Facades\RateLimiter::availableIn($throttleKey);
+            return back()->withErrors([
+                'email' => __('auth.throttle', ['seconds' => $seconds]),
+            ])->onlyInput('email');
+        }
+
         if (Auth::attempt($credentials)) {
+            \Illuminate\Support\Facades\RateLimiter::clear($throttleKey);
             $request->session()->regenerate();
 
             // Check if user is admin (Super Admin)
@@ -33,6 +43,8 @@ class AuthController extends Controller
 
             return redirect()->intended(route('admin.dashboard'));
         }
+
+        \Illuminate\Support\Facades\RateLimiter::hit($throttleKey);
 
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',

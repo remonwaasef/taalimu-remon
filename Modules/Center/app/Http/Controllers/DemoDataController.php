@@ -13,6 +13,10 @@ class DemoDataController extends Controller
     public function __construct(DemoDataService $demoService)
     {
         $this->demoService = $demoService;
+        $this->middleware(function ($request, $next) {
+            abort_if(!auth()->user() || !auth()->user()->hasRole('center_admin'), 403, 'Unauthorized action.');
+            return $next($request);
+        });
     }
 
     public function seed(Request $request)

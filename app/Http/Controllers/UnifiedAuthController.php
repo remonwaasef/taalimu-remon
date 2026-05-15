@@ -21,6 +21,16 @@ class UnifiedAuthController extends Controller
             'password' => ['required'],
         ]);
 
+        // Rate Limiting Key: IP + Email
+        $throttleKey = 'unified_login.' . \Illuminate\Support\Str::lower($request->input('email')) . '|' . $request->ip();
+
+        if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = \Illuminate\Support\Facades\RateLimiter::availableIn($throttleKey);
+            return back()->withErrors([
+                'email' => __('auth.throttle', ['seconds' => $seconds]),
+            ])->onlyInput('email');
+        }
+
         $isEmail = filter_var($request->email, FILTER_VALIDATE_EMAIL);
         $user = null;
 
@@ -74,6 +84,7 @@ class UnifiedAuthController extends Controller
 
         // If authenticated
         if ($user) {
+            \Illuminate\Support\Facades\RateLimiter::clear($throttleKey);
             // Check if user is super admin (super_admin role and no tenant_id)
             if ($user->role === 'super_admin' && is_null($user->tenant_id)) {
                 Auth::logout();
@@ -122,6 +133,8 @@ class UnifiedAuthController extends Controller
             
             return redirect($loginUrl);
         }
+
+        \Illuminate\Support\Facades\RateLimiter::hit($throttleKey);
 
         return back()->withErrors([
             'email' => 'البريد الإلكتروني أو كلمة المرور غير صحيحة.',

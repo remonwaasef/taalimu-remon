@@ -1,0 +1,245 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\Tenant;
+use App\Models\User;
+use App\Models\Package;
+use App\Models\Coupon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
+use App\Services\TelegramService;
+use Illuminate\Support\Str;
+
+class TenantRegistrationService
+{
+    protected TelegramService $telegram;
+
+    public function __construct(TelegramService $telegram)
+    {
+        $this->telegram = $telegram;
+    }
+
+    /**
+     * Register a new tenant and its initial admin user.
+     *
+     * @param array $data Expected keys: center_name, email, phone, account_type, plan, billing_cycle, currency, coupon_code
+     * @param string|null $password Raw password (will be hashed). Null if social auth.
+     * @param string|null $googleId Google ID if social auth.
+     * @param \Stevebauman\Location\Position|null $geoData GeoIP data for location context
+     * @return array [ 'tenant' => Tenant, 'user' => User ]
+     */
+    public function registerTenant(array $data, ?string $password = null, ?string $googleId = null, $geoData = null): array
+    {
+        $tenant = null;
+        $user = null;
+
+        DB::transaction(function () use ($data, $password, $googleId, $geoData, &$tenant, &$user) {
+            $package = Package::where('slug', $data['plan'])->first();
+            $currency = $data['currency'] ?? 'EGP';
+            $regionalPrice = $package->getRegionalPrice($currency);
+            
+            $basePrice = $regionalPrice['amount'];
+            if ($data['billing_cycle'] === 'term') {
+                $basePrice = $regionalPrice['term_price'] ?? ($regionalPrice['amount'] * 4);
+            } elseif ($data['billing_cycle'] === 'yearly') {
+                $basePrice = $regionalPrice['yearly_price'] ?? ($regionalPrice['amount'] * 10);
+            }
+
+            $coupon = null;
+            $discountAmount = 0;
+            if (!empty($data['coupon_code'])) {
+                $coupon = Coupon::where('code', $data['coupon_code'])->first();
+                if ($coupon && $coupon->isValid()) {
+                    if ($coupon->package_id && $package && $coupon->package_id !== $package->id) {
+                        $coupon = null;
+                    } else if ($package) {
+                        $discountAmount = $coupon->calculateDiscount($basePrice);
+                    }
+                } else {
+                    $coupon = null;
+                }
+            }
+
+            // Generate Subdomain
+            $subdomain = self::generateSubdomain($data['center_name']);
+
+            // 1. Create Tenant
+            $tenant = Tenant::create([
+                'name' => $data['center_name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'], 
+                'domain' => $subdomain,
+                'type' => $data['account_type'],
+                'database_name' => 'edu_central',
+                'status' => 'active', 
+            ]);
+
+            // Save locale and currency
+            $settings = $tenant->settings ?? [];
+            $settings['locale'] = session('locale', 'ar');
+            $settings['currency'] = session('suggested_currency', $currency);
+            if ($geoData) {
+                $settings['registration_location'] = [
+                    'country' => $geoData->countryName ?? null,
+                    'country_code' => $geoData->countryCode ?? null,
+                    'city' => $geoData->cityName ?? null,
+                    'ip' => $geoData->ip ?? null,
+                ];
+            }
+            $tenant->settings = $settings;
+            $tenant->save();
+
+            // 2. Create Admin User
+            $userData = [
+                'name' => $data['center_name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'],
+                'role' => 'center_admin',
+                'tenant_id' => $tenant->id,
+            ];
+
+            if ($password) {
+                $userData['password'] = Hash::make($password);
+            }
+            if ($googleId) {
+                $userData['google_id'] = $googleId;
+                $userData['email_verified_at'] = now();
+            }
+
+            $user = User::create($userData);
+
+            // 3. Subscription & Billing
+            $finalPrice = max(0, $basePrice - $discountAmount);
+            if ($package) {
+                $subscription = $tenant->subscriptions()->create([
+                    'package_id' => $package->id,
+                    'status' => 'trialing',
+                    'trial_ends_at' => now()->addDays($package->trial_days),
+                    'starts_at' => now(),
+                    'ends_at' => null, 
+                    'billing_cycle' => $data['billing_cycle'],
+                    'price' => $finalPrice,
+                    'currency' => $currency,
+                    'payment_status' => 'unpaid',
+                ]);
+
+                // Record applied coupon
+                if ($coupon) {
+                    $tenant->appliedCoupons()->create([
+                        'coupon_id' => $coupon->id,
+                        'subscription_id' => $subscription->id,
+                        'discount_amount' => $discountAmount,
+                        'applied_at' => now(),
+                    ]);
+                    $coupon->increment('used_count');
+                }
+            }
+
+            // 4. Default System Data
+            $this->seedTenantData($tenant);
+        });
+
+        // Event & Notification
+        if (!$googleId) {
+            event(new Registered($user));
+        }
+
+        $this->telegram->sendNewRegistrationNotification($tenant, $user);
+
+        return ['tenant' => $tenant, 'user' => $user];
+    }
+
+    /**
+     * Generate a unique subdomain from the center name
+     */
+    public static function generateSubdomain($centerName)
+    {
+        $transliteration = [
+            'ا' => 'a', 'أ' => 'a', 'إ' => 'a', 'آ' => 'a',
+            'ب' => 'b', 'ت' => 't', 'ث' => 'th',
+            'ج' => 'j', 'ح' => 'h', 'خ' => 'kh',
+            'د' => 'd', 'ذ' => 'dh', 'ر' => 'r',
+            'ز' => 'z', 'س' => 's', 'ش' => 'sh',
+            'ص' => 's', 'ض' => 'd', 'ط' => 't',
+            'ظ' => 'z', 'ع' => 'a', 'غ' => 'gh',
+            'ف' => 'f', 'ق' => 'q', 'ك' => 'k',
+            'ل' => 'l', 'م' => 'm', 'ن' => 'n',
+            'ه' => 'h', 'و' => 'w', 'ي' => 'y',
+            'ة' => 'h', 'ى' => 'a', 'ئ' => 'e', 'ء' => 'a', 'ؤ' => 'o',
+            ' ' => '-', '_' => '-'
+        ];
+
+        // Convert Arabic to English
+        $slug = strtr($centerName, $transliteration);
+        
+        // Clean up: only letters, numbers, and hyphens
+        $slug = preg_replace('/[^a-z0-9-]/', '', strtolower($slug));
+        $slug = preg_replace('/-+/', '-', $slug);
+        $slug = trim($slug, '-');
+        
+        // Forbidden subdomains
+        $forbidden = ['admin', 'www', 'api', 'app', 'dev', 'test', 'mail', 'webmail', 'portal', 'dashboard', 'edu', 'cdn', 'localhost'];
+        if (in_array($slug, $forbidden)) {
+            $slug = $slug . '-' . time();
+        }
+
+        // Fallback if empty
+        if (empty($slug)) {
+            $slug = 'center-' . time();
+        }
+
+        $originalSlug = $slug;
+        $counter = 1;
+
+        while (Tenant::where('domain', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $counter;
+            $counter++;
+        }
+
+        return $slug;
+    }
+
+    /**
+     * Seed initial tenant data.
+     */
+    protected function seedTenantData(Tenant $tenant)
+    {
+        // 1. Roles & Permissions Setup for the Tenant
+        \Database\Seeders\RolesAndPermissionsSeeder::seedForTenant($tenant->id);
+
+        // 2. Assign Center Admin Role to the first user
+        $admin = \App\Models\User::where('tenant_id', $tenant->id)->first();
+        if ($admin) {
+            $admin->assignRole('center_admin');
+        }
+
+        // 3. Payment Gateway Configs
+        $paymentConfigs = [
+            [
+                'tenant_id' => $tenant->id,
+                'gateway' => 'paymob',
+                'is_active' => false,
+                'credentials' => json_encode(['api_key' => '', 'integration_id' => '', 'iframe_id' => '', 'hmac_secret' => '']),
+                'created_at' => now(), 'updated_at' => now(),
+            ],
+            [
+                'tenant_id' => $tenant->id,
+                'gateway' => 'paypal',
+                'is_active' => false,
+                'credentials' => json_encode(['client_id' => '', 'client_secret' => '', 'mode' => 'sandbox']),
+                'created_at' => now(), 'updated_at' => now(),
+            ],
+            [
+                'tenant_id' => $tenant->id,
+                'gateway' => 'stripe',
+                'is_active' => false,
+                'credentials' => json_encode(['public_key' => '', 'secret_key' => '', 'webhook_secret' => '']),
+                'created_at' => now(), 'updated_at' => now(),
+            ]
+        ];
+
+        DB::table('payment_gateway_configs')->insert($paymentConfigs);
+    }
+}

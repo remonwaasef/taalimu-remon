@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Cache;
 
 class SettingsService
 {
+    use \App\Traits\HandlesFileUploads;
+
     /**
      * Update basic tenant settings including files.
      */
@@ -31,13 +33,13 @@ class SettingsService
             $settings = array_replace_recursive($settings, $data['settings']);
         }
 
-        // Upload files
+        // Upload files using the trait and safely delete old ones
         if ($logoFile) {
-            $tenant->logo = $logoFile->store("{$tenant->id}/logos", 'public');
+            $tenant->logo = $this->uploadFile($logoFile, $tenant->logo, 'logos', 'public');
         }
 
         if ($faviconFile) {
-            $tenant->favicon = $faviconFile->store("{$tenant->id}/favicons", 'public');
+            $tenant->favicon = $this->uploadFile($faviconFile, $tenant->favicon, 'favicons', 'public');
         }
 
         $tenant->settings = $settings;
@@ -139,5 +141,41 @@ class SettingsService
         });
 
         Stage::clearCache();
+    }
+
+    /**
+     * Update payment reminder scheduling settings for the tenant.
+     */
+    public function updatePaymentReminders(Tenant $tenant, array $data)
+    {
+        $settings = $tenant->settings ?? [];
+
+        $settings['payment_reminders'] = [
+            'default_due_day'        => (int) ($data['default_due_day'] ?? 1),
+            'default_monthly_fee'    => !empty($data['default_monthly_fee']) ? (float) $data['default_monthly_fee'] : null,
+            'email_reminders'        => collect($data['email_reminders'] ?? [])->map(function ($item) {
+                return [
+                    'days_before' => (int) ($item['days_before'] ?? 0),
+                    'enabled'     => (bool) ($item['enabled'] ?? false),
+                ];
+            })->toArray(),
+            'whatsapp_reminders'     => collect($data['whatsapp_reminders'] ?? [])->map(function ($item) {
+                return [
+                    'days_after' => (int) ($item['days_after'] ?? 0),
+                    'enabled'    => (bool) ($item['enabled'] ?? false),
+                ];
+            })->toArray(),
+            'whatsapp_before_due'    => (bool) ($data['whatsapp_before_due'] ?? false),
+            'overdue_repeat_enabled' => (bool) ($data['overdue_repeat_enabled'] ?? false),
+            'overdue_repeat_interval'=> (int) ($data['overdue_repeat_interval'] ?? 7),
+            'overdue_max_reminders'  => !empty($data['overdue_max_reminders']) ? (int) $data['overdue_max_reminders'] : null,
+            'email_template'         => $data['email_template'] ?? null,
+            'whatsapp_template'      => $data['whatsapp_template'] ?? null,
+        ];
+
+        $tenant->settings = $settings;
+        $tenant->save();
+
+        return $tenant;
     }
 }

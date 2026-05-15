@@ -39,6 +39,16 @@ class AppServiceProvider extends ServiceProvider
         // Prevent N+1 queries in development
         Model::preventLazyLoading(! app()->isProduction());
 
+        // Enforce strict password policies across the entire platform
+        \Illuminate\Validation\Rules\Password::defaults(function () {
+            $rule = \Illuminate\Validation\Rules\Password::min(8)
+                ->mixedCase()
+                ->numbers()
+                ->symbols();
+
+            return app()->isProduction() ? $rule->uncompromised() : $rule;
+        });
+
         // Global Session/Cookie compatibility for multi-subdomain
         // Set this in boot() to ensure it's ready BEFORE StartSession middleware runs
         $mainDomain = config('app.tenant_domain');

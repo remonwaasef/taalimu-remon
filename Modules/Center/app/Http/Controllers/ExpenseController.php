@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Storage;
 
 class ExpenseController extends Controller
 {
+    use \App\Traits\HandlesFileUploads;
+
     public function index(Request $request)
     {
         $query = Expense::query();
@@ -48,7 +50,7 @@ class ExpenseController extends Controller
         ]);
 
         if ($request->hasFile('attachment')) {
-            $validated['attachment'] = $request->file('attachment')->store('expenses/attachments', 'public');
+            $validated['attachment'] = $this->uploadFile($request->file('attachment'), null, 'expenses/attachments', 'public');
         }
 
         Expense::create($validated);
@@ -73,10 +75,7 @@ class ExpenseController extends Controller
         ]);
 
         if ($request->hasFile('attachment')) {
-            if ($expense->attachment) {
-                Storage::disk('public')->delete($expense->attachment);
-            }
-            $validated['attachment'] = $request->file('attachment')->store('expenses/attachments', 'public');
+            $validated['attachment'] = $this->uploadFile($request->file('attachment'), $expense->attachment, 'expenses/attachments', 'public');
         }
 
         $expense->update($validated);
@@ -86,9 +85,7 @@ class ExpenseController extends Controller
 
     public function destroy(Expense $expense)
     {
-        if ($expense->attachment) {
-            Storage::disk('public')->delete($expense->attachment);
-        }
+        $this->deleteFile($expense->attachment, 'public');
 
         $expense->delete();
 

@@ -85,29 +85,33 @@ class StudentController extends Controller
 
         $data = $request->validated();
 
-        // Handle Profile Photo Upload using trait
-        $data['profile_photo'] = $this->handleFileUpload(
-            $request,
-            'profile_photo',
-            null,
-            'students/photos'
-        );
+        try {
+            $data['profile_photo'] = $this->handleFileUpload(
+                $request,
+                'profile_photo',
+                null,
+                'students/photos'
+            );
 
-        $result = $this->studentService->registerStudent(StudentData::fromArray($data), auth()->user());
-        
-        // Store info in session to display to the user
-        session()->flash('generated_password', $result['generated_password']);
-        session()->flash('student_name', $result['student']->name);
-        session()->flash('student_phone', $result['student']->phone);
-        session()->flash('student_email', $result['student']->email);
+            $result = $this->studentService->registerStudent(StudentData::fromArray($data), auth()->user());
+            
+            // Store info in session to display to the user
+            session()->flash('generated_password', $result['generated_password']);
+            session()->flash('student_name', $result['student']->name);
+            session()->flash('student_phone', $result['student']->phone);
+            session()->flash('student_email', $result['student']->email);
 
-        // Smart Onboarding Routing: If this is the first student, guide them back to the dashboard
-        $studentCount = Student::where('tenant_id', $this->tenant->id)->count();
-        if ($studentCount === 1) {
-            return redirect()->route('center.dashboard')->with('success', __('center::messages.first_student_onboarding'));
+            // Smart Onboarding Routing: If this is the first student, guide them back to the dashboard
+            $studentCount = Student::where('tenant_id', $this->tenant->id)->count();
+            if ($studentCount === 1) {
+                return redirect()->route('center.dashboard')->with('success', __('center::messages.first_student_onboarding'));
+            }
+
+            return redirect()->route('center.students.index', ['tenant' => $this->tenant->domain])->with('success', __('center::messages.msg_081'));
+        } catch (\Exception $e) {
+            \Log::error('Student registration failed: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', __('center::messages.registration_failed') ?? 'حدث خطأ أثناء التسجيل: ' . $e->getMessage());
         }
-
-        return redirect()->route('center.students.index', ['tenant' => $this->tenant->domain])->with('success', __('center::messages.msg_081'));
     }
 
 
@@ -292,9 +296,7 @@ class StudentController extends Controller
         $this->authorize('delete', $student);
 
         // Delete profile photo
-        if ($student->profile_photo) {
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($student->profile_photo);
-        }
+        $this->deleteFile($student->profile_photo, 'public');
 
         $this->studentService->deleteStudent($student, auth()->user());
 
@@ -479,10 +481,14 @@ class StudentController extends Controller
             $path = $request->file('file')->store('temp/imports');
         }
         
-        \App\Jobs\ImportStudentsJob::dispatchSync($path, $this->tenant->id, auth()->id());
-
-        return redirect()->route('center.students.index', ['tenant' => $this->tenant->domain])
-            ->with('success', __('center::messages.msg_086'));
+        try {
+            \App\Jobs\ImportStudentsJob::dispatchSync($path, $this->tenant->id, auth()->id());
+            return redirect()->route('center.students.index', ['tenant' => $this->tenant->domain])
+                ->with('success', __('center::messages.msg_086'));
+        } catch (\Exception $e) {
+            \Log::error('Student import failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'حدث خطأ أثناء الاستيراد: ' . $e->getMessage());
+        }
     }
 
     /**

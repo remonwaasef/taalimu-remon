@@ -279,7 +279,7 @@ class OnboardingController extends Controller
                             'name' => $instructorData['instructor_name'],
                             'phone' => $instructorData['instructor_phone'],
                             'email' => $instructorData['instructor_email'] ?: 'instructor_' . time() . '_' . $index . '@' . $tenant->domain,
-                            'password' => 'password123',
+                            'password' => \Illuminate\Support\Str::random(12),
                             'role' => 'instructor',
                             'email_verified_at' => now(),
                             'phone_verified_at' => now(),

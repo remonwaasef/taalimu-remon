@@ -16,6 +16,25 @@ use App\Models\User;
 class PhoneVerificationController extends Controller
 {
     /**
+     * Format phone number with country code for WhatsApp delivery.
+     * Strips leading zeros and non-digits, then prepends country code.
+     */
+    private function formatPhoneForWhatsApp(string $phone, string $countryCode): string
+    {
+        // Remove any non-digit characters
+        $phone = preg_replace('/[^0-9]/', '', $phone);
+        // Remove leading zeros from local number
+        $phone = ltrim($phone, '0');
+        // Ensure country code doesn't have +
+        $countryCode = preg_replace('/[^0-9]/', '', $countryCode);
+        // Don't double-add if phone already starts with country code
+        if (!str_starts_with($phone, $countryCode)) {
+            $phone = $countryCode . $phone;
+        }
+        return $phone;
+    }
+
+    /**
      * Send an OTP code to the provided phone number via WhatsApp.
      * Uses cache-based storage since the user doesn't exist yet.
      */
@@ -23,52 +42,52 @@ class PhoneVerificationController extends Controller
     {
         $request->validate([
             'phone' => 'required|string|max:20',
+            'country_code' => 'required|string|max:5',
         ]);
 
         $phone = $request->input('phone');
+        $countryCode = $request->input('country_code');
+        $fullPhone = $this->formatPhoneForWhatsApp($phone, $countryCode);
 
         // Rate limit: max 3 OTP requests per phone per 5 minutes
-        $rateLimitKey = 'phone_otp_' . md5($phone);
+        $rateLimitKey = 'phone_otp_' . md5($fullPhone);
         if (RateLimiter::tooManyAttempts($rateLimitKey, 3)) {
             $seconds = RateLimiter::availableIn($rateLimitKey);
             return response()->json([
                 'success' => false,
-                'message' => app()->getLocale() == 'ar'
-                    ? "تم إرسال الكود بالفعل. يرجى الانتظار {$seconds} ثانية قبل المحاولة مرة أخرى."
-                    : "OTP already sent. Please wait {$seconds} seconds before trying again.",
+                'message' => __('messages.otp_wait_seconds', ['seconds' => $seconds]),
             ], 429);
         }
 
-        // Check if phone is already registered
-        if (User::where('phone', $phone)->exists()) {
+        // Check if phone is already registered (check both local and full formats)
+        if (User::where('phone', $phone)->orWhere('phone', $fullPhone)->exists()) {
             return response()->json([
                 'success' => false,
-                'message' => app()->getLocale() == 'ar'
-                    ? 'رقم الهاتف هذا مسجل بالفعل. يرجى تسجيل الدخول بدلاً من ذلك.'
-                    : 'This phone number is already registered. Please login instead.',
+                'message' => __('messages.phone_already_registered'),
             ], 422);
         }
 
         // Generate a 6-digit OTP
         $otpCode = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
-        // Store in cache for 10 minutes
+        // Store in cache for 10 minutes (keyed by local phone for matching with form)
         $cacheKey = 'registration_otp_' . md5($phone);
         Cache::put($cacheKey, [
             'code' => $otpCode,
             'phone' => $phone,
+            'country_code' => $countryCode,
+            'full_phone' => $fullPhone,
             'attempts' => 0,
             'created_at' => now()->toDateTimeString(),
         ], now()->addMinutes(10));
 
-        // Send via WhatsApp
+        // Send via WhatsApp using full international number
         try {
             $whatsapp = app(\App\Services\WhatsAppService::class);
-            $message = app()->getLocale() == 'ar'
-                ? "مرحباً بك في منصة تعليمي! 🎓\nكود التحقق الخاص بك هو: {$otpCode}\nيرجى عدم مشاركة هذا الكود مع أي شخص."
-                : "Welcome to Taalimu! 🎓\nYour verification code is: {$otpCode}\nPlease do not share this code with anyone.";
+            $message = __('messages.otp_whatsapp_message', ['otp' => $otpCode]);
 
-            $whatsapp->sendSystemMessage($phone, $message);
+            // Send to the full international phone number
+            $whatsapp->sendSystemMessage($fullPhone, $message);
         } catch (\Exception $e) {
             Log::warning('Phone OTP WhatsApp send failed: ' . $e->getMessage());
             // Don't fail the request - the OTP is still in cache for testing
@@ -77,13 +96,14 @@ class PhoneVerificationController extends Controller
         // Increment rate limiter
         RateLimiter::hit($rateLimitKey, 300); // 5 minutes
 
-        Log::info('Registration OTP sent', ['phone' => substr($phone, 0, -4) . '****']);
+        Log::info('Registration OTP sent', [
+            'phone' => substr($phone, 0, -4) . '****',
+            'country_code' => $countryCode,
+        ]);
 
         return response()->json([
             'success' => true,
-            'message' => app()->getLocale() == 'ar'
-                ? 'تم إرسال كود التحقق عبر واتساب. يرجى إدخال الكود المكون من 6 أرقام.'
-                : 'Verification code sent via WhatsApp. Please enter the 6-digit code.',
+            'message' => __('messages.otp_sent_success'),
             'expires_in' => 600, // 10 minutes in seconds
         ]);
     }
@@ -108,9 +128,7 @@ class PhoneVerificationController extends Controller
         if (!$otpData) {
             return response()->json([
                 'success' => false,
-                'message' => app()->getLocale() == 'ar'
-                    ? 'انتهت صلاحية كود التحقق. يرجى طلب كود جديد.'
-                    : 'Verification code expired. Please request a new code.',
+                'message' => __('messages.otp_expired'),
             ], 422);
         }
 
@@ -119,9 +137,7 @@ class PhoneVerificationController extends Controller
             Cache::forget($cacheKey);
             return response()->json([
                 'success' => false,
-                'message' => app()->getLocale() == 'ar'
-                    ? 'تم تجاوز الحد الأقصى لمحاولات التحقق. يرجى طلب كود جديد.'
-                    : 'Maximum verification attempts exceeded. Please request a new code.',
+                'message' => __('messages.otp_max_attempts'),
             ], 429);
         }
 
@@ -132,9 +148,7 @@ class PhoneVerificationController extends Controller
         if ($otpData['code'] !== $otp) {
             return response()->json([
                 'success' => false,
-                'message' => app()->getLocale() == 'ar'
-                    ? 'كود التحقق غير صحيح. يرجى المحاولة مرة أخرى.'
-                    : 'Incorrect verification code. Please try again.',
+                'message' => __('messages.otp_incorrect'),
                 'remaining_attempts' => 5 - $otpData['attempts'],
             ], 422);
         }
@@ -144,6 +158,7 @@ class PhoneVerificationController extends Controller
         session([
             'phone_verified' => true,
             'phone_verified_number' => $phone,
+            'phone_verified_country_code' => $otpData['country_code'] ?? '20',
             'phone_verification_token' => $verificationToken,
             'phone_verified_at' => now()->toDateTimeString(),
         ]);
@@ -156,9 +171,7 @@ class PhoneVerificationController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => app()->getLocale() == 'ar'
-                ? 'تم التحقق من رقم الهاتف بنجاح! ✅'
-                : 'Phone number verified successfully! ✅',
+            'message' => __('messages.otp_verified_success'),
             'token' => $verificationToken,
         ]);
     }

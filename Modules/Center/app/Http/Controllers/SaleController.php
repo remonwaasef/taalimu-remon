@@ -106,19 +106,24 @@ class SaleController extends Controller
         $amountToDistribute = $request->amount;
         $notes = $request->notes ?? 'تحصيل سريع للمستحقات';
 
-        foreach ($student->sales as $sale) {
-            if ($amountToDistribute <= 0) break;
+        try {
+            foreach ($student->sales as $sale) {
+                if ($amountToDistribute <= 0) break;
 
-            $remainingOnSale = $sale->total_amount - $sale->paid_amount;
-            $payAmount = min($remainingOnSale, $amountToDistribute);
+                $remainingOnSale = $sale->total_amount - $sale->paid_amount;
+                $payAmount = min($remainingOnSale, $amountToDistribute);
 
-            // Add payment via FinanceService (which also handles notifications)
-            $this->financeService->addPayment($sale, $payAmount, 'cash', $notes);
+                // Add payment via FinanceService (which also handles notifications)
+                $this->financeService->addPayment($sale, $payAmount, 'cash', $notes);
 
-            $amountToDistribute -= $payAmount;
+                $amountToDistribute -= $payAmount;
+            }
+     
+            return redirect()->back()->with('success', __('center::messages.msg_074'));
+        } catch (\Exception $e) {
+            \Log::error('markPaid failed: ' . $e->getMessage());
+            return back()->with('error', __('center::messages.error_unexpected') ?? 'حدث خطأ غير متوقع.');
         }
- 
-        return redirect()->back()->with('success', __('center::messages.msg_074'));
     }
 
     public function lookupStudents(Request $request)
@@ -188,7 +193,8 @@ class SaleController extends Controller
             $sale = $this->financeService->createSale($request->all());
             return response()->json(['success' => true, 'sale_id' => $sale->id]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            \Log::error('Sale creation failed: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => __('center::messages.error_unexpected') ?? 'حدث خطأ غير متوقع أثناء المعالجة'], 500);
         }
     }
 
@@ -216,13 +222,21 @@ class SaleController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        $this->financeService->addPayment($sale, $request->amount, $request->payment_method, $request->notes);
+        try {
+            $this->financeService->addPayment($sale, $request->amount, $request->payment_method, $request->notes);
 
-        if ($request->expectsJson()) {
-            return response()->json(['success' => true, 'message' => 'Payment added successfully']);
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'message' => 'Payment added successfully']);
+            }
+
+            return back()->with('success', __('center::messages.msg_074'));
+        } catch (\Exception $e) {
+            \Log::error('addPayment failed: ' . $e->getMessage());
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => __('center::messages.error_unexpected') ?? 'حدث خطأ غير متوقع'], 500);
+            }
+            return back()->with('error', __('center::messages.error_unexpected') ?? 'حدث خطأ غير متوقع.');
         }
-
-        return back()->with('success', __('center::messages.msg_074'));
     }
 
     public function getStudentSummary($id)
@@ -408,9 +422,10 @@ class SaleController extends Controller
 
         try {
             $refundService->processRefund($sale, $request->all());
-            return redirect()->back()->with('success', 'تمت عملية الاسترداد بنجاح وتحديث السجلات.');
+            return redirect()->back()->with('success', __('center::messages.refund_success') ?? 'تمت عملية الاسترداد بنجاح وتحديث السجلات.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'خطأ في عملية الاسترداد: ' . $e->getMessage());
+            \Log::error('Refund failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', __('center::messages.error_unexpected') ?? 'خطأ في عملية الاسترداد. يرجى المحاولة لاحقاً.');
         }
     }
 
@@ -442,14 +457,20 @@ class SaleController extends Controller
             return redirect()->route('center.sales.show', $sale->id)->with('success', 'الفاتورة مدفوعة بالفعل.');
         }
 
-        // Amount to pay (Remaining)
-        $amountToPay = $sale->total_amount - $sale->paid_amount;
+        try {
+            // Amount to pay (Remaining)
+            $amountToPay = $sale->total_amount - $sale->paid_amount;
 
-        // Add payment via FinanceService
-        $this->financeService->addPayment($sale, $amountToPay, 'online', 'دفعة إلكترونية مسددة عبر بوابة الدفع');
+            // Add payment via FinanceService
+            $this->financeService->addPayment($sale, $amountToPay, 'online', 'دفعة إلكترونية مسددة عبر بوابة الدفع');
 
-        return redirect()->route('center.sales.show', $sale->id)
-            ->with('success', 'تم الدفع الإلكتروني بنجاح!');
+            return redirect()->route('center.sales.show', $sale->id)
+                ->with('success', __('center::messages.online_payment_success') ?? 'تم الدفع الإلكتروني بنجاح!');
+        } catch (\Exception $e) {
+            \Log::error('checkoutSuccess failed: ' . $e->getMessage());
+            return redirect()->route('center.sales.show', $sale->id)
+                ->with('error', __('center::messages.error_unexpected') ?? 'حدث خطأ أثناء معالجة الدفع الإلكتروني.');
+        }
     }
 }
 

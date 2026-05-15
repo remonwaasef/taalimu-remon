@@ -21,57 +21,13 @@ class RegistrationController extends Controller
             ->get();
 
         $suggestedCurrency = session('suggested_currency', 'EGP');
+        $symbols = ['EGP' => 'EGP', 'USD' => '$', 'EUR' => '€'];
+        if (app()->getLocale() == 'ar') {
+            $symbols['EGP'] = 'ج.م';
+        }
+        $currency = $symbols[$suggestedCurrency] ?? $suggestedCurrency;
         
-        $packagesData = $packages->map(function($p) use ($suggestedCurrency) {
-            $symbols = ['EGP' => 'EGP', 'USD' => '$', 'EUR' => '€'];
-            if (app()->getLocale() == 'ar') {
-                $symbols['EGP'] = 'ج.م';
-            }
-            $currency = $symbols[$suggestedCurrency] ?? $suggestedCurrency;
-            $discountPercent = 0;
-            $savingsAmount = 0;
-            if ($p->old_price > 0 && $p->old_price > $p->price) {
-                $discountPercent = round((($p->old_price - $p->price) / $p->old_price) * 100);
-                $savingsAmount = $p->old_price - $p->price;
-            }
-
-            return [
-                'slug' => $p->slug,
-                'name' => match(app()->getLocale()) {
-                    'ar' => $p->name,
-                    'fr' => $p->name_fr ?: ($p->name_en ?: $p->name),
-                    default => $p->name_en ?: $p->name,
-                },
-                'price' => number_format($p->price, 0) . ' ' . $currency,
-                'price_value' => number_format($p->price, 0),
-                'price_raw' => (float)$p->price,
-                'old_price' => $p->old_price > 0 ? number_format($p->old_price, 0) . ' ' . $currency : null,
-                'old_price_value' => $p->old_price > 0 ? number_format($p->old_price, 0) : null,
-                'old_price_raw' => (float)$p->old_price,
-                'currency' => $currency,
-                'discount_percent' => $discountPercent > 0 ? $discountPercent : null,
-                'savings_amount' => $savingsAmount > 0 ? number_format($savingsAmount, 0) : null,
-                'discount_label' => $p->discount_label,
-                'term_price' => $p->term_price ? number_format($p->term_price, 0) . ' ' . $currency : number_format($p->price * 4, 0) . ' ' . $currency,
-                'term_price_value' => $p->term_price ? number_format($p->term_price, 0) : number_format($p->price * 4, 0),
-                'term_price_raw' => $p->term_price ?: ($p->price * 4),
-                'yearly_price' => $p->yearly_price ? number_format($p->yearly_price, 0) . ' ' . $currency : number_format($p->price * 10, 0) . ' ' . $currency,
-                'yearly_price_value' => $p->yearly_price ? number_format($p->yearly_price, 0) : number_format($p->price * 10, 0),
-                'yearly_price_raw' => $p->yearly_price ?: ($p->price * 10),
-                'regional_prices' => $p->regional_prices ?? [],
-                'trial_days' => (int)$p->trial_days,
-                'features' => ($p->display_features && is_array($p->display_features) && count($p->display_features) > 0) 
-                    ? $p->display_features 
-                    : $p->features->map(function($f) {
-                        $name = app()->getLocale() == 'ar' ? $f->name : ($f->name_en ?: $f->name);
-                        $value = $f->pivot->value;
-                        if ($value && !in_array(strtolower($value), ['true', '1', 'yes'])) {
-                            return (app()->getLocale() == 'ar' ? ($name . ': ' . $value) : ($name . ': ' . $value));
-                        }
-                        return $name;
-                    })->toArray(),
-            ];
-        })->values();
+        $packagesData = \App\Models\Package::getDisplayData($packages, $currency);
 
         $accountType = request('account_type');
         if (!in_array($accountType, ['center', 'instructor'])) {
@@ -79,57 +35,6 @@ class RegistrationController extends Controller
         }
 
         return view('auth.register', compact('packages', 'packagesData', 'accountType'));
-    }
-
-    /**
-     * Generate a unique subdomain from the center name
-     */
-    private function generateSubdomain($centerName)
-    {
-        // Arabic to English transliteration
-        $transliteration = [
-            'ا' => 'a', 'أ' => 'a', 'إ' => 'a', 'آ' => 'a',
-            'ب' => 'b', 'ت' => 't', 'ث' => 'th',
-            'ج' => 'j', 'ح' => 'h', 'خ' => 'kh',
-            'د' => 'd', 'ذ' => 'dh', 'ر' => 'r',
-            'ز' => 'z', 'س' => 's', 'ش' => 'sh',
-            'ص' => 's', 'ض' => 'd', 'ط' => 't',
-            'ظ' => 'z', 'ع' => 'a', 'غ' => 'gh',
-            'ف' => 'f', 'ق' => 'q', 'ك' => 'k',
-            'ل' => 'l', 'م' => 'm', 'ن' => 'n',
-            'ه' => 'h', 'و' => 'w', 'ي' => 'y',
-            ' ' => '-', '_' => '-'
-        ];
-        
-        // Convert Arabic to English
-        $slug = strtr($centerName, $transliteration);
-        
-        // Clean up: only letters, numbers, and hyphens
-        $slug = preg_replace('/[^a-z0-9-]/', '', strtolower($slug));
-        $slug = preg_replace('/-+/', '-', $slug);
-        $slug = trim($slug, '-');
-        
-        // Forbidden subdomains
-        $forbidden = ['admin', 'www', 'api', 'app', 'dev', 'test', 'mail', 'webmail', 'portal', 'dashboard', 'edu'];
-        if (in_array($slug, $forbidden)) {
-            $slug = $slug . '-' . time();
-        }
-
-        // Fallback if empty
-        if (empty($slug)) {
-            $slug = 'center-' . time();
-        }
-        
-        // Check for duplicates
-        $originalSlug = $slug;
-        $counter = 1;
-        
-        while (Tenant::where('domain', $slug)->exists()) {
-            $slug = $originalSlug . '-' . $counter;
-            $counter++;
-        }
-        
-        return $slug;
     }
 
     public function register(Request $request, TelegramService $telegram, \App\Services\GeoIPService $geoIP)
@@ -160,9 +65,7 @@ class RegistrationController extends Controller
         // PHONE VERIFICATION GATE: Ensure phone was verified via OTP before account creation
         $phoneVerified = session('phone_verified') && session('phone_verified_number') === $request->phone;
         if (!$phoneVerified) {
-            return back()->withErrors(['phone' => app()->getLocale() == 'ar'
-                ? 'يرجى التحقق من رقم الهاتف أولاً عبر كود التحقق.'
-                : 'Please verify your phone number first via OTP.'])->withInput();
+            return back()->withErrors(['phone' => __('messages.verify_phone_first')])->withInput();
         }
 
         $currency = $request->input('currency', 'EGP');
@@ -171,10 +74,7 @@ class RegistrationController extends Controller
         if ($currency === 'EGP') {
             $detectedCountry = $geoIP->getCountryCode($request->ip());
             if ($detectedCountry && $detectedCountry !== 'EG') {
-                $errorMsg = app()->getLocale() == 'ar' 
-                    ? 'عذراً، الدفع بالجنيه المصري متاح فقط للمقيمين داخل مصر. يرجى اختيار عملة أخرى (USD أو EUR).'
-                    : 'EGP pricing is only available for users in Egypt. Please select another currency (USD or EUR).';
-                return back()->withErrors(['currency' => $errorMsg])->withInput();
+                return back()->withErrors(['currency' => __('messages.egp_only_egypt')])->withInput();
             }
         }
 
@@ -190,9 +90,7 @@ class RegistrationController extends Controller
         $submissionKey = 'registration_lock_' . md5($request->email);
         if (session()->has($submissionKey)) {
             \Log::warning('Duplicate registration submission blocked', ['email' => $request->email]);
-            return back()->withErrors(['error' => app()->getLocale() == 'ar' 
-                ? 'جاري معالجة التسجيل. يرجى الانتظار.'
-                : 'Registration is being processed. Please wait.'])->withInput();
+            return back()->withErrors(['error' => __('messages.registration_processing')])->withInput();
         }
 
         // Set submission lock BEFORE the transaction
@@ -232,7 +130,7 @@ class RegistrationController extends Controller
             }
 
             // Auto-generate subdomain from center name
-            $subdomain = $this->generateSubdomain($request->center_name);
+            $subdomain = \App\Services\TenantRegistrationService::generateSubdomain($request->center_name);
 
             // 1. Create Tenant
             $tenant = Tenant::create([
@@ -314,8 +212,9 @@ class RegistrationController extends Controller
 
             // === POST-COMMIT SIDE EFFECTS (non-critical, won't rollback DB) ===
 
-            // Release submission lock
+            // Release submission lock and clear phone verification data
             session()->forget($submissionKey);
+            session()->forget(['phone_verified', 'phone_verified_number', 'phone_verification_token', 'phone_verified_at']);
 
             // Send Telegram Notification (non-critical)
             try {
@@ -413,9 +312,7 @@ class RegistrationController extends Controller
             ]);
             
             // Security fix: Generic error message instead of raw exception details
-            $errorMessage = app()->getLocale() == 'ar' 
-                ? 'حدث خطأ غير متوقع أثناء عملية التسجيل. يرجى المحاولة مرة أخرى لاحقاً أو التواصل مع الدعم الفني.'
-                : 'An unexpected error occurred during registration. Please try again later or contact support.';
+            $errorMessage = __('messages.registration_failed');
 
             return back()->withErrors(['error' => $errorMessage])->withInput();
         }
