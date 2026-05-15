@@ -45,15 +45,13 @@ class SetLocale
         // Set application locale
         App::setLocale($locale);
 
-        // Determine Suggested Currency based on Locale + GeoIP
-        // Recalculate if not set yet, or if locale changed since last calculation
-        $previousLocale = Session::get('suggested_currency_locale');
-        if (!Session::has('suggested_currency') || $previousLocale !== $locale) {
+        // Determine Suggested Currency based on GeoIP
+        // Only calculate if not set yet. We no longer change currency when language changes!
+        if (!Session::has('suggested_currency')) {
             $geoIP = app(\App\Services\GeoIPService::class);
             $countryCode = Session::get('user_country_code') ?: $geoIP->getCountryCode($request->ip());
-            $currency = $geoIP->getCurrencyFromLocale($locale, $countryCode);
+            $currency = $geoIP->getCurrencyFromCountryCode($countryCode);
             Session::put('suggested_currency', $currency);
-            Session::put('suggested_currency_locale', $locale);
             Session::put('user_country_code', $countryCode);
         }
 
