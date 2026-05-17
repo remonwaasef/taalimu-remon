@@ -85,16 +85,32 @@ class AppServiceProvider extends ServiceProvider
     protected function configureRateLimiting(): void
     {
         \Illuminate\Support\Facades\RateLimiter::for('login', function (\Illuminate\Http\Request $request) {
-            $limit = app()->environment('local') ? 100 : 5;
+            $host = $request->getHost();
+            $isLocal = app()->environment('local') || 
+                       in_array($host, ['localhost', '127.0.0.1', '::1']) || 
+                       str_contains($host, '.localhost') || 
+                       str_contains($host, '192.168.');
+            $limit = $isLocal ? 100 : 5;
             return \Illuminate\Cache\RateLimiting\Limit::perMinute($limit)->by($request->email.$request->ip());
         });
 
         \Illuminate\Support\Facades\RateLimiter::for('password-reset', function (\Illuminate\Http\Request $request) {
-            return \Illuminate\Cache\RateLimiting\Limit::perMinute(3)->by($request->email.$request->ip());
+            $host = $request->getHost();
+            $isLocal = app()->environment('local') || 
+                       in_array($host, ['localhost', '127.0.0.1', '::1']) || 
+                       str_contains($host, '.localhost') || 
+                       str_contains($host, '192.168.');
+            $limit = $isLocal ? 100 : 3;
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute($limit)->by($request->email.$request->ip());
         });
 
         \Illuminate\Support\Facades\RateLimiter::for('registration', function (\Illuminate\Http\Request $request) {
-            $limit = app()->environment('local') ? 50 : 5;
+            $host = $request->getHost();
+            $isLocal = app()->environment('local') || 
+                       in_array($host, ['localhost', '127.0.0.1', '::1']) || 
+                       str_contains($host, '.localhost') || 
+                       str_contains($host, '192.168.');
+            $limit = $isLocal ? 100 : 5;
             return \Illuminate\Cache\RateLimiting\Limit::perMinute($limit)->by($request->ip());
         });
 

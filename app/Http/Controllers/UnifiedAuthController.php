@@ -24,7 +24,15 @@ class UnifiedAuthController extends Controller
         // Rate Limiting Key: IP + Email
         $throttleKey = 'unified_login.' . \Illuminate\Support\Str::lower($request->input('email')) . '|' . $request->ip();
 
-        if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($throttleKey, 5)) {
+        // Increase rate limit for local development/testing to prevent locking out developers
+        $host = $request->getHost();
+        $isLocal = app()->environment('local') || 
+                   in_array($host, ['localhost', '127.0.0.1', '::1']) || 
+                   str_contains($host, '.localhost') || 
+                   str_contains($host, '192.168.');
+        $maxAttempts = $isLocal ? 100 : 5;
+
+        if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($throttleKey, $maxAttempts)) {
             $seconds = \Illuminate\Support\Facades\RateLimiter::availableIn($throttleKey);
             return back()->withErrors([
                 'email' => __('auth.throttle', ['seconds' => $seconds]),
