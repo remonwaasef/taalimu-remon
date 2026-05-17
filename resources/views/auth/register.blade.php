@@ -649,6 +649,7 @@ document.addEventListener('alpine:init', () => {
                                             </div>
                                         </div>
                                         {{-- Phone Input --}}
+                                        <div class="relative flex-1 group">
                                             <input type="text" name="phone" x-model="phone" 
                                                 :readonly="phoneVerified"
                                                 class="w-full h-11 px-4 bg-slate-50/50 border-2 rounded-xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
