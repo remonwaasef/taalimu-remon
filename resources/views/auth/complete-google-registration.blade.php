@@ -592,7 +592,7 @@ window.addEventListener('pageshow', (event) => {
                             </div>
                             <p class="text-[10px] font-bold font-arabic text-amber-600 flex items-center gap-1 px-1">
                                 <i class="bi bi-whatsapp text-emerald-500"></i>
-                                {{ app()->isLocale('ar') ? 'تم إرسال كود التحقق عبر واتساب' : 'Verification code sent via WhatsApp' }}
+                                {{ app()->isLocale('ar') ? 'تم إرسال كود التحقق عبر واتساب والبريد الإلكتروني' : 'Verification code sent via WhatsApp and Email' }}
                             </p>
                         </div>
 
