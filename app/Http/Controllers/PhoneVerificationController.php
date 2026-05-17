@@ -51,7 +51,16 @@ class PhoneVerificationController extends Controller
 
         // Rate limit: max 3 OTP requests per phone per 5 minutes
         $rateLimitKey = 'phone_otp_' . md5($fullPhone);
-        if (RateLimiter::tooManyAttempts($rateLimitKey, 3)) {
+        
+        // Increase rate limit for local development/testing to prevent locking out developers
+        $host = $request->getHost();
+        $isLocal = app()->environment('local') || 
+                   in_array($host, ['localhost', '127.0.0.1', '::1']) || 
+                   str_contains($host, '.localhost') || 
+                   str_contains($host, '192.168.');
+        $maxAttempts = $isLocal ? 100 : 3;
+
+        if (RateLimiter::tooManyAttempts($rateLimitKey, $maxAttempts)) {
             $seconds = RateLimiter::availableIn($rateLimitKey);
             return response()->json([
                 'success' => false,
