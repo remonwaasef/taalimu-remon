@@ -110,6 +110,8 @@ class OnboardingController extends Controller
                 'instructor_phone' => $inst->phone,
                 'instructor_specialization' => $inst->specialization ?? '',
                 'instructor_email' => $inst->email ?? '',
+                'commission_type' => $inst->commission_type ?? 'percentage',
+                'commission_rate' => $inst->commission_rate ?? 0,
             ];
         })->toArray();
 
@@ -253,6 +255,8 @@ class OnboardingController extends Controller
                     'instructors.*.instructor_phone' => ['required', 'string', 'max:20', 'regex:/^[0-9\+\-\s\(\)]+$/'],
                     'instructors.*.instructor_specialization' => 'nullable|string|max:255',
                     'instructors.*.instructor_email' => 'nullable|email|max:255',
+                    'instructors.*.commission_type' => 'required|in:percentage,fixed',
+                    'instructors.*.commission_rate' => 'required|numeric|min:0',
                 ]);
                 
                 $existingInstructors = \App\Models\Instructor::where('tenant_id', $tenant->id)->get();
@@ -266,6 +270,8 @@ class OnboardingController extends Controller
                             'phone' => $instructorData['instructor_phone'],
                             'email' => $instructorData['instructor_email'] ?: $existingInstructor->email,
                             'specialization' => $instructorData['instructor_specialization'],
+                            'commission_type' => $instructorData['commission_type'],
+                            'commission_rate' => $instructorData['commission_rate'],
                         ]);
                         if ($existingInstructor->user) {
                             $existingInstructor->user->update([
@@ -292,6 +298,8 @@ class OnboardingController extends Controller
                             'phone' => $instructorData['instructor_phone'],
                             'email' => $user->email,
                             'specialization' => $instructorData['instructor_specialization'],
+                            'commission_type' => $instructorData['commission_type'],
+                            'commission_rate' => $instructorData['commission_rate'],
                             'status' => 'active',
                         ]);
                     }

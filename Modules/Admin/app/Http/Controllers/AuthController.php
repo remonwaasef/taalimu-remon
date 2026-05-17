@@ -49,7 +49,13 @@ class AuthController extends Controller
                 ]);
             }
 
-            return redirect()->intended(route('admin.dashboard'));
+            $intended = redirect()->getIntendedUrl();
+            if ($intended && str_contains($intended, '/admin')) {
+                return redirect()->intended(route('admin.dashboard'));
+            }
+            
+            session()->forget('url.intended');
+            return redirect()->route('admin.dashboard');
         }
 
         \Illuminate\Support\Facades\RateLimiter::hit($throttleKey);

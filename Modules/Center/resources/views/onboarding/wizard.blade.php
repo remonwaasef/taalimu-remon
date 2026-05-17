@@ -197,12 +197,25 @@
                                                     <input type="tel" x-model="instructor.instructor_phone" @input="instructor.instructor_phone = $event.target.value.replace(/[^0-9\+\-\(\)\s]/g, '')" dir="ltr" placeholder="01xxxxxxxxx" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-5 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
                                                 </div>
                                             </div>
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                                                <div>
+                                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">نوع العمولة</label>
+                                                    <select x-model="instructor.commission_type" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-5 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5 appearance-none cursor-pointer" required>
+                                                        <option value="percentage">نسبة مئوية (%)</option>
+                                                        <option value="fixed">مبلغ ثابت</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">قيمة العمولة</label>
+                                                    <input type="number" step="0.01" min="0" x-model="instructor.commission_rate" placeholder="0.00" class="w-full bg-white border-2 border-white rounded-2xl focus:ring-emerald-500 focus:border-emerald-500 h-12 px-5 text-sm font-bold transition-all focus:shadow-lg focus:shadow-emerald-500/5" required>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </template>
                                 
                                 <div class="flex justify-center">
-                                    <button type="button" @click="formData.step_2.instructors.push({ instructor_name: '', instructor_phone: '', instructor_specialization: '', instructor_email: '' })" class="text-xs font-black uppercase text-brand-primary hover:underline transition-all flex items-center gap-2">
+                                    <button type="button" @click="formData.step_2.instructors.push({ instructor_name: '', instructor_phone: '', instructor_specialization: '', instructor_email: '', commission_type: 'percentage', commission_rate: '0' })" class="text-xs font-black uppercase text-brand-primary hover:underline transition-all flex items-center gap-2">
                                         <i class="fa-solid fa-plus"></i> إضافة مدرس آخر
                                     </button>
                                 </div>
@@ -512,7 +525,7 @@
                         currency: '{{ $tenant->settings['currency'] ?? session('suggested_currency', 'EGP') }}',
                         education_system: '{{ $tenant->settings['education_system'] ?? 'egyptian_national' }}'
                     },
-                    step_2: { instructors: [{ instructor_name: '', instructor_phone: '', instructor_specialization: '', instructor_email: '' }] },
+                    step_2: { instructors: [{ instructor_name: '', instructor_phone: '', instructor_specialization: '', instructor_email: '', commission_type: 'percentage', commission_rate: '0' }] },
                     step_3: { courses: [{ instructor_index: '0', course_name: '', price: '', sessions_count: '1', schedules: [{day: '0', time: '16:00', time_end: '18:00'}] }] },
                     step_4: { students: [{ student_name: '', student_email: '', student_phone: '', parent_name: '', parent_phone: '', parent_email: '', grade_id: '', enroll_course_indices: [] }] }
                 },
