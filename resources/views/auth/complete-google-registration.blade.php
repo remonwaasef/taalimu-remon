@@ -524,9 +524,8 @@ window.addEventListener('pageshow', (event) => {
                             {{-- Country Code Selector --}}
                             <div class="relative" dir="ltr">
                                 <select x-model="countryCode" name="country_code"
-                                    :disabled="phoneVerified"
-                                    class="h-11 pl-2 pr-7 bg-slate-50/50 border-2 border-slate-100 rounded-xl text-sm font-black text-slate-700 focus:outline-none focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all appearance-none cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-                                    :class="phoneVerified ? 'border-emerald-300 bg-emerald-50/30' : 'border-slate-100'">
+                                    class="h-11 pl-2 pr-7 bg-slate-50/50 border-2 border-slate-100 rounded-xl text-sm font-black text-slate-700 focus:outline-none focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all appearance-none cursor-pointer"
+                                    :class="phoneVerified ? 'border-emerald-300 bg-emerald-50/30 pointer-events-none opacity-60' : 'border-slate-100'">
                                     @include('partials.country-codes')
                                 </select>
                                 <div class="absolute inset-y-0 right-1 flex items-center pointer-events-none">
@@ -536,9 +535,9 @@ window.addEventListener('pageshow', (event) => {
                             {{-- Phone Input --}}
                             <div class="relative flex-1 group">
                                 <input type="text" name="phone" x-model="phoneNumber"
-                                    :disabled="phoneVerified"
-                                    class="w-full h-11 px-4 bg-slate-50/50 border-2 rounded-xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner disabled:opacity-60 disabled:cursor-not-allowed"
-                                    :class="phoneVerified ? 'border-emerald-300 bg-emerald-50/30' : 'border-slate-100'"
+                                    :readonly="phoneVerified"
+                                    class="w-full h-11 px-4 bg-slate-50/50 border-2 rounded-xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
+                                    :class="phoneVerified ? 'border-emerald-300 bg-emerald-50/30 pointer-events-none' : 'border-slate-100'"
                                     placeholder="10xxxxxxx" required dir="ltr">
                                 {{-- Verified Badge --}}
                                 <div x-show="phoneVerified" class="absolute inset-y-0 end-0 pe-3 flex items-center">
