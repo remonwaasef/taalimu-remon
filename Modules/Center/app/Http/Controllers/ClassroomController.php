@@ -44,12 +44,7 @@ class ClassroomController extends Controller
             'capacity' => 'nullable|integer|min:1',
             'type' => 'nullable|string|in:hall,lab,virtual',
             'color' => 'nullable|string|max:7',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('classrooms', 'public');
-        }
 
         $classroom = Classroom::create($validated);
 
@@ -104,15 +99,7 @@ class ClassroomController extends Controller
             'capacity' => 'nullable|integer|min:1',
             'type' => 'nullable|string|in:hall,lab,virtual',
             'color' => 'nullable|string|max:7',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
-        if ($request->hasFile('image')) {
-            if ($classroom->image) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($classroom->image);
-            }
-            $validated['image'] = $request->file('image')->store('classrooms', 'public');
-        }
 
         $classroom->update($validated);
 
