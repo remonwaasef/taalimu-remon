@@ -82,7 +82,7 @@
                         <div class="col-12 text-end">
                             <hr class="my-4 opacity-10">
                             <a href="{{ route('center.expenses.index') }}" class="btn btn-light rounded-pill px-4 me-2 border">{{ __('center::expenses.cancel') }}</a>
-                            <button type="submit" class="btn btn-primary rounded-pill px-5">{{ __('center::expenses.save_expense') }}</button>
+                            <button type="submit" id="submit-btn" class="btn btn-primary rounded-pill px-5">{{ __('center::expenses.save_expense') }}</button>
                         </div>
                     </div>
                 </form>

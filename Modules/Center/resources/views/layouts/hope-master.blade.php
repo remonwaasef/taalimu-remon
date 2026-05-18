@@ -158,5 +158,29 @@
     
     <!-- Beta Bug Report Widget -->
     @include('center::partials.bug-report-widget')
+    <!-- Global Double Submit Prevention -->
+    <script>
+        document.addEventListener('submit', function(e) {
+            if (e.target && e.target.tagName === 'FORM') {
+                const submitBtn = e.target.querySelector('button[type="submit"]');
+                if (submitBtn && !submitBtn.disabled) {
+                    // Prevent default only if the form is invalid (browser usually handles this, but just in case)
+                    if (!e.target.checkValidity()) {
+                        return;
+                    }
+                    
+                    setTimeout(() => {
+                        submitBtn.disabled = true;
+                        const isDelete = e.target.querySelector('input[name="_method"][value="DELETE"]') != null;
+                        const loadingText = isDelete ? 'جاري الحذف...' : 'جاري التنفيذ...';
+                        
+                        // Keep original width to avoid layout shift if possible
+                        submitBtn.style.minWidth = submitBtn.offsetWidth + 'px';
+                        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mx-1"></i> ' + loadingText;
+                    }, 0);
+                }
+            }
+        });
+    </script>
 </body>
 </html>
