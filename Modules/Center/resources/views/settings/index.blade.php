@@ -1705,5 +1705,18 @@ function insertVariable(badge, textareaId) {
     textarea.focus();
     textarea.selectionStart = textarea.selectionEnd = start + variable.length;
 }
+
+function confirmTemplate() {
+    const form = document.getElementById('applyTemplateForm');
+    const select = form.querySelector('select[name="template_key"]');
+    if (!select || !select.value) {
+        alert("{{ __('center::settings.academic.select_template_first') }}");
+        return;
+    }
+    
+    if (confirm("{{ __('center::settings.academic.confirm_template') }}")) {
+        form.submit();
+    }
+}
 </script>
 @endpush
