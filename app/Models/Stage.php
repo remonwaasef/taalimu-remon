@@ -18,6 +18,18 @@ class Stage extends Model
         'order',
     ];
 
+    /**
+     * Get the translated stage name if it is a translation key.
+     */
+    public function getNameAttribute($value)
+    {
+        if (str_contains((string)$value, '::')) {
+            $translated = __($value);
+            return $translated !== $value ? $translated : $value;
+        }
+        return $value;
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
