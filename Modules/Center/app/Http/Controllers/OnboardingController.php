@@ -280,18 +280,19 @@ class OnboardingController extends Controller
                             ]);
                         }
                     } else {
+                        $plainPassword = \Illuminate\Support\Str::random(12);
                         $user = \App\Models\User::create([
                             'tenant_id' => $tenant->id,
                             'name' => $instructorData['instructor_name'],
                             'phone' => $instructorData['instructor_phone'],
                             'email' => $instructorData['instructor_email'] ?: 'instructor_' . time() . '_' . $index . '@' . $tenant->domain,
-                            'password' => \Illuminate\Support\Str::random(12),
+                            'password' => $plainPassword,
                             'role' => 'instructor',
                             'email_verified_at' => now(),
                             'phone_verified_at' => now(),
                         ]);
 
-                        \App\Models\Instructor::create([
+                        $instructor = \App\Models\Instructor::create([
                             'tenant_id' => $tenant->id,
                             'user_id' => $user->id,
                             'name' => $instructorData['instructor_name'],
@@ -302,6 +303,21 @@ class OnboardingController extends Controller
                             'commission_rate' => $instructorData['commission_rate'],
                             'status' => 'active',
                         ]);
+
+                        if ($instructorData['instructor_email']) {
+                            try {
+                                \Illuminate\Support\Facades\Mail::to($user->email)->queue(
+                                    new \App\Mail\WelcomeTeacherMail(
+                                        $instructor,
+                                        $plainPassword,
+                                        $tenant->name ?? 'المنصة',
+                                        url('/login')
+                                    )
+                                );
+                            } catch (\Exception $e) {
+                                \Illuminate\Support\Facades\Log::error("Failed to send welcome email to instructor: " . $e->getMessage());
+                            }
+                        }
                     }
                 }
 

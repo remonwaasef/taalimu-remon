@@ -60,9 +60,26 @@ class InstructorController extends Controller
         try {
             $imagePath = $this->handleFileUpload($request, 'image', null, 'instructors');
 
-            $instructor = Instructor::create([
+            $tenant = app('tenant');
+            $plainPassword = \Illuminate\Support\Str::random(12);
+            $email = $request->email ?: 'instructor_' . time() . '_' . rand(100, 999) . '@' . $tenant->domain;
+
+            $user = \App\Models\User::create([
+                'tenant_id' => $tenant->id,
                 'name' => $request->name,
-                'email' => $request->email,
+                'phone' => $request->phone,
+                'email' => $email,
+                'password' => $plainPassword,
+                'role' => 'instructor',
+                'email_verified_at' => now(),
+                'phone_verified_at' => now(),
+            ]);
+
+            $instructor = Instructor::create([
+                'tenant_id' => $tenant->id,
+                'user_id' => $user->id,
+                'name' => $request->name,
+                'email' => $user->email,
                 'phone' => $request->phone,
                 'specialization' => $request->specialization,
                 'status' => $request->status ?? 'active',
@@ -74,6 +91,21 @@ class InstructorController extends Controller
                 'bio' => $request->bio,
                 'image' => $imagePath ?? null,
             ]);
+
+            if ($request->email) {
+                try {
+                    \Illuminate\Support\Facades\Mail::to($user->email)->queue(
+                        new \App\Mail\WelcomeTeacherMail(
+                            $instructor,
+                            $plainPassword,
+                            $tenant->name ?? 'المنصة',
+                            url('/login')
+                        )
+                    );
+                } catch (\Exception $e) {
+                    \Illuminate\Support\Facades\Log::error("Failed to send welcome email to instructor: " . $e->getMessage());
+                }
+            }
 
             // Notify Admins
             $admins = \App\Models\User::where('tenant_id', app('tenant')->id)
@@ -153,6 +185,14 @@ class InstructorController extends Controller
         }
 
         $instructor->save();
+
+        if ($instructor->user_id) {
+            \App\Models\User::where('id', $instructor->user_id)->update([
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'email' => $request->email ?: $instructor->email,
+            ]);
+        }
 
         return redirect()->route('center.instructors.index')->with('success', __('center::messages.msg_050'));
     }

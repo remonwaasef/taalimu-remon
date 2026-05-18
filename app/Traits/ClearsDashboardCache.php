@@ -40,4 +40,15 @@ trait ClearsDashboardCache
             CenterAnalyticsQuery::clearCacheForTenant($tenantId);
         }
     }
+
+    /**
+     * مسح كاش التحليلات بشكل عام (للاستخدام اليدوي).
+     */
+    public static function clearDashboardCache(): void
+    {
+        $tenantId = app()->bound('tenant') ? app('tenant')->id : null;
+        if ($tenantId) {
+            CenterAnalyticsQuery::clearCacheForTenant($tenantId);
+        }
+    }
 }
