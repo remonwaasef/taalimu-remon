@@ -4,6 +4,12 @@
     .bg-danger-soft { background-color: rgba(220, 53, 69, 0.1) !important; border-color: rgba(220, 53, 69, 0.2) !important; }
     .active-reminder-info { background-color: rgba(0, 180, 216, 0.15) !important; border-color: #00b4d8 !important; }
     .active-reminder-danger { background-color: rgba(231, 76, 60, 0.15) !important; border-color: #e74c3c !important; }
+    .btn-collapse-chevron[aria-expanded="true"] .fa-chevron-down {
+        transform: rotate(180deg);
+    }
+    .btn-collapse-chevron .fa-chevron-down {
+        transition: transform 0.2s ease-in-out;
+    }
 </style>
 @endpush
 @extends('center::layouts.hope-master')
@@ -1162,6 +1168,12 @@
                                     <div class="stage-card card border bg-light mb-3 rounded-3 overflow-hidden shadow-none" data-index="{{ $sIndex }}">
                                         <div class="card-header bg-white d-flex align-items-center gap-3 py-2 border-bottom">
                                             <input type="hidden" name="stages[{{ $sIndex }}][id]" value="{{ $stage->id }}">
+                                            
+                                            <!-- Collapse trigger chevron -->
+                                            <button type="button" class="btn btn-sm btn-link text-muted p-0 me-1 btn-collapse-chevron collapsed" data-bs-toggle="collapse" data-bs-target="#stage-collapse-{{ $sIndex }}" aria-expanded="false" aria-controls="stage-collapse-{{ $sIndex }}" style="text-decoration: none;">
+                                                <i class="fas fa-chevron-down"></i>
+                                            </button>
+
                                             <input type="text" name="stages[{{ $sIndex }}][name]" class="form-control form-control-sm fw-bold border-0 bg-light" value="{{ $stage->name }}" placeholder="{{ __('center::settings.academic.stage_name_placeholder') }}">
                                             <div class="ms-auto d-flex gap-2">
                                                 <button type="button" class="btn btn-sm btn-light text-primary" onclick="addGrade({{ $sIndex }})" title="{{ __('center::settings.academic.add_grade') }}">
@@ -1172,17 +1184,19 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="card-body p-3">
-                                            <div class="grades-container d-flex flex-wrap gap-2">
-                                                @foreach($stage->grades as $gIndex => $grade)
-                                                    <div class="grade-item d-flex align-items-center bg-white border rounded-pill px-3 py-1 shadow-sm">
-                                                        <input type="hidden" name="stages[{{ $sIndex }}][grades][{{ $gIndex }}][id]" value="{{ $grade->id }}">
-                                                        <input type="text" name="stages[{{ $sIndex }}][grades][{{ $gIndex }}][name]" class="form-control form-control-sm border-0 p-0 text-center" style="width: 100px; font-size: 0.85rem;" value="{{ $grade->name }}" placeholder="{{ __('center::settings.academic.grade_name_placeholder') }}">
-                                                        <button type="button" class="btn btn-link btn-sm text-danger p-0 ms-2" onclick="removeGrade(this, {{ $grade->id }})">
-                                                            <i class="fas fa-times-circle"></i>
-                                                        </button>
-                                                    </div>
-                                                @endforeach
+                                        <div class="collapse" id="stage-collapse-{{ $sIndex }}">
+                                            <div class="card-body p-3">
+                                                <div class="grades-container d-flex flex-wrap gap-2">
+                                                    @foreach($stage->grades as $gIndex => $grade)
+                                                        <div class="grade-item d-flex align-items-center bg-white border rounded-pill px-3 py-1 shadow-sm">
+                                                            <input type="hidden" name="stages[{{ $sIndex }}][grades][{{ $gIndex }}][id]" value="{{ $grade->id }}">
+                                                            <input type="text" name="stages[{{ $sIndex }}][grades][{{ $gIndex }}][name]" class="form-control form-control-sm border-0 p-0 text-center" style="width: 100px; font-size: 0.85rem;" value="{{ $grade->name }}" placeholder="{{ __('center::settings.academic.grade_name_placeholder') }}">
+                                                            <button type="button" class="btn btn-link btn-sm text-danger p-0 ms-2" onclick="removeGrade(this, {{ $grade->id }})">
+                                                                <i class="fas fa-times-circle"></i>
+                                                            </button>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1587,6 +1601,15 @@
     }
     .accordion-button:focus { box-shadow: none; }
     .accordion-item { border-color: #e2e8f0 !important; }
+    
+    /* Academic Stage Collapse Chevron Animation */
+    .btn-collapse-chevron i {
+        transition: transform 0.3s ease;
+        display: inline-block;
+    }
+    .btn-collapse-chevron.collapsed i {
+        transform: rotate(-90deg);
+    }
 </style>
 @endpush
 
@@ -1716,6 +1739,143 @@ function confirmTemplate() {
     
     if (confirm("{{ __('center::settings.academic.confirm_template') }}")) {
         form.submit();
+    }
+}
+
+// Dynamic Academic Structure Management JS
+let stageCounter = {{ count($stages) }};
+
+function addStage() {
+    const container = document.getElementById('stages-container');
+    const index = stageCounter++;
+    
+    const html = `
+        <div class="stage-card card border bg-light mb-3 rounded-3 overflow-hidden shadow-none" data-index="${index}">
+            <div class="card-header bg-white d-flex align-items-center gap-3 py-2 border-bottom">
+                <input type="hidden" name="stages[${index}][id]" value="">
+                
+                <!-- Collapse trigger chevron -->
+                <button type="button" class="btn btn-sm btn-link text-muted p-0 me-1 btn-collapse-chevron" data-bs-toggle="collapse" data-bs-target="#stage-collapse-${index}" aria-expanded="true" aria-controls="stage-collapse-${index}" style="text-decoration: none;">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+
+                <input type="text" name="stages[${index}][name]" class="form-control form-control-sm fw-bold border-0 bg-light" value="" placeholder="{{ __('center::settings.academic.stage_name_placeholder') }}" required>
+                <div class="ms-auto d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-light text-primary" onclick="addGrade(${index})" title="{{ __('center::settings.academic.add_grade') }}">
+                        <i class="fas fa-plus-circle"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-light text-danger" onclick="removeStage(this)" title="{{ __('center::settings.academic.remove_stage') }}">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="collapse show" id="stage-collapse-${index}">
+                <div class="card-body p-3">
+                    <div class="grades-container d-flex flex-wrap gap-2"></div>
+                </div>
+            </div>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', html);
+}
+
+function removeStage(btn, id = null) {
+    if (confirm("هل أنت متأكد من حذف هذه المرحلة وجميع صفوفها؟")) {
+        if (id) {
+            const deletionContainer = document.getElementById('deletion-inputs');
+            deletionContainer.insertAdjacentHTML('beforeend', `<input type="hidden" name="deleted_stages[]" value="${id}">`);
+        }
+        btn.closest('.stage-card').remove();
+    }
+}
+
+function addGrade(sIndex) {
+    const stageCard = document.querySelector(`.stage-card[data-index="${sIndex}"]`);
+    const container = stageCard.querySelector('.grades-container');
+    const gIndex = Date.now() + Math.floor(Math.random() * 1000);
+    
+    // Auto expand the stage if collapsed so the user sees the new grade added
+    const collapseEl = document.getElementById(`stage-collapse-${sIndex}`);
+    if (collapseEl && !collapseEl.classList.contains('show')) {
+        const bsCollapse = new bootstrap.Collapse(collapseEl, { show: true });
+        bsCollapse.show();
+    }
+    
+    const html = `
+        <div class="grade-item d-flex align-items-center bg-white border rounded-pill px-3 py-1 shadow-sm">
+            <input type="hidden" name="stages[${sIndex}][grades][${gIndex}][id]" value="">
+            <input type="text" name="stages[${sIndex}][grades][${gIndex}][name]" class="form-control form-control-sm border-0 p-0 text-center" style="width: 100px; font-size: 0.85rem;" value="" placeholder="{{ __('center::settings.academic.grade_name_placeholder') }}" required>
+            <button type="button" class="btn btn-link btn-sm text-danger p-0 ms-2" onclick="removeGrade(this)">
+                <i class="fas fa-times-circle"></i>
+            </button>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', html);
+}
+
+function removeGrade(btn, id = null) {
+    if (id) {
+        const deletionContainer = document.getElementById('deletion-inputs');
+        deletionContainer.insertAdjacentHTML('beforeend', `<input type="hidden" name="deleted_grades[]" value="${id}">`);
+    }
+    btn.closest('.grade-item').remove();
+}
+
+// Attendance / Late Rules Management JS
+let lateLevelCounter = {{ count($lateLevels) }};
+
+function addLateLevel() {
+    const container = document.getElementById('late-levels-container');
+    const index = lateLevelCounter++;
+    
+    // Remove the defaults alert if it exists
+    const alert = document.getElementById('system-defaults-alert');
+    if (alert) alert.remove();
+    
+    const html = `
+        <div class="late-level-item d-flex align-items-center gap-2 mb-2 bg-light p-2 rounded-3">
+            <input type="number" name="settings[academic][late_levels][${index}][minutes]" class="form-control form-control-sm" style="width: 100px;" value="" placeholder="{{ __('center::settings.academic.threshold_minutes') }}" required>
+            <input type="text" name="settings[academic][late_levels][${index}][label]" class="form-control form-control-sm" value="" placeholder="{{ __('center::settings.academic.level_label') }}" required>
+            <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeLateLevel(this)">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', html);
+}
+
+function removeLateLevel(btn) {
+    btn.closest('.late-level-item').remove();
+}
+
+function restoreLateDefaults() {
+    if (confirm("هل أنت متأكد من إعادة ضبط مستويات التأخير إلى الافتراضية؟")) {
+        const container = document.getElementById('late-levels-container');
+        container.innerHTML = `
+            <div class="alert alert-info py-2 px-3 small border-0 mb-3 bg-opacity-10 text-info" id="system-defaults-alert">
+                <i class="fas fa-info-circle me-2"></i>{{ __('center::settings.academic_system_defaults_alert') }}
+            </div>
+        `;
+        
+        const defaults = [
+            { minutes: 15, label: "تأخير بسيط" },
+            { minutes: 30, label: "تأخير نصف ساعة" },
+            { minutes: 60, label: "تأخير كبير (ساعة)" }
+        ];
+        
+        defaults.forEach((level, index) => {
+            const html = `
+                <div class="late-level-item d-flex align-items-center gap-2 mb-2 bg-light p-2 rounded-3">
+                    <input type="number" name="settings[academic][late_levels][${index}][minutes]" class="form-control form-control-sm" style="width: 100px;" value="${level.minutes}" placeholder="{{ __('center::settings.academic.threshold_minutes') }}" required>
+                    <input type="text" name="settings[academic][late_levels][${index}][label]" class="form-control form-control-sm" value="${level.label}" placeholder="{{ __('center::settings.academic.level_label') }}" required>
+                    <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeLateLevel(this)">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        });
+        lateLevelCounter = defaults.length;
     }
 }
 </script>
