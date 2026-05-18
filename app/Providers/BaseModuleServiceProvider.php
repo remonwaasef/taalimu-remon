@@ -82,8 +82,12 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
             $this->loadTranslationsFrom($langPath, $this->getModuleNameLower());
             $this->loadJsonTranslationsFrom($langPath);
         } else {
-            $this->loadTranslationsFrom(module_path($this->getModuleName(), 'lang'), $this->getModuleNameLower());
-            $this->loadJsonTranslationsFrom(module_path($this->getModuleName(), 'lang'));
+            $moduleLangPath = module_path($this->getModuleName(), 'lang');
+            if (!is_dir($moduleLangPath)) {
+                $moduleLangPath = module_path($this->getModuleName(), 'resources/lang');
+            }
+            $this->loadTranslationsFrom($moduleLangPath, $this->getModuleNameLower());
+            $this->loadJsonTranslationsFrom($moduleLangPath);
         }
     }
 
