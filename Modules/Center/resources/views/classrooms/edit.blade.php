@@ -90,7 +90,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h6 class="fw-bold mb-0 text-dark">
                                 <i class="fas fa-tools me-2 text-info"></i>{{ __('center::messages.blade_0216') }}</h6>
-                            <a href="{{ route('center.assets.create', ['classroom_id' => $classroom->id]) }}" class="btn btn-sm btn-info text-white rounded-pill px-3">{{ __('center::messages.blade_0096') }}</a>
+                            <a href="{{ route('center.assets.create', ['classroom_id' => $classroom->id]) }}" class="btn btn-sm btn-info text-white rounded-pill px-3">{{ __('center::messages.blade_0246') }}</a>
                         </div>
                         
                         @if($classroom->assets->count() > 0)
