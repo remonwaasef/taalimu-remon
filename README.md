@@ -1,6 +1,5 @@
 
 <h1 align="center">Taalimu — منصة SaaS لإدارة المراكز التعليمية</h1>
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 <p align="center">
   <strong>نظام متكامل متعدد المستأجرين لإدارة المراكز التعليمية والمدرسين المستقلين</strong>
 </p>
