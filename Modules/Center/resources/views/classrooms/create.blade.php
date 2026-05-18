@@ -25,7 +25,7 @@
                         <h5 class="fw-bold text-dark mb-4"><i class="fas fa-info-circle me-2 text-primary"></i>{{ __('center::messages.blade_0165') }}</h5>
 
                         <div class="form-floating mb-3">
-                            <input type="text" name="name" class="form-control rounded-3" id="nameInput" placeholder="{{ __('center::messages.blade_0187') }}" value="{{ old('name', $classroom->name ?? '') }}">
+                            <input type="text" name="name" class="form-control rounded-3" id="nameInput" placeholder=" " value="{{ old('name', $classroom->name ?? '') }}">
                             <label for="nameInput">{{ __('center::messages.blade_0166') }}</label>
                             @error('name') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                         </div>
@@ -33,7 +33,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
-                                    <input type="number" name="capacity" class="form-control rounded-3" id="capacityInput" placeholder="{{ __('center::messages.blade_0188') }}" value="{{ old('capacity', $classroom->capacity ?? '') }}">
+                                    <input type="number" name="capacity" class="form-control rounded-3" id="capacityInput" placeholder=" " value="{{ old('capacity', $classroom->capacity ?? '') }}">
                                     <label for="capacityInput">{{ __('center::messages.blade_0167') }}</label>
                                 </div>
                                 @error('capacity') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
