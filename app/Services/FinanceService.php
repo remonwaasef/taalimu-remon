@@ -152,7 +152,7 @@ class FinanceService
                 }
             }
             if (!empty($enrolledCourseIds) && $student) {
-                app(\App\Services\StudentService::class)->sendGroupEnrollmentEmails($student, $enrolledCourseIds);
+                app(\App\Services\Student\StudentNotificationService::class)->sendGroupEnrollmentEmails($student, $enrolledCourseIds);
             }
 
             // 5. Create First Payment Record in Ledger
