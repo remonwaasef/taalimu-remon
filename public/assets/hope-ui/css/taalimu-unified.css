@@ -240,6 +240,15 @@ a:hover {
     font-weight: 400;
 }
 
+/* Global Fix for Bootstrap Form-Floating Placeholder Overlap */
+.form-floating > .form-control::placeholder {
+    color: transparent !important;
+}
+
+.form-floating > .form-control:focus::placeholder {
+    color: #94a3b8 !important;
+}
+
 .form-control:focus,
 .form-select:focus {
     border-color: #059669 !important;
