@@ -31,12 +31,12 @@
                     <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2">{{ __('center::classrooms.id_label') }}{{ $classroom->id }}</span>
                 </div>
                 <div class="card-body p-4">
-                    <form action="{{ route('center.classrooms.update', $classroom) }}" method="POST">
+                    <form action="{{ route('center.classrooms.update', $classroom) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
                         <div class="form-floating mb-3">
-                            <input type="text" name="name" class="form-control rounded-3 @error('name') is-invalid @enderror" id="nameInput" placeholder="Name" value="{{ old('name', $classroom->name) }}" required>
+                            <input type="text" name="name" class="form-control rounded-3 @error('name') is-invalid @enderror" id="nameInput" placeholder=" " value="{{ old('name', $classroom->name) }}" required>
                             <label for="nameInput">{{ __('center::messages.blade_0207') }}</label>
                             @error('name')<div class="invalid-feedback small mt-1">{{ $message }}</div>@enderror
                         </div>
@@ -44,7 +44,7 @@
                         <div class="row g-3">
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
-                                    <input type="number" name="capacity" class="form-control rounded-3 @error('capacity') is-invalid @enderror" id="capacityInput" placeholder="Capacity" value="{{ old('capacity', $classroom->capacity) }}">
+                                    <input type="number" name="capacity" class="form-control rounded-3 @error('capacity') is-invalid @enderror" id="capacityInput" placeholder=" " value="{{ old('capacity', $classroom->capacity) }}">
                                     <label for="capacityInput">{{ __('center::messages.blade_0208') }}</label>
                                     @error('capacity')<div class="invalid-feedback small mt-1">{{ $message }}</div>@enderror
                                 </div>
@@ -61,11 +61,23 @@
                             </div>
                         </div>
 
-                        <div class="mb-4">
-                            <label class="form-label fw-bold">{{ __('center::messages.blade_0212') }}</label>
-                            <div class="d-flex align-items-center gap-2">
-                                <input type="color" name="color" class="form-control form-control-color" value="{{ old('color', $classroom->color ?? '#435ebe') }}" title="{{ __('center::messages.blade_0220') }}">
-                                <small class="text-muted">{{ __('center::messages.blade_0213') }}</small>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-bold">{{ __('center::messages.blade_0212') }}</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <input type="color" name="color" class="form-control form-control-color" value="{{ old('color', $classroom->color ?? '#435ebe') }}" title="{{ __('center::messages.blade_0220') }}">
+                                    <small class="text-muted">{{ __('center::messages.blade_0213') }}</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-bold">صورة القاعة</label>
+                                <input type="file" name="image" class="form-control" id="imageInput" accept="image/*">
+                                @error('image') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                                @if($classroom->image)
+                                    <div class="mt-2">
+                                        <img src="{{ asset('storage/' . $classroom->image) }}" class="rounded" width="80" height="80" style="object-fit: cover;">
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
