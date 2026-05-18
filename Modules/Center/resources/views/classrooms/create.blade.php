@@ -18,7 +18,7 @@
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm rounded-4 h-100 position-relative overflow-hidden">
                 <div class="card-body p-4">
-                    <form action="{{ isset($classroom) ? route('center.classrooms.update', $classroom) : route('center.classrooms.store') }}" method="POST" id="classroomForm" enctype="multipart/form-data">
+                    <form action="{{ isset($classroom) ? route('center.classrooms.update', $classroom) : route('center.classrooms.store') }}" method="POST" id="classroomForm">
                         @csrf
                         @if(isset($classroom)) @method('PUT') @endif
 
@@ -50,17 +50,11 @@
                             </div>
                         </div>
 
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">{{ __('center::messages.blade_0171') }}</label>
-                                <div class="d-flex align-items-center gap-2">
-                                    <input type="color" name="color" class="form-control form-control-color" value="{{ old('color', $classroom->color ?? '#435ebe') }}" title="{{ __('center::messages.blade_0189') }}">
-                                    <small class="text-muted">{{ __('center::messages.blade_0172') }}</small>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">صورة القاعة</label>
-                                <input type="file" name="image" class="form-control" id="imageInput" accept="image/*">
-                                @error('image') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">{{ __('center::messages.blade_0171') }}</label>
+                            <div class="d-flex align-items-center gap-2">
+                                <input type="color" name="color" class="form-control form-control-color" value="{{ old('color', $classroom->color ?? '#435ebe') }}" title="{{ __('center::messages.blade_0189') }}">
+                                <small class="text-muted">{{ __('center::messages.blade_0172') }}</small>
                             </div>
                         </div>
 
@@ -119,28 +113,22 @@
 
         <!-- Live Preview Card -->
         <div class="col-lg-4">
-            <div class="card border-0 shadow-sm rounded-4 bg-primary text-white position-relative overflow-hidden">
+            <div class="card border-0 shadow-sm rounded-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;">
                 <div class="card-body p-4 text-center">
-                    <h5 class="fw-bold mb-4 opacity-75">{{ __('center::messages.blade_0180') }}</h5>
+                    <h5 class="fw-bold mb-4 text-dark opacity-75">{{ __('center::messages.blade_0180') }}</h5>
                     
                     <div class="d-flex justify-content-center mb-4">
-                        <div class="bg-white bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center shadow-lg overflow-hidden animate__animated animate__pulse animate__infinite" style="width: 120px; height: 120px; position: relative;">
-                            @if(isset($classroom) && $classroom->image)
-                                <img src="{{ asset('storage/' . $classroom->image) }}" id="previewImage" class="w-100 h-100 object-fit-cover" alt="صورة القاعة">
-                                <i class="fas fa-chalkboard-teacher fa-4x text-white d-none" id="previewIcon"></i>
-                            @else
-                                <img src="" id="previewImage" class="w-100 h-100 object-fit-cover d-none" alt="صورة القاعة">
-                                <i class="fas fa-chalkboard-teacher fa-4x text-white" id="previewIcon"></i>
-                            @endif
+                        <div class="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-lg" style="width: 120px; height: 120px; border: 4px solid #fff;">
+                            <i class="fas fa-chalkboard-teacher fa-4x text-primary animate__animated animate__pulse animate__infinite" id="previewIcon"></i>
                         </div>
                     </div>
 
-                    <h3 class="fw-bold mb-2" id="previewName">{{ $classroom->name ?? __('center::messages.blade_0200') }}</h3>
-                    <p class="mb-0 opacity-75">
-                        <i class="fas fa-users me-1"></i>{{ __('center::messages.blade_0181') }}<span id="previewCapacity">{{ $classroom->capacity ?? '--' }}</span>{{ __('center::messages.blade_0182') }}</p>
+                    <h3 class="fw-bold mb-2 text-dark" id="previewName">{{ $classroom->name ?? __('center::messages.blade_0200') }}</h3>
+                    <p class="mb-0 text-muted fw-bold">
+                        <i class="fas fa-users me-1 text-primary"></i>{{ __('center::messages.blade_0181') }}<span id="previewCapacity">{{ $classroom->capacity ?? '--' }}</span>{{ __('center::messages.blade_0182') }}</p>
                 </div>
                 <!-- Decoration -->
-                <div class="position-absolute top-0 end-0 p-3 opacity-10">
+                <div class="position-absolute top-0 end-0 p-3 opacity-10 text-primary">
                     <i class="fas fa-shapes fa-5x"></i>
                 </div>
             </div>
@@ -165,9 +153,6 @@
             const capacityInput = document.getElementById('capacityInput');
             const previewName = document.getElementById('previewName');
             const previewCapacity = document.getElementById('previewCapacity');
-            const imageInput = document.getElementById('imageInput');
-            const previewImage = document.getElementById('previewImage');
-            const previewIcon = document.getElementById('previewIcon');
 
             nameInput.addEventListener('input', function() {
                 previewName.textContent = this.value || __('center::messages.blade_0201');
@@ -176,25 +161,6 @@
             capacityInput.addEventListener('input', function() {
                 previewCapacity.textContent = this.value || '--';
             });
-
-            if(imageInput) {
-                imageInput.addEventListener('change', function(event) {
-                    const file = event.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            previewImage.src = e.target.result;
-                            previewImage.classList.remove('d-none');
-                            previewIcon.classList.add('d-none');
-                        }
-                        reader.readAsDataURL(file);
-                    } else {
-                        previewImage.src = '';
-                        previewImage.classList.add('d-none');
-                        previewIcon.classList.remove('d-none');
-                    }
-                });
-            }
         });
     </script>
 @endsection
