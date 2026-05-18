@@ -40,6 +40,7 @@ class Classroom extends Model
         'capacity',
         'type',
         'color',
+        'image',
         'is_active',
         'facilities_summary',
     ];
