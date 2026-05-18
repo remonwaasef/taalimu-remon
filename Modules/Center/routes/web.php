@@ -373,7 +373,7 @@ $tenantRoutes = function () {
         // Classroom Management
         Route::middleware(['can:manage schedule'])->group(function() {
             Route::resource('classrooms', ClassroomController::class)->names('center.classrooms');
-            Route::resource('assets', AssetController::class)->names('center.assets');
+            Route::resource('inventory', AssetController::class)->names('center.assets')->parameters(['inventory' => 'asset']);
         });
 
         // Bookings Management
