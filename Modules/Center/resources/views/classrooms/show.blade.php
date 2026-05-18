@@ -26,12 +26,30 @@
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body p-4">
-                    <div class="text-center mb-4">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 shadow-sm border border-4 border-white" style="width: 80px; height: 80px; font-size: 2rem; background-color: {{ $classroom->color ?? '#435ebe' }}; color: white;">
+                    <div class="position-relative mb-4">
+                        <!-- Classroom Cover Image -->
+                        <div class="overflow-hidden rounded-4 shadow-sm" style="height: 160px;">
+                            @php
+                                $coverImage = match($classroom->type) {
+                                    'lab' => 'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=600&q=80',
+                                    'virtual' => 'https://images.unsplash.com/photo-1610484826967-09c5720778c7?auto=format&fit=crop&w=600&q=80',
+                                    default => 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=600&q=80',
+                                };
+                            @endphp
+                            <img src="{{ $coverImage }}" class="w-100 h-100 object-fit-cover animate__animated animate__zoomIn" alt="{{ $classroom->name }}" style="filter: brightness(0.85);">
+                        </div>
+                        
+                        <!-- Floating Accent Badge / Type Icon -->
+                        <div class="rounded-circle d-flex align-items-center justify-content-center position-absolute shadow-lg border border-4 border-white animate__animated animate__bounceIn" 
+                             style="width: 70px; height: 70px; font-size: 1.8rem; background-color: {{ $classroom->color ?? '#435ebe' }}; color: white; bottom: -35px; left: 50%; transform: translateX(-50%); z-index: 2;">
                              @if($classroom->type == 'lab') 💻 @elseif($classroom->type == 'virtual') 🌐 @else 🏢 @endif
                         </div>
-                        <h4 class="fw-bold mb-1">{{ $classroom->name }}</h4>
-                        <span class="badge bg-light text-primary border border-primary border-opacity-10 px-3 py-2 rounded-pill">
+                    </div>
+
+                    <!-- Classroom Title & Badge -->
+                    <div class="text-center pt-3 mb-4">
+                        <h4 class="fw-bold mb-1 text-dark">{{ $classroom->name }}</h4>
+                        <span class="badge bg-light text-primary border border-primary border-opacity-10 px-3 py-2 rounded-pill fw-bold">
                             {{ $classroom->type == 'lab' ? __('center::messages.blade_0252') : ($classroom->type == 'virtual' ? __('center::messages.blade_0253') : __('center::messages.blade_0254')) }}
                         </span>
                     </div>

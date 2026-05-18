@@ -34,6 +34,7 @@ class AssetController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        dd($request->all());
         // $this->authorize('create', Asset::class);
 
         $validated = $request->validate([

@@ -261,7 +261,7 @@ textarea.form-control {
 }
 
 .form-label,
-label {
+label:not(.form-floating > label):not(.custom-form-floating > label) {
     font-weight: 700 !important;
     font-size: 0.85rem !important;
     color: #1e293b !important;
