@@ -27,8 +27,12 @@
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body p-4">
                     <div class="text-center mb-4">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 shadow-sm border border-4 border-white" style="width: 80px; height: 80px; font-size: 2rem; background-color: {{ $classroom->color ?? '#435ebe' }}; color: white;">
-                             @if($classroom->type == 'lab') 💻 @elseif($classroom->type == 'virtual') 🌐 @else 🏢 @endif
+                        <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 shadow-sm border border-4 border-white overflow-hidden" style="width: 80px; height: 80px; font-size: 2rem; background-color: {{ $classroom->color ?? '#435ebe' }}; color: white;">
+                            @if($classroom->image)
+                                <img src="{{ asset('storage/' . $classroom->image) }}" class="w-100 h-100 object-fit-cover" alt="صورة القاعة">
+                            @else
+                                @if($classroom->type == 'lab') 💻 @elseif($classroom->type == 'virtual') 🌐 @else 🏢 @endif
+                            @endif
                         </div>
                         <h4 class="fw-bold mb-1">{{ $classroom->name }}</h4>
                         <span class="badge bg-light text-primary border border-primary border-opacity-10 px-3 py-2 rounded-pill">
