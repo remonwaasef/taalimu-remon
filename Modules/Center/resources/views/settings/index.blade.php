@@ -1108,7 +1108,7 @@
                                                 <select name="template_key" class="form-select form-select-sm rounded-pill" required>
                                                     <option value="">{{ __('center::settings.academic.select_template') }}</option>
                                                     @foreach($templates as $key => $template)
-                                                        <option value="{{ $key }}">{{ __($template['name']) }}</option>
+                                                        <option value="{{ $key }}" {{ ($tenant->settings['education_system'] ?? '') == $key ? 'selected' : '' }}>{{ __($template['name']) }}</option>
                                                     @endforeach
                                                 </select>
                                                 <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 text-nowrap" onclick="confirmTemplate()">

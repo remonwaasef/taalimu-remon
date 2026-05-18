@@ -140,6 +140,15 @@ class SettingsService
             }
         });
 
+        // Update the tenant setting so it reflects correctly in the dropdown
+        $settings = $tenant->settings ?? [];
+        $settings['education_system'] = $templateKey;
+        $tenant->settings = $settings;
+        $tenant->save();
+
+        // Clear lookup cache
+        Cache::forget("tenant_lookup_{$tenant->domain}");
+
         Stage::clearCache();
     }
 
