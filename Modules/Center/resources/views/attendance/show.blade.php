@@ -56,6 +56,12 @@
                                         $attendance = $student ? $attendances->get($student->id) : null;
                                     @endphp
                                     @if($student)
+                                    @php
+                                        $isAdmin = auth()->user()->hasRole('center_admin');
+                                        $lockPresent = ($attendance && !$isAdmin) || ($isEnded && !$isAdmin && (!$attendance || $attendance->status !== 'present'));
+                                        $lockLate = ($attendance && !$isAdmin) || ($isEnded && !$isAdmin && (!$attendance || $attendance->status !== 'late'));
+                                        $lockAbsent = ($attendance && !$isAdmin) || ($isEnded && !$isAdmin && (!$attendance || $attendance->status !== 'absent'));
+                                    @endphp
                                     <tr>
                                         <td>
                                             <div class="fw-bold">{{ $student->name }}</div>
@@ -87,11 +93,11 @@
                                                     <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
                                                     <input type="hidden" name="session_date" value="{{ today()->format('Y-m-d') }}">
                                                     <input type="hidden" name="status" value="present">
-                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'present' ? 'success' : 'outline-success' }} rounded-pill px-3" {{ $isEnded && (!$attendance || $attendance->status !== 'present') ? 'disabled' : '' }}>{{ __('center::attendance.present') }}</button>
+                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'present' ? 'success' : 'outline-success' }} rounded-pill px-3" {{ $lockPresent ? 'disabled' : '' }}>{{ __('center::attendance.present') }}</button>
                                                 </form>
                                                 
                                                 <!-- Smart Late Button (Triggers Modal) -->
-                                                <button type="button" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'late' ? 'warning' : 'outline-warning' }} rounded-pill px-3" onclick="openLateModal({{ $student->id }}, '{{ $schedule->course_id }}', '{{ $schedule->id }}', '{{ addslashes($student->name) }}')" {{ $isEnded && (!$attendance || $attendance->status !== 'late') ? 'disabled' : '' }}>{{ __('center::attendance.late') }}</button>
+                                                <button type="button" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'late' ? 'warning' : 'outline-warning' }} rounded-pill px-3" onclick="openLateModal({{ $student->id }}, '{{ $schedule->course_id }}', '{{ $schedule->id }}', '{{ addslashes($student->name) }}')" {{ $lockLate ? 'disabled' : '' }}>{{ __('center::attendance.late') }}</button>
 
                                                 <form action="{{ route('center.attendance.store') }}" method="POST">
                                                     @csrf
@@ -100,7 +106,7 @@
                                                     <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
                                                     <input type="hidden" name="session_date" value="{{ today()->format('Y-m-d') }}">
                                                     <input type="hidden" name="status" value="absent">
-                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'absent' ? 'danger' : 'outline-danger' }} rounded-pill px-3">{{ __('center::attendance.absent') }}</button>
+                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'absent' ? 'danger' : 'outline-danger' }} rounded-pill px-3" {{ $lockAbsent ? 'disabled' : '' }}>{{ __('center::attendance.absent') }}</button>
                                                 </form>
                                             </div>
                                         </td>
