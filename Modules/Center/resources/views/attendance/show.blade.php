@@ -200,6 +200,11 @@
         document.getElementById('lateModalMinutes').value = diffMinutes;
         
         const modalEl = document.getElementById('lateModal');
+        // Move modal to body to prevent z-index/backdrop trapping
+        if (modalEl.parentNode !== document.body) {
+            document.body.appendChild(modalEl);
+        }
+        
         const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
         modal.show();
     }
