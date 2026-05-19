@@ -19,14 +19,23 @@
                 <div class="col-md-6">
                     <div class="input-group">
                         <span class="input-group-text bg-white rounded-start-pill px-3"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" id="searchInput" class="form-control bg-white rounded-end-pill py-2" placeholder="{{ __('center::sales.search_placeholder') }}">
+                        <input type="text" id="searchInput"
+                            data-smart-search="#billingTable"
+                            data-search-fields="name,phone"
+                            data-search-counter="#resultCount"
+                            data-search-empty="#noResults"
+                            data-search-container="#billingTableContainer"
+                            data-search-highlight="true"
+                            data-search-counter-suffix="{{ __('center::sales.student_count') }}"
+                            class="form-control bg-white rounded-end-pill py-2"
+                            placeholder="{{ __('center::sales.search_placeholder') }}">
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <select id="filterStatus" class="form-select bg-white rounded-pill py-2">
+                    <select data-smart-filter="#billingTable" data-filter-key="status" class="form-select bg-white rounded-pill py-2">
                         <option value="all">{{ __('center::sales.all_students') }}</option>
                         <option value="unpaid">{{ __('center::sales.has_balance') }}</option>
-                        <option value="fully_paid">{{ __('center::sales.fully_paid') }}</option>
+                        <option value="paid">{{ __('center::sales.fully_paid') }}</option>
                     </select>
                 </div>
             </div>
@@ -171,47 +180,12 @@
     .bg-success-soft { background-color: rgba(25, 135, 84, 0.1); }
     .stats-card { background: #fff; border-radius: 1.25rem; }
     #billingTable thead th { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.025em; }
+    #resultCount { transition: transform 0.2s ease; }
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
-    const filterStatus = document.getElementById('filterStatus');
-    const rows = document.querySelectorAll('.student-row');
-    const noResults = document.getElementById('noResults');
-    const resultCount = document.getElementById('resultCount');
-    const tableContainer = document.getElementById('billingTableContainer');
-
-    function applyFilters() {
-        const query = searchInput.value.trim().toLowerCase();
-        const filter = filterStatus.value;
-        let visible = 0;
-
-        rows.forEach(row => {
-            const name = row.dataset.name.toLowerCase();
-            const phone = row.dataset.phone.toLowerCase();
-            const status = row.dataset.status;
-
-            const matchSearch = !query || name.includes(query) || phone.includes(query);
-            const matchFilter = filter === 'all' || status === filter;
-
-            if (matchSearch && matchFilter) {
-                row.style.display = '';
-                visible++;
-            } else {
-                row.style.display = 'none';
-            }
-        });
-
-        if (resultCount) resultCount.textContent = visible + ' {{ __('center::sales.student_count') }}';
-        if (noResults) noResults.classList.toggle('d-none', visible > 0);
-        if (tableContainer) tableContainer.classList.toggle('d-none', visible === 0);
-    }
-
-    if (searchInput) searchInput.addEventListener('input', applyFilters);
-    if (filterStatus) filterStatus.addEventListener('change', applyFilters);
-
-    // Modal data handling
+    // Modal data handling (page-specific, cannot be generalized)
     const collectModal = document.getElementById('collectModal');
     if (collectModal) {
         collectModal.addEventListener('show.bs.modal', function(event) {
@@ -224,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('modal_student_name').textContent = name;
             document.getElementById('modal_amount').value = balance;
             document.getElementById('modal_amount').max = balance;
-            document.getElementById('modal_balance_hint').textContent = '{{ __('center::sales.current_balance_hint') }}' + new Intl.NumberFormat().format(balance);
+            document.getElementById('modal_balance_hint').textContent = '{{ __("center::sales.current_balance_hint") }}' + new Intl.NumberFormat().format(balance);
         });
     }
 });
