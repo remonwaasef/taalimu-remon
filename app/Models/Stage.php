@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Stage extends Model
 {
-    use HasFactory, LogsActivity, \App\Traits\IdentifyTenant, \App\Traits\ClearsDashboardCache;
+    use HasFactory, LogsActivity, SoftDeletes, \App\Traits\IdentifyTenant, \App\Traits\ClearsDashboardCache;
 
     protected $fillable = [
         'tenant_id',
