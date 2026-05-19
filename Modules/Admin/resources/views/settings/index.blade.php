@@ -645,14 +645,60 @@
 
                     <!-- System Features Tab -->
                     <div class="tab-pane fade" id="system-features" role="tabpanel">
+                        
+                        <!-- Header -->
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div>
-                                <h5 class="fw-bold mb-1">{{ __('admin.system_features_management') }}</h5>
-                                <p class="text-muted small mb-0">{{ __('admin.system_features_note') }}</p>
+                                <h5 class="fw-bold mb-1"><i class="bi bi-puzzle me-2"></i> إدارة ميزات النظام</h5>
+                                <p class="text-muted small mb-0">أضف ميزات جديدة وتحكم في أي خطة تظهر فيها</p>
                             </div>
                             <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#addFeatureModal">
-                                <i class="bi bi-plus-lg me-1"></i> {{ __('admin.new_feature') }}
+                                <i class="bi bi-plus-lg me-1"></i> ميزة جديدة
                             </button>
+                        </div>
+
+                        <!-- How it works - Guide -->
+                        <div class="alert border-0 rounded-4 shadow-sm mb-4 p-0 overflow-hidden" style="background: linear-gradient(135deg, #f0f4ff 0%, #e8f5e9 100%);">
+                            <div class="p-3">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-lightbulb text-warning fs-4 me-2"></i>
+                                    <h6 class="fw-bold mb-0">كيف يعمل النظام؟ (3 خطوات فقط)</h6>
+                                    <button class="btn btn-sm btn-link text-muted ms-auto p-0" type="button" data-bs-toggle="collapse" data-bs-target="#howItWorks">
+                                        <i class="bi bi-chevron-down"></i>
+                                    </button>
+                                </div>
+                                <div class="collapse show" id="howItWorks">
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <div class="bg-white rounded-3 p-3 h-100 border text-center">
+                                                <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width:40px;height:40px;">
+                                                    <span class="fw-bold text-primary">1</span>
+                                                </div>
+                                                <h6 class="fw-bold small mb-1">أضف الميزة</h6>
+                                                <p class="text-muted mb-0" style="font-size:0.75rem;">اضغط "ميزة جديدة" واكتب اسمها</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="bg-white rounded-3 p-3 h-100 border text-center">
+                                                <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width:40px;height:40px;">
+                                                    <span class="fw-bold text-success">2</span>
+                                                </div>
+                                                <h6 class="fw-bold small mb-1">اختر الخطط</h6>
+                                                <p class="text-muted mb-0" style="font-size:0.75rem;">فعّلها في الخطط التي تريدها</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="bg-white rounded-3 p-3 h-100 border text-center">
+                                                <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width:40px;height:40px;">
+                                                    <span class="fw-bold text-info">3</span>
+                                                </div>
+                                                <h6 class="fw-bold small mb-1">تلقائياً!</h6>
+                                                <p class="text-muted mb-0" style="font-size:0.75rem;">الميزة تظهر/تختفي تلقائياً للعملاء</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         @php
@@ -673,50 +719,57 @@
                         @endphp
 
                         @forelse($groupedFeatures as $category => $catFeatures)
-                            <div class="mb-5">
+                            <div class="mb-4">
                                 <h6 class="fw-bold mb-3 pb-2 border-bottom d-flex align-items-center">
                                     <i class="bi {{ $categoryIcons[$category] ?? $categoryIcons['default'] }} me-2 fs-5"></i> 
                                     {{ $categoryNames[$category] ?? ucfirst($category) }}
-                                    <span class="badge bg-light text-muted ms-auto rounded-pill border">{{ $catFeatures->count() }} ميزات</span>
+                                    <span class="badge bg-light text-muted ms-auto rounded-pill border small">{{ $catFeatures->count() }}</span>
                                 </h6>
                                 <div class="row g-3">
                                     @foreach($catFeatures as $feature)
+                                    @php
+                                        $assignedPackages = $feature->packages ?? collect();
+                                    @endphp
                                     <div class="col-md-6 col-xl-4">
-                                        <div class="card h-100 border-0 shadow-sm rounded-4 feature-card transition-all" style="background: #f8f9fa;">
+                                        <div class="card h-100 border-0 shadow-sm rounded-4" style="background: #f8f9fa;">
                                             <div class="card-body p-3">
+                                                <!-- Feature Name & Actions -->
                                                 <div class="d-flex justify-content-between align-items-start mb-2">
                                                     <div class="d-flex align-items-center gap-2">
-                                                        <div class="bg-white p-2 rounded-3 shadow-sm border border-light">
-                                                            <i class="bi {{ $feature->type == 'limit' ? 'bi-123 text-info' : 'bi-toggle-on text-success' }} fs-5"></i>
+                                                        <div class="bg-white p-2 rounded-3 shadow-sm border">
+                                                            <i class="bi {{ $feature->type == 'limit' ? 'bi-sliders text-info' : 'bi-toggle-on text-success' }} fs-5"></i>
                                                         </div>
                                                         <div>
-                                                            <h6 class="fw-bold mb-0">{{ $feature->name }}</h6>
+                                                            <h6 class="fw-bold mb-0 lh-sm">{{ $feature->name }}</h6>
                                                             <small class="text-muted" dir="ltr">{{ $feature->name_en }}</small>
                                                         </div>
                                                     </div>
                                                     <div class="dropdown">
-                                                        <button class="btn btn-sm btn-link text-muted p-0 border-0" type="button" data-bs-toggle="dropdown">
-                                                            <i class="bi bi-three-dots-vertical"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-3 text-end">
-                                                            <li><a class="dropdown-item py-2" href="#" data-bs-toggle="modal" data-bs-target="#editFeatureModal{{ $feature->id }}"><i class="bi bi-pencil me-2"></i> تعديل</a></li>
+                                                        <button class="btn btn-sm btn-link text-muted p-0 border-0" type="button" data-bs-toggle="dropdown"><i class="bi bi-three-dots-vertical"></i></button>
+                                                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow rounded-3 text-end">
+                                                            <li><a class="dropdown-item py-2" href="#" data-bs-toggle="modal" data-bs-target="#editFeatureModal{{ $feature->id }}"><i class="bi bi-pencil me-2 text-primary"></i> تعديل</a></li>
                                                             <li><hr class="dropdown-divider"></li>
-                                                            <li>
-                                                                <a class="dropdown-item py-2 text-danger" href="#" onclick="if(confirm('حذف هذه الميزة سيؤدي لحذف قيمها من جميع الباقات. هل أنت متأكد؟')) document.getElementById('delete-feature-{{ $feature->id }}').submit()">
-                                                                    <i class="bi bi-trash me-2"></i> حذف نهائي
-                                                                </a>
-                                                            </li>
+                                                            <li><a class="dropdown-item py-2 text-danger" href="#" onclick="if(confirm('هل أنت متأكد من حذف هذه الميزة؟')) document.getElementById('delete-feature-{{ $feature->id }}').submit()"><i class="bi bi-trash me-2"></i> حذف</a></li>
                                                         </ul>
                                                     </div>
                                                 </div>
                                                 
-                                                <div class="d-flex align-items-center gap-2 mt-3">
-                                                    <code class="bg-white border px-2 py-1 rounded-2 small text-dark d-flex align-items-center flex-grow-1">
-                                                        <i class="bi bi-braces text-muted me-1"></i> {{ $feature->code }}
-                                                    </code>
-                                                    <span class="badge {{ $feature->type == 'limit' ? 'bg-info-subtle text-info' : 'bg-success-subtle text-success' }} rounded-pill px-3 py-2 border">
-                                                        {{ $feature->type == 'limit' ? 'رقمي' : 'نعم/لا' }}
-                                                    </span>
+                                                <!-- Assigned Plans -->
+                                                <div class="mt-3 pt-2 border-top">
+                                                    <small class="text-muted d-block mb-2"><i class="bi bi-link-45deg me-1"></i> مفعّلة في:</small>
+                                                    @if($assignedPackages->count() > 0)
+                                                        <div class="d-flex flex-wrap gap-1">
+                                                            @foreach($assignedPackages as $pkg)
+                                                                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2 py-1" style="font-size:0.7rem;">
+                                                                    <i class="bi bi-check-circle-fill me-1"></i>{{ $pkg->name }}
+                                                                </span>
+                                                            @endforeach
+                                                        </div>
+                                                    @else
+                                                        <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-2 py-1" style="font-size:0.7rem;">
+                                                            <i class="bi bi-exclamation-triangle me-1"></i> غير مفعّلة في أي خطة
+                                                        </span>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -726,8 +779,9 @@
                             </div>
                         @empty
                             <div class="text-center py-5">
-                                <i class="bi bi-grid-3x3-gap text-muted opacity-25" style="font-size: 4rem;"></i>
-                                <p class="text-muted mt-3">لا توجد ميزات مضافة حتى الآن.</p>
+                                <i class="bi bi-puzzle text-muted opacity-25" style="font-size: 4rem;"></i>
+                                <p class="text-muted mt-3 mb-1">لا توجد ميزات مضافة حتى الآن</p>
+                                <p class="text-muted small">اضغط على "ميزة جديدة" لإنشاء أول ميزة</p>
                             </div>
                         @endforelse
                     </div>
@@ -1068,88 +1122,158 @@
 
 <!-- Add Feature Modal -->
 <div class="modal fade" id="addFeatureModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-4 border-0">
-            <div class="modal-header">
-                <h5 class="fw-bold">{{ __('admin.new_feature') }}</h5>
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-0 pb-0 px-4 pt-4">
+                <div>
+                    <h5 class="fw-bold mb-1"><i class="bi bi-stars text-primary me-2"></i> إضافة ميزة جديدة</h5>
+                    <p class="text-muted small mb-0">أدخل اسم الميزة واختر الخطط التي تريد تفعيلها فيها</p>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('admin.settings.features.store') }}" method="POST">
+            <form action="{{ route('admin.settings.features.store') }}" method="POST" id="addFeatureForm">
                 @csrf
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">{{ __('admin.feature_name') }} (AR)</label>
-                        <input type="text" class="form-control" name="name">
+                <div class="modal-body px-4">
+                    
+                    <!-- Step 1: Basic Info -->
+                    <div class="bg-light rounded-4 p-3 mb-4">
+                        <h6 class="fw-bold mb-3 text-primary"><span class="badge bg-primary rounded-circle me-2">1</span> اسم الميزة</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small">الاسم بالعربي <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control rounded-3" name="name" id="featureNameAr" placeholder="مثال: التحضير بدون إنترنت" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small">الاسم بالإنجليزي <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control rounded-3" name="name_en" id="featureNameEn" placeholder="e.g: Offline Attendance" required>
+                                <small class="text-muted" style="font-size:0.7rem;">سيتم إنشاء الكود البرمجي تلقائياً من هذا الاسم</small>
+                            </div>
+                        </div>
+                        <!-- Hidden auto-generated code -->
+                        <input type="hidden" name="code" id="featureCodeAuto">
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{ __('admin.feature_name') }} (EN)</label>
-                        <input type="text" class="form-control" name="name_en">
+
+                    <!-- Step 2: Feature Type (simplified) -->
+                    <div class="bg-light rounded-4 p-3 mb-4">
+                        <h6 class="fw-bold mb-3 text-primary"><span class="badge bg-primary rounded-circle me-2">2</span> نوع الميزة</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small">ما هي طبيعة الميزة؟</label>
+                                <div class="d-flex gap-2">
+                                    <div class="form-check border rounded-3 p-3 flex-fill bg-white">
+                                        <input class="form-check-input" type="radio" name="type" value="boolean" id="typeBoolean" checked>
+                                        <label class="form-check-label small" for="typeBoolean">
+                                            <i class="bi bi-toggle-on text-success me-1"></i> <strong>تشغيل/إيقاف</strong><br>
+                                            <span class="text-muted" style="font-size:0.7rem;">مثل: البحث الذكي</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-check border rounded-3 p-3 flex-fill bg-white">
+                                        <input class="form-check-input" type="radio" name="type" value="limit" id="typeLimit">
+                                        <label class="form-check-label small" for="typeLimit">
+                                            <i class="bi bi-sliders text-info me-1"></i> <strong>رقم محدد</strong><br>
+                                            <span class="text-muted" style="font-size:0.7rem;">مثل: عدد الطلاب</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small">التصنيف</label>
+                                <select class="form-select rounded-3" name="category">
+                                    <option value="core">⚙️ الأساسيات</option>
+                                    <option value="smart" selected>✨ الميزات الذكية</option>
+                                    <option value="analysis">📊 التحليلات</option>
+                                    <option value="academic">📘 الأكاديمي</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{ __('admin.feature_code') }}</label>
-                        <input type="text" class="form-control" name="code" placeholder="max_students">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{ __('admin.type') }}</label>
-                        <select class="form-select" name="type">
-                            <option value="limit">{{ __('admin.limit_type') }}</option>
-                            <option value="boolean">{{ __('admin.boolean_type') }}</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{ __('admin.category') }}</label>
-                        <select class="form-select" name="category">
-                            <option value="core">{{ __('admin.category_core') }}</option>
-                            <option value="smart">{{ __('admin.category_smart') }}</option>
-                            <option value="analysis">{{ __('admin.category_analysis') }}</option>
-                            <option value="academic">{{ __('admin.category_academic') }}</option>
-                        </select>
+
+                    <!-- Step 3: Assign to Plans -->
+                    <div class="bg-primary bg-opacity-10 rounded-4 p-3 border border-primary border-opacity-25">
+                        <h6 class="fw-bold mb-1 text-primary"><span class="badge bg-primary rounded-circle me-2">3</span> فعّلها في الخطط التالية</h6>
+                        <p class="text-muted small mb-3">اختر الخطط التي سيحصل أصحابها على هذه الميزة</p>
+                        <div class="row g-2">
+                            @foreach($packages as $pkg)
+                            <div class="col-md-6 col-lg-4">
+                                <label class="form-check form-switch bg-white p-3 rounded-3 border d-flex align-items-center justify-content-between m-0 cursor-pointer h-100" for="newf_pkg_{{ $pkg->id }}">
+                                    <div>
+                                        <span class="fw-bold d-block">{{ $pkg->name }}</span>
+                                        <small class="text-muted">{{ $pkg->price ? number_format($pkg->price) . ' ر.س' : 'مجاني' }}</small>
+                                    </div>
+                                    <input class="form-check-input m-0 ms-2" type="checkbox" name="assign_packages[]" value="{{ $pkg->id }}" id="newf_pkg_{{ $pkg->id }}">
+                                </label>
+                            </div>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary rounded-pill px-4">{{ __('admin.add') }}</button>
+                <div class="modal-footer border-0 px-4 pb-4 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-5 shadow-sm">
+                        <i class="bi bi-plus-lg me-1"></i> إضافة الميزة
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
+<script>
+// Auto-generate code from English name
+document.getElementById('featureNameEn')?.addEventListener('input', function() {
+    const code = this.value
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s]/g, '')
+        .replace(/\s+/g, '_');
+    document.getElementById('featureCodeAuto').value = code;
+});
+</script>
+
 @foreach($features as $f)
 <!-- Edit Feature Modal -->
 <div class="modal fade" id="editFeatureModal{{ $f->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-4 border-0">
-            <div class="modal-header">
-                <h5 class="fw-bold">{{ __('admin.edit_role') }}: {{ $f->name }}</h5>
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-0 pb-0 px-4 pt-4">
+                <div>
+                    <h5 class="fw-bold mb-0"><i class="bi bi-pencil text-primary me-2"></i> تعديل: {{ $f->name }}</h5>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form action="{{ route('admin.settings.features.update', $f->id) }}" method="POST">
                 @csrf @method('PUT')
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">{{ __('admin.feature_name') }} (AR)</label>
-                        <input type="text" class="form-control" name="name" value="{{ $f->name }}">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{ __('admin.feature_name') }} (EN)</label>
-                        <input type="text" class="form-control" name="name_en" value="{{ $f->name_en }}">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{ __('admin.sort_order') }}</label>
-                        <input type="number" class="form-control" name="sort_order" value="{{ $f->sort_order }}">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{ __('admin.category') }}</label>
-                        <select class="form-select" name="category">
-                            <option value="core" @if($f->category == 'core') selected @endif>{{ __('admin.category_core') }}</option>
-                            <option value="smart" @if($f->category == 'smart') selected @endif>{{ __('admin.category_smart') }}</option>
-                            <option value="analysis" @if($f->category == 'analysis') selected @endif>{{ __('admin.category_analysis') }}</option>
-                            <option value="academic" @if($f->category == 'academic') selected @endif>{{ __('admin.category_academic') }}</option>
-                        </select>
+                <div class="modal-body px-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">الاسم بالعربي</label>
+                            <input type="text" class="form-control rounded-3" name="name" value="{{ $f->name }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">الاسم بالإنجليزي</label>
+                            <input type="text" class="form-control rounded-3" name="name_en" value="{{ $f->name_en }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">التصنيف</label>
+                            <select class="form-select rounded-3" name="category">
+                                <option value="core" @if($f->category == 'core') selected @endif>⚙️ الأساسيات</option>
+                                <option value="smart" @if($f->category == 'smart') selected @endif>✨ الميزات الذكية</option>
+                                <option value="analysis" @if($f->category == 'analysis') selected @endif>📊 التحليلات</option>
+                                <option value="academic" @if($f->category == 'academic') selected @endif>📘 الأكاديمي</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">الكود البرمجي</label>
+                            <input type="text" class="form-control rounded-3 bg-light font-monospace" value="{{ $f->code }}" disabled>
+                            <small class="text-muted" style="font-size:0.65rem;">لا يمكن تغيير الكود بعد الإنشاء</small>
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary rounded-pill px-4">{{ __('admin.save_changes') }}</button>
+                <div class="modal-footer border-0 px-4 pb-4 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                        <i class="bi bi-check-lg me-1"></i> حفظ التعديلات
+                    </button>
                 </div>
             </form>
         </div>
