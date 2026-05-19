@@ -149,9 +149,11 @@ class AttendanceController extends Controller
         }
 
         if ($this->attendanceService->hasAttendedToday($studentId, $request->schedule_id)) {
-            return $request->expectsJson()
-                ? response()->json(['success' => false, 'message' => 'هذا الطالب مسجل حضوره بالفعل.'], 422)
-                : back()->with('error', __('center::messages.msg_012'));
+            if (!$user->hasRole('center_admin')) {
+                return $request->expectsJson()
+                    ? response()->json(['success' => false, 'message' => 'هذا الطالب مسجل حضوره بالفعل. التعديل مسموح للمدير فقط.'], 422)
+                    : back()->with('error', 'هذا الطالب مسجل حضوره بالفعل. التعديل مسموح للمدير فقط.');
+            }
         }
 
         $this->attendanceService->markAttendance(array_merge($validated, [
