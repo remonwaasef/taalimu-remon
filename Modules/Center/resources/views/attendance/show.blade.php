@@ -179,7 +179,7 @@
     </div>
 </div>
 
-<!-- Offline Status Bar -->
+@feature('offline_attendance')
 <div id="offlineStatusBar" class="position-fixed bottom-0 start-0 w-100 d-none" style="z-index: 9999;">
     <div class="d-flex align-items-center justify-content-between px-4 py-2" id="offlineBarInner">
         <div class="d-flex align-items-center">
@@ -189,7 +189,9 @@
         <div id="offlinePending" class="small"></div>
     </div>
 </div>
+@endfeature
 
+@feature('offline_attendance')
 <style>
     #offlineStatusBar .bar-offline {
         background: linear-gradient(135deg, #dc3545, #c82333);
@@ -218,6 +220,7 @@
         50% { opacity: 0.6; }
     }
 </style>
+@endfeature
 
 @push('scripts')
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
@@ -225,6 +228,12 @@
     // ═══════════════════════════════════════════════════════════════
     // OFFLINE ATTENDANCE SYSTEM
     // ═══════════════════════════════════════════════════════════════
+    @feature('offline_attendance')
+    const OFFLINE_ENABLED = true;
+    @else
+    const OFFLINE_ENABLED = false;
+    @endfeature
+
     const OFFLINE_STORAGE_KEY = 'taalimu_offline_attendance';
     const SYNC_URL = '{{ route("center.attendance.offlineSync") }}';
     const STORE_URL = '{{ route("center.attendance.store") }}';
@@ -606,17 +615,19 @@
 
     // ─── Initialize Everything ───
     document.addEventListener('DOMContentLoaded', function() {
-        // Intercept forms for offline support
-        interceptAttendanceForms();
+        if (OFFLINE_ENABLED) {
+            // Intercept forms for offline support
+            interceptAttendanceForms();
 
-        // Restore offline UI for previously saved records
-        restoreOfflineUI();
+            // Restore offline UI for previously saved records
+            restoreOfflineUI();
 
-        // Show connection status
-        updateOfflineBar();
+            // Show connection status
+            updateOfflineBar();
 
-        // Try to sync on page load
-        syncOfflineAttendance();
+            // Try to sync on page load
+            syncOfflineAttendance();
+        }
 
         // QR Scanner modal lifecycle
         const scanModal = document.getElementById('scanQrModal');
@@ -628,19 +639,23 @@
 
     // ─── Network Event Listeners ───
     window.addEventListener('online', function() {
-        console.log('[Network] 🟢 Back online!');
-        updateOfflineBar();
-        syncOfflineAttendance();
+        if (OFFLINE_ENABLED) {
+            console.log('[Network] 🟢 Back online!');
+            updateOfflineBar();
+            syncOfflineAttendance();
+        }
     });
 
     window.addEventListener('offline', function() {
-        console.log('[Network] 🔴 Gone offline');
-        updateOfflineBar();
+        if (OFFLINE_ENABLED) {
+            console.log('[Network] 🔴 Gone offline');
+            updateOfflineBar();
+        }
     });
 
     // ─── Periodic Sync (every 30 seconds if online) ───
     setInterval(() => {
-        if (navigator.onLine && getOfflineRecords().length > 0) {
+        if (OFFLINE_ENABLED && navigator.onLine && getOfflineRecords().length > 0) {
             syncOfflineAttendance();
         }
     }, 30000);

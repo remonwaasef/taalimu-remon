@@ -77,6 +77,13 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\Course::observe(\App\Observers\TenantModelObserver::class);
         \App\Models\Classroom::observe(\App\Observers\TenantModelObserver::class);
         \Modules\Center\Models\Branch::observe(\App\Observers\TenantModelObserver::class);
+
+        // Blade directive for Feature Flags
+        \Illuminate\Support\Facades\Blade::if('feature', function ($feature) {
+            $tenant = app(\App\Services\TenantService::class)->getTenant();
+            if (!$tenant) return false;
+            return $tenant->hasFeature($feature);
+        });
     }
 
     /**
