@@ -18,7 +18,7 @@ class SettingsController extends Controller
         
         $packages = Package::with('features')->orderBy('sort_order')->get();
         // Get features ordered by sort_order
-        $features = \App\Models\Feature::orderBy('sort_order')->get();
+        $features = \App\Models\Feature::with('packages')->orderBy('sort_order')->get();
         $coupons = Coupon::with('package')->latest()->paginate(10);
         
         return view('admin::settings.index', compact('packages', 'features', 'coupons'));
@@ -182,18 +182,37 @@ class SettingsController extends Controller
     public function storeFeature(Request $request)
     {
         $data = $request->validate([
-            'name' => 'nullable|string|max:255',
-            'name_en' => 'nullable|string|max:255',
-            'code' => 'nullable|string',
-            'type' => 'nullable|in:limit,boolean',
-            'category' => 'nullable|string',
+            'name' => 'required|string|max:255',
+            'name_en' => 'required|string|max:255',
+            'code' => 'required|string',
+            'type' => 'required|in:limit,boolean',
+            'category' => 'required|string',
             'sort_order' => 'nullable|integer',
+            'assign_packages' => 'nullable|array',
+            'assign_packages.*' => 'exists:packages,id'
         ]);
 
-        \App\Models\Feature::create($data);
+        $feature = \App\Models\Feature::create([
+            'name' => $data['name'],
+            'name_en' => $data['name_en'],
+            'code' => $data['code'],
+            'type' => $data['type'],
+            'category' => $data['category'],
+            'sort_order' => $data['sort_order'] ?? 0,
+            'is_visible' => true
+        ]);
         
+        if (!empty($data['assign_packages'])) {
+            $syncData = [];
+            foreach ($data['assign_packages'] as $packageId) {
+                // Default value: 'true' for boolean, '-1' (unlimited) for limits
+                $syncData[$packageId] = ['value' => $feature->type === 'limit' ? '-1' : 'true'];
+            }
+            $feature->packages()->syncWithoutDetaching($syncData);
+        }
+
         \Illuminate\Support\Facades\Cache::forget('landing_features');
-        return redirect()->back()->with('success', 'تم إضافة الميزة بنجاح');
+        return redirect()->back()->with('success', 'تم إضافة الميزة وربطها بالخطط بنجاح');
     }
 
     public function updateFeature(Request $request, $id)
