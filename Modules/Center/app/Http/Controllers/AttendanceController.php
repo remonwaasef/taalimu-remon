@@ -98,7 +98,8 @@ class AttendanceController extends Controller
             'course_id' => 'required|exists:courses,id',
             'schedule_id' => 'required|exists:schedules,id',
             'session_date' => 'required|date|before_or_equal:today',
-            'status' => 'required|in:present,absent,late,excused'
+            'status' => 'required|in:present,absent,late,excused',
+            'late_minutes' => 'nullable|integer|min:0'
         ]);
 
         $user = auth()->user();

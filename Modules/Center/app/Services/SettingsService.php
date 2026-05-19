@@ -56,10 +56,34 @@ class SettingsService
     public function updateAcademicStructure(Tenant $tenant, array $data)
     {
         if (isset($data['deleted_stages'])) {
-            Stage::whereIn('id', $data['deleted_stages'])->delete();
+            foreach ($data['deleted_stages'] as $stageId) {
+                $stage = \App\Models\Stage::find($stageId);
+                if ($stage) {
+                    $hasStudents = \App\Models\Student::whereHas('grade', function ($q) use ($stageId) {
+                        $q->where('stage_id', $stageId);
+                    })->exists();
+                    
+                    if ($hasStudents) {
+                        $stage->delete(); // Soft delete
+                    } else {
+                        $stage->forceDelete(); // Hard delete
+                    }
+                }
+            }
         }
+        
         if (isset($data['deleted_grades'])) {
-            Grade::whereIn('id', $data['deleted_grades'])->delete();
+            foreach ($data['deleted_grades'] as $gradeId) {
+                $grade = \App\Models\Grade::find($gradeId);
+                if ($grade) {
+                    $hasStudents = \App\Models\Student::where('grade_id', $gradeId)->exists();
+                    if ($hasStudents) {
+                        $grade->delete(); // Soft delete
+                    } else {
+                        $grade->forceDelete(); // Hard delete
+                    }
+                }
+            }
         }
 
         if (isset($data['settings'])) {

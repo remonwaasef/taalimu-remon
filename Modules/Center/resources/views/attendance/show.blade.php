@@ -90,15 +90,8 @@
                                                     <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'present' ? 'success' : 'outline-success' }} rounded-pill px-3" {{ $isEnded && (!$attendance || $attendance->status !== 'present') ? 'disabled' : '' }}>{{ __('center::attendance.present') }}</button>
                                                 </form>
                                                 
-                                                <form action="{{ route('center.attendance.store') }}" method="POST">
-                                                    @csrf
-                                                    <input type="hidden" name="student_id" value="{{ $student->id }}">
-                                                    <input type="hidden" name="course_id" value="{{ $schedule->course_id }}">
-                                                    <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
-                                                    <input type="hidden" name="session_date" value="{{ today()->format('Y-m-d') }}">
-                                                    <input type="hidden" name="status" value="late">
-                                                    <button type="submit" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'late' ? 'warning' : 'outline-warning' }} rounded-pill px-3" {{ $isEnded && (!$attendance || $attendance->status !== 'late') ? 'disabled' : '' }}>{{ __('center::attendance.late') }}</button>
-                                                </form>
+                                                <!-- Smart Late Button (Triggers Modal) -->
+                                                <button type="button" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'late' ? 'warning' : 'outline-warning' }} rounded-pill px-3" onclick="openLateModal({{ $student->id }}, '{{ $schedule->course_id }}', '{{ $schedule->id }}', '{{ addslashes($student->name) }}')" {{ $isEnded && (!$attendance || $attendance->status !== 'late') ? 'disabled' : '' }}>{{ __('center::attendance.late') }}</button>
 
                                                 <form action="{{ route('center.attendance.store') }}" method="POST">
                                                     @csrf
@@ -126,6 +119,41 @@
         </div>
     </div>
 
+<!-- Smart Late Modal -->
+<div class="modal fade" id="lateModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h6 class="modal-title fw-bold" id="lateModalTitle">تسجيل تأخير</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('center.attendance.store') }}" method="POST">
+                @csrf
+                <div class="modal-body text-center pt-2">
+                    <p class="text-muted small mb-3">طالب: <strong id="lateModalStudentName" class="text-dark"></strong></p>
+                    
+                    <input type="hidden" name="student_id" id="lateModalStudentId">
+                    <input type="hidden" name="course_id" id="lateModalCourseId">
+                    <input type="hidden" name="schedule_id" id="lateModalScheduleId">
+                    <input type="hidden" name="session_date" value="{{ today()->format('Y-m-d') }}">
+                    <input type="hidden" name="status" value="late">
+                    
+                    <label class="form-label fw-bold">كم دقيقة تأخير؟</label>
+                    <div class="input-group input-group-lg mb-2">
+                        <input type="number" name="late_minutes" id="lateModalMinutes" class="form-control text-center fw-bold" required min="1" value="">
+                        <span class="input-group-text bg-light">دقيقة</span>
+                    </div>
+                    <small class="text-success d-block mb-3" style="font-size: 0.75rem;"><i class="bi bi-robot"></i> تم الحساب آلياً بناءً على وقت الحصة</small>
+                </div>
+                <div class="modal-footer border-top-0 pt-0 justify-content-center">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold">حفظ التأخير</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Scan QR Modal -->
 <div class="modal fade" id="scanQrModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -148,6 +176,33 @@
 @push('scripts')
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
+    const sessionStartTimeRaw = "{{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }}";
+
+    function openLateModal(studentId, courseId, scheduleId, studentName) {
+        document.getElementById('lateModalStudentId').value = studentId;
+        document.getElementById('lateModalCourseId').value = courseId;
+        document.getElementById('lateModalScheduleId').value = scheduleId;
+        document.getElementById('lateModalStudentName').innerText = studentName;
+        
+        // Smart Calculation
+        const now = new Date();
+        const sessionTime = new Date();
+        const [hours, minutes] = sessionStartTimeRaw.split(':');
+        sessionTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+        
+        let diffMinutes = Math.floor((now - sessionTime) / 60000);
+        
+        // If diff is negative (arrived before session) or too crazy high (e.g. next day/retroactive), default to 15
+        if (diffMinutes <= 0 || diffMinutes > 300) {
+            diffMinutes = 15; 
+        }
+        
+        document.getElementById('lateModalMinutes').value = diffMinutes;
+        
+        const modal = new bootstrap.Modal(document.getElementById('lateModal'));
+        modal.show();
+    }
+
     let html5QrScanner = null;
     let scannerRunning = false;
     const scanConfig = { fps: 10, qrbox: { width: 250, height: 250 } };

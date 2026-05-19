@@ -44,6 +44,17 @@ class AttendanceService
             }
         }
 
+        // If manual late entry from modal (has minutes but no label), resolve label automatically
+        if ($status === 'late' && $lateMinutes > 0 && !$lateLabel) {
+            $lateLevels = $this->getLateLevels();
+            foreach ($lateLevels as $level) {
+                if ($lateMinutes >= $level['minutes']) {
+                    $lateLabel = $level['label'];
+                    break;
+                }
+            }
+        }
+
         $attendance = Attendance::updateOrCreate(
             [
                 'student_id' => $data['student_id'],
