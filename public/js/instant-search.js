@@ -310,6 +310,17 @@
         filters.forEach(function(filterEl) {
             filterEl.addEventListener('change', applyFilters);
         });
+        // ─── Auto-Select from URL ───
+        var urlParams = new URLSearchParams(window.location.search);
+        var searchParam = urlParams.get('search') || urlParams.get('q');
+        if (searchParam) {
+            input.value = searchParam;
+            // Sync with global inputs
+            document.querySelectorAll('.global-search-input').forEach(function(globalInput) {
+                globalInput.value = searchParam;
+            });
+            setTimeout(applyFilters, 100);
+        }
     }
 
     // ─── Keyboard Shortcut: / or Ctrl+K ───
@@ -327,7 +338,26 @@
 
     // ─── Auto-Initialize on DOM Ready ───
     document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('[data-smart-search]').forEach(initSmartSearch);
+        var smartInputs = document.querySelectorAll('[data-smart-search]');
+        smartInputs.forEach(initSmartSearch);
+
+        // Handle Global Search Form globally
+        document.querySelectorAll('.global-search-input').forEach(function(globalInput) {
+            var form = globalInput.closest('form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    // If no local smart search exists on this page, redirect to students page
+                    if (smartInputs.length === 0 && globalInput.value.trim() !== '') {
+                        var query = encodeURIComponent(globalInput.value.trim());
+                        // Extract tenant from URL (e.g., /center/...)
+                        var tenantMatch = window.location.pathname.match(/^\/([^\/]+)/);
+                        var tenant = tenantMatch ? tenantMatch[1] : 'center';
+                        window.location.href = '/' + tenant + '/students?search=' + query;
+                    }
+                });
+            }
+        });
     });
 
     // ─── Inject Styles ───
