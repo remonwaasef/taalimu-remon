@@ -588,7 +588,9 @@
                                                             @endphp
                                                             <div class="col-6">
                                                                 <div class="p-2 bg-white rounded-3 border border-light text-center h-100 shadow-sm">
-                                                                    <label class="d-block small text-muted mb-1" style="font-size: 0.6rem;">{{ __('features.' . $feature->code) }}</label>
+                                                                    <label class="d-block small text-muted fw-bold mb-1" style="font-size: 0.65rem;">
+                                                                        {{ app()->getLocale() === 'ar' ? $feature->name : $feature->name_en }}
+                                                                    </label>
                                                                     @if($feature->type === 'limit')
                                                                         <input type="text" class="form-control form-control-sm border-0 bg-light rounded-2 text-center" name="packages[{{ $package->id }}][limits][{{ $feature->id }}]" value="{{ $value }}" placeholder="-1">
                                                                     @else
