@@ -648,53 +648,86 @@
                                 <h5 class="fw-bold mb-1">{{ __('admin.system_features_management') }}</h5>
                                 <p class="text-muted small mb-0">{{ __('admin.system_features_note') }}</p>
                             </div>
-                            <button type="button" class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addFeatureModal">
+                            <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#addFeatureModal">
                                 <i class="bi bi-plus-lg me-1"></i> {{ __('admin.new_feature') }}
                             </button>
                         </div>
 
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th class="rounded-start-3">{{ __('admin.feature_name') }}</th>
-                                        <th>{{ __('admin.feature_code') }}</th>
-                                        <th>{{ __('admin.type') }}</th>
-                                        <th>{{ __('admin.category') }}</th>
-                                        <th>{{ __('admin.sort_order') }}</th>
-                                        <th class="rounded-end-3 text-center">{{ __('admin.actions') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($features as $feature)
-                                    <tr>
-                                        <td>
-                                            <div class="fw-bold">{{ $feature->name }}</div>
-                                            <div class="small text-muted" dir="ltr">{{ $feature->name_en }}</div>
-                                        </td>
-                                        <td><code class="bg-light px-2 py-1 rounded">{{ $feature->code }}</code></td>
-                                        <td>
-                                            <span class="badge {{ $feature->type == 'limit' ? 'bg-info-subtle text-info' : 'bg-success-subtle text-success' }} rounded-pill">
-                                                {{ $feature->type == 'limit' ? 'رقمي' : 'نعم/لا' }}
-                                            </span>
-                                        </td>
-                                        <td>{{ $feature->category }}</td>
-                                        <td>{{ $feature->sort_order }}</td>
-                                        <td class="text-center">
-                                            <div class="btn-group btn-group-sm">
-                                                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editFeatureModal{{ $feature->id }}">
-                                                    <i class="bi bi-pencil"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-outline-danger" onclick="if(confirm('حذف هذه الميزة سيؤدي لحذف قيمها من جميع الباقات. هل أنت متأكد؟')) document.getElementById('delete-feature-{{ $feature->id }}').submit()">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
+                        @php
+                            $groupedFeatures = $features->groupBy('category');
+                            $categoryIcons = [
+                                'core' => 'bi-cpu',
+                                'smart' => 'bi-stars text-warning',
+                                'analysis' => 'bi-graph-up-arrow text-info',
+                                'academic' => 'bi-journal-text text-primary',
+                                'default' => 'bi-box'
+                            ];
+                            $categoryNames = [
+                                'core' => 'الأساسيات (Core)',
+                                'smart' => 'الميزات الذكية (Smart)',
+                                'analysis' => 'التحليلات (Analysis)',
+                                'academic' => 'الأكاديمي (Academic)'
+                            ];
+                        @endphp
+
+                        @forelse($groupedFeatures as $category => $catFeatures)
+                            <div class="mb-5">
+                                <h6 class="fw-bold mb-3 pb-2 border-bottom d-flex align-items-center">
+                                    <i class="bi {{ $categoryIcons[$category] ?? $categoryIcons['default'] }} me-2 fs-5"></i> 
+                                    {{ $categoryNames[$category] ?? ucfirst($category) }}
+                                    <span class="badge bg-light text-muted ms-auto rounded-pill border">{{ $catFeatures->count() }} ميزات</span>
+                                </h6>
+                                <div class="row g-3">
+                                    @foreach($catFeatures as $feature)
+                                    <div class="col-md-6 col-xl-4">
+                                        <div class="card h-100 border-0 shadow-sm rounded-4 feature-card transition-all" style="background: #f8f9fa;">
+                                            <div class="card-body p-3">
+                                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <div class="bg-white p-2 rounded-3 shadow-sm border border-light">
+                                                            <i class="bi {{ $feature->type == 'limit' ? 'bi-123 text-info' : 'bi-toggle-on text-success' }} fs-5"></i>
+                                                        </div>
+                                                        <div>
+                                                            <h6 class="fw-bold mb-0">{{ $feature->name }}</h6>
+                                                            <small class="text-muted" dir="ltr">{{ $feature->name_en }}</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-sm btn-link text-muted p-0 border-0" type="button" data-bs-toggle="dropdown">
+                                                            <i class="bi bi-three-dots-vertical"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-3 text-end">
+                                                            <li><a class="dropdown-item py-2" href="#" data-bs-toggle="modal" data-bs-target="#editFeatureModal{{ $feature->id }}"><i class="bi bi-pencil me-2"></i> تعديل</a></li>
+                                                            <li><hr class="dropdown-divider"></li>
+                                                            <li>
+                                                                <a class="dropdown-item py-2 text-danger" href="#" onclick="if(confirm('حذف هذه الميزة سيؤدي لحذف قيمها من جميع الباقات. هل أنت متأكد؟')) document.getElementById('delete-feature-{{ $feature->id }}').submit()">
+                                                                    <i class="bi bi-trash me-2"></i> حذف نهائي
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="d-flex align-items-center gap-2 mt-3">
+                                                    <code class="bg-white border px-2 py-1 rounded-2 small text-dark d-flex align-items-center flex-grow-1">
+                                                        <i class="bi bi-braces text-muted me-1"></i> {{ $feature->code }}
+                                                    </code>
+                                                    <span class="badge {{ $feature->type == 'limit' ? 'bg-info-subtle text-info' : 'bg-success-subtle text-success' }} rounded-pill px-3 py-2 border">
+                                                        {{ $feature->type == 'limit' ? 'رقمي' : 'نعم/لا' }}
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </td>
-                                    </tr>
+                                        </div>
+                                    </div>
                                     @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="text-center py-5">
+                                <i class="bi bi-grid-3x3-gap text-muted opacity-25" style="font-size: 4rem;"></i>
+                                <p class="text-muted mt-3">لا توجد ميزات مضافة حتى الآن.</p>
+                            </div>
+                        @endforelse
                     </div>
 
                     <!-- Coupons Tab -->
