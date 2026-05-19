@@ -18,11 +18,20 @@
                 <div class="col-md-6">
                     <div class="input-group">
                         <span class="input-group-text bg-white rounded-start-pill px-3"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" id="searchInput" class="form-control bg-white rounded-end-pill py-2" placeholder="{{ __('instructor::billing.search_placeholder') }}">
+                        <input type="text" id="searchInput" 
+                            data-smart-search="#billingTable"
+                            data-search-fields="name,phone"
+                            data-search-counter="#resultCount"
+                            data-search-empty="#noResults"
+                            data-search-container="#billingTableContainer"
+                            data-search-highlight="true"
+                            data-search-counter-suffix="{{ __('instructor::billing.student_count') }}"
+                            class="form-control bg-white rounded-end-pill py-2" 
+                            placeholder="{{ __('instructor::billing.search_placeholder') }}">
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <select id="filterStatus" class="form-select bg-white rounded-pill py-2">
+                    <select data-smart-filter="#billingTable" data-filter-key="status" class="form-select bg-white rounded-pill py-2">
                         <option value="all">{{ __('instructor::billing.all_students') }}</option>
                         <option value="unpaid">{{ __('instructor::billing.has_balance') }}</option>
                         <option value="paid">{{ __('instructor::billing.fully_paid') }}</option>
@@ -172,50 +181,17 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
-    const filterStatus = document.getElementById('filterStatus');
-    const rows = document.querySelectorAll('.student-row');
-    const noResults = document.getElementById('noResults');
-    const resultCount = document.getElementById('resultCount');
-    const tableContainer = document.getElementById('billingTableContainer');
-
     // Auto-select filter from URL if present
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('status')) {
         const urlStatus = urlParams.get('status');
-        if (filterStatus.querySelector(`option[value="${urlStatus}"]`)) {
+        const filterStatus = document.querySelector('[data-smart-filter="#billingTable"][data-filter-key="status"]');
+        if (filterStatus && filterStatus.querySelector(`option[value="${urlStatus}"]`)) {
             filterStatus.value = urlStatus;
+            // Trigger change so smart search picks it up
+            filterStatus.dispatchEvent(new Event('change'));
         }
     }
-
-    function applyFilters() {
-        const query = searchInput.value.trim().toLowerCase();
-        const filter = filterStatus.value;
-        let visible = 0;
-
-        rows.forEach(row => {
-            const name = row.dataset.name.toLowerCase();
-            const phone = row.dataset.phone.toLowerCase();
-            const status = row.dataset.status;
-
-            const matchSearch = !query || name.includes(query) || phone.includes(query);
-            const matchFilter = filter === 'all' || status === filter;
-
-            if (matchSearch && matchFilter) {
-                row.style.display = '';
-                visible++;
-            } else {
-                row.style.display = 'none';
-            }
-        });
-
-        if (resultCount) resultCount.textContent = visible + ' {{ __('instructor::billing.student_count') }}';
-        if (noResults) noResults.classList.toggle('d-none', visible > 0);
-        if (tableContainer) tableContainer.classList.toggle('d-none', visible === 0);
-    }
-
-    if (searchInput) searchInput.addEventListener('input', applyFilters);
-    if (filterStatus) filterStatus.addEventListener('change', applyFilters);
 
     // Modal data handling
     const collectModal = document.getElementById('collectModal');
@@ -233,9 +209,6 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('modal_balance_hint').textContent = '{{ __('instructor::billing.current_balance') }}' + new Intl.NumberFormat().format(balance);
         });
     }
-
-    // Apply filters on initial load
-    applyFilters();
 });
 </script>
 @endsection

@@ -199,7 +199,9 @@
                         <input 
                             type="text" 
                             id="search-input"
-                            data-instant-search=".custom-table"
+                            data-smart-search=".custom-table"
+                            data-search-fields="name,phone"
+                            data-search-highlight="true"
                             class="form-control ps-5 rounded-pill border-0 shadow-sm" 
                             placeholder="{{ __('center::students.search_placeholder') }}"
                             style="background-color: var(--color-light); height: 48px;"
@@ -227,15 +229,17 @@
                 </div>
 
                 <div class="btn-group p-1 bg-light rounded-pill" role="group" style="min-width: 250px;">
-                    <input type="radio" class="btn-check financial-filter" name="finFilter" id="finAll" value="all" checked>
+                    <input type="radio" data-smart-filter=".custom-table" data-filter-key="fin-status" class="btn-check financial-filter" name="finFilter" id="finAll" value="all" checked>
                     <label class="btn btn-sm btn-outline-primary border-0 rounded-pill px-3" for="finAll">{{ __('center::students.all') }}</label>
                     
-                    <input type="radio" class="btn-check financial-filter" name="finFilter" id="finDebt" value="debt">
+                    <input type="radio" data-smart-filter=".custom-table" data-filter-key="fin-status" class="btn-check financial-filter" name="finFilter" id="finDebt" value="debt">
                     <label class="btn btn-sm btn-outline-danger border-0 rounded-pill px-3" for="finDebt">{{ __('center::students.debtor') }}</label>
                     
-                    <input type="radio" class="btn-check financial-filter" name="finFilter" id="finPaid" value="paid">
+                    <input type="radio" data-smart-filter=".custom-table" data-filter-key="fin-status" class="btn-check financial-filter" name="finFilter" id="finPaid" value="paid">
                     <label class="btn btn-sm btn-outline-success border-0 rounded-pill px-3" for="finPaid">{{ __('center::students.paid') }}</label>
                 </div>
+                <!-- Hidden input to link stage/grade buttons with smart search -->
+                <input type="hidden" id="smartGradeFilter" data-smart-filter=".custom-table" data-filter-key="grade" value="all">
             </div>
 
             <!-- Sub-grade Buttons (Hidden by default) -->
@@ -520,9 +524,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             const stageBtns = document.querySelectorAll('.stage-btn');
             const subGradeContainers = document.querySelectorAll('.sub-grades-container');
-            const searchInput = document.getElementById('search-input');
-            const finFilters = document.querySelectorAll('.financial-filter');
-            let currentStageGrades = null;
+            const smartGradeFilter = document.getElementById('smartGradeFilter');
+
+            function updateSmartGradeFilter(grades) {
+                if (smartGradeFilter) {
+                    smartGradeFilter.value = grades ? grades : 'all';
+                    smartGradeFilter.dispatchEvent(new Event('change'));
+                }
+            }
 
             stageBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -532,20 +541,17 @@
                     
                     const stage = this.getAttribute('data-stage');
                     if (stage === 'all') {
-                        currentStageGrades = null;
+                        updateSmartGradeFilter(null);
                     } else {
                         const gradesAttr = this.getAttribute('data-grades');
-                        currentStageGrades = gradesAttr ? gradesAttr.split(',') : [];
+                        updateSmartGradeFilter(gradesAttr);
                         const subGradeContainer = document.getElementById(stage + '-grades');
                         if (subGradeContainer) {
                             subGradeContainer.style.display = 'block';
                         }
                     }
-                    filterStudents();
                 });
             });
-
-            finFilters.forEach(f => f.addEventListener('change', filterStudents));
 
             // Quick Payment Logic
             const payModalEl = document.getElementById('quickPayModal');
@@ -630,14 +636,9 @@
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
-                    currentStageGrades = [this.getAttribute('data-grade')];
-                    filterStudents();
+                    updateSmartGradeFilter(this.getAttribute('data-grade'));
                 });
             });
-
-            if (searchInput) {
-                searchInput.addEventListener('input', filterStudents);
-            }
 
             // Bulk Action logic
             const selectAll = document.getElementById('select-all');
@@ -695,50 +696,7 @@
                 });
             });
 
-            function filterStudents() {
-                const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
-                const activeFinFilterEl = document.querySelector('.financial-filter:checked');
-                const activeFinFilter = activeFinFilterEl ? activeFinFilterEl.value : 'all';
-                const studentRows = document.querySelectorAll('.student-row');
-                const tbody = document.querySelector('tbody');
-                let emptyRow = document.getElementById('empty-state-row');
-
-                if (!emptyRow) {
-                    emptyRow = document.createElement('tr');
-                    emptyRow.id = 'empty-state-row';
-                    emptyRow.innerHTML = `<td colspan="8" class="text-center py-5 px-3">
-                                    <div class="mb-3">
-                                        <img src="{{ asset('assets/images/empty-state.svg') }}" alt="No students" style="width: 120px; opacity: 0.6;">
-                                    </div>
-                                    <h5 class="text-dark fw-bold mb-2">{{ __('center::students.no_students') }}</h5>
-                                    <p class="text-muted small px-3 mx-auto" style="max-width: 400px;">{{ __('center::students.add_import_hint') ?? 'لا توجد نتائج مطابقة لعملية البحث الحالية.' }}</p>
-                                </td>`;
-                }
-                
-                let visibleCount = 0;
-                studentRows.forEach(row => {
-                    const rowGrade = row.getAttribute('data-grade');
-                    const finStatus = row.getAttribute('data-fin-status');
-                    const text = row.textContent.toLowerCase();
-                    const gradeMatch = !currentStageGrades || currentStageGrades.includes(rowGrade);
-                    const searchMatch = !searchTerm || text.includes(searchTerm);
-                    const finMatch = activeFinFilter === 'all' || finStatus === activeFinFilter;
-                    if (gradeMatch && searchMatch && finMatch) {
-                        row.style.display = '';
-                        visibleCount++;
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-                
-                const existingEmpty = document.getElementById('empty-state-row');
-                if (visibleCount === 0) {
-                    if (!existingEmpty) tbody.appendChild(emptyRow);
-                    else existingEmpty.style.display = '';
-                } else if (existingEmpty) {
-                    existingEmpty.style.display = 'none';
-                }
-            }
+            // Removed manual filterStudents() since it's handled by smart-search.js
         });
 
         // AJAX Deletion with Undo Functionality

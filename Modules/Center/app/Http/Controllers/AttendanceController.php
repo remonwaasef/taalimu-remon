@@ -295,4 +295,73 @@ class AttendanceController extends Controller
 
         return view('center::attendance.success', ['message' => $successMsg]);
     }
+
+    /**
+     * Sync offline attendance records (bulk).
+     * Receives an array of attendance records saved in LocalStorage when offline.
+     */
+    public function offlineSync(Request $request)
+    {
+        $this->authorize('create', Attendance::class);
+
+        $validated = $request->validate([
+            'records' => 'required|array|min:1|max:200',
+            'records.*.student_id' => 'nullable|exists:students,id',
+            'records.*.student_code' => 'nullable|string',
+            'records.*.course_id' => 'required|exists:courses,id',
+            'records.*.schedule_id' => 'required|exists:schedules,id',
+            'records.*.session_date' => 'required|date',
+            'records.*.status' => 'required|in:present,absent,late,excused',
+            'records.*.late_minutes' => 'nullable|integer|min:0',
+            'records.*.offline_timestamp' => 'nullable|string',
+        ]);
+
+        $synced = 0;
+        $failed = 0;
+        $errors = [];
+
+        foreach ($validated['records'] as $index => $record) {
+            try {
+                $studentId = $record['student_id'] ?? null;
+
+                // Resolve student by code if no ID
+                if (!$studentId && !empty($record['student_code'])) {
+                    $student = Student::where('tenant_id', $this->tenant->id)
+                        ->where('code', $record['student_code'])
+                        ->first();
+                    if ($student) {
+                        $studentId = $student->id;
+                    }
+                }
+
+                if (!$studentId) {
+                    $failed++;
+                    $errors[] = "Record #{$index}: Student not found.";
+                    continue;
+                }
+
+                $this->attendanceService->markAttendance(array_merge($record, [
+                    'tenant_id' => $this->tenant->id,
+                    'student_id' => $studentId,
+                ]));
+
+                $synced++;
+            } catch (\Exception $e) {
+                $failed++;
+                $errors[] = "Record #{$index}: " . $e->getMessage();
+                \Illuminate\Support\Facades\Log::warning('Offline sync failed for record', [
+                    'record' => $record,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'synced' => $synced,
+            'failed' => $failed,
+            'errors' => $errors,
+            'message' => "تمت مزامنة {$synced} سجل حضور بنجاح." . ($failed > 0 ? " فشل {$failed} سجل." : ''),
+        ]);
+    }
 }
