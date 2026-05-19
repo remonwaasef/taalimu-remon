@@ -28,14 +28,7 @@
       </span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <!-- Global Search (Power UX) -->
-        <form class="me-auto d-none d-lg-flex ms-3" style="width: 350px;">
-            <div class="input-group input-group-sm bg-light rounded-pill border-0 px-3 py-1 align-items-center" style="transition: all 0.3s ease;">
-                <i class="fas fa-search text-muted opacity-50 me-2"></i>
-                <input type="text" class="form-control bg-transparent border-0 shadow-none global-search-input" placeholder="{{ __('center::dashboard.header.search_placeholder', [], 'ar') ?: 'بحث: طالب، فاتورة، دورة...' }}" aria-label="Search">
-                <span class="badge bg-secondary opacity-50 ms-2" style="font-size: 0.65rem;">Ctrl+Shift+F</span>
-            </div>
-        </form>
+        <!-- Global Search removed as per user request -->
 
       <ul class="navbar-nav ms-auto  navbar-list mb-2 mb-lg-0 align-items-center">
 
