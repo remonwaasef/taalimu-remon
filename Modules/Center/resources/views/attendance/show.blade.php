@@ -146,7 +146,7 @@
                     <small class="text-success d-block mb-3" style="font-size: 0.75rem;"><i class="bi bi-robot"></i> تم الحساب آلياً بناءً على وقت الحصة</small>
                 </div>
                 <div class="modal-footer border-top-0 pt-0 justify-content-center">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal" onclick="bootstrap.Modal.getInstance(document.getElementById('lateModal'))?.hide()">إلغاء</button>
                     <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold">حفظ التأخير</button>
                 </div>
             </form>
@@ -199,7 +199,8 @@
         
         document.getElementById('lateModalMinutes').value = diffMinutes;
         
-        const modal = new bootstrap.Modal(document.getElementById('lateModal'));
+        const modalEl = document.getElementById('lateModal');
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
         modal.show();
     }
 
