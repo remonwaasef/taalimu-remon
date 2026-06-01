@@ -6,8 +6,12 @@ echo "=============================================="
 
 # 1. Check Env
 if [ ! -f .env ]; then
-    echo "Error: .env file not found!"
-    exit 1
+    echo "Warning: .env file not found! Creating from .env.example..."
+    cp .env.example .env
+    if [ $? -ne 0 ]; then
+        echo "Error: Could not create .env file!"
+        exit 1
+    fi
 fi
 
 # 2. Update .env for Redis (using sed)

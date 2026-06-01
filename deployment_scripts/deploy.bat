@@ -5,8 +5,12 @@ echo ==============================================
 
 echo [1/6] Environment Check...
 if not exist .env (
-    echo Error: .env file not found!
-    exit /b 1
+    echo Warning: .env file not found! Creating from .env.example...
+    copy .env.example .env
+    if errorlevel 1 (
+        echo Error: Could not create .env file!
+        exit /b 1
+    )
 )
 
 echo [2/6] Enabling Redis in .env...
