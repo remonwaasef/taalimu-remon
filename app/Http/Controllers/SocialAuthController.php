@@ -40,7 +40,7 @@ class SocialAuthController extends Controller
     public function handleGoogleCallback()
     {
         try {
-            $googleUser = Socialite::driver('google')->stateless()->user();
+            $googleUser = Socialite::driver('google')->user();
             
             // 1. Check if user already exists by google_id → Login directly
             $user = User::where('google_id', $googleUser->id)->first();

@@ -1442,7 +1442,10 @@ class InstructorController extends Controller
         $tenant->settings = $settings;
 
         if ($request->hasFile('logo')) {
-            $tenant->logo = $request->file('logo')->store("{$tenant->id}/logos", 'public');
+            $logoFile = $request->file('logo');
+            $safeExt = in_array(strtolower($logoFile->getClientOriginalExtension()), ['jpg','jpeg','png','gif','webp']) ? strtolower($logoFile->getClientOriginalExtension()) : 'png';
+            $safeName = \Illuminate\Support\Str::random(30) . '.' . $safeExt;
+            $tenant->logo = $logoFile->storeAs("{$tenant->id}/logos", $safeName, 'public');
         }
 
         $tenant->save();

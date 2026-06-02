@@ -30,7 +30,8 @@ class BugReportController extends Controller
         try {
             if ($request->hasFile('screenshot')) {
                 $file = $request->file('screenshot');
-                $fileName = 'bug-reports/' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $safeExt = in_array($file->getClientOriginalExtension(), ['jpg','jpeg','png','gif','webp']) ? $file->getClientOriginalExtension() : 'png';
+                $fileName = 'bug-reports/' . \Illuminate\Support\Str::random(30) . '.' . $safeExt;
                 
                 // Save to Laravel's internal storage (storage/app/public)
                 \Illuminate\Support\Facades\Storage::disk('public')->put(
@@ -47,10 +48,14 @@ class BugReportController extends Controller
                 
                 if (preg_match('/^data:image\/(\w+);base64,/', $imageData, $type)) {
                     $extension = strtolower($type[1]);
+                    // Security: Only allow safe image extensions from base64
+                    if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                        $extension = 'png';
+                    }
                     $image = base64_decode(substr($imageData, strpos($imageData, ',') + 1));
                     
                     if ($image) {
-                        $fileName = 'bug-reports/' . uniqid() . '_auto.' . $extension;
+                        $fileName = 'bug-reports/' . \Illuminate\Support\Str::random(30) . '_auto.' . $extension;
                         
                         // Save to Laravel's internal storage (storage/app/public)
                         if (\Illuminate\Support\Facades\Storage::disk('public')->put($fileName, $image)) {
@@ -263,7 +268,7 @@ class BugReportController extends Controller
             $destDir = dirname($destPath);
 
             if (!file_exists($destDir)) {
-                mkdir($destDir, 0777, true);
+                mkdir($destDir, 0755, true);
             }
 
             if (file_exists($sourcePath)) {
