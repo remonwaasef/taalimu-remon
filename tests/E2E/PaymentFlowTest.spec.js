@@ -4,8 +4,10 @@ test.describe('Payment & Subscription Flow', () => {
     test.beforeEach(async ({ page }) => {
         // Login as admin
         await page.goto('http://demo-center.localhost:8000/login');
-        await page.fill('input[name="email"]', 'admin@demo.com');
-        await page.fill('input[name="password"]', 'password');
+        const email = process.env.TEST_EMAIL || 'admin@demo.com';
+        const password = process.env.TEST_PASSWORD || 'password';
+        await page.fill('input[name="email"]', email);
+        await page.fill('input[name="password"]', password);
         await page.click('button[type="submit"]');
         await expect(page).toHaveURL('http://demo-center.localhost:8000/');
     });
