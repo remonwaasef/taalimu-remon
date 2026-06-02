@@ -46,7 +46,7 @@ class QuizService
     /**
      * Submit a quiz and calculate results.
      */
-    public function submitQuiz(Quiz $quiz, array $answers)
+    public function submitQuiz(Quiz $quiz, array $answers, QuizAttempt $attempt = null)
     {
         $score = 0;
         $totalPoints = $quiz->questions->sum('points');
@@ -62,12 +62,20 @@ class QuizService
         $percentage = ($totalPoints > 0) ? ($score / $totalPoints) * 100 : 0;
         $passed = $percentage >= $quiz->passing_score;
 
-        $attempt = $quiz->attempts()->create([
-            'user_id' => Auth::id(),
-            'score' => $percentage, 
-            'passed' => $passed,
-            'completed_at' => now(),
-        ]);
+        if ($attempt) {
+            $attempt->update([
+                'score' => $percentage, 
+                'passed' => $passed,
+                'completed_at' => now(),
+            ]);
+        } else {
+            $attempt = $quiz->attempts()->create([
+                'user_id' => Auth::id(),
+                'score' => $percentage, 
+                'passed' => $passed,
+                'completed_at' => now(),
+            ]);
+        }
 
         if ($passed) {
             $this->gamificationService->awardPoints(

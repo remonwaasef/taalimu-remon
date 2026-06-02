@@ -151,7 +151,24 @@ class CourseService
 
             // Check for certificate
             if ($progress >= 100) {
-                $this->certificateService->checkAndGenerate($enrollment);
+                // إضافة شرط اختبار/مراجعة للشهادة (ليس فقط progress=100%)
+                $hasQuizzes = \App\Models\Quiz::whereHas('section', function($q) use ($course) {
+                    $q->where('course_id', $course->id);
+                })->exists();
+
+                $passedExams = true;
+                if ($hasQuizzes) {
+                    $passedExams = \App\Models\QuizAttempt::where('user_id', $user->id)
+                        ->whereHas('quiz.section', function($q) use ($course) {
+                            $q->where('course_id', $course->id);
+                        })
+                        ->where('score', '>=', 50) // Assuming 50 is passing
+                        ->exists();
+                }
+
+                if ($passedExams) {
+                    $this->certificateService->checkAndGenerate($enrollment);
+                }
             }
 
             return $enrollment;

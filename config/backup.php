@@ -36,6 +36,8 @@ return [
                  * Directories used by the backup process will automatically be excluded.
                  */
                 'exclude' => [
+                    base_path('.env'),
+                    base_path('.env.backup'),
                     base_path('vendor'),
                     base_path('node_modules'),
                     storage_path('framework'),
@@ -165,6 +167,7 @@ return [
              */
             'disks' => [
                 'local',
+                's3',
             ],
 
             /*

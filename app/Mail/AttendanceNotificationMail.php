@@ -21,7 +21,7 @@ class AttendanceNotificationMail extends Mailable
      */
     public function __construct($subject, $body, $variables, $centerName, $studentName)
     {
-        $this->subject = $subject;
+        $this->subject = str_replace(["\r", "\n"], '', $subject);
         $this->body = $body;
         $this->variables = $variables;
         $this->centerName = $centerName;

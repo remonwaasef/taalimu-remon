@@ -10,6 +10,18 @@ use App\Traits\HasLocaleResolution;
 class WhatsAppService
 {
     use HasLocaleResolution;
+
+    /**
+     * Mask phone number for logging
+     */
+    protected function maskPhone($phone)
+    {
+        if (!$phone) return '';
+        $len = strlen($phone);
+        if ($len <= 4) return str_repeat('*', $len);
+        return substr($phone, 0, 2) . str_repeat('*', $len - 4) . substr($phone, -2);
+    }
+
     /**
      * Send a WhatsApp message.
      * For now, this is a mock/placeholder for UltraMsg or similar APIs.
@@ -56,7 +68,8 @@ class WhatsAppService
                 ]);
 
             if ($response->successful()) {
-                Log::info("Official WhatsApp message sent to {$to} for tenant {$tenant->id}");
+                $maskedTo = $this->maskPhone($to);
+                Log::info("Official WhatsApp message sent to {$maskedTo} for tenant {$tenant->id}");
                 return true;
             }
 
@@ -175,7 +188,8 @@ class WhatsAppService
 
         if (!$accessToken || !$phoneNumberId) {
             // Fallback: Log the message instead of sending if keys are missing
-            Log::info("WhatsApp System Message (SIMULATED): To: {$to}, Message: {$message}");
+            $maskedTo = $this->maskPhone($to);
+            Log::info("WhatsApp System Message (SIMULATED): To: {$maskedTo}, Message: {$message}");
             return true; 
         }
 
@@ -199,7 +213,8 @@ class WhatsAppService
                 ]);
 
             if ($response->successful()) {
-                Log::info("Official WhatsApp System Message sent to {$to}");
+                $maskedTo = $this->maskPhone($to);
+                Log::info("Official WhatsApp System Message sent to {$maskedTo}");
                 return true;
             }
 

@@ -164,12 +164,13 @@ class QuizController extends Controller
             ])->with('info', __('center::messages.msg_066'));
         }
 
-        $sessionKey = 'quiz_start_' . $quiz->id . '_' . auth()->id();
-        if (!session()->has($sessionKey)) {
-            session([$sessionKey => now()]);
-        }
+        // نقل وقت الاختبار من Session إلى DB
+        $attempt = $quiz->attempts()->firstOrCreate(
+            ['user_id' => auth()->id(), 'completed_at' => null],
+            ['score' => 0, 'passed' => false, 'tenant_id' => app('tenant')->id ?? null]
+        );
 
-        $startTime = session($sessionKey);
+        $startTime = $attempt->created_at;
         $endTime = null;
         if ($quiz->duration_minutes) {
             $endTime = \Carbon\Carbon::parse($startTime)->addMinutes($quiz->duration_minutes);
@@ -187,17 +188,18 @@ class QuizController extends Controller
             'answers.*' => 'required|exists:question_options,id',
         ]);
 
-        $sessionKey = 'quiz_start_' . $quiz->id . '_' . auth()->id();
-        $startTime = session($sessionKey);
+        $attempt = $quiz->attempts()->where('user_id', auth()->id())->whereNull('completed_at')->first();
+        if (!$attempt) {
+            return back()->with('error', 'لا يوجد اختبار قيد التنفيذ.');
+        }
+
+        $startTime = $attempt->created_at;
 
         if (!$this->quizService->isTimeValid($quiz, $startTime)) {
             return back()->with('error', __('center::messages.msg_067'));
         }
 
-        $attempt = $this->quizService->submitQuiz($quiz, $request->answers);
-
-        // Clear session
-        session()->forget($sessionKey);
+        $attempt = $this->quizService->submitQuiz($quiz, $request->answers, $attempt);
 
         return redirect()->route('center.quizzes.result', $attempt);
     }

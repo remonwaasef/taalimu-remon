@@ -17,24 +17,31 @@ class RefundService
     {
         return DB::transaction(function () use ($sale, $data) {
             $tenantId = \Modules\Tenancy\Services\TenantResolver::get()->id;
+            
+            // Lock the sale record to prevent double-spend race conditions
+            $lockedSale = Sale::lockForUpdate()->find($sale->id);
             $refundAmount = $data['amount'];
+
+            if ($lockedSale->paid_amount < $refundAmount) {
+                throw new \Exception('Insufficient paid amount for this refund.');
+            }
 
             // 1. Create Refund Record
             $refund = Refund::create([
                 'tenant_id' => $tenantId,
-                'sale_id' => $sale->id,
+                'sale_id' => $lockedSale->id,
                 'amount' => $refundAmount,
-                __('services.string_93'),
+                'reason' => $data['reason'] ?? __('services.string_93'),
                 'refund_method' => $data['refund_method'] ?? 'cash',
                 'processed_by' => auth()->id(),
             ]);
 
             // 2. Update Sale Status/Paid Amount
-            $newPaidAmount = $sale->paid_amount - $refundAmount;
-            $sale->update([
+            $newPaidAmount = $lockedSale->paid_amount - $refundAmount;
+            $lockedSale->update([
                 'paid_amount' => $newPaidAmount,
             ]);
-            $sale->updateStatus();
+            $lockedSale->updateStatus();
 
             // 3. Reverse Commissions
             // We find commissions linked to this sale that are NOT yet paid

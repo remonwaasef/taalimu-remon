@@ -33,7 +33,7 @@ class ChatbotService
 
             $fullPrompt = $systemPrompt . "\n\nUser: " . $message . "\n\nAssistant:";
 
-            $response = Http::timeout(30)->post($this->apiUrl . '?key=' . $this->apiKey, [
+            $response = Http::timeout(30)->withHeaders(['x-goog-api-key' => $this->apiKey])->post($this->apiUrl, [
                 'contents' => [
                     [
                         'parts' => [

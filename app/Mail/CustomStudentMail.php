@@ -24,7 +24,7 @@ class CustomStudentMail extends Mailable
     public function __construct(Student $student, $subjectString, $messageContent, $senderName = null)
     {
         $this->student = $student;
-        $this->subjectString = $subjectString;
+        $this->subjectString = str_replace(["\r", "\n"], '', $subjectString);
         $this->messageContent = $messageContent;
         $this->senderName = $senderName ?: config('app.name');
     }
