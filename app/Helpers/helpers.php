@@ -9,7 +9,7 @@ if (!function_exists('tenant_url')) {
      * @param bool $secure Whether to use HTTPS
      * @return string The full tenant URL
      */
-    function tenant_url(string $path = '', $tenant = null, bool $secure = null): string
+    function tenant_url(string $path = '', $tenant = null, ?bool $secure = null): string
     {
         // Get tenant
         if (is_null($tenant)) {
