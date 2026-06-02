@@ -11,8 +11,10 @@ test.describe('Authentication Flow', () => {
         await expect(page.locator('body')).toContainText('تسجيل الدخول');
 
         // Fill credentials
-        await page.fill('input[name="email"]', 'admin@demo.com');
-        await page.fill('input[name="password"]', 'password');
+        const email = process.env.TEST_EMAIL || 'admin@demo.com';
+        const password = process.env.TEST_PASSWORD || 'password';
+        await page.fill('input[name="email"]', email);
+        await page.fill('input[name="password"]', password);
 
         // Click login
         await page.click('button[type="submit"]');

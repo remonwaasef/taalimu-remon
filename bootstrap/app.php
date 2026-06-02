@@ -17,8 +17,8 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Trust all proxies to ensure HTTPS is detected correctly behind load balancers
-        $middleware->trustProxies(at: '*');
+        // Trust only local proxies (adjust this in production to match your actual LB/Proxy IP)
+        $middleware->trustProxies(at: ['127.0.0.1', '10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16']);
 
         // Add SetLocale middleware globally for web routes
         $middleware->web(prepend: [
@@ -36,10 +36,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'throttle:api',
         ]);
         
-        // Temporarily disable CSRF for debugging
-        // $middleware->validateCsrfTokens(except: [
-        //     '*/login',
-        // ]);
+        // CSRF verification should not be disabled in production
         
         // Configure redirect for unauthenticated users
         $middleware->redirectGuestsTo(function ($request) {
@@ -130,7 +127,7 @@ return Application::configure(basePath: dirname(__DIR__))
                     $status = $e->getStatusCode();
                 }
 
-                $isLocal = app()->environment('local') || config('app.debug');
+                $isLocal = app()->environment('local');
                 return response()->json([
                     'success' => false,
                     'message' => $isLocal ? $e->getMessage() : ($status === 500 ? 'An internal server error occurred.' : $e->getMessage()),
