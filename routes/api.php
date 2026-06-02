@@ -21,4 +21,4 @@ Route::match(['get', 'head'], '/health-check', function () {
 
 Route::get('/user', function (Request $request) {
     return $request->user();
-})->middleware('auth:sanctum');
+})->middleware(['auth:sanctum', 'throttle:60,1']);
