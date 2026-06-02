@@ -25,6 +25,7 @@ class OnlineClass extends Model
 
     protected $casts = [
         'start_time' => 'datetime',
+        'meeting_password' => 'encrypted',
     ];
 
     /**

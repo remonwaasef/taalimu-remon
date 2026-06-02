@@ -129,7 +129,6 @@ class UserController extends Controller
             $loginUrl = route('center.login', ['tenant' => $this->tenant->domain]);
             $roleLabel = __('roles.' . $validated['role'], [], app()->getLocale());
             $user->notify(new \App\Notifications\TeamMemberWelcome(
-                $plainPassword,
                 $this->tenant->name,
                 $loginUrl,
                 $roleLabel
@@ -299,6 +298,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)->where('tenant_id', auth()->user()->tenant_id)],
+            'current_password' => ['required_with:password', 'current_password'],
             'password' => [
                 'nullable', 
                 'string', 

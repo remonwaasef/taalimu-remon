@@ -93,7 +93,6 @@ class SocialAuthController extends Controller
                 'plan'  => $planParam,
                 'cycle' => $cycleParam,
                 'account_type' => $accountTypeParam,
-                'token' => $token,
             ]));
 
             $redirectUrl = route('google.complete-registration') . ($query ? '?' . $query : '');
