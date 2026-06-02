@@ -69,7 +69,7 @@ class InstructorController extends Controller
                 'name' => $request->name,
                 'phone' => $request->phone,
                 'email' => $email,
-                'password' => $plainPassword,
+                'password' => \Illuminate\Support\Facades\Hash::make($plainPassword),
                 'role' => 'instructor',
                 'email_verified_at' => now(),
                 'phone_verified_at' => now(),

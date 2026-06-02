@@ -41,6 +41,16 @@ class ApiTenantMiddleware
         // Scope permissions
         app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
 
+        // Security check: Prevent Cross-Tenant token usage
+        if ($user = $request->user('sanctum')) {
+            if ($user->tenant_id !== $tenant->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized cross-tenant access.',
+                ], 403);
+            }
+        }
+
         return $next($request);
     }
 }

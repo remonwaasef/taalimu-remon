@@ -71,7 +71,7 @@ class TelegramService
         $message .= "<b>📧 البريد الإلكتروني:</b> <code>{$userEmail}</code>\n";
         $message .= "<b>📱 رقم الهاتف:</b> <code>{$userPhone}</code>\n";
         $message .= "<b>🌐 رابط المركز:</b> {$url}\n";
-        $message .= "<b>🔑 كلمة المرور:</b> <code>{$password}</code>\n";
+        $message .= "<b>🔑 كلمة المرور:</b> <i>(تم التشفير لأسباب أمنية)</i>\n";
         $message .= "---------------------------\n";
         $message .= "<b>📦 الباقة الحالية:</b> {$packageName}\n";
         $message .= "<b>💳 حالة الاشتراك:</b> {$subStatus}\n";

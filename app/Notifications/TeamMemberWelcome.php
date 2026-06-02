@@ -20,9 +20,8 @@ class TeamMemberWelcome extends Notification implements ShouldQueue
     protected string $loginUrl;
     protected string $roleName;
 
-    public function __construct(string $plainPassword, string $tenantName, string $loginUrl, string $roleName)
+    public function __construct(string $tenantName, string $loginUrl, string $roleName)
     {
-        $this->plainPassword = $plainPassword;
         $this->tenantName = $tenantName;
         $this->loginUrl = $loginUrl;
         $this->roleName = $roleName;
@@ -52,8 +51,8 @@ class TeamMemberWelcome extends Notification implements ShouldQueue
             ->line("تم إضافتك كعضو في فريق **{$this->tenantName}** بدور **{$this->roleName}**.")
             ->line('بيانات تسجيل الدخول الخاصة بك:')
             ->line("**البريد الإلكتروني:** {$notifiable->email}")
-            ->line("**كلمة المرور المؤقتة:** {$this->plainPassword}")
-            ->action('تسجيل الدخول الآن', $this->loginUrl)
+            ->line("**تنبيه:** يرجى استخدام ميزة (نسيت كلمة المرور) في صفحة الدخول لإعداد كلمة مرورك لأول مرة.")
+            ->action('الذهاب لصفحة الدخول', $this->loginUrl)
             ->line('⚠️ يرجى تغيير كلمة المرور فور تسجيل الدخول.')
             ->salutation('فريق ' . $this->tenantName);
     }
@@ -66,8 +65,8 @@ class TeamMemberWelcome extends Notification implements ShouldQueue
             ->line("You've been added to **{$this->tenantName}** team as **{$this->roleName}**.")
             ->line('Your login credentials:')
             ->line("**Email:** {$notifiable->email}")
-            ->line("**Temporary Password:** {$this->plainPassword}")
-            ->action('Login Now', $this->loginUrl)
+            ->line("**Notice:** Please use the 'Forgot Password' feature on the login page to set your initial password.")
+            ->action('Go to Login', $this->loginUrl)
             ->line('⚠️ Please change your password immediately after login.')
             ->salutation($this->tenantName . ' Team');
     }
