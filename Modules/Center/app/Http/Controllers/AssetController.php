@@ -12,7 +12,7 @@ class AssetController extends Controller
 {
     public function index()
     {
-        // $this->authorize('viewAny', Asset::class);
+        $this->authorize('viewAny', Asset::class);
         $assets = Asset::with('classroom')
             ->orderBy(\DB::raw('ISNULL(classroom_id)'), 'asc')
             ->orderBy('classroom_id')
@@ -27,14 +27,14 @@ class AssetController extends Controller
 
     public function create()
     {
-        // $this->authorize('create', Asset::class);
+        $this->authorize('create', Asset::class);
         $classrooms = Classroom::select('id', 'name')->get();
         return view('center::assets.create', compact('classrooms'));
     }
 
     public function store(Request $request): RedirectResponse
     {
-        // $this->authorize('create', Asset::class);
+        $this->authorize('create', Asset::class);
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -55,20 +55,20 @@ class AssetController extends Controller
 
     public function show(Asset $asset)
     {
-        // $this->authorize('view', $asset);
+        $this->authorize('view', $asset);
         return view('center::assets.show', compact('asset'));
     }
 
     public function edit(Asset $asset)
     {
-        // $this->authorize('update', $asset);
+        $this->authorize('update', $asset);
         $classrooms = Classroom::select('id', 'name')->get();
         return view('center::assets.edit', compact('asset', 'classrooms'));
     }
 
     public function update(Request $request, Asset $asset): RedirectResponse
     {
-        // $this->authorize('update', $asset);
+        $this->authorize('update', $asset);
         
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -89,7 +89,7 @@ class AssetController extends Controller
 
     public function destroy(Asset $asset): RedirectResponse
     {
-        // $this->authorize('delete', $asset);
+        $this->authorize('delete', $asset);
         $asset->delete();
 
         return redirect()->route('center.assets.index')

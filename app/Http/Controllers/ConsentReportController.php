@@ -57,9 +57,16 @@ class ConsentReportController extends Controller implements HasMiddleware
             // Headers
             fputcsv($file, ['ID', 'User ID', 'Session ID', 'IP', 'Analytics', 'Marketing', 'Date']);
             
+            $sanitizeCsv = function ($value) {
+                if (is_string($value) && preg_match('/^[=\+\-@]/', $value)) {
+                    return "'" . $value;
+                }
+                return $value;
+            };
+
             // Data
             foreach ($consents as $consent) {
-                fputcsv($file, [
+                fputcsv($file, array_map($sanitizeCsv, [
                     $consent->id,
                     $consent->user_id ?? 'Guest',
                     $consent->session_id,
@@ -67,7 +74,7 @@ class ConsentReportController extends Controller implements HasMiddleware
                     $consent->analytics_consent ? 'Yes' : 'No',
                     $consent->marketing_consent ? 'Yes' : 'No',
                     $consent->consent_date,
-                ]);
+                ]));
             }
             
             fclose($file);

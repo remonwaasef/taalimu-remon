@@ -27,17 +27,20 @@ class CertificateService
             return $existing;
         }
 
+        $uuid = (string) Str::uuid();
+        
         // Create new certificate
         return Certificate::create([
             'tenant_id' => $enrollment->course->tenant_id,
             'student_id' => $enrollment->student_id,
             'course_id' => $enrollment->course_id,
-            'uuid' => (string) Str::uuid(),
+            'uuid' => $uuid,
             'issued_at' => now(),
             'metadata' => [
                 'student_name' => $enrollment->student->user->name,
                 'course_title' => $enrollment->course->title,
                 'tenant_name' => \Modules\Tenancy\Services\TenantResolver::get()->name ?? 'Edu Platform',
+                'validation_url' => url('/certificates/verify/' . $uuid), // إضافة رابط تحقق عام للشهادة
             ],
         ]);
     }

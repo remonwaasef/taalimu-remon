@@ -158,7 +158,36 @@ class PayPalService
 
     public function verifyWebhook($headers, $body)
     {
-        // Simple verification for now
-        return true; 
+        try {
+            $token = $this->getAccessToken();
+            $webhookId = config('services.paypal.webhook_id');
+
+            if (!$webhookId) {
+                Log::warning('PayPal Webhook ID is not configured.');
+                return false;
+            }
+
+            $response = $this->client->post('/v1/notifications/verify-webhook-signature', [
+                'headers' => [
+                    'Authorization' => "Bearer {$token}",
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => [
+                    'auth_algo' => $headers['paypal-auth-algo'][0] ?? '',
+                    'cert_url' => $headers['paypal-cert-url'][0] ?? '',
+                    'transmission_id' => $headers['paypal-transmission-id'][0] ?? '',
+                    'transmission_sig' => $headers['paypal-transmission-sig'][0] ?? '',
+                    'transmission_time' => $headers['paypal-transmission-time'][0] ?? '',
+                    'webhook_id' => $webhookId,
+                    'webhook_event' => json_decode($body, true),
+                ],
+            ]);
+
+            $result = json_decode($response->getBody(), true);
+            return isset($result['verification_status']) && $result['verification_status'] === 'SUCCESS';
+        } catch (\Exception $e) {
+            Log::error('PayPal Webhook Verification Error: ' . $e->getMessage());
+            return false;
+        }
     }
 }

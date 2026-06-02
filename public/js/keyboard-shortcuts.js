@@ -26,8 +26,8 @@
         { keys: ['ctrl', 'shift', '/'], action: 'show-shortcuts', label: 'عرض الاختصارات', icon: 'fas fa-keyboard' },
     ];
 
-    // URL patterns for navigation shortcuts
-    const ROUTES = {
+    // URL patterns for navigation shortcuts, preferring dynamic ones from window
+    const ROUTES = window.AppRoutes || {
         'dashboard': '/',
         'students': '/students',
         'courses': '/courses',

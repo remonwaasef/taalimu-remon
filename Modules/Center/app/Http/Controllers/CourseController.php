@@ -123,16 +123,23 @@ class CourseController extends Controller
         $student = \App\Models\Student::where('tenant_id', $this->tenant->id)
             ->findOrFail($request->student_id);
 
-        // Prevent duplicate enrollment
-        $alreadyEnrolled = Enrollment::where('user_id', $student->user_id)
-            ->where('course_id', $course->id)
-            ->exists();
+        $lockKey = "enrollment_lock_{$student->user_id}_{$course->id}";
+        $lock = \Illuminate\Support\Facades\Cache::lock($lockKey, 10);
 
-        if ($alreadyEnrolled) {
-            return back()->with('error', __('center::messages.student_already_enrolled'));
+        if (!$lock->get()) {
+            return back()->with('error', __('center::messages.registration_in_progress') ?? 'جاري معالجة طلبك...');
         }
 
         try {
+            // Prevent duplicate enrollment
+            $alreadyEnrolled = Enrollment::where('user_id', $student->user_id)
+                ->where('course_id', $course->id)
+                ->exists();
+
+            if ($alreadyEnrolled) {
+                return back()->with('error', __('center::messages.student_already_enrolled'));
+            }
+
             // إنشاء فاتورة غير مدفوعة تلقائياً عند التسجيل
             $this->financeService->createSale([
                 'student_id' => $student->id,
@@ -143,6 +150,8 @@ class CourseController extends Controller
             return back()->with('success', __('center::messages.msg_027'));
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
+        } finally {
+            $lock->release();
         }
     }
 

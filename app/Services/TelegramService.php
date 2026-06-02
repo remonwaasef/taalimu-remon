@@ -106,8 +106,8 @@ class TelegramService
         $message = "<b>⚠️ خطأ برمجي في النظام (Error 500)</b>\n\n";
         $message .= "<b>🔗 الرابط:</b> {$url}\n";
         $message .= "<b>👤 المستخدم:</b> " . ($user ? $user->email : __('services.string_128')) . "\n";
-        $message .= "<b>❌ الرسالة:</b> <code>" . substr($e->getMessage(), 0, 200) . "</code>\n";
-        $message .= "<b>📂 الملف:</b> <code>" . basename($e->getFile()) . "</code> في سطر <code>" . $e->getLine() . "</code>\n\n";
+        $message .= "<b>❌ نوع الخطأ:</b> <code>" . class_basename($e) . "</code>\n";
+        $message .= "يرجى مراجعة سجلات الخادم (Logs) لمعرفة التفاصيل.\n\n";
         $message .= "#ErrorAlert";
 
         return $this->sendAdminNotification($message);

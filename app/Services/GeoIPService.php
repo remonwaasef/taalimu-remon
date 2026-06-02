@@ -24,7 +24,7 @@ class GeoIPService
         try {
             // Cache results for 24 hours to reduce API load
             return Cache::remember("geoip_country_{$ip}", 86400, function () use ($ip) {
-                $response = Http::timeout(2)->get("http://ip-api.com/json/{$ip}?fields=status,countryCode");
+                $response = Http::timeout(2)->get("https://ip-api.com/json/{$ip}?fields=status,countryCode");
                 
                 if ($response->successful() && $response->json('status') === 'success') {
                     return strtoupper($response->json('countryCode'));

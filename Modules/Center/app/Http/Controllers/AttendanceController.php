@@ -305,7 +305,7 @@ class AttendanceController extends Controller
         $this->authorize('create', Attendance::class);
 
         $validated = $request->validate([
-            'records' => 'required|array|min:1|max:200',
+            'records' => 'required|array|min:1|max:50',
             'records.*.student_id' => 'nullable|exists:students,id',
             'records.*.student_code' => 'nullable|string',
             'records.*.course_id' => 'required|exists:courses,id',

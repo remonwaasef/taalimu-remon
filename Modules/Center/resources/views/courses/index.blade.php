@@ -121,7 +121,7 @@
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center gap-1 justify-content-end">
-                                        <button type="button" onclick="openEnrollModal('{{ $course->id }}', '{{ addslashes($course->title) }}')" class="btn btn-sm btn-success rounded-pill px-3 py-1 fw-bold shadow-sm d-none d-xl-inline-block border-0">
+                                        <button type="button" onclick="openEnrollModal('{{ $course->id }}', '{{ e($course->title) }}')" class="btn btn-sm btn-success rounded-pill px-3 py-1 fw-bold shadow-sm d-none d-xl-inline-block border-0">
                                             <i class="fas fa-user-plus me-1"></i> {{ __('center::courses.enroll_student') }}
                                         </button>
                                         <div class="{{ ($loop->remaining < 2 && $courses->count() > 2) ? 'dropup' : 'dropdown' }}">
@@ -130,7 +130,7 @@
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
                                                 <li><a class="dropdown-item" href="{{ route('center.courses.show', $course->id) }}"><i class="fas fa-eye me-2 text-muted"></i> {{ __('center::courses.view') }}</a></li>
-                                                <li><button type="button" class="dropdown-item fw-bold text-success" onclick="openEnrollModal('{{ $course->id }}', '{{ addslashes($course->title) }}')"><i class="fas fa-user-plus me-2"></i> {{ __('center::courses.enroll_student') }}</button></li>
+                                                <li><button type="button" class="dropdown-item fw-bold text-success" onclick="openEnrollModal('{{ $course->id }}', '{{ e($course->title) }}')"><i class="fas fa-user-plus me-2"></i> {{ __('center::courses.enroll_student') }}</button></li>
                                                 <li><hr class="dropdown-divider"></li>
                                                 <li><a class="dropdown-item" href="{{ route('center.courses.edit', $course->id) }}"><i class="fas fa-edit me-2 text-muted"></i> {{ __('center::courses.edit') }}</a></li>
                                                 <li><a class="dropdown-item" href="{{ route('center.curriculum.edit', $course->id) }}"><i class="fas fa-book-open me-2 text-muted"></i> {{ __('center::courses.content') }}</a></li>

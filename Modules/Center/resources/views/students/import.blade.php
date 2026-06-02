@@ -180,9 +180,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const lines = text.split('\n').filter(line => line.trim());
-        let html = '';
+        previewBody.innerHTML = '';
         let count = 0;
-
         lines.forEach(function(line, i) {
             // Split by tab (Excel clipboard) or comma
             let cols = line.split('\t');
@@ -195,17 +194,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (name && email) {
                 count++;
-                html += '<tr>';
-                html += '<td>' + count + '</td>';
-                html += '<td>' + escapeHtml(name) + '</td>';
-                html += '<td dir="ltr">' + escapeHtml(email) + '</td>';
-                html += '<td dir="ltr">' + escapeHtml(phone) + '</td>';
-                html += '<td>' + escapeHtml(grade) + '</td>';
-                html += '</tr>';
+                const tr = document.createElement('tr');
+                
+                const td1 = document.createElement('td');
+                td1.textContent = count;
+                tr.appendChild(td1);
+                
+                const td2 = document.createElement('td');
+                td2.textContent = name;
+                tr.appendChild(td2);
+                
+                const td3 = document.createElement('td');
+                td3.dir = 'ltr';
+                td3.textContent = email;
+                tr.appendChild(td3);
+                
+                const td4 = document.createElement('td');
+                td4.dir = 'ltr';
+                td4.textContent = phone;
+                tr.appendChild(td4);
+                
+                const td5 = document.createElement('td');
+                td5.textContent = grade;
+                tr.appendChild(td5);
+                
+                previewBody.appendChild(tr);
             }
         });
 
-        previewBody.innerHTML = html;
         previewCount.textContent = count;
         previewSection.classList.toggle('d-none', count === 0);
         submitBtn.disabled = (count === 0);

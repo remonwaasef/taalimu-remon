@@ -1410,7 +1410,7 @@
 
     function copyAllDetails() {
         @if(session('generated_password'))
-            const text = `{!! addslashes($msg) !!}`;
+            const text = @json($msg ?? '');
             navigator.clipboard.writeText(text).then(function() {
                 alert("{{ __('center::students.profile.reset_password.copy_success') }}");
             });

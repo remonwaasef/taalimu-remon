@@ -122,7 +122,7 @@
                     <li class="list-inline-item"><a href="#">Terms of Use</a></li>
                 </ul>
                 <div class="right-panel">
-                    ©<script>document.write(new Date().getFullYear())</script> {{ config('app.name') }}, Made with <span class="text-gray border-gray"> Hope UI</span>
+                    ©{{ date('Y') }} {{ config('app.name') }}, Made with <span class="text-gray border-gray"> Hope UI</span>
                 </div>
             </div>
         </footer>

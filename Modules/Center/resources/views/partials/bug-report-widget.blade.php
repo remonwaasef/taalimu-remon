@@ -418,7 +418,19 @@ function removeScreenshot() {
     box.classList.remove('has-image');
 
     // Show a simple "no screenshot" placeholder
-    loading.innerHTML = '<div><i class="fas fa-camera" style="opacity:0.3"></i></div><small style="color:#94a3b8">{{ app()->getLocale() == "ar" ? "لم يتم إرفاق صورة" : "No screenshot attached" }}</small>';
+    loading.textContent = '';
+    const div = document.createElement('div');
+    const icon = document.createElement('i');
+    icon.className = 'fas fa-camera';
+    icon.style.opacity = '0.3';
+    div.appendChild(icon);
+    
+    const small = document.createElement('small');
+    small.style.color = '#94a3b8';
+    small.textContent = '{{ app()->getLocale() == "ar" ? "لم يتم إرفاق صورة" : "No screenshot attached" }}';
+    
+    loading.appendChild(div);
+    loading.appendChild(small);
     loading.classList.remove('d-none');
 }
 
@@ -430,8 +442,12 @@ function retakeScreenshot() {
 
 function openBugReportModal() {
     const btn = document.getElementById('bugReportFab');
-    const originalContent = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size: 20px;"></i>';
+    const originalNodes = Array.from(btn.childNodes); // Save original nodes
+    btn.textContent = '';
+    const spinner = document.createElement('i');
+    spinner.className = 'fas fa-spinner fa-spin';
+    spinner.style.fontSize = '20px';
+    btn.appendChild(spinner);
     btn.style.pointerEvents = 'none';
 
     // First capture the screenshot (while modal is hidden)
@@ -452,14 +468,16 @@ function openBugReportModal() {
         .then(function(dataUrl) {
             // Show the modal with the captured screenshot
             fab.style.display = '';
-            btn.innerHTML = originalContent;
+            btn.textContent = '';
+            originalNodes.forEach(node => btn.appendChild(node));
             btn.style.pointerEvents = 'auto';
             showModalWithScreenshot(dataUrl);
         })
         .catch(function(error) {
             console.error('Auto screenshot failed:', error);
             fab.style.display = '';
-            btn.innerHTML = originalContent;
+            btn.textContent = '';
+            originalNodes.forEach(node => btn.appendChild(node));
             btn.style.pointerEvents = 'auto';
             showModalWithScreenshot(null);
         });
@@ -557,8 +575,11 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
 
         const btn = document.getElementById('bugSubmitBtn');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>{{ __("center::bug_report.submitting") }}';
+        const originalNodes = Array.from(btn.childNodes);
+        btn.textContent = '{{ __("center::bug_report.submitting") }}';
+        const spinner = document.createElement('i');
+        spinner.className = 'fas fa-spinner fa-spin me-2';
+        btn.prepend(spinner);
         btn.disabled = true;
 
         const infoField = document.getElementById('bugBrowserInfo');
@@ -616,7 +637,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         })
         .finally(() => {
-            btn.innerHTML = originalText;
+            btn.textContent = '';
+            originalNodes.forEach(node => btn.appendChild(node));
             btn.disabled = false;
         });
     });

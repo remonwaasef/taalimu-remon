@@ -137,7 +137,7 @@
             }
 
             function copyAllDetails() {
-                const text = `{!! addslashes($msg) !!}`;
+                const text = @json($msg);
                 navigator.clipboard.writeText(text).then(function() {
                     alert('{{ __('center::students.copy_all_success') }}');
                 });

@@ -97,7 +97,7 @@
                                                 </form>
                                                 
                                                 <!-- Smart Late Button (Triggers Modal) -->
-                                                <button type="button" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'late' ? 'warning' : 'outline-warning' }} rounded-pill px-3" onclick="openLateModal({{ $student->id }}, '{{ $schedule->course_id }}', '{{ $schedule->id }}', '{{ addslashes($student->name) }}')" {{ $lockLate ? 'disabled' : '' }}>{{ __('center::attendance.late') }}</button>
+                                                <button type="button" class="btn btn-sm btn-{{ $attendance && $attendance->status == 'late' ? 'warning' : 'outline-warning' }} rounded-pill px-3" onclick="openLateModal({{ $student->id }}, '{{ $schedule->course_id }}', '{{ $schedule->id }}', '{{ e($student->name) }}')" {{ $lockLate ? 'disabled' : '' }}>{{ __('center::attendance.late') }}</button>
 
                                                 <form action="{{ route('center.attendance.store') }}" method="POST">
                                                     @csrf

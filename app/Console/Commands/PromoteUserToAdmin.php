@@ -35,6 +35,29 @@ class PromoteUserToAdmin extends Command
             return 1;
         }
 
+        // Display user details for confirmation
+        $this->table(
+            ['ID', 'Name', 'Email', 'Current Role', 'Tenant ID'],
+            [[$user->id, $user->name, $user->email, $user->role ?? 'N/A', $user->tenant_id ?? 'NULL']]
+        );
+
+        $this->warn('⚠️  This will promote the user to Super Admin with GLOBAL access (tenant_id = NULL).');
+
+        if (!$this->confirm("Are you sure you want to promote '{$user->name}' ({$email}) to Super Admin?")) {
+            $this->info('Operation cancelled.');
+            return 0;
+        }
+
+        // Double confirmation for safety
+        $confirmName = $this->ask('Type the user email to confirm');
+        if ($confirmName !== $email) {
+            $this->error('Email mismatch. Operation cancelled.');
+            return 1;
+        }
+
+        $previousRole = $user->role;
+        $previousTenantId = $user->tenant_id;
+
         // 1. Set the role column (used by AuthController and some legacy checks)
         $user->role = 'admin';
         $user->tenant_id = null; // Super Admins should be global
@@ -49,7 +72,18 @@ class PromoteUserToAdmin extends Command
         // 4. Reset cache to ensure immediate access
         app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 
-        $this->info("User {$email} has been promoted to Super Admin successfully.");
+        // 5. Audit log
+        \Illuminate\Support\Facades\Log::critical('ADMIN PROMOTION', [
+            'promoted_user_id' => $user->id,
+            'promoted_user_email' => $user->email,
+            'previous_role' => $previousRole,
+            'previous_tenant_id' => $previousTenantId,
+            'promoted_by' => get_current_user() . '@' . gethostname(),
+            'timestamp' => now()->toIso8601String(),
+        ]);
+
+        $this->info("✅ User {$email} has been promoted to Super Admin successfully.");
+        $this->warn('This action has been logged for auditing purposes.');
         return 0;
     }
 }
