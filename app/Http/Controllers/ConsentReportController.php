@@ -13,9 +13,15 @@ class ConsentReportController extends Controller implements HasMiddleware
     {
         return [
             function ($request, $next) {
-                if (!auth()->check() || !auth()->user()->hasRole('super_admin')) {
+                if (!auth()->check()) {
                     abort(403, 'Unauthorized access to GDPR data.');
                 }
+                
+                $user = auth()->user();
+                if (!$user->hasRole('super_admin') && !$user->hasRole('center_admin')) {
+                    abort(403, 'Unauthorized access to GDPR data.');
+                }
+                
                 return $next($request);
             },
         ];
@@ -23,16 +29,23 @@ class ConsentReportController extends Controller implements HasMiddleware
 
     public function index()
     {
+        $query = DB::table('user_consents');
+        
+        // Scope by tenant if not super_admin
+        if (!auth()->user()->hasRole('super_admin')) {
+            $query->where('tenant_id', app('tenant')->id ?? null);
+        }
+
         // إحصائيات الموافقات
         $stats = [
-            'total_consents' => DB::table('user_consents')->count(),
-            'analytics_accepted' => DB::table('user_consents')->where('analytics_consent', true)->count(),
-            'marketing_accepted' => DB::table('user_consents')->where('marketing_consent', true)->count(),
-            'today_consents' => DB::table('user_consents')->whereDate('created_at', today())->count(),
+            'total_consents' => (clone $query)->count(),
+            'analytics_accepted' => (clone $query)->where('analytics_consent', true)->count(),
+            'marketing_accepted' => (clone $query)->where('marketing_consent', true)->count(),
+            'today_consents' => (clone $query)->whereDate('created_at', today())->count(),
         ];
 
         // أحدث 50 موافقة
-        $recent_consents = DB::table('user_consents')
+        $recent_consents = (clone $query)
             ->orderBy('created_at', 'desc')
             ->limit(50)
             ->get();
@@ -42,8 +55,15 @@ class ConsentReportController extends Controller implements HasMiddleware
 
     public function export()
     {
+        $query = DB::table('user_consents');
+        
+        // Scope by tenant if not super_admin
+        if (!auth()->user()->hasRole('super_admin')) {
+            $query->where('tenant_id', app('tenant')->id ?? null);
+        }
+
         // تصدير جميع الموافقات إلى CSV
-        $consents = DB::table('user_consents')->get();
+        $consents = $query->get();
         
         $filename = 'cookie-consents-' . date('Y-m-d') . '.csv';
         $headers = [

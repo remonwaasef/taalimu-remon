@@ -103,8 +103,8 @@ class AttendanceService
                 $attendanceAlertEnabled = !isset($tenant->settings['academic']['attendance_alert']) || $tenant->settings['academic']['attendance_alert'];
 
                 if ($attendanceAlertEnabled) {
-                    // Dispatch Sync for immediate reliability (avoids queue worker dependency)
-                    \App\Jobs\SendWhatsAppNotification::dispatchSync($tenant, $student, $schedule->course);
+                    // Dispatch on queue for better performance
+                    \App\Jobs\SendWhatsAppNotification::dispatch($tenant, $student, $schedule->course)->onQueue('whatsapp');
                     
                     // Send Email Notification if enabled
                     $this->sendEmailNotification($tenant, $student, $schedule->course, $status);

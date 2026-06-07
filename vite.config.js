@@ -8,6 +8,17 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks(id) {
+                    if (id.includes('node_modules')) {
+                        return 'vendor';
+                    }
+                }
+            }
+        }
+    },
     server: {
         host: '127.0.0.1', // استخدام IPv4 بدلاً من IPv6
         port: 5173,
