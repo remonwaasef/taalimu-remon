@@ -224,7 +224,7 @@ class SocialAuthController extends Controller
         $request->validate([
             'account_type' => 'required|in:center,instructor',
             'center_name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20|unique:users,phone',
+            'phone' => 'nullable|string|max:20|unique:users,phone',
             'plan' => 'required|exists:packages,slug',
             'billing_cycle' => 'required|in:monthly,term,yearly',
             'payment_gateway' => 'nullable|in:paypal,paymob,test',
