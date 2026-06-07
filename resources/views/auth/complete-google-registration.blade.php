@@ -597,7 +597,7 @@ window.addEventListener('pageshow', (event) => {
                     </div>
 
                     <div class="pt-4">
-                        <button type="submit" :disabled="isSubmitting || subdomainStatus === 'invalid' || (phoneNumber && phoneNumber.length < 8)"
+                        <button type="submit" :disabled="isSubmitting || subdomainStatus === 'invalid' || (phoneNumber.length > 0 && phoneNumber.length < 8)"
                                 class="w-full h-14 rounded-full flex items-center justify-center gap-3 group bg-brand-secondary text-white shadow-xl shadow-brand-secondary/20 hover:shadow-brand-secondary/40 hover:-translate-y-0.5 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale">
                              <span x-show="!isSubmitting" class="text-lg font-black font-arabic" 
                                   x-text="currentPlan.trial_days > 0 ? ({{ Js::from(app()->isLocale('ar') ? 'ابدأ الفترة التجريبية' : 'Start Free Trial') }}) : (finalPrice === 0 ? '{{ __('auth.register.cta_main') }}' : '{{ app()->isLocale('ar') ? 'ادفع واستكمل التسجيل' : 'Pay & Complete Registration' }}')">
