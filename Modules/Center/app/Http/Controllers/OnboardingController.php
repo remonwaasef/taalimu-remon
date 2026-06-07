@@ -86,10 +86,7 @@ class OnboardingController extends Controller
 
     public function show()
     {
-        // Fix: Ensure step_4 is in the ENUM (Self-correcting DB)
-        try {
-            \Illuminate\Support\Facades\DB::statement("ALTER TABLE tenants MODIFY COLUMN onboarding_status ENUM('pending', 'step_1', 'step_2', 'step_3', 'step_4', 'completed') DEFAULT 'pending'");
-        } catch (\Exception $e) {}
+        // Fix removed: DDL operations should not be in the HTTP request path
 
         $tenant = auth()->user()->tenant;
         $status = $tenant->onboarding_status;

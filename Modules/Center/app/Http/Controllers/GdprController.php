@@ -33,9 +33,9 @@ class GdprController extends Controller
             
             $fileName = 'my_data_' . $user->id . '_' . now()->format('Y_m_d') . '.json';
             
-            return response()->streamDownload(function () use ($data) {
-                echo json_encode($data, JSON_PRETTY_PRINT);
-            }, $fileName);
+            return response()->json($data, 200, [
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '"'
+            ])->setEncodingOptions(JSON_PRETTY_PRINT);
 
         } catch (\Exception $e) {
             Log::error('GDPR Export Failed: ' . $e->getMessage());

@@ -244,6 +244,8 @@ class SaleController extends Controller
         $tenant = $this->tenant;
         $student = Student::with(['grade.stage'])->where('tenant_id', $tenant->id)->findOrFail($id);
         
+        $this->authorize('view', $student);
+        
         // Active Enrollments
         $courses = DB::table('enrollments')
             ->join('courses', 'enrollments.course_id', '=', 'courses.id')
@@ -436,6 +438,7 @@ class SaleController extends Controller
     {
         $tenant = $this->tenant;
         $sale = Sale::where('tenant_id', $tenant->id)->findOrFail($id);
+        $this->authorize('view', $sale);
         
         // Ensure invoice is not fully paid
         if ($sale->status === 'paid') {
@@ -452,6 +455,7 @@ class SaleController extends Controller
     {
         $tenant = $this->tenant;
         $sale = Sale::where('tenant_id', $tenant->id)->findOrFail($id);
+        $this->authorize('update', $sale);
 
         if ($sale->status === 'paid') {
             return redirect()->route('center.sales.show', $sale->id)->with('success', 'الفاتورة مدفوعة بالفعل.');
