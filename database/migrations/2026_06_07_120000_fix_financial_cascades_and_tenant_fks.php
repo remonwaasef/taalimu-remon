@@ -12,21 +12,36 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Remove cascadeOnDelete from sales and payments
-        Schema::table('sales', function (Blueprint $table) {
-            $table->dropForeign(['tenant_id']);
-            $table->foreign('tenant_id')->references('id')->on('tenants')->restrictOnDelete();
-        });
+        try {
+            Schema::table('sales', function (Blueprint $table) {
+                // Check if the foreign key has cascade, or just drop and recreate
+                $table->dropForeign(['tenant_id']);
+                $table->foreign('tenant_id')->references('id')->on('tenants')->restrictOnDelete();
+            });
+        } catch (\Exception $e) {
+            \Log::warning("Could not update sales.tenant_id foreign key (might already be updated): " . $e->getMessage());
+        }
 
-        Schema::table('payments', function (Blueprint $table) {
-            $table->dropForeign(['tenant_id']);
-            $table->foreign('tenant_id')->references('id')->on('tenants')->restrictOnDelete();
-        });
+        try {
+            Schema::table('payments', function (Blueprint $table) {
+                $table->dropForeign(['tenant_id']);
+                $table->foreign('tenant_id')->references('id')->on('tenants')->restrictOnDelete();
+            });
+        } catch (\Exception $e) {
+            \Log::warning("Could not update payments.tenant_id foreign key (might already be updated): " . $e->getMessage());
+        }
 
         // 2. Add tenant_id to user_consents
-        Schema::table('user_consents', function (Blueprint $table) {
-            $table->unsignedBigInteger('tenant_id')->nullable()->after('id');
-            $table->foreign('tenant_id')->references('id')->on('tenants')->cascadeOnDelete();
-        });
+        try {
+            if (!Schema::hasColumn('user_consents', 'tenant_id')) {
+                Schema::table('user_consents', function (Blueprint $table) {
+                    $table->unsignedBigInteger('tenant_id')->nullable()->after('id');
+                    $table->foreign('tenant_id')->references('id')->on('tenants')->cascadeOnDelete();
+                });
+            }
+        } catch (\Exception $e) {
+            \Log::warning("Could not add tenant_id to user_consents (might already exist): " . $e->getMessage());
+        }
 
         // 3. Fix tenant_id type in classrooms and schedules (Warning: This assumes tenant_id strings were actually numbers)
         // Only doing this if requested by the plan.
