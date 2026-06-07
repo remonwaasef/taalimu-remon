@@ -8,9 +8,16 @@ use Illuminate\Support\Facades\Log;
 
 class PayPalWebhookController extends Controller
 {
-    public function handle(Request $request)
+    public function handle(Request $request, \App\Services\PayPalService $paypalService)
     {
         $payload = $request->all();
+        
+        // Verify webhook signature
+        if (!$paypalService->verifyWebhook($request->headers->all(), $request->getContent())) {
+            Log::warning('Invalid PayPal Webhook Signature', ['ip' => $request->ip()]);
+            return response()->json(['error' => 'Invalid signature'], 400);
+        }
+
         $eventType = $payload['event_type'] ?? '';
 
         Log::info('PayPal Webhook Received: ' . $eventType, $payload);

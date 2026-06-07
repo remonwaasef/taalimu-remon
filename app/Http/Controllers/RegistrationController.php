@@ -226,7 +226,7 @@ class RegistrationController extends Controller
             // Send Onboarding Email 1 (Welcome) if enabled (non-critical)
             if (config('services.onboarding.emails_enabled', false)) {
                 try {
-                    \Illuminate\Support\Facades\Mail::to($user->email)->send(
+                    \Illuminate\Support\Facades\Mail::to($user->email)->queue(
                         new \App\Mail\TenantOnboardingMail($tenant, $user, 1)
                     );
                 } catch (\Exception $e) {

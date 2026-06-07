@@ -49,7 +49,7 @@ class ChatbotService
 
             if ($response->successful()) {
                 $data = $response->json();
-                $reply = $data[__('services.string_52');
+                $reply = $data['candidates'][0]['content']['parts'][0]['text'] ?? 'Sorry, I could not generate a response.';
                 
                 return [
                     'success' => true,
@@ -60,14 +60,14 @@ class ChatbotService
             Log::error('Gemini API Error', ['response' => $response->body()]);
             return [
                 'success' => false,
-                __('services.string_53'),
+                'message' => 'Chatbot API error. Please try again later.',
             ];
 
         } catch (\Exception $e) {
             Log::error('Chatbot Error', ['error' => $e->getMessage()]);
             return [
                 'success' => false,
-                __('services.string_54'),
+                'message' => 'An unexpected error occurred.',
             ];
         }
     }
