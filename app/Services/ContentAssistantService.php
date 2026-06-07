@@ -85,14 +85,14 @@ class ContentAssistantService
             Log::error('Gemini API Error', ['response' => $response->body()]);
             return [
                 'success' => false,
-                __('services.string_55'),
+                'message' => 'AI service error. Please try again later.',
             ];
 
         } catch (\Exception $e) {
             Log::error('Content Assistant Error', ['error' => $e->getMessage()]);
             return [
                 'success' => false,
-                __('services.string_56'),
+                'message' => 'An unexpected error occurred with the AI service.',
             ];
         }
     }

@@ -80,7 +80,7 @@ class FinanceService
                         ->exists();
                     
                     if ($isEnrolled) {
-                        throw new \Exception(__('services.string_80') . $course->title);
+                        throw new \Exception('الطالب مسجل بالفعل في: ' . $course->title);
                     }
                 }
             }
@@ -164,7 +164,7 @@ class FinanceService
                     'payment_method' => $data['payment_method'],
                     'received_by' => auth()->id(),
                     'paid_at' => now(),
-                    __('services.string_81'),
+                    'notes' => 'دفعة أولى عند إنشاء الفاتورة',
                 ]);
 
                 // Notifications
@@ -205,7 +205,7 @@ class FinanceService
                 'payment_method' => $method ?? $sale->payment_method,
                 'received_by' => auth()->id(),
                 'paid_at' => now(),
-                __('services.string_82'),
+                'notes' => $notes ?? 'سداد دفعة مالية',
             ]);
 
             // Eager load student and user to prevent N+1
@@ -275,13 +275,13 @@ class FinanceService
                 $bodyKey = "notif_payment_confirmed_body_{$locale}";
 
                 $defaultSubjects = [
-                    __('services.string_83'),
+                    'ar' => 'تأكيد الدفع',
                     'en' => 'Payment Confirmation',
                     'fr' => 'Confirmation de paiement',
                 ];
 
                 $defaultBodies = [
-                    'ar' => __('services.string_84'),
+                    'ar' => "مرحباً {student_name},\n\nنؤكد لك استلام مبلغ {paid_amount}.\nطريقة الدفع: {payment_method}\nالرصيد المتبقي: {remaining}\n\nشكراً لك,\n{center_name}",
                     'en' => "Hello {student_name},\n\nWe confirm the receipt of {paid_amount}.\nPayment Method: {payment_method}\nRemaining Balance: {remaining}\n\nThank you,\n{center_name}",
                     'fr' => "Bonjour {student_name},\n\nNous confirmons la réception d'un paiement de {paid_amount}.\nMéthode de paiement: {payment_method}\nSolde restant: {remaining}\n\nMerci,\n{center_name}",
                 ];
@@ -292,18 +292,18 @@ class FinanceService
                 $currencySymbol = function_exists('get_currency_symbol') ? get_currency_symbol() : ($tenant->settings['financial']['currency'] ?? 'EGP');
 
                 $variables = [
-                    'student_name' => $student->name, // Standardized key
-                    __('services.string_85') => $student->name,
+                    'student_name' => $student->name,
+                    'اسم_الطالب' => $student->name,
                     'center_name' => $tenant->name,
-                    __('services.string_86') => $tenant->name,
-                    __('services.string_87') => $amount . ' ' . $currencySymbol,
+                    'اسم_المركز' => $tenant->name,
+                    'المبلغ_المدفوع' => $amount . ' ' . $currencySymbol,
                     'paid_amount' => $amount . ' ' . $currencySymbol,
-                    __('services.string_88') => now()->format('Y-m-d'),
+                    'تاريخ_الدفع' => now()->format('Y-m-d'),
                     'payment_date' => now()->format('Y-m-d'),
-                    __('services.string_89') => max(0, $balance) . ' ' . $currencySymbol,
+                    'المتبقي' => max(0, $balance) . ' ' . $currencySymbol,
                     'remaining' => max(0, $balance) . ' ' . $currencySymbol,
                     'payment_method' => $method,
-                    __('services.string_90') => $method,
+                    'طريقة_الدفع' => $method,
                 ];
 
                 if ($realEmail) {

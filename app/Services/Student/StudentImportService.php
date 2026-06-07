@@ -131,7 +131,7 @@ class StudentImportService
             
              app(\App\Services\AdminNotificationService::class)->notifyAdmins(
                 'bulk_import',
-                __('services.string_105', ['successCount' => $successCount]),
+                'تم استيراد ' . $successCount . ' طالب بنجاح',
                 route('center.students.index', ['tenant' => \Modules\Tenancy\Services\TenantResolver::get()->domain]),
                 'fas fa-file-import',
                 $creator->name

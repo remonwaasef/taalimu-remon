@@ -80,8 +80,8 @@ class ScheduleConflictService
         $conflicting = $query->with(['course', 'classroom'])->first();
 
         if ($conflicting) {
-            $courseName = $conflicting->course->title ?? __('services.string_94');
-            $classroomName = $conflicting->classroom->name ?? __('services.string_95');
+            $courseName = $conflicting->course->title ?? 'كورس غير معروف';
+            $classroomName = $conflicting->classroom->name ?? 'قاعة غير معروفة';
             $startTimeFormatted = Carbon::parse($conflicting->start_time)->format('h:i A');
             $endTimeFormatted = Carbon::parse($conflicting->end_time)->format('h:i A');
             
@@ -123,8 +123,8 @@ class ScheduleConflictService
         $conflicting = $query->with(['course', 'instructor'])->first();
 
         if ($conflicting) {
-            $courseName = $conflicting->course->title ?? __('services.string_96');
-            $instructorName = $conflicting->instructor->name ?? __('services.string_97');
+            $courseName = $conflicting->course->title ?? 'كورس غير معروف';
+            $instructorName = $conflicting->instructor->name ?? 'مدرس غير معروف';
             $startTimeFormatted = Carbon::parse($conflicting->start_time)->format('h:i A');
             $endTimeFormatted = Carbon::parse($conflicting->end_time)->format('h:i A');
             
@@ -151,8 +151,8 @@ class ScheduleConflictService
         $mapping = [
             'sunday' => 0, 'monday' => 1, 'tuesday' => 2, 'wednesday' => 3,
             'thursday' => 4, 'friday' => 5, 'saturday' => 6,
-            __('services.string_98') => 0, __('services.string_99') => 1, __('services.string_100') => 2, __('services.string_101') => 3,
-            __('services.string_102') => 4, __('services.string_103') => 5, __('services.string_104') => 6,
+            'الأحد' => 0, 'الاثنين' => 1, 'الثلاثاء' => 2, 'الأربعاء' => 3,
+            'الخميس' => 4, 'الجمعة' => 5, 'السبت' => 6,
         ];
 
         return $mapping[strtolower($day)] ?? null;
