@@ -34,26 +34,26 @@ class DemoDataService
             return DB::transaction(function () use ($tenant) {
             // 1. Create Academic Structure if not exists
             $stage = Stage::firstOrCreate(
-                [__('services.string_66')],
+                ['name' => 'المرحلة الثانوية', 'tenant_id' => $tenant->id],
                 ['order' => 1]
             );
 
             $grade = Grade::firstOrCreate(
-                [__('services.string_67')],
+                ['name' => 'الصف الثالث الثانوي', 'tenant_id' => $tenant->id, 'stage_id' => $stage->id],
                 ['order' => 3]
             );
 
             // 2. Create Instructors
             $instructorsData = [
                 [
-                    __('services.string_68'),
-                    __('services.string_69'),
+                    'name' => 'أحمد محمد',
+                    'specialization' => 'الرياضيات',
                     'email' => 'ahmed.demo@' . $tenant->domain,
                     'status' => 'active',
                 ],
                 [
-                    __('services.string_70'),
-                    __('services.string_71'),
+                    'name' => 'سارة أحمد',
+                    'specialization' => 'اللغة العربية',
                     'email' => 'sara.demo@' . $tenant->domain,
                     'status' => 'active',
                 ]
@@ -72,21 +72,21 @@ class DemoDataService
             // 3. Create Courses
             $courses = [];
             $coursesData = [
-                [__('services.string_72'), 'instructor_id' => $instructors[0]->id, 'price' => 500],
-                [__('services.string_73'), 'instructor_id' => $instructors[1]->id, 'price' => 450],
+                ['title' => 'دورة الرياضيات المتقدمة', 'instructor_id' => $instructors[0]->id, 'price' => 500],
+                ['title' => 'دورة اللغة العربية', 'instructor_id' => $instructors[1]->id, 'price' => 450],
             ];
 
             foreach ($coursesData as $data) {
                 $courses[] = Course::create(array_merge($data, [
                     'tenant_id' => $tenant->id,
-                    __('services.string_74'),
+                    'description' => 'دورة تجريبية للعرض',
                     'sessions_count' => 12,
                     'status' => 'published',
                 ]));
             }
 
             // 4. Create Students & Enrollments & Sales
-            $studentsNames = [__('services.string_75'), __('services.string_76'), __('services.string_77'), __('services.string_78'), __('services.string_79')];
+            $studentsNames = ['محمد علي', 'فاطمة حسن', 'يوسف إبراهيم', 'نور الدين', 'مريم عبدالله'];
             
             foreach ($studentsNames as $index => $name) {
                 $studentEmail = Str::slug($name, '.') . '.demo' . $index . '@' . $tenant->domain;

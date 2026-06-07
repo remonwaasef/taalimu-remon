@@ -27,7 +27,7 @@ class StudentNotificationService
     {
         $this->adminNotificationService->notifyAdmins(
             'student_registered',
-            __('services.string_106', ['student_name' => $student->name]),
+            'تم تسجيل طالب جديد: ' . $student->name,
             route('center.students.show', ['tenant' => \Modules\Tenancy\Services\TenantResolver::get()->domain, 'student' => $student->id]),
             'fas fa-user-plus',
             $creator->name
@@ -38,7 +38,7 @@ class StudentNotificationService
     {
         $this->adminNotificationService->notifyAdmins(
             'student_updated',
-            __('services.string_107', ['student_name' => $student->name]),
+            'تم تعديل بيانات الطالب: ' . $student->name,
             route('center.students.show', ['tenant' => \Modules\Tenancy\Services\TenantResolver::get()->domain, 'student' => $student->id]),
             'fas fa-user-edit',
             $modifier->name
@@ -49,7 +49,7 @@ class StudentNotificationService
     {
         $this->adminNotificationService->notifyAdmins(
             'student_deleted',
-            __('services.string_108', ['studentName' => $studentName]),
+            'تم حذف الطالب: ' . $studentName,
             route('center.students.index', ['tenant' => \Modules\Tenancy\Services\TenantResolver::get()->domain]),
             'fas fa-user-times',
             $deleter->name
@@ -112,12 +112,12 @@ class StudentNotificationService
             $groupBodyKey = "notif_group_enrollment_body_{$locale}";
 
             $defaultGroupSubjects = [
-                __('services.string_109'),
+                'ar' => 'تم تسجيلك في مجموعة جديدة',
                 'en' => 'You have been enrolled in a new group',
                 'fr' => 'Vous avez été inscrit dans un nouveau groupe',
             ];
             $defaultGroupBodies = [
-                'ar' => __('services.string_110'),
+                'ar' => "مرحباً {student_name},\n\nتم تسجيلك بنجاح في {group_name}.\nنتمنى لك التوفيق!\n\n{center_name}",
                 'en' => "Hello {student_name},\n\nYou have been successfully enrolled in {group_name}.\nWe wish you the best of luck!\n\n{center_name}",
                 'fr' => "Bonjour {student_name},\n\nVous avez été inscrit avec succès dans {group_name}.\nNous vous souhaitons bonne chance !\n\n{center_name}",
             ];
@@ -181,7 +181,7 @@ class StudentNotificationService
                     $body = $settings["welcome_student_body_{$locale}"] ?? $settings['welcome_student_body'];
                     
                     $passwordHints = [
-                        __('services.string_111'),
+                        'ar' => '(يرجى استخدام "نسيت كلمة المرور" لإعادة تعيين كلمة مرور جديدة)',
                         'en' => '(Please use "Forgot Password" to set a new password)',
                         'fr' => '(Veuillez utiliser « Mot de passe oublié » pour définir un nouveau mot de passe)',
                     ];
@@ -201,7 +201,7 @@ class StudentNotificationService
                         $gBody = $settings["welcome_guardian_body_{$locale}"] ?? $settings['welcome_guardian_body'];
 
                         $guardianPasswordHints = [
-                            __('services.string_112'),
+                            'ar' => '(يرجى التواصل مع المركز للحصول على بيانات الدخول)',
                             'en' => '(Please contact the center to get the login credentials)',
                             'fr' => '(Veuillez contacter le centre pour obtenir les identifiants de connexion)',
                         ];

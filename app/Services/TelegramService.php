@@ -56,14 +56,14 @@ class TelegramService
         
         // Fetch subscription info
         $sub = \App\Models\Subscription::where('tenant_id', $tenant->id)->latest()->first();
-        $packageName = $sub ? $sub->type_label : __('services.string_113');
-        $subStatus = $sub ? ($sub->onTrial() ? __('services.string_114') : __('services.string_115')) : __('services.string_116');
-        $endsAt = ($sub && $sub->ends_at) ? $sub->ends_at->format(__('services.string_117')) : __('services.string_116');
-        $amount = ($sub && $sub->total_amount) ? $sub->total_amount . ' ' . __('services.string_118') : __('services.string_119');
+        $packageName = $sub ? $sub->type_label : 'غير محدد';
+        $subStatus = $sub ? ($sub->onTrial() ? 'فترة تجريبية' : 'مفعل') : 'N/A';
+        $endsAt = ($sub && $sub->ends_at) ? $sub->ends_at->format('Y-m-d') : 'N/A';
+        $amount = ($sub && $sub->total_amount) ? $sub->total_amount . ' EGP' : 'مجاني';
 
-        $userName = $user ? $user->name : __('services.string_120');
-        $userEmail = $user ? $user->email : __('services.string_121');
-        $userPhone = $user ? $user->phone : __('services.string_122');
+        $userName = $user ? $user->name : 'غير معروف';
+        $userEmail = $user ? $user->email : 'غير متاح';
+        $userPhone = $user ? $user->phone : 'غير متاح';
 
         $message = "<b>🚀 تسجيل جديد / اشتراك في المنصة!</b>\n\n";
         $message .= "<b>🏢 اسم المركز:</b> {$tenant->name}\n";
@@ -77,7 +77,7 @@ class TelegramService
         $message .= "<b>💳 حالة الاشتراك:</b> {$subStatus}\n";
         $message .= "<b>💰 قيمة الدفع:</b> {$amount}\n";
         $message .= "<b>⏳ تاريخ الانتهاء:</b> {$endsAt}\n\n";
-        $message .= __('services.string_123');
+        $message .= "#NewRegistration";
 
         return $this->sendAdminNotification($message);
     }
@@ -87,13 +87,13 @@ class TelegramService
      */
     public function sendTicketAlert($tenant, $ticket, $isNew = true)
     {
-        $action = $isNew ? __('services.string_124') : __('services.string_125');
+        $action = $isNew ? 'تذكرة دعم جديدة' : 'رد على تذكرة دعم';
         $message = "<b>🎫 {$action}</b>\n\n";
         $message .= "<b>🏢 المركز:</b> {$tenant->name}\n";
         $message .= "<b>📝 العنوان:</b> {$ticket->subject}\n";
         $message .= "<b>🔢 رقم التذكرة:</b> #{$ticket->id}\n";
-        $message .= "<b>⚠️ الأولوية:</b> " . ($ticket->priority ?? __('services.string_126')) . "\n\n";
-        $message .= __('services.string_127');
+        $message .= "<b>⚠️ الأولوية:</b> " . ($ticket->priority ?? 'عادية') . "\n\n";
+        $message .= "#SupportTicket";
 
         return $this->sendAdminNotification($message);
     }
@@ -105,7 +105,7 @@ class TelegramService
     {
         $message = "<b>⚠️ خطأ برمجي في النظام (Error 500)</b>\n\n";
         $message .= "<b>🔗 الرابط:</b> {$url}\n";
-        $message .= "<b>👤 المستخدم:</b> " . ($user ? $user->email : __('services.string_128')) . "\n";
+        $message .= "<b>👤 المستخدم:</b> " . ($user ? $user->email : 'زائر') . "\n";
         $message .= "<b>❌ نوع الخطأ:</b> <code>" . class_basename($e) . "</code>\n";
         $message .= "يرجى مراجعة سجلات الخادم (Logs) لمعرفة التفاصيل.\n\n";
         $message .= "#ErrorAlert";
@@ -135,7 +135,7 @@ class TelegramService
         $message = "<b>🎟️ استخدام كوبون خصم</b>\n\n";
         $message .= "<b>🏢 المركز:</b> {$tenant->name}\n";
         $message .= "<b>🏷️ الكوبون:</b> <code>{$coupon->code}</code>\n";
-        $message .= "<b>📉 قيمة الخصم:</b> {$discount} " . \App\Models\SiteSetting::get(__('services.string_129')) . "\n";
+        $message .= "<b>📉 قيمة الخصم:</b> {$discount} " . \App\Models\SiteSetting::get('currency', 'EGP') . "\n";
 
         return $this->sendAdminNotification($message);
     }
@@ -145,12 +145,12 @@ class TelegramService
      */
     public function sendFailedPaymentAlert($tenant, $reason = null)
     {
-        $reason = $reason ?? __('services.string_130');
+        $reason = $reason ?? 'غير محدد';
         $message = "<b>❌ فشل في عملية الدفع / التجديد!</b>\n\n";
         $message .= "<b>🏢 المركز:</b> {$tenant->name}\n";
         $message .= "<b>📧 البريد:</b> {$tenant->email}\n";
         $message .= "<b>⚠️ السبب:</b> <code>{$reason}</code>\n\n";
-        $message .= __('services.string_131');
+        $message .= "#PaymentFailed";
 
         return $this->sendAdminNotification($message);
     }
@@ -179,7 +179,7 @@ class TelegramService
         $message .= "<b>🏢 المركز:</b> {$tenant->name}\n";
         $message .= "<b>📊 المورد:</b> <code>{$resource}</code>\n";
         $message .= "<b>📈 الاستهلاك:</b> {$usage} / {$limit}\n\n";
-        $message .= __('services.string_132');
+        $message .= "#ResourceWarning";
 
         return $this->sendAdminNotification($message);
     }
@@ -193,7 +193,7 @@ class TelegramService
         $message .= "<b>🏢 المركز:</b> {$tenant->name}\n";
         $message .= "<b>📧 البريد:</b> {$tenant->email}\n";
         $message .= "<b>🔔 السبب:</b> <code>{$reason}</code>\n\n";
-        $message .= __('services.string_133');
+        $message .= "#ChurnWarning";
 
         return $this->sendAdminNotification($message);
     }
@@ -218,18 +218,18 @@ class TelegramService
      */
     public function sendCouponCreatedAlert($user, $coupon)
     {
-        $type = $coupon->type === 'percentage' ? __('services.string_134') : __('services.string_135');
+        $type = $coupon->type === 'percentage' ? 'نسبة مئوية' : 'مبلغ ثابت';
         $value = $coupon->reward;
-        $package = $coupon->package ? $coupon->package->name : __('services.string_137');
+        $package = $coupon->package ? $coupon->package->name : 'جميع الباقات';
         
         $message = "<b>🎫 إنشاء كوبون خصم جديد!</b>\n\n";
         $message .= "<b>👤 بواسطة:</b> {$user->name}\n";
-        $message .= "<b>🎟️ كود الكوبون:</b> <code>{$coupon->code}</code>\n";
+        $message .= "<b>🎫️ كود الكوبون:</b> <code>{$coupon->code}</code>\n";
         $message .= "<b>📎 الاسم:</b> {$coupon->name}\n";
         $message .= "<b>📉 النوع:</b> {$type}\n";
         $message .= "<b>💰 القيمة:</b> {$value}\n";
         $message .= "<b>📦 المخطط المستهدف:</b> {$package}\n";
-        $message .= "<b>📅 ينتهي في:</b> " . ($coupon->expires_at ? $coupon->expires_at->format(__('services.string_138')) : __('services.string_126')) . "\n\n";
+        $message .= "<b>📅 ينتهي في:</b> " . ($coupon->expires_at ? $coupon->expires_at->format('Y-m-d') : 'غير محدد') . "\n\n";
         $message .= "#SalesAudit";
 
         return $this->sendAdminNotification($message);

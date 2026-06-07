@@ -106,7 +106,7 @@ class CourseService
             ->exists();
 
         if ($exists) {
-            throw new \Exception(__('services.string_57'));
+            throw new \Exception('الطالب مسجل بالفعل في هذا الكورس');
         }
 
         return Enrollment::create([
@@ -185,8 +185,8 @@ class CourseService
         $dayMapping = [
             'sunday' => 0, 'monday' => 1, 'tuesday' => 2, 'wednesday' => 3,
             'thursday' => 4, 'friday' => 5, 'saturday' => 6,
-            __('services.string_58') => 0, __('services.string_59') => 1, __('services.string_60') => 2, __('services.string_61') => 3,
-            __('services.string_62') => 4, __('services.string_63') => 5, __('services.string_64') => 6,
+            'الأحد' => 0, 'الاثنين' => 1, 'الثلاثاء' => 2, 'الأربعاء' => 3,
+            'الخميس' => 4, 'الجمعة' => 5, 'السبت' => 6,
         ];
 
         // First, validate all schedules for conflicts
@@ -234,7 +234,7 @@ class CourseService
             
         Notification::send($admins, new GeneralNotification(
             'course_created',
-            __('services.string_65', ['course_title' => $course->title]),
+            'تم إنشاء كورس جديد: ' . $course->title,
             route('center.courses.index'),
             'fas fa-book-open',
             auth()->user()->name

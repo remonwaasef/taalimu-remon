@@ -956,7 +956,7 @@ class InstructorController extends Controller
 
         try {
             $senderName = $instructor ? $instructor->name : $this->tenant->name;
-            \Illuminate\Support\Facades\Mail::to($email)->send(new \App\Mail\CustomStudentMail(
+            \Illuminate\Support\Facades\Mail::to($email)->queue(new \App\Mail\CustomStudentMail(
                 $student, 
                 $request->subject, 
                 $request->message,

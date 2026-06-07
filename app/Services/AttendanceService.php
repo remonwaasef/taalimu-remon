@@ -220,13 +220,13 @@ class AttendanceService
                 $bodyKey = "notif_attendance_body_{$locale}";
 
                 $defaultSubjects = [
-                    __('services.string_50'),
+                    'ar' => 'إشعار الحضور - {center_name}',
                     'en' => 'Attendance Notification - {center_name}',
                     'fr' => 'Notification de présence - {center_name}',
                 ];
 
                 $defaultBodies = [
-                    'ar' => __('services.string_51'),
+                    'ar' => "مرحباً {student_name},\n\nنود إعلامك بأنه تم تسجيل حضورك في {course_name}.\nالحالة: {status}\n\nمع تحياتنا,\n{center_name}",
                     'en' => "Hello {student_name},\n\nWe would like to inform you that your attendance for {course_name} has been recorded.\nStatus: {status}\n\nBest regards,\n{center_name}",
                     'fr' => "Bonjour {student_name},\n\nNous vous informons que votre présence pour {course_name} a été enregistrée.\nStatut: {status}\n\nCordialement,\n{center_name}",
                 ];

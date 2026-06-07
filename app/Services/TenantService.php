@@ -108,7 +108,7 @@ class TenantService
                         $tenant->id,
                         'subscription',
                         $package->slug ?? 'unknown',
-                        $package->name ?? __('services.string_139'),
+                        $package->name ?? 'غير محدد',
                         $currentSub->billing_cycle ?? 'monthly',
                         $currentSub->gateway ?? 'unknown',
                         $currentSub->total_amount ?? 0,
@@ -125,7 +125,7 @@ class TenantService
                         ->get()
                         ->map(function ($sub) {
                             $sub->operation_type = 'subscription';
-                            $sub->package_name = $sub->package->name ?? __('services.string_140');
+                            $sub->package_name = $sub->package->name ?? 'غير محدد';
                             $sub->package_slug = $sub->package->slug ?? 'unknown';
                             $sub->amount = $sub->total_amount ?? 0;
                             $sub->transaction_id = $sub->stripe_id;

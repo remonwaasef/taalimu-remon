@@ -482,9 +482,9 @@ class StudentController extends Controller
         }
         
         try {
-            \App\Jobs\ImportStudentsJob::dispatchSync($path, $this->tenant->id, auth()->id());
+            \App\Jobs\ImportStudentsJob::dispatch($path, $this->tenant->id, auth()->id());
             return redirect()->route('center.students.index', ['tenant' => $this->tenant->domain])
-                ->with('success', __('center::messages.msg_086'));
+                ->with('success', __('center::messages.msg_086') . ' - جاري المعالجة في الخلفية');
         } catch (\Exception $e) {
             \Log::error('Student import failed: ' . $e->getMessage());
             return redirect()->back()->with('error', 'حدث خطأ أثناء الاستيراد: ' . $e->getMessage());
@@ -534,7 +534,7 @@ class StudentController extends Controller
         }
 
         try {
-            \Illuminate\Support\Facades\Mail::to($email)->send(new \App\Mail\CustomStudentMail(
+            \Illuminate\Support\Facades\Mail::to($email)->queue(new \App\Mail\CustomStudentMail(
                 $student, 
                 $request->subject, 
                 $request->message,
