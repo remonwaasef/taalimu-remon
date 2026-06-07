@@ -517,7 +517,7 @@ window.addEventListener('pageshow', (event) => {
 
                     {{-- Phone Field with OTP Verification --}}
                     <div class="space-y-1.5">
-                        <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.phone') }}</label>
+                        <label class="text-[12px] font-black text-slate-400 px-1 font-arabic uppercase tracking-wide">{{ __('auth.register.phone') }} <span class="text-[9px] font-normal text-slate-300">({{ app()->getLocale() == 'ar' ? 'اختياري' : 'Optional' }})</span></label>
                         
                         {{-- Country Code + Phone Input + Send OTP Button --}}
                         <div class="relative flex gap-2">
@@ -536,7 +536,7 @@ window.addEventListener('pageshow', (event) => {
                             <div class="relative flex-1 group">
                                 <input type="text" name="phone" x-model="phoneNumber"
                                     class="w-full h-11 px-4 bg-slate-50/50 border-2 rounded-xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary border-slate-100 transition-all shadow-inner"
-                                    placeholder="10xxxxxxx" required dir="ltr">
+                                    placeholder="10xxxxxxx" dir="ltr">
                             </div>
                             {{-- Removed OTP Button for Google Auth --}}
                         </div>
@@ -597,7 +597,7 @@ window.addEventListener('pageshow', (event) => {
                     </div>
 
                     <div class="pt-4">
-                        <button type="submit" :disabled="isSubmitting || subdomainStatus === 'invalid' || !phoneNumber || phoneNumber.length < 8"
+                        <button type="submit" :disabled="isSubmitting || subdomainStatus === 'invalid' || (phoneNumber && phoneNumber.length < 8)"
                                 class="w-full h-14 rounded-full flex items-center justify-center gap-3 group bg-brand-secondary text-white shadow-xl shadow-brand-secondary/20 hover:shadow-brand-secondary/40 hover:-translate-y-0.5 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale">
                              <span x-show="!isSubmitting" class="text-lg font-black font-arabic" 
                                   x-text="currentPlan.trial_days > 0 ? ({{ Js::from(app()->isLocale('ar') ? 'ابدأ الفترة التجريبية' : 'Start Free Trial') }}) : (finalPrice === 0 ? '{{ __('auth.register.cta_main') }}' : '{{ app()->isLocale('ar') ? 'ادفع واستكمل التسجيل' : 'Pay & Complete Registration' }}')">
