@@ -386,7 +386,7 @@ class SocialAuthController extends Controller
                     'registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . $user->id, config('app.key')),
                 ]);
 
-                return redirect()->route('registration.success');
+                return redirect()->route('dashboard');
             } else {
                 // Paid Plan Flow (Modular Payment Gateway)
                 session([

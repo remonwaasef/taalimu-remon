@@ -271,7 +271,7 @@ class RegistrationController extends Controller
                     'total_amount' => $finalAmount,
                 ]);
 
-                return redirect()->route('registration.success');
+                return redirect()->route('dashboard');
             }
 
             // Paid Plan Flow (Modular Payment Gateway)
