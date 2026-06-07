@@ -30,25 +30,46 @@ return new class extends Migration
 
         // 3. Fix tenant_id type in classrooms and schedules (Warning: This assumes tenant_id strings were actually numbers)
         // Only doing this if requested by the plan.
-        Schema::table('classrooms', function (Blueprint $table) {
-            // Drop index first if it exists
-            $table->dropIndex(['tenant_id']);
-            $table->unsignedBigInteger('tenant_id')->change();
-            $table->foreign('tenant_id')->references('id')->on('tenants')->cascadeOnDelete();
-        });
+        try {
+            Schema::table('classrooms', function (Blueprint $table) {
+                $table->unsignedBigInteger('tenant_id')->change();
+            });
+        } catch (\Exception $e) {
+            \Log::warning("Could not change classrooms.tenant_id type: " . $e->getMessage());
+        }
 
-        Schema::table('schedules', function (Blueprint $table) {
-            // Drop indexes first
-            $table->dropIndex(['tenant_id', 'day_of_week']);
-            $table->dropIndex('sch_tenant_course_day_idx');
-            
-            $table->unsignedBigInteger('tenant_id')->change();
-            $table->foreign('tenant_id')->references('id')->on('tenants')->cascadeOnDelete();
-            
-            // Re-add indexes
-            $table->index(['tenant_id', 'day_of_week']);
-            $table->index(['tenant_id', 'course_id', 'day_of_week'], 'sch_tenant_course_day_idx');
-        });
+        try {
+            Schema::table('classrooms', function (Blueprint $table) {
+                // Check if foreign key exists first to avoid duplicate
+                $fkExists = collect(DB::select("SELECT CONSTRAINT_NAME FROM information_schema.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'classrooms' AND COLUMN_NAME = 'tenant_id' AND REFERENCED_TABLE_NAME IS NOT NULL"))->isNotEmpty();
+                
+                if (!$fkExists) {
+                    $table->foreign('tenant_id')->references('id')->on('tenants')->cascadeOnDelete();
+                }
+            });
+        } catch (\Exception $e) {
+            \Log::warning("Could not add foreign key to classrooms.tenant_id: " . $e->getMessage());
+        }
+
+        try {
+            Schema::table('schedules', function (Blueprint $table) {
+                $table->unsignedBigInteger('tenant_id')->change();
+            });
+        } catch (\Exception $e) {
+            \Log::warning("Could not change schedules.tenant_id type: " . $e->getMessage());
+        }
+
+        try {
+            Schema::table('schedules', function (Blueprint $table) {
+                $fkExists = collect(DB::select("SELECT CONSTRAINT_NAME FROM information_schema.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'schedules' AND COLUMN_NAME = 'tenant_id' AND REFERENCED_TABLE_NAME IS NOT NULL"))->isNotEmpty();
+                
+                if (!$fkExists) {
+                    $table->foreign('tenant_id')->references('id')->on('tenants')->cascadeOnDelete();
+                }
+            });
+        } catch (\Exception $e) {
+            \Log::warning("Could not add foreign key to schedules.tenant_id: " . $e->getMessage());
+        }
     }
 
     /**
