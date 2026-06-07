@@ -231,11 +231,11 @@ class SocialAuthController extends Controller
             'coupon_code' => 'nullable|string|exists:coupons,code',
         ]);
 
-        // PHONE VERIFICATION GATE: Ensure phone was verified via OTP before account creation
-        $phoneVerified = session('phone_verified') && session('phone_verified_number') === $request->phone;
-        if (!$phoneVerified) {
-            return back()->withErrors(['phone' => __('messages.verify_phone_first')])->withInput();
-        }
+        // PHONE VERIFICATION GATE: Bypassed for Google registrations as requested
+        // $phoneVerified = session('phone_verified') && session('phone_verified_number') === $request->phone;
+        // if (!$phoneVerified) {
+        //     return back()->withErrors(['phone' => __('messages.verify_phone_first')])->withInput();
+        // }
 
         // 1. Check if user already exists (safety check for race conditions)
         if (User::where('email', $googleData['email'])->exists()) {

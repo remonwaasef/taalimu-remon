@@ -535,75 +535,12 @@ window.addEventListener('pageshow', (event) => {
                             {{-- Phone Input --}}
                             <div class="relative flex-1 group">
                                 <input type="text" name="phone" x-model="phoneNumber"
-                                    :readonly="phoneVerified"
-                                    class="w-full h-11 px-4 bg-slate-50/50 border-2 rounded-xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary transition-all shadow-inner"
-                                    :class="phoneVerified ? 'border-emerald-300 bg-emerald-50/30 pointer-events-none' : 'border-slate-100'"
+                                    class="w-full h-11 px-4 bg-slate-50/50 border-2 rounded-xl text-base font-bold focus:outline-none focus:bg-white focus:ring-4 focus:ring-brand-secondary/5 focus:border-brand-secondary border-slate-100 transition-all shadow-inner"
                                     placeholder="10xxxxxxx" required dir="ltr">
-                                {{-- Verified Badge --}}
-                                <div x-show="phoneVerified" class="absolute inset-y-0 end-0 pe-3 flex items-center">
-                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-black">
-                                        <i class="bi bi-check-circle-fill"></i>
-                                        {{ app()->isLocale('ar') ? 'تم التحقق' : 'Verified' }}
-                                    </span>
-                                </div>
                             </div>
-                            {{-- Send OTP Button --}}
-                            <button type="button" @click="sendOtp()" 
-                                    x-show="!phoneVerified"
-                                    :disabled="isSendingOtp || otpCountdown > 0 || !phoneNumber || phoneNumber.length < 7"
-                                    class="h-11 px-4 rounded-xl font-black text-[11px] font-arabic transition-all whitespace-nowrap flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    :class="otpSent ? 'bg-slate-100 text-slate-600 hover:bg-slate-200' : 'bg-brand-secondary text-white shadow-lg shadow-brand-secondary/20 hover:shadow-brand-secondary/30'">
-                                <template x-if="isSendingOtp">
-                                    <div class="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
-                                </template>
-                                <template x-if="!isSendingOtp && otpCountdown > 0">
-                                    <span x-text="formattedCountdown"></span>
-                                </template>
-                                <template x-if="!isSendingOtp && otpCountdown <= 0">
-                                    <span>{{ app()->isLocale('ar') ? 'إرسال كود' : 'Send OTP' }}</span>
-                                </template>
-                            </button>
-                        </div>
+                            {{-- Removed OTP Button for Google Auth --}}
 
-                        {{-- OTP Input (appears after sending) --}}
-                        <div x-show="otpSent && !phoneVerified" x-cloak 
-                             x-transition:enter="transition ease-out duration-300" 
-                             x-transition:enter-start="opacity-0 -translate-y-2" 
-                             x-transition:enter-end="opacity-100 translate-y-0"
-                             class="space-y-2">
-                            <div class="relative flex gap-2">
-                                <div class="relative flex-1">
-                                    <input type="text" x-model="otpCode" maxlength="6" inputmode="numeric" pattern="[0-9]*"
-                                        @input="otpCode = otpCode.replace(/[^0-9]/g, ''); if(otpCode.length === 6) verifyOtp()"
-                                        class="w-full h-11 px-4 bg-amber-50/50 border-2 border-amber-200 rounded-xl text-center text-xl font-black tracking-[0.5em] focus:outline-none focus:ring-4 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all"
-                                        placeholder="● ● ● ● ● ●">
-                                </div>
-                                <button type="button" @click="verifyOtp()" 
-                                        :disabled="isVerifyingOtp || otpCode.length !== 6"
-                                        class="h-11 px-4 rounded-xl bg-emerald-500 text-white font-black text-[11px] font-arabic shadow-lg shadow-emerald-500/20 hover:bg-emerald-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5">
-                                    <template x-if="isVerifyingOtp">
-                                        <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                    </template>
-                                    <template x-if="!isVerifyingOtp">
-                                        <span>{{ app()->isLocale('ar') ? 'تحقق' : 'Verify' }}</span>
-                                    </template>
-                                </button>
-                            </div>
-                            <p class="text-[10px] font-bold font-arabic text-amber-600 flex items-center gap-1 px-1">
-                                <i class="bi bi-whatsapp text-emerald-500"></i>
-                                {{ app()->isLocale('ar') ? 'تم إرسال كود التحقق عبر واتساب والبريد الإلكتروني' : 'Verification code sent via WhatsApp and Email' }}
-                            </p>
-                        </div>
-
-                        {{-- OTP Status Message --}}
-                        <p x-show="otpMessage && otpStatus !== 'sent'" x-cloak
-                           :class="{
-                               'text-emerald-600': otpStatus === 'verified',
-                               'text-red-500': otpStatus === 'error',
-                               'text-amber-600': otpStatus === 'sending' || otpStatus === 'verifying'
-                           }"
-                           class="text-[11px] font-bold px-1 font-arabic animate-fade-in" x-text="otpMessage"></p>
-                    </div>
+                        {{-- Removed OTP verification block --}}
 
                     <!-- Coupon (Compact inline) -->
                     <div class="pt-2">
@@ -659,9 +596,8 @@ window.addEventListener('pageshow', (event) => {
                         </div>
                     </div>
 
-                    {{-- Submit Button --}}
                     <div class="pt-4">
-                        <button type="submit" :disabled="isSubmitting || subdomainStatus === 'invalid' || !phoneVerified"
+                        <button type="submit" :disabled="isSubmitting || subdomainStatus === 'invalid' || !phoneNumber || phoneNumber.length < 8"
                                 class="w-full h-14 rounded-full flex items-center justify-center gap-3 group bg-brand-secondary text-white shadow-xl shadow-brand-secondary/20 hover:shadow-brand-secondary/40 hover:-translate-y-0.5 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale">
                              <span x-show="!isSubmitting" class="text-lg font-black font-arabic" 
                                   x-text="currentPlan.trial_days > 0 ? ({{ Js::from(app()->isLocale('ar') ? 'ابدأ الفترة التجريبية' : 'Start Free Trial') }}) : (finalPrice === 0 ? '{{ __('auth.register.cta_main') }}' : '{{ app()->isLocale('ar') ? 'ادفع واستكمل التسجيل' : 'Pay & Complete Registration' }}')">
