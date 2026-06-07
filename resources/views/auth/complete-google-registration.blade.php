@@ -539,7 +539,7 @@ window.addEventListener('pageshow', (event) => {
                                     placeholder="10xxxxxxx" required dir="ltr">
                             </div>
                             {{-- Removed OTP Button for Google Auth --}}
-
+                        </div>
                         {{-- Removed OTP verification block --}}
 
                     <!-- Coupon (Compact inline) -->
