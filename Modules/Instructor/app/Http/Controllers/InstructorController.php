@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\WelcomeStudentMail;
 use App\Mail\WelcomeGuardianMail;
+use Modules\Instructor\Http\Requests\StoreStudentRequest;
+use Modules\Instructor\Http\Requests\StoreGroupRequest;
 
 class InstructorController extends Controller
 {
@@ -445,23 +447,14 @@ class InstructorController extends Controller
     /**
      * Store a manually created student and enroll them
      */
-    public function storeStudent(Request $request)
+    public function storeStudent(StoreStudentRequest $request)
     {
         $instructor = $this->instructor;
         if (!$instructor) {
             return back()->with('error', __('instructor::messages.not_instructor_error'));
         }
 
-        $validated = $request->validate([
-            'name' => 'required_without:student_id|string|max:255',
-            'phone' => 'required_without:student_id|string|digits:11',
-            'parent_phone' => 'required_without:student_id|string|digits:11',
-            'parent_email' => 'nullable|email|max:255',
-            'email' => 'nullable|email|max:255',
-            'course_ids' => 'required|array|min:1',
-            'course_ids.*' => 'exists:courses,id',
-            'student_id' => 'nullable|exists:students,id',
-        ]);
+        $validated = $request->validated();
 
         try {
             \DB::beginTransaction();
@@ -700,7 +693,7 @@ class InstructorController extends Controller
     /**
      * Store a newly created group in storage
      */
-    public function storeGroup(Request $request)
+    public function storeGroup(StoreGroupRequest $request)
     {
         $instructor = $this->instructor;
         
@@ -709,12 +702,7 @@ class InstructorController extends Controller
         }
 
         try {
-            $validated = $request->validate([
-                'title' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'price' => 'required|numeric|min:0',
-                'sessions_count' => 'required|integer|min:1',
-            ]);
+            $validated = $request->validated();
 
             \Log::info('Attempting to create course for instructor: ' . $instructor->id, [
                 'validated' => $validated,
@@ -759,17 +747,12 @@ class InstructorController extends Controller
     /**
      * Update the specified group in storage
      */
-    public function updateGroup(Request $request, Course $course)
+    public function updateGroup(StoreGroupRequest $request, Course $course)
     {
         $instructor = $this->instructor;
         $this->authorizeCourse($course);
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'sessions_count' => 'required|integer|min:1',
-        ]);
+        $validated = $request->validated();
 
         $course->update($validated);
 

@@ -37,7 +37,7 @@ class FinanceService
     {
         return DB::transaction(function () use ($data) {
             $tenantId = \Modules\Tenancy\Services\TenantResolver::get()->id;
-            $student = Student::find($data['student_id']);
+            $student = Student::with('user')->find($data['student_id']);
 
             // 1. Fetch actual prices from DB — scoped to current tenant to prevent cross-tenant manipulation
             $courseIds = collect($data['items'])->pluck('id')->toArray();
@@ -207,6 +207,9 @@ class FinanceService
                 'paid_at' => now(),
                 __('services.string_82'),
             ]);
+
+            // Eager load student and user to prevent N+1
+            $sale->loadMissing('student.user');
 
             // Notifications
             $this->notifyPayment(\Modules\Tenancy\Services\TenantResolver::get(), $sale->student, $amount, $sale->total_amount - $newPaidAmount, $method ?? $sale->payment_method);

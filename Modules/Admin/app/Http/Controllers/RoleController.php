@@ -25,6 +25,8 @@ class RoleController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Role::class);
+
         // Only show System Roles (NULL tenant_id) in the central admin area
         $roles = Role::with(['permissions', 'users'])
             ->where('guard_name', 'web')
@@ -40,6 +42,7 @@ class RoleController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Role::class);
         $permissions = $this->permissionService->getGroupedPermissions();
         return view('admin::roles.create', compact('permissions'));
     }
@@ -49,6 +52,8 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Role::class);
+
         $request->validate([
             'name' => [
                 'required',
@@ -76,6 +81,7 @@ class RoleController extends Controller
     public function edit($id)
     {
         $role = Role::findOrFail($id);
+        $this->authorize('update', $role);
         $permissions = $this->permissionService->getGroupedPermissions();
         
         return view('admin::roles.edit', compact('role', 'permissions'));
@@ -87,6 +93,7 @@ class RoleController extends Controller
     public function update(Request $request, $id)
     {
         $role = Role::findOrFail($id);
+        $this->authorize('update', $role);
         
         $request->validate([
             'name' => [
@@ -133,6 +140,7 @@ class RoleController extends Controller
     public function destroy($id)
     {
         $role = Role::findOrFail($id);
+        $this->authorize('delete', $role);
         
         $systemRoles = ['super_admin', 'center_admin', 'instructor', 'student', 'secretary', 'accountant', 'staff'];
         if (in_array($role->name, $systemRoles)) {
