@@ -64,7 +64,7 @@ class PaymentController extends Controller
                     return redirect()->route('center.subscription.success', ['tenant' => $tenant->domain]);
                 }
 
-                return redirect()->route('registration.success');
+                return redirect()->route('dashboard');
             }
         }
 
@@ -160,7 +160,7 @@ class PaymentController extends Controller
                     return redirect()->route('center.subscription.success', ['tenant' => $tenant->domain]);
                 }
 
-                return redirect()->route('registration.success');
+                return redirect()->route('dashboard');
             }
 
             Log::error("Paymob Payment Success but Tenant not found", [
@@ -295,7 +295,7 @@ class PaymentController extends Controller
         session(['registration_success' => true]);
         $this->paymentService->loginAdminAndNotify($tenant, $telegram, '********');
 
-        return redirect()->route('registration.success');
+        return redirect()->route('dashboard');
     }
 
     /**
