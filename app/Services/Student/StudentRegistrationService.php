@@ -77,7 +77,7 @@ class StudentRegistrationService
                 $guardianId = $guardian->id;
             }
 
-            $student = Student::create([
+            $student = Student::forceCreate([
                 'tenant_id' => \Modules\Tenancy\Services\TenantResolver::get()->id,
                 'user_id' => $user->id,
                 'grade_id' => $data->grade_id,

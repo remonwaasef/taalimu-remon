@@ -75,7 +75,7 @@ class StudentRegistrationController extends Controller
 
             $user->assignRole('student');
 
-            Student::create([
+            Student::forceCreate([
                 'user_id' => $user->id,
                 'tenant_id' => $course->tenant_id,
                 'name' => $request->name,

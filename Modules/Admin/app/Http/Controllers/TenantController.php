@@ -109,7 +109,7 @@ class TenantController extends Controller
             'status' => 'nullable|in:active,inactive',
         ]);
 
-        Tenant::create([
+        Tenant::forceCreate([
             'name' => $request->name,
             'domain' => $request->domain,
             'status' => $request->status,

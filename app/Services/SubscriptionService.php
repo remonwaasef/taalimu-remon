@@ -31,7 +31,7 @@ class SubscriptionService
         // Cancel existing active subscriptions
         $tenant->subscriptions()->where('status', 'active')->update(['status' => 'cancelled']);
 
-        return Subscription::create([
+        return Subscription::forceCreate([
             'tenant_id' => $tenant->id,
             'name' => 'default',
             'stripe_id' => 'sub_demo_' . time(),
