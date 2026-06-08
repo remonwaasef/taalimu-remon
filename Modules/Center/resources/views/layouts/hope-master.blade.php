@@ -77,6 +77,19 @@
         </div>
 
         <div class="container-fluid content-inner py-0">
+            @if(auth()->check() && auth()->user()->role === 'center_admin' && app()->bound('tenant') && app('tenant')->onboarding_status !== 'completed')
+                <div class="alert alert-warning alert-dismissible fade show rounded-4 border-0 shadow-sm mb-4 d-flex align-items-center justify-content-between" role="alert">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-exclamation-triangle me-3 fa-lg"></i>
+                        <div>
+                            <strong>تنبيه:</strong> لم تقم بإكمال إعدادات مركزك الأساسية! بعض الميزات قد لا تعمل بشكل صحيح حتى تقوم بإكمالها.
+                        </div>
+                    </div>
+                    <a href="{{ route('center.onboarding.show') }}" class="btn btn-warning btn-sm ms-3 fw-bold shadow-sm">أكمل الإعدادات الآن</a>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show rounded-4 border-0 shadow-sm mb-4" role="alert">
                     <div class="d-flex align-items-center">
