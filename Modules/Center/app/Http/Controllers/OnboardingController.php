@@ -378,12 +378,12 @@ class OnboardingController extends Controller
                     
                     foreach ($courseData['schedules'] as $sched) {
                         $startTime = \Carbon\Carbon::createFromFormat('H:i', $sched['time']);
-                        $endTime = isset($sched['time_end']) ? \Carbon\Carbon::createFromFormat('H:i', $sched['time_end']) : (clone $startTime)->addHours(2);
+                        $endTime = !empty($sched['time_end']) ? \Carbon\Carbon::createFromFormat('H:i', $sched['time_end']) : (clone $startTime)->addHours(2);
                         
                         \App\Models\Schedule::create([
                             'tenant_id' => $tenant->id,
                             'course_id' => $course->id,
-                            'instructor_id' => $instructor?->user_id,
+                            'instructor_id' => $instructor?->id,
                             'day_of_week' => $sched['day'],
                             'start_time' => $startTime->format('H:i:s'),
                             'end_time' => $endTime->format('H:i:s'),
