@@ -130,6 +130,10 @@
             </div>
         </div>
     @endif
+    
+    <div class="mt-4 d-flex justify-content-center">
+        {{ $students->links() }}
+    </div>
 </div>
 
 @push('modals')

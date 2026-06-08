@@ -247,6 +247,7 @@
         </div>
 
         <div class="container-fluid content-inner mt-n5 py-0">
+            <x-flash-messages />
             @yield('content')
         </div>
 
@@ -270,22 +271,7 @@
     <script src="{{ asset('assets/hope-ui/js/hope-ui.js') }}"></script>
     
     <script>
-        // SweetAlert2 Toast Configuration (Matching Admin Master)
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-start',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true
-        });
-
-        @if(session('success'))
-            Toast.fire({ icon: 'success', title: "{{ session('success') }}" });
-        @endif
-
-        @if(session('error'))
-            Toast.fire({ icon: 'error', title: "{{ session('error') }}" });
-        @endif
+        // SweetAlert2 Toast Configuration handled by x-flash-messages component
 
         function toggleCustomDropdown(event, btn) {
             if (event) event.stopPropagation();

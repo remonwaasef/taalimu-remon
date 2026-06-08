@@ -56,11 +56,8 @@
                 <form id="posForm" data-autosave="create-sale">
                     <div class="mb-4">
                         <label class="form-label fw-bold">{{ __('center::sales.student') }}</label>
-                        <select name="student_id" id="student_id" class="form-select rounded-3 shadow-none p-2 border" required onchange="fetchStudentSummary(this.value)">
+                        <select name="student_id" id="student_id" class="form-select rounded-3 shadow-none p-2 border" required>
                             <option value="">{{ __('center::sales.select_student') }}</option>
-                            @foreach($students as $student)
-                            <option value="{{ $student->id }}">{{ $student->name }} ({{ $student->phone }})</option>
-                            @endforeach
                         </select>
                     </div>
 
@@ -193,8 +190,45 @@
     }
 </style>
 
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endpush
+
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
+    $(document).ready(function() {
+        if ($.fn.select2) {
+            $('#student_id').select2({
+                ajax: {
+                    url: '{{ route("center.sales.lookup") }}',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return {
+                                    text: item.name + ' (' + item.phone + ')',
+                                    id: item.id
+                                }
+                            })
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: '{{ __("center::sales.select_student") }}',
+                minimumInputLength: 1
+            }).on('select2:select', function (e) {
+                fetchStudentSummary(e.params.data.id);
+            });
+        }
+    });
+
     let cart = [];
     let subtotalAmount = 0;
     let installmentMode = false;

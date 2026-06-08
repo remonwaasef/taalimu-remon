@@ -45,21 +45,22 @@ class SaleController extends Controller
         $tenant = $this->tenant;
         
         // Fetch students who have at least one sale with a remaining balance
-        $students = Student::where('tenant_id', $tenant->id)
+        $studentsQuery = Student::where('tenant_id', $tenant->id)
             ->whereHas('sales', function($query) {
                 $query->whereRaw('paid_amount < total_amount');
             })
             ->with(['sales' => function($query) {
                 $query->whereRaw('paid_amount < total_amount');
-            }])
-            ->get()
-            ->map(function($student) {
-                $student->total_debt = $student->sales->sum(function($sale) {
-                    return $sale->total_amount - $sale->paid_amount;
-                });
-                return $student;
-            })
-            ->sortByDesc('total_debt');
+            }]);
+
+        $students = $studentsQuery->paginate(15);
+        
+        $students->getCollection()->transform(function($student) {
+            $student->total_debt = $student->sales->sum(function($sale) {
+                return $sale->total_amount - $sale->paid_amount;
+            });
+            return $student;
+        });
 
         return view('center::sales.overdue', compact('students', 'tenant'));
     }
@@ -71,7 +72,7 @@ class SaleController extends Controller
         
         $students = Student::where('tenant_id', $tenant->id)
             ->with(['user', 'sales', 'enrollments.course'])
-            ->get();
+            ->paginate(15);
 
         return view('center::sales.account', compact('tenant', 'students'));
     }
@@ -163,7 +164,7 @@ class SaleController extends Controller
     {
         $this->authorize('create', Sale::class);
         $tenant = $this->tenant;
-        $students = Student::where('tenant_id', $tenant->id)->get();
+        $students = collect([]); // Don't load all students, rely on Select2 AJAX
         $courses = Course::where('tenant_id', $tenant->id)->get();
         
         return view('center::sales.create', compact('students', 'courses', 'tenant'));

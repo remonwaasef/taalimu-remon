@@ -586,7 +586,8 @@
             </div>
         </nav>
 
-        <!-- Flash Messages (Handled by SweetAlert2) -->
+        <!-- Flash Messages -->
+        <x-flash-messages />
 
         @yield('content')
     </div>
@@ -634,32 +635,6 @@
         close?.addEventListener('click', toggleSidebar);
         overlay?.addEventListener('click', toggleSidebar);
 
-        // SweetAlert2 Toast Configuration
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-start', // Admin is always RTL as per html tag
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
-        });
-
-        @if(session('success'))
-            Toast.fire({
-                icon: 'success',
-                title: "{{ session('success') }}"
-            });
-        @endif
-
-        @if(session('error'))
-            Toast.fire({
-                icon: 'error',
-                title: "{{ session('error') }}"
-            });
-        @endif
     </script>
     <script>
         // Bootstrap dropdowns and other components are auto-initialized by the data-api

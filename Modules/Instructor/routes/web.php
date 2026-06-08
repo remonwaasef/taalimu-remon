@@ -2,51 +2,56 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Instructor\Http\Controllers\InstructorController;
+use Modules\Instructor\Http\Controllers\StudentController;
+use Modules\Instructor\Http\Controllers\GroupController;
+use Modules\Instructor\Http\Controllers\ScheduleController;
+use Modules\Instructor\Http\Controllers\AttendanceController;
+use Modules\Instructor\Http\Controllers\SettingsController;
 
 $instructorRoutes = function () {
     Route::middleware(['auth', 'verified', 'subscription'])->prefix('instructor')->group(function () {
         Route::get('/', [InstructorController::class, 'index'])->name('instructor.dashboard');
-        Route::get('/set-locale/{locale}', [InstructorController::class, 'setLocale'])->name('instructor.set-locale');
+        Route::get('/set-locale/{locale}', [SettingsController::class, 'setLocale'])->name('instructor.set-locale');
         Route::get('/scanner/{course}', [InstructorController::class, 'scanner'])->name('instructor.scanner');
         Route::post('/scan/{course}', [InstructorController::class, 'scan'])->name('instructor.scan');
         Route::get('/billing', [InstructorController::class, 'billing'])->name('instructor.billing');
         Route::post('/mark-paid', [InstructorController::class, 'markPaid'])->name('instructor.students.mark-paid');
-        Route::get('/students-list', [InstructorController::class, 'students'])->name('instructor.students.list');
-        Route::get('/students-export', [InstructorController::class, 'exportStudents'])->name('instructor.students.export');
-        Route::get('/groups-list', [InstructorController::class, 'groups'])->name('instructor.groups.list');
-        Route::get('/groups/create', [InstructorController::class, 'createGroup'])->name('instructor.groups.create');
-        Route::post('/groups', [InstructorController::class, 'storeGroup'])->name('instructor.groups.store');
-        Route::get('/groups/{course}/edit', [InstructorController::class, 'editGroup'])->name('instructor.groups.edit');
-        Route::put('/groups/{course}', [InstructorController::class, 'updateGroup'])->name('instructor.groups.update');
-        Route::post('/groups/{course}/rotate-link', [InstructorController::class, 'rotateGroupLink'])->name('instructor.groups.rotate-link');
-        Route::post('/groups/{course}/duplicate', [InstructorController::class, 'duplicateGroup'])->name('instructor.groups.duplicate');
-        Route::delete('/groups/{course}', [InstructorController::class, 'destroyGroup'])->name('instructor.groups.destroy');
+        Route::get('/students-list', [StudentController::class, 'index'])->name('instructor.students.list');
+        Route::get('/students-export', [StudentController::class, 'export'])->name('instructor.students.export');
+        Route::get('/groups-list', [GroupController::class, 'index'])->name('instructor.groups.list');
+        Route::get('/groups/create', [GroupController::class, 'create'])->name('instructor.groups.create');
+        Route::post('/groups', [GroupController::class, 'store'])->name('instructor.groups.store');
+        Route::get('/groups/{course}/edit', [GroupController::class, 'edit'])->name('instructor.groups.edit');
+        Route::put('/groups/{course}', [GroupController::class, 'update'])->name('instructor.groups.update');
+        Route::post('/groups/{course}/rotate-link', [GroupController::class, 'rotateLink'])->name('instructor.groups.rotate-link');
+        Route::post('/groups/{course}/duplicate', [GroupController::class, 'duplicate'])->name('instructor.groups.duplicate');
+        Route::delete('/groups/{course}', [GroupController::class, 'destroy'])->name('instructor.groups.destroy');
         
-        Route::get('/students-create', [InstructorController::class, 'createStudent'])->name('instructor.students.create');
-        Route::post('/students-store', [InstructorController::class, 'storeStudent'])->name('instructor.students.store');
-        Route::get('/students/{student}', [InstructorController::class, 'showStudent'])->name('instructor.students.show');
-        Route::post('/students/import', [InstructorController::class, 'importStudents'])->name('instructor.students.import');
-        Route::post('/students/{student}/toggle-status', [InstructorController::class, 'toggleStudentStatus'])->name('instructor.students.toggle-status');
-        Route::post('/students/{student}/update-notes', [InstructorController::class, 'updateStudentNotes'])->name('instructor.students.update-notes');
-        Route::post('/students/{student}/transfer', [InstructorController::class, 'transferStudent'])->name('instructor.students.transfer');
-        Route::delete('/students/{student}', [InstructorController::class, 'destroyStudent'])->name('instructor.students.destroy');
-        Route::post('/students/{student}/send-email', [InstructorController::class, 'sendEmail'])->name('instructor.students.send-email');
+        Route::get('/students-create', [StudentController::class, 'create'])->name('instructor.students.create');
+        Route::post('/students-store', [StudentController::class, 'store'])->name('instructor.students.store');
+        Route::get('/students/{student}', [StudentController::class, 'show'])->name('instructor.students.show');
+        Route::post('/students/import', [StudentController::class, 'import'])->name('instructor.students.import');
+        Route::post('/students/{student}/toggle-status', [StudentController::class, 'toggleStatus'])->name('instructor.students.toggle-status');
+        Route::post('/students/{student}/update-notes', [StudentController::class, 'updateNotes'])->name('instructor.students.update-notes');
+        Route::post('/students/{student}/transfer', [StudentController::class, 'transfer'])->name('instructor.students.transfer');
+        Route::delete('/students/{student}', [StudentController::class, 'destroy'])->name('instructor.students.destroy');
+        Route::post('/students/{student}/send-email', [StudentController::class, 'sendEmail'])->name('instructor.students.send-email');
         
         // Settings Dashboard
-        Route::get('/settings', [InstructorController::class, 'settings'])->name('instructor.settings');
-        Route::post('/settings/update-general', [InstructorController::class, 'updateGeneralSettings'])->name('instructor.settings.update-general');
+        Route::get('/settings', [SettingsController::class, 'index'])->name('instructor.settings');
+        Route::post('/settings/update-general', [SettingsController::class, 'updateGeneral'])->name('instructor.settings.update-general');
         
         // WhatsApp Settings
-        Route::get('/whatsapp', [InstructorController::class, 'whatsappSettings'])->name('instructor.whatsapp.settings');
-        Route::post('/whatsapp/update', [InstructorController::class, 'updateWhatsAppSettings'])->name('instructor.whatsapp.update');
+        Route::get('/whatsapp', [SettingsController::class, 'whatsapp'])->name('instructor.whatsapp.settings');
+        Route::post('/whatsapp/update', [SettingsController::class, 'updateWhatsApp'])->name('instructor.whatsapp.update');
         
         // Payment Reminders Settings
-        Route::post('/reminders/update', [InstructorController::class, 'updateReminderSettings'])->name('instructor.reminders.update');
-        Route::post('/students/{student}/update-payment', [InstructorController::class, 'updateStudentPayment'])->name('instructor.students.update-payment');
+        Route::post('/reminders/update', [SettingsController::class, 'updateReminders'])->name('instructor.reminders.update');
+        Route::post('/students/{student}/update-payment', [StudentController::class, 'updatePayment'])->name('instructor.students.update-payment');
         
         // Email Templates Settings
-        Route::post('/email-templates/update', [InstructorController::class, 'updateEmailTemplateSettings'])->name('instructor.email-templates.update');
-        Route::post('/email-templates/reset', [InstructorController::class, 'resetEmailTemplateSettings'])->name('instructor.email-templates.reset');
+        Route::post('/email-templates/update', [SettingsController::class, 'updateEmailTemplates'])->name('instructor.email-templates.update');
+        Route::post('/email-templates/reset', [SettingsController::class, 'resetEmailTemplates'])->name('instructor.email-templates.reset');
         
         // Auto-clear cache route (Temporary helper)
         Route::get('/clear-cache', function() {
@@ -56,7 +61,7 @@ $instructorRoutes = function () {
     });
 
     // Public Phone Check
-    Route::get('/instructor/check-phone', [InstructorController::class, 'checkPhone'])->name('instructor.students.check-phone');
+    Route::get('/instructor/check-phone', [StudentController::class, 'checkPhone'])->name('instructor.students.check-phone');
 
     Route::middleware(['auth', 'verified', 'subscription'])->prefix('instructor')->group(function () {
 
@@ -64,19 +69,19 @@ $instructorRoutes = function () {
         Route::resource('online-classes', \Modules\Instructor\Http\Controllers\OnlineClassController::class)->names('instructor.online_classes');
 
         // Instructor Schedule Management
-        Route::get('/schedules', [InstructorController::class, 'schedules'])->name('instructor.schedules.index');
-        Route::get('/schedules/create', [InstructorController::class, 'createSchedule'])->name('instructor.schedules.create');
-        Route::post('/schedules', [InstructorController::class, 'storeSchedule'])->name('instructor.schedules.store');
-        Route::get('/schedules/{schedule}/edit', [InstructorController::class, 'editSchedule'])->name('instructor.schedules.edit');
-        Route::put('/schedules/{schedule}', [InstructorController::class, 'updateSchedule'])->name('instructor.schedules.update');
-        Route::delete('/schedules/{schedule}', [InstructorController::class, 'destroySchedule'])->name('instructor.schedules.destroy');
-        Route::post('/classrooms/store', [InstructorController::class, 'storeClassroom'])->name('instructor.classrooms.store');
+        Route::get('/schedules', [ScheduleController::class, 'index'])->name('instructor.schedules.index');
+        Route::get('/schedules/create', [ScheduleController::class, 'create'])->name('instructor.schedules.create');
+        Route::post('/schedules', [ScheduleController::class, 'store'])->name('instructor.schedules.store');
+        Route::get('/schedules/{schedule}/edit', [ScheduleController::class, 'edit'])->name('instructor.schedules.edit');
+        Route::put('/schedules/{schedule}', [ScheduleController::class, 'update'])->name('instructor.schedules.update');
+        Route::delete('/schedules/{schedule}', [ScheduleController::class, 'destroy'])->name('instructor.schedules.destroy');
+        Route::post('/classrooms/store', [ScheduleController::class, 'storeClassroom'])->name('instructor.classrooms.store');
 
         // Instructor Attendance
-        Route::get('/attendance', [InstructorController::class, 'attendance'])->name('instructor.attendance.index');
-        Route::get('/attendance/schedule/{schedule}', [InstructorController::class, 'attendanceShow'])->name('instructor.attendance.show');
-        Route::post('/attendance/store', [InstructorController::class, 'storeAttendance'])->name('instructor.attendance.store');
-        Route::post('/attendance/bulk-absent/{schedule}', [InstructorController::class, 'bulkAbsent'])->name('instructor.attendance.bulkAbsent');
+        Route::get('/attendance', [AttendanceController::class, 'index'])->name('instructor.attendance.index');
+        Route::get('/attendance/schedule/{schedule}', [AttendanceController::class, 'show'])->name('instructor.attendance.show');
+        Route::post('/attendance/store', [AttendanceController::class, 'store'])->name('instructor.attendance.store');
+        Route::post('/attendance/bulk-absent/{schedule}', [AttendanceController::class, 'bulkAbsent'])->name('instructor.attendance.bulkAbsent');
 
         // Reports
         Route::get('/reports', function() { return redirect()->route('instructor.reports.students'); })->name('instructor.reports');
