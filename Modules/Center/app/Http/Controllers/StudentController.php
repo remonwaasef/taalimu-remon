@@ -211,7 +211,7 @@ class StudentController extends Controller
      */
     public function statement($id)
     {
-        $student = Student::findOrFail($id);
+        $student = Student::where('tenant_id', $this->tenant->id)->findOrFail($id);
         $this->authorize('view', $student);
         $tenantId = $this->tenant->id;
 

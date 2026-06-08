@@ -97,7 +97,7 @@ class CourseController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $course = Course::with(['instructor', 'enrollments.user.student'])->findOrFail($id);
+        $course = Course::where('tenant_id', app('tenant')->id)->with(['instructor', 'enrollments.user.student'])->findOrFail($id);
         $this->authorize('view', $course);
         // Get students NOT enrolled in this course
         $students = \App\Models\Student::whereDoesntHave('user.enrollments', function($q) use ($id) {
@@ -112,7 +112,7 @@ class CourseController extends Controller
 
     public function enroll(Request $request, $id)
     {
-        $course = Course::findOrFail($id);
+        $course = Course::where('tenant_id', app('tenant')->id)->findOrFail($id);
         
         $this->authorize('enroll', $course);
         
@@ -158,7 +158,7 @@ class CourseController extends Controller
 
     public function quickEnroll(Request $request, $id)
     {
-        $course = Course::findOrFail($id);
+        $course = Course::where('tenant_id', app('tenant')->id)->findOrFail($id);
         $this->authorize('enroll', $course);
 
         $request->validate([
@@ -197,7 +197,7 @@ class CourseController extends Controller
      */
     public function edit($id)
     {
-        $course = Course::with('schedules')->findOrFail($id);
+        $course = Course::where('tenant_id', app('tenant')->id)->with('schedules')->findOrFail($id);
         $this->authorize('update', $course);
         $instructors = Instructor::select('id', 'name', 'email')->get();
         $classrooms = \App\Models\Classroom::select('id', 'name')->get();
@@ -209,7 +209,7 @@ class CourseController extends Controller
      */
     public function update(UpdateCourseRequest $request, $id): RedirectResponse
     {
-        $course = Course::findOrFail($id);
+        $course = Course::where('tenant_id', app('tenant')->id)->findOrFail($id);
         $this->authorize('update', $course);
         
         $data = $request->validated();
@@ -251,7 +251,7 @@ class CourseController extends Controller
      */
     public function destroy($id)
     {
-        $course = Course::findOrFail($id);
+        $course = Course::where('tenant_id', app('tenant')->id)->findOrFail($id);
         $this->authorize('delete', $course);
         
         $this->courseService->deleteCourse($course);

@@ -151,11 +151,18 @@ class PaymobGateway implements PaymentGatewayInterface
 
     /**
      * Verify HMAC for Paymob Redirect (Client Side)
+     * Uses Paymob's official field ordering (alphabetical) and strict type handling.
      */
     public function verifyRedirectHmac(array $data): bool
     {
-        if (!isset($data['hmac'])) return false;
+        if (!isset($data['hmac'])) {
+            Log::channel('security')->warning('Paymob Redirect: Missing HMAC field', [
+                'ip' => request()->ip(),
+            ]);
+            return false;
+        }
 
+        // Paymob's official alphabetically-ordered fields for redirect HMAC
         $fields = [
             'amount_cents',
             'created_at',
@@ -181,24 +188,64 @@ class PaymobGateway implements PaymentGatewayInterface
 
         $source = '';
         foreach ($fields as $field) {
-            $val = $data[$field] ?? null;
-            if (is_bool($val)) {
-                $source .= $val ? 'true' : 'false';
-            } else {
-                $source .= $val;
-            }
+            $val = $data[$field] ?? '';
+            // Paymob sends booleans as strings 'true'/'false' in redirect
+            $source .= $this->normalizeHmacValue($val);
         }
 
         $calculated = hash_hmac('sha512', $source, $this->hmacSecret);
         
-        return hash_equals($calculated, $data['hmac']);
+        $isValid = hash_equals($calculated, $data['hmac']);
+
+        if (!$isValid) {
+            Log::channel('security')->warning('Paymob Redirect HMAC Verification Failed', [
+                'ip' => request()->ip(),
+                'transaction_id' => $data['id'] ?? 'unknown',
+                'amount_cents' => $data['amount_cents'] ?? 'unknown',
+            ]);
+        }
+
+        return $isValid;
+    }
+
+    /**
+     * Normalize a value for HMAC concatenation.
+     * Handles booleans, nulls, and type inconsistencies from Paymob.
+     */
+    protected function normalizeHmacValue($val): string
+    {
+        if (is_bool($val)) {
+            return $val ? 'true' : 'false';
+        }
+        if ($val === null) {
+            return '';
+        }
+        // Paymob sometimes sends 'true'/'false' as strings
+        return (string) $val;
     }
 
     public function handleCallback(array $payload): array
     {
-        // Paymob standard HMAC verification logic for Transaction Processed webhook
+        // Fail-closed: if payload structure is invalid, deny immediately
+        if (!isset($payload['obj']) || !is_array($payload['obj']) || !isset($payload['hmac'])) {
+            Log::channel('security')->warning('Paymob Webhook: Malformed payload structure', [
+                'ip' => request()->ip(),
+            ]);
+            return ['success' => false, 'message' => 'Malformed payload'];
+        }
+
         $data = $payload['obj'];
-        
+
+        // Validate required nested fields exist before accessing them
+        if (!isset($data['order']['id']) || !isset($data['source_data']['pan']) 
+            || !isset($data['source_data']['sub_type']) || !isset($data['source_data']['type'])) {
+            Log::channel('security')->warning('Paymob Webhook: Missing required nested fields', [
+                'ip' => request()->ip(),
+            ]);
+            return ['success' => false, 'message' => 'Missing required fields'];
+        }
+
+        // Paymob standard HMAC verification logic for Transaction Processed webhook
         $hmacFields = [
             $data['amount_cents'],
             $data['created_at'],
@@ -224,19 +271,15 @@ class PaymobGateway implements PaymentGatewayInterface
 
         $hmacSource = '';
         foreach ($hmacFields as $field) {
-            if (is_bool($field)) {
-                $hmacSource .= $field ? 'true' : 'false';
-            } else {
-                $hmacSource .= $field;
-            }
+            $hmacSource .= $this->normalizeHmacValue($field);
         }
 
         $calculatedHmac = hash_hmac('sha512', $hmacSource, $this->hmacSecret);
 
         if (!hash_equals($calculatedHmac, $payload['hmac'])) {
-            Log::error('Paymob HMAC Mismatch (Webhook)', [
-                'expected' => $payload['hmac'],
-                'calculated' => $calculatedHmac,
+            Log::channel('security')->error('Paymob Webhook HMAC Mismatch - Possible Tampering', [
+                'ip' => request()->ip(),
+                'transaction_id' => $data['id'] ?? 'unknown',
             ]);
             return ['success' => false, 'message' => 'HMAC Mismatch'];
         }
