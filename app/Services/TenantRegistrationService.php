@@ -66,7 +66,7 @@ class TenantRegistrationService
             $subdomain = self::generateSubdomain($data['center_name']);
 
             // 1. Create Tenant
-            $tenant = Tenant::create([
+            $tenant = Tenant::forceCreate([
                 'name' => $data['center_name'],
                 'email' => $data['email'],
                 'phone' => $data['phone'], 

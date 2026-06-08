@@ -133,7 +133,7 @@ class RegistrationController extends Controller
             $subdomain = \App\Services\TenantRegistrationService::generateSubdomain($request->center_name);
 
             // 1. Create Tenant
-            $tenant = Tenant::create([
+            $tenant = Tenant::forceCreate([
                 'name' => $request->center_name,
                 'email' => $request->email,
                 'phone' => $request->phone, 
@@ -189,7 +189,7 @@ class RegistrationController extends Controller
             $isTrialPlan = $package->trial_days > 0;
 
             if ($isTrialPlan) {
-                \App\Models\Subscription::create([
+                \App\Models\Subscription::forceCreate([
                     'tenant_id' => $tenant->id,
                     'package_id' => $package->id,
                     'name' => 'default',

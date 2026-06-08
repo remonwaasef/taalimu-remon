@@ -486,8 +486,8 @@ class InstructorController extends Controller
                     ]);
                     $user->assignRole('student');
 
-                    $student = Student::create([
-                        'tenant_id' => $instructor->tenant_id,
+                    $student = Student::forceCreate([
+                        'tenant_id' => app('tenant')->id,
                         'user_id' => $user->id,
                         'name' => $validated['name'],
                         'phone' => $validated['phone'],
