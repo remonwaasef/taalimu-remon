@@ -62,7 +62,7 @@
             </div>
 
             <!-- Minimal Progress Line -->
-            <div class="mb-12">
+            <div class="mb-12" x-show="currentStep !== 'welcome'" x-cloak>
                 <div class="grid grid-cols-4 gap-4 px-2">
                     <template x-for="(stepObj, index) in steps" :key="index">
                         <div class="space-y-3 group cursor-default">
@@ -96,8 +96,35 @@
                 </div>
 
                 <div class="p-8 md:p-14">
+                    <!-- WELCOME STEP -->
+                    <div x-show="currentStep === 'welcome'" 
+                         x-transition:enter="transition ease-out duration-300 transform"
+                         x-transition:enter-start="opacity-0 translate-y-4"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         class="space-y-8 text-center" x-cloak>
+                        
+                        <div class="flex justify-center mb-6">
+                            <div class="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-500 shadow-inner border border-emerald-100">
+                                <i class="fa-solid fa-hand-sparkles text-4xl"></i>
+                            </div>
+                        </div>
+                        
+                        <h2 class="text-3xl font-black text-slate-900 tracking-tight">{{ __('onboarding.welcome_step.title', ['name' => auth()->user()->name]) }}مرحباً بك في منصتك التعليمية!</h2>
+                        <p class="text-slate-500 font-medium text-lg max-w-lg mx-auto leading-relaxed">
+                            نحن سعداء جداً بانضمامك إلينا! لقد قمنا بتهيئة مساحة العمل الخاصة بك بنجاح. 
+                            الآن، ومن أجل إعداد المنصة لتناسب احتياجات مركزك وطلابك بشكل مثالي، يرجى إكمال هذه الخطوات السريعة.
+                        </p>
+                        
+                        <div class="pt-8 flex justify-center">
+                            <button type="button" @click="currentStep = 'step_1'; updateUrl()" class="group bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white px-12 py-5 rounded-[2rem] font-black text-xl transition-all shadow-xl shadow-emerald-600/20 flex items-center gap-4 transform hover:-translate-y-2">
+                                إبدأ إعداد المنصة 
+                                <i class="fa-solid fa-arrow-right rtl:rotate-180 group-hover:translate-x-2 transition-transform"></i>
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- STEP 1: Core Settings -->
-                    <div x-show="currentStep === 'step_1'" 
+                    <div x-show="currentStep === 'step_1'" style="display: none;"
                          x-transition:enter="transition ease-out duration-300 transform"
                          x-transition:enter-start="opacity-0 translate-y-4"
                          x-transition:enter-end="opacity-100 translate-y-0"
@@ -506,7 +533,7 @@
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('onboardingWizard', (initialStatus) => ({
-                currentStep: (new URLSearchParams(window.location.search).get('step')) || (initialStatus === 'pending' ? 'step_1' : initialStatus),
+                currentStep: (new URLSearchParams(window.location.search).get('step')) || (initialStatus === 'pending' ? 'welcome' : initialStatus),
                 loading: false,
                 init() {
                     this.initWizard();
