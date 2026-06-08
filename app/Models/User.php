@@ -96,18 +96,12 @@ class User extends Authenticatable
         'email',
         'phone',
         'password',
-        'role',
         'points',
-        'tenant_id',
         'instructor_id',
         'qr_identifier',
         'must_change_password',
         'locale',
         'google_id',
-        'email_verified_at',
-        'phone_verified_at',
-        'phone_verification_code',
-        'phone_verification_expires_at',
     ];
 
     /**

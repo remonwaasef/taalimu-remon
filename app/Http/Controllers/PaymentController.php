@@ -86,6 +86,7 @@ class PaymentController extends Controller
                 'received_hmac' => $request->get('hmac'),
                 'payload' => $request->except(['hmac'])
             ]);
+            abort(403, 'Invalid Payment Signature');
         }
 
         $success = filter_var($request->get('success'), FILTER_VALIDATE_BOOLEAN);
@@ -98,23 +99,23 @@ class PaymentController extends Controller
         ]);
 
         if ($success && $transactionId) {
-            // 2. Context Restoration
-            $tenantId = session('tenant_id');
-            $planSlug = session('selected_plan');
-            $billingCycle = session('billing_cycle', 'monthly');
-            $isChange = session('is_subscription_change', false);
-            $basePrice = session('base_price', 0);
-            $totalAmount = session('total_amount', 0);
-
-            // Fallback: restore from merchant_order_id if session expired
-            if (!$tenantId && $merchantOrderId) {
-                $restored = $this->paymentService->restoreContextFromMerchantOrder($merchantOrderId);
-                if ($restored) {
-                    $tenantId = $restored['tenant_id'];
-                    $planSlug = $restored['plan_slug'];
-                    $billingCycle = $restored['billing_cycle'];
-                    $isChange = $restored['is_change'];
-                }
+            // 2. Context Restoration (Prioritize DB Source of Truth to prevent Session Fixation)
+            $restored = $this->paymentService->restoreContextFromMerchantOrder($merchantOrderId);
+            if ($restored) {
+                $tenantId = $restored['tenant_id'];
+                $planSlug = $restored['plan_slug'];
+                $billingCycle = $restored['billing_cycle'];
+                $isChange = $restored['is_change'];
+                $basePrice = $restored['base_price'] ?? session('base_price', 0);
+                $totalAmount = $restored['total_amount'] ?? session('total_amount', 0);
+            } else {
+                // Fallback to session only if DB restore fails, but validate tenant to prevent session tampering
+                $tenantId = session('tenant_id');
+                $planSlug = session('selected_plan');
+                $billingCycle = session('billing_cycle', 'monthly');
+                $isChange = session('is_subscription_change', false);
+                $basePrice = session('base_price', 0);
+                $totalAmount = session('total_amount', 0);
             }
 
             $tenant = $tenantId ? Tenant::find($tenantId) : null;
