@@ -29,12 +29,17 @@ class BasicWAF
     ];
 
     /**
-     * The URIs that should be excluded from WAF filtering.
+     * Field-level exclusions: specific input fields on specific routes
+     * that should be skipped during WAF inspection (e.g. OAuth tokens,
+     * payment HMAC signatures) to avoid false positives.
      *
-     * @var array<int, string>
+     * Format: 'route_pattern' => ['field1', 'field2']
      */
-    protected $except = [
-        'auth/google/*',
+    protected $fieldExclusions = [
+        'auth/google/*'          => ['code', 'state', 'scope', 'authuser', 'prompt', 'session_state'],
+        'payment/paymob/*'       => ['hmac', 'token', 'source_data_pan', 'source_data_sub_type'],
+        'payment/paypal/*'       => ['token', 'PayerID', 'ba_token'],
+        'api/webhooks/*'         => ['hmac', 'obj'],
     ];
 
     /**
@@ -42,12 +47,8 @@ class BasicWAF
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Skip for excluded routes
-        foreach ($this->except as $except) {
-            if ($request->is($except)) {
-                return $next($request);
-            }
-        }
+        // Determine which fields to skip for the current route
+        $excludedFields = $this->getExcludedFields($request);
 
         // Check all input for suspicious patterns (recursively)
         $inputs = array_merge(
@@ -72,6 +73,11 @@ class BasicWAF
         }
 
         foreach ($flatValues as $key => $value) {
+            // Skip excluded fields for this route (OAuth tokens, HMAC signatures, etc.)
+            if (in_array($key, $excludedFields, true)) {
+                continue;
+            }
+
             if ($this->isSuspicious($value)) {
                 Log::channel('security')->warning('Suspicious request detected', [
                     'ip' => $request->ip(),
@@ -88,6 +94,19 @@ class BasicWAF
         }
 
         return $next($request);
+    }
+
+    /**
+     * Get excluded fields for the current request path.
+     */
+    protected function getExcludedFields(Request $request): array
+    {
+        foreach ($this->fieldExclusions as $pattern => $fields) {
+            if ($request->is($pattern)) {
+                return $fields;
+            }
+        }
+        return [];
     }
 
     /**

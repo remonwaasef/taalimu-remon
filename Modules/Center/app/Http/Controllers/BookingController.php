@@ -24,8 +24,8 @@ class BookingController extends Controller
             'notes' => 'nullable|string|max:500',
         ]);
 
-        $schedule = Schedule::findOrFail($request->schedule_id);
-        $student = Student::findOrFail($request->student_id); // Fetch to trigger TenantScope
+        $schedule = Schedule::where('tenant_id', app('tenant')->id)->findOrFail($request->schedule_id);
+        $student = Student::where('tenant_id', app('tenant')->id)->findOrFail($request->student_id);
         
         // Check if student is already booked for this session
         $exists = Booking::where('student_id', $request->student_id)
@@ -62,7 +62,7 @@ class BookingController extends Controller
      */
     public function updateStatus(Request $request, $id): RedirectResponse
     {
-        $booking = Booking::findOrFail($id);
+        $booking = Booking::where('tenant_id', app('tenant')->id)->findOrFail($id);
         $this->authorize('update', $booking);
 
         $request->validate([
@@ -79,7 +79,7 @@ class BookingController extends Controller
      */
     public function destroy($id): RedirectResponse
     {
-        $booking = Booking::findOrFail($id);
+        $booking = Booking::where('tenant_id', app('tenant')->id)->findOrFail($id);
         $this->authorize('delete', $booking);
         $booking->delete();
 

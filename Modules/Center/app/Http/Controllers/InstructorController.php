@@ -138,7 +138,7 @@ class InstructorController extends Controller
      */
     public function show($id)
     {
-        $instructor = Instructor::withCount('courses')->findOrFail($id);
+        $instructor = Instructor::where('tenant_id', app('tenant')->id)->withCount('courses')->findOrFail($id);
         $this->authorize('view', $instructor);
 
         // Load commission history
@@ -155,7 +155,7 @@ class InstructorController extends Controller
      */
     public function edit($id)
     {
-        $instructor = Instructor::findOrFail($id);
+        $instructor = Instructor::where('tenant_id', app('tenant')->id)->findOrFail($id);
         $this->authorize('update', $instructor);
         return view('center::instructors.edit', compact('instructor'));
     }
@@ -165,7 +165,7 @@ class InstructorController extends Controller
      */
     public function update(UpdateInstructorRequest $request, $id): RedirectResponse
     {
-        $instructor = Instructor::findOrFail($id);
+        $instructor = Instructor::where('tenant_id', app('tenant')->id)->findOrFail($id);
         $this->authorize('update', $instructor);
 
         $instructor->name = $request->name;
@@ -202,7 +202,7 @@ class InstructorController extends Controller
      */
     public function destroy($id)
     {
-        $instructor = Instructor::findOrFail($id);
+        $instructor = Instructor::where('tenant_id', app('tenant')->id)->findOrFail($id);
         $this->authorize('delete', $instructor);
 
         $this->deleteFile($instructor->image, 'public');
@@ -217,7 +217,7 @@ class InstructorController extends Controller
      */
     public function payout(Request $request, $id, PayoutService $payoutService)
     {
-        $instructor = Instructor::findOrFail($id);
+        $instructor = Instructor::where('tenant_id', app('tenant')->id)->findOrFail($id);
         $this->authorize('update', $instructor); // Using update perm for financial settlement
 
         $request->validate([
@@ -240,7 +240,7 @@ class InstructorController extends Controller
      */
     public function statement($id)
     {
-        $instructor = Instructor::findOrFail($id);
+        $instructor = Instructor::where('tenant_id', app('tenant')->id)->findOrFail($id);
         $this->authorize('view', $instructor);
 
         // Fetch commissions (Credits)
