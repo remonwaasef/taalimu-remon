@@ -66,7 +66,11 @@ class UnifiedAuthController extends Controller
             foreach (array_unique($phoneVariations) as $phone) {
                 if (empty($phone)) continue;
                 
-                $potentialUser = User::where('phone', $phone)->first();
+                $query = User::where('phone', $phone);
+                if (app()->bound('tenant')) {
+                    $query->where('tenant_id', app('tenant')->id);
+                }
+                $potentialUser = $query->first();
                 if ($potentialUser && \Illuminate\Support\Facades\Hash::check($request->password, $potentialUser->password)) {
                     if (Auth::attempt(['email' => $potentialUser->email, 'password' => $request->password])) {
                         $user = Auth::user();
@@ -77,12 +81,18 @@ class UnifiedAuthController extends Controller
 
             // 2. Fallback: Search in Student table if user not found via synced phone
             if (!$user) {
-                $student = \App\Models\Student::where(function($q) use ($input, $cleanPhone) {
+                $studentQuery = \App\Models\Student::where(function($q) use ($input, $cleanPhone) {
                     $q->where('phone', $input)
                       ->orWhere('phone', $cleanPhone)
                       ->orWhere('phone', '0' . $cleanPhone)
                       ->orWhere('phone', substr($cleanPhone, 1));
-                })->first();
+                });
+                
+                if (app()->bound('tenant')) {
+                    $studentQuery->where('tenant_id', app('tenant')->id);
+                }
+                
+                $student = $studentQuery->first();
 
                 if ($student && $student->user && \Illuminate\Support\Facades\Hash::check($request->password, $student->user->password)) {
                     if (Auth::attempt(['email' => $student->user->email, 'password' => $request->password])) {

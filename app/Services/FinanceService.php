@@ -240,8 +240,8 @@ class FinanceService
      */
     public function notifyPayment($tenant, $student, $amount, $balance, $method = 'cash')
     {
-        // WhatsApp Notification
-        $this->whatsappService->sendPaymentNotification($tenant, $student, $amount, $balance);
+        // WhatsApp Notification - Dispatch to queue to avoid DB row locks
+        \App\Jobs\SendWhatsAppPaymentNotification::dispatch($tenant, $student, $amount, $balance)->onQueue('whatsapp');
         
         // Email Notification
         $this->sendPaymentEmailNotification($tenant, $student, $amount, $balance, $method);

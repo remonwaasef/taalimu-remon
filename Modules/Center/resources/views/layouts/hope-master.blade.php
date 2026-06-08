@@ -77,39 +77,7 @@
         </div>
 
         <div class="container-fluid content-inner py-0">
-            @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show rounded-4 border-0 shadow-sm mb-4" role="alert">
-                    <div class="d-flex align-items-center">
-                        <i class="fas fa-check-circle me-3 fa-lg"></i>
-                        <div>{{ session('success') }}</div>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-
-            @if(session('error'))
-                <div class="alert alert-danger alert-dismissible fade show rounded-4 border-0 shadow-sm mb-4" role="alert">
-                    <div class="d-flex align-items-center">
-                        <i class="fas fa-exclamation-circle me-3 fa-lg"></i>
-                        <div>{{ session('error') }}</div>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-
-            @if($errors->any())
-                <div class="alert alert-danger alert-dismissible fade show rounded-4 border-0 shadow-sm mb-4" role="alert">
-                    <div class="d-flex align-items-center">
-                        <i class="fas fa-exclamation-triangle me-3 fa-lg"></i>
-                        <ul class="mb-0 list-unstyled">
-                            @foreach($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
+            <x-flash-messages />
 
             @yield('content')
         </div>

@@ -71,6 +71,9 @@
             </table>
         </div>
     </div>
+    <div class="card-footer bg-white border-0 py-3 d-flex justify-content-center">
+        {{ $students->links() }}
+    </div>
 </div>
 
 @push('scripts')

@@ -58,6 +58,11 @@ class SocialAuthController extends Controller
             // 2. Check if user exists with same email → Link google_id & Login
             $existingUser = User::where('email', $googleUser->email)->first();
             if ($existingUser) {
+                if (empty($existingUser->google_id)) {
+                    return redirect()->route('login.portal')
+                        ->withErrors(['email' => __('This email is already registered. Please login with your password to link your Google account.')]);
+                }
+
                 $existingUser->forceFill([
                     'google_id' => $googleUser->id,
                     'email_verified_at' => $existingUser->email_verified_at ?? now(),
@@ -74,9 +79,9 @@ class SocialAuthController extends Controller
 
             // 3. New user → Pass Google data via encrypted token (session-independent)
             $googleData = [
-                'id'    => $googleUser->id,
-                'name'  => $googleUser->name,
-                'email' => $googleUser->email,
+                'id'    => htmlspecialchars(strip_tags($googleUser->id)),
+                'name'  => htmlspecialchars(strip_tags($googleUser->name)),
+                'email' => htmlspecialchars(strip_tags($googleUser->email)),
             ];
             
             // Encrypt the Google user data into a URL-safe token
