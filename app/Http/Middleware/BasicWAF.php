@@ -35,11 +35,6 @@ class BasicWAF
      */
     protected $except = [
         'auth/google/*',
-        'login*',
-        'register*',
-        'payment/*',
-        'webhooks/*',
-        'stripe/*',
     ];
 
     /**

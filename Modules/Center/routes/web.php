@@ -46,6 +46,7 @@ $tenantRoutes = function () {
         Route::post('login', [AuthController::class, 'login'])
             ->middleware('throttle:login')
             ->name('center.login.submit');
+        Route::post('login/sso', [AuthController::class, 'ssoLogin'])->name('center.login.sso');
             
         // Magic Login (QR Code) - Support both GET (page) and POST (confirmation)
         Route::match(['get', 'post'], 'magic-login/{student}', [AuthController::class, 'magicLogin'])

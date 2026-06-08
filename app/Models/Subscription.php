@@ -33,7 +33,6 @@ class Subscription extends CashierSubscription
     }
 
     protected $fillable = [
-        'tenant_id',
         'package_id',
         'name',
         'stripe_id',
@@ -46,7 +45,6 @@ class Subscription extends CashierSubscription
         'gateway',
         'trial_ends_at',
         'ends_at',
-        'status', // Custom field
         'coupon_id',
         'coupon_code',
         'discount_amount',

@@ -68,9 +68,10 @@ class UnifiedAuthController extends Controller
                 
                 $potentialUser = User::where('phone', $phone)->first();
                 if ($potentialUser && \Illuminate\Support\Facades\Hash::check($request->password, $potentialUser->password)) {
-                    $user = $potentialUser;
-                    Auth::login($user);
-                    break;
+                    if (Auth::attempt(['email' => $potentialUser->email, 'password' => $request->password])) {
+                        $user = Auth::user();
+                        break;
+                    }
                 }
             }
 
@@ -84,8 +85,9 @@ class UnifiedAuthController extends Controller
                 })->first();
 
                 if ($student && $student->user && \Illuminate\Support\Facades\Hash::check($request->password, $student->user->password)) {
-                    $user = $student->user;
-                    Auth::login($user);
+                    if (Auth::attempt(['email' => $student->user->email, 'password' => $request->password])) {
+                        $user = Auth::user();
+                    }
                 }
             }
         }
@@ -136,10 +138,20 @@ class UnifiedAuthController extends Controller
                 'tenant' => $tenant->domain
             ]);
             
-            // Redirect to tenant login with token
-            $loginUrl = tenant_url('login?token=' . $token, $tenant);
+            // Redirect to tenant login via auto-submitting POST form
+            $loginUrl = tenant_url('login/sso', $tenant);
             
-            return redirect($loginUrl);
+            return response()->setContent("
+                <html>
+                <body onload='document.forms[0].submit()'>
+                    <p style='text-align:center; margin-top:20vh; font-family:sans-serif;'>جاري تحويلك إلى لوحة التحكم...</p>
+                    <form method='POST' action='{$loginUrl}' style='display:none;'>
+                        <input type='hidden' name='token' value='{$token}'>
+                        <noscript><button type='submit'>Click here to continue</button></noscript>
+                    </form>
+                </body>
+                </html>
+            ");
         }
 
         \Illuminate\Support\Facades\RateLimiter::hit($throttleKey);

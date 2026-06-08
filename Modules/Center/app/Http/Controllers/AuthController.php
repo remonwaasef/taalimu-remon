@@ -10,7 +10,13 @@ class AuthController extends Controller
 {
     public function showLoginForm(Request $request)
     {
-        // Check for token-based login (Cross-Domain Handoff)
+        // Token logic moved to ssoLogin (POST) for security
+        
+        return view('center::auth.login');
+    }
+
+    public function ssoLogin(Request $request)
+    {
         if ($request->has('token')) {
             $token = $request->input('token');
             $data = \Illuminate\Support\Facades\Cache::pull('login_token_' . $token);
@@ -53,7 +59,7 @@ class AuthController extends Controller
             }
         }
         
-        return view('center::auth.login');
+        return redirect()->route('center.login', ['tenant' => app('tenant')->domain])->withErrors(['email' => 'الرابط منتهي الصلاحية أو غير صالح.']);
     }
 
     public function login(Request $request)
