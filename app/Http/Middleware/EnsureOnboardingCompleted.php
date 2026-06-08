@@ -51,7 +51,7 @@ class EnsureOnboardingCompleted
             return $next($request);
         }
 
-        // 5. Allow access instead of redirecting
-        return $next($request);
+        // 5. Redirect to onboarding wizard
+        return redirect()->route('center.onboarding.show');
     }
 }
