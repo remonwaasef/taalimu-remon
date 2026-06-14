@@ -1,21 +1,5 @@
 @extends('center::layouts.hope-master')
 
-@php
-    // Helper to sanitize phone numbers for wa.me links
-    // Strips spaces, dashes, parentheses, and leading '+'
-    // Uses tenant's default country code for local numbers (starting with 0)
-    function sanitizePhoneForWhatsApp($phone) {
-        if (!$phone) return '';
-        $phone = preg_replace('/[^0-9]/', '', $phone); // Keep digits only
-        // If phone starts with '0' (local format), prepend tenant's country code
-        if (str_starts_with($phone, '0')) {
-            $countryCode = app('tenant')->settings['default_country_code'] ?? '20'; // Default: Egypt
-            $phone = $countryCode . substr($phone, 1); // Remove leading 0, add country code
-        }
-        return $phone;
-    }
-@endphp
-
 @section('content')
     @if(session('generated_password'))
         @php

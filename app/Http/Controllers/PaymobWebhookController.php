@@ -19,9 +19,8 @@ class PaymobWebhookController extends Controller
 
     public function handle(Request $request)
     {
-        Log::info('Paymob Webhook Received', $request->all());
-
-        $payload = $request->all();
+        $payload = $request->except(['card_pan', 'source', 'cvv', 'token']);
+        Log::info('Paymob Webhook Received', $payload);
         
         // Use the gateway's built-in verification logic
         $result = $this->gateway->handleCallback($payload);

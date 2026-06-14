@@ -55,26 +55,11 @@ class SocialAuthController extends Controller
                 return redirect()->intended('/dashboard');
             }
 
-            // 2. Check if user exists with same email → Link google_id & Login
+            // 2. Check if user exists with same email
             $existingUser = User::where('email', $googleUser->email)->first();
             if ($existingUser) {
-                if (empty($existingUser->google_id)) {
-                    return redirect()->route('login.portal')
-                        ->withErrors(['email' => __('This email is already registered. Please login with your password to link your Google account.')]);
-                }
-
-                $existingUser->forceFill([
-                    'google_id' => $googleUser->id,
-                    'email_verified_at' => $existingUser->email_verified_at ?? now(),
-                ])->save();
-                
-                Auth::login($existingUser, true);
-                
-                if ($existingUser->role === 'instructor' || ($existingUser->tenant && $existingUser->tenant->type === 'instructor')) {
-                    return redirect()->route('instructor.dashboard', ['tenant' => $existingUser->tenant->domain]);
-                }
-
-                return redirect()->intended('/dashboard');
+                return redirect()->route('login.portal')
+                    ->withErrors(['email' => __('This email is already registered. Please login with your password to link your Google account.')]);
             }
 
             // 3. New user → Pass Google data via encrypted token (session-independent)
@@ -429,7 +414,7 @@ class SocialAuthController extends Controller
                 'trace' => $e->getTraceAsString(),
                 'session_id' => session()->getId(),
                 'has_google_user' => session()->has('google_user'),
-                'input' => $request->all(),
+                'input' => $request->except(['password', 'password_confirmation', 'card_pan', 'source', 'cvv']),
             ]);
             // WE DO NOT FORGET google_user HERE, so the user can try again!
             session()->save(); 

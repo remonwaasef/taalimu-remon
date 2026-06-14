@@ -1,19 +1,4 @@
 @extends('center::layouts.hope-master')
-
-@php
-    if (!function_exists('sanitizePhoneForWhatsApp')) {
-        function sanitizePhoneForWhatsApp($phone) {
-            if (!$phone) return '';
-            $phone = preg_replace('/[^0-9]/', '', $phone);
-            if (str_starts_with($phone, '0')) {
-                $countryCode = app('tenant')->settings['default_country_code'] ?? '20';
-                $phone = $countryCode . substr($phone, 1);
-            }
-            return $phone;
-        }
-    }
-@endphp
-
 @section('page-title', __('center::students.title'))
 
 @section('page-actions')

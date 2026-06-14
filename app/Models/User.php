@@ -47,14 +47,6 @@ class User extends Authenticatable
 
         static::saved(function ($user) {
             \Illuminate\Support\Facades\Cache::forget("user_cache_{$user->id}");
-            
-            // Professional Sync: Ensure the 'role' column matches the primary Spatie role
-            // This is a safety fallback for code that checks $user->role directly.
-            $primaryRole = $user->getRoleNames()->first();
-            if ($primaryRole && $user->role !== $primaryRole) {
-                // Update without triggering events to prevent loops
-                $user->newQuery()->where('id', $user->id)->update(['role' => $primaryRole]);
-            }
         });
 
         static::deleted(function ($user) {
