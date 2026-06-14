@@ -31,6 +31,21 @@ class StudentController extends Controller
         $this->studentService = $studentService;
         $this->studentQuery = $studentQuery;
     }
+
+    /**
+     * Find a student scoped to the current tenant, or fail.
+     */
+    private function findStudentOrFail($id, array $with = [], bool $withTrashed = false)
+    {
+        $query = Student::forTenant($this->tenant->id);
+        if ($withTrashed) {
+            $query->withTrashed();
+        }
+        if (!empty($with)) {
+            $query->with($with);
+        }
+        return $query->findOrFail($id);
+    }
     public function index(Request $request)
     {
         $this->authorize('viewAny', Student::class);
@@ -102,7 +117,7 @@ class StudentController extends Controller
             session()->flash('student_email', $result['student']->email);
 
             // Smart Onboarding Routing: If this is the first student, guide them back to the dashboard
-            $studentCount = Student::where('tenant_id', $this->tenant->id)->count();
+            $studentCount = Student::forTenant($this->tenant->id)->count();
             if ($studentCount === 1) {
                 return redirect()->route('center.dashboard')->with('success', __('center::messages.first_student_onboarding'));
             }
@@ -120,9 +135,7 @@ class StudentController extends Controller
      */
     public function show($id)
     {
-        $student = Student::where('tenant_id', $this->tenant->id)
-            ->with(['grade.stage', 'user', 'tenant'])
-            ->findOrFail($id);
+        $student = $this->findStudentOrFail($id, ['grade.stage', 'user', 'tenant']);
             
         $this->authorize('view', $student);
             
@@ -136,7 +149,7 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        $student = Student::where('tenant_id', $this->tenant->id)->findOrFail($id);
+        $student = $this->findStudentOrFail($id);
         $this->authorize('update', $student);
         
         $stages = \App\Models\Stage::getCached();
@@ -150,7 +163,7 @@ class StudentController extends Controller
      */
     public function update(UpdateStudentRequest $request, $id): RedirectResponse
     {
-        $student = Student::where('tenant_id', $this->tenant->id)->findOrFail($id);
+        $student = $this->findStudentOrFail($id);
         $this->authorize('update', $student);
 
         // Pass user_id to exclude to the request validator
@@ -173,7 +186,7 @@ class StudentController extends Controller
 
     public function resetPassword($id): RedirectResponse
     {
-        $student = Student::where('tenant_id', $this->tenant->id)->findOrFail($id);
+        $student = $this->findStudentOrFail($id);
         $this->authorize('update', $student);
 
         $newPassword = $this->studentService->resetPassword($student->user);
@@ -188,7 +201,7 @@ class StudentController extends Controller
      */
     public function remindDebt($id, \App\Services\WhatsAppService $whatsappService)
     {
-        $student = Student::where('tenant_id', $this->tenant->id)->findOrFail($id);
+        $student = $this->findStudentOrFail($id);
         $this->authorize('update', $student);
 
         $totalDebt = Sale::where('student_id', $student->id)->sum(\Illuminate\Support\Facades\DB::raw('total_amount - paid_amount'));
@@ -211,7 +224,7 @@ class StudentController extends Controller
      */
     public function statement($id)
     {
-        $student = Student::where('tenant_id', $this->tenant->id)->findOrFail($id);
+        $student = $this->findStudentOrFail($id);
         $this->authorize('view', $student);
         $tenantId = $this->tenant->id;
 
@@ -292,7 +305,7 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        $student = Student::where('tenant_id', $this->tenant->id)->findOrFail($id);
+        $student = $this->findStudentOrFail($id);
         $this->authorize('delete', $student);
 
         // Delete profile photo
@@ -313,7 +326,7 @@ class StudentController extends Controller
 
     public function restore($id)
     {
-        $student = Student::where('tenant_id', $this->tenant->id)->withTrashed()->findOrFail($id);
+        $student = $this->findStudentOrFail($id, [], true);
         $this->authorize('update', $student);
 
         $student->restore();
@@ -519,7 +532,7 @@ class StudentController extends Controller
      */
     public function sendEmail(Request $request, $id)
     {
-        $student = Student::where('tenant_id', $this->tenant->id)->findOrFail($id);
+        $student = $this->findStudentOrFail($id);
         $this->authorize('update', $student);
 
         $request->validate([
@@ -550,7 +563,7 @@ class StudentController extends Controller
 
     public function idCard($id)
     {
-        $student = Student::where('tenant_id', $this->tenant->id)->findOrFail($id);
+        $student = $this->findStudentOrFail($id);
         return view('center::students.id_card', compact('student'));
     }
 }

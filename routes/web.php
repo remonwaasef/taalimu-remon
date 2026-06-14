@@ -98,7 +98,7 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
         ]);
 
         return response()->json(['success' => true]);
-    })->middleware('throttle:30,1');
+    })->middleware(['auth', 'throttle:30,1']);
 
     Route::get('/api/coupons/validate', [App\Http\Controllers\CouponApiController::class, 'validateCoupon'])
         ->middleware('throttle:coupons')

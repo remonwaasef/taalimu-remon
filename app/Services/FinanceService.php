@@ -72,16 +72,21 @@ class FinanceService
 
             // 1.5 Validation: Check if student is already enrolled in any of these courses
             // This prevents duplicate sales on page refresh or double-submissions
+            $courseIdsToCheck = [];
             foreach ($data['items'] as $item) {
                 if (($item['type'] ?? Course::class) === Course::class) {
-                    $course = $courses->get($item['id']);
-                    $isEnrolled = Enrollment::where('user_id', $student->user_id)
-                        ->where('course_id', $course->id)
-                        ->exists();
-                    
-                    if ($isEnrolled) {
-                        throw new \Exception('الطالب مسجل بالفعل في: ' . $course->title);
-                    }
+                    $courseIdsToCheck[] = $item['id'];
+                }
+            }
+            if (!empty($courseIdsToCheck)) {
+                $enrolledCourseIds = Enrollment::where('user_id', $student->user_id)
+                    ->whereIn('course_id', $courseIdsToCheck)
+                    ->pluck('course_id')
+                    ->toArray();
+                
+                if (!empty($enrolledCourseIds)) {
+                    $firstEnrolledCourse = $courses->get($enrolledCourseIds[0]);
+                    throw new \Exception('الطالب مسجل بالفعل في: ' . ($firstEnrolledCourse ? $firstEnrolledCourse->title : ''));
                 }
             }
 
@@ -152,7 +157,9 @@ class FinanceService
                 }
             }
             if (!empty($enrolledCourseIds) && $student) {
-                app(\App\Services\Student\StudentNotificationService::class)->sendGroupEnrollmentEmails($student, $enrolledCourseIds);
+                DB::afterCommit(function() use ($student, $enrolledCourseIds) {
+                    app(\App\Services\Student\StudentNotificationService::class)->sendGroupEnrollmentEmails($student, $enrolledCourseIds);
+                });
             }
 
             // 5. Create First Payment Record in Ledger
@@ -169,7 +176,10 @@ class FinanceService
 
                 // Notifications
                 if ($student) {
-                    $this->notifyPayment(\Modules\Tenancy\Services\TenantResolver::get(), $student, $data['paid_amount'], $totalAmount - $data['paid_amount'], $data['payment_method'] ?? 'cash');
+                    $tenant = \Modules\Tenancy\Services\TenantResolver::get();
+                    DB::afterCommit(function() use ($tenant, $student, $data, $totalAmount) {
+                        $this->notifyPayment($tenant, $student, $data['paid_amount'], $totalAmount - $data['paid_amount'], $data['payment_method'] ?? 'cash');
+                    });
                 }
             }
 
@@ -212,7 +222,12 @@ class FinanceService
             $sale->loadMissing('student.user');
 
             // Notifications
-            $this->notifyPayment(\Modules\Tenancy\Services\TenantResolver::get(), $sale->student, $amount, $sale->total_amount - $newPaidAmount, $method ?? $sale->payment_method);
+            $tenant = \Modules\Tenancy\Services\TenantResolver::get();
+            $student = $sale->student;
+            $totalAmount = $sale->total_amount;
+            DB::afterCommit(function() use ($tenant, $student, $amount, $totalAmount, $newPaidAmount, $method, $sale) {
+                $this->notifyPayment($tenant, $student, $amount, $totalAmount - $newPaidAmount, $method ?? $sale->payment_method);
+            });
 
             return $sale;
         });

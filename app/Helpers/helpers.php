@@ -152,3 +152,21 @@ if (!function_exists('format_price')) {
         return $formatted . ' ' . $symbol;
     }
 }
+
+if (!function_exists('sanitizePhoneForWhatsApp')) {
+    /**
+     * Sanitize a phone number for WhatsApp links.
+     *
+     * @param string|null $phone
+     * @return string
+     */
+    function sanitizePhoneForWhatsApp($phone) {
+        if (!$phone) return '';
+        $phone = preg_replace('/[^0-9]/', '', $phone);
+        if (str_starts_with($phone, '0')) {
+            $countryCode = app('tenant')->settings['default_country_code'] ?? '20';
+            $phone = $countryCode . substr($phone, 1);
+        }
+        return $phone;
+    }
+}

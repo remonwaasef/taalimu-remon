@@ -188,7 +188,9 @@ class Tenant extends Model
      */
     public function getLtvAttribute()
     {
-        return $this->invoices()->where('status', 'paid')->sum('amount');
+        return \Illuminate\Support\Facades\Cache::remember("tenant_ltv_{$this->id}", 3600, function () {
+            return $this->invoices()->where('status', 'paid')->sum('amount');
+        });
     }
 
     /**
@@ -196,10 +198,12 @@ class Tenant extends Model
      */
     public function getOverdueStudentsCount(): int
     {
-        return $this->sales()
-            ->whereRaw('paid_amount < total_amount')
-            ->distinct('student_id')
-            ->count('student_id');
+        return \Illuminate\Support\Facades\Cache::remember("tenant_overdue_{$this->id}", 3600, function () {
+            return $this->sales()
+                ->whereRaw('paid_amount < total_amount')
+                ->distinct('student_id')
+                ->count('student_id');
+        });
     }
 
     /**

@@ -25,11 +25,10 @@ class UnifiedAuthController extends Controller
         $throttleKey = 'unified_login.' . \Illuminate\Support\Str::lower($request->input('email')) . '|' . $request->ip();
 
         // Increase rate limit for local development/testing to prevent locking out developers
-        $host = $request->getHost();
+        $ip = $request->ip();
         $isLocal = app()->environment('local') || 
-                   in_array($host, ['localhost', '127.0.0.1', '::1']) || 
-                   str_contains($host, '.localhost') || 
-                   str_contains($host, '192.168.');
+                   in_array($ip, ['127.0.0.1', '::1']) || 
+                   str_contains($ip, '192.168.');
         $maxAttempts = $isLocal ? 100 : 5;
 
         if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($throttleKey, $maxAttempts)) {
@@ -43,12 +42,19 @@ class UnifiedAuthController extends Controller
         $user = null;
 
         if ($isEmail) {
-            $credentials = [
-                'email' => $request->email,
-                'password' => $request->password,
-            ];
-            if (Auth::attempt($credentials)) {
-                $user = Auth::user();
+            $query = User::where('email', $request->email);
+            if (app()->bound('tenant')) {
+                $query->where(function($q) {
+                    $q->where('tenant_id', app('tenant')->id)
+                      ->orWhereNull('tenant_id'); // Allow super admins
+                });
+            }
+            $potentialUser = $query->first();
+
+            if ($potentialUser && \Illuminate\Support\Facades\Hash::check($request->password, $potentialUser->password)) {
+                if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+                    $user = Auth::user();
+                }
             }
         } else {
             // Phone-based login logic
@@ -149,14 +155,20 @@ class UnifiedAuthController extends Controller
             ]);
             
             // Redirect to tenant login via auto-submitting POST form
+            $signature = hash_hmac('sha256', $token, config('app.key'));
             $loginUrl = tenant_url('login/sso', $tenant);
+            
+            $safeLoginUrl = e($loginUrl);
+            $safeToken = e($token);
+            $safeSignature = e($signature);
             
             return response()->setContent("
                 <html>
                 <body onload='document.forms[0].submit()'>
                     <p style='text-align:center; margin-top:20vh; font-family:sans-serif;'>جاري تحويلك إلى لوحة التحكم...</p>
-                    <form method='POST' action='{$loginUrl}' style='display:none;'>
-                        <input type='hidden' name='token' value='{$token}'>
+                    <form method='POST' action='{$safeLoginUrl}' style='display:none;'>
+                        <input type='hidden' name='token' value='{$safeToken}'>
+                        <input type='hidden' name='signature' value='{$safeSignature}'>
                         <noscript><button type='submit'>Click here to continue</button></noscript>
                     </form>
                 </body>

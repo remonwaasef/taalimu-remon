@@ -170,4 +170,20 @@ class Student extends Model
     {
         return $this->hasMany(\App\Models\Certificate::class);
     }
+
+    /**
+     * Scope a query to only include students of a given tenant.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  int|null  $tenantId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeForTenant($query, $tenantId = null)
+    {
+        $tenantId = $tenantId ?? app('tenant')->id ?? null;
+        if ($tenantId) {
+            return $query->where('tenant_id', $tenantId);
+        }
+        return $query;
+    }
 }

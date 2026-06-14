@@ -169,22 +169,20 @@ class CourseController extends Controller
         ]);
 
         try {
-            return \DB::transaction(function() use ($request, $course) {
-                // 1. Create Student
-                $studentData = \App\DTOs\StudentData::fromArray($request->all());
-                $registrationResult = app(\App\Services\StudentService::class)->registerStudent($studentData, auth()->user());
-                $student = $registrationResult['student'];
+            // 1. Create Student
+            $studentData = \App\DTOs\StudentData::fromArray($request->all());
+            $registrationResult = app(\App\Services\StudentService::class)->registerStudent($studentData, auth()->user());
+            $student = $registrationResult['student'];
 
-                // 2. إنشاء فاتورة غير مدفوعة تلقائياً (بدلاً من التسجيل المباشر)
-                $this->financeService->createSale([
-                    'student_id' => $student->id,
-                    'items' => [['id' => $course->id, 'price' => $course->price]],
-                    'payment_method' => 'cash',
-                    'paid_amount' => 0,
-                ]);
+            // 2. إنشاء فاتورة غير مدفوعة تلقائياً (بدلاً من التسجيل المباشر)
+            $this->financeService->createSale([
+                'student_id' => $student->id,
+                'items' => [['id' => $course->id, 'price' => $course->price]],
+                'payment_method' => 'cash',
+                'paid_amount' => 0,
+            ]);
 
-                return back()->with('success', __('center::messages.msg_028'));
-            });
+            return back()->with('success', __('center::messages.msg_028'));
         } catch (\Exception $e) {
             \Log::error('Quick enroll failed: ' . $e->getMessage());
             return back()->with('error', __('center::messages.registration_failed') ?? 'حدث خطأ أثناء التسجيل السريع.');

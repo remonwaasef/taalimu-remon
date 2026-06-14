@@ -21,15 +21,37 @@ class StoreStudentRequest extends FormRequest
      */
     public function rules(): array
     {
+        $tenantId = app('tenant')->id;
+
         return [
-            'name' => 'required_without:student_id|string|max:255',
-            'phone' => 'required_without:student_id|string|digits:11',
-            'parent_phone' => 'required_without:student_id|string|digits:11',
+            'name' => ['required_without:student_id', 'string', 'max:255', 'regex:/^[\pL\s]+$/u'],
+            'phone' => [
+                'required_without:student_id',
+                'string',
+                'max:20',
+                'regex:/^([0-9\s\-\+\(\)]*)$/',
+                'min:10',
+            ],
+            'parent_phone' => ['nullable', 'string', 'max:20', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
             'parent_email' => 'nullable|email|max:255',
             'email' => 'nullable|email|max:255',
             'course_ids' => 'required|array|min:1',
             'course_ids.*' => 'exists:courses,id',
             'student_id' => 'nullable|exists:students,id',
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     */
+    public function messages(): array
+    {
+        return [
+            'name.regex' => 'الاسم يجب أن يحتوي على حروف ومسافات فقط.',
+            'phone.regex' => 'صيغة رقم الهاتف غير صحيحة.',
+            'phone.min' => 'رقم الهاتف يجب أن يكون 10 أرقام على الأقل.',
+            'parent_phone.regex' => 'صيغة رقم ولي الأمر غير صحيحة.',
+            'parent_phone.min' => 'رقم ولي الأمر يجب أن يكون 10 أرقام على الأقل.',
         ];
     }
 }

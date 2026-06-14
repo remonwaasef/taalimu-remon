@@ -20,7 +20,8 @@ class PayPalWebhookController extends Controller
 
         $eventType = $payload['event_type'] ?? '';
 
-        Log::info('PayPal Webhook Received: ' . $eventType, $payload);
+        $safePayload = $request->except(['card_pan', 'source', 'cvv', 'token', 'payer.payer_info.tax_id_type']);
+        Log::info('PayPal Webhook Received: ' . $eventType, $safePayload);
 
         switch ($eventType) {
             case 'BILLING.SUBSCRIPTION.ACTIVATED':
