@@ -15,6 +15,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Payment;
 use App\Models\Refund;
 use App\Services\RefundService;
+use Modules\Center\Http\Requests\StoreSaleRequest;
 
 class SaleController extends Controller
 {
@@ -170,28 +171,10 @@ class SaleController extends Controller
         return view('center::sales.create', compact('students', 'courses', 'tenant'));
     }
 
-    public function store(Request $request)
+    public function store(StoreSaleRequest $request)
     {
-        $this->authorize('create', Sale::class);
-        $request->validate([
-            'student_id' => [
-                'required',
-                Rule::exists('students', 'id')->where('tenant_id', $this->tenant->id)
-            ],
-            'items' => 'required|array|min:1',
-            'items.*.id' => [
-                'required', 
-                Rule::exists('courses', 'id')->where('tenant_id', $this->tenant->id)
-            ],
-            'items.*.price' => 'required|numeric|min:0',
-            'payment_method' => 'required|string',
-            'paid_amount' => 'required|numeric|min:0',
-            'discount_amount' => 'nullable|numeric|min:0',
-            'tax_amount' => 'nullable|numeric|min:0',
-        ]);
-
         try {
-            $sale = $this->financeService->createSale($request->all());
+            $sale = $this->financeService->createSale($request->validated());
             return response()->json(['success' => true, 'sale_id' => $sale->id]);
         } catch (\Exception $e) {
             \Log::error('Sale creation failed: ' . $e->getMessage());
@@ -383,7 +366,7 @@ class SaleController extends Controller
     {
         $tenant = $this->tenant;
         $payment = \App\Models\Payment::where('tenant_id', $tenant->id)
-            ->with(['sale.student', 'receiver'])
+            ->with(['sale.student', 'sale.items.item', 'receiver'])
             ->findOrFail($paymentId);
 
         $this->authorize('view', $payment->sale);
