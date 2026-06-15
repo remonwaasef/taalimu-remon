@@ -256,7 +256,7 @@ class OnboardingController extends Controller
                     'instructors.*.commission_rate' => 'required|numeric|min:0',
                 ]);
                 
-                $existingInstructors = \App\Models\Instructor::where('tenant_id', $tenant->id)->get();
+                $existingInstructors = \App\Models\Instructor::where('tenant_id', $tenant->id)->with('user')->get();
                 $instructorsInput = $request->input('instructors');
 
                 foreach ($instructorsInput as $index => $instructorData) {
@@ -349,12 +349,13 @@ class OnboardingController extends Controller
                 $existingCourses = \App\Models\Course::where('tenant_id', $tenant->id)->orderBy('id', 'asc')->get();
                 $coursesInput = $request->input('courses');
                 
+                $instructors = \App\Models\Instructor::where('tenant_id', $tenant->id)
+                    ->orderBy('id', 'asc')
+                    ->get();
+                
                 foreach ($coursesInput as $index => $courseData) {
-                    $instructorIndex = $courseData['instructor_index'] ?? 0;
-                    $instructor = \App\Models\Instructor::where('tenant_id', $tenant->id)
-                        ->orderBy('id', 'asc')
-                        ->skip($instructorIndex)
-                        ->first();
+                    $instructorIndex = (int)($courseData['instructor_index'] ?? 0);
+                    $instructor = $instructors->get($instructorIndex);
                         
                     if (isset($existingCourses[$index])) {
                         $course = $existingCourses[$index];
@@ -437,22 +438,26 @@ class OnboardingController extends Controller
                         $result = $this->studentService->registerStudent($studentData, auth()->user());
                         $student = $result['student'];
 
-                        // Enroll student in each selected course
+                        // Enroll student in all selected courses in a single sale creation
                         $courseIndices = $studentInput['enroll_course_indices'] ?? [];
+                        $saleItems = [];
                         foreach ($courseIndices as $courseIndex) {
                             $course = $allCourses->get((int)$courseIndex);
                             if ($course) {
-                                try {
-                                    $this->financeService->createSale([
-                                        'student_id' => $student->id,
-                                        'items' => [['id' => $course->id, 'price' => $course->price]],
-                                        'payment_method' => 'cash',
-                                        'paid_amount' => 0,
-                                        'notes' => 'Onboarding Enrollment',
-                                    ]);
-                                } catch (\Exception $e) {
-                                    \Log::error("Onboarding Finance Error: " . $e->getMessage());
-                                }
+                                $saleItems[] = ['id' => $course->id, 'price' => $course->price];
+                            }
+                        }
+                        if (!empty($saleItems)) {
+                            try {
+                                $this->financeService->createSale([
+                                    'student_id' => $student->id,
+                                    'items' => $saleItems,
+                                    'payment_method' => 'cash',
+                                    'paid_amount' => 0,
+                                    'notes' => 'Onboarding Enrollment',
+                                ]);
+                            } catch (\Exception $e) {
+                                \Log::error("Onboarding Finance Error: " . $e->getMessage());
                             }
                         }
                     } catch (\Exception $e) {
