@@ -159,7 +159,10 @@ class SubscriptionService
             // check for 90% limit warning
             $this->checkThresholdWarning($tenant, $featureCode);
 
-        } catch (\Throwable $e) {}
+        } catch (\Throwable $e) {
+            // Best-effort counter: never break the request, but record the failure.
+            \Illuminate\Support\Facades\Log::warning("incrementUsage failed for tenant {$tenant->id} / {$featureCode}: " . $e->getMessage());
+        }
     }
 
     /**
@@ -210,6 +213,9 @@ class SubscriptionService
             } else {
                 \Illuminate\Support\Facades\Cache::forget($cacheKey);
             }
-        } catch (\Throwable $e) {}
+        } catch (\Throwable $e) {
+            // Best-effort counter: never break the request, but record the failure.
+            \Illuminate\Support\Facades\Log::warning("decrementUsage failed for tenant {$tenant->id} / {$featureCode}: " . $e->getMessage());
+        }
     }
 }
