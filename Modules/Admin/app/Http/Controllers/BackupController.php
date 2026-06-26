@@ -46,12 +46,19 @@ class BackupController extends Controller
 
     public function download(Request $request)
     {
-        $fileName = $request->get('file');
+        // Security: basename() strips any directory component (e.g. "../../") so the
+        // request can only ever target a file inside the backup directory.
+        $fileName = basename((string) $request->get('file', ''));
+
+        if ($fileName === '' || ! str_ends_with($fileName, '.zip')) {
+            abort(404, "الملف غير موجود.");
+        }
+
         $disk = Storage::disk(config('backup.backup.destination.disks')[0]);
         $path = config('backup.backup.name') . '/' . $fileName;
 
         if ($disk->exists($path)) {
-            return Storage::disk(config('backup.backup.destination.disks')[0])->download($path);
+            return $disk->download($path);
         }
 
         abort(404, "الملف غير موجود.");
@@ -59,6 +66,13 @@ class BackupController extends Controller
 
     public function delete($fileName)
     {
+        // Security: prevent path traversal — only allow deleting a .zip inside the backup dir.
+        $fileName = basename((string) $fileName);
+
+        if ($fileName === '' || ! str_ends_with($fileName, '.zip')) {
+            return redirect()->back()->with('error', 'الملف غير موجود.');
+        }
+
         $disk = Storage::disk(config('backup.backup.destination.disks')[0]);
         $path = config('backup.backup.name') . '/' . $fileName;
 
