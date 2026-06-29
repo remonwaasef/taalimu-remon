@@ -48,8 +48,6 @@ class Instructor extends Model
         return $options;
     }
 
-    protected $guarded = ['id'];
-
     protected $fillable = [
         'tenant_id',
         'user_id',
@@ -112,18 +110,30 @@ class Instructor extends Model
 
     public function getTotalEarnedAttribute()
     {
+        if (array_key_exists('commissions_sum_amount', $this->attributes)) {
+            return (float) $this->attributes['commissions_sum_amount'];
+        }
         return $this->commissions()->where('status', '!=', 'pending')->sum('amount');
     }
 
     public function getPendingEarningsAttribute()
     {
+        if (array_key_exists('commissions_pending_sum_amount', $this->attributes)) {
+            return (float) $this->attributes['commissions_pending_sum_amount'];
+        }
         return $this->commissions()->where('status', 'pending')->sum('amount');
     }
 
     public function getOutstandingBalanceAttribute()
     {
-        $earned = $this->commissions()->where('status', '!=', 'pending')->sum('amount');
-        $payouts = $this->payouts()->sum('amount');
+        $earned = $this->total_earned;
+        
+        if (array_key_exists('payouts_sum_amount', $this->attributes)) {
+            $payouts = (float) $this->attributes['payouts_sum_amount'];
+        } else {
+            $payouts = $this->payouts()->sum('amount');
+        }
+        
         return $earned - $payouts;
     }
 }

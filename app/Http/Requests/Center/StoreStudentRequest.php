@@ -13,7 +13,7 @@ class StoreStudentRequest extends FormRequest
 
     public function rules()
     {
-        $tenantId = app('tenant')->id;
+        $tenantId = app()->bound('tenant') ? app('tenant')->id : null;
         
         return [
             'name' => ['required', 'string', 'max:255', 'regex:/^[\pL\s]+$/u'],

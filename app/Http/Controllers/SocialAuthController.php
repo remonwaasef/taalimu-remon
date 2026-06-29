@@ -177,7 +177,7 @@ class SocialAuthController extends Controller
     /**
      * Handle the complete registration for Google-authenticated users.
      */
-    public function completeRegistration(Request $request, TelegramService $telegram)
+    public function completeRegistration(Request $request, TelegramService $telegram, \App\Services\TenantRegistrationService $registrationService)
     {
         $googleData = session('google_user');
         
@@ -221,12 +221,6 @@ class SocialAuthController extends Controller
             'coupon_code' => 'nullable|string|exists:coupons,code',
         ]);
 
-        // PHONE VERIFICATION GATE: Bypassed for Google registrations as requested
-        // $phoneVerified = session('phone_verified') && session('phone_verified_number') === $request->phone;
-        // if (!$phoneVerified) {
-        //     return back()->withErrors(['phone' => __('messages.verify_phone_first')])->withInput();
-        // }
-
         // 1. Check if user already exists (safety check for race conditions)
         if (User::where('email', $googleData['email'])->exists()) {
              $existing = User::where('email', $googleData['email'])->first();
@@ -243,116 +237,38 @@ class SocialAuthController extends Controller
         session()->save();
 
         try {
-            DB::beginTransaction();
+            // Call unified registration service
+            $registrationData = $request->validated();
+            $registrationData['email'] = $googleData['email'];
+            $registrationData['name'] = $googleData['name'];
+            $registrationData['currency'] = 'EGP'; // Default to EGP for registration settings
 
-            // Auto-generate subdomain
-            $subdomain = $this->generateSubdomain($request->center_name);
+            $result = $registrationService->registerTenant(
+                $registrationData,
+                null, // No password needed for Google social signups
+                $googleData['id'],
+                null
+            );
 
-            // 1. Create Tenant
-            $tenant = Tenant::forceCreate([
-                'name' => $request->center_name,
-                'email' => $googleData['email'],
-                'phone' => $request->phone,
-                'domain' => $subdomain,
-                'type' => $request->account_type,
-                'database_name' => 'edu_central',
-                'status' => 'active',
-            ]);
-
-            // Save locale and currency into tenant settings from session/GeoIP
-            $registrationLocale = session('locale', 'ar');
-            $registrationCurrency = session('suggested_currency', 'EGP');
-            $tenant->settings = array_merge($tenant->settings ?? [], [
-                'default_locale' => $registrationLocale,
-                'currency' => $registrationCurrency,
-            ]);
-            $tenant->save();
-
-            // 2. Create User (no password needed for Google users)
-            $user = new User([
-                'name' => $googleData['name'],
-                'email' => $googleData['email'],
-                'phone' => $request->phone,
-                'password' => Hash::make(Str::random(32)), // Random password, user logs in via Google
-                'google_id' => $googleData['id'],
-                'email_verified_at' => now(), // Trust Google verification
-                'locale' => session('locale', 'ar'),
-            ]);
-            $user->tenant_id = $tenant->id;
-            $user->role = $request->account_type === 'instructor' ? 'instructor' : 'center_admin';
-            $user->save();
-
-            event(new Registered($user));
-
-            // Set Spatie Team Context
-            app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
-            $user->assignRole($user->role);
-
-            // 3. Handle Subscription logic
+            $tenant = $result['tenant'];
+            $user = $result['user'];
+            $coupon = $tenant->temp_coupon;
+            $discountAmount = $tenant->temp_discount_amount;
+            $basePrice = $tenant->temp_base_price;
+            $finalAmount = $tenant->temp_total_amount;
+            $subdomain = $tenant->domain;
             $billingCycle = $request->input('billing_cycle', 'monthly');
+
             $package = \App\Models\Package::where('slug', $request->plan)->first();
-            
-            if ($billingCycle === 'term') {
-                $basePrice = $package->term_price ?: ($package->price * 4);
-            } elseif ($billingCycle === 'yearly') {
-                $basePrice = $package->yearly_price ?: ($package->price * 10);
-            } else {
-                $basePrice = $package->price;
-            }
-
-            // Handle Coupon Discount
-            $discountAmount = 0;
-            $couponId = null;
-            if ($request->filled('coupon_code')) {
-                $coupon = \App\Models\Coupon::where('code', $request->coupon_code)->first();
-                if ($coupon && $coupon->isValid() && (!$coupon->package_id || $coupon->package_id === $package->id)) {
-                    $discountAmount = $coupon->calculateDiscount($basePrice);
-                    $couponId = $coupon->id;
-                }
-            }
-            $finalAmount = max(0, $basePrice - $discountAmount);
-
-            $isTrialPlan = $package->trial_days > 0;
-
-            if ($isTrialPlan) {
-                \App\Models\Subscription::forceCreate([
-                    'tenant_id' => $tenant->id,
-                    'package_id' => $package->id,
-                    'name' => 'default',
-                    'stripe_id' => 'sub_trial_' . Str::random(10),
-                    'stripe_status' => 'trialing',
-                    'stripe_price' => $package->slug,
-                    'quantity' => 1,
-                    'trial_ends_at' => now()->addDays($package->trial_days),
-                    'ends_at' => now()->addDays($package->trial_days),
-                    'status' => 'trialing',
-                    'billing_cycle' => $billingCycle,
-                    'base_price' => $basePrice,
-                    'total_amount' => $finalAmount,
-                    'discount_amount' => $discountAmount,
-                ]);
-            }
-
-            // COMMIT the database transaction - everything critical is saved
-            DB::commit();
-
-            // === POST-COMMIT SIDE EFFECTS (non-critical, won't rollback DB) ===
+            $isTrialPlan = $package && $package->trial_days > 0;
 
             // Send WhatsApp OTP (non-critical - account is already created)
             try {
                 $otpCode = $user->generatePhoneVerificationCode();
-                $whatsapp = app(\App\Services\WhatsAppService::class);
                 $message = __('messages.otp_sent_sms') . ": {$otpCode}";
-                $whatsapp->sendSystemMessage($user->phone, $message);
+                \App\Jobs\SendSystemWhatsAppMessage::dispatch($user->phone, $message);
             } catch (\Exception $otpEx) {
-                \Log::warning('WhatsApp OTP failed (non-critical): ' . $otpEx->getMessage());
-            }
-
-            // Send Telegram Notification (non-critical)
-            try {
-                $telegram->sendRegistrationAlert($tenant, $user, $isTrialPlan ? '(Registration - Free Trial)' : '(Registration - Paid Plan)');
-            } catch (\Exception $telegramEx) {
-                \Log::warning('Telegram notification failed (non-critical): ' . $telegramEx->getMessage());
+                \Log::warning('WhatsApp OTP dispatch failed (non-critical): ' . $otpEx->getMessage());
             }
 
             // Clear session data ONLY after successful DB commit
@@ -399,7 +315,7 @@ class SocialAuthController extends Controller
                 $redirectUrl = $gateway->createCheckoutSession($tenant, $package, $billingCycle, [
                     'total_amount' => $finalAmount,
                     'base_price' => $basePrice,
-                    'coupon_id' => $couponId,
+                    'coupon_id' => $coupon ? $coupon->id : null,
                     'discount_amount' => $discountAmount,
                 ]);
 
@@ -407,7 +323,6 @@ class SocialAuthController extends Controller
             }
 
         } catch (\Exception $e) {
-            DB::rollBack();
             // Release submission lock on failure so user can try again
             session()->forget($submissionKey);
             \Log::error('Google Registration Error: ' . $e->getMessage(), [
@@ -418,28 +333,7 @@ class SocialAuthController extends Controller
             ]);
             // WE DO NOT FORGET google_user HERE, so the user can try again!
             session()->save(); 
-            return back()->withErrors(['center_name' => __('Registration failed: ') . $e->getMessage()])->withInput();
+            return back()->withErrors(['center_name' => __('messages.registration_failed')])->withInput();
         }
-    }
-
-    /**
-     * Generate a unique subdomain from the center name.
-     */
-    private function generateSubdomain(string $name): string
-    {
-        $slug = Str::slug($name);
-        if (empty($slug)) {
-            $slug = 'center';
-        }
-
-        $original = $slug;
-        $counter = 1;
-
-        while (Tenant::where('domain', $slug)->exists()) {
-            $slug = $original . '-' . $counter;
-            $counter++;
-        }
-
-        return $slug;
     }
 }

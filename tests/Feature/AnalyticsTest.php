@@ -53,7 +53,12 @@ class AnalyticsTest extends TestCase
         ]);
 
         // Setup Admin User
-        $this->admin = User::factory()->create(['email' => 'admin@test.com', 'tenant_id' => $this->tenant->id]);
+        $this->admin = User::factory()->create([
+            'email' => 'admin@test.com',
+            'tenant_id' => $this->tenant->id,
+            'role' => 'center_admin',
+        ]);
+        setPermissionsTeamId($this->tenant->id);
         $this->admin->assignRole('center_admin');
 
         // Setup Instructor Profile (needed for course creation)

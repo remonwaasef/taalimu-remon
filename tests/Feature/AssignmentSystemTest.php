@@ -32,7 +32,8 @@ class AssignmentSystemTest extends TestCase
         parent::setUp();
 
         // Setup Tenant
-        $this->tenant = Tenant::create(['domain' => 'test', 'name' => 'Test Center']);
+        $this->tenant = $this->createTenant(['domain' => 'test', 'name' => 'Test Center']);
+        app()->instance('tenant', $this->tenant);
         
         // Setup Subscription
         $package = Package::create([

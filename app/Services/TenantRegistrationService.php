@@ -110,32 +110,49 @@ class TenantRegistrationService
 
             $user = User::create($userData);
 
+            // 2.1 Create Instructor Profile
+            \App\Models\Instructor::create([
+                'tenant_id' => $tenant->id,
+                'user_id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->phone,
+                'status' => 'active',
+            ]);
+
             // 3. Subscription & Billing
             $finalPrice = max(0, $basePrice - $discountAmount);
-            if ($package) {
-                $subscription = $tenant->subscriptions()->create([
+            $isTrialPlan = $package && $package->trial_days > 0;
+
+            if ($isTrialPlan) {
+                $tenant->active_subscription_object = \App\Models\Subscription::forceCreate([
+                    'tenant_id' => $tenant->id,
                     'package_id' => $package->id,
-                    'status' => 'trialing',
+                    'name' => 'default',
+                    'stripe_id' => 'sub_trial_' . \Illuminate\Support\Str::random(10),
+                    'stripe_status' => 'trialing',
+                    'stripe_price' => $package->slug,
+                    'quantity' => 1,
                     'trial_ends_at' => now()->addDays($package->trial_days),
-                    'starts_at' => now(),
-                    'ends_at' => null, 
+                    'ends_at' => now()->addDays($package->trial_days),
+                    'status' => 'trialing',
                     'billing_cycle' => $data['billing_cycle'],
-                    'price' => $finalPrice,
-                    'currency' => $currency,
-                    'payment_status' => 'unpaid',
+                    'base_price' => $basePrice,
+                    'total_amount' => $finalPrice,
+                    'discount_amount' => $discountAmount,
                 ]);
 
-                // Record applied coupon
+                // Record applied coupon if exists
                 if ($coupon) {
-                    $tenant->appliedCoupons()->create([
-                        'coupon_id' => $coupon->id,
-                        'subscription_id' => $subscription->id,
-                        'discount_amount' => $discountAmount,
-                        'applied_at' => now(),
-                    ]);
                     $coupon->increment('used_count');
                 }
             }
+
+            // Expose values on tenant object for controllers
+            $tenant->temp_coupon = $coupon;
+            $tenant->temp_discount_amount = $discountAmount;
+            $tenant->temp_base_price = $basePrice;
+            $tenant->temp_total_amount = $finalPrice;
 
             // 4. Default System Data
             $this->seedTenantData($tenant);

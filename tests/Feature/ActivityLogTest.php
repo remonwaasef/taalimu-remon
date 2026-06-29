@@ -25,9 +25,14 @@ class ActivityLogTest extends TestCase
         $this->tenant = Tenant::create(['domain' => 'test', 'name' => 'Test Center']);
         
         // Setup Admin
-        $this->admin = User::factory()->create(['email' => 'admin@test.com', 'tenant_id' => $this->tenant->id]);
-        $role = \Spatie\Permission\Models\Role::where('name', 'super_admin')->first();
-        $this->admin->roles()->attach($role->id, ['tenant_id' => $this->tenant->id]);
+        $this->admin = User::factory()->create([
+            'email' => 'admin@test.com',
+            'tenant_id' => $this->tenant->id,
+            'role' => 'super_admin',
+        ]);
+        
+        app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId(null);
+        $this->admin->assignRole('super_admin');
     }
 
     public function test_user_creation_is_logged()
@@ -82,7 +87,7 @@ class ActivityLogTest extends TestCase
         $response = $this->get(route('admin.activity-logs.index'));
 
         $response->assertStatus(200);
-        $response->assertSee('Activity Logs');
-        $response->assertSee('Created');
+        $response->assertSee('سجل النشاطات');
+        $response->assertSee('إنشاء');
     }
 }

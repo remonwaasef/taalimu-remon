@@ -135,147 +135,8 @@ class OperationIssue extends Model
         return $query->where('is_muted', false);
     }
 
-    // ==================== Actions ====================
-
-    public function acknowledge(User $user): void
-    {
-        $oldStatus = $this->status;
-        
-        $this->update([
-            'status' => 'acknowledged',
-            'acknowledged_at' => now(),
-            'first_response_at' => $this->first_response_at ?? now(),
-        ]);
-
-        $this->recordTimeline('status_changed', $user, [
-            'old_value' => ['status' => $oldStatus],
-            'new_value' => ['status' => 'acknowledged'],
-        ]);
-    }
-
-    public function assignTo(User $assignee, User $assignedBy): void
-    {
-        $oldAssignee = $this->assigned_to;
-        
-        $this->update([
-            'assigned_to' => $assignee->id,
-            'status' => $this->status === 'new' ? 'acknowledged' : $this->status,
-            'first_response_at' => $this->first_response_at ?? now(),
-        ]);
-
-        $this->recordTimeline('assigned', $assignedBy, [
-            'old_value' => ['assigned_to' => $oldAssignee],
-            'new_value' => ['assigned_to' => $assignee->id, 'name' => $assignee->name],
-        ]);
-    }
-
-    public function updateStatus(string $status, User $user, ?string $comment = null): void
-    {
-        $oldStatus = $this->status;
-        
-        $updateData = ['status' => $status];
-        
-        if ($status === 'in_progress' && !$this->first_response_at) {
-            $updateData['first_response_at'] = now();
-        }
-        
-        $this->update($updateData);
-
-        $this->recordTimeline('status_changed', $user, [
-            'old_value' => ['status' => $oldStatus],
-            'new_value' => ['status' => $status],
-            'comment' => $comment,
-        ]);
-    }
-
-    public function resolve(string $type, string $notes, User $user): void
-    {
-        $oldStatus = $this->status;
-        $resolvedAt = now();
-        $resolutionMinutes = $this->created_at->diffInMinutes($resolvedAt);
-        
-        $this->update([
-            'status' => 'resolved',
-            'resolution_type' => $type,
-            'resolution_notes' => $notes,
-            'resolved_by' => $user->id,
-            'resolved_at' => $resolvedAt,
-            'resolution_time_minutes' => $resolutionMinutes,
-        ]);
-
-        $this->recordTimeline('resolved', $user, [
-            'old_value' => ['status' => $oldStatus],
-            'new_value' => [
-                'status' => 'resolved',
-                'resolution_type' => $type,
-                'resolution_time_minutes' => $resolutionMinutes,
-            ],
-            'comment' => $notes,
-        ]);
-    }
-
-    public function addComment(string $comment, User $user): IssueTimeline
-    {
-        return $this->recordTimeline('commented', $user, [
-            'comment' => $comment,
-        ]);
-    }
-
-    public function mute(): void
-    {
-        $this->update(['is_muted' => true]);
-        
-        if (auth()->check()) {
-            $this->recordTimeline('muted', auth()->user());
-        }
-    }
-
-    public function unmute(): void
-    {
-        $this->update(['is_muted' => false]);
-        
-        if (auth()->check()) {
-            $this->recordTimeline('unmuted', auth()->user());
-        }
-    }
-
-    public function mergeWith(OperationIssue $target): void
-    {
-        // Move timeline entries to target
-        $this->timeline()->update(['issue_id' => $target->id]);
-        
-        // Increment occurrence count
-        $target->increment('occurrence_count', $this->occurrence_count);
-        $target->update([
-            'last_occurrence_at' => max($this->last_occurrence_at ?? $this->created_at, $target->last_occurrence_at ?? $target->created_at),
-            'is_recurring' => true,
-        ]);
-        
-        // Soft delete this issue
-        $this->delete();
-    }
-
-    public function incrementOccurrence(): void
-    {
-        $this->increment('occurrence_count');
-        $this->update([
-            'last_occurrence_at' => now(),
-            'is_recurring' => $this->occurrence_count > 1,
-        ]);
-    }
-
-    // ==================== Helpers ====================
-
-    protected function recordTimeline(string $type, ?User $user, array $data = []): IssueTimeline
-    {
-        return $this->timeline()->create([
-            'user_id' => $user?->id,
-            'type' => $type,
-            'old_value' => $data['old_value'] ?? null,
-            'new_value' => $data['new_value'] ?? null,
-            'comment' => $data['comment'] ?? null,
-        ]);
-    }
+    // ==================== Actions & Helpers ====================
+    // Logic delegated to OperationIssueService to promote single responsibility principle.
 
     public function getSeverityColorAttribute(): string
     {
@@ -355,7 +216,8 @@ class OperationIssue extends Model
     protected static function boot()
     {
         parent::boot();
-
+        
+        // Note: bootBelongsToTenant is booted automatically by Laravel's bootTraits() mechanism
         static::creating(function ($issue) {
             if (empty($issue->uuid)) {
                 $issue->uuid = (string) Str::uuid();

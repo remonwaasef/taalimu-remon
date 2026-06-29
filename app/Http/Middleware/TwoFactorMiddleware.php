@@ -20,7 +20,7 @@ class TwoFactorMiddleware
             if (!$request->session()->has('2fa_verified')) {
                 // If not verified, and the user is not currently trying to verify, redirect them
                 if (!$request->is('2fa*') && !$request->is('logout')) {
-                    return redirect()->route('2fa.index');
+                    return redirect()->route('2fa.verify');
                 }
             }
         }

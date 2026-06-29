@@ -29,7 +29,9 @@ class AuthenticationSubscriber
         if ($event->user->role === 'super_admin' || $event->user->email === config('app.admin_email', 'admin@taalimu.com')) {
             try {
                 app(\App\Services\TelegramService::class)->sendLoginAlert($event->user, request()->ip());
-            } catch (\Throwable $e) {}
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning("AuthenticationSubscriber (Login Alert): Telegram notification failed. Error: " . $e->getMessage());
+            }
         }
     }
 
@@ -68,7 +70,9 @@ class AuthenticationSubscriber
         if (str_contains($email, 'admin')) {
             try {
                 app(\App\Services\TelegramService::class)->sendAdminNotification("<b>🚨 فشل تسجيل دخول حساب إداري!</b>\n\n<b>البريد:</b> <code>{$email}</code>\n<b>IP:</b> <code>" . request()->ip() . "</code>");
-            } catch (\Throwable $e) {}
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning("AuthenticationSubscriber (Login Failed Alert): Telegram notification failed. Error: " . $e->getMessage());
+            }
         }
     }
 
@@ -89,7 +93,9 @@ class AuthenticationSubscriber
         // Notify Admin on Telegram
         try {
             app(\App\Services\TelegramService::class)->sendAdminNotification("<b>🚫 تم قفل حساب مستخدم (Lockout)</b>\n\n<b>البريد:</b> <code>{$email}</code>\n<b>IP:</b> <code>" . request()->ip() . "</code>");
-        } catch (\Throwable $e) {}
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning("AuthenticationSubscriber (Lockout Alert): Telegram notification failed. Error: " . $e->getMessage());
+        }
     }
 
     /**

@@ -37,7 +37,7 @@ class RegistrationController extends Controller
         return view('auth.register', compact('packages', 'packagesData', 'accountType'));
     }
 
-    public function register(Request $request, TelegramService $telegram, \App\Services\GeoIPService $geoIP)
+    public function register(Request $request, TelegramService $telegram, \App\Services\GeoIPService $geoIP, \App\Services\TenantRegistrationService $registrationService)
     {
         $request->validate([
             'account_type' => 'required|in:center,instructor',
@@ -98,130 +98,36 @@ class RegistrationController extends Controller
         session()->save();
 
         try {
-            DB::beginTransaction();
+            // Geopositioning data for logs/security
+            $geoData = null;
+            try {
+                $geoData = $geoIP->getLocation($request->ip());
+            } catch (\Exception $e) {
+                // Ignore geoip errors to not block registration
+            }
 
-            $coupon = null;
-            $discountAmount = 0;
+            // Call unified registration service
+            $result = $registrationService->registerTenant(
+                $request->validated(),
+                $request->password,
+                null,
+                $geoData
+            );
+
+            $tenant = $result['tenant'];
+            $user = $result['user'];
+            $coupon = $tenant->temp_coupon;
+            $discountAmount = $tenant->temp_discount_amount;
+            $basePrice = $tenant->temp_base_price;
+            $finalAmount = $tenant->temp_total_amount;
+            $subdomain = $tenant->domain;
+
             $package = \App\Models\Package::where('slug', $request->plan)->first();
-            $currency = $request->input('currency', 'EGP');
-            $regionalPrice = $package->getRegionalPrice($currency);
-            
-            if ($request->billing_cycle === 'term') {
-                $basePrice = $regionalPrice['term_price'] ?? ($regionalPrice['amount'] * 4);
-            } elseif ($request->billing_cycle === 'yearly') {
-                $basePrice = $regionalPrice['yearly_price'] ?? ($regionalPrice['amount'] * 10);
-            } else {
-                $basePrice = $regionalPrice['amount'];
-            }
-
-            if ($request->has('coupon_code') && $request->coupon_code) {
-                $coupon = \App\Models\Coupon::where('code', $request->coupon_code)->first();
-                if ($coupon && $coupon->isValid()) {
-                    // Check if coupon belongs to a specific package
-                    if ($coupon->package_id && $package && $coupon->package_id !== $package->id) {
-                        $coupon = null; // Doesn't apply to this package
-                    } else if ($package) {
-                        // Calculate discount logic if needed for validation
-                        $discountAmount = $coupon->calculateDiscount($basePrice);
-                    }
-                } else {
-                    $coupon = null; // Invalid coupon
-                }
-            }
-
-            // Auto-generate subdomain from center name
-            $subdomain = \App\Services\TenantRegistrationService::generateSubdomain($request->center_name);
-
-            // 1. Create Tenant
-            $tenant = Tenant::forceCreate([
-                'name' => $request->center_name,
-                'email' => $request->email,
-                'phone' => $request->phone, 
-                'domain' => $subdomain,
-                'type' => $request->account_type,
-                'database_name' => 'edu_central', // Shared DB for now
-                'status' => 'active', 
-            ]);
-
-            // Save locale and currency into tenant settings from session/GeoIP
-            $registrationLocale = session('locale', 'ar');
-            $registrationCurrency = session('suggested_currency', $currency);
-            $tenant->settings = array_merge($tenant->settings ?? [], [
-                'default_locale' => $registrationLocale,
-                'currency' => $registrationCurrency,
-            ]);
-            $tenant->save();
-
-            // 2. Create Admin User for this Tenant
-            $user = new User([
-                'name' => $request->name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'password' => Hash::make($request->password),
-                'locale' => session('locale', 'ar'),
-                'email_verified_at' => now(),
-                'phone_verified_at' => now(),
-            ]);
-            $user->tenant_id = $tenant->id;
-            $user->role = $request->account_type === 'instructor' ? 'instructor' : 'center_admin';
-            $user->save();
-            
-            // 2.1 Create Instructor Profile if applicable
-            // For 'instructor' account type, this is mandatory.
-            // For 'center' account type, we create a primary instructor profile for the owner by default.
-            \App\Models\Instructor::create([
-                'tenant_id' => $tenant->id,
-                'user_id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'phone' => $user->phone,
-                'status' => 'active',
-            ]);
-            
-            event(new Registered($user));
-            
-            // Set Spatie Team Context
-            app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
-            $user->assignRole($user->role);
-
-            // 3. Handle Subscription logic
-            $finalAmount = $basePrice - $discountAmount;
-            $isTrialPlan = $package->trial_days > 0;
-
-            if ($isTrialPlan) {
-                \App\Models\Subscription::forceCreate([
-                    'tenant_id' => $tenant->id,
-                    'package_id' => $package->id,
-                    'name' => 'default',
-                    'stripe_id' => 'sub_trial_' . \Illuminate\Support\Str::random(10),
-                    'stripe_status' => 'trialing',
-                    'stripe_price' => $package->slug,
-                    'quantity' => 1,
-                    'trial_ends_at' => now()->addDays($package->trial_days),
-                    'ends_at' => now()->addDays($package->trial_days),
-                    'status' => 'trialing',
-                    'billing_cycle' => $request->billing_cycle,
-                    'base_price' => $basePrice,
-                    'total_amount' => $finalAmount,
-                    'discount_amount' => $discountAmount,
-                ]);
-            }
-
-            // COMMIT the database transaction - everything critical is saved
-            DB::commit();
-
-            // === POST-COMMIT SIDE EFFECTS (non-critical, won't rollback DB) ===
+            $isTrialPlan = $package && $package->trial_days > 0;
 
             // Release submission lock and clear phone verification data
             session()->forget($submissionKey);
             session()->forget(['phone_verified', 'phone_verified_number', 'phone_verification_token', 'phone_verified_at']);
-
-            // Send Telegram Notification (non-critical)
-            try {
-                $telegram->sendRegistrationAlert($tenant, $user, $isTrialPlan ? '(Registration - Free Trial)' : '(Registration - Paid Plan)');
-            } catch (\Exception $telegramEx) {
-                \Log::warning('Telegram notification failed (non-critical): ' . $telegramEx->getMessage());
-            }
 
             // Send Onboarding Email 1 (Welcome) if enabled (non-critical)
             if (config('services.onboarding.emails_enabled', false)) {
@@ -304,7 +210,6 @@ class RegistrationController extends Controller
             return redirect()->away($redirectUrl);
 
         } catch (\Exception $e) {
-            DB::rollBack();
             // Release submission lock on failure so user can try again
             session()->forget($submissionKey);
             \Log::error('Registration error: ' . $e->getMessage(), [

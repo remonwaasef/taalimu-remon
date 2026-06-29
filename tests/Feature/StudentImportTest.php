@@ -23,7 +23,7 @@ class StudentImportTest extends TestCase
         parent::setUp();
 
         // Setup Tenant & Bind
-        $this->tenant = Tenant::create(['domain' => 'test', 'name' => 'Test Center', 'status' => 'active']);
+        $this->tenant = Tenant::create(['domain' => 'test', 'name' => 'Test Center', 'status' => 'active', 'onboarding_status' => 'completed']);
         app()->instance('tenant', $this->tenant);
         app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($this->tenant->id);
         

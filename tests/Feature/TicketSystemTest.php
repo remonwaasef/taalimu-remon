@@ -20,14 +20,20 @@ class TicketSystemTest extends TestCase
     {
         parent::setUp();
 
+        // Seed roles and permissions
+        $this->seed(\Database\Seeders\RolesAndPermissionsSeeder::class);
+
         // Setup Tenant
-        $this->tenant = Tenant::create(['domain' => 'test', 'name' => 'Test Center']);
+        $this->tenant = $this->createTenant(['domain' => 'test', 'name' => 'Test Center']);
+        app()->instance('tenant', $this->tenant);
         
         // Setup Tenant User (Center Admin)
-        $this->tenantUser = User::factory()->create(['email' => 'center@test.com', 'tenant_id' => $this->tenant->id, 'role' => 'admin']);
+        $this->tenantUser = User::factory()->create(['email' => 'center@test.com', 'tenant_id' => $this->tenant->id, 'role' => 'center_admin']);
 
         // Setup Super Admin
         $this->admin = User::factory()->create(['email' => 'superadmin@test.com', 'role' => 'super_admin']);
+        app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId(null);
+        $this->admin->assignRole('super_admin');
     }
 
     public function test_tenant_can_create_ticket()

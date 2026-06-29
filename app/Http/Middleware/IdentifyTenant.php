@@ -28,10 +28,7 @@ class IdentifyTenant
             if (count($pathSegments) >= 2 && $pathSegments[0] === 'c') {
                 $tenantDomain = $pathSegments[1];
                 
-                \Illuminate\Support\Facades\Log::debug('IdentifyTenant [Path Mode]', [
-                    'tenant_domain' => $tenantDomain,
-                    'path' => $request->path()
-                ]);
+
                 
                 // Max Optimization: Load full context (Tenant + Subscription + Package + Features)
                 $loadRelations = ['currentSubscription.package.features'];
@@ -54,13 +51,11 @@ class IdentifyTenant
                 }
             } else {
                 // Not a tenant path, skip tenant identification
-                \Illuminate\Support\Facades\Log::debug('IdentifyTenant [Path Mode] - Skipped', ['path' => $request->path()]);
                 return $next($request);
             }
         } else {
             // Subdomain-based tenancy (original logic)
             $host = $request->getHost();
-            \Illuminate\Support\Facades\Log::debug('IdentifyTenant [Subdomain Mode]', ['host' => $host]);
             
             // Use the configured tenant domain (e.g., yourdomain.com)
             $mainHost = config('app.tenant_domain') ?: parse_url(config('app.url'), PHP_URL_HOST);
@@ -109,7 +104,7 @@ class IdentifyTenant
                     ->first();
             }
             
-            \Illuminate\Support\Facades\Log::debug('Tenant lookup [Subdomain]', ['subdomain' => $subdomain, 'found' => $tenant ? 'yes' : 'no']);
+
             
             // If this is a tenant-only domain (checked by str_ends_with) and no tenant found, 404
             if (!$tenant && str_ends_with($host, '.' . $mainHost)) {
@@ -146,8 +141,11 @@ class IdentifyTenant
 
             // Set timezone dynamically for multi-region support
             if ($tenant->timezone) {
-                date_default_timezone_set($tenant->timezone);
                 config(['app.timezone' => $tenant->timezone]);
+                // If using Carbon, set its default timezone dynamically for the current request context
+                if (class_exists(\Carbon\Carbon::class)) {
+                    \Carbon\Carbon::setTestNow(); // Reset any test time and let it use the current config
+                }
             }
 
             // Dynamically set log file for this tenant

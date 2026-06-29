@@ -17,7 +17,7 @@ class UpdateStudentRequest extends FormRequest
         $student = \App\Models\Student::find($id);
         $userId = $student ? $student->user_id : null;
         
-        $tenantId = app('tenant')->id;
+        $tenantId = app()->bound('tenant') ? app('tenant')->id : null;
 
         return [
             'name' => ['nullable', 'string', 'max:255', 'regex:/^[\pL\s]+$/u'],

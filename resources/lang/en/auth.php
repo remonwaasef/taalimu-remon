@@ -6,6 +6,8 @@ return [
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
     'email_already_taken' => 'This email is already registered in another system. Please use a different email.',
     'must_change_password' => 'You must change your password before continuing.',
+    'center_not_found' => 'Cannot find your educational center.',
+    'invalid_credentials' => 'The email or password you entered is incorrect.',
 
     // Standard Auth Keys
     'logout' => 'Logout',

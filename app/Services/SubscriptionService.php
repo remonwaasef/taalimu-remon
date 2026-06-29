@@ -47,7 +47,7 @@ class SubscriptionService
      */
     public function checkLimit(Tenant $tenant, string $featureCode): bool
     {
-        $subscription = $tenant->activeSubscription();
+        $subscription = $tenant->active_subscription;
 
         if (!$subscription) {
             return false;
@@ -92,7 +92,7 @@ class SubscriptionService
      */
     public function getFeatureValue(Tenant $tenant, string $featureCode)
     {
-        $subscription = $tenant->activeSubscription();
+        $subscription = $tenant->active_subscription;
         if (!$subscription) return false;
 
         $package = $subscription->resolved_package;
@@ -125,7 +125,7 @@ class SubscriptionService
             }
         }
 
-        return \Illuminate\Support\Facades\Cache::rememberForever($cacheKey, function () use ($tenant, $featureCode) {
+        return \Illuminate\Support\Facades\Cache::remember($cacheKey, 86400, function () use ($tenant, $featureCode) {
             switch ($featureCode) {
                 case 'max_students':
                     return $tenant->users()->where('role', 'student')->count();
@@ -159,7 +159,9 @@ class SubscriptionService
             // check for 90% limit warning
             $this->checkThresholdWarning($tenant, $featureCode);
 
-        } catch (\Throwable $e) {}
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning("SubscriptionService: Failed to increment usage for tenant {$tenant->id}, feature {$featureCode}. Error: " . $e->getMessage());
+        }
     }
 
     /**
@@ -171,7 +173,7 @@ class SubscriptionService
             return;
         }
 
-        $subscription = $tenant->activeSubscription();
+        $subscription = $tenant->active_subscription;
         if (!$subscription) return;
 
         $package = $subscription->resolved_package;
@@ -210,6 +212,8 @@ class SubscriptionService
             } else {
                 \Illuminate\Support\Facades\Cache::forget($cacheKey);
             }
-        } catch (\Throwable $e) {}
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning("SubscriptionService: Failed to decrement usage for tenant {$tenant->id}, feature {$featureCode}. Error: " . $e->getMessage());
+        }
     }
 }

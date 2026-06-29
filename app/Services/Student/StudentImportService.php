@@ -134,7 +134,7 @@ class StudentImportService
                 'تم استيراد ' . $successCount . ' طالب بنجاح',
                 route('center.students.index', ['tenant' => \Modules\Tenancy\Services\TenantResolver::get()->domain]),
                 'fas fa-file-import',
-                $creator->name
+                $creator ? $creator->name : 'System'
             );
 
             $this->notificationService->sendBulkWelcomeEmails(

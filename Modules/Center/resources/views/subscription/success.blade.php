@@ -1,4 +1,4 @@
-@extends(auth()->check() && auth()->user()->role === 'instructor' ? 'instructor::components.layouts.master' : 'center::layouts.master')
+@extends(auth()->check() && auth()->user()->role === 'instructor' ? 'instructor::components.layouts.hope-master' : 'center::layouts.hope-master')
 
 @section('title', 'Subscription Successful')
 @section('page-title', 'Subscription Successful')

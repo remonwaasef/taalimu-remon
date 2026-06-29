@@ -87,15 +87,18 @@ class AttendanceService
                     ->first();
                 
                 if ($enrollment) {
-                    if ($enrollment->remaining_sessions > 0) {
-                        $enrollment->decrement('remaining_sessions');
-                    }
-                    
-                    // Update Progress based on sessions
                     $totalSessions = $schedule->course->sessions_count ?? 0;
+                    $progress = 0;
+                    
                     if ($totalSessions > 0) {
-                        $consumed = $totalSessions - $enrollment->remaining_sessions;
+                        $remaining = max(0, $enrollment->remaining_sessions - 1);
+                        $consumed = $totalSessions - $remaining;
                         $progress = min(100, round(($consumed / $totalSessions) * 100));
+                    }
+
+                    if ($enrollment->remaining_sessions > 0) {
+                        $enrollment->decrement('remaining_sessions', 1, ['progress' => $progress]);
+                    } else {
                         $enrollment->update(['progress' => $progress]);
                     }
                 }
@@ -171,9 +174,6 @@ class AttendanceService
 
         return $lateLevels;
     }
-
-    /**
-     * Generate a signed QR URL for attendance.
 
     /**
      * Generate a signed QR URL for attendance.

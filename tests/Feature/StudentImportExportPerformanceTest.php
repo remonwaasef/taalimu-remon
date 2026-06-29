@@ -11,7 +11,6 @@ use App\Models\Stage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use App\Services\StudentService;
-use Illuminate\Support\Facades\Event;
 
 class StudentImportExportPerformanceTest extends TestCase
 {
@@ -45,11 +44,8 @@ class StudentImportExportPerformanceTest extends TestCase
 
     public function test_bulk_import_logic_is_correct()
     {
-        // Mock Notification to avoid route generation issues in test
-        $mockNotification = \Mockery::mock(\App\Services\AdminNotificationService::class);
-        $mockNotification->shouldReceive('notifyAdmins')->andReturnNull();
-        
-        $service = new StudentService($mockNotification);
+        // Use the service container to properly resolve StudentService with all its dependencies
+        $service = app(StudentService::class);
         
         $this->actingAs($this->admin);
 
@@ -74,7 +70,7 @@ class StudentImportExportPerformanceTest extends TestCase
         $this->assertDatabaseCount('users', 11); // 1 Admin + 10 Students
         $this->assertDatabaseCount('students', 10);
         
-        // precise check
+        // Precise check
         $this->assertDatabaseHas('students', [
             'email' => 'student1@example.com',
             'grade_id' => $this->grade->id
@@ -83,9 +79,7 @@ class StudentImportExportPerformanceTest extends TestCase
 
     public function test_import_handles_duplicates_efficiently()
     {
-        $mockNotification = \Mockery::mock(\App\Services\AdminNotificationService::class);
-        $mockNotification->shouldReceive('notifyAdmins')->andReturnNull();
-        $service = new StudentService($mockNotification);
+        $service = app(StudentService::class);
         
         $this->actingAs($this->admin);
 
@@ -99,7 +93,7 @@ class StudentImportExportPerformanceTest extends TestCase
 
         $csvData = [
             ["New Student", "student2@example.com", "12345", "Grade 1"],
-            ["Duplicate Student", "student1@example.com", "12345", "Grade 1"], // Should fail
+            ["Duplicate Student", "student1@example.com", "67890", "Grade 1"], // Should fail - email already exists
         ];
 
         $result = $service->importStudents($csvData);
