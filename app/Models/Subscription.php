@@ -18,7 +18,9 @@ class Subscription extends CashierSubscription
                 try {
                     \Illuminate\Support\Facades\Cache::forget("taalimu:tenancy:domain:{$subscription->tenant->domain}");
                     \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$subscription->tenant->domain}");
-                } catch (\Throwable $e) {}
+                } catch (\Throwable $e) {
+                    \Illuminate\Support\Facades\Log::warning("Subscription Model (saved event): Failed to clear tenant cache for domain {$subscription->tenant->domain}. Error: " . $e->getMessage());
+                }
             }
         });
 
@@ -27,12 +29,15 @@ class Subscription extends CashierSubscription
                 try {
                     \Illuminate\Support\Facades\Cache::forget("taalimu:tenancy:domain:{$subscription->tenant->domain}");
                     \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$subscription->tenant->domain}");
-                } catch (\Throwable $e) {}
+                } catch (\Throwable $e) {
+                    \Illuminate\Support\Facades\Log::warning("Subscription Model (deleted event): Failed to clear tenant cache for domain {$subscription->tenant->domain}. Error: " . $e->getMessage());
+                }
             }
         });
     }
 
     protected $fillable = [
+        'tenant_id',
         'package_id',
         'name',
         'stripe_id',
@@ -51,6 +56,7 @@ class Subscription extends CashierSubscription
         'total_amount',
         'billing_cycle',
         'base_price',
+        'status',
     ];
 
     protected $casts = [

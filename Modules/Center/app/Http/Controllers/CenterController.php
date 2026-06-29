@@ -95,10 +95,36 @@ class CenterController extends Controller
                 ->get();
         });
 
-        // 2. AI Early Warning Logic
-        $atRiskStudents = $this->getAtRiskStudents($tenantId);
-        $performanceTrends = $this->getPerformanceTrends($tenantId);
-        $aiInsights = $this->getAIInsights($tenantId, $performanceTrends['data']);
+        // 2. AI Early Warning Logic (Cached for 30 minutes)
+        $aiCacheKey = "dashboard_ai_insights_v3_{$tenantId}";
+        $aiData = \App\Support\TenantCache::remember($aiCacheKey, now()->addMinutes(30), function () use ($tenantId) {
+            $performanceTrends = $this->getPerformanceTrends($tenantId);
+            return [
+                'atRiskStudents' => $this->getAtRiskStudents($tenantId),
+                'performanceTrends' => $performanceTrends,
+                'aiInsights' => $this->getAIInsights($tenantId, $performanceTrends['data']),
+            ];
+        });
+
+        $atRiskStudents = $aiData['atRiskStudents'];
+        $performanceTrends = $aiData['performanceTrends'];
+        $aiInsights = $aiData['aiInsights'];
+
+        if (request()->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'activeStudents' => $activeStudents,
+                    'activeCourses' => $activeCourses,
+                    'monthlyRevenue' => $monthlyRevenue,
+                    'monthlyExpenses' => $monthlyExpenses,
+                    'netProfit' => $netProfit,
+                    'sessionsToday' => $sessionsToday,
+                    'attendanceRate' => $attendanceRate,
+                    'overdueAmount' => $overdueAmount,
+                ]
+            ]);
+        }
 
         return view('center::index', compact(
             'activeStudents',

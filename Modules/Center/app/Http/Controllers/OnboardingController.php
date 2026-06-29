@@ -101,7 +101,13 @@ class OnboardingController extends Controller
             ->orderBy('order')
             ->get();
 
-        $existingInstructors = \App\Models\Instructor::where('tenant_id', $tenant->id)->orderBy('id')->get()->map(function($inst) {
+        $existingInstructorsQuery = \App\Models\Instructor::where('tenant_id', $tenant->id)
+            ->select('id', 'name', 'phone', 'specialization', 'email', 'commission_type', 'commission_rate')
+            ->orderBy('id')
+            ->limit(100)
+            ->get();
+
+        $existingInstructors = $existingInstructorsQuery->map(function($inst) {
             return [
                 'instructor_name' => $inst->name,
                 'instructor_phone' => $inst->phone,
@@ -112,8 +118,16 @@ class OnboardingController extends Controller
             ];
         })->toArray();
 
-        $instructorsListIds = \App\Models\Instructor::where('tenant_id', $tenant->id)->orderBy('id')->pluck('id')->toArray();
-        $existingCourses = \App\Models\Course::where('tenant_id', $tenant->id)->orderBy('id')->with('schedules')->get()->map(function($course) use ($instructorsListIds) {
+        $instructorsListIds = $existingInstructorsQuery->pluck('id')->toArray();
+
+        $existingCourses = \App\Models\Course::where('tenant_id', $tenant->id)
+            ->select('id', 'instructor_id', 'title', 'price', 'sessions_count')
+            ->orderBy('id')
+            ->limit(100)
+            ->with(['schedules' => function ($query) {
+                $query->select('id', 'course_id', 'day_of_week', 'start_time', 'end_time');
+            }])
+            ->get()->map(function($course) use ($instructorsListIds) {
             $idx = array_search($course->instructor_id, $instructorsListIds);
             
             $schedules = $course->schedules->map(function($s) {
@@ -137,7 +151,11 @@ class OnboardingController extends Controller
             ];
         })->toArray();
 
-        $existingStudents = \App\Models\Student::where('tenant_id', $tenant->id)->orderBy('id')->get()->map(function($student) {
+        $existingStudents = \App\Models\Student::where('tenant_id', $tenant->id)
+            ->select('id', 'name', 'email', 'phone', 'parent_name', 'parent_phone', 'parent_email', 'grade_id')
+            ->orderBy('id')
+            ->limit(100)
+            ->get()->map(function($student) {
             return [
                 'student_name' => $student->name,
                 'student_email' => $student->email ?? '',

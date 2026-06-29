@@ -31,7 +31,7 @@ class Tenant extends Model
                     \Illuminate\Support\Facades\Cache::store('redis')->forget("taalimu:tenancy:domain:{$tenant->domain}");
                 }
             } catch (\Throwable $e) {
-                // Fail silently if Redis is down or extension missing
+                \Illuminate\Support\Facades\Log::warning("Tenant Model (saved event): Failed to clear redis cache for domain {$tenant->domain}. Error: " . $e->getMessage());
             }
             // Keep old cache clearing for safety during transition
             \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$tenant->domain}");
@@ -43,7 +43,7 @@ class Tenant extends Model
                     \Illuminate\Support\Facades\Cache::store('redis')->forget("taalimu:tenancy:domain:{$tenant->domain}");
                 }
             } catch (\Throwable $e) {
-                // Fail silently
+                \Illuminate\Support\Facades\Log::warning("Tenant Model (deleted event): Failed to clear redis cache for domain {$tenant->domain}. Error: " . $e->getMessage());
             }
             \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$tenant->domain}");
         });
@@ -139,21 +139,14 @@ class Tenant extends Model
         return $this->hasMany(SubscriptionLog::class);
     }
 
-    /**
-     * Get the active subscription for the tenant.
-     */
     public function activeSubscription()
     {
-        // Check if relation is already loaded (from Cache Eager Loading)
-        if ($this->relationLoaded('currentSubscription')) {
-            return $this->currentSubscription;
-        }
+        return $this->currentSubscription();
+    }
 
-        return $this->subscriptions()
-            ->whereIn('status', ['active', 'trialing'])
-            ->where('ends_at', '>', now())
-            ->latest()
-            ->first();
+    public function getActiveSubscriptionAttribute()
+    {
+        return $this->currentSubscription;
     }
 
     /**
@@ -200,7 +193,7 @@ class Tenant extends Model
     {
         return \Illuminate\Support\Facades\Cache::remember("tenant_overdue_{$this->id}", 3600, function () {
             return $this->sales()
-                ->whereRaw('paid_amount < total_amount')
+                ->whereColumn('paid_amount', '<', 'total_amount')
                 ->distinct('student_id')
                 ->count('student_id');
         });

@@ -107,12 +107,51 @@ class FinanceService
                 'notes' => $data['notes'] ?? null,
             ]);
 
-            // 4. Create Sale Items — reuse already loaded courses
+            // 4. Prepare data for bulk inserts to optimize database queries
+            $now = now();
+            $saleItemsData = [];
+            $enrollmentsData = [];
+
             foreach ($itemsToCreate as $itemData) {
                 $itemData['sale_id'] = $sale->id;
-                $saleItem = SaleItem::create($itemData);
+                $itemData['created_at'] = $now;
+                $itemData['updated_at'] = $now;
+                $saleItemsData[] = $itemData;
 
-                // Commission Logic
+                if ($itemData['item_type'] === Course::class && $student) {
+                    $course = $courses->get($itemData['item_id']);
+                    if ($course) {
+                        // Directly build Enrollment data to avoid N+1 and fix the duplicated sessions bug
+                        $enrollmentsData[] = [
+                            'user_id' => $student->user_id,
+                            'course_id' => $course->id,
+                            'enrolled_at' => $now,
+                            'status' => 'active',
+                            'progress' => 0,
+                            'remaining_sessions' => $course->sessions_count ?? 0,
+                            'created_at' => $now,
+                            'updated_at' => $now,
+                        ];
+                    }
+                }
+            }
+
+            // Bulk Insert SaleItems & Enrollments
+            if (!empty($saleItemsData)) {
+                SaleItem::insert($saleItemsData);
+            }
+            if (!empty($enrollmentsData)) {
+                Enrollment::insert($enrollmentsData);
+            }
+
+            // Fetch inserted SaleItems to get their IDs for Commissions
+            $insertedSaleItems = SaleItem::where('sale_id', $sale->id)
+                ->where('item_type', Course::class)
+                ->get()
+                ->keyBy('item_id');
+
+            $commissionsData = [];
+            foreach ($itemsToCreate as $itemData) {
                 if ($itemData['item_type'] === Course::class) {
                     $course = $courses->get($itemData['item_id']);
                     if ($course && $course->instructor && $course->instructor->commission_rate > 0) {
@@ -120,33 +159,28 @@ class FinanceService
                         $type = $course->instructor->commission_type ?? 'percentage';
                         $amount = ($type === 'percentage') ? ($itemData['price'] * $rate) / 100 : $rate;
 
-                        Commission::create([
-                            'tenant_id' => $tenantId,
-                            'instructor_id' => $course->instructor_id,
-                            'sale_id' => $sale->id,
-                            'sale_item_id' => $saleItem->id,
-                            'amount' => $amount,
-                            'rate' => $rate,
-                            'status' => 'earned', // Auto-earn on sale
-                        ]);
-                    }
-                }
+                        $saleItem = $insertedSaleItems->get($itemData['item_id']);
 
-                if ($itemData['item_type'] === Course::class && $student) {
-                    $course = $courses->get($itemData['item_id']); // Use cached collection instead of N+1
-                    if ($course) {
-                        // No try-catch here anymore, we want it to fail if it somehow got past the first check
-                        // but actually we already checked at the top.
-                        $enrollment = $this->courseService->enrollStudent($course, $student);
-                        
-                        // Add sessions to balance
-                        if ($course->sessions_count > 0) {
-                            $enrollment->update([
-                                'remaining_sessions' => $enrollment->remaining_sessions + $course->sessions_count
-                            ]);
+                        if ($saleItem) {
+                            $commissionsData[] = [
+                                'tenant_id' => $tenantId,
+                                'instructor_id' => $course->instructor_id,
+                                'sale_id' => $sale->id,
+                                'sale_item_id' => $saleItem->id,
+                                'amount' => $amount,
+                                'rate' => $rate,
+                                'status' => 'earned', // Auto-earn on sale
+                                'created_at' => $now,
+                                'updated_at' => $now,
+                            ];
                         }
                     }
                 }
+            }
+
+            // Bulk Insert Commissions
+            if (!empty($commissionsData)) {
+                Commission::insert($commissionsData);
             }
 
             // 4.5 Send Group Enrollment Emails for newly enrolled courses

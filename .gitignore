@@ -62,5 +62,7 @@ deployment_scripts/
 *.pem
 *.key
 !storage/*.key
-edu.zip  
- 
+edu.zip
+phpcpd.phar
+/database/database.sqlite
+CUsersdellDownloadsremoneduedustoragelogs/

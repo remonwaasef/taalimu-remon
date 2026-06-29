@@ -24,7 +24,7 @@ class StudentSystemTest extends TestCase
         parent::setUp();
 
         // 1. Setup Tenant & Bind to container
-        $this->tenant = Tenant::create(['domain' => 'qa', 'name' => 'QA Center']);
+        $this->tenant = Tenant::create(['domain' => 'qa', 'name' => 'QA Center', 'onboarding_status' => 'completed']);
         app()->instance('tenant', $this->tenant);
         
         // Clear Spatie Cache

@@ -76,7 +76,6 @@ $tenantRoutes = function () {
     Route::middleware(['auth', 'force_password_change'])->group(function() {
         Route::match(['get', 'post'], 'logout', [AuthController::class, 'logout'])->name('center.logout');
 
-        /*
         // Two-Factor Authentication Routes (Ultimate Security Flow)
         Route::get('2fa/setup', [\App\Http\Controllers\TwoFactorController::class, 'showSetupForm'])->name('2fa.setup');
         Route::post('2fa/setup', [\App\Http\Controllers\TwoFactorController::class, 'confirmSetup'])->name('2fa.setup.confirm');
@@ -89,7 +88,7 @@ $tenantRoutes = function () {
         // Original/Enable/Disable routes if needed elsewhere
         Route::get('2fa/enable', [\App\Http\Controllers\TwoFactorController::class, 'showSetupForm'])->name('2fa.enable');
         Route::post('2fa/disable', [\App\Http\Controllers\TwoFactorController::class, 'disable'])->name('2fa.disable');
-        */
+        Route::post('2fa/store', [\App\Http\Controllers\TwoFactorController::class, 'confirmSetup'])->name('2fa.store');
 
         // Subscription Routes (Accessible even if subscription expired)
         Route::get('subscription', [SubscriptionController::class, 'index'])->name('center.subscription.index');
@@ -108,7 +107,7 @@ $tenantRoutes = function () {
     });
 
     // Protected Routes with Subscription Check and Onboarding Check
-    Route::middleware(['auth', 'subscription', 'force_password_change', 'onboarding.completed', 'prevent-back-history'])->group(function() {
+    Route::middleware(['auth', 'subscription', 'force_password_change', 'onboarding.completed', '2fa', 'prevent-back-history'])->group(function() {
         // Dashboard
         Route::get('/', [CenterController::class, 'index'])->name('center.dashboard');
         Route::get('/dashboard', [CenterController::class, 'index'])->name('center.dashboard.alt');

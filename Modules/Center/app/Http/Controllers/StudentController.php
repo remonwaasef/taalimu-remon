@@ -210,13 +210,9 @@ class StudentController extends Controller
             return redirect()->back()->with('info', __('center::messages.no_outstanding_debts'));
         }
 
-        $success = $whatsappService->sendDebtReminder($this->tenant, $student, $totalDebt);
+        \App\Jobs\SendDebtReminderJob::dispatch($this->tenant, $student, $totalDebt);
 
-        if ($success) {
-            return redirect()->back()->with('success', __('center::messages.debt_reminder_sent'));
-        } else {
-            return redirect()->back()->with('warning', __('center::messages.debt_reminder_failed'));
-        }
+        return redirect()->back()->with('success', __('center::messages.debt_reminder_sent'));
     }
 
     /**
@@ -228,9 +224,11 @@ class StudentController extends Controller
         $this->authorize('view', $student);
         $tenantId = $this->tenant->id;
 
-        // Fetch Sales (Invoices) - Debits (Money student owes)
+        // Fetch recent Sales (Invoices) - Debits (Money student owes)
         $sales = Sale::where('student_id', $student->id)
             ->with('items.item')
+            ->latest()
+            ->limit(500)
             ->get()
             ->map(function ($s) {
                 return [
@@ -243,11 +241,13 @@ class StudentController extends Controller
                 ];
             });
 
-        // Fetch Payments - Credits (Money student paid)
+        // Fetch recent Payments - Credits (Money student paid)
         $payments = Payment::whereHas('sale', function ($q) use ($student) {
                 $q->where('student_id', $student->id);
             })
             ->with(['receiver'])
+            ->latest()
+            ->limit(500)
             ->get()
             ->map(function ($p) {
                 return [
@@ -260,11 +260,13 @@ class StudentController extends Controller
                 ];
             });
 
-        // Fetch Refunds - Debits (Money returned to student, reversing payment)
+        // Fetch recent Refunds - Debits (Money returned to student, reversing payment)
         $refunds = Refund::whereHas('sale', function ($q) use ($student) {
                 $q->where('student_id', $student->id);
             })
             ->with('processor')
+            ->latest()
+            ->limit(500)
             ->get()
             ->map(function ($r) {
                 return [

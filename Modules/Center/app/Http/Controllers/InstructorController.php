@@ -243,9 +243,11 @@ class InstructorController extends Controller
         $instructor = Instructor::where('tenant_id', app('tenant')->id)->findOrFail($id);
         $this->authorize('view', $instructor);
 
-        // Fetch commissions (Credits)
+        // Fetch recent commissions (Credits) - Limited to prevent memory exhaustion
         $commissions = $instructor->commissions()
             ->with(['sale.student', 'saleItem.item'])
+            ->latest()
+            ->limit(500)
             ->get()
             ->map(function ($c) {
                 return [
@@ -261,9 +263,11 @@ class InstructorController extends Controller
                 ];
             });
 
-        // Fetch payouts (Debits)
+        // Fetch recent payouts (Debits) - Limited to prevent memory exhaustion
         $payouts = $instructor->payouts()
             ->with('processor')
+            ->latest()
+            ->limit(500)
             ->get()
             ->map(function ($p) {
                 return [

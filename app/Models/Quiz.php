@@ -15,6 +15,7 @@ class Quiz extends Model
         'title',
         'description',
         'time_limit',
+        'duration_minutes',
         'passing_score',
         'is_randomized',
         'random_questions_count',

@@ -74,11 +74,10 @@ class AuthController extends Controller
         $throttleKey = 'login.' . \Illuminate\Support\Str::lower($request->input('email')) . '|' . $request->ip();
 
         // Increase rate limit for local development/testing to prevent locking out developers
-        $host = $request->getHost();
+        $ip = $request->ip();
         $isLocal = app()->environment('local') || 
-                   in_array($host, ['localhost', '127.0.0.1', '::1']) || 
-                   str_contains($host, '.localhost') || 
-                   str_contains($host, '192.168.');
+                   in_array($ip, ['127.0.0.1', '::1']) || 
+                   str_starts_with($ip, '192.168.');
         $maxAttempts = $isLocal ? 100 : 5;
 
         if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($throttleKey, $maxAttempts)) {
@@ -162,21 +161,17 @@ class AuthController extends Controller
         
         // Attempt authentication
         if ($user && \Illuminate\Support\Facades\Hash::check($request->password, $user->password)) {
+            if (app()->bound('tenant') && $user->tenant_id !== app('tenant')->id) {
+                \Illuminate\Support\Facades\RateLimiter::hit($throttleKey);
+                return back()->withErrors([
+                    'email' => __('auth.failed'),
+                ])->onlyInput('email');
+            }
+
             \Illuminate\Support\Facades\RateLimiter::clear($throttleKey);
             Auth::login($user);
             $request->session()->regenerate();
             
-            $user = auth()->user();
-            
-            if (app()->bound('tenant')) {
-                if ($user->tenant_id !== app('tenant')->id) {
-                    Auth::logout();
-                    return back()->withErrors([
-                        'email' => __('auth.failed'),
-                    ]);
-                }
-            }
-
             // Redirect based on role
             if ($user->role === 'student') {
                 return redirect()->route('campus.index', ['tenant' => app('tenant')->domain]); 

@@ -9,6 +9,13 @@ use App\Models\Tenant;
 
 class UnifiedAuthController extends Controller
 {
+    protected $authService;
+
+    public function __construct(\App\Services\UnifiedAuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     public function showLoginForm()
     {
         return view('auth.unified-login');
@@ -28,7 +35,7 @@ class UnifiedAuthController extends Controller
         $ip = $request->ip();
         $isLocal = app()->environment('local') || 
                    in_array($ip, ['127.0.0.1', '::1']) || 
-                   str_contains($ip, '192.168.');
+                   str_starts_with($ip, '192.168.');
         $maxAttempts = $isLocal ? 100 : 5;
 
         if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($throttleKey, $maxAttempts)) {
@@ -38,75 +45,7 @@ class UnifiedAuthController extends Controller
             ])->onlyInput('email');
         }
 
-        $isEmail = filter_var($request->email, FILTER_VALIDATE_EMAIL);
-        $user = null;
-
-        if ($isEmail) {
-            $query = User::where('email', $request->email);
-            if (app()->bound('tenant')) {
-                $query->where(function($q) {
-                    $q->where('tenant_id', app('tenant')->id)
-                      ->orWhereNull('tenant_id'); // Allow super admins
-                });
-            }
-            $potentialUser = $query->first();
-
-            if ($potentialUser && \Illuminate\Support\Facades\Hash::check($request->password, $potentialUser->password)) {
-                if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-                    $user = Auth::user();
-                }
-            }
-        } else {
-            // Phone-based login logic
-            $input = $request->email;
-            $cleanPhone = preg_replace('/[^0-9]/', '', $input);
-            
-            // 1. Try variations of the phone number in the User table directly
-            $phoneVariations = [
-                $input,
-                $cleanPhone,
-                '0' . $cleanPhone,
-                substr($cleanPhone, 1)
-            ];
-
-            foreach (array_unique($phoneVariations) as $phone) {
-                if (empty($phone)) continue;
-                
-                $query = User::where('phone', $phone);
-                if (app()->bound('tenant')) {
-                    $query->where('tenant_id', app('tenant')->id);
-                }
-                $potentialUser = $query->first();
-                if ($potentialUser && \Illuminate\Support\Facades\Hash::check($request->password, $potentialUser->password)) {
-                    if (Auth::attempt(['email' => $potentialUser->email, 'password' => $request->password])) {
-                        $user = Auth::user();
-                        break;
-                    }
-                }
-            }
-
-            // 2. Fallback: Search in Student table if user not found via synced phone
-            if (!$user) {
-                $studentQuery = \App\Models\Student::where(function($q) use ($input, $cleanPhone) {
-                    $q->where('phone', $input)
-                      ->orWhere('phone', $cleanPhone)
-                      ->orWhere('phone', '0' . $cleanPhone)
-                      ->orWhere('phone', substr($cleanPhone, 1));
-                });
-                
-                if (app()->bound('tenant')) {
-                    $studentQuery->where('tenant_id', app('tenant')->id);
-                }
-                
-                $student = $studentQuery->first();
-
-                if ($student && $student->user && \Illuminate\Support\Facades\Hash::check($request->password, $student->user->password)) {
-                    if (Auth::attempt(['email' => $student->user->email, 'password' => $request->password])) {
-                        $user = Auth::user();
-                    }
-                }
-            }
-        }
+        $user = $this->authService->authenticate($request->email, $request->password);
 
         // If authenticated
         if ($user) {
@@ -124,7 +63,7 @@ class UnifiedAuthController extends Controller
             if (!$tenant) {
                 Auth::logout();
                 return back()->withErrors([
-                    'email' => 'لا يمكن العثور على المركز الخاص بك.',
+                    'email' => __('auth.center_not_found'),
                 ]);
             }
             
@@ -161,16 +100,25 @@ class UnifiedAuthController extends Controller
             $safeLoginUrl = e($loginUrl);
             $safeToken = e($token);
             $safeSignature = e($signature);
+            $csrfToken = e(csrf_token());
             
             return response()->setContent("
+                <!DOCTYPE html>
                 <html>
-                <body onload='document.forms[0].submit()'>
+                <head>
+                    <title>Redirecting...</title>
+                </head>
+                <body>
                     <p style='text-align:center; margin-top:20vh; font-family:sans-serif;'>جاري تحويلك إلى لوحة التحكم...</p>
-                    <form method='POST' action='{$safeLoginUrl}' style='display:none;'>
+                    <form id='ssoForm' method='POST' action='{$safeLoginUrl}' style='display:none;'>
+                        <input type='hidden' name='_token' value='{$csrfToken}'>
                         <input type='hidden' name='token' value='{$safeToken}'>
                         <input type='hidden' name='signature' value='{$safeSignature}'>
                         <noscript><button type='submit'>Click here to continue</button></noscript>
                     </form>
+                    <script type='text/javascript'>
+                        document.getElementById('ssoForm').submit();
+                    </script>
                 </body>
                 </html>
             ");
@@ -179,7 +127,7 @@ class UnifiedAuthController extends Controller
         \Illuminate\Support\Facades\RateLimiter::hit($throttleKey);
 
         return back()->withErrors([
-            'email' => 'البريد الإلكتروني أو كلمة المرور غير صحيحة.',
+            'email' => __('auth.invalid_credentials'),
         ])->onlyInput('email');
     }
     public function logout(Request $request)

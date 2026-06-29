@@ -39,6 +39,14 @@ class ExperimentalUserJourneyTest extends TestCase
 
     public function test_experimental_data_user_journey()
     {
+        // This test requires a real MySQL database with pre-seeded experimental data.
+        // Skip if the MySQL host ('db') is not reachable.
+        try {
+            \DB::connection('mysql')->getPdo();
+        } catch (\Exception $e) {
+            $this->markTestSkipped('MySQL database is not available. Skipping experimental user journey test.');
+        }
+
         // 1. Identify the 'exp-smart-center' tenant
         $tenant = Tenant::where('domain', 'exp-smart-center')->first();
         if (!$tenant) {

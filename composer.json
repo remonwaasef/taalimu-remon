@@ -30,7 +30,7 @@
         "spatie/laravel-sitemap": "*"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "*",
+        "barryvdh/laravel-debugbar": "^4.3",
         "barryvdh/laravel-ide-helper": "*",
         "fakerphp/faker": "^1.23",
         "laravel/pail": "^1.2.2",

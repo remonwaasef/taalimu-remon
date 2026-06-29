@@ -49,7 +49,7 @@ class ImportStudentsJob implements ShouldQueue
         app()->instance('tenant', $tenant);
 
         // Read CSV from file
-        $path = storage_path('app/' . $this->filePath);
+        $path = \Illuminate\Support\Facades\Storage::path($this->filePath);
         if (!file_exists($path)) return;
 
         $totalSuccess = 0;

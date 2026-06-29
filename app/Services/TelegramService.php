@@ -17,9 +17,27 @@ class TelegramService
     }
 
     /**
-     * Send a notification to the admin via Telegram.
+     * Send a notification to the admin via Telegram (queued).
      */
     public function sendAdminNotification($message)
+    {
+        if (app()->runningInConsole()) {
+            return $this->sendAdminNotificationDirectly($message);
+        }
+
+        try {
+            \App\Jobs\SendTelegramNotification::dispatch($message)->onQueue('notifications');
+            return true;
+        } catch (\Throwable $e) {
+            Log::error("Failed to queue Telegram notification: " . $e->getMessage());
+            return $this->sendAdminNotificationDirectly($message);
+        }
+    }
+
+    /**
+     * Send a notification directly (synchronously).
+     */
+    public function sendAdminNotificationDirectly($message)
     {
         if (!$this->token || !$this->chatId) {
             Log::warning("Telegram credentials missing. Set TELEGRAM_BOT_TOKEN and TELEGRAM_ADMIN_CHAT_ID in .env");
