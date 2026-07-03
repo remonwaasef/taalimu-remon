@@ -47,6 +47,55 @@ class TelegramService
     }
 
     /**
+     * Send a message to a specific chat, optionally with inline URL buttons.
+     *
+     * Used to deliver per-center payment-reminder digests where each button is a
+     * wa.me "click-to-send" link, so staff send WhatsApp reminders in one tap
+     * without paying for the Meta WhatsApp API.
+     *
+     * @param  string  $chatId          Target Telegram chat id (per-center).
+     * @param  string  $message         HTML-formatted text.
+     * @param  array   $inlineButtons   List of ['text' => ..., 'url' => ...]; each becomes its own row.
+     */
+    public function sendToChat(string $chatId, string $message, array $inlineButtons = []): bool
+    {
+        if (!$this->token || !$chatId) {
+            Log::warning('Telegram sendToChat skipped: missing bot token or chat_id.');
+            return false;
+        }
+
+        $payload = [
+            'chat_id' => $chatId,
+            'text' => $message,
+            'parse_mode' => 'HTML',
+            'disable_web_page_preview' => true,
+        ];
+
+        if (!empty($inlineButtons)) {
+            $payload['reply_markup'] = json_encode([
+                'inline_keyboard' => array_map(fn ($b) => [[
+                    'text' => $b['text'],
+                    'url' => $b['url'],
+                ]], array_values($inlineButtons)),
+            ]);
+        }
+
+        try {
+            $response = Http::post("https://api.telegram.org/bot{$this->token}/sendMessage", $payload);
+
+            if ($response->successful()) {
+                return true;
+            }
+
+            Log::error('Telegram sendToChat API error: ' . $response->body());
+        } catch (\Exception $e) {
+            Log::error('Telegram sendToChat exception: ' . $e->getMessage());
+        }
+
+        return false;
+    }
+
+    /**
      * Send a welcome message with credentials to the admin for manual sharing.
      */
     public function sendRegistrationAlert($tenant, $user, $password)

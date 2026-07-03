@@ -204,6 +204,10 @@ class SettingsService
             'overdue_max_reminders'  => !empty($data['overdue_max_reminders']) ? (int) $data['overdue_max_reminders'] : null,
             'email_template'         => $data['email_template'] ?? null,
             'whatsapp_template'      => $data['whatsapp_template'] ?? null,
+            // Free WhatsApp channel via Telegram "click-to-send" links (reminders:send-wa-links).
+            'wa_telegram_enabled'    => (bool) ($data['wa_telegram_enabled'] ?? false),
+            'telegram_chat_id'       => !empty($data['telegram_chat_id']) ? trim((string) $data['telegram_chat_id']) : null,
+            'wa_days_before'         => (int) ($data['wa_days_before'] ?? 3),
         ];
 
         $tenant->settings = $settings;
