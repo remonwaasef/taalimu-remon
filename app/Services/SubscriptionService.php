@@ -24,6 +24,19 @@ class SubscriptionService
     }
 
     /**
+     * Whether the app's cache is actually backed by Redis.
+     *
+     * The atomic usage counter only works on a Redis store. Gating on the
+     * configured store (not extension_loaded('redis')) avoids trying to reach
+     * a Redis server that may not exist even when the phpredis extension is
+     * present — e.g. on CI runners or file/array-cache environments.
+     */
+    protected function usesRedisCache(): bool
+    {
+        return config('cache.default') === 'redis';
+    }
+
+    /**
      * Subscribe a tenant to a package.
      */
     public function subscribe(Tenant $tenant, Package $package): Subscription
@@ -126,7 +139,7 @@ class SubscriptionService
         $cacheKey = "tenant_{$tenant->id}_usage_{$featureCode}";
 
         // Use Atomic Counter if enabled, otherwise fallback to heavy count
-        if (extension_loaded('redis')) {
+        if ($this->usesRedisCache()) {
             $usage = \Illuminate\Support\Facades\Cache::store('redis')->get($cacheKey);
             if ($usage !== null) {
                 return (int) $usage;
@@ -158,7 +171,7 @@ class SubscriptionService
     {
         $cacheKey = "tenant_{$tenant->id}_usage_{$featureCode}";
         try {
-            if (extension_loaded('redis')) {
+            if ($this->usesRedisCache()) {
                 \Illuminate\Support\Facades\Cache::store('redis')->increment($cacheKey);
             } else {
                 \Illuminate\Support\Facades\Cache::forget($cacheKey);
@@ -221,7 +234,7 @@ class SubscriptionService
     {
         $cacheKey = "tenant_{$tenant->id}_usage_{$featureCode}";
         try {
-            if (extension_loaded('redis')) {
+            if ($this->usesRedisCache()) {
                 $current = \Illuminate\Support\Facades\Cache::store('redis')->get($cacheKey);
                 if ($current && (int) $current > 0) {
                     \Illuminate\Support\Facades\Cache::store('redis')->decrement($cacheKey);
