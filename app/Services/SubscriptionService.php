@@ -168,6 +168,7 @@ class SubscriptionService
             $this->checkThresholdWarning($tenant, $featureCode);
 
         } catch (\Throwable $e) {
+            // Best-effort counter: never break the request, but record the failure.
             \Illuminate\Support\Facades\Log::warning("SubscriptionService: Failed to increment usage for tenant {$tenant->id}, feature {$featureCode}. Error: ".$e->getMessage());
         }
     }
@@ -229,6 +230,7 @@ class SubscriptionService
                 \Illuminate\Support\Facades\Cache::forget($cacheKey);
             }
         } catch (\Throwable $e) {
+            // Best-effort counter: never break the request, but record the failure.
             \Illuminate\Support\Facades\Log::warning("SubscriptionService: Failed to decrement usage for tenant {$tenant->id}, feature {$featureCode}. Error: ".$e->getMessage());
         }
     }
