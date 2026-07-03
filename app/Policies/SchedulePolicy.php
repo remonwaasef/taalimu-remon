@@ -9,7 +9,7 @@ class SchedulePolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyRole(['center_admin', 'admin', 'instructor']) || $user->hasPermissionTo('view schedule');
+        return $user->hasAnyRole(['center_admin', 'admin', 'instructor']) || $user->checkPermissionTo('view schedule');
     }
 
     public function view(User $user, Schedule $schedule): bool
@@ -18,7 +18,7 @@ class SchedulePolicy
             return false;
         }
 
-        if ($user->hasAnyRole(['center_admin', 'admin']) || $user->hasPermissionTo('view schedule')) {
+        if ($user->hasAnyRole(['center_admin', 'admin']) || $user->checkPermissionTo('view schedule')) {
             return true;
         }
 
@@ -27,7 +27,7 @@ class SchedulePolicy
 
     public function create(User $user): bool
     {
-        return $user->hasAnyRole(['center_admin', 'admin', 'instructor']) || $user->hasPermissionTo('create schedule');
+        return $user->hasAnyRole(['center_admin', 'admin', 'instructor']) || $user->checkPermissionTo('manage schedule');
     }
 
     public function update(User $user, Schedule $schedule): bool
@@ -36,7 +36,7 @@ class SchedulePolicy
             return false;
         }
 
-        if ($user->hasAnyRole(['center_admin', 'admin']) || $user->hasPermissionTo('update schedule')) {
+        if ($user->hasAnyRole(['center_admin', 'admin']) || $user->checkPermissionTo('manage schedule')) {
             return true;
         }
 
@@ -49,7 +49,7 @@ class SchedulePolicy
             return false;
         }
 
-        if ($user->hasAnyRole(['center_admin', 'admin']) || $user->hasPermissionTo('delete schedule')) {
+        if ($user->hasAnyRole(['center_admin', 'admin']) || $user->checkPermissionTo('manage schedule')) {
             return true;
         }
 

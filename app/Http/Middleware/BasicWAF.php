@@ -20,7 +20,9 @@ class BasicWAF
         // XSS
         '/<script[^>]*>.*?<\/script>/i',
         '/javascript:/i',
-        '/on\w+\s*=/i',
+        // Match real HTML event-handler attributes only (inside a tag), not any
+        // plain text starting with "on" (e.g. "one = 1" in a notes field).
+        '/<[^>]+\son\w+\s*=/i',
         
         // Path Traversal
         '/\.\.[\/\\\\]/',

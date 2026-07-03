@@ -9,28 +9,28 @@ class AttendancePolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyRole(['center_admin', 'admin', 'instructor']) || $user->hasPermissionTo('view attendance');
+        return $user->hasAnyRole(['center_admin', 'admin', 'instructor']) || $user->checkPermissionTo('view attendance');
     }
 
     public function view(User $user, Attendance $attendance): bool
     {
-        return (int)$user->tenant_id === (int)$attendance->tenant_id && ($user->hasAnyRole(['center_admin', 'admin', 'instructor']) || $user->hasPermissionTo('view attendance'));
+        return (int)$user->tenant_id === (int)$attendance->tenant_id && ($user->hasAnyRole(['center_admin', 'admin', 'instructor']) || $user->checkPermissionTo('view attendance'));
     }
 
     public function create(User $user): bool
     {
-        return $user->hasAnyRole(['center_admin', 'admin', 'instructor']) || $user->hasPermissionTo('create attendance');
+        return $user->hasAnyRole(['center_admin', 'admin', 'instructor']) || $user->checkPermissionTo('take attendance');
     }
 
     public function update(User $user, Attendance $attendance): bool
     {
         return (int)$user->tenant_id === (int)$attendance->tenant_id && 
-                ($user->hasAnyRole(['center_admin', 'admin', 'instructor']) || $user->hasPermissionTo('update attendance'));
+                ($user->hasAnyRole(['center_admin', 'admin', 'instructor']) || $user->checkPermissionTo('take attendance'));
     }
 
     public function delete(User $user, Attendance $attendance): bool
     {
         return (int)$user->tenant_id === (int)$attendance->tenant_id && 
-                ($user->hasAnyRole(['center_admin', 'admin']) || $user->hasPermissionTo('delete attendance'));
+                ($user->hasAnyRole(['center_admin', 'admin']) || $user->checkPermissionTo('take attendance'));
     }
 }

@@ -211,7 +211,7 @@ class SocialAuthController extends Controller
                 ->withErrors(['email' => __('Registration is being processed. Please wait.')]);
         }
         
-        $request->validate([
+        $validated = $request->validate([
             'account_type' => 'required|in:center,instructor',
             'center_name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20|unique:users,phone',
@@ -238,7 +238,7 @@ class SocialAuthController extends Controller
 
         try {
             // Call unified registration service
-            $registrationData = $request->validated();
+            $registrationData = $validated;
             $registrationData['email'] = $googleData['email'];
             $registrationData['name'] = $googleData['name'];
             $registrationData['currency'] = 'EGP'; // Default to EGP for registration settings

@@ -215,6 +215,16 @@ class RolesAndPermissionsSeeder extends Seeder
     }
 
     /**
+     * يضمن وجود الأدوار والصلاحيات الموحدة عند تسجيل مستأجر جديد.
+     * الأدوار عالمية (tenant_id = null) فلا تُنشأ نسخ لكل مستأجر؛
+     * الاستدعاء idempotent ويهيئ أول تسجيل على قاعدة بيانات فارغة.
+     */
+    public static function seedForTenant(?int $tenantId = null): void
+    {
+        (new self)->run();
+    }
+
+    /**
      * حذف الأدوار المكررة (المرتبطة بـ tenant معين) والإبقاء على الموحدة فقط
      */
     protected function cleanupDuplicateRoles(): void

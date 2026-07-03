@@ -13,28 +13,28 @@ class SalePolicy
 
     public function viewAny(User $user): bool
     {
-        return $this->hasAnyRole($user, ['center_admin', 'admin']) || $user->hasPermissionTo('view sales');
+        return $this->hasAnyRole($user, ['center_admin', 'admin']) || $user->checkPermissionTo('view sales');
     }
 
     public function view(User $user, Sale $sale): bool
     {
-        return $user->tenant_id === $sale->tenant_id && ($this->hasAnyRole($user, ['center_admin', 'admin']) || $user->hasPermissionTo('view sales'));
+        return $user->tenant_id === $sale->tenant_id && ($this->hasAnyRole($user, ['center_admin', 'admin']) || $user->checkPermissionTo('view sales'));
     }
 
     public function create(User $user): bool
     {
-        return $this->hasAnyRole($user, ['center_admin', 'admin']) || $user->hasPermissionTo('create sales');
+        return $this->hasAnyRole($user, ['center_admin', 'admin']) || $user->checkPermissionTo('create sales');
     }
 
     public function update(User $user, Sale $sale): bool
     {
         return $user->tenant_id === $sale->tenant_id && 
-               ($this->hasAnyRole($user, ['center_admin', 'admin']) || $user->hasPermissionTo('update sales'));
+               ($this->hasAnyRole($user, ['center_admin', 'admin']) || $user->checkPermissionTo('edit sales'));
     }
 
     public function delete(User $user, Sale $sale): bool
     {
         return $user->tenant_id === $sale->tenant_id && 
-               ($this->hasAnyRole($user, ['center_admin', 'admin']) || $user->hasPermissionTo('delete sales'));
+               ($this->hasAnyRole($user, ['center_admin', 'admin']) || $user->checkPermissionTo('delete sales'));
     }
 }
