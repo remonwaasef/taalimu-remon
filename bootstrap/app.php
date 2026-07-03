@@ -35,8 +35,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api(append: [
             'throttle:api',
         ]);
-        
-        // CSRF verification should not be disabled in production
+
+        // Payment gateway webhooks are server-to-server calls that cannot carry a CSRF token.
+        // Their authenticity is verified inside the controllers (PayPal signature / Paymob HMAC).
+        $middleware->validateCsrfTokens(except: [
+            'webhooks/paypal',
+            'webhooks/paymob',
+        ]);
         
         // Configure redirect for unauthenticated users
         $middleware->redirectGuestsTo(function ($request) {
@@ -97,14 +102,21 @@ return Application::configure(basePath: dirname(__DIR__))
                 }
             }
 
-            // Telegram Alert for critical errors - disabled shouldReport check as it's undefined
-            // if ($exceptions->shouldReport($e)) {
+            // Telegram Alert for critical errors only — skip expected exceptions (404s,
+            // validation, auth) so the channel isn't flooded and internals aren't leaked.
+            $isExpected = $e instanceof \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface
+                || $e instanceof \Illuminate\Validation\ValidationException
+                || $e instanceof \Illuminate\Auth\AuthenticationException
+                || $e instanceof \Illuminate\Auth\Access\AuthorizationException
+                || $e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException;
+
+            if (! $isExpected) {
                 try {
                     app(\App\Services\TelegramService::class)->sendExceptionAlert($e, request()->fullUrl(), auth()->user());
                 } catch (\Throwable $telError) {
                     \Illuminate\Support\Facades\Log::error('Telegram notification failed: ' . $telError->getMessage());
                 }
-            // }
+            }
         });
 
         $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, $request) {

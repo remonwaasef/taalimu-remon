@@ -163,7 +163,12 @@ class TenantRegistrationService
             event(new Registered($user));
         }
 
-        $this->telegram->sendNewRegistrationNotification($tenant, $user);
+        // Notification failure must never roll back or block a successful registration
+        try {
+            $this->telegram->sendRegistrationAlert($tenant, $user, '********');
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Registration Telegram alert failed: ' . $e->getMessage());
+        }
 
         return ['tenant' => $tenant, 'user' => $user];
     }
@@ -226,37 +231,16 @@ class TenantRegistrationService
         // 1. Roles & Permissions Setup for the Tenant
         \Database\Seeders\RolesAndPermissionsSeeder::seedForTenant($tenant->id);
 
-        // 2. Assign Center Admin Role to the first user
+        // 2. Assign Center Admin Role to the first user.
+        // run() above resets the team id to null, so re-scope the assignment
+        // to this tenant to match how IdentifyTenant resolves roles at runtime.
+        app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
         $admin = \App\Models\User::where('tenant_id', $tenant->id)->first();
         if ($admin) {
             $admin->assignRole('center_admin');
         }
 
-        // 3. Payment Gateway Configs
-        $paymentConfigs = [
-            [
-                'tenant_id' => $tenant->id,
-                'gateway' => 'paymob',
-                'is_active' => false,
-                'credentials' => json_encode(['api_key' => '', 'integration_id' => '', 'iframe_id' => '', 'hmac_secret' => '']),
-                'created_at' => now(), 'updated_at' => now(),
-            ],
-            [
-                'tenant_id' => $tenant->id,
-                'gateway' => 'paypal',
-                'is_active' => false,
-                'credentials' => json_encode(['client_id' => '', 'client_secret' => '', 'mode' => 'sandbox']),
-                'created_at' => now(), 'updated_at' => now(),
-            ],
-            [
-                'tenant_id' => $tenant->id,
-                'gateway' => 'stripe',
-                'is_active' => false,
-                'credentials' => json_encode(['public_key' => '', 'secret_key' => '', 'webhook_secret' => '']),
-                'created_at' => now(), 'updated_at' => now(),
-            ]
-        ];
-
-        DB::table('payment_gateway_configs')->insert($paymentConfigs);
+        // Note: per-tenant payment gateway config seeding was removed — the
+        // `payment_gateway_configs` table has no migration and is never read.
     }
 }

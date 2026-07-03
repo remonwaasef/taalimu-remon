@@ -16,7 +16,7 @@ class StudentPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $this->hasAnyRole($user, ['center_admin', 'instructor', 'secretary']) || $user->hasPermissionTo('view students');
+        return $this->hasAnyRole($user, ['center_admin', 'instructor', 'secretary']) || $user->checkPermissionTo('view students');
     }
 
     /**
@@ -28,7 +28,7 @@ class StudentPolicy
         // Also allow the student themselves (if they had a user account)
         return $student->tenant_id === $user->tenant_id && 
                ($this->hasAnyRole($user, ['center_admin', 'instructor', 'secretary']) || 
-                $user->hasPermissionTo('view students') || 
+                $user->checkPermissionTo('view students') || 
                 $user->id === $student->user_id);
     }
 
@@ -37,7 +37,7 @@ class StudentPolicy
      */
     public function create(User $user): bool
     {
-        return $this->hasAnyRole($user, ['center_admin', 'secretary']) || $user->hasPermissionTo('create students');
+        return $this->hasAnyRole($user, ['center_admin', 'secretary']) || $user->checkPermissionTo('create students');
     }
 
     /**
@@ -46,7 +46,7 @@ class StudentPolicy
     public function update(User $user, Student $student): bool
     {
         return $student->tenant_id === $user->tenant_id && 
-               ($this->hasAnyRole($user, ['center_admin', 'secretary']) || $user->hasPermissionTo('update students'));
+               ($this->hasAnyRole($user, ['center_admin', 'secretary']) || $user->checkPermissionTo('edit students'));
     }
 
     /**
@@ -55,6 +55,6 @@ class StudentPolicy
     public function delete(User $user, Student $student): bool
     {
         return $student->tenant_id === $user->tenant_id && 
-               ($this->hasAnyRole($user, 'center_admin') || $user->hasPermissionTo('delete students'));
+               ($this->hasAnyRole($user, 'center_admin') || $user->checkPermissionTo('delete students'));
     }
 }

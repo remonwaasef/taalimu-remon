@@ -118,11 +118,16 @@ class FinanceService
                 $itemData['updated_at'] = $now;
                 $saleItemsData[] = $itemData;
 
-                if ($itemData['item_type'] === Course::class && $student) {
+                // Enrollment requires a linked user account (enrollments.user_id is NOT NULL);
+                // students without accounts still get the sale recorded, just no enrollment.
+                if ($itemData['item_type'] === Course::class && $student && $student->user_id) {
                     $course = $courses->get($itemData['item_id']);
                     if ($course) {
-                        // Directly build Enrollment data to avoid N+1 and fix the duplicated sessions bug
+                        // Directly build Enrollment data to avoid N+1 and fix the duplicated sessions bug.
+                        // Bulk insert() bypasses Eloquent creating hooks, so tenant_id
+                        // must be set explicitly (NOT NULL on enrollments).
                         $enrollmentsData[] = [
+                            'tenant_id' => $sale->tenant_id,
                             'user_id' => $student->user_id,
                             'course_id' => $course->id,
                             'enrolled_at' => $now,

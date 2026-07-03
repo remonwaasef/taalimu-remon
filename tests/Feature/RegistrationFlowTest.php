@@ -29,7 +29,10 @@ class RegistrationFlowTest extends TestCase
             'payment_gateway' => 'test'
         ];
 
-        $response = $this->call('POST', '/register', $payload);
+        $response = $this->withSession([
+            'phone_verified' => true,
+            'phone_verified_number' => $payload['phone'],
+        ])->call('POST', '/register', $payload);
 
         $this->assertEquals(302, $response->status());
 
@@ -62,7 +65,10 @@ class RegistrationFlowTest extends TestCase
             'payment_gateway' => 'test'
         ];
 
-        $response = $this->call('POST', '/register', $payload);
+        $response = $this->withSession([
+            'phone_verified' => true,
+            'phone_verified_number' => $payload['phone'],
+        ])->call('POST', '/register', $payload);
 
         $this->assertEquals(302, $response->status());
 

@@ -16,7 +16,7 @@ class InstructorPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $this->hasAnyRole($user, ['center_admin', 'admin']) || $user->hasPermissionTo('view instructors');
+        return $this->hasAnyRole($user, ['center_admin', 'admin']) || $user->checkPermissionTo('view instructors');
     }
 
     /**
@@ -25,7 +25,7 @@ class InstructorPolicy
     public function view(User $user, Instructor $instructor): bool
     {
         return $user->tenant_id === $instructor->tenant_id &&
-               ($this->hasAnyRole($user, ['center_admin', 'admin', 'secretary']) || $user->hasPermissionTo('view instructors'));
+               ($this->hasAnyRole($user, ['center_admin', 'admin', 'secretary']) || $user->checkPermissionTo('view instructors'));
     }
 
     /**
@@ -33,7 +33,7 @@ class InstructorPolicy
      */
     public function create(User $user): bool
     {
-        return $this->hasAnyRole($user, ['center_admin', 'admin']) || $user->hasPermissionTo('create instructors');
+        return $this->hasAnyRole($user, ['center_admin', 'admin']) || $user->checkPermissionTo('create instructors');
     }
 
     /**
@@ -42,7 +42,7 @@ class InstructorPolicy
     public function update(User $user, Instructor $instructor): bool
     {
         return $user->tenant_id === $instructor->tenant_id && 
-               ($this->hasAnyRole($user, ['center_admin', 'admin']) || $user->hasPermissionTo('update instructors'));
+               ($this->hasAnyRole($user, ['center_admin', 'admin']) || $user->checkPermissionTo('edit instructors'));
     }
 
     /**
@@ -51,6 +51,6 @@ class InstructorPolicy
     public function delete(User $user, Instructor $instructor): bool
     {
         return $user->tenant_id === $instructor->tenant_id && 
-               ($this->hasAnyRole($user, ['center_admin', 'admin']) || $user->hasPermissionTo('delete instructors'));
+               ($this->hasAnyRole($user, ['center_admin', 'admin']) || $user->checkPermissionTo('delete instructors'));
     }
 }

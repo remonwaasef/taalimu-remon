@@ -100,7 +100,10 @@ class DemoDataService
                     'password' => Str::random(12),
                 ]);
 
-                $result = $this->studentService->registerStudent($sData, auth()->user());
+                // During self-registration no user is authenticated yet — fall back
+                // to the tenant's admin (first user) as the creator.
+                $creator = auth()->user() ?? User::where('tenant_id', $tenant->id)->orderBy('id')->first();
+                $result = $this->studentService->registerStudent($sData, $creator);
                 $student = $result['student'];
 
                 // Enroll in a random course

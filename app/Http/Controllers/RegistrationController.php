@@ -39,7 +39,7 @@ class RegistrationController extends Controller
 
     public function register(Request $request, TelegramService $telegram, \App\Services\GeoIPService $geoIP, \App\Services\TenantRegistrationService $registrationService)
     {
-        $request->validate([
+        $validated = $request->validate([
             'account_type' => 'required|in:center,instructor',
             'center_name' => 'required|string|max:255',
             'name' => 'required|string|max:255',
@@ -101,14 +101,22 @@ class RegistrationController extends Controller
             // Geopositioning data for logs/security
             $geoData = null;
             try {
-                $geoData = $geoIP->getLocation($request->ip());
-            } catch (\Exception $e) {
+                $countryCode = $geoIP->getCountryCode($request->ip());
+                if ($countryCode) {
+                    $geoData = (object) [
+                        'countryName' => null,
+                        'countryCode' => $countryCode,
+                        'cityName' => null,
+                        'ip' => $request->ip(),
+                    ];
+                }
+            } catch (\Throwable $e) {
                 // Ignore geoip errors to not block registration
             }
 
             // Call unified registration service
             $result = $registrationService->registerTenant(
-                $request->validated(),
+                $validated,
                 $request->password,
                 null,
                 $geoData
@@ -145,7 +153,7 @@ class RegistrationController extends Controller
                 \Modules\Tenancy\Services\TenantResolver::set($tenant);
                 app(\App\Services\DemoDataService::class)->seedForTenant($tenant);
                 \Illuminate\Support\Facades\Log::info("Auto-Provisioning: Demo data seeded for tenant {$tenant->domain}");
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 \Illuminate\Support\Facades\Log::error('Auto-Provisioning Error (Demo Data): ' . $e->getMessage());
             }
 
