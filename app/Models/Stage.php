@@ -10,7 +10,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Stage extends Model
 {
-    use \App\Traits\ClearsDashboardCache, \App\Traits\IdentifyTenant, HasFactory, LogsActivity, SoftDeletes;
+    use \App\Traits\BelongsToTenant, \App\Traits\ClearsDashboardCache, HasFactory, LogsActivity, SoftDeletes;
 
     protected $fillable = [
         'tenant_id',

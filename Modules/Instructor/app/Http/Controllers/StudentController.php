@@ -2,17 +2,16 @@
 
 namespace Modules\Instructor\Http\Controllers;
 
+use App\DTOs\StudentData;
 use App\Http\Controllers\Controller;
-use App\Mail\WelcomeGuardianMail;
-use App\Mail\WelcomeStudentMail;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Payment;
 use App\Models\Sale;
 use App\Models\Student;
+use App\Services\StudentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Modules\Instructor\Http\Controllers\Traits\ResolvesInstructor;
 use Modules\Instructor\Http\Requests\StoreStudentRequest;
 
@@ -61,7 +60,7 @@ class StudentController extends Controller
     /**
      * Store a manually created student and enroll them
      */
-    public function store(StoreStudentRequest $request)
+    public function store(StoreStudentRequest $request, StudentService $studentService)
     {
         $instructor = $this->instructor;
         if (! $instructor) {
@@ -70,154 +69,47 @@ class StudentController extends Controller
 
         $validated = $request->validated();
 
+        // Restrict enrolment to courses this instructor actually owns, so a forged
+        // course id from another instructor/tenant cannot be attached.
+        $courseIds = Course::whereIn('id', $validated['course_ids'] ?? [])
+            ->where('instructor_id', $instructor->id)
+            ->pluck('id')
+            ->all();
+
+        if (empty($courseIds)) {
+            return back()->withInput()->with('error', __('instructor::messages.unauthorized'));
+        }
+
         try {
-            \DB::beginTransaction();
-
             if ($request->filled('student_id')) {
-                $student = Student::findOrFail($request->student_id);
+                // Enrol an existing student the instructor is allowed to manage.
+                $student = Student::findOrFail($validated['student_id']);
                 $this->authorizeInstructor($student);
-                $user = $student->user;
+                $studentService->enrollInCourses($student, $courseIds);
             } else {
-                $user = \App\Models\User::where('phone', $validated['phone'])->first();
-
-                if (! $user) {
-                    $email = $validated['email'] ?: ($validated['phone'].'@'.($this->tenant->domain ?? 'taalimu').'.com');
-
-                    if (\App\Models\User::where('email', $email)->exists() && ! $validated['email']) {
-                        $email = $validated['phone'].'_'.\Illuminate\Support\Str::random(4).'@'.($this->tenant->domain ?? 'taalimu').'.com';
-                    }
-
-                    $user = \App\Models\User::create([
-                        'tenant_id' => $instructor->tenant_id,
-                        'name' => $validated['name'],
-                        'email' => $email,
-                        'phone' => $validated['phone'],
-                        'password' => \Illuminate\Support\Facades\Hash::make($validated['phone']),
-                        'role' => 'student',
-                        'qr_identifier' => \Illuminate\Support\Str::random(12),
-                    ]);
-                    $user->assignRole('student');
-
-                    $student = Student::forceCreate([
-                        'tenant_id' => app('tenant')->id,
-                        'user_id' => $user->id,
+                // Delegate creation (user, guardian, student, enrolment and the
+                // welcome/enrolment emails) to the shared registration service
+                // instead of duplicating that logic here.
+                $result = $studentService->registerStudent(
+                    StudentData::fromArray([
                         'name' => $validated['name'],
                         'phone' => $validated['phone'],
-                        'parent_phone' => $validated['parent_phone'],
-                        'parent_email' => $validated['parent_email'],
-                        'status' => 'active',
-                    ]);
-                } else {
-                    $student = $user->student;
-                }
+                        'email' => $validated['email'] ?? null,
+                        'parent_phone' => $validated['parent_phone'] ?? null,
+                        'parent_email' => $validated['parent_email'] ?? null,
+                        'course_ids' => $courseIds,
+                    ]),
+                    auth()->user()
+                );
+                $student = $result['student'];
             }
 
-            // Enroll in courses via FinanceService
-            if (! empty($validated['course_ids'])) {
-                $items = [];
-                $courses = Course::whereIn('id', $validated['course_ids'])->get();
-                foreach ($courses as $course) {
-                    $items[] = ['id' => $course->id, 'price' => $course->price];
-                }
-
-                if (! empty($items)) {
-                    app(\App\Services\FinanceService::class)->createSale([
-                        'student_id' => $student->id,
-                        'items' => $items,
-                        'payment_method' => 'cash',
-                        'paid_amount' => 0,
-                    ]);
-                }
-                $newEnrollments = $validated['course_ids'];
-            }
-
-            \DB::commit();
-
-            // Send emails
-            try {
-                $student = Student::where('user_id', $user->id)->first();
-                $hasValidStudentEmail = $validated['email'] && ! preg_match('/^std\d+\..+@taalimu\.com$/', $validated['email']);
-                $hasValidParentEmail = ! empty($validated['parent_email']);
-
-                if ($student && ($hasValidStudentEmail || $hasValidParentEmail)) {
-                    $tenant = $this->tenant;
-                    $tenantSettings = $tenant->settings['email_templates'] ?? [];
-                    $defaultPresetKey = config('email_templates.default_preset', 'formal');
-                    $defaultPreset = config("email_templates.presets.{$defaultPresetKey}", []);
-
-                    $variables = [
-                        'اسم_الطالب' => $student->name,
-                        'اسم_المركز' => $tenant->name,
-                        'رابط_الدخول' => url('/login'),
-                        'كلمة_المرور' => $validated['phone'],
-                        'رقم_الهاتف' => $student->phone ?? '',
-                        'اسم_ولي_الأمر' => '',
-                        'المرحلة' => '',
-                    ];
-
-                    $studentEnabled = (bool) ($tenantSettings['welcome_student_enabled'] ?? true);
-                    if ($studentEnabled && $hasValidStudentEmail) {
-                        $subject = $tenantSettings['welcome_student_subject'] ?? $defaultPreset['student_subject'] ?? '';
-                        $body = $tenantSettings['welcome_student_body'] ?? $defaultPreset['student_body'] ?? '';
-                        Mail::to($validated['email'])->queue(new WelcomeStudentMail(
-                            $student, $subject, $body, $variables, $tenant->name
-                        ));
-                    }
-
-                    $guardianEnabled = (bool) ($tenantSettings['welcome_guardian_enabled'] ?? true);
-                    if ($guardianEnabled && $hasValidParentEmail) {
-                        $guardianSubject = $tenantSettings['welcome_guardian_subject'] ?? $defaultPreset['guardian_subject'] ?? '';
-                        $guardianBody = $tenantSettings['welcome_guardian_body'] ?? $defaultPreset['guardian_body'] ?? '';
-
-                        Mail::to($validated['parent_email'])->queue(new WelcomeGuardianMail(
-                            '',
-                            $student->name,
-                            $guardianSubject,
-                            $guardianBody,
-                            $variables,
-                            $tenant->name
-                        ));
-                    }
-
-                    $groupEnrollmentEnabled = (bool) ($tenantSettings['notif_group_enrollment_enabled'] ?? false);
-                    if ($groupEnrollmentEnabled && count($newEnrollments) > 0) {
-                        foreach ($newEnrollments as $course_id) {
-                            $course = Course::find($course_id);
-                            $groupVariables = [
-                                'اسم_الطالب' => $student->name,
-                                'اسم_المركز' => $tenant->name,
-                                'اسم_المجموعة' => $course ? $course->title : '',
-                                'سعر_الدورة' => $course ? ($course->price.' ج.م') : '',
-                                'رابط_الدخول' => url('/login'),
-                            ];
-
-                            $groupSubject = $tenantSettings['notif_group_enrollment_subject'] ?? 'تم تسجيلك في مجموعة جديدة';
-                            $groupBody = $tenantSettings['notif_group_enrollment_body'] ?? '';
-
-                            if ($hasValidStudentEmail) {
-                                Mail::to($validated['email'])->queue(new \App\Mail\NotifGroupEnrollmentMail(
-                                    $groupSubject, $groupBody, $groupVariables, $tenant->name, $student->name
-                                ));
-                            }
-
-                            if ($hasValidParentEmail) {
-                                Mail::to($validated['parent_email'])->queue(new \App\Mail\NotifGroupEnrollmentMail(
-                                    $groupSubject, $groupBody, $groupVariables, $tenant->name, $student->name
-                                ));
-                            }
-                        }
-                    }
-                }
-            } catch (\Exception $mailEx) {
-                Log::error('Instructor welcome/enrollment email failed: '.$mailEx->getMessage());
-            }
-
-            return redirect()->route('instructor.students.list')->with('success', __('instructor::messages.student_added', ['name' => $validated['name']]));
+            return redirect()->route('instructor.students.list')
+                ->with('success', __('instructor::messages.student_added', ['name' => $student->name]));
         } catch (\Exception $e) {
-            \DB::rollBack();
             Log::error('Manual student registration failed: '.$e->getMessage());
 
-            return back()->withInput()->with('error', __('instructor::messages.error_adding_student', ['message' => $e->getMessage()]));
+            return back()->withInput()->with('error', __('instructor::messages.error_adding_student'));
         }
     }
 
@@ -297,7 +189,7 @@ class StudentController extends Controller
             \DB::rollBack();
             Log::error('Student deletion failed: '.$e->getMessage());
 
-            return back()->with('error', __('instructor::messages.error_deleting_student', ['message' => $e->getMessage()]));
+            return back()->with('error', __('instructor::messages.error_deleting_student'));
         }
     }
 
@@ -453,7 +345,7 @@ class StudentController extends Controller
     /**
      * Send an email to the student
      */
-    public function sendEmail(Request $request, Student $student)
+    public function sendEmail(Request $request, Student $student, StudentService $studentService)
     {
         $instructor = $this->instructor;
 
@@ -471,23 +363,23 @@ class StudentController extends Controller
             'message' => 'required|string',
         ]);
 
-        $email = $student->email ?: ($student->user ? $student->user->email : null);
-
-        if (! $email) {
-            return back()->with('error', 'هذا الطالب لا يمتلك بريداً إلكترونياً مسجلاً.');
-        }
-
         try {
-            $senderName = $instructor ? $instructor->name : $this->tenant->name;
-            Mail::to($email)->queue(new \App\Mail\CustomStudentMail(
-                $student, $request->subject, $request->message, $senderName
-            ));
+            $sent = $studentService->sendCustomEmail(
+                $student,
+                $request->subject,
+                $request->message,
+                $instructor ? $instructor->name : $this->tenant->name
+            );
+
+            if (! $sent) {
+                return back()->with('error', 'هذا الطالب لا يمتلك بريداً إلكترونياً مسجلاً.');
+            }
 
             return back()->with('success', 'تم إرسال البريد الإلكتروني للطالب بنجاح.');
         } catch (\Exception $e) {
             Log::error("Failed to send email to student {$student->id}: ".$e->getMessage());
 
-            return back()->with('error', 'حدث خطأ أثناء الإرسال: '.$e->getMessage());
+            return back()->with('error', 'حدث خطأ أثناء الإرسال.');
         }
     }
 

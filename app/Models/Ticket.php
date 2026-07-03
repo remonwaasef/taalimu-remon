@@ -9,7 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Ticket extends Model
 {
-    use \App\Traits\IdentifyTenant, HasFactory, LogsActivity;
+    use \App\Traits\BelongsToTenant, HasFactory, LogsActivity;
 
     public function getActivitylogOptions(): LogOptions
     {

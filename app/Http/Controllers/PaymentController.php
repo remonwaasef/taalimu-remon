@@ -194,7 +194,12 @@ class PaymentController extends Controller
 
         Log::warning('Paymob Payment Failed/Cancelled', [
             'tenant_id' => $tenantId, 'is_change' => $isChange,
-            'all_params' => $request->all(),
+            // Only the diagnostic subset — the full callback also carries card
+            // fragments (source_data_pan), tokens and the HMAC signature.
+            'params' => $request->only([
+                'id', 'order', 'merchant_order_id', 'success',
+                'txn_response_code', 'amount_cents', 'currency', 'error_occured',
+            ]),
         ]);
 
         if ($isChange && $tenantId) {
@@ -221,6 +226,8 @@ class PaymentController extends Controller
      */
     public function demo()
     {
+        abort_unless(\App\Services\PaymentGateways\MockGateway::demoPaymentsAllowed(), 404);
+
         $planSlug = session('selected_plan');
         $tenantId = session('tenant_id');
 
@@ -249,6 +256,8 @@ class PaymentController extends Controller
      */
     public function demoSuccess(TelegramService $telegram)
     {
+        abort_unless(\App\Services\PaymentGateways\MockGateway::demoPaymentsAllowed(), 404);
+
         if (! session('tenant_id')) {
             return redirect()->route('register');
         }

@@ -205,10 +205,15 @@ class AnalyticsController extends Controller
         $netProfitAllTime = $totalRevenueAllTime - ($totalExpensesAllTime + $totalCommissionsAllTime);
 
         // 2. Yearly Breakdown Logic (For the Profit/Loss Table)
+        // Use a sargable [start, end) range on the year so the date indexes are used
+        // instead of YEAR() disabling them.
+        $yearStart = \Carbon\Carbon::create($year, 1, 1)->startOfDay();
+        $yearEnd = (clone $yearStart)->addYear();
+
         $monthlyRevenue = Sale::select(
             DB::raw('MONTH(created_at) as month'),
             DB::raw('SUM(paid_amount) as total')
-        )->whereYear('created_at', $year)
+        )->where('created_at', '>=', $yearStart)->where('created_at', '<', $yearEnd)
             ->groupBy('month')
             ->orderBy('month')
             ->get()
@@ -217,7 +222,7 @@ class AnalyticsController extends Controller
         $monthlyExpenses = Expense::select(
             DB::raw('MONTH(date) as month'),
             DB::raw('SUM(amount) as total')
-        )->whereYear('date', $year)
+        )->where('date', '>=', $yearStart)->where('date', '<', $yearEnd)
             ->groupBy('month')
             ->orderBy('month')
             ->get()
@@ -226,14 +231,14 @@ class AnalyticsController extends Controller
         $monthlyCommissions = \App\Models\Commission::select(
             DB::raw('MONTH(created_at) as month'),
             DB::raw('SUM(amount) as total')
-        )->whereYear('created_at', $year)
+        )->where('created_at', '>=', $yearStart)->where('created_at', '<', $yearEnd)
             ->groupBy('month')
             ->orderBy('month')
             ->get()
             ->pluck('total', 'month');
 
         $expenseCategories = Expense::select('category', DB::raw('SUM(amount) as total'))
-            ->whereYear('date', $year)
+            ->where('date', '>=', $yearStart)->where('date', '<', $yearEnd)
             ->groupBy('category')
             ->get();
 

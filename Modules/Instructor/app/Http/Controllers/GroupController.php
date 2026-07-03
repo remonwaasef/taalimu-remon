@@ -75,7 +75,7 @@ class GroupController extends Controller
                 'trace' => $e->getTraceAsString(),
             ]);
 
-            return back()->withInput()->with('error', __('instructor::messages.error_saving_group', ['message' => $e->getMessage()]));
+            return back()->withInput()->with('error', __('instructor::messages.error_saving_group'));
         }
     }
 

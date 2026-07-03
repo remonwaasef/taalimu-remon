@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 
 class OperationIssue extends Model
 {
-    use \App\Traits\IdentifyTenant, HasFactory, SoftDeletes;
+    use \App\Traits\BelongsToTenant, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'uuid',

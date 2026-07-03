@@ -17,8 +17,20 @@ class StripeGateway implements PaymentGatewayInterface
         // Check if price ID looks like a real Stripe price (starts with 'price_1')
         $isRealPriceId = $priceId && str_starts_with($priceId, 'price_1');
 
-        // Handle Demo Mode: explicit demo flag, missing keys, or placeholder price IDs
-        if (config('services.stripe.demo_mode') || empty(config('services.stripe.secret')) || ! $isRealPriceId) {
+        $isConfigured = ! empty(config('services.stripe.secret')) && $isRealPriceId;
+
+        // Demo Mode is only reachable when explicitly enabled or outside production.
+        // A misconfigured production Stripe must fail closed, never grant a free subscription.
+        if (! $isConfigured || config('services.stripe.demo_mode')) {
+            if (! static::demoPaymentsAllowed()) {
+                \Log::error('Stripe misconfigured in production', [
+                    'reason' => ! $isRealPriceId ? "Price ID '{$priceId}' is not a real Stripe price" : 'Missing Stripe secret',
+                    'package' => $package->slug,
+                ]);
+
+                throw new \RuntimeException('Stripe payment gateway is not configured.');
+            }
+
             \Log::info('Stripe using Demo Mode', [
                 'reason' => ! $isRealPriceId ? "Price ID '{$priceId}' is not a real Stripe price" : 'Demo mode enabled',
                 'package' => $package->slug,
@@ -49,6 +61,14 @@ class StripeGateway implements PaymentGatewayInterface
                 ->checkout($checkoutOptions)
                 ->url;
         } catch (\Exception $e) {
+            // Fail closed: a Stripe outage or bad request must surface as an error,
+            // not silently activate the subscription via the demo flow.
+            if (! static::demoPaymentsAllowed()) {
+                \Log::error('Stripe checkout failed: '.$e->getMessage());
+
+                throw $e;
+            }
+
             \Log::warning('Stripe checkout failed, falling back to Demo Mode: '.$e->getMessage());
 
             return $this->handleDemoRedirect($tenant, $package, $billingCycle, $options);

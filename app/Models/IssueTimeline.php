@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class IssueTimeline extends Model
 {
-    use \App\Traits\IdentifyTenant;
+    use \App\Traits\BelongsToTenant;
     use HasFactory;
 
     protected $table = 'issue_timeline';

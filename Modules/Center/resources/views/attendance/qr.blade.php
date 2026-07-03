@@ -25,7 +25,7 @@
 <script>
     // Initial QR Generation
     new QRCode(document.getElementById("qrcode"), {
-        text: "{!! $url !!}",
+        text: @json($url),
         width: 256,
         height: 256
     });

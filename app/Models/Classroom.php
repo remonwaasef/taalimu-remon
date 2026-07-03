@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Classroom extends Model
 {
-    use \App\Traits\IdentifyTenant, HasFactory;
+    use \App\Traits\BelongsToTenant, HasFactory;
 
     protected static function boot()
     {

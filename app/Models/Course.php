@@ -12,7 +12,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Course extends Model
 {
-    use \App\Traits\ClearsDashboardCache, \App\Traits\IdentifyTenant, HasFactory, LogsActivity, SoftDeletes;
+    use \App\Traits\BelongsToTenant, \App\Traits\ClearsDashboardCache, HasFactory, LogsActivity, SoftDeletes;
 
     protected static function boot()
     {
