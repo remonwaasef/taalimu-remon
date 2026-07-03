@@ -30,13 +30,19 @@ jobs:
           path: vendor
           key: composer-${{ hashFiles('composer.lock') }}
 
-      - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress
-
+      # .env must exist before Composer's post-autoload-dump runs
+      # `package:discover`, otherwise app boot falls back to config defaults
+      # and (with phpredis loaded on the runner) tries to connect to Redis.
       - name: Prepare environment
+        run: cp .env.example .env
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress --no-scripts
+
+      - name: Generate key & discover packages
         run: |
-          cp .env.example .env
           php artisan key:generate
+          php artisan package:discover
 
       - name: Run tests
         run: php artisan test
@@ -55,8 +61,10 @@ jobs:
           php-version: '8.4'
           coverage: none
 
+      # --no-scripts: this job only lints, it never boots the app, so skip
+      # package:discover (which would try to connect to Redis without an .env).
       - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress
+        run: composer install --prefer-dist --no-interaction --no-progress --no-scripts
 
       - name: Check code style
         run: vendor/bin/pint --test
@@ -75,8 +83,9 @@ jobs:
           php-version: '8.4'
           coverage: none
 
+      # --no-scripts: audit only inspects composer.lock, no app boot needed.
       - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress
+        run: composer install --prefer-dist --no-interaction --no-progress --no-scripts
 
       - name: Audit dependencies for known vulnerabilities
         run: composer audit --no-interaction
