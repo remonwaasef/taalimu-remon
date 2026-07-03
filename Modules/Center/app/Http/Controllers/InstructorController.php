@@ -131,7 +131,7 @@ class InstructorController extends Controller
         } catch (\Exception $e) {
             \Log::error('Instructor creation failed: '.$e->getMessage());
 
-            return redirect()->back()->withInput()->with('error', __('center::messages.error_unexpected') ?? 'حدث خطأ: '.$e->getMessage());
+            return redirect()->back()->withInput()->with('error', __('center::messages.error_unexpected'));
         }
     }
 
@@ -235,7 +235,9 @@ class InstructorController extends Controller
 
             return redirect()->back()->with('success', __('center::instructors.payout_success'));
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', __('center::instructors.payout_error', ['message' => $e->getMessage()]));
+            \Log::error('Instructor payout failed: '.$e->getMessage());
+
+            return redirect()->back()->with('error', __('center::instructors.payout_error', ['message' => '']));
         }
     }
 

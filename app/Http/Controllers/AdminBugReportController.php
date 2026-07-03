@@ -86,7 +86,8 @@ class AdminBugReportController extends Controller
         }
 
         if (! $filePath) {
-            abort(404, 'Screenshot file not found. Paths checked: '.implode(', ', $possiblePaths));
+            \Log::warning('Bug report screenshot not found', ['paths' => $possiblePaths]);
+            abort(404, 'Screenshot file not found.');
         }
 
         $mimeType = mime_content_type($filePath) ?: 'image/jpeg';

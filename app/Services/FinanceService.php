@@ -238,6 +238,9 @@ class FinanceService
     public function addPayment(Sale $sale, $amount, $method = null, $notes = null)
     {
         return DB::transaction(function () use ($sale, $amount, $method, $notes) {
+            // Lock the row to prevent a lost update when two payments post concurrently.
+            $sale = Sale::lockForUpdate()->findOrFail($sale->id);
+
             $newPaidAmount = $sale->paid_amount + $amount;
             $status = $this->determineStatus($sale->total_amount, $newPaidAmount);
 

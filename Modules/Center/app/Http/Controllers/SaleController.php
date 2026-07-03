@@ -178,6 +178,8 @@ class SaleController extends Controller
 
     public function store(StoreSaleRequest $request)
     {
+        $this->authorize('create', Sale::class);
+
         try {
             $sale = $this->financeService->createSale($request->validated());
 
@@ -351,6 +353,8 @@ class SaleController extends Controller
 
     public function downloadStatement($id)
     {
+        $this->authorize('viewAny', Sale::class);
+
         $tenant = $this->tenant;
         $student = Student::where('tenant_id', $tenant->id)->findOrFail($id);
 

@@ -48,9 +48,11 @@ class BugReportController extends Controller
                     if (! in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
                         $extension = 'png';
                     }
-                    $image = base64_decode(substr($imageData, strpos($imageData, ',') + 1));
+                    $image = base64_decode(substr($imageData, strpos($imageData, ',') + 1), true);
 
-                    if ($image) {
+                    // Verify the decoded bytes are actually a real image, not just
+                    // an attacker-supplied blob with an image data-URI prefix.
+                    if ($image && @getimagesizefromstring($image) !== false) {
                         $fileName = 'bug-reports/'.\Illuminate\Support\Str::random(30).'_auto.'.$extension;
 
                         // Save to Laravel's internal storage (storage/app/public)
