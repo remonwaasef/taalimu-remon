@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Security;
 
-use Tests\TestCase;
 use Illuminate\Support\Facades\File;
 use ReflectionClass;
+use Tests\TestCase;
 
 class ModelIsolationTest extends TestCase
 {
@@ -23,7 +23,7 @@ class ModelIsolationTest extends TestCase
             'Package',
             'PackageFeature',
             'Subscription',
-            'Role', 
+            'Role',
             'Coupon', // System-wide coupons for subscriptions
             'SiteSetting', // Global platform settings
             'SaleItem', // Child of Sale (implicitly isolated)
@@ -33,16 +33,16 @@ class ModelIsolationTest extends TestCase
         $failures = [];
 
         foreach ($files as $file) {
-            $className = 'App\\Models\\' . str_replace(['.php', '/'], ['', '\\'], $file->getRelativePathname());
+            $className = 'App\\Models\\'.str_replace(['.php', '/'], ['', '\\'], $file->getRelativePathname());
 
-            if (!class_exists($className)) {
+            if (! class_exists($className)) {
                 continue;
             }
 
             $reflection = new ReflectionClass($className);
-            
+
             // Skip non-models or abstract classes
-            if (!$reflection->isInstantiable() || !$reflection->isSubclassOf('Illuminate\\Database\\Eloquent\\Model')) {
+            if (! $reflection->isInstantiable() || ! $reflection->isSubclassOf('Illuminate\\Database\\Eloquent\\Model')) {
                 continue;
             }
 
@@ -52,11 +52,11 @@ class ModelIsolationTest extends TestCase
             }
 
             $traits = array_keys($reflection->getTraits());
-            if (!in_array('App\\Traits\\IdentifyTenant', $traits)) {
+            if (! in_array('App\\Traits\\IdentifyTenant', $traits)) {
                 $failures[] = $className;
             }
         }
 
-        $this->assertEmpty($failures, "The following models are missing the IdentifyTenant trait: " . implode(', ', $failures));
+        $this->assertEmpty($failures, 'The following models are missing the IdentifyTenant trait: '.implode(', ', $failures));
     }
 }

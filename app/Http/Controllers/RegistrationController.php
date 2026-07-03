@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\TelegramService;
-use App\Models\Tenant;
 use App\Models\User;
+use App\Services\TelegramService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Auth\Events\Registered;
 
 class RegistrationController extends Controller
 {
@@ -26,11 +22,11 @@ class RegistrationController extends Controller
             $symbols['EGP'] = 'ج.م';
         }
         $currency = $symbols[$suggestedCurrency] ?? $suggestedCurrency;
-        
+
         $packagesData = \App\Models\Package::getDisplayData($packages, $currency);
 
         $accountType = request('account_type');
-        if (!in_array($accountType, ['center', 'instructor'])) {
+        if (! in_array($accountType, ['center', 'instructor'])) {
             $accountType = null;
         }
 
@@ -46,8 +42,8 @@ class RegistrationController extends Controller
             'email' => 'required|email|max:255|unique:users,email',
             'phone' => 'required|string|max:20|unique:users,phone',
             'password' => [
-                'required', 
-                'string', 
+                'required',
+                'string',
                 \Illuminate\Validation\Rules\Password::min(8)
                     ->mixedCase()
                     ->numbers()
@@ -64,7 +60,7 @@ class RegistrationController extends Controller
 
         // PHONE VERIFICATION GATE: Ensure phone was verified via OTP before account creation
         $phoneVerified = session('phone_verified') && session('phone_verified_number') === $request->phone;
-        if (!$phoneVerified) {
+        if (! $phoneVerified) {
             return back()->withErrors(['phone' => __('messages.verify_phone_first')])->withInput();
         }
 
@@ -87,9 +83,10 @@ class RegistrationController extends Controller
         }
 
         // DUPLICATE SUBMISSION GUARD: Prevent creating account twice on double-click
-        $submissionKey = 'registration_lock_' . md5($request->email);
+        $submissionKey = 'registration_lock_'.md5($request->email);
         if (session()->has($submissionKey)) {
             \Log::warning('Duplicate registration submission blocked', ['email' => $request->email]);
+
             return back()->withErrors(['error' => __('messages.registration_processing')])->withInput();
         }
 
@@ -144,7 +141,7 @@ class RegistrationController extends Controller
                         new \App\Mail\TenantOnboardingMail($tenant, $user, 1)
                     );
                 } catch (\Exception $e) {
-                    \Log::error('Failed to send onboarding email 1: ' . $e->getMessage());
+                    \Log::error('Failed to send onboarding email 1: '.$e->getMessage());
                 }
             }
 
@@ -154,7 +151,7 @@ class RegistrationController extends Controller
                 app(\App\Services\DemoDataService::class)->seedForTenant($tenant);
                 \Illuminate\Support\Facades\Log::info("Auto-Provisioning: Demo data seeded for tenant {$tenant->domain}");
             } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::error('Auto-Provisioning Error (Demo Data): ' . $e->getMessage());
+                \Illuminate\Support\Facades\Log::error('Auto-Provisioning Error (Demo Data): '.$e->getMessage());
             }
 
             // Auto-Provisioning: Cloudflare DNS Automation (Mocked/Prepared)
@@ -162,11 +159,11 @@ class RegistrationController extends Controller
                 // TODO: Integrate Cloudflare API to create CNAME record for $subdomain automatically
                 \Illuminate\Support\Facades\Log::info("Auto-Provisioning: Cloudflare DNS CNAME mapped for {$subdomain}");
             } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::error('Auto-Provisioning Error (Cloudflare DNS): ' . $e->getMessage());
+                \Illuminate\Support\Facades\Log::error('Auto-Provisioning Error (Cloudflare DNS): '.$e->getMessage());
             }
 
             // Set session integrity token to prevent payment bypass
-            session(['registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . $user->id, config('app.key'))]);
+            session(['registration_hmac' => hash_hmac('sha256', $tenant->id.'|'.$user->id, config('app.key'))]);
 
             if ($isTrialPlan) {
                 session([
@@ -206,7 +203,7 @@ class RegistrationController extends Controller
 
             // Modular Payment Gateway Logic
             $gateway = \App\Services\PaymentFactory::make($request->payment_gateway);
-            
+
             $redirectUrl = $gateway->createCheckoutSession($tenant, $package, $request->billing_cycle, [
                 'coupon_id' => $coupon ? $coupon->id : null,
                 'coupon_code' => $coupon ? $coupon->code : null,
@@ -220,10 +217,10 @@ class RegistrationController extends Controller
         } catch (\Exception $e) {
             // Release submission lock on failure so user can try again
             session()->forget($submissionKey);
-            \Log::error('Registration error: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString()
+            \Log::error('Registration error: '.$e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
             ]);
-            
+
             // Security fix: Generic error message instead of raw exception details
             $errorMessage = __('messages.registration_failed');
 

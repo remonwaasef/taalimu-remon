@@ -20,12 +20,12 @@ class CheckSubscription
             return $next($request);
         }
 
-        if (!app()->bound('tenant')) {
+        if (! app()->bound('tenant')) {
             return $next($request);
         }
 
         $tenant = app('tenant');
-        
+
         // Skip check for specific routes (e.g., billing page)
         if ($request->routeIs('center.subscription.*') || $request->routeIs('center.tickets.*') || $request->routeIs('center.sales.*') || $request->routeIs('2fa.*')) {
             return $next($request);
@@ -33,7 +33,7 @@ class CheckSubscription
 
         $subscription = $tenant->activeSubscription();
 
-        if (!$subscription) {
+        if (! $subscription) {
             // Redirect to billing/subscription page
             return redirect()->route('center.subscription.index', ['tenant' => $tenant->domain])
                 ->with('error', __('subscription.expired'));

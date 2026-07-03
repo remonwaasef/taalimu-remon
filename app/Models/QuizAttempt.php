@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class QuizAttempt extends Model
 {
-    use HasFactory, \App\Traits\IdentifyTenant;
+    use \App\Traits\IdentifyTenant, HasFactory;
 
     protected $fillable = [
         'tenant_id',
@@ -18,7 +18,6 @@ class QuizAttempt extends Model
         'started_at',
         'completed_at',
     ];
-
 
     protected $casts = [
         'started_at' => 'datetime',

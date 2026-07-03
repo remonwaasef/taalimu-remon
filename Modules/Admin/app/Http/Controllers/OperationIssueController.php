@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\OperationIssue;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class OperationIssueController extends Controller
 {
@@ -30,11 +29,11 @@ class OperationIssueController extends Controller
 
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('message', 'like', "%{$search}%")
-                  ->orWhere('uuid', 'like', "%{$search}%")
-                  ->orWhere('action', 'like', "%{$search}%");
+                    ->orWhere('message', 'like', "%{$search}%")
+                    ->orWhere('uuid', 'like', "%{$search}%")
+                    ->orWhere('action', 'like', "%{$search}%");
             });
         }
 
@@ -62,7 +61,7 @@ class OperationIssueController extends Controller
             $issue->acknowledge(auth()->user());
         }
 
-        $admins = User::whereHas('roles', function($q) {
+        $admins = User::whereHas('roles', function ($q) {
             $q->where('name', 'super_admin');
         })->get();
 
@@ -72,10 +71,10 @@ class OperationIssueController extends Controller
     public function updateStatus(Request $request, $uuid)
     {
         $issue = OperationIssue::where('uuid', $uuid)->firstOrFail();
-        
+
         $request->validate([
             'status' => 'required|in:new,acknowledged,in_progress,resolved,closed,wont_fix',
-            'comment' => 'nullable|string'
+            'comment' => 'nullable|string',
         ]);
 
         if ($request->status === 'resolved') {
@@ -90,9 +89,9 @@ class OperationIssueController extends Controller
     public function assign(Request $request, $uuid)
     {
         $issue = OperationIssue::where('uuid', $uuid)->firstOrFail();
-        
+
         $request->validate([
-            'assigned_to' => 'required|exists:users,id'
+            'assigned_to' => 'required|exists:users,id',
         ]);
 
         $assignee = User::findOrFail($request->assigned_to);
@@ -104,9 +103,9 @@ class OperationIssueController extends Controller
     public function addComment(Request $request, $uuid)
     {
         $issue = OperationIssue::where('uuid', $uuid)->firstOrFail();
-        
+
         $request->validate([
-            'comment' => 'required|string'
+            'comment' => 'required|string',
         ]);
 
         $issue->addComment($request->comment, auth()->user());

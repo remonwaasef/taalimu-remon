@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Sale extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes, \App\Traits\IdentifyTenant, \App\Traits\ClearsDashboardCache;
+    use \App\Traits\ClearsDashboardCache, \App\Traits\IdentifyTenant, HasFactory, LogsActivity, SoftDeletes;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -65,6 +64,7 @@ class Sale extends Model
         } elseif ($this->paid_amount > 0) {
             return 'partial';
         }
+
         return 'pending';
     }
 

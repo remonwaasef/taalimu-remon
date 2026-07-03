@@ -1,4 +1,5 @@
 <?php
+
 $tenants = \App\Models\Tenant::whereIn('domain', ['remonq', 'remonj', 'ra3y'])->get();
 foreach ($tenants as $tenant) {
     $sub = $tenant->activeSubscription();

@@ -14,7 +14,7 @@ class ApplyTemplateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'template_key' => 'required|string|in:' . implode(',', array_keys(config('academic.templates', []))),
+            'template_key' => 'required|string|in:'.implode(',', array_keys(config('academic.templates', []))),
         ];
     }
 }

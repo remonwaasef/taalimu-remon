@@ -17,18 +17,20 @@ class WelcomeGuardianMail extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
 
     public string $guardianName;
+
     public string $studentName;
+
     public string $processedBody;
+
     public string $subjectLine;
+
     public string $senderName;
 
     /**
-     * @param string $guardianName
-     * @param string $studentName
-     * @param string $subjectTemplate  Subject with placeholders
-     * @param string $bodyTemplate     Body with placeholders
-     * @param array  $variables        Key-value pairs for replacement
-     * @param string $senderName       Sender display name
+     * @param  string  $subjectTemplate  Subject with placeholders
+     * @param  string  $bodyTemplate  Body with placeholders
+     * @param  array  $variables  Key-value pairs for replacement
+     * @param  string  $senderName  Sender display name
      */
     public function __construct(
         string $guardianName,
@@ -52,12 +54,12 @@ class WelcomeGuardianMail extends Mailable implements ShouldQueue
     public function build()
     {
         return $this->subject($this->subjectLine)
-                    ->view('emails.welcome_guardian_mail')
-                    ->with([
-                        'guardianName'   => $this->guardianName,
-                        'studentName'    => $this->studentName,
-                        'messageContent' => $this->processedBody,
-                        'senderName'     => $this->senderName,
-                    ]);
+            ->view('emails.welcome_guardian_mail')
+            ->with([
+                'guardianName' => $this->guardianName,
+                'studentName' => $this->studentName,
+                'messageContent' => $this->processedBody,
+                'senderName' => $this->senderName,
+            ]);
     }
 }

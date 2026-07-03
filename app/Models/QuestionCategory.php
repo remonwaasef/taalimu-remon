@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use App\Scopes\TenantScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class QuestionCategory extends Model
 {
-    use HasFactory, \App\Traits\IdentifyTenant;
+    use \App\Traits\IdentifyTenant, HasFactory;
 
     protected $fillable = ['tenant_id', 'name', 'slug'];
 

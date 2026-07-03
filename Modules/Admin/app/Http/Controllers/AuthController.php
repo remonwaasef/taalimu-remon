@@ -20,18 +20,19 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        $throttleKey = 'admin_login.' . \Illuminate\Support\Str::lower($request->input('email')) . '|' . $request->ip();
+        $throttleKey = 'admin_login.'.\Illuminate\Support\Str::lower($request->input('email')).'|'.$request->ip();
 
         // Increase rate limit for local development/testing to prevent locking out developers
         $host = $request->getHost();
-        $isLocal = app()->environment('local') || 
-                   in_array($host, ['localhost', '127.0.0.1', '::1']) || 
-                   str_contains($host, '.localhost') || 
+        $isLocal = app()->environment('local') ||
+                   in_array($host, ['localhost', '127.0.0.1', '::1']) ||
+                   str_contains($host, '.localhost') ||
                    str_contains($host, '192.168.');
         $maxAttempts = $isLocal ? 100 : 5;
 
         if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($throttleKey, $maxAttempts)) {
             $seconds = \Illuminate\Support\Facades\RateLimiter::availableIn($throttleKey);
+
             return back()->withErrors([
                 'email' => __('auth.throttle', ['seconds' => $seconds]),
             ])->onlyInput('email');
@@ -42,8 +43,9 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             // Check if user is admin (Super Admin)
-            if (!in_array(auth()->user()->role, ['super_admin', 'admin'])) {
+            if (! in_array(auth()->user()->role, ['super_admin', 'admin'])) {
                 Auth::logout();
+
                 return back()->withErrors([
                     'email' => 'You do not have access to this area.',
                 ]);
@@ -53,8 +55,9 @@ class AuthController extends Controller
             if ($intended && str_contains($intended, '/admin')) {
                 return redirect()->intended(route('admin.dashboard'));
             }
-            
+
             session()->forget('url.intended');
+
             return redirect()->route('admin.dashboard');
         }
 
@@ -70,6 +73,7 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect()->route('admin.login');
     }
 }

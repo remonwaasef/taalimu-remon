@@ -2,22 +2,24 @@
 
 namespace App\Jobs;
 
+use App\Models\Student;
+use App\Models\Tenant;
+use App\Services\WhatsAppService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use App\Models\Tenant;
-use App\Models\Student;
-use App\Services\WhatsAppService;
 
 class SendDebtReminderJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $tenant;
+
     public $student;
+
     public $totalDebt;
 
     /**
@@ -38,7 +40,7 @@ class SendDebtReminderJob implements ShouldQueue
         try {
             $whatsapp->sendDebtReminder($this->tenant, $this->student, $this->totalDebt);
         } catch (\Exception $e) {
-            Log::warning('Job SendDebtReminderJob failed: ' . $e->getMessage());
+            Log::warning('Job SendDebtReminderJob failed: '.$e->getMessage());
         }
     }
 }

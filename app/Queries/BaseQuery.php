@@ -8,10 +8,6 @@ abstract class BaseQuery
 {
     /**
      * Apply filters to the query.
-     *
-     * @param Builder $query
-     * @param array $filters
-     * @return Builder
      */
     abstract public function apply(Builder $query, array $filters): Builder;
 

@@ -4,17 +4,17 @@ namespace Modules\Center\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Services\StudentService;
-use App\Services\FinanceService;
 
 class OnboardingController extends Controller
 {
     protected $studentService;
+
     protected $financeService;
+
     protected $settingsService;
 
     public function __construct(
-        \App\Services\StudentService $studentService, 
+        \App\Services\StudentService $studentService,
         \App\Services\FinanceService $financeService,
         \Modules\Center\Services\SettingsService $settingsService
     ) {
@@ -30,7 +30,9 @@ class OnboardingController extends Controller
     public function fixMissingInvoices()
     {
         $tenant = auth()->user()->tenant;
-        if (!$tenant) abort(403);
+        if (! $tenant) {
+            abort(403);
+        }
 
         $students = \App\Models\Student::where('tenant_id', $tenant->id)
             ->has('enrollments')
@@ -43,35 +45,37 @@ class OnboardingController extends Controller
         foreach ($students as $student) {
             foreach ($student->enrollments as $enrollment) {
                 $course = $enrollment->course;
-                if (!$course) continue;
+                if (! $course) {
+                    continue;
+                }
 
                 $price = $course->price ?? 0;
 
                 $sale = \App\Models\Sale::create([
-                    'tenant_id'       => $tenant->id,
-                    'student_id'      => $student->id,
+                    'tenant_id' => $tenant->id,
+                    'student_id' => $student->id,
                     'subtotal_amount' => $price,
                     'discount_amount' => 0,
-                    'tax_amount'      => 0,
-                    'total_amount'    => $price,
-                    'paid_amount'     => 0,
-                    'status'          => $price > 0 ? 'pending' : 'paid',
-                    'payment_method'  => 'cash',
-                    'notes'           => 'إصلاح تلقائي - تسجيل من الإعداد الأولي',
+                    'tax_amount' => 0,
+                    'total_amount' => $price,
+                    'paid_amount' => 0,
+                    'status' => $price > 0 ? 'pending' : 'paid',
+                    'payment_method' => 'cash',
+                    'notes' => 'إصلاح تلقائي - تسجيل من الإعداد الأولي',
                 ]);
 
                 \App\Models\SaleItem::create([
-                    'sale_id'   => $sale->id,
+                    'sale_id' => $sale->id,
                     'item_type' => \App\Models\Course::class,
-                    'item_id'   => $course->id,
-                    'price'     => $price,
-                    'quantity'  => 1,
+                    'item_id' => $course->id,
+                    'price' => $price,
+                    'quantity' => 1,
                 ]);
 
                 $fixed[] = [
                     'student' => $student->name,
-                    'course'  => $course->title,
-                    'amount'  => $price,
+                    'course' => $course->title,
+                    'amount' => $price,
                     'sale_id' => $sale->id,
                 ];
             }
@@ -79,8 +83,8 @@ class OnboardingController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => count($fixed) > 0 ? 'تم إنشاء ' . count($fixed) . ' فاتورة بنجاح' : 'لا يوجد طلاب بدون فواتير',
-            'fixed'   => $fixed,
+            'message' => count($fixed) > 0 ? 'تم إنشاء '.count($fixed).' فاتورة بنجاح' : 'لا يوجد طلاب بدون فواتير',
+            'fixed' => $fixed,
         ]);
     }
 
@@ -107,7 +111,7 @@ class OnboardingController extends Controller
             ->limit(100)
             ->get();
 
-        $existingInstructors = $existingInstructorsQuery->map(function($inst) {
+        $existingInstructors = $existingInstructorsQuery->map(function ($inst) {
             return [
                 'instructor_name' => $inst->name,
                 'instructor_phone' => $inst->phone,
@@ -127,46 +131,46 @@ class OnboardingController extends Controller
             ->with(['schedules' => function ($query) {
                 $query->select('id', 'course_id', 'day_of_week', 'start_time', 'end_time');
             }])
-            ->get()->map(function($course) use ($instructorsListIds) {
-            $idx = array_search($course->instructor_id, $instructorsListIds);
-            
-            $schedules = $course->schedules->map(function($s) {
+            ->get()->map(function ($course) use ($instructorsListIds) {
+                $idx = array_search($course->instructor_id, $instructorsListIds);
+
+                $schedules = $course->schedules->map(function ($s) {
+                    return [
+                        'day' => (string) $s->day_of_week,
+                        'time' => substr($s->start_time, 0, 5),
+                        'time_end' => substr($s->end_time, 0, 5),
+                    ];
+                })->toArray();
+
+                if (empty($schedules)) {
+                    $schedules = [['day' => '0', 'time' => '16:00', 'time_end' => '18:00']];
+                }
+
                 return [
-                    'day' => (string)$s->day_of_week,
-                    'time' => substr($s->start_time, 0, 5),
-                    'time_end' => substr($s->end_time, 0, 5),
+                    'instructor_index' => $idx !== false ? (string) $idx : '0',
+                    'course_name' => $course->title,
+                    'price' => $course->price,
+                    'sessions_count' => $course->sessions_count,
+                    'schedules' => $schedules,
                 ];
             })->toArray();
-
-            if (empty($schedules)) {
-                $schedules = [['day' => '0', 'time' => '16:00', 'time_end' => '18:00']];
-            }
-
-            return [
-                'instructor_index' => $idx !== false ? (string)$idx : '0',
-                'course_name' => $course->title,
-                'price' => $course->price,
-                'sessions_count' => $course->sessions_count,
-                'schedules' => $schedules,
-            ];
-        })->toArray();
 
         $existingStudents = \App\Models\Student::where('tenant_id', $tenant->id)
             ->select('id', 'name', 'email', 'phone', 'parent_name', 'parent_phone', 'parent_email', 'grade_id')
             ->orderBy('id')
             ->limit(100)
-            ->get()->map(function($student) {
-            return [
-                'student_name' => $student->name,
-                'student_email' => $student->email ?? '',
-                'student_phone' => $student->phone,
-                'parent_name' => $student->parent_name ?? '',
-                'parent_phone' => $student->parent_phone ?? '',
-                'parent_email' => $student->parent_email ?? '',
-                'grade_id' => $student->grade_id ?? '',
-                'enroll_course_indices' => []
-            ];
-        })->toArray();
+            ->get()->map(function ($student) {
+                return [
+                    'student_name' => $student->name,
+                    'student_email' => $student->email ?? '',
+                    'student_phone' => $student->phone,
+                    'parent_name' => $student->parent_name ?? '',
+                    'parent_phone' => $student->parent_phone ?? '',
+                    'parent_email' => $student->parent_email ?? '',
+                    'grade_id' => $student->grade_id ?? '',
+                    'enroll_course_indices' => [],
+                ];
+            })->toArray();
 
         return view('center::onboarding.wizard', compact('status', 'tenant', 'stages', 'existingInstructors', 'existingCourses', 'existingStudents'));
     }
@@ -178,17 +182,17 @@ class OnboardingController extends Controller
         ]);
 
         $tenant = auth()->user()->tenant;
-        
+
         // Update user locale
         auth()->user()->update(['locale' => $request->locale]);
-        
+
         // Update session locale
         session(['locale' => $request->locale]);
 
         // Optional: Also update tenant default setting if you want it to be the "choice"
         $settings = $tenant->settings ?? [];
         $settings['default_locale'] = $request->locale;
-        
+
         // Map language to default currency and education system
         $currencyMap = [
             'ar' => 'EGP',
@@ -202,7 +206,7 @@ class OnboardingController extends Controller
         ];
 
         if (isset($currencyMap[$request->locale])) {
-            if (!isset($settings['financial'])) {
+            if (! isset($settings['financial'])) {
                 $settings['financial'] = [];
             }
             $settings['financial']['currency'] = $currencyMap[$request->locale];
@@ -235,15 +239,15 @@ class OnboardingController extends Controller
             // Save Settings
             $settings = $tenant->settings ?? [];
             $settings['default_locale'] = $request->locale;
-            
-            if (!isset($settings['financial'])) {
+
+            if (! isset($settings['financial'])) {
                 $settings['financial'] = [];
             }
             $settings['financial']['currency'] = $request->currency;
             $settings['currency'] = $request->currency; // Legacy support
-            
+
             $settings['education_system'] = $request->education_system;
-            
+
             $tenant->settings = $settings;
             $tenant->onboarding_status = 'step_2';
             $tenant->save();
@@ -252,18 +256,18 @@ class OnboardingController extends Controller
             try {
                 $this->settingsService->applyTemplate($tenant, $request->education_system);
             } catch (\Exception $e) {
-                \Log::error("Onboarding Template Application Error: " . $e->getMessage());
+                \Log::error('Onboarding Template Application Error: '.$e->getMessage());
             }
 
             // Set user locale too
             auth()->user()->update(['locale' => $request->locale]);
             session(['locale' => $request->locale]);
 
-            return response()->json(['success' => true, 'redirect' => route('center.onboarding.show') . '?step=step_2']);
+            return response()->json(['success' => true, 'redirect' => route('center.onboarding.show').'?step=step_2']);
         }
 
         if ($step === 'step_2') {
-            if (!$request->boolean('skip')) {
+            if (! $request->boolean('skip')) {
                 $request->validate([
                     'instructors' => 'required|array|min:1',
                     'instructors.*.instructor_name' => 'required|string|max:255',
@@ -273,7 +277,7 @@ class OnboardingController extends Controller
                     'instructors.*.commission_type' => 'required|in:percentage,fixed',
                     'instructors.*.commission_rate' => 'required|numeric|min:0',
                 ]);
-                
+
                 $existingInstructors = \App\Models\Instructor::where('tenant_id', $tenant->id)->with('user')->get();
                 $instructorsInput = $request->input('instructors');
 
@@ -300,7 +304,7 @@ class OnboardingController extends Controller
                             'tenant_id' => $tenant->id,
                             'name' => $instructorData['instructor_name'],
                             'phone' => $instructorData['instructor_phone'],
-                            'email' => $instructorData['instructor_email'] ?: 'instructor_' . time() . '_' . $index . '@' . $tenant->domain,
+                            'email' => $instructorData['instructor_email'] ?: 'instructor_'.time().'_'.$index.'@'.$tenant->domain,
                             'password' => $plainPassword,
                             'role' => 'instructor',
                             'email_verified_at' => now(),
@@ -330,7 +334,7 @@ class OnboardingController extends Controller
                                     )
                                 );
                             } catch (\Exception $e) {
-                                \Illuminate\Support\Facades\Log::error("Failed to send welcome email to instructor: " . $e->getMessage());
+                                \Illuminate\Support\Facades\Log::error('Failed to send welcome email to instructor: '.$e->getMessage());
                             }
                         }
                     }
@@ -346,13 +350,14 @@ class OnboardingController extends Controller
                     }
                 }
             }
-            
+
             $tenant->update(['onboarding_status' => 'step_3']);
+
             return response()->json(['success' => true, 'next_step' => 'step_3']);
         }
 
         if ($step === 'step_3') {
-            if (!$request->boolean('skip')) {
+            if (! $request->boolean('skip')) {
                 $request->validate([
                     'courses' => 'required|array|min:1',
                     'courses.*.course_name' => 'required|string|max:255',
@@ -366,15 +371,15 @@ class OnboardingController extends Controller
 
                 $existingCourses = \App\Models\Course::where('tenant_id', $tenant->id)->orderBy('id', 'asc')->get();
                 $coursesInput = $request->input('courses');
-                
+
                 $instructors = \App\Models\Instructor::where('tenant_id', $tenant->id)
                     ->orderBy('id', 'asc')
                     ->get();
-                
+
                 foreach ($coursesInput as $index => $courseData) {
-                    $instructorIndex = (int)($courseData['instructor_index'] ?? 0);
+                    $instructorIndex = (int) ($courseData['instructor_index'] ?? 0);
                     $instructor = $instructors->get($instructorIndex);
-                        
+
                     if (isset($existingCourses[$index])) {
                         $course = $existingCourses[$index];
                         $course->update([
@@ -394,11 +399,11 @@ class OnboardingController extends Controller
                             'status' => 'active',
                         ]);
                     }
-                    
+
                     foreach ($courseData['schedules'] as $sched) {
                         $startTime = \Carbon\Carbon::createFromFormat('H:i', $sched['time']);
-                        $endTime = !empty($sched['time_end']) ? \Carbon\Carbon::createFromFormat('H:i', $sched['time_end']) : (clone $startTime)->addHours(2);
-                        
+                        $endTime = ! empty($sched['time_end']) ? \Carbon\Carbon::createFromFormat('H:i', $sched['time_end']) : (clone $startTime)->addHours(2);
+
                         \App\Models\Schedule::create([
                             'tenant_id' => $tenant->id,
                             'course_id' => $course->id,
@@ -409,20 +414,21 @@ class OnboardingController extends Controller
                         ]);
                     }
                 }
-                
+
                 if ($existingCourses->count() > count($coursesInput)) {
                     for ($i = count($coursesInput); $i < $existingCourses->count(); $i++) {
                         $existingCourses[$i]->delete();
                     }
                 }
             }
-            
+
             $tenant->update(['onboarding_status' => 'step_4']);
+
             return response()->json(['success' => true, 'next_step' => 'step_4']);
         }
 
         if ($step === 'step_4') {
-            if (!$request->boolean('skip')) {
+            if (! $request->boolean('skip')) {
                 $request->validate([
                     'students' => 'required|array|min:1',
                     'students.*.student_name' => 'required|string|max:255',
@@ -460,12 +466,12 @@ class OnboardingController extends Controller
                         $courseIndices = $studentInput['enroll_course_indices'] ?? [];
                         $saleItems = [];
                         foreach ($courseIndices as $courseIndex) {
-                            $course = $allCourses->get((int)$courseIndex);
+                            $course = $allCourses->get((int) $courseIndex);
                             if ($course) {
                                 $saleItems[] = ['id' => $course->id, 'price' => $course->price];
                             }
                         }
-                        if (!empty($saleItems)) {
+                        if (! empty($saleItems)) {
                             try {
                                 $this->financeService->createSale([
                                     'student_id' => $student->id,
@@ -475,26 +481,26 @@ class OnboardingController extends Controller
                                     'notes' => 'Onboarding Enrollment',
                                 ]);
                             } catch (\Exception $e) {
-                                \Log::error("Onboarding Finance Error: " . $e->getMessage());
+                                \Log::error('Onboarding Finance Error: '.$e->getMessage());
                             }
                         }
                     } catch (\Exception $e) {
                         return response()->json([
-                            'success' => false, 
-                            'message' => "خطأ في تسجيل الطالب ({$studentInput['student_name']}): " . $e->getMessage()
+                            'success' => false,
+                            'message' => "خطأ في تسجيل الطالب ({$studentInput['student_name']}): ".$e->getMessage(),
                         ], 422);
                     }
                 }
             }
-            
-            \Log::info('Onboarding completed for tenant: ' . $tenant->domain);
+
+            \Log::info('Onboarding completed for tenant: '.$tenant->domain);
             $tenant->update(['onboarding_status' => 'completed']);
             $redirectUrl = route('center.dashboard');
-            \Log::info('Redirecting to: ' . $redirectUrl);
+            \Log::info('Redirecting to: '.$redirectUrl);
+
             return response()->json(['success' => true, 'redirect' => $redirectUrl]);
         }
 
         return response()->json(['success' => false, 'message' => 'Invalid step.'], 400);
     }
-
 }

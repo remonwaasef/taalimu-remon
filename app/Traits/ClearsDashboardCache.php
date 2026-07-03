@@ -6,10 +6,10 @@ use App\Queries\CenterAnalyticsQuery;
 
 /**
  * Trait ClearsDashboardCache
- * 
+ *
  * يُمسح كاش لوحة التحكم تلقائياً عند إنشاء/تحديث/حذف نموذج.
  * يُستخدم في Models التي تؤثر على بيانات لوحة التحكم (Sale, Student, Attendance).
- * 
+ *
  * Usage: use ClearsDashboardCache; في الـ Model المطلوب.
  */
 trait ClearsDashboardCache
@@ -35,7 +35,7 @@ trait ClearsDashboardCache
     protected static function clearAnalyticsCache($model): void
     {
         $tenantId = $model->tenant_id ?? (app()->bound('tenant') ? app('tenant')->id : null);
-        
+
         if ($tenantId) {
             CenterAnalyticsQuery::clearCacheForTenant($tenantId);
         }

@@ -15,25 +15,29 @@ return new class extends Migration
             Schema::table('commissions', function (Blueprint $table) {
                 $table->index(['instructor_id', 'status'], 'idx_comm_inst_status');
             });
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         try {
             Schema::table('payments', function (Blueprint $table) {
                 $table->index(['tenant_id', 'paid_at'], 'idx_pay_tenant_paid');
             });
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         try {
             Schema::table('attendances', function (Blueprint $table) {
                 $table->index(['tenant_id', 'student_id', 'session_date'], 'idx_att_tenant_stu_date');
             });
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         try {
             Schema::table('bookings', function (Blueprint $table) {
                 $table->index(['schedule_id', 'status'], 'idx_book_sch_status');
             });
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
     }
 
     /**
@@ -45,24 +49,28 @@ return new class extends Migration
             Schema::table('bookings', function (Blueprint $table) {
                 $table->dropIndex('idx_book_sch_status');
             });
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         try {
             Schema::table('attendances', function (Blueprint $table) {
                 $table->dropIndex('idx_att_tenant_stu_date');
             });
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         try {
             Schema::table('payments', function (Blueprint $table) {
                 $table->dropIndex('idx_pay_tenant_paid');
             });
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         try {
             Schema::table('commissions', function (Blueprint $table) {
                 $table->dropIndex('idx_comm_inst_status');
             });
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
     }
 };

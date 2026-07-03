@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Tenant;
+use App\Models\User;
+use App\Services\TelegramService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Laravel\Socialite\Facades\Socialite;
-use Illuminate\Support\Str;
-use Illuminate\Auth\Events\Registered;
-use App\Services\TelegramService;
 
 class SocialAuthController extends Controller
 {
@@ -41,17 +38,17 @@ class SocialAuthController extends Controller
     {
         try {
             $googleUser = Socialite::driver('google')->user();
-            
+
             // 1. Check if user already exists by google_id → Login directly
             $user = User::where('google_id', $googleUser->id)->first();
             if ($user) {
                 Auth::login($user, true);
-                
+
                 // Redirect based on role or tenant type
                 if ($user->role === 'instructor' || ($user->tenant && $user->tenant->type === 'instructor')) {
                     return redirect()->route('instructor.dashboard', ['tenant' => $user->tenant->domain]);
                 }
-                
+
                 return redirect()->intended('/dashboard');
             }
 
@@ -64,11 +61,11 @@ class SocialAuthController extends Controller
 
             // 3. New user → Pass Google data via encrypted token (session-independent)
             $googleData = [
-                'id'    => htmlspecialchars(strip_tags($googleUser->id)),
-                'name'  => htmlspecialchars(strip_tags($googleUser->name)),
+                'id' => htmlspecialchars(strip_tags($googleUser->id)),
+                'name' => htmlspecialchars(strip_tags($googleUser->name)),
                 'email' => htmlspecialchars(strip_tags($googleUser->email)),
             ];
-            
+
             // Encrypt the Google user data into a URL-safe token
             $token = encrypt(json_encode($googleData));
 
@@ -76,21 +73,21 @@ class SocialAuthController extends Controller
             session(['google_user' => $googleData]);
 
             // Build redirect URL with plan/cycle persisted from session
-            $planParam  = session('selected_plan', '');
+            $planParam = session('selected_plan', '');
             $cycleParam = session('billing_cycle', 'monthly');
             $accountTypeParam = session('account_type', 'center');
             $query = http_build_query(array_filter([
-                'plan'  => $planParam,
+                'plan' => $planParam,
                 'cycle' => $cycleParam,
                 'account_type' => $accountTypeParam,
             ]));
 
-            $redirectUrl = route('google.complete-registration') . ($query ? '?' . $query : '');
+            $redirectUrl = route('google.complete-registration').($query ? '?'.$query : '');
 
             \Log::info('Google Callback Success', [
                 'session_id' => session()->getId(),
                 'google_email' => $googleUser->email,
-                'has_token' => !empty($token),
+                'has_token' => ! empty($token),
             ]);
 
             session()->save();
@@ -98,9 +95,10 @@ class SocialAuthController extends Controller
             return redirect($redirectUrl);
 
         } catch (\Exception $e) {
-            \Log::error('Google Login Error: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString()
+            \Log::error('Google Login Error: '.$e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
             ]);
+
             return redirect()->route('login.portal')
                 ->withErrors(['email' => __('Unable to login with Google. Please try again.')]);
         }
@@ -113,8 +111,8 @@ class SocialAuthController extends Controller
     {
         // Try to get Google user data: first from session, then from encrypted token
         $googleData = session('google_user');
-        
-        if (!$googleData && $request->has('token')) {
+
+        if (! $googleData && $request->has('token')) {
             try {
                 $googleData = json_decode(decrypt($request->query('token')), true);
                 if ($googleData && isset($googleData['id'], $googleData['email'])) {
@@ -131,11 +129,12 @@ class SocialAuthController extends Controller
             }
         }
 
-        if (!$googleData) {
+        if (! $googleData) {
             \Log::warning('Google Complete Registration - No data available', [
                 'session_id' => session()->getId(),
                 'has_token' => $request->has('token'),
             ]);
+
             return redirect()->route('login.portal')
                 ->withErrors(['email' => __('Session expired. Please try again with Google.')]);
         }
@@ -143,13 +142,14 @@ class SocialAuthController extends Controller
         // AUTO-LOGIN FALLBACK: If user already exists (from a previous partial attempt), skip the form
         $user = \App\Models\User::where('email', $googleData['email'])->first();
         if ($user) {
-             Auth::login($user, true);
-             session()->forget('google_user');
-             
-             if ($user->role === 'instructor' || ($user->tenant && $user->tenant->type === 'instructor')) {
-                 return redirect()->route('instructor.dashboard', ['tenant' => $user->tenant->domain]);
-             }
-             return redirect()->intended('/dashboard');
+            Auth::login($user, true);
+            session()->forget('google_user');
+
+            if ($user->role === 'instructor' || ($user->tenant && $user->tenant->type === 'instructor')) {
+                return redirect()->route('instructor.dashboard', ['tenant' => $user->tenant->domain]);
+            }
+
+            return redirect()->intended('/dashboard');
         }
 
         // Fetch packages for the sidebar summary
@@ -164,7 +164,7 @@ class SocialAuthController extends Controller
             $symbols['EGP'] = 'ج.م';
         }
         $currency = $symbols[$suggestedCurrency] ?? $suggestedCurrency;
-        
+
         $packagesData = \App\Models\Package::getDisplayData($packages, $currency);
 
         $selectedPlanSlug = $request->query('plan', session('selected_plan', $packages->firstWhere('is_default', true)?->slug ?? $packages->first()?->slug));
@@ -180,20 +180,20 @@ class SocialAuthController extends Controller
     public function completeRegistration(Request $request, TelegramService $telegram, \App\Services\TenantRegistrationService $registrationService)
     {
         $googleData = session('google_user');
-        
+
         \Log::info('Google Complete Registration Start', [
             'session_id' => session()->getId(),
-            'has_google_user' => !empty($googleData),
-            'google_email' => $googleData['email'] ?? 'N/A'
+            'has_google_user' => ! empty($googleData),
+            'google_email' => $googleData['email'] ?? 'N/A',
         ]);
 
-        if (!$googleData) {
+        if (! $googleData) {
             return redirect()->route('login.portal')
                 ->withErrors(['email' => __('Session expired. Please try again with Google.')]);
         }
 
         // DUPLICATE SUBMISSION GUARD: Prevent creating account twice on double-click
-        $submissionKey = 'google_registration_lock_' . md5($googleData['email']);
+        $submissionKey = 'google_registration_lock_'.md5($googleData['email']);
         if (session()->has($submissionKey)) {
             \Log::warning('Duplicate Google registration submission blocked', ['email' => $googleData['email']]);
             // User already exists from the first submission, redirect them
@@ -205,12 +205,14 @@ class SocialAuthController extends Controller
                 if ($existingUser->role === 'instructor' || ($existingUser->tenant && $existingUser->tenant->type === 'instructor')) {
                     return redirect()->route('instructor.dashboard', ['tenant' => $existingUser->tenant->domain]);
                 }
+
                 return redirect()->intended('/dashboard');
             }
+
             return redirect()->route('login.portal')
                 ->withErrors(['email' => __('Registration is being processed. Please wait.')]);
         }
-        
+
         $validated = $request->validate([
             'account_type' => 'required|in:center,instructor',
             'center_name' => 'required|string|max:255',
@@ -223,13 +225,14 @@ class SocialAuthController extends Controller
 
         // 1. Check if user already exists (safety check for race conditions)
         if (User::where('email', $googleData['email'])->exists()) {
-             $existing = User::where('email', $googleData['email'])->first();
-             if (!$existing->google_id) {
-                 $existing->update(['google_id' => $googleData['id']]);
-             }
-             Auth::login($existing, true);
-             session()->forget('google_user');
-             return redirect()->intended('/dashboard');
+            $existing = User::where('email', $googleData['email'])->first();
+            if (! $existing->google_id) {
+                $existing->update(['google_id' => $googleData['id']]);
+            }
+            Auth::login($existing, true);
+            session()->forget('google_user');
+
+            return redirect()->intended('/dashboard');
         }
 
         // Set submission lock BEFORE the transaction to prevent double-clicks
@@ -265,10 +268,10 @@ class SocialAuthController extends Controller
             // Send WhatsApp OTP (non-critical - account is already created)
             try {
                 $otpCode = $user->generatePhoneVerificationCode();
-                $message = __('messages.otp_sent_sms') . ": {$otpCode}";
+                $message = __('messages.otp_sent_sms').": {$otpCode}";
                 \App\Jobs\SendSystemWhatsAppMessage::dispatch($user->phone, $message);
             } catch (\Exception $otpEx) {
-                \Log::warning('WhatsApp OTP dispatch failed (non-critical): ' . $otpEx->getMessage());
+                \Log::warning('WhatsApp OTP dispatch failed (non-critical): '.$otpEx->getMessage());
             }
 
             // Clear session data ONLY after successful DB commit
@@ -289,7 +292,7 @@ class SocialAuthController extends Controller
                     'billing_cycle' => $billingCycle,
                     'base_price' => $basePrice,
                     'total_amount' => $finalAmount,
-                    'registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . $user->id, config('app.key')),
+                    'registration_hmac' => hash_hmac('sha256', $tenant->id.'|'.$user->id, config('app.key')),
                 ]);
 
                 return redirect()->route('dashboard');
@@ -305,13 +308,13 @@ class SocialAuthController extends Controller
                     'base_price' => $basePrice,
                     'total_amount' => $finalAmount,
                     'discount_amount' => $discountAmount,
-                    'registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . $user->id, config('app.key')),
+                    'registration_hmac' => hash_hmac('sha256', $tenant->id.'|'.$user->id, config('app.key')),
                 ]);
 
                 // Determine Gateway
                 $gatewayName = $request->input('payment_gateway', 'paymob');
                 $gateway = \App\Services\PaymentFactory::make($gatewayName);
-                
+
                 $redirectUrl = $gateway->createCheckoutSession($tenant, $package, $billingCycle, [
                     'total_amount' => $finalAmount,
                     'base_price' => $basePrice,
@@ -325,14 +328,15 @@ class SocialAuthController extends Controller
         } catch (\Exception $e) {
             // Release submission lock on failure so user can try again
             session()->forget($submissionKey);
-            \Log::error('Google Registration Error: ' . $e->getMessage(), [
+            \Log::error('Google Registration Error: '.$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
                 'session_id' => session()->getId(),
                 'has_google_user' => session()->has('google_user'),
                 'input' => $request->except(['password', 'password_confirmation', 'card_pan', 'source', 'cvv']),
             ]);
             // WE DO NOT FORGET google_user HERE, so the user can try again!
-            session()->save(); 
+            session()->save();
+
             return back()->withErrors(['center_name' => __('messages.registration_failed')])->withInput();
         }
     }

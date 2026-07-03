@@ -3,14 +3,14 @@
 namespace Modules\Instructor\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Course;
-use App\Models\Student;
-use App\Models\Schedule;
 use App\Models\Enrollment;
-use App\Models\Sale;
 use App\Models\Payment;
+use App\Models\Sale;
+use App\Models\Schedule;
+use App\Models\Student;
 use App\Services\AttendanceService;
+use Illuminate\Http\Request;
 use Modules\Center\Models\Attendance;
 use Modules\Instructor\Http\Controllers\Traits\ResolvesInstructor;
 
@@ -24,8 +24,8 @@ class InstructorController extends Controller
     public function index()
     {
         $instructor = $this->instructor;
-        
-        if (!$instructor) {
+
+        if (! $instructor) {
             $courses = Course::take(5)->get();
             $totalStudents = Student::count();
             $totalCourses = Course::count();
@@ -34,25 +34,25 @@ class InstructorController extends Controller
                 ->sum('paid_amount');
         } else {
             $courses = $instructor->courses()->withCount('enrollments')->get();
-            $totalStudents = Student::whereHas('enrollments', function($q) use ($instructor) {
+            $totalStudents = Student::whereHas('enrollments', function ($q) use ($instructor) {
                 $q->whereIn('course_id', $instructor->courses->pluck('id'));
             })->count();
             $totalCourses = $courses->count();
-            
+
             $monthlyRevenue = Sale::whereMonth('created_at', now()->month)
                 ->whereYear('created_at', now()->year)
-                ->whereHas('student.enrollments', function($q) use ($instructor) {
+                ->whereHas('student.enrollments', function ($q) use ($instructor) {
                     $q->whereIn('course_id', $instructor->courses->pluck('id'));
                 })->sum('paid_amount');
         }
-        
+
         // Attendance Analytics (Last 7 Days)
         $attendanceData = [];
         $days = [];
         for ($i = 6; $i >= 0; $i--) {
             $date = now()->subDays($i);
             $days[] = $date->translatedFormat('D');
-            
+
             $query = Attendance::whereDate('session_date', $date->toDateString());
             if ($instructor) {
                 $query->whereIn('course_id', $instructor->courses->pluck('id'));
@@ -88,10 +88,10 @@ class InstructorController extends Controller
 
         $user = \App\Models\User::where('qr_identifier', $request->qr_identifier)->first();
 
-        if (!$user || !$user->student) {
+        if (! $user || ! $user->student) {
             return response()->json([
                 'success' => false,
-                'message' => __('instructor::messages.student_not_found')
+                'message' => __('instructor::messages.student_not_found'),
             ], 404);
         }
 
@@ -101,11 +101,11 @@ class InstructorController extends Controller
             ->where('course_id', $course->id)
             ->first();
 
-        if (!$enrollment) {
+        if (! $enrollment) {
             return response()->json([
                 'success' => false,
                 'student_name' => $student->name,
-                'message' => __('instructor::messages.student_not_enrolled')
+                'message' => __('instructor::messages.student_not_enrolled'),
             ], 403);
         }
 
@@ -116,7 +116,7 @@ class InstructorController extends Controller
                 'success' => true,
                 'student_name' => $student->name,
                 'already_marked' => true,
-                'message' => __('instructor::messages.already_attended')
+                'message' => __('instructor::messages.already_attended'),
             ]);
         }
 
@@ -132,17 +132,17 @@ class InstructorController extends Controller
         $msg = __('instructor::messages.attendance_notification', [
             'student' => $student->name,
             'course' => $course->title,
-            'center' => $this->tenant->name
+            'center' => $this->tenant->name,
         ]);
         $phoneToNotify = $student->parent_phone ?: $student->phone;
-        $whatsappUrl = "https://wa.me/" . preg_replace('/[^0-9]/', '', $phoneToNotify) . "?text=" . urlencode($msg);
+        $whatsappUrl = 'https://wa.me/'.preg_replace('/[^0-9]/', '', $phoneToNotify).'?text='.urlencode($msg);
 
         return response()->json([
             'success' => true,
             'student_name' => $student->name,
             'remaining_sessions' => $enrollment->fresh()->remaining_sessions,
             'whatsapp_url' => $whatsappUrl,
-            'message' => __('instructor::messages.scanned_success')
+            'message' => __('instructor::messages.scanned_success'),
         ]);
     }
 
@@ -152,11 +152,11 @@ class InstructorController extends Controller
     public function billing()
     {
         $instructor = $this->instructor;
-        
-        if (!$instructor) {
+
+        if (! $instructor) {
             $students = Student::with(['user', 'sales', 'enrollments.course'])->take(10)->get();
         } else {
-            $students = Student::whereHas('enrollments', function($q) use ($instructor) {
+            $students = Student::whereHas('enrollments', function ($q) use ($instructor) {
                 $q->whereIn('course_id', $instructor->courses->pluck('id'));
             })->with(['user', 'sales', 'enrollments.course'])->get();
         }
@@ -177,7 +177,7 @@ class InstructorController extends Controller
 
         $student = Student::with(['enrollments.course', 'sales'])->findOrFail($request->student_id);
 
-        $totalDue = $student->enrollments->sum(function($enrollment) {
+        $totalDue = $student->enrollments->sum(function ($enrollment) {
             return $enrollment->course->price ?? 0;
         });
         $totalPaid = $student->sales->sum('paid_amount');
@@ -209,23 +209,23 @@ class InstructorController extends Controller
         try {
             $tenant = $this->tenant;
             $tenantSettings = $tenant->settings['email_templates'] ?? [];
-            
+
             $realEmail = null;
             $studentEmail = $student->email ?? ($student->user ? $student->user->email : null);
-            if ($studentEmail && !preg_match('/^std\d+\..+@taalimu\.com$/', $studentEmail)) {
+            if ($studentEmail && ! preg_match('/^std\d+\..+@taalimu\.com$/', $studentEmail)) {
                 $realEmail = $studentEmail;
             }
 
-            if (!empty($tenantSettings['notif_payment_confirmed_enabled']) && ($realEmail || $student->parent_email)) {
+            if (! empty($tenantSettings['notif_payment_confirmed_enabled']) && ($realEmail || $student->parent_email)) {
                 $subject = $tenantSettings['notif_payment_confirmed_subject'] ?? 'تأكيد استلام دفعة';
                 $body = $tenantSettings['notif_payment_confirmed_body'] ?? '';
-                
+
                 $variables = [
                     'اسم_الطالب' => $student->name,
                     'اسم_المركز' => $tenant->name,
-                    'المبلغ_المدفوع' => $request->amount . ' ج.م',
+                    'المبلغ_المدفوع' => $request->amount.' ج.م',
                     'تاريخ_الدفع' => now()->format('Y-m-d'),
-                    'المتبقي' => max(0, $balance - $request->amount) . ' ج.م',
+                    'المتبقي' => max(0, $balance - $request->amount).' ج.م',
                     'طريقة_الدفع' => 'نقدي',
                 ];
 
@@ -234,7 +234,7 @@ class InstructorController extends Controller
                         $subject, $body, $variables, $tenant->name, $student->name
                     ));
                 }
-                
+
                 if ($student->parent_email) {
                     \Illuminate\Support\Facades\Mail::to($student->parent_email)->queue(new \App\Mail\NotifPaymentConfirmedMail(
                         $subject, $body, $variables, $tenant->name, $student->name
@@ -242,7 +242,7 @@ class InstructorController extends Controller
                 }
             }
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Payment confirmation email failed: ' . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error('Payment confirmation email failed: '.$e->getMessage());
         }
 
         return back()->with('success', __('instructor::messages.collection_success', ['amount' => $request->amount, 'student' => $student->name]));
@@ -253,9 +253,9 @@ class InstructorController extends Controller
         $instructor = $this->instructor;
         $courseIds = $instructor ? $instructor->courses->pluck('id') : Course::pluck('id');
 
-        $students = Student::whereHas('enrollments', function($q) use ($courseIds) {
+        $students = Student::whereHas('enrollments', function ($q) use ($courseIds) {
             $q->whereIn('course_id', $courseIds);
-        })->with(['enrollments' => function($q) use ($courseIds) {
+        })->with(['enrollments' => function ($q) use ($courseIds) {
             $q->whereIn('course_id', $courseIds)->with('course');
         }])->get();
 
@@ -265,7 +265,7 @@ class InstructorController extends Controller
                 ->whereIn('course_id', $courseIds)
                 ->where('status', 'present')
                 ->count();
-            
+
             $student->attendance_percentage = $totalSessions > 0 ? round(($attendedSessions / $totalSessions) * 100) : 0;
             $student->attended_count = $attendedSessions;
             $student->total_sessions = $totalSessions;
@@ -279,14 +279,16 @@ class InstructorController extends Controller
         $instructor = $this->instructor;
         $courseIds = $instructor ? $instructor->courses->pluck('id') : Course::pluck('id');
 
-        $students = Student::whereHas('enrollments', function($q) use ($courseIds) {
+        $students = Student::whereHas('enrollments', function ($q) use ($courseIds) {
             $q->whereIn('course_id', $courseIds);
-        })->with(['enrollments' => function($q) use ($courseIds) {
+        })->with(['enrollments' => function ($q) use ($courseIds) {
             $q->whereIn('course_id', $courseIds)->with('course');
         }, 'sales'])->get();
 
         foreach ($students as $student) {
-            $student->total_due = $student->enrollments->sum(function($e) { return $e->course->price ?? 0; });
+            $student->total_due = $student->enrollments->sum(function ($e) {
+                return $e->course->price ?? 0;
+            });
             $student->total_paid = $student->sales->sum('paid_amount');
             $student->balance = $student->total_due - $student->total_paid;
             $student->financial_status = $student->balance <= 0 ? 'paid' : ($student->total_paid > 0 ? 'partial' : 'unpaid');

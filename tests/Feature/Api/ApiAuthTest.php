@@ -12,6 +12,7 @@ class ApiAuthTest extends TestCase
     use RefreshDatabase;
 
     protected $tenant;
+
     protected $user;
 
     protected function setUp(): void
@@ -41,13 +42,13 @@ class ApiAuthTest extends TestCase
         $token = $this->user->createToken('test-token')->plainTextToken;
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token,
+            'Authorization' => 'Bearer '.$token,
         ])->getJson('/api/user');
 
         $response->assertStatus(200)
-                 ->assertJson([
-                     'id' => $this->user->id,
-                     'email' => $this->user->email,
-                 ]);
+            ->assertJson([
+                'id' => $this->user->id,
+                'email' => $this->user->email,
+            ]);
     }
 }

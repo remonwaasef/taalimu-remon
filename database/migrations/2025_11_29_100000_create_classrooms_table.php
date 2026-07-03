@@ -15,15 +15,15 @@ return new class extends Migration
             $table->id();
             $table->string('tenant_id');
             $table->foreignId('branch_id')->nullable()->constrained('branches')->cascadeOnDelete();
-            
+
             $table->string('name')->nullable();
             $table->integer('capacity')->nullable();
-            
+
             $table->string('type')->default('hall'); // hall, lab, virtual
             $table->string('color')->default('#435ebe');
             $table->boolean('is_active')->default(true);
             $table->text('facilities_summary')->nullable();
-            
+
             $table->timestamps();
 
             $table->index('tenant_id');

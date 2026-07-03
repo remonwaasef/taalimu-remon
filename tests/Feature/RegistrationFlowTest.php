@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\Tenant;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -26,7 +25,7 @@ class RegistrationFlowTest extends TestCase
             'password_confirmation' => 'Str0ngP@ssw0rd!1',
             'plan' => 'basic',
             'billing_cycle' => 'monthly',
-            'payment_gateway' => 'test'
+            'payment_gateway' => 'test',
         ];
 
         $response = $this->withSession([
@@ -49,7 +48,7 @@ class RegistrationFlowTest extends TestCase
             'email' => 'admin1@demo.com',
             'domain' => 'demo-center',
             'database_name' => 'edu_central',
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         $payload = [
@@ -62,7 +61,7 @@ class RegistrationFlowTest extends TestCase
             'password_confirmation' => 'Str0ngP@ssw0rd!2',
             'plan' => 'basic',
             'billing_cycle' => 'monthly',
-            'payment_gateway' => 'test'
+            'payment_gateway' => 'test',
         ];
 
         $response = $this->withSession([

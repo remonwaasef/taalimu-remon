@@ -4,9 +4,7 @@ namespace Modules\Admin\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
-use App\Models\TicketMessage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
@@ -20,34 +18,34 @@ class TicketController extends Controller
     public function index()
     {
         // Authorization: Only super admins can manage tickets
-        if (!auth()->user()->hasRole('super_admin')) {
-             abort(403, 'Unauthorized action.');
+        if (! auth()->user()->hasRole('super_admin')) {
+            abort(403, 'Unauthorized action.');
         }
 
         $tickets = Ticket::with(['tenant', 'user'])
             ->latest()
             ->paginate(15);
-            
+
         return view('admin::tickets.index', compact('tickets'));
     }
 
     public function show($ticketId)
     {
         // Authorization
-        if (!auth()->user()->hasRole('super_admin')) {
-             abort(403, 'Unauthorized action.');
+        if (! auth()->user()->hasRole('super_admin')) {
+            abort(403, 'Unauthorized action.');
         }
 
         $ticket = Ticket::with(['tenant', 'messages.user'])->findOrFail($ticketId);
-        
+
         return view('admin::tickets.show', compact('ticket'));
     }
 
     public function reply(Request $request, $ticketId)
     {
         // Authorization
-        if (!auth()->user()->hasRole('super_admin')) {
-             abort(403, 'Unauthorized action.');
+        if (! auth()->user()->hasRole('super_admin')) {
+            abort(403, 'Unauthorized action.');
         }
 
         $request->validate([
@@ -63,8 +61,8 @@ class TicketController extends Controller
     public function close($ticketId)
     {
         // Authorization
-        if (!auth()->user()->hasRole('super_admin')) {
-             abort(403, 'Unauthorized action.');
+        if (! auth()->user()->hasRole('super_admin')) {
+            abort(403, 'Unauthorized action.');
         }
 
         $ticket = Ticket::findOrFail($ticketId);

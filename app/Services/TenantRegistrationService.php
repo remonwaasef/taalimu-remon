@@ -2,15 +2,13 @@
 
 namespace App\Services;
 
+use App\Models\Coupon;
+use App\Models\Package;
 use App\Models\Tenant;
 use App\Models\User;
-use App\Models\Package;
-use App\Models\Coupon;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Auth\Events\Registered;
-use App\Services\TelegramService;
-use Illuminate\Support\Str;
 
 class TenantRegistrationService
 {
@@ -24,10 +22,10 @@ class TenantRegistrationService
     /**
      * Register a new tenant and its initial admin user.
      *
-     * @param array $data Expected keys: center_name, email, phone, account_type, plan, billing_cycle, currency, coupon_code
-     * @param string|null $password Raw password (will be hashed). Null if social auth.
-     * @param string|null $googleId Google ID if social auth.
-     * @param \Stevebauman\Location\Position|null $geoData GeoIP data for location context
+     * @param  array  $data  Expected keys: center_name, email, phone, account_type, plan, billing_cycle, currency, coupon_code
+     * @param  string|null  $password  Raw password (will be hashed). Null if social auth.
+     * @param  string|null  $googleId  Google ID if social auth.
+     * @param  \Stevebauman\Location\Position|null  $geoData  GeoIP data for location context
      * @return array [ 'tenant' => Tenant, 'user' => User ]
      */
     public function registerTenant(array $data, ?string $password = null, ?string $googleId = null, $geoData = null): array
@@ -39,7 +37,7 @@ class TenantRegistrationService
             $package = Package::where('slug', $data['plan'])->first();
             $currency = $data['currency'] ?? 'EGP';
             $regionalPrice = $package->getRegionalPrice($currency);
-            
+
             $basePrice = $regionalPrice['amount'];
             if ($data['billing_cycle'] === 'term') {
                 $basePrice = $regionalPrice['term_price'] ?? ($regionalPrice['amount'] * 4);
@@ -49,12 +47,12 @@ class TenantRegistrationService
 
             $coupon = null;
             $discountAmount = 0;
-            if (!empty($data['coupon_code'])) {
+            if (! empty($data['coupon_code'])) {
                 $coupon = Coupon::where('code', $data['coupon_code'])->first();
                 if ($coupon && $coupon->isValid()) {
                     if ($coupon->package_id && $package && $coupon->package_id !== $package->id) {
                         $coupon = null;
-                    } else if ($package) {
+                    } elseif ($package) {
                         $discountAmount = $coupon->calculateDiscount($basePrice);
                     }
                 } else {
@@ -69,11 +67,11 @@ class TenantRegistrationService
             $tenant = Tenant::forceCreate([
                 'name' => $data['center_name'],
                 'email' => $data['email'],
-                'phone' => $data['phone'], 
+                'phone' => $data['phone'],
                 'domain' => $subdomain,
                 'type' => $data['account_type'],
                 'database_name' => 'edu_central',
-                'status' => 'active', 
+                'status' => 'active',
             ]);
 
             // Save locale and currency
@@ -129,7 +127,7 @@ class TenantRegistrationService
                     'tenant_id' => $tenant->id,
                     'package_id' => $package->id,
                     'name' => 'default',
-                    'stripe_id' => 'sub_trial_' . \Illuminate\Support\Str::random(10),
+                    'stripe_id' => 'sub_trial_'.\Illuminate\Support\Str::random(10),
                     'stripe_status' => 'trialing',
                     'stripe_price' => $package->slug,
                     'quantity' => 1,
@@ -159,7 +157,7 @@ class TenantRegistrationService
         });
 
         // Event & Notification
-        if (!$googleId) {
+        if (! $googleId) {
             event(new Registered($user));
         }
 
@@ -167,7 +165,7 @@ class TenantRegistrationService
         try {
             $this->telegram->sendRegistrationAlert($tenant, $user, '********');
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::error('Registration Telegram alert failed: ' . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error('Registration Telegram alert failed: '.$e->getMessage());
         }
 
         return ['tenant' => $tenant, 'user' => $user];
@@ -190,33 +188,33 @@ class TenantRegistrationService
             'ل' => 'l', 'م' => 'm', 'ن' => 'n',
             'ه' => 'h', 'و' => 'w', 'ي' => 'y',
             'ة' => 'h', 'ى' => 'a', 'ئ' => 'e', 'ء' => 'a', 'ؤ' => 'o',
-            ' ' => '-', '_' => '-'
+            ' ' => '-', '_' => '-',
         ];
 
         // Convert Arabic to English
         $slug = strtr($centerName, $transliteration);
-        
+
         // Clean up: only letters, numbers, and hyphens
         $slug = preg_replace('/[^a-z0-9-]/', '', strtolower($slug));
         $slug = preg_replace('/-+/', '-', $slug);
         $slug = trim($slug, '-');
-        
+
         // Forbidden subdomains
         $forbidden = ['admin', 'www', 'api', 'app', 'dev', 'test', 'mail', 'webmail', 'portal', 'dashboard', 'edu', 'cdn', 'localhost'];
         if (in_array($slug, $forbidden)) {
-            $slug = $slug . '-' . time();
+            $slug = $slug.'-'.time();
         }
 
         // Fallback if empty
         if (empty($slug)) {
-            $slug = 'center-' . time();
+            $slug = 'center-'.time();
         }
 
         $originalSlug = $slug;
         $counter = 1;
 
         while (Tenant::where('domain', $slug)->exists()) {
-            $slug = $originalSlug . '-' . $counter;
+            $slug = $originalSlug.'-'.$counter;
             $counter++;
         }
 

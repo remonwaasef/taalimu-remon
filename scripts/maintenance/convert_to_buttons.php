@@ -16,4 +16,4 @@ $newWaButton = '<button type="button" class="btn btn-xs btn-outline-success roun
 $content = str_replace($oldWaBadge, $newWaButton, $content);
 
 file_put_contents($file, $content);
-echo "Variables converted to buttons!";
+echo 'Variables converted to buttons!';

@@ -17,16 +17,18 @@ class WelcomeStudentMail extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
 
     public string $studentName;
+
     public string $processedBody;
+
     public string $subjectLine;
+
     public string $senderName;
 
     /**
-     * @param Student $student
-     * @param string  $subjectTemplate  Subject with placeholders
-     * @param string  $bodyTemplate     Body with placeholders
-     * @param array   $variables        Key-value pairs for replacement
-     * @param string  $senderName       Sender display name (center/instructor name)
+     * @param  string  $subjectTemplate  Subject with placeholders
+     * @param  string  $bodyTemplate  Body with placeholders
+     * @param  array  $variables  Key-value pairs for replacement
+     * @param  string  $senderName  Sender display name (center/instructor name)
      */
     public function __construct(
         Student $student,
@@ -49,12 +51,12 @@ class WelcomeStudentMail extends Mailable implements ShouldQueue
     public function build()
     {
         return $this->subject($this->subjectLine)
-                    ->view('emails.welcome_student_mail')
-                    ->with([
-                        'studentName'    => $this->studentName,
-                        'messageContent' => $this->processedBody,
-                        'senderName'     => $this->senderName,
-                    ]);
+            ->view('emails.welcome_student_mail')
+            ->with([
+                'studentName' => $this->studentName,
+                'messageContent' => $this->processedBody,
+                'senderName' => $this->senderName,
+            ]);
     }
 
     /**
@@ -63,8 +65,9 @@ class WelcomeStudentMail extends Mailable implements ShouldQueue
     public static function replacePlaceholders(string $template, array $variables): string
     {
         foreach ($variables as $key => $value) {
-            $template = str_replace('{' . $key . '}', $value ?? '', $template);
+            $template = str_replace('{'.$key.'}', $value ?? '', $template);
         }
+
         return $template;
     }
 }

@@ -8,10 +8,6 @@ trait HasRoleCheck
 {
     /**
      * Check if the user has any of the given roles, checking both Spatie roles and the simple role column.
-     *
-     * @param User $user
-     * @param array|string $roles
-     * @return bool
      */
     protected function hasAnyRole(User $user, array|string $roles): bool
     {

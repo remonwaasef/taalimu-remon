@@ -2,7 +2,7 @@
 
 $files = [
     'd:/new project/antigravty/edu/edu/Modules/Center/resources/views/settings/index.blade.php',
-    'd:/new project/antigravty/edu/edu/app/Console/Commands/SendPaymentRemindersCommand.php'
+    'd:/new project/antigravty/edu/edu/app/Console/Commands/SendPaymentRemindersCommand.php',
 ];
 
 // 1. Update index.blade.php (UI)
@@ -18,7 +18,7 @@ $mappings = [
     '{group_name}' => '{اسم_المجموعة}',
     '{course_price}' => '{سعر_الدورة}',
     '{entry_link}' => '{رابط_الدخول}',
-    '{password}' => '{كلمة_المرور}'
+    '{password}' => '{كلمة_المرور}',
 ];
 
 foreach ($mappings as $old => $new) {
@@ -96,4 +96,4 @@ $content = str_replace($oldWaLogic, $newWaLogic, $content);
 
 file_put_contents($files[1], $content);
 
-echo "Variables updated successfully!";
+echo 'Variables updated successfully!';

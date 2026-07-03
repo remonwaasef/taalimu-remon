@@ -43,7 +43,7 @@ class IssueTimeline extends Model
 
     public function getTypeIconAttribute(): string
     {
-        return match($this->type) {
+        return match ($this->type) {
             'created' => '🆕',
             'status_changed' => '🔄',
             'assigned' => '👤',
@@ -62,7 +62,7 @@ class IssueTimeline extends Model
 
     public function getTypeTextAttribute(): string
     {
-        return match($this->type) {
+        return match ($this->type) {
             'created' => __('Issue created'),
             'status_changed' => __('Status changed'),
             'assigned' => __('Assigned to'),
@@ -82,8 +82,8 @@ class IssueTimeline extends Model
     public function getDescriptionAttribute(): string
     {
         $userName = $this->user?->name ?? __('System');
-        
-        return match($this->type) {
+
+        return match ($this->type) {
             'status_changed' => sprintf(
                 '%s changed status from "%s" to "%s"',
                 $userName,

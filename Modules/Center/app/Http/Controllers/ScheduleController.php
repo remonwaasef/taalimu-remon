@@ -19,14 +19,15 @@ class ScheduleController extends Controller
     {
         $this->authorize('viewAny', Schedule::class);
         $user = auth()->user();
-        
+
         $query = Schedule::with(['course', 'classroom', 'instructor', 'bookings'])->latest();
 
-        if ($user->hasRole('instructor') && !$user->hasRole('center_admin')) {
+        if ($user->hasRole('instructor') && ! $user->hasRole('center_admin')) {
             $query->where('instructor_id', $user->instructor->id ?? 0);
         }
 
         $schedules = $query->paginate(10);
+
         return view('center::schedules.index', compact('schedules'));
     }
 
@@ -36,7 +37,7 @@ class ScheduleController extends Controller
         $coursesQuery = Course::select('id', 'title', 'instructor_id');
         $instructorsQuery = Instructor::select('id', 'name', 'email');
 
-        if ($user->hasRole('instructor') && !$user->hasRole('center_admin')) {
+        if ($user->hasRole('instructor') && ! $user->hasRole('center_admin')) {
             $instructorId = $user->instructor->id ?? 0;
             $coursesQuery->where('instructor_id', $instructorId);
             $instructorsQuery->where('id', $instructorId);
@@ -55,6 +56,7 @@ class ScheduleController extends Controller
     public function create()
     {
         $this->authorize('create', Schedule::class);
+
         return view('center::schedules.create', $this->getFormData());
     }
 
@@ -65,16 +67,16 @@ class ScheduleController extends Controller
     {
         $this->authorize('create', Schedule::class);
         $validated = $request->validate([
-                        'course_id' => 'nullable|exists:courses,id',
+            'course_id' => 'nullable|exists:courses,id',
 
-                        'classroom_id' => 'nullable|exists:classrooms,id',
+            'classroom_id' => 'nullable|exists:classrooms,id',
 
             'instructor_id' => 'nullable|exists:instructors,id',
-                        'day_of_week' => 'nullable|integer|between:0,6',
+            'day_of_week' => 'nullable|integer|between:0,6',
 
-                        'start_time' => 'nullable',
+            'start_time' => 'nullable',
 
-                        'end_time' => 'nullable|after:start_time',
+            'end_time' => 'nullable|after:start_time',
 
             'max_students' => 'nullable|integer|min:1',
         ]);
@@ -97,8 +99,9 @@ class ScheduleController extends Controller
     public function edit(Schedule $schedule)
     {
         $this->authorize('update', $schedule);
+
         return view('center::schedules.edit', array_merge(
-            ['schedule' => $schedule], 
+            ['schedule' => $schedule],
             $this->getFormData()
         ));
     }
@@ -110,16 +113,16 @@ class ScheduleController extends Controller
     {
         $this->authorize('update', $schedule);
         $validated = $request->validate([
-                        'course_id' => 'nullable|exists:courses,id',
+            'course_id' => 'nullable|exists:courses,id',
 
-                        'classroom_id' => 'nullable|exists:classrooms,id',
+            'classroom_id' => 'nullable|exists:classrooms,id',
 
             'instructor_id' => 'nullable|exists:instructors,id',
-                        'day_of_week' => 'nullable|integer|between:0,6',
+            'day_of_week' => 'nullable|integer|between:0,6',
 
-                        'start_time' => 'nullable',
+            'start_time' => 'nullable',
 
-                        'end_time' => 'nullable|after:start_time',
+            'end_time' => 'nullable|after:start_time',
 
             'max_students' => 'nullable|integer|min:1',
         ]);
@@ -167,7 +170,7 @@ class ScheduleController extends Controller
         }
 
         // Classroom conflict
-        if (!empty($data['classroom_id'])) {
+        if (! empty($data['classroom_id'])) {
             $classroomConflict = (clone $query)->where('classroom_id', $data['classroom_id'])->with('course')->first();
             if ($classroomConflict) {
                 return __('center::schedules.classroom_conflict', ['course' => $classroomConflict->course->title]);
@@ -175,7 +178,7 @@ class ScheduleController extends Controller
         }
 
         // Instructor conflict
-        if (!empty($data['instructor_id'])) {
+        if (! empty($data['instructor_id'])) {
             $instructorConflict = (clone $query)->where('instructor_id', $data['instructor_id'])->with('course')->first();
             if ($instructorConflict) {
                 return __('center::schedules.instructor_conflict', ['course' => $instructorConflict->course->title]);

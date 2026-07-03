@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Package;
 use App\Models\SiteSetting;
-use App\Models\Subscription;
 use App\Models\SubscriptionLog;
 use App\Models\Tenant;
 use App\Models\User;
@@ -51,9 +50,9 @@ class PaymentProcessingService
 
         $subscriptionData = [
             'gateway' => $gateway,
-            'stripe_id' => "sub_{$gateway}_" . ($transactionId ?: Str::random(10)),
+            'stripe_id' => "sub_{$gateway}_".($transactionId ?: Str::random(10)),
             'stripe_status' => 'active',
-            'stripe_price' => "price_{$gateway}_" . ($package->slug ?? 'unknown'),
+            'stripe_price' => "price_{$gateway}_".($package->slug ?? 'unknown'),
             'quantity' => 1,
             'billing_cycle' => $billingCycle,
             'base_price' => $basePrice,
@@ -97,7 +96,7 @@ class PaymentProcessingService
 
         $telegram->sendRegistrationAlert($tenant, $user, $paymentLabel);
 
-        if (!Auth::check() && $user) {
+        if (! Auth::check() && $user) {
             Auth::login($user, true);
         }
 
@@ -109,7 +108,7 @@ class PaymentProcessingService
      */
     public function processCoupon(?int $couponId, Tenant $tenant, float $discountAmount): void
     {
-        if (!$couponId) {
+        if (! $couponId) {
             return;
         }
 
@@ -119,7 +118,7 @@ class PaymentProcessingService
             try {
                 app(TelegramService::class)->sendCouponAlert($tenant, $coupon, $discountAmount);
             } catch (\Throwable $e) {
-                Log::warning("Failed to send coupon alert: " . $e->getMessage());
+                Log::warning('Failed to send coupon alert: '.$e->getMessage());
             }
         }
     }
@@ -130,7 +129,7 @@ class PaymentProcessingService
      */
     public function restoreContextFromMerchantOrder(string $merchantOrderId): ?array
     {
-        if (!str_starts_with($merchantOrderId, 'tx_')) {
+        if (! str_starts_with($merchantOrderId, 'tx_')) {
             return null;
         }
 

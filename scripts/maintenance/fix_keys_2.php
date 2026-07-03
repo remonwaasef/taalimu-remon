@@ -1,7 +1,7 @@
 <?php
 
 $files = [
-    'd:/new project/antigravty/edu/edu/add_placeholders.php'
+    'd:/new project/antigravty/edu/edu/add_placeholders.php',
 ];
 
 $mappings = [
@@ -19,7 +19,7 @@ $mappings = [
     'اسم_ولي_الأمر' => 'parent_name',
     'المرحلة' => 'stage',
     'تاريخ_الدفع' => 'payment_date',
-    'طريقة_الدفع' => 'payment_method'
+    'طريقة_الدفع' => 'payment_method',
 ];
 
 foreach ($files as $file) {

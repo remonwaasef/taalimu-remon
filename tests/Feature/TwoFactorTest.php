@@ -2,25 +2,27 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Tenant;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use PragmaRX\Google2FA\Google2FA;
+use Tests\TestCase;
 
 class TwoFactorTest extends TestCase
 {
     use RefreshDatabase;
 
     protected $tenant;
+
     protected $user;
+
     protected $google2fa;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->google2fa = new Google2FA();
+        $this->google2fa = new Google2FA;
 
         // Setup Tenant with onboarding completed
         $this->tenant = $this->createTenant([
@@ -33,7 +35,7 @@ class TwoFactorTest extends TestCase
         $this->user = User::factory()->create([
             'email' => 'user@test.com',
             'tenant_id' => $this->tenant->id,
-            'role' => 'center_admin'
+            'role' => 'center_admin',
         ]);
     }
 
@@ -60,7 +62,7 @@ class TwoFactorTest extends TestCase
         $otp = $this->google2fa->getCurrentOtp($secret);
 
         $response = $this->post(route('2fa.store', ['tenant' => $this->tenant->domain]), [
-            'one_time_password' => $otp
+            'one_time_password' => $otp,
         ]);
 
         $response->assertRedirect(route('center.dashboard', ['tenant' => $this->tenant->domain]));
@@ -80,7 +82,7 @@ class TwoFactorTest extends TestCase
         $this->user->forceFill(['google2fa_secret' => $secret])->save();
 
         $response = $this->post(route('2fa.store', ['tenant' => $this->tenant->domain]), [
-            'one_time_password' => '000000' // Invalid OTP
+            'one_time_password' => '000000', // Invalid OTP
         ]);
 
         $response->assertRedirect();
@@ -97,7 +99,7 @@ class TwoFactorTest extends TestCase
         $secret = $this->google2fa->generateSecretKey();
         $this->user->forceFill([
             'google2fa_secret' => $secret,
-            'google2fa_enabled' => true
+            'google2fa_enabled' => true,
         ])->save();
 
         $this->actingAs($this->user);
@@ -115,7 +117,7 @@ class TwoFactorTest extends TestCase
         $secret = $this->google2fa->generateSecretKey();
         $this->user->forceFill([
             'google2fa_secret' => $secret,
-            'google2fa_enabled' => true
+            'google2fa_enabled' => true,
         ])->save();
 
         $this->actingAs($this->user);
@@ -124,7 +126,7 @@ class TwoFactorTest extends TestCase
         $otp = $this->google2fa->getCurrentOtp($secret);
 
         $response = $this->post(route('2fa.verify.post', ['tenant' => $this->tenant->domain]), [
-            'one_time_password' => $otp
+            'one_time_password' => $otp,
         ]);
 
         $response->assertRedirect(route('center.dashboard', ['tenant' => $this->tenant->domain]));

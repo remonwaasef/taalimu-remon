@@ -19,7 +19,7 @@ class Subscription extends CashierSubscription
                     \Illuminate\Support\Facades\Cache::forget("taalimu:tenancy:domain:{$subscription->tenant->domain}");
                     \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$subscription->tenant->domain}");
                 } catch (\Throwable $e) {
-                    \Illuminate\Support\Facades\Log::warning("Subscription Model (saved event): Failed to clear tenant cache for domain {$subscription->tenant->domain}. Error: " . $e->getMessage());
+                    \Illuminate\Support\Facades\Log::warning("Subscription Model (saved event): Failed to clear tenant cache for domain {$subscription->tenant->domain}. Error: ".$e->getMessage());
                 }
             }
         });
@@ -30,7 +30,7 @@ class Subscription extends CashierSubscription
                     \Illuminate\Support\Facades\Cache::forget("taalimu:tenancy:domain:{$subscription->tenant->domain}");
                     \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$subscription->tenant->domain}");
                 } catch (\Throwable $e) {
-                    \Illuminate\Support\Facades\Log::warning("Subscription Model (deleted event): Failed to clear tenant cache for domain {$subscription->tenant->domain}. Error: " . $e->getMessage());
+                    \Illuminate\Support\Facades\Log::warning("Subscription Model (deleted event): Failed to clear tenant cache for domain {$subscription->tenant->domain}. Error: ".$e->getMessage());
                 }
             }
         });
@@ -73,10 +73,10 @@ class Subscription extends CashierSubscription
         if ($this->gateway === 'paypal') {
             return $this->belongsTo(Package::class, 'paypal_plan_id', 'paypal_plan_id');
         }
-        
+
         $relation = $this->belongsTo(Package::class, 'stripe_price', 'stripe_price_id');
-        
-        // If we're eager loading, we can't easily fallback here, 
+
+        // If we're eager loading, we can't easily fallback here,
         // but we'll handle it in the SubscriptionService or via an attribute.
         return $relation;
     }
@@ -87,11 +87,14 @@ class Subscription extends CashierSubscription
     public function getResolvedPackageAttribute()
     {
         $package = $this->package;
-        if ($package) return $package;
+        if ($package) {
+            return $package;
+        }
 
         // Fallback for demo price IDs: price_demo_{slug}
         if ($this->gateway === 'stripe' && str_starts_with($this->stripe_price, 'price_demo_')) {
             $slug = str_replace('price_demo_', '', $this->stripe_price);
+
             return Package::where('slug', $slug)->first();
         }
 

@@ -14,19 +14,19 @@ return new class extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tenant_id')->nullable()->index()->constrained()->cascadeOnDelete();
-            
+
             $table->foreignId('quiz_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->nullable()->constrained('question_categories')->nullOnDelete();
-            
+
             $table->text('content');
             $table->text('explanation')->nullable();
-            
+
             $table->enum('type', ['mcq', 'true_false'])->default('mcq');
             $table->enum('difficulty', ['easy', 'medium', 'hard'])->default('medium');
-            
+
             $table->integer('points')->default(1);
             $table->timestamps();
-            
+
             $table->index(['tenant_id', 'difficulty']);
         });
     }

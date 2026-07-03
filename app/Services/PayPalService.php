@@ -8,8 +8,11 @@ use Illuminate\Support\Facades\Log;
 class PayPalService
 {
     protected $client;
+
     protected $baseUrl;
+
     protected $clientId;
+
     protected $clientSecret;
 
     public function __construct()
@@ -73,7 +76,8 @@ class PayPalService
 
             return json_decode($response->getBody(), true);
         } catch (\Exception $e) {
-            Log::error('PayPal Subscription Creation Error: ' . $e->getMessage());
+            Log::error('PayPal Subscription Creation Error: '.$e->getMessage());
+
             return null;
         }
     }
@@ -92,7 +96,8 @@ class PayPalService
 
             return json_decode($response->getBody(), true);
         } catch (\Exception $e) {
-            Log::error('PayPal Subscription Details Error: ' . $e->getMessage());
+            Log::error('PayPal Subscription Details Error: '.$e->getMessage());
+
             return null;
         }
     }
@@ -129,10 +134,11 @@ class PayPalService
 
             return json_decode($response->getBody(), true);
         } catch (\Exception $e) {
-            Log::error('PayPal Order Creation Error: ' . $e->getMessage());
+            Log::error('PayPal Order Creation Error: '.$e->getMessage());
             if (method_exists($e, 'getResponse') && $e->getResponse()) {
-                Log::error('PayPal Error Response: ' . $e->getResponse()->getBody()->getContents());
+                Log::error('PayPal Error Response: '.$e->getResponse()->getBody()->getContents());
             }
+
             return null;
         }
     }
@@ -151,7 +157,8 @@ class PayPalService
 
             return json_decode($response->getBody(), true);
         } catch (\Exception $e) {
-            Log::error('PayPal Order Capture Error: ' . $e->getMessage());
+            Log::error('PayPal Order Capture Error: '.$e->getMessage());
+
             return null;
         }
     }
@@ -162,8 +169,9 @@ class PayPalService
             $token = $this->getAccessToken();
             $webhookId = config('services.paypal.webhook_id');
 
-            if (!$webhookId) {
+            if (! $webhookId) {
                 Log::warning('PayPal Webhook ID is not configured.');
+
                 return false;
             }
 
@@ -184,9 +192,11 @@ class PayPalService
             ]);
 
             $result = json_decode($response->getBody(), true);
+
             return isset($result['verification_status']) && $result['verification_status'] === 'SUCCESS';
         } catch (\Exception $e) {
-            Log::error('PayPal Webhook Verification Error: ' . $e->getMessage());
+            Log::error('PayPal Webhook Verification Error: '.$e->getMessage());
+
             return false;
         }
     }

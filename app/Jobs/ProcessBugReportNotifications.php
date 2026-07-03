@@ -18,9 +18,11 @@ class ProcessBugReportNotifications implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $report;
+
     public $debugError;
 
     public $tries = 3;
+
     public $backoff = [60, 120, 300];
 
     /**
@@ -56,11 +58,11 @@ class ProcessBugReportNotifications implements ShouldQueue
     private function copyToPublicStorage(string $fileName): void
     {
         try {
-            $sourcePath = storage_path('app/public/' . $fileName);
-            $destPath = public_path('storage/' . $fileName);
+            $sourcePath = storage_path('app/public/'.$fileName);
+            $destPath = public_path('storage/'.$fileName);
             $destDir = dirname($destPath);
 
-            if (!file_exists($destDir)) {
+            if (! file_exists($destDir)) {
                 mkdir($destDir, 0755, true);
             }
 
@@ -71,7 +73,7 @@ class ProcessBugReportNotifications implements ShouldQueue
                 }
             }
         } catch (\Exception $e) {
-            Log::warning('Failed to copy screenshot to public storage: ' . $e->getMessage());
+            Log::warning('Failed to copy screenshot to public storage: '.$e->getMessage());
         }
     }
 
@@ -84,14 +86,14 @@ class ProcessBugReportNotifications implements ShouldQueue
             $botToken = config('services.telegram.bot_token');
             $chatId = config('services.telegram.admin_chat_id');
 
-            if (!$botToken || !$chatId) {
+            if (! $botToken || ! $chatId) {
                 return;
             }
 
             $tenant = $report->tenant;
             $user = $report->user;
 
-            $priorityEmoji = match($report->priority) {
+            $priorityEmoji = match ($report->priority) {
                 'critical' => '🔴',
                 'high' => '🟠',
                 'medium' => '🟡',
@@ -99,7 +101,7 @@ class ProcessBugReportNotifications implements ShouldQueue
                 default => '⚪',
             };
 
-            $categoryEmoji = match($report->category) {
+            $categoryEmoji = match ($report->category) {
                 'bug' => '🐛',
                 'suggestion' => '💡',
                 'ui_issue' => '🎨',
@@ -114,7 +116,7 @@ class ProcessBugReportNotifications implements ShouldQueue
             $message .= "{$priorityEmoji} *الأولوية:* {$report->priority}\n\n";
             $message .= "📌 *العنوان:* {$report->title}\n\n";
             $message .= "📝 *الوصف:*\n{$report->description}\n\n";
-            
+
             if ($debugError) {
                 $message .= "⚠️ *خطأ في الصورة:* `{$debugError}`\n\n";
             } else {
@@ -125,13 +127,13 @@ class ProcessBugReportNotifications implements ShouldQueue
             }
 
             $message .= "━━━━━━━━━━━━━━━━━━━━\n";
-            $message .= "🏢 *المركز:* " . ($tenant?->name ?? 'N/A') . "\n";
-            $message .= "👤 *المستخدم:* " . ($user?->name ?? 'N/A') . "\n";
-            $message .= "📧 *الإيميل:* " . ($user?->email ?? 'N/A') . "\n";
+            $message .= '🏢 *المركز:* '.($tenant?->name ?? 'N/A')."\n";
+            $message .= '👤 *المستخدم:* '.($user?->name ?? 'N/A')."\n";
+            $message .= '📧 *الإيميل:* '.($user?->email ?? 'N/A')."\n";
             $message .= "🔗 *الصفحة:* {$report->page_url}\n";
-            $message .= "📱 *المتصفح:* " . ($report->browser_info['browser'] ?? 'N/A') . "\n";
+            $message .= '📱 *المتصفح:* '.($report->browser_info['browser'] ?? 'N/A')."\n";
             $message .= "🆔 *رقم البلاغ:* #{$report->id}\n";
-            $message .= "━━━━━━━━━━━━━━━━━━━━";
+            $message .= '━━━━━━━━━━━━━━━━━━━━';
 
             $fullRealPath = $report->screenshot ? (Storage::disk('public')->path($report->screenshot)) : null;
 
@@ -153,7 +155,7 @@ class ProcessBugReportNotifications implements ShouldQueue
                 ]);
             }
         } catch (\Exception $e) {
-            Log::warning('Telegram bug report notification failed: ' . $e->getMessage());
+            Log::warning('Telegram bug report notification failed: '.$e->getMessage());
         }
     }
 
@@ -165,7 +167,7 @@ class ProcessBugReportNotifications implements ShouldQueue
         try {
             $developerEmail = config('mail.bug_report_address', config('mail.from.address'));
 
-            if (!$developerEmail) {
+            if (! $developerEmail) {
                 return;
             }
 
@@ -178,28 +180,28 @@ class ProcessBugReportNotifications implements ShouldQueue
             $body .= "<div style='background: linear-gradient(135deg, #059669, #047857); color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px;'>";
             $body .= "<h2 style='margin: 0;'>🚨 بلاغ جديد - تعليمُه</h2>";
             $body .= "<p style='margin: 5px 0 0; opacity: 0.9;'>#{$report->id} | {$report->priority} | {$report->category}</p>";
-            $body .= "</div>";
+            $body .= '</div>';
 
             $body .= "<div style='background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;'>";
             $body .= "<h3 style='color: #1e293b;'>📌 {$report->title}</h3>";
             $body .= "<p style='color: #475569; line-height: 1.8;'>{$report->description}</p>";
             $body .= "<hr style='border: none; border-top: 1px solid #e2e8f0;'>";
             $body .= "<table style='width: 100%; color: #64748b; font-size: 14px;'>";
-            $body .= "<tr><td><strong>🏢 المركز:</strong></td><td>" . ($tenant?->name ?? 'N/A') . "</td></tr>";
-            $body .= "<tr><td><strong>👤 المستخدم:</strong></td><td>" . ($user?->name ?? 'N/A') . " (" . ($user?->email ?? 'N/A') . ")</td></tr>";
+            $body .= '<tr><td><strong>🏢 المركز:</strong></td><td>'.($tenant?->name ?? 'N/A').'</td></tr>';
+            $body .= '<tr><td><strong>👤 المستخدم:</strong></td><td>'.($user?->name ?? 'N/A').' ('.($user?->email ?? 'N/A').')</td></tr>';
             $body .= "<tr><td><strong>🔗 الصفحة:</strong></td><td><a href='{$report->page_url}'>{$report->page_url}</a></td></tr>";
-            $body .= "<tr><td><strong>📱 المتصفح:</strong></td><td>" . ($report->browser_info['browser'] ?? 'N/A') . " / " . ($report->browser_info['os'] ?? 'N/A') . "</td></tr>";
+            $body .= '<tr><td><strong>📱 المتصفح:</strong></td><td>'.($report->browser_info['browser'] ?? 'N/A').' / '.($report->browser_info['os'] ?? 'N/A').'</td></tr>';
             $body .= "<tr><td><strong>🕐 الوقت:</strong></td><td>{$report->created_at}</td></tr>";
-            $body .= "</table>";
-            $body .= "</div></div>";
+            $body .= '</table>';
+            $body .= '</div></div>';
 
             Mail::html($body, function ($mail) use ($developerEmail, $subject) {
                 $mail->to($developerEmail)
-                     ->subject($subject);
+                    ->subject($subject);
             });
 
         } catch (\Exception $e) {
-            Log::warning('Email bug report notification failed: ' . $e->getMessage());
+            Log::warning('Email bug report notification failed: '.$e->getMessage());
         }
     }
 }

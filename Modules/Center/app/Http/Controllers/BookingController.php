@@ -8,7 +8,6 @@ use App\Models\Schedule;
 use App\Models\Student;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class BookingController extends Controller
 {
@@ -26,7 +25,7 @@ class BookingController extends Controller
 
         $schedule = Schedule::where('tenant_id', app('tenant')->id)->findOrFail($request->schedule_id);
         $student = Student::where('tenant_id', app('tenant')->id)->findOrFail($request->student_id);
-        
+
         // Check if student is already booked for this session
         $exists = Booking::where('student_id', $request->student_id)
             ->where('schedule_id', $request->schedule_id)

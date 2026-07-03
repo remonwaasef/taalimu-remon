@@ -70,6 +70,7 @@ class DuplicateDetector
     public function setTimeWindow(int $hours): self
     {
         $this->timeWindowHours = $hours;
+
         return $this;
     }
 }

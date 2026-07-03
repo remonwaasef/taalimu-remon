@@ -4,11 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Scopes\TenantScope;
 
 class Expense extends Model
 {
-    use HasFactory, \App\Traits\IdentifyTenant;
+    use \App\Traits\IdentifyTenant, HasFactory;
 
     protected $fillable = [
         'tenant_id',

@@ -28,7 +28,7 @@ return new class extends Migration
             $table->boolean('is_co_instructor')->default(false);
             $table->string('image')->nullable();
             $table->timestamps();
-            
+
             $table->index(['tenant_id', 'status']);
         });
     }

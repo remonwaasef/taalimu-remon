@@ -2,9 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
-
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -20,11 +19,13 @@ return new class extends Migration
                     return true;
                 }
             }
+
             return false;
         }
 
         try {
             $indexes = DB::select("SHOW INDEX FROM `{$table}` WHERE Key_name = ?", [$indexName]);
+
             return count($indexes) > 0;
         } catch (\Throwable $e) {
             return false;
@@ -41,7 +42,7 @@ return new class extends Migration
             return in_array('phone', $index['columns']);
         });
 
-        if (!$usersHasPhoneIndex) {
+        if (! $usersHasPhoneIndex) {
             Schema::table('users', function (Blueprint $table) {
                 $table->index('phone', 'users_phone_index');
             });
@@ -51,7 +52,7 @@ return new class extends Migration
             return in_array('phone', $index['columns']);
         });
 
-        if (!$studentsHasPhoneIndex) {
+        if (! $studentsHasPhoneIndex) {
             Schema::table('students', function (Blueprint $table) {
                 $table->index('phone', 'students_phone_index');
             });

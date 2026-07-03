@@ -2,11 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Student;
+use App\Models\Course;
 use App\Models\Sale;
 use App\Models\SaleItem;
-use App\Models\Course;
-use App\Models\Enrollment;
+use App\Models\Student;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -40,28 +39,32 @@ class FixMissingStudentInvoices extends Command
 
         if ($students->isEmpty()) {
             $this->info('No students found with missing invoices.');
+
             return 0;
         }
 
         $this->info("Found {$students->count()} student(s) with enrollments but no invoice:");
 
         foreach ($students as $student) {
-            $this->line("  → [{$student->tenant_id}] {$student->name} (ID: {$student->id}) - " . $student->enrollments->count() . " enrollment(s)");
+            $this->line("  → [{$student->tenant_id}] {$student->name} (ID: {$student->id}) - ".$student->enrollments->count().' enrollment(s)');
 
-            if (!$isDryRun) {
+            if (! $isDryRun) {
                 DB::transaction(function () use ($student) {
                     foreach ($student->enrollments as $enrollment) {
                         $course = $enrollment->course;
-                        if (!$course) continue;
+                        if (! $course) {
+                            continue;
+                        }
 
                         // Check if a sale already exists for this student+course
                         $exists = Sale::where('tenant_id', $student->tenant_id)
                             ->where('student_id', $student->id)
-                            ->whereHas('items', fn($q) => $q->where('item_id', $course->id)->where('item_type', Course::class))
+                            ->whereHas('items', fn ($q) => $q->where('item_id', $course->id)->where('item_type', Course::class))
                             ->exists();
 
                         if ($exists) {
                             $this->line("    ✓ Sale already exists for course: {$course->title}");
+
                             continue;
                         }
 
@@ -69,25 +72,25 @@ class FixMissingStudentInvoices extends Command
 
                         // Create the sale (pending - unpaid)
                         $sale = Sale::create([
-                            'tenant_id'      => $student->tenant_id,
-                            'student_id'     => $student->id,
-                            'subtotal_amount'=> $price,
-                            'discount_amount'=> 0,
-                            'tax_amount'     => 0,
-                            'total_amount'   => $price,
-                            'paid_amount'    => 0,
-                            'status'         => $price > 0 ? 'pending' : 'paid',
+                            'tenant_id' => $student->tenant_id,
+                            'student_id' => $student->id,
+                            'subtotal_amount' => $price,
+                            'discount_amount' => 0,
+                            'tax_amount' => 0,
+                            'total_amount' => $price,
+                            'paid_amount' => 0,
+                            'status' => $price > 0 ? 'pending' : 'paid',
                             'payment_method' => 'cash',
-                            'notes'          => 'تم إنشاؤها تلقائياً لتصحيح سجلات التسجيل',
+                            'notes' => 'تم إنشاؤها تلقائياً لتصحيح سجلات التسجيل',
                         ]);
 
                         // Create the sale item
                         SaleItem::create([
-                            'sale_id'   => $sale->id,
+                            'sale_id' => $sale->id,
                             'item_type' => Course::class,
-                            'item_id'   => $course->id,
-                            'price'     => $price,
-                            'quantity'  => 1,
+                            'item_id' => $course->id,
+                            'price' => $price,
+                            'quantity' => 1,
                         ]);
 
                         $this->info("    ✓ Created invoice #{$sale->id} for {$student->name} → {$course->title} ({$price})");

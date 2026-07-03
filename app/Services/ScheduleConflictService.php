@@ -11,8 +11,7 @@ class ScheduleConflictService
      * Check for any conflicts with the given schedule data.
      * Returns an array of conflict messages, empty if no conflicts.
      *
-     * @param array $scheduleData
-     * @param int|null $excludeCourseId Exclude schedules from this course (for updates)
+     * @param  int|null  $excludeCourseId  Exclude schedules from this course (for updates)
      * @return array Array of conflict messages
      */
     public function validateSchedule(array $scheduleData, ?int $excludeCourseId = null): array
@@ -25,7 +24,7 @@ class ScheduleConflictService
         $startTime = $scheduleData['start_time'] ?? null;
         $endTime = $scheduleData['end_time'] ?? null;
 
-        if (!$dayOfWeek || !$startTime || !$endTime) {
+        if (! $dayOfWeek || ! $startTime || ! $endTime) {
             return $conflicts;
         }
 
@@ -69,7 +68,7 @@ class ScheduleConflictService
                 // Check for time overlap
                 $q->where(function ($inner) use ($startTime, $endTime) {
                     $inner->where('start_time', '<', $endTime)
-                          ->where('end_time', '>', $startTime);
+                        ->where('end_time', '>', $startTime);
                 });
             });
 
@@ -84,12 +83,12 @@ class ScheduleConflictService
             $classroomName = $conflicting->classroom->name ?? 'قاعة غير معروفة';
             $startTimeFormatted = Carbon::parse($conflicting->start_time)->format('h:i A');
             $endTimeFormatted = Carbon::parse($conflicting->end_time)->format('h:i A');
-            
+
             return __('center::schedules.classroom_conflict_detailed', [
                 'classroom' => $classroomName,
                 'course' => $courseName,
                 'start' => $startTimeFormatted,
-                'end' => $endTimeFormatted
+                'end' => $endTimeFormatted,
             ]);
         }
 
@@ -112,7 +111,7 @@ class ScheduleConflictService
             ->where(function ($q) use ($startTime, $endTime) {
                 $q->where(function ($inner) use ($startTime, $endTime) {
                     $inner->where('start_time', '<', $endTime)
-                          ->where('end_time', '>', $startTime);
+                        ->where('end_time', '>', $startTime);
                 });
             });
 
@@ -127,12 +126,12 @@ class ScheduleConflictService
             $instructorName = $conflicting->instructor->name ?? 'مدرس غير معروف';
             $startTimeFormatted = Carbon::parse($conflicting->start_time)->format('h:i A');
             $endTimeFormatted = Carbon::parse($conflicting->end_time)->format('h:i A');
-            
+
             return __('center::schedules.instructor_conflict_detailed', [
                 'instructor' => $instructorName,
                 'course' => $courseName,
                 'start' => $startTimeFormatted,
-                'end' => $endTimeFormatted
+                'end' => $endTimeFormatted,
             ]);
         }
 
@@ -173,7 +172,7 @@ class ScheduleConflictService
         $allSlots = [];
         $workStart = Carbon::createFromTimeString('08:00');
         $workEnd = Carbon::createFromTimeString('22:00');
-        
+
         $current = $workStart->copy();
         while ($current < $workEnd) {
             $slotEnd = $current->copy()->addHours(2);
@@ -182,7 +181,7 @@ class ScheduleConflictService
             foreach ($bookedSlots as $booked) {
                 $bookedStart = Carbon::parse($booked->start_time);
                 $bookedEnd = Carbon::parse($booked->end_time);
-                
+
                 if ($current < $bookedEnd && $slotEnd > $bookedStart) {
                     $isAvailable = false;
                     break;
@@ -202,5 +201,3 @@ class ScheduleConflictService
         return $allSlots;
     }
 }
-
-

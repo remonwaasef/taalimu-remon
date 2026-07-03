@@ -2,12 +2,12 @@
 
 namespace Modules\Center\Services;
 
-use App\Models\Tenant;
-use App\Models\Stage;
 use App\Models\Grade;
+use App\Models\Stage;
+use App\Models\Tenant;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Cache;
 
 class SettingsService
 {
@@ -22,9 +22,9 @@ class SettingsService
 
         // Basic Info
         $tenant->fill(collect($data)->only([
-            'name', 'phone', 'address', 'description', 
-            'facebook_url', 'instagram_url', 'twitter_url', 
-            'youtube_url', 'linkedin_url', 'timezone'
+            'name', 'phone', 'address', 'description',
+            'facebook_url', 'instagram_url', 'twitter_url',
+            'youtube_url', 'linkedin_url', 'timezone',
         ])->toArray());
 
         $settings = $tenant->settings ?? [];
@@ -62,7 +62,7 @@ class SettingsService
                     $hasStudents = \App\Models\Student::whereHas('grade', function ($q) use ($stageId) {
                         $q->where('stage_id', $stageId);
                     })->exists();
-                    
+
                     if ($hasStudents) {
                         $stage->delete(); // Soft delete
                     } else {
@@ -71,7 +71,7 @@ class SettingsService
                 }
             }
         }
-        
+
         if (isset($data['deleted_grades'])) {
             foreach ($data['deleted_grades'] as $gradeId) {
                 $grade = \App\Models\Grade::find($gradeId);
@@ -88,13 +88,13 @@ class SettingsService
 
         if (isset($data['settings'])) {
             $settings = $tenant->settings ?? [];
-            
+
             if (isset($data['settings']['academic']['late_levels'])) {
-                if (!isset($settings['academic'])) {
+                if (! isset($settings['academic'])) {
                     $settings['academic'] = [];
                 }
                 $settings['academic']['late_levels'] = $data['settings']['academic']['late_levels'];
-                
+
                 $mergedSettings = $data['settings'];
                 unset($mergedSettings['academic']['late_levels']);
                 $settings = array_replace_recursive($settings, $mergedSettings);
@@ -112,7 +112,7 @@ class SettingsService
                     ['id' => $stageData['id'] ?? null],
                     [
                         'name' => $stageData['name'],
-                        'order' => $index
+                        'order' => $index,
                     ]
                 );
 
@@ -123,7 +123,7 @@ class SettingsService
                             [
                                 'stage_id' => $stage->id,
                                 'name' => $gradeData['name'],
-                                'order' => $gIndex
+                                'order' => $gIndex,
                             ]
                         );
                     }
@@ -184,26 +184,26 @@ class SettingsService
         $settings = $tenant->settings ?? [];
 
         $settings['payment_reminders'] = [
-            'default_due_day'        => (int) ($data['default_due_day'] ?? 1),
-            'default_monthly_fee'    => !empty($data['default_monthly_fee']) ? (float) $data['default_monthly_fee'] : null,
-            'email_reminders'        => collect($data['email_reminders'] ?? [])->map(function ($item) {
+            'default_due_day' => (int) ($data['default_due_day'] ?? 1),
+            'default_monthly_fee' => ! empty($data['default_monthly_fee']) ? (float) $data['default_monthly_fee'] : null,
+            'email_reminders' => collect($data['email_reminders'] ?? [])->map(function ($item) {
                 return [
                     'days_before' => (int) ($item['days_before'] ?? 0),
-                    'enabled'     => (bool) ($item['enabled'] ?? false),
+                    'enabled' => (bool) ($item['enabled'] ?? false),
                 ];
             })->toArray(),
-            'whatsapp_reminders'     => collect($data['whatsapp_reminders'] ?? [])->map(function ($item) {
+            'whatsapp_reminders' => collect($data['whatsapp_reminders'] ?? [])->map(function ($item) {
                 return [
                     'days_after' => (int) ($item['days_after'] ?? 0),
-                    'enabled'    => (bool) ($item['enabled'] ?? false),
+                    'enabled' => (bool) ($item['enabled'] ?? false),
                 ];
             })->toArray(),
-            'whatsapp_before_due'    => (bool) ($data['whatsapp_before_due'] ?? false),
+            'whatsapp_before_due' => (bool) ($data['whatsapp_before_due'] ?? false),
             'overdue_repeat_enabled' => (bool) ($data['overdue_repeat_enabled'] ?? false),
-            'overdue_repeat_interval'=> (int) ($data['overdue_repeat_interval'] ?? 7),
-            'overdue_max_reminders'  => !empty($data['overdue_max_reminders']) ? (int) $data['overdue_max_reminders'] : null,
-            'email_template'         => $data['email_template'] ?? null,
-            'whatsapp_template'      => $data['whatsapp_template'] ?? null,
+            'overdue_repeat_interval' => (int) ($data['overdue_repeat_interval'] ?? 7),
+            'overdue_max_reminders' => ! empty($data['overdue_max_reminders']) ? (int) $data['overdue_max_reminders'] : null,
+            'email_template' => $data['email_template'] ?? null,
+            'whatsapp_template' => $data['whatsapp_template'] ?? null,
         ];
 
         $tenant->settings = $settings;

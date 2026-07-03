@@ -52,7 +52,9 @@ class ArabicReshaper
 
     public function reshape($text)
     {
-        if (empty($text)) return '';
+        if (empty($text)) {
+            return '';
+        }
 
         $chars = preg_split('//u', $text, -1, PREG_SPLIT_NO_EMPTY);
         $result = [];
@@ -60,16 +62,17 @@ class ArabicReshaper
 
         for ($i = 0; $i < $count; $i++) {
             $char = $chars[$i];
-            
-            if (!isset(self::$mapping[$char])) {
+
+            if (! isset(self::$mapping[$char])) {
                 $result[] = $char;
+
                 continue;
             }
 
             $prev = ($i > 0) ? $chars[$i - 1] : null;
             $next = ($i < $count - 1) ? $chars[$i + 1] : null;
 
-            $connectPrev = $prev && isset(self::$mapping[$prev]) && !in_array($prev, self::$nonConnectingBefore);
+            $connectPrev = $prev && isset(self::$mapping[$prev]) && ! in_array($prev, self::$nonConnectingBefore);
             $connectNext = $next && isset(self::$mapping[$next]);
 
             if ($connectPrev && $connectNext) {
@@ -90,6 +93,7 @@ class ArabicReshaper
     protected function reorderRTL($text)
     {
         $chars = preg_split('//u', $text, -1, PREG_SPLIT_NO_EMPTY);
+
         return implode('', array_reverse($chars));
     }
 }

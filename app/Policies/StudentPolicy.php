@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Student;
 use App\Models\User;
-
 use App\Traits\HasRoleCheck;
 
 class StudentPolicy
@@ -26,9 +25,9 @@ class StudentPolicy
     {
         // Allow if tenant matches AND user has appropriate role or permission
         // Also allow the student themselves (if they had a user account)
-        return $student->tenant_id === $user->tenant_id && 
-               ($this->hasAnyRole($user, ['center_admin', 'instructor', 'secretary']) || 
-                $user->checkPermissionTo('view students') || 
+        return $student->tenant_id === $user->tenant_id &&
+               ($this->hasAnyRole($user, ['center_admin', 'instructor', 'secretary']) ||
+                $user->checkPermissionTo('view students') ||
                 $user->id === $student->user_id);
     }
 
@@ -45,7 +44,7 @@ class StudentPolicy
      */
     public function update(User $user, Student $student): bool
     {
-        return $student->tenant_id === $user->tenant_id && 
+        return $student->tenant_id === $user->tenant_id &&
                ($this->hasAnyRole($user, ['center_admin', 'secretary']) || $user->checkPermissionTo('edit students'));
     }
 
@@ -54,7 +53,7 @@ class StudentPolicy
      */
     public function delete(User $user, Student $student): bool
     {
-        return $student->tenant_id === $user->tenant_id && 
+        return $student->tenant_id === $user->tenant_id &&
                ($this->hasAnyRole($user, 'center_admin') || $user->checkPermissionTo('delete students'));
     }
 }

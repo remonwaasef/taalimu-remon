@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Guardian extends Model
 {
-    use HasFactory, LogsActivity, \App\Traits\IdentifyTenant;
+    use \App\Traits\IdentifyTenant, HasFactory, LogsActivity;
 
     protected $fillable = [
         'tenant_id',

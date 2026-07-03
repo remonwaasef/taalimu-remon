@@ -2,10 +2,10 @@
 
 namespace App\Listeners;
 
-use Illuminate\Auth\Events\Login;
-use Illuminate\Auth\Events\Logout;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Lockout;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Auth\Events\Logout;
 use Illuminate\Events\Dispatcher;
 use Spatie\Activitylog\Models\Activity;
 
@@ -30,7 +30,7 @@ class AuthenticationSubscriber
             try {
                 app(\App\Services\TelegramService::class)->sendLoginAlert($event->user, request()->ip());
             } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::warning("AuthenticationSubscriber (Login Alert): Telegram notification failed. Error: " . $e->getMessage());
+                \Illuminate\Support\Facades\Log::warning('AuthenticationSubscriber (Login Alert): Telegram notification failed. Error: '.$e->getMessage());
             }
         }
     }
@@ -69,9 +69,9 @@ class AuthenticationSubscriber
         $email = $event->credentials['email'] ?? 'unknown';
         if (str_contains($email, 'admin')) {
             try {
-                app(\App\Services\TelegramService::class)->sendAdminNotification("<b>🚨 فشل تسجيل دخول حساب إداري!</b>\n\n<b>البريد:</b> <code>{$email}</code>\n<b>IP:</b> <code>" . request()->ip() . "</code>");
+                app(\App\Services\TelegramService::class)->sendAdminNotification("<b>🚨 فشل تسجيل دخول حساب إداري!</b>\n\n<b>البريد:</b> <code>{$email}</code>\n<b>IP:</b> <code>".request()->ip().'</code>');
             } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::warning("AuthenticationSubscriber (Login Failed Alert): Telegram notification failed. Error: " . $e->getMessage());
+                \Illuminate\Support\Facades\Log::warning('AuthenticationSubscriber (Login Failed Alert): Telegram notification failed. Error: '.$e->getMessage());
             }
         }
     }
@@ -92,9 +92,9 @@ class AuthenticationSubscriber
 
         // Notify Admin on Telegram
         try {
-            app(\App\Services\TelegramService::class)->sendAdminNotification("<b>🚫 تم قفل حساب مستخدم (Lockout)</b>\n\n<b>البريد:</b> <code>{$email}</code>\n<b>IP:</b> <code>" . request()->ip() . "</code>");
+            app(\App\Services\TelegramService::class)->sendAdminNotification("<b>🚫 تم قفل حساب مستخدم (Lockout)</b>\n\n<b>البريد:</b> <code>{$email}</code>\n<b>IP:</b> <code>".request()->ip().'</code>');
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::warning("AuthenticationSubscriber (Lockout Alert): Telegram notification failed. Error: " . $e->getMessage());
+            \Illuminate\Support\Facades\Log::warning('AuthenticationSubscriber (Lockout Alert): Telegram notification failed. Error: '.$e->getMessage());
         }
     }
 

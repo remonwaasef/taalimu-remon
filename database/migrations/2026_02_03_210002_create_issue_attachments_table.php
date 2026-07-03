@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('path');
             $table->text('description')->nullable();
             $table->timestamps();
-            
+
             $table->index('issue_id');
         });
     }

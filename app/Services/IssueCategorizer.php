@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
-use Throwable;
-use Illuminate\Database\QueryException;
-use PDOException;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
+use Illuminate\Validation\ValidationException;
+use PDOException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
 
 class IssueCategorizer
 {
@@ -108,19 +108,19 @@ class IssueCategorizer
 
         // Try to guess from namespace/class name
         $className = get_class($e);
-        
+
         if (str_contains($className, 'Database') || str_contains($className, 'Query')) {
             return 'database';
         }
-        
+
         if (str_contains($className, 'Auth')) {
             return 'authentication';
         }
-        
+
         if (str_contains($className, 'Validation')) {
             return 'validation';
         }
-        
+
         if (str_contains($className, 'Http')) {
             return 'http';
         }
@@ -135,10 +135,10 @@ class IssueCategorizer
     {
         $className = class_basename($e);
         $message = $e->getMessage();
-        
+
         // Truncate message if too long
         if (strlen($message) > 100) {
-            $message = substr($message, 0, 97) . '...';
+            $message = substr($message, 0, 97).'...';
         }
 
         // Clean up common patterns

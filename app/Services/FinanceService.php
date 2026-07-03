@@ -2,24 +2,25 @@
 
 namespace App\Services;
 
+use App\Mail\NotifPaymentConfirmedMail;
+use App\Models\Commission;
+use App\Models\Course;
+use App\Models\Enrollment;
+use App\Models\Payment;
 use App\Models\Sale;
 use App\Models\SaleItem;
-use App\Models\Course;
 use App\Models\Student;
-use App\Models\Payment;
-use App\Models\Commission;
-use App\Models\Enrollment;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log;
-use App\Mail\NotifPaymentConfirmedMail;
 use App\Traits\HasLocaleResolution;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class FinanceService
 {
     use HasLocaleResolution;
+
     protected $courseService;
+
     protected $whatsappService;
 
     public function __construct(CourseService $courseService, WhatsAppService $whatsappService)
@@ -27,10 +28,10 @@ class FinanceService
         $this->courseService = $courseService;
         $this->whatsappService = $whatsappService;
     }
+
     /**
      * Process a new sale.
      *
-     * @param array $data
      * @return Sale
      */
     public function createSale(array $data)
@@ -51,8 +52,8 @@ class FinanceService
 
             foreach ($data['items'] as $item) {
                 $course = $courses->get($item['id']);
-                if (!$course) {
-                    throw new \Exception("Course not found: " . $item['id']);
+                if (! $course) {
+                    throw new \Exception('Course not found: '.$item['id']);
                 }
 
                 $price = $course->price;
@@ -78,15 +79,15 @@ class FinanceService
                     $courseIdsToCheck[] = $item['id'];
                 }
             }
-            if (!empty($courseIdsToCheck)) {
+            if (! empty($courseIdsToCheck)) {
                 $enrolledCourseIds = Enrollment::where('user_id', $student->user_id)
                     ->whereIn('course_id', $courseIdsToCheck)
                     ->pluck('course_id')
                     ->toArray();
-                
-                if (!empty($enrolledCourseIds)) {
+
+                if (! empty($enrolledCourseIds)) {
                     $firstEnrolledCourse = $courses->get($enrolledCourseIds[0]);
-                    throw new \Exception('الطالب مسجل بالفعل في: ' . ($firstEnrolledCourse ? $firstEnrolledCourse->title : ''));
+                    throw new \Exception('الطالب مسجل بالفعل في: '.($firstEnrolledCourse ? $firstEnrolledCourse->title : ''));
                 }
             }
 
@@ -142,10 +143,10 @@ class FinanceService
             }
 
             // Bulk Insert SaleItems & Enrollments
-            if (!empty($saleItemsData)) {
+            if (! empty($saleItemsData)) {
                 SaleItem::insert($saleItemsData);
             }
-            if (!empty($enrollmentsData)) {
+            if (! empty($enrollmentsData)) {
                 Enrollment::insert($enrollmentsData);
             }
 
@@ -184,7 +185,7 @@ class FinanceService
             }
 
             // Bulk Insert Commissions
-            if (!empty($commissionsData)) {
+            if (! empty($commissionsData)) {
                 Commission::insert($commissionsData);
             }
 
@@ -195,8 +196,8 @@ class FinanceService
                     $enrolledCourseIds[] = $itemData['item_id'];
                 }
             }
-            if (!empty($enrolledCourseIds) && $student) {
-                DB::afterCommit(function() use ($student, $enrolledCourseIds) {
+            if (! empty($enrolledCourseIds) && $student) {
+                DB::afterCommit(function () use ($student, $enrolledCourseIds) {
                     app(\App\Services\Student\StudentNotificationService::class)->sendGroupEnrollmentEmails($student, $enrolledCourseIds);
                 });
             }
@@ -216,7 +217,7 @@ class FinanceService
                 // Notifications
                 if ($student) {
                     $tenant = \Modules\Tenancy\Services\TenantResolver::get();
-                    DB::afterCommit(function() use ($tenant, $student, $data, $totalAmount) {
+                    DB::afterCommit(function () use ($tenant, $student, $data, $totalAmount) {
                         $this->notifyPayment($tenant, $student, $data['paid_amount'], $totalAmount - $data['paid_amount'], $data['payment_method'] ?? 'cash');
                     });
                 }
@@ -229,10 +230,9 @@ class FinanceService
     /**
      * Add a payment to an existing sale.
      *
-     * @param Sale $sale
-     * @param float $amount
-     * @param string|null $method
-     * @param string|null $notes
+     * @param  float  $amount
+     * @param  string|null  $method
+     * @param  string|null  $notes
      * @return Sale
      */
     public function addPayment(Sale $sale, $amount, $method = null, $notes = null)
@@ -264,7 +264,7 @@ class FinanceService
             $tenant = \Modules\Tenancy\Services\TenantResolver::get();
             $student = $sale->student;
             $totalAmount = $sale->total_amount;
-            DB::afterCommit(function() use ($tenant, $student, $amount, $totalAmount, $newPaidAmount, $method, $sale) {
+            DB::afterCommit(function () use ($tenant, $student, $amount, $totalAmount, $newPaidAmount, $method, $sale) {
                 $this->notifyPayment($tenant, $student, $amount, $totalAmount - $newPaidAmount, $method ?? $sale->payment_method);
             });
 
@@ -275,8 +275,8 @@ class FinanceService
     /**
      * Determine payment status based on amounts.
      *
-     * @param float $total
-     * @param float $paid
+     * @param  float  $total
+     * @param  float  $paid
      * @return string
      */
     protected function determineStatus($total, $paid)
@@ -286,6 +286,7 @@ class FinanceService
         } elseif ($paid > 0) {
             return 'partial';
         }
+
         return 'pending';
     }
 
@@ -296,7 +297,7 @@ class FinanceService
     {
         // WhatsApp Notification - Dispatch to queue to avoid DB row locks
         \App\Jobs\SendWhatsAppPaymentNotification::dispatch($tenant, $student, $amount, $balance)->onQueue('whatsapp');
-        
+
         // Email Notification
         $this->sendPaymentEmailNotification($tenant, $student, $amount, $balance, $method);
     }
@@ -308,23 +309,23 @@ class FinanceService
     {
         try {
             $tenantSettings = $tenant->settings['email_templates'] ?? [];
-            
+
             // Determine real email
             $realEmail = null;
             $studentEmail = $student->email ?? ($student->user ? $student->user->email : null);
-            
+
             // Skip auto-generated emails
-            if ($studentEmail && !preg_match('/^std\d+\..+@taalimu\.com$/', $studentEmail)) {
+            if ($studentEmail && ! preg_match('/^std\d+\..+@taalimu\.com$/', $studentEmail)) {
                 $realEmail = $studentEmail;
             }
 
-            $hasParentEmail = !empty($student->parent_email);
+            $hasParentEmail = ! empty($student->parent_email);
 
-            $paymentEmailEnabled = !isset($tenantSettings['notif_payment_confirmed_enabled']) || $tenantSettings['notif_payment_confirmed_enabled'];
+            $paymentEmailEnabled = ! isset($tenantSettings['notif_payment_confirmed_enabled']) || $tenantSettings['notif_payment_confirmed_enabled'];
 
             if ($paymentEmailEnabled && ($realEmail || $hasParentEmail)) {
                 $locale = $this->getTargetLocale($tenant, $student);
-                
+
                 $subjectKey = "notif_payment_confirmed_subject_{$locale}";
                 $bodyKey = "notif_payment_confirmed_body_{$locale}";
 
@@ -339,10 +340,10 @@ class FinanceService
                     'en' => "Hello {student_name},\n\nWe confirm the receipt of {paid_amount}.\nPayment Method: {payment_method}\nRemaining Balance: {remaining}\n\nThank you,\n{center_name}",
                     'fr' => "Bonjour {student_name},\n\nNous confirmons la réception d'un paiement de {paid_amount}.\nMéthode de paiement: {payment_method}\nSolde restant: {remaining}\n\nMerci,\n{center_name}",
                 ];
-                
+
                 $subject = $tenantSettings[$subjectKey] ?? $tenantSettings['notif_payment_confirmed_subject'] ?? ($defaultSubjects[$locale] ?? $defaultSubjects['en']);
                 $body = $tenantSettings[$bodyKey] ?? $tenantSettings['notif_payment_confirmed_body'] ?? ($defaultBodies[$locale] ?? $defaultBodies['en']);
-                
+
                 $currencySymbol = function_exists('get_currency_symbol') ? get_currency_symbol() : ($tenant->settings['financial']['currency'] ?? 'EGP');
 
                 $variables = [
@@ -350,12 +351,12 @@ class FinanceService
                     'اسم_الطالب' => $student->name,
                     'center_name' => $tenant->name,
                     'اسم_المركز' => $tenant->name,
-                    'المبلغ_المدفوع' => $amount . ' ' . $currencySymbol,
-                    'paid_amount' => $amount . ' ' . $currencySymbol,
+                    'المبلغ_المدفوع' => $amount.' '.$currencySymbol,
+                    'paid_amount' => $amount.' '.$currencySymbol,
                     'تاريخ_الدفع' => now()->format('Y-m-d'),
                     'payment_date' => now()->format('Y-m-d'),
-                    'المتبقي' => max(0, $balance) . ' ' . $currencySymbol,
-                    'remaining' => max(0, $balance) . ' ' . $currencySymbol,
+                    'المتبقي' => max(0, $balance).' '.$currencySymbol,
+                    'remaining' => max(0, $balance).' '.$currencySymbol,
                     'payment_method' => $method,
                     'طريقة_الدفع' => $method,
                 ];
@@ -365,7 +366,7 @@ class FinanceService
                         $subject, $body, $variables, $tenant->name, $student->name
                     ));
                 }
-                
+
                 if ($hasParentEmail) {
                     Mail::to($student->parent_email)->queue(new NotifPaymentConfirmedMail(
                         $subject, $body, $variables, $tenant->name, $student->name
@@ -373,7 +374,7 @@ class FinanceService
                 }
             }
         } catch (\Exception $e) {
-            Log::error('FinanceService payment confirmation email failed: ' . $e->getMessage());
+            Log::error('FinanceService payment confirmation email failed: '.$e->getMessage());
         }
     }
 }

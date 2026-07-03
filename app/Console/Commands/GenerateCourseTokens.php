@@ -22,7 +22,7 @@ class GenerateCourseTokens extends Command
 
         foreach ($courses as $course) {
             $course->update([
-                'registration_token' => \Illuminate\Support\Str::random(16)
+                'registration_token' => \Illuminate\Support\Str::random(16),
             ]);
             $count++;
         }

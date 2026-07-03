@@ -2,11 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\Quiz;
-use App\Models\QuizAttempt;
 use App\Models\Question;
 use App\Models\QuestionOption;
-use App\Services\GamificationService;
+use App\Models\Quiz;
+use App\Models\QuizAttempt;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,17 +17,18 @@ class QuizService
     {
         $this->gamificationService = $gamificationService;
     }
+
     /**
      * Get questions for a quiz (fixed or randomized from bank).
      */
     public function getQuizQuestions(Quiz $quiz)
     {
-        if (!$quiz->is_randomized) {
+        if (! $quiz->is_randomized) {
             return $quiz->questions()->with('options')->get();
         }
 
         $query = Question::where('tenant_id', $quiz->tenant_id ?? \Modules\Tenancy\Services\TenantResolver::get()->id)
-            ->with(['options' => function($q) {
+            ->with(['options' => function ($q) {
                 $q->inRandomOrder();
             }]);
 
@@ -46,11 +46,11 @@ class QuizService
     /**
      * Submit a quiz and calculate results.
      */
-    public function submitQuiz(Quiz $quiz, array $answers, QuizAttempt $attempt = null)
+    public function submitQuiz(Quiz $quiz, array $answers, ?QuizAttempt $attempt = null)
     {
         $score = 0;
         $totalPoints = $quiz->questions->sum('points');
-        
+
         foreach ($answers as $questionId => $optionId) {
             $option = QuestionOption::find($optionId);
             // Ensure the option belongs to a question in this quiz
@@ -64,14 +64,14 @@ class QuizService
 
         if ($attempt) {
             $attempt->update([
-                'score' => $percentage, 
+                'score' => $percentage,
                 'passed' => $passed,
                 'completed_at' => now(),
             ]);
         } else {
             $attempt = $quiz->attempts()->create([
                 'user_id' => Auth::id(),
-                'score' => $percentage, 
+                'score' => $percentage,
                 'passed' => $passed,
                 'completed_at' => now(),
             ]);
@@ -79,9 +79,9 @@ class QuizService
 
         if ($passed) {
             $this->gamificationService->awardPoints(
-                Auth::user(), 
-                (int)$score, 
-                "Passed quiz: " . $quiz->title, 
+                Auth::user(),
+                (int) $score,
+                'Passed quiz: '.$quiz->title,
                 $attempt
             );
         }
@@ -94,13 +94,13 @@ class QuizService
      */
     public function isTimeValid(Quiz $quiz, $startTime)
     {
-        if (!$quiz->duration_minutes || !$startTime) {
+        if (! $quiz->duration_minutes || ! $startTime) {
             return true;
         }
 
         $startTime = Carbon::parse($startTime);
         $allowedTime = $startTime->copy()->addMinutes($quiz->duration_minutes)->addMinute(); // 1 min buffer
-        
+
         return now()->lessThanOrEqualTo($allowedTime);
     }
 
@@ -115,5 +115,3 @@ class QuizService
             ->exists();
     }
 }
-
-

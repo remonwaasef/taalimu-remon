@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\Payout;
 use App\Models\Commission;
 use App\Models\Expense;
 use App\Models\Instructor;
+use App\Models\Payout;
 use Illuminate\Support\Facades\DB;
 
 class PayoutService
@@ -32,7 +32,7 @@ class PayoutService
             ]);
 
             // 2. Mark Commissions as Paid
-            // We find earned commissions for this instructor and mark them as paid 
+            // We find earned commissions for this instructor and mark them as paid
             // until the payout amount is covered (greedy settlement)
             $remainingToSettle = $amount;
             $commissions = Commission::where('instructor_id', $instructor->id)
@@ -41,7 +41,9 @@ class PayoutService
                 ->get();
 
             foreach ($commissions as $commission) {
-                if ($remainingToSettle <= 0) break;
+                if ($remainingToSettle <= 0) {
+                    break;
+                }
 
                 if ($commission->amount <= $remainingToSettle) {
                     $commission->update([
@@ -50,7 +52,7 @@ class PayoutService
                     ]);
                     $remainingToSettle -= $commission->amount;
                 } else {
-                    // Partial settlement of a single commission record is complex, 
+                    // Partial settlement of a single commission record is complex,
                     // for now we only mark fully covered records as paid.
                     // Or we could leave it as earned and just reduce the payout balance.
                     // To keep it simple: we mark as paid only if fully covered.
@@ -62,7 +64,7 @@ class PayoutService
                 'tenant_id' => $tenantId,
                 'category' => 'salaries',
                 'amount' => $amount,
-                'description' => 'صرف مستحقات للمدرس ' . $instructor->name . ' - رقم الصرفية #' . $payout->id,
+                'description' => 'صرف مستحقات للمدرس '.$instructor->name.' - رقم الصرفية #'.$payout->id,
                 'date' => $data['payout_date'] ?? now(),
                 'payment_method' => $data['payment_method'] ?? 'cash',
                 'created_by' => auth()->id(),
@@ -72,5 +74,3 @@ class PayoutService
         });
     }
 }
-
-

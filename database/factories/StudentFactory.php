@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\Student;
 use App\Models\User;
-use App\Models\Grade;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class StudentFactory extends Factory

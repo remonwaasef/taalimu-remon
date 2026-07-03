@@ -2,15 +2,15 @@
 
 namespace App\Services\Student;
 
+use App\Mail\NotifGroupEnrollmentMail;
+use App\Mail\WelcomeGuardianMail;
+use App\Mail\WelcomeStudentMail;
 use App\Models\Student;
 use App\Models\User;
-use App\Mail\WelcomeStudentMail;
-use App\Mail\WelcomeGuardianMail;
-use App\Mail\NotifGroupEnrollmentMail;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log;
 use App\Services\AdminNotificationService;
 use App\Traits\HasLocaleResolution;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class StudentNotificationService
 {
@@ -27,7 +27,7 @@ class StudentNotificationService
     {
         $this->adminNotificationService->notifyAdmins(
             'student_registered',
-            'تم تسجيل طالب جديد: ' . $student->name,
+            'تم تسجيل طالب جديد: '.$student->name,
             route('center.students.show', ['tenant' => \Modules\Tenancy\Services\TenantResolver::get()->domain, 'student' => $student->id]),
             'fas fa-user-plus',
             $creator->name
@@ -38,7 +38,7 @@ class StudentNotificationService
     {
         $this->adminNotificationService->notifyAdmins(
             'student_updated',
-            'تم تعديل بيانات الطالب: ' . $student->name,
+            'تم تعديل بيانات الطالب: '.$student->name,
             route('center.students.show', ['tenant' => \Modules\Tenancy\Services\TenantResolver::get()->domain, 'student' => $student->id]),
             'fas fa-user-edit',
             $modifier->name
@@ -49,7 +49,7 @@ class StudentNotificationService
     {
         $this->adminNotificationService->notifyAdmins(
             'student_deleted',
-            'تم حذف الطالب: ' . $studentName,
+            'تم حذف الطالب: '.$studentName,
             route('center.students.index', ['tenant' => \Modules\Tenancy\Services\TenantResolver::get()->domain]),
             'fas fa-user-times',
             $deleter->name
@@ -88,7 +88,7 @@ class StudentNotificationService
                 }
             }
         } catch (\Exception $e) {
-            Log::error("Failed to queue welcome emails for student {$student->id}: " . $e->getMessage());
+            Log::error("Failed to queue welcome emails for student {$student->id}: ".$e->getMessage());
         }
     }
 
@@ -97,15 +97,19 @@ class StudentNotificationService
         try {
             $tenant = \Modules\Tenancy\Services\TenantResolver::get();
             $tenantSettings = $tenant->settings['email_templates'] ?? [];
-            $groupEnrollmentEnabled = !isset($tenantSettings['notif_group_enrollment_enabled']) || $tenantSettings['notif_group_enrollment_enabled'];
-            
-            if (!$groupEnrollmentEnabled) return;
+            $groupEnrollmentEnabled = ! isset($tenantSettings['notif_group_enrollment_enabled']) || $tenantSettings['notif_group_enrollment_enabled'];
+
+            if (! $groupEnrollmentEnabled) {
+                return;
+            }
 
             $hasValidStudentEmail = $this->isRealEmail($student->email);
             $guardianEmail = $student->parent_email ?: $student->guardian?->email;
             $hasValidParentEmail = $this->isRealEmail($guardianEmail);
 
-            if (!$hasValidStudentEmail && !$hasValidParentEmail) return;
+            if (! $hasValidStudentEmail && ! $hasValidParentEmail) {
+                return;
+            }
 
             $locale = $this->getTargetLocale($tenant, $student);
             $groupSubjectKey = "notif_group_enrollment_subject_{$locale}";
@@ -129,13 +133,15 @@ class StudentNotificationService
 
             foreach ($courseIds as $courseId) {
                 $course = \App\Models\Course::find($courseId);
-                if (!$course) continue;
+                if (! $course) {
+                    continue;
+                }
 
                 $groupVariables = [
                     'student_name' => $student->name,
                     'center_name' => $tenant->name,
                     'group_name' => $course->title,
-                    'course_price' => $course->price . ' ' . $currencySymbol,
+                    'course_price' => $course->price.' '.$currencySymbol,
                     'login_link' => url('/login'),
                 ];
 
@@ -152,7 +158,7 @@ class StudentNotificationService
                 }
             }
         } catch (\Exception $e) {
-            Log::error("Failed to queue group enrollment emails for student {$student->id}: " . $e->getMessage());
+            Log::error("Failed to queue group enrollment emails for student {$student->id}: ".$e->getMessage());
         }
     }
 
@@ -162,7 +168,7 @@ class StudentNotificationService
             $tenant = \Modules\Tenancy\Services\TenantResolver::get();
             $settings = $this->getEmailTemplateSettings($tenant);
 
-            if (!$settings['welcome_student_enabled'] && !$settings['welcome_guardian_enabled']) {
+            if (! $settings['welcome_student_enabled'] && ! $settings['welcome_guardian_enabled']) {
                 return;
             }
 
@@ -170,7 +176,7 @@ class StudentNotificationService
                 ->whereIn('email', $emails)
                 ->with('guardian')
                 ->get()
-                ->filter(fn($s) => $this->isRealEmail($s->email));
+                ->filter(fn ($s) => $this->isRealEmail($s->email));
 
             foreach ($students as $student) {
                 $variables = $this->buildTemplateVariables($student, $tenant, null);
@@ -179,7 +185,7 @@ class StudentNotificationService
                 if ($settings['welcome_student_enabled']) {
                     $subject = $settings["welcome_student_subject_{$locale}"] ?? $settings['welcome_student_subject'];
                     $body = $settings["welcome_student_body_{$locale}"] ?? $settings['welcome_student_body'];
-                    
+
                     $passwordHints = [
                         'ar' => '(يرجى استخدام "نسيت كلمة المرور" لإعادة تعيين كلمة مرور جديدة)',
                         'en' => '(Please use "Forgot Password" to set a new password)',
@@ -214,7 +220,7 @@ class StudentNotificationService
                 }
             }
         } catch (\Exception $e) {
-            Log::error("Failed to queue bulk welcome emails: " . $e->getMessage());
+            Log::error('Failed to queue bulk welcome emails: '.$e->getMessage());
         }
     }
 
@@ -225,12 +231,12 @@ class StudentNotificationService
         $defaultPreset = config("email_templates.presets.{$defaultPresetKey}", []);
 
         return [
-            'welcome_student_enabled'  => (bool) ($tenantSettings['welcome_student_enabled'] ?? true),
+            'welcome_student_enabled' => (bool) ($tenantSettings['welcome_student_enabled'] ?? true),
             'welcome_guardian_enabled' => (bool) ($tenantSettings['welcome_guardian_enabled'] ?? true),
-            'welcome_student_subject'  => $tenantSettings['welcome_student_subject'] ?? $defaultPreset['student_subject'] ?? '',
-            'welcome_student_body'     => $tenantSettings['welcome_student_body'] ?? $defaultPreset['student_body'] ?? '',
+            'welcome_student_subject' => $tenantSettings['welcome_student_subject'] ?? $defaultPreset['student_subject'] ?? '',
+            'welcome_student_body' => $tenantSettings['welcome_student_body'] ?? $defaultPreset['student_body'] ?? '',
             'welcome_guardian_subject' => $tenantSettings['welcome_guardian_subject'] ?? $defaultPreset['guardian_subject'] ?? '',
-            'welcome_guardian_body'    => $tenantSettings['welcome_guardian_body'] ?? $defaultPreset['guardian_body'] ?? '',
+            'welcome_guardian_body' => $tenantSettings['welcome_guardian_body'] ?? $defaultPreset['guardian_body'] ?? '',
             'welcome_student_subject_ar' => $tenantSettings['welcome_student_subject_ar'] ?? null,
             'welcome_student_subject_en' => $tenantSettings['welcome_student_subject_en'] ?? $defaultPreset['student_subject_en'] ?? null,
             'welcome_student_subject_fr' => $tenantSettings['welcome_student_subject_fr'] ?? $defaultPreset['student_subject_fr'] ?? null,
@@ -248,22 +254,23 @@ class StudentNotificationService
 
     public function isRealEmail(?string $email): bool
     {
-        if (!$email) return false;
-        return !preg_match('/^std\d+\..+@taalimu\.com$/', $email);
+        if (! $email) {
+            return false;
+        }
+
+        return ! preg_match('/^std\d+\..+@taalimu\.com$/', $email);
     }
 
     public function buildTemplateVariables(Student $student, $tenant, ?string $password): array
     {
         return [
-            'student_name'    => $student->name,
-            'center_name'     => $tenant->name,
-            'login_link'      => url('/login'),
-            'password'        => $password ?? '',
-            'phone'           => $student->phone ?? '',
-            'parent_name'     => $student->guardian?->name ?? $student->parent_name ?? '',
-            'stage'           => $student->grade_level_name ?? '',
+            'student_name' => $student->name,
+            'center_name' => $tenant->name,
+            'login_link' => url('/login'),
+            'password' => $password ?? '',
+            'phone' => $student->phone ?? '',
+            'parent_name' => $student->guardian?->name ?? $student->parent_name ?? '',
+            'stage' => $student->grade_level_name ?? '',
         ];
     }
 }
-
-

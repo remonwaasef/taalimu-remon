@@ -18,4 +18,4 @@ $content = str_replace('">ودي</button>', '">{{ __(\'center::settings.reminder
 $content = str_replace('">عاجل</button>', '">{{ __(\'center::settings.reminders.presets.urgent\') }}</button>', $content);
 
 file_put_contents($file, $content);
-echo "Blade translations updated!";
+echo 'Blade translations updated!';

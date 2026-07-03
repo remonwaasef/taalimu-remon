@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class BackupController extends Controller
 {
@@ -20,7 +19,7 @@ class BackupController extends Controller
             if ($disk->exists($file) && substr($file, -4) == '.zip') {
                 $backups[] = [
                     'file_path' => $file,
-                    'file_name' => str_replace(config('backup.backup.name') . '/', '', $file),
+                    'file_name' => str_replace(config('backup.backup.name').'/', '', $file),
                     'file_size' => $this->formatBytes($disk->size($file)),
                     'last_modified' => date('Y-m-d H:i:s', $disk->lastModified($file)),
                 ];
@@ -37,10 +36,10 @@ class BackupController extends Controller
         try {
             // Run only database backup for speed and simplicity in this UI
             Artisan::call('backup:run', ['--only-db' => true]);
-            
+
             return redirect()->back()->with('success', 'تم إنشاء النسخة الاحتياطية بنجاح.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'فشل إنشاء النسخة: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'فشل إنشاء النسخة: '.$e->getMessage());
         }
     }
 
@@ -48,22 +47,23 @@ class BackupController extends Controller
     {
         $fileName = $request->get('file');
         $disk = Storage::disk(config('backup.backup.destination.disks')[0]);
-        $path = config('backup.backup.name') . '/' . $fileName;
+        $path = config('backup.backup.name').'/'.$fileName;
 
         if ($disk->exists($path)) {
             return Storage::disk(config('backup.backup.destination.disks')[0])->download($path);
         }
 
-        abort(404, "الملف غير موجود.");
+        abort(404, 'الملف غير موجود.');
     }
 
     public function delete($fileName)
     {
         $disk = Storage::disk(config('backup.backup.destination.disks')[0]);
-        $path = config('backup.backup.name') . '/' . $fileName;
+        $path = config('backup.backup.name').'/'.$fileName;
 
         if ($disk->exists($path)) {
             $disk->delete($path);
+
             return redirect()->back()->with('success', 'تم حذف النسخة الاحتياطية.');
         }
 
@@ -78,6 +78,6 @@ class BackupController extends Controller
         $pow = min($pow, count($units) - 1);
         $bytes /= pow(1024, $pow);
 
-        return round($bytes, $precision) . ' ' . $units[$pow];
+        return round($bytes, $precision).' '.$units[$pow];
     }
 }

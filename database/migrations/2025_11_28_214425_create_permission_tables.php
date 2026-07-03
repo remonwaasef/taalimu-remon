@@ -20,32 +20,32 @@ return new class extends Migration
         throw_if(empty($tableNames), Exception::class, 'Error: config/permission.php not loaded. Run [php artisan config:clear] and try again.');
 
         Schema::create($tableNames['permissions'], static function (Blueprint $table) {
-            $table->bigIncrements('id'); 
-            $table->string('name');       
-            $table->string('guard_name'); 
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->string('guard_name');
             $table->timestamps();
 
             $table->unique(['name', 'guard_name']);
         });
 
-        Schema::create($tableNames['roles'], static function (Blueprint $table) use ($teams, $columnNames) {
+        Schema::create($tableNames['roles'], static function (Blueprint $table) {
             $table->bigIncrements('id');
             // Integrated tenant_id (mapping to teams)
             $table->unsignedBigInteger('tenant_id')->nullable();
             $table->index('tenant_id');
-            
-            $table->string('name');       
-            $table->string('guard_name'); 
+
+            $table->string('name');
+            $table->string('guard_name');
             $table->timestamps();
-            
+
             $table->unique(['tenant_id', 'name', 'guard_name']);
         });
 
-        Schema::create($tableNames['model_has_permissions'], static function (Blueprint $table) use ($tableNames, $columnNames, $pivotPermission, $teams) {
+        Schema::create($tableNames['model_has_permissions'], static function (Blueprint $table) use ($tableNames, $columnNames, $pivotPermission) {
             $table->unsignedBigInteger($pivotPermission);
             $table->string('model_type');
             $table->unsignedBigInteger($columnNames['model_morph_key']);
-            
+
             $table->unsignedBigInteger('tenant_id')->nullable();
             $table->index('tenant_id');
 
@@ -59,11 +59,11 @@ return new class extends Migration
             $table->unique(['tenant_id', $pivotPermission, $columnNames['model_morph_key'], 'model_type'], 'model_has_permissions_tenant_unique');
         });
 
-        Schema::create($tableNames['model_has_roles'], static function (Blueprint $table) use ($tableNames, $columnNames, $pivotRole, $teams) {
+        Schema::create($tableNames['model_has_roles'], static function (Blueprint $table) use ($tableNames, $columnNames, $pivotRole) {
             $table->unsignedBigInteger($pivotRole);
             $table->string('model_type');
             $table->unsignedBigInteger($columnNames['model_morph_key']);
-            
+
             $table->unsignedBigInteger('tenant_id')->nullable();
             $table->index('tenant_id');
 

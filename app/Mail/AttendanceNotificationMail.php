@@ -11,9 +11,13 @@ class AttendanceNotificationMail extends Mailable
     use Queueable, SerializesModels;
 
     public $subject;
+
     public $body;
+
     public $variables;
+
     public $centerName;
+
     public $studentName;
 
     /**
@@ -36,19 +40,20 @@ class AttendanceNotificationMail extends Mailable
         $processedBody = $this->replacePlaceholders($this->body, $this->variables);
 
         return $this->subject($this->replacePlaceholders($this->subject, $this->variables))
-                    ->view('emails.welcome_student_mail')
-                    ->with([
-                        'studentName' => $this->studentName,
-                        'messageContent' => $processedBody,
-                        'senderName' => $this->centerName,
-                    ]);
+            ->view('emails.welcome_student_mail')
+            ->with([
+                'studentName' => $this->studentName,
+                'messageContent' => $processedBody,
+                'senderName' => $this->centerName,
+            ]);
     }
 
     protected function replacePlaceholders($template, $variables)
     {
         foreach ($variables as $key => $value) {
-            $template = str_replace('{' . $key . '}', (string) $value, $template);
+            $template = str_replace('{'.$key.'}', (string) $value, $template);
         }
+
         return $template;
     }
 }

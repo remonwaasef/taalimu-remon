@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use Modules\Center\Models\Branch;
 use App\Models\User;
+use Modules\Center\Models\Branch;
 
 class BranchPolicy
 {
@@ -25,13 +25,13 @@ class BranchPolicy
 
     public function update(User $user, Branch $branch): bool
     {
-        return $user->tenant_id === $branch->tenant_id && 
+        return $user->tenant_id === $branch->tenant_id &&
                ($user->hasRole(['center_admin', 'admin']) || $user->checkPermissionTo('manage settings'));
     }
 
     public function delete(User $user, Branch $branch): bool
     {
-        return $user->tenant_id === $branch->tenant_id && 
+        return $user->tenant_id === $branch->tenant_id &&
                ($user->hasRole(['center_admin', 'admin']) || $user->checkPermissionTo('manage settings'));
     }
 }

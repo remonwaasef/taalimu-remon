@@ -2,17 +2,18 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Tenant;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Activitylog\Models\Activity;
+use Tests\TestCase;
 
 class ActivityLogTest extends TestCase
 {
     use RefreshDatabase;
 
     protected $tenant;
+
     protected $admin;
 
     protected function setUp(): void
@@ -23,14 +24,14 @@ class ActivityLogTest extends TestCase
 
         // Setup Tenant
         $this->tenant = Tenant::create(['domain' => 'test', 'name' => 'Test Center']);
-        
+
         // Setup Admin
         $this->admin = User::factory()->create([
             'email' => 'admin@test.com',
             'tenant_id' => $this->tenant->id,
             'role' => 'super_admin',
         ]);
-        
+
         app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId(null);
         $this->admin->assignRole('super_admin');
     }
@@ -43,7 +44,7 @@ class ActivityLogTest extends TestCase
             'name' => 'New User',
             'email' => 'new@test.com',
             'tenant_id' => $this->tenant->id,
-            'role' => 'student'
+            'role' => 'student',
         ]);
 
         $this->assertDatabaseHas('activity_log', [

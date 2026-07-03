@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use App\Models\QuizAttempt;
+use App\Models\User;
 
 class QuizAttemptPolicy
 {
@@ -21,8 +21,8 @@ class QuizAttemptPolicy
         // Admins and instructors from the same tenant can view attempts
         $quiz = $attempt->quiz;
         $course = $quiz->lesson->section->course;
-        
-        return $course->tenant_id === $user->tenant_id && 
+
+        return $course->tenant_id === $user->tenant_id &&
                $user->hasAnyRole(['center_admin', 'admin', 'instructor']);
     }
 
@@ -33,13 +33,13 @@ class QuizAttemptPolicy
     {
         // Students can take quizzes if enrolled in the course
         $course = $quiz->lesson->section->course;
-        
+
         // Check enrollment
         $enrolled = \App\Models\Enrollment::where('user_id', $user->id)
             ->where('course_id', $course->id)
             ->where('status', 'active')
             ->exists();
-            
+
         return $enrolled && $course->tenant_id === $user->tenant_id;
     }
 }

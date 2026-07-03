@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class LessonProgress extends Model
 {
-    use HasFactory, \App\Traits\IdentifyTenant;
+    use \App\Traits\IdentifyTenant, HasFactory;
 
     protected $table = 'lesson_progress';
 
@@ -17,7 +17,6 @@ class LessonProgress extends Model
         'lesson_id',
         'completed_at',
     ];
-
 
     protected $casts = [
         'completed_at' => 'datetime',

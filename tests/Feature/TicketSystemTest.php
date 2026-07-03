@@ -2,18 +2,20 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Tenant;
 use App\Models\Ticket;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class TicketSystemTest extends TestCase
 {
     use RefreshDatabase;
 
     protected $tenant;
+
     protected $admin;
+
     protected $tenantUser;
 
     protected function setUp(): void
@@ -26,7 +28,7 @@ class TicketSystemTest extends TestCase
         // Setup Tenant
         $this->tenant = $this->createTenant(['domain' => 'test', 'name' => 'Test Center']);
         app()->instance('tenant', $this->tenant);
-        
+
         // Setup Tenant User (Center Admin)
         $this->tenantUser = User::factory()->create(['email' => 'center@test.com', 'tenant_id' => $this->tenant->id, 'role' => 'center_admin']);
 
@@ -55,12 +57,12 @@ class TicketSystemTest extends TestCase
     public function test_tenant_can_view_tickets()
     {
         $this->actingAs($this->tenantUser);
-        
+
         $ticket = Ticket::create([
             'tenant_id' => $this->tenant->id,
             'user_id' => $this->tenantUser->id,
             'subject' => 'Existing Ticket',
-            'status' => 'open'
+            'status' => 'open',
         ]);
 
         $response = $this->get(route('center.tickets.index', ['tenant' => $this->tenant->domain]));
@@ -76,7 +78,7 @@ class TicketSystemTest extends TestCase
             'tenant_id' => $this->tenant->id,
             'user_id' => $this->tenantUser->id,
             'subject' => 'Admin Help',
-            'status' => 'open'
+            'status' => 'open',
         ]);
 
         // 2. Login as Super Admin
@@ -94,7 +96,7 @@ class TicketSystemTest extends TestCase
 
         $response->assertRedirect();
         $this->assertDatabaseHas('ticket_messages', ['message' => 'We are checking it.']);
-        
+
         // 5. Verify status update
         $this->assertEquals('answered', $ticket->fresh()->status);
     }
@@ -105,7 +107,7 @@ class TicketSystemTest extends TestCase
             'tenant_id' => $this->tenant->id,
             'user_id' => $this->tenantUser->id,
             'subject' => 'To Close',
-            'status' => 'open'
+            'status' => 'open',
         ]);
 
         $this->actingAs($this->admin);

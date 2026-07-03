@@ -3,8 +3,8 @@
 namespace App\Services\PaymentGateways;
 
 use App\Interfaces\PaymentGatewayInterface;
-use App\Models\Tenant;
 use App\Models\Package;
+use App\Models\Tenant;
 use App\Services\PayPalService;
 
 class PayPalGateway implements PaymentGatewayInterface
@@ -20,7 +20,7 @@ class PayPalGateway implements PaymentGatewayInterface
     {
         // PayPal support for USD only
         $currency = 'USD';
-        
+
         // Base USD price from regional prices (defaulting to package defaults)
         $baseUsdPrice = $package->regional_prices['default']['amount'] ?? 49;
         if ($billingCycle === 'yearly') {
@@ -40,9 +40,9 @@ class PayPalGateway implements PaymentGatewayInterface
         $amount = number_format(max(0, $amount), 2, '.', '');
 
         $resp = $this->paypal->createOrder(
-            $amount, 
-            $currency, 
-            route('payment.paypal.success'), 
+            $amount,
+            $currency,
+            route('payment.paypal.success'),
             $options['cancel_url'] ?? route('payment.cancel')
         );
 
@@ -67,13 +67,16 @@ class PayPalGateway implements PaymentGatewayInterface
     public function handleCallback(array $payload): array
     {
         $orderId = $payload['token'] ?? null;
-        if (!$orderId) return ['success' => false];
+        if (! $orderId) {
+            return ['success' => false];
+        }
 
         $details = $this->paypal->captureOrder($orderId);
+
         return [
             'success' => ($details && $details['status'] === 'COMPLETED'),
             'transaction_id' => $orderId,
-            'details' => $details
+            'details' => $details,
         ];
     }
 

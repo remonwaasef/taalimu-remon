@@ -3,10 +3,9 @@
 namespace Modules\Instructor\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Schedule;
-use App\Models\Course;
 use App\Services\AttendanceService;
+use Illuminate\Http\Request;
 use Modules\Center\Models\Attendance;
 use Modules\Instructor\Http\Controllers\Traits\ResolvesInstructor;
 
@@ -28,7 +27,7 @@ class AttendanceController extends Controller
         }
 
         $todaySessions = $query->orderBy('start_time')->get()
-            ->unique(fn ($s) => $s->course_id . '-' . $s->start_time . '-' . $s->end_time);
+            ->unique(fn ($s) => $s->course_id.'-'.$s->start_time.'-'.$s->end_time);
 
         $todaySessions = new \Illuminate\Pagination\LengthAwarePaginator(
             $todaySessions->forPage(request()->get('page', 1), 10),
@@ -41,7 +40,7 @@ class AttendanceController extends Controller
         $attendanceQuery = Attendance::with(['student', 'course', 'schedule'])->latest();
 
         if ($instructor) {
-            $attendanceQuery->whereHas('course', fn($q) => $q->where('instructor_id', $instructor->id));
+            $attendanceQuery->whereHas('course', fn ($q) => $q->where('instructor_id', $instructor->id));
         }
 
         $recentAttendance = $attendanceQuery->take(10)->get();
@@ -54,7 +53,7 @@ class AttendanceController extends Controller
         $this->authorizeSchedule($schedule);
 
         $schedule->load('course.enrollments.user.student', 'classroom');
-        
+
         $attendances = Attendance::where('schedule_id', $schedule->id)
             ->whereDate('session_date', today())
             ->get()

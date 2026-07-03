@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Sale;
 use App\Models\User;
-
 use App\Traits\HasRoleCheck;
 
 class SalePolicy
@@ -28,13 +27,13 @@ class SalePolicy
 
     public function update(User $user, Sale $sale): bool
     {
-        return $user->tenant_id === $sale->tenant_id && 
+        return $user->tenant_id === $sale->tenant_id &&
                ($this->hasAnyRole($user, ['center_admin', 'admin']) || $user->checkPermissionTo('edit sales'));
     }
 
     public function delete(User $user, Sale $sale): bool
     {
-        return $user->tenant_id === $sale->tenant_id && 
+        return $user->tenant_id === $sale->tenant_id &&
                ($this->hasAnyRole($user, ['center_admin', 'admin']) || $user->checkPermissionTo('delete sales'));
     }
 }

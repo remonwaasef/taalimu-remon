@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('reason');
             $table->nullableMorphs('referenceable');
             $table->timestamps();
-            
+
             $table->index(['tenant_id', 'user_id']);
         });
     }

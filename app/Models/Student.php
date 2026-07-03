@@ -2,17 +2,15 @@
 
 namespace App\Models;
 
-use App\Scopes\TenantScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Student extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes, \App\Traits\IdentifyTenant, \App\Traits\ClearsDashboardCache;
+    use \App\Traits\ClearsDashboardCache, \App\Traits\IdentifyTenant, HasFactory, LogsActivity, SoftDeletes;
 
     protected static function boot()
     {
@@ -29,12 +27,12 @@ class Student extends Model
 
     public function clearCache()
     {
-        cache()->forget('student_profile_' . $this->id);
+        cache()->forget('student_profile_'.$this->id);
     }
 
     public function getCachedProfile()
     {
-        return cache()->remember('student_profile_' . $this->id, now()->addHours(6), function () {
+        return cache()->remember('student_profile_'.$this->id, now()->addHours(6), function () {
             return $this->load(['user', 'grade']);
         });
     }
@@ -45,8 +43,6 @@ class Student extends Model
             ->logOnly(['name', 'email', 'status', 'guardian_id'])
             ->logOnlyDirty();
     }
-
-
 
     protected $fillable = [
         'tenant_id',
@@ -112,7 +108,7 @@ class Student extends Model
     public function getGradeLevelNameAttribute()
     {
         if ($this->grade) {
-            return ($this->grade->stage?->name ? $this->grade->stage->name . ' - ' : '') . $this->grade->name;
+            return ($this->grade->stage?->name ? $this->grade->stage->name.' - ' : '').$this->grade->name;
         }
 
         $grades = [
@@ -162,7 +158,7 @@ class Student extends Model
     {
         return $this->hasMany(\App\Models\Enrollment::class, 'user_id', 'user_id');
     }
-    
+
     public function sales()
     {
         return $this->hasMany(Sale::class);
@@ -186,6 +182,7 @@ class Student extends Model
         if ($tenantId) {
             return $query->where('tenant_id', $tenantId);
         }
+
         return $query;
     }
 }

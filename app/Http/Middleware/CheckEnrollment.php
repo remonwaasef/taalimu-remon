@@ -18,8 +18,8 @@ class CheckEnrollment
         $user = $request->user();
         $course = $request->route('course'); // Assuming route model binding or parameter
 
-        if (!$user || !$course) {
-             return redirect()->back()->with('error', 'Unauthorized access.');
+        if (! $user || ! $course) {
+            return redirect()->back()->with('error', 'Unauthorized access.');
         }
 
         // Check if user is enrolled
@@ -28,7 +28,7 @@ class CheckEnrollment
             ->where('status', 'active')
             ->first();
 
-        if (!$enrollment) {
+        if (! $enrollment) {
             // Redirect to course details/enrollment page
             return redirect()->route('center.courses.show', ['course' => $course->id])
                 ->with('error', 'You must be enrolled to access this content.');

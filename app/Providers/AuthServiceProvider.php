@@ -4,23 +4,23 @@ namespace App\Providers;
 
 use App\Models\Assignment;
 use App\Models\Course;
-use App\Models\Quiz;
-use App\Models\Student;
 use App\Models\Instructor;
-use Spatie\Permission\Models\Role;
-use Modules\Center\Models\Branch;
-use App\Models\Schedule;
-use App\Policies\AssignmentPolicy;
-use App\Policies\CoursePolicy;
-use App\Policies\QuizPolicy;
-use App\Policies\StudentPolicy;
-use App\Policies\InstructorPolicy;
-use App\Policies\RolePolicy;
-use App\Policies\BranchPolicy;
-use App\Policies\SchedulePolicy;
 use App\Models\Question;
+use App\Models\Quiz;
+use App\Models\Schedule;
+use App\Models\Student;
+use App\Policies\AssignmentPolicy;
+use App\Policies\BranchPolicy;
+use App\Policies\CoursePolicy;
+use App\Policies\InstructorPolicy;
 use App\Policies\QuestionPolicy;
+use App\Policies\QuizPolicy;
+use App\Policies\RolePolicy;
+use App\Policies\SchedulePolicy;
+use App\Policies\StudentPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Modules\Center\Models\Branch;
+use Spatie\Permission\Models\Role;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -70,7 +70,7 @@ class AuthServiceProvider extends ServiceProvider
             // Case-insensitive check for Super Admin, Admin and Center Admin
             // These roles get full access to all features without needing individual permissions
             $bypassRoles = ['super_admin', 'Super Admin', 'admin', 'Admin', 'center_admin'];
-            if ($user->hasAnyRole($bypassRoles) || 
+            if ($user->hasAnyRole($bypassRoles) ||
                 in_array(strtolower($user->role ?? ''), ['super_admin', 'admin', 'center_admin'])) {
                 return true;
             }
@@ -78,7 +78,8 @@ class AuthServiceProvider extends ServiceProvider
 
         // Zero DB Hits: Cache authenticated user data in Redis
         \Illuminate\Support\Facades\Auth::provider('cached', function ($app, array $config) {
-            return new class($app['hash'], $config['model']) extends \Illuminate\Auth\EloquentUserProvider {
+            return new class($app['hash'], $config['model']) extends \Illuminate\Auth\EloquentUserProvider
+            {
                 public function retrieveById($identifier)
                 {
                     return \Illuminate\Support\Facades\Cache::remember("user_cache_{$identifier}", 3600, function () use ($identifier) {

@@ -18,7 +18,7 @@ class EnsureOnboardingCompleted
         $user = auth()->user();
 
         // 1. Only applies to logged-in users
-        if (!$user) {
+        if (! $user) {
             return $next($request);
         }
 
@@ -28,7 +28,7 @@ class EnsureOnboardingCompleted
         }
 
         // 3. Only applies if user belongs to a tenant
-        if (!$user->tenant_id || !$user->tenant) {
+        if (! $user->tenant_id || ! $user->tenant) {
             return $next($request);
         }
 
@@ -38,7 +38,7 @@ class EnsureOnboardingCompleted
         }
 
         $status = $user->tenant->onboarding_status;
-        
+
         // If completed, let them pass
         if ($status === 'completed') {
             return $next($request);

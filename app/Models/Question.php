@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
-    use HasFactory, \App\Traits\IdentifyTenant;
-
+    use \App\Traits\IdentifyTenant, HasFactory;
 
     protected $fillable = [
         'tenant_id',

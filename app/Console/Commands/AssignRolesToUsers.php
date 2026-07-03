@@ -2,22 +2,23 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\User;
+use Illuminate\Console\Command;
 use Spatie\Permission\Models\Role;
 
 class AssignRolesToUsers extends Command
 {
     protected $signature = 'permissions:assign-roles';
+
     protected $description = 'Assign Spatie roles to users based on their role column';
 
     public function handle()
     {
         $this->info('Assigning roles to users...');
-        
+
         // Clear permissions cache
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
-        
+
         // Set team ID to null for global roles
         setPermissionsTeamId(null);
 
@@ -25,9 +26,10 @@ class AssignRolesToUsers extends Command
 
         foreach (User::cursor() as $user) {
             $roleName = $user->role;
-            
+
             if (empty($roleName)) {
                 $this->line("Skipping user {$user->name} - no role set");
+
                 continue;
             }
 
@@ -50,13 +52,14 @@ class AssignRolesToUsers extends Command
                 ->whereNull('tenant_id')
                 ->first();
 
-            if (!$role) {
+            if (! $role) {
                 $this->warn("Role '{$mappedRole}' not found for user {$user->name}");
+
                 continue;
             }
 
             // Check if user already has this role
-            if (!$user->hasRole($mappedRole)) {
+            if (! $user->hasRole($mappedRole)) {
                 // Remove any existing roles and assign the correct one
                 $user->syncRoles([$role]);
                 $this->info("Assigned role '{$mappedRole}' to user {$user->name}");
@@ -67,10 +70,10 @@ class AssignRolesToUsers extends Command
         }
 
         $this->info("Done! Assigned roles to {$count} users.");
-        
+
         // Clear cache again
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
-        
+
         return 0;
     }
 }

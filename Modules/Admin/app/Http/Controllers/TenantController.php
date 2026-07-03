@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Tenant;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class TenantController extends Controller
 {
@@ -16,6 +15,7 @@ class TenantController extends Controller
     {
         $this->tenantService = $tenantService;
     }
+
     public function index(Request $request)
     {
         $this->authorize('viewAny', Tenant::class);
@@ -24,9 +24,9 @@ class TenantController extends Controller
         // Basic Filters
         if ($request->filled('search')) {
             $search = \App\Helpers\QueryHelper::escapeLike($request->search);
-            $query->where(function($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('domain', 'like', '%' . $search . '%');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%'.$search.'%')
+                    ->orWhere('domain', 'like', '%'.$search.'%');
             });
         }
 
@@ -39,8 +39,8 @@ class TenantController extends Controller
             if ($request->subscription_status === 'active') {
                 $query->whereHas('currentSubscription');
             } elseif ($request->subscription_status === 'expired') {
-                $query->whereDoesntHave('currentSubscription', function($q) {
-                    $q->where('status', 'active')->where(function($sq) {
+                $query->whereDoesntHave('currentSubscription', function ($q) {
+                    $q->where('status', 'active')->where(function ($sq) {
                         $sq->whereNull('ends_at')->orWhere('ends_at', '>', now());
                     });
                 });
@@ -48,7 +48,7 @@ class TenantController extends Controller
         }
 
         if ($request->filled('package_id')) {
-            $query->whereHas('subscriptions', function($q) use ($request) {
+            $query->whereHas('subscriptions', function ($q) use ($request) {
                 $q->where('package_id', $request->package_id)->orWhere('stripe_price', $request->package_id);
             });
         }
@@ -60,7 +60,7 @@ class TenantController extends Controller
             'inactive_count' => Tenant::where('status', 'inactive')->count(),
             'total_students' => \App\Models\Student::count(),
             'active_subscriptions' => \App\Models\Subscription::where('status', 'active')
-                ->where(function($q) {
+                ->where(function ($q) {
                     $q->whereNull('ends_at')->orWhere('ends_at', '>', now());
                 })->count(),
             'expiring_soon' => \App\Models\Subscription::whereNotNull('ends_at')
@@ -69,7 +69,7 @@ class TenantController extends Controller
         ];
 
         $tenants = $query->with(['users', 'currentSubscription.package'])
-            ->withSum(['invoices as ltv' => function($query) {
+            ->withSum(['invoices as ltv' => function ($query) {
                 $query->where('status', 'paid');
             }], 'amount')
             ->addSelect(['last_activity_at' => \Spatie\Activitylog\Models\Activity::select('activity_log.created_at')
@@ -77,7 +77,7 @@ class TenantController extends Controller
                 ->whereColumn('users.tenant_id', 'tenants.id')
                 ->where('activity_log.causer_type', \App\Models\User::class)
                 ->orderBy('activity_log.created_at', 'desc')
-                ->limit(1)
+                ->limit(1),
             ])
             ->orderBy('tenants.created_at', 'desc')
             ->paginate(20)
@@ -94,6 +94,7 @@ class TenantController extends Controller
     public function create()
     {
         $this->authorize('create', Tenant::class);
+
         return view('admin::tenants.create');
     }
 
@@ -133,11 +134,11 @@ class TenantController extends Controller
         $growthData = $this->tenantService->getGrowthData($tenant);
 
         return view('admin::tenants.show', array_merge([
-            'tenant' => $tenant, 
+            'tenant' => $tenant,
             'activities' => $activities,
             'staff' => $staff,
             'subscriptionHistory' => $subscriptionHistory,
-            'growthData' => $growthData
+            'growthData' => $growthData,
         ], $stats));
     }
 
@@ -150,7 +151,7 @@ class TenantController extends Controller
         $this->authorize('update', $tenant);
 
         $tenant->update([
-            'status' => $tenant->status === 'active' ? 'inactive' : 'active'
+            'status' => $tenant->status === 'active' ? 'inactive' : 'active',
         ]);
 
         return back()->with('success', 'تم تغيير حالة المركز بنجاح.');
@@ -163,24 +164,24 @@ class TenantController extends Controller
     {
         $tenant = Tenant::findOrFail($id);
         $this->authorize('impersonate', $tenant);
-        
+
         $admin = $this->tenantService->getImpersonationUser($tenant);
 
-        if (!$admin) {
+        if (! $admin) {
             return back()->with('error', 'لا يوجد مستخدم مسؤول متاح لهذا المركز حالياً.');
         }
 
         // Store original admin ID to allow return
         session(['impersonator_id' => auth()->id()]);
-        
+
         auth()->login($admin);
 
         // Redirect to tenant's dashboard on their subdomain
         $protocol = request()->secure() ? 'https://' : 'http://';
-        $domain = $tenant->domain . '.' . config('app.tenant_domain');
-        $port = (request()->getPort() && !in_array(request()->getPort(), [80, 443])) ? ':' . request()->getPort() : '';
-        
-        return redirect($protocol . $domain . $port . '/dashboard');
+        $domain = $tenant->domain.'.'.config('app.tenant_domain');
+        $port = (request()->getPort() && ! in_array(request()->getPort(), [80, 443])) ? ':'.request()->getPort() : '';
+
+        return redirect($protocol.$domain.$port.'/dashboard');
     }
 
     /**
@@ -192,8 +193,8 @@ class TenantController extends Controller
     {
         $centralUrl = config('app.url');
 
-        if (!session()->has('impersonator_id')) {
-            return redirect()->to($centralUrl . '/admin')->with('error', 'لا توجد جلسة انتحال شخصية نشطة.');
+        if (! session()->has('impersonator_id')) {
+            return redirect()->to($centralUrl.'/admin')->with('error', 'لا توجد جلسة انتحال شخصية نشطة.');
         }
 
         $adminId = session()->pull('impersonator_id');
@@ -207,7 +208,7 @@ class TenantController extends Controller
 
         // Redirect to the central domain's return route with the token
         // The admin will be authenticated THERE, not on the tenant subdomain.
-        return redirect()->to($centralUrl . '/admin/impersonate/return?token=' . $token);
+        return redirect()->to($centralUrl.'/admin/impersonate/return?token='.$token);
     }
 
     /**
@@ -219,27 +220,27 @@ class TenantController extends Controller
         $token = $request->query('token');
         $centralUrl = config('app.url');
 
-        if (!$token) {
-            return redirect()->to($centralUrl . '/admin/login')->with('error', 'رمز العودة غير صالح.');
+        if (! $token) {
+            return redirect()->to($centralUrl.'/admin/login')->with('error', 'رمز العودة غير صالح.');
         }
 
         $cacheKey = "impersonation_return:{$token}";
         $adminId = \Illuminate\Support\Facades\Cache::pull($cacheKey);
 
-        if (!$adminId) {
-            return redirect()->to($centralUrl . '/admin/login')->with('error', 'انتهت صلاحية رمز العودة أو تم استخدامه مسبقاً.');
+        if (! $adminId) {
+            return redirect()->to($centralUrl.'/admin/login')->with('error', 'انتهت صلاحية رمز العودة أو تم استخدامه مسبقاً.');
         }
 
         $admin = \App\Models\User::find($adminId);
 
-        if (!$admin) {
-            return redirect()->to($centralUrl . '/admin/login')->with('error', 'المشرف غير موجود.');
+        if (! $admin) {
+            return redirect()->to($centralUrl.'/admin/login')->with('error', 'المشرف غير موجود.');
         }
 
         // Login the admin on the CENTRAL domain's session
         auth()->login($admin);
 
-        return redirect()->to($centralUrl . '/admin/tenants')
+        return redirect()->to($centralUrl.'/admin/tenants')
             ->with('success', 'تم العودة للوحة تحكم المشرف العام بنجاح.');
     }
 
@@ -251,7 +252,7 @@ class TenantController extends Controller
         $tenant = Tenant::findOrFail($id);
         $this->authorize('updateNotes', $tenant);
         $tenant->update([
-            'admin_notes' => $request->admin_notes
+            'admin_notes' => $request->admin_notes,
         ]);
 
         return back()->with('success', 'تم تحديث الملاحظات الإدارية بنجاح.');
@@ -264,6 +265,7 @@ class TenantController extends Controller
     {
         $tenant = Tenant::findOrFail($id);
         $this->authorize('update', $tenant);
+
         return view('admin::tenants.edit', compact('tenant'));
     }
 
@@ -277,7 +279,7 @@ class TenantController extends Controller
 
         $request->validate([
             'name' => 'nullable|string|max:255',
-            'domain' => 'nullable|string|max:255|unique:tenants,domain,' . $id,
+            'domain' => 'nullable|string|max:255|unique:tenants,domain,'.$id,
             'status' => 'nullable|in:active,inactive',
         ]);
 
@@ -297,16 +299,16 @@ class TenantController extends Controller
     {
         $tenant = Tenant::findOrFail($id);
         $this->authorize('delete', $tenant);
-        
+
         // Check if tenant has related data
         $studentsCount = \App\Models\Student::where('tenant_id', $id)->count();
-        
+
         if ($studentsCount > 0) {
-            return back()->withErrors(['message' => 'لا يمكن حذف المركز لأنه يحتوي على ' . $studentsCount . ' طالب.']);
+            return back()->withErrors(['message' => 'لا يمكن حذف المركز لأنه يحتوي على '.$studentsCount.' طالب.']);
         }
-        
+
         $tenant->delete();
-        
+
         return redirect()->route('admin.tenants.index')->with('success', 'تم حذف المركز بنجاح');
     }
 
@@ -314,8 +316,8 @@ class TenantController extends Controller
     {
         $request->validate([
             'password' => [
-                'required', 
-                'string', 
+                'required',
+                'string',
                 'confirmed',
                 \Illuminate\Validation\Rules\Password::min(8)
                     ->mixedCase()
@@ -329,7 +331,7 @@ class TenantController extends Controller
         $this->authorize('resetPassword', $tenant);
         $admin = $tenant->users->first();
 
-        if (!$admin) {
+        if (! $admin) {
             return back()->withErrors(['message' => 'لم يتم العثور على مسؤول لهذا المركز.']);
         }
 

@@ -15,10 +15,15 @@ class PaymentReminderMail extends Mailable
     use Queueable, SerializesModels;
 
     public Student $student;
+
     public Tenant $tenant;
+
     public float $amount;
+
     public int $dueDay;
+
     public string $stage;
+
     public string $customMessage;
 
     /**
@@ -45,7 +50,7 @@ class PaymentReminderMail extends Mailable
             'ar' => [
                 'pre_due_7d' => 'تذكير بموعد الدفع - بعد أسبوع',
                 'pre_due_3d' => 'تذكير بموعد الدفع - بعد 3 أيام',
-                'due_day'    => 'اليوم موعد سداد المصروفات',
+                'due_day' => 'اليوم موعد سداد المصروفات',
                 'overdue_1d' => 'تنبيه: تأخر سداد المصروفات',
                 'overdue_3d' => 'تنبيه عاجل: مصروفات متأخرة',
                 'overdue_7d' => 'إشعار أخير: مصروفات متأخرة',
@@ -53,7 +58,7 @@ class PaymentReminderMail extends Mailable
             'en' => [
                 'pre_due_7d' => 'Payment Reminder - Due in One Week',
                 'pre_due_3d' => 'Payment Reminder - Due in 3 Days',
-                'due_day'    => 'Tuition Payment Due Today',
+                'due_day' => 'Tuition Payment Due Today',
                 'overdue_1d' => 'Notice: Overdue Tuition Payment',
                 'overdue_3d' => 'Urgent: Overdue Tuition Payment',
                 'overdue_7d' => 'Final Notice: Overdue Tuition Payment',
@@ -61,7 +66,7 @@ class PaymentReminderMail extends Mailable
             'fr' => [
                 'pre_due_7d' => 'Rappel de paiement - Échéance dans une semaine',
                 'pre_due_3d' => 'Rappel de paiement - Échéance dans 3 jours',
-                'due_day'    => 'Paiement des frais de scolarité dû aujourd\'hui',
+                'due_day' => 'Paiement des frais de scolarité dû aujourd\'hui',
                 'overdue_1d' => 'Avis : Paiement de scolarité en retard',
                 'overdue_3d' => 'Urgent : Paiement de scolarité en retard',
                 'overdue_7d' => 'Dernier avis : Paiement de scolarité en retard',

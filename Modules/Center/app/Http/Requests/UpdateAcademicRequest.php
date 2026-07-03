@@ -22,7 +22,7 @@ class UpdateAcademicRequest extends FormRequest
             'stages.*.grades.*.name' => 'required|string|max:255',
             'deleted_stages' => 'nullable|array',
             'deleted_grades' => 'nullable|array',
-            'settings' => 'nullable|array'
+            'settings' => 'nullable|array',
         ];
     }
 }

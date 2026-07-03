@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Models\User;
-
 use App\Traits\HasRoleCheck;
 
 class UserPolicy
@@ -20,6 +19,7 @@ class UserPolicy
         if ($this->hasAnyRole($user, 'super_admin')) {
             return true;
         }
+
         return $user->tenant_id === $model->tenant_id && ($this->hasAnyRole($user, ['center_admin', 'admin']) || $user->checkPermissionTo('manage users'));
     }
 
@@ -33,7 +33,8 @@ class UserPolicy
         if ($this->hasAnyRole($user, 'super_admin')) {
             return true;
         }
-        return $user->tenant_id === $model->tenant_id && 
+
+        return $user->tenant_id === $model->tenant_id &&
                ($this->hasAnyRole($user, ['center_admin', 'admin']) || $user->checkPermissionTo('manage users'));
     }
 
@@ -42,7 +43,8 @@ class UserPolicy
         if ($this->hasAnyRole($user, 'super_admin')) {
             return true;
         }
-        return $user->tenant_id === $model->tenant_id && 
+
+        return $user->tenant_id === $model->tenant_id &&
                ($this->hasAnyRole($user, ['center_admin', 'admin']) || $user->checkPermissionTo('manage users'));
     }
 }

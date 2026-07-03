@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\Tenant;
-use App\Models\Student;
 use App\Models\Course;
 use App\Models\Sale;
+use App\Models\Student;
+use App\Models\Tenant;
 use App\Models\User;
 use App\Scopes\TenantScope;
 use Illuminate\Support\Facades\DB;
@@ -23,7 +23,7 @@ class TenantService
         $totalRevenue = Sale::where('tenant_id', $tenant->id)->where('status', 'paid')->sum('paid_amount');
 
         $lastSubscription = $tenant->subscriptions->last();
-        
+
         $limits = [
             'students' => [
                 'used' => $studentsCount,
@@ -32,7 +32,7 @@ class TenantService
             'courses' => [
                 'used' => $coursesCount,
                 'total' => $lastSubscription?->plan?->courses_limit ?? 10,
-            ]
+            ],
         ];
 
         return [
@@ -49,7 +49,7 @@ class TenantService
     public function getRecentActivity(Tenant $tenant, int $limit = 5)
     {
         $tenantUserIds = $tenant->users->pluck('id');
-        
+
         return Activity::with(['subject', 'causer'])
             ->whereIn('causer_id', $tenantUserIds)
             ->where('causer_type', User::class)
@@ -65,19 +65,20 @@ class TenantService
     {
         // Prioritize center_admin (Owner)
         $admin = $tenant->users()->where('role', 'center_admin')->orderBy('id', 'asc')->first();
-        
+
         // Fallback to regular admin
-        if (!$admin) {
+        if (! $admin) {
             $admin = $tenant->users()->where('role', 'admin')->first();
         }
 
         // Fallback to instructor (for instructor-type tenants)
-        if (!$admin) {
+        if (! $admin) {
             $admin = $tenant->users()->where('role', 'instructor')->orderBy('id', 'asc')->first();
         }
 
         return $admin;
     }
+
     /**
      * Get staff/instructors for a tenant.
      */
@@ -97,7 +98,7 @@ class TenantService
         $logs = $tenant->subscriptionLogs()
             ->orderBy('created_at', 'desc')
             ->get();
-        
+
         // Fallback: if no logs exist yet, create an entry from the current active subscription
         if ($logs->isEmpty()) {
             $currentSub = $tenant->activeSubscription();
@@ -129,12 +130,13 @@ class TenantService
                             $sub->package_slug = $sub->package->slug ?? 'unknown';
                             $sub->amount = $sub->total_amount ?? 0;
                             $sub->transaction_id = $sub->stripe_id;
+
                             return $sub;
                         });
                 }
             }
         }
-        
+
         return $logs;
     }
 

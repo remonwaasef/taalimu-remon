@@ -2,8 +2,8 @@
 
 namespace App\Services\PaymentGateways;
 
-use App\Models\Tenant;
 use App\Models\Package;
+use App\Models\Tenant;
 
 trait HandlesDemoPayments
 {
@@ -13,7 +13,7 @@ trait HandlesDemoPayments
     protected function handleDemoRedirect(Tenant $tenant, Package $package, string $billingCycle, array $options = []): string
     {
         $cyclePrice = $billingCycle === 'yearly' ? $package->yearly_price : $package->price;
-        
+
         session([
             'tenant_id' => $tenant->id,
             'selected_plan' => $package->slug,
@@ -23,8 +23,8 @@ trait HandlesDemoPayments
             'applied_coupon_id' => $options['coupon_id'] ?? null,
             'applied_coupon_code' => $options['coupon_code'] ?? null,
             'discount_amount' => $options['discount_amount'] ?? 0,
-            'registration_hmac' => hash_hmac('sha256', $tenant->id . '|' . (auth()->id() ?? 'guest'), config('app.key')),
-            'is_subscription_change' => !empty($options['is_upgrade']),
+            'registration_hmac' => hash_hmac('sha256', $tenant->id.'|'.(auth()->id() ?? 'guest'), config('app.key')),
+            'is_subscription_change' => ! empty($options['is_upgrade']),
             'is_mock_payment' => true,
         ]);
 

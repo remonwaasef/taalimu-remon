@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Role;
+use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 
 class CenterRolesSeeder extends Seeder
@@ -25,23 +25,23 @@ class CenterRolesSeeder extends Seeder
         $permissions = [
             // Student Management
             'view students', 'create students', 'edit students', 'delete students',
-            
+
             // Instructor Management
             'view instructors', 'create instructors', 'edit instructors', 'delete instructors',
-            
+
             // Course Management
             'view courses', 'create courses', 'edit courses', 'delete courses',
-            
+
             // Financials
             'view sales', 'create sales', 'edit sales', 'delete sales',
             'view expenses', 'create expenses', 'edit expenses', 'delete expenses',
             'view billing', 'manage billing',
-            
+
             // Operations
             'view schedule', 'manage schedule',
             'view attendance', 'take attendance',
             'view exams', 'manage exams',
-            
+
             // Admin
             'manage users', // add/edit other staff
             'view reports',

@@ -1,10 +1,9 @@
 <?php
 
 use App\Models\Student;
-use App\Models\Enrollment;
 
-require __DIR__ . '/vendor/autoload.php';
-$app = require_once __DIR__ . '/bootstrap/app.php';
+require __DIR__.'/vendor/autoload.php';
+$app = require_once __DIR__.'/bootstrap/app.php';
 $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
 $kernel->bootstrap();
 
@@ -17,11 +16,11 @@ if ($student) {
             ->where('course_id', $enrollment->course_id)
             ->whereIn('status', ['present', 'late'])
             ->count();
-        
+
         $enrollment->update([
-            'remaining_sessions' => max(0, $total - $present)
+            'remaining_sessions' => max(0, $total - $present),
         ]);
-        echo "Fixed enrollment for course: " . $enrollment->course->title . " (Total: $total, Present: $present, Remaining: " . ($total - $present) . ")\n";
+        echo 'Fixed enrollment for course: '.$enrollment->course->title." (Total: $total, Present: $present, Remaining: ".($total - $present).")\n";
     }
 } else {
     echo "Student not found.\n";

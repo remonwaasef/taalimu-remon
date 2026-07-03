@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\User;
+use Illuminate\Console\Command;
 use Spatie\Permission\Models\Role;
 
 class SyncUserRoles extends Command
@@ -31,26 +31,26 @@ class SyncUserRoles extends Command
 
         User::chunk(100, function ($users) use (&$count) {
             foreach ($users as $user) {
-                if (!$user->role) {
+                if (! $user->role) {
                     continue;
                 }
-    
+
                 // Map database roles to Spatie roles if names differ, otherwise use direct mapping
                 // In CenterRolesSeeder: 'center_admin', 'secretary', 'accountant', 'staff'
                 // In SuperAdminSeeder: 'super_admin' (via custom logic)
-                
+
                 $roleName = $user->role;
-    
+
                 // Handle special mapping if needed
                 if ($roleName === 'admin' && $user->tenant_id === null) {
                     $roleName = 'super_admin';
                 }
-    
+
                 // Check if role exists in the guard
                 $role = Role::where('name', $roleName)->first();
-    
+
                 if ($role) {
-                    if (!$user->hasRole($roleName)) {
+                    if (! $user->hasRole($roleName)) {
                         $user->assignRole($roleName);
                         $this->info("Assigned role [$roleName] to user: {$user->email}");
                         $count++;

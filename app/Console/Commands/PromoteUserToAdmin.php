@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\User;
+use Illuminate\Console\Command;
 use Spatie\Permission\Models\Role;
 
 class PromoteUserToAdmin extends Command
@@ -30,8 +30,9 @@ class PromoteUserToAdmin extends Command
         $email = $this->argument('email');
         $user = User::where('email', $email)->first();
 
-        if (!$user) {
+        if (! $user) {
             $this->error("User with email {$email} not found.");
+
             return 1;
         }
 
@@ -43,8 +44,9 @@ class PromoteUserToAdmin extends Command
 
         $this->warn('⚠️  This will promote the user to Super Admin with GLOBAL access (tenant_id = NULL).');
 
-        if (!$this->confirm("Are you sure you want to promote '{$user->name}' ({$email}) to Super Admin?")) {
+        if (! $this->confirm("Are you sure you want to promote '{$user->name}' ({$email}) to Super Admin?")) {
             $this->info('Operation cancelled.');
+
             return 0;
         }
 
@@ -52,6 +54,7 @@ class PromoteUserToAdmin extends Command
         $confirmName = $this->ask('Type the user email to confirm');
         if ($confirmName !== $email) {
             $this->error('Email mismatch. Operation cancelled.');
+
             return 1;
         }
 
@@ -78,12 +81,13 @@ class PromoteUserToAdmin extends Command
             'promoted_user_email' => $user->email,
             'previous_role' => $previousRole,
             'previous_tenant_id' => $previousTenantId,
-            'promoted_by' => get_current_user() . '@' . gethostname(),
+            'promoted_by' => get_current_user().'@'.gethostname(),
             'timestamp' => now()->toIso8601String(),
         ]);
 
         $this->info("✅ User {$email} has been promoted to Super Admin successfully.");
         $this->warn('This action has been logged for auditing purposes.');
+
         return 0;
     }
 }

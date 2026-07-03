@@ -3,10 +3,9 @@
 namespace Modules\Center\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Question;
 use App\Models\QuestionCategory;
-use App\Models\QuestionOption;
+use Illuminate\Http\Request;
 
 class QuestionBankController extends Controller
 {
@@ -15,6 +14,7 @@ class QuestionBankController extends Controller
         $this->authorize('viewAny', Question::class);
         $questions = Question::with('category')->latest()->paginate(20);
         $categories = QuestionCategory::select('id', 'name', 'slug')->get();
+
         return view('center::questions.index', compact('questions', 'categories'));
     }
 
@@ -22,6 +22,7 @@ class QuestionBankController extends Controller
     {
         $this->authorize('create', Question::class);
         $categories = QuestionCategory::select('id', 'name', 'slug')->get();
+
         return view('center::questions.create', compact('categories'));
     }
 
@@ -57,6 +58,7 @@ class QuestionBankController extends Controller
         $this->authorize('update', $question);
         $categories = QuestionCategory::select('id', 'name', 'slug')->get();
         $question->load('options');
+
         return view('center::questions.edit', compact('question', 'categories'));
     }
 
@@ -81,6 +83,7 @@ class QuestionBankController extends Controller
     {
         $this->authorize('delete', $question);
         $question->delete();
+
         return back()->with('success', __('center::messages.msg_055'));
     }
 
@@ -89,6 +92,7 @@ class QuestionBankController extends Controller
     {
         $request->validate(['name' => 'required|string|max:255']);
         QuestionCategory::create(['name' => $request->name]);
+
         return back()->with('success', __('center::messages.msg_056'));
     }
 }

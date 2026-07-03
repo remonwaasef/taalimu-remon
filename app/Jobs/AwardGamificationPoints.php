@@ -15,8 +15,11 @@ class AwardGamificationPoints implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $user;
+
     public $points;
+
     public $reason;
+
     public $referenceable;
 
     /**

@@ -3,9 +3,9 @@
 namespace Modules\Instructor\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Schedule;
 use App\Models\Course;
+use App\Models\Schedule;
+use Illuminate\Http\Request;
 use Modules\Instructor\Http\Controllers\Traits\ResolvesInstructor;
 
 class ScheduleController extends Controller
@@ -16,12 +16,13 @@ class ScheduleController extends Controller
     {
         $instructor = $this->instructor;
         $query = Schedule::with(['course', 'classroom', 'instructor', 'bookings'])->latest();
-        
+
         if ($instructor) {
             $query->where('instructor_id', $instructor->id);
         }
 
         $schedules = $query->get();
+
         return view('instructor::schedules.index', compact('schedules'));
     }
 
@@ -30,14 +31,14 @@ class ScheduleController extends Controller
         $instructor = $this->instructor;
         $courses = $instructor ? $instructor->courses()->select('id', 'title', 'instructor_id')->get() : Course::select('id', 'title', 'instructor_id')->get();
         $classrooms = \App\Models\Classroom::select('id', 'name', 'capacity')->get();
-        
+
         return view('instructor::schedules.create', compact('courses', 'classrooms'));
     }
 
     public function store(Request $request)
     {
         $instructor = $this->instructor;
-        if (!$instructor) {
+        if (! $instructor) {
             return back()->with('error', __('instructor::messages.not_instructor_error'));
         }
 
@@ -68,7 +69,7 @@ class ScheduleController extends Controller
             return back()->withInput()->with('error', __('instructor::messages.instructor_conflict'));
         }
 
-        if (!empty($validated['classroom_id'])) {
+        if (! empty($validated['classroom_id'])) {
             $classroomConflict = clone $conflictQuery;
             if ($classroomConflict->where('classroom_id', $validated['classroom_id'])->exists()) {
                 return back()->withInput()->with('error', __('instructor::messages.hall_conflict'));
@@ -119,7 +120,7 @@ class ScheduleController extends Controller
             return back()->withInput()->with('error', __('instructor::messages.instructor_conflict'));
         }
 
-        if (!empty($validated['classroom_id'])) {
+        if (! empty($validated['classroom_id'])) {
             $classroomConflict = clone $conflictQuery;
             if ($classroomConflict->where('classroom_id', $validated['classroom_id'])->exists()) {
                 return back()->withInput()->with('error', __('instructor::messages.hall_conflict'));
@@ -136,6 +137,7 @@ class ScheduleController extends Controller
     {
         $this->authorizeSchedule($schedule);
         $schedule->delete();
+
         return redirect()->route('instructor.schedules.index')
             ->with('success', __('instructor::messages.schedule_deleted'));
     }
@@ -156,10 +158,11 @@ class ScheduleController extends Controller
 
         if ($request->ajax()) {
             $classrooms = \App\Models\Classroom::select('id', 'name', 'capacity')->get();
+
             return response()->json([
                 'success' => true,
                 'classrooms' => $classrooms,
-                'new_id' => $classroom->id
+                'new_id' => $classroom->id,
             ]);
         }
 

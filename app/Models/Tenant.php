@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Cashier\Billable;
-use Spatie\Activitylog\Traits\LogsActivity; // Added direct import for LogsActivity
-use Spatie\Activitylog\LogOptions; // Added direct import for LogOptions
+use Spatie\Activitylog\LogOptions; // Added direct import for LogsActivity
+use Spatie\Activitylog\Traits\LogsActivity; // Added direct import for LogOptions
 
 class Tenant extends Model
 {
-    use HasFactory, Billable, LogsActivity;
-    
+    use Billable, HasFactory, LogsActivity;
+
     protected static function boot()
     {
         parent::boot();
@@ -19,9 +19,9 @@ class Tenant extends Model
         // High-Scale: Cache Table Schema
         if (app()->environment('production') && extension_loaded('redis')) {
             static::$appColumns = \Illuminate\Support\Facades\Cache::store('redis')->remember(
-                'schema_columns_tenants', 
-                86400, 
-                fn() => \Illuminate\Support\Facades\Schema::getColumnListing('tenants')
+                'schema_columns_tenants',
+                86400,
+                fn () => \Illuminate\Support\Facades\Schema::getColumnListing('tenants')
             );
         }
 
@@ -31,7 +31,7 @@ class Tenant extends Model
                     \Illuminate\Support\Facades\Cache::store('redis')->forget("taalimu:tenancy:domain:{$tenant->domain}");
                 }
             } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::warning("Tenant Model (saved event): Failed to clear redis cache for domain {$tenant->domain}. Error: " . $e->getMessage());
+                \Illuminate\Support\Facades\Log::warning("Tenant Model (saved event): Failed to clear redis cache for domain {$tenant->domain}. Error: ".$e->getMessage());
             }
             // Keep old cache clearing for safety during transition
             \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$tenant->domain}");
@@ -43,7 +43,7 @@ class Tenant extends Model
                     \Illuminate\Support\Facades\Cache::store('redis')->forget("taalimu:tenancy:domain:{$tenant->domain}");
                 }
             } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::warning("Tenant Model (deleted event): Failed to clear redis cache for domain {$tenant->domain}. Error: " . $e->getMessage());
+                \Illuminate\Support\Facades\Log::warning("Tenant Model (deleted event): Failed to clear redis cache for domain {$tenant->domain}. Error: ".$e->getMessage());
             }
             \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$tenant->domain}");
         });
@@ -53,22 +53,22 @@ class Tenant extends Model
     {
         return LogOptions::defaults()
             ->logOnly([
-                'name', 
-                'email', 
-                'phone', 
-                'address', 
-                'logo', 
-                'favicon', 
-                'description', 
-                'facebook_url', 
-                'instagram_url', 
-                'twitter_url', 
-                'youtube_url', 
-                'linkedin_url', 
-                'domain', 
+                'name',
+                'email',
+                'phone',
+                'address',
+                'logo',
+                'favicon',
+                'description',
+                'facebook_url',
+                'instagram_url',
+                'twitter_url',
+                'youtube_url',
+                'linkedin_url',
+                'domain',
                 'status',
                 'settings',
-                'timezone'
+                'timezone',
             ])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
@@ -121,7 +121,11 @@ class Tenant extends Model
     }
 
     protected static $appColumns = [];
-    public function getTableColumns() { return static::$appColumns ?: parent::getTableColumns(); }
+
+    public function getTableColumns()
+    {
+        return static::$appColumns ?: parent::getTableColumns();
+    }
 
     /**
      * Get the subscriptions for the tenant.

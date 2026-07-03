@@ -14,6 +14,7 @@ class CurriculumController extends Controller
     {
         $this->authorize('update', $course);
         $course->load(['sections.lessons', 'resources']);
+
         return view('center::curriculum.edit', compact('course'));
     }
 
@@ -23,8 +24,9 @@ class CurriculumController extends Controller
         $request->validate(['title' => 'required|string|min:2|max:255']);
         $course->sections()->create([
             'title' => $request->title,
-            'sort_order' => $course->sections()->max('sort_order') + 1
+            'sort_order' => $course->sections()->max('sort_order') + 1,
         ]);
+
         return back()->with('success', __('center::messages.msg_034'));
     }
 
@@ -33,6 +35,7 @@ class CurriculumController extends Controller
         $this->authorize('update', $section->course);
         $request->validate(['title' => 'required|string|min:2|max:255']);
         $section->update(['title' => $request->title]);
+
         return back()->with('success', __('center::messages.msg_035'));
     }
 
@@ -40,6 +43,7 @@ class CurriculumController extends Controller
     {
         $this->authorize('update', $section->course);
         $section->delete();
+
         return back()->with('success', __('center::messages.msg_036'));
     }
 
@@ -49,8 +53,9 @@ class CurriculumController extends Controller
         $request->validate(['title' => 'required|string|min:2|max:255']);
         $section->lessons()->create([
             'title' => $request->title,
-            'sort_order' => $section->lessons()->max('sort_order') + 1
+            'sort_order' => $section->lessons()->max('sort_order') + 1,
         ]);
+
         return back()->with('success', __('center::messages.msg_037'));
     }
 
@@ -62,16 +67,17 @@ class CurriculumController extends Controller
             'type' => 'required|in:video,text,quiz,assignment',
             'content' => 'nullable|string',
             'duration' => 'nullable|integer',
-            'is_free' => 'boolean'
+            'is_free' => 'boolean',
         ]);
-        
+
         if (isset($validated['type']) && $validated['type'] === 'text' && isset($validated['content'])) {
             // Whitelist safe tags to prevent XSS while allowing rich text formatting
             $allowedTags = '<p><br><b><i><strong><em><ul><ol><li><div><span><h1><h2><h3><h4><h5><h6><a>';
             $validated['content'] = strip_tags($validated['content'], $allowedTags);
         }
-        
+
         $lesson->update($validated);
+
         return back()->with('success', __('center::messages.msg_038'));
     }
 
@@ -79,6 +85,7 @@ class CurriculumController extends Controller
     {
         $this->authorize('update', $lesson->section->course);
         $lesson->delete();
+
         return back()->with('success', __('center::messages.msg_039'));
     }
 
@@ -89,6 +96,7 @@ class CurriculumController extends Controller
         foreach ($request->sections as $index => $id) {
             \App\Models\Section::where('id', $id)->where('course_id', $course->id)->update(['sort_order' => $index]);
         }
+
         return response()->json(['status' => 'success']);
     }
 
@@ -99,6 +107,7 @@ class CurriculumController extends Controller
         foreach ($request->lessons as $index => $id) {
             \App\Models\Lesson::where('id', $id)->where('section_id', $section->id)->update(['sort_order' => $index]);
         }
+
         return response()->json(['status' => 'success']);
     }
 

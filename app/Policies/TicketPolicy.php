@@ -14,7 +14,7 @@ class TicketPolicy
 
     public function view(User $user, Ticket $ticket): bool
     {
-        return $user->tenant_id === $ticket->tenant_id && 
+        return $user->tenant_id === $ticket->tenant_id &&
                ($user->id === $ticket->user_id || $user->hasAnyRole(['center_admin', 'admin']));
     }
 
@@ -25,13 +25,13 @@ class TicketPolicy
 
     public function update(User $user, Ticket $ticket): bool
     {
-        return $user->tenant_id === $ticket->tenant_id && 
+        return $user->tenant_id === $ticket->tenant_id &&
                ($user->id === $ticket->user_id || $user->hasAnyRole(['center_admin', 'admin']));
     }
 
     public function delete(User $user, Ticket $ticket): bool
     {
-        return $user->tenant_id === $ticket->tenant_id && 
+        return $user->tenant_id === $ticket->tenant_id &&
                $user->hasAnyRole(['center_admin', 'admin']);
     }
 }

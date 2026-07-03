@@ -2,17 +2,15 @@
 
 namespace App\Models;
 
-use App\Scopes\TenantScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
-
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Stage extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes, \App\Traits\IdentifyTenant, \App\Traits\ClearsDashboardCache;
+    use \App\Traits\ClearsDashboardCache, \App\Traits\IdentifyTenant, HasFactory, LogsActivity, SoftDeletes;
 
     protected $fillable = [
         'tenant_id',
@@ -25,10 +23,12 @@ class Stage extends Model
      */
     public function getNameAttribute($value)
     {
-        if (str_contains((string)$value, '::')) {
+        if (str_contains((string) $value, '::')) {
             $translated = __($value);
+
             return $translated !== $value ? $translated : $value;
         }
+
         return $value;
     }
 
@@ -50,7 +50,7 @@ class Stage extends Model
     {
         $tenantId = app('tenant')->id ?? 0;
         cache()->forget("tenant_{$tenantId}_stages");
-        
+
         // Use the trait's method for dashboard-wide clearing
         static::clearDashboardCache();
     }
@@ -58,6 +58,7 @@ class Stage extends Model
     public static function getCached()
     {
         $tenantId = app('tenant')->id ?? 0;
+
         return cache()->remember("tenant_{$tenantId}_stages", 3600, function () {
             return static::with('grades')->orderBy('order')->get();
         });

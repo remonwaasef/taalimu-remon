@@ -18,7 +18,7 @@ class AdminBugReportController extends Controller
         if ($request->has('status') && $request->status !== '') {
             $query->where('status', $request->status);
         }
-        
+
         if ($request->has('priority') && $request->priority !== '') {
             $query->where('priority', $request->priority);
         }
@@ -66,15 +66,15 @@ class AdminBugReportController extends Controller
      */
     public function showScreenshot(BugReport $bugReport)
     {
-        if (!$bugReport->screenshot) {
+        if (! $bugReport->screenshot) {
             abort(404, 'No screenshot attached to this report.');
         }
 
         // Try multiple possible storage locations
         $possiblePaths = [
-            storage_path('app/public/' . $bugReport->screenshot),
-            public_path('storage/' . $bugReport->screenshot),
-            storage_path('app/public/logos/' . $bugReport->screenshot),
+            storage_path('app/public/'.$bugReport->screenshot),
+            public_path('storage/'.$bugReport->screenshot),
+            storage_path('app/public/logos/'.$bugReport->screenshot),
         ];
 
         $filePath = null;
@@ -85,8 +85,8 @@ class AdminBugReportController extends Controller
             }
         }
 
-        if (!$filePath) {
-            abort(404, 'Screenshot file not found. Paths checked: ' . implode(', ', $possiblePaths));
+        if (! $filePath) {
+            abort(404, 'Screenshot file not found. Paths checked: '.implode(', ', $possiblePaths));
         }
 
         $mimeType = mime_content_type($filePath) ?: 'image/jpeg';

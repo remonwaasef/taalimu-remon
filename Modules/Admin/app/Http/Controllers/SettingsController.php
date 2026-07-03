@@ -3,11 +3,10 @@
 namespace Modules\Admin\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
-use App\Models\SiteSetting;
-use App\Models\Package;
 use App\Models\Coupon;
+use App\Models\Package;
+use App\Models\SiteSetting;
+use Illuminate\Http\Request;
 
 class SettingsController extends Controller
 {
@@ -15,19 +14,19 @@ class SettingsController extends Controller
     public function index()
     {
         // Authorization check handled by middleware
-        
+
         $packages = Package::with('features')->orderBy('sort_order')->get();
         // Get features ordered by sort_order
         $features = \App\Models\Feature::with('packages')->orderBy('sort_order')->get();
         $coupons = Coupon::with('package')->latest()->paginate(10);
-        
+
         return view('admin::settings.index', compact('packages', 'features', 'coupons'));
     }
 
     public function update(Request $request)
     {
         // Authorization check handled by middleware
-        
+
         $request->validate([
             'site_name' => 'required|string|max:255',
             'admin_email' => 'required|email|max:255',
@@ -97,23 +96,23 @@ class SettingsController extends Controller
                     // START: Sync Base Price to Default Regional Price
                     // This ensures that the valid base price is always available as the "default" smart price fallback
                     $defaultCurrency = \App\Models\SiteSetting::get('currency_code', 'USD');
-                    
+
                     // Fetch current regional prices to avoid losing data not in the request
                     $currentRegional = $package->regional_prices ?? [];
-                    
+
                     $basePriceData = [
                         'amount' => $data['price'] ?? 0,
                         'term_price' => $data['term_price'] ?? 0,
                         'yearly_price' => $data['yearly_price'] ?? 0,
                         'old_price' => $data['old_price'] ?? 0,
                         'currency' => $defaultCurrency,
-                        'discount_label' => $data['regional_prices']['default']['discount_label'] ?? ($currentRegional['default']['discount_label'] ?? null) 
+                        'discount_label' => $data['regional_prices']['default']['discount_label'] ?? ($currentRegional['default']['discount_label'] ?? null),
                     ];
 
                     // Safely merge: prioritize request data for regional prices, but ensure 'default' is synced
                     $mergedRegional = array_merge($currentRegional, $data['regional_prices'] ?? []);
                     $mergedRegional['default'] = array_merge($mergedRegional['default'] ?? [], $basePriceData);
-                    
+
                     $data['regional_prices'] = $mergedRegional;
                     // END: Sync Base Price
 
@@ -140,7 +139,7 @@ class SettingsController extends Controller
             if (extension_loaded('redis') && class_exists('Redis')) {
                 $redis = \Illuminate\Support\Facades\Redis::connection();
                 $keys = $redis->keys('taalimu:tenancy:domain:*');
-                if (!empty($keys)) {
+                if (! empty($keys)) {
                     foreach ($keys as $key) {
                         // Redis::keys() might return prefixed keys depending on configuration
                         $redis->del($key);
@@ -148,7 +147,7 @@ class SettingsController extends Controller
                 }
             }
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::error('Failed to clear tenancy caches: ' . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error('Failed to clear tenancy caches: '.$e->getMessage());
         }
 
         return redirect()->back()->with('success', 'تم حفظ جميع التعديلات بنجاح');
@@ -165,8 +164,9 @@ class SettingsController extends Controller
         ]);
 
         Package::create($data);
-        
+
         \Illuminate\Support\Facades\Cache::forget('landing_packages');
+
         return redirect()->back()->with('success', 'تم إضافة الباقة بنجاح');
     }
 
@@ -174,8 +174,9 @@ class SettingsController extends Controller
     {
         $package = Package::findOrFail($id);
         $package->delete();
-        
+
         \Illuminate\Support\Facades\Cache::forget('landing_packages');
+
         return redirect()->back()->with('success', 'تم حذف الباقة بنجاح');
     }
 
@@ -189,7 +190,7 @@ class SettingsController extends Controller
             'category' => 'required|string',
             'sort_order' => 'nullable|integer',
             'assign_packages' => 'nullable|array',
-            'assign_packages.*' => 'exists:packages,id'
+            'assign_packages.*' => 'exists:packages,id',
         ]);
 
         $feature = \App\Models\Feature::create([
@@ -199,10 +200,10 @@ class SettingsController extends Controller
             'type' => $data['type'],
             'category' => $data['category'],
             'sort_order' => $data['sort_order'] ?? 0,
-            'is_visible' => true
+            'is_visible' => true,
         ]);
-        
-        if (!empty($data['assign_packages'])) {
+
+        if (! empty($data['assign_packages'])) {
             $syncData = [];
             foreach ($data['assign_packages'] as $packageId) {
                 // Default value: 'true' for boolean, '-1' (unlimited) for limits
@@ -212,6 +213,7 @@ class SettingsController extends Controller
         }
 
         \Illuminate\Support\Facades\Cache::forget('landing_features');
+
         return redirect()->back()->with('success', 'تم إضافة الميزة وربطها بالخطط بنجاح');
     }
 
@@ -227,8 +229,9 @@ class SettingsController extends Controller
         ]);
 
         $feature->update($data);
-        
+
         \Illuminate\Support\Facades\Cache::forget('landing_features');
+
         return redirect()->back()->with('success', 'تم تحديث الميزة بنجاح');
     }
 
@@ -236,8 +239,9 @@ class SettingsController extends Controller
     {
         $feature = \App\Models\Feature::findOrFail($id);
         $feature->delete();
-        
+
         \Illuminate\Support\Facades\Cache::forget('landing_features');
+
         return redirect()->back()->with('success', 'تم حذف الميزة بنجاح');
     }
 }

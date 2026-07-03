@@ -32,7 +32,7 @@ class SyncUserToKlaviyo implements ShouldQueue
         $profileData = [
             'email' => $this->user->email,
             'first_name' => $this->user->name,
-            'title' => $this->user->role ?? 'user'
+            'title' => $this->user->role ?? 'user',
         ];
 
         // Sync the profile
@@ -40,10 +40,10 @@ class SyncUserToKlaviyo implements ShouldQueue
 
         // Track "Registered" event
         $klaviyo->trackEvent('Registered', [
-            '$email' => $this->user->email
+            '$email' => $this->user->email,
         ], [
             'role' => $this->user->role ?? 'user',
-            'tenant_id' => $this->user->tenant_id ?? null
+            'tenant_id' => $this->user->tenant_id ?? null,
         ]);
     }
 }

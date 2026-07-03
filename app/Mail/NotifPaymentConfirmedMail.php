@@ -12,8 +12,11 @@ class NotifPaymentConfirmedMail extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
 
     public string $processedBody;
+
     public string $subjectLine;
+
     public string $senderName;
+
     public string $studentName;
 
     public function __construct(?string $subjectTemplate, ?string $bodyTemplate, array $variables, string $senderName, string $studentName = '')
@@ -27,19 +30,20 @@ class NotifPaymentConfirmedMail extends Mailable implements ShouldQueue
     public function build()
     {
         return $this->subject($this->subjectLine)
-                    ->view('emails.welcome_student_mail') // Reuse the clean template
-                    ->with([
-                        'studentName' => $this->studentName ?: $this->senderName,
-                        'messageContent' => $this->processedBody,
-                        'senderName'     => $this->senderName,
-                    ]);
+            ->view('emails.welcome_student_mail') // Reuse the clean template
+            ->with([
+                'studentName' => $this->studentName ?: $this->senderName,
+                'messageContent' => $this->processedBody,
+                'senderName' => $this->senderName,
+            ]);
     }
 
     public static function replacePlaceholders(string $template, array $variables): string
     {
         foreach ($variables as $key => $value) {
-            $template = str_replace('{' . $key . '}', (string) $value, $template);
+            $template = str_replace('{'.$key.'}', (string) $value, $template);
         }
+
         return $template;
     }
 }

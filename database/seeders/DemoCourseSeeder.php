@@ -2,22 +2,23 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\User;
 use App\Models\Course;
-use App\Models\Section;
-use App\Models\Lesson;
 use App\Models\Enrollment;
+use App\Models\Lesson;
+use App\Models\Section;
 use App\Models\Tenant;
+use App\Models\User;
+use Illuminate\Database\Seeder;
 
 class DemoCourseSeeder extends Seeder
 {
     public function run()
     {
         $tenant = Tenant::where('domain', 'remon')->first();
-        
-        if (!$tenant) {
+
+        if (! $tenant) {
             $this->command->info('Tenant remon not found.');
+
             return;
         }
 

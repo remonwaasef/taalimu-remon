@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\Student;
 use App\Models\Course;
 use App\Models\Enrollment;
+use App\Models\Student;
 
-require __DIR__ . '/vendor/autoload.php';
-$app = require_once __DIR__ . '/bootstrap/app.php';
+require __DIR__.'/vendor/autoload.php';
+$app = require_once __DIR__.'/bootstrap/app.php';
 $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
 $kernel->bootstrap();
 
@@ -15,7 +15,7 @@ if ($course) {
     $course->update(['sessions_count' => 10]);
     echo "STEP 1: Updated course '{$course->title}' to 10 sessions.\n";
 } else {
-    die("Course 'عربي' not found.\n");
+    exit("Course 'عربي' not found.\n");
 }
 
 // 2. Force fix the student enrollment
@@ -24,15 +24,15 @@ if ($student) {
     $enrollment = Enrollment::where('user_id', $student->user_id)
         ->where('course_id', $course->id)
         ->first();
-    
+
     if ($enrollment) {
         $present = \Modules\Center\Models\Attendance::where('student_id', $student->id)
             ->where('course_id', $course->id)
             ->whereIn('status', ['present', 'late'])
             ->count();
-        
+
         $enrollment->update(['remaining_sessions' => 10 - $present]);
-        echo "STEP 2: Updated student '{$student->name}' enrollment (Remaining: " . (10 - $present) . ").\n";
+        echo "STEP 2: Updated student '{$student->name}' enrollment (Remaining: ".(10 - $present).").\n";
     } else {
         echo "Enrollment for student in this course not found.\n";
     }

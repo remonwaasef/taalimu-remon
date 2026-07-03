@@ -2,29 +2,33 @@
 
 namespace Tests\Feature;
 
+use App\Models\Assignment;
+use App\Models\Course;
+use App\Models\Instructor;
+use App\Models\Lesson;
+use App\Models\Package;
+use App\Models\Subscription;
+use App\Models\Tenant;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Tenant;
-use App\Models\Course;
-use App\Models\Lesson;
-use App\Models\Assignment;
-use App\Models\Instructor;
-use App\Models\Package;
-use App\Models\Subscription;
 
 class AssignmentSystemTest extends TestCase
 {
     use RefreshDatabase;
 
     protected $tenant;
+
     protected $instructorUser;
+
     protected $instructorProfile;
+
     protected $student;
+
     protected $course;
+
     protected $section;
 
     protected function setUp(): void
@@ -34,7 +38,7 @@ class AssignmentSystemTest extends TestCase
         // Setup Tenant
         $this->tenant = $this->createTenant(['domain' => 'test', 'name' => 'Test Center']);
         app()->instance('tenant', $this->tenant);
-        
+
         // Setup Subscription
         $package = Package::create([
             'name' => 'Pro Plan',
@@ -72,13 +76,13 @@ class AssignmentSystemTest extends TestCase
 
         // Setup Users
         $this->instructorUser = User::factory()->create([
-            'email' => 'instructor@test.com', 
-            'tenant_id' => $this->tenant->id, 
+            'email' => 'instructor@test.com',
+            'tenant_id' => $this->tenant->id,
             'role' => 'instructor',
-            'instructor_id' => $this->instructorProfile->id
+            'instructor_id' => $this->instructorProfile->id,
         ]);
         $this->instructorUser->assignRole($role);
-        
+
         $this->student = User::factory()->create(['email' => 'student@test.com', 'tenant_id' => $this->tenant->id]);
 
         // Setup Course
@@ -140,7 +144,7 @@ class AssignmentSystemTest extends TestCase
         ]);
 
         $response->assertRedirect();
-        
+
         // Assert file exists in storage
         $submission = $assignment->submissions()->where('user_id', $this->student->id)->first();
         $this->assertNotNull($submission);
@@ -186,7 +190,7 @@ class AssignmentSystemTest extends TestCase
     public function test_secure_download_access()
     {
         Storage::fake('local');
-        
+
         $lesson = Lesson::create([
             'section_id' => $this->section->id,
             'title' => 'Assignment Lesson',
@@ -202,7 +206,7 @@ class AssignmentSystemTest extends TestCase
 
         // Create a file
         $file = UploadedFile::fake()->create('homework.pdf', 100);
-        $path = $file->store('assignments/' . $assignment->id);
+        $path = $file->store('assignments/'.$assignment->id);
 
         $submission = $assignment->submissions()->create([
             'user_id' => $this->student->id,

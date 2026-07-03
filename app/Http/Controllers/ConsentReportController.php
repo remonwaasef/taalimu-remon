@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Support\Facades\DB;
 
 class ConsentReportController extends Controller implements HasMiddleware
 {
@@ -13,15 +11,15 @@ class ConsentReportController extends Controller implements HasMiddleware
     {
         return [
             function ($request, $next) {
-                if (!auth()->check()) {
+                if (! auth()->check()) {
                     abort(403, 'Unauthorized access to GDPR data.');
                 }
-                
+
                 $user = auth()->user();
-                if (!$user->hasRole('super_admin') && !$user->hasRole('center_admin')) {
+                if (! $user->hasRole('super_admin') && ! $user->hasRole('center_admin')) {
                     abort(403, 'Unauthorized access to GDPR data.');
                 }
-                
+
                 return $next($request);
             },
         ];
@@ -30,9 +28,9 @@ class ConsentReportController extends Controller implements HasMiddleware
     public function index()
     {
         $query = DB::table('user_consents');
-        
+
         // Scope by tenant if not super_admin
-        if (!auth()->user()->hasRole('super_admin')) {
+        if (! auth()->user()->hasRole('super_admin')) {
             $query->where('tenant_id', app('tenant')->id ?? null);
         }
 
@@ -56,31 +54,32 @@ class ConsentReportController extends Controller implements HasMiddleware
     public function export()
     {
         $query = DB::table('user_consents');
-        
+
         // Scope by tenant if not super_admin
-        if (!auth()->user()->hasRole('super_admin')) {
+        if (! auth()->user()->hasRole('super_admin')) {
             $query->where('tenant_id', app('tenant')->id ?? null);
         }
 
         // تصدير جميع الموافقات إلى CSV
         $consents = $query->get();
-        
-        $filename = 'cookie-consents-' . date('Y-m-d') . '.csv';
+
+        $filename = 'cookie-consents-'.date('Y-m-d').'.csv';
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => "attachment; filename=\"$filename\"",
         ];
 
-        $callback = function() use ($consents) {
+        $callback = function () use ($consents) {
             $file = fopen('php://output', 'w');
-            
+
             // Headers
             fputcsv($file, ['ID', 'User ID', 'Session ID', 'IP', 'Analytics', 'Marketing', 'Date']);
-            
+
             $sanitizeCsv = function ($value) {
                 if (is_string($value) && preg_match('/^[=\+\-@]/', $value)) {
-                    return "'" . $value;
+                    return "'".$value;
                 }
+
                 return $value;
             };
 
@@ -96,7 +95,7 @@ class ConsentReportController extends Controller implements HasMiddleware
                     $consent->consent_date,
                 ]));
             }
-            
+
             fclose($file);
         };
 

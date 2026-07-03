@@ -5,9 +5,7 @@ namespace Modules\Center\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\BugReport;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 
 class BugReportController extends Controller
 {
@@ -26,13 +24,13 @@ class BugReportController extends Controller
 
         $screenshotPath = null;
         $errorDebug = null;
-        
+
         try {
             if ($request->hasFile('screenshot')) {
                 $file = $request->file('screenshot');
-                $safeExt = in_array($file->getClientOriginalExtension(), ['jpg','jpeg','png','gif','webp']) ? $file->getClientOriginalExtension() : 'png';
-                $fileName = 'bug-reports/' . \Illuminate\Support\Str::random(30) . '.' . $safeExt;
-                
+                $safeExt = in_array($file->getClientOriginalExtension(), ['jpg', 'jpeg', 'png', 'gif', 'webp']) ? $file->getClientOriginalExtension() : 'png';
+                $fileName = 'bug-reports/'.\Illuminate\Support\Str::random(30).'.'.$safeExt;
+
                 // Save to Laravel's internal storage (storage/app/public) using streaming to save memory
                 $file->storeAs(
                     dirname($fileName),
@@ -40,41 +38,38 @@ class BugReportController extends Controller
                     'public'
                 );
                 $screenshotPath = $fileName;
-                
 
-                
             } elseif ($request->filled('auto_screenshot')) {
                 $imageData = $request->input('auto_screenshot');
-                
+
                 if (preg_match('/^data:image\/(\w+);base64,/', $imageData, $type)) {
                     $extension = strtolower($type[1]);
                     // Security: Only allow safe image extensions from base64
-                    if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                    if (! in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
                         $extension = 'png';
                     }
                     $image = base64_decode(substr($imageData, strpos($imageData, ',') + 1));
-                    
+
                     if ($image) {
-                        $fileName = 'bug-reports/' . \Illuminate\Support\Str::random(30) . '_auto.' . $extension;
-                        
+                        $fileName = 'bug-reports/'.\Illuminate\Support\Str::random(30).'_auto.'.$extension;
+
                         // Save to Laravel's internal storage (storage/app/public)
                         if (\Illuminate\Support\Facades\Storage::disk('public')->put($fileName, $image)) {
                             $screenshotPath = $fileName;
-                            
 
                         } else {
-                            $errorDebug = "Storage::put failed for " . $fileName;
+                            $errorDebug = 'Storage::put failed for '.$fileName;
                         }
                     } else {
-                        $errorDebug = "Base64 decode failed";
+                        $errorDebug = 'Base64 decode failed';
                     }
                 } else {
-                    $errorDebug = "Regex match failed for image data";
+                    $errorDebug = 'Regex match failed for image data';
                 }
             }
         } catch (\Exception $e) {
-            $errorDebug = "Exception: " . $e->getMessage();
-            Log::error("Bug Report Image Save Error: " . $e->getMessage());
+            $errorDebug = 'Exception: '.$e->getMessage();
+            Log::error('Bug Report Image Save Error: '.$e->getMessage());
         }
 
         $tenantId = app('tenant')->id ?? auth()->user()->tenant_id ?? null;
@@ -90,7 +85,7 @@ class BugReportController extends Controller
             'browser_info' => $request->input('browser_info') ? json_decode($request->input('browser_info'), true) : null,
             'screenshot' => $screenshotPath,
             'status' => 'open',
-            'admin_notes' => $errorDebug ? "Error saving screenshot: " . $errorDebug : null,
+            'admin_notes' => $errorDebug ? 'Error saving screenshot: '.$errorDebug : null,
         ]);
 
         // Eager load relations to prevent N+1 queries in the queue worker
@@ -117,16 +112,21 @@ class BugReportController extends Controller
         $lowKeywords = ['suggestion', 'اقتراح', 'تحسين', 'improvement', 'would be nice'];
 
         foreach ($criticalKeywords as $kw) {
-            if (str_contains($description, $kw)) return 'critical';
+            if (str_contains($description, $kw)) {
+                return 'critical';
+            }
         }
         foreach ($highKeywords as $kw) {
-            if (str_contains($description, $kw)) return 'high';
+            if (str_contains($description, $kw)) {
+                return 'high';
+            }
         }
         foreach ($lowKeywords as $kw) {
-            if (str_contains($description, $kw)) return 'low';
+            if (str_contains($description, $kw)) {
+                return 'low';
+            }
         }
 
         return 'medium';
     }
-
 }

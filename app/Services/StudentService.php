@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
-use App\Models\User;
-use App\Models\Student;
 use App\DTOs\StudentData;
-use App\Services\Student\StudentRegistrationService;
-use App\Services\Student\StudentProfileService;
+use App\Models\Student;
+use App\Models\User;
 use App\Services\Student\StudentImportService;
 use App\Services\Student\StudentPasswordService;
+use App\Services\Student\StudentProfileService;
+use App\Services\Student\StudentRegistrationService;
 
 /**
  * Facade for Student operations.
@@ -17,8 +17,11 @@ use App\Services\Student\StudentPasswordService;
 class StudentService
 {
     protected $registrationService;
+
     protected $profileService;
+
     protected $importService;
+
     protected $passwordService;
 
     public function __construct(

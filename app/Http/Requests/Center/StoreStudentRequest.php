@@ -14,33 +14,33 @@ class StoreStudentRequest extends FormRequest
     public function rules()
     {
         $tenantId = app()->bound('tenant') ? app('tenant')->id : null;
-        
+
         return [
             'name' => ['required', 'string', 'max:255', 'regex:/^[\pL\s]+$/u'],
             'code' => [
                 'nullable', // Service will generate if null
                 'string',
                 'max:50',
-                \Illuminate\Validation\Rule::unique('students', 'code')->where('tenant_id', $tenantId)
+                \Illuminate\Validation\Rule::unique('students', 'code')->where('tenant_id', $tenantId),
             ],
             'national_id' => [
                 'nullable',
                 'string',
                 'max:20',
-                \Illuminate\Validation\Rule::unique('students', 'national_id')->where('tenant_id', $tenantId)
+                \Illuminate\Validation\Rule::unique('students', 'national_id')->where('tenant_id', $tenantId),
             ],
             'email' => [
                 'nullable',
                 'email',
-                \Illuminate\Validation\Rule::unique('users', 'email')->where('tenant_id', $tenantId)
+                \Illuminate\Validation\Rule::unique('users', 'email')->where('tenant_id', $tenantId),
             ],
             'phone' => [
-                'required', 
-                'string', 
-                'max:20', 
-                'regex:/^([0-9\s\-\+\(\)]*)$/', 
+                'required',
+                'string',
+                'max:20',
+                'regex:/^([0-9\s\-\+\(\)]*)$/',
                 'min:10',
-                \Illuminate\Validation\Rule::unique('users', 'phone')->where('tenant_id', $tenantId)
+                \Illuminate\Validation\Rule::unique('users', 'phone')->where('tenant_id', $tenantId),
             ],
             'parent_phone' => ['nullable', 'string', 'max:20', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
             'parent_email' => 'nullable|email|max:255',

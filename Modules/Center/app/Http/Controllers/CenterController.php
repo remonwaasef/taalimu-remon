@@ -2,17 +2,13 @@
 
 namespace Modules\Center\Http\Controllers;
 
-use App\Models\Instructor;
-use Modules\Center\Http\Controllers\CenterBaseController as Controller;
-use Illuminate\Http\Request;
-use App\Models\Student;
 use App\Models\Course;
-use App\Models\Sale;
 use App\Models\Expense;
-use App\Models\QuizAttempt;
-use App\Models\User;
+use App\Models\Sale;
+use App\Models\Student;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
+use Modules\Center\Http\Controllers\CenterBaseController as Controller;
 
 class CenterController extends Controller
 {
@@ -23,38 +19,38 @@ class CenterController extends Controller
     {
         \Log::info('Entering CenterController@index');
         $user = auth()->user();
-        
+
         // Redirect instructors to their specific dashboard
         if ($user && ($user->role === 'instructor' || ($user->tenant && $user->tenant->type === 'instructor'))) {
             return redirect()->route('instructor.dashboard', ['tenant' => $user->tenant->domain]);
         }
 
         $validCenterRoles = ['admin', 'center_admin', 'instructor', 'secretary', 'accountant', 'staff', 'support_agent', 'finance_manager', 'content_manager'];
-        
-        if ($user->role !== 'center_admin' && !$user->hasAnyRole($validCenterRoles)) {
+
+        if ($user->role !== 'center_admin' && ! $user->hasAnyRole($validCenterRoles)) {
             if (request()->expectsJson()) {
                 return response()->json(['message' => 'Unauthorized role'], 403);
             }
+
             return redirect()->route('campus.index');
         }
-        
 
-        
         if ($user && $user->role === 'student') {
-             if (request()->expectsJson()) {
-                 return response()->json(['message' => 'Unauthorized role'], 403);
-             }
-             return redirect()->route('campus.index');
+            if (request()->expectsJson()) {
+                return response()->json(['message' => 'Unauthorized role'], 403);
+            }
+
+            return redirect()->route('campus.index');
         }
 
         // 1. Summary Metrics & Setup Progress (Cached for 15 minutes)
         $tenant = $this->tenant;
         $tenantId = $tenant->id;
-        $cacheKey = "dashboard_stats_v3";
+        $cacheKey = 'dashboard_stats_v3';
 
-        $dashboardData = \App\Support\TenantCache::remember($cacheKey, now()->addMinutes(15), function () use ($tenantId) {
+        $dashboardData = \App\Support\TenantCache::remember($cacheKey, now()->addMinutes(15), function () {
             $activeStudentsCount = Student::where('status', 'active')->count();
-            
+
             // Attendance Rate for the current week
             $thisWeekAttendance = \Modules\Center\Models\Attendance::where('created_at', '>=', now()->startOfWeek())
                 ->count();
@@ -86,7 +82,7 @@ class CenterController extends Controller
         $netProfit = $monthlyRevenue - $monthlyExpenses;
 
         // 1.1 Fetch Recent Activities (Cached for 5 minutes)
-        $activityCacheKey = "recent_activities";
+        $activityCacheKey = 'recent_activities';
         $recentActivities = \App\Support\TenantCache::remember($activityCacheKey, now()->addMinutes(5), function () use ($tenantId) {
             return \Spatie\Activitylog\Models\Activity::where('properties->tenant_id', $tenantId)
                 ->with(['causer', 'subject'])
@@ -99,6 +95,7 @@ class CenterController extends Controller
         $aiCacheKey = "dashboard_ai_insights_v3_{$tenantId}";
         $aiData = \App\Support\TenantCache::remember($aiCacheKey, now()->addMinutes(30), function () use ($tenantId) {
             $performanceTrends = $this->getPerformanceTrends($tenantId);
+
             return [
                 'atRiskStudents' => $this->getAtRiskStudents($tenantId),
                 'performanceTrends' => $performanceTrends,
@@ -122,7 +119,7 @@ class CenterController extends Controller
                     'sessionsToday' => $sessionsToday,
                     'attendanceRate' => $attendanceRate,
                     'overdueAmount' => $overdueAmount,
-                ]
+                ],
             ]);
         }
 
@@ -161,36 +158,36 @@ class CenterController extends Controller
             ->havingRaw('baseline_avg IS NOT NULL AND recent_avg < (baseline_avg * 0.85)')
             ->limit(3)
             ->get()
-            ->map(function($item) {
+            ->map(function ($item) {
                 return [
                     'name' => $item->name,
                     'risk_level' => 'high',
-                    'reason' => __('center::dashboard.insights.score_drop_detected')
+                    'reason' => __('center::dashboard.insights.score_drop_detected'),
                 ];
             })->toArray();
 
         // 2. Inactive students (no activity in 10 days)
         $inactiveStudents = Student::where('tenant_id', $tenantId)
             ->where('status', 'active')
-            ->whereDoesntHave('user.activities', function($q) {
+            ->whereDoesntHave('user.activities', function ($q) {
                 $q->where('created_at', '>=', now()->subDays(10));
             })
             ->limit(2)
             ->get()
-            ->map(function($student) {
+            ->map(function ($student) {
                 return [
                     'name' => $student->name,
                     'risk_level' => 'medium',
-                    'reason' => __('center::dashboard.insights.inactivity_detected')
+                    'reason' => __('center::dashboard.insights.inactivity_detected'),
                 ];
             })->toArray();
 
         $merged = array_merge($studentsWithDrops, $inactiveStudents);
-        
+
         // Fallback for demo if no real data yet
         if (empty($merged)) {
             return [
-                ['name' => 'Demo Student', 'risk_level' => 'low', 'reason' => 'Healthy engagement patterns']
+                ['name' => 'Demo Student', 'risk_level' => 'low', 'reason' => 'Healthy engagement patterns'],
             ];
         }
 
@@ -199,19 +196,19 @@ class CenterController extends Controller
 
     private function getPerformanceTrends($tenantId)
     {
-        $days = collect(range(6, 0))->map(fn($i) => now()->subDays($i)->format('Y-m-d'));
-        
+        $days = collect(range(6, 0))->map(fn ($i) => now()->subDays($i)->format('Y-m-d'));
+
         $hasData = DB::table('quiz_attempts')
             ->join('students', 'quiz_attempts.user_id', '=', 'students.user_id')
             ->where('students.tenant_id', $tenantId)
             ->where('quiz_attempts.tenant_id', $tenantId) // Added explicit tenant filter
             ->exists();
 
-        if (!$hasData) {
+        if (! $hasData) {
             // Demo Trend: A nice gentle upward curve
             return [
                 'data' => [65, 70, 68, 72, 75, 78, 85],
-                'is_demo' => true
+                'is_demo' => true,
             ];
         }
 
@@ -225,19 +222,19 @@ class CenterController extends Controller
             ->pluck('avg_score', 'date');
 
         return [
-            'data' => $days->map(fn($date) => round($data->get($date, 0)))->toArray(),
-            'is_demo' => false
+            'data' => $days->map(fn ($date) => round($data->get($date, 0)))->toArray(),
+            'is_demo' => false,
         ];
     }
 
     private function getAIInsights($tenantId, $performanceTrends)
     {
         $insights = [];
-        
+
         // Check 1: General Trend
         $lastValue = end($performanceTrends);
         $prevValue = prev($performanceTrends);
-        
+
         if ($lastValue > $prevValue) {
             $insights[] = ['type' => 'success', 'text' => __('center::dashboard.insights.upward_trend')];
         } elseif ($lastValue < $prevValue && $lastValue > 0) {

@@ -5,10 +5,9 @@ namespace Tests\Feature;
 use App\Models\Classroom;
 use App\Models\Course;
 use App\Models\Instructor;
+use App\Models\Subscription;
 use App\Models\Tenant;
 use App\Models\User;
-use App\Models\Package;
-use App\Models\Subscription;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -17,8 +16,11 @@ class CourseSystemTest extends TestCase
     use RefreshDatabase;
 
     protected $tenant;
+
     protected $admin;
+
     protected $instructor;
+
     protected $classroom;
 
     protected function setUp(): void
@@ -37,10 +39,10 @@ class CourseSystemTest extends TestCase
         \Spatie\Permission\Models\Permission::firstOrCreate(['name' => 'view courses', 'guard_name' => 'web']);
         \Spatie\Permission\Models\Permission::firstOrCreate(['name' => 'create courses', 'guard_name' => 'web']);
         \Spatie\Permission\Models\Permission::firstOrCreate(['name' => 'edit courses', 'guard_name' => 'web']);
-        
+
         // Setup Role
         $role = \App\Models\Role::firstOrCreate(['name' => 'center_admin', 'guard_name' => 'web']);
-        
+
         $package = \App\Models\Package::create([
             'name' => 'Elite',
             'slug' => 'elite',
@@ -108,16 +110,16 @@ class CourseSystemTest extends TestCase
                     'start_time' => '10:00',
                     'end_time' => '12:00',
                     'classroom_id' => $this->classroom->id,
-                    'max_students' => 25
+                    'max_students' => 25,
                 ],
                 [
                     'day_of_week' => 'tuesday',
                     'start_time' => '14:00',
                     'end_time' => '16:00',
                     'classroom_id' => $this->classroom->id,
-                    'max_students' => 25
-                ]
-            ]
+                    'max_students' => 25,
+                ],
+            ],
         ];
 
         $response = $this->post(route('center.courses.store', ['tenant' => $this->tenant->domain]), $courseData);

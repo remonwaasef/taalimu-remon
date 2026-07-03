@@ -18,28 +18,28 @@ class SettingsController extends Controller
         // One-time price correction logic
         try {
             $basic = \App\Models\Package::where('slug', 'basic')->first();
-            if ($basic && ($basic->price > 1000 || $basic->term_price === null)) { 
+            if ($basic && ($basic->price > 1000 || $basic->term_price === null)) {
                 $updates = [
                     'basic' => [
                         'price' => 450, 'term_price' => 1450, 'yearly_price' => 2500,
                         'regional_prices' => [
                             'EG' => ['amount' => 450, 'currency' => 'EGP', 'term_price' => 1450, 'yearly_price' => 2500],
-                            'default' => ['amount' => 15, 'currency' => 'USD', 'term_price' => 49, 'yearly_price' => 85]
-                        ]
+                            'default' => ['amount' => 15, 'currency' => 'USD', 'term_price' => 49, 'yearly_price' => 85],
+                        ],
                     ],
                     'pro' => [
                         'price' => 950, 'term_price' => 3450, 'yearly_price' => 6000,
                         'regional_prices' => [
                             'EG' => ['amount' => 950, 'currency' => 'EGP', 'term_price' => 3450, 'yearly_price' => 6000],
-                            'default' => ['amount' => 30, 'currency' => 'USD', 'term_price' => 99, 'yearly_price' => 170]
-                        ]
+                            'default' => ['amount' => 30, 'currency' => 'USD', 'term_price' => 99, 'yearly_price' => 170],
+                        ],
                     ],
                     'enterprise' => [
                         'price' => 1950, 'term_price' => 6950, 'yearly_price' => 12000,
                         'regional_prices' => [
                             'EG' => ['amount' => 1950, 'currency' => 'EGP', 'term_price' => 6950, 'yearly_price' => 12000],
-                            'default' => ['amount' => 60, 'currency' => 'USD', 'term_price' => 199, 'yearly_price' => 340]
-                        ]
+                            'default' => ['amount' => 60, 'currency' => 'USD', 'term_price' => 199, 'yearly_price' => 340],
+                        ],
                     ],
                 ];
 
@@ -49,12 +49,13 @@ class SettingsController extends Controller
                 \Illuminate\Support\Facades\Cache::forget('subscription_packages_full');
             }
         } catch (\Exception $e) {
-            \Log::error('Settings Price Fix Failed: ' . $e->getMessage());
+            \Log::error('Settings Price Fix Failed: '.$e->getMessage());
         }
 
         $tenant = $this->tenant;
         $settings = $tenant->settings['whatsapp'] ?? [];
         $packages = \App\Models\Package::with('features')->where('is_active', true)->orderBy('sort_order')->get();
+
         return view('instructor::settings', compact('tenant', 'settings', 'packages'));
     }
 
@@ -69,11 +70,11 @@ class SettingsController extends Controller
             'address' => 'nullable|string|max:500',
             'description' => 'nullable|string|max:1000',
             'currency' => 'nullable|string|max:10',
-            'logo' => 'nullable|image|max:2048'
+            'logo' => 'nullable|image|max:2048',
         ]);
 
         $tenant = \App\Models\Tenant::findOrFail($this->tenant->id);
-        
+
         $tenant->name = $request->name;
         $tenant->phone = $request->phone;
         $tenant->address = $request->address;
@@ -85,8 +86,8 @@ class SettingsController extends Controller
 
         if ($request->hasFile('logo')) {
             $logoFile = $request->file('logo');
-            $safeExt = in_array(strtolower($logoFile->getClientOriginalExtension()), ['jpg','jpeg','png','gif','webp']) ? strtolower($logoFile->getClientOriginalExtension()) : 'png';
-            $safeName = \Illuminate\Support\Str::random(30) . '.' . $safeExt;
+            $safeExt = in_array(strtolower($logoFile->getClientOriginalExtension()), ['jpg', 'jpeg', 'png', 'gif', 'webp']) ? strtolower($logoFile->getClientOriginalExtension()) : 'png';
+            $safeName = \Illuminate\Support\Str::random(30).'.'.$safeExt;
             $tenant->logo = $logoFile->storeAs("{$tenant->id}/logos", $safeName, 'public');
         }
 
@@ -104,9 +105,9 @@ class SettingsController extends Controller
         $settings = $tenant->settings['whatsapp'] ?? [
             'enabled' => false,
             'instance_id' => '',
-            'token' => ''
+            'token' => '',
         ];
-        
+
         return view('instructor::whatsapp', compact('settings'));
     }
 
@@ -123,12 +124,12 @@ class SettingsController extends Controller
             'country_code' => 'required|string',
             'attendance_template' => 'nullable|string',
             'payment_template' => 'nullable|string',
-            'debt_template' => 'nullable|string'
+            'debt_template' => 'nullable|string',
         ]);
 
         $tenant = \App\Models\Tenant::findOrFail($this->tenant->id);
         $settings = $tenant->settings ?? [];
-        
+
         $settings['whatsapp'] = [
             'enabled' => $request->has('enabled'),
             'phone_number_id' => $request->phone_number_id,
@@ -138,7 +139,7 @@ class SettingsController extends Controller
             'country_code' => $request->country_code,
             'attendance_template' => $request->attendance_template,
             'payment_template' => $request->payment_template,
-            'debt_template' => $request->debt_template
+            'debt_template' => $request->debt_template,
         ];
 
         $tenant->settings = $settings;
@@ -174,42 +175,42 @@ class SettingsController extends Controller
     public function updateEmailTemplates(Request $request)
     {
         $request->validate([
-            'welcome_student_enabled'  => 'required|boolean',
+            'welcome_student_enabled' => 'required|boolean',
             'welcome_guardian_enabled' => 'required|boolean',
-            'welcome_student_subject'  => 'nullable|string|max:500',
-            'welcome_student_body'     => 'nullable|string|max:5000',
+            'welcome_student_subject' => 'nullable|string|max:500',
+            'welcome_student_body' => 'nullable|string|max:5000',
             'welcome_guardian_subject' => 'nullable|string|max:500',
-            'welcome_guardian_body'    => 'nullable|string|max:5000',
-            'notif_payment_reminder_enabled'   => 'required|boolean',
-            'notif_payment_reminder_subject'   => 'nullable|string|max:500',
-            'notif_payment_reminder_body'      => 'nullable|string|max:5000',
-            'notif_group_enrollment_enabled'   => 'required|boolean',
-            'notif_group_enrollment_subject'   => 'nullable|string|max:500',
-            'notif_group_enrollment_body'      => 'nullable|string|max:5000',
-            'notif_payment_confirmed_enabled'  => 'required|boolean',
-            'notif_payment_confirmed_subject'  => 'nullable|string|max:500',
-            'notif_payment_confirmed_body'     => 'nullable|string|max:5000',
+            'welcome_guardian_body' => 'nullable|string|max:5000',
+            'notif_payment_reminder_enabled' => 'required|boolean',
+            'notif_payment_reminder_subject' => 'nullable|string|max:500',
+            'notif_payment_reminder_body' => 'nullable|string|max:5000',
+            'notif_group_enrollment_enabled' => 'required|boolean',
+            'notif_group_enrollment_subject' => 'nullable|string|max:500',
+            'notif_group_enrollment_body' => 'nullable|string|max:5000',
+            'notif_payment_confirmed_enabled' => 'required|boolean',
+            'notif_payment_confirmed_subject' => 'nullable|string|max:500',
+            'notif_payment_confirmed_body' => 'nullable|string|max:5000',
         ]);
 
         $tenant = \App\Models\Tenant::findOrFail($this->tenant->id);
         $settings = $tenant->settings ?? [];
 
         $settings['email_templates'] = [
-            'welcome_student_enabled'  => (bool) $request->welcome_student_enabled,
+            'welcome_student_enabled' => (bool) $request->welcome_student_enabled,
             'welcome_guardian_enabled' => (bool) $request->welcome_guardian_enabled,
-            'welcome_student_subject'  => $request->welcome_student_subject,
-            'welcome_student_body'     => $request->welcome_student_body,
+            'welcome_student_subject' => $request->welcome_student_subject,
+            'welcome_student_body' => $request->welcome_student_body,
             'welcome_guardian_subject' => $request->welcome_guardian_subject,
-            'welcome_guardian_body'    => $request->welcome_guardian_body,
+            'welcome_guardian_body' => $request->welcome_guardian_body,
             'notif_payment_reminder_enabled' => (bool) $request->notif_payment_reminder_enabled,
             'notif_payment_reminder_subject' => $request->notif_payment_reminder_subject,
-            'notif_payment_reminder_body'    => $request->notif_payment_reminder_body,
+            'notif_payment_reminder_body' => $request->notif_payment_reminder_body,
             'notif_group_enrollment_enabled' => (bool) $request->notif_group_enrollment_enabled,
             'notif_group_enrollment_subject' => $request->notif_group_enrollment_subject,
-            'notif_group_enrollment_body'    => $request->notif_group_enrollment_body,
+            'notif_group_enrollment_body' => $request->notif_group_enrollment_body,
             'notif_payment_confirmed_enabled' => (bool) $request->notif_payment_confirmed_enabled,
             'notif_payment_confirmed_subject' => $request->notif_payment_confirmed_subject,
-            'notif_payment_confirmed_body'    => $request->notif_payment_confirmed_body,
+            'notif_payment_confirmed_body' => $request->notif_payment_confirmed_body,
         ];
 
         $tenant->settings = $settings;
@@ -243,12 +244,12 @@ class SettingsController extends Controller
     {
         if (in_array($locale, ['ar', 'en', 'fr'])) {
             session(['locale' => $locale]);
-            
+
             if (auth()->check()) {
                 auth()->user()->update(['locale' => $locale]);
             }
         }
-        
+
         return back();
     }
 }

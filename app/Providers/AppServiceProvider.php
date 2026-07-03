@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -54,11 +54,11 @@ class AppServiceProvider extends ServiceProvider
         $mainDomain = config('app.tenant_domain');
         $host = request()->getHost();
 
-        if ($mainDomain && $mainDomain !== 'localhost' && !str_contains($mainDomain, 'localhost')) {
+        if ($mainDomain && $mainDomain !== 'localhost' && ! str_contains($mainDomain, 'localhost')) {
             // Only force the session domain if the request is actually accessing via the main domain/subdomain
             // This prevents breaking sessions (419 errors) on Mobile when testing via LAN IPs like 192.168.x.x
             if (str_ends_with($host, str_replace('www.', '', $mainDomain))) {
-                config(['session.domain' => '.' . str_replace('www.', '', $mainDomain)]);
+                config(['session.domain' => '.'.str_replace('www.', '', $mainDomain)]);
             }
 
             // PWAs and Cross-Domain Token Logins on mobile often require SameSite=None and Secure
@@ -81,7 +81,10 @@ class AppServiceProvider extends ServiceProvider
         // Blade directive for Feature Flags
         \Illuminate\Support\Facades\Blade::if('feature', function ($feature) {
             $tenant = app(\App\Services\TenantService::class)->getTenant();
-            if (!$tenant) return false;
+            if (! $tenant) {
+                return false;
+            }
+
             return $tenant->hasFeature($feature);
         });
     }
@@ -95,6 +98,7 @@ class AppServiceProvider extends ServiceProvider
             $ip = $request->ip();
             $isLocal = app()->environment('local') || in_array($ip, ['127.0.0.1', '::1']) || str_starts_with($ip, '192.168.');
             $limit = $isLocal ? 100 : 5;
+
             return \Illuminate\Cache\RateLimiting\Limit::perMinute($limit)->by($request->email.$ip);
         });
 
@@ -102,6 +106,7 @@ class AppServiceProvider extends ServiceProvider
             $ip = $request->ip();
             $isLocal = app()->environment('local') || in_array($ip, ['127.0.0.1', '::1']) || str_starts_with($ip, '192.168.');
             $limit = $isLocal ? 100 : 3;
+
             return \Illuminate\Cache\RateLimiting\Limit::perMinute($limit)->by($request->email.$ip);
         });
 
@@ -109,6 +114,7 @@ class AppServiceProvider extends ServiceProvider
             $ip = $request->ip();
             $isLocal = app()->environment('local') || in_array($ip, ['127.0.0.1', '::1']) || str_starts_with($ip, '192.168.');
             $limit = $isLocal ? 100 : 5;
+
             return \Illuminate\Cache\RateLimiting\Limit::perMinute($limit)->by($ip);
         });
 
@@ -117,6 +123,7 @@ class AppServiceProvider extends ServiceProvider
             if ($request->user()) {
                 return \Illuminate\Cache\RateLimiting\Limit::perMinute(60)->by($request->user()->id);
             }
+
             return \Illuminate\Cache\RateLimiting\Limit::perMinute(10)->by($request->ip());
         });
 
@@ -130,9 +137,11 @@ class AppServiceProvider extends ServiceProvider
                 if ($request->user()->hasAnyRole(['admin', 'center_admin', 'instructor'])) {
                     return \Illuminate\Cache\RateLimiting\Limit::perMinute(300)->by($request->user()->id);
                 }
+
                 // Standard limit for students
                 return \Illuminate\Cache\RateLimiting\Limit::perMinute(120)->by($request->user()->id);
             }
+
             // Strict limit for guests
             return \Illuminate\Cache\RateLimiting\Limit::perMinute(30)->by($request->ip());
         });

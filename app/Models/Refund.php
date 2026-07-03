@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Refund extends Model
 {
-    use HasFactory, \App\Traits\IdentifyTenant;
+    use \App\Traits\IdentifyTenant, HasFactory;
 
     protected $fillable = [
         'tenant_id',

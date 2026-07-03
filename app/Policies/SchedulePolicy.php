@@ -14,7 +14,7 @@ class SchedulePolicy
 
     public function view(User $user, Schedule $schedule): bool
     {
-        if ((int)$user->tenant_id !== (int)$schedule->tenant_id) {
+        if ((int) $user->tenant_id !== (int) $schedule->tenant_id) {
             return false;
         }
 
@@ -22,7 +22,7 @@ class SchedulePolicy
             return true;
         }
 
-        return $user->hasRole('instructor') && (int)$user->instructor?->id === (int)$schedule->instructor_id;
+        return $user->hasRole('instructor') && (int) $user->instructor?->id === (int) $schedule->instructor_id;
     }
 
     public function create(User $user): bool
@@ -32,7 +32,7 @@ class SchedulePolicy
 
     public function update(User $user, Schedule $schedule): bool
     {
-        if ((int)$user->tenant_id !== (int)$schedule->tenant_id) {
+        if ((int) $user->tenant_id !== (int) $schedule->tenant_id) {
             return false;
         }
 
@@ -40,12 +40,12 @@ class SchedulePolicy
             return true;
         }
 
-        return $user->hasRole('instructor') && (int)$user->instructor?->id === (int)$schedule->instructor_id;
+        return $user->hasRole('instructor') && (int) $user->instructor?->id === (int) $schedule->instructor_id;
     }
 
     public function delete(User $user, Schedule $schedule): bool
     {
-        if ((int)$user->tenant_id !== (int)$schedule->tenant_id) {
+        if ((int) $user->tenant_id !== (int) $schedule->tenant_id) {
             return false;
         }
 
@@ -53,6 +53,6 @@ class SchedulePolicy
             return true;
         }
 
-        return $user->hasRole('instructor') && (int)$user->instructor?->id === (int)$schedule->instructor_id;
+        return $user->hasRole('instructor') && (int) $user->instructor?->id === (int) $schedule->instructor_id;
     }
 }

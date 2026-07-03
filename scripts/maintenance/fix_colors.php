@@ -14,7 +14,7 @@ $style = "@push('styles')
 @endpush";
 
 if (strpos($content, '.bg-info-soft') === false) {
-    $content = $style . "\n" . $content;
+    $content = $style."\n".$content;
 }
 
 // 2. Update Pre-Due (Info) section
@@ -70,4 +70,4 @@ $newJs = "function toggleReminderStyle(checkbox, elementId, colorClass) {
 $content = str_replace($oldJs, $newJs, $content);
 
 file_put_contents($file, $content);
-echo "Colors updated successfully!";
+echo 'Colors updated successfully!';

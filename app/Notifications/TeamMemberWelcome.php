@@ -16,8 +16,11 @@ class TeamMemberWelcome extends Notification implements ShouldQueue
     use Queueable;
 
     protected string $plainPassword;
+
     protected string $tenantName;
+
     protected string $loginUrl;
+
     protected string $roleName;
 
     public function __construct(string $tenantName, string $loginUrl, string $roleName)
@@ -51,10 +54,10 @@ class TeamMemberWelcome extends Notification implements ShouldQueue
             ->line("تم إضافتك كعضو في فريق **{$this->tenantName}** بدور **{$this->roleName}**.")
             ->line('بيانات تسجيل الدخول الخاصة بك:')
             ->line("**البريد الإلكتروني:** {$notifiable->email}")
-            ->line("**تنبيه:** يرجى استخدام ميزة (نسيت كلمة المرور) في صفحة الدخول لإعداد كلمة مرورك لأول مرة.")
+            ->line('**تنبيه:** يرجى استخدام ميزة (نسيت كلمة المرور) في صفحة الدخول لإعداد كلمة مرورك لأول مرة.')
             ->action('الذهاب لصفحة الدخول', $this->loginUrl)
             ->line('⚠️ يرجى تغيير كلمة المرور فور تسجيل الدخول.')
-            ->salutation('فريق ' . $this->tenantName);
+            ->salutation('فريق '.$this->tenantName);
     }
 
     protected function buildEnglishMail(object $notifiable): MailMessage
@@ -68,6 +71,6 @@ class TeamMemberWelcome extends Notification implements ShouldQueue
             ->line("**Notice:** Please use the 'Forgot Password' feature on the login page to set your initial password.")
             ->action('Go to Login', $this->loginUrl)
             ->line('⚠️ Please change your password immediately after login.')
-            ->salutation($this->tenantName . ' Team');
+            ->salutation($this->tenantName.' Team');
     }
 }

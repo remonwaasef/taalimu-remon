@@ -2,22 +2,21 @@
 
 namespace App\Services;
 
-use App\Models\Course;
-use App\Models\Student;
-use App\Models\Enrollment;
-use App\Models\Schedule;
 use App\DTOs\CourseData;
+use App\Models\Course;
+use App\Models\Enrollment;
+use App\Models\Lesson;
+use App\Models\LessonProgress;
+use App\Models\Schedule;
+use App\Models\Student;
+use App\Notifications\GeneralNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Storage;
-use App\Notifications\GeneralNotification;
-use App\Services\CertificateService;
-use App\Models\LessonProgress;
-use App\Models\Lesson;
 
 class CourseService
 {
     protected $certificateService;
+
     protected $conflictService;
 
     public function __construct(CertificateService $certificateService, ScheduleConflictService $conflictService)
@@ -29,7 +28,6 @@ class CourseService
     /**
      * Create a new course.
      *
-     * @param CourseData $data
      * @return Course
      */
     public function createCourse(CourseData $data)
@@ -38,7 +36,7 @@ class CourseService
             $course = Course::create($data->toArray());
 
             // Create Schedules
-            if (!empty($data->schedules)) {
+            if (! empty($data->schedules)) {
                 $this->syncSchedules($course, $data->schedules, $data->instructor_id);
             }
 
@@ -52,8 +50,6 @@ class CourseService
     /**
      * Update an existing course.
      *
-     * @param Course $course
-     * @param CourseData $data
      * @return Course
      */
     public function updateCourse(Course $course, CourseData $data)
@@ -64,7 +60,7 @@ class CourseService
             // Sync Schedules
             if (isset($data->schedules)) {
                 $course->schedules()->delete();
-                if (!empty($data->schedules)) {
+                if (! empty($data->schedules)) {
                     $this->syncSchedules($course, $data->schedules, $data->instructor_id);
                 }
             }
@@ -76,7 +72,6 @@ class CourseService
     /**
      * Delete a course.
      *
-     * @param Course $course
      * @return bool|null
      */
     public function deleteCourse(Course $course)
@@ -86,6 +81,7 @@ class CourseService
             if ($course->image) {
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($course->image);
             }
+
             return $course->delete();
         });
     }
@@ -93,9 +89,8 @@ class CourseService
     /**
      * Enroll a student in a course.
      *
-     * @param Course $course
-     * @param Student $student
      * @return Enrollment
+     *
      * @throws \Exception
      */
     public function enrollStudent(Course $course, Student $student)
@@ -125,7 +120,7 @@ class CourseService
     public function completeLesson(Course $course, $lessonId, $user)
     {
         $lesson = Lesson::findOrFail($lessonId);
-        
+
         $enrollment = Enrollment::where('user_id', $user->id)
             ->where('course_id', $course->id)
             ->firstOrFail();
@@ -140,26 +135,25 @@ class CourseService
             ]);
 
             // Update enrollment progress
-            $totalLessons = Lesson::whereHas('section', function($q) use ($course) {
+            $totalLessons = Lesson::whereHas('section', function ($q) use ($course) {
                 $q->where('course_id', $course->id);
             })->count();
             $completedLessons = LessonProgress::where('enrollment_id', $enrollment->id)->count();
 
-            
             $progress = $totalLessons > 0 ? round(($completedLessons / $totalLessons) * 100) : 0;
             $enrollment->update(['progress' => $progress]);
 
             // Check for certificate
             if ($progress >= 100) {
                 // إضافة شرط اختبار/مراجعة للشهادة (ليس فقط progress=100%)
-                $hasQuizzes = \App\Models\Quiz::whereHas('section', function($q) use ($course) {
+                $hasQuizzes = \App\Models\Quiz::whereHas('section', function ($q) use ($course) {
                     $q->where('course_id', $course->id);
                 })->exists();
 
                 $passedExams = true;
                 if ($hasQuizzes) {
                     $passedExams = \App\Models\QuizAttempt::where('user_id', $user->id)
-                        ->whereHas('quiz.section', function($q) use ($course) {
+                        ->whereHas('quiz.section', function ($q) use ($course) {
                             $q->where('course_id', $course->id);
                         })
                         ->where('score', '>=', 50) // Assuming 50 is passing
@@ -175,9 +169,9 @@ class CourseService
         });
     }
 
-
     /**
      * Sync schedules for a course.
+     *
      * @throws \Exception if schedule conflicts are detected
      */
     protected function syncSchedules(Course $course, array $schedulesData, $instructorId)
@@ -194,13 +188,13 @@ class CourseService
         foreach ($schedulesData as $index => $scheduleData) {
             $scheduleData['instructor_id'] = $instructorId;
             $conflicts = $this->conflictService->validateSchedule($scheduleData, $course->id);
-            if (!empty($conflicts)) {
+            if (! empty($conflicts)) {
                 $allConflicts = array_merge($allConflicts, $conflicts);
             }
         }
 
         // If any conflicts found, throw exception with all messages
-        if (!empty($allConflicts)) {
+        if (! empty($allConflicts)) {
             throw new \Exception(implode("\n", $allConflicts));
         }
 
@@ -231,15 +225,13 @@ class CourseService
         $admins = \App\Models\User::where('tenant_id', \Modules\Tenancy\Services\TenantResolver::get()->id)
             ->whereIn('role', ['admin', 'center_admin'])
             ->get();
-            
+
         Notification::send($admins, new GeneralNotification(
             'course_created',
-            'تم إنشاء كورس جديد: ' . $course->title,
+            'تم إنشاء كورس جديد: '.$course->title,
             route('center.courses.index'),
             'fas fa-book-open',
             auth()->user()->name
         ));
     }
 }
-
-

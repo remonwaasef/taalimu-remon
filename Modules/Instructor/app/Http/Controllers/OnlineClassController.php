@@ -3,9 +3,9 @@
 namespace Modules\Instructor\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\OnlineClass;
 use App\Models\Course;
+use App\Models\OnlineClass;
+use Illuminate\Http\Request;
 
 class OnlineClassController extends Controller
 {
@@ -15,9 +15,9 @@ class OnlineClassController extends Controller
     public function index()
     {
         $instructor = auth()->user()->instructor;
-        
+
         $query = OnlineClass::with(['course']);
-        
+
         if ($instructor) {
             $query->where('instructor_id', $instructor->id);
         }
@@ -33,7 +33,7 @@ class OnlineClassController extends Controller
     public function create()
     {
         $instructor = auth()->user()->instructor;
-        
+
         if ($instructor) {
             $courses = $instructor->courses;
         } else {
@@ -49,8 +49,8 @@ class OnlineClassController extends Controller
     public function store(Request $request)
     {
         $instructor = auth()->user()->instructor;
-        
-        if (!$instructor) {
+
+        if (! $instructor) {
             return back()->with('error', 'Unauthorized. Must be an instructor.');
         }
 
@@ -81,7 +81,7 @@ class OnlineClassController extends Controller
     public function edit(OnlineClass $onlineClass)
     {
         $instructor = auth()->user()->instructor;
-        
+
         if ($instructor && $onlineClass->instructor_id !== $instructor->id) {
             abort(403, 'Unauthorized');
         }
@@ -101,7 +101,7 @@ class OnlineClassController extends Controller
     public function update(Request $request, OnlineClass $onlineClass)
     {
         $instructor = auth()->user()->instructor;
-        
+
         if ($instructor && $onlineClass->instructor_id !== $instructor->id) {
             abort(403, 'Unauthorized');
         }
@@ -130,7 +130,7 @@ class OnlineClassController extends Controller
     public function destroy(OnlineClass $onlineClass)
     {
         $instructor = auth()->user()->instructor;
-        
+
         if ($instructor && $onlineClass->instructor_id !== $instructor->id) {
             abort(403, 'Unauthorized');
         }

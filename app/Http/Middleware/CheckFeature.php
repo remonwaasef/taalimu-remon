@@ -10,23 +10,19 @@ class CheckFeature
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string  $featureCode
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handle(Request $request, Closure $next, string $featureCode): Response
     {
-        if (!app()->bound('tenant')) {
+        if (! app()->bound('tenant')) {
             return $next($request);
         }
 
         $tenant = app('tenant');
 
         // Added logging and tenant check
-        if (!$tenant) {
+        if (! $tenant) {
             \Illuminate\Support\Facades\Log::warning('CheckFeature: No tenant found in request context, but app is bound to tenant.');
+
             return $next($request);
         }
 
@@ -40,21 +36,22 @@ class CheckFeature
                 'feature_code' => $featureCode,
                 'has_feature' => $hasFeature ? 'yes' : 'no',
                 'has_active_subscription' => $subscription ? 'yes' : 'no',
-                'user_role' => auth()->user()->role ?? 'guest'
+                'user_role' => auth()->user()->role ?? 'guest',
             ]);
         }
 
-        if (!$hasFeature) {
+        if (! $hasFeature) {
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => __('هذه الميزة غير متوفرة في باقتك الحالية.')
+                    'message' => __('هذه الميزة غير متوفرة في باقتك الحالية.'),
                 ], 403);
             }
 
             // If it's a student trying to access student portal, don't send them to subscription index
             if (auth()->check() && auth()->user()->role === 'student' && $featureCode === 'student_portal') {
                 auth()->logout();
+
                 return redirect()->route('center.login', ['tenant' => $tenant->domain])
                     ->with('error', __('بوابة الطالب غير مفعلة لهذا المركز حالياً.'));
             }

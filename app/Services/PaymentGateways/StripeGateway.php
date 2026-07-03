@@ -3,9 +3,8 @@
 namespace App\Services\PaymentGateways;
 
 use App\Interfaces\PaymentGatewayInterface;
-use App\Models\Tenant;
 use App\Models\Package;
-use Illuminate\Support\Str;
+use App\Models\Tenant;
 
 class StripeGateway implements PaymentGatewayInterface
 {
@@ -14,16 +13,17 @@ class StripeGateway implements PaymentGatewayInterface
     public function createCheckoutSession(Tenant $tenant, Package $package, string $billingCycle, array $options = []): string
     {
         $priceId = $package->stripe_price_id;
-        
+
         // Check if price ID looks like a real Stripe price (starts with 'price_1')
         $isRealPriceId = $priceId && str_starts_with($priceId, 'price_1');
-        
+
         // Handle Demo Mode: explicit demo flag, missing keys, or placeholder price IDs
-        if (config('services.stripe.demo_mode') || empty(config('services.stripe.secret')) || !$isRealPriceId) {
-            \Log::info("Stripe using Demo Mode", [
-                'reason' => !$isRealPriceId ? "Price ID '{$priceId}' is not a real Stripe price" : 'Demo mode enabled',
+        if (config('services.stripe.demo_mode') || empty(config('services.stripe.secret')) || ! $isRealPriceId) {
+            \Log::info('Stripe using Demo Mode', [
+                'reason' => ! $isRealPriceId ? "Price ID '{$priceId}' is not a real Stripe price" : 'Demo mode enabled',
                 'package' => $package->slug,
             ]);
+
             return $this->handleDemoRedirect($tenant, $package, $billingCycle, $options);
         }
 
@@ -34,13 +34,14 @@ class StripeGateway implements PaymentGatewayInterface
             ]);
 
             $checkoutOptions = [
-                'success_url' => ($options['success_url'] ?? route('payment.success')) . '?session_id={CHECKOUT_SESSION_ID}',
+                'success_url' => ($options['success_url'] ?? route('payment.success')).'?session_id={CHECKOUT_SESSION_ID}',
                 'cancel_url' => $options['cancel_url'] ?? route('payment.cancel'),
             ];
 
             // Regional Pricing Support
-            if (!empty($options['line_items'])) {
+            if (! empty($options['line_items'])) {
                 $checkoutOptions['line_items'] = $options['line_items'];
+
                 return $tenant->checkout(null, $checkoutOptions)->url;
             }
 
@@ -48,15 +49,15 @@ class StripeGateway implements PaymentGatewayInterface
                 ->checkout($checkoutOptions)
                 ->url;
         } catch (\Exception $e) {
-            \Log::warning("Stripe checkout failed, falling back to Demo Mode: " . $e->getMessage());
+            \Log::warning('Stripe checkout failed, falling back to Demo Mode: '.$e->getMessage());
+
             return $this->handleDemoRedirect($tenant, $package, $billingCycle, $options);
         }
     }
 
-
     public function handleCallback(array $payload): array
     {
-        // Stripe actual verification happens in PaymentController@success 
+        // Stripe actual verification happens in PaymentController@success
         // using \Stripe\Checkout\Session::retrieve($sessionId)
         return ['success' => true];
     }

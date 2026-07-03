@@ -21,24 +21,24 @@ class QuizController extends Controller
     {
         $this->authorize('viewAny', \App\Models\Quiz::class);
         $tenantId = app('tenant')->id;
-        
+
         // Fetch quizzes belonging to this tenant's courses
-        $quizzesQuery = \App\Models\Quiz::whereHas('lesson.section.course', function($query) use ($tenantId) {
+        $quizzesQuery = \App\Models\Quiz::whereHas('lesson.section.course', function ($query) use ($tenantId) {
             $query->where('tenant_id', $tenantId);
         });
 
         $quizzes = (clone $quizzesQuery)->with('lesson.section.course')->get();
 
-        $recentAttempts = \App\Models\QuizAttempt::whereHas('quiz.lesson.section.course', function($query) use ($tenantId) {
+        $recentAttempts = \App\Models\QuizAttempt::whereHas('quiz.lesson.section.course', function ($query) use ($tenantId) {
             $query->where('tenant_id', $tenantId);
         })->with(['quiz', 'user'])->latest()->take(10)->get();
 
         // Statistics
         $totalQuizzesCount = $quizzes->count();
-        $allAttemptsQuery = \App\Models\QuizAttempt::whereHas('quiz.lesson.section.course', function($query) use ($tenantId) {
+        $allAttemptsQuery = \App\Models\QuizAttempt::whereHas('quiz.lesson.section.course', function ($query) use ($tenantId) {
             $query->where('tenant_id', $tenantId);
         });
-        
+
         $totalAttemptsCount = $allAttemptsQuery->count();
         $passedAttemptsCount = (clone $allAttemptsQuery)->where('passed', true)->count();
         $avgPassingRate = $totalAttemptsCount > 0 ? ($passedAttemptsCount / $totalAttemptsCount) * 100 : 0;
@@ -65,13 +65,14 @@ class QuizController extends Controller
         $this->authorize('update', $quiz);
         $quiz->load('questions.options');
         $categories = \App\Models\QuestionCategory::select('id', 'name', 'slug')->get();
+
         return view('center::quizzes.edit', compact('quiz', 'categories'));
     }
 
     public function update(\App\Http\Requests\Center\UpdateQuizRequest $request, \App\Models\Quiz $quiz)
     {
         $this->authorize('update', $quiz);
-        
+
         $quiz->update($request->validated());
 
         return back()->with('success', __('center::messages.msg_058'));
@@ -118,6 +119,7 @@ class QuizController extends Controller
     {
         $this->authorize('update', $question->quiz);
         $question->delete();
+
         return back()->with('success', __('center::messages.msg_061'));
     }
 
@@ -126,6 +128,7 @@ class QuizController extends Controller
         $this->authorize('update', $question->quiz);
         $request->validate(['content' => 'required|string|min:1|max:500']);
         $question->options()->create(['content' => $request->content, 'is_correct' => false]);
+
         return back()->with('success', __('center::messages.msg_062'));
     }
 
@@ -134,6 +137,7 @@ class QuizController extends Controller
         $this->authorize('update', $option->question->quiz);
         $request->validate(['content' => 'required|string|min:1|max:500']);
         $option->update(['content' => $request->content]);
+
         return back()->with('success', __('center::messages.msg_063'));
     }
 
@@ -141,6 +145,7 @@ class QuizController extends Controller
     {
         $this->authorize('update', $option->question->quiz);
         $option->delete();
+
         return back()->with('success', __('center::messages.msg_064'));
     }
 
@@ -150,6 +155,7 @@ class QuizController extends Controller
         // Reset other options for this question
         $option->question->options()->update(['is_correct' => false]);
         $option->update(['is_correct' => true]);
+
         return back()->with('success', __('center::messages.msg_065'));
     }
 
@@ -157,10 +163,10 @@ class QuizController extends Controller
     public function show(\App\Models\Quiz $quiz)
     {
         $this->authorize('view', $quiz);
-        
+
         if ($this->quizService->hasPassed($quiz, auth()->id())) {
             return redirect()->route('center.quizzes.result', [
-                'attempt' => $quiz->attempts()->where('user_id', auth()->id())->where('passed', true)->first()->id
+                'attempt' => $quiz->attempts()->where('user_id', auth()->id())->where('passed', true)->first()->id,
             ])->with('info', __('center::messages.msg_066'));
         }
 
@@ -177,6 +183,7 @@ class QuizController extends Controller
         }
 
         $questions = $this->quizService->getQuizQuestions($quiz);
+
         return view('center::quizzes.show', compact('quiz', 'endTime', 'questions'));
     }
 
@@ -189,13 +196,13 @@ class QuizController extends Controller
         ]);
 
         $attempt = $quiz->attempts()->where('user_id', auth()->id())->whereNull('completed_at')->first();
-        if (!$attempt) {
+        if (! $attempt) {
             return back()->with('error', 'لا يوجد اختبار قيد التنفيذ.');
         }
 
         $startTime = $attempt->created_at;
 
-        if (!$this->quizService->isTimeValid($quiz, $startTime)) {
+        if (! $this->quizService->isTimeValid($quiz, $startTime)) {
             return back()->with('error', __('center::messages.msg_067'));
         }
 
@@ -207,6 +214,7 @@ class QuizController extends Controller
     public function result(\App\Models\QuizAttempt $attempt)
     {
         $this->authorize('view', $attempt);
+
         return view('center::quizzes.result', compact('attempt'));
     }
 

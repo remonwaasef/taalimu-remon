@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Course;
 use App\Models\User;
-
 use App\Traits\HasRoleCheck;
 
 class CoursePolicy
@@ -24,7 +23,7 @@ class CoursePolicy
      */
     public function view(User $user, Course $course): bool
     {
-        return $course->tenant_id === $user->tenant_id && 
+        return $course->tenant_id === $user->tenant_id &&
                ($this->hasAnyRole($user, ['center_admin', 'instructor']) || $user->checkPermissionTo('view courses'));
     }
 
@@ -43,7 +42,7 @@ class CoursePolicy
         }
 
         if ($this->hasAnyRole($user, ['instructor'])) {
-            return $user->instructor_id && 
+            return $user->instructor_id &&
                    $course->instructor_id === $user->instructor_id &&
                    $course->tenant_id === $user->tenant_id;
         }
@@ -56,7 +55,7 @@ class CoursePolicy
      */
     public function delete(User $user, Course $course): bool
     {
-        return $course->tenant_id === $user->tenant_id && 
+        return $course->tenant_id === $user->tenant_id &&
                ($this->hasAnyRole($user, ['center_admin']) || $user->checkPermissionTo('delete courses'));
     }
 
@@ -65,7 +64,7 @@ class CoursePolicy
      */
     public function enroll(User $user, Course $course): bool
     {
-        return $course->tenant_id === $user->tenant_id && 
+        return $course->tenant_id === $user->tenant_id &&
                ($this->hasAnyRole($user, ['center_admin', 'admin', 'secretary']) || $user->checkPermissionTo('manage students'));
     }
 }

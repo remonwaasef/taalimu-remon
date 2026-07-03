@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class BugReport extends Model
 {
     use \App\Traits\IdentifyTenant;
+
     protected $fillable = [
         'tenant_id',
         'user_id',
@@ -64,7 +65,7 @@ class BugReport extends Model
      */
     public function getCategoryLabelAttribute(): string
     {
-        return match($this->category) {
+        return match ($this->category) {
             'bug' => '🐛 Bug',
             'suggestion' => '💡 Suggestion',
             'ui_issue' => '🎨 UI Issue',
@@ -79,7 +80,7 @@ class BugReport extends Model
      */
     public function getPriorityBadgeAttribute(): string
     {
-        return match($this->priority) {
+        return match ($this->priority) {
             'critical' => 'danger',
             'high' => 'warning',
             'medium' => 'info',
@@ -93,7 +94,7 @@ class BugReport extends Model
      */
     public function getStatusBadgeAttribute(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             'open' => 'danger',
             'in_progress' => 'warning',
             'resolved' => 'success',
