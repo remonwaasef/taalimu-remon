@@ -30,6 +30,7 @@ rr
 .rr.yaml
 
 # Temporary & Backup files
+phpcpd.phar
 *.bak
 temp_*
 tmp_*

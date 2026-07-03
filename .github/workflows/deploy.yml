@@ -35,6 +35,9 @@ jobs:
             npm install
             npm run build
             
+            # Safety net: back up the database before running migrations
+            php artisan backup:run --only-db || echo "WARNING: pre-migration backup failed"
+
             # Run Laravel commands
             php artisan migrate --force
             php artisan storage:link
