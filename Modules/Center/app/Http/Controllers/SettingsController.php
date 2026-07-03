@@ -99,6 +99,9 @@ class SettingsController extends Controller
             'overdue_max_reminders'             => 'nullable|integer|min:1|max:50',
             'email_template'                    => 'nullable|string|max:2000',
             'whatsapp_template'                 => 'nullable|string|max:2000',
+            'wa_telegram_enabled'               => 'nullable|boolean',
+            'telegram_chat_id'                  => 'nullable|string|max:64',
+            'wa_days_before'                    => 'nullable|integer|min:0|max:28',
         ]);
 
         $tenant = Tenant::findOrFail($this->tenant->id);
