@@ -126,7 +126,7 @@ class StudentController extends Controller
         } catch (\Exception $e) {
             \Log::error('Student registration failed: '.$e->getMessage());
 
-            return redirect()->back()->withInput()->with('error', __('center::messages.registration_failed') ?? 'حدث خطأ أثناء التسجيل: '.$e->getMessage());
+            return redirect()->back()->withInput()->with('error', __('center::messages.registration_failed'));
         }
     }
 
@@ -508,7 +508,7 @@ class StudentController extends Controller
         } catch (\Exception $e) {
             \Log::error('Student import failed: '.$e->getMessage());
 
-            return redirect()->back()->with('error', 'حدث خطأ أثناء الاستيراد: '.$e->getMessage());
+            return redirect()->back()->with('error', __('center::messages.error_unexpected'));
         }
     }
 
@@ -548,31 +548,30 @@ class StudentController extends Controller
             'message' => 'required|string',
         ]);
 
-        $email = $student->email ?: ($student->user ? $student->user->email : null);
-
-        if (! $email) {
-            return redirect()->back()->with('error', __('center::messages.no_student_email'));
-        }
-
         try {
-            \Illuminate\Support\Facades\Mail::to($email)->queue(new \App\Mail\CustomStudentMail(
+            $sent = $this->studentService->sendCustomEmail(
                 $student,
                 $request->subject,
                 $request->message,
                 $this->tenant->name
-            ));
+            );
+
+            if (! $sent) {
+                return redirect()->back()->with('error', __('center::messages.no_student_email'));
+            }
 
             return redirect()->back()->with('success', __('center::messages.email_sent_success'));
         } catch (\Exception $e) {
             \Log::error("Failed to send email to student {$student->id}: ".$e->getMessage());
 
-            return redirect()->back()->with('error', __('center::messages.email_send_error').': '.$e->getMessage());
+            return redirect()->back()->with('error', __('center::messages.email_send_error'));
         }
     }
 
     public function idCard($id)
     {
         $student = $this->findStudentOrFail($id);
+        $this->authorize('view', $student);
 
         return view('center::students.id_card', compact('student'));
     }

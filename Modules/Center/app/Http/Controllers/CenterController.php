@@ -17,7 +17,6 @@ class CenterController extends Controller
      */
     public function index()
     {
-        \Log::info('Entering CenterController@index');
         $user = auth()->user();
 
         // Redirect instructors to their specific dashboard
@@ -51,6 +50,11 @@ class CenterController extends Controller
         $dashboardData = \App\Support\TenantCache::remember($cacheKey, now()->addMinutes(15), function () {
             $activeStudentsCount = Student::where('status', 'active')->count();
 
+            // Sargable month boundaries so the created_at/date indexes are used
+            // instead of MONTH()/YEAR() forcing a full table scan.
+            $monthStart = now()->startOfMonth();
+            $monthEnd = now()->endOfMonth();
+
             // Attendance Rate for the current week
             $thisWeekAttendance = \Modules\Center\Models\Attendance::where('created_at', '>=', now()->startOfWeek())
                 ->count();
@@ -60,11 +64,9 @@ class CenterController extends Controller
             return [
                 'activeStudents' => $activeStudentsCount,
                 'activeCourses' => Course::where('status', 'published')->count(),
-                'monthlyRevenue' => Sale::whereMonth('created_at', now()->month)
-                    ->whereYear('created_at', now()->year)
+                'monthlyRevenue' => Sale::whereBetween('created_at', [$monthStart, $monthEnd])
                     ->sum('paid_amount'),
-                'monthlyExpenses' => Expense::whereMonth('date', now()->month)
-                    ->whereYear('date', now()->year)
+                'monthlyExpenses' => Expense::whereBetween('date', [$monthStart, $monthEnd])
                     ->sum('amount'),
                 'sessionsToday' => \App\Models\Schedule::where('day_of_week', strtolower(now()->format('l')))->count(),
                 'attendanceRate' => min($attendanceRate, 100),
@@ -85,6 +87,7 @@ class CenterController extends Controller
         $activityCacheKey = 'recent_activities';
         $recentActivities = \App\Support\TenantCache::remember($activityCacheKey, now()->addMinutes(5), function () use ($tenantId) {
             return \Spatie\Activitylog\Models\Activity::where('properties->tenant_id', $tenantId)
+                ->where('created_at', '>=', now()->subDays(90))
                 ->with(['causer', 'subject'])
                 ->latest()
                 ->take(10)

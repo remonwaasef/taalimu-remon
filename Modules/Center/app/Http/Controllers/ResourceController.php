@@ -14,14 +14,19 @@ class ResourceController extends Controller
     {
         $this->authorize('update', $course);
 
+        $tenantId = app('tenant')->id;
+
         $request->validate([
             'title' => 'required|string|max:255',
             'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,zip,png,jpg,jpeg,gif,mp4,mp3,webm|max:10240', // 10MB limit
-            'lesson_id' => 'nullable|exists:lessons,id',
+            // Scope the existence check to this tenant so a lesson id from another
+            // center cannot be attached.
+            'lesson_id' => [
+                'nullable',
+                \Illuminate\Validation\Rule::exists('lessons', 'id')->where('tenant_id', $tenantId),
+            ],
             'is_public' => 'boolean',
         ]);
-
-        $tenantId = app('tenant')->id;
         $path = $request->file('file')->store("{$tenantId}/resources/".$course->id, 'local');
 
         CourseResource::create([

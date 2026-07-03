@@ -146,6 +146,37 @@ class StudentRegistrationService
         return $result;
     }
 
+    /**
+     * Enrol an already-existing student into the given courses (creating an
+     * unpaid sale) and send the group-enrollment emails. Shared by the Center
+     * and Instructor flows so the enrolment logic lives in one place.
+     */
+    public function enrollInCourses(Student $student, array $courseIds): void
+    {
+        $courseIds = array_values(array_filter($courseIds));
+        if (empty($courseIds)) {
+            return;
+        }
+
+        $items = [];
+        foreach (\App\Models\Course::whereIn('id', $courseIds)->get() as $course) {
+            $items[] = ['id' => $course->id, 'price' => $course->price];
+        }
+
+        if (empty($items)) {
+            return;
+        }
+
+        $this->financeService->createSale([
+            'student_id' => $student->id,
+            'items' => $items,
+            'payment_method' => 'cash',
+            'paid_amount' => 0,
+        ]);
+
+        $this->notificationService->sendGroupEnrollmentEmails($student, $courseIds);
+    }
+
     public function generateUniqueCode()
     {
         $tenantId = \Modules\Tenancy\Services\TenantResolver::get()->id;

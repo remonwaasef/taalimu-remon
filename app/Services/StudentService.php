@@ -46,6 +46,11 @@ class StudentService
         return $this->profileService->updateStudent($student, $data, $modifier);
     }
 
+    public function enrollInCourses(Student $student, array $courseIds): void
+    {
+        $this->registrationService->enrollInCourses($student, $courseIds);
+    }
+
     public function getExportData()
     {
         return $this->profileService->getExportData();
@@ -54,6 +59,11 @@ class StudentService
     public function getProfileData(Student $student)
     {
         return $this->profileService->getProfileData($student);
+    }
+
+    public function sendCustomEmail(Student $student, string $subject, string $message, string $senderName): bool
+    {
+        return $this->profileService->sendCustomEmail($student, $subject, $message, $senderName);
     }
 
     public function deleteStudent(Student $student, User $deleter)

@@ -61,7 +61,7 @@ class SettingsController extends Controller
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Failed to apply academic template: '.$e->getMessage());
 
-            return back()->with('error', 'حدث خطأ أثناء تطبيق النموذج: '.$e->getMessage());
+            return back()->with('error', 'حدث خطأ أثناء تطبيق النموذج.');
         }
     }
 

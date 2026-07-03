@@ -221,6 +221,8 @@ class PaymentController extends Controller
      */
     public function demo()
     {
+        abort_unless(\App\Services\PaymentGateways\MockGateway::demoPaymentsAllowed(), 404);
+
         $planSlug = session('selected_plan');
         $tenantId = session('tenant_id');
 
@@ -249,6 +251,8 @@ class PaymentController extends Controller
      */
     public function demoSuccess(TelegramService $telegram)
     {
+        abort_unless(\App\Services\PaymentGateways\MockGateway::demoPaymentsAllowed(), 404);
+
         if (! session('tenant_id')) {
             return redirect()->route('register');
         }
