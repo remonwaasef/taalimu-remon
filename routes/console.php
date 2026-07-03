@@ -14,6 +14,9 @@ Schedule::command('finance:remind-debts')->dailyAt('10:00')->withoutOverlapping(
 // Payment Reminders: Email + WhatsApp (Daily at 08:00 AM)
 Schedule::command('reminders:send-payment')->dailyAt('08:00')->withoutOverlapping();
 
+// Payment Reminders: free WhatsApp via Telegram click-to-send links (Daily at 08:05 AM)
+Schedule::command('reminders:send-wa-links')->dailyAt('08:05')->withoutOverlapping();
+
 // Telegram Subscription Reminders (Daily)
 Schedule::command('app:send-subscription-reminders')->dailyAt('09:00')->withoutOverlapping();
 
