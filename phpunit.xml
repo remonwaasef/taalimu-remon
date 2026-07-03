@@ -11,16 +11,10 @@
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
         </testsuite>
-        <testsuite name="Regression">
-            <file>tests/Unit/Services/FinanceServiceTest.php</file>
-            <file>tests/Unit/Helpers/QueryHelperTest.php</file>
-            <file>tests/Feature/Validation/StudentValidationTest.php</file>
-            <file>tests/Feature/StudentSystemTest.php</file>
-            <file>tests/Feature/CourseSystemTest.php</file>
-            <file>tests/Feature/StudentImportTest.php</file>
-            <file>tests/Feature/Api/ApiAuthTest.php</file>
-            <file>tests/Feature/Api/ApiRoleTest.php</file>
-        </testsuite>
+        <!-- Do not re-list files from tests/Unit or tests/Feature in another
+             suite: on Linux, PHPUnit 11 warns per duplicate file and
+             failOnPhpunitWarning (default true) turns that into exit code 1
+             even when every test passes (the former "Regression" suite). -->
     </testsuites>
     <source>
         <include>
