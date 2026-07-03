@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Quiz extends Model
 {
-    use \App\Traits\IdentifyTenant, HasFactory;
+    use \App\Traits\BelongsToTenant, HasFactory;
 
     protected $fillable = [
         'lesson_id',

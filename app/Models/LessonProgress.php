@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class LessonProgress extends Model
 {
-    use \App\Traits\IdentifyTenant, HasFactory;
+    use \App\Traits\BelongsToTenant, HasFactory;
 
     protected $table = 'lesson_progress';
 

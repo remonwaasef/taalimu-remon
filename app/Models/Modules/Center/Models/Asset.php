@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Asset extends Model
 {
-    use \App\Traits\IdentifyTenant;
+    use \App\Traits\BelongsToTenant;
 
     protected $fillable = [
         'tenant_id',

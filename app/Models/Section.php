@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Section extends Model
 {
-    use \App\Traits\IdentifyTenant, HasFactory;
+    use \App\Traits\BelongsToTenant, HasFactory;
 
     protected $fillable = [
         'course_id',

@@ -2,13 +2,12 @@
 
 namespace Modules\Center\Models;
 
-use App\Traits\IdentifyTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Attendance extends Model
 {
-    use \App\Traits\ClearsDashboardCache, HasFactory, IdentifyTenant;
+    use \App\Traits\BelongsToTenant, \App\Traits\ClearsDashboardCache, HasFactory;
 
     protected $fillable = [
         'tenant_id',

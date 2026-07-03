@@ -82,7 +82,7 @@
                         </div>
                     @elseif($lesson->type == 'text')
                         <div class="p-4">
-                            {!! strip_tags($lesson->content, '<p><br><strong><em><ul><ol><li><h1><h2><h3><h4><h5><h6><a><img><table><thead><tbody><tr><th><td><blockquote><pre><code>') !!}
+                            {!! $lesson->sanitizedContent() !!}
                         </div>
                     @elseif($lesson->type == 'quiz')
                         <div class="p-5 text-center">

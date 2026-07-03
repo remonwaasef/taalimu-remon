@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Lesson extends Model
 {
-    use \App\Traits\IdentifyTenant, HasFactory;
+    use \App\Traits\BelongsToTenant, HasFactory;
 
     protected $fillable = [
         'section_id',
@@ -19,6 +19,16 @@ class Lesson extends Model
         'is_preview',
         'sort_order',
     ];
+
+    /**
+     * Lesson content safe for raw ({!! !!}) output. Content is already
+     * purified on write, but legacy rows may predate that, so purify on
+     * read as well.
+     */
+    public function sanitizedContent(): string
+    {
+        return \Mews\Purifier\Facades\Purifier::clean((string) $this->content, 'lesson');
+    }
 
     public function section()
     {

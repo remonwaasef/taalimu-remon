@@ -11,7 +11,7 @@ use App\Scopes\TenantScope;
  * يقوم تلقائياً بإضافة TenantScope وضبط tenant_id عند الإنشاء.
  *
  * ملاحظة: تمت إعادة تسمية هذا الـ Trait من IdentifyTenant إلى BelongsToTenant
- * لتجنب التعارض مع Middleware IdentifyTenant.
+ * لتجنب التعارض مع Middleware IdentifyTenant (أُزيل الاسم القديم نهائياً).
  */
 trait BelongsToTenant
 {

@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class BugReport extends Model
 {
-    use \App\Traits\IdentifyTenant;
+    use \App\Traits\BelongsToTenant;
 
     protected $fillable = [
         'tenant_id',

@@ -9,7 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Schedule extends Model
 {
-    use \App\Traits\IdentifyTenant, HasFactory, LogsActivity;
+    use \App\Traits\BelongsToTenant, HasFactory, LogsActivity;
 
     protected $fillable = [
         'tenant_id',
