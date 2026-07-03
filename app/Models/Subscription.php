@@ -6,7 +6,7 @@ use Laravel\Cashier\Subscription as CashierSubscription;
 
 class Subscription extends CashierSubscription
 {
-    use \App\Traits\IdentifyTenant;
+    use \App\Traits\BelongsToTenant;
 
     protected static function boot()
     {

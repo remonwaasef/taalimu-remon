@@ -10,7 +10,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Grade extends Model
 {
-    use \App\Traits\IdentifyTenant, HasFactory, LogsActivity, SoftDeletes;
+    use \App\Traits\BelongsToTenant, HasFactory, LogsActivity, SoftDeletes;
 
     protected $fillable = [
         'tenant_id',

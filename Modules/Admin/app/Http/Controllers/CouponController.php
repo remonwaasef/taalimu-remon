@@ -15,8 +15,6 @@ class CouponController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        \Log::info('Coupon store request:', $request->all());
-
         $validated = $request->validate([
             'code' => 'required|string|unique:coupons,code|max:50',
             'name' => 'nullable|string|max:100',

@@ -194,7 +194,12 @@ class PaymentController extends Controller
 
         Log::warning('Paymob Payment Failed/Cancelled', [
             'tenant_id' => $tenantId, 'is_change' => $isChange,
-            'all_params' => $request->all(),
+            // Only the diagnostic subset — the full callback also carries card
+            // fragments (source_data_pan), tokens and the HMAC signature.
+            'params' => $request->only([
+                'id', 'order', 'merchant_order_id', 'success',
+                'txn_response_code', 'amount_cents', 'currency', 'error_occured',
+            ]),
         ]);
 
         if ($isChange && $tenantId) {

@@ -20,6 +20,7 @@
         "laravel/sanctum": "^4.2",
         "laravel/socialite": "^5.0",
         "laravel/tinker": "^2.10.1",
+        "mews/purifier": "^3.4",
         "nwidart/laravel-modules": "^12.0",
         "pragmarx/google2fa-laravel": "^2.3",
         "sentry/sentry-laravel": "^4.20",
