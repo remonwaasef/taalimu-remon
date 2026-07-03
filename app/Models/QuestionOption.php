@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class QuestionOption extends Model
 {
-    use HasFactory, \App\Traits\IdentifyTenant;
+    use \App\Traits\IdentifyTenant, HasFactory;
 
     protected $fillable = [
         'tenant_id',
@@ -15,7 +15,6 @@ class QuestionOption extends Model
         'content',
         'is_correct',
     ];
-
 
     public function question()
     {

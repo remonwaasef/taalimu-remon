@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('order')->default(0);
             $table->timestamps();
-            
+
             $table->index('tenant_id');
             $table->index('stage_id');
         });

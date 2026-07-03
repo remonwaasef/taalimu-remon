@@ -42,7 +42,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'webhooks/paypal',
             'webhooks/paymob',
         ]);
-        
+
         // Configure redirect for unauthenticated users
         $middleware->redirectGuestsTo(function ($request) {
             // 1. Admin Routes -> Admin Login
@@ -52,22 +52,22 @@ return Application::configure(basePath: dirname(__DIR__))
 
             $host = $request->getHost();
             $mainDomain = config('app.tenant_domain');
-            
+
             // 2. Main Domain / Localhost -> Unified Login Portal
             // Check if host is exactly the main domain or www.maindomain
-            if ($host === $mainDomain || $host === 'www.' . $mainDomain || $host === 'localhost') {
+            if ($host === $mainDomain || $host === 'www.'.$mainDomain || $host === 'localhost') {
                 return route('login.portal');
             }
 
             // 3. Tenant Subdomain -> Tenant Login
             // Only if it ends with the main domain and has a subdomain
-            if ($mainDomain && str_ends_with($host, '.' . $mainDomain)) {
-                $subdomain = substr($host, 0, -strlen('.' . $mainDomain));
+            if ($mainDomain && str_ends_with($host, '.'.$mainDomain)) {
+                $subdomain = substr($host, 0, -strlen('.'.$mainDomain));
                 if ($subdomain && $subdomain !== 'www') {
                     return route('center.login', ['tenant' => $subdomain]);
                 }
             }
-            
+
             // Fallback
             return route('login.portal');
         });
@@ -92,13 +92,13 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Auto-capture all exceptions in tenant context
-        $exceptions->report(function (\Throwable $e) use ($exceptions) {
+        $exceptions->report(function (\Throwable $e) {
             if (app()->bound('tenant') && app('tenant')) {
                 try {
                     app(\App\Services\IssueLogger::class)->logException($e, request());
                 } catch (\Throwable $logError) {
                     // Prevent infinite loops - just log to file
-                    \Illuminate\Support\Facades\Log::error('Failed to log issue: ' . $logError->getMessage());
+                    \Illuminate\Support\Facades\Log::error('Failed to log issue: '.$logError->getMessage());
                 }
             }
 
@@ -114,7 +114,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 try {
                     app(\App\Services\TelegramService::class)->sendExceptionAlert($e, request()->fullUrl(), auth()->user());
                 } catch (\Throwable $telError) {
-                    \Illuminate\Support\Facades\Log::error('Telegram notification failed: ' . $telError->getMessage());
+                    \Illuminate\Support\Facades\Log::error('Telegram notification failed: '.$telError->getMessage());
                 }
             }
         });
@@ -123,7 +123,7 @@ return Application::configure(basePath: dirname(__DIR__))
             if ($request->is('api/*')) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Resource not found.'
+                    'message' => 'Resource not found.',
                 ], 404);
             }
         });
@@ -140,6 +140,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 }
 
                 $isLocal = app()->environment('local');
+
                 return response()->json([
                     'success' => false,
                     'message' => $isLocal ? $e->getMessage() : ($status === 500 ? 'An internal server error occurred.' : $e->getMessage()),

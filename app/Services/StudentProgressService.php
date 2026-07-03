@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\User;
 use App\Models\Enrollment;
 use App\Models\LessonProgress;
+use App\Models\User;
 
 class StudentProgressService
 {
@@ -26,26 +26,26 @@ class StudentProgressService
     {
         $allLessons = $enrollment->course->sections->flatMap->lessons;
         $courseLessonIds = $allLessons->pluck('id');
-        
+
         $lastProgress = LessonProgress::where('user_id', $enrollment->user_id)
             ->whereIn('lesson_id', $courseLessonIds)
             ->latest('updated_at')
             ->first();
 
-        if (!$lastProgress) {
+        if (! $lastProgress) {
             // Start from the first lesson
             return $allLessons->first();
         }
 
         // Find next lesson after the last completed one
-        $currentIndex = $allLessons->search(function($item) use ($lastProgress) {
+        $currentIndex = $allLessons->search(function ($item) use ($lastProgress) {
             return $item->id == $lastProgress->lesson_id;
         });
 
         if ($currentIndex !== false && $currentIndex < $allLessons->count() - 1) {
             return $allLessons[$currentIndex + 1];
         }
-        
+
         return $lastProgress->lesson;
     }
 }

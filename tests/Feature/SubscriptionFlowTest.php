@@ -2,20 +2,20 @@
 
 namespace Tests\Feature;
 
+use App\Models\Package;
+use App\Models\Tenant;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Tenant;
-use App\Models\Package;
-use App\Models\Subscription;
-use Laravel\Cashier\Cashier;
 
 class SubscriptionFlowTest extends TestCase
 {
     use RefreshDatabase;
 
     protected $tenant;
+
     protected $admin;
+
     protected $package;
 
     protected function setUp(): void
@@ -25,7 +25,7 @@ class SubscriptionFlowTest extends TestCase
         // Setup Tenant
         $this->tenant = $this->createTenant(['domain' => 'test', 'name' => 'Test Center']);
         app()->instance('tenant', $this->tenant);
-        
+
         // Setup Package
         $this->package = Package::create([
             'name' => 'Pro Plan',
@@ -62,7 +62,7 @@ class SubscriptionFlowTest extends TestCase
         $response = $this->get(route('center.subscription.checkout', ['tenant' => $this->tenant->domain, 'package' => $this->package->id]));
 
         // The route should be accessible (not 404) - accept either redirect or server error
-        $this->assertTrue(in_array($response->status(), [302, 500]), 'Expected 302 or 500, got: ' . $response->status());
+        $this->assertTrue(in_array($response->status(), [302, 500]), 'Expected 302 or 500, got: '.$response->status());
     }
 
     public function test_success_page_loads()

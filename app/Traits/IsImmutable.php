@@ -36,7 +36,7 @@ trait IsImmutable
     public function isImmutable(): bool
     {
         // If tenant_id is null, it's a System Record (Global).
-        // Only Super Admins might bypass this via specific flags if needed, 
+        // Only Super Admins might bypass this via specific flags if needed,
         // but for now, we lock it down strictly.
         return is_null($this->tenant_id);
     }

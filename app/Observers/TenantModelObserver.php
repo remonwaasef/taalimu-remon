@@ -4,11 +4,6 @@ namespace App\Observers;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
-use App\Models\User;
-use App\Models\Instructor;
-use App\Models\Course;
-use App\Models\Classroom;
-use Modules\Center\Models\Branch;
 
 class TenantModelObserver
 {
@@ -34,7 +29,7 @@ class TenantModelObserver
     protected function updateCache(Model $model, int $change): void
     {
         // Ensure the model has a tenant_id
-        if (!isset($model->tenant_id)) {
+        if (! isset($model->tenant_id)) {
             return;
         }
 

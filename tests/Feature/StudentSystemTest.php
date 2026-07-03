@@ -3,12 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\Grade;
+use App\Models\Package;
 use App\Models\Stage;
 use App\Models\Student;
+use App\Models\Subscription;
 use App\Models\Tenant;
 use App\Models\User;
-use App\Models\Package;
-use App\Models\Subscription;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -17,6 +17,7 @@ class StudentSystemTest extends TestCase
     use RefreshDatabase;
 
     protected $tenant;
+
     protected $admin;
 
     protected function setUp(): void
@@ -26,16 +27,16 @@ class StudentSystemTest extends TestCase
         // 1. Setup Tenant & Bind to container
         $this->tenant = Tenant::create(['domain' => 'qa', 'name' => 'QA Center', 'onboarding_status' => 'completed']);
         app()->instance('tenant', $this->tenant);
-        
+
         // Clear Spatie Cache
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
-        
+
         // Fix Session Domain for Subdomain Auth & Force Root URL
         config(['session.domain' => '.localhost']);
         \Illuminate\Support\Facades\URL::forceRootUrl('http://qa.localhost');
 
         app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($this->tenant->id);
-        
+
         // Setup Permissions
         \Spatie\Permission\Models\Permission::firstOrCreate(['name' => 'view students', 'guard_name' => 'web']);
         \Spatie\Permission\Models\Permission::firstOrCreate(['name' => 'create students', 'guard_name' => 'web']);
@@ -73,7 +74,7 @@ class StudentSystemTest extends TestCase
             'must_change_password' => false,
         ]);
         $this->admin->givePermissionTo(['view students', 'create students', 'edit students']);
-        
+
         // Fix: Create and assign Role for Policy checks
         $role = \App\Models\Role::firstOrCreate(['name' => 'center_admin', 'guard_name' => 'web', 'tenant_id' => $this->tenant->id]);
         $this->admin->assignRole($role);
@@ -98,7 +99,6 @@ class StudentSystemTest extends TestCase
             'password' => 'password123',
         ];
 
-
         $response = $this->post(route('center.students.store', ['tenant' => $this->tenant->domain]), $studentData);
 
         $response->assertRedirect();
@@ -122,7 +122,7 @@ class StudentSystemTest extends TestCase
     {
         $this->actingAs($this->admin);
         $grade = Grade::first();
-        
+
         $student = Student::create([
             'tenant_id' => $this->tenant->id,
             'user_id' => User::factory()->create(['tenant_id' => $this->tenant->id])->id,
@@ -141,14 +141,13 @@ class StudentSystemTest extends TestCase
             'grade_id' => $grade->id,
         ];
 
-
         $response = $this->put(route('center.students.update', [
             'tenant' => $this->tenant->domain,
-            'student' => $student->id
+            'student' => $student->id,
         ]), $updateData);
 
         $response->assertRedirect();
-        
+
         // Verify Database
         $this->assertDatabaseHas('students', [
             'id' => $student->id,

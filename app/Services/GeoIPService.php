@@ -2,16 +2,16 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Cache;
 
 class GeoIPService
 {
     /**
      * Get the country code for an IP address.
-     * 
-     * @param string $ip
+     *
+     * @param  string  $ip
      * @return string|null (ISO 3166-1 alpha-2)
      */
     public function getCountryCode($ip)
@@ -25,7 +25,7 @@ class GeoIPService
             // Cache results for 24 hours to reduce API load
             return Cache::remember("geoip_country_{$ip}", 86400, function () use ($ip) {
                 $response = Http::timeout(2)->get("https://ip-api.com/json/{$ip}?fields=status,countryCode");
-                
+
                 if ($response->successful() && $response->json('status') === 'success') {
                     return strtoupper($response->json('countryCode'));
                 }
@@ -33,30 +33,31 @@ class GeoIPService
                 return null;
             });
         } catch (\Exception $e) {
-            Log::warning("GeoIP Lookup failed for {$ip}: " . $e->getMessage());
+            Log::warning("GeoIP Lookup failed for {$ip}: ".$e->getMessage());
+
             return null;
         }
     }
 
     /**
      * Map country code to application locale.
-     * 
-     * @param string|null $countryCode
+     *
+     * @param  string|null  $countryCode
      * @return string
      */
     public function getLocaleFromCountry($countryCode)
     {
-        if (!$countryCode) {
+        if (! $countryCode) {
             return 'ar'; // Default
         }
 
         $arabicCountries = [
-            'EG', 'SA', 'AE', 'JO', 'LB', 'KW', 'QA', 'BH', 'OM', 'IQ', 
-            'YE', 'SY', 'PS', 'LY', 'SD', 'MA', 'DZ', 'TN', 'MR', 'DJ', 'KM'
+            'EG', 'SA', 'AE', 'JO', 'LB', 'KW', 'QA', 'BH', 'OM', 'IQ',
+            'YE', 'SY', 'PS', 'LY', 'SD', 'MA', 'DZ', 'TN', 'MR', 'DJ', 'KM',
         ];
 
         $frenchCountries = [
-            'FR', 'BE', 'MC', 'LU', 'CH', 'CA', 'SN', 'ML', 'CI', 'BF', 'NE', 'TG', 'BJ', 'GN'
+            'FR', 'BE', 'MC', 'LU', 'CH', 'CA', 'SN', 'ML', 'CI', 'BF', 'NE', 'TG', 'BJ', 'GN',
         ];
 
         if (in_array($countryCode, $arabicCountries)) {
@@ -72,13 +73,13 @@ class GeoIPService
 
     /**
      * Map country code to application currency.
-     * 
-     * @param string|null $countryCode
+     *
+     * @param  string|null  $countryCode
      * @return string
      */
     public function getCurrencyFromCountryCode($countryCode = null)
     {
-        if (!$countryCode) {
+        if (! $countryCode) {
             return 'USD';
         }
 

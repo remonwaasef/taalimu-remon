@@ -16,10 +16,10 @@ return new class extends Migration
             $table->foreignId('tenant_id')->nullable()->index(); // From tenant_id migration
             $table->foreignId('section_id')->constrained()->cascadeOnDelete();
             $table->string('title');
-            
+
             // Expanded enum with 'assignment'
             $table->enum('type', ['video', 'text', 'quiz', 'assignment'])->default('video');
-            
+
             $table->text('content')->nullable(); // URL for video or HTML for text
             $table->integer('duration')->default(0); // in minutes
             $table->integer('sort_order')->default(0);

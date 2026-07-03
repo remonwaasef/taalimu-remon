@@ -2,11 +2,11 @@
 
 namespace Modules\Center\Http\Controllers;
 
-use Modules\Center\Http\Controllers\CenterBaseController as Controller;
 use App\Models\Package;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Modules\Center\Http\Controllers\CenterBaseController as Controller;
 
 class SubscriptionController extends Controller
 {
@@ -26,16 +26,16 @@ class SubscriptionController extends Controller
         $currentPackage = $subscription?->resolved_package;
 
         // Days remaining calculation
-        $daysRemaining   = null;
-        $daysTotal       = null;
+        $daysRemaining = null;
+        $daysTotal = null;
         $progressPercent = 0;
 
         if ($subscription && $subscription->ends_at) {
-            $daysRemaining   = max(0, intval(ceil(now()->diffInDays($subscription->ends_at, false))));
-            $daysTotal       = $subscription->created_at
+            $daysRemaining = max(0, intval(ceil(now()->diffInDays($subscription->ends_at, false))));
+            $daysTotal = $subscription->created_at
                 ? intval(ceil($subscription->created_at->diffInDays($subscription->ends_at)))
                 : 30;
-            $daysTotal       = max(1, $daysTotal);
+            $daysTotal = max(1, $daysTotal);
             $progressPercent = min(100, round((($daysTotal - $daysRemaining) / $daysTotal) * 100));
         }
 
@@ -68,7 +68,7 @@ class SubscriptionController extends Controller
     {
         $this->authorize('update', $this->tenant);
         $package = Package::findOrFail($packageId);
-        $tenant  = $this->tenant;
+        $tenant = $this->tenant;
 
         if ($package->price <= 0 && $package->yearly_price <= 0) {
             return back()->with('error', __('center::messages.msg_087'));
@@ -80,7 +80,7 @@ class SubscriptionController extends Controller
 
         try {
             $gateway = \App\Services\PaymentFactory::make($gatewayName);
-            
+
             // Set session data for context restoration if redirect loses session
             session([
                 'tenant_id' => $tenant->id,
@@ -93,13 +93,14 @@ class SubscriptionController extends Controller
 
             $redirectUrl = $gateway->createCheckoutSession($tenant, $package, $billingCycle, [
                 'success_url' => route('center.subscription.success', ['tenant' => $tenant->domain]),
-                'cancel_url'  => route('center.subscription.index', ['tenant' => $tenant->domain]),
-                'is_upgrade'  => true,
+                'cancel_url' => route('center.subscription.index', ['tenant' => $tenant->domain]),
+                'is_upgrade' => true,
             ]);
 
             return redirect()->away($redirectUrl);
         } catch (\Exception $e) {
-            \Log::error("Subscription checkout error: " . $e->getMessage());
+            \Log::error('Subscription checkout error: '.$e->getMessage());
+
             return back()->with('error', 'حدث خطأ أثناء معالجة عملية الدفع.');
         }
     }

@@ -26,13 +26,13 @@ class SendWeeklyTelegramReport extends Command
     public function handle()
     {
         $lastWeek = now()->subDays(7);
-        
+
         $newTenants = \App\Models\Tenant::where('created_at', '>=', $lastWeek)->count();
         $totalTenants = \App\Models\Tenant::count();
-        
+
         $activeSubs = \App\Models\Subscription::where('stripe_status', 'active')->count();
         $totalRevenue = \App\Models\Subscription::where('stripe_status', 'active')->sum('total_amount');
-        
+
         $totalStudents = \App\Models\User::where('role', 'student')->count();
         $newStudents = \App\Models\User::where('role', 'student')->where('created_at', '>=', $lastWeek)->count();
 
@@ -40,7 +40,7 @@ class SendWeeklyTelegramReport extends Command
             'مراكز جديدة (هذا الأسبوع)' => $newTenants,
             'إجمالي المراكز المسجلة' => $totalTenants,
             'اشتراكات نشطة حالياً' => $activeSubs,
-            'إجمالي الإيرادات المتكررة' => number_format($totalRevenue, 0) . ' ' . \App\Models\SiteSetting::get('currency_symbol', 'جنيه'),
+            'إجمالي الإيرادات المتكررة' => number_format($totalRevenue, 0).' '.\App\Models\SiteSetting::get('currency_symbol', 'جنيه'),
             'طلاب جدد (هذا الأسبوع)' => $newStudents,
             'إجمالي الطلاب في المنصة' => $totalStudents,
         ];

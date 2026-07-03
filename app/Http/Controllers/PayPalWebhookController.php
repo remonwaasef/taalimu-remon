@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Subscription;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class PayPalWebhookController extends Controller
@@ -11,17 +11,18 @@ class PayPalWebhookController extends Controller
     public function handle(Request $request, \App\Services\PayPalService $paypalService)
     {
         $payload = $request->all();
-        
+
         // Verify webhook signature
-        if (!$paypalService->verifyWebhook($request->headers->all(), $request->getContent())) {
+        if (! $paypalService->verifyWebhook($request->headers->all(), $request->getContent())) {
             Log::warning('Invalid PayPal Webhook Signature', ['ip' => $request->ip()]);
+
             return response()->json(['error' => 'Invalid signature'], 400);
         }
 
         $eventType = $payload['event_type'] ?? '';
 
         $safePayload = $request->except(['card_pan', 'source', 'cvv', 'token', 'payer.payer_info.tax_id_type']);
-        Log::info('PayPal Webhook Received: ' . $eventType, $safePayload);
+        Log::info('PayPal Webhook Received: '.$eventType, $safePayload);
 
         switch ($eventType) {
             case 'BILLING.SUBSCRIPTION.ACTIVATED':
@@ -96,7 +97,7 @@ class PayPalWebhookController extends Controller
                 } elseif ($subscription->billing_cycle === 'yearly') {
                     $daysToAdd = 365;
                 }
-                
+
                 $subscription->update([
                     'ends_at' => now()->addDays($daysToAdd),
                 ]);

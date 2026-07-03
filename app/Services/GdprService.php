@@ -2,10 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\User;
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Spatie\Activitylog\Models\Activity;
 
 class GdprService
@@ -34,7 +33,7 @@ class GdprService
         $data['academic_records']['quizzes'] = $user->quizAttempts()
             ->with('quiz:id,title')
             ->get()
-            ->map(function($attempt) {
+            ->map(function ($attempt) {
                 return [
                     'quiz_title' => $attempt->quiz->title ?? 'Unknown Quiz',
                     'score' => $attempt->score,
@@ -48,10 +47,10 @@ class GdprService
             $data['academic_records']['courses'] = $student->enrollments()
                 ->with('course:id,title')
                 ->get()
-                ->map(function($enrollment) {
+                ->map(function ($enrollment) {
                     return [
                         'course_title' => $enrollment->course->title ?? 'Unknown Course',
-                        'progress' => $enrollment->progress_percent . '%',
+                        'progress' => $enrollment->progress_percent.'%',
                         'enrolled_at' => $enrollment->created_at->toIso8601String(),
                     ];
                 });
@@ -62,7 +61,7 @@ class GdprService
             ->where('causer_type', get_class($user))
             ->latest()
             ->get()
-            ->map(function($activity) {
+            ->map(function ($activity) {
                 return [
                     'description' => $activity->description,
                     'date' => $activity->created_at->toIso8601String(),
@@ -86,7 +85,7 @@ class GdprService
                 ->update([
                     'causer_id' => null,
                     'properties' => array_merge(['original_user_role' => $user->role], ['deleted_at' => now()->toIso8601String()]),
-                    'description' => 'Activity by deleted user'
+                    'description' => 'Activity by deleted user',
                 ]);
 
             // 2. Delete Student Record & Related Data

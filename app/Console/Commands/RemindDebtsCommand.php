@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Sale;
 use App\Models\Student;
 use App\Models\Tenant;
 use App\Services\WhatsAppService;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
 class RemindDebtsCommand extends Command

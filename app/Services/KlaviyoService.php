@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Log;
 class KlaviyoService
 {
     protected $apiKey;
+
     protected $baseUrl = 'https://a.klaviyo.com/api';
+
     protected $revision = '2024-02-15';
 
     public function __construct()
@@ -19,13 +21,13 @@ class KlaviyoService
     /**
      * Create or update a profile in Klaviyo.
      *
-     * @param array $profileData
      * @return bool
      */
     public function syncProfile(array $profileData)
     {
-        if (!$this->apiKey) {
+        if (! $this->apiKey) {
             Log::warning('Klaviyo API key is missing. Skipping profile sync.');
+
             return false;
         }
 
@@ -34,8 +36,8 @@ class KlaviyoService
         $payload = [
             'data' => [
                 'type' => 'profile',
-                'attributes' => $profileData
-            ]
+                'attributes' => $profileData,
+            ],
         ];
 
         try {
@@ -51,14 +53,15 @@ class KlaviyoService
 
             Log::error('Klaviyo Profile Sync Failed', [
                 'status' => $response->status(),
-                'body' => $response->body()
+                'body' => $response->body(),
             ]);
 
             return false;
         } catch (\Exception $e) {
             Log::error('Klaviyo Profile Sync Exception', [
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
+
             return false;
         }
     }
@@ -66,14 +69,11 @@ class KlaviyoService
     /**
      * Track a custom event in Klaviyo.
      *
-     * @param string $eventName
-     * @param array $profileAttributes
-     * @param array $eventProperties
      * @return bool
      */
     public function trackEvent(string $eventName, array $profileAttributes, array $eventProperties = [])
     {
-        if (!$this->apiKey) {
+        if (! $this->apiKey) {
             return false;
         }
 
@@ -88,14 +88,14 @@ class KlaviyoService
                         'data' => [
                             'type' => 'metric',
                             'attributes' => [
-                                'name' => $eventName
-                            ]
-                        ]
+                                'name' => $eventName,
+                            ],
+                        ],
                     ],
                     'properties' => $eventProperties,
-                    'time' => now()->toIso8601String()
-                ]
-            ]
+                    'time' => now()->toIso8601String(),
+                ],
+            ],
         ];
 
         try {
@@ -112,14 +112,15 @@ class KlaviyoService
             Log::error('Klaviyo Event Track Failed', [
                 'event' => $eventName,
                 'status' => $response->status(),
-                'body' => $response->body()
+                'body' => $response->body(),
             ]);
 
             return false;
         } catch (\Exception $e) {
             Log::error('Klaviyo Event Track Exception', [
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
+
             return false;
         }
     }

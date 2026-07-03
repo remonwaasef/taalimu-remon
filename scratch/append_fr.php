@@ -1,4 +1,5 @@
 <?php
+
 $files = [
     'analytics.php' => [
         'commission_log' => 'Journal des commissions',
@@ -47,21 +48,21 @@ $files = [
 ];
 
 foreach ($files as $file => $translations) {
-    $path = "Modules/Center/resources/lang/fr/" . $file;
+    $path = 'Modules/Center/resources/lang/fr/'.$file;
     if (file_exists($path)) {
         $content = file_get_contents($path);
-        
+
         // Remove trailing '];' and any whitespace
         $content = preg_replace('/\];\s*$/', '', $content);
-        
+
         // Append the new translations
         foreach ($translations as $key => $value) {
             $content .= "\n    '{$key}' => '{$value}',";
         }
-        
+
         // Add back the '];'
         $content .= "\n];\n";
-        
+
         file_put_contents($path, $content);
         echo "Updated $file\n";
     }

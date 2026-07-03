@@ -24,13 +24,13 @@ class BookingPolicy
 
     public function update(User $user, Booking $booking): bool
     {
-        return $user->tenant_id === $booking->tenant_id && 
+        return $user->tenant_id === $booking->tenant_id &&
                $user->hasAnyRole(['center_admin', 'admin', 'instructor']);
     }
 
     public function delete(User $user, Booking $booking): bool
     {
-        return $user->tenant_id === $booking->tenant_id && 
+        return $user->tenant_id === $booking->tenant_id &&
                $user->hasAnyRole(['center_admin', 'admin']);
     }
 }

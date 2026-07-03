@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\Refund;
-use App\Models\Sale;
 use App\Models\Commission;
 use App\Models\Enrollment;
+use App\Models\Refund;
+use App\Models\Sale;
 use Illuminate\Support\Facades\DB;
 
 class RefundService
@@ -17,7 +17,7 @@ class RefundService
     {
         return DB::transaction(function () use ($sale, $data) {
             $tenantId = \Modules\Tenancy\Services\TenantResolver::get()->id;
-            
+
             // Lock the sale record to prevent double-spend race conditions
             $lockedSale = Sale::lockForUpdate()->find($sale->id);
             $refundAmount = $data['amount'];
@@ -37,11 +37,11 @@ class RefundService
             ]);
 
             // 2. Update Sale Status/Paid Amount AND Total Amount
-            // FIX: Reduce total_amount alongside paid_amount so the student 
+            // FIX: Reduce total_amount alongside paid_amount so the student
             // doesn't owe money (debt) for a service they returned.
             $newPaidAmount = $lockedSale->paid_amount - $refundAmount;
             $newTotalAmount = max(0, $lockedSale->total_amount - $refundAmount);
-            
+
             $lockedSale->update([
                 'paid_amount' => $newPaidAmount,
                 'total_amount' => $newTotalAmount,
@@ -59,7 +59,7 @@ class RefundService
 
             foreach ($commissions as $commission) {
                 if ($refundPercentage >= 0.99) {
-                    $commission->delete(); 
+                    $commission->delete();
                 } else {
                     $newCommAmount = max(0, $commission->amount * (1 - $refundPercentage));
                     $commission->update(['amount' => $newCommAmount]);
@@ -70,9 +70,9 @@ class RefundService
             if ($data['unenroll_student'] ?? false) {
                 // FIX: Use user_id instead of student_id since Enrollment uses user_id
                 $userId = $sale->student->user_id;
-                
+
                 if ($userId) {
-                    $sale->items->each(function($item) use ($userId) {
+                    $sale->items->each(function ($item) use ($userId) {
                         if ($item->item_type === \App\Models\Course::class) {
                             Enrollment::where('user_id', $userId)
                                 ->where('course_id', $item->item_id)
@@ -86,5 +86,3 @@ class RefundService
         });
     }
 }
-
-

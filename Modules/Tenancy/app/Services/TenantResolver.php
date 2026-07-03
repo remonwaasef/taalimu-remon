@@ -26,14 +26,12 @@ class TenantResolver
         if (app()->bound('tenant')) {
             return app('tenant');
         }
-        
+
         return null;
     }
 
     /**
      * Set the current tenant manually (Crucial for Queues, Jobs, and Commands).
-     *
-     * @param Tenant $tenant
      */
     public static function set(Tenant $tenant)
     {

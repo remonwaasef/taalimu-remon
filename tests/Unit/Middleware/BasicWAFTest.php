@@ -2,11 +2,11 @@
 
 namespace Tests\Unit\Middleware;
 
-use Tests\TestCase;
 use App\Http\Middleware\BasicWAF;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use Tests\TestCase;
 
 class BasicWAFTest extends TestCase
 {
@@ -15,7 +15,7 @@ class BasicWAFTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->middleware = new BasicWAF();
+        $this->middleware = new BasicWAF;
     }
 
     /** @test */
@@ -40,7 +40,7 @@ class BasicWAFTest extends TestCase
 
         // Use pattern that matches WAF regex: select...from or or/and with 1=1
         $request = Request::create('/test', 'POST', [
-            'search' => "1 OR 1=1",
+            'search' => '1 OR 1=1',
         ]);
 
         $response = $this->middleware->handle($request, function ($req) {

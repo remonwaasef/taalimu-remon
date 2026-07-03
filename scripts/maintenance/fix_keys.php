@@ -5,7 +5,7 @@ $files = [
     'd:/new project/antigravty/edu/edu/app/Services/StudentService.php',
     'd:/new project/antigravty/edu/edu/app/Console/Commands/SendPaymentRemindersCommand.php',
     'd:/new project/antigravty/edu/edu/config/email_templates.php',
-    'd:/new project/antigravty/edu/edu/add_localized_presets.php'
+    'd:/new project/antigravty/edu/edu/add_localized_presets.php',
 ];
 
 $mappings = [
@@ -23,7 +23,7 @@ $mappings = [
     'اسم_ولي_الأمر' => 'parent_name',
     'المرحلة' => 'stage',
     'تاريخ_الدفع' => 'payment_date',
-    'طريقة_الدفع' => 'payment_method'
+    'طريقة_الدفع' => 'payment_method',
 ];
 
 foreach ($files as $file) {

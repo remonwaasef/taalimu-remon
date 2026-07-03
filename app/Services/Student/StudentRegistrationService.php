@@ -2,18 +2,19 @@
 
 namespace App\Services\Student;
 
-use App\Models\User;
-use App\Models\Student;
-use App\Models\Guardian;
 use App\DTOs\StudentData;
+use App\Models\Guardian;
+use App\Models\Student;
+use App\Models\User;
+use App\Services\FinanceService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Services\FinanceService;
 
 class StudentRegistrationService
 {
     protected $financeService;
+
     protected $notificationService;
 
     public function __construct(FinanceService $financeService, StudentNotificationService $notificationService)
@@ -32,7 +33,7 @@ class StudentRegistrationService
             $code = $data->code ?? $this->generateUniqueCode();
 
             $existingUser = User::where('email', $email)->first();
-            if (!$existingUser && !empty($data->phone)) {
+            if (! $existingUser && ! empty($data->phone)) {
                 $existingUser = User::where('phone', $data->phone)->first();
             }
 
@@ -44,6 +45,7 @@ class StudentRegistrationService
                         'name' => $data->name,
                         'phone' => $data->phone,
                     ]);
+
                     return [
                         'user' => $existingUser,
                         'student' => $student,
@@ -110,14 +112,14 @@ class StudentRegistrationService
                 'generated_password' => $generatedPassword,
             ];
 
-            if (!empty($data->course_ids)) {
+            if (! empty($data->course_ids)) {
                 $items = [];
                 $courses = \App\Models\Course::whereIn('id', $data->course_ids)->get();
                 foreach ($courses as $course) {
                     $items[] = ['id' => $course->id, 'price' => $course->price];
                 }
 
-                if (!empty($items)) {
+                if (! empty($items)) {
                     $this->financeService->createSale([
                         'student_id' => $student->id,
                         'items' => $items,
@@ -136,7 +138,7 @@ class StudentRegistrationService
 
         if (isset($result['student'])) {
             $this->notificationService->sendWelcomeEmails($result['student'], $result['generated_password']);
-            if (!empty($data->course_ids)) {
+            if (! empty($data->course_ids)) {
                 $this->notificationService->sendGroupEnrollmentEmails($result['student'], $data->course_ids);
             }
         }
@@ -147,10 +149,10 @@ class StudentRegistrationService
     public function generateUniqueCode()
     {
         $tenantId = \Modules\Tenancy\Services\TenantResolver::get()->id;
-        $prefix = 'S-' . ($tenantId % 1000);
-        
+        $prefix = 'S-'.($tenantId % 1000);
+
         $lastStudent = Student::where('tenant_id', $tenantId)
-            ->where('code', 'like', $prefix . '%')
+            ->where('code', 'like', $prefix.'%')
             ->latest('id')
             ->first();
 
@@ -174,7 +176,7 @@ class StudentRegistrationService
     {
         $tenant = \Modules\Tenancy\Services\TenantResolver::get();
         $subdomain = $tenant->domain;
-        
+
         $lastStudent = User::where('tenant_id', $tenant->id)
             ->where('role', 'student')
             ->where('email', 'like', "std%.{$subdomain}@taalimu.com")
@@ -199,5 +201,3 @@ class StudentRegistrationService
         return $email;
     }
 }
-
-

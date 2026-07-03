@@ -2,42 +2,41 @@
 
 namespace Tests\Unit\Services;
 
-use Tests\TestCase;
-use App\Services\StudentService;
-use App\Services\AdminNotificationService;
 use App\Models\Student;
-use App\Models\User;
 use App\Models\Tenant;
-use App\Models\Grade;
-use App\DTOs\StudentData;
+use App\Models\User;
+use App\Services\AdminNotificationService;
+use App\Services\StudentService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Mockery;
+use Tests\TestCase;
 
 class StudentServiceTest extends TestCase
 {
     use RefreshDatabase;
 
     protected $studentService;
+
     protected $tenant;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create tenant
         $this->tenant = Tenant::create([
             'name' => 'Test Center',
             'domain' => 'test-center',
             'email' => 'admin@test.com',
         ]);
-        
+
         // Bind tenant
         app()->instance('tenant', $this->tenant);
-        
+
         // Use Laravel container to resolve StudentService with all new dependencies
         $this->studentService = app(StudentService::class);
-        
+
         // Mock the notification service if it's still used internally by one of the sub-services
         $notificationService = Mockery::mock(AdminNotificationService::class);
         $notificationService->shouldReceive('notifyAdmins')->andReturn(true);
@@ -60,9 +59,9 @@ class StudentServiceTest extends TestCase
         $reflection = new \ReflectionClass($this->studentService);
         $method = $reflection->getMethod('generateUniqueEmail');
         $method->setAccessible(true);
-        
+
         $email = $method->invoke($this->studentService);
-        
+
         $this->assertEquals('std2.test-center@taalimu.com', $email);
     }
 
@@ -81,10 +80,10 @@ class StudentServiceTest extends TestCase
         }
 
         $exportData = $this->studentService->getExportData();
-        
+
         // Verify it's a lazy collection (Generator-based)
         $this->assertInstanceOf(\Illuminate\Support\LazyCollection::class, $exportData);
-        
+
         // Verify correct data count
         $this->assertEquals(5, $exportData->count());
     }
@@ -98,7 +97,7 @@ class StudentServiceTest extends TestCase
             'password' => Hash::make('password'),
             'tenant_id' => $this->tenant->id,
         ]);
-        
+
         auth()->login($creator);
 
         // Attempt to import with dangerous characters
@@ -113,7 +112,7 @@ class StudentServiceTest extends TestCase
         // All should be rejected due to CSV injection patterns
         $this->assertEquals(0, $result['success_count']);
         $this->assertCount(3, $result['errors']);
-        
+
         foreach ($result['errors'] as $error) {
             $this->assertStringContainsString('Unsafe characters', $error);
         }
@@ -128,7 +127,7 @@ class StudentServiceTest extends TestCase
             'password' => Hash::make('password'),
             'tenant_id' => $this->tenant->id,
         ]);
-        
+
         auth()->login($creator);
 
         // Create test data
@@ -141,7 +140,7 @@ class StudentServiceTest extends TestCase
 
         $this->assertEquals(10, $result['success_count']);
         $this->assertEmpty($result['errors']);
-        
+
         // Verify students were created
         $this->assertEquals(10, Student::count());
         $this->assertEquals(11, User::count()); // 10 students + 1 admin

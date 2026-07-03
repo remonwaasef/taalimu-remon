@@ -2,10 +2,10 @@
 
 namespace App\Services\Student;
 
-use App\Models\User;
-use App\Models\Student;
-use App\Models\Guardian;
 use App\DTOs\StudentData;
+use App\Models\Guardian;
+use App\Models\Student;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class StudentProfileService
@@ -79,7 +79,7 @@ class StudentProfileService
                     $student->id,
                     $student->name,
                     $student->email,
-                    " " . $student->phone,
+                    ' '.$student->phone,
                     $student->grade_level_name,
                     $student->school_name ?? '---',
                     $student->section_type ?? '---',
@@ -98,7 +98,7 @@ class StudentProfileService
             ->latest('session_date')
             ->limit(100) // Fixed N+1 Memory Issue
             ->get();
-            
+
         $attendanceStats = \Modules\Center\Models\Attendance::where('student_id', $student->id)
             ->selectRaw("
                 COUNT(CASE WHEN status IN ('present', 'late') THEN 1 END) as present_count,
@@ -109,7 +109,7 @@ class StudentProfileService
         $presentCount = $attendanceStats->present_count ?? 0;
         $absentCount = $attendanceStats->absent_count ?? 0;
         $totalAttendanceRecords = $attendanceStats->total ?? 0;
-        
+
         $totalCourseSessions = (int) $student->enrollments()
             ->join('courses', 'enrollments.course_id', '=', 'courses.id')
             ->sum('courses.sessions_count'); // Fixed N+1
@@ -121,20 +121,20 @@ class StudentProfileService
             ->latest()
             ->limit(50)
             ->get();
-            
+
         $quizStats = \App\Models\QuizAttempt::where('user_id', $userId)
-            ->selectRaw("AVG(score) as avg_score, MAX(score) as max_score, COUNT(*) as total")
+            ->selectRaw('AVG(score) as avg_score, MAX(score) as max_score, COUNT(*) as total')
             ->first();
 
         $avgQuizScore = $quizStats->total > 0 ? round($quizStats->avg_score) : 0;
         $highestScore = $quizStats->total > 0 ? $quizStats->max_score : 0;
 
         $pointsStats = \App\Models\PointLog::where('user_id', $userId)
-            ->selectRaw("
+            ->selectRaw('
                 SUM(points) as balance,
                 SUM(CASE WHEN points > 0 THEN points ELSE 0 END) as earned,
                 SUM(CASE WHEN points < 0 THEN ABS(points) ELSE 0 END) as spent
-            ")->first();
+            ')->first();
 
         $pointBalance = $pointsStats->balance ?? 0;
         $pointsEarned = $pointsStats->earned ?? 0;
@@ -154,7 +154,7 @@ class StudentProfileService
             'availableSchedules' => \App\Models\Schedule::where('tenant_id', $tenantId)
                 ->with(['course', 'classroom', 'instructor'])
                 ->get(),
-            
+
             'stats' => [
                 'attendance_pct' => $attendancePercentage,
                 'attendance_count' => $presentCount,
@@ -168,12 +168,12 @@ class StudentProfileService
                 'points_spent' => $pointsSpent,
                 'remaining_sessions_count' => (int) $student->enrollments()->sum('remaining_sessions'),
             ],
-            
+
             'attendance_logs' => $attendanceLogs,
             'quiz_attempts' => $quizAttempts,
             'assignments' => $assignments,
             'point_logs' => \App\Models\PointLog::where('user_id', $userId)->latest()->limit(50)->get(),
-            'payments' => \App\Models\Payment::whereHas('sale', function($q) use ($student) {
+            'payments' => \App\Models\Payment::whereHas('sale', function ($q) use ($student) {
                 $q->where('student_id', $student->id);
             })->with('receiver')->latest()->limit(20)->get(),
         ];
@@ -199,9 +199,8 @@ class StudentProfileService
             }
             $result = $student->delete();
             $this->notificationService->notifyAdminsAboutDeletion($studentName, $deleter);
+
             return $result;
         });
     }
 }
-
-

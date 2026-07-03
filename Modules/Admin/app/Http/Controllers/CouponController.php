@@ -5,15 +5,14 @@ namespace Modules\Admin\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Coupon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class CouponController extends Controller
 {
     public function store(Request $request)
     {
         // Authorization: Only super admins can manage coupons
-        if (!auth()->user()->hasRole('super_admin')) {
-             abort(403, 'Unauthorized action.');
+        if (! auth()->user()->hasRole('super_admin')) {
+            abort(403, 'Unauthorized action.');
         }
 
         \Log::info('Coupon store request:', $request->all());
@@ -40,7 +39,7 @@ class CouponController extends Controller
             $coupon->load('package');
             app(\App\Services\TelegramService::class)->sendCouponCreatedAlert(auth()->user(), $coupon);
         } catch (\Throwable $e) {
-            \Log::error("Failed to send coupon creation alert: " . $e->getMessage());
+            \Log::error('Failed to send coupon creation alert: '.$e->getMessage());
         }
 
         return redirect()->back()->with('success', 'تم إنشاء الكوبون بنجاح!');
@@ -49,12 +48,12 @@ class CouponController extends Controller
     public function update(Request $request, Coupon $coupon)
     {
         // Authorization
-        if (!auth()->user()->hasRole('super_admin')) {
-             abort(403, 'Unauthorized action.');
+        if (! auth()->user()->hasRole('super_admin')) {
+            abort(403, 'Unauthorized action.');
         }
 
         $validated = $request->validate([
-            'code' => 'required|string|max:50|unique:coupons,code,' . $coupon->id,
+            'code' => 'required|string|max:50|unique:coupons,code,'.$coupon->id,
             'name' => 'nullable|string|max:100',
             'type' => 'required|in:percentage,fixed',
             'value' => 'required|numeric|min:0.01|max:99999999',
@@ -76,8 +75,8 @@ class CouponController extends Controller
     public function destroy(Coupon $coupon)
     {
         // Authorization
-        if (!auth()->user()->hasRole('super_admin')) {
-             abort(403, 'Unauthorized action.');
+        if (! auth()->user()->hasRole('super_admin')) {
+            abort(403, 'Unauthorized action.');
         }
 
         $coupon->delete();

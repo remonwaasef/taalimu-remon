@@ -12,28 +12,28 @@ return new class extends Migration
     public function up(): void
     {
         // Tenant domain index — used on EVERY request in IdentifyTenant middleware
-        if (!$this->hasIndex('tenants', 'tenants_domain_index')) {
+        if (! $this->hasIndex('tenants', 'tenants_domain_index')) {
             Schema::table('tenants', function (Blueprint $table) {
                 $table->index('domain', 'tenants_domain_index');
             });
         }
 
         // Users: tenant_id used in all tenant-scoped queries
-        if (!$this->hasIndex('users', 'users_tenant_id_index')) {
+        if (! $this->hasIndex('users', 'users_tenant_id_index')) {
             Schema::table('users', function (Blueprint $table) {
                 $table->index('tenant_id', 'users_tenant_id_index');
             });
         }
 
         // Users: email used in login
-        if (!$this->hasIndex('users', 'users_email_index')) {
+        if (! $this->hasIndex('users', 'users_email_index')) {
             Schema::table('users', function (Blueprint $table) {
                 $table->index('email', 'users_email_index');
             });
         }
 
         // Students: tenant_id for tenant-scoped student queries
-        if (!$this->hasIndex('students', 'students_tenant_id_index')) {
+        if (! $this->hasIndex('students', 'students_tenant_id_index')) {
             Schema::table('students', function (Blueprint $table) {
                 $table->index('tenant_id', 'students_tenant_id_index');
             });
@@ -42,28 +42,28 @@ return new class extends Migration
         // Enrollments: already has (user_id, course_id) index from creation migration — skipped
 
         // Sales: tenant+student for finance queries
-        if (!$this->hasIndex('sales', 'sales_tenant_student_index')) {
+        if (! $this->hasIndex('sales', 'sales_tenant_student_index')) {
             Schema::table('sales', function (Blueprint $table) {
                 $table->index(['tenant_id', 'student_id'], 'sales_tenant_student_index');
             });
         }
 
         // Courses: tenant_id for tenant-scoped course queries
-        if (!$this->hasIndex('courses', 'courses_tenant_id_index')) {
+        if (! $this->hasIndex('courses', 'courses_tenant_id_index')) {
             Schema::table('courses', function (Blueprint $table) {
                 $table->index('tenant_id', 'courses_tenant_id_index');
             });
         }
 
         // Schedules: tenant_id for tenant-scoped schedule queries
-        if (!$this->hasIndex('schedules', 'schedules_tenant_id_index')) {
+        if (! $this->hasIndex('schedules', 'schedules_tenant_id_index')) {
             Schema::table('schedules', function (Blueprint $table) {
                 $table->index('tenant_id', 'schedules_tenant_id_index');
             });
         }
 
         // Subscriptions: tenant_id + status for subscription lookups
-        if (!$this->hasIndex('subscriptions', 'subscriptions_tenant_status_index')) {
+        if (! $this->hasIndex('subscriptions', 'subscriptions_tenant_status_index')) {
             Schema::table('subscriptions', function (Blueprint $table) {
                 $table->index(['tenant_id', 'status'], 'subscriptions_tenant_status_index');
             });
@@ -105,6 +105,7 @@ return new class extends Migration
                 return true;
             }
         }
+
         return false;
     }
 };

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamp('check_in_time')->nullable();
             $table->enum('status', ['present', 'late', 'absent', 'excused'])->default('present');
             $table->timestamps();
-            
+
             // Indexes
             $table->index('student_id');
             $table->index(['tenant_id', 'session_date']);

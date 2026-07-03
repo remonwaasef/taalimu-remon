@@ -15,19 +15,19 @@ return new class extends Migration
             $table->id();
             $table->string('tenant_id'); // Kept as string per original, though usually foreignId
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
-            
+
             // Nullable classroom with set null
             $table->foreignId('classroom_id')->nullable()->constrained()->onDelete('set null');
-            
+
             $table->unsignedBigInteger('instructor_id')->nullable();
             $table->foreign('instructor_id')->references('id')->on('users')->nullOnDelete();
-            
+
             $table->foreignId('branch_id')->nullable()->constrained('branches')->cascadeOnDelete();
 
             $table->tinyInteger('day_of_week')->nullable()->comment('0=Sunday, 6=Saturday');
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
-            
+
             $table->integer('max_students')->nullable();
             $table->timestamps();
 

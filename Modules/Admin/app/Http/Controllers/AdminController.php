@@ -16,15 +16,15 @@ class AdminController extends Controller
         $activeTenants = \App\Models\Tenant::where('status', 'active')->count();
         $totalStudents = \App\Models\Student::count();
         $expiringSoon = \App\Models\Subscription::where('ends_at', '<=', now()->addDays(7))
-                                                ->where('ends_at', '>=', now())
-                                                ->count();
-        
+            ->where('ends_at', '>=', now())
+            ->count();
+
         // Financial Metrics
         $totalRevenue = \App\Models\Invoice::where('status', 'paid')->sum('amount');
         $thisMonthRevenue = \App\Models\Invoice::where('status', 'paid')
-                                            ->whereMonth('created_at', now()->month)
-                                            ->whereYear('created_at', now()->year)
-                                            ->sum('amount');
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->sum('amount');
 
         // Support Metrics
         $openTickets = \App\Models\Ticket::where('status', '!=', 'closed')->count();
@@ -37,15 +37,15 @@ class AdminController extends Controller
         $planAnalytics = \App\Models\Package::where('is_active', true)
             ->withCount(['features'])
             ->get()
-            ->map(function($package) {
+            ->map(function ($package) {
                 $activeSubIds = \App\Models\Subscription::where('status', 'active')
-                    ->where(function($q) use ($package) {
+                    ->where(function ($q) use ($package) {
                         $q->where('stripe_price', $package->stripe_price_id)
-                          ->orWhere('package_id', $package->id);
+                            ->orWhere('package_id', $package->id);
                     })
                     ->pluck('id');
 
-                $centersCount = \App\Models\Tenant::whereHas('subscriptions', function($q) use ($activeSubIds) {
+                $centersCount = \App\Models\Tenant::whereHas('subscriptions', function ($q) use ($activeSubIds) {
                     $q->whereIn('id', $activeSubIds)->where('status', 'active');
                 })->count();
 
@@ -62,9 +62,9 @@ class AdminController extends Controller
             });
 
         return view('admin::index', compact(
-            'totalTenants', 
-            'activeTenants', 
-            'totalStudents', 
+            'totalTenants',
+            'activeTenants',
+            'totalStudents',
             'expiringSoon',
             'totalRevenue',
             'thisMonthRevenue',

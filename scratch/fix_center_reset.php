@@ -1,4 +1,5 @@
 <?php
+
 $file = 'Modules/Center/resources/views/settings/index.blade.php';
 $content = file_get_contents($file);
 
@@ -15,7 +16,7 @@ if ($pos === false) {
 }
 
 // Find the form action before this button (search backwards)
-$searchBack = "center.settings.update";
+$searchBack = 'center.settings.update';
 $lastPos = strrpos(substr($content, 0, $pos), $searchBack);
 if ($lastPos === false) {
     echo "Could not find form action before reset button\n";

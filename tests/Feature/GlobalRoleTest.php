@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Models\Tenant;
 use App\Models\User;
-use Spatie\Permission\Models\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Role;
+use Tests\TestCase;
 
 class GlobalRoleTest extends TestCase
 {
@@ -23,9 +23,9 @@ class GlobalRoleTest extends TestCase
             $this->assertDatabaseHas('roles', [
                 'name' => $roleName,
                 'tenant_id' => null,
-                'guard_name' => 'web'
+                'guard_name' => 'web',
             ]);
-            
+
             // Assert NO tenant-specific role exists yet
             $this->assertDatabaseMissing('roles', [
                 'name' => $roleName,
@@ -38,7 +38,7 @@ class GlobalRoleTest extends TestCase
     {
         // 1. Setup
         $this->seed(\Database\Seeders\RolesAndPermissionsSeeder::class);
-        
+
         $tenant1 = Tenant::create(['domain' => 't1.test', 'name' => 'Tenant 1']);
         $tenant2 = Tenant::create(['domain' => 't2.test', 'name' => 'Tenant 2']);
 
@@ -47,14 +47,14 @@ class GlobalRoleTest extends TestCase
             'name' => 'User 1',
             'email' => 'u1@test.com',
             'password' => 'password',
-            'tenant_id' => $tenant1->id
+            'tenant_id' => $tenant1->id,
         ]);
-        
+
         $user2 = User::create([
             'name' => 'User 2',
             'email' => 'u2@test.com',
             'password' => 'password',
-            'tenant_id' => $tenant2->id
+            'tenant_id' => $tenant2->id,
         ]);
 
         // 3. Assign Roles using helper that should check global scope
@@ -67,11 +67,11 @@ class GlobalRoleTest extends TestCase
         $user2->assignRole($studentRole);
 
         // 4. Assertions
-        
+
         // Context: Tenant 1
         setPermissionsTeamId($tenant1->id);
         $this->assertTrue($user1->hasRole('student'), 'User 1 should have student role in Tenant 1');
-        
+
         // Context: Tenant 2
         setPermissionsTeamId($tenant2->id);
         $this->assertTrue($user2->hasRole('student'), 'User 2 should have student role in Tenant 2');
@@ -80,13 +80,13 @@ class GlobalRoleTest extends TestCase
         $this->assertDatabaseHas('model_has_roles', [
             'model_id' => $user1->id,
             'role_id' => $studentRole->id,
-            'tenant_id' => $tenant1->id // Spatie saves team_id in pivot
+            'tenant_id' => $tenant1->id, // Spatie saves team_id in pivot
         ]);
 
         $this->assertDatabaseHas('model_has_roles', [
             'model_id' => $user2->id,
             'role_id' => $studentRole->id,
-            'tenant_id' => $tenant2->id
+            'tenant_id' => $tenant2->id,
         ]);
 
         // CRITICAL: Ensure NO new role was created

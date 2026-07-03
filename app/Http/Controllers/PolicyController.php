@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class PolicyController extends Controller
 {
     public function privacy()
@@ -20,7 +18,7 @@ class PolicyController extends Controller
     {
         return view('policies.cookies');
     }
-    
+
     public function gdpr()
     {
         return view('policies.gdpr');

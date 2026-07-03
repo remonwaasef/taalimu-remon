@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Role;
-use Spatie\Permission\Models\Permission;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Permission;
 
 class RolesAndPermissionsSeeder extends Seeder
 {
@@ -18,7 +18,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $this->cleanupDuplicateRoles();
 
         // === إنشاء صلاحيات تفصيلية (CRUD) ===
-        
+
         // صلاحيات المراكز (للـ Super Admin فقط)
         $centerPermissions = [
             'view centers',
@@ -28,7 +28,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'suspend centers',
             'manage centers', // keep for backward compatibility
         ];
-        
+
         // صلاحيات الطلاب
         $studentPermissions = [
             'view students',
@@ -37,7 +37,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'delete students',
             'manage students', // keep for backward compatibility
         ];
-        
+
         // صلاحيات المدرسين
         $instructorPermissions = [
             'view instructors',
@@ -46,7 +46,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'delete instructors',
             'manage instructors', // keep for backward compatibility
         ];
-        
+
         // صلاحيات الدورات
         $coursePermissions = [
             'view courses',
@@ -56,7 +56,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'publish courses',
             'manage courses', // keep for backward compatibility
         ];
-        
+
         // صلاحيات المبيعات والفواتير
         $salesPermissions = [
             'view sales',
@@ -64,42 +64,42 @@ class RolesAndPermissionsSeeder extends Seeder
             'edit sales',
             'delete sales',
         ];
-        
+
         $expensePermissions = [
             'view expenses',
             'create expenses',
             'edit expenses',
             'delete expenses',
         ];
-        
+
         $billingPermissions = [
             'view billing',
             'manage billing',
         ];
-        
+
         // صلاحيات الجداول والحضور
         $schedulePermissions = [
             'view schedule',
             'manage schedule',
         ];
-        
+
         $attendancePermissions = [
             'view attendance',
             'take attendance',
         ];
-        
+
         // صلاحيات الامتحانات
         $examPermissions = [
             'view exams',
             'manage exams',
         ];
-        
+
         // صلاحيات التقارير والتحليلات
         $reportPermissions = [
             'view reports',
             'view analytics',
         ];
-        
+
         // صلاحيات المستخدمين والإعدادات
         $systemPermissions = [
             'manage users',
@@ -121,7 +121,7 @@ class RolesAndPermissionsSeeder extends Seeder
             $reportPermissions,
             $systemPermissions
         );
-        
+
         foreach ($allPermissions as $permission) {
             Permission::firstOrCreate(
                 ['name' => $permission, 'guard_name' => 'web']
@@ -131,11 +131,11 @@ class RolesAndPermissionsSeeder extends Seeder
         // === إنشاء الأدوار الموحدة (بدون tenant_id) ===
         // تعيين tenant_id = null لجعل الأدوار موحدة لجميع المراكز
         setPermissionsTeamId(null);
-        
+
         // 1. Super Admin - كل الصلاحيات
         $superAdmin = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web', 'tenant_id' => null]);
         $superAdmin->syncPermissions(Permission::all());
-        
+
         // 2. Center Admin - صلاحيات إدارة المركز
         $centerAdmin = Role::firstOrCreate(['name' => 'center_admin', 'guard_name' => 'web', 'tenant_id' => null]);
         $centerAdmin->syncPermissions(array_merge(
@@ -151,7 +151,7 @@ class RolesAndPermissionsSeeder extends Seeder
             $reportPermissions,
             ['manage users', 'manage settings'] // إدارة مستخدمي المركز والإعدادات
         ));
-        
+
         // 3. Instructor - صلاحيات محدودة
         $instructor = Role::firstOrCreate(['name' => 'instructor', 'guard_name' => 'web', 'tenant_id' => null]);
         $instructor->syncPermissions([
@@ -164,13 +164,13 @@ class RolesAndPermissionsSeeder extends Seeder
             'view exams',
             'manage exams',
         ]);
-        
+
         // 4. Student - عرض فقط
         $student = Role::firstOrCreate(['name' => 'student', 'guard_name' => 'web', 'tenant_id' => null]);
         $student->syncPermissions([
             'view courses',
         ]);
-        
+
         // 5. Secretary (سكرتير) - إدارة الطلاب والجداول
         $secretary = Role::firstOrCreate(['name' => 'secretary', 'guard_name' => 'web', 'tenant_id' => null]);
         $secretary->syncPermissions([
@@ -186,7 +186,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'view sales',
             'create sales',
         ]);
-        
+
         // 6. Accountant (محاسب) - إدارة المالية فقط
         $accountant = Role::firstOrCreate(['name' => 'accountant', 'guard_name' => 'web', 'tenant_id' => null]);
         $accountant->syncPermissions(array_merge(
@@ -195,7 +195,7 @@ class RolesAndPermissionsSeeder extends Seeder
             $billingPermissions,
             ['view reports', 'view analytics']
         ));
-        
+
         // 7. Parent (ولي أمر) - متابعة أبنائه
         $parentRole = Role::firstOrCreate(['name' => 'parent', 'guard_name' => 'web', 'tenant_id' => null]);
         $parentRole->syncPermissions([
@@ -204,7 +204,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'view exams',
             'view reports',
         ]);
-        
+
         // 8. Staff (موظف عام) - صلاحيات محدودة جداً
         $staff = Role::firstOrCreate(['name' => 'staff', 'guard_name' => 'web', 'tenant_id' => null]);
         $staff->syncPermissions([
@@ -230,8 +230,8 @@ class RolesAndPermissionsSeeder extends Seeder
     protected function cleanupDuplicateRoles(): void
     {
         $globalRoleNames = [
-            'super_admin', 'center_admin', 'instructor', 'student', 
-            'secretary', 'accountant', 'staff'
+            'super_admin', 'center_admin', 'instructor', 'student',
+            'secretary', 'accountant', 'staff',
         ];
 
         // حذف الأدوار المكررة (التي لديها tenant_id غير null)

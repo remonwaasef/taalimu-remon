@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Spatie\Permission\Models\Role as SpatieRole;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Permission\Models\Role as SpatieRole;
 
 class Role extends SpatieRole
 {
@@ -14,7 +14,7 @@ class Role extends SpatieRole
         return \Spatie\Activitylog\LogOptions::defaults()
             ->logOnly(['name', 'guard_name', 'tenant_id'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs(); 
+            ->dontSubmitEmptyLogs();
     }
 
     public function tenant(): BelongsTo

@@ -2,20 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Traits\ManagesTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
 use Laravel\Sanctum\HasApiTokens;
-use App\Traits\ManagesTokens;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles, LogsActivity, HasApiTokens, ManagesTokens, \App\Traits\IdentifyTenant;
+    use \App\Traits\IdentifyTenant, HasApiTokens, HasFactory, HasRoles, LogsActivity, ManagesTokens, Notifiable;
 
     protected static function boot()
     {
@@ -24,9 +23,9 @@ class User extends Authenticatable
         // High-Scale: Cache Table Schema to prevent DESCRIBE queries
         if (app()->environment('production') && extension_loaded('redis')) {
             static::$appColumns = \Illuminate\Support\Facades\Cache::store('redis')->remember(
-                'schema_columns_users', 
-                86400, 
-                fn() => \Illuminate\Support\Facades\Schema::getColumnListing('users')
+                'schema_columns_users',
+                86400,
+                fn () => \Illuminate\Support\Facades\Schema::getColumnListing('users')
             );
         }
 
@@ -61,7 +60,11 @@ class User extends Authenticatable
     }
 
     protected static $appColumns = [];
-    public function getTableColumns() { return static::$appColumns ?: parent::getTableColumns(); }
+
+    public function getTableColumns()
+    {
+        return static::$appColumns ?: parent::getTableColumns();
+    }
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -123,6 +126,7 @@ class User extends Authenticatable
             'phone_verification_code' => 'encrypted',
         ];
     }
+
     public function tenant()
     {
         return $this->belongsTo(Tenant::class);
@@ -148,7 +152,7 @@ class User extends Authenticatable
      */
     public function hasVerifiedPhone()
     {
-        return !is_null($this->phone_verified_at);
+        return ! is_null($this->phone_verified_at);
     }
 
     public function markPhoneAsVerified()
@@ -163,7 +167,7 @@ class User extends Authenticatable
     public function generatePhoneVerificationCode()
     {
         $code = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-        
+
         $this->forceFill([
             'phone_verification_code' => $code,
             'phone_verification_expires_at' => now()->addMinutes(15),

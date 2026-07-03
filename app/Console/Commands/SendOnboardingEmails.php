@@ -2,12 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Models\Tenant;
-use App\Models\User;
 use App\Mail\TenantOnboardingMail;
-use Illuminate\Support\Facades\Mail;
+use App\Models\Tenant;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
 
 class SendOnboardingEmails extends Command
 {
@@ -31,8 +30,9 @@ class SendOnboardingEmails extends Command
     public function handle()
     {
         // Check if onboarding emails are enabled via .env
-        if (!config('app.enable_onboarding_emails', false)) {
+        if (! config('app.enable_onboarding_emails', false)) {
             $this->info('Onboarding emails are disabled in draft mode (ENABLE_ONBOARDING_EMAILS=false).');
+
             return;
         }
 
@@ -43,7 +43,9 @@ class SendOnboardingEmails extends Command
 
         foreach ($tenants as $tenant) {
             $admin = $tenant->users->whereIn('role', ['center_admin', 'instructor'])->first();
-            if (!$admin) continue;
+            if (! $admin) {
+                continue;
+            }
 
             $daysSinceCreation = Carbon::parse($tenant->created_at)->startOfDay()->diffInDays(now()->startOfDay());
 
@@ -65,7 +67,7 @@ class SendOnboardingEmails extends Command
                     Mail::to($admin->email)->send(new TenantOnboardingMail($tenant, $admin, $stepToSend));
                     $this->info("Sent Onboarding Email Step {$stepToSend} to {$admin->email} ({$tenant->domain})");
                 } catch (\Exception $e) {
-                    $this->error("Failed to send Email Step {$stepToSend} to {$admin->email}: " . $e->getMessage());
+                    $this->error("Failed to send Email Step {$stepToSend} to {$admin->email}: ".$e->getMessage());
                 }
             }
         }

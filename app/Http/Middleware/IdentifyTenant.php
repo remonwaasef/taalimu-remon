@@ -5,8 +5,8 @@ namespace App\Http\Middleware;
 use App\Models\Tenant;
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\URL;
+use Symfony\Component\HttpFoundation\Response;
 
 class IdentifyTenant
 {
@@ -19,17 +19,15 @@ class IdentifyTenant
     {
         $mode = config('app.tenancy_mode', 'subdomain');
         $tenant = null;
-        
+
         if ($mode === 'path') {
             // Path-based tenancy: Extract tenant from URL path /c/{tenant}/
             $pathSegments = $request->segments();
-            
+
             // Check if first segment is 'c' and second segment exists
             if (count($pathSegments) >= 2 && $pathSegments[0] === 'c') {
                 $tenantDomain = $pathSegments[1];
-                
 
-                
                 // Max Optimization: Load full context (Tenant + Subscription + Package + Features)
                 $loadRelations = ['currentSubscription.package.features'];
 
@@ -41,7 +39,7 @@ class IdentifyTenant
                                 ->first();
                         });
                     } else {
-                        throw new \Exception("Redis extension not loaded");
+                        throw new \Exception('Redis extension not loaded');
                     }
                 } catch (\Throwable $e) {
                     // Failover to DB with same eager loading for performance
@@ -56,25 +54,26 @@ class IdentifyTenant
         } else {
             // Subdomain-based tenancy (original logic)
             $host = $request->getHost();
-            
+
             // Use the configured tenant domain (e.g., yourdomain.com)
             $mainHost = config('app.tenant_domain') ?: parse_url(config('app.url'), PHP_URL_HOST);
-            
+
             // Skip if it's 'www' or exactly the main domain
-            if ($host === $mainHost || $host === 'www.' . $mainHost || $host === 'localhost') {
-                 // Even if we skip deeper tenant identification, if the route matched a {tenant} group,
-                 // we should ensure URL generation doesn't break for these routes.
-                 if ($request->route() && $request->route()->hasParameter('tenant')) {
-                     URL::defaults(['tenant' => $request->route('tenant')]);
-                 }
-                 return $next($request);
+            if ($host === $mainHost || $host === 'www.'.$mainHost || $host === 'localhost') {
+                // Even if we skip deeper tenant identification, if the route matched a {tenant} group,
+                // we should ensure URL generation doesn't break for these routes.
+                if ($request->route() && $request->route()->hasParameter('tenant')) {
+                    URL::defaults(['tenant' => $request->route('tenant')]);
+                }
+
+                return $next($request);
             }
 
             // Logic to extract subdomain
             // If host is tenant.yourdomain.com, we want 'tenant'
             $subdomain = '';
-            if (str_ends_with($host, '.' . $mainHost)) {
-                $subdomain = str_replace('.' . $mainHost, '', $host);
+            if (str_ends_with($host, '.'.$mainHost)) {
+                $subdomain = str_replace('.'.$mainHost, '', $host);
             } else {
                 // Fallback for cases where it's not following the standard pattern
                 $parts = explode('.', $host);
@@ -95,7 +94,7 @@ class IdentifyTenant
                             ->first();
                     });
                 } else {
-                    throw new \Exception("Redis extension not loaded");
+                    throw new \Exception('Redis extension not loaded');
                 }
             } catch (\Throwable $e) {
                 // Fallback to DB if Redis fails or extension missing
@@ -103,11 +102,9 @@ class IdentifyTenant
                     ->where('domain', $subdomain)
                     ->first();
             }
-            
 
-            
             // If this is a tenant-only domain (checked by str_ends_with) and no tenant found, 404
-            if (!$tenant && str_ends_with($host, '.' . $mainHost)) {
+            if (! $tenant && str_ends_with($host, '.'.$mainHost)) {
                 abort(404, 'Center not found.');
             }
         }
@@ -122,21 +119,22 @@ class IdentifyTenant
             if ($mode === 'subdomain' && count($request->segments()) >= 2 && $request->segments()[0] === 'c' && $request->segments()[1] === $tenant->domain) {
                 $pathSegments = $request->segments();
                 $remainingPath = implode('/', array_slice($pathSegments, 2));
+
                 return redirect(tenant_url($remainingPath, $tenant));
             }
 
             app()->instance('tenant', $tenant);
-            
+
             // Set Spatie Team ID to the current tenant so that user assignments (pivot table) are found.
             app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
-            
+
             view()->share('tenant', $tenant);
             URL::defaults(['tenant' => $tenant->domain]);
-            
+
             // Add tenant context to logs
             \Illuminate\Support\Facades\Log::withContext([
                 'tenant_id' => $tenant->id,
-                'tenant_domain' => $tenant->domain
+                'tenant_domain' => $tenant->domain,
             ]);
 
             // Set timezone dynamically for multi-region support
@@ -151,7 +149,7 @@ class IdentifyTenant
             // Dynamically set log file for this tenant
             config(['logging.channels.single.path' => storage_path("logs/tenant_{$tenant->id}.log")]);
             config(['logging.channels.daily.path' => storage_path("logs/tenant_{$tenant->id}.log")]);
-            
+
             if ($request->route()) {
                 $request->route()->forgetParameter('tenant');
             }

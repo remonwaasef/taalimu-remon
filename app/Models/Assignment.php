@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Assignment extends Model
 {
-    use HasFactory, \App\Traits\IdentifyTenant;
+    use \App\Traits\IdentifyTenant, HasFactory;
 
     protected $fillable = [
         'tenant_id',
@@ -17,7 +17,6 @@ class Assignment extends Model
         'due_date',
         'max_score',
     ];
-
 
     protected $casts = [
         'due_date' => 'datetime',

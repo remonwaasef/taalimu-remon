@@ -43,15 +43,15 @@ class SendPaymentRemindersCommand extends Command
             $emailReminders = $settings['email_reminders'] ?? [];
             $whatsappReminders = $settings['whatsapp_reminders'] ?? [];
             $whatsappBeforeDue = $settings['whatsapp_before_due'] ?? false;
-            
+
             // Legacy templates fallback
             $whatsappTemplate = $settings['whatsapp_template'] ?? '';
-            
+
             // New unified email templates
             $emailSettings = $tenant->settings['email_templates'] ?? [];
-            if (!($emailSettings['notif_payment_reminder_enabled'] ?? false)) {
+            if (! ($emailSettings['notif_payment_reminder_enabled'] ?? false)) {
                 // If the new email toggle is off, don't send emails even if the cron runs
-                $emailReminders = []; 
+                $emailReminders = [];
             }
             $emailTemplate = $emailSettings['notif_payment_reminder_body'] ?? ($settings['email_template'] ?? '');
             $emailSubject = $emailSettings['notif_payment_reminder_subject'] ?? 'تذكير بموعد الدفع';
@@ -69,7 +69,7 @@ class SendPaymentRemindersCommand extends Command
                 $dueDay = $student->payment_due_day ?: $defaultDueDay;
                 $fee = $student->monthly_fee ?: $defaultFee;
 
-                if (!$fee || $fee <= 0) {
+                if (! $fee || $fee <= 0) {
                     continue; // No fee configured
                 }
 
@@ -82,7 +82,7 @@ class SendPaymentRemindersCommand extends Command
 
                 // Pre-due reminders (Email - free)
                 foreach ($emailReminders as $reminder) {
-                    if (!($reminder['enabled'] ?? false)) {
+                    if (! ($reminder['enabled'] ?? false)) {
                         continue;
                     }
 
@@ -98,7 +98,7 @@ class SendPaymentRemindersCommand extends Command
                 // WhatsApp before due (only if user explicitly enabled it — it costs money)
                 if ($whatsappBeforeDue && $daysUntilDue > 0) {
                     foreach ($whatsappReminders as $reminder) {
-                        if (!($reminder['enabled'] ?? false)) {
+                        if (! ($reminder['enabled'] ?? false)) {
                             continue;
                         }
                         // Check if this is a "before due" whatsapp reminder
@@ -116,7 +116,7 @@ class SendPaymentRemindersCommand extends Command
                     $daysOverdue = abs($daysUntilDue);
 
                     foreach ($whatsappReminders as $reminder) {
-                        if (!($reminder['enabled'] ?? false)) {
+                        if (! ($reminder['enabled'] ?? false)) {
                             continue;
                         }
 
@@ -148,7 +148,7 @@ class SendPaymentRemindersCommand extends Command
                                 $stage = "overdue_repeat_{$daysOverdue}d";
 
                                 // Check that this specific repeat stage hasn't been sent already
-                                if (!PaymentReminder::alreadySent($tenant->id, $student->id, "email_{$stage}", $currentYear, $currentMonth)) {
+                                if (! PaymentReminder::alreadySent($tenant->id, $student->id, "email_{$stage}", $currentYear, $currentMonth)) {
                                     $this->sendEmailReminder($tenant, $student, $fee, $dueDay, $stage, $emailTemplate, $emailSubject, $currentYear, $currentMonth);
                                     $this->sendWhatsAppReminder($whatsappService, $tenant, $student, $fee, $dueDay, $stage, $whatsappTemplate, $currentYear, $currentMonth);
                                     $processedCount++;
@@ -161,6 +161,7 @@ class SendPaymentRemindersCommand extends Command
         }
 
         $this->info("Payment reminder processing completed. Total actions: {$processedCount}");
+
         return self::SUCCESS;
     }
 
@@ -184,13 +185,14 @@ class SendPaymentRemindersCommand extends Command
         // Prevent duplicate
         if (PaymentReminder::alreadySent($tenant->id, $student->id, "email_{$stage}", $year, $month)) {
             $this->line("  ⏭ Email already sent: {$student->name} / {$stage}");
+
             return;
         }
 
         // Collect emails
         $emails = collect();
         $studentEmail = $student->email ?? ($student->user ? $student->user->email : null);
-        if ($studentEmail && !preg_match('/^std\d+\..+@taalimu\.com$/', $studentEmail)) {
+        if ($studentEmail && ! preg_match('/^std\d+\..+@taalimu\.com$/', $studentEmail)) {
             $emails->push($studentEmail);
         }
         if ($student->parent_email) {
@@ -205,6 +207,7 @@ class SendPaymentRemindersCommand extends Command
 
         if ($emails->isEmpty()) {
             $this->line("  ⚠ No email found for: {$student->name}");
+
             return;
         }
 
@@ -214,15 +217,15 @@ class SendPaymentRemindersCommand extends Command
                 'student_name' => $student->name,
                 'center_name' => $tenant->name,
                 'amount' => $fee,
-                'due_date' => $dueDay . ' من كل شهر',
+                'due_date' => $dueDay.' من كل شهر',
                 'remaining' => $fee, // Fallback
                 'group_name' => 'المجموعة الدراسية', // Generic
                 'course_price' => $fee,
                 'login_link' => url('/login'),
                 'password' => '******',
             ];
-            
-            // Reusing NotifGroupEnrollmentMail or a dedicated generic one. 
+
+            // Reusing NotifGroupEnrollmentMail or a dedicated generic one.
             // We will use a generic mailer since PaymentReminderMail was built for the legacy system.
             $mailable = new \App\Mail\NotifGroupEnrollmentMail($subject, $template, $variables, $tenant->name, $student->name);
 
@@ -243,7 +246,7 @@ class SendPaymentRemindersCommand extends Command
 
             $this->line("  ✅ Email sent to {$student->name} ({$stage})");
         } catch (\Exception $e) {
-            Log::error("Payment reminder email failed for student {$student->id}: " . $e->getMessage());
+            Log::error("Payment reminder email failed for student {$student->id}: ".$e->getMessage());
 
             PaymentReminder::create([
                 'tenant_id' => $tenant->id,
@@ -259,7 +262,7 @@ class SendPaymentRemindersCommand extends Command
                 'recipients' => json_encode($emails->toArray()),
             ]);
 
-            $this->error("  ❌ Email failed for {$student->name}: " . $e->getMessage());
+            $this->error("  ❌ Email failed for {$student->name}: ".$e->getMessage());
         }
     }
 
@@ -271,37 +274,39 @@ class SendPaymentRemindersCommand extends Command
         // Prevent duplicate
         if (PaymentReminder::alreadySent($tenant->id, $student->id, "whatsapp_{$stage}", $year, $month)) {
             $this->line("  ⏭ WhatsApp already sent: {$student->name} / {$stage}");
+
             return;
         }
 
         $phone = $student->parent_phone ?: $student->phone;
-        if (!$phone) {
+        if (! $phone) {
             $this->line("  ⚠ No phone for: {$student->name}");
+
             return;
         }
 
         // Build message
         $currency = $tenant->settings['currency'] ?? 'ج.م';
-        if (!empty($template)) {
+        if (! empty($template)) {
             $variables = [
                 'student_name' => $student->name,
                 'center_name' => $tenant->name,
-                'amount' => number_format($fee, 2) . ' ' . $currency,
-                'due_date' => $dueDay . ' من كل شهر',
-                'remaining' => number_format($fee, 2) . ' ' . $currency,
+                'amount' => number_format($fee, 2).' '.$currency,
+                'due_date' => $dueDay.' من كل شهر',
+                'remaining' => number_format($fee, 2).' '.$currency,
                 'login_link' => url('/login'),
             ];
-            
+
             $message = $template;
             foreach ($variables as $key => $value) {
-                $message = str_replace('{' . $key . '}', (string) $value, $message);
+                $message = str_replace('{'.$key.'}', (string) $value, $message);
             }
         } else {
             // Default WhatsApp message
             if (str_starts_with($stage, 'overdue')) {
-                $message = "⚠️ تنبيه من {$tenant->name}\n\nالسلام عليكم،\nنود إبلاغكم بأن مصروفات الطالب/ة {$student->name} بمبلغ " . number_format($fee, 2) . " {$currency} قد تأخر سدادها.\nنرجو التواصل مع الإدارة لتسوية amount.\n\nشكراً لتعاونكم.";
+                $message = "⚠️ تنبيه من {$tenant->name}\n\nالسلام عليكم،\nنود إبلاغكم بأن مصروفات الطالب/ة {$student->name} بمبلغ ".number_format($fee, 2)." {$currency} قد تأخر سدادها.\nنرجو التواصل مع الإدارة لتسوية amount.\n\nشكراً لتعاونكم.";
             } else {
-                $message = "📋 تذكير من {$tenant->name}\n\nالسلام عليكم،\nنذكّركم بأن مصروفات الطالب/ة {$student->name} بمبلغ " . number_format($fee, 2) . " {$currency} مستحقة يوم {$dueDay} من الشهر الحالي.\n\nشكراً لتعاونكم.";
+                $message = "📋 تذكير من {$tenant->name}\n\nالسلام عليكم،\nنذكّركم بأن مصروفات الطالب/ة {$student->name} بمبلغ ".number_format($fee, 2)." {$currency} مستحقة يوم {$dueDay} من الشهر الحالي.\n\nشكراً لتعاونكم.";
             }
         }
 
@@ -327,7 +332,7 @@ class SendPaymentRemindersCommand extends Command
                 $this->line("  ⚠ WhatsApp returned false for {$student->name}");
             }
         } catch (\Exception $e) {
-            Log::error("Payment reminder WhatsApp failed for student {$student->id}: " . $e->getMessage());
+            Log::error("Payment reminder WhatsApp failed for student {$student->id}: ".$e->getMessage());
 
             PaymentReminder::create([
                 'tenant_id' => $tenant->id,
@@ -343,7 +348,7 @@ class SendPaymentRemindersCommand extends Command
                 'recipients' => json_encode([$phone]),
             ]);
 
-            $this->error("  ❌ WhatsApp failed for {$student->name}: " . $e->getMessage());
+            $this->error("  ❌ WhatsApp failed for {$student->name}: ".$e->getMessage());
         }
     }
 }

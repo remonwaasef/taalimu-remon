@@ -2,22 +2,22 @@
 
 namespace App\Services;
 
-use App\Models\Instructor;
-use App\Models\Course;
-use App\Models\Student;
-use App\Models\Stage;
-use App\Models\Grade;
-use App\Models\User;
-use App\DTOs\CourseData;
 use App\DTOs\StudentData;
+use App\Models\Course;
+use App\Models\Grade;
+use App\Models\Instructor;
+use App\Models\Stage;
+use App\Models\Student;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use App\Services\SubscriptionService;
 
 class DemoDataService
 {
     protected $courseService;
+
     protected $studentService;
+
     protected $financeService;
 
     public function __construct(CourseService $courseService, StudentService $studentService, FinanceService $financeService)
@@ -32,95 +32,95 @@ class DemoDataService
         SubscriptionService::silence(true);
         try {
             return DB::transaction(function () use ($tenant) {
-            // 1. Create Academic Structure if not exists
-            $stage = Stage::firstOrCreate(
-                ['name' => 'المرحلة الثانوية', 'tenant_id' => $tenant->id],
-                ['order' => 1]
-            );
+                // 1. Create Academic Structure if not exists
+                $stage = Stage::firstOrCreate(
+                    ['name' => 'المرحلة الثانوية', 'tenant_id' => $tenant->id],
+                    ['order' => 1]
+                );
 
-            $grade = Grade::firstOrCreate(
-                ['name' => 'الصف الثالث الثانوي', 'tenant_id' => $tenant->id, 'stage_id' => $stage->id],
-                ['order' => 3]
-            );
+                $grade = Grade::firstOrCreate(
+                    ['name' => 'الصف الثالث الثانوي', 'tenant_id' => $tenant->id, 'stage_id' => $stage->id],
+                    ['order' => 3]
+                );
 
-            // 2. Create Instructors
-            $instructorsData = [
-                [
-                    'name' => 'أحمد محمد',
-                    'specialization' => 'الرياضيات',
-                    'email' => 'ahmed.demo@' . $tenant->domain,
-                    'status' => 'active',
-                ],
-                [
-                    'name' => 'سارة أحمد',
-                    'specialization' => 'اللغة العربية',
-                    'email' => 'sara.demo@' . $tenant->domain,
-                    'status' => 'active',
-                ]
-            ];
+                // 2. Create Instructors
+                $instructorsData = [
+                    [
+                        'name' => 'أحمد محمد',
+                        'specialization' => 'الرياضيات',
+                        'email' => 'ahmed.demo@'.$tenant->domain,
+                        'status' => 'active',
+                    ],
+                    [
+                        'name' => 'سارة أحمد',
+                        'specialization' => 'اللغة العربية',
+                        'email' => 'sara.demo@'.$tenant->domain,
+                        'status' => 'active',
+                    ],
+                ];
 
-            $instructors = [];
-            foreach ($instructorsData as $data) {
-                $instructors[] = Instructor::create(array_merge($data, [
-                    'tenant_id' => $tenant->id,
-                    'phone' => '01' . rand(100000000, 999999999),
-                    'commission_rate' => 20,
-                    'commission_type' => 'percentage',
-                ]));
-            }
+                $instructors = [];
+                foreach ($instructorsData as $data) {
+                    $instructors[] = Instructor::create(array_merge($data, [
+                        'tenant_id' => $tenant->id,
+                        'phone' => '01'.rand(100000000, 999999999),
+                        'commission_rate' => 20,
+                        'commission_type' => 'percentage',
+                    ]));
+                }
 
-            // 3. Create Courses
-            $courses = [];
-            $coursesData = [
-                ['title' => 'دورة الرياضيات المتقدمة', 'instructor_id' => $instructors[0]->id, 'price' => 500],
-                ['title' => 'دورة اللغة العربية', 'instructor_id' => $instructors[1]->id, 'price' => 450],
-            ];
+                // 3. Create Courses
+                $courses = [];
+                $coursesData = [
+                    ['title' => 'دورة الرياضيات المتقدمة', 'instructor_id' => $instructors[0]->id, 'price' => 500],
+                    ['title' => 'دورة اللغة العربية', 'instructor_id' => $instructors[1]->id, 'price' => 450],
+                ];
 
-            foreach ($coursesData as $data) {
-                $courses[] = Course::create(array_merge($data, [
-                    'tenant_id' => $tenant->id,
-                    'description' => 'دورة تجريبية للعرض',
-                    'sessions_count' => 12,
-                    'status' => 'published',
-                ]));
-            }
+                foreach ($coursesData as $data) {
+                    $courses[] = Course::create(array_merge($data, [
+                        'tenant_id' => $tenant->id,
+                        'description' => 'دورة تجريبية للعرض',
+                        'sessions_count' => 12,
+                        'status' => 'published',
+                    ]));
+                }
 
-            // 4. Create Students & Enrollments & Sales
-            $studentsNames = ['محمد علي', 'فاطمة حسن', 'يوسف إبراهيم', 'نور الدين', 'مريم عبدالله'];
-            
-            foreach ($studentsNames as $index => $name) {
-                $studentEmail = Str::slug($name, '.') . '.demo' . $index . '@' . $tenant->domain;
-                
-                // Register Student
-                $sData = StudentData::fromArray([
-                    'name' => $name,
-                    'email' => $studentEmail,
-                    'phone' => '01' . rand(100000000, 999999999),
-                    'grade_id' => $grade->id,
-                    'password' => Str::random(12),
-                ]);
+                // 4. Create Students & Enrollments & Sales
+                $studentsNames = ['محمد علي', 'فاطمة حسن', 'يوسف إبراهيم', 'نور الدين', 'مريم عبدالله'];
 
-                // During self-registration no user is authenticated yet — fall back
-                // to the tenant's admin (first user) as the creator.
-                $creator = auth()->user() ?? User::where('tenant_id', $tenant->id)->orderBy('id')->first();
-                $result = $this->studentService->registerStudent($sData, $creator);
-                $student = $result['student'];
+                foreach ($studentsNames as $index => $name) {
+                    $studentEmail = Str::slug($name, '.').'.demo'.$index.'@'.$tenant->domain;
 
-                // Enroll in a random course
-                $course = $courses[array_rand($courses)];
-                
-                // Create Sale/Invoice
-                $this->financeService->createSale([
-                    'student_id' => $student->id,
-                    'items' => [['id' => $course->id, 'price' => $course->price]],
-                    'payment_method' => 'cash',
-                    'paid_amount' => $index % 2 == 0 ? $course->price : 0, // Some paid, some debt
-                    'status' => $index % 2 == 0 ? 'paid' : 'pending',
-                ]);
-            }
+                    // Register Student
+                    $sData = StudentData::fromArray([
+                        'name' => $name,
+                        'email' => $studentEmail,
+                        'phone' => '01'.rand(100000000, 999999999),
+                        'grade_id' => $grade->id,
+                        'password' => Str::random(12),
+                    ]);
 
-            return true;
-        });
+                    // During self-registration no user is authenticated yet — fall back
+                    // to the tenant's admin (first user) as the creator.
+                    $creator = auth()->user() ?? User::where('tenant_id', $tenant->id)->orderBy('id')->first();
+                    $result = $this->studentService->registerStudent($sData, $creator);
+                    $student = $result['student'];
+
+                    // Enroll in a random course
+                    $course = $courses[array_rand($courses)];
+
+                    // Create Sale/Invoice
+                    $this->financeService->createSale([
+                        'student_id' => $student->id,
+                        'items' => [['id' => $course->id, 'price' => $course->price]],
+                        'payment_method' => 'cash',
+                        'paid_amount' => $index % 2 == 0 ? $course->price : 0, // Some paid, some debt
+                        'status' => $index % 2 == 0 ? 'paid' : 'pending',
+                    ]);
+                }
+
+                return true;
+            });
         } finally {
             SubscriptionService::silence(false);
         }
@@ -136,7 +136,7 @@ class DemoDataService
                     ->where('role', 'student')
                     ->where(function ($q) {
                         $q->where('email', 'like', '%.demo%@%')
-                          ->orWhere('email', 'like', 'std%.demo%@%');
+                            ->orWhere('email', 'like', 'std%.demo%@%');
                     })->get();
 
                 foreach ($demoUsers as $user) {
@@ -157,11 +157,11 @@ class DemoDataService
                     ->where('email', 'like', '%.demo@%')->get();
 
                 foreach ($demoInstructors as $instructor) {
-                    $instructor->courses()->chunk(50, function($courses) {
-                       foreach($courses as $course) {
-                           $course->schedules()->delete();
-                           $course->delete();
-                       }
+                    $instructor->courses()->chunk(50, function ($courses) {
+                        foreach ($courses as $course) {
+                            $course->schedules()->delete();
+                            $course->delete();
+                        }
                     });
                     $instructor->delete();
                 }
@@ -170,7 +170,7 @@ class DemoDataService
             });
         } finally {
             SubscriptionService::silence(false);
-            
+
             // Recalculate usage aggressively or simply forget cache so it recounting
             \Illuminate\Support\Facades\Cache::forget("tenant_{$tenant->id}_usage_max_students");
             \Illuminate\Support\Facades\Cache::forget("tenant_{$tenant->id}_usage_max_instructors");

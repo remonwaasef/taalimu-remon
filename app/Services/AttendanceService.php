@@ -2,20 +2,22 @@
 
 namespace App\Services;
 
-use Modules\Center\Models\Attendance;
-use Illuminate\Support\Facades\URL;
-use Carbon\Carbon;
-use App\Models\Student;
-use App\Models\Schedule;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log;
 use App\Mail\AttendanceNotificationMail;
+use App\Models\Schedule;
+use App\Models\Student;
 use App\Traits\HasLocaleResolution;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
+use Modules\Center\Models\Attendance;
 
 class AttendanceService
 {
     use HasLocaleResolution;
+
     protected $whatsappService;
+
     protected $gamificationService;
 
     public function __construct(WhatsAppService $whatsappService, GamificationService $gamificationService)
@@ -34,7 +36,7 @@ class AttendanceService
         $lateLabel = $data['late_label'] ?? null;
 
         // If status is present but no late data provided, check if it should be late
-        if ($status === 'present' && !isset($data['late_minutes']) && isset($data['schedule_id'])) {
+        if ($status === 'present' && ! isset($data['late_minutes']) && isset($data['schedule_id'])) {
             $schedule = Schedule::find($data['schedule_id']);
             if ($schedule) {
                 $lateData = $this->determineStatus($schedule);
@@ -45,7 +47,7 @@ class AttendanceService
         }
 
         // If manual late entry from modal (has minutes but no label), resolve label automatically
-        if ($status === 'late' && $lateMinutes > 0 && !$lateLabel) {
+        if ($status === 'late' && $lateMinutes > 0 && ! $lateLabel) {
             $lateLevels = $this->getLateLevels();
             foreach ($lateLevels as $level) {
                 if ($lateMinutes >= $level['minutes']) {
@@ -73,23 +75,23 @@ class AttendanceService
 
         // Send WhatsApp Notification if student arrived (even if previously marked as absent)
         $isArriving = in_array($status, ['present', 'late']);
-        $wasAlreadyPresent = !$attendance->wasRecentlyCreated && in_array($attendance->getOriginal('status'), ['present', 'late']);
+        $wasAlreadyPresent = ! $attendance->wasRecentlyCreated && in_array($attendance->getOriginal('status'), ['present', 'late']);
 
-        if ($isArriving && !$wasAlreadyPresent) {
+        if ($isArriving && ! $wasAlreadyPresent) {
             $student = Student::with('user')->find($data['student_id']);
             $schedule = Schedule::with('course')->find($data['schedule_id']);
             $tenant = \Modules\Tenancy\Services\TenantResolver::get();
-            
+
             if ($student && $schedule) {
                 // Deduct session from balance
                 $enrollment = \App\Models\Enrollment::where('user_id', $student->user_id)
                     ->where('course_id', $data['course_id'])
                     ->first();
-                
+
                 if ($enrollment) {
                     $totalSessions = $schedule->course->sessions_count ?? 0;
                     $progress = 0;
-                    
+
                     if ($totalSessions > 0) {
                         $remaining = max(0, $enrollment->remaining_sessions - 1);
                         $consumed = $totalSessions - $remaining;
@@ -103,12 +105,12 @@ class AttendanceService
                     }
                 }
 
-                $attendanceAlertEnabled = !isset($tenant->settings['academic']['attendance_alert']) || $tenant->settings['academic']['attendance_alert'];
+                $attendanceAlertEnabled = ! isset($tenant->settings['academic']['attendance_alert']) || $tenant->settings['academic']['attendance_alert'];
 
                 if ($attendanceAlertEnabled) {
                     // Dispatch on queue for better performance
                     \App\Jobs\SendWhatsAppNotification::dispatch($tenant, $student, $schedule->course)->onQueue('whatsapp');
-                    
+
                     // Send Email Notification if enabled
                     $this->sendEmailNotification($tenant, $student, $schedule->course, $status);
                 }
@@ -117,9 +119,9 @@ class AttendanceService
                 if ($student->user) {
                     $points = $status === 'late' ? 5 : 10;
                     \App\Jobs\AwardGamificationPoints::dispatch(
-                        $student->user, 
-                        $points, 
-                        "Attended session: " . $schedule->course->title . ($status === 'late' ? " (Late)" : ""), 
+                        $student->user,
+                        $points,
+                        'Attended session: '.$schedule->course->title.($status === 'late' ? ' (Late)' : ''),
                         $attendance
                     )->onQueue('gamification');
                 }
@@ -167,8 +169,8 @@ class AttendanceService
     public function getLateLevels(): array
     {
         $lateLevels = \Modules\Tenancy\Services\TenantResolver::get()->settings['academic']['late_levels'] ?? config('academic.late_rules.defaults', []);
-        
-        usort($lateLevels, function($a, $b) {
+
+        usort($lateLevels, function ($a, $b) {
             return $b['minutes'] <=> $a['minutes'];
         });
 
@@ -180,7 +182,7 @@ class AttendanceService
      */
     public function generateQrUrl(int $scheduleId, ?string $tenantDomain = null)
     {
-        if (!$tenantDomain && app()->bound('tenant')) {
+        if (! $tenantDomain && app()->bound('tenant')) {
             $tenantDomain = \Modules\Tenancy\Services\TenantResolver::get()->domain;
         }
 
@@ -201,21 +203,23 @@ class AttendanceService
     {
         try {
             $tenantSettings = $tenant->settings['email_templates'] ?? [];
-            $notifEnabled = !isset($tenantSettings['notif_attendance_enabled']) || $tenantSettings['notif_attendance_enabled'];
+            $notifEnabled = ! isset($tenantSettings['notif_attendance_enabled']) || $tenantSettings['notif_attendance_enabled'];
 
-            if (!$notifEnabled) return;
+            if (! $notifEnabled) {
+                return;
+            }
 
             // Determine real email
             $realEmail = null;
             $studentEmail = $student->email ?? ($student->user ? $student->user->email : null);
-            if ($studentEmail && !preg_match('/^std\d+\..+@taalimu\.com$/', $studentEmail)) {
+            if ($studentEmail && ! preg_match('/^std\d+\..+@taalimu\.com$/', $studentEmail)) {
                 $realEmail = $studentEmail;
             }
-            $hasParentEmail = !empty($student->parent_email);
+            $hasParentEmail = ! empty($student->parent_email);
 
             if ($realEmail || $hasParentEmail) {
                 $locale = $this->getTargetLocale($tenant, $student);
-                
+
                 $subjectKey = "notif_attendance_subject_{$locale}";
                 $bodyKey = "notif_attendance_body_{$locale}";
 
@@ -230,15 +234,15 @@ class AttendanceService
                     'en' => "Hello {student_name},\n\nWe would like to inform you that your attendance for {course_name} has been recorded.\nStatus: {status}\n\nBest regards,\n{center_name}",
                     'fr' => "Bonjour {student_name},\n\nNous vous informons que votre présence pour {course_name} a été enregistrée.\nStatut: {status}\n\nCordialement,\n{center_name}",
                 ];
-                
+
                 $subject = $tenantSettings[$subjectKey] ?? $tenantSettings['notif_attendance_subject'] ?? ($defaultSubjects[$locale] ?? $defaultSubjects['en']);
                 $body = $tenantSettings[$bodyKey] ?? $tenantSettings['notif_attendance_body'] ?? ($defaultBodies[$locale] ?? $defaultBodies['en']);
-                
+
                 $variables = [
                     'student_name' => $student->name,
                     'course_name' => $course->title,
                     'center_name' => $tenant->name,
-                    'status' => __('center::students.' . $status, [], $locale),
+                    'status' => __('center::students.'.$status, [], $locale),
                     'date' => now()->format('Y-m-d'),
                 ];
 
@@ -247,7 +251,7 @@ class AttendanceService
                         $subject, $body, $variables, $tenant->name, $student->name
                     ));
                 }
-                
+
                 if ($hasParentEmail) {
                     Mail::to($student->parent_email)->queue(new AttendanceNotificationMail(
                         $subject, $body, $variables, $tenant->name, $student->name
@@ -255,7 +259,7 @@ class AttendanceService
                 }
             }
         } catch (\Exception $e) {
-            Log::error('AttendanceService email notification failed: ' . $e->getMessage());
+            Log::error('AttendanceService email notification failed: '.$e->getMessage());
         }
     }
 
@@ -270,5 +274,3 @@ class AttendanceService
             ->exists();
     }
 }
-
-

@@ -4,7 +4,6 @@ namespace Modules\Center\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Spatie\Activitylog\Models\Activity;
-use Illuminate\Http\Request;
 
 class ActivityLogController extends Controller
 {
@@ -19,9 +18,9 @@ class ActivityLogController extends Controller
                     $q->where('tenant_id', app('tenant')->id);
                 })
                 // OR activities caused by users of this tenant
-                ->orWhereHas('causer', function ($q) {
-                    $q->where('tenant_id', app('tenant')->id);
-                });
+                    ->orWhereHas('causer', function ($q) {
+                        $q->where('tenant_id', app('tenant')->id);
+                    });
             })
             ->latest()
             ->paginate(20);

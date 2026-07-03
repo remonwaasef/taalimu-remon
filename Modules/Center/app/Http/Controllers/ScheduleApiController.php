@@ -4,8 +4,8 @@ namespace Modules\Center\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Services\ScheduleConflictService;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ScheduleApiController extends Controller
 {
@@ -45,14 +45,14 @@ class ScheduleApiController extends Controller
         if (empty($conflicts)) {
             return response()->json([
                 'status' => 'available',
-                'message' => '✅ ' . __('center::schedules.schedule_available'),
+                'message' => '✅ '.__('center::schedules.schedule_available'),
                 'conflicts' => [],
             ]);
         }
 
         return response()->json([
             'status' => 'conflict',
-            'message' => '❌ ' . __('center::schedules.schedule_conflict_short'),
+            'message' => '❌ '.__('center::schedules.schedule_conflict_short'),
             'conflicts' => $conflicts,
         ]);
     }

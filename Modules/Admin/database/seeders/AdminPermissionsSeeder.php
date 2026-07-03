@@ -2,8 +2,8 @@
 
 namespace Modules\Admin\Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Role;
+use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 
 class AdminPermissionsSeeder extends Seeder
@@ -15,8 +15,8 @@ class AdminPermissionsSeeder extends Seeder
     {
         // Define system roles (tenant_id = null)
         $roles = [
-            'super_admin'     => 'صلاحيات كاملة للمنصة',
-            'support_agent'   => 'إدارة تذاكر الدعم والعملاء',
+            'super_admin' => 'صلاحيات كاملة للمنصة',
+            'support_agent' => 'إدارة تذاكر الدعم والعملاء',
             'finance_manager' => 'إدارة الاشتراكات والتقارير المالية',
             'content_manager' => 'إدارة إعدادات المنصة والمحتوى العام',
         ];

@@ -22,19 +22,18 @@ Route::get('/ping', function () {
 
 // Tenant-protected API routes
 Route::middleware([ApiTenantMiddleware::class])->group(function () {
-    
+
     Route::get('/tenant/info', function () {
         $tenant = TenantResolver::get();
+
         return response()->json([
             'success' => true,
             'data' => [
                 'id' => $tenant->id,
                 'name' => $tenant->name,
                 'domain' => $tenant->domain,
-            ]
+            ],
         ]);
     });
 
 });
-
-

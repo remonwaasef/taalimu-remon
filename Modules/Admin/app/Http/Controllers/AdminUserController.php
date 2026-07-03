@@ -3,8 +3,8 @@
 namespace Modules\Admin\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -25,7 +25,7 @@ class AdminUserController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
@@ -60,18 +60,18 @@ class AdminUserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
             'password' => ['required', Password::min(8)->letters()->numbers()],
-            'role'     => ['required', Rule::in($this->adminRoles())],
+            'role' => ['required', Rule::in($this->adminRoles())],
         ]);
 
         $user = User::create([
-            'name'              => $request->name,
-            'email'             => $request->email,
-            'password'          => Hash::make($request->password),
-            'role'              => $request->role,
-            'tenant_id'         => null,
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
+            'tenant_id' => null,
             'email_verified_at' => now(),
         ]);
 
@@ -107,10 +107,10 @@ class AdminUserController extends Controller
         abort_if($user->tenant_id !== null, 404);
 
         $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => ['required', 'email', Rule::unique('users', 'email')->ignore($user->id)],
+            'name' => 'required|string|max:255',
+            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($user->id)],
             'password' => ['nullable', Password::min(8)->letters()->numbers()],
-            'role'     => ['required', Rule::in($this->adminRoles())],
+            'role' => ['required', Rule::in($this->adminRoles())],
         ]);
 
         // Prevent demoting the last super_admin
@@ -122,9 +122,9 @@ class AdminUserController extends Controller
         }
 
         $user->update([
-            'name'  => $request->name,
+            'name' => $request->name,
             'email' => $request->email,
-            'role'  => $request->role,
+            'role' => $request->role,
         ]);
 
         if ($request->filled('password')) {

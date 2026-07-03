@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 
 class PersonalAccessToken extends SanctumPersonalAccessToken
 {
@@ -19,7 +19,7 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
     {
         $plainToken = str_contains($token, '|') ? explode('|', $token, 2)[1] : $token;
         $hashedToken = hash('sha256', $plainToken);
-        $cacheKey = "sanctum_token_" . $hashedToken;
+        $cacheKey = 'sanctum_token_'.$hashedToken;
 
         return Cache::remember($cacheKey, 300, function () use ($token) {
             return parent::findToken($token);
@@ -36,10 +36,10 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
 
         if (count($dirty) === 1 && isset($dirty['last_used_at'])) {
             $lastUsed = $this->getOriginal('last_used_at');
-            
+
             // If it was updated less than 30 minutes ago, skip saving to DB
             if ($lastUsed && \Illuminate\Support\Carbon::parse($lastUsed)->diffInMinutes(now()) < 30) {
-                return true; 
+                return true;
             }
         }
 
@@ -54,11 +54,11 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
         parent::boot();
 
         static::saved(function ($token) {
-            Cache::forget("sanctum_token_" . $token->token);
+            Cache::forget('sanctum_token_'.$token->token);
         });
 
         static::deleted(function ($token) {
-            Cache::forget("sanctum_token_" . $token->token);
+            Cache::forget('sanctum_token_'.$token->token);
         });
     }
 }

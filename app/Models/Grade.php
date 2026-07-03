@@ -2,17 +2,15 @@
 
 namespace App\Models;
 
-use App\Scopes\TenantScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
-
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Grade extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes, \App\Traits\IdentifyTenant;
+    use \App\Traits\IdentifyTenant, HasFactory, LogsActivity, SoftDeletes;
 
     protected $fillable = [
         'tenant_id',
@@ -32,8 +30,8 @@ class Grade extends Model
 
     protected static function booted(): void
     {
-        static::saved(fn() => Stage::clearCache());
-        static::deleted(fn() => Stage::clearCache());
+        static::saved(fn () => Stage::clearCache());
+        static::deleted(fn () => Stage::clearCache());
     }
 
     public function stage()

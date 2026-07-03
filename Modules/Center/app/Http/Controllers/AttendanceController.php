@@ -2,16 +2,13 @@
 
 namespace Modules\Center\Http\Controllers;
 
-use Modules\Center\Http\Controllers\CenterBaseController as Controller;
-use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\Schedule;
-use App\Models\Enrollment;
-use Modules\Center\Models\Attendance;
-use Illuminate\Support\Facades\URL;
-use Carbon\Carbon;
 use App\Models\Student;
-use Illuminate\Http\RedirectResponse;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Modules\Center\Http\Controllers\CenterBaseController as Controller;
+use Modules\Center\Models\Attendance;
 
 class AttendanceController extends Controller
 {
@@ -37,7 +34,7 @@ class AttendanceController extends Controller
             ->whereNotNull('course_id');
 
         // Filter by instructor if they are not center_admin
-        if ($user->hasRole('instructor') && !$user->hasRole('center_admin')) {
+        if ($user->hasRole('instructor') && ! $user->hasRole('center_admin')) {
             $query->where('instructor_id', $user->instructor->id ?? 0);
         }
 
@@ -46,7 +43,7 @@ class AttendanceController extends Controller
             ->orderBy('start_time')
             ->get()
             ->unique(function ($schedule) {
-                return $schedule->course_id . '-' . $schedule->start_time . '-' . $schedule->end_time;
+                return $schedule->course_id.'-'.$schedule->start_time.'-'.$schedule->end_time;
             });
 
         $todaySessions = new \Illuminate\Pagination\LengthAwarePaginator(
@@ -59,8 +56,8 @@ class AttendanceController extends Controller
 
         $attendanceQuery = Attendance::with(['student', 'course', 'schedule'])->latest();
 
-        if ($user->hasRole('instructor') && !$user->hasRole('center_admin')) {
-            $attendanceQuery->whereHas('course', function($q) use ($user) {
+        if ($user->hasRole('instructor') && ! $user->hasRole('center_admin')) {
+            $attendanceQuery->whereHas('course', function ($q) use ($user) {
                 $q->where('instructor_id', $user->instructor->id ?? 0);
             });
         }
@@ -77,7 +74,7 @@ class AttendanceController extends Controller
     {
         $this->authorize('viewAny', Attendance::class);
         $schedule->load(['course.enrollments.user.student', 'classroom']);
-        
+
         $attendances = Attendance::where('schedule_id', $schedule->id)
             ->whereDate('session_date', today())
             ->get()
@@ -99,11 +96,11 @@ class AttendanceController extends Controller
             'schedule_id' => 'required|exists:schedules,id',
             'session_date' => 'required|date|before_or_equal:today',
             'status' => 'required|in:present,absent,late,excused',
-            'late_minutes' => 'nullable|integer|min:0'
+            'late_minutes' => 'nullable|integer|min:0',
         ]);
 
         $user = auth()->user();
-        if ($user->hasRole('instructor') && !$user->hasRole('center_admin')) {
+        if ($user->hasRole('instructor') && ! $user->hasRole('center_admin')) {
             $course = Course::findOrFail($validated['course_id']);
             if ($course->instructor_id !== ($user->instructor->id ?? 0)) {
                 return $request->expectsJson()
@@ -115,27 +112,27 @@ class AttendanceController extends Controller
         $studentId = $request->student_id;
 
         // If student_id is not provided, try to find by code
-        if (!$studentId && $request->student_code) {
+        if (! $studentId && $request->student_code) {
             $student = \App\Models\Student::where('tenant_id', $this->tenant->id)
                 ->where('code', $request->student_code)
                 ->first();
-            
-            if (!$student) {
+
+            if (! $student) {
                 // Try finding by ID directly just in case the code is actually an ID
                 $student = \App\Models\Student::where('tenant_id', $this->tenant->id)
                     ->where('id', $request->student_code)
                     ->first();
             }
 
-            if (!$student) {
-                return $request->expectsJson() 
+            if (! $student) {
+                return $request->expectsJson()
                     ? response()->json(['success' => false, 'message' => 'لم يتم العثور على الطالب بهذا الكود.'], 404)
                     : back()->with('error', __('center::messages.msg_009'));
             }
             $studentId = $student->id;
         }
 
-        if (!$studentId) {
+        if (! $studentId) {
             return $request->expectsJson()
                 ? response()->json(['success' => false, 'message' => 'معرف الطالب مطلوب.'], 422)
                 : back()->with('error', __('center::messages.msg_010'));
@@ -149,7 +146,7 @@ class AttendanceController extends Controller
         }
 
         if ($this->attendanceService->hasAttendedToday($studentId, $request->schedule_id)) {
-            if (!$user->hasRole('center_admin')) {
+            if (! $user->hasRole('center_admin')) {
                 return $request->expectsJson()
                     ? response()->json(['success' => false, 'message' => 'هذا الطالب مسجل حضوره بالفعل. التعديل مسموح للمدير فقط.'], 422)
                     : back()->with('error', 'هذا الطالب مسجل حضوره بالفعل. التعديل مسموح للمدير فقط.');
@@ -172,7 +169,7 @@ class AttendanceController extends Controller
     public function bulkAbsent(Schedule $schedule)
     {
         $this->authorize('create', Attendance::class);
-        
+
         $schedule->load('course.enrollments.user.student');
         $recordedStudentIds = Attendance::where('schedule_id', $schedule->id)
             ->whereDate('session_date', today())
@@ -182,14 +179,14 @@ class AttendanceController extends Controller
         $markedCount = 0;
         foreach ($schedule->course->enrollments as $enrollment) {
             $student = $enrollment->user->student ?? null;
-            if ($student && !in_array($student->id, $recordedStudentIds)) {
+            if ($student && ! in_array($student->id, $recordedStudentIds)) {
                 $this->attendanceService->markAttendance([
                     'tenant_id' => $this->tenant->id,
                     'student_id' => $student->id,
                     'course_id' => $schedule->course_id,
                     'schedule_id' => $schedule->id,
                     'session_date' => today(),
-                    'status' => 'absent'
+                    'status' => 'absent',
                 ]);
                 $markedCount++;
             }
@@ -218,7 +215,7 @@ class AttendanceController extends Controller
             abort(403, 'انتهت صلاحية رمز QR أو أنه غير صالح. يرجى مسح الرمز مرة أخرى.');
         }
 
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return view('center::attendance.scan-login', [
                 'schedule' => $schedule,
                 'qrUrl' => $request->fullUrl(),
@@ -226,8 +223,9 @@ class AttendanceController extends Controller
         }
 
         $student = auth()->user()->student;
-        if (!$student) {
+        if (! $student) {
             auth()->logout();
+
             return view('center::attendance.scan-login', [
                 'schedule' => $schedule,
                 'qrUrl' => $request->fullUrl(),
@@ -249,13 +247,14 @@ class AttendanceController extends Controller
             'qr_url' => 'nullable|string',
         ]);
 
-        if (!auth()->attempt(['email' => $request->email, 'password' => $request->password])) {
+        if (! auth()->attempt(['email' => $request->email, 'password' => $request->password])) {
             return back()->withErrors(['email' => 'بيانات الدخول غير صحيحة.'])->withInput();
         }
 
         $student = auth()->user()->student;
-        if (!$student) {
+        if (! $student) {
             auth()->logout();
+
             return back()->with('message', __('center::messages.msg_014'));
         }
 
@@ -325,7 +324,7 @@ class AttendanceController extends Controller
                 $studentId = $record['student_id'] ?? null;
 
                 // Resolve student by code if no ID
-                if (!$studentId && !empty($record['student_code'])) {
+                if (! $studentId && ! empty($record['student_code'])) {
                     $student = Student::where('tenant_id', $this->tenant->id)
                         ->where('code', $record['student_code'])
                         ->first();
@@ -334,9 +333,10 @@ class AttendanceController extends Controller
                     }
                 }
 
-                if (!$studentId) {
+                if (! $studentId) {
                     $failed++;
                     $errors[] = "Record #{$index}: Student not found.";
+
                     continue;
                 }
 
@@ -348,7 +348,7 @@ class AttendanceController extends Controller
                 $synced++;
             } catch (\Exception $e) {
                 $failed++;
-                $errors[] = "Record #{$index}: " . $e->getMessage();
+                $errors[] = "Record #{$index}: ".$e->getMessage();
                 \Illuminate\Support\Facades\Log::warning('Offline sync failed for record', [
                     'record' => $record,
                     'error' => $e->getMessage(),
@@ -361,7 +361,7 @@ class AttendanceController extends Controller
             'synced' => $synced,
             'failed' => $failed,
             'errors' => $errors,
-            'message' => "تمت مزامنة {$synced} سجل حضور بنجاح." . ($failed > 0 ? " فشل {$failed} سجل." : ''),
+            'message' => "تمت مزامنة {$synced} سجل حضور بنجاح.".($failed > 0 ? " فشل {$failed} سجل." : ''),
         ]);
     }
 }

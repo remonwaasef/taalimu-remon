@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\User;
 use App\Models\Student;
-use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UnifiedAuthService
 {
@@ -19,9 +19,9 @@ class UnifiedAuthService
         if ($isEmail) {
             $query = User::where('email', $emailOrPhone);
             if (app()->bound('tenant')) {
-                $query->where(function($q) {
+                $query->where(function ($q) {
                     $q->where('tenant_id', app('tenant')->id)
-                      ->orWhereNull('tenant_id'); // Allow super admins
+                        ->orWhereNull('tenant_id'); // Allow super admins
                 });
             }
             $potentialUser = $query->first();
@@ -34,21 +34,21 @@ class UnifiedAuthService
         } else {
             // Phone-based login logic
             $cleanPhone = preg_replace('/[^0-9]/', '', $emailOrPhone);
-            
+
             $phoneVariations = array_values(array_filter(array_unique([
                 $emailOrPhone,
                 $cleanPhone,
-                '0' . $cleanPhone,
-                substr($cleanPhone, 1)
+                '0'.$cleanPhone,
+                substr($cleanPhone, 1),
             ])));
 
-            if (!empty($phoneVariations)) {
+            if (! empty($phoneVariations)) {
                 // 1. Single Query for matching User by phone variations
                 $query = User::whereIn('phone', $phoneVariations);
                 if (app()->bound('tenant')) {
                     $query->where('tenant_id', app('tenant')->id);
                 }
-                
+
                 $potentialUsers = $query->get();
                 foreach ($potentialUsers as $potentialUser) {
                     if (Hash::check($password, $potentialUser->password)) {
@@ -63,7 +63,7 @@ class UnifiedAuthService
                 if (app()->bound('tenant')) {
                     $studentQuery->where('tenant_id', app('tenant')->id);
                 }
-                
+
                 $student = $studentQuery->first();
                 if ($student && $student->user && Hash::check($password, $student->user->password)) {
                     if (Auth::attempt(['email' => $student->user->email, 'password' => $password])) {

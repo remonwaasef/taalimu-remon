@@ -1,12 +1,12 @@
 <?php
 
-use Modules\Admin\Http\Controllers\AdminController;
-use Modules\Admin\Http\Controllers\TenantController;
-use Modules\Admin\Http\Controllers\AuthController;
-use Modules\Admin\Http\Controllers\SettingsController;
-use Modules\Admin\Http\Controllers\OperationIssueController;
-use Modules\Admin\Http\Controllers\AdminUserController;
 use Illuminate\Support\Facades\Route;
+use Modules\Admin\Http\Controllers\AdminController;
+use Modules\Admin\Http\Controllers\AdminUserController;
+use Modules\Admin\Http\Controllers\AuthController;
+use Modules\Admin\Http\Controllers\OperationIssueController;
+use Modules\Admin\Http\Controllers\SettingsController;
+use Modules\Admin\Http\Controllers\TenantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,9 +19,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('admin')->name('admin.')->group(function() {
+Route::prefix('admin')->name('admin.')->group(function () {
     // Guest Routes
-    Route::middleware('guest')->group(function() {
+    Route::middleware('guest')->group(function () {
         Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
         Route::post('login', [AuthController::class, 'login'])
             ->middleware('throttle:login')
@@ -29,7 +29,7 @@ Route::prefix('admin')->name('admin.')->group(function() {
     });
 
     // Protected Routes (General Auth - accessible while impersonating)
-    Route::middleware(['auth'])->group(function() {
+    Route::middleware(['auth'])->group(function () {
         Route::get('impersonate/stop', [TenantController::class, 'stopImpersonating'])->name('impersonate.stop');
     });
 
@@ -37,16 +37,16 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('impersonate/return', [TenantController::class, 'returnFromImpersonation'])->name('impersonate.return');
 
     // Protected Routes (Super Admin Only)
-    Route::middleware(['auth', \App\Http\Middleware\CheckAdminRole::class])->group(function() {
+    Route::middleware(['auth', \App\Http\Middleware\CheckAdminRole::class])->group(function () {
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
-        
+
         Route::get('/', [AdminController::class, 'index'])->name('dashboard');
         Route::resource('tenants', TenantController::class);
         Route::post('tenants/{tenant}/toggle-status', [TenantController::class, 'toggleStatus'])->name('tenants.toggle-status');
         Route::get('tenants/{tenant}/impersonate', [TenantController::class, 'impersonate'])->name('tenants.impersonate');
         Route::post('tenants/{tenant}/notes', [TenantController::class, 'updateNotes'])->name('tenants.notes');
         Route::post('tenants/{tenant}/reset-password', [TenantController::class, 'resetPassword'])->name('tenants.reset-password');
-        
+
         // Support Ticket Routes
         Route::get('tickets', [\Modules\Admin\Http\Controllers\TicketController::class, 'index'])->name('tickets.index');
         Route::get('tickets/{ticket}', [\Modules\Admin\Http\Controllers\TicketController::class, 'show'])->name('tickets.show');
@@ -65,7 +65,7 @@ Route::prefix('admin')->name('admin.')->group(function() {
         // Settings
         Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
         Route::post('settings', [SettingsController::class, 'update'])->name('settings.update');
-        
+
         // Package Management
         Route::post('settings/packages', [SettingsController::class, 'storePackage'])->name('settings.packages.store');
         Route::delete('settings/packages/{id}', [SettingsController::class, 'destroyPackage'])->name('settings.packages.destroy');
@@ -86,7 +86,7 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::resource('users', AdminUserController::class)->except(['show']);
 
         // Operation Issues
-        Route::prefix('operation-issues')->name('operation-issues.')->group(function() {
+        Route::prefix('operation-issues')->name('operation-issues.')->group(function () {
             Route::get('/', [OperationIssueController::class, 'index'])->name('index');
             Route::get('/{uuid}', [OperationIssueController::class, 'show'])->name('show');
             Route::patch('/{uuid}/status', [OperationIssueController::class, 'updateStatus'])->name('update-status');
@@ -95,7 +95,7 @@ Route::prefix('admin')->name('admin.')->group(function() {
         });
 
         // Backup Management
-        Route::prefix('backups')->name('backups.')->group(function() {
+        Route::prefix('backups')->name('backups.')->group(function () {
             Route::get('/', [\Modules\Admin\Http\Controllers\BackupController::class, 'index'])->name('index');
             Route::post('/', [\Modules\Admin\Http\Controllers\BackupController::class, 'create'])->name('create');
             Route::get('/download', [\Modules\Admin\Http\Controllers\BackupController::class, 'download'])->name('download');

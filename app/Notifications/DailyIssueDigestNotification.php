@@ -49,11 +49,11 @@ class DailyIssueDigestNotification extends Notification implements ShouldQueue
             ->action('View All Issues', $url);
 
         foreach ($this->issues->take(5) as $issue) {
-            $message->line("- [{$issue->severity}] " . ($issue->tenant->name ?? 'System') . ": " . ($issue->title ?: substr($issue->message, 0, 100)));
+            $message->line("- [{$issue->severity}] ".($issue->tenant->name ?? 'System').': '.($issue->title ?: substr($issue->message, 0, 100)));
         }
 
         if ($totalCount > 5) {
-            $message->line("... and " . ($totalCount - 5) . " more.");
+            $message->line('... and '.($totalCount - 5).' more.');
         }
 
         return $message;
@@ -68,7 +68,7 @@ class DailyIssueDigestNotification extends Notification implements ShouldQueue
             'total_issues' => $this->issues->count(),
             'critical_issues' => $this->issues->where('severity', 'critical')->count(),
             'issue_ids' => $this->issues->pluck('id')->toArray(),
-            'message' => 'Daily operational issues digest for ' . now()->toDateString(),
+            'message' => 'Daily operational issues digest for '.now()->toDateString(),
         ];
     }
 }

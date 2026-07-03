@@ -3,8 +3,8 @@
 namespace Modules\Center\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Modules\Center\Models\Asset;
 use App\Models\Classroom;
+use App\Models\Modules\Center\Models\Asset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -18,7 +18,7 @@ class AssetController extends Controller
             ->orderBy('classroom_id')
             ->latest()
             ->get()
-            ->groupBy(function($asset) {
+            ->groupBy(function ($asset) {
                 return $asset->classroom ? $asset->classroom->name : '---';
             });
 
@@ -29,6 +29,7 @@ class AssetController extends Controller
     {
         $this->authorize('create', Asset::class);
         $classrooms = Classroom::select('id', 'name')->get();
+
         return view('center::assets.create', compact('classrooms'));
     }
 
@@ -56,6 +57,7 @@ class AssetController extends Controller
     public function show(Asset $asset)
     {
         $this->authorize('view', $asset);
+
         return view('center::assets.show', compact('asset'));
     }
 
@@ -63,13 +65,14 @@ class AssetController extends Controller
     {
         $this->authorize('update', $asset);
         $classrooms = Classroom::select('id', 'name')->get();
+
         return view('center::assets.edit', compact('asset', 'classrooms'));
     }
 
     public function update(Request $request, Asset $asset): RedirectResponse
     {
         $this->authorize('update', $asset);
-        
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'code' => 'nullable|string|max:100',

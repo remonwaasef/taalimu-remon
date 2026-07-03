@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * SecurityHeaders Middleware
- * 
+ *
  * يضيف HTTP Security Headers لكل استجابة لحماية التطبيق من:
  * - Clickjacking (X-Frame-Options)
  * - MIME Sniffing (X-Content-Type-Options)

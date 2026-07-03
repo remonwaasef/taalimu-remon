@@ -3,19 +3,25 @@
 namespace App\Services\PaymentGateways;
 
 use App\Interfaces\PaymentGatewayInterface;
-use App\Models\Tenant;
 use App\Models\Package;
+use App\Models\Tenant;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class PaymobGateway implements PaymentGatewayInterface
 {
     protected $apiKey;
+
     protected $hmacSecret;
+
     protected $merchantId;
+
     protected $cardIntegrationId;
+
     protected $walletIntegrationId;
+
     protected $iframeId;
+
     protected $baseUrl = 'https://accept.paymob.com/api';
 
     public function __construct()
@@ -46,7 +52,7 @@ class PaymobGateway implements PaymentGatewayInterface
                     $amountInCents = $package->price * 100;
                 }
             }
-            
+
             $orderId = $this->createOrder($authToken, $amountInCents, $tenant, $package, $billingCycle);
 
             // 3. Payment Key Generation
@@ -56,7 +62,7 @@ class PaymobGateway implements PaymentGatewayInterface
             return "https://accept.paymob.com/api/acceptance/iframes/{$this->iframeId}?payment_token={$paymentToken}";
 
         } catch (\Exception $e) {
-            Log::error('Paymob Checkout Error: ' . $e->getMessage());
+            Log::error('Paymob Checkout Error: '.$e->getMessage());
             throw $e;
         }
     }
@@ -71,7 +77,7 @@ class PaymobGateway implements PaymentGatewayInterface
         ]);
 
         $response = Http::post("{$this->baseUrl}/auth/tokens", [
-            'api_key' => $apiKey
+            'api_key' => $apiKey,
         ]);
 
         Log::info('Paymob Auth Response', [
@@ -80,7 +86,7 @@ class PaymobGateway implements PaymentGatewayInterface
         ]);
 
         if ($response->failed()) {
-            throw new \Exception('Paymob Authentication Failed: ' . $response->body());
+            throw new \Exception('Paymob Authentication Failed: '.$response->body());
         }
 
         return $response->json()['token'];
@@ -97,7 +103,7 @@ class PaymobGateway implements PaymentGatewayInterface
             $tenant->id,
             $packageSlug,
             $billingCycle,
-            $isChange
+            $isChange,
         ]);
 
         $response = Http::post("{$this->baseUrl}/ecommerce/orders", [
@@ -106,7 +112,7 @@ class PaymobGateway implements PaymentGatewayInterface
             'amount_cents' => (string) $amountInCents,
             'currency' => 'EGP',
             'items' => [],
-            'merchant_order_id' => 'tx_' . time() . '_' . $context,
+            'merchant_order_id' => 'tx_'.time().'_'.$context,
         ]);
 
         if ($response->failed()) {
@@ -136,7 +142,7 @@ class PaymobGateway implements PaymentGatewayInterface
                 'postal_code' => 'NA',
                 'city' => 'NA',
                 'country' => 'EG',
-                'state' => 'NA'
+                'state' => 'NA',
             ],
             'currency' => 'EGP',
             'integration_id' => $this->cardIntegrationId,
@@ -155,10 +161,11 @@ class PaymobGateway implements PaymentGatewayInterface
      */
     public function verifyRedirectHmac(array $data): bool
     {
-        if (!isset($data['hmac'])) {
+        if (! isset($data['hmac'])) {
             Log::channel('security')->warning('Paymob Redirect: Missing HMAC field', [
                 'ip' => request()->ip(),
             ]);
+
             return false;
         }
 
@@ -183,7 +190,7 @@ class PaymobGateway implements PaymentGatewayInterface
             'source_data_pan',
             'source_data_sub_type',
             'source_data_type',
-            'success'
+            'success',
         ];
 
         $source = '';
@@ -194,10 +201,10 @@ class PaymobGateway implements PaymentGatewayInterface
         }
 
         $calculated = hash_hmac('sha512', $source, $this->hmacSecret);
-        
+
         $isValid = hash_equals($calculated, $data['hmac']);
 
-        if (!$isValid) {
+        if (! $isValid) {
             Log::channel('security')->warning('Paymob Redirect HMAC Verification Failed', [
                 'ip' => request()->ip(),
                 'transaction_id' => $data['id'] ?? 'unknown',
@@ -220,6 +227,7 @@ class PaymobGateway implements PaymentGatewayInterface
         if ($val === null) {
             return '';
         }
+
         // Paymob sometimes sends 'true'/'false' as strings
         return (string) $val;
     }
@@ -227,21 +235,23 @@ class PaymobGateway implements PaymentGatewayInterface
     public function handleCallback(array $payload): array
     {
         // Fail-closed: if payload structure is invalid, deny immediately
-        if (!isset($payload['obj']) || !is_array($payload['obj']) || !isset($payload['hmac'])) {
+        if (! isset($payload['obj']) || ! is_array($payload['obj']) || ! isset($payload['hmac'])) {
             Log::channel('security')->warning('Paymob Webhook: Malformed payload structure', [
                 'ip' => request()->ip(),
             ]);
+
             return ['success' => false, 'message' => 'Malformed payload'];
         }
 
         $data = $payload['obj'];
 
         // Validate required nested fields exist before accessing them
-        if (!isset($data['order']['id']) || !isset($data['source_data']['pan']) 
-            || !isset($data['source_data']['sub_type']) || !isset($data['source_data']['type'])) {
+        if (! isset($data['order']['id']) || ! isset($data['source_data']['pan'])
+            || ! isset($data['source_data']['sub_type']) || ! isset($data['source_data']['type'])) {
             Log::channel('security')->warning('Paymob Webhook: Missing required nested fields', [
                 'ip' => request()->ip(),
             ]);
+
             return ['success' => false, 'message' => 'Missing required fields'];
         }
 
@@ -266,7 +276,7 @@ class PaymobGateway implements PaymentGatewayInterface
             $data['source_data']['pan'],
             $data['source_data']['sub_type'],
             $data['source_data']['type'],
-            $data['success']
+            $data['success'],
         ];
 
         $hmacSource = '';
@@ -276,11 +286,12 @@ class PaymobGateway implements PaymentGatewayInterface
 
         $calculatedHmac = hash_hmac('sha512', $hmacSource, $this->hmacSecret);
 
-        if (!hash_equals($calculatedHmac, $payload['hmac'])) {
+        if (! hash_equals($calculatedHmac, $payload['hmac'])) {
             Log::channel('security')->error('Paymob Webhook HMAC Mismatch - Possible Tampering', [
                 'ip' => request()->ip(),
                 'transaction_id' => $data['id'] ?? 'unknown',
             ]);
+
             return ['success' => false, 'message' => 'HMAC Mismatch'];
         }
 
@@ -289,7 +300,7 @@ class PaymobGateway implements PaymentGatewayInterface
             'transaction_id' => $data['id'],
             'order_id' => $data['order']['id'],
             'merchant_order_id' => $data['order']['merchant_order_id'] ?? null,
-            'amount' => $data['amount_cents'] / 100
+            'amount' => $data['amount_cents'] / 100,
         ];
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 $basePath = __DIR__.'/Modules/Instructor/lang';
 
 $translations = [
@@ -28,7 +29,7 @@ $translations = [
             'capacity' => 'السعة',
             'no_matching_sessions' => 'لا توجد حصص مطابقة للبحث.',
             'total_sessions' => 'حصة إجمالاً',
-        ]
+        ],
     ],
     'en' => [
         'billing' => [
@@ -56,7 +57,7 @@ $translations = [
             'capacity' => 'Capacity',
             'no_matching_sessions' => 'No sessions matching your search.',
             'total_sessions' => 'Total Sessions',
-        ]
+        ],
     ],
     'fr' => [
         'billing' => [
@@ -84,27 +85,27 @@ $translations = [
             'capacity' => 'Capacité',
             'no_matching_sessions' => 'Aucune session ne correspond à votre recherche.',
             'total_sessions' => 'Total des sessions',
-        ]
-    ]
+        ],
+    ],
 ];
 
 foreach ($translations as $lang => $files) {
     foreach ($files as $file => $newKeys) {
         $filePath = "$basePath/$lang/$file.php";
-        
+
         $existing = [];
         if (file_exists($filePath)) {
             $existing = include $filePath;
         } else {
-            if(!is_dir(dirname($filePath))) {
+            if (! is_dir(dirname($filePath))) {
                 mkdir(dirname($filePath), 0755, true);
             }
         }
-        
+
         $merged = array_merge($existing, $newKeys);
-        
-        $content = "<?php\n\nreturn " . var_export($merged, true) . ";\n";
-        
+
+        $content = "<?php\n\nreturn ".var_export($merged, true).";\n";
+
         file_put_contents($filePath, $content);
     }
 }

@@ -8,8 +8,8 @@ $kernel->bootstrap();
 use Illuminate\Support\Arr;
 
 $langDirs = [
-    'core' => __DIR__ . '/resources/lang',
-    'center' => __DIR__ . '/Modules/Center/resources/lang'
+    'core' => __DIR__.'/resources/lang',
+    'center' => __DIR__.'/Modules/Center/resources/lang',
 ];
 
 $translations = [
@@ -28,11 +28,11 @@ $translations = [
             'new_feature' => 'New Feature',
             'save_all' => 'Save All',
             'regional_prices' => 'Regional Prices',
-            'auto_detected' => 'Auto Detected'
+            'auto_detected' => 'Auto Detected',
         ],
         'core/features.php' => [
             'whatsapp_alerts' => 'Automated WhatsApp Alerts',
-            'multi_branch' => 'Multi-branch Support'
+            'multi_branch' => 'Multi-branch Support',
         ],
         'core/landing.php' => [
             'pricing.days' => 'Day',
@@ -54,26 +54,26 @@ $translations = [
             'pricing.comparison.categories.analysis.features.technical_support' => 'Tech Support',
             'pricing.comparison.plans.free.branches' => false,
             'pricing.comparison.plans.free.sms' => false,
-            'pricing.comparison.plans.basic.branches' => false
+            'pricing.comparison.plans.basic.branches' => false,
         ],
         'core/validation.php' => [
             'attributes.center_name' => 'Center Name',
             'attributes.name' => 'Full Name',
             'attributes.email' => 'Email Address',
             'attributes.password' => 'Password',
-            'attributes.plan' => 'Plan'
+            'attributes.plan' => 'Plan',
         ],
         'center/analytics.php' => [
-            'general' => 'Analytics'
+            'general' => 'Analytics',
         ],
         'center/classrooms.php' => [
             'students_count' => '{0} Student|{1} 1 Student|[2,*] :count Students',
             'add_asset' => 'Add Asset to this Classroom',
-            'assets_count' => 'Assets & Inventory'
+            'assets_count' => 'Assets & Inventory',
         ],
         'center/courses.php' => [
             'schedules' => 'Schedules',
-            'enroll_student' => 'Enroll Student'
+            'enroll_student' => 'Enroll Student',
         ],
         'center/dashboard.php' => [
             'enroll_student' => 'Enroll Student',
@@ -96,7 +96,7 @@ $translations = [
             'launchpad.steps.student.title' => 'Enroll your first Student',
             'launchpad.steps.student.desc' => 'Welcome your new students.. Start enrolling students in your courses.',
             'launchpad.steps.attendance.title' => 'Take Attendance',
-            'launchpad.steps.attendance.desc' => 'Monitor discipline.. Start tracking the attendance and absence of your students accurately.'
+            'launchpad.steps.attendance.desc' => 'Monitor discipline.. Start tracking the attendance and absence of your students accurately.',
         ],
         'center/instructors.php' => [
             'status' => 'Status',
@@ -111,7 +111,7 @@ $translations = [
             'on_hold' => 'On Hold',
             'phone' => 'Phone Number',
             'bio' => 'Biography',
-            'show' => 'Show Details'
+            'show' => 'Show Details',
         ],
         'center/sales.php' => [
             'select_courses' => 'Select Courses',
@@ -126,7 +126,7 @@ $translations = [
             'bank_transfer' => 'Bank Transfer',
             'select_student' => 'Select Student',
             'item_already_in_cart' => 'This course is already in the cart',
-            'please_select_student' => 'Please select a student'
+            'please_select_student' => 'Please select a student',
         ],
         'center/settings.php' => [
             'academic.attendance_rules' => 'Attendance & Lateness Rules',
@@ -135,7 +135,7 @@ $translations = [
             'academic.threshold_minutes' => 'Minutes (after start)',
             'academic.level_label' => 'Status Name (e.g., Mild Delay)',
             'academic.add_level' => 'Add Lateness Level',
-            'academic.confirm_delete_level' => 'Are you sure you want to delete this lateness level?'
+            'academic.confirm_delete_level' => 'Are you sure you want to delete this lateness level?',
         ],
         'center/sidebar.php' => [
             'expenses' => 'Expenses',
@@ -144,45 +144,49 @@ $translations = [
             'student_updated' => 'Student updated successfully',
             'student_deleted' => 'Student deleted successfully',
             'assets' => 'Assets & Inventory',
-            'school_management' => 'School Management'
+            'school_management' => 'School Management',
         ],
         'center/students.php' => [
-            'export_file' => 'Export File'
-        ]
-    ]
+            'export_file' => 'Export File',
+        ],
+    ],
 ];
 
-function arrayToCode($array, $indent = 1) {
-    if (empty($array)) return '[]';
+function arrayToCode($array, $indent = 1)
+{
+    if (empty($array)) {
+        return '[]';
+    }
     $code = "[\n";
     $spaces = str_repeat('    ', $indent);
     foreach ($array as $key => $value) {
-        $keyFormatted = is_string($key) ? "'" . addslashes($key) . "'" : $key;
-        $code .= $spaces . $keyFormatted . ' => ';
+        $keyFormatted = is_string($key) ? "'".addslashes($key)."'" : $key;
+        $code .= $spaces.$keyFormatted.' => ';
         if (is_array($value)) {
-            $code .= arrayToCode($value, $indent + 1) . ",\n";
+            $code .= arrayToCode($value, $indent + 1).",\n";
         } elseif (is_string($value)) {
-            $code .= "'" . addslashes($value) . "',\n";
+            $code .= "'".addslashes($value)."',\n";
         } elseif (is_bool($value)) {
-            $code .= ($value ? 'true' : 'false') . ",\n";
+            $code .= ($value ? 'true' : 'false').",\n";
         } elseif (is_numeric($value)) {
-            $code .= $value . ",\n";
+            $code .= $value.",\n";
         } else {
             $code .= "null,\n";
         }
     }
-    $code .= str_repeat('    ', $indent - 1) . ']';
+    $code .= str_repeat('    ', $indent - 1).']';
+
     return $code;
 }
 
 foreach ($translations as $locale => $files) {
     foreach ($files as $fileKey => $keysToUpdate) {
-        list($type, $filename) = explode('/', $fileKey);
+        [$type, $filename] = explode('/', $fileKey);
         $baseDir = $langDirs[$type];
-        $filePath = $baseDir . '/' . $locale . '/' . $filename;
-        
-        if (!file_exists($filePath)) {
-            if (!is_dir(dirname($filePath))) {
+        $filePath = $baseDir.'/'.$locale.'/'.$filename;
+
+        if (! file_exists($filePath)) {
+            if (! is_dir(dirname($filePath))) {
                 mkdir(dirname($filePath), 0755, true);
             }
             $currentData = [];
@@ -194,7 +198,7 @@ foreach ($translations as $locale => $files) {
             Arr::set($currentData, $dotKey, $value);
         }
 
-        $code = "<?php\n\nreturn " . arrayToCode($currentData) . ";\n";
+        $code = "<?php\n\nreturn ".arrayToCode($currentData).";\n";
         file_put_contents($filePath, $code);
         echo "Updated $filePath\n";
     }

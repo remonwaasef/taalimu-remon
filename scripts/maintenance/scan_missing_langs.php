@@ -14,14 +14,14 @@ $foundKeys = [];
 foreach ($iterator as $file) {
     if ($file->isFile() && $file->getExtension() === 'php') {
         $content = file_get_contents($file->getPathname());
-        
+
         // Regex to match center::file.key
         // Matches: __('center::analytics.discounts_granted')
         // Matches: @lang('center::settings.title')
         // Matches: trans('center::sidebar.dashboard')
         preg_match_all('/(?:__|trans|@lang)\s*\(\s*[\'"]center::([a-zA-Z0-9_\-\.]+)/', $content, $matches);
-        
-        if (!empty($matches[1])) {
+
+        if (! empty($matches[1])) {
             foreach ($matches[1] as $key) {
                 $foundKeys[] = $key;
             }
@@ -30,7 +30,7 @@ foreach ($iterator as $file) {
 }
 
 $foundKeys = array_unique($foundKeys);
-echo "Found " . count($foundKeys) . " unique keys in Center module views.\n";
+echo 'Found '.count($foundKeys)." unique keys in Center module views.\n";
 
 // 2. Check each key in lang files
 foreach ($locales as $locale) {
@@ -39,19 +39,20 @@ foreach ($locales as $locale) {
         $parts = explode('.', $fullKey);
         $fileName = $parts[0];
         $keyPath = array_slice($parts, 1);
-        
+
         $filePath = "$langDir/$locale/$fileName.php";
-        
-        if (!file_exists($filePath)) {
+
+        if (! file_exists($filePath)) {
             $allMissing[$locale][$fileName][] = [
                 'key' => implode('.', $keyPath),
-                'full' => $fullKey
+                'full' => $fullKey,
             ];
+
             continue;
         }
-        
+
         $translations = include $filePath;
-        
+
         // Traverse nested array
         $current = $translations;
         $exists = true;
@@ -63,11 +64,11 @@ foreach ($locales as $locale) {
                 break;
             }
         }
-        
-        if (!$exists) {
+
+        if (! $exists) {
             $allMissing[$locale][$fileName][] = [
                 'key' => implode('.', $keyPath),
-                'full' => $fullKey
+                'full' => $fullKey,
             ];
         }
     }
@@ -80,9 +81,9 @@ if (empty($allMissing)) {
     foreach ($allMissing as $locale => $files) {
         echo "\n[$locale] Missing keys:\n";
         foreach ($files as $file => $keys) {
-            echo "  $file.php: " . count($keys) . " keys missing\n";
+            echo "  $file.php: ".count($keys)." keys missing\n";
             foreach ($keys as $k) {
-                echo "    - " . $k['key'] . " (Full: " . $k['full'] . ")\n";
+                echo '    - '.$k['key'].' (Full: '.$k['full'].")\n";
             }
         }
     }

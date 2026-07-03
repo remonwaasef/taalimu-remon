@@ -3,12 +3,10 @@
 namespace Modules\Admin\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Role;
-use Spatie\Permission\Models\Permission;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Cache;
 use App\Services\PermissionService;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class RoleController extends Controller
 {
@@ -18,7 +16,6 @@ class RoleController extends Controller
     {
         $this->permissionService = $permissionService;
     }
-
 
     /**
      * Display a listing of the resource.
@@ -44,6 +41,7 @@ class RoleController extends Controller
     {
         $this->authorize('create', Role::class);
         $permissions = $this->permissionService->getGroupedPermissions();
+
         return view('admin::roles.create', compact('permissions'));
     }
 
@@ -58,7 +56,7 @@ class RoleController extends Controller
             'name' => [
                 'required',
                 'string',
-                Rule::unique('roles')->where(fn ($q) => $q->whereNull('tenant_id'))
+                Rule::unique('roles')->where(fn ($q) => $q->whereNull('tenant_id')),
             ],
             'permissions' => 'nullable|array',
             'permissions.*' => 'exists:permissions,name',
@@ -67,7 +65,7 @@ class RoleController extends Controller
         ]);
 
         $role = Role::create(['name' => $request->name, 'guard_name' => 'web', 'tenant_id' => null]);
-        
+
         if ($request->has('permissions')) {
             $role->syncPermissions($request->permissions);
         }
@@ -83,7 +81,7 @@ class RoleController extends Controller
         $role = Role::findOrFail($id);
         $this->authorize('update', $role);
         $permissions = $this->permissionService->getGroupedPermissions();
-        
+
         return view('admin::roles.edit', compact('role', 'permissions'));
     }
 
@@ -94,12 +92,12 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($id);
         $this->authorize('update', $role);
-        
+
         $request->validate([
             'name' => [
                 'required',
                 'string',
-                Rule::unique('roles')->ignore($id)->where(fn ($q) => $q->whereNull('tenant_id'))
+                Rule::unique('roles')->ignore($id)->where(fn ($q) => $q->whereNull('tenant_id')),
             ],
             'permissions' => 'nullable|array',
             'permissions.*' => 'exists:permissions,name',
@@ -108,7 +106,7 @@ class RoleController extends Controller
         ]);
 
         $role->update(['name' => $request->name]);
-        
+
         // Prevent renaming core system roles which are hardcoded in policies/logic
         $systemRoles = ['super_admin', 'center_admin', 'instructor', 'student', 'secretary', 'accountant', 'staff'];
         if (in_array($role->getOriginal('name'), $systemRoles) && $request->name !== $role->getOriginal('name')) {
@@ -116,7 +114,7 @@ class RoleController extends Controller
         }
 
         $role->update(['name' => $request->name]);
-        
+
         if ($request->has('permissions')) {
             $role->syncPermissions($request->permissions);
 
@@ -141,12 +139,12 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($id);
         $this->authorize('delete', $role);
-        
+
         $systemRoles = ['super_admin', 'center_admin', 'instructor', 'student', 'secretary', 'accountant', 'staff'];
         if (in_array($role->name, $systemRoles)) {
             return back()->with('error', __('Cannot delete core system roles.'));
         }
-        
+
         if ($role->users()->count() > 0) {
             return back()->with('error', __('Cannot delete role because it is assigned to users.'));
         }

@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -19,10 +19,12 @@ return new class extends Migration
                     return true;
                 }
             }
+
             return false;
         }
 
         $indexes = DB::select("SHOW INDEX FROM `{$table}` WHERE Key_name = ?", [$indexName]);
+
         return count($indexes) > 0;
     }
 
@@ -38,6 +40,7 @@ return new class extends Migration
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -47,6 +50,7 @@ return new class extends Migration
              WHERE CONSTRAINT_SCHEMA = ? AND TABLE_NAME = ? AND CONSTRAINT_NAME = ? AND CONSTRAINT_TYPE = 'FOREIGN KEY'",
             [$db, $table, $fkName]
         );
+
         return $result[0]->cnt > 0;
     }
 
@@ -56,7 +60,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Unique constraint on enrollments(user_id, course_id)
-        if (Schema::hasTable('enrollments') && !$this->indexExists('enrollments', 'enrollments_user_id_course_id_unique')) {
+        if (Schema::hasTable('enrollments') && ! $this->indexExists('enrollments', 'enrollments_user_id_course_id_unique')) {
             if (DB::getDriverName() === 'sqlite') {
                 DB::statement('DELETE FROM enrollments WHERE id NOT IN (SELECT min(id) FROM enrollments GROUP BY user_id, course_id)');
             } else {
@@ -68,7 +72,7 @@ return new class extends Migration
         }
 
         // 2. Unique constraint on certificates(student_id, course_id)
-        if (Schema::hasTable('certificates') && !$this->indexExists('certificates', 'certificates_student_id_course_id_unique')) {
+        if (Schema::hasTable('certificates') && ! $this->indexExists('certificates', 'certificates_student_id_course_id_unique')) {
             if (DB::getDriverName() === 'sqlite') {
                 DB::statement('DELETE FROM certificates WHERE id NOT IN (SELECT min(id) FROM certificates GROUP BY student_id, course_id)');
             } else {
@@ -80,7 +84,7 @@ return new class extends Migration
         }
 
         // 3. Unique constraint on commissions(sale_id, instructor_id)
-        if (Schema::hasTable('commissions') && !$this->indexExists('commissions', 'commissions_sale_id_instructor_id_unique')) {
+        if (Schema::hasTable('commissions') && ! $this->indexExists('commissions', 'commissions_sale_id_instructor_id_unique')) {
             if (DB::getDriverName() === 'sqlite') {
                 DB::statement('DELETE FROM commissions WHERE id NOT IN (SELECT min(id) FROM commissions GROUP BY sale_id, instructor_id)');
             } else {
@@ -92,7 +96,7 @@ return new class extends Migration
         }
 
         // 4. Unique constraint on bookings(student_id, schedule_id)
-        if (Schema::hasTable('bookings') && !$this->indexExists('bookings', 'bookings_student_id_schedule_id_unique')) {
+        if (Schema::hasTable('bookings') && ! $this->indexExists('bookings', 'bookings_student_id_schedule_id_unique')) {
             if (DB::getDriverName() === 'sqlite') {
                 DB::statement('DELETE FROM bookings WHERE id NOT IN (SELECT min(id) FROM bookings GROUP BY student_id, schedule_id)');
             } else {
@@ -115,12 +119,12 @@ return new class extends Migration
                 DB::statement('DELETE s1 FROM students s1 INNER JOIN students s2 WHERE s1.id < s2.id AND s1.tenant_id = s2.tenant_id AND s1.phone = s2.phone AND s1.phone IS NOT NULL');
             }
 
-            if (!$this->indexExists('students', 'students_tenant_id_email_unique')) {
+            if (! $this->indexExists('students', 'students_tenant_id_email_unique')) {
                 Schema::table('students', function (Blueprint $table) {
                     $table->unique(['tenant_id', 'email']);
                 });
             }
-            if (!$this->indexExists('students', 'students_tenant_id_phone_unique')) {
+            if (! $this->indexExists('students', 'students_tenant_id_phone_unique')) {
                 Schema::table('students', function (Blueprint $table) {
                     $table->unique(['tenant_id', 'phone']);
                 });
@@ -139,12 +143,12 @@ return new class extends Migration
                 DB::statement('DELETE i1 FROM instructors i1 INNER JOIN instructors i2 WHERE i1.id < i2.id AND i1.tenant_id = i2.tenant_id AND i1.phone = i2.phone AND i1.phone IS NOT NULL');
             }
 
-            if (!$this->indexExists('instructors', 'instructors_tenant_id_email_unique')) {
+            if (! $this->indexExists('instructors', 'instructors_tenant_id_email_unique')) {
                 Schema::table('instructors', function (Blueprint $table) {
                     $table->unique(['tenant_id', 'email']);
                 });
             }
-            if (!$this->indexExists('instructors', 'instructors_tenant_id_phone_unique')) {
+            if (! $this->indexExists('instructors', 'instructors_tenant_id_phone_unique')) {
                 Schema::table('instructors', function (Blueprint $table) {
                     $table->unique(['tenant_id', 'phone']);
                 });
@@ -160,7 +164,7 @@ return new class extends Migration
         ];
 
         foreach ($constraints as $c) {
-            if (!Schema::hasTable($c['table']) || !Schema::hasColumn($c['table'], $c['column'])) {
+            if (! Schema::hasTable($c['table']) || ! Schema::hasColumn($c['table'], $c['column'])) {
                 continue;
             }
 
@@ -173,9 +177,9 @@ return new class extends Migration
 
             Schema::table($c['table'], function (Blueprint $t) use ($c) {
                 $t->foreign($c['column'], $c['fk_name'])
-                  ->references('id')
-                  ->on($c['ref_table'])
-                  ->restrictOnDelete();
+                    ->references('id')
+                    ->on($c['ref_table'])
+                    ->restrictOnDelete();
             });
         }
     }
@@ -186,10 +190,10 @@ return new class extends Migration
     public function down(): void
     {
         $uniqueIndexes = [
-            'enrollments'  => 'enrollments_user_id_course_id_unique',
+            'enrollments' => 'enrollments_user_id_course_id_unique',
             'certificates' => 'certificates_student_id_course_id_unique',
-            'commissions'  => 'commissions_sale_id_instructor_id_unique',
-            'bookings'     => 'bookings_student_id_schedule_id_unique',
+            'commissions' => 'commissions_sale_id_instructor_id_unique',
+            'bookings' => 'bookings_student_id_schedule_id_unique',
         ];
 
         foreach ($uniqueIndexes as $table => $index) {
@@ -201,7 +205,7 @@ return new class extends Migration
         }
 
         $tenantUniques = [
-            'students'    => ['students_tenant_id_email_unique', 'students_tenant_id_phone_unique'],
+            'students' => ['students_tenant_id_email_unique', 'students_tenant_id_phone_unique'],
             'instructors' => ['instructors_tenant_id_email_unique', 'instructors_tenant_id_phone_unique'],
         ];
 
@@ -219,10 +223,10 @@ return new class extends Migration
 
         // Foreign keys: drop restrictOnDelete versions (re-adding cascadeOnDelete would require knowing the originals)
         $fks = [
-            'payments'  => 'payments_sale_id_foreign',
-            'refunds'   => 'refunds_sale_id_foreign',
-            'payouts'   => 'payouts_instructor_id_foreign',
-            'expenses'  => 'expenses_tenant_id_foreign',
+            'payments' => 'payments_sale_id_foreign',
+            'refunds' => 'refunds_sale_id_foreign',
+            'payouts' => 'payouts_instructor_id_foreign',
+            'expenses' => 'expenses_tenant_id_foreign',
         ];
 
         foreach ($fks as $table => $fkName) {

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Services\PaymentGateways\PaymobGateway;
 use App\Models\Subscription;
 use App\Models\Tenant;
+use App\Services\PaymentGateways\PaymobGateway;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class PaymobWebhookController extends Controller
@@ -21,12 +21,13 @@ class PaymobWebhookController extends Controller
     {
         $payload = $request->except(['card_pan', 'source', 'cvv', 'token']);
         Log::info('Paymob Webhook Received', $payload);
-        
+
         // Use the gateway's built-in verification logic
         $result = $this->gateway->handleCallback($payload);
 
-        if (!$result['success']) {
-            Log::warning('Paymob Webhook Verification Failed: ' . ($result['message'] ?? 'Unknown Error'));
+        if (! $result['success']) {
+            Log::warning('Paymob Webhook Verification Failed: '.($result['message'] ?? 'Unknown Error'));
+
             return response()->json(['status' => 'error'], 400);
         }
 
@@ -34,14 +35,14 @@ class PaymobWebhookController extends Controller
         $orderId = $result['order_id'];
 
         // Find subscription by transaction ID or order ID if stored
-        $subscription = Subscription::where('stripe_id', 'sub_paymob_' . $transactionId)->first();
+        $subscription = Subscription::where('stripe_id', 'sub_paymob_'.$transactionId)->first();
 
         if ($subscription) {
             $subscription->update([
                 'status' => 'active',
-                'stripe_status' => 'active'
+                'stripe_status' => 'active',
             ]);
-            
+
             Log::info("Paymob Subscription Updated for Trans ID: {$transactionId}");
         } else {
             // Restore context from merchant_order_id
@@ -58,9 +59,9 @@ class PaymobWebhookController extends Controller
                     $tenant = Tenant::find($tenantId);
                     if ($tenant) {
                         $package = \App\Models\Package::where('slug', $planSlug)->first();
-                        
+
                         $totalAmount = ($billingCycle === 'yearly' ? ($package->yearly_price ?? 0) : ($billingCycle === 'term' ? ($package->term_price ?? 0) : ($package->price ?? 0)));
-                        
+
                         if ($billingCycle === 'monthly') {
                             $days = 30;
                         } elseif ($billingCycle === 'term') {
@@ -69,7 +70,7 @@ class PaymobWebhookController extends Controller
                         } elseif ($billingCycle === 'yearly') {
                             $days = 365;
                         } elseif ($package) {
-                            $days = $package->duration_in_days; 
+                            $days = $package->duration_in_days;
                         } else {
                             $days = 30;
                         }
@@ -78,9 +79,9 @@ class PaymobWebhookController extends Controller
                             ['name' => 'default'],
                             [
                                 'gateway' => 'paymob',
-                                'stripe_id' => 'sub_paymob_' . $transactionId,
+                                'stripe_id' => 'sub_paymob_'.$transactionId,
                                 'stripe_status' => 'active',
-                                'stripe_price' => 'price_paymob_' . ($package->slug ?? ($planSlug ?: 'unknown')),
+                                'stripe_price' => 'price_paymob_'.($package->slug ?? ($planSlug ?: 'unknown')),
                                 'quantity' => 1,
                                 'billing_cycle' => $billingCycle,
                                 'base_price' => $totalAmount,
@@ -107,6 +108,7 @@ class PaymobWebhookController extends Controller
                         );
 
                         Log::info("Paymob Webhook: Subscription created from context restoration for Trans ID: {$transactionId}");
+
                         return response()->json(['status' => 'success']);
                     }
                 }

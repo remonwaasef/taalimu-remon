@@ -27,13 +27,13 @@ return new class extends Migration
                 'resolved',
                 'reopened',
                 'muted',
-                'unmuted'
+                'unmuted',
             ]);
             $table->json('old_value')->nullable();
             $table->json('new_value')->nullable();
             $table->text('comment')->nullable();
             $table->timestamps();
-            
+
             $table->index(['issue_id', 'created_at']);
         });
     }

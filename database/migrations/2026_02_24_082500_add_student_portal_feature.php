@@ -1,11 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use App\Models\Feature;
 use App\Models\Package;
 use App\Models\PackageFeature;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -29,13 +27,13 @@ return new class extends Migration
 
         // 2. Associate with packages
         $plans = [
-             'free-trial' => 'true',
-             'growth' => 'true',
-             'institution' => 'true',
-             'starter' => 'false'
+            'free-trial' => 'true',
+            'growth' => 'true',
+            'institution' => 'true',
+            'starter' => 'false',
         ];
 
-        foreach($plans as $slug => $value) {
+        foreach ($plans as $slug => $value) {
             $package = Package::where('slug', $slug)->first();
             if ($package) {
                 PackageFeature::updateOrCreate(

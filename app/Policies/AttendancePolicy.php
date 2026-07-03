@@ -14,7 +14,7 @@ class AttendancePolicy
 
     public function view(User $user, Attendance $attendance): bool
     {
-        return (int)$user->tenant_id === (int)$attendance->tenant_id && ($user->hasAnyRole(['center_admin', 'admin', 'instructor']) || $user->checkPermissionTo('view attendance'));
+        return (int) $user->tenant_id === (int) $attendance->tenant_id && ($user->hasAnyRole(['center_admin', 'admin', 'instructor']) || $user->checkPermissionTo('view attendance'));
     }
 
     public function create(User $user): bool
@@ -24,13 +24,13 @@ class AttendancePolicy
 
     public function update(User $user, Attendance $attendance): bool
     {
-        return (int)$user->tenant_id === (int)$attendance->tenant_id && 
+        return (int) $user->tenant_id === (int) $attendance->tenant_id &&
                 ($user->hasAnyRole(['center_admin', 'admin', 'instructor']) || $user->checkPermissionTo('take attendance'));
     }
 
     public function delete(User $user, Attendance $attendance): bool
     {
-        return (int)$user->tenant_id === (int)$attendance->tenant_id && 
+        return (int) $user->tenant_id === (int) $attendance->tenant_id &&
                 ($user->hasAnyRole(['center_admin', 'admin']) || $user->checkPermissionTo('take attendance'));
     }
 }

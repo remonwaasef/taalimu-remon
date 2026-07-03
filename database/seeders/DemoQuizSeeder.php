@@ -2,20 +2,21 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Course;
 use App\Models\Lesson;
 use App\Models\Quiz;
 use App\Models\Tenant;
+use Illuminate\Database\Seeder;
 
 class DemoQuizSeeder extends Seeder
 {
     public function run()
     {
         $tenant = Tenant::where('domain', 'remon')->first();
-        
-        if (!$tenant) {
+
+        if (! $tenant) {
             $this->command->info('Tenant remon not found.');
+
             return;
         }
 
@@ -23,9 +24,10 @@ class DemoQuizSeeder extends Seeder
         app()->instance('tenant', $tenant);
 
         $course = Course::where('title', 'Laravel Mastery')->first();
-        
-        if (!$course) {
+
+        if (! $course) {
             $this->command->info('Course Laravel Mastery not found.');
+
             return;
         }
 

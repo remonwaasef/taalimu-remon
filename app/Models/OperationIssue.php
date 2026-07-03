@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
+use Carbon\CarbonInterval;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
-use Carbon\CarbonInterval;
 
 class OperationIssue extends Model
 {
-    use HasFactory, SoftDeletes, \App\Traits\IdentifyTenant;
+    use \App\Traits\IdentifyTenant, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'uuid',
@@ -140,7 +140,7 @@ class OperationIssue extends Model
 
     public function getSeverityColorAttribute(): string
     {
-        return match($this->severity) {
+        return match ($this->severity) {
             'critical' => 'red',
             'high' => 'orange',
             'medium' => 'yellow',
@@ -151,7 +151,7 @@ class OperationIssue extends Model
 
     public function getSeverityBadgeClassAttribute(): string
     {
-        return match($this->severity) {
+        return match ($this->severity) {
             'critical' => 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
             'high' => 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300',
             'medium' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
@@ -162,7 +162,7 @@ class OperationIssue extends Model
 
     public function getStatusBadgeClassAttribute(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             'new' => 'bg-red-100 text-red-800',
             'acknowledged' => 'bg-yellow-100 text-yellow-800',
             'in_progress' => 'bg-blue-100 text-blue-800',
@@ -181,13 +181,13 @@ class OperationIssue extends Model
 
         $slaConfig = config("issues.sla.{$this->severity}", ['resolution' => 1440]);
         $slaMinutes = $slaConfig['resolution'];
-        
+
         return $this->created_at->addMinutes($slaMinutes)->isPast();
     }
 
     public function timeToResolve(): ?CarbonInterval
     {
-        if (!$this->resolved_at) {
+        if (! $this->resolved_at) {
             return null;
         }
 
@@ -216,7 +216,7 @@ class OperationIssue extends Model
     protected static function boot()
     {
         parent::boot();
-        
+
         // Note: bootBelongsToTenant is booted automatically by Laravel's bootTraits() mechanism
         static::creating(function ($issue) {
             if (empty($issue->uuid)) {

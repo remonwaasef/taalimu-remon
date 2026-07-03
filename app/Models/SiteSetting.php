@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class SiteSetting extends Model
 {
@@ -29,12 +29,14 @@ class SiteSetting extends Model
         try {
             return \Illuminate\Support\Facades\Cache::rememberForever("setting_{$key}", function () use ($key, $default) {
                 $setting = self::where('key', $key)->first();
+
                 return $setting ? $setting->value : $default;
             });
         } catch (\Throwable $e) {
             // Fallback to DB if cache fails (e.g., file permissions or Redis down)
-            \Illuminate\Support\Facades\Log::warning("Cache failure in SiteSetting::get({$key}): " . $e->getMessage());
+            \Illuminate\Support\Facades\Log::warning("Cache failure in SiteSetting::get({$key}): ".$e->getMessage());
             $setting = self::where('key', $key)->first();
+
             return $setting ? $setting->value : $default;
         }
     }
@@ -51,7 +53,7 @@ class SiteSetting extends Model
             ['key' => $key],
             ['value' => $value, 'group' => $group]
         );
-        
+
         \Illuminate\Support\Facades\Cache::forget("setting_{$key}");
 
         // Security Alert for sensitive keys
@@ -61,9 +63,10 @@ class SiteSetting extends Model
                 if (auth()->check()) {
                     app(\App\Services\TelegramService::class)->sendSettingChangeAlert(auth()->user(), $key, $oldValue, $value);
                 }
-            } catch (\Throwable $e) {}
+            } catch (\Throwable $e) {
+            }
         }
-        
+
         return $setting;
     }
 }

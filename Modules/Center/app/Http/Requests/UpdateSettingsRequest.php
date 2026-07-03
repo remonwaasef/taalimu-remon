@@ -23,7 +23,7 @@ class UpdateSettingsRequest extends FormRequest
             'twitter_url' => 'nullable|url',
             'youtube_url' => 'nullable|url',
             'linkedin_url' => 'nullable|url',
-            'timezone' => 'nullable|string|in:' . implode(',', timezone_identifiers_list()),
+            'timezone' => 'nullable|string|in:'.implode(',', timezone_identifiers_list()),
             'logo' => 'nullable|image|max:2048',
             'favicon' => 'nullable|image|max:1024',
             'settings' => 'nullable|array',

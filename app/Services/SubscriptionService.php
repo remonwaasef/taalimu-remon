@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\Tenant;
+use App\Models\Feature;
 use App\Models\Package;
 use App\Models\Subscription;
-use App\Models\Feature;
+use App\Models\Tenant;
 use Carbon\Carbon;
 
 class SubscriptionService
@@ -34,7 +34,7 @@ class SubscriptionService
         return Subscription::forceCreate([
             'tenant_id' => $tenant->id,
             'name' => 'default',
-            'stripe_id' => 'sub_demo_' . time(),
+            'stripe_id' => 'sub_demo_'.time(),
             'stripe_status' => 'active',
             'stripe_price' => $package->stripe_price_id,
             'ends_at' => Carbon::now()->addDays($package->duration_in_days),
@@ -49,23 +49,25 @@ class SubscriptionService
     {
         $subscription = $tenant->active_subscription;
 
-        if (!$subscription) {
+        if (! $subscription) {
             return false;
         }
 
         // Zero DB Hits: Check if package and features are already loaded from Cache
         $package = $subscription->relationLoaded('package') ? $subscription->package : null;
-        
+
         if ($package && $package->relationLoaded('features')) {
             $packageFeature = $package->features->firstWhere('code', $featureCode);
         } else {
             // Use resolved_package attribute which has fallbacks for demo/mismatched price IDs
             $package = $subscription->resolved_package;
-            if (!$package) return false;
+            if (! $package) {
+                return false;
+            }
             $packageFeature = $package->features()->where('code', $featureCode)->first();
         }
 
-        if (!$packageFeature) {
+        if (! $packageFeature) {
             return false; // Feature not included in package
         }
 
@@ -93,13 +95,19 @@ class SubscriptionService
     public function getFeatureValue(Tenant $tenant, string $featureCode)
     {
         $subscription = $tenant->active_subscription;
-        if (!$subscription) return false;
+        if (! $subscription) {
+            return false;
+        }
 
         $package = $subscription->resolved_package;
-        if (!$package) return false;
+        if (! $package) {
+            return false;
+        }
 
         $packageFeature = $package->features()->where('code', $featureCode)->first();
-        if (!$packageFeature) return false;
+        if (! $packageFeature) {
+            return false;
+        }
 
         $limit = $packageFeature->pivot ? $packageFeature->pivot->value : $packageFeature->value;
 
@@ -160,7 +168,7 @@ class SubscriptionService
             $this->checkThresholdWarning($tenant, $featureCode);
 
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::warning("SubscriptionService: Failed to increment usage for tenant {$tenant->id}, feature {$featureCode}. Error: " . $e->getMessage());
+            \Illuminate\Support\Facades\Log::warning("SubscriptionService: Failed to increment usage for tenant {$tenant->id}, feature {$featureCode}. Error: ".$e->getMessage());
         }
     }
 
@@ -174,23 +182,31 @@ class SubscriptionService
         }
 
         $subscription = $tenant->active_subscription;
-        if (!$subscription) return;
+        if (! $subscription) {
+            return;
+        }
 
         $package = $subscription->resolved_package;
-        if (!$package) return;
+        if (! $package) {
+            return;
+        }
 
         $packageFeature = $package->features()->where('code', $featureCode)->first();
-        if (!$packageFeature) return;
+        if (! $packageFeature) {
+            return;
+        }
 
         $limit = (int) ($packageFeature->pivot ? $packageFeature->pivot->value : $packageFeature->value);
-        if ($limit <= 0) return; // Unlimited or invalid
+        if ($limit <= 0) {
+            return;
+        } // Unlimited or invalid
 
         $usage = $this->getUsage($tenant, $featureCode);
-        
+
         if ($usage >= ($limit * 0.9)) {
             // Use cache to prevent spamming (once per day per resource)
-            $alertKey = "tenant_{$tenant->id}_alert_sent_{$featureCode}_" . now()->format('Y-m-d');
-            if (!\Illuminate\Support\Facades\Cache::has($alertKey)) {
+            $alertKey = "tenant_{$tenant->id}_alert_sent_{$featureCode}_".now()->format('Y-m-d');
+            if (! \Illuminate\Support\Facades\Cache::has($alertKey)) {
                 app(\App\Services\TelegramService::class)->sendResourceLimitWarning($tenant, $featureCode, $usage, $limit);
                 \Illuminate\Support\Facades\Cache::put($alertKey, true, now()->addDay());
             }
@@ -206,14 +222,14 @@ class SubscriptionService
         try {
             if (extension_loaded('redis')) {
                 $current = \Illuminate\Support\Facades\Cache::store('redis')->get($cacheKey);
-                if ($current && (int)$current > 0) {
+                if ($current && (int) $current > 0) {
                     \Illuminate\Support\Facades\Cache::store('redis')->decrement($cacheKey);
                 }
             } else {
                 \Illuminate\Support\Facades\Cache::forget($cacheKey);
             }
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::warning("SubscriptionService: Failed to decrement usage for tenant {$tenant->id}, feature {$featureCode}. Error: " . $e->getMessage());
+            \Illuminate\Support\Facades\Log::warning("SubscriptionService: Failed to decrement usage for tenant {$tenant->id}, feature {$featureCode}. Error: ".$e->getMessage());
         }
     }
 }

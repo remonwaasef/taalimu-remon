@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Instructor;
 use App\Models\User;
-
 use App\Traits\HasRoleCheck;
 
 class InstructorPolicy
@@ -41,7 +40,7 @@ class InstructorPolicy
      */
     public function update(User $user, Instructor $instructor): bool
     {
-        return $user->tenant_id === $instructor->tenant_id && 
+        return $user->tenant_id === $instructor->tenant_id &&
                ($this->hasAnyRole($user, ['center_admin', 'admin']) || $user->checkPermissionTo('edit instructors'));
     }
 
@@ -50,7 +49,7 @@ class InstructorPolicy
      */
     public function delete(User $user, Instructor $instructor): bool
     {
-        return $user->tenant_id === $instructor->tenant_id && 
+        return $user->tenant_id === $instructor->tenant_id &&
                ($this->hasAnyRole($user, ['center_admin', 'admin']) || $user->checkPermissionTo('delete instructors'));
     }
 }

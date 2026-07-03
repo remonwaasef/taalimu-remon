@@ -43,13 +43,13 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
     public function register(): void
     {
         // Check if EventServiceProvider exists in the module
-        $eventProviderClass = 'Modules\\' . $this->getModuleName() . '\Providers\EventServiceProvider';
+        $eventProviderClass = 'Modules\\'.$this->getModuleName().'\Providers\EventServiceProvider';
         if (class_exists($eventProviderClass)) {
             $this->app->register($eventProviderClass);
         }
 
         // Check if RouteServiceProvider exists in the module
-        $routeProviderClass = 'Modules\\' . $this->getModuleName() . '\Providers\RouteServiceProvider';
+        $routeProviderClass = 'Modules\\'.$this->getModuleName().'\Providers\RouteServiceProvider';
         if (class_exists($routeProviderClass)) {
             $this->app->register($routeProviderClass);
         }
@@ -76,14 +76,14 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
      */
     public function registerTranslations(): void
     {
-        $langPath = resource_path('lang/modules/' . $this->getModuleNameLower());
+        $langPath = resource_path('lang/modules/'.$this->getModuleNameLower());
 
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, $this->getModuleNameLower());
             $this->loadJsonTranslationsFrom($langPath);
         } else {
             $moduleLangPath = module_path($this->getModuleName(), 'lang');
-            if (!is_dir($moduleLangPath)) {
+            if (! is_dir($moduleLangPath)) {
                 $moduleLangPath = module_path($this->getModuleName(), 'resources/lang');
             }
             $this->loadTranslationsFrom($moduleLangPath, $this->getModuleNameLower());
@@ -103,9 +103,9 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
 
             foreach ($iterator as $file) {
                 if ($file->isFile() && $file->getExtension() === 'php') {
-                    $config = str_replace($configPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
+                    $config = str_replace($configPath.DIRECTORY_SEPARATOR, '', $file->getPathname());
                     $config_key = str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $config);
-                    $segments = explode('.', $this->getModuleNameLower() . '.' . $config_key);
+                    $segments = explode('.', $this->getModuleNameLower().'.'.$config_key);
 
                     // Remove duplicated adjacent segments
                     $normalized = [];
@@ -140,14 +140,14 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
      */
     public function registerViews(): void
     {
-        $viewPath = resource_path('views/modules/' . $this->getModuleNameLower());
+        $viewPath = resource_path('views/modules/'.$this->getModuleNameLower());
         $sourcePath = module_path($this->getModuleName(), 'resources/views');
 
-        $this->publishes([$sourcePath => $viewPath], ['views', $this->getModuleNameLower() . '-module-views']);
+        $this->publishes([$sourcePath => $viewPath], ['views', $this->getModuleNameLower().'-module-views']);
 
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->getModuleNameLower());
 
-        Blade::componentNamespace(config('modules.namespace', 'Modules') . '\\' . $this->getModuleName() . '\\View\\Components', $this->getModuleNameLower());
+        Blade::componentNamespace(config('modules.namespace', 'Modules').'\\'.$this->getModuleName().'\\View\\Components', $this->getModuleNameLower());
     }
 
     /**
@@ -162,8 +162,8 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
     {
         $paths = [];
         foreach (config('view.paths', []) as $path) {
-            if (is_dir($path . '/modules/' . $this->getModuleNameLower())) {
-                $paths[] = $path . '/modules/' . $this->getModuleNameLower();
+            if (is_dir($path.'/modules/'.$this->getModuleNameLower())) {
+                $paths[] = $path.'/modules/'.$this->getModuleNameLower();
             }
         }
 

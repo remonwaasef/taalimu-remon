@@ -85,7 +85,7 @@ return [
     | Performance Optimization Mode
     |--------------------------------------------------------------------------
     |
-    | When set to true, heavy operations like Activity Logging and 
+    | When set to true, heavy operations like Activity Logging and
     | real-time DB counts are disabled or moved to Redis Atomic Counters.
     | Useful for handling massive concurrent requests (100k+).
     |

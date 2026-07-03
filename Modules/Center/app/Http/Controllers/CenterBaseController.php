@@ -13,6 +13,7 @@ class CenterBaseController extends Controller
     /**
     /**
      * The current tenant (center) instance.
+     *
      * @var \App\Models\Tenant
      */
     protected $tenant;

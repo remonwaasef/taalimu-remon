@@ -2,27 +2,32 @@
 
 namespace Tests\Feature;
 
+use App\Models\Course;
+use App\Models\Instructor;
+use App\Models\Lesson;
+use App\Models\Package;
+use App\Models\Question;
+use App\Models\Quiz;
+use App\Models\Subscription;
+use App\Models\Tenant;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Tenant;
-use App\Models\Course;
-use App\Models\Lesson;
-use App\Models\Quiz;
-use App\Models\Question;
-use App\Models\Instructor;
-use App\Models\Package;
-use App\Models\Subscription;
 
 class QuizSystemTest extends TestCase
 {
     use RefreshDatabase;
 
     protected $tenant;
+
     protected $instructorUser;
+
     protected $instructorProfile;
+
     protected $student;
+
     protected $course;
+
     protected $section;
 
     protected function setUp(): void
@@ -32,7 +37,7 @@ class QuizSystemTest extends TestCase
         // Setup Tenant with onboarding_status to pass middleware
         $this->tenant = $this->createTenant(['domain' => 'test', 'name' => 'Test Center']);
         app()->instance('tenant', $this->tenant);
-        
+
         // Setup Subscription with manage_exams feature
         $package = Package::create([
             'name' => 'Pro Plan',
@@ -77,13 +82,13 @@ class QuizSystemTest extends TestCase
 
         // Setup Users
         $this->instructorUser = User::factory()->create([
-            'email' => 'instructor@test.com', 
+            'email' => 'instructor@test.com',
             'tenant_id' => $this->tenant->id,
             'role' => 'instructor',
-            'instructor_id' => $this->instructorProfile->id
+            'instructor_id' => $this->instructorProfile->id,
         ]);
         $this->instructorUser->assignRole($role);
-        
+
         $this->student = User::factory()->create([
             'email' => 'student@test.com',
             'tenant_id' => $this->tenant->id,
@@ -195,7 +200,7 @@ class QuizSystemTest extends TestCase
             ->first();
         // Manually update the quiz attempt's created_at using query builder to bypass Eloquent events/caches
         \DB::table('quiz_attempts')->where('id', $attempt->id)->update([
-            'created_at' => \Carbon\Carbon::now()->subMinutes(10)->toDateTimeString()
+            'created_at' => \Carbon\Carbon::now()->subMinutes(10)->toDateTimeString(),
         ]);
 
         // Advance Carbon time to now + 5 minutes
@@ -208,7 +213,7 @@ class QuizSystemTest extends TestCase
 
         // The controller returns back()->with('error', ...) as a redirect
         $this->assertEquals(302, $response->status());
-        
+
         // Ensure the attempt was NOT marked as completed/passed
         $this->assertDatabaseMissing('quiz_attempts', [
             'user_id' => $this->student->id,

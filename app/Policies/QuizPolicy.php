@@ -23,6 +23,7 @@ class QuizPolicy
 
         if ($user->hasRole('instructor')) {
             $course = $quiz->lesson->section->course;
+
             return $course && $user->instructor_id && $course->instructor_id === $user->instructor_id;
         }
 
@@ -40,6 +41,7 @@ class QuizPolicy
 
         if ($user->hasRole('instructor')) {
             $course = $quiz->lesson->section->course;
+
             return $course && $user->instructor_id && $course->instructor_id === $user->instructor_id;
         }
 
@@ -51,7 +53,7 @@ class QuizPolicy
      */
     public function delete(User $user, Quiz $quiz): bool
     {
-        return $this->belongsToSameTenant($user, $quiz) && 
+        return $this->belongsToSameTenant($user, $quiz) &&
                $user->hasRole('center_admin');
     }
 
@@ -62,20 +64,20 @@ class QuizPolicy
     {
         // Get the lesson's course tenant_id through relationships
         $lesson = $quiz->lesson;
-        if (!$lesson) {
+        if (! $lesson) {
             return false;
         }
-        
+
         $section = $lesson->section;
-        if (!$section) {
+        if (! $section) {
             return false;
         }
-        
+
         $course = $section->course;
-        if (!$course) {
+        if (! $course) {
             return false;
         }
-        
+
         return $course->tenant_id === $user->tenant_id;
     }
 }

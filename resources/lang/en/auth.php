@@ -84,7 +84,7 @@ return [
         'or' => 'OR',
         'processing' => 'Processing...',
     ],
-    
+
     // Login Page
     'login' => [
         'title' => 'Login',
@@ -100,7 +100,7 @@ return [
         'register_now' => 'Create new account',
         'admin_login' => 'Admin Login',
     ],
-    
+
     // Registration Success Page
     'registration' => [
         'success_title' => 'Registration Successful!',

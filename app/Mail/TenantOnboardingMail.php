@@ -15,8 +15,11 @@ class TenantOnboardingMail extends Mailable
     use Queueable, SerializesModels;
 
     public Tenant $tenant;
+
     public User $user;
+
     public int $step;
+
     public int $trialDaysLeft;
 
     public function __construct(Tenant $tenant, User $user, int $step)
@@ -24,10 +27,10 @@ class TenantOnboardingMail extends Mailable
         $this->tenant = $tenant;
         $this->user = $user;
         $this->step = $step;
-        
+
         $subscription = $tenant->activeSubscription();
-        $this->trialDaysLeft = $subscription && $subscription->trial_ends_at 
-            ? max(0, now()->diffInDays($subscription->trial_ends_at, false)) 
+        $this->trialDaysLeft = $subscription && $subscription->trial_ends_at
+            ? max(0, now()->diffInDays($subscription->trial_ends_at, false))
             : 14;
     }
 
@@ -36,9 +39,9 @@ class TenantOnboardingMail extends Mailable
         $subjects = [
             1 => "{$this->user->name}, votre centre est prêt sur Taalimu ! Vérifiez votre email",
             2 => "{$this->user->name}, 80% des centres ajoutent leurs élèves dès le J1 📊",
-            3 => "Arrêtez de courir après les paiements ! Automatisez avec Taalimu",
-            4 => "Fini les appels sans fin ! Activez votre portail parents",
-            5 => "Comment Centre Y gère 500 élèves sans stress avec Taalimu"
+            3 => 'Arrêtez de courir après les paiements ! Automatisez avec Taalimu',
+            4 => 'Fini les appels sans fin ! Activez votre portail parents',
+            5 => 'Comment Centre Y gère 500 élèves sans stress avec Taalimu',
         ];
 
         return new Envelope(

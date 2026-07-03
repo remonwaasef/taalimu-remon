@@ -2,24 +2,24 @@
 
 namespace Modules\Center\Http\Controllers;
 
-use Modules\Center\Http\Controllers\CenterBaseController as Controller;
-use App\Models\Sale;
-use App\Models\SaleItem;
-use App\Models\Student;
 use App\Models\Course;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\DB;
-use App\Services\FinanceService;
-use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Payment;
 use App\Models\Refund;
+use App\Models\Sale;
+use App\Models\Student;
+use App\Services\FinanceService;
 use App\Services\RefundService;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
+use Modules\Center\Http\Controllers\CenterBaseController as Controller;
 use Modules\Center\Http\Requests\StoreSaleRequest;
 
 class SaleController extends Controller
 {
     protected $financeService;
+
     protected $arabicReshaper;
 
     public function __construct(FinanceService $financeService, \App\Services\ArabicReshaper $arabicReshaper)
@@ -28,6 +28,7 @@ class SaleController extends Controller
         $this->financeService = $financeService;
         $this->arabicReshaper = $arabicReshaper;
     }
+
     public function index()
     {
         $this->authorize('viewAny', Sale::class);
@@ -36,7 +37,7 @@ class SaleController extends Controller
             ->with('student')
             ->latest()
             ->paginate(10);
-            
+
         return view('center::sales.index', compact('sales', 'tenant'));
     }
 
@@ -44,22 +45,23 @@ class SaleController extends Controller
     {
         $this->authorize('viewAny', Sale::class);
         $tenant = $this->tenant;
-        
+
         // Fetch students who have at least one sale with a remaining balance
         $studentsQuery = Student::where('tenant_id', $tenant->id)
-            ->whereHas('sales', function($query) {
+            ->whereHas('sales', function ($query) {
                 $query->whereRaw('paid_amount < total_amount');
             })
-            ->with(['sales' => function($query) {
+            ->with(['sales' => function ($query) {
                 $query->whereRaw('paid_amount < total_amount');
             }]);
 
         $students = $studentsQuery->paginate(15);
-        
-        $students->getCollection()->transform(function($student) {
-            $student->total_debt = $student->sales->sum(function($sale) {
+
+        $students->getCollection()->transform(function ($student) {
+            $student->total_debt = $student->sales->sum(function ($sale) {
                 return $sale->total_amount - $sale->paid_amount;
             });
+
             return $student;
         });
 
@@ -70,7 +72,7 @@ class SaleController extends Controller
     {
         $this->authorize('viewAny', Sale::class);
         $tenant = $this->tenant;
-        
+
         $students = Student::where('tenant_id', $tenant->id)
             ->with(['user', 'sales', 'enrollments.course'])
             ->paginate(15);
@@ -86,23 +88,23 @@ class SaleController extends Controller
         $request->validate([
             'student_id' => [
                 'required',
-                Rule::exists('students', 'id')->where('tenant_id', $tenant->id)
+                Rule::exists('students', 'id')->where('tenant_id', $tenant->id),
             ],
             'amount' => 'required|numeric|min:0',
             'notes' => 'nullable|string',
         ]);
 
-        $student = Student::with(['sales' => function($query) {
+        $student = Student::with(['sales' => function ($query) {
             $query->whereRaw('paid_amount < total_amount')->orderBy('created_at', 'asc');
         }])->findOrFail($request->student_id);
 
         // Calculate balance directly from unpaid sales to be perfectly accurate
-        $totalDebt = $student->sales->sum(function($sale) {
+        $totalDebt = $student->sales->sum(function ($sale) {
             return $sale->total_amount - $sale->paid_amount;
         });
 
         if ($request->amount > $totalDebt) {
-            return back()->with('error', __('center::messages.msg_071') . " (المبلغ أكبر من المديونية)"); // Using existing error or custom message
+            return back()->with('error', __('center::messages.msg_071').' (المبلغ أكبر من المديونية)'); // Using existing error or custom message
         }
 
         $amountToDistribute = $request->amount;
@@ -110,7 +112,9 @@ class SaleController extends Controller
 
         try {
             foreach ($student->sales as $sale) {
-                if ($amountToDistribute <= 0) break;
+                if ($amountToDistribute <= 0) {
+                    break;
+                }
 
                 $remainingOnSale = $sale->total_amount - $sale->paid_amount;
                 $payAmount = min($remainingOnSale, $amountToDistribute);
@@ -120,10 +124,11 @@ class SaleController extends Controller
 
                 $amountToDistribute -= $payAmount;
             }
-     
+
             return redirect()->back()->with('success', __('center::messages.msg_074'));
         } catch (\Exception $e) {
-            \Log::error('markPaid failed: ' . $e->getMessage());
+            \Log::error('markPaid failed: '.$e->getMessage());
+
             return back()->with('error', __('center::messages.error_unexpected') ?? 'حدث خطأ غير متوقع.');
         }
     }
@@ -139,22 +144,22 @@ class SaleController extends Controller
         }
 
         $results = Student::where('tenant_id', $tenant->id)
-            ->where(function($q) use ($query) {
+            ->where(function ($q) use ($query) {
                 $q->where('name', 'like', "%{$query}%")
-                  ->orWhere('phone', 'like', "%{$query}%")
-                  ->orWhere('code', 'like', "%{$query}%");
+                    ->orWhere('phone', 'like', "%{$query}%")
+                    ->orWhere('code', 'like', "%{$query}%");
             })
             ->with(['grade.stage'])
             ->limit(10) // Limit for performance and UX
             ->get()
-            ->map(function($s) {
+            ->map(function ($s) {
                 return [
                     'id' => $s->id,
                     'name' => $s->name,
                     'phone' => $s->phone,
                     'code' => $s->code,
                     'grade' => $s->grade_level_name,
-                    'initial' => mb_substr($s->name, 0, 1, 'UTF-8')
+                    'initial' => mb_substr($s->name, 0, 1, 'UTF-8'),
                 ];
             });
 
@@ -167,7 +172,7 @@ class SaleController extends Controller
         $tenant = $this->tenant;
         $students = collect([]); // Don't load all students, rely on Select2 AJAX
         $courses = Course::where('tenant_id', $tenant->id)->get();
-        
+
         return view('center::sales.create', compact('students', 'courses', 'tenant'));
     }
 
@@ -175,9 +180,11 @@ class SaleController extends Controller
     {
         try {
             $sale = $this->financeService->createSale($request->validated());
+
             return response()->json(['success' => true, 'sale_id' => $sale->id]);
         } catch (\Exception $e) {
-            \Log::error('Sale creation failed: ' . $e->getMessage());
+            \Log::error('Sale creation failed: '.$e->getMessage());
+
             return response()->json(['success' => false, 'message' => __('center::messages.error_unexpected') ?? 'حدث خطأ غير متوقع أثناء المعالجة'], 500);
         }
     }
@@ -215,10 +222,11 @@ class SaleController extends Controller
 
             return back()->with('success', __('center::messages.msg_074'));
         } catch (\Exception $e) {
-            \Log::error('addPayment failed: ' . $e->getMessage());
+            \Log::error('addPayment failed: '.$e->getMessage());
             if ($request->expectsJson()) {
                 return response()->json(['success' => false, 'message' => __('center::messages.error_unexpected') ?? 'حدث خطأ غير متوقع'], 500);
             }
+
             return back()->with('error', __('center::messages.error_unexpected') ?? 'حدث خطأ غير متوقع.');
         }
     }
@@ -227,9 +235,9 @@ class SaleController extends Controller
     {
         $tenant = $this->tenant;
         $student = Student::with(['grade.stage'])->where('tenant_id', $tenant->id)->findOrFail($id);
-        
+
         $this->authorize('view', $student);
-        
+
         // Active Enrollments
         $courses = DB::table('enrollments')
             ->join('courses', 'enrollments.course_id', '=', 'courses.id')
@@ -244,11 +252,11 @@ class SaleController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $payments = Payment::whereHas('sale', function($q) use ($student) {
+        $payments = Payment::whereHas('sale', function ($q) use ($student) {
             $q->where('student_id', $student->id);
         })->where('tenant_id', $tenant->id)->get();
 
-        $refunds = Refund::whereHas('sale', function($q) use ($student) {
+        $refunds = Refund::whereHas('sale', function ($q) use ($student) {
             $q->where('student_id', $student->id);
         })->where('tenant_id', $tenant->id)->get();
 
@@ -260,10 +268,10 @@ class SaleController extends Controller
                 'id' => $sale->id,
                 'date' => $sale->created_at->format('Y-m-d H:i'),
                 'type' => 'invoice',
-                'amount' => (float)$sale->total_amount,
+                'amount' => (float) $sale->total_amount,
                 'status' => $sale->status,
-                'remaining' => (float)($sale->total_amount - $sale->paid_amount),
-                'description' => 'فاتورة مبيعات #' . $sale->id
+                'remaining' => (float) ($sale->total_amount - $sale->paid_amount),
+                'description' => 'فاتورة مبيعات #'.$sale->id,
             ]);
         }
 
@@ -272,10 +280,10 @@ class SaleController extends Controller
                 'id' => $payment->id,
                 'date' => ($payment->paid_at ?? $payment->created_at)->format('Y-m-d H:i'),
                 'type' => 'payment',
-                'amount' => (float)$payment->amount,
+                'amount' => (float) $payment->amount,
                 'method' => $payment->payment_method,
-                'description' => 'سداد دفعة مالية' . ($payment->payment_method ? " ({$payment->payment_method})" : ""),
-                'sale_id' => $payment->sale_id
+                'description' => 'سداد دفعة مالية'.($payment->payment_method ? " ({$payment->payment_method})" : ''),
+                'sale_id' => $payment->sale_id,
             ]);
         }
 
@@ -284,9 +292,9 @@ class SaleController extends Controller
                 'id' => $refund->id,
                 'date' => $refund->created_at->format('Y-m-d H:i'),
                 'type' => 'refund',
-                'amount' => (float)$refund->amount,
+                'amount' => (float) $refund->amount,
                 'description' => 'عملية استرداد (Refund)',
-                'sale_id' => $refund->sale_id
+                'sale_id' => $refund->sale_id,
             ]);
         }
 
@@ -303,16 +311,16 @@ class SaleController extends Controller
             ->where('tenant_id', $tenant->id)
             ->orderBy('session_date', 'desc')
             ->get();
-        
+
         $totalSessions = $attendance->count();
         $presentSessions = $attendance->where('status', 'present')->count();
         $attendanceRate = $totalSessions > 0 ? round(($presentSessions / $totalSessions) * 100) : 0;
-        $recentAttendance = $attendance->take(5)->map(function($att) {
-             return [
-                 'date' => $att->session_date->format('Y-m-d'),
-                 'status' => $att->status,
-                 'course' => $att->course?->title ?? 'N/A'
-             ];
+        $recentAttendance = $attendance->take(5)->map(function ($att) {
+            return [
+                'date' => $att->session_date->format('Y-m-d'),
+                'status' => $att->status,
+                'course' => $att->course?->title ?? 'N/A',
+            ];
         });
 
         return response()->json([
@@ -322,7 +330,7 @@ class SaleController extends Controller
                 'phone' => $student->phone,
                 'status' => $student->status,
                 'grade' => $student->grade_level_name,
-                'id' => $student->id
+                'id' => $student->id,
             ],
             'courses' => $courses,
             'stats' => [
@@ -332,8 +340,9 @@ class SaleController extends Controller
                 'course_count' => $courses->count(),
             ],
             'ledger' => $ledger,
-            'unpaid_invoices' => $sales->where('paid_amount', '<', 'total_amount')->map(function($s) {
+            'unpaid_invoices' => $sales->where('paid_amount', '<', 'total_amount')->map(function ($s) {
                 $s->remaining = $s->total_amount - $s->paid_amount;
+
                 return $s;
             })->values(),
             'recent_attendance' => $recentAttendance,
@@ -344,13 +353,15 @@ class SaleController extends Controller
     {
         $tenant = $this->tenant;
         $student = Student::where('tenant_id', $tenant->id)->findOrFail($id);
-        
+
         $sales = Sale::where('student_id', $student->id)
             ->with(['items.item', 'payments'])
             ->orderBy('created_at', 'asc')
             ->get();
 
-        $totalDebt = $sales->sum(function($s) { return $s->total_amount - $s->paid_amount; });
+        $totalDebt = $sales->sum(function ($s) {
+            return $s->total_amount - $s->paid_amount;
+        });
 
         // Reshape Arabic
         $studentName = $this->arabicReshaper->reshape($student->name);
@@ -359,7 +370,7 @@ class SaleController extends Controller
         $pdf = Pdf::loadView('center::sales.statement', compact('student', 'sales', 'totalDebt', 'tenant', 'studentName', 'tenantName'))
             ->setPaper('a4', 'portrait');
 
-        return $pdf->download('statement-' . $student->id . '.pdf');
+        return $pdf->download('statement-'.$student->id.'.pdf');
     }
 
     public function downloadReceipt($paymentId)
@@ -376,7 +387,7 @@ class SaleController extends Controller
         if ($payment->sale->student) {
             $payment->sale->student->name = $this->arabicReshaper->reshape($payment->sale->student->name);
         }
-        
+
         foreach ($payment->sale->items as $item) {
             if ($item->item) {
                 // We use a temporary property to store reshaped title for the PDF
@@ -387,7 +398,7 @@ class SaleController extends Controller
         $pdf = Pdf::loadView('center::sales.receipt', compact('payment', 'tenant'))
             ->setPaper('a5', 'portrait');
 
-        return $pdf->download('receipt-' . $payment->id . '.pdf');
+        return $pdf->download('receipt-'.$payment->id.'.pdf');
     }
 
     /**
@@ -400,7 +411,7 @@ class SaleController extends Controller
         $this->authorize('update', $sale);
 
         $request->validate([
-            'amount' => 'required|numeric|min:0.01|max:' . $sale->paid_amount,
+            'amount' => 'required|numeric|min:0.01|max:'.$sale->paid_amount,
             'reason' => 'nullable|string',
             'refund_method' => 'required|string',
             'unenroll_student' => 'boolean',
@@ -408,9 +419,11 @@ class SaleController extends Controller
 
         try {
             $refundService->processRefund($sale, $request->all());
+
             return redirect()->back()->with('success', __('center::messages.refund_success') ?? 'تمت عملية الاسترداد بنجاح وتحديث السجلات.');
         } catch (\Exception $e) {
-            \Log::error('Refund failed: ' . $e->getMessage());
+            \Log::error('Refund failed: '.$e->getMessage());
+
             return redirect()->back()->with('error', __('center::messages.error_unexpected') ?? 'خطأ في عملية الاسترداد. يرجى المحاولة لاحقاً.');
         }
     }
@@ -423,7 +436,7 @@ class SaleController extends Controller
         $tenant = $this->tenant;
         $sale = Sale::where('tenant_id', $tenant->id)->findOrFail($id);
         $this->authorize('view', $sale);
-        
+
         // Ensure invoice is not fully paid
         if ($sale->status === 'paid') {
             return redirect()->back()->with('info', 'هذه الفاتورة مدفوعة بالكامل.');
@@ -455,10 +468,10 @@ class SaleController extends Controller
             return redirect()->route('center.sales.show', $sale->id)
                 ->with('success', __('center::messages.online_payment_success') ?? 'تم الدفع الإلكتروني بنجاح!');
         } catch (\Exception $e) {
-            \Log::error('checkoutSuccess failed: ' . $e->getMessage());
+            \Log::error('checkoutSuccess failed: '.$e->getMessage());
+
             return redirect()->route('center.sales.show', $sale->id)
                 ->with('error', __('center::messages.error_unexpected') ?? 'حدث خطأ أثناء معالجة الدفع الإلكتروني.');
         }
     }
 }
-

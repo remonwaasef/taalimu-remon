@@ -1,17 +1,20 @@
 <?php
 
-function updateLangFile($path, $newKeys) {
-    if (!file_exists($path)) return;
+function updateLangFile($path, $newKeys)
+{
+    if (! file_exists($path)) {
+        return;
+    }
     $content = include $path;
     $content = array_replace_recursive($content, $newKeys);
     $export = var_export($content, true);
     $export = preg_replace('/array \(/', '[', $export);
     $export = preg_replace('/\)/', ']', $export);
     $export = preg_replace('/=> \n\s+\[/', '=> [', $export);
-    $export = preg_replace_callback("/'([^'\\\\]|\\\\.)*'/", function($m) {
+    $export = preg_replace_callback("/'([^'\\\\]|\\\\.)*'/", function ($m) {
         return str_replace(']', ')', $m[0]);
     }, $export);
-    file_put_contents($path, "<?php\n\nreturn " . $export . ";\n");
+    file_put_contents($path, "<?php\n\nreturn ".$export.";\n");
 }
 
 $arNew = [
@@ -24,8 +27,8 @@ $arNew = [
             'formal' => 'ترحيب رسمي',
             'friendly' => 'ترحيب ودي',
             'minimal' => 'إشعار بسيط',
-        ]
-    ]
+        ],
+    ],
 ];
 
 $frNew = [
@@ -38,8 +41,8 @@ $frNew = [
             'formal' => 'Accueil Formel',
             'friendly' => 'Accueil Amical',
             'minimal' => 'Notification Simple',
-        ]
-    ]
+        ],
+    ],
 ];
 
 $enNew = [
@@ -52,12 +55,12 @@ $enNew = [
             'formal' => 'Formal Welcome',
             'friendly' => 'Friendly Welcome',
             'minimal' => 'Simple Notification',
-        ]
-    ]
+        ],
+    ],
 ];
 
-updateLangFile("d:/new project/antigravty/edu/edu/Modules/Center/resources/lang/ar/settings.php", $arNew);
-updateLangFile("d:/new project/antigravty/edu/edu/Modules/Center/resources/lang/fr/settings.php", $frNew);
-updateLangFile("d:/new project/antigravty/edu/edu/Modules/Center/resources/lang/en/settings.php", $enNew);
+updateLangFile('d:/new project/antigravty/edu/edu/Modules/Center/resources/lang/ar/settings.php', $arNew);
+updateLangFile('d:/new project/antigravty/edu/edu/Modules/Center/resources/lang/fr/settings.php', $frNew);
+updateLangFile('d:/new project/antigravty/edu/edu/Modules/Center/resources/lang/en/settings.php', $enNew);
 
-echo "Radical translation keys added!";
+echo 'Radical translation keys added!';

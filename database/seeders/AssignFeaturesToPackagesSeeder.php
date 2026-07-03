@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Package;
 use App\Models\Feature;
+use App\Models\Package;
+use Illuminate\Database\Seeder;
 
 class AssignFeaturesToPackagesSeeder extends Seeder
 {
@@ -40,13 +40,15 @@ class AssignFeaturesToPackagesSeeder extends Seeder
 
         foreach ($newFeatures as $code => $values) {
             $feature = Feature::where('code', $code)->first();
-            if (!$feature) continue;
+            if (! $feature) {
+                continue;
+            }
 
             foreach ($values as $slug => $value) {
                 $package = Package::where('slug', $slug)->first();
                 if ($package) {
                     $package->features()->syncWithoutDetaching([
-                        $feature->id => ['value' => $value]
+                        $feature->id => ['value' => $value],
                     ]);
                 }
             }

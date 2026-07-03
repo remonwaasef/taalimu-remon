@@ -2,19 +2,20 @@
 
 namespace App\Jobs;
 
+use App\Services\WhatsAppService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use App\Services\WhatsAppService;
 
 class SendSystemWhatsAppMessage implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $phone;
+
     public $message;
 
     /**
@@ -34,7 +35,7 @@ class SendSystemWhatsAppMessage implements ShouldQueue
         try {
             $whatsapp->sendSystemMessage($this->phone, $this->message);
         } catch (\Exception $e) {
-            Log::warning('Job SendSystemWhatsAppMessage failed: ' . $e->getMessage());
+            Log::warning('Job SendSystemWhatsAppMessage failed: '.$e->getMessage());
         }
     }
 }

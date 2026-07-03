@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Tenant;
 use App\Models\Package;
-use App\Services\TelegramService;
+use App\Models\Tenant;
 use App\Services\PaymentProcessingService;
+use App\Services\TelegramService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -61,6 +61,7 @@ class PaymentController extends Controller
 
                 if (session('is_subscription_change')) {
                     session()->forget('is_subscription_change');
+
                     return redirect()->route('center.subscription.success', ['tenant' => $tenant->domain]);
                 }
 
@@ -81,10 +82,10 @@ class PaymentController extends Controller
 
         // 1. Verify Redirect HMAC
         $isHmacValid = $gateway->verifyRedirectHmac($request->all());
-        if (!$isHmacValid) {
+        if (! $isHmacValid) {
             Log::warning('Paymob Redirect HMAC Mismatch', [
                 'received_hmac' => $request->get('hmac'),
-                'payload' => $request->except(['hmac'])
+                'payload' => $request->except(['hmac']),
             ]);
             abort(403, 'Invalid Payment Signature');
         }
@@ -95,7 +96,7 @@ class PaymentController extends Controller
 
         Log::info('Paymob Redirect Received', [
             'success' => $success, 'transaction_id' => $transactionId,
-            'merchant_order_id' => $merchantOrderId, 'hmac_valid' => $isHmacValid
+            'merchant_order_id' => $merchantOrderId, 'hmac_valid' => $isHmacValid,
         ]);
 
         if ($success && $transactionId) {
@@ -121,8 +122,8 @@ class PaymentController extends Controller
             $tenant = $tenantId ? Tenant::find($tenantId) : null;
 
             // Fallback: find tenant via existing subscription
-            if (!$tenant) {
-                $existingSub = \App\Models\Subscription::where('stripe_id', 'sub_paymob_' . $transactionId)->first();
+            if (! $tenant) {
+                $existingSub = \App\Models\Subscription::where('stripe_id', 'sub_paymob_'.$transactionId)->first();
                 if ($existingSub) {
                     $tenant = $existingSub->tenant;
                     $isChange = true;
@@ -131,7 +132,7 @@ class PaymentController extends Controller
             }
 
             // Robust upgrade detection
-            if ($tenant && !$isChange) {
+            if ($tenant && ! $isChange) {
                 $isChange = $tenant->subscriptions()->where('name', 'default')->exists();
             }
 
@@ -164,9 +165,10 @@ class PaymentController extends Controller
                 return redirect()->route('dashboard');
             }
 
-            Log::error("Paymob Payment Success but Tenant not found", [
-                'transaction_id' => $transactionId, 'merchant_order_id' => $merchantOrderId
+            Log::error('Paymob Payment Success but Tenant not found', [
+                'transaction_id' => $transactionId, 'merchant_order_id' => $merchantOrderId,
             ]);
+
             return redirect()->route('home')->withErrors(['error' => __('payment.success_but_tenant_not_found')]);
         }
 
@@ -182,7 +184,7 @@ class PaymentController extends Controller
         $tenantId = session('tenant_id');
         $isChange = session('is_subscription_change', false);
 
-        if (!$tenantId && $merchantOrderId) {
+        if (! $tenantId && $merchantOrderId) {
             $restored = $this->paymentService->restoreContextFromMerchantOrder($merchantOrderId);
             if ($restored) {
                 $tenantId = $restored['tenant_id'];
@@ -222,14 +224,14 @@ class PaymentController extends Controller
         $planSlug = session('selected_plan');
         $tenantId = session('tenant_id');
 
-        if (!$planSlug || !$tenantId) {
+        if (! $planSlug || ! $tenantId) {
             return redirect()->route('register')->withErrors(['error' => __('Your session has expired. Please register again.')]);
         }
 
         $package = Package::where('slug', $planSlug)->first();
         $tenant = Tenant::find($tenantId);
 
-        if (!$package || !$tenant) {
+        if (! $package || ! $tenant) {
             return redirect()->route('register')->withErrors(['error' => __('Selected plan or tenant not found.')]);
         }
 
@@ -247,20 +249,21 @@ class PaymentController extends Controller
      */
     public function demoSuccess(TelegramService $telegram)
     {
-        if (!session('tenant_id')) {
+        if (! session('tenant_id')) {
             return redirect()->route('register');
         }
 
         // Security: Validate session integrity
         $userId = auth()->check() ? auth()->id() : \App\Models\User::where('tenant_id', session('tenant_id'))->where('role', 'center_admin')->value('id');
-        $expectedHmac = hash_hmac('sha256', session('tenant_id') . '|' . $userId, config('app.key'));
-        if (!hash_equals($expectedHmac, session('registration_hmac', ''))) {
+        $expectedHmac = hash_hmac('sha256', session('tenant_id').'|'.$userId, config('app.key'));
+        if (! hash_equals($expectedHmac, session('registration_hmac', ''))) {
             Log::warning('Demo payment bypass attempt detected', ['ip' => request()->ip()]);
+
             return redirect()->route('register')->withErrors(['error' => __('payment.invalid_session')]);
         }
 
         $tenant = Tenant::find(session('tenant_id'));
-        if (!$tenant) {
+        if (! $tenant) {
             return redirect()->route('register');
         }
 
@@ -290,6 +293,7 @@ class PaymentController extends Controller
         if (session('is_subscription_change')) {
             session()->forget('is_subscription_change');
             $this->sendUpgradeNotification($tenant);
+
             return redirect()->route('center.subscription.success', ['tenant' => $tenant->domain]);
         }
 
@@ -311,19 +315,19 @@ class PaymentController extends Controller
             $sub = \App\Models\Subscription::where('tenant_id', $tenant->id)->latest()->first();
             $packageName = $sub ? $sub->type_label : __('payment.unspecified');
             $endsAt = ($sub && $sub->ends_at) ? $sub->ends_at->format('Y-m-d') : __('payment.unspecified');
-            $amount = session('total_amount', 0) . ' ' . \App\Models\SiteSetting::get('currency_symbol', 'جنيه');
+            $amount = session('total_amount', 0).' '.\App\Models\SiteSetting::get('currency_symbol', 'جنيه');
 
-            $msg = "<b>🔄 " . __('payment.subscription_upgrade') . "</b>\n\n";
-            $msg .= "<b>🏢 " . __('payment.center') . ":</b> {$tenant->name}\n";
-            $msg .= "<b>👤 " . __('payment.user') . ":</b> {$userName}\n";
-            $msg .= "<b>📦 " . __('payment.new_package') . ":</b> {$packageName}\n";
-            $msg .= "<b>💰 " . __('payment.amount_paid') . ":</b> {$amount}\n";
-            $msg .= "<b>⏳ " . __('payment.new_expiry') . ":</b> {$endsAt}\n\n";
-            $msg .= "#SubscriptionUpgrade";
+            $msg = '<b>🔄 '.__('payment.subscription_upgrade')."</b>\n\n";
+            $msg .= '<b>🏢 '.__('payment.center').":</b> {$tenant->name}\n";
+            $msg .= '<b>👤 '.__('payment.user').":</b> {$userName}\n";
+            $msg .= '<b>📦 '.__('payment.new_package').":</b> {$packageName}\n";
+            $msg .= '<b>💰 '.__('payment.amount_paid').":</b> {$amount}\n";
+            $msg .= '<b>⏳ '.__('payment.new_expiry').":</b> {$endsAt}\n\n";
+            $msg .= '#SubscriptionUpgrade';
 
             app(TelegramService::class)->sendAdminNotification($msg);
         } catch (\Throwable $e) {
-            Log::error("Failed to send upgrade notification: " . $e->getMessage());
+            Log::error('Failed to send upgrade notification: '.$e->getMessage());
         }
     }
 }

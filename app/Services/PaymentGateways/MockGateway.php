@@ -3,8 +3,8 @@
 namespace App\Services\PaymentGateways;
 
 use App\Interfaces\PaymentGatewayInterface;
-use App\Models\Tenant;
 use App\Models\Package;
+use App\Models\Tenant;
 use Illuminate\Support\Str;
 
 class MockGateway implements PaymentGatewayInterface
@@ -21,7 +21,7 @@ class MockGateway implements PaymentGatewayInterface
 
     public function handleCallback(array $payload): array
     {
-        return ['success' => true, 'transaction_id' => 'mock_' . Str::random(10)];
+        return ['success' => true, 'transaction_id' => 'mock_'.Str::random(10)];
     }
 
     public function getName(): string

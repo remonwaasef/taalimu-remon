@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 trait ResolvesInstructor
 {
     protected $instructor;
+
     protected $tenant;
 
     public function callAction($method, $parameters)
@@ -27,11 +28,13 @@ trait ResolvesInstructor
     protected function resolveInstructor()
     {
         $user = auth()->user();
-        if (!$user) return null;
+        if (! $user) {
+            return null;
+        }
 
         $instructor = $user->instructor;
 
-        if (!$instructor) {
+        if (! $instructor) {
             if ($user->hasRole(['instructor', 'center_admin'])) {
                 $instructor = \App\Models\Instructor::create([
                     'tenant_id' => $user->tenant_id,
@@ -66,8 +69,8 @@ trait ResolvesInstructor
     {
         $instructor = $this->instructor;
         $isRelated = $student->enrollments()->whereIn('course_id', $instructor->courses->pluck('id'))->exists();
-        
-        if (!$isRelated) {
+
+        if (! $isRelated) {
             abort(403, __('instructor::messages.unauthorized'));
         }
     }

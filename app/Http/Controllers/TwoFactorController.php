@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use PragmaRX\Google2FALaravel\Facade as Google2FA;
 use Illuminate\Support\Facades\Auth;
+use PragmaRX\Google2FALaravel\Facade as Google2FA;
 
 class TwoFactorController extends Controller
 {
@@ -14,14 +14,14 @@ class TwoFactorController extends Controller
     public function showSetupForm()
     {
         $user = Auth::user();
-        
+
         // If already enabled, redirect to dashboard or verify
         if ($user->google2fa_enabled) {
             return redirect()->route('center.dashboard');
         }
 
         // Generate secret key if not exists
-        if (!$user->google2fa_secret) {
+        if (! $user->google2fa_secret) {
             $user->google2fa_secret = Google2FA::generateSecretKey();
             $user->save();
         }
@@ -34,7 +34,7 @@ class TwoFactorController extends Controller
         );
 
         // Generate QR Code directly using Chillerlan (Stable)
-        $qrCodeUrl = (new \chillerlan\QRCode\QRCode())->render($otpAuthUrl);
+        $qrCodeUrl = (new \chillerlan\QRCode\QRCode)->render($otpAuthUrl);
 
         return view('auth.2fa.setup', compact('qrCodeUrl', 'user'));
     }
@@ -49,13 +49,13 @@ class TwoFactorController extends Controller
         ]);
 
         $user = Auth::user();
-        
+
         $valid = Google2FA::verifyKey($user->google2fa_secret, $request->one_time_password);
 
         if ($valid) {
             $user->google2fa_enabled = true;
             $user->save();
-            
+
             // Mark session as verified
             session(['2fa_verified' => true]);
 
@@ -83,12 +83,12 @@ class TwoFactorController extends Controller
         ]);
 
         $user = Auth::user();
-        
+
         $valid = Google2FA::verifyKey($user->google2fa_secret, $request->one_time_password);
 
         if ($valid) {
             session(['2fa_verified' => true]);
-            
+
             // Redirect to intended url or dashboard
             return redirect()->intended(route('center.dashboard'));
         }

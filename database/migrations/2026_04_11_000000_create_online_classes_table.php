@@ -12,18 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::dropIfExists('online_classes');
-        
+
         Schema::create('online_classes', function (Blueprint $table) {
             $table->id();
-            
+
             // Multi-Tenancy Column
             $table->unsignedBigInteger('tenant_id')->nullable();
-            
+
             $table->unsignedBigInteger('instructor_id')->nullable();
-            
+
             // Optional relation to a course
             $table->unsignedBigInteger('course_id')->nullable();
-            
+
             $table->string('title');
             $table->string('platform')->default('zoom')->comment('zoom, meet, custom');
             $table->text('meeting_link');
@@ -31,9 +31,9 @@ return new class extends Migration
             $table->string('meeting_password')->nullable();
             $table->timestamp('start_time');
             $table->integer('duration_minutes')->default(60);
-            
+
             $table->string('status')->default('scheduled')->comment('scheduled, live, completed, cancelled');
-            
+
             $table->timestamps();
 
             // Setup basic foreign keys if needed. To avoid strict constraint issues during multi-tenancy,

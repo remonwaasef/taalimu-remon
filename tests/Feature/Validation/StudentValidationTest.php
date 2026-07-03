@@ -3,8 +3,8 @@
 namespace Tests\Feature\Validation;
 
 use App\Http\Requests\Center\StoreStudentRequest;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
 class StudentValidationTest extends TestCase
@@ -12,15 +12,16 @@ class StudentValidationTest extends TestCase
     use RefreshDatabase;
 
     protected $tenant;
+
     protected $grade;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->tenant = \App\Models\Tenant::create(['domain' => 'test', 'name' => 'Test Center']);
         app()->instance('tenant', $this->tenant);
-        
+
         $stage = \App\Models\Stage::create(['tenant_id' => $this->tenant->id, 'name' => 'Stage 1']);
         $this->grade = \App\Models\Grade::create(['tenant_id' => $this->tenant->id, 'stage_id' => $stage->id, 'name' => 'Grade 1']);
     }
@@ -31,12 +32,12 @@ class StudentValidationTest extends TestCase
         $data = [
             'name' => 'John123',
             'phone' => '01234567890',
-            'grade_id' => $this->grade->id
+            'grade_id' => $this->grade->id,
         ];
-        $request = new StoreStudentRequest();
-        
+        $request = new StoreStudentRequest;
+
         $validator = Validator::make($data, $request->rules());
-        
+
         $this->assertTrue($validator->fails());
         $this->assertArrayHasKey('name', $validator->errors()->toArray());
     }
@@ -47,12 +48,12 @@ class StudentValidationTest extends TestCase
         $data = [
             'name' => 'John Doe',
             'phone' => 'abc-123-456',
-            'grade_id' => $this->grade->id
+            'grade_id' => $this->grade->id,
         ];
-        $request = new StoreStudentRequest();
-        
+        $request = new StoreStudentRequest;
+
         $validator = Validator::make($data, $request->rules());
-        
+
         $this->assertTrue($validator->fails());
         $this->assertArrayHasKey('phone', $validator->errors()->toArray());
     }
@@ -67,10 +68,10 @@ class StudentValidationTest extends TestCase
             'gender' => 'male',
             'grade_id' => $this->grade->id,
         ];
-        $request = new StoreStudentRequest();
-        
+        $request = new StoreStudentRequest;
+
         $validator = Validator::make($data, $request->rules());
-        
+
         $this->assertFalse($validator->fails());
     }
 }

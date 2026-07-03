@@ -17,8 +17,11 @@ class SendWhatsAppPaymentNotification implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $tenant;
+
     public $student;
+
     public $amount;
+
     public $balance;
 
     /**
@@ -40,10 +43,10 @@ class SendWhatsAppPaymentNotification implements ShouldQueue
         try {
             // Set tenant context for the job
             app()->instance('tenant', $this->tenant);
-            
+
             $whatsAppService->sendPaymentNotification($this->tenant, $this->student, $this->amount, $this->balance);
         } catch (\Exception $e) {
-            Log::error('SendWhatsAppPaymentNotification failed: ' . $e->getMessage());
+            Log::error('SendWhatsAppPaymentNotification failed: '.$e->getMessage());
         }
     }
 }

@@ -27,7 +27,7 @@ Schedule::command('app:send-weekly-telegram-report')->weeklyOn(0, '08:00')->with
 Schedule::command('app:check-inactive-tenants')->dailyAt('11:00')->withoutOverlapping();
 
 // Daily Issue Digest (Daily at 08:30 AM)
-Schedule::call(fn() => app(\App\Services\IssueNotifier::class)->sendDailyDigest())
+Schedule::call(fn () => app(\App\Services\IssueNotifier::class)->sendDailyDigest())
     ->dailyAt('08:30')
     ->name('daily-issue-digest')
     ->withoutOverlapping();

@@ -3,9 +3,9 @@
 namespace Modules\Center\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\CourseResource;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ResourceController extends Controller
@@ -22,7 +22,7 @@ class ResourceController extends Controller
         ]);
 
         $tenantId = app('tenant')->id;
-        $path = $request->file('file')->store("{$tenantId}/resources/" . $course->id, 'local');
+        $path = $request->file('file')->store("{$tenantId}/resources/".$course->id, 'local');
 
         CourseResource::create([
             'course_id' => $course->id,
@@ -50,10 +50,10 @@ class ResourceController extends Controller
     public function download(CourseResource $resource)
     {
         $user = auth()->user();
-        
+
         // Admin/Instructor can always download
         if ($user->hasAnyRole(['admin', 'center_admin', 'instructor'])) {
-            return Storage::disk('local')->download($resource->file_path, $resource->title . '.' . $resource->file_type);
+            return Storage::disk('local')->download($resource->file_path, $resource->title.'.'.$resource->file_type);
         }
 
         // Student check
@@ -61,10 +61,10 @@ class ResourceController extends Controller
             ->where('course_id', $resource->course_id)
             ->exists();
 
-        if (!$isEnrolled && !$resource->is_public) {
+        if (! $isEnrolled && ! $resource->is_public) {
             abort(403, 'يجب الاشتراك في الدورة للوصول لهذا المورد');
         }
 
-        return Storage::disk('local')->download($resource->file_path, $resource->title . '.' . $resource->file_type);
+        return Storage::disk('local')->download($resource->file_path, $resource->title.'.'.$resource->file_type);
     }
 }

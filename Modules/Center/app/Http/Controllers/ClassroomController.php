@@ -17,6 +17,7 @@ class ClassroomController extends Controller
     {
         $this->authorize('viewAny', Classroom::class);
         $classrooms = Classroom::with('assets')->withCount('assets')->latest()->paginate(10);
+
         return view('center::classrooms.index', compact('classrooms'));
     }
 
@@ -26,6 +27,7 @@ class ClassroomController extends Controller
     public function create()
     {
         $this->authorize('create', Classroom::class);
+
         return view('center::classrooms.create');
     }
 
@@ -35,7 +37,7 @@ class ClassroomController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $this->authorize('create', Classroom::class);
-        if (!app('tenant')->hasFeature('max_classrooms')) {
+        if (! app('tenant')->hasFeature('max_classrooms')) {
             return redirect()->back()->with('error', __('center::messages.msg_021'));
         }
 
@@ -70,8 +72,8 @@ class ClassroomController extends Controller
     public function show(Classroom $classroom)
     {
         $this->authorize('view', $classroom);
-        
-        $classroom->load(['assets', 'schedules' => function($query) {
+
+        $classroom->load(['assets', 'schedules' => function ($query) {
             $query->with(['course', 'instructor'])->orderBy('day_of_week')->orderBy('start_time');
         }]);
 
@@ -84,6 +86,7 @@ class ClassroomController extends Controller
     public function edit(Classroom $classroom)
     {
         $this->authorize('update', $classroom);
+
         return view('center::classrooms.edit', compact('classroom'));
     }
 
@@ -93,7 +96,7 @@ class ClassroomController extends Controller
     public function update(Request $request, Classroom $classroom): RedirectResponse
     {
         $this->authorize('update', $classroom);
-        
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'capacity' => 'nullable|integer|min:1',

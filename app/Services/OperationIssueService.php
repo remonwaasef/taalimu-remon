@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\IssueTimeline;
 use App\Models\OperationIssue;
 use App\Models\User;
-use App\Models\IssueTimeline;
 
 class OperationIssueService
 {
@@ -14,7 +14,7 @@ class OperationIssueService
     public function acknowledge(OperationIssue $issue, User $user): void
     {
         $oldStatus = $issue->status;
-        
+
         $issue->update([
             'status' => 'acknowledged',
             'acknowledged_at' => now(),
@@ -33,7 +33,7 @@ class OperationIssueService
     public function assignTo(OperationIssue $issue, User $assignee, User $assignedBy): void
     {
         $oldAssignee = $issue->assigned_to;
-        
+
         $issue->update([
             'assigned_to' => $assignee->id,
             'status' => $issue->status === 'new' ? 'acknowledged' : $issue->status,
@@ -52,13 +52,13 @@ class OperationIssueService
     public function updateStatus(OperationIssue $issue, string $status, User $user, ?string $comment = null): void
     {
         $oldStatus = $issue->status;
-        
+
         $updateData = ['status' => $status];
-        
-        if ($status === 'in_progress' && !$issue->first_response_at) {
+
+        if ($status === 'in_progress' && ! $issue->first_response_at) {
             $updateData['first_response_at'] = now();
         }
-        
+
         $issue->update($updateData);
 
         $this->recordTimeline($issue, 'status_changed', $user, [
@@ -76,7 +76,7 @@ class OperationIssueService
         $oldStatus = $issue->status;
         $resolvedAt = now();
         $resolutionMinutes = $issue->created_at->diffInMinutes($resolvedAt);
-        
+
         $issue->update([
             'status' => 'resolved',
             'resolution_type' => $type,
@@ -113,7 +113,7 @@ class OperationIssueService
     public function mute(OperationIssue $issue): void
     {
         $issue->update(['is_muted' => true]);
-        
+
         if (auth()->check()) {
             $this->recordTimeline($issue, 'muted', auth()->user());
         }
@@ -125,7 +125,7 @@ class OperationIssueService
     public function unmute(OperationIssue $issue): void
     {
         $issue->update(['is_muted' => false]);
-        
+
         if (auth()->check()) {
             $this->recordTimeline($issue, 'unmuted', auth()->user());
         }
@@ -138,14 +138,14 @@ class OperationIssueService
     {
         // Move timeline entries to target
         $source->timeline()->update(['issue_id' => $target->id]);
-        
+
         // Increment occurrence count
         $target->increment('occurrence_count', $source->occurrence_count);
         $target->update([
             'last_occurrence_at' => max($source->last_occurrence_at ?? $source->created_at, $target->last_occurrence_at ?? $target->created_at),
             'is_recurring' => true,
         ]);
-        
+
         // Soft delete the source issue
         $source->delete();
     }

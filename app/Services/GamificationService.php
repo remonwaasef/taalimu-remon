@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\User;
 use App\Models\PointLog;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class GamificationService
@@ -13,7 +13,9 @@ class GamificationService
      */
     public function awardPoints(User $user, int $points, string $reason, $referenceable = null)
     {
-        if ($points === 0) return;
+        if ($points === 0) {
+            return;
+        }
 
         return DB::transaction(function () use ($user, $points, $reason, $referenceable) {
             // Update user balance

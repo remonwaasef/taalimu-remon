@@ -16,7 +16,7 @@ class UpdateStudentRequest extends FormRequest
         $id = $this->route('student');
         $student = \App\Models\Student::find($id);
         $userId = $student ? $student->user_id : null;
-        
+
         $tenantId = app()->bound('tenant') ? app('tenant')->id : null;
 
         return [
@@ -25,26 +25,26 @@ class UpdateStudentRequest extends FormRequest
                 'nullable',
                 'string',
                 'max:50',
-                \Illuminate\Validation\Rule::unique('students', 'code')->ignore($id)->where('tenant_id', $tenantId)
+                \Illuminate\Validation\Rule::unique('students', 'code')->ignore($id)->where('tenant_id', $tenantId),
             ],
             'national_id' => [
                 'nullable',
                 'string',
                 'max:20',
-                \Illuminate\Validation\Rule::unique('students', 'national_id')->ignore($id)->where('tenant_id', $tenantId)
+                \Illuminate\Validation\Rule::unique('students', 'national_id')->ignore($id)->where('tenant_id', $tenantId),
             ],
             'email' => [
                 'nullable',
                 'email',
-                \Illuminate\Validation\Rule::unique('users', 'email')->ignore($userId)->where('tenant_id', $tenantId)
+                \Illuminate\Validation\Rule::unique('users', 'email')->ignore($userId)->where('tenant_id', $tenantId),
             ],
             'phone' => [
-                'nullable', 
-                'string', 
-                'max:20', 
-                'regex:/^([0-9\s\-\+\(\)]*)$/', 
+                'nullable',
+                'string',
+                'max:20',
+                'regex:/^([0-9\s\-\+\(\)]*)$/',
                 'min:10',
-                \Illuminate\Validation\Rule::unique('users', 'phone')->ignore($userId)->where('tenant_id', $tenantId)
+                \Illuminate\Validation\Rule::unique('users', 'phone')->ignore($userId)->where('tenant_id', $tenantId),
             ],
             'parent_phone' => ['nullable', 'string', 'max:20', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
             'parent_email' => 'nullable|email|max:255',

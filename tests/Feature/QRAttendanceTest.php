@@ -2,29 +2,35 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Tenant;
 use App\Models\Course;
-use App\Models\Schedule;
 use App\Models\Instructor;
-use App\Models\Student;
 use App\Models\Package;
+use App\Models\Schedule;
+use App\Models\Student;
 use App\Models\Subscription;
-use Modules\Center\Models\Attendance;
+use App\Models\Tenant;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\URL;
+use Modules\Center\Models\Attendance;
+use Tests\TestCase;
 
 class QRAttendanceTest extends TestCase
 {
     use RefreshDatabase;
 
     protected $tenant;
+
     protected $instructorUser;
+
     protected $instructorProfile;
+
     protected $studentUser;
+
     protected $studentProfile;
+
     protected $course;
+
     protected $schedule;
 
     protected function setUp(): void
@@ -35,7 +41,7 @@ class QRAttendanceTest extends TestCase
         $this->tenant = Tenant::create([
             'name' => 'Test Center',
             'domain' => 'test',
-            'database' => 'test_db'
+            'database' => 'test_db',
         ]);
         app()->instance('tenant', $this->tenant);
 
@@ -91,7 +97,7 @@ class QRAttendanceTest extends TestCase
         // Setup Student User
         $this->studentUser = User::factory()->create([
             'tenant_id' => $this->tenant->id,
-            'role' => 'student'
+            'role' => 'student',
         ]);
 
         // Create Student Profile
@@ -127,7 +133,7 @@ class QRAttendanceTest extends TestCase
         // and is behind feature:attendance_tracking middleware
         $response = $this->get(route('center.attendance.qr', [
             'tenant' => $this->tenant->domain,
-            'schedule' => $this->schedule->id
+            'schedule' => $this->schedule->id,
         ]));
 
         // The route may return 200 or redirect depending on authorization policy

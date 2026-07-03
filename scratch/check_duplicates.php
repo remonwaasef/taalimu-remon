@@ -1,25 +1,24 @@
 <?php
+
 require __DIR__.'/../vendor/autoload.php';
 $app = require_once __DIR__.'/../bootstrap/app.php';
 $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
-use App\Models\Student;
 use App\Models\Sale;
-use App\Models\SaleItem;
-use Illuminate\Support\Facades\DB;
+use App\Models\Student;
 
 $studentId = 11;
 $student = Student::find($studentId);
 
-if (!$student) {
-    die("Student not found\n");
+if (! $student) {
+    exit("Student not found\n");
 }
 
 echo "Student: {$student->name} (ID: {$student->id})\n";
 
 $sales = Sale::where('student_id', $student->id)->with('items')->get();
 
-echo "Total Sales: " . $sales->count() . "\n";
+echo 'Total Sales: '.$sales->count()."\n";
 
 $seenCourses = [];
 $toDelete = [];
@@ -38,4 +37,4 @@ foreach ($sales as $sale) {
     }
 }
 
-echo "Suggested for deletion: " . implode(', ', $toDelete) . "\n";
+echo 'Suggested for deletion: '.implode(', ', $toDelete)."\n";

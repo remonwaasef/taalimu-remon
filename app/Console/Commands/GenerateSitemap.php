@@ -32,17 +32,18 @@ class GenerateSitemap extends Command
                 if (str_contains($url->path(), 'admin') || str_contains($url->path(), 'center') || str_contains($url->path(), 'auth')) {
                     return;
                 }
+
                 return $url;
             })
             ->getSitemap();
 
         // Manually add localized versions of the homepage
         $sitemap->add(Url::create('/?hl=ar')->setPriority(1.0)->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY))
-                ->add(Url::create('/?hl=en')->setPriority(0.9)->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY))
-                ->add(Url::create('/?hl=fr')->setPriority(0.8)->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY));
+            ->add(Url::create('/?hl=en')->setPriority(0.9)->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY))
+            ->add(Url::create('/?hl=fr')->setPriority(0.8)->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY));
 
         $sitemap->writeToFile(public_path('sitemap.xml'));
-            
+
         $this->info('Sitemap generated successfully.');
     }
 }

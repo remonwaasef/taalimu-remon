@@ -1,9 +1,11 @@
 <?php
 
-function beautifyKey($key) {
+function beautifyKey($key)
+{
     // Convert discounts_granted to Discounts Granted
     $text = str_replace('_', ' ', $key);
     $text = ucwords($text);
+
     return $text;
 }
 
@@ -21,23 +23,27 @@ foreach ($iterator as $file) {
     if ($file->isFile() && $file->getExtension() === 'php') {
         $content = file_get_contents($file->getPathname());
         preg_match_all('/(?:__|trans|@lang)\s*\(\s*[\'"]center::([a-zA-Z0-9_\-\.]+)/', $content, $matches);
-        if (!empty($matches[1])) {
+        if (! empty($matches[1])) {
             foreach ($matches[1] as $key) {
                 // Sanitize key (remove empty or trailing dots)
                 $key = trim($key, '.');
-                if (!empty($key)) $foundKeys[] = $key;
+                if (! empty($key)) {
+                    $foundKeys[] = $key;
+                }
             }
         }
     }
 }
 
 $foundKeys = array_unique($foundKeys);
-echo "Found " . count($foundKeys) . " unique keys.\n";
+echo 'Found '.count($foundKeys)." unique keys.\n";
 
 // 2. Load all current translations into a cache to avoid repeated file writes
 $translationsCache = [];
 foreach ($locales as $locale) {
-    if (!is_dir("$langDir/$locale")) continue;
+    if (! is_dir("$langDir/$locale")) {
+        continue;
+    }
     $files = scandir("$langDir/$locale");
     foreach ($files as $file) {
         if (pathinfo($file, PATHINFO_EXTENSION) === 'php') {
@@ -54,17 +60,19 @@ foreach ($locales as $locale) {
         $parts = explode('.', $fullKey);
         $fileName = $parts[0];
         $keyPath = array_slice($parts, 1);
-        
-        if (empty($keyPath)) continue; // Skip keys like center::analytics (no key)
 
-        if (!isset($translationsCache[$locale][$fileName])) {
+        if (empty($keyPath)) {
+            continue;
+        } // Skip keys like center::analytics (no key)
+
+        if (! isset($translationsCache[$locale][$fileName])) {
             $translationsCache[$locale][$fileName] = [];
         }
 
         $current = &$translationsCache[$locale][$fileName];
         $isMissing = false;
         foreach ($keyPath as $segment) {
-            if (!isset($current[$segment])) {
+            if (! isset($current[$segment])) {
                 $current[$segment] = [];
                 $isMissing = true;
             }
@@ -86,19 +94,19 @@ echo "Identified $addedCount missing translation instances across all locales.\n
 foreach ($translationsCache as $locale => $files) {
     foreach ($files as $fileName => $data) {
         $filePath = "$langDir/$locale/$fileName.php";
-        
+
         $export = var_export($data, true);
         // Convert array() to []
         $export = preg_replace('/array \(/', '[', $export);
         $export = preg_replace('/\)/', ']', $export);
         $export = preg_replace('/=> \n\s+\[/', '=> [', $export);
-        
+
         // Final cleanup for parentheses in strings (previous bug fix)
-        $export = preg_replace_callback("/'([^'\\\\]|\\\\.)*'/", function($m) {
+        $export = preg_replace_callback("/'([^'\\\\]|\\\\.)*'/", function ($m) {
             return str_replace(']', ')', $m[0]);
         }, $export);
 
-        file_put_contents($filePath, "<?php\n\nreturn " . $export . ";\n");
+        file_put_contents($filePath, "<?php\n\nreturn ".$export.";\n");
     }
 }
 

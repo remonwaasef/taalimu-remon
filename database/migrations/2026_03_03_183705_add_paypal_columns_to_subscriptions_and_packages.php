@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('paypal_status')->nullable()->after('stripe_status');
             $table->string('paypal_plan_id')->nullable()->after('stripe_price');
             $table->string('gateway')->default('stripe')->after('tenant_id');
-            
+
             // Stripe ID should be nullable if we use PayPal
             $table->string('stripe_id')->nullable()->change();
             $table->string('stripe_status')->nullable()->change();

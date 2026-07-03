@@ -2,25 +2,27 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Tenant;
-use App\Models\Student;
 use App\Models\Course;
+use App\Models\Instructor;
 use App\Models\Lesson;
+use App\Models\Package;
 use App\Models\Quiz;
 use App\Models\QuizAttempt;
-use App\Models\Package;
+use App\Models\Student;
 use App\Models\Subscription;
-use App\Models\Instructor;
+use App\Models\Tenant;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class AnalyticsTest extends TestCase
 {
     use RefreshDatabase;
 
     protected $tenant;
+
     protected $admin;
+
     protected $instructorProfile;
 
     protected function setUp(): void
@@ -29,10 +31,10 @@ class AnalyticsTest extends TestCase
 
         // Setup Tenant
         $this->tenant = Tenant::create(['domain' => 'test', 'name' => 'Test Center']);
-        
+
         setPermissionsTeamId($this->tenant->id);
         $this->seed(\Database\Seeders\RolesAndPermissionsSeeder::class);
-        
+
         // Setup Subscription
         $package = Package::create([
             'name' => 'Pro Plan',
@@ -77,7 +79,7 @@ class AnalyticsTest extends TestCase
         // Create Students
         $student1 = Student::create(['tenant_id' => $this->tenant->id, 'name' => 'Student A', 'email' => 'studentA@test.com']);
         $student2 = Student::create(['tenant_id' => $this->tenant->id, 'name' => 'Student B', 'email' => 'studentB@test.com']);
-        
+
         // Create Users for students (needed for quiz attempts)
         $user1 = User::factory()->create(['email' => 'studentA@test.com', 'tenant_id' => $this->tenant->id]);
         $user2 = User::factory()->create(['email' => 'studentB@test.com', 'tenant_id' => $this->tenant->id]);
@@ -88,9 +90,9 @@ class AnalyticsTest extends TestCase
             'instructor_id' => $this->instructorProfile->id,
             'title' => 'Math 101',
             'slug' => 'math-101',
-            'price' => 100
+            'price' => 100,
         ]);
-        
+
         $section = $course->sections()->create(['title' => 'Section 1', 'sort_order' => 1]);
         $lesson = Lesson::create(['section_id' => $section->id, 'title' => 'Quiz 1', 'type' => 'quiz', 'sort_order' => 1]);
         $quiz = Quiz::create(['lesson_id' => $lesson->id, 'title' => 'Math Quiz', 'passing_score' => 50, 'duration_minutes' => 10]);
@@ -106,7 +108,7 @@ class AnalyticsTest extends TestCase
             'total_amount' => 100,
             'paid_amount' => 100,
             'status' => 'paid',
-            'payment_method' => 'cash'
+            'payment_method' => 'cash',
         ]);
 
         // 2. Visit Analytics Page
@@ -114,10 +116,10 @@ class AnalyticsTest extends TestCase
 
         // 3. Assertions
         $response->assertStatus(200);
-        
+
         // Check Metrics
         $response->assertSee($student1->name); // Student A should be in Recent Sales
-        
+
         // Check Counts
         $response->assertViewHas('totalStudents', 2);
         $response->assertViewHas('totalCourses', 1);

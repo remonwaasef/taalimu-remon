@@ -2,9 +2,9 @@
 
 namespace Modules\Api\app\Http\Middleware;
 
+use App\Models\Tenant;
 use Closure;
 use Illuminate\Http\Request;
-use App\Models\Tenant;
 use Modules\Tenancy\Services\TenantResolver;
 
 class ApiTenantMiddleware
@@ -16,7 +16,7 @@ class ApiTenantMiddleware
     {
         $tenantDomain = $request->header('X-Tenant-Domain');
 
-        if (!$tenantDomain) {
+        if (! $tenantDomain) {
             return response()->json([
                 'success' => false,
                 'message' => 'Missing X-Tenant-Domain header.',
@@ -28,7 +28,7 @@ class ApiTenantMiddleware
             return Tenant::where('domain', $tenantDomain)->where('status', 'active')->first();
         });
 
-        if (!$tenant) {
+        if (! $tenant) {
             return response()->json([
                 'success' => false,
                 'message' => 'Tenant not found or inactive.',
@@ -37,7 +37,7 @@ class ApiTenantMiddleware
 
         // Inject into Resolver
         TenantResolver::set($tenant);
-        
+
         // Scope permissions
         app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
 

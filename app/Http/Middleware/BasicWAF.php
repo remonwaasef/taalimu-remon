@@ -4,8 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response;
 
 class BasicWAF
 {
@@ -16,14 +16,14 @@ class BasicWAF
         // SQL Injection
         '/(\bselect\b|\bunion\b|\binsert\b|\bupdate\b|\bdelete\b|\bdrop\b|\bcreate\b|\balter\b).*(\bfrom\b|\binto\b|\bwhere\b)/i',
         '/(\bor\b|\band\b)\s+[\'"]?\d+[\'"]?\s*=\s*[\'"]?\d+[\'"]?/i',
-        
+
         // XSS
         '/<script[^>]*>.*?<\/script>/i',
         '/javascript:/i',
         // Match real HTML event-handler attributes only (inside a tag), not any
         // plain text starting with "on" (e.g. "one = 1" in a notes field).
         '/<[^>]+\son\w+\s*=/i',
-        
+
         // Path Traversal
         '/\.\.[\/\\\\]/',
         '/etc\/passwd/i',
@@ -38,10 +38,10 @@ class BasicWAF
      * Format: 'route_pattern' => ['field1', 'field2']
      */
     protected $fieldExclusions = [
-        'auth/google/*'          => ['code', 'state', 'scope', 'authuser', 'prompt', 'session_state'],
-        'payment/paymob/*'       => ['hmac', 'token', 'source_data_pan', 'source_data_sub_type'],
-        'payment/paypal/*'       => ['token', 'PayerID', 'ba_token'],
-        'api/webhooks/*'         => ['hmac', 'obj'],
+        'auth/google/*' => ['code', 'state', 'scope', 'authuser', 'prompt', 'session_state'],
+        'payment/paymob/*' => ['hmac', 'token', 'source_data_pan', 'source_data_sub_type'],
+        'payment/paypal/*' => ['token', 'PayerID', 'ba_token'],
+        'api/webhooks/*' => ['hmac', 'obj'],
     ];
 
     /**
@@ -70,7 +70,7 @@ class BasicWAF
         foreach (['user-agent', 'referer'] as $header) {
             $headerValue = $request->header($header);
             if (is_string($headerValue)) {
-                $flatValues['header_' . $header] = $headerValue;
+                $flatValues['header_'.$header] = $headerValue;
             }
         }
 
@@ -90,7 +90,7 @@ class BasicWAF
                 ]);
 
                 return response()->json([
-                    'error' => 'Request blocked for security reasons'
+                    'error' => 'Request blocked for security reasons',
                 ], 403);
             }
         }
@@ -108,6 +108,7 @@ class BasicWAF
                 return $fields;
             }
         }
+
         return [];
     }
 
@@ -121,6 +122,7 @@ class BasicWAF
                 return true;
             }
         }
+
         return false;
     }
 }

@@ -3,8 +3,8 @@
 namespace Modules\Admin\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Subscription;
 use App\Models\Package;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
@@ -12,8 +12,8 @@ class SubscriptionController extends Controller
     public function index(Request $request)
     {
         // Authorization: Only super admins can view subscriptions
-        if (!auth()->user()->hasRole('super_admin')) {
-             abort(403, 'Unauthorized action.');
+        if (! auth()->user()->hasRole('super_admin')) {
+            abort(403, 'Unauthorized action.');
         }
 
         $query = Subscription::with(['tenant.users', 'package']);
@@ -21,14 +21,14 @@ class SubscriptionController extends Controller
         // Filtering
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->whereHas('tenant', function($q) use ($search) {
+            $query->whereHas('tenant', function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%");
             });
         }
 
         if ($request->filled('status')) {
             if ($request->status === 'active') {
-                $query->where(function($q) {
+                $query->where(function ($q) {
                     $q->whereNull('ends_at')->orWhere('ends_at', '>', now());
                 });
             } elseif ($request->status === 'expired') {
@@ -39,7 +39,7 @@ class SubscriptionController extends Controller
         // Statistics
         $stats = [
             'total_count' => Subscription::count(),
-            'active_count' => Subscription::where(function($q) {
+            'active_count' => Subscription::where(function ($q) {
                 $q->whereNull('ends_at')->orWhere('ends_at', '>', now());
             })->count(),
             'expiring_soon' => Subscription::whereNotNull('ends_at')
@@ -55,8 +55,8 @@ class SubscriptionController extends Controller
 
     public function destroy($id)
     {
-        if (!auth()->user()->hasRole('super_admin')) {
-             abort(403, 'Unauthorized action.');
+        if (! auth()->user()->hasRole('super_admin')) {
+            abort(403, 'Unauthorized action.');
         }
 
         $subscription = Subscription::findOrFail($id);
@@ -67,8 +67,8 @@ class SubscriptionController extends Controller
 
     public function edit($id)
     {
-        if (!auth()->user()->hasRole('super_admin')) {
-             abort(403, 'Unauthorized action.');
+        if (! auth()->user()->hasRole('super_admin')) {
+            abort(403, 'Unauthorized action.');
         }
 
         $subscription = Subscription::with('tenant', 'package')->findOrFail($id);
@@ -79,8 +79,8 @@ class SubscriptionController extends Controller
 
     public function update(Request $request, $id)
     {
-        if (!auth()->user()->hasRole('super_admin')) {
-             abort(403, 'Unauthorized action.');
+        if (! auth()->user()->hasRole('super_admin')) {
+            abort(403, 'Unauthorized action.');
         }
 
         $subscription = Subscription::findOrFail($id);

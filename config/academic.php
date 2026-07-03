@@ -138,6 +138,6 @@ return [
             ['minutes' => 15, 'label' => 'center::academic.late_rules.slight_delay'],
             ['minutes' => 30, 'label' => 'center::academic.late_rules.half_hour_delay'],
             ['minutes' => 60, 'label' => 'center::academic.late_rules.hour_delay'],
-        ]
+        ],
     ],
 ];

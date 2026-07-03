@@ -3,18 +3,18 @@
 namespace Modules\Instructor\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Student;
+use App\Mail\WelcomeGuardianMail;
+use App\Mail\WelcomeStudentMail;
 use App\Models\Course;
 use App\Models\Enrollment;
-use App\Models\Sale;
 use App\Models\Payment;
+use App\Models\Sale;
+use App\Models\Student;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\WelcomeStudentMail;
-use App\Mail\WelcomeGuardianMail;
-use Modules\Instructor\Http\Requests\StoreStudentRequest;
 use Modules\Instructor\Http\Controllers\Traits\ResolvesInstructor;
+use Modules\Instructor\Http\Requests\StoreStudentRequest;
 
 class StudentController extends Controller
 {
@@ -27,14 +27,14 @@ class StudentController extends Controller
     {
         $instructor = $this->instructor;
 
-        if (!$instructor) {
+        if (! $instructor) {
             $students = Student::with(['user', 'enrollments.course', 'sales'])->take(20)->get();
         } else {
-            $students = Student::whereHas('enrollments', function($q) use ($instructor) {
+            $students = Student::whereHas('enrollments', function ($q) use ($instructor) {
                 $q->whereIn('course_id', $instructor->courses->pluck('id'));
-            })->with(['user', 'enrollments.course' => function($q) use ($instructor) {
+            })->with(['user', 'enrollments.course' => function ($q) use ($instructor) {
                 $q->where('instructor_id', $instructor->id);
-            }, 'sales' => function($q) use ($instructor) {
+            }, 'sales' => function ($q) {
                 // Optionally filter sales if needed
             }])->get();
         }
@@ -54,7 +54,7 @@ class StudentController extends Controller
             return redirect()->route('instructor.groups.create')
                 ->with('info', __('instructor::messages.create_group_first'));
         }
-        
+
         return view('instructor::students.create', compact('courses'));
     }
 
@@ -64,7 +64,7 @@ class StudentController extends Controller
     public function store(StoreStudentRequest $request)
     {
         $instructor = $this->instructor;
-        if (!$instructor) {
+        if (! $instructor) {
             return back()->with('error', __('instructor::messages.not_instructor_error'));
         }
 
@@ -80,11 +80,11 @@ class StudentController extends Controller
             } else {
                 $user = \App\Models\User::where('phone', $validated['phone'])->first();
 
-                if (!$user) {
-                    $email = $validated['email'] ?: ($validated['phone'] . '@' . ($this->tenant->domain ?? 'taalimu') . '.com');
-                    
-                    if (\App\Models\User::where('email', $email)->exists() && !$validated['email']) {
-                        $email = $validated['phone'] . '_' . \Illuminate\Support\Str::random(4) . '@' . ($this->tenant->domain ?? 'taalimu') . '.com';
+                if (! $user) {
+                    $email = $validated['email'] ?: ($validated['phone'].'@'.($this->tenant->domain ?? 'taalimu').'.com');
+
+                    if (\App\Models\User::where('email', $email)->exists() && ! $validated['email']) {
+                        $email = $validated['phone'].'_'.\Illuminate\Support\Str::random(4).'@'.($this->tenant->domain ?? 'taalimu').'.com';
                     }
 
                     $user = \App\Models\User::create([
@@ -113,14 +113,14 @@ class StudentController extends Controller
             }
 
             // Enroll in courses via FinanceService
-            if (!empty($validated['course_ids'])) {
+            if (! empty($validated['course_ids'])) {
                 $items = [];
                 $courses = Course::whereIn('id', $validated['course_ids'])->get();
                 foreach ($courses as $course) {
                     $items[] = ['id' => $course->id, 'price' => $course->price];
                 }
 
-                if (!empty($items)) {
+                if (! empty($items)) {
                     app(\App\Services\FinanceService::class)->createSale([
                         'student_id' => $student->id,
                         'items' => $items,
@@ -136,8 +136,8 @@ class StudentController extends Controller
             // Send emails
             try {
                 $student = Student::where('user_id', $user->id)->first();
-                $hasValidStudentEmail = $validated['email'] && !preg_match('/^std\d+\..+@taalimu\.com$/', $validated['email']);
-                $hasValidParentEmail = !empty($validated['parent_email']);
+                $hasValidStudentEmail = $validated['email'] && ! preg_match('/^std\d+\..+@taalimu\.com$/', $validated['email']);
+                $hasValidParentEmail = ! empty($validated['parent_email']);
 
                 if ($student && ($hasValidStudentEmail || $hasValidParentEmail)) {
                     $tenant = $this->tenant;
@@ -146,13 +146,13 @@ class StudentController extends Controller
                     $defaultPreset = config("email_templates.presets.{$defaultPresetKey}", []);
 
                     $variables = [
-                        'اسم_الطالب'    => $student->name,
-                        'اسم_المركز'    => $tenant->name,
-                        'رابط_الدخول'   => url('/login'),
-                        'كلمة_المرور'   => $validated['phone'],
-                        'رقم_الهاتف'    => $student->phone ?? '',
+                        'اسم_الطالب' => $student->name,
+                        'اسم_المركز' => $tenant->name,
+                        'رابط_الدخول' => url('/login'),
+                        'كلمة_المرور' => $validated['phone'],
+                        'رقم_الهاتف' => $student->phone ?? '',
                         'اسم_ولي_الأمر' => '',
-                        'المرحلة'       => '',
+                        'المرحلة' => '',
                     ];
 
                     $studentEnabled = (bool) ($tenantSettings['welcome_student_enabled'] ?? true);
@@ -168,7 +168,7 @@ class StudentController extends Controller
                     if ($guardianEnabled && $hasValidParentEmail) {
                         $guardianSubject = $tenantSettings['welcome_guardian_subject'] ?? $defaultPreset['guardian_subject'] ?? '';
                         $guardianBody = $tenantSettings['welcome_guardian_body'] ?? $defaultPreset['guardian_body'] ?? '';
-                        
+
                         Mail::to($validated['parent_email'])->queue(new WelcomeGuardianMail(
                             '',
                             $student->name,
@@ -178,7 +178,7 @@ class StudentController extends Controller
                             $tenant->name
                         ));
                     }
-                    
+
                     $groupEnrollmentEnabled = (bool) ($tenantSettings['notif_group_enrollment_enabled'] ?? false);
                     if ($groupEnrollmentEnabled && count($newEnrollments) > 0) {
                         foreach ($newEnrollments as $course_id) {
@@ -187,19 +187,19 @@ class StudentController extends Controller
                                 'اسم_الطالب' => $student->name,
                                 'اسم_المركز' => $tenant->name,
                                 'اسم_المجموعة' => $course ? $course->title : '',
-                                'سعر_الدورة' => $course ? ($course->price . ' ج.م') : '',
+                                'سعر_الدورة' => $course ? ($course->price.' ج.م') : '',
                                 'رابط_الدخول' => url('/login'),
                             ];
-                            
+
                             $groupSubject = $tenantSettings['notif_group_enrollment_subject'] ?? 'تم تسجيلك في مجموعة جديدة';
                             $groupBody = $tenantSettings['notif_group_enrollment_body'] ?? '';
-                            
+
                             if ($hasValidStudentEmail) {
                                 Mail::to($validated['email'])->queue(new \App\Mail\NotifGroupEnrollmentMail(
                                     $groupSubject, $groupBody, $groupVariables, $tenant->name, $student->name
                                 ));
                             }
-                            
+
                             if ($hasValidParentEmail) {
                                 Mail::to($validated['parent_email'])->queue(new \App\Mail\NotifGroupEnrollmentMail(
                                     $groupSubject, $groupBody, $groupVariables, $tenant->name, $student->name
@@ -209,13 +209,14 @@ class StudentController extends Controller
                     }
                 }
             } catch (\Exception $mailEx) {
-                Log::error('Instructor welcome/enrollment email failed: ' . $mailEx->getMessage());
+                Log::error('Instructor welcome/enrollment email failed: '.$mailEx->getMessage());
             }
 
             return redirect()->route('instructor.students.list')->with('success', __('instructor::messages.student_added', ['name' => $validated['name']]));
         } catch (\Exception $e) {
             \DB::rollBack();
-            Log::error('Manual student registration failed: ' . $e->getMessage());
+            Log::error('Manual student registration failed: '.$e->getMessage());
+
             return back()->withInput()->with('error', __('instructor::messages.error_adding_student', ['message' => $e->getMessage()]));
         }
     }
@@ -226,17 +227,17 @@ class StudentController extends Controller
     public function show(Student $student)
     {
         $instructor = $this->instructor;
-        
+
         if ($instructor) {
             $isEnrolled = Enrollment::where('user_id', $student->user_id)
                 ->whereIn('course_id', $instructor->courses->pluck('id'))
                 ->exists();
-            if (!$isEnrolled) {
+            if (! $isEnrolled) {
                 abort(403);
             }
         }
 
-        $student->load(['user', 'enrollments.course', 'sales' => function($q) {
+        $student->load(['user', 'enrollments.course', 'sales' => function ($q) {
             $q->latest();
         }]);
 
@@ -259,26 +260,26 @@ class StudentController extends Controller
     public function destroy(Student $student)
     {
         $instructor = $this->instructor;
-        
+
         if ($instructor) {
             $isAssociated = Enrollment::where('user_id', $student->user_id)
                 ->whereIn('course_id', $instructor->courses->pluck('id'))
                 ->exists();
-            
-            if (!$isAssociated) {
+
+            if (! $isAssociated) {
                 abort(403, __('instructor::messages.unauthorized'));
             }
         }
 
         try {
             \DB::beginTransaction();
-            
+
             $studentName = $student->name;
             $userId = $student->user_id;
 
             Enrollment::where('user_id', $userId)->delete();
             \Modules\Center\Models\Attendance::where('student_id', $student->id)->delete();
-            Payment::whereHas('sale', function($q) use ($student) {
+            Payment::whereHas('sale', function ($q) use ($student) {
                 $q->where('student_id', $student->id);
             })->delete();
             Sale::where('student_id', $student->id)->delete();
@@ -290,10 +291,12 @@ class StudentController extends Controller
             }
 
             \DB::commit();
+
             return redirect()->route('instructor.students.list')->with('success', __('instructor::messages.student_deleted', ['name' => $studentName]));
         } catch (\Exception $e) {
             \DB::rollBack();
-            Log::error('Student deletion failed: ' . $e->getMessage());
+            Log::error('Student deletion failed: '.$e->getMessage());
+
             return back()->with('error', __('instructor::messages.error_deleting_student', ['message' => $e->getMessage()]));
         }
     }
@@ -305,6 +308,7 @@ class StudentController extends Controller
     {
         $this->authorizeInstructor($student);
         $student->update(['status' => $student->status === 'active' ? 'frozen' : 'active']);
+
         return back()->with('success', __('instructor::messages.updated'));
     }
 
@@ -315,6 +319,7 @@ class StudentController extends Controller
     {
         $this->authorizeInstructor($student);
         $student->update(['notes' => $request->notes]);
+
         return back()->with('success', __('instructor::messages.saved'));
     }
 
@@ -342,22 +347,22 @@ class StudentController extends Controller
     public function export()
     {
         $instructor = $this->instructor;
-        
-        if (!$instructor) {
+
+        if (! $instructor) {
             $students = Student::with(['enrollments.course'])->get();
         } else {
-            $students = Student::whereHas('enrollments', function($q) use ($instructor) {
+            $students = Student::whereHas('enrollments', function ($q) use ($instructor) {
                 $q->whereIn('course_id', $instructor->courses->pluck('id'));
             })->with(['enrollments.course'])->get();
         }
 
-        $filename = "students_export_" . date('Y-m-d') . ".csv";
+        $filename = 'students_export_'.date('Y-m-d').'.csv';
         $headers = [
-            "Content-type"        => "text/csv; charset=UTF-8",
-            "Content-Disposition" => "attachment; filename=$filename",
-            "Pragma"              => "no-cache",
-            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-            "Expires"             => "0"
+            'Content-type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=$filename",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
         ];
 
         $columns = [
@@ -366,12 +371,12 @@ class StudentController extends Controller
             __('instructor::messages.csv_parent_phone'),
             __('instructor::messages.csv_groups'),
             __('instructor::messages.csv_registration_date'),
-            __('instructor::messages.csv_status')
+            __('instructor::messages.csv_status'),
         ];
 
-        $callback = function() use($students, $columns) {
+        $callback = function () use ($students, $columns) {
             $file = fopen('php://output', 'w');
-            fputs($file, "\xEF\xBB\xBF");
+            fwrite($file, "\xEF\xBB\xBF");
             fputcsv($file, $columns);
 
             foreach ($students as $student) {
@@ -397,7 +402,7 @@ class StudentController extends Controller
     {
         $request->validate([
             'csv_file' => 'required|file|mimes:csv,txt|max:2048',
-            'course_id' => 'required|exists:courses,id'
+            'course_id' => 'required|exists:courses,id',
         ]);
 
         $instructor = $this->instructor;
@@ -414,13 +419,15 @@ class StudentController extends Controller
         $imported = 0;
         $errors = 0;
 
-        while (($data = fgetcsv($handle)) !== FALSE) {
+        while (($data = fgetcsv($handle)) !== false) {
             try {
                 $name = $data[0] ?? null;
                 $phone = $data[1] ?? null;
                 $parent_phone = $data[2] ?? null;
 
-                if (!$name || !$phone) continue;
+                if (! $name || ! $phone) {
+                    continue;
+                }
 
                 $student = Student::firstOrCreate(
                     ['phone' => $phone, 'tenant_id' => $instructor->tenant_id],
@@ -440,7 +447,7 @@ class StudentController extends Controller
         }
         fclose($handle);
 
-        return back()->with('success', __('instructor::messages.import_success', ['count' => $imported]) . ($errors ? " " . __('instructor::messages.import_errors', ['count' => $errors]) : ""));
+        return back()->with('success', __('instructor::messages.import_success', ['count' => $imported]).($errors ? ' '.__('instructor::messages.import_errors', ['count' => $errors]) : ''));
     }
 
     /**
@@ -449,12 +456,14 @@ class StudentController extends Controller
     public function sendEmail(Request $request, Student $student)
     {
         $instructor = $this->instructor;
-        
+
         if ($instructor) {
             $isEnrolled = Enrollment::where('user_id', $student->user_id)
                 ->whereIn('course_id', $instructor->courses->pluck('id'))
                 ->exists();
-            if (!$isEnrolled) abort(403);
+            if (! $isEnrolled) {
+                abort(403);
+            }
         }
 
         $request->validate([
@@ -464,7 +473,7 @@ class StudentController extends Controller
 
         $email = $student->email ?: ($student->user ? $student->user->email : null);
 
-        if (!$email) {
+        if (! $email) {
             return back()->with('error', 'هذا الطالب لا يمتلك بريداً إلكترونياً مسجلاً.');
         }
 
@@ -473,10 +482,12 @@ class StudentController extends Controller
             Mail::to($email)->queue(new \App\Mail\CustomStudentMail(
                 $student, $request->subject, $request->message, $senderName
             ));
+
             return back()->with('success', 'تم إرسال البريد الإلكتروني للطالب بنجاح.');
         } catch (\Exception $e) {
-            Log::error("Failed to send email to student {$student->id}: " . $e->getMessage());
-            return back()->with('error', 'حدث خطأ أثناء الإرسال: ' . $e->getMessage());
+            Log::error("Failed to send email to student {$student->id}: ".$e->getMessage());
+
+            return back()->with('error', 'حدث خطأ أثناء الإرسال: '.$e->getMessage());
         }
     }
 
@@ -486,7 +497,7 @@ class StudentController extends Controller
     public function checkPhone(Request $request)
     {
         $phone = $request->get('phone');
-        if (!$phone || strlen($phone) < 11) {
+        if (! $phone || strlen($phone) < 11) {
             return response()->json(['status' => 'invalid']);
         }
 
@@ -496,7 +507,7 @@ class StudentController extends Controller
             return response()->json([
                 'status' => 'exists',
                 'name' => auth()->check() ? $user->name : null,
-                'role' => $user->role
+                'role' => $user->role,
             ]);
         }
 
@@ -525,21 +536,24 @@ class StudentController extends Controller
 
     private function getOrCreateUserForStudent($student)
     {
-        if ($student->user_id) return $student->user_id;
-        
+        if ($student->user_id) {
+            return $student->user_id;
+        }
+
         $user = \App\Models\User::where('phone', $student->phone)->first();
-        if (!$user) {
+        if (! $user) {
             $user = \App\Models\User::create([
                 'name' => $student->name,
                 'phone' => $student->phone,
-                'email' => $student->phone . '@edu.com',
+                'email' => $student->phone.'@edu.com',
                 'password' => bcrypt(\Illuminate\Support\Str::random(12)),
                 'role' => 'student',
                 'tenant_id' => $student->tenant_id,
             ]);
         }
-        
+
         $student->update(['user_id' => $user->id]);
+
         return $user->id;
     }
 }

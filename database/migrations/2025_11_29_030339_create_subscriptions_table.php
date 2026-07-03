@@ -14,16 +14,16 @@ return new class extends Migration
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tenant_id')->constrained()->cascadeOnDelete();
-            
+
             // Manual Billing / Appraisal fields
-            $table->unsignedBigInteger('package_id')->nullable(); 
+            $table->unsignedBigInteger('package_id')->nullable();
             $table->unsignedBigInteger('coupon_id')->nullable();
             $table->string('coupon_code')->nullable();
             $table->decimal('discount_amount', 10, 2)->default(0);
             $table->decimal('total_amount', 10, 2)->nullable();
             $table->string('billing_cycle')->nullable()->default('monthly');
             $table->decimal('base_price', 10, 2)->nullable();
-            
+
             // Cashier / Stripe fields
             $table->string('name'); // e.g. 'default'
             $table->string('stripe_id')->unique();
@@ -31,14 +31,14 @@ return new class extends Migration
             $table->string('stripe_price')->nullable();
             $table->integer('quantity')->nullable();
             $table->timestamp('trial_ends_at')->nullable();
-            
+
             // Dates & status
             $table->dateTime('starts_at')->nullable();
             $table->dateTime('ends_at')->nullable();
             $table->enum('status', ['active', 'expired', 'cancelled', 'trialing'])->default('active');
-            
+
             $table->timestamps();
-            
+
             $table->index(['tenant_id', 'stripe_status']);
         });
 

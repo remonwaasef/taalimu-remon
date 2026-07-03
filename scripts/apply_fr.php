@@ -8,8 +8,8 @@ $kernel->bootstrap();
 use Illuminate\Support\Arr;
 
 $langDirs = [
-    'core' => __DIR__ . '/resources/lang',
-    'center' => __DIR__ . '/Modules/Center/resources/lang'
+    'core' => __DIR__.'/resources/lang',
+    'center' => __DIR__.'/Modules/Center/resources/lang',
 ];
 
 $translations = [
@@ -71,7 +71,7 @@ $translations = [
             'students' => 'Étudiants',
             'instructors' => 'Instructeurs',
             'regional_prices' => 'Prix Régionaux',
-            'auto_detected' => 'Détection Automatique'
+            'auto_detected' => 'Détection Automatique',
         ],
         'core/auth.php' => [
             'failed' => 'Ces identifiants ne correspondent pas à nos enregistrements.',
@@ -134,7 +134,7 @@ $translations = [
             'registration.bookmark_hint' => 'Ajoutez ce lien à vos favoris pour un accès rapide',
             'registration.copy' => 'Copier',
             'registration.copied' => 'Copié !',
-            'registration.url_copied' => 'L\'URL a été copiée !'
+            'registration.url_copied' => 'L\'URL a été copiée !',
         ],
         'core/dashboard.php' => [
             'dashboard' => 'Tableau de bord',
@@ -149,7 +149,7 @@ $translations = [
             'sales' => 'Ventes',
             'subscription' => 'Abonnement',
             'activity_logs' => 'Journaux d\'activité',
-            'profile' => 'Profil'
+            'profile' => 'Profil',
         ],
         'core/features.php' => [
             'yes' => 'Oui',
@@ -159,7 +159,7 @@ $translations = [
             'video_support' => 'Support Vidéo',
             'marketing_tools' => 'Outils Marketing',
             'custom_domain' => 'Domaine Personnalisé',
-            'remove_branding' => 'Supprimer la Marque'
+            'remove_branding' => 'Supprimer la Marque',
         ],
         'core/landing.php' => [
             'pricing.per_year' => '/ par an',
@@ -189,7 +189,7 @@ $translations = [
             'pricing.comparison.categories.analysis.features.technical_support' => 'Support Technique',
             'pricing.comparison.plans.free.branches' => false,
             'pricing.comparison.plans.free.sms' => false,
-            'pricing.comparison.plans.basic.branches' => false
+            'pricing.comparison.plans.basic.branches' => false,
         ],
         'core/sidebar.php' => [
             'dashboard' => 'Tableau de bord',
@@ -206,7 +206,7 @@ $translations = [
             'overview' => 'Aperçu',
             'consent_report' => 'Rapport de Consentement',
             'rights_reserved' => 'Tous droits réservés',
-            'developed_by' => 'Développé par'
+            'developed_by' => 'Développé par',
         ],
         'core/validation.php' => [
             'accepted' => 'Le champ :attribute doit être accepté.',
@@ -342,10 +342,10 @@ $translations = [
             'attributes.name' => 'Nom Complet',
             'attributes.email' => 'Adresse E-mail',
             'attributes.password' => 'Mot de passe',
-            'attributes.plan' => 'Forfait'
+            'attributes.plan' => 'Forfait',
         ],
         'center/analytics.php' => [
-            'general' => 'Analyses'
+            'general' => 'Analyses',
         ],
         'center/billing.php' => [
             'current_subscription' => 'Abonnement Actuel',
@@ -356,7 +356,7 @@ $translations = [
             'subscribe' => 'S\'abonner',
             'unlimited' => 'Illimité',
             'unknown_package' => 'Forfait Inconnu',
-            'currency' => '$'
+            'currency' => '$',
         ],
         'center/branches.php' => [
             'edit_branch' => 'Modifier la Succursale',
@@ -368,12 +368,12 @@ $translations = [
             'no_branches_found' => 'Aucune succursale.',
             'select_manager' => 'Sélectionnez un Gérant',
             'cancel' => 'Annuler',
-            'save_changes' => 'Enregistrer'
+            'save_changes' => 'Enregistrer',
         ],
         'center/classrooms.php' => [
             'students_count' => '{0} Étudiant|{1} 1 Étudiant|[2,*] :count Étudiants',
             'add_asset' => 'Ajouter un équipement',
-            'assets_count' => 'Équipements'
+            'assets_count' => 'Équipements',
         ],
         'center/courses.php' => [
             'search_placeholder' => 'Rechercher un cours...',
@@ -390,7 +390,7 @@ $translations = [
             'content' => 'Contenu',
             'view' => 'Voir',
             'enroll_student' => 'Inscrire l\'étudiant',
-            'delete_confirm' => 'Êtes-vous sûr de vouloir supprimer ce cours ?'
+            'delete_confirm' => 'Êtes-vous sûr de vouloir supprimer ce cours ?',
         ],
         'center/dashboard.php' => [
             'active_students' => 'Étudiants Actifs',
@@ -473,7 +473,7 @@ $translations = [
             'launchpad.steps.student.title' => 'Étudiants',
             'launchpad.steps.student.desc' => 'Inscrivez un étudiant.',
             'launchpad.steps.attendance.title' => 'Présences',
-            'launchpad.steps.attendance.desc' => 'Gérez les présences.'
+            'launchpad.steps.attendance.desc' => 'Gérez les présences.',
         ],
         'center/instructors.php' => [
             'search_placeholder' => 'Rechercher un instructeur...',
@@ -492,7 +492,7 @@ $translations = [
             'courses_count' => 'Cours',
             'show' => 'Afficher',
             'delete' => 'Supprimer',
-            'phone' => 'Téléphone'
+            'phone' => 'Téléphone',
         ],
         'center/sales.php' => [
             'select_courses' => 'Sélectionner des Cours',
@@ -507,7 +507,7 @@ $translations = [
             'bank_transfer' => 'Virement Bancaire',
             'select_student' => 'Sélectionner un Étudiant',
             'item_already_in_cart' => 'Ce cours est déjà dans le panier',
-            'please_select_student' => 'Veuillez sélectionner un étudiant'
+            'please_select_student' => 'Veuillez sélectionner un étudiant',
         ],
         'center/settings.php' => [
             'general.timezone' => 'Fuseau Horaire',
@@ -517,7 +517,7 @@ $translations = [
             'academic.threshold_minutes' => 'Minutes',
             'academic.level_label' => 'Description (ex: Retard léger)',
             'academic.add_level' => 'Ajouter un Niveau',
-            'academic.confirm_delete_level' => 'Êtes-vous sûr ?'
+            'academic.confirm_delete_level' => 'Êtes-vous sûr ?',
         ],
         'center/sidebar.php' => [
             'expenses' => 'Dépenses',
@@ -526,45 +526,49 @@ $translations = [
             'student_updated' => 'Étudiant mis à jour',
             'student_deleted' => 'Étudiant supprimé',
             'assets' => 'Équipements',
-            'school_management' => 'Gestion Scolaire'
+            'school_management' => 'Gestion Scolaire',
         ],
         'center/students.php' => [
-            'export_file' => 'Exporter le Fichier'
-        ]
-    ]
+            'export_file' => 'Exporter le Fichier',
+        ],
+    ],
 ];
 
-function arrayToCode($array, $indent = 1) {
-    if (empty($array)) return '[]';
+function arrayToCode($array, $indent = 1)
+{
+    if (empty($array)) {
+        return '[]';
+    }
     $code = "[\n";
     $spaces = str_repeat('    ', $indent);
     foreach ($array as $key => $value) {
-        $keyFormatted = is_string($key) ? "'" . addslashes($key) . "'" : $key;
-        $code .= $spaces . $keyFormatted . ' => ';
+        $keyFormatted = is_string($key) ? "'".addslashes($key)."'" : $key;
+        $code .= $spaces.$keyFormatted.' => ';
         if (is_array($value)) {
-            $code .= arrayToCode($value, $indent + 1) . ",\n";
+            $code .= arrayToCode($value, $indent + 1).",\n";
         } elseif (is_string($value)) {
-            $code .= "'" . addslashes($value) . "',\n";
+            $code .= "'".addslashes($value)."',\n";
         } elseif (is_bool($value)) {
-            $code .= ($value ? 'true' : 'false') . ",\n";
+            $code .= ($value ? 'true' : 'false').",\n";
         } elseif (is_numeric($value)) {
-            $code .= $value . ",\n";
+            $code .= $value.",\n";
         } else {
             $code .= "null,\n";
         }
     }
-    $code .= str_repeat('    ', $indent - 1) . ']';
+    $code .= str_repeat('    ', $indent - 1).']';
+
     return $code;
 }
 
 foreach ($translations as $locale => $files) {
     foreach ($files as $fileKey => $keysToUpdate) {
-        list($type, $filename) = explode('/', $fileKey);
+        [$type, $filename] = explode('/', $fileKey);
         $baseDir = $langDirs[$type];
-        $filePath = $baseDir . '/' . $locale . '/' . $filename;
-        
-        if (!file_exists($filePath)) {
-            if (!is_dir(dirname($filePath))) {
+        $filePath = $baseDir.'/'.$locale.'/'.$filename;
+
+        if (! file_exists($filePath)) {
+            if (! is_dir(dirname($filePath))) {
                 mkdir(dirname($filePath), 0755, true);
             }
             $currentData = [];
@@ -576,7 +580,7 @@ foreach ($translations as $locale => $files) {
             Arr::set($currentData, $dotKey, $value);
         }
 
-        $code = "<?php\n\nreturn " . arrayToCode($currentData) . ";\n";
+        $code = "<?php\n\nreturn ".arrayToCode($currentData).";\n";
         file_put_contents($filePath, $code);
         echo "Updated $filePath\n";
     }

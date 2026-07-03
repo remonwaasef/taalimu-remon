@@ -56,7 +56,7 @@ class OnlineClassController extends Controller
     {
         $tenantId = app('tenant')->id ?? auth()->user()->tenant_id;
         $class = OnlineClass::where('tenant_id', $tenantId)->findOrFail($id);
-        
+
         $class->delete();
 
         return back()->with('success', __('center::messages.deleted_successfully') ?? 'تم حذف الجلسة بنجاح.');

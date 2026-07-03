@@ -29,6 +29,7 @@ class IssueLogger
             $existing = $this->duplicateDetector->find($fingerprint);
             if ($existing) {
                 $existing->incrementOccurrence();
+
                 return $existing;
             }
 
@@ -75,6 +76,7 @@ class IssueLogger
                 'original_error' => $e->getMessage(),
                 'logger_error' => $logError->getMessage(),
             ]);
+
             return null;
         }
     }
@@ -86,7 +88,7 @@ class IssueLogger
     {
         try {
             $request = request();
-            
+
             $issue = OperationIssue::create([
                 'uuid' => Str::uuid(),
                 'tenant_id' => $options['tenant_id'] ?? (\Modules\Tenancy\Services\TenantResolver::id()),
@@ -101,7 +103,7 @@ class IssueLogger
                 'stack_trace' => $options['stack_trace'] ?? null,
                 'severity' => $options['severity'] ?? 'medium',
                 'category' => $options['category'] ?? 'business_logic',
-                'fingerprint' => md5($action . '|' . $message),
+                'fingerprint' => md5($action.'|'.$message),
                 'user_agent' => $request->userAgent(),
                 'ip_address' => $request->ip(),
                 'tags' => $options['tags'] ?? null,
@@ -124,6 +126,7 @@ class IssueLogger
                 'message' => $message,
                 'error' => $e->getMessage(),
             ]);
+
             return null;
         }
     }
@@ -135,7 +138,7 @@ class IssueLogger
     {
         return $this->log(
             $request->route()?->getName() ?? 'validation.failed',
-            'Validation failed: ' . json_encode(array_keys($errors)),
+            'Validation failed: '.json_encode(array_keys($errors)),
             [
                 'severity' => 'low',
                 'category' => 'validation',
@@ -150,7 +153,7 @@ class IssueLogger
      */
     protected function sanitizePayload(?array $data): ?array
     {
-        if (!$data) {
+        if (! $data) {
             return null;
         }
 
@@ -176,12 +179,12 @@ class IssueLogger
                     return '[REDACTED]';
                 }
             }
-            
+
             // Recursively sanitize nested arrays
             if (is_array($value)) {
                 return $this->sanitizePayload($value);
             }
-            
+
             return $value;
         })->toArray();
     }
@@ -191,7 +194,7 @@ class IssueLogger
      */
     protected function captureContext(?Request $request): ?array
     {
-        if (!$request) {
+        if (! $request) {
             return null;
         }
 
@@ -221,6 +224,7 @@ class IssueLogger
             if (in_array(strtolower($key), $sensitiveHeaders)) {
                 return ['[REDACTED]'];
             }
+
             return $value;
         })->toArray();
     }
@@ -230,7 +234,7 @@ class IssueLogger
      */
     protected function guessActionFromRequest(?Request $request): string
     {
-        if (!$request) {
+        if (! $request) {
             return 'unknown';
         }
 
@@ -244,5 +248,3 @@ class IssueLogger
         return "{$method}.{$path}";
     }
 }
-
-

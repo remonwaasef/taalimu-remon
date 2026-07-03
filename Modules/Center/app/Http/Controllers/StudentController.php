@@ -2,27 +2,26 @@
 
 namespace Modules\Center\Http\Controllers;
 
-use Modules\Center\Http\Controllers\CenterBaseController as Controller;
-use App\Models\Student;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use App\Models\Sale;
-use App\Models\Payment;
-use App\Models\Refund;
-use Illuminate\Http\Response;
-use App\Services\StudentService;
-use App\Queries\StudentQuery;
+use App\DTOs\StudentData;
 use App\Http\Requests\Center\StoreStudentRequest;
 use App\Http\Requests\Center\UpdateStudentRequest;
-use App\DTOs\StudentData;
+use App\Models\Payment;
+use App\Models\Refund;
+use App\Models\Sale;
+use App\Models\Student;
+use App\Queries\StudentQuery;
+use App\Services\StudentService;
 use App\Traits\HandlesFileUploads;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Modules\Center\Http\Controllers\CenterBaseController as Controller;
 
 class StudentController extends Controller
 {
     use HandlesFileUploads;
-    
+
     protected $studentService;
+
     protected $studentQuery;
 
     public function __construct(StudentService $studentService, StudentQuery $studentQuery)
@@ -41,28 +40,31 @@ class StudentController extends Controller
         if ($withTrashed) {
             $query->withTrashed();
         }
-        if (!empty($with)) {
+        if (! empty($with)) {
             $query->with($with);
         }
+
         return $query->findOrFail($id);
     }
+
     public function index(Request $request)
     {
         $this->authorize('viewAny', Student::class);
-        
+
         $query = Student::query();
         $query = $this->studentQuery->apply($query, $request->all());
 
         $students = $query->with(['grade.stage', 'enrollments.course', 'sales'])->latest()->paginate(10);
-        
+
         // Calculate financial data for each student for filtering
-        $students->getCollection()->transform(function($student) {
-            $totalDue = $student->enrollments->sum(function($enrollment) {
+        $students->getCollection()->transform(function ($student) {
+            $totalDue = $student->enrollments->sum(function ($enrollment) {
                 return $enrollment->course->price ?? 0;
             });
             $totalPaid = $student->sales->sum('paid_amount');
             $student->total_balance = $totalDue - $totalPaid;
             $student->financial_status = $student->total_balance > 0 ? 'debt' : 'paid';
+
             return $student;
         });
 
@@ -72,20 +74,18 @@ class StudentController extends Controller
         return view('center::students.index', compact('students', 'stages', 'courses'));
     }
 
-
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
         $this->authorize('create', Student::class);
-        
+
         $stages = \App\Models\Stage::getCached();
         $courses = \App\Models\Course::where('tenant_id', $this->tenant->id)->orderBy('title')->get();
-        
+
         return view('center::students.create', compact('stages', 'courses'));
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -94,7 +94,7 @@ class StudentController extends Controller
     {
         $this->authorize('create', Student::class);
 
-        if (!$this->tenant->hasFeature('max_students')) {
+        if (! $this->tenant->hasFeature('max_students')) {
             return redirect()->back()->with('error', __('center::students.max_limit_reached'));
         }
 
@@ -109,7 +109,7 @@ class StudentController extends Controller
             );
 
             $result = $this->studentService->registerStudent(StudentData::fromArray($data), auth()->user());
-            
+
             // Store info in session to display to the user
             session()->flash('generated_password', $result['generated_password']);
             session()->flash('student_name', $result['student']->name);
@@ -124,11 +124,11 @@ class StudentController extends Controller
 
             return redirect()->route('center.students.index', ['tenant' => $this->tenant->domain])->with('success', __('center::messages.msg_081'));
         } catch (\Exception $e) {
-            \Log::error('Student registration failed: ' . $e->getMessage());
-            return redirect()->back()->withInput()->with('error', __('center::messages.registration_failed') ?? 'حدث خطأ أثناء التسجيل: ' . $e->getMessage());
+            \Log::error('Student registration failed: '.$e->getMessage());
+
+            return redirect()->back()->withInput()->with('error', __('center::messages.registration_failed') ?? 'حدث خطأ أثناء التسجيل: '.$e->getMessage());
         }
     }
-
 
     /**
      * Show the specified resource.
@@ -136,9 +136,9 @@ class StudentController extends Controller
     public function show($id)
     {
         $student = $this->findStudentOrFail($id, ['grade.stage', 'user', 'tenant']);
-            
+
         $this->authorize('view', $student);
-            
+
         $data = $this->studentService->getProfileData($student);
 
         return view('center::students.show', array_merge(['student' => $student], $data));
@@ -151,12 +151,11 @@ class StudentController extends Controller
     {
         $student = $this->findStudentOrFail($id);
         $this->authorize('update', $student);
-        
+
         $stages = \App\Models\Stage::getCached();
-        
+
         return view('center::students.edit', compact('student', 'stages'));
     }
-
 
     /**
      * Update the specified resource in storage.
@@ -170,7 +169,7 @@ class StudentController extends Controller
         // $request->merge(['user_id_to_exclude' => $student->user_id]);
 
         $data = $request->validated();
-        
+
         // Handle Profile Photo Upload using trait
         $data['profile_photo'] = $this->handleFileUpload(
             $request,
@@ -235,7 +234,7 @@ class StudentController extends Controller
                     'date' => $s->created_at,
                     'type' => 'invoice',
                     'amount' => $s->total_amount,
-                    'description' => 'فاتورة مبيعات #' . $s->id,
+                    'description' => 'فاتورة مبيعات #'.$s->id,
                     'is_credit' => false,
                     'ref_id' => $s->id,
                 ];
@@ -243,8 +242,8 @@ class StudentController extends Controller
 
         // Fetch recent Payments - Credits (Money student paid)
         $payments = Payment::whereHas('sale', function ($q) use ($student) {
-                $q->where('student_id', $student->id);
-            })
+            $q->where('student_id', $student->id);
+        })
             ->with(['receiver'])
             ->latest()
             ->limit(500)
@@ -254,7 +253,7 @@ class StudentController extends Controller
                     'date' => $p->paid_at ?? $p->created_at,
                     'type' => 'payment',
                     'amount' => $p->amount,
-                    'description' => 'دفعة نقدية - الاستلام بواسطة: ' . ($p->receiver->name ?? 'طالب') . ' - فاتورة #' . $p->sale_id,
+                    'description' => 'دفعة نقدية - الاستلام بواسطة: '.($p->receiver->name ?? 'طالب').' - فاتورة #'.$p->sale_id,
                     'is_credit' => true,
                     'ref_id' => $p->id,
                 ];
@@ -262,8 +261,8 @@ class StudentController extends Controller
 
         // Fetch recent Refunds - Debits (Money returned to student, reversing payment)
         $refunds = Refund::whereHas('sale', function ($q) use ($student) {
-                $q->where('student_id', $student->id);
-            })
+            $q->where('student_id', $student->id);
+        })
             ->with('processor')
             ->latest()
             ->limit(500)
@@ -273,7 +272,7 @@ class StudentController extends Controller
                     'date' => $r->created_at,
                     'type' => 'refund',
                     'amount' => $r->amount, // Amount returned
-                    'description' => 'استرداد مالي (Refund) - فاتورة #' . $r->sale_id . ($r->reason ? ' - ' . $r->reason : ''),
+                    'description' => 'استرداد مالي (Refund) - فاتورة #'.$r->sale_id.($r->reason ? ' - '.$r->reason : ''),
                     'is_credit' => false, // Reduces their credit, essentially increasing debt effectively
                     'ref_id' => $r->id,
                 ];
@@ -291,6 +290,7 @@ class StudentController extends Controller
                 $balance += $transaction['amount']; // Invoice or Refund increases debt
             }
             $transaction['balance'] = $balance;
+
             return $transaction;
         });
 
@@ -319,7 +319,7 @@ class StudentController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => __('center::messages.msg_084'),
-                'restore_url' => route('center.students.restore', ['tenant' => $this->tenant->domain, 'id' => $id])
+                'restore_url' => route('center.students.restore', ['tenant' => $this->tenant->domain, 'id' => $id]),
             ]);
         }
 
@@ -343,25 +343,26 @@ class StudentController extends Controller
     public function export()
     {
         $this->authorize('viewAny', Student::class);
-        
+
         return response()->streamDownload(function () {
             $students = $this->studentService->getExportData();
             $csvHeader = ['ID', 'Name', 'Email', 'Phone', 'Grade Level', 'School', 'Section', 'Status'];
             $handle = fopen('php://output', 'w');
-            
+
             // Add BOM for Excel compatibility with Arabic
-            fputs($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
-            
+            fwrite($handle, chr(0xEF).chr(0xBB).chr(0xBF));
+
             fputcsv($handle, $csvHeader);
             foreach ($students as $row) {
                 fputcsv($handle, $row);
             }
-            
+
             fclose($handle);
         }, 'students_export.csv', [
             'Content-Type' => 'text/csv',
         ]);
     }
+
     /**
      * Download dynamic import template with real grades.
      */
@@ -371,7 +372,7 @@ class StudentController extends Controller
 
         // Fetch real grades for this tenant
         $grades = \App\Models\Grade::where('tenant_id', $this->tenant->id)->limit(3)->get();
-        
+
         $sampleData = [];
         if ($grades->isEmpty()) {
             $sampleData[] = ['Ahmed Ali', 'ahmed1@example.com', '01012345678', 'Primary 1'];
@@ -393,23 +394,23 @@ class StudentController extends Controller
         $html .= '<style>td{mso-number-format:\@;padding:5px;border:1px solid #ccc;font-family:Arial,sans-serif;font-size:12pt;} th{background:#4CAF50;color:#fff;padding:8px;border:1px solid #388E3C;font-family:Arial,sans-serif;font-size:12pt;font-weight:bold;}</style>';
         $html .= '</head><body>';
         $html .= '<table>';
-        
+
         // Header row
         $html .= '<tr>';
         foreach (['name', 'email', 'phone', 'grade_level'] as $header) {
-            $html .= '<th>' . e($header) . '</th>';
+            $html .= '<th>'.e($header).'</th>';
         }
         $html .= '</tr>';
-        
+
         // Data rows
         foreach ($sampleData as $row) {
             $html .= '<tr>';
             foreach ($row as $cell) {
-                $html .= '<td>' . e($cell) . '</td>';
+                $html .= '<td>'.e($cell).'</td>';
             }
             $html .= '</tr>';
         }
-        
+
         $html .= '</table></body></html>';
 
         return response($html)
@@ -423,6 +424,7 @@ class StudentController extends Controller
     public function importForm()
     {
         $this->authorize('create', Student::class);
+
         return view('center::students.import');
     }
 
@@ -433,8 +435,8 @@ class StudentController extends Controller
     {
         // Authorization: ensure user can create students
         $this->authorize('create', Student::class);
-        
-        if (!$this->tenant->hasFeature('max_students')) {
+
+        if (! $this->tenant->hasFeature('max_students')) {
             return redirect()->back()->with('error', __('center::messages.msg_085'));
         }
 
@@ -447,17 +449,17 @@ class StudentController extends Controller
             ]);
 
             $pasteData = $request->input('paste_data');
-            $lines = array_filter(explode("\n", $pasteData), fn($line) => trim($line) !== '');
+            $lines = array_filter(explode("\n", $pasteData), fn ($line) => trim($line) !== '');
 
             if (empty($lines)) {
                 return redirect()->back()->withErrors(['paste_data' => 'لا توجد بيانات صالحة للاستيراد.']);
             }
 
             // Convert pasted data to CSV file
-            $csvPath = 'temp/imports/' . uniqid('paste_') . '.csv';
-            $fullCsvPath = storage_path('app/' . $csvPath);
+            $csvPath = 'temp/imports/'.uniqid('paste_').'.csv';
+            $fullCsvPath = storage_path('app/'.$csvPath);
 
-            if (!is_dir(dirname($fullCsvPath))) {
+            if (! is_dir(dirname($fullCsvPath))) {
                 mkdir(dirname($fullCsvPath), 0755, true);
             }
 
@@ -472,9 +474,11 @@ class StudentController extends Controller
                 $cols = array_map('trim', $cols);
 
                 // Skip header rows
-                if (isset($cols[0]) && strtolower($cols[0]) === 'name') continue;
+                if (isset($cols[0]) && strtolower($cols[0]) === 'name') {
+                    continue;
+                }
 
-                if (count($cols) >= 2 && !empty($cols[0]) && !empty($cols[1])) {
+                if (count($cols) >= 2 && ! empty($cols[0]) && ! empty($cols[1])) {
                     fputcsv($fp, [
                         $cols[0] ?? '',        // name
                         $cols[1] ?? '',        // email
@@ -495,14 +499,16 @@ class StudentController extends Controller
 
             $path = $request->file('file')->store('temp/imports');
         }
-        
+
         try {
             \App\Jobs\ImportStudentsJob::dispatch($path, $this->tenant->id, auth()->id());
+
             return redirect()->route('center.students.index', ['tenant' => $this->tenant->domain])
-                ->with('success', __('center::messages.msg_086') . ' - جاري المعالجة في الخلفية');
+                ->with('success', __('center::messages.msg_086').' - جاري المعالجة في الخلفية');
         } catch (\Exception $e) {
-            \Log::error('Student import failed: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'حدث خطأ أثناء الاستيراد: ' . $e->getMessage());
+            \Log::error('Student import failed: '.$e->getMessage());
+
+            return redirect()->back()->with('error', 'حدث خطأ أثناء الاستيراد: '.$e->getMessage());
         }
     }
 
@@ -519,13 +525,13 @@ class StudentController extends Controller
             ->where('phone', $request->phone)
             ->first();
 
-        if (!$guardian) {
+        if (! $guardian) {
             return response()->json(['found' => false]);
         }
 
         return response()->json([
             'found' => true,
-            'guardian' => $guardian
+            'guardian' => $guardian,
         ]);
     }
 
@@ -544,28 +550,30 @@ class StudentController extends Controller
 
         $email = $student->email ?: ($student->user ? $student->user->email : null);
 
-        if (!$email) {
+        if (! $email) {
             return redirect()->back()->with('error', __('center::messages.no_student_email'));
         }
 
         try {
             \Illuminate\Support\Facades\Mail::to($email)->queue(new \App\Mail\CustomStudentMail(
-                $student, 
-                $request->subject, 
+                $student,
+                $request->subject,
                 $request->message,
                 $this->tenant->name
             ));
-            
+
             return redirect()->back()->with('success', __('center::messages.email_sent_success'));
         } catch (\Exception $e) {
-            \Log::error("Failed to send email to student {$student->id}: " . $e->getMessage());
-            return redirect()->back()->with('error', __('center::messages.email_send_error') . ': ' . $e->getMessage());
+            \Log::error("Failed to send email to student {$student->id}: ".$e->getMessage());
+
+            return redirect()->back()->with('error', __('center::messages.email_send_error').': '.$e->getMessage());
         }
     }
 
     public function idCard($id)
     {
         $student = $this->findStudentOrFail($id);
+
         return view('center::students.id_card', compact('student'));
     }
 }

@@ -2,15 +2,14 @@
 
 namespace App\Models;
 
-use App\Scopes\TenantScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Schedule extends Model
 {
-    use HasFactory, LogsActivity, \App\Traits\IdentifyTenant;
+    use \App\Traits\IdentifyTenant, HasFactory, LogsActivity;
 
     protected $fillable = [
         'tenant_id',
@@ -39,13 +38,14 @@ class Schedule extends Model
 
     public function clearCache()
     {
-        cache()->forget('schedules_' . $this->tenant_id);
+        cache()->forget('schedules_'.$this->tenant_id);
     }
 
     public static function getCachedSchedules()
     {
         $tenantId = app('tenant')->id;
-        return cache()->remember('schedules_' . $tenantId, now()->addDay(), function () use ($tenantId) {
+
+        return cache()->remember('schedules_'.$tenantId, now()->addDay(), function () use ($tenantId) {
             return self::where('tenant_id', $tenantId)
                 ->with(['course', 'classroom', 'instructor'])
                 ->get();

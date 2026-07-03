@@ -5,8 +5,8 @@ namespace App\Services;
 use App\Models\OperationIssue;
 use App\Models\User;
 use App\Notifications\CriticalIssueNotification;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 
 class IssueNotifier
 {
@@ -26,12 +26,12 @@ class IssueNotifier
         }
 
         // Skip if notifications are disabled
-        if (!config('issues.notifications.email', true)) {
+        if (! config('issues.notifications.email', true)) {
             return;
         }
 
         // Only notify for critical severities
-        if (!in_array($issue->severity, $this->criticalSeverities)) {
+        if (! in_array($issue->severity, $this->criticalSeverities)) {
             return;
         }
 
@@ -54,6 +54,7 @@ class IssueNotifier
                 Log::warning('No admins found to notify about critical issue', [
                     'issue_id' => $issue->id,
                 ]);
+
                 return;
             }
 
@@ -104,10 +105,10 @@ class IssueNotifier
         // Send notification
         try {
             $admins = $this->getAdminsToNotify();
-            
+
             if ($admins->isNotEmpty()) {
                 Notification::send($admins, new \App\Notifications\DailyIssueDigestNotification($issues));
-                
+
                 Log::info('Daily issue digest notification sent', [
                     'issue_count' => $issues->count(),
                     'admins_notified' => $admins->pluck('id')->toArray(),

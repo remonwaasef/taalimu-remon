@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Package;
 use App\Models\Feature;
+use App\Models\Package;
 use App\Models\PackageFeature;
+use Illuminate\Database\Seeder;
 
 class PackageSeeder extends Seeder
 {
@@ -80,7 +80,7 @@ class PackageSeeder extends Seeder
                     'manage_exams' => 'true',
                     'advanced_roles' => 'false',
                     'student_portal' => 'false',
-                ]
+                ],
             ],
             [
                 'name' => 'النمو',
@@ -123,7 +123,7 @@ class PackageSeeder extends Seeder
                     'manage_exams' => 'true',
                     'advanced_roles' => 'true',
                     'student_portal' => 'true',
-                ]
+                ],
             ],
             [
                 'name' => 'المؤسسة',
@@ -164,7 +164,7 @@ class PackageSeeder extends Seeder
                     'manage_exams' => 'true',
                     'advanced_roles' => 'true',
                     'student_portal' => 'true',
-                ]
+                ],
             ],
         ];
 

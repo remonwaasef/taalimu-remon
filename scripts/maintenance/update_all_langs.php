@@ -1,19 +1,22 @@
 <?php
 
-function updateLangFile($path, $newKeys) {
-    if (!file_exists($path)) return;
+function updateLangFile($path, $newKeys)
+{
+    if (! file_exists($path)) {
+        return;
+    }
     $content = include $path;
-    
+
     // Recursive merge/update
     $content = array_replace_recursive($content, $newKeys);
-    
+
     $export = var_export($content, true);
     // Convert array() to []
     $export = preg_replace('/array \(/', '[', $export);
     $export = preg_replace('/\)/', ']', $export);
     $export = preg_replace('/=> \n\s+\[/', '=> [', $export);
-    
-    file_put_contents($path, "<?php\n\nreturn " . $export . ";\n");
+
+    file_put_contents($path, "<?php\n\nreturn ".$export.";\n");
 }
 
 // 1. Analytics Files
@@ -41,7 +44,7 @@ $analyticsKeys = [
         'discount_value' => 'Discount Value',
         'final_after_discount' => 'Final After Discount',
         'no_discounts_recorded' => 'No discounts recorded',
-    ]
+    ],
 ];
 
 foreach ($analyticsKeys as $lang => $keys) {
@@ -63,8 +66,8 @@ $settingsKeys = [
                 'formal' => 'رسمي',
                 'friendly' => 'ودي',
                 'urgent' => 'عاجل',
-            ]
-        ]
+            ],
+        ],
     ],
     'fr' => [
         'reminders' => [
@@ -79,8 +82,8 @@ $settingsKeys = [
                 'formal' => 'Formel',
                 'friendly' => 'Amical',
                 'urgent' => 'Urgent',
-            ]
-        ]
+            ],
+        ],
     ],
     'en' => [
         'reminders' => [
@@ -95,13 +98,13 @@ $settingsKeys = [
                 'formal' => 'Formal',
                 'friendly' => 'Friendly',
                 'urgent' => 'Urgent',
-            ]
-        ]
-    ]
+            ],
+        ],
+    ],
 ];
 
 foreach ($settingsKeys as $lang => $keys) {
     updateLangFile("d:/new project/antigravty/edu/edu/Modules/Center/resources/lang/$lang/settings.php", $keys);
 }
 
-echo "All language files updated successfully!";
+echo 'All language files updated successfully!';

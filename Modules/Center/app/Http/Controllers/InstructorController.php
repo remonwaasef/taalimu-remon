@@ -3,18 +3,18 @@
 namespace Modules\Center\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Instructor;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use App\Traits\HandlesFileUploads;
 use App\Http\Requests\Center\StoreInstructorRequest;
 use App\Http\Requests\Center\UpdateInstructorRequest;
+use App\Models\Instructor;
 use App\Services\PayoutService;
+use App\Traits\HandlesFileUploads;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class InstructorController extends Controller
 {
     use HandlesFileUploads;
+
     /**
      * Display a listing of the resource.
      */
@@ -26,8 +26,8 @@ class InstructorController extends Controller
         if ($request->has('search')) {
             $search = \App\Helpers\QueryHelper::escapeLike($request->search);
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('specialization', 'like', '%' . $search . '%');
+                $q->where('name', 'like', '%'.$search.'%')
+                    ->orWhere('specialization', 'like', '%'.$search.'%');
             });
         }
 
@@ -43,6 +43,7 @@ class InstructorController extends Controller
     public function create()
     {
         $this->authorize('create', Instructor::class);
+
         return view('center::instructors.create');
     }
 
@@ -53,7 +54,7 @@ class InstructorController extends Controller
     {
         $this->authorize('create', Instructor::class);
 
-        if (!app('tenant')->hasFeature('max_instructors')) {
+        if (! app('tenant')->hasFeature('max_instructors')) {
             return redirect()->back()->with('error', __('center::messages.msg_048'));
         }
 
@@ -62,7 +63,7 @@ class InstructorController extends Controller
 
             $tenant = app('tenant');
             $plainPassword = \Illuminate\Support\Str::random(12);
-            $email = $request->email ?: 'instructor_' . time() . '_' . rand(100, 999) . '@' . $tenant->domain;
+            $email = $request->email ?: 'instructor_'.time().'_'.rand(100, 999).'@'.$tenant->domain;
 
             $user = \App\Models\User::create([
                 'tenant_id' => $tenant->id,
@@ -103,7 +104,7 @@ class InstructorController extends Controller
                         )
                     );
                 } catch (\Exception $e) {
-                    \Illuminate\Support\Facades\Log::error("Failed to send welcome email to instructor: " . $e->getMessage());
+                    \Illuminate\Support\Facades\Log::error('Failed to send welcome email to instructor: '.$e->getMessage());
                 }
             }
 
@@ -111,7 +112,7 @@ class InstructorController extends Controller
             $admins = \App\Models\User::where('tenant_id', app('tenant')->id)
                 ->whereIn('role', ['admin', 'center_admin'])
                 ->get();
-                
+
             \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\GeneralNotification(
                 'instructor_registered', // Translation key
                 __('center::instructors.new_instructor_registered', ['name' => $request->name]),
@@ -128,8 +129,9 @@ class InstructorController extends Controller
 
             return redirect()->route('center.instructors.index')->with('success', __('center::messages.msg_049'));
         } catch (\Exception $e) {
-            \Log::error('Instructor creation failed: ' . $e->getMessage());
-            return redirect()->back()->withInput()->with('error', __('center::messages.error_unexpected') ?? 'حدث خطأ: ' . $e->getMessage());
+            \Log::error('Instructor creation failed: '.$e->getMessage());
+
+            return redirect()->back()->withInput()->with('error', __('center::messages.error_unexpected') ?? 'حدث خطأ: '.$e->getMessage());
         }
     }
 
@@ -157,6 +159,7 @@ class InstructorController extends Controller
     {
         $instructor = Instructor::where('tenant_id', app('tenant')->id)->findOrFail($id);
         $this->authorize('update', $instructor);
+
         return view('center::instructors.edit', compact('instructor'));
     }
 
@@ -181,7 +184,7 @@ class InstructorController extends Controller
         $instructor->bio = $request->bio;
 
         if ($request->hasFile('image')) {
-             $instructor->image = $this->handleFileUpload($request, 'image', $instructor->image, 'instructors');
+            $instructor->image = $this->handleFileUpload($request, 'image', $instructor->image, 'instructors');
         }
 
         $instructor->save();
@@ -221,7 +224,7 @@ class InstructorController extends Controller
         $this->authorize('update', $instructor); // Using update perm for financial settlement
 
         $request->validate([
-            'amount' => 'required|numeric|min:0.01|max:' . ($instructor->total_earned + 0.01),
+            'amount' => 'required|numeric|min:0.01|max:'.($instructor->total_earned + 0.01),
             'payment_method' => 'required|in:cash,bank_transfer,online,other',
             'payout_date' => 'required|date',
             'notes' => 'nullable|string',
@@ -229,6 +232,7 @@ class InstructorController extends Controller
 
         try {
             $payoutService->processPayout($instructor, $request->all());
+
             return redirect()->back()->with('success', __('center::instructors.payout_success'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', __('center::instructors.payout_error', ['message' => $e->getMessage()]));
@@ -256,7 +260,7 @@ class InstructorController extends Controller
                     'amount' => $c->amount,
                     'description' => __('center::instructors.commission_sales', [
                         'student' => $c->sale->student->name ?? __('center::instructors.table_student'),
-                        'invoice' => $c->sale_id
+                        'invoice' => $c->sale_id,
                     ]),
                     'is_credit' => true,
                     'status' => $c->status,
@@ -274,7 +278,7 @@ class InstructorController extends Controller
                     'date' => $p->payout_date instanceof \Illuminate\Support\Carbon ? $p->payout_date : \Carbon\Carbon::parse($p->payout_date),
                     'type' => 'payout',
                     'amount' => $p->amount,
-                    'description' => __('center::instructors.payout') . ': ' . (__('center::instructors.' . $p->payment_method) ?? $p->payment_method) . ($p->notes ? ' - ' . $p->notes : ''),
+                    'description' => __('center::instructors.payout').': '.(__('center::instructors.'.$p->payment_method) ?? $p->payment_method).($p->notes ? ' - '.$p->notes : ''),
                     'is_credit' => false,
                     'status' => 'completed',
                 ];

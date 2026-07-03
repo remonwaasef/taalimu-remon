@@ -28,8 +28,8 @@ class ForcePasswordChange
         if ($user && $user->must_change_password) {
             // Check if the current route is in the exceptions
             $routeName = $request->route()->getName();
-            
-            if (!in_array($routeName, $this->except)) {
+
+            if (! in_array($routeName, $this->except)) {
                 // Determine the tenant parameter for the redirect
                 $tenant = null;
                 if (app()->bound('tenant')) {

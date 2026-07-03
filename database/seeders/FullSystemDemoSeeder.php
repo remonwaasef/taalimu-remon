@@ -2,27 +2,26 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Tenant;
-use App\Models\User;
-use App\Models\Course;
-use App\Models\Section;
-use App\Models\Lesson;
-use App\Models\Quiz;
-use App\Models\Question;
-use App\Models\QuestionOption;
 use App\Models\Assignment;
 use App\Models\Classroom;
-use App\Models\Schedule;
-use App\Models\Student;
+use App\Models\Course;
+use App\Models\Enrollment;
 use App\Models\Instructor;
-use Modules\Center\Models\Attendance;
+use App\Models\Lesson;
+use App\Models\Question;
+use App\Models\QuestionOption;
+use App\Models\Quiz;
 use App\Models\Sale;
 use App\Models\SaleItem;
-use App\Models\Enrollment;
+use App\Models\Schedule;
+use App\Models\Section;
+use App\Models\Student;
 use App\Models\Subscription;
+use App\Models\Tenant;
+use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Carbon\Carbon;
+use Modules\Center\Models\Attendance;
 
 class FullSystemDemoSeeder extends Seeder
 {
@@ -47,7 +46,7 @@ class FullSystemDemoSeeder extends Seeder
         $roles = ['center_admin', 'instructor', 'student', 'secretary', 'accountant', 'staff'];
         foreach ($roles as $roleName) {
             $exists = \Spatie\Permission\Models\Role::where('name', $roleName)->whereNull('tenant_id')->exists();
-            if (!$exists) {
+            if (! $exists) {
                 $this->command->warn("Warning: Global role '$roleName' not found! Make sure RolesAndPermissionsSeeder is run first.");
             }
         }
@@ -56,7 +55,7 @@ class FullSystemDemoSeeder extends Seeder
         Subscription::updateOrCreate(
             ['tenant_id' => $tenant->id, 'name' => 'default'],
             [
-                'stripe_id' => 'sub_demo_' . $tenant->id,
+                'stripe_id' => 'sub_demo_'.$tenant->id,
                 'stripe_status' => 'active',
                 'stripe_price' => 'price_demo_pro',
                 'quantity' => 1,
@@ -84,7 +83,7 @@ class FullSystemDemoSeeder extends Seeder
             [
                 'name' => 'أحمد محمد (رياضيات)',
                 'specialization' => 'الرياضيات المتقدمة',
-                'bio' => 'مدرس خبير في الرياضيات لأكثر من 10 سنوات.'
+                'bio' => 'مدرس خبير في الرياضيات لأكثر من 10 سنوات.',
             ]
         );
         $userInst1 = User::updateOrCreate(
@@ -108,7 +107,7 @@ class FullSystemDemoSeeder extends Seeder
             [
                 'name' => 'سارة علي (علوم)',
                 'specialization' => 'الفيزياء والكيمياء',
-                'bio' => 'متخصصة في تبسيط العلوم للطلاب.'
+                'bio' => 'متخصصة في تبسيط العلوم للطلاب.',
             ]
         );
         $userInst2 = User::updateOrCreate(
@@ -133,10 +132,10 @@ class FullSystemDemoSeeder extends Seeder
             $student = Student::updateOrCreate(
                 ['email' => "student$i@demo.com", 'tenant_id' => $tenant->id],
                 [
-                    'name' => 'طالب تجريبي ' . $i,
-                    'phone' => '012' . str_pad($i, 8, '0', STR_PAD_LEFT),
+                    'name' => 'طالب تجريبي '.$i,
+                    'phone' => '012'.str_pad($i, 8, '0', STR_PAD_LEFT),
                     'grade_level' => 'الصف الثالث الثانوي',
-                    'status' => 'active'
+                    'status' => 'active',
                 ]
             );
             $students[] = $student;
@@ -172,15 +171,15 @@ class FullSystemDemoSeeder extends Seeder
         // 7. Sections & Lessons
         foreach ([$course1, $course2] as $course) {
             $section = Section::updateOrCreate(['course_id' => $course->id, 'title' => 'الوحدة الأولى: الأساسيات'], ['sort_order' => 1]);
-            
+
             // Text Lesson
             $textLesson = Lesson::updateOrCreate(
                 ['section_id' => $section->id, 'title' => 'مقدمة عن الدورة'],
                 [
                     'type' => 'text',
-                    'content' => 'أهلاً بكم في دورة ' . $course->title,
+                    'content' => 'أهلاً بكم في دورة '.$course->title,
                     'sort_order' => 1,
-                    'is_free' => true
+                    'is_free' => true,
                 ]
             );
 
@@ -189,7 +188,7 @@ class FullSystemDemoSeeder extends Seeder
                 ['section_id' => $section->id, 'title' => 'اختبار تشخيصي'],
                 [
                     'type' => 'quiz',
-                    'sort_order' => 2
+                    'sort_order' => 2,
                 ]
             );
             $quiz = Quiz::updateOrCreate(
@@ -197,10 +196,10 @@ class FullSystemDemoSeeder extends Seeder
                 [
                     'title' => 'اختبار تحديد المستوى',
                     'passing_score' => 50,
-                    'duration_minutes' => 15
+                    'duration_minutes' => 15,
                 ]
             );
-            
+
             $q1 = Question::updateOrCreate(
                 ['quiz_id' => $quiz->id, 'content' => 'هل تعتبر هذه الدورة مخصصة للمبتدئين؟'],
                 ['type' => 'true_false', 'points' => 10]
@@ -213,7 +212,7 @@ class FullSystemDemoSeeder extends Seeder
                 ['section_id' => $section->id, 'title' => 'التكليف الأول'],
                 [
                     'type' => 'assignment',
-                    'sort_order' => 3
+                    'sort_order' => 3,
                 ]
             );
             Assignment::updateOrCreate(
@@ -221,7 +220,7 @@ class FullSystemDemoSeeder extends Seeder
                 [
                     'title' => 'واجب المحاضرة الأولى',
                     'max_score' => 100,
-                    'due_date' => now()->addDays(3)
+                    'due_date' => now()->addDays(3),
                 ]
             );
         }
@@ -231,10 +230,10 @@ class FullSystemDemoSeeder extends Seeder
         foreach ($days as $day) {
             Schedule::updateOrCreate(
                 [
-                    'tenant_id' => $tenant->id, 
-                    'course_id' => $course1->id, 
+                    'tenant_id' => $tenant->id,
+                    'course_id' => $course1->id,
                     'day_of_week' => $day,
-                    'start_time' => '09:00'
+                    'start_time' => '09:00',
                 ],
                 [
                     'classroom_id' => $room1->id,
@@ -245,10 +244,10 @@ class FullSystemDemoSeeder extends Seeder
 
             Schedule::updateOrCreate(
                 [
-                    'tenant_id' => $tenant->id, 
-                    'course_id' => $course2->id, 
+                    'tenant_id' => $tenant->id,
+                    'course_id' => $course2->id,
                     'day_of_week' => $day,
-                    'start_time' => '12:00'
+                    'start_time' => '12:00',
                 ],
                 [
                     'classroom_id' => $room2->id,
@@ -261,7 +260,7 @@ class FullSystemDemoSeeder extends Seeder
         // 9. Enrollments & Sales & Attendance
         foreach ($students as $index => $student) {
             $enrolledCourse = ($index % 2 == 0) ? $course1 : $course2;
-            
+
             // Sync user
             $user = User::updateOrCreate(
                 ['email' => $student->email],
@@ -314,7 +313,7 @@ class FullSystemDemoSeeder extends Seeder
                     [
                         'student_id' => $student->id,
                         'schedule_id' => $sched->id,
-                        'session_date' => now()->subDays(2)->format('Y-m-d')
+                        'session_date' => now()->subDays(2)->format('Y-m-d'),
                     ],
                     [
                         'tenant_id' => $tenant->id,

@@ -15,18 +15,18 @@ return new class extends Migration
             $table->id();
             $table->foreignId('tenant_id')->constrained()->cascadeOnDelete();
             $table->foreignId('classroom_id')->nullable()->constrained()->nullOnDelete();
-            
+
             $table->string('name'); // e.g., Dell Projector X1
             $table->string('code')->nullable(); // Asset Tag / Barcode
             $table->string('type')->default('equipment'); // equipment, furniture, electronics
             $table->string('status')->default('active'); // active, maintenance, broken, lost
-            
+
             $table->date('purchase_date')->nullable();
             $table->decimal('cost', 10, 2)->nullable();
             $table->text('notes')->nullable();
-            
+
             $table->timestamps();
-            
+
             $table->index(['tenant_id', 'status']);
             $table->index(['tenant_id', 'type']);
         });

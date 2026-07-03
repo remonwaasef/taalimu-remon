@@ -2,18 +2,17 @@
 
 namespace App\Models;
 
-use App\Scopes\TenantScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
-use App\Models\Tenant; // Added for Atomic Counters
+use Spatie\Activitylog\Traits\LogsActivity;
+
+// Added for Atomic Counters
 
 class Course extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes, \App\Traits\IdentifyTenant, \App\Traits\ClearsDashboardCache;
+    use \App\Traits\ClearsDashboardCache, \App\Traits\IdentifyTenant, HasFactory, LogsActivity, SoftDeletes;
 
     protected static function boot()
     {
@@ -75,7 +74,7 @@ class Course extends Model
      */
     public function getRegistrationUrl()
     {
-        if (!$this->registration_token) {
+        if (! $this->registration_token) {
             return null;
         }
 

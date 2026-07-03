@@ -1,12 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Instructor\Http\Controllers\InstructorController;
-use Modules\Instructor\Http\Controllers\StudentController;
-use Modules\Instructor\Http\Controllers\GroupController;
-use Modules\Instructor\Http\Controllers\ScheduleController;
 use Modules\Instructor\Http\Controllers\AttendanceController;
+use Modules\Instructor\Http\Controllers\GroupController;
+use Modules\Instructor\Http\Controllers\InstructorController;
+use Modules\Instructor\Http\Controllers\ScheduleController;
 use Modules\Instructor\Http\Controllers\SettingsController;
+use Modules\Instructor\Http\Controllers\StudentController;
 
 $instructorRoutes = function () {
     Route::middleware(['auth', 'verified', 'subscription'])->prefix('instructor')->group(function () {
@@ -26,7 +26,7 @@ $instructorRoutes = function () {
         Route::post('/groups/{course}/rotate-link', [GroupController::class, 'rotateLink'])->name('instructor.groups.rotate-link');
         Route::post('/groups/{course}/duplicate', [GroupController::class, 'duplicate'])->name('instructor.groups.duplicate');
         Route::delete('/groups/{course}', [GroupController::class, 'destroy'])->name('instructor.groups.destroy');
-        
+
         Route::get('/students-create', [StudentController::class, 'create'])->name('instructor.students.create');
         Route::post('/students-store', [StudentController::class, 'store'])->name('instructor.students.store');
         Route::get('/students/{student}', [StudentController::class, 'show'])->name('instructor.students.show');
@@ -36,26 +36,27 @@ $instructorRoutes = function () {
         Route::post('/students/{student}/transfer', [StudentController::class, 'transfer'])->name('instructor.students.transfer');
         Route::delete('/students/{student}', [StudentController::class, 'destroy'])->name('instructor.students.destroy');
         Route::post('/students/{student}/send-email', [StudentController::class, 'sendEmail'])->name('instructor.students.send-email');
-        
+
         // Settings Dashboard
         Route::get('/settings', [SettingsController::class, 'index'])->name('instructor.settings');
         Route::post('/settings/update-general', [SettingsController::class, 'updateGeneral'])->name('instructor.settings.update-general');
-        
+
         // WhatsApp Settings
         Route::get('/whatsapp', [SettingsController::class, 'whatsapp'])->name('instructor.whatsapp.settings');
         Route::post('/whatsapp/update', [SettingsController::class, 'updateWhatsApp'])->name('instructor.whatsapp.update');
-        
+
         // Payment Reminders Settings
         Route::post('/reminders/update', [SettingsController::class, 'updateReminders'])->name('instructor.reminders.update');
         Route::post('/students/{student}/update-payment', [StudentController::class, 'updatePayment'])->name('instructor.students.update-payment');
-        
+
         // Email Templates Settings
         Route::post('/email-templates/update', [SettingsController::class, 'updateEmailTemplates'])->name('instructor.email-templates.update');
         Route::post('/email-templates/reset', [SettingsController::class, 'resetEmailTemplates'])->name('instructor.email-templates.reset');
-        
+
         // Auto-clear cache route (Temporary helper)
-        Route::get('/clear-cache', function() {
+        Route::get('/clear-cache', function () {
             \Illuminate\Support\Facades\Artisan::call('view:clear');
+
             return 'تم مسح الكاش بنجاح! يمكنك الآن الرجوع للصفحة الرئيسية وتحديثها لترى التعديلات.';
         });
     });
@@ -84,7 +85,9 @@ $instructorRoutes = function () {
         Route::post('/attendance/bulk-absent/{schedule}', [AttendanceController::class, 'bulkAbsent'])->name('instructor.attendance.bulkAbsent');
 
         // Reports
-        Route::get('/reports', function() { return redirect()->route('instructor.reports.students'); })->name('instructor.reports');
+        Route::get('/reports', function () {
+            return redirect()->route('instructor.reports.students');
+        })->name('instructor.reports');
         Route::get('/reports/students', [InstructorController::class, 'studentReports'])->name('instructor.reports.students');
         Route::get('/reports/payments', [InstructorController::class, 'paymentReports'])->name('instructor.reports.payments');
 
@@ -110,7 +113,7 @@ if ($mode === 'path' || $mode === 'subdomain') {
         $domain = $appUrlHost;
     }
 
-    Route::domain($domain == 'localhost' ? '{tenant}.localhost' : '{tenant}.' . $domain)
+    Route::domain($domain == 'localhost' ? '{tenant}.localhost' : '{tenant}.'.$domain)
         ->middleware([\App\Http\Middleware\IdentifyTenant::class])
         ->group($instructorRoutes);
 }

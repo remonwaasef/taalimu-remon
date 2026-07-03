@@ -2,8 +2,8 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -13,8 +13,11 @@ class RiskDetected implements ShouldBroadcastNow
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $studentName;
+
     public $riskType;
+
     public $message;
+
     public $tenantId;
 
     /**
@@ -36,7 +39,7 @@ class RiskDetected implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('center.' . $this->tenantId),
+            new PrivateChannel('center.'.$this->tenantId),
         ];
     }
 

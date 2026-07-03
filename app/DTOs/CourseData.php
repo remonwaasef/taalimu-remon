@@ -45,6 +45,6 @@ class CourseData
             'status' => $this->status,
             'sessions_count' => $this->sessions_count,
             'image' => $this->image,
-        ], fn($value) => !is_null($value));
+        ], fn ($value) => ! is_null($value));
     }
 }

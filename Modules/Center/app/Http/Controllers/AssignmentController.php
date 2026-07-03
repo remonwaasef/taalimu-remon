@@ -27,14 +27,14 @@ class AssignmentController extends Controller
     public function edit(\App\Models\Assignment $assignment)
     {
         $this->authorize('update', $assignment);
-        
+
         return view('center::assignments.edit', compact('assignment'));
     }
 
     public function update(Request $request, \App\Models\Assignment $assignment)
     {
         $this->authorize('update', $assignment);
-        
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'due_date' => 'nullable|date',
@@ -51,8 +51,9 @@ class AssignmentController extends Controller
     public function show(\App\Models\Assignment $assignment)
     {
         $this->authorize('view', $assignment);
-        
+
         $submission = $assignment->submissions()->where('user_id', auth()->id())->first();
+
         return view('center::assignments.show', compact('assignment', 'submission'));
     }
 
@@ -64,7 +65,7 @@ class AssignmentController extends Controller
         ]);
 
         // Store in private storage (storage/app/assignments)
-        $path = $request->file('file')->store('assignments/' . $assignment->id);
+        $path = $request->file('file')->store('assignments/'.$assignment->id);
 
         $assignment->submissions()->updateOrCreate(
             ['user_id' => auth()->id()],
@@ -81,7 +82,7 @@ class AssignmentController extends Controller
     {
         // Use policy for clean, testable authorization
         $this->authorize('download', $submission);
-        
+
         return \Illuminate\Support\Facades\Storage::download($submission->file_path);
     }
 
@@ -90,6 +91,7 @@ class AssignmentController extends Controller
     {
         $this->authorize('update', $assignment);
         $submissions = $assignment->submissions()->with('user')->get();
+
         return view('center::assignments.submissions', compact('assignment', 'submissions'));
     }
 
@@ -97,7 +99,7 @@ class AssignmentController extends Controller
     {
         $this->authorize('update', $submission->assignment);
         $request->validate([
-            'grade' => 'required|integer|min:0|max:' . $submission->assignment->max_score,
+            'grade' => 'required|integer|min:0|max:'.$submission->assignment->max_score,
             'feedback' => 'nullable|string',
         ]);
 

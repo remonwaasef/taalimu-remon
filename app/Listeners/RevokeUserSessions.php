@@ -24,7 +24,7 @@ class RevokeUserSessions implements ShouldQueue
     public function handle(UserRoleChanged $event): void
     {
         $user = $event->user;
-        
+
         \Illuminate\Support\Facades\Log::warning("SECURITY: Role Changed for User Use ID: {$user->id}. Initiating Session Kill Switch.");
 
         // 1. Revoke all Sanctum/Passport Tokens
@@ -39,7 +39,7 @@ class RevokeUserSessions implements ShouldQueue
                 ->delete();
         } catch (\Exception $e) {
             // Ignore if sessions table doesn't exist or using another driver
-            \Illuminate\Support\Facades\Log::warning("Could not clear database sessions: " . $e->getMessage());
+            \Illuminate\Support\Facades\Log::warning('Could not clear database sessions: '.$e->getMessage());
         }
 
         // 3. Invalidate specific caches if keyed by user ID

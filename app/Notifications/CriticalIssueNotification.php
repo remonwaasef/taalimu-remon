@@ -27,11 +27,11 @@ class CriticalIssueNotification extends Notification implements ShouldQueue
 
         return (new MailMessage)
             ->error()
-            ->subject('🚨 Critical Issue: ' . $this->issue->title)
+            ->subject('🚨 Critical Issue: '.$this->issue->title)
             ->line('A critical issue has been detected in a tenant environment.')
-            ->line('**Tenant:** ' . ($this->issue->tenant->name ?? 'N/A'))
-            ->line('**Action:** ' . $this->issue->action)
-            ->line('**Message:** ' . $this->issue->message)
+            ->line('**Tenant:** '.($this->issue->tenant->name ?? 'N/A'))
+            ->line('**Action:** '.$this->issue->action)
+            ->line('**Message:** '.$this->issue->message)
             ->action('View Issue Details', $url)
             ->line('Please investigate immediately.');
     }

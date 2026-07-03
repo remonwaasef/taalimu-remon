@@ -12,8 +12,11 @@ class CustomStudentMail extends Mailable
     use Queueable, SerializesModels;
 
     public $student;
+
     public $messageContent;
+
     public $subjectString;
+
     public $senderName;
 
     /**
@@ -37,11 +40,11 @@ class CustomStudentMail extends Mailable
     public function build()
     {
         return $this->subject($this->subjectString)
-                    ->view('emails.custom_student_mail')
-                    ->with([
-                        'studentName' => $this->student->name,
-                        'messageContent' => $this->messageContent,
-                        'senderName' => $this->senderName,
-                    ]);
+            ->view('emails.custom_student_mail')
+            ->with([
+                'studentName' => $this->student->name,
+                'messageContent' => $this->messageContent,
+                'senderName' => $this->senderName,
+            ]);
     }
 }

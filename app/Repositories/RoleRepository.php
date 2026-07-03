@@ -12,13 +12,10 @@ class RoleRepository
 
     /**
      * Get all roles available for a specific tenant (Global + Local).
-     *
-     * @param int|null $tenantId
-     * @return Collection
      */
     public function getAllForTenant(?int $tenantId): Collection
     {
-        if (!$tenantId) {
+        if (! $tenantId) {
             return collect([]);
         }
 
@@ -28,17 +25,18 @@ class RoleRepository
             // Fetch Global Roles (NULL tenant_id) AND Local Roles (tenant_id = $tenantId)
             $roles = Role::where(function ($query) use ($tenantId) {
                 $query->where('tenant_id', $tenantId)
-                      ->orWhereNull('tenant_id');
+                    ->orWhereNull('tenant_id');
             })
-            ->where('guard_name', 'web')
-            ->orderBy('tenant_id', 'desc') // Local roles first (non-null)
-            ->get();
+                ->where('guard_name', 'web')
+                ->orderBy('tenant_id', 'desc') // Local roles first (non-null)
+                ->get();
 
             // Deduplicate by name, keeping the first one found (the tenant one, due to ordering)
             return $roles->unique('name')->map(function ($role) {
-                 // Add 'type' attribute for UI logic
-                 $role->type = is_null($role->tenant_id) ? 'system' : 'custom';
-                 return $role;
+                // Add 'type' attribute for UI logic
+                $role->type = is_null($role->tenant_id) ? 'system' : 'custom';
+
+                return $role;
             })->values(); // Reset keys for clean array/collection
         });
     }
@@ -51,7 +49,7 @@ class RoleRepository
         return Role::where('id', $roleId)
             ->where(function ($query) use ($tenantId) {
                 $query->where('tenant_id', $tenantId)
-                      ->orWhereNull('tenant_id');
+                    ->orWhereNull('tenant_id');
             })->first();
     }
 

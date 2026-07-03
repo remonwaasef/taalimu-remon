@@ -2,10 +2,9 @@
 
 namespace App\Services;
 
+use App\Traits\HasLocaleResolution;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-
-use App\Traits\HasLocaleResolution;
 
 class WhatsAppService
 {
@@ -16,10 +15,15 @@ class WhatsAppService
      */
     protected function maskPhone($phone)
     {
-        if (!$phone) return '';
+        if (! $phone) {
+            return '';
+        }
         $len = strlen($phone);
-        if ($len <= 4) return str_repeat('*', $len);
-        return substr($phone, 0, 2) . str_repeat('*', $len - 4) . substr($phone, -2);
+        if ($len <= 4) {
+            return str_repeat('*', $len);
+        }
+
+        return substr($phone, 0, 2).str_repeat('*', $len - 4).substr($phone, -2);
     }
 
     /**
@@ -33,8 +37,8 @@ class WhatsAppService
     public function sendMessageByTenant($tenant, $to, $message)
     {
         $settings = $tenant->settings['whatsapp'] ?? [];
-        
-        if (!($settings['enabled'] ?? false)) {
+
+        if (! ($settings['enabled'] ?? false)) {
             return false;
         }
 
@@ -43,15 +47,16 @@ class WhatsAppService
         $apiVersion = $settings['api_version'] ?? 'v21.0';
         $countryCode = $settings['country_code'] ?? '20';
 
-        if (!$accessToken || !$phoneNumberId) {
-            Log::warning("Official WhatsApp credentials missing for tenant: " . $tenant->id);
+        if (! $accessToken || ! $phoneNumberId) {
+            Log::warning('Official WhatsApp credentials missing for tenant: '.$tenant->id);
+
             return false;
         }
 
         // Format phone number: remove any non-digit characters and ensure country code
         $to = preg_replace('/[^0-9]/', '', $to);
-        if ($countryCode && !str_starts_with($to, $countryCode)) {
-            $to = $countryCode . ltrim($to, '0');
+        if ($countryCode && ! str_starts_with($to, $countryCode)) {
+            $to = $countryCode.ltrim($to, '0');
         }
 
         try {
@@ -70,17 +75,17 @@ class WhatsAppService
             if ($response->successful()) {
                 $maskedTo = $this->maskPhone($to);
                 Log::info("Official WhatsApp message sent to {$maskedTo} for tenant {$tenant->id}");
+
                 return true;
             }
 
-            Log::error("Official WhatsApp failed for tenant {$tenant->id}: " . $response->body());
+            Log::error("Official WhatsApp failed for tenant {$tenant->id}: ".$response->body());
         } catch (\Exception $e) {
-            Log::error("Official WhatsApp exception for tenant {$tenant->id}: " . $e->getMessage());
+            Log::error("Official WhatsApp exception for tenant {$tenant->id}: ".$e->getMessage());
         }
 
         return false;
     }
-
 
     /**
      * Send student attendance notification.
@@ -88,7 +93,9 @@ class WhatsAppService
     public function sendAttendanceNotification($tenant, $student, $course)
     {
         $to = $student->parent_phone ?: $student->phone;
-        if (!$to) return false;
+        if (! $to) {
+            return false;
+        }
 
         $locale = $this->getTargetLocale($tenant, $student);
         $settings = $tenant->settings['whatsapp'] ?? [];
@@ -98,16 +105,16 @@ class WhatsAppService
             $message = strtr($template, [
                 ':student_name' => $student->name,
                 ':course_name' => $course->title,
-                ':tenant_name' => $tenant->name
+                ':tenant_name' => $tenant->name,
             ]);
         } else {
             $message = __('center::messages.whatsapp_attendance_notify', [
                 'student_name' => $student->name,
                 'course_name' => $course->title,
-                'tenant_name' => $tenant->name
+                'tenant_name' => $tenant->name,
             ], $locale);
         }
-        
+
         return $this->sendMessageByTenant($tenant, $to, $message);
     }
 
@@ -117,7 +124,9 @@ class WhatsAppService
     public function sendPaymentNotification($tenant, $student, $amount, $remaining)
     {
         $to = $student->parent_phone ?: $student->phone;
-        if (!$to) return false;
+        if (! $to) {
+            return false;
+        }
 
         $locale = $this->getTargetLocale($tenant, $student);
         $settings = $tenant->settings['whatsapp'] ?? [];
@@ -129,7 +138,7 @@ class WhatsAppService
                 ':currency' => get_currency_symbol(),
                 ':student_name' => $student->name,
                 ':remaining' => $remaining,
-                ':tenant_name' => $tenant->name
+                ':tenant_name' => $tenant->name,
             ]);
         } else {
             $message = __('center::messages.whatsapp_payment_notify', [
@@ -137,10 +146,10 @@ class WhatsAppService
                 'currency' => get_currency_symbol(),
                 'student_name' => $student->name,
                 'remaining' => $remaining,
-                'tenant_name' => $tenant->name
+                'tenant_name' => $tenant->name,
             ], $locale);
         }
-        
+
         return $this->sendMessageByTenant($tenant, $to, $message);
     }
 
@@ -150,7 +159,9 @@ class WhatsAppService
     public function sendDebtReminder($tenant, $student, $amount)
     {
         $to = $student->parent_phone ?: $student->phone;
-        if (!$to) return false;
+        if (! $to) {
+            return false;
+        }
 
         $locale = $this->getTargetLocale($tenant, $student);
         $settings = $tenant->settings['whatsapp'] ?? [];
@@ -161,17 +172,17 @@ class WhatsAppService
                 ':amount' => $amount,
                 ':currency' => get_currency_symbol(),
                 ':student_name' => $student->name,
-                ':tenant_name' => $tenant->name
+                ':tenant_name' => $tenant->name,
             ]);
         } else {
             $message = __('center::messages.whatsapp_debt_reminder', [
                 'amount' => $amount,
                 'currency' => get_currency_symbol(),
                 'student_name' => $student->name,
-                'tenant_name' => $tenant->name
+                'tenant_name' => $tenant->name,
             ], $locale);
         }
-        
+
         return $this->sendMessageByTenant($tenant, $to, $message);
     }
 
@@ -186,17 +197,18 @@ class WhatsAppService
         $apiVersion = config('services.whatsapp.system_version', 'v21.0');
         $countryCode = config('services.whatsapp.system_country_code', '20');
 
-        if (!$accessToken || !$phoneNumberId) {
+        if (! $accessToken || ! $phoneNumberId) {
             // Fallback: Log the message instead of sending if keys are missing
             $maskedTo = $this->maskPhone($to);
             Log::info("WhatsApp System Message (SIMULATED): To: {$maskedTo}, Message: {$message}");
-            return true; 
+
+            return true;
         }
 
         // Format phone number
         $to = preg_replace('/[^0-9]/', '', $to);
-        if ($countryCode && !str_starts_with($to, $countryCode)) {
-            $to = $countryCode . ltrim($to, '0');
+        if ($countryCode && ! str_starts_with($to, $countryCode)) {
+            $to = $countryCode.ltrim($to, '0');
         }
 
         try {
@@ -215,15 +227,15 @@ class WhatsAppService
             if ($response->successful()) {
                 $maskedTo = $this->maskPhone($to);
                 Log::info("Official WhatsApp System Message sent to {$maskedTo}");
+
                 return true;
             }
 
-            Log::error("Official WhatsApp System Message failed: " . $response->body());
+            Log::error('Official WhatsApp System Message failed: '.$response->body());
         } catch (\Exception $e) {
-            Log::error("Official WhatsApp System Message exception: " . $e->getMessage());
+            Log::error('Official WhatsApp System Message exception: '.$e->getMessage());
         }
 
         return false;
     }
-
 }

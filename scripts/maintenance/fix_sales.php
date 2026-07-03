@@ -1,17 +1,19 @@
 <?php
 
+use App\Models\Payment;
 use App\Models\Sale;
 use App\Models\Student;
-use App\Models\Payment;
 
 $sales = Sale::doesntHave('items')->where('status', 'paid')->get();
-echo "Found " . $sales->count() . " fake sales.\n";
+echo 'Found '.$sales->count()." fake sales.\n";
 
 foreach ($sales as $fakeSale) {
     $amount = $fakeSale->paid_amount;
     $student = Student::find($fakeSale->student_id);
-    
-    if (!$student) continue;
+
+    if (! $student) {
+        continue;
+    }
 
     $unpaidSales = Sale::where('student_id', $student->id)
         ->whereRaw('paid_amount < total_amount')
@@ -19,7 +21,9 @@ foreach ($sales as $fakeSale) {
         ->get();
 
     foreach ($unpaidSales as $realSale) {
-        if ($amount <= 0) break;
+        if ($amount <= 0) {
+            break;
+        }
 
         $remaining = $realSale->total_amount - $realSale->paid_amount;
         $pay = min($remaining, $amount);
@@ -36,7 +40,7 @@ foreach ($sales as $fakeSale) {
 
         Payment::where('sale_id', $fakeSale->id)->update([
             'sale_id' => $realSale->id,
-            'amount' => $pay
+            'amount' => $pay,
         ]);
 
         $amount -= $pay;

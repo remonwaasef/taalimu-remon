@@ -81,6 +81,6 @@ class StudentData
             'section_type' => $this->section_type,
             'profile_photo' => $this->profile_photo,
             'grade_level' => $this->grade_level,
-        ], fn($value) => !is_null($value));
+        ], fn ($value) => ! is_null($value));
     }
 }

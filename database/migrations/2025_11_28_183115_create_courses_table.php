@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('status')->default('active');
             $table->timestamps();
-            
+
             $table->index(['tenant_id', 'status']);
         });
     }

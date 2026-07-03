@@ -3,9 +3,8 @@
 namespace Modules\Campus\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Services\CertificateService;
 use App\Models\Certificate;
+use App\Services\CertificateService;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
@@ -26,12 +25,14 @@ class CampusController extends Controller implements HasMiddleware
         return [
             new Middleware(function ($request, $next) {
                 $user = auth()->user();
-                if ($user && !$user->student) {
+                if ($user && ! $user->student) {
                     if ($user->hasRole('instructor')) {
                         return redirect()->route('instructor.dashboard')->with('error', 'هذه الصفحة مخصصة للطلاب فقط.');
                     }
+
                     return redirect()->route('center.dashboard')->with('error', 'هذه الصفحة مخصصة للطلاب فقط.');
                 }
+
                 return $next($request);
             }),
         ];
@@ -45,7 +46,7 @@ class CampusController extends Controller implements HasMiddleware
         $user = auth()->user();
         $student = $user->student;
         $tenantId = app('tenant')->id;
-        
+
         $enrollments = $student->enrollments()
             ->with(['course.sections.lessons'])
             ->latest('updated_at')
@@ -75,30 +76,30 @@ class CampusController extends Controller implements HasMiddleware
     public function courses()
     {
         $student = auth()->user()->student;
-        
+
         // Get courses the student is already enrolled in
         $enrolledCourseIds = $student->enrollments()->pluck('course_id');
-        
+
         // Get published courses that the student is NOT enrolled in
         $courses = \App\Models\Course::where('status', 'published')
             ->whereNotIn('id', $enrolledCourseIds)
             ->latest()
             ->get();
-            
+
         return view('campus::courses', compact('student', 'courses'));
     }
 
     public function schedule()
     {
         $student = auth()->user()->student;
-        
+
         // 1. Get Enrolled Course IDs
         $enrolledCourseIds = $student->enrollments()->pluck('course_id');
 
         // 2. Fetch Schedules for these courses
-        $schedules = \App\Models\Schedule::with(['course', 'classroom' => function($q) {
-                $q->withoutGlobalScopes(); 
-            }, 'instructor'])
+        $schedules = \App\Models\Schedule::with(['course', 'classroom' => function ($q) {
+            $q->withoutGlobalScopes();
+        }, 'instructor'])
             ->whereIn('course_id', $enrolledCourseIds)
             ->orderBy('start_time')
             ->get()
@@ -123,7 +124,7 @@ class CampusController extends Controller implements HasMiddleware
         $student = auth()->user()->student;
         $sales = \App\Models\Sale::where('student_id', $student->id)->latest()->get();
         $totalDebt = $sales->sum('total_amount') - $sales->sum('paid_amount');
-        
+
         return view('campus::finances', compact('student', 'sales', 'totalDebt'));
     }
 
@@ -134,17 +135,16 @@ class CampusController extends Controller implements HasMiddleware
             ->with('course')
             ->latest()
             ->paginate(10);
-            
+
         return view('campus::attendance', compact('student', 'attendances'));
     }
 
     public function profile()
     {
         $student = auth()->user()->student;
+
         return view('campus::profile', compact('student'));
     }
-
-
 
     public function downloadCertificate(Certificate $certificate, CertificateService $certificateService)
     {
@@ -154,8 +154,6 @@ class CampusController extends Controller implements HasMiddleware
         }
 
         return $certificateService->generatePdf($certificate)
-            ->download('certificate-' . $certificate->uuid . '.pdf');
+            ->download('certificate-'.$certificate->uuid.'.pdf');
     }
-
-
 }

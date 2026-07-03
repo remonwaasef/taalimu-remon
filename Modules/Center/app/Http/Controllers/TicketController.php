@@ -4,13 +4,12 @@ namespace Modules\Center\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
-use App\Models\TicketMessage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
     protected $ticketService;
+
     protected $telegram;
 
     public function __construct(\App\Services\TicketService $ticketService, \App\Services\TelegramService $telegram)
@@ -26,7 +25,7 @@ class TicketController extends Controller
         $tickets = Ticket::with('user')
             ->latest()
             ->paginate(10);
-            
+
         return view('center::tickets.index', compact('tickets', 'tenant'));
     }
 
@@ -34,6 +33,7 @@ class TicketController extends Controller
     {
         $this->authorize('create', Ticket::class);
         $tenant = app('tenant');
+
         return view('center::tickets.create', compact('tenant'));
     }
 
@@ -50,7 +50,7 @@ class TicketController extends Controller
         $tenant = app('tenant');
 
         $ticket = $this->ticketService->createTicket(array_merge($request->all(), [
-            'tenant_id' => $tenant->id
+            'tenant_id' => $tenant->id,
         ]));
 
         // Notify Admin
@@ -64,7 +64,7 @@ class TicketController extends Controller
     {
         $ticket = Ticket::findOrFail($ticketId);
         $this->authorize('view', $ticket);
-        
+
         $tenant = app('tenant');
         $ticket->load('messages.user');
 

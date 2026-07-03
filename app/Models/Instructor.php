@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use App\Scopes\TenantScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Instructor extends Model
 {
-    use HasFactory, \App\Traits\IdentifyTenant, \Spatie\Activitylog\Traits\LogsActivity, \App\Traits\ClearsDashboardCache;
+    use \App\Traits\ClearsDashboardCache, \App\Traits\IdentifyTenant, HasFactory, \Spatie\Activitylog\Traits\LogsActivity;
 
     protected static function boot()
     {
@@ -87,7 +86,6 @@ class Instructor extends Model
         'phone',
     ];
 
-
     public function courses()
     {
         return $this->hasMany(Course::class);
@@ -113,6 +111,7 @@ class Instructor extends Model
         if (array_key_exists('commissions_sum_amount', $this->attributes)) {
             return (float) $this->attributes['commissions_sum_amount'];
         }
+
         return $this->commissions()->where('status', '!=', 'pending')->sum('amount');
     }
 
@@ -121,19 +120,20 @@ class Instructor extends Model
         if (array_key_exists('commissions_pending_sum_amount', $this->attributes)) {
             return (float) $this->attributes['commissions_pending_sum_amount'];
         }
+
         return $this->commissions()->where('status', 'pending')->sum('amount');
     }
 
     public function getOutstandingBalanceAttribute()
     {
         $earned = $this->total_earned;
-        
+
         if (array_key_exists('payouts_sum_amount', $this->attributes)) {
             $payouts = (float) $this->attributes['payouts_sum_amount'];
         } else {
             $payouts = $this->payouts()->sum('amount');
         }
-        
+
         return $earned - $payouts;
     }
 }
