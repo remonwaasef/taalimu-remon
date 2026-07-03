@@ -14,7 +14,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use \App\Traits\IdentifyTenant, HasApiTokens, HasFactory, HasRoles, LogsActivity, ManagesTokens, Notifiable;
+    use \App\Traits\BelongsToTenant, HasApiTokens, HasFactory, HasRoles, LogsActivity, ManagesTokens, Notifiable;
 
     protected static function boot()
     {

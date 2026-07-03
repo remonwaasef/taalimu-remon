@@ -71,9 +71,9 @@ class CurriculumController extends Controller
         ]);
 
         if (isset($validated['type']) && $validated['type'] === 'text' && isset($validated['content'])) {
-            // Whitelist safe tags to prevent XSS while allowing rich text formatting
-            $allowedTags = '<p><br><b><i><strong><em><ul><ol><li><div><span><h1><h2><h3><h4><h5><h6><a>';
-            $validated['content'] = strip_tags($validated['content'], $allowedTags);
+            // HTMLPurifier (unlike strip_tags) also removes event-handler
+            // attributes and javascript: URIs, not just disallowed tags.
+            $validated['content'] = \Mews\Purifier\Facades\Purifier::clean($validated['content'], 'lesson');
         }
 
         $lesson->update($validated);

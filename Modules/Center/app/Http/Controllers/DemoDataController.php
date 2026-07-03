@@ -35,7 +35,7 @@ class DemoDataController extends Controller
         } catch (\Exception $e) {
             \Log::error('Demo Seeding Failed: '.$e->getMessage());
 
-            return redirect()->back()->with('error', 'حدث خطأ أثناء إضافة البيانات التجريبية: '.$e->getMessage());
+            return redirect()->back()->with('error', 'حدث خطأ أثناء إضافة البيانات التجريبية.');
         }
     }
 
@@ -54,7 +54,7 @@ class DemoDataController extends Controller
         } catch (\Exception $e) {
             \Log::error('Demo Seeding Reset Failed: '.$e->getMessage());
 
-            return redirect()->back()->with('error', 'حدث خطأ أثناء حذف البيانات التجريبية: '.$e->getMessage());
+            return redirect()->back()->with('error', 'حدث خطأ أثناء حذف البيانات التجريبية.');
         }
     }
 }

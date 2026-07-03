@@ -8,10 +8,25 @@ use App\Models\Tenant;
 trait HandlesDemoPayments
 {
     /**
+     * Demo payments activate a real subscription without charging anyone,
+     * so they must never be reachable in production unless explicitly
+     * enabled via STRIPE_DEMO_MODE.
+     */
+    public static function demoPaymentsAllowed(): bool
+    {
+        return (bool) config('services.stripe.demo_mode')
+            || app()->environment('local', 'testing');
+    }
+
+    /**
      * Store mock payment data in session and redirect to the demo payment page.
      */
     protected function handleDemoRedirect(Tenant $tenant, Package $package, string $billingCycle, array $options = []): string
     {
+        if (! static::demoPaymentsAllowed()) {
+            throw new \RuntimeException('Demo payments are disabled in this environment.');
+        }
+
         $cyclePrice = $billingCycle === 'yearly' ? $package->yearly_price : $package->price;
 
         session([

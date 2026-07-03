@@ -30,19 +30,26 @@ class ContentSecurityPolicy
 
             $response->headers->set('X-CSP-Debug', 'true');
         } else {
-            // نسخة أكثر أمانًا للإنتاج: نقيّد المصادر ونمنع unsafe-eval
+            // نسخة الإنتاج: قائمة بيضاء صريحة بالنطاقات بدل السماح لأي https،
+            // حتى لا يُفرَّغ الـ CSP من قيمته ضد XSS. inline scripts ما زالت مسموحة
+            // مؤقتاً لأن القوالب تعتمد عليها (خطة لاحقة: نقلها إلى Vite + nonce).
+            $cdn = 'cdn.jsdelivr.net cdnjs.cloudflare.com unpkg.com';
+            $fonts = 'fonts.googleapis.com fonts.gstatic.com fonts.bunny.net';
+
             $csp = [
                 "default-src 'self'",
-                "script-src 'self' https: cdn.jsdelivr.net",
-                "style-src 'self' https: cdn.jsdelivr.net fonts.googleapis.com",
-                "font-src 'self' data: https: fonts.gstatic.com",
+                "script-src 'self' 'unsafe-inline' {$cdn}",
+                "style-src 'self' 'unsafe-inline' {$cdn} {$fonts}",
+                "font-src 'self' data: {$cdn} {$fonts}",
                 "img-src 'self' data: blob: https:",
-                "connect-src 'self' https:",
-                "worker-src 'self'",
+                "connect-src 'self' https://api.qrserver.com",
+                "media-src 'self' https://assets.mixkit.co",
+                "worker-src 'self' blob:",
                 "manifest-src 'self'",
                 "frame-ancestors 'none'",
                 "frame-src 'self' https://www.youtube.com https://player.vimeo.com https://js.stripe.com",
                 "base-uri 'self'",
+                "form-action 'self'",
             ];
         }
 

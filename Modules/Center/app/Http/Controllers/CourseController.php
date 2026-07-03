@@ -84,7 +84,7 @@ class CourseController extends Controller
         } catch (\Exception $e) {
             \Log::error('Course creation failed: '.$e->getMessage());
 
-            return redirect()->back()->withInput()->with('error', __('center::messages.registration_failed') ?? 'حدث خطأ: '.$e->getMessage());
+            return redirect()->back()->withInput()->with('error', __('center::messages.error_unexpected'));
         }
 
         // Smart Onboarding Routing: If this is the first course, guide them to register a student
@@ -154,7 +154,9 @@ class CourseController extends Controller
 
             return back()->with('success', __('center::messages.msg_027'));
         } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
+            \Log::error('Course enrollment/sale failed: '.$e->getMessage());
+
+            return back()->with('error', __('center::messages.error_unexpected'));
         } finally {
             $lock->release();
         }
@@ -233,7 +235,7 @@ class CourseController extends Controller
         } catch (\Throwable $e) {
             \Log::error('CourseController@update: EXCEPTION', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
 
-            return redirect()->back()->withInput()->with('error', $e->getMessage());
+            return redirect()->back()->withInput()->with('error', __('center::messages.error_unexpected'));
         }
 
         return redirect()->route('center.courses.index')->with('success', __('center::messages.msg_029'));
@@ -246,7 +248,9 @@ class CourseController extends Controller
 
             return back()->with('success', __('center::messages.msg_030'));
         } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
+            \Log::error('CourseController completeLesson failed: '.$e->getMessage());
+
+            return back()->with('error', __('center::messages.error_unexpected'));
         }
     }
 

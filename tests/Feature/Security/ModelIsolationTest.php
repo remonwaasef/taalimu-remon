@@ -9,10 +9,10 @@ use Tests\TestCase;
 class ModelIsolationTest extends TestCase
 {
     /**
-     * Ensure all models in app/Models use the IdentifyTenant trait,
+     * Ensure all models in app/Models use the BelongsToTenant trait,
      * except for core models that shouldn't be isolated (like Tenant itself).
      */
-    public function test_all_models_use_identify_tenant_trait()
+    public function test_all_models_use_belongs_to_tenant_trait()
     {
         $modelPath = app_path('Models');
         $files = File::allFiles($modelPath);
@@ -52,11 +52,11 @@ class ModelIsolationTest extends TestCase
             }
 
             $traits = array_keys($reflection->getTraits());
-            if (! in_array('App\\Traits\\IdentifyTenant', $traits)) {
+            if (! in_array('App\\Traits\\BelongsToTenant', $traits)) {
                 $failures[] = $className;
             }
         }
 
-        $this->assertEmpty($failures, 'The following models are missing the IdentifyTenant trait: '.implode(', ', $failures));
+        $this->assertEmpty($failures, 'The following models are missing the BelongsToTenant trait: '.implode(', ', $failures));
     }
 }

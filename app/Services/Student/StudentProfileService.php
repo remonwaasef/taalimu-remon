@@ -17,6 +17,26 @@ class StudentProfileService
         $this->notificationService = $notificationService;
     }
 
+    /**
+     * Queue a custom email to a student (or their linked user account).
+     * Returns false when the student has no usable email address so the caller
+     * can surface the right message. Mail failures bubble up to the caller.
+     */
+    public function sendCustomEmail(Student $student, string $subject, string $message, string $senderName): bool
+    {
+        $email = $student->email ?: $student->user?->email;
+
+        if (! $email) {
+            return false;
+        }
+
+        \Illuminate\Support\Facades\Mail::to($email)->queue(
+            new \App\Mail\CustomStudentMail($student, $subject, $message, $senderName)
+        );
+
+        return true;
+    }
+
     public function updateStudent(Student $student, StudentData $data, User $modifier)
     {
         return DB::transaction(function () use ($student, $data, $modifier) {

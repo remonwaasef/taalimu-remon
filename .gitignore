@@ -45,6 +45,7 @@ regional_dump*
 packages_with_features.json
 packages.json
 features.json
+killer_features_plan.txt
 *.sql
 /scratch
 /docs/internal
