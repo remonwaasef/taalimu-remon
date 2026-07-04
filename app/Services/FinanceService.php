@@ -380,4 +380,27 @@ class FinanceService
             Log::error('FinanceService payment confirmation email failed: '.$e->getMessage());
         }
     }
+
+    /**
+     * Distribute a lump-sum payment across a student's unpaid sales, oldest first.
+     * $unpaidSales must be ordered oldest-first and contain only sales with a balance.
+     */
+    public function distributePayment($unpaidSales, float $amount, ?string $notes = null): void
+    {
+        $amountToDistribute = $amount;
+
+        foreach ($unpaidSales as $sale) {
+            if ($amountToDistribute <= 0) {
+                break;
+            }
+
+            $remainingOnSale = $sale->total_amount - $sale->paid_amount;
+            $payAmount = min($remainingOnSale, $amountToDistribute);
+
+            // addPayment also handles notifications
+            $this->addPayment($sale, $payAmount, 'cash', $notes);
+
+            $amountToDistribute -= $payAmount;
+        }
+    }
 }

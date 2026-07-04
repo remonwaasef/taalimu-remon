@@ -5,9 +5,6 @@ namespace Modules\Center\Http\Controllers;
 use App\DTOs\StudentData;
 use App\Http\Requests\Center\StoreStudentRequest;
 use App\Http\Requests\Center\UpdateStudentRequest;
-use App\Models\Payment;
-use App\Models\Refund;
-use App\Models\Sale;
 use App\Models\Student;
 use App\Queries\StudentQuery;
 use App\Services\StudentService;
@@ -203,7 +200,7 @@ class StudentController extends Controller
         $student = $this->findStudentOrFail($id);
         $this->authorize('update', $student);
 
-        $totalDebt = Sale::where('student_id', $student->id)->sum(\Illuminate\Support\Facades\DB::raw('total_amount - paid_amount'));
+        $totalDebt = app(\App\Services\Student\StudentLedgerService::class)->totalDebt($student);
 
         if ($totalDebt <= 0) {
             return redirect()->back()->with('info', __('center::messages.no_outstanding_debts'));
@@ -217,87 +214,13 @@ class StudentController extends Controller
     /**
      * View student financial statement (Ledger).
      */
-    public function statement($id)
+    public function statement($id, \App\Services\Student\StudentLedgerService $ledgerService)
     {
         $student = $this->findStudentOrFail($id);
         $this->authorize('view', $student);
-        $tenantId = $this->tenant->id;
 
-        // Fetch recent Sales (Invoices) - Debits (Money student owes)
-        $sales = Sale::where('student_id', $student->id)
-            ->with('items.item')
-            ->latest()
-            ->limit(500)
-            ->get()
-            ->map(function ($s) {
-                return [
-                    'date' => $s->created_at,
-                    'type' => 'invoice',
-                    'amount' => $s->total_amount,
-                    'description' => 'فاتورة مبيعات #'.$s->id,
-                    'is_credit' => false,
-                    'ref_id' => $s->id,
-                ];
-            });
-
-        // Fetch recent Payments - Credits (Money student paid)
-        $payments = Payment::whereHas('sale', function ($q) use ($student) {
-            $q->where('student_id', $student->id);
-        })
-            ->with(['receiver'])
-            ->latest()
-            ->limit(500)
-            ->get()
-            ->map(function ($p) {
-                return [
-                    'date' => $p->paid_at ?? $p->created_at,
-                    'type' => 'payment',
-                    'amount' => $p->amount,
-                    'description' => 'دفعة نقدية - الاستلام بواسطة: '.($p->receiver->name ?? 'طالب').' - فاتورة #'.$p->sale_id,
-                    'is_credit' => true,
-                    'ref_id' => $p->id,
-                ];
-            });
-
-        // Fetch recent Refunds - Debits (Money returned to student, reversing payment)
-        $refunds = Refund::whereHas('sale', function ($q) use ($student) {
-            $q->where('student_id', $student->id);
-        })
-            ->with('processor')
-            ->latest()
-            ->limit(500)
-            ->get()
-            ->map(function ($r) {
-                return [
-                    'date' => $r->created_at,
-                    'type' => 'refund',
-                    'amount' => $r->amount, // Amount returned
-                    'description' => 'استرداد مالي (Refund) - فاتورة #'.$r->sale_id.($r->reason ? ' - '.$r->reason : ''),
-                    'is_credit' => false, // Reduces their credit, essentially increasing debt effectively
-                    'ref_id' => $r->id,
-                ];
-            });
-
-        // Merge and sort
-        $ledger = $sales->concat($payments)->concat($refunds)->sortBy('date')->values();
-
-        // Calculate running balance (Debt)
-        $balance = 0; // Debt amount
-        $ledger = $ledger->map(function ($transaction) use (&$balance) {
-            if ($transaction['is_credit']) {
-                $balance -= $transaction['amount']; // Payment decreases debt
-            } else {
-                $balance += $transaction['amount']; // Invoice or Refund increases debt
-            }
-            $transaction['balance'] = $balance;
-
-            return $transaction;
-        });
-
+        ['ledger' => $ledger, 'totalDebt' => $totalDebt] = $ledgerService->buildLedger($student);
         $tenant = $this->tenant;
-
-        // Current real debt
-        $totalDebt = Sale::where('student_id', $student->id)->sum(\DB::raw('total_amount - paid_amount'));
 
         return view('center::students.statement', compact('student', 'ledger', 'tenant', 'totalDebt'));
     }
@@ -366,52 +289,11 @@ class StudentController extends Controller
     /**
      * Download dynamic import template with real grades.
      */
-    public function downloadTemplate()
+    public function downloadTemplate(\App\Services\Student\StudentImportService $importService)
     {
         $this->authorize('create', Student::class);
 
-        // Fetch real grades for this tenant
-        $grades = \App\Models\Grade::where('tenant_id', $this->tenant->id)->limit(3)->get();
-
-        $sampleData = [];
-        if ($grades->isEmpty()) {
-            $sampleData[] = ['Ahmed Ali', 'ahmed1@example.com', '01012345678', 'Primary 1'];
-            $sampleData[] = ['Sara Khaled', 'sara2@example.com', '01023456789', 'Primary 2'];
-        } else {
-            $sampleData[] = ['Ahmed Ali', 'ahmed1@example.com', '01012345678', $grades->first()->name];
-            if ($grades->count() > 1) {
-                $sampleData[] = ['Sara Khaled', 'sara2@example.com', '01023456789', $grades->skip(1)->first()->name];
-            }
-        }
-
-        // Generate HTML table that Excel reads natively with full Arabic support
-        $html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">';
-        $html .= '<head><meta charset="UTF-8">';
-        $html .= '<!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>';
-        $html .= '<x:Name>Students</x:Name>';
-        $html .= '<x:WorksheetOptions><x:DisplayRightToLeft/><x:DisplayGridlines/></x:WorksheetOptions>';
-        $html .= '</x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->';
-        $html .= '<style>td{mso-number-format:\@;padding:5px;border:1px solid #ccc;font-family:Arial,sans-serif;font-size:12pt;} th{background:#4CAF50;color:#fff;padding:8px;border:1px solid #388E3C;font-family:Arial,sans-serif;font-size:12pt;font-weight:bold;}</style>';
-        $html .= '</head><body>';
-        $html .= '<table>';
-
-        // Header row
-        $html .= '<tr>';
-        foreach (['name', 'email', 'phone', 'grade_level'] as $header) {
-            $html .= '<th>'.e($header).'</th>';
-        }
-        $html .= '</tr>';
-
-        // Data rows
-        foreach ($sampleData as $row) {
-            $html .= '<tr>';
-            foreach ($row as $cell) {
-                $html .= '<td>'.e($cell).'</td>';
-            }
-            $html .= '</tr>';
-        }
-
-        $html .= '</table></body></html>';
+        $html = $importService->buildTemplateHtml($this->tenant->id);
 
         return response($html)
             ->header('Content-Type', 'application/vnd.ms-excel; charset=UTF-8')
@@ -448,49 +330,12 @@ class StudentController extends Controller
                 'paste_data' => 'required|string|min:5',
             ]);
 
-            $pasteData = $request->input('paste_data');
-            $lines = array_filter(explode("\n", $pasteData), fn ($line) => trim($line) !== '');
+            $path = app(\App\Services\Student\StudentImportService::class)
+                ->convertPasteToCsv($request->input('paste_data'));
 
-            if (empty($lines)) {
+            if ($path === null) {
                 return redirect()->back()->withErrors(['paste_data' => 'لا توجد بيانات صالحة للاستيراد.']);
             }
-
-            // Convert pasted data to CSV file
-            $csvPath = 'temp/imports/'.uniqid('paste_').'.csv';
-            $fullCsvPath = storage_path('app/'.$csvPath);
-
-            if (! is_dir(dirname($fullCsvPath))) {
-                mkdir(dirname($fullCsvPath), 0755, true);
-            }
-
-            $fp = fopen($fullCsvPath, 'w');
-            // Write header
-            fputcsv($fp, ['name', 'email', 'phone', 'grade_level']);
-
-            foreach ($lines as $line) {
-                $line = trim($line);
-                // Split by tab (Excel clipboard default) or comma
-                $cols = str_contains($line, "\t") ? explode("\t", $line) : str_getcsv($line);
-                $cols = array_map('trim', $cols);
-
-                // Skip header rows
-                if (isset($cols[0]) && strtolower($cols[0]) === 'name') {
-                    continue;
-                }
-
-                if (count($cols) >= 2 && ! empty($cols[0]) && ! empty($cols[1])) {
-                    fputcsv($fp, [
-                        $cols[0] ?? '',        // name
-                        $cols[1] ?? '',        // email
-                        $cols[2] ?? '',        // phone
-                        $cols[3] ?? '',        // grade_level
-                    ]);
-                }
-            }
-            fclose($fp);
-
-            $path = $csvPath;
-
         } else {
             // File upload method (CSV only)
             $request->validate([

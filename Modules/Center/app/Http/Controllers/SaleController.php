@@ -3,15 +3,12 @@
 namespace Modules\Center\Http\Controllers;
 
 use App\Models\Course;
-use App\Models\Payment;
-use App\Models\Refund;
 use App\Models\Sale;
 use App\Models\Student;
 use App\Services\FinanceService;
 use App\Services\RefundService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Modules\Center\Http\Controllers\CenterBaseController as Controller;
 use Modules\Center\Http\Requests\StoreSaleRequest;
@@ -107,23 +104,12 @@ class SaleController extends Controller
             return back()->with('error', __('center::messages.msg_071').' (المبلغ أكبر من المديونية)'); // Using existing error or custom message
         }
 
-        $amountToDistribute = $request->amount;
-        $notes = $request->notes ?? 'تحصيل سريع للمستحقات';
-
         try {
-            foreach ($student->sales as $sale) {
-                if ($amountToDistribute <= 0) {
-                    break;
-                }
-
-                $remainingOnSale = $sale->total_amount - $sale->paid_amount;
-                $payAmount = min($remainingOnSale, $amountToDistribute);
-
-                // Add payment via FinanceService (which also handles notifications)
-                $this->financeService->addPayment($sale, $payAmount, 'cash', $notes);
-
-                $amountToDistribute -= $payAmount;
-            }
+            $this->financeService->distributePayment(
+                $student->sales,
+                (float) $request->amount,
+                $request->notes ?? 'تحصيل سريع للمستحقات'
+            );
 
             return redirect()->back()->with('success', __('center::messages.msg_074'));
         } catch (\Exception $e) {
@@ -233,122 +219,14 @@ class SaleController extends Controller
         }
     }
 
-    public function getStudentSummary($id)
+    public function getStudentSummary($id, \App\Services\Student\StudentLedgerService $ledgerService)
     {
         $tenant = $this->tenant;
         $student = Student::with(['grade.stage'])->where('tenant_id', $tenant->id)->findOrFail($id);
 
         $this->authorize('view', $student);
 
-        // Active Enrollments
-        $courses = DB::table('enrollments')
-            ->join('courses', 'enrollments.course_id', '=', 'courses.id')
-            ->where('enrollments.user_id', $student->user_id)
-            ->where('enrollments.tenant_id', $tenant->id)
-            ->select('courses.title', 'enrollments.enrolled_at', 'enrollments.status')
-            ->get();
-
-        // Financial Summary: Fetch all Sales, Payments, and Refunds
-        $sales = Sale::where('student_id', $student->id)
-            ->where('tenant_id', $tenant->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        $payments = Payment::whereHas('sale', function ($q) use ($student) {
-            $q->where('student_id', $student->id);
-        })->where('tenant_id', $tenant->id)->get();
-
-        $refunds = Refund::whereHas('sale', function ($q) use ($student) {
-            $q->where('student_id', $student->id);
-        })->where('tenant_id', $tenant->id)->get();
-
-        // Combine into Ledger (Transactions Timeline)
-        $ledger = collect();
-
-        foreach ($sales as $sale) {
-            $ledger->push([
-                'id' => $sale->id,
-                'date' => $sale->created_at->format('Y-m-d H:i'),
-                'type' => 'invoice',
-                'amount' => (float) $sale->total_amount,
-                'status' => $sale->status,
-                'remaining' => (float) ($sale->total_amount - $sale->paid_amount),
-                'description' => 'فاتورة مبيعات #'.$sale->id,
-            ]);
-        }
-
-        foreach ($payments as $payment) {
-            $ledger->push([
-                'id' => $payment->id,
-                'date' => ($payment->paid_at ?? $payment->created_at)->format('Y-m-d H:i'),
-                'type' => 'payment',
-                'amount' => (float) $payment->amount,
-                'method' => $payment->payment_method,
-                'description' => 'سداد دفعة مالية'.($payment->payment_method ? " ({$payment->payment_method})" : ''),
-                'sale_id' => $payment->sale_id,
-            ]);
-        }
-
-        foreach ($refunds as $refund) {
-            $ledger->push([
-                'id' => $refund->id,
-                'date' => $refund->created_at->format('Y-m-d H:i'),
-                'type' => 'refund',
-                'amount' => (float) $refund->amount,
-                'description' => 'عملية استرداد (Refund)',
-                'sale_id' => $refund->sale_id,
-            ]);
-        }
-
-        $ledger = $ledger->sortByDesc('date')->values();
-
-        // Stats calculation
-        $totalBilled = $sales->sum('total_amount');
-        $totalPaid = $payments->sum('amount');
-        $totalRefunded = $refunds->sum('amount');
-        $totalDebt = $totalBilled - $totalPaid + $totalRefunded;
-
-        // Attendance Stats
-        $attendance = \Modules\Center\Models\Attendance::where('student_id', $student->id)
-            ->where('tenant_id', $tenant->id)
-            ->orderBy('session_date', 'desc')
-            ->get();
-
-        $totalSessions = $attendance->count();
-        $presentSessions = $attendance->where('status', 'present')->count();
-        $attendanceRate = $totalSessions > 0 ? round(($presentSessions / $totalSessions) * 100) : 0;
-        $recentAttendance = $attendance->take(5)->map(function ($att) {
-            return [
-                'date' => $att->session_date->format('Y-m-d'),
-                'status' => $att->status,
-                'course' => $att->course?->title ?? 'N/A',
-            ];
-        });
-
-        return response()->json([
-            'success' => true,
-            'student' => [
-                'name' => $student->name,
-                'phone' => $student->phone,
-                'status' => $student->status,
-                'grade' => $student->grade_level_name,
-                'id' => $student->id,
-            ],
-            'courses' => $courses,
-            'stats' => [
-                'total_debt' => number_format($totalDebt, 2),
-                'total_paid' => number_format($totalPaid, 2),
-                'attendance_rate' => $attendanceRate,
-                'course_count' => $courses->count(),
-            ],
-            'ledger' => $ledger,
-            'unpaid_invoices' => $sales->where('paid_amount', '<', 'total_amount')->map(function ($s) {
-                $s->remaining = $s->total_amount - $s->paid_amount;
-
-                return $s;
-            })->values(),
-            'recent_attendance' => $recentAttendance,
-        ]);
+        return response()->json($ledgerService->buildStudentSummary($student, $tenant));
     }
 
     public function downloadStatement($id)
