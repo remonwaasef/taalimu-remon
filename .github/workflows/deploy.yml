@@ -7,54 +7,41 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    # Self-hosted runner on the production VPS itself (outbound-only polling).
+    # Replaced the SSH-from-GitHub approach: Hostinger's edge firewall drops
+    # inbound :22 from some Azure ranges intermittently (incident 2026-07-04).
+    runs-on: [self-hosted, taalimu-prod]
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Deploy on server
+        # Default runner shell is bash -e: the job fails on the FIRST failing
+        # command — a swallowed `git fetch` failure once rolled production back
+        # to a stale ref while reporting success.
+        run: |
+          cd /home/taalimu/htdocs/taalimu.com
 
-      - name: Deploy to Server via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          port: 22
-          # Fail the job on the FIRST failing command. Without this, a failed
-          # `git fetch` was swallowed and `reset --hard` rolled production back
-          # to a stale origin/main (incident: 2026-07-04).
-          script_stop: true
-          script: |
-            cd /home/taalimu/htdocs/taalimu.com
+          export GIT_TERMINAL_PROMPT=0
 
-            # Prevent Git from prompting for credentials
-            export GIT_TERMINAL_PROMPT=0
+          # .env is untracked but existed in old commits, so a reset that
+          # crosses those commits can delete it. Guard it around git ops.
+          cp -f .env /tmp/taalimu.env.deploy_guard
 
-            # .env is untracked but existed in old commits, so a reset that
-            # crosses those commits can delete it (2026-07-04 incident).
-            # Guard it around the git operations.
-            cp -f .env /tmp/taalimu.env.deploy_guard
+          git fetch origin main
+          git reset --hard origin/main
 
-            # Fetch latest changes and reset
-            git fetch origin main
-            git reset --hard origin/main
+          if [ ! -f .env ]; then cp -f /tmp/taalimu.env.deploy_guard .env; fi
 
-            if [ ! -f .env ]; then cp -f /tmp/taalimu.env.deploy_guard .env; fi
+          export COMPOSER_ALLOW_SUPERUSER=1
+          composer install --no-dev --optimize-autoloader
+          npm install
+          npm run build
 
-            # Install dependencies
-            export COMPOSER_ALLOW_SUPERUSER=1
-            composer install --no-dev --optimize-autoloader
-            npm install
-            npm run build
-            
-            # Safety net: back up the database before running migrations
-            php artisan backup:run --only-db || echo "WARNING: pre-migration backup failed"
+          # Safety net: back up the database before running migrations
+          php artisan backup:run --only-db || echo "WARNING: pre-migration backup failed"
 
-            # Run Laravel commands
-            php artisan migrate --force
-            php artisan storage:link
-            php artisan optimize:clear
-            php artisan queue:restart
-            
-            # Fix permissions
-            chown -R taalimu:taalimu storage bootstrap/cache
-            chmod -R 775 storage bootstrap/cache
+          php artisan migrate --force
+          php artisan storage:link || true
+          php artisan optimize:clear
+          php artisan queue:restart
+
+          chown -R taalimu:taalimu storage bootstrap/cache
+          chmod -R 775 storage bootstrap/cache
