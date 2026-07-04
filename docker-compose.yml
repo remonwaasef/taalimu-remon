@@ -30,6 +30,49 @@ services:
     depends_on:
       - app
 
+  # Runs queued jobs (mailables are ShouldQueue — without this worker they never send
+  # when QUEUE_CONNECTION is database/redis).
+  worker:
+    image: laravel-app
+    container_name: laravel_worker
+    restart: unless-stopped
+    working_dir: /var/www/html
+    command: php artisan queue:work --tries=3 --backoff=10 --max-time=3600
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - laravel_network
+    depends_on:
+      - app
+      - db
+      - redis
+
+  # Fires the Laravel scheduler every minute (payment reminders, Telegram reports, backups —
+  # see routes/console.php).
+  scheduler:
+    image: laravel-app
+    container_name: laravel_scheduler
+    restart: unless-stopped
+    working_dir: /var/www/html
+    command: sh -c "while true; do php artisan schedule:run --no-interaction; sleep 60; done"
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - laravel_network
+    depends_on:
+      - app
+      - db
+
+  redis:
+    image: redis:7-alpine
+    container_name: laravel_redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - laravel_network
+
   db:
     image: mysql:8.0
     container_name: laravel_db
@@ -52,3 +95,4 @@ networks:
 
 volumes:
   db_data:
+  redis_data:

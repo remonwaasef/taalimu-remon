@@ -20,15 +20,6 @@ class User extends Authenticatable
     {
         parent::boot();
 
-        // High-Scale: Cache Table Schema to prevent DESCRIBE queries
-        if (app()->environment('production') && extension_loaded('redis')) {
-            static::$appColumns = \Illuminate\Support\Facades\Cache::store('redis')->remember(
-                'schema_columns_users',
-                86400,
-                fn () => \Illuminate\Support\Facades\Schema::getColumnListing('users')
-            );
-        }
-
         static::creating(function ($user) {
             if ($user->role === 'student' && empty($user->qr_identifier)) {
                 $user->qr_identifier = \Illuminate\Support\Str::random(12);
@@ -57,13 +48,6 @@ class User extends Authenticatable
                 }
             }
         });
-    }
-
-    protected static $appColumns = [];
-
-    public function getTableColumns()
-    {
-        return static::$appColumns ?: parent::getTableColumns();
     }
 
     public function getActivitylogOptions(): LogOptions

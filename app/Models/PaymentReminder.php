@@ -29,20 +29,6 @@ class PaymentReminder extends Model
         'amount' => 'decimal:2',
     ];
 
-    /**
-     * Check if a reminder has already been sent for this student/stage/period.
-     */
-    public static function alreadySent(int $tenantId, int $studentId, string $stage, int $year, int $month): bool
-    {
-        return static::where('tenant_id', $tenantId)
-            ->where('student_id', $studentId)
-            ->where('stage', $stage)
-            ->where('reminder_year', $year)
-            ->where('reminder_month', $month)
-            ->where('status', 'sent')
-            ->exists();
-    }
-
     public function student()
     {
         return $this->belongsTo(Student::class);

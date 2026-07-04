@@ -41,7 +41,14 @@ class BasicWAF
         'auth/google/*' => ['code', 'state', 'scope', 'authuser', 'prompt', 'session_state'],
         'payment/paymob/*' => ['hmac', 'token', 'source_data_pan', 'source_data_sub_type'],
         'payment/paypal/*' => ['token', 'PayerID', 'ba_token'],
+        // Payment webhooks live at /webhooks/* (see routes/web.php), not /api/webhooks/*
+        'webhooks/*' => ['hmac', 'obj'],
         'api/webhooks/*' => ['hmac', 'obj'],
+        // Lesson body: an LMS legitimately teaches SQL/JS, so "select ... from" or
+        // "<script>" in course text must not 403. The field is sanitized with
+        // HTMLPurifier on write (CurriculumController::updateLesson) instead.
+        '*/lessons/*' => ['content'],
+        '*/sections/*/lessons' => ['content'],
     ];
 
     /**
@@ -58,13 +65,15 @@ class BasicWAF
             $request->query->all()
         );
 
-        // Recursively extract all string values from nested arrays
+        // Flatten with full dot-paths. array_walk_recursive keyed by leaf name,
+        // so a later benign field with the same name overwrote (and hid) an
+        // earlier suspicious value — dot-paths are collision-free.
         $flatValues = [];
-        array_walk_recursive($inputs, function ($value, $key) use (&$flatValues) {
+        foreach (\Illuminate\Support\Arr::dot($inputs) as $path => $value) {
             if (is_string($value)) {
-                $flatValues[$key] = $value;
+                $flatValues[$path] = $value;
             }
-        });
+        }
 
         // Also check critical headers (User-Agent, Referer)
         foreach (['user-agent', 'referer'] as $header) {
@@ -75,8 +84,10 @@ class BasicWAF
         }
 
         foreach ($flatValues as $key => $value) {
-            // Skip excluded fields for this route (OAuth tokens, HMAC signatures, etc.)
-            if (in_array($key, $excludedFields, true)) {
+            // Skip excluded fields for this route (OAuth tokens, HMAC signatures, etc.).
+            // Match any dot-path segment so excluding a parent key (e.g. Paymob's
+            // "obj") also covers its nested values.
+            if ($excludedFields && array_intersect(explode('.', (string) $key), $excludedFields)) {
                 continue;
             }
 

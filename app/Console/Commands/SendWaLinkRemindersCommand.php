@@ -59,6 +59,18 @@ class SendWaLinkRemindersCommand extends Command
                 ->where('status', 'active')
                 ->get();
 
+            // Two queries per tenant instead of two per student: who already paid
+            // this month, and which students already got today's digest entry.
+            // Dedup rows are recorded as 'queued' (staff still has to tap the link),
+            // so match both 'queued' and 'sent' — matching only 'sent' would resend
+            // the digest on every re-run of the command.
+            $paidStudentIds = $this->paidStudentIdsThisMonth($tenant->id);
+            $remindedStudentIds = PaymentReminder::where('tenant_id', $tenant->id)
+                ->where('stage', "watg_{$dateStamp}")
+                ->whereIn('status', ['queued', 'sent'])
+                ->pluck('student_id')
+                ->flip();
+
             foreach ($students as $student) {
                 $dueDay = $student->payment_due_day ?: $defaultDueDay;
                 $fee = $student->monthly_fee ?: $defaultFee;
@@ -67,7 +79,7 @@ class SendWaLinkRemindersCommand extends Command
                     continue;
                 }
 
-                if ($this->hasStudentPaidThisMonth($student, $year, $month)) {
+                if ($paidStudentIds->has($student->id)) {
                     continue;
                 }
 
@@ -87,7 +99,7 @@ class SendWaLinkRemindersCommand extends Command
 
                 // One entry per student per day (idempotent across re-runs).
                 $stage = "watg_{$dateStamp}";
-                if (PaymentReminder::alreadySent($tenant->id, $student->id, $stage, $year, $month)) {
+                if ($remindedStudentIds->has($student->id)) {
                     continue;
                 }
 
@@ -149,15 +161,17 @@ class SendWaLinkRemindersCommand extends Command
     }
 
     /**
-     * Check if the student has any payment recorded this month.
+     * IDs of students with a paid sale this month, as a keyed set.
+     * whereBetween keeps the created_at index usable (whereYear/whereMonth don't).
      */
-    protected function hasStudentPaidThisMonth(Student $student, int $year, int $month): bool
+    protected function paidStudentIdsThisMonth(int $tenantId): \Illuminate\Support\Collection
     {
-        return $student->sales()
+        return \App\Models\Sale::where('tenant_id', $tenantId)
             ->where('status', 'paid')
-            ->whereYear('created_at', $year)
-            ->whereMonth('created_at', $month)
-            ->exists();
+            ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
+            ->distinct()
+            ->pluck('student_id')
+            ->flip();
     }
 
     /**
