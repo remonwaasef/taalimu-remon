@@ -19,16 +19,27 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
+          # Fail the job on the FIRST failing command. Without this, a failed
+          # `git fetch` was swallowed and `reset --hard` rolled production back
+          # to a stale origin/main (incident: 2026-07-04).
+          script_stop: true
           script: |
             cd /home/taalimu/htdocs/taalimu.com
-            
+
             # Prevent Git from prompting for credentials
             export GIT_TERMINAL_PROMPT=0
-            
+
+            # .env is untracked but existed in old commits, so a reset that
+            # crosses those commits can delete it (2026-07-04 incident).
+            # Guard it around the git operations.
+            cp -f .env /tmp/taalimu.env.deploy_guard
+
             # Fetch latest changes and reset
             git fetch origin main
             git reset --hard origin/main
-            
+
+            if [ ! -f .env ]; then cp -f /tmp/taalimu.env.deploy_guard .env; fi
+
             # Install dependencies
             export COMPOSER_ALLOW_SUPERUSER=1
             composer install --no-dev --optimize-autoloader
