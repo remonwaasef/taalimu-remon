@@ -152,4 +152,100 @@ class StudentImportService
             'errors' => $errors,
         ];
     }
+
+    /**
+     * Build the downloadable import template as Excel-compatible HTML,
+     * seeded with the tenant's real grade names when available.
+     */
+    public function buildTemplateHtml(int $tenantId): string
+    {
+        $grades = \App\Models\Grade::where('tenant_id', $tenantId)->limit(3)->get();
+
+        $sampleData = [];
+        if ($grades->isEmpty()) {
+            $sampleData[] = ['Ahmed Ali', 'ahmed1@example.com', '01012345678', 'Primary 1'];
+            $sampleData[] = ['Sara Khaled', 'sara2@example.com', '01023456789', 'Primary 2'];
+        } else {
+            $sampleData[] = ['Ahmed Ali', 'ahmed1@example.com', '01012345678', $grades->first()->name];
+            if ($grades->count() > 1) {
+                $sampleData[] = ['Sara Khaled', 'sara2@example.com', '01023456789', $grades->skip(1)->first()->name];
+            }
+        }
+
+        // Generate HTML table that Excel reads natively with full Arabic support
+        $html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">';
+        $html .= '<head><meta charset="UTF-8">';
+        $html .= '<!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>';
+        $html .= '<x:Name>Students</x:Name>';
+        $html .= '<x:WorksheetOptions><x:DisplayRightToLeft/><x:DisplayGridlines/></x:WorksheetOptions>';
+        $html .= '</x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->';
+        $html .= '<style>td{mso-number-format:\@;padding:5px;border:1px solid #ccc;font-family:Arial,sans-serif;font-size:12pt;} th{background:#4CAF50;color:#fff;padding:8px;border:1px solid #388E3C;font-family:Arial,sans-serif;font-size:12pt;font-weight:bold;}</style>';
+        $html .= '</head><body>';
+        $html .= '<table>';
+
+        $html .= '<tr>';
+        foreach (['name', 'email', 'phone', 'grade_level'] as $header) {
+            $html .= '<th>'.e($header).'</th>';
+        }
+        $html .= '</tr>';
+
+        foreach ($sampleData as $row) {
+            $html .= '<tr>';
+            foreach ($row as $cell) {
+                $html .= '<td>'.e($cell).'</td>';
+            }
+            $html .= '</tr>';
+        }
+
+        $html .= '</table></body></html>';
+
+        return $html;
+    }
+
+    /**
+     * Convert pasted Excel/CSV rows into a stored CSV import file.
+     * Returns the storage-relative path, or null when no usable rows exist.
+     */
+    public function convertPasteToCsv(string $pasteData): ?string
+    {
+        $lines = array_filter(explode("\n", $pasteData), fn ($line) => trim($line) !== '');
+
+        if (empty($lines)) {
+            return null;
+        }
+
+        $csvPath = 'temp/imports/'.uniqid('paste_').'.csv';
+        $fullCsvPath = storage_path('app/'.$csvPath);
+
+        if (! is_dir(dirname($fullCsvPath))) {
+            mkdir(dirname($fullCsvPath), 0755, true);
+        }
+
+        $fp = fopen($fullCsvPath, 'w');
+        fputcsv($fp, ['name', 'email', 'phone', 'grade_level']);
+
+        foreach ($lines as $line) {
+            $line = trim($line);
+            // Split by tab (Excel clipboard default) or comma
+            $cols = str_contains($line, "\t") ? explode("\t", $line) : str_getcsv($line);
+            $cols = array_map('trim', $cols);
+
+            // Skip header rows
+            if (isset($cols[0]) && strtolower($cols[0]) === 'name') {
+                continue;
+            }
+
+            if (count($cols) >= 2 && ! empty($cols[0]) && ! empty($cols[1])) {
+                fputcsv($fp, [
+                    $cols[0] ?? '',        // name
+                    $cols[1] ?? '',        // email
+                    $cols[2] ?? '',        // phone
+                    $cols[3] ?? '',        // grade_level
+                ]);
+            }
+        }
+        fclose($fp);
+
+        return $csvPath;
+    }
 }
