@@ -28,25 +28,7 @@ class IdentifyTenant
             if (count($pathSegments) >= 2 && $pathSegments[0] === 'c') {
                 $tenantDomain = $pathSegments[1];
 
-                // Max Optimization: Load full context (Tenant + Subscription + Package + Features)
-                $loadRelations = ['currentSubscription.package.features'];
-
-                try {
-                    if (extension_loaded('redis')) {
-                        $tenant = \Illuminate\Support\Facades\Cache::store('redis')->remember("taalimu:tenancy:domain:{$tenantDomain}", 3600, function () use ($tenantDomain, $loadRelations) {
-                            return Tenant::with($loadRelations)
-                                ->where('domain', $tenantDomain)
-                                ->first();
-                        });
-                    } else {
-                        throw new \Exception('Redis extension not loaded');
-                    }
-                } catch (\Throwable $e) {
-                    // Failover to DB with same eager loading for performance
-                    $tenant = Tenant::with($loadRelations)
-                        ->where('domain', $tenantDomain)
-                        ->first();
-                }
+                $tenant = $this->resolveTenant($tenantDomain);
             } else {
                 // Not a tenant path, skip tenant identification
                 return $next($request);
@@ -85,23 +67,7 @@ class IdentifyTenant
                 return $next($request);
             }
 
-            // Optimized Tenant Resolution with Redis & Failover (Zero DB Hits Strategy)
-            try {
-                if (extension_loaded('redis')) {
-                    $tenant = \Illuminate\Support\Facades\Cache::store('redis')->remember("taalimu:tenancy:domain:{$subdomain}", 3600, function () use ($subdomain) {
-                        return Tenant::with(['currentSubscription.package.features'])
-                            ->where('domain', $subdomain)
-                            ->first();
-                    });
-                } else {
-                    throw new \Exception('Redis extension not loaded');
-                }
-            } catch (\Throwable $e) {
-                // Fallback to DB if Redis fails or extension missing
-                $tenant = Tenant::with(['currentSubscription.package.features'])
-                    ->where('domain', $subdomain)
-                    ->first();
-            }
+            $tenant = $this->resolveTenant($subdomain);
 
             // If this is a tenant-only domain (checked by str_ends_with) and no tenant found, 404
             if (! $tenant && str_ends_with($host, '.'.$mainHost)) {
@@ -163,5 +129,29 @@ class IdentifyTenant
         }
 
         return $next($request);
+    }
+
+    /**
+     * Resolve a tenant (with subscription/package/features) by domain, cached on the
+     * default cache store for one hour. Invalidation lives in the Tenant and
+     * Subscription model events — both must forget on the SAME default store,
+     * so never pin a specific store here.
+     */
+    protected function resolveTenant(string $domain): ?Tenant
+    {
+        $loadTenant = fn () => Tenant::with(['currentSubscription.package.features'])
+            ->where('domain', $domain)
+            ->first();
+
+        try {
+            return \Illuminate\Support\Facades\Cache::remember(
+                "taalimu:tenancy:domain:{$domain}",
+                3600,
+                $loadTenant
+            );
+        } catch (\Throwable $e) {
+            // Failover to DB if the cache backend is down
+            return $loadTenant();
+        }
     }
 }

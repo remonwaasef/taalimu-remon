@@ -16,37 +16,19 @@ class Tenant extends Model
     {
         parent::boot();
 
-        // High-Scale: Cache Table Schema
-        if (app()->environment('production') && extension_loaded('redis')) {
-            static::$appColumns = \Illuminate\Support\Facades\Cache::store('redis')->remember(
-                'schema_columns_tenants',
-                86400,
-                fn () => \Illuminate\Support\Facades\Schema::getColumnListing('tenants')
-            );
-        }
-
-        static::saved(function ($tenant) {
+        // Invalidate the IdentifyTenant middleware cache. Must use the same default
+        // cache store the middleware reads from — do not pin a specific store.
+        $flushTenantCache = function ($tenant) {
             try {
-                if (extension_loaded('redis')) {
-                    \Illuminate\Support\Facades\Cache::store('redis')->forget("taalimu:tenancy:domain:{$tenant->domain}");
-                }
+                \Illuminate\Support\Facades\Cache::forget("taalimu:tenancy:domain:{$tenant->domain}");
+                \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$tenant->domain}");
             } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::warning("Tenant Model (saved event): Failed to clear redis cache for domain {$tenant->domain}. Error: ".$e->getMessage());
+                \Illuminate\Support\Facades\Log::warning("Tenant Model: Failed to clear tenant cache for domain {$tenant->domain}. Error: ".$e->getMessage());
             }
-            // Keep old cache clearing for safety during transition
-            \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$tenant->domain}");
-        });
+        };
 
-        static::deleted(function ($tenant) {
-            try {
-                if (extension_loaded('redis')) {
-                    \Illuminate\Support\Facades\Cache::store('redis')->forget("taalimu:tenancy:domain:{$tenant->domain}");
-                }
-            } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::warning("Tenant Model (deleted event): Failed to clear redis cache for domain {$tenant->domain}. Error: ".$e->getMessage());
-            }
-            \Illuminate\Support\Facades\Cache::forget("tenant_lookup_{$tenant->domain}");
-        });
+        static::saved($flushTenantCache);
+        static::deleted($flushTenantCache);
     }
 
     public function getActivitylogOptions(): LogOptions
@@ -118,13 +100,6 @@ class Tenant extends Model
     public function users()
     {
         return $this->hasMany(User::class);
-    }
-
-    protected static $appColumns = [];
-
-    public function getTableColumns()
-    {
-        return static::$appColumns ?: parent::getTableColumns();
     }
 
     /**

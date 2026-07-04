@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Mail\PaymentReminderMail;
 use App\Models\PaymentReminder;
 use App\Models\Student;
 use App\Models\Tenant;
@@ -63,7 +62,14 @@ class SendPaymentRemindersCommand extends Command
             // Get active students with unpaid balances
             $students = Student::where('tenant_id', $tenant->id)
                 ->where('status', 'active')
+                ->with(['user', 'guardian'])
                 ->get();
+
+            // Batch the per-student lookups into two queries per tenant:
+            // students who already paid this month, and reminders already sent
+            // this month (keyed "{student_id}|{stage}").
+            $paidStudentIds = $this->paidStudentIdsThisMonth($tenant->id);
+            $sentReminders = $this->sentRemindersThisMonth($tenant->id, $currentYear, $currentMonth);
 
             foreach ($students as $student) {
                 $dueDay = $student->payment_due_day ?: $defaultDueDay;
@@ -74,7 +80,7 @@ class SendPaymentRemindersCommand extends Command
                 }
 
                 // Check if student already paid this month
-                if ($this->hasStudentPaidThisMonth($student, $currentYear, $currentMonth)) {
+                if ($paidStudentIds->has($student->id)) {
                     continue;
                 }
 
@@ -90,7 +96,7 @@ class SendPaymentRemindersCommand extends Command
                     $stage = $daysBefore === 0 ? 'due_day' : "pre_due_{$daysBefore}d";
 
                     if ($daysUntilDue === $daysBefore) {
-                        $this->sendEmailReminder($tenant, $student, $fee, $dueDay, $stage, $emailTemplate, $emailSubject, $currentYear, $currentMonth);
+                        $this->sendEmailReminder($tenant, $student, $fee, $dueDay, $stage, $emailTemplate, $emailSubject, $currentYear, $currentMonth, $sentReminders);
                         $processedCount++;
                     }
                 }
@@ -105,7 +111,7 @@ class SendPaymentRemindersCommand extends Command
                         $daysBefore = (int) ($reminder['days_before'] ?? -1);
                         if ($daysBefore > 0 && $daysUntilDue === $daysBefore) {
                             $stage = "wa_pre_due_{$daysBefore}d";
-                            $this->sendWhatsAppReminder($whatsappService, $tenant, $student, $fee, $dueDay, $stage, $whatsappTemplate, $currentYear, $currentMonth);
+                            $this->sendWhatsAppReminder($whatsappService, $tenant, $student, $fee, $dueDay, $stage, $whatsappTemplate, $currentYear, $currentMonth, $sentReminders);
                             $processedCount++;
                         }
                     }
@@ -125,10 +131,10 @@ class SendPaymentRemindersCommand extends Command
                             $stage = "overdue_{$daysAfter}d";
 
                             // Also send email for overdue
-                            $this->sendEmailReminder($tenant, $student, $fee, $dueDay, $stage, $emailTemplate, $emailSubject, $currentYear, $currentMonth);
+                            $this->sendEmailReminder($tenant, $student, $fee, $dueDay, $stage, $emailTemplate, $emailSubject, $currentYear, $currentMonth, $sentReminders);
 
                             // Send WhatsApp
-                            $this->sendWhatsAppReminder($whatsappService, $tenant, $student, $fee, $dueDay, $stage, $whatsappTemplate, $currentYear, $currentMonth);
+                            $this->sendWhatsAppReminder($whatsappService, $tenant, $student, $fee, $dueDay, $stage, $whatsappTemplate, $currentYear, $currentMonth, $sentReminders);
                             $processedCount++;
                         }
                     }
@@ -148,9 +154,9 @@ class SendPaymentRemindersCommand extends Command
                                 $stage = "overdue_repeat_{$daysOverdue}d";
 
                                 // Check that this specific repeat stage hasn't been sent already
-                                if (! PaymentReminder::alreadySent($tenant->id, $student->id, "email_{$stage}", $currentYear, $currentMonth)) {
-                                    $this->sendEmailReminder($tenant, $student, $fee, $dueDay, $stage, $emailTemplate, $emailSubject, $currentYear, $currentMonth);
-                                    $this->sendWhatsAppReminder($whatsappService, $tenant, $student, $fee, $dueDay, $stage, $whatsappTemplate, $currentYear, $currentMonth);
+                                if (! $sentReminders->has("{$student->id}|email_{$stage}")) {
+                                    $this->sendEmailReminder($tenant, $student, $fee, $dueDay, $stage, $emailTemplate, $emailSubject, $currentYear, $currentMonth, $sentReminders);
+                                    $this->sendWhatsAppReminder($whatsappService, $tenant, $student, $fee, $dueDay, $stage, $whatsappTemplate, $currentYear, $currentMonth, $sentReminders);
                                     $processedCount++;
                                 }
                             }
@@ -166,24 +172,39 @@ class SendPaymentRemindersCommand extends Command
     }
 
     /**
-     * Check if the student has any payments recorded this month.
+     * IDs of students with a paid sale this month, as a keyed set.
+     * whereBetween keeps the created_at index usable (whereYear/whereMonth don't).
      */
-    protected function hasStudentPaidThisMonth(Student $student, int $year, int $month): bool
+    protected function paidStudentIdsThisMonth(int $tenantId): \Illuminate\Support\Collection
     {
-        return $student->sales()
+        return \App\Models\Sale::where('tenant_id', $tenantId)
             ->where('status', 'paid')
-            ->whereYear('created_at', $year)
-            ->whereMonth('created_at', $month)
-            ->exists();
+            ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
+            ->distinct()
+            ->pluck('student_id')
+            ->flip();
+    }
+
+    /**
+     * Reminders already sent this month, as a set keyed "{student_id}|{stage}".
+     */
+    protected function sentRemindersThisMonth(int $tenantId, int $year, int $month): \Illuminate\Support\Collection
+    {
+        return PaymentReminder::where('tenant_id', $tenantId)
+            ->where('reminder_year', $year)
+            ->where('reminder_month', $month)
+            ->where('status', 'sent')
+            ->get(['student_id', 'stage'])
+            ->mapWithKeys(fn ($r) => ["{$r->student_id}|{$r->stage}" => true]);
     }
 
     /**
      * Send an email reminder and log it.
      */
-    protected function sendEmailReminder(Tenant $tenant, Student $student, float $fee, int $dueDay, string $stage, string $template, string $subject, int $year, int $month): void
+    protected function sendEmailReminder(Tenant $tenant, Student $student, float $fee, int $dueDay, string $stage, string $template, string $subject, int $year, int $month, \Illuminate\Support\Collection $sentReminders): void
     {
         // Prevent duplicate
-        if (PaymentReminder::alreadySent($tenant->id, $student->id, "email_{$stage}", $year, $month)) {
+        if ($sentReminders->has("{$student->id}|email_{$stage}")) {
             $this->line("  ⏭ Email already sent: {$student->name} / {$stage}");
 
             return;
@@ -243,6 +264,7 @@ class SendPaymentRemindersCommand extends Command
                 'status' => 'sent',
                 'recipients' => json_encode($emails->toArray()),
             ]);
+            $sentReminders->put("{$student->id}|email_{$stage}", true);
 
             $this->line("  ✅ Email sent to {$student->name} ({$stage})");
         } catch (\Exception $e) {
@@ -269,10 +291,10 @@ class SendPaymentRemindersCommand extends Command
     /**
      * Send a WhatsApp reminder and log it.
      */
-    protected function sendWhatsAppReminder(WhatsAppService $whatsappService, Tenant $tenant, Student $student, float $fee, int $dueDay, string $stage, string $template, int $year, int $month): void
+    protected function sendWhatsAppReminder(WhatsAppService $whatsappService, Tenant $tenant, Student $student, float $fee, int $dueDay, string $stage, string $template, int $year, int $month, \Illuminate\Support\Collection $sentReminders): void
     {
         // Prevent duplicate
-        if (PaymentReminder::alreadySent($tenant->id, $student->id, "whatsapp_{$stage}", $year, $month)) {
+        if ($sentReminders->has("{$student->id}|whatsapp_{$stage}")) {
             $this->line("  ⏭ WhatsApp already sent: {$student->name} / {$stage}");
 
             return;
@@ -304,7 +326,7 @@ class SendPaymentRemindersCommand extends Command
         } else {
             // Default WhatsApp message
             if (str_starts_with($stage, 'overdue')) {
-                $message = "⚠️ تنبيه من {$tenant->name}\n\nالسلام عليكم،\nنود إبلاغكم بأن مصروفات الطالب/ة {$student->name} بمبلغ ".number_format($fee, 2)." {$currency} قد تأخر سدادها.\nنرجو التواصل مع الإدارة لتسوية amount.\n\nشكراً لتعاونكم.";
+                $message = "⚠️ تنبيه من {$tenant->name}\n\nالسلام عليكم،\nنود إبلاغكم بأن مصروفات الطالب/ة {$student->name} بمبلغ ".number_format($fee, 2)." {$currency} قد تأخر سدادها.\nنرجو التواصل مع الإدارة لتسويتها.\n\nشكراً لتعاونكم.";
             } else {
                 $message = "📋 تذكير من {$tenant->name}\n\nالسلام عليكم،\nنذكّركم بأن مصروفات الطالب/ة {$student->name} بمبلغ ".number_format($fee, 2)." {$currency} مستحقة يوم {$dueDay} من الشهر الحالي.\n\nشكراً لتعاونكم.";
             }
@@ -327,6 +349,7 @@ class SendPaymentRemindersCommand extends Command
             ]);
 
             if ($result) {
+                $sentReminders->put("{$student->id}|whatsapp_{$stage}", true);
                 $this->line("  ✅ WhatsApp sent to {$student->name} ({$stage})");
             } else {
                 $this->line("  ⚠ WhatsApp returned false for {$student->name}");
