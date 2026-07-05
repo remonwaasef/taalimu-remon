@@ -12,6 +12,7 @@ use App\Models\Student;
 use App\Models\Tenant;
 use App\Models\User;
 use App\Services\FinanceService;
+use App\Services\SettingsService;
 use App\Services\StudentService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;

@@ -54,15 +54,19 @@ $instructorRoutes = function () {
         Route::post('/email-templates/reset', [SettingsController::class, 'resetEmailTemplates'])->name('instructor.email-templates.reset');
 
         // Auto-clear cache route (Temporary helper)
-        Route::get('/clear-cache', function () {
+        if (app()->environment('local')) {
+            Route::get('/clear-cache', function () {
             \Illuminate\Support\Facades\Artisan::call('view:clear');
 
             return 'تم مسح الكاش بنجاح! يمكنك الآن الرجوع للصفحة الرئيسية وتحديثها لترى التعديلات.';
-        });
+            });
+        }
     });
 
     // Public Phone Check
-    Route::get('/instructor/check-phone', [StudentController::class, 'checkPhone'])->name('instructor.students.check-phone');
+    Route::get('/instructor/check-phone', [StudentController::class, 'checkPhone'])
+        ->middleware('throttle:20,1')
+        ->name('instructor.students.check-phone');
 
     Route::middleware(['auth', 'verified', 'subscription'])->prefix('instructor')->group(function () {
 
@@ -94,7 +98,9 @@ $instructorRoutes = function () {
     });
 
     // Public Student Portal (Accessible via QR Link)
-    Route::get('/s/{identifier}', [\Modules\Instructor\Http\Controllers\StudentPortalController::class, 'index'])->name('student.portal');
+    Route::get('/s/{identifier}', [\Modules\Instructor\Http\Controllers\StudentPortalController::class, 'index'])
+        ->middleware('signed')
+        ->name('student.portal');
 };
 
 // Register routes based on tenancy mode (Supporting both path and subdomain)

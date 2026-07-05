@@ -44,6 +44,47 @@ class StudentController extends Controller
         return $query->findOrFail($id);
     }
 
+    /**
+     * Lightweight JSON search used by async student pickers (TomSelect).
+     * Replaces loading the entire student list into enrollment modals,
+     * which did not scale beyond a few hundred students.
+     */
+    public function search(Request $request)
+    {
+        $this->authorize('viewAny', Student::class);
+
+        $validated = $request->validate([
+            'q' => 'nullable|string|max:100',
+            'exclude_course_id' => 'nullable|integer',
+        ]);
+
+        $query = Student::query()->select('id', 'name', 'phone');
+
+        if (! empty($validated['q'])) {
+            $term = $validated['q'];
+            $query->where(function ($q) use ($term) {
+                $q->where('name', 'like', "%{$term}%")
+                    ->orWhere('phone', 'like', "%{$term}%")
+                    ->orWhere('code', 'like', "%{$term}%");
+            });
+        }
+
+        // Optionally hide students already enrolled in a given course
+        if (! empty($validated['exclude_course_id'])) {
+            $courseId = (int) $validated['exclude_course_id'];
+            $query->whereDoesntHave('user.enrollments', fn ($q) => $q->where('course_id', $courseId));
+        }
+
+        $students = $query->orderBy('name')->limit(20)->get();
+
+        return response()->json(
+            $students->map(fn ($s) => [
+                'id' => $s->id,
+                'text' => $s->name.($s->phone ? ' ('.$s->phone.')' : ''),
+            ])
+        );
+    }
+
     public function index(Request $request)
     {
         $this->authorize('viewAny', Student::class);

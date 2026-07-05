@@ -45,6 +45,9 @@ class AuthServiceProvider extends ServiceProvider
         \App\Models\QuizAttempt::class => \App\Policies\QuizAttemptPolicy::class,
         \App\Models\AssignmentSubmission::class => \App\Policies\AssignmentSubmissionPolicy::class,
         \Modules\Center\Models\Attendance::class => \App\Policies\AttendancePolicy::class,
+        // Explicit registration (model moved from an anomalous namespace where
+        // auto-discovery could never find this policy).
+        \App\Models\Asset::class => \App\Policies\AssetPolicy::class,
     ];
 
     /**

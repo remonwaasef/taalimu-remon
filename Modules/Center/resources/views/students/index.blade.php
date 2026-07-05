@@ -87,19 +87,31 @@
                         <div class="ticket-stub-decoration top"></div>
                         <div class="ticket-stub-decoration bottom"></div>
                         
-                        @if(session('student_email'))
-                            @php
-                                $studentForQr = \App\Models\Student::where('email', session('student_email'))->where('tenant_id', app('tenant')->id)->first();
-                                $qrUrl = $studentForQr ? \Illuminate\Support\Facades\URL::signedRoute('center.login.magic', ['student' => $studentForQr->id, 'tenant' => app('tenant')->domain]) : url('/login');
-                            @endphp
-                            <div class="qr-container bg-white p-2 rounded-3 shadow-sm mb-3">
-                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode($qrUrl) }}" alt="QR Code" style="width: 140px; height: 140px;">
-                            </div>
-                        @else
-                            <div class="qr-container bg-white p-2 rounded-3 shadow-sm mb-3">
-                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(url('/login')) }}" alt="QR Code" style="width: 140px; height: 140px;">
-                            </div>
-                        @endif
+                        @php
+                            $studentForQr = session('student_email')
+                                ? \App\Models\Student::where('email', session('student_email'))->where('tenant_id', app('tenant')->id)->first()
+                                : null;
+                            // Signed magic-login link — generated as a QR locally in the
+                            // browser so this credential is never sent to a third-party service.
+                            $qrUrl = $studentForQr
+                                ? \Illuminate\Support\Facades\URL::signedRoute('center.login.magic', ['student' => $studentForQr->id, 'tenant' => app('tenant')->domain])
+                                : url('/login');
+                        @endphp
+                        <div class="qr-container bg-white p-2 rounded-3 shadow-sm mb-3">
+                            <div class="student-local-qr d-flex justify-content-center" style="width: 140px; height: 140px;" data-qr="{{ $qrUrl }}"></div>
+                        </div>
+                        @push('scripts')
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                document.querySelectorAll('.student-local-qr').forEach(function (el) {
+                                    if (typeof QRCode !== 'undefined' && el.dataset.qr) {
+                                        new QRCode(el, { text: el.dataset.qr, width: 130, height: 130, correctLevel: QRCode.CorrectLevel.H });
+                                    }
+                                });
+                            });
+                        </script>
+                        @endpush
                         <p class="small text-muted mb-0">{{ __('center::students.scan_qr_tip') }}</p>
                         <div class="mt-3 text-secondary small">
                             <i class="fas fa-clock me-1"></i> {{ __('center::students.valid_unlimited') }}

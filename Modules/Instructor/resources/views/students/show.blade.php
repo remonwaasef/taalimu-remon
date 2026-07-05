@@ -12,9 +12,21 @@
                     <div class="mb-4">
                         @if($student->user && $student->user->qr_identifier)
                             <div class="d-flex flex-column align-items-center">
-                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode($student->user->qr_identifier) }}" alt="QR Code" class="img-fluid rounded-4 shadow-sm mb-2" style="max-width: 150px;">
+                                {{-- QR generated locally in the browser (no third-party service) --}}
+                                <div id="studentQrCode" class="d-flex justify-content-center rounded-4 shadow-sm mb-2 p-2 bg-white" style="width: 150px; height: 150px;" data-identifier="{{ $student->user->qr_identifier }}"></div>
                                 <span class="badge bg-light text-dark border user-select-all fs-6 font-monospace">{{ $student->user->qr_identifier }}</span>
                             </div>
+                            @push('scripts')
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    const el = document.getElementById('studentQrCode');
+                                    if (el && typeof QRCode !== 'undefined' && el.dataset.identifier) {
+                                        new QRCode(el, { text: el.dataset.identifier, width: 130, height: 130, correctLevel: QRCode.CorrectLevel.H });
+                                    }
+                                });
+                            </script>
+                            @endpush
                         @else
                             <div class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 100px; height: 100px; background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);">
                                 <i class="fas fa-user-graduate fa-3x"></i>
@@ -26,7 +38,7 @@
                     
                     <div class="d-flex justify-content-center gap-2 mb-4">
                         @php
-                            $portalUrl = route('student.portal', $student->user->qr_identifier ?? 'invalid');
+                            $portalUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute('student.portal', now()->addDays(30), ['identifier' => $student->user->qr_identifier ?? 'invalid']);
                             $shareMsg = __('instructor::dashboard.student_portal_share_msg', [
                                 'name' => $student->name,
                                 'url' => $portalUrl

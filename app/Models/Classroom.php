@@ -49,7 +49,7 @@ class Classroom extends Model
 
     public function assets()
     {
-        return $this->hasMany(Modules\Center\Models\Asset::class);
+        return $this->hasMany(Asset::class);
     }
 
     public function getActivitylogOptions(): LogOptions

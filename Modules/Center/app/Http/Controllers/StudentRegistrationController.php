@@ -66,9 +66,13 @@ class StudentRegistrationController extends Controller
                 'name' => $request->name,
                 'email' => $email,
                 'phone' => $request->phone,
-                'password' => Hash::make($request->phone), // Default password is phone
+                // Phone is only a TEMPORARY password; the user is forced to change it
+                // on first login (must_change_password) so a guessable phone number
+                // cannot remain a valid credential.
+                'password' => Hash::make($request->phone),
+                'must_change_password' => true,
                 'role' => 'student',
-                'qr_identifier' => Str::random(12),
+                'qr_identifier' => Str::random(32),
                 'tenant_id' => $course->tenant_id,
             ]);
 
@@ -85,7 +89,7 @@ class StudentRegistrationController extends Controller
         } else {
             // Ensure existing user has a qr_identifier if they are a student
             if ($user->role === 'student' && empty($user->qr_identifier)) {
-                $user->update(['qr_identifier' => Str::random(12)]);
+                $user->update(['qr_identifier' => Str::random(32)]);
             }
         }
 
@@ -103,18 +107,27 @@ class StudentRegistrationController extends Controller
             ]);
         }
 
+        // Remember which user just completed registration so the success page can
+        // only be viewed for that account. Prevents enumerating /register/success/{id}
+        // to harvest other students' names, QR identifiers and portal links (IDOR).
+        session()->put('registered_user_id', $user->id);
+
         return redirect()->route('group.registration.success', ['user' => $user->id]);
     }
 
     public function success(User $user)
     {
+        // Authorization: the success screen exposes the student's QR identifier
+        // (their attendance secret) and a signed portal link. It must only be
+        // reachable by the browser session that just registered this user.
+        abort_unless((int) session('registered_user_id') === (int) $user->id, 403);
+
         // Get the latest enrollment to show the group/instructor info
         $enrollment = $user->enrollments()->with('course.instructor')->latest()->first();
         $course = $enrollment ? $enrollment->course : null;
 
-        // Use a reliable external QR generator that works across all mobile browsers
-        $qrCode = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data='.urlencode($user->qr_identifier);
-
-        return view('center::groups.registration_success', compact('user', 'qrCode', 'course'));
+        // The QR code is rendered client-side from the identifier (see the view),
+        // so no data is sent to any third-party QR service.
+        return view('center::groups.registration_success', compact('user', 'course'));
     }
 }

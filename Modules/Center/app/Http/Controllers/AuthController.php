@@ -74,12 +74,9 @@ class AuthController extends Controller
         // Rate Limiting Key: IP + Email
         $throttleKey = 'login.'.\Illuminate\Support\Str::lower($request->input('email')).'|'.$request->ip();
 
-        // Increase rate limit for local development/testing to prevent locking out developers
-        $ip = $request->ip();
-        $isLocal = app()->environment('local') ||
-                   in_array($ip, ['127.0.0.1', '::1']) ||
-                   str_starts_with($ip, '192.168.');
-        $maxAttempts = $isLocal ? 100 : 5;
+        // Increase rate limit for local development/testing to prevent locking out developers.
+        // Environment-based only — request IPs must never relax throttling (spoofable via XFF).
+        $maxAttempts = is_relaxed_throttle_env() ? 100 : 5;
 
         if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($throttleKey, $maxAttempts)) {
             $seconds = \Illuminate\Support\Facades\RateLimiter::availableIn($throttleKey);
@@ -236,7 +233,9 @@ class AuthController extends Controller
     {
         $request->validate([
             'current_password' => ['required', 'current_password'],
-            'password' => 'required|min:8|confirmed',
+            // Uses the platform-wide policy defined in AppServiceProvider
+            // (min 8 + mixed case + numbers + symbols + uncompromised in production).
+            'password' => ['required', 'confirmed', \Illuminate\Validation\Rules\Password::defaults()],
         ]);
 
         $user = auth()->user();

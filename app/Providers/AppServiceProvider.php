@@ -94,28 +94,24 @@ class AppServiceProvider extends ServiceProvider
      */
     protected function configureRateLimiting(): void
     {
+        // NOTE: limits are relaxed based on the app environment ONLY.
+        // Request IPs must never be trusted for this (spoofable via X-Forwarded-For).
         \Illuminate\Support\Facades\RateLimiter::for('login', function (\Illuminate\Http\Request $request) {
-            $ip = $request->ip();
-            $isLocal = app()->environment('local') || in_array($ip, ['127.0.0.1', '::1']) || str_starts_with($ip, '192.168.');
-            $limit = $isLocal ? 100 : 5;
+            $limit = is_relaxed_throttle_env() ? 100 : 5;
 
-            return \Illuminate\Cache\RateLimiting\Limit::perMinute($limit)->by($request->email.$ip);
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute($limit)->by($request->email.$request->ip());
         });
 
         \Illuminate\Support\Facades\RateLimiter::for('password-reset', function (\Illuminate\Http\Request $request) {
-            $ip = $request->ip();
-            $isLocal = app()->environment('local') || in_array($ip, ['127.0.0.1', '::1']) || str_starts_with($ip, '192.168.');
-            $limit = $isLocal ? 100 : 3;
+            $limit = is_relaxed_throttle_env() ? 100 : 3;
 
-            return \Illuminate\Cache\RateLimiting\Limit::perMinute($limit)->by($request->email.$ip);
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute($limit)->by($request->email.$request->ip());
         });
 
         \Illuminate\Support\Facades\RateLimiter::for('registration', function (\Illuminate\Http\Request $request) {
-            $ip = $request->ip();
-            $isLocal = app()->environment('local') || in_array($ip, ['127.0.0.1', '::1']) || str_starts_with($ip, '192.168.');
-            $limit = $isLocal ? 100 : 5;
+            $limit = is_relaxed_throttle_env() ? 100 : 5;
 
-            return \Illuminate\Cache\RateLimiting\Limit::perMinute($limit)->by($ip);
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute($limit)->by($request->ip());
         });
 
         // Protect QR Scanner Endpoints against spam scanning

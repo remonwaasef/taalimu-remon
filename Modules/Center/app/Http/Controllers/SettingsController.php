@@ -7,8 +7,8 @@ use App\Models\Tenant;
 use Modules\Center\Http\Controllers\CenterBaseController as Controller;
 use Modules\Center\Http\Requests\ApplyTemplateRequest;
 use Modules\Center\Http\Requests\UpdateAcademicRequest;
+use App\Services\SettingsService;
 use Modules\Center\Http\Requests\UpdateSettingsRequest;
-use Modules\Center\Services\SettingsService;
 
 class SettingsController extends Controller
 {
@@ -87,7 +87,7 @@ class SettingsController extends Controller
      */
     public function updateReminders(\Illuminate\Http\Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'default_due_day' => 'required|integer|min:1|max:28',
             'default_monthly_fee' => 'nullable|numeric|min:0',
             'email_reminders' => 'array',
@@ -109,7 +109,8 @@ class SettingsController extends Controller
 
         $tenant = Tenant::findOrFail($this->tenant->id);
 
-        $this->settingsService->updatePaymentReminders($tenant, $request->all());
+        // Pass validated input only — never the raw request payload.
+        $this->settingsService->updatePaymentReminders($tenant, $validated);
 
         return back()->with('success', __('center::settings.reminders.saved'));
     }

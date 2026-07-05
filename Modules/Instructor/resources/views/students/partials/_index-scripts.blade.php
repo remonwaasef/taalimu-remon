@@ -155,7 +155,17 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', function() {
             if (qrModal) {
                 qrModalName.textContent = this.dataset.name;
-                qrModalImg.src = this.dataset.qr;
+                // Generate the QR locally from the identifier — nothing is sent
+                // to any external QR service.
+                qrModalImg.innerHTML = '';
+                if (typeof QRCode !== 'undefined' && this.dataset.identifier) {
+                    new QRCode(qrModalImg, {
+                        text: this.dataset.identifier,
+                        width: 180,
+                        height: 180,
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                }
                 portalUrlInput.value = this.dataset.portal;
                 openPortalBtn.href = this.dataset.portal;
                 qrModal.show();

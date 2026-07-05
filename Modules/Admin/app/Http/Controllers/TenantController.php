@@ -69,6 +69,7 @@ class TenantController extends Controller
         ];
 
         $tenants = $query->with(['users', 'currentSubscription.package'])
+            ->withCount('students')
             ->withSum(['invoices as ltv' => function ($query) {
                 $query->where('status', 'paid');
             }], 'amount')

@@ -269,8 +269,7 @@
                                         if (str_starts_with($phoneForWa, '0')) {
                                             $phoneForWa = '20' . substr($phoneForWa, 1);
                                         }
-                                        $qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" . urlencode($student->user->qr_identifier ?? '');
-                                        $portalUrl = route('student.portal', ['identifier' => $student->user->qr_identifier ?? '']);
+                                        $portalUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute('student.portal', now()->addDays(30), ['identifier' => $student->user->qr_identifier ?? '']);
                                     @endphp
                                     <a href="https://api.whatsapp.com/send?phone={{ $phoneForWa }}" target="_blank" class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-success shadow-sm" title="{{ __('instructor::students.whatsapp_parent') }}">
                                         <i class="fab fa-whatsapp fa-lg"></i>
@@ -300,7 +299,7 @@
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4">
                                             <li>
-                                                <button type="button" class="dropdown-item py-2 show-qr-btn" data-name="{{ $student->name }}" data-qr="{{ $qrUrl }}" data-portal="{{ $portalUrl }}">
+                                                <button type="button" class="dropdown-item py-2 show-qr-btn" data-name="{{ $student->name }}" data-identifier="{{ $student->user->qr_identifier ?? '' }}" data-portal="{{ $portalUrl }}">
                                                     <i class="fas fa-qrcode me-2 text-primary"></i> {{ __('instructor::students.qr_and_portal') }}
                                                 </button>
                                             </li>
@@ -383,7 +382,8 @@
             <div class="modal-body text-center p-4">
                 <h5 class="fw-bold mb-3" id="qrModalName"></h5>
                 <div class="bg-light p-3 rounded-4 mb-3 d-inline-block shadow-inner">
-                    <img id="qrModalImg" src="" alt="QR" style="width: 180px; height: 180px;">
+                    {{-- QR is generated locally in the browser (no third-party service). --}}
+                    <div id="qrModalImg" class="d-flex justify-content-center" style="width: 180px; height: 180px;"></div>
                 </div>
                 
                 <div class="mb-3">
@@ -561,6 +561,9 @@
         </div>
     </div>
 </div>
+
+{{-- Local QR generator (renders in-browser, no third-party service) --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 @endpush
 
 

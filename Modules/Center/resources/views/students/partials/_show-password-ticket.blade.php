@@ -44,9 +44,22 @@
                         <div class="ticket-stub-decoration bottom"></div>
                         
                         <div class="qr-container bg-white p-2 rounded-3 shadow-sm mb-3">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode($qrUrl) }}" alt="QR Code" style="width: 140px; height: 140px;">
+                            {{-- Signed magic-login link → QR generated locally, never sent to a third party --}}
+                            <div class="pwticket-local-qr d-flex justify-content-center" style="width: 140px; height: 140px;" data-qr="{{ $qrUrl }}"></div>
                         </div>
                         <p class="small text-muted mb-0">{{ __('center::students.magic_login_tip') }}</p>
+                        @push('scripts')
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                document.querySelectorAll('.pwticket-local-qr').forEach(function (el) {
+                                    if (typeof QRCode !== 'undefined' && el.dataset.qr) {
+                                        new QRCode(el, { text: el.dataset.qr, width: 130, height: 130, correctLevel: QRCode.CorrectLevel.H });
+                                    }
+                                });
+                            });
+                        </script>
+                        @endpush
                     </div>
                 </div>
             </div>

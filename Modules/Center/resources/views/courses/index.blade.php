@@ -206,9 +206,6 @@
                                     <label class="form-label fw-bold text-dark mb-2">{{ __('center::courses.select_student_from_list') }}</label>
                                     <select name="student_id" class="form-select border-2" id="unifiedStudentSelect" placeholder="{{ __('center::courses.search_student_placeholder') }}">
                                         <option value="">{{ __('center::courses.select_student_from_list') }}</option>
-                                        @foreach($students as $student)
-                                            <option value="{{ $student->id }}">{{ $student->name }} ({{ $student->phone }})</option>
-                                        @endforeach
                                     </select>
                                     <div class="form-text mt-2"><i class="fas fa-info-circle me-1"></i>{{ __('center::courses.search_student_hint') }}</div>
                                 </div>
@@ -297,8 +294,21 @@
                 const selectEl = document.getElementById('unifiedStudentSelect');
                 if (selectEl) {
                     unifiedTomSelect = new TomSelect('#unifiedStudentSelect', {
-                        sortField: { field: "text", direction: "asc" },
+                        // Students are loaded on demand from the server instead of
+                        // being embedded in the page (does not scale on large tenants).
+                        valueField: 'id',
+                        labelField: 'text',
+                        searchField: [],
                         maxOptions: 50,
+                        preload: 'focus',
+                        loadThrottle: 300,
+                        load: function(query, callback) {
+                            const url = '{{ route('center.students.search') }}?q=' + encodeURIComponent(query);
+                            fetch(url, { headers: { 'Accept': 'application/json' } })
+                                .then(r => r.ok ? r.json() : [])
+                                .then(json => callback(json))
+                                .catch(() => callback());
+                        },
                         @if(app()->isLocale('ar'))
                         direction: 'rtl',
                         @endif

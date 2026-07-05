@@ -223,7 +223,7 @@
             </div>
 
             <div class="d-flex flex-column gap-3">
-                <a href="{{ route('student.portal', $user->qr_identifier) }}" class="btn-portal">
+                <a href="{{ \Illuminate\Support\Facades\URL::temporarySignedRoute('student.portal', now()->addDays(30), ['identifier' => $user->qr_identifier]) }}" class="btn-portal">
                     <i class="fas fa-rocket"></i> دخول بوابة الطالب
                 </a>
                 

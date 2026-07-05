@@ -4,7 +4,7 @@ namespace Modules\Center\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Classroom;
-use App\Models\Modules\Center\Models\Asset;
+use App\Models\Asset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 

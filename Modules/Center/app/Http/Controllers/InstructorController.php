@@ -223,7 +223,7 @@ class InstructorController extends Controller
         $instructor = Instructor::where('tenant_id', app('tenant')->id)->findOrFail($id);
         $this->authorize('update', $instructor); // Using update perm for financial settlement
 
-        $request->validate([
+        $validated = $request->validate([
             'amount' => 'required|numeric|min:0.01|max:'.($instructor->total_earned + 0.01),
             'payment_method' => 'required|in:cash,bank_transfer,online,other',
             'payout_date' => 'required|date',
@@ -231,7 +231,7 @@ class InstructorController extends Controller
         ]);
 
         try {
-            $payoutService->processPayout($instructor, $request->all());
+            $payoutService->processPayout($instructor, $validated);
 
             return redirect()->back()->with('success', __('center::instructors.payout_success'));
         } catch (\Exception $e) {

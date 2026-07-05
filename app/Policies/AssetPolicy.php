@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\Modules\Center\Models\Asset;
+use App\Models\Asset;
 use App\Models\User;
 
 class AssetPolicy

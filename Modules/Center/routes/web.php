@@ -59,9 +59,17 @@ $tenantRoutes = function () {
     });
 
     // Student Self-Registration via Token (Public)
-    Route::get('register/group/{token}', [\Modules\Center\Http\Controllers\StudentRegistrationController::class, 'index'])->name('group.register');
-    Route::post('register/group/{token}', [\Modules\Center\Http\Controllers\StudentRegistrationController::class, 'store'])->name('group.register.submit');
-    Route::get('register/success/{user}', [\Modules\Center\Http\Controllers\StudentRegistrationController::class, 'success'])->name('group.registration.success');
+    // Throttled: public, unauthenticated endpoints that create users + sales,
+    // so they must be rate-limited against mass account creation / spam.
+    Route::get('register/group/{token}', [\Modules\Center\Http\Controllers\StudentRegistrationController::class, 'index'])
+        ->middleware('throttle:30,1')
+        ->name('group.register');
+    Route::post('register/group/{token}', [\Modules\Center\Http\Controllers\StudentRegistrationController::class, 'store'])
+        ->middleware('throttle:registration')
+        ->name('group.register.submit');
+    Route::get('register/success/{user}', [\Modules\Center\Http\Controllers\StudentRegistrationController::class, 'success'])
+        ->middleware('throttle:30,1')
+        ->name('group.registration.success');
 
     // QR Attendance Mark - Public route (protected by signed URL, NOT by auth middleware)
     // Students scan this from their phone and may not be logged in
@@ -122,6 +130,10 @@ $tenantRoutes = function () {
         Route::middleware(['can:view students'])->group(function () {
             Route::get('students', [StudentController::class, 'index'])->name('center.students.index');
             Route::get('students/export', [StudentController::class, 'export'])->name('center.students.export');
+            // Async picker for enrollment modals (lightweight JSON, max 20 rows)
+            Route::get('students/search', [StudentController::class, 'search'])
+                ->middleware('throttle:60,1')
+                ->name('center.students.search');
         });
 
         Route::middleware(['can:create students'])->group(function () {
