@@ -981,6 +981,7 @@ return [
     'msg_011' => 'Cannot record attendance after session time ends (you can only record absence).',
     'msg_012' => 'This student is already marked present today.',
     'msg_013' => 'Status updated successfully.',
+    'bulk_absent_success' => ':count students marked absent successfully.',
     'msg_014' => 'This account is not a student account. Please login with a student account.',
     'msg_015' => 'Student is already registered in this session.',
     'msg_016' => 'Sorry, this session is fully booked.',

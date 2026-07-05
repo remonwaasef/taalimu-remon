@@ -77,7 +77,7 @@
 @if(session()->has('impersonator_id'))
     <div class="alert alert-warning mb-0 rounded-0 border-0 p-2 d-flex justify-content-between align-items-center" style="z-index: 1050; position: relative;">
         <div>
-            <i class="fas fa-user-secret me-2"></i> {!! __('admin::admin.impersonation.alert', ['name' => '<strong>' . auth()->user()->name . '</strong>']) !!}
+            <i class="fas fa-user-secret me-2"></i> {!! __('admin::admin.impersonation.alert', ['name' => '<strong>' . e(auth()->user()->name) . '</strong>']) !!}
         </div>
         <a href="{{ route('admin.impersonate.stop') }}" class="btn btn-dark btn-sm rounded-pill px-4 fw-bold">
             <i class="fas fa-sign-out-alt me-1"></i> {{ __('admin::admin.impersonation.stop') }}

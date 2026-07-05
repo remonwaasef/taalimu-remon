@@ -174,7 +174,8 @@
             <div class="extra-small opacity-75">بطاقة تعريف الطالب الرقمية</div>
             
             <div class="qr-code-badge">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(url('/login?student_id='.$student->id)) }}" alt="QR Code">
+                {{-- QR generated locally in the browser (no third-party service) --}}
+                <div id="idCardQr" data-qr="{{ url('/login?student_id='.$student->id) }}"></div>
             </div>
         </div>
 
@@ -214,7 +215,14 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var el = document.getElementById('idCardQr');
+            if (el && typeof QRCode !== 'undefined' && el.dataset.qr) {
+                new QRCode(el, { text: el.dataset.qr, width: 70, height: 70, correctLevel: QRCode.CorrectLevel.H });
+            }
+        });
         // Optional: Auto-trigger print
         // window.onload = function() { window.print(); }
     </script>

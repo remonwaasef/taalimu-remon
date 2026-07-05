@@ -292,7 +292,7 @@ class SaleController extends Controller
         $sale = Sale::where('tenant_id', $tenant->id)->findOrFail($id);
         $this->authorize('update', $sale);
 
-        $request->validate([
+        $validated = $request->validate([
             'amount' => 'required|numeric|min:0.01|max:'.$sale->paid_amount,
             'reason' => 'nullable|string',
             'refund_method' => 'required|string',
@@ -300,7 +300,7 @@ class SaleController extends Controller
         ]);
 
         try {
-            $refundService->processRefund($sale, $request->all());
+            $refundService->processRefund($sale, $validated);
 
             return redirect()->back()->with('success', __('center::messages.refund_success') ?? 'تمت عملية الاسترداد بنجاح وتحديث السجلات.');
         } catch (\Exception $e) {

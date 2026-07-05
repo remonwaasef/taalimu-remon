@@ -93,7 +93,7 @@ class UserController extends Controller
                 Rule::unique('users')->where('tenant_id', $this->tenant->id),
             ],
             'phone' => 'nullable|string|max:20',
-            'password' => 'nullable|string|min:8|confirmed',
+            'password' => ['nullable', 'string', 'confirmed', \Illuminate\Validation\Rules\Password::defaults()],
             'role' => ['required', Rule::in($validRoles)],
             'permissions' => 'nullable|array',
             'permissions.*' => 'string|exists:permissions,name',

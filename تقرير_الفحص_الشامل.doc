@@ -1,0 +1,222 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40" dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8">
+<title>تقرير الفحص الشامل — منصة Taalimu</title>
+<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom><w:BiDi/></w:WordDocument></xml><![endif]-->
+<style>
+  body { font-family: Arial, "Segoe UI", Tahoma, sans-serif; direction: rtl; font-size: 11pt; color: #1a1a1a; }
+  h1 { font-size: 20pt; color: #1f3864; border-bottom: 3pt solid #1f3864; padding-bottom: 6pt; }
+  h2 { font-size: 15pt; color: #1f3864; border-bottom: 1pt solid #8faadc; padding-bottom: 3pt; margin-top: 24pt; }
+  h3 { font-size: 12.5pt; color: #2e5395; margin-top: 16pt; }
+  table { border-collapse: collapse; width: 100%; font-size: 10pt; margin: 8pt 0; }
+  th { background: #1f3864; color: #fff; padding: 6pt; border: 1pt solid #999; text-align: right; }
+  td { padding: 6pt; border: 1pt solid #bbb; vertical-align: top; text-align: right; }
+  code, .path { font-family: "Consolas", "Courier New", monospace; font-size: 9pt; color: #7b241c; direction: ltr; unicode-bidi: embed; }
+  .crit { background: #f8d7da; font-weight: bold; }
+  .high { background: #fde9d9; font-weight: bold; }
+  .med  { background: #fff2cc; font-weight: bold; }
+  .low  { background: #e2efda; font-weight: bold; }
+  .info { background: #deebf7; font-weight: bold; }
+  .good { color: #1e6b34; }
+  .kbd  { background:#eee; padding:1pt 3pt; }
+  p, li { line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<h1>تقرير الفحص الشامل — منصة Taalimu التعليمية (SaaS)</h1>
+<p><b>التاريخ:</b> 4 يوليو 2026 &nbsp;|&nbsp; <b>النطاق:</b> الأمان، الأداء وعنق الزجاجة، جودة الكود، الهيكلة، مبدأ DRY<br>
+<b>التقنية:</b> Laravel 12 (PHP 8.4) — بنية Multi-Tenant بوحدات nwidart/laravel-modules (Admin, Center, Instructor, Campus, Api, Tenancy)</p>
+
+<h2>1. الملخص التنفيذي</h2>
+<p>المشروع في حالة نضج <b>أعلى من المتوسط بوضوح</b>: بنية أمنية مدروسة (تحقق HMAC للويب هوك، روابط دخول موقّعة، عزل مستأجرين عبر Global Scope مع اختبارات عزل، رؤوس أمان وWAF وThrottling)، وطبقات معمارية سليمة (Services / DTOs / Query Objects / Form Requests / Policies) مع كاش متعدد المستويات. لا توجد ثغرات حرجة قابلة للاستغلال المباشر، لكن توجد <b>نقاط ضعف متوسطة</b> يجب معالجتها، وأكبر دين تقني هو <b>الازدواج بين وحدتي Center وInstructor</b>.</p>
+
+<table>
+<tr><th>المحور</th><th>التقييم</th><th>خلاصة</th></tr>
+<tr><td>الأمان</td><td class="low">جيد جداً (8/10)</td><td>أساس قوي؛ 6 ملاحظات متوسطة/منخفضة أدناه</td></tr>
+<tr><td>الأداء</td><td class="low">جيد (7.5/10)</td><td>كاش وفهارس ممتازة؛ 3 نقاط عنق زجاجة محددة</td></tr>
+<tr><td>جودة الكود</td><td class="med">جيد (7/10)</td><td>طبقات سليمة؛ ملفات ضخمة وJS مضمّن في البليد</td></tr>
+<tr><td>الهيكلة</td><td class="med">جيد (7/10)</td><td>وحدات واضحة لكن بتبعيات متقاطعة ونموذج في مسار خاطئ</td></tr>
+<tr><td>DRY</td><td class="med">متوسط (6/10)</td><td>ازدواج وحدتين كاملتين + نظامي أدوار متوازيين</td></tr>
+</table>
+
+<h2>2. الأمان</h2>
+
+<h3>2.1 النتائج (مرتبة بالخطورة)</h3>
+<table>
+<tr><th style="width:8%">الخطورة</th><th style="width:27%">المشكلة</th><th style="width:33%">الموقع والدليل</th><th style="width:32%">الحل المقترح</th></tr>
+
+<tr><td class="high">عالية</td>
+<td>تخزين بيانات اعتماد WhatsApp (access_token) وأسرار التكاملات كنص صريح داخل عمود <code>settings</code> (JSON) دون تشفير</td>
+<td><span class="path">app/Models/Tenant.php:93</span> — <code>'settings' =&gt; 'array'</code><br><span class="path">Modules/Instructor/.../SettingsController.php:133-146</span> يحفظ <code>access_token</code> مباشرة</td>
+<td>استخدام cast <code>'settings' =&gt; 'encrypted:array'</code> أو تشفير الحقول الحساسة فقط عبر <code>Crypt::encryptString()</code> قبل الحفظ، مع migration لتشفير البيانات القائمة</td></tr>
+
+<tr><td class="med">متوسطة</td>
+<td>اعتبار أي IP يبدأ بـ <code>192.168.</code> بيئة محلية فيُرفع حد محاولات الدخول من 5 إلى 100 ومحاولات OTP من 3 إلى 100 — مع <code>trustProxies</code> واسعة النطاق يمكن نظرياً انتحال IP داخلي عبر ترويسة X-Forwarded-For إذا أُسيء ضبط الـ LB</td>
+<td>مكرر في 7 مواقع: <span class="path">Modules/Center/.../AuthController.php:78-82</span>، <span class="path">app/Http/Controllers/PhoneVerificationController.php:57-61</span>، <span class="path">UnifiedAuthController.php:38</span>، <span class="path">AppServiceProvider.php:99,107,115</span><br><span class="path">bootstrap/app.php:21</span> — trustProxies لكل النطاقات الخاصة</td>
+<td>الاعتماد على <code>app()->environment('local')</code> فقط وحذف فحص الـ IP نهائياً، أو استخراجه إلى دالة واحدة <code>App::isTrustedLocalRequest()</code> مع قصر trustProxies على IP الموزّع الفعلي في الإنتاج</td></tr>
+
+<tr><td class="med">متوسطة</td>
+<td>سياسة CSP في الإنتاج تسمح بـ <code>'unsafe-inline'</code> للسكربتات، ما يُضعف الحماية من XSS (مُوثّق في تعليق بالكود كخطة مؤجلة)</td>
+<td><span class="path">app/Http/Middleware/ContentSecurityPolicy.php:41</span></td>
+<td>الانتقال التدريجي إلى nonce عبر Vite (<code>@vite</code> يدعم CSP nonce في Laravel 12)، خاصة أن البليدات مليئة بسكربتات مضمنة</td></tr>
+
+<tr><td class="med">متوسطة</td>
+<td>دخول بالهاتف يطابق 4 صيغ للرقم مع مسار fallback يختار <b>أول</b> <code>center_admin</code> عند تطابق هاتف المركز — احتمال تسجيل دخول لحساب غير مقصود عند تشابه/تكرار الأرقام، والمطابقة الفضفاضة (<code>substr($phone,1)</code>) توسّع نطاق التصادم</td>
+<td><span class="path">Modules/Center/.../AuthController.php:102-160</span></td>
+<td>توحيد صيغة تخزين الهاتف (E.164) عند الإدخال بحيث تكفي مطابقة واحدة دقيقة، وفرض unique index على (tenant_id, phone)، وإزالة fallback هاتف المركز أو تقييده بتأكيد إضافي</td></tr>
+
+<tr><td class="low">منخفضة</td>
+<td>إخراج اسم المستخدم دون تهريب داخل بانر الانتحال (Impersonation) — XSS مخزّن محتمل إذا احتوى اسم مدير مركز على HTML</td>
+<td><span class="path">Modules/Admin/.../layouts/master.blade.php:416</span> و<span class="path">hope-header.blade.php:80</span>: <code>{!! __('...', ['name' =&gt; '&lt;strong&gt;'.auth()-&gt;user()-&gt;name.'&lt;/strong&gt;']) !!}</code></td>
+<td>تهريب الاسم: <code>'&lt;strong&gt;'.e(auth()-&gt;user()-&gt;name).'&lt;/strong&gt;'</code></td></tr>
+
+<tr><td class="low">منخفضة</td>
+<td>سياسة كلمات مرور غير متسقة: التسجيل يفرض قواعد قوية (mixedCase + numbers + symbols + uncompromised) بينما تغيير كلمة المرور يكتفي بـ <code>min:8</code></td>
+<td>قوي: <span class="path">RegistrationController.php:44-52</span><br>ضعيف: <span class="path">Modules/Center/.../AuthController.php:239</span></td>
+<td>تعريف <code>Password::defaults()</code> مرة واحدة في AppServiceProvider واستخدامها في كل نقاط التحقق</td></tr>
+
+<tr><td class="low">منخفضة</td>
+<td>تمرير <code>$request-&gt;all()</code> إلى الخدمات بعد validate بدل <code>$request-&gt;validated()</code> — يُدخل حقولاً غير مُتحقق منها ويجعل الحماية معتمدة على <code>$fillable</code> فقط</td>
+<td>10 مواقع، منها: <span class="path">Modules/Center/.../SettingsController.php:112</span>، <span class="path">TicketController.php:52</span>، <span class="path">SaleController.php:303</span>، <span class="path">InstructorController.php:234</span></td>
+<td>استبدالها بـ <code>$request-&gt;validated()</code> أو DTO من validated فقط</td></tr>
+
+<tr><td class="info">معلومة</td>
+<td>ملف <code>.env</code> بمفتاح <code>APP_KEY</code> حقيقي موجود في مجلد المشروع (مستثنى من git بشكل صحيح، لكنه انتقل مع نسخ المجلد — كما في هذه النسخة)</td>
+<td><span class="path">.env:13</span></td>
+<td>عند مشاركة المجلد أو نقله: تدوير APP_KEY وكلمات المرور، والتأكد أن النسخ الاحتياطية لا تتضمن .env</td></tr>
+</table>
+
+<h3>2.2 نقاط قوة أمنية (تُحسب للمشروع)</h3>
+<ul>
+<li class="good">تحقق HMAC-SHA512 لويب هوك Paymob مع <code>hash_equals</code> ومنطق fail-closed، وتحقق توقيع PayPal عبر واجهة PayPal الرسمية (<span class="path">PaymobGateway.php:235-305</span>، <span class="path">PayPalService.php:166</span>).</li>
+<li class="good">عزل المستأجرين عبر <code>TenantScope</code> عالمي + trait <code>BelongsToTenant</code> على كل النماذج، مع اختبار <span class="path">tests/Feature/Security/ModelIsolationTest.php</span>، وفحص tenant إضافي عند الدخول وSSO.</li>
+<li class="good">روابط دخول سحرية موقّعة (<code>hasValidSignature</code>) وتوكنات SSO أحادية الاستخدام (<code>Cache::pull</code>).</li>
+<li class="good">استثناء CSRF مقصور على مسارَي الويب هوك فقط مع توثيق السبب.</li>
+<li class="good">منظومة رؤوس أمان كاملة: CSP مخصص للإنتاج، HSTS، nosniff، frame-ancestors، مع WAF أساسي وThrottling عام (300/دقيقة) وخاص (تسجيل، دخول، OTP).</li>
+<li class="good">OTP عبر <code>random_int</code> بمحاولات تحقق محدودة (5) وصلاحية 10 دقائق، وbcrypt بجولات 12، وتشفير الجلسات، والتحقق من رفع الملفات بامتدادات وأحجام مضبوطة.</li>
+</ul>
+
+<h2>3. الأداء وعنق الزجاجة</h2>
+
+<h3>3.1 نقاط عنق الزجاجة</h3>
+<table>
+<tr><th style="width:8%">الأثر</th><th style="width:30%">المشكلة</th><th style="width:30%">الموقع</th><th style="width:32%">الحل</th></tr>
+
+<tr><td class="high">مرتفع</td>
+<td>صفحة قائمة الدورات تحمّل <b>جميع طلاب المركز</b> (id, name, phone) في كل زيارة لمجرد تعبئة مودال "تسجيل سريع" — مع آلاف الطلاب تصبح الصفحة بطيئة وتستهلك ذاكرة كبيرة</td>
+<td><span class="path">Modules/Center/.../CourseController.php:50</span> — <code>Student::select(...)->get()</code></td>
+<td>استبدالها ببحث AJAX (endpoint مع <code>limit 20</code> + debounce) أو تحميل كسول عند فتح المودال فقط</td></tr>
+
+<tr><td class="med">متوسط</td>
+<td>تسجيل الغياب الجماعي ومزامنة الحضور: استعلام كتابة منفصل (<code>updateOrCreate</code>) لكل طالب داخل حلقة، وفي المزامنة استعلام بحث بالكود لكل سجل — فصل فيه 100 طالب = 200+ استعلام لكل عملية</td>
+<td><span class="path">Modules/Center/.../AttendanceController.php:180-193</span> (bulkAbsent)<br><span class="path">:322-347</span> (bulkSync)</td>
+<td>تجميع السجلات ثم <code>Attendance::upsert()</code> دفعة واحدة، وجلب خريطة الأكواد مسبقاً بـ <code>pluck('id','code')</code> (ملاحظة إيجابية: العلاقات نفسها مُحمّلة eager بشكل صحيح في :173)</td></tr>
+
+<tr><td class="low">منخفض</td>
+<td>أوامر التذكير المجدولة تمر على المستأجرين/الطلاب بحلقات دون chunking — ستتضخم زمنياً مع نمو البيانات</td>
+<td><span class="path">app/Console/Commands/RemindDebtsCommand.php</span>، <span class="path">SendPaymentRemindersCommand.php</span> وأشباهها</td>
+<td><code>chunkById(500)</code> + إرسال الإشعارات عبر Queue (موجودة فعلاً للـ OTP)</td></tr>
+
+<tr><td class="low">منخفض</td>
+<td>دوال SQL خاصة بـ MySQL تقيّد النقل بين قواعد البيانات وتمنع استخدام الفهارس أحياناً: <code>ISNULL()</code>، <code>MONTH()</code>، <code>ROW_NUMBER() OVER</code></td>
+<td><span class="path">Modules/Center/.../AssetController.php:17</span>، <span class="path">AnalyticsController.php:214-233</span>، <span class="path">CenterController.php:153</span></td>
+<td>مقبولة حالياً؛ يُفضّل عزلها في Query Objects (كما فُعل في <code>CenterAnalyticsQuery::getDateFormatSql</code>) لتوحيد التعامل</td></tr>
+</table>
+
+<h3>3.2 نقاط قوة في الأداء</h3>
+<ul>
+<li class="good">كاش منهجي متعدد الطبقات: حلّ المستأجر مُخزّن ساعة مع failover لقاعدة البيانات، لوحات التحكم 15 دقيقة، التحليلات 5 دقائق عبر <code>TenantCache</code> بمفاتيح معزولة لكل مستأجر، مع إبطال عبر Model Events وTrait <code>ClearsDashboardCache</code>.</li>
+<li class="good">Eager loading منتشر (<code>with(['instructor','schedules.classroom'])</code>...) وPagination في القوائم مع middleware <code>PaginationLimit</code> يمنع طلب صفحات ضخمة.</li>
+<li class="good">فهارس مركبة مدروسة تتماشى مع الـ TenantScope مثل <code>index(['tenant_id','status'])</code>، وRedis للجلسات والكاش، وطوابير للأعمال الثقيلة (إشعارات OTP).</li>
+</ul>
+
+<h2>4. جودة الكود والهيكلة وDRY</h2>
+
+<h3>4.1 النتائج</h3>
+<table>
+<tr><th style="width:8%">الأولوية</th><th style="width:32%">المشكلة</th><th style="width:28%">الدليل</th><th style="width:32%">الحل</th></tr>
+
+<tr><td class="high">عالية</td>
+<td><b>أكبر دين تقني — ازدواج وحدتي Center وInstructor:</b> كلتاهما تحويان Settings/Student/Attendance/Schedule/OnlineClass Controllers ونسخاً متشابهة من بليدات التبويبات (<code>_tab-general</code>, <code>_tab-reminders</code>, <code>_tab-whatsapp</code>...). كما أن Instructor يعتمد مباشرة على خدمات Center — تبعية متقاطعة تكسر حدود الوحدات</td>
+<td><span class="path">Modules/Instructor/.../SettingsController.php:154</span> يستدعي <code>Modules\Center\Services\SettingsService</code><br>قارن <span class="path">Instructor/.../SettingsController.php:65-97</span> مع نظيره في Center</td>
+<td>استخراج المنطق المشترك إلى طبقة مشتركة (<code>app/Services</code> أو وحدة Shared) والإبقاء في الوحدتين على الاختلافات فقط (Policies/Views)، ومنع أي <code>use Modules\X</code> بين وحدتين شقيقتين</td></tr>
+
+<tr><td class="high">عالية</td>
+<td><b>نظاما أدوار متوازيان:</b> عمود <code>role</code> نصي يُقارن مباشرة (33 مقارنة في 18 ملفاً) بالتوازي مع Spatie Permissions (<code>hasRole</code> في 13+ ملفاً) — أي تعديل دور في نظام دون الآخر يسبب تضارب صلاحيات</td>
+<td>أمثلة: <span class="path">Modules/Center/.../AuthController.php:41,179</span>، <span class="path">routes/web.php:26</span>، <span class="path">RedirectIfAuthenticated.php</span> (4 مواضع)</td>
+<td>اعتماد Spatie مصدراً وحيداً للحقيقة، وإبقاء العمود كـ cache للقراءة فقط يُحدّث عبر Observer، أو حذفه (يوجد أمر <code>SyncUserRoles</code> يمكن البناء عليه)</td></tr>
+
+<tr><td class="med">متوسطة</td>
+<td>تكرار مقتطف "isLocal" (فحص البيئة + IPs) حرفياً في 7 مواضع — مخالفة DRY لها أثر أمني (إصلاحه يتطلب 7 تعديلات)</td>
+<td><span class="path">AuthController.php:78-82</span>، <span class="path">PhoneVerificationController.php:57-61</span>، <span class="path">UnifiedAuthController.php:36-38</span>، <span class="path">AppServiceProvider.php:99,107,115</span>، <span class="path">GeoIPService.php:20</span></td>
+<td>دالة helper واحدة أو Macro على Request</td></tr>
+
+<tr><td class="med">متوسطة</td>
+<td>ملفات ضخمة تتجاوز مسؤولية واحدة: <code>Center/routes/web.php</code> (444 سطراً)، AttendanceController (367)، FinanceService (406)، OnboardingService (418)، SocialAuthController (343)، PaymentController (342)، بليد <code>Admin/layouts/master</code> (670)</td>
+<td>إحصاء أسطر فعلي من الفحص</td>
+<td>تقسيم المسارات لملفات فرعية (<code>routes/attendance.php</code>...) تُحمّل من RouteServiceProvider، ونقل منطق الويب هوك/الجلسات من الكونترولر إلى Services (النمط موجود أصلاً)</td></tr>
+
+<tr><td class="med">متوسطة</td>
+<td>نموذج في مسار/نيمسبيس شاذ يكسر اتساق البنية وPSR-4 المنطقي</td>
+<td><span class="path">app/Models/Modules/Center/Models/Asset.php</span> بنيمسبيس <code>App\Models\Modules\Center\Models</code></td>
+<td>نقله إلى <code>Modules/Center/app/Models/Asset.php</code> أو <code>app/Models/Asset.php</code> وتحديث الاستخدامات</td></tr>
+
+<tr><td class="low">منخفضة</td>
+<td>كتل JavaScript/CSS ضخمة مضمّنة داخل البليد (مثل <code>_show-scripts</code> 436 سطراً، <code>_edit-scripts</code> 264) — لا تستفيد من تجميع Vite والضغط والكاش، وتمنع تشديد CSP</td>
+<td><span class="path">Modules/Center/.../attendance/partials/_show-scripts.blade.php</span> وأمثالها (فصلها كـ partials خطوة جيدة أصلاً)</td>
+<td>نقلها تدريجياً إلى ملفات <code>resources/js</code> عبر Vite مع تمرير البيانات بـ <code>@js</code> / data-attributes</td></tr>
+
+<tr><td class="low">منخفضة</td>
+<td>خلط لغات الواجهة: نصوص عربية hard-coded داخل الكود رغم وجود منظومة ترجمة كاملة (ar/en/fr)</td>
+<td><span class="path">Modules/Center/.../AttendanceController.php:195</span> — <code>"تم تسجيل غياب $markedCount طلاب"</code>، <span class="path">AuthController.php:63,207</span></td>
+<td>نقلها إلى ملفات lang الموجودة أصلاً</td></tr>
+</table>
+
+<h3>4.2 نقاط قوة معمارية</h3>
+<ul>
+<li class="good">فصل طبقات حقيقي: Services (46 خدمة) + DTOs (<code>StudentData</code>, <code>CourseData</code>) + Query Objects (<code>CourseQuery</code>, <code>StudentQuery</code>, <code>CenterAnalyticsQuery</code>) + Form Requests + Policies مع <code>authorize()</code> منهجي.</li>
+<li class="good">تغطية اختبارات معقولة: 31 ملف اختبار تشمل الأمان (عزل النماذج، CSRF للويب هوك، 2FA، تعقيم المحتوى) والأداء (استيراد/تصدير الطلاب).</li>
+<li class="good">أدوات جودة مفعّلة: Pint، IDE Helper، Debugbar، Sentry، سجل نشاط Spatie، ونظام تسجيل أعطال داخلي (IssueLogger + تنبيهات Telegram) مع فصل سجلات لكل مستأجر.</li>
+<li class="good">تعقيم محتوى الدروس عبر <code>sanitizedContent()</code> (mews/purifier) بدل إخراج HTML خام، واستخدام <code>nl2br(e(...))</code> الصحيح في التذاكر.</li>
+</ul>
+
+<h2>5. خطة المعالجة المقترحة (حسب الأولوية)</h2>
+<table>
+<tr><th style="width:10%">المرحلة</th><th style="width:60%">الإجراء</th><th style="width:15%">الجهد</th><th style="width:15%">الأثر</th></tr>
+<tr><td rowspan="3"><b>فوري<br>(أسبوع)</b></td><td>تشفير أسرار التكاملات في <code>settings</code> (encrypted cast + migration)</td><td>منخفض</td><td>عالٍ</td></tr>
+<tr><td>حذف فحص <code>192.168.</code> وتوحيد isLocal في دالة واحدة، وتضييق trustProxies في الإنتاج</td><td>منخفض</td><td>عالٍ</td></tr>
+<tr><td>تهريب اسم المستخدم في بانر الانتحال + توحيد <code>Password::defaults()</code> + استبدال <code>all()</code> بـ <code>validated()</code></td><td>منخفض</td><td>متوسط</td></tr>
+<tr><td rowspan="3"><b>قصير المدى<br>(شهر)</b></td><td>بحث AJAX بدل تحميل كل الطلاب في صفحة الدورات، و<code>upsert</code> جماعي للحضور</td><td>متوسط</td><td>عالٍ</td></tr>
+<tr><td>توحيد نظام الأدوار على Spatie وجعل عمود <code>role</code> قراءة فقط</td><td>متوسط</td><td>عالٍ</td></tr>
+<tr><td>توحيد تخزين الهاتف بصيغة E.164 وتبسيط منطق الدخول بالهاتف</td><td>متوسط</td><td>متوسط</td></tr>
+<tr><td rowspan="3"><b>متوسط المدى<br>(ربع سنة)</b></td><td>استخراج المشترك بين Center وInstructor إلى طبقة Shared وقطع التبعيات المتقاطعة</td><td>مرتفع</td><td>عالٍ جداً</td></tr>
+<tr><td>نقل JS المضمّن إلى Vite ثم تشديد CSP بـ nonce (إزالة unsafe-inline)</td><td>مرتفع</td><td>عالٍ</td></tr>
+<tr><td>تقسيم ملفات المسارات والكونترولرز الضخمة + نقل نموذج Asset لمساره الصحيح + chunking لأوامر الجدولة</td><td>متوسط</td><td>متوسط</td></tr>
+</table>
+
+<h2>6. ملحق: الإصلاحات المنفَّذة (2026-07-05)</h2>
+<table>
+<tr><th style="width:35%">الإصلاح</th><th style="width:45%">ما تم عمله</th><th style="width:20%">الحالة</th></tr>
+<tr><td>تشفير أسرار التكاملات</td><td>Cast مخصص <code>App\Casts\EncryptedSettings</code> يشفّر <code>whatsapp.access_token/token</code> عند الحفظ ويفك التشفير عند القراءة، مع توافق خلفي للقيم القديمة (تُشفَّر عند أول حفظ — لا حاجة لـ migration). كما أُزيل <code>settings</code> من سجل النشاط حتى لا تُنسخ الأسرار إلى <code>activity_log</code>.</td><td class="low">منفّذ</td></tr>
+<tr><td>ثغرة تخفيف Rate limiting عبر 192.168</td><td>حُذف فحص الـ IP من المواقع السبعة واستُبدل بدالة واحدة <code>is_relaxed_throttle_env()</code> تعتمد على بيئة التطبيق فقط.</td><td class="low">منفّذ</td></tr>
+<tr><td>XSS بانر الانتحال</td><td>تهريب الاسم بـ <code>e()</code> في القالبين.</td><td class="low">منفّذ</td></tr>
+<tr><td>توحيد سياسة كلمات المرور</td><td><code>Password::defaults()</code> (كانت معرّفة) أصبحت مستخدمة في <code>changePassword</code> و<code>UserController</code> بدل <code>min:8</code>.</td><td class="low">منفّذ</td></tr>
+<tr><td>تمرير <code>all()</code> للخدمات</td><td>استبدال بـ <code>validated()</code> في 6 مواقع (Settings/Ticket/Sale/Instructor Controllers في الوحدتين).</td><td class="low">منفّذ</td></tr>
+<tr><td>عنق زجاجة الغياب الجماعي</td><td><code>bulkAbsent</code> أصبح إدراجاً دفعياً واحداً (مع dedupe)، و<code>offlineSync</code> يجلب خريطة أكواد الطلاب باستعلام واحد. الرسالة العربية المضمّنة نُقلت لملفات lang الثلاثة.</td><td class="low">منفّذ</td></tr>
+<tr><td>تحميل كل الطلاب في صفحات الدورات</td><td>Endpoint جديد <code>center.students.search</code> (JSON بحد 20 نتيجة + throttle) وتحويل TomSelect في <code>courses/index</code> و<code>courses/show</code> إلى تحميل عن بُعد؛ أُزيل تحميل القوائم الكاملة من الكونترولر.</td><td class="low">منفّذ</td></tr>
+<tr><td>نموذج Asset في مسار شاذ</td><td>نُقل إلى <code>App\Models\Asset</code> مع تحديث كل المراجع وتسجيل <code>AssetPolicy</code> صراحةً (كانت السياسة غير قابلة للاكتشاف تلقائياً بسبب النيمسبيس الشاذ — خلل كامن أُصلح). أُبقي stub متوافق خلفياً في المسار القديم.</td><td class="low">منفّذ</td></tr>
+<tr><td>حدود الوحدات (Instructor→Center)</td><td>نُقل <code>SettingsService</code> إلى <code>App\Services</code> (الطبقة المشتركة) وتحديث المراجع في routes وInstructor وCenter وOnboarding، مع stub مهمَل للتوافق.</td><td class="low">منفّذ</td></tr>
+<tr><td>ازدواج نظامي الأدوار</td><td><code>UserObserver</code> يزامن الآن عمود <code>role</code> مع أدوار Spatie تلقائياً عند الإنشاء/التغيير (team-scoped، مع إزالة الدور السابق) — لا يمكن أن ينفصل النظامان بعد الآن. الاستبدال الكامل للمقارنات النصية الـ33 يبقى خطوة لاحقة تتطلب اختبارات.</td><td class="med">منفّذ جزئياً</td></tr>
+<tr><td>نقل نموذج Attendance للطبقة المشتركة</td><td>لم يُنفَّذ عمداً: 21 ملفاً يعتمد عليه ولا يمكن تشغيل الاختبارات حالياً (القرص ممتلئ) — دين مقبول موثّق.</td><td class="info">مؤجّل</td></tr>
+<tr><td>CSP nonce + نقل JS إلى Vite + تقسيم المسارات</td><td>تتطلب build واختبارات تشغيلية — مؤجلة للمرحلة متوسطة المدى كما في الخطة.</td><td class="info">مؤجّل</td></tr>
+</table>
+
+<p><b>خطوات مطلوبة منك بعد هذه التعديلات:</b> تشغيل <code>composer dump-autoload</code> ثم <code>php artisan optimize:clear</code>، ثم تشغيل الاختبارات <code>php artisan test</code> قبل النشر. توكنات WhatsApp المخزنة ستُشفَّر تلقائياً عند أول حفظ لإعدادات كل مستأجر، أو فوراً عبر حلقة <code>Tenant::all()->each->save()</code> في tinker.</p>
+
+<p style="margin-top:20pt; color:#555; font-size:9pt; border-top:1pt solid #ccc; padding-top:6pt;">
+أُعدّ هذا التقرير بفحص ثابت (Static Review) لشيفرة المشروع بتاريخ 2026-07-04، ونُفِّذت الإصلاحات بتاريخ 2026-07-05. لم تُنفَّذ اختبارات اختراق ديناميكية على بيئة تشغيل حية؛ يُنصح بإكمال الصورة عبر تشغيل PHPStan/Larastan وفحص تبعيات <code>composer audit</code> دورياً.
+</p>
+
+</body>
+</html>

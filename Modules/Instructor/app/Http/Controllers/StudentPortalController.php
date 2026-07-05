@@ -15,6 +15,8 @@ class StudentPortalController extends Controller
      */
     public function index($identifier)
     {
+        abort_unless(request()->hasValidSignature(), 403);
+
         $user = User::where('qr_identifier', $identifier)->firstOrFail();
         $student = $user->student;
 

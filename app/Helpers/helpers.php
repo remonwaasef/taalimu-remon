@@ -165,3 +165,19 @@ if (! function_exists('sanitizePhoneForWhatsApp')) {
         return $phone;
     }
 }
+
+if (! function_exists('is_relaxed_throttle_env')) {
+    /**
+     * Whether rate limits may be relaxed for development/testing.
+     *
+     * SECURITY: this must rely on the application environment ONLY.
+     * Never trust the request IP for this decision — behind a proxy the
+     * client IP is derived from X-Forwarded-For and a private-looking
+     * address (192.168.x.x) can be attacker-controlled, which would allow
+     * brute-force protections to be bypassed in production.
+     */
+    function is_relaxed_throttle_env(): bool
+    {
+        return app()->environment(['local', 'testing']);
+    }
+}

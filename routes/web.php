@@ -146,7 +146,7 @@ Route::get('lang/{locale}', function ($locale) {
                     if ($tenant) {
                         $hasStages = \App\Models\Stage::where('tenant_id', $tenant->id)->exists();
                         if (! $hasStages) {
-                            $settingsService = app(\Modules\Center\Services\SettingsService::class);
+                            $settingsService = app(\App\Services\SettingsService::class);
                             $settingsService->applyTemplate($tenant, 'french_system');
                         }
                     }

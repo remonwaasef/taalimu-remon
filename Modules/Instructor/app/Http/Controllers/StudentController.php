@@ -388,19 +388,19 @@ class StudentController extends Controller
      */
     public function checkPhone(Request $request)
     {
-        $phone = $request->get('phone');
-        if (! $phone || strlen($phone) < 11) {
+        $phone = preg_replace('/[^0-9+]/', '', (string) $request->get('phone'));
+        if (! $phone || strlen(preg_replace('/[^0-9]/', '', $phone)) < 8) {
             return response()->json(['status' => 'invalid']);
         }
 
-        $user = \App\Models\User::where('phone', $phone)->first();
+        $userQuery = \App\Models\User::query()->where('phone', $phone);
 
-        if ($user) {
-            return response()->json([
-                'status' => 'exists',
-                'name' => auth()->check() ? $user->name : null,
-                'role' => $user->role,
-            ]);
+        if (app()->bound('tenant')) {
+            $userQuery->where('tenant_id', app('tenant')->id);
+        }
+
+        if ($userQuery->exists()) {
+            return response()->json(['status' => 'exists']);
         }
 
         return response()->json(['status' => 'available']);

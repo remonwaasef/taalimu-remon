@@ -49,7 +49,9 @@ class Tenant extends Model
                 'linkedin_url',
                 'domain',
                 'status',
-                'settings',
+                // 'settings' intentionally NOT logged: it contains integration
+                // credentials (WhatsApp tokens) that must not be copied into
+                // the activity_log table in plaintext.
                 'timezone',
             ])
             ->logOnlyDirty()
@@ -90,7 +92,9 @@ class Tenant extends Model
     ];
 
     protected $casts = [
-        'settings' => 'array',
+        // Encrypts credential values (WhatsApp tokens, etc.) at rest.
+        // Legacy plaintext values keep working and are encrypted on next save.
+        'settings' => \App\Casts\EncryptedSettings::class,
         'trial_ends_at' => 'datetime',
     ];
 
@@ -100,6 +104,11 @@ class Tenant extends Model
     public function users()
     {
         return $this->hasMany(User::class);
+    }
+
+    public function students()
+    {
+        return $this->hasMany(Student::class);
     }
 
     /**

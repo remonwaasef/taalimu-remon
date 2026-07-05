@@ -151,9 +151,9 @@ class SettingsController extends Controller
     /**
      * Update payment reminder settings
      */
-    public function updateReminders(Request $request, \Modules\Center\Services\SettingsService $settingsService)
+    public function updateReminders(Request $request, \App\Services\SettingsService $settingsService)
     {
-        $request->validate([
+        $validated = $request->validate([
             'default_due_day' => 'required|integer|min:1|max:28',
             'default_monthly_fee' => 'nullable|numeric|min:0',
             'email_reminders' => 'array',
@@ -164,7 +164,8 @@ class SettingsController extends Controller
         ]);
 
         $tenant = \App\Models\Tenant::findOrFail($this->tenant->id);
-        $settingsService->updatePaymentReminders($tenant, $request->all());
+        // Pass validated input only — never the raw request payload.
+        $settingsService->updatePaymentReminders($tenant, $validated);
 
         return back()->with('success', __('instructor::reminders.saved'));
     }

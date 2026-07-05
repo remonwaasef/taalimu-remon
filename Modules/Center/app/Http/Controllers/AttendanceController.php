@@ -174,25 +174,43 @@ class AttendanceController extends Controller
         $recordedStudentIds = Attendance::where('schedule_id', $schedule->id)
             ->whereDate('session_date', today())
             ->pluck('student_id')
-            ->toArray();
+            ->all();
+        $recordedStudentIds = array_flip($recordedStudentIds); // O(1) lookups
 
-        $markedCount = 0;
+        // Build all rows first, then insert in ONE query instead of one
+        // updateOrCreate per student (2 queries × N students on large classes).
+        // 'absent' rows trigger no notifications/gamification in markAttendance,
+        // so a plain batch insert is behavior-equivalent for this path.
+        $now = now();
+        $rows = [];
         foreach ($schedule->course->enrollments as $enrollment) {
             $student = $enrollment->user->student ?? null;
-            if ($student && ! in_array($student->id, $recordedStudentIds)) {
-                $this->attendanceService->markAttendance([
+            if ($student && ! isset($recordedStudentIds[$student->id])) {
+                $recordedStudentIds[$student->id] = true; // dedupe multiple enrollments
+                $rows[] = [
                     'tenant_id' => $this->tenant->id,
                     'student_id' => $student->id,
                     'course_id' => $schedule->course_id,
                     'schedule_id' => $schedule->id,
-                    'session_date' => today(),
+                    'session_date' => today()->toDateString(),
+                    'check_in_time' => $now,
                     'status' => 'absent',
-                ]);
-                $markedCount++;
+                    'late_minutes' => 0,
+                    'late_label' => null,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
             }
         }
 
-        return back()->with('success', "تم تسجيل غياب $markedCount طلاب بنجاح");
+        if ($rows !== []) {
+            foreach (array_chunk($rows, 500) as $chunk) {
+                Attendance::insert($chunk);
+            }
+        }
+        $markedCount = count($rows);
+
+        return back()->with('success', __('center::messages.bulk_absent_success', ['count' => $markedCount]));
     }
 
     /**
@@ -319,18 +337,25 @@ class AttendanceController extends Controller
         $failed = 0;
         $errors = [];
 
+        // Resolve all student codes in ONE query instead of one query per record.
+        $codes = collect($validated['records'])
+            ->filter(fn ($r) => empty($r['student_id']) && ! empty($r['student_code']))
+            ->pluck('student_code')
+            ->unique()
+            ->values();
+        $codeToId = $codes->isEmpty()
+            ? collect()
+            : Student::where('tenant_id', $this->tenant->id)
+                ->whereIn('code', $codes)
+                ->pluck('id', 'code');
+
         foreach ($validated['records'] as $index => $record) {
             try {
                 $studentId = $record['student_id'] ?? null;
 
-                // Resolve student by code if no ID
+                // Resolve student by code if no ID (from the prefetched map)
                 if (! $studentId && ! empty($record['student_code'])) {
-                    $student = Student::where('tenant_id', $this->tenant->id)
-                        ->where('code', $record['student_code'])
-                        ->first();
-                    if ($student) {
-                        $studentId = $student->id;
-                    }
+                    $studentId = $codeToId[$record['student_code']] ?? null;
                 }
 
                 if (! $studentId) {

@@ -46,11 +46,12 @@ class CourseController extends Controller
 
         $courses = $query->latest()->paginate(10);
 
-        // Load data needed for the unified Quick Enroll Modal
-        $students = \App\Models\Student::select('id', 'name', 'phone')->get();
+        // Students for the Quick Enroll modal are now fetched asynchronously
+        // via center.students.search — loading the full list here did not
+        // scale beyond a few hundred students.
         $stages = \App\Models\Stage::getCached();
 
-        return view('center::courses.index', compact('courses', 'students', 'stages'));
+        return view('center::courses.index', compact('courses', 'stages'));
     }
 
     /**
@@ -103,15 +104,14 @@ class CourseController extends Controller
     {
         $course = Course::where('tenant_id', app('tenant')->id)->with(['instructor', 'enrollments.user.student'])->findOrFail($id);
         $this->authorize('view', $course);
-        // Get students NOT enrolled in this course
-        $students = \App\Models\Student::whereDoesntHave('user.enrollments', function ($q) use ($id) {
-            $q->where('course_id', $id);
-        })->get();
 
+        // Non-enrolled students are now fetched asynchronously via
+        // center.students.search (exclude_course_id) — loading all of them
+        // here was a full-table read on every course page view.
         $stages = \App\Models\Stage::getCached();
         $auto_enroll = $request->has('enroll');
 
-        return view('center::courses.show', compact('course', 'students', 'stages', 'auto_enroll'));
+        return view('center::courses.show', compact('course', 'stages', 'auto_enroll'));
     }
 
     public function enroll(Request $request, $id)

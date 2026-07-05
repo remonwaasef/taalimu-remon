@@ -159,9 +159,6 @@
                                     <label class="form-label fw-bold text-dark mb-2">{{ __('center::courses.choose_student_label') }}</label>
                                     <select name="student_id" class="form-select border-2" id="studentSelect" required>
                                         <option value="">{{ __('center::courses.search_student_modal_placeholder') }}</option>
-                                        @foreach($students as $student)
-                                            <option value="{{ $student->id }}">{{ $student->name }} ({{ $student->phone }})</option>
-                                        @endforeach
                                     </select>
                                     <div class="form-text mt-2"><i class="fas fa-info-circle me-1"></i>{{ __('center::courses.search_unregistered_hint') }}</div>
                                 </div>
@@ -238,8 +235,21 @@
         <script>
             new TomSelect('#studentSelect', {
                 plugins: ['dropdown_input'],
-                sortField: { field: "text", direction: "asc" },
-                maxOptions: null
+                // Non-enrolled students are loaded on demand from the server
+                // instead of being embedded in the page (full-table read before).
+                valueField: 'id',
+                labelField: 'text',
+                searchField: [],
+                maxOptions: 50,
+                preload: 'focus',
+                loadThrottle: 300,
+                load: function(query, callback) {
+                    const url = '{{ route('center.students.search') }}?exclude_course_id={{ $course->id }}&q=' + encodeURIComponent(query);
+                    fetch(url, { headers: { 'Accept': 'application/json' } })
+                        .then(r => r.ok ? r.json() : [])
+                        .then(json => callback(json))
+                        .catch(() => callback());
+                }
             });
 
             @if(isset($auto_enroll) && $auto_enroll)

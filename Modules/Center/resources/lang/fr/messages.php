@@ -981,6 +981,7 @@ return [
     'msg_011' => 'Impossible d\'enregistrer la présence après la fin de la session.',
     'msg_012' => 'Cet étudiant est déjà marqué présent aujourd\'hui.',
     'msg_013' => 'Statut mis à jour avec succès.',
+    'bulk_absent_success' => ':count étudiants marqués absents avec succès.',
     'msg_014' => 'Ce compte n\'est pas un compte étudiant.',
     'msg_015' => 'L\'étudiant est déjà inscrit à cette session.',
     'msg_016' => 'Désolé, cette session est complète.',

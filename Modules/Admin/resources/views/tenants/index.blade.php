@@ -138,7 +138,7 @@
                     <tbody>
                         @forelse($tenants as $tenant)
                             @php
-                                $studentsCount = \App\Models\Student::where('tenant_id', $tenant->id)->count();
+                                $studentsCount = $tenant->students_count;
                                 $admin = $tenant->users->first();
                                 $statusClass = $tenant->status == 'active' ? 'success' : 'danger';
                                 $statusLabel = $tenant->status == 'active' ? __('admin::admin.tenants.table.active') : __('admin::admin.tenants.table.inactive');

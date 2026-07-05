@@ -40,7 +40,7 @@ class TicketController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create', Ticket::class);
-        $request->validate([
+        $validated = $request->validate([
             'subject' => 'required|string|max:255',
             'category' => 'required|string',
             'priority' => 'required|string',
@@ -49,7 +49,7 @@ class TicketController extends Controller
 
         $tenant = app('tenant');
 
-        $ticket = $this->ticketService->createTicket(array_merge($request->all(), [
+        $ticket = $this->ticketService->createTicket(array_merge($validated, [
             'tenant_id' => $tenant->id,
         ]));
 
