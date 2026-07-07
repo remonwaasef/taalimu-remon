@@ -21,7 +21,10 @@ return [
 
     'allowed_origins' => [env('APP_URL', 'http://localhost'), env('FRONTEND_URL', 'http://localhost:3000')],
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => [
+        // Allow all subdomains of the configured tenant domain
+        '#^https?://.*\.'.preg_quote(env('TENANT_DOMAIN', 'localhost'), '#').'$#',
+    ],
 
     'allowed_headers' => ['*'],
 

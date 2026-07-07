@@ -91,6 +91,8 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        \Sentry\Laravel\Integration::handles($exceptions);
+
         // Auto-capture all exceptions in tenant context
         $exceptions->report(function (\Throwable $e) {
             if (app()->bound('tenant') && app('tenant')) {
