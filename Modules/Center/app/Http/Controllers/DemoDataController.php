@@ -4,10 +4,13 @@ namespace Modules\Center\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Services\DemoDataService;
+use App\Traits\ClearsDashboardCache;
 use Illuminate\Http\Request;
 
 class DemoDataController extends Controller
 {
+    use ClearsDashboardCache;
+
     protected $demoService;
 
     public function __construct(DemoDataService $demoService)
@@ -28,14 +31,13 @@ class DemoDataController extends Controller
             $this->demoService->seedForTenant($tenant);
 
             // Clear dashboard cache to show new data immediately
-            \App\Support\TenantCache::forget('dashboard_stats_v3');
-            \App\Support\TenantCache::forget('recent_activities');
+            static::clearDashboardCache();
 
-            return redirect()->route('center.dashboard')->with('success', 'تمت إضافة البيانات التجريبية بنجاح! 🎉 استكشف التقارير والرسوم البيانية الآن.');
+            return redirect()->route('center.dashboard')->with('success', __('center::dashboard.demo_seed_success'));
         } catch (\Exception $e) {
             \Log::error('Demo Seeding Failed: '.$e->getMessage());
 
-            return redirect()->back()->with('error', 'حدث خطأ أثناء إضافة البيانات التجريبية.');
+            return redirect()->back()->with('error', __('center::dashboard.demo_seed_error'));
         }
     }
 
@@ -47,14 +49,14 @@ class DemoDataController extends Controller
             $this->demoService->removeDemoDataForTenant($tenant);
 
             // Clear dashboard cache to show clean state immediately
-            \App\Support\TenantCache::forget('dashboard_stats_v3');
-            \App\Support\TenantCache::forget('recent_activities');
+            static::clearDashboardCache();
 
-            return redirect()->route('center.dashboard')->with('success', 'تم حذف البيانات التجريبية بنجاح.');
+            return redirect()->route('center.dashboard')->with('success', __('center::dashboard.demo_destroy_success'));
         } catch (\Exception $e) {
             \Log::error('Demo Seeding Reset Failed: '.$e->getMessage());
 
-            return redirect()->back()->with('error', 'حدث خطأ أثناء حذف البيانات التجريبية.');
+            return redirect()->back()->with('error', __('center::dashboard.demo_destroy_error'));
         }
     }
 }
+

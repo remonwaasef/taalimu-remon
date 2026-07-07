@@ -137,4 +137,8 @@ return [
     'saturday' => 'Saturday',
     'total_active_students_desc' => 'Total Active Students Desc',
     'student_rate_6_months' => 'Student Rate 6 Months',
+    'demo_seed_success' => 'Demo data added successfully! 🎉 Explore reports and charts now.',
+    'demo_seed_error' => 'An error occurred while adding demo data.',
+    'demo_destroy_success' => 'Demo data deleted successfully.',
+    'demo_destroy_error' => 'An error occurred while deleting demo data.',
 ];

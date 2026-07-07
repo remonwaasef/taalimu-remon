@@ -153,4 +153,8 @@ return [
         'browsing_as' => 'Vous naviguez en tant que : ',
         'overdue_invoices' => 'Factures en Retard',
     ],
+    'demo_seed_success' => 'Données de démonstration ajoutées avec succès ! 🎉 Explorez les rapports et graphiques.',
+    'demo_seed_error' => 'Une erreur est survenue lors de l\'ajout des données de démonstration.',
+    'demo_destroy_success' => 'Données de démonstration supprimées avec succès.',
+    'demo_destroy_error' => 'Une erreur est survenue lors de la suppression des données de démonstration.',
 ];
