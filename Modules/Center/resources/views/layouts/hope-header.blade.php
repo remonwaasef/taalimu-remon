@@ -163,7 +163,7 @@
               <li><a class="dropdown-item" href="{{ route('center.settings.index', ['tenant' => $tenant->domain ?? 'center']) }}">{{ __('center::sidebar.settings') }}</a></li>
               <li><hr class="dropdown-divider"></li>
               <li>
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('center.logout') }}">
                   @csrf
                   <a href="javascript:void(0)" class="dropdown-item" onclick="event.preventDefault(); this.closest('form').submit();">
                       {{ __('center::sidebar.logout') }}
