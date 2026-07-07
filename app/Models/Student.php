@@ -40,7 +40,7 @@ class Student extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['name', 'email', 'status', 'guardian_id'])
+            ->logOnly(['name', 'email', 'status'])
             ->logOnlyDirty();
     }
 
@@ -48,7 +48,6 @@ class Student extends Model
         'tenant_id',
         'user_id',
         'grade_id',
-        'guardian_id',
         'code',
         'national_id',
         'name',
@@ -149,9 +148,21 @@ class Student extends Model
         return $this->hasMany(\App\Models\Booking::class);
     }
 
+    public function guardians()
+    {
+        return $this->belongsToMany(Guardian::class, 'guardian_student')
+            ->withPivot('relation')
+            ->withTimestamps();
+    }
+
     public function guardian()
     {
-        return $this->belongsTo(Guardian::class);
+        return $this->guardians();
+    }
+
+    public function getGuardianAttribute()
+    {
+        return $this->guardians->first();
     }
 
     public function enrollments()

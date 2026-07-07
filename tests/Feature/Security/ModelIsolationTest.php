@@ -28,6 +28,7 @@ class ModelIsolationTest extends TestCase
             'SiteSetting', // Global platform settings
             'SaleItem', // Child of Sale (implicitly isolated)
             'PersonalAccessToken', // Sanctum's token (managed by library)
+            'Modules\Center\Models\Asset', // Deprecated subclass stub
         ];
 
         $failures = [];
@@ -47,7 +48,9 @@ class ModelIsolationTest extends TestCase
             }
 
             $shortName = $reflection->getShortName();
-            if (in_array($shortName, $excludedModels)) {
+            if (in_array($shortName, $excludedModels) || in_array($className, [
+                'App\\Models\\Modules\\Center\\Models\\Asset',
+            ])) {
                 continue;
             }
 

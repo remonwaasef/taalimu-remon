@@ -215,9 +215,13 @@ class AttendanceService
             if ($studentEmail && ! preg_match('/^std\d+\..+@taalimu\.com$/', $studentEmail)) {
                 $realEmail = $studentEmail;
             }
-            $hasParentEmail = ! empty($student->parent_email);
+            // Fetch guardian emails dynamically from the guardians relation
+            $guardianEmails = [];
+            if ($student->relationLoaded('guardians') || $student->guardians()->exists()) {
+                $guardianEmails = $student->guardians->pluck('email')->filter()->toArray();
+            }
 
-            if ($realEmail || $hasParentEmail) {
+            if ($realEmail || !empty($guardianEmails)) {
                 $locale = $this->getTargetLocale($tenant, $student);
 
                 $subjectKey = "notif_attendance_subject_{$locale}";
@@ -252,8 +256,8 @@ class AttendanceService
                     ));
                 }
 
-                if ($hasParentEmail) {
-                    Mail::to($student->parent_email)->queue(new AttendanceNotificationMail(
+                foreach ($guardianEmails as $parentEmail) {
+                    Mail::to($parentEmail)->queue(new AttendanceNotificationMail(
                         $subject, $body, $variables, $tenant->name, $student->name
                     ));
                 }

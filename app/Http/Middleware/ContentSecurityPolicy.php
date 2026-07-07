@@ -57,10 +57,14 @@ class ContentSecurityPolicy
 
         // Additional security headers
         $response->headers->set('X-Content-Type-Options', 'nosniff');
-        $response->headers->set('X-Frame-Options', 'DENY');
+        $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
         $response->headers->set('X-XSS-Protection', '1; mode=block');
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
         $response->headers->set('Permissions-Policy', 'geolocation=(), microphone=(), camera=(self)');
+
+        // Prevent server info disclosure
+        $response->headers->remove('X-Powered-By');
+        $response->headers->remove('Server');
 
         // HSTS - Strict Transport Security (Only in production/https)
         if (! app()->environment('local')) {

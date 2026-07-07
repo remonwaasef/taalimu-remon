@@ -30,7 +30,9 @@ class Guardian extends Model
 
     public function students()
     {
-        return $this->hasMany(Student::class);
+        return $this->belongsToMany(Student::class, 'guardian_student')
+            ->withPivot('relation')
+            ->withTimestamps();
     }
 
     public function tenant()

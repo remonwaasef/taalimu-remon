@@ -34,7 +34,26 @@ class GeneralNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        $channels = ['database'];
+        
+        $tenantId = app()->bound('tenant') ? app('tenant')->id : null;
+        if (\App\Models\SiteSetting::get('enable_email_notifications', false, $tenantId)) {
+            $channels[] = 'mail';
+        }
+        
+        return $channels;
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     */
+    public function toMail($notifiable)
+    {
+        return (new \Illuminate\Notifications\Messages\MailMessage)
+            ->subject($this->title)
+            ->line($this->message)
+            ->action('عرض التفاصيل', $this->url)
+            ->line('شكراً لاستخدامكم منصتنا التعليمية!');
     }
 
     /**

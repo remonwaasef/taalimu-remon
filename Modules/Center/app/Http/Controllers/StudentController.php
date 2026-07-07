@@ -6,6 +6,8 @@ use App\DTOs\StudentData;
 use App\Http\Requests\Center\StoreStudentRequest;
 use App\Http\Requests\Center\UpdateStudentRequest;
 use App\Models\Student;
+use App\Models\Course;
+use App\Models\Stage;
 use App\Queries\StudentQuery;
 use App\Services\StudentService;
 use App\Traits\HandlesFileUploads;
@@ -106,8 +108,8 @@ class StudentController extends Controller
             return $student;
         });
 
-        $stages = \App\Models\Stage::getCached();
-        $courses = \App\Models\Course::where('tenant_id', $this->tenant->id)->orderBy('title')->get();
+        $stages = Stage::getCached();
+        $courses = Course::orderBy('title')->get();
 
         return view('center::students.index', compact('students', 'stages', 'courses'));
     }
@@ -119,8 +121,8 @@ class StudentController extends Controller
     {
         $this->authorize('create', Student::class);
 
-        $stages = \App\Models\Stage::getCached();
-        $courses = \App\Models\Course::where('tenant_id', $this->tenant->id)->orderBy('title')->get();
+        $stages = Stage::getCached();
+        $courses = Course::orderBy('title')->get();
 
         return view('center::students.create', compact('stages', 'courses'));
     }
@@ -190,7 +192,7 @@ class StudentController extends Controller
         $student = $this->findStudentOrFail($id);
         $this->authorize('update', $student);
 
-        $stages = \App\Models\Stage::getCached();
+        $stages = Stage::getCached();
 
         return view('center::students.edit', compact('student', 'stages'));
     }
