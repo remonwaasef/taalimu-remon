@@ -94,14 +94,17 @@ class StudentController extends Controller
         $query = Student::query();
         $query = $this->studentQuery->apply($query, $request->all());
 
-        $students = $query->with(['grade.stage', 'enrollments.course', 'sales'])->latest()->paginate(10);
+        $students = $query->with(['grade.stage', 'enrollments.course'])
+            ->withSum('sales', 'paid_amount')
+            ->latest()
+            ->paginate(10);
 
         // Calculate financial data for each student for filtering
         $students->getCollection()->transform(function ($student) {
             $totalDue = $student->enrollments->sum(function ($enrollment) {
                 return $enrollment->course->price ?? 0;
             });
-            $totalPaid = $student->sales->sum('paid_amount');
+            $totalPaid = $student->sales_sum_paid_amount ?? 0;
             $student->total_balance = $totalDue - $totalPaid;
             $student->financial_status = $student->total_balance > 0 ? 'debt' : 'paid';
 

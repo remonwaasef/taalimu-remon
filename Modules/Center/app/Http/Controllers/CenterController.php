@@ -261,11 +261,5 @@ class CenterController extends Controller
         return $insights;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('center::create');
-    }
+
 }
