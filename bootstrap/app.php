@@ -28,6 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\ContentSecurityPolicy::class,
             \App\Http\Middleware\BasicWAF::class,
             \App\Http\Middleware\PaginationLimit::class,
+            \App\Http\Middleware\HandleInertiaRequests::class,
             'throttle:300,1',
         ]);
 

@@ -129,6 +129,30 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
     Route::get('auth/google/callback', [App\Http\Controllers\SocialAuthController::class, 'handleGoogleCallback']);
     Route::get('auth/google/complete', [App\Http\Controllers\SocialAuthController::class, 'showCompleteRegistration'])->name('google.complete-registration');
     Route::post('auth/google/complete', [App\Http\Controllers\SocialAuthController::class, 'completeRegistration'])->name('google.complete-registration.post');
+
+    // Inertia Demo Route
+    Route::get('/inertia-demo', function () {
+        $user = auth()->user() ?: (object)['name' => 'أستاذنا الافتراضي'];
+        $stats = [
+            'activeStudents' => 1248,
+            'activeCourses' => 18,
+            'monthlyRevenue' => '$4,850',
+            'attendanceRate' => 94,
+        ];
+        $leaderboard = [
+            ['name' => 'أحمد محمد', 'points' => 950],
+            ['name' => 'سارة أحمد', 'points' => 880],
+            ['name' => 'محمود علي', 'points' => 820],
+            ['name' => 'فاطمة عمر', 'points' => 790],
+            ['name' => 'خالد وليد', 'points' => 750],
+        ];
+
+        return inertia('DemoDashboard', [
+            'user' => $user,
+            'stats' => $stats,
+            'leaderboard' => $leaderboard
+        ]);
+    })->name('inertia.demo');
 });
 
 // Global Language Switcher (Accessible from any domain) — rate limited to prevent locale flooding
