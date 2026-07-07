@@ -42,7 +42,7 @@ class ContentSecurityPolicy
                 "style-src 'self' 'unsafe-inline' {$cdn} {$fonts}",
                 "font-src 'self' data: {$cdn} {$fonts}",
                 "img-src 'self' data: blob: https:",
-                "connect-src 'self' https://api.qrserver.com",
+                "connect-src 'self'",
                 "media-src 'self' https://assets.mixkit.co",
                 "worker-src 'self' blob:",
                 "manifest-src 'self'",
