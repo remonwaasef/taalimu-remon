@@ -70,11 +70,11 @@ class AdminBugReportController extends Controller
             abort(404, 'No screenshot attached to this report.');
         }
 
-        // Try multiple possible storage locations
+        // Try multiple possible storage locations (local secure first, then legacy public paths)
         $possiblePaths = [
+            storage_path('app/'.$bugReport->screenshot),
             storage_path('app/public/'.$bugReport->screenshot),
             public_path('storage/'.$bugReport->screenshot),
-            storage_path('app/public/logos/'.$bugReport->screenshot),
         ];
 
         $filePath = null;
