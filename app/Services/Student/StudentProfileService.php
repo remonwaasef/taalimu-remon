@@ -47,7 +47,7 @@ class StudentProfileService
                 'phone' => $data->phone,
             ]);
 
-            $guardianId = $student->guardian_id;
+            $guardianId = null;
             if ($data->parent_phone) {
                 $guardian = Guardian::updateOrCreate(
                     ['tenant_id' => \Modules\Tenancy\Services\TenantResolver::get()->id, 'phone' => $data->parent_phone],
@@ -62,7 +62,6 @@ class StudentProfileService
 
             $student->update([
                 'grade_id' => $data->grade_id,
-                'guardian_id' => $guardianId,
                 'grade_level' => $data->grade_level,
                 'code' => $data->code ?? $student->code,
                 'national_id' => $data->national_id ?? $student->national_id,
@@ -82,6 +81,12 @@ class StudentProfileService
                 'section_type' => $data->section_type,
                 'profile_photo' => $data->profile_photo ?? $student->profile_photo,
             ]);
+
+            if ($guardianId) {
+                $student->guardians()->syncWithPivotValues([$guardianId], ['relation' => $data->parent_relation ?: 'parent']);
+            } else {
+                $student->guardians()->detach();
+            }
 
             $this->notificationService->notifyAdminsAboutUpdate($student, $modifier);
 
@@ -198,11 +203,14 @@ class StudentProfileService
             })->with('receiver')->latest()->limit(20)->get(),
         ];
 
-        if ($student->guardian_id) {
-            $data['siblings'] = Student::where('guardian_id', $student->guardian_id)
-                ->where('id', '!=', $student->id)
-                ->with('grade')
-                ->get();
+        $guardianIds = $student->guardians->pluck('id')->toArray();
+        if (!empty($guardianIds)) {
+            $data['siblings'] = Student::whereHas('guardians', function ($q) use ($guardianIds) {
+                $q->whereIn('guardians.id', $guardianIds);
+            })
+            ->where('students.id', '!=', $student->id)
+            ->with('grade')
+            ->get();
         } else {
             $data['siblings'] = collect();
         }

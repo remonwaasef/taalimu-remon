@@ -112,9 +112,6 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="d-flex flex-column gap-3">
-                        @php
-                            $recentLogs = \App\Models\PointLog::with('user')->latest()->take(5)->get();
-                        @endphp
                         @forelse($recentLogs as $log)
                         <div class="d-flex align-items-center gap-3">
                             <div class="avatar-xs rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; font-size: 0.8rem;">

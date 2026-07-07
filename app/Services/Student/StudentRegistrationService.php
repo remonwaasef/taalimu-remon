@@ -83,7 +83,6 @@ class StudentRegistrationService
                 'tenant_id' => \Modules\Tenancy\Services\TenantResolver::get()->id,
                 'user_id' => $user->id,
                 'grade_id' => $data->grade_id,
-                'guardian_id' => $guardianId,
                 'grade_level' => $data->grade_level,
                 'code' => $code,
                 'national_id' => $data->national_id,
@@ -105,6 +104,10 @@ class StudentRegistrationService
                 'profile_photo' => $profilePhotoPath,
                 'joined_at' => now(),
             ]);
+
+            if ($guardianId) {
+                $student->guardians()->attach($guardianId, ['relation' => $data->parent_relation ?: 'parent']);
+            }
 
             $result = [
                 'user' => $user,
