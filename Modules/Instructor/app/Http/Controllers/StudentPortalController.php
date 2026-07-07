@@ -49,6 +49,15 @@ class StudentPortalController extends Controller
             ->orderBy('start_time', 'asc')
             ->get();
 
-        return view('instructor::student_portal', compact('student', 'user', 'attendances', 'sales', 'course', 'onlineClasses'));
+        return inertia('StudentPortal', [
+            'student' => $student,
+            'user' => $user,
+            'attendances' => $attendances,
+            'sales' => $sales,
+            'course' => $course,
+            'onlineClasses' => $onlineClasses,
+            'locale' => app()->getLocale(),
+            'currency' => app('tenant')->settings['currency'] ?? 'EGP',
+        ]);
     }
 }
