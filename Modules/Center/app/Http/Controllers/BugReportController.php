@@ -31,11 +31,11 @@ class BugReportController extends Controller
                 $safeExt = in_array($file->getClientOriginalExtension(), ['jpg', 'jpeg', 'png', 'gif', 'webp']) ? $file->getClientOriginalExtension() : 'png';
                 $fileName = 'bug-reports/'.\Illuminate\Support\Str::random(30).'.'.$safeExt;
 
-                // Save to Laravel's internal storage (storage/app/public) using streaming to save memory
+                // Save to Laravel's secure internal storage (storage/app/bug-reports)
                 $file->storeAs(
                     dirname($fileName),
                     basename($fileName),
-                    'public'
+                    'local'
                 );
                 $screenshotPath = $fileName;
 
@@ -55,8 +55,8 @@ class BugReportController extends Controller
                     if ($image && @getimagesizefromstring($image) !== false) {
                         $fileName = 'bug-reports/'.\Illuminate\Support\Str::random(30).'_auto.'.$extension;
 
-                        // Save to Laravel's internal storage (storage/app/public)
-                        if (\Illuminate\Support\Facades\Storage::disk('public')->put($fileName, $image)) {
+                        // Save to Laravel's secure internal storage (storage/app/bug-reports)
+                        if (\Illuminate\Support\Facades\Storage::disk('local')->put($fileName, $image)) {
                             $screenshotPath = $fileName;
 
                         } else {
