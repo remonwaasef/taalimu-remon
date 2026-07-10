@@ -12,32 +12,32 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" nonce="{{ $csp_nonce ?? '' }}">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Hope UI CSS (from public/assets/hope-ui) -->
-    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/libs.min.css') }}" nonce="{{ $csp_nonce ?? '' }}">
-    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/hope-ui.css?v=1.1.0') }}" nonce="{{ $csp_nonce ?? '' }}">
-    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/custom.css?v=1.1.0') }}" nonce="{{ $csp_nonce ?? '' }}">
+    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/libs.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/hope-ui.css?v=1.1.0') }}">
+    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/custom.css?v=1.1.0') }}">
     @if(isset($tenant) && ($tenant->settings['appearance']['dark_mode'] ?? false))
-        <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/dark.css?v=1.1.0') }}" nonce="{{ $csp_nonce ?? '' }}">
+        <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/dark.css?v=1.1.0') }}">
     @elseif(isset($tenant->settings['appearance']['dark_mode']) && $tenant->settings['appearance']['dark_mode'])
-        <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/dark.css?v=1.1.0') }}" nonce="{{ $csp_nonce ?? '' }}">
+        <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/dark.css?v=1.1.0') }}">
     @endif
     @if(app()->getLocale() == 'ar')
-        <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/rtl.css?v=1.1.0') }}" nonce="{{ $csp_nonce ?? '' }}">
+        <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/rtl.css?v=1.1.0') }}">
     @endif
-    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/customizer.css?v=1.1.0') }}" nonce="{{ $csp_nonce ?? '' }}">
+    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/customizer.css?v=1.1.0') }}">
 
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" nonce="{{ $csp_nonce ?? '' }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     
     <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" nonce="{{ $csp_nonce ?? '' }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Taalimu Unified Premium Emerald Theme -->
-    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/taalimu-unified.css?v=' . time()) }}" nonce="{{ $csp_nonce ?? '' }}">
+    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/taalimu-unified.css?v=' . time()) }}">
     <!-- Network Monitor Styles -->
-    <link rel="stylesheet" href="{{ asset('css/network-monitor.css') }}" nonce="{{ $csp_nonce ?? '' }}">
+    <link rel="stylesheet" href="{{ asset('css/network-monitor.css') }}">
     
     @yield('head_extra')
     @stack('styles')
@@ -87,7 +87,7 @@
 
     <!-- Network Monitor (Real Connectivity Detection) -->
     <script src="{{ asset('js/network-monitor.js') }}"></script>
-    <script nonce="{{ $csp_nonce ?? '' }}">
+    <script>
         if (window.TaalimuNetwork) {
             window.TaalimuNetwork.onStatusChange((isOnline) => {
                 document.body.classList.toggle('is-network-offline', !isOnline);

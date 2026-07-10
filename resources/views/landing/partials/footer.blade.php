@@ -8,11 +8,11 @@
                 <a href="{{ route('home') }}" class="flex items-center gap-3">
                     <img src="{{ asset('images/brand/logo-full.png?v=3') }}" alt="{{ config('app.name') }}" class="h-9 w-auto">
                     <span class="font-black text-xl text-slate-900 leading-tight tracking-tight">
-                        {{ $siteSettings['site_name'] ?? 'Taalimu' }}
+                        {{ \App\Models\SiteSetting::get('site_name', 'Taalimu') }}
                     </span>
                 </a>
                 <p class="text-slate-600 font-medium leading-relaxed max-w-sm text-sm">
-                    {{ $siteSettings['site_description_' . app()->getLocale()] ?? __('landing.hero.subtitle') }}
+                    {{ \App\Models\SiteSetting::get('site_description_' . app()->getLocale(), __('landing.hero.subtitle')) }}
                 </p>
                 <!-- Social -->
                 <div class="flex items-center gap-3">
@@ -53,7 +53,7 @@
 
         <div class="pt-8 border-t border-slate-200/60 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="text-slate-600 text-sm font-medium">
-                {{ str_replace(config('app.name'), $siteSettings['site_name'] ?? config('app.name'), __('landing.footer.copyright')) }}
+                {{ str_replace(config('app.name'), \App\Models\SiteSetting::get('site_name', config('app.name')), __('landing.footer.copyright')) }}
             </div>
             
             <div class="flex items-center gap-3 px-4 py-2 rounded-full bg-slate-100 border border-slate-200">

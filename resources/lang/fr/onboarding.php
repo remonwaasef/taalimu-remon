@@ -5,14 +5,14 @@ return [
     'welcome_title' => 'Bienvenue sur votre nouvelle plateforme éducative 🚀',
     'welcome_subtitle' => 'Préparons votre centre pour le lancement en seulement 4 étapes simples.',
     'security_note' => 'Les informations et données de votre centre sont entièrement cryptées et sécurisées',
-
+    
     'steps' => [
         'step_1' => 'Paramètres de base',
         'step_2' => 'Enseignants',
         'step_3' => 'Cours et Matières',
         'step_4' => 'Étudiants',
     ],
-
+    
     'step_1' => [
         'title' => 'Paramètres de base',
         'subtitle' => 'Commençons par configurer les options d\'affichage de votre plateforme.',
@@ -21,14 +21,14 @@ return [
         'education_system_label' => 'Système Éducatif',
         'btn_submit' => 'Enregistrer et continuer',
     ],
-
+    
     'education_systems' => [
         'egyptian_national' => 'Système National Égyptien',
         'egyptian_azhar' => 'Système Al-Azhar',
         'french_system' => 'Système Français (Mission Française)',
         'european_system' => 'Système Européen (International/IB)',
     ],
-
+    
     'step_2' => [
         'title' => 'Ajouter le premier enseignant',
         'subtitle' => 'Ajoutez le premier enseignant à votre plateforme pour commencer à lier des cours.',

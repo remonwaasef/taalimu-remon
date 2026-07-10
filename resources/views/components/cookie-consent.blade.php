@@ -1,4 +1,4 @@
-<style nonce="{{ $csp_nonce ?? '' }}">
+<style>
     .cookie-banner-container {
         position: fixed;
         bottom: -150px; /* Initially hidden */
@@ -83,7 +83,7 @@
     </div>
 </div>
 
-<script nonce="{{ $csp_nonce ?? '' }}">
+<script>
     document.addEventListener("DOMContentLoaded", function() {
         const banner = document.getElementById('gdprCookieBanner');
         const btnAccept = document.getElementById('acceptCookies');

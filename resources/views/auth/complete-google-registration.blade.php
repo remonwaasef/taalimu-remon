@@ -4,7 +4,7 @@
 <!-- Import Cairo & Outfit Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-<script nonce="{{ $csp_nonce ?? '' }}">
+<script>
 document.addEventListener('alpine:init', () => {
     Alpine.data('googleRegistration', (config) => ({
         selectedPlan: config.selectedPlan,
@@ -316,7 +316,7 @@ window.addEventListener('pageshow', (event) => {
 });
 </script>
 
-<div class="min-h-screen bg-slate-50/50 flex justify-center items-center p-4 lg:p-8 mesh-gradient-soft noise-overlay" 
+<div class="min-h-screen bg-slate-50/50 flex justify-center p-4 lg:p-8 mesh-gradient-soft noise-overlay register-page-offset" 
      x-data="googleRegistration({
         selectedPlan: {{ Js::from($selectedPlanSlug) }},
         selectedCycle: {{ Js::from($selectedCycle) }},
@@ -328,7 +328,7 @@ window.addEventListener('pageshow', (event) => {
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
     
     <!-- Main Centered Card Container (Optimized Layout) -->
-    <div class="w-full max-w-4xl mx-auto bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100/50 animate-fade-in-up md:backdrop-blur-xl relative" x-cloak>
+    <div class="w-full max-w-4xl bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100/50 animate-fade-in-up md:backdrop-blur-xl relative" x-cloak>
         
         <div class="grid grid-cols-1 lg:grid-cols-12">
             <!-- Left Info Panel (Hidden on Mobile or as Sidebar) -->
@@ -632,7 +632,6 @@ window.addEventListener('pageshow', (event) => {
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
          class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
-         style="display: none;"
          x-cloak>
         <div @click.away="showPlanModal = false" 
              class="bg-white rounded-[2.5rem] w-full max-w-lg shadow-2xl overflow-hidden animate-scale-in">

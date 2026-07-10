@@ -1,4 +1,4 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.master')
 
 @section('title', 'Enable Two-Factor Authentication')
 

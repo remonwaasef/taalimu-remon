@@ -236,7 +236,7 @@
 </div>
 @endif
 
-<script nonce="{{ $csp_nonce ?? '' }}">
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         
         // Wizard Navigation
@@ -412,7 +412,7 @@
     });
 </script>
 
-<style nonce="{{ $csp_nonce ?? '' }}">
+<style>
     .cursor-pointer { cursor: pointer; }
     .transition-all { transition: all 0.3s ease; }
     .hover-shadow-sm:hover, .custom-checkbox-card:hover { 

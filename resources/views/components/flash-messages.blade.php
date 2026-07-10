@@ -67,7 +67,7 @@
     @endif
 </div>
 
-<script nonce="{{ $csp_nonce ?? '' }}">
+<script>
 document.addEventListener('DOMContentLoaded', function() {
     // Also support SweetAlert2 for session flashes if SweetAlert is loaded
     if (typeof Swal !== 'undefined') {
@@ -84,11 +84,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         @if(session('success'))
-            Toast.fire({ icon: 'success', title: @json(session('success')) });
+            Toast.fire({ icon: 'success', title: "{!! addslashes(session('success')) !!}" });
         @endif
-
+        
         @if(session('error'))
-            Toast.fire({ icon: 'error', title: @json(session('error')) });
+            Toast.fire({ icon: 'error', title: "{!! addslashes(session('error')) !!}" });
         @endif
     }
 });

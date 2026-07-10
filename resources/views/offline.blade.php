@@ -16,7 +16,7 @@
     </div>
 </div>
 
-<script nonce="{{ $csp_nonce ?? '' }}">
+<script>
     window.addEventListener('online', () => {
         window.location.href = '/';
     });

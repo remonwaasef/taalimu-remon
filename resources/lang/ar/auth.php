@@ -6,9 +6,7 @@ return [
     'throttle' => 'عدد كبير جدا من محاولات الدخول. يرجى المحاولة مرة أخرى بعد :seconds ثانية.',
     'email_already_taken' => 'هذا البريد الإلكتروني مسجل مسبقاً في نظام آخر. يرجى استخدام بريد مختلف.',
     'must_change_password' => 'يجب عليك تغيير كلمة المرور قبل المتابعة.',
-    'center_not_found' => 'لا يمكن العثور على المركز الخاص بك.',
-    'invalid_credentials' => 'البريد الإلكتروني أو كلمة المرور غير صحيحة.',
-
+    
     // Standard Auth Keys
     'logout' => 'تسجيل الخروج',
     'email' => 'البريد الإلكتروني',
@@ -84,8 +82,8 @@ return [
         'or' => 'أو',
         'processing' => 'جاري المعالجة...',
     ],
-
-    // Login Page
+    
+    // Login Page  
     'login' => [
         'title' => 'تسجيل الدخول',
         'subtitle' => 'مرحباً بعودتك',
@@ -100,7 +98,7 @@ return [
         'register_now' => 'إنشاء حساب جديد',
         'admin_login' => 'دخول المشرف العام',
     ],
-
+    
     // Registration Success Page
     'registration' => [
         'success_title' => 'تم التسجيل بنجاح!',
