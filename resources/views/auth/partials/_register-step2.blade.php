@@ -1,5 +1,5 @@
                 <!-- STEP 2: Personal Details & Summary -->
-                <div x-show="currentStep === 2" x-cloak :class="{'hidden': currentStep !== 2}" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="hidden space-y-4">
+                <div x-show="currentStep === 2" x-cloak style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-8 items-start">
                         <!-- Left Column: Form -->
                         <div class="space-y-4">
