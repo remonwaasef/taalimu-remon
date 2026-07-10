@@ -1,4 +1,6 @@
 *.log
+deployment_scripts/deploy.config.ps1
+
 .DS_Store
 .env
 .env.backup
