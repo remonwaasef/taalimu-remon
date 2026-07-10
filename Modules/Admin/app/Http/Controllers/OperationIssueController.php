@@ -63,7 +63,7 @@ class OperationIssueController extends Controller
 
         $admins = User::whereHas('roles', function ($q) {
             $q->where('name', 'super_admin');
-        })->get();
+        })->limit(50)->get();
 
         return view('admin::operation_issues.show', compact('issue', 'admins'));
     }

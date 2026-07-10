@@ -15,7 +15,7 @@ use Modules\Campus\Http\Controllers\CampusController;
 */
 
 Route::domain(config('app.tenant_domain') == 'localhost' ? '{tenant}.localhost' : '{tenant}.'.config('app.tenant_domain'))
-    ->middleware([\App\Http\Middleware\IdentifyTenant::class, 'auth', 'feature:student_portal'])
+    ->middleware(['auth', 'feature:student_portal'])
     ->group(function () {
         Route::prefix('campus')->name('campus.')->group(function () {
             Route::get('/', [CampusController::class, 'index'])->name('index');

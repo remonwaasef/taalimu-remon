@@ -2,9 +2,18 @@
 
 namespace Modules\Center\Http\Controllers;
 
+use App\Helpers\PhoneHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Instructor;
+use App\Models\Student;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -19,10 +28,9 @@ class AuthController extends Controller
     {
         if ($request->has('token')) {
             $token = $request->input('token');
-            $data = \Illuminate\Support\Facades\Cache::pull('login_token_'.$token);
+            $data = Cache::pull('login_token_'.$token);
 
             if ($data) {
-                // Check if the token belongs to this tenant
                 $tenantMatches = app()->bound('tenant') && isset($data['tenant_id']) && (int) $data['tenant_id'] === (int) app('tenant')->id;
 
                 if ($tenantMatches && isset($data['user_id'])) {
@@ -36,7 +44,7 @@ class AuthController extends Controller
                     $user = auth()->user();
 
                     if ($user && $user->tenant_id === app('tenant')->id) {
-                        \Illuminate\Support\Facades\Log::info('Unified Login: Success', ['user_id' => $user->id]);
+                        Log::info('Unified Login: Success', ['user_id' => $user->id]);
 
                         if ($user->role === 'center_admin') {
                             return redirect()->route('center.dashboard', ['tenant' => app('tenant')->domain]);
@@ -50,13 +58,13 @@ class AuthController extends Controller
                     return redirect()->route('center.login', ['tenant' => app('tenant')->domain])
                         ->withErrors(['email' => __('auth.failed')]);
                 } else {
-                    \Illuminate\Support\Facades\Log::warning('Unified Login: Tenant Mismatch or Invalid Data', [
+                    Log::warning('Unified Login: Tenant Mismatch or Invalid Data', [
                         'token_tenant' => $data['tenant_id'] ?? 'null',
                         'current_tenant' => app('tenant')->id ?? 'null',
                     ]);
                 }
             } else {
-                \Illuminate\Support\Facades\Log::warning('Unified Login: Token Expired or Invalid', ['token' => substr($token, 0, 10).'...']);
+                Log::warning('Unified Login: Token Expired or Invalid', ['token' => substr($token, 0, 10).'...']);
             }
         }
 
@@ -65,103 +73,84 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        // Flexible validation: accept email or phone
         $request->validate([
             'email' => ['required', 'string'],
             'password' => ['required'],
         ]);
 
-        // Rate Limiting Key: IP + Email
-        $throttleKey = 'login.'.\Illuminate\Support\Str::lower($request->input('email')).'|'.$request->ip();
-
-        // Increase rate limit for local development/testing to prevent locking out developers.
-        // Environment-based only — request IPs must never relax throttling (spoofable via XFF).
+        $throttleKey = 'login.' . Str::lower($request->input('email')) . '|' . $request->ip();
         $maxAttempts = is_relaxed_throttle_env() ? 100 : 5;
 
-        if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($throttleKey, $maxAttempts)) {
-            $seconds = \Illuminate\Support\Facades\RateLimiter::availableIn($throttleKey);
+        if (RateLimiter::tooManyAttempts($throttleKey, $maxAttempts)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
 
             return back()->withErrors([
                 'email' => __('auth.throttle', ['seconds' => $seconds]),
             ])->onlyInput('email');
         }
 
-        // Determine if input is email or phone
         $loginField = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
-
-        // Find user by email or phone
         $user = null;
+        $tenantId = app('tenant')->id;
 
         if ($loginField === 'email') {
-            $user = \App\Models\User::where('email', $request->email)
-                ->where('tenant_id', app('tenant')->id)
+            $user = User::where('email', $request->email)
+                ->where('tenant_id', $tenantId)
                 ->first();
         } else {
-            // Find student or instructor by phone
-            $phone = preg_replace('/[^0-9]/', '', $request->email);
+            $phoneVariations = PhoneHelper::getVariations($request->email);
+
+            if (empty($phoneVariations)) {
+                return back()->withErrors(['email' => __('auth.failed')])->onlyInput('email');
+            }
 
             // 1. Try Students
-            $student = \App\Models\Student::where('tenant_id', app('tenant')->id)
-                ->where(function ($q) use ($request, $phone) {
-                    $q->where('phone', $request->email) // Exact as typed
-                        ->orWhere('phone', $phone)         // Cleaned
-                        ->orWhere('phone', '0'.$phone)   // Common local variations
-                        ->orWhere('phone', substr($phone, 1));
-                })->first();
+            $student = Student::where('tenant_id', $tenantId)
+                ->whereIn('phone', $phoneVariations)
+                ->first();
 
             if ($student && $student->user_id) {
-                $user = \App\Models\User::find($student->user_id);
-            } else {
-                // 2. Try Instructors
-                $instructor = \App\Models\Instructor::where('tenant_id', app('tenant')->id)
-                    ->where(function ($q) use ($request, $phone) {
-                        $q->where('phone', $request->email)
-                            ->orWhere('phone', $phone)
-                            ->orWhere('phone', '0'.$phone)
-                            ->orWhere('phone', substr($phone, 1));
-                    })->first();
+                $user = User::find($student->user_id);
+            }
+
+            // 2. Try Instructors
+            if (! $user) {
+                $instructor = Instructor::where('tenant_id', $tenantId)
+                    ->whereIn('phone', $phoneVariations)
+                    ->first();
 
                 if ($instructor && $instructor->user_id) {
-                    $user = \App\Models\User::find($instructor->user_id);
-                } else {
-                    // 3. Try User table directly (for center_admin or others without separate profiles)
-                    $user = \App\Models\User::where('tenant_id', app('tenant')->id)
-                        ->where(function ($q) use ($request, $phone) {
-                            $q->where('phone', $request->email)
-                                ->orWhere('phone', $phone)
-                                ->orWhere('phone', '0'.$phone)
-                                ->orWhere('phone', substr($phone, 1));
-                        })->first();
+                    $user = User::find($instructor->user_id);
+                }
+            }
 
-                    if (! $user) {
-                        // 4. Try Center Admin (using tenant phone)
-                        $tenant = app('tenant');
-                        if ($tenant && $tenant->phone) {
-                            $tenantPhone = preg_replace('/[^0-9]/', '', $tenant->phone);
-                            $inputPhone = preg_replace('/[^0-9]/', '', $request->email);
+            // 3. Try User table directly
+            if (! $user) {
+                $user = User::where('tenant_id', $tenantId)
+                    ->whereIn('phone', $phoneVariations)
+                    ->first();
+            }
 
-                            if ($tenantPhone === $inputPhone ||
-                                '0'.$tenantPhone === $inputPhone ||
-                                $tenantPhone === '0'.$inputPhone ||
-                                substr($tenantPhone, 1) === $inputPhone ||
-                                $tenantPhone === substr($inputPhone, 1)) {
+            // 4. Try tenant phone match
+            if (! $user) {
+                $tenant = app('tenant');
+                if ($tenant && $tenant->phone) {
+                    $tenantVariations = PhoneHelper::getVariations($tenant->phone);
+                    $inputVariations = $phoneVariations;
 
-                                // Find the primary center admin
-                                $user = \App\Models\User::where('tenant_id', $tenant->id)
-                                    ->where('role', 'center_admin')
-                                    ->orderBy('id', 'asc')
-                                    ->first();
-                            }
-                        }
+                    if (array_intersect($tenantVariations, $inputVariations)) {
+                        $user = User::where('tenant_id', $tenantId)
+                            ->where('role', 'center_admin')
+                            ->orderBy('id', 'asc')
+                            ->first();
                     }
                 }
             }
         }
 
-        // Attempt authentication
-        if ($user && \Illuminate\Support\Facades\Hash::check($request->password, $user->password)) {
-            if (app()->bound('tenant') && $user->tenant_id !== app('tenant')->id) {
-                \Illuminate\Support\Facades\RateLimiter::hit($throttleKey);
+        if ($user && Hash::check($request->password, $user->password)) {
+            if ($user->tenant_id !== $tenantId) {
+                RateLimiter::hit($throttleKey);
 
                 return back()->withErrors([
                     'email' => __('auth.failed'),

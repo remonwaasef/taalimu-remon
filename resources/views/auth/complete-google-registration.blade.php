@@ -316,7 +316,7 @@ window.addEventListener('pageshow', (event) => {
 });
 </script>
 
-<div class="min-h-screen bg-slate-50/50 flex justify-center items-start p-4 lg:p-8 mesh-gradient-soft noise-overlay register-page-offset" 
+<div class="min-h-screen bg-slate-50/50 flex justify-center items-center p-4 lg:p-8 mesh-gradient-soft noise-overlay" 
      x-data="googleRegistration({
         selectedPlan: {{ Js::from($selectedPlanSlug) }},
         selectedCycle: {{ Js::from($selectedCycle) }},

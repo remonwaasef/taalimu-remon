@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Tenant;
 use App\Models\User;
 use App\Services\GamificationService;
 use Illuminate\Bus\Queueable;
@@ -14,6 +15,10 @@ class AwardGamificationPoints implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $tries = 3;
+
+    public $backoff = [10, 60];
+
     public $user;
 
     public $points;
@@ -22,9 +27,6 @@ class AwardGamificationPoints implements ShouldQueue
 
     public $referenceable;
 
-    /**
-     * Create a new job instance.
-     */
     public function __construct(User $user, int $points, string $reason, $referenceable = null)
     {
         $this->user = $user;
@@ -33,13 +35,9 @@ class AwardGamificationPoints implements ShouldQueue
         $this->referenceable = $referenceable;
     }
 
-    /**
-     * Execute the job.
-     */
     public function handle(GamificationService $gamificationService): void
     {
-        // Ensure tenant context is set for the job
-        $tenant = \App\Models\Tenant::find($this->user->tenant_id);
+        $tenant = Tenant::find($this->user->tenant_id);
         if ($tenant) {
             app()->instance('tenant', $tenant);
         }

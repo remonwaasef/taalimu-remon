@@ -1,8 +1,6 @@
                         <div class="tab-pane fade" id="subscription" role="tabpanel">
                             @php
-                                $subscription = $tenant->activeSubscription();
                                 $package = $subscription ? $subscription->resolved_package : null;
-                                $service = app(\App\Services\SubscriptionService::class);
                             @endphp
 
                             {{-- 1. Consumption Overview (Status) --}}
@@ -30,10 +28,7 @@
                                     @foreach($features as $f)
                                         @php
                                             $limit = $service->getFeatureValue($tenant, $f['code']);
-                                            $usage = 0;
-                                            if($f['code'] == 'max_students') $usage = $tenant->users()->where('role', 'student')->count();
-                                            if($f['code'] == 'max_courses') $usage = \App\Models\Course::where('tenant_id', $tenant->id)->count();
-                                            if($f['code'] == 'max_instructors') $usage = \App\Models\Instructor::where('tenant_id', $tenant->id)->count();
+                                            $usage = $usageData[$f['code']] ?? 0;
                                             
                                             $isUnlimited = $limit === 'unlimited' || $limit == -1;
                                             $percent = 0;

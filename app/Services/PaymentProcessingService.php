@@ -7,6 +7,7 @@ use App\Models\SiteSetting;
 use App\Models\SubscriptionLog;
 use App\Models\Tenant;
 use App\Models\User;
+use App\Services\TelegramService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -18,6 +19,10 @@ use Illuminate\Support\Str;
  */
 class PaymentProcessingService
 {
+    public function __construct(
+        protected TelegramService $telegramService
+    ) {}
+
     /**
      * حساب مدة الاشتراك بالأيام حسب دورة الفوترة.
      */
@@ -98,6 +103,7 @@ class PaymentProcessingService
 
         if (! Auth::check() && $user) {
             Auth::login($user, true);
+            session()->regenerate();
         }
 
         return $user;
@@ -116,7 +122,7 @@ class PaymentProcessingService
         if ($coupon) {
             $coupon->incrementUsage();
             try {
-                app(TelegramService::class)->sendCouponAlert($tenant, $coupon, $discountAmount);
+                $this->telegramService->sendCouponAlert($tenant, $coupon, $discountAmount);
             } catch (\Throwable $e) {
                 Log::warning('Failed to send coupon alert: '.$e->getMessage());
             }

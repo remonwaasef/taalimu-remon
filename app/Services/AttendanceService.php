@@ -37,7 +37,7 @@ class AttendanceService
 
         // If status is present but no late data provided, check if it should be late
         if ($status === 'present' && ! isset($data['late_minutes']) && isset($data['schedule_id'])) {
-            $schedule = Schedule::find($data['schedule_id']);
+            $schedule = Schedule::with('course')->find($data['schedule_id']);
             if ($schedule) {
                 $lateData = $this->determineStatus($schedule);
                 $status = $lateData['status'];
@@ -79,7 +79,7 @@ class AttendanceService
 
         if ($isArriving && ! $wasAlreadyPresent) {
             $student = Student::with('user')->find($data['student_id']);
-            $schedule = Schedule::with('course')->find($data['schedule_id']);
+            $schedule = $schedule ?? Schedule::with('course')->find($data['schedule_id']);
             $tenant = \Modules\Tenancy\Services\TenantResolver::get();
 
             if ($student && $schedule) {
@@ -221,7 +221,7 @@ class AttendanceService
                 $guardianEmails = $student->guardians->pluck('email')->filter()->toArray();
             }
 
-            if ($realEmail || !empty($guardianEmails)) {
+            if ($realEmail || ! empty($guardianEmails)) {
                 $locale = $this->getTargetLocale($tenant, $student);
 
                 $subjectKey = "notif_attendance_subject_{$locale}";

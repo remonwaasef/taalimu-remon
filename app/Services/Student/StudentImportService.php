@@ -4,6 +4,7 @@ namespace App\Services\Student;
 
 use App\Models\Student;
 use App\Models\User;
+use App\Services\AdminNotificationService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -12,9 +13,14 @@ class StudentImportService
 {
     protected $notificationService;
 
-    public function __construct(StudentNotificationService $notificationService)
-    {
+    protected $adminNotificationService;
+
+    public function __construct(
+        StudentNotificationService $notificationService,
+        AdminNotificationService $adminNotificationService
+    ) {
         $this->notificationService = $notificationService;
+        $this->adminNotificationService = $adminNotificationService;
     }
 
     public function importStudents(array $csvData)
@@ -133,7 +139,7 @@ class StudentImportService
                 }
             });
 
-            app(\App\Services\AdminNotificationService::class)->notifyAdmins(
+            $this->adminNotificationService->notifyAdmins(
                 'bulk_import',
                 'تم استيراد '.$successCount.' طالب بنجاح',
                 route('center.students.index', ['tenant' => \Modules\Tenancy\Services\TenantResolver::get()->domain]),

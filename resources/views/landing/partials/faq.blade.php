@@ -4,7 +4,7 @@
             <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">
                 {{ __('landing.faq.title_prefix') }} <span class="text-emerald-500">{{ __('landing.faq.title_highlight') }}</span>
             </h2>
-            @php $siteName = \App\Models\SiteSetting::get('site_name', 'Taalimu'); @endphp
+            @php $siteName = $siteSettings['site_name'] ?? 'Taalimu'; @endphp
             <p class="text-lg text-slate-500 max-w-2xl mx-auto font-medium">
                 {{ str_replace(config('app.name'), $siteName, __('landing.faq.subtitle')) }}
             </p>

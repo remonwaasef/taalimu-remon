@@ -5,6 +5,7 @@ namespace Modules\Campus\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Certificate;
 use App\Services\CertificateService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
@@ -84,6 +85,7 @@ class CampusController extends Controller implements HasMiddleware
         $courses = \App\Models\Course::where('status', 'published')
             ->whereNotIn('id', $enrolledCourseIds)
             ->latest()
+            ->limit(200)
             ->get();
 
         return view('campus::courses', compact('student', 'courses'));
@@ -102,6 +104,7 @@ class CampusController extends Controller implements HasMiddleware
         }, 'instructor'])
             ->whereIn('course_id', $enrolledCourseIds)
             ->orderBy('start_time')
+            ->limit(200)
             ->get()
             ->groupBy('day_of_week');
 
@@ -122,8 +125,8 @@ class CampusController extends Controller implements HasMiddleware
     public function finances()
     {
         $student = auth()->user()->student;
-        $sales = \App\Models\Sale::where('student_id', $student->id)->latest()->get();
-        $totalDebt = $sales->sum('total_amount') - $sales->sum('paid_amount');
+        $sales = \App\Models\Sale::where('student_id', $student->id)->latest()->limit(200)->get();
+        $totalDebt = \App\Models\Sale::where('student_id', $student->id)->sum(DB::raw('total_amount - paid_amount'));
 
         return view('campus::finances', compact('student', 'sales', 'totalDebt'));
     }

@@ -7,4 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Invoice extends Model
 {
     use \App\Traits\BelongsToTenant;
+
+    protected $guarded = ['id'];
 }

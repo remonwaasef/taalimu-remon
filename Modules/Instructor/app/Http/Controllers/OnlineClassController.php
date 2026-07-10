@@ -22,7 +22,7 @@ class OnlineClassController extends Controller
             $query->where('instructor_id', $instructor->id);
         }
 
-        $onlineClasses = $query->latest('start_time')->get();
+        $onlineClasses = $query->latest('start_time')->limit(200)->get();
 
         return view('instructor::online_classes.index', compact('onlineClasses'));
     }
@@ -35,9 +35,9 @@ class OnlineClassController extends Controller
         $instructor = auth()->user()->instructor;
 
         if ($instructor) {
-            $courses = $instructor->courses;
+            $courses = $instructor->courses()->limit(500)->get();
         } else {
-            $courses = Course::select('id', 'title')->get();
+            $courses = Course::select('id', 'title')->limit(500)->get();
         }
 
         return view('instructor::online_classes.create', compact('courses'));

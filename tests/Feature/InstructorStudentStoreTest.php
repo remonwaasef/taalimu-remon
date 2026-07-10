@@ -10,6 +10,7 @@ use App\Models\Subscription;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
@@ -91,7 +92,7 @@ class InstructorStudentStoreTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_creates_and_enrolls_a_new_student_via_the_shared_service()
     {
         $this->actingAs($this->instructorUser);
@@ -121,7 +122,7 @@ class InstructorStudentStoreTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_rejects_enrolment_into_a_course_the_instructor_does_not_own()
     {
         $otherInstructor = Instructor::create([

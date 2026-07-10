@@ -5,9 +5,9 @@ namespace Modules\Center\Http\Controllers;
 use App\DTOs\StudentData;
 use App\Http\Requests\Center\StoreStudentRequest;
 use App\Http\Requests\Center\UpdateStudentRequest;
-use App\Models\Student;
 use App\Models\Course;
 use App\Models\Stage;
+use App\Models\Student;
 use App\Queries\StudentQuery;
 use App\Services\StudentService;
 use App\Traits\HandlesFileUploads;
@@ -63,7 +63,7 @@ class StudentController extends Controller
         $query = Student::query()->select('id', 'name', 'phone');
 
         if (! empty($validated['q'])) {
-            $term = $validated['q'];
+            $term = \App\Helpers\QueryHelper::escapeLike($validated['q']);
             $query->where(function ($q) use ($term) {
                 $q->where('name', 'like', "%{$term}%")
                     ->orWhere('phone', 'like', "%{$term}%")
@@ -112,9 +112,16 @@ class StudentController extends Controller
         });
 
         $stages = Stage::getCached();
-        $courses = Course::orderBy('title')->get();
+        $courses = Course::orderBy('title')->limit(500)->get();
 
-        return view('center::students.index', compact('students', 'stages', 'courses'));
+        $studentForQr = null;
+        if (session('student_email')) {
+            $studentForQr = Student::where('email', session('student_email'))
+                ->where('tenant_id', app('tenant')->id)
+                ->first();
+        }
+
+        return view('center::students.index', compact('students', 'stages', 'courses', 'studentForQr'));
     }
 
     /**
@@ -125,7 +132,7 @@ class StudentController extends Controller
         $this->authorize('create', Student::class);
 
         $stages = Stage::getCached();
-        $courses = Course::orderBy('title')->get();
+        $courses = Course::orderBy('title')->limit(500)->get();
 
         return view('center::students.create', compact('stages', 'courses'));
     }

@@ -16,9 +16,18 @@ class TwoFactorMiddleware
         $user = auth()->user();
 
         if ($user && ! empty($user->google2fa_secret)) {
-            // Check if 2fa is verified in the current session
-            if (! $request->session()->has('2fa_verified')) {
-                // If not verified, and the user is not currently trying to verify, redirect them
+            $verified = $request->session()->get('2fa_verified');
+            $verifiedIp = $request->session()->get('2fa_verified_ip');
+
+            if ($verified) {
+                $currentIp = $request->ip();
+                if ($verifiedIp !== $currentIp) {
+                    $request->session()->forget(['2fa_verified', '2fa_verified_ip']);
+                    $verified = false;
+                }
+            }
+
+            if (! $verified) {
                 if (! $request->is('2fa*') && ! $request->is('logout')) {
                     return redirect()->route('2fa.verify');
                 }

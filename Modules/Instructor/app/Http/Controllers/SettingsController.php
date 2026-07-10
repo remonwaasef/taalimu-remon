@@ -3,12 +3,17 @@
 namespace Modules\Instructor\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Services\SubscriptionService;
 use Illuminate\Http\Request;
 use Modules\Instructor\Http\Controllers\Traits\ResolvesInstructor;
 
 class SettingsController extends Controller
 {
     use ResolvesInstructor;
+
+    public function __construct(
+        protected SubscriptionService $subscriptionService
+    ) {}
 
     /**
      * Display the consolidated settings dashboard
@@ -56,7 +61,16 @@ class SettingsController extends Controller
         $settings = $tenant->settings['whatsapp'] ?? [];
         $packages = \App\Models\Package::with('features')->where('is_active', true)->orderBy('sort_order')->get();
 
-        return view('instructor::settings', compact('tenant', 'settings', 'packages'));
+        $subscription = $tenant->activeSubscription();
+        $service = $this->subscriptionService;
+
+        $usageData = [
+            'max_students' => $tenant->users()->where('role', 'student')->count(),
+            'max_courses' => \App\Models\Course::where('tenant_id', $tenant->id)->count(),
+            'max_instructors' => \App\Models\Instructor::where('tenant_id', $tenant->id)->count(),
+        ];
+
+        return view('instructor::settings', compact('tenant', 'settings', 'packages', 'subscription', 'service', 'usageData'));
     }
 
     /**

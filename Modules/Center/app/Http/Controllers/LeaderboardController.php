@@ -3,8 +3,8 @@
 namespace Modules\Center\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Services\GamificationService;
 use App\Models\PointLog;
+use App\Services\GamificationService;
 
 class LeaderboardController extends Controller
 {

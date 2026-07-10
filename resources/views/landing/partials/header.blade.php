@@ -15,7 +15,7 @@
                 <img src="{{ asset('images/brand/logo-full.png?v=3') }}" alt="Logo" class="h-6 sm:h-7 lg:h-8 w-auto group-hover:scale-105 transition-transform">
                 <div class="hidden md:flex flex-col">
                     <span class="font-black text-sm lg:text-lg text-slate-900 leading-tight tracking-tight whitespace-nowrap">
-                        {{ \App\Models\SiteSetting::get('site_name', 'Taalimu') }}
+                        {{ $siteSettings['site_name'] ?? 'Taalimu' }}
                     </span>
                 </div>
             </a>

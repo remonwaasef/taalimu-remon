@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Cache;
 use Laravel\Cashier\Subscription as CashierSubscription;
 
 class Subscription extends CashierSubscription
@@ -86,44 +87,42 @@ class Subscription extends CashierSubscription
      */
     public function getResolvedPackageAttribute()
     {
-        $package = $this->package;
-        if ($package) {
-            return $package;
-        }
+        return Cache::remember("subscription_package_{$this->id}", 3600, function () {
+            $package = $this->package;
+            if ($package) {
+                return $package;
+            }
 
-        // Fallback for demo price IDs: price_demo_{slug}
-        if ($this->gateway === 'stripe' && str_starts_with($this->stripe_price, 'price_demo_')) {
-            $slug = str_replace('price_demo_', '', $this->stripe_price);
+            // Fallback for demo price IDs: price_demo_{slug}
+            if ($this->gateway === 'stripe' && str_starts_with($this->stripe_price, 'price_demo_')) {
+                $slug = str_replace('price_demo_', '', $this->stripe_price);
 
-            return Package::where('slug', $slug)->first();
-        }
+                return Package::where('slug', $slug)->first();
+            }
 
-        // Fallback for free trial: price_free -> basic
-        if ($this->stripe_price === 'price_free') {
-            return Package::where('slug', 'basic')->first();
-        }
+            // Fallback for free trial: price_free -> basic
+            if ($this->stripe_price === 'price_free') {
+                return Package::where('slug', 'basic')->first();
+            }
 
-        // Robust Fallback for configuration mismatches or old data
-        // price_starter -> basic
-        // price_growth -> pro
-        // price_enterprise -> enterprise
-        $mappings = [
-            'price_starter' => 'basic',
-            'price_growth' => 'pro',
-            'price_enterprise' => 'enterprise',
-            'price_paymob_basic' => 'basic',
-            'price_paymob_pro' => 'pro',
-            'price_paymob_enterprise' => 'enterprise',
-            'starter' => 'basic', // some old data might use plain slug
-            'growth' => 'pro',
-        ];
+            // Robust Fallback for configuration mismatches or old data
+            $mappings = [
+                'price_starter' => 'basic',
+                'price_growth' => 'pro',
+                'price_enterprise' => 'enterprise',
+                'price_paymob_basic' => 'basic',
+                'price_paymob_pro' => 'pro',
+                'price_paymob_enterprise' => 'enterprise',
+                'starter' => 'basic',
+                'growth' => 'pro',
+            ];
 
-        if (isset($mappings[$this->stripe_price])) {
-            return Package::where('slug', $mappings[$this->stripe_price])->first();
-        }
+            if (isset($mappings[$this->stripe_price])) {
+                return Package::where('slug', $mappings[$this->stripe_price])->first();
+            }
 
-        // Final attempt: check if stripe_price itself is a slug
-        return Package::where('slug', $this->stripe_price)->first();
+            return Package::where('slug', $this->stripe_price)->first();
+        });
     }
 
     /**

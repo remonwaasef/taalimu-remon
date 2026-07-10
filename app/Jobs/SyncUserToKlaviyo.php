@@ -14,19 +14,17 @@ class SyncUserToKlaviyo implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $tries = 3;
+
+    public $backoff = [30, 120];
+
     public $user;
 
-    /**
-     * Create a new job instance.
-     */
     public function __construct(User $user)
     {
         $this->user = $user;
     }
 
-    /**
-     * Execute the job.
-     */
     public function handle(KlaviyoService $klaviyo)
     {
         $profileData = [
@@ -35,10 +33,7 @@ class SyncUserToKlaviyo implements ShouldQueue
             'title' => $this->user->role ?? 'user',
         ];
 
-        // Sync the profile
         $klaviyo->syncProfile($profileData);
-
-        // Track "Registered" event
         $klaviyo->trackEvent('Registered', [
             '$email' => $this->user->email,
         ], [
