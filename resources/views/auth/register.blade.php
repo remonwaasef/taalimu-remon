@@ -15,7 +15,7 @@
 </style>
 @include('auth.partials._register-scripts')
 
-<div class="min-h-[85vh] bg-slate-50/50 flex justify-center p-4 lg:p-8 mesh-gradient-soft noise-overlay register-page-offset" 
+<div class="min-h-[85vh] bg-slate-50/50 flex justify-center items-start p-4 lg:p-8 mesh-gradient-soft noise-overlay register-page-offset" 
      x-data="registrationForm({
         selectedPlan: {{ Js::from(old('plan', request('plan', $packages->firstWhere('is_default', true)?->slug ?? $packages->first()?->slug ?? ''))) }},
         billingCycle: {{ Js::from(old('billing_cycle', request('cycle', 'monthly'))) }},
@@ -30,7 +30,7 @@
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
     
     <!-- Main Centered Card Container (Simplified Single Column) -->
-    <div class="w-full transition-all duration-500 bg-white rounded-2xl shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100/50 animate-fade-in-up md:backdrop-blur-xl relative"
+    <div class="w-full mx-auto transition-all duration-500 bg-white rounded-2xl shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100/50 animate-fade-in-up md:backdrop-blur-xl relative"
          x-cloak
          :class="currentStep === 2 ? 'max-w-4xl' : 'max-w-xl'">
         
