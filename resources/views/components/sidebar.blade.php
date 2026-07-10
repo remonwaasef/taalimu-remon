@@ -1,5 +1,5 @@
 <aside class="sidebar sidebar-default navs-rounded-all sidebar-base" style="background: #ffffff !important; border-left: 1px solid rgba(0,0,0,0.05) !important;">
-<style>
+<style nonce="{{ $csp_nonce ?? '' }}">
 /* Premium Light Sidebar Theme */
 .sidebar-base {
     box-shadow: 2px 0 24px rgba(0,0,0,0.03) !important;

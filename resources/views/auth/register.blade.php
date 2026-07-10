@@ -4,7 +4,7 @@
 <!-- Import Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-<style>
+<style nonce="{{ $csp_nonce ?? '' }}">
     /* Premium Identity Missing Classes (since Tailwind JIT isn't running) */
     .bg-emerald-600 { background-color: #059669 !important; }
     .shadow-emerald-600\/20 { box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.2), 0 4px 6px -4px rgba(5, 150, 105, 0.1) !important; }
