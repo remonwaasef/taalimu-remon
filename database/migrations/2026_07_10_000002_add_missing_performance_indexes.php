@@ -48,9 +48,8 @@ return new class extends Migration
             $table->index('category_id', 'idx_quizzes_category_id');
         });
 
-        // lesson_progress - enrollment_id, completed_at
+        // lesson_progress - completed_at
         Schema::table('lesson_progress', function (Blueprint $table) {
-            $table->index('enrollment_id', 'idx_lesson_progress_enrollment_id');
             $table->index('completed_at', 'idx_lesson_progress_completed_at');
         });
     }
@@ -92,7 +91,6 @@ return new class extends Migration
         });
 
         Schema::table('lesson_progress', function (Blueprint $table) {
-            $table->dropIndex('idx_lesson_progress_enrollment_id');
             $table->dropIndex('idx_lesson_progress_completed_at');
         });
     }
