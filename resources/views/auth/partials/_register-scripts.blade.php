@@ -21,7 +21,6 @@ document.addEventListener('alpine:init', () => {
         discountValue: 0,
         discountType: 'percentage',
         discountText: '',
-        discountText: '',
         isApplyingCoupon: false,
         selectedCurrency: config.selectedCurrency || 'EGP',
         accountType: config.accountType || null,
@@ -313,7 +312,6 @@ document.addEventListener('alpine:init', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         },
 
-        showPlanModal: false,
 
         get couponDiscountAmount() {
             if (this.couponStatus !== 'valid') return 0;
