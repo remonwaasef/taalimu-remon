@@ -1,4 +1,4 @@
-<script>
+<script nonce="{{ $csp_nonce ?? '' }}">
 document.addEventListener('alpine:init', () => {
     Alpine.data('registrationForm', (config) => ({
         selectedPlan: config.selectedPlan,
