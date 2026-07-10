@@ -5,6 +5,7 @@
         isMenuOpen: false
     }"
     @scroll.window="scrolled = window.pageYOffset > 20"
+    @resize.window="isMenuOpen = false"
     :class="scrolled ? 'bg-white border-b border-slate-200/50 py-2 shadow-md' : 'bg-transparent py-4'"
 >
     <div class="container mx-auto px-4 lg:px-12">
