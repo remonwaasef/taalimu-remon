@@ -13,11 +13,11 @@ class ContentSecurityPolicy
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $response = $next($request);
-
         $nonce = base64_encode(random_bytes(16));
         view()->share('csp_nonce', $nonce);
         $request->attributes->set('csp_nonce', $nonce);
+
+        $response = $next($request);
 
         $cdn = 'cdn.jsdelivr.net cdnjs.cloudflare.com unpkg.com';
         $fonts = 'fonts.googleapis.com fonts.gstatic.com fonts.bunny.net';
