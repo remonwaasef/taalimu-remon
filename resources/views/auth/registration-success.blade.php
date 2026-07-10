@@ -114,7 +114,7 @@
     </div>
 </div>
 
-<script>
+<script nonce="{{ $csp_nonce ?? '' }}">
 function copyUrl() {
     const urlInput = document.getElementById('centerUrl');
     const copyBtn = document.getElementById('copyBtn');

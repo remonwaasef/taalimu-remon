@@ -147,7 +147,7 @@
     </div>
 </section>
 
-<style>
+<style nonce="{{ $csp_nonce ?? '' }}">
     @keyframes heroFadeInRight {
         from {
             opacity: 0;

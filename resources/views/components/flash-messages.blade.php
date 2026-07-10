@@ -67,7 +67,7 @@
     @endif
 </div>
 
-<script>
+<script nonce="{{ $csp_nonce ?? '' }}">
 document.addEventListener('DOMContentLoaded', function() {
     // Also support SweetAlert2 for session flashes if SweetAlert is loaded
     if (typeof Swal !== 'undefined') {
