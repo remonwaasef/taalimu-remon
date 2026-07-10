@@ -12,6 +12,8 @@
     .to-teal-500 { --tw-gradient-to: #14b8a6 !important; }
     .hover\:from-emerald-700:hover { --tw-gradient-from: #047857 !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(4, 120, 87, 0)) !important; }
     .hover\:to-teal-600:hover { --tw-gradient-to: #0d9488 !important; }
+    .max-w-xl { max-width: 36rem !important; }
+    .max-w-4xl { max-width: 56rem !important; }
 </style>
 @include('auth.partials._register-scripts')
 

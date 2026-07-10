@@ -14,8 +14,8 @@
  * ============================================================
  */
 
-const CACHE_NAME = 'taalimu-v9';
-const STATIC_CACHE = 'taalimu-static-v9';
+const CACHE_NAME = 'taalimu-v10';
+const STATIC_CACHE = 'taalimu-static-v10';
 const MAX_CACHE_SIZE = 100; // Maximum cached entries
 
 // Static assets to pre-cache on install
