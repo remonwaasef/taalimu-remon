@@ -2,18 +2,21 @@
 
 namespace App\Listeners;
 
+use App\Services\TelegramService;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Events\Dispatcher;
+use Illuminate\Support\Facades\Log;
 use Spatie\Activitylog\Models\Activity;
 
 class AuthenticationSubscriber
 {
-    /**
-     * Handle user login events.
-     */
+    public function __construct(
+        protected TelegramService $telegramService
+    ) {}
+
     public function handleUserLogin($event): void
     {
         activity('auth')
@@ -25,19 +28,15 @@ class AuthenticationSubscriber
             ])
             ->log('Successful Login');
 
-        // Notify Admin for Super Admin login
         if ($event->user->role === 'super_admin' || $event->user->email === config('app.admin_email', 'admin@taalimu.com')) {
             try {
-                app(\App\Services\TelegramService::class)->sendLoginAlert($event->user, request()->ip());
+                $this->telegramService->sendLoginAlert($event->user, request()->ip());
             } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::warning('AuthenticationSubscriber (Login Alert): Telegram notification failed. Error: '.$e->getMessage());
+                Log::warning('AuthenticationSubscriber (Login Alert): Telegram notification failed. Error: '.$e->getMessage());
             }
         }
     }
 
-    /**
-     * Handle user logout events.
-     */
     public function handleUserLogout($event): void
     {
         if ($event->user) {
@@ -52,9 +51,6 @@ class AuthenticationSubscriber
         }
     }
 
-    /**
-     * Handle user login failure events.
-     */
     public function handleUserLoginFailed($event): void
     {
         activity('auth')
@@ -65,20 +61,16 @@ class AuthenticationSubscriber
             ])
             ->log('Login Attempt Failed');
 
-        // Notify Admin on Telegram for suspicious activity
         $email = $event->credentials['email'] ?? 'unknown';
         if (str_contains($email, 'admin')) {
             try {
-                app(\App\Services\TelegramService::class)->sendAdminNotification("<b>🚨 فشل تسجيل دخول حساب إداري!</b>\n\n<b>البريد:</b> <code>{$email}</code>\n<b>IP:</b> <code>".request()->ip().'</code>');
+                $this->telegramService->sendAdminNotification("<b>🚨 فشل تسجيل دخول حساب إداري!</b>\n\n<b>البريد:</b> <code>{$email}</code>\n<b>IP:</b> <code>".request()->ip().'</code>');
             } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::warning('AuthenticationSubscriber (Login Failed Alert): Telegram notification failed. Error: '.$e->getMessage());
+                Log::warning('AuthenticationSubscriber (Login Failed Alert): Telegram notification failed. Error: '.$e->getMessage());
             }
         }
     }
 
-    /**
-     * Handle user lockout events.
-     */
     public function handleUserLockout($event): void
     {
         $email = $event->request->email ?? 'unknown';
@@ -90,17 +82,13 @@ class AuthenticationSubscriber
             ])
             ->log('User Account Locked Out');
 
-        // Notify Admin on Telegram
         try {
-            app(\App\Services\TelegramService::class)->sendAdminNotification("<b>🚫 تم قفل حساب مستخدم (Lockout)</b>\n\n<b>البريد:</b> <code>{$email}</code>\n<b>IP:</b> <code>".request()->ip().'</code>');
+            $this->telegramService->sendAdminNotification("<b>🚫 تم قفل حساب مستخدم (Lockout)</b>\n\n<b>البريد:</b> <code>{$email}</code>\n<b>IP:</b> <code>".request()->ip().'</code>');
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::warning('AuthenticationSubscriber (Lockout Alert): Telegram notification failed. Error: '.$e->getMessage());
+            Log::warning('AuthenticationSubscriber (Lockout Alert): Telegram notification failed. Error: '.$e->getMessage());
         }
     }
 
-    /**
-     * Register the listeners for the subscriber.
-     */
     public function subscribe(Dispatcher $events): void
     {
         $events->listen(

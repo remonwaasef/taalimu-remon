@@ -17,20 +17,19 @@ return [
 
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
-    'allowed_methods' => ['*'],
+    'allowed_methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 
     'allowed_origins' => [env('APP_URL', 'http://localhost'), env('FRONTEND_URL', 'http://localhost:3000')],
 
     'allowed_origins_patterns' => [
-        // Allow all subdomains of the configured tenant domain
-        '#^https?://.*\.'.preg_quote(env('TENANT_DOMAIN', 'localhost'), '#').'$#',
+        '#^https://[a-zA-Z0-9-]+\.'.preg_quote(env('TENANT_DOMAIN', 'localhost'), '#').'$#',
     ],
 
     'allowed_headers' => ['*'],
 
     'exposed_headers' => [],
 
-    'max_age' => 0,
+    'max_age' => 86400,
 
     'supports_credentials' => true,
 

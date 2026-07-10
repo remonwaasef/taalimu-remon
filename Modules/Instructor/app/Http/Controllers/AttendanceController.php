@@ -26,7 +26,7 @@ class AttendanceController extends Controller
             $query->where('instructor_id', $instructor->id);
         }
 
-        $todaySessions = $query->orderBy('start_time')->get()
+        $todaySessions = $query->orderBy('start_time')->limit(200)->get()
             ->unique(fn ($s) => $s->course_id.'-'.$s->start_time.'-'.$s->end_time);
 
         $todaySessions = new \Illuminate\Pagination\LengthAwarePaginator(
@@ -62,7 +62,7 @@ class AttendanceController extends Controller
         return view('instructor::attendance.show', compact('schedule', 'attendances'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, AttendanceService $attendanceService)
     {
         $validated = $request->validate([
             'student_id' => 'required|integer',
@@ -75,7 +75,6 @@ class AttendanceController extends Controller
         $schedule = Schedule::findOrFail($validated['schedule_id']);
         $this->authorizeSchedule($schedule);
 
-        $attendanceService = app(AttendanceService::class);
         $attendanceService->markAttendance($validated);
 
         return back()->with('success', __('instructor::messages.saved'));

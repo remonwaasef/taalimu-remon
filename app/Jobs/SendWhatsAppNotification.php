@@ -15,15 +15,16 @@ class SendWhatsAppNotification implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $tries = 3;
+
+    public $backoff = [30, 120];
+
     public $tenant;
 
     public $student;
 
     public $course;
 
-    /**
-     * Create a new job instance.
-     */
     public function __construct(Tenant $tenant, Student $student, $course)
     {
         $this->tenant = $tenant;
@@ -31,14 +32,9 @@ class SendWhatsAppNotification implements ShouldQueue
         $this->course = $course;
     }
 
-    /**
-     * Execute the job.
-     */
     public function handle(WhatsAppService $whatsAppService): void
     {
-        // Set tenant context for the job to enable global scopes
         app()->instance('tenant', $this->tenant);
-
         $whatsAppService->sendAttendanceNotification($this->tenant, $this->student, $this->course);
     }
 }

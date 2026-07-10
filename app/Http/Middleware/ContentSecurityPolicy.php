@@ -15,31 +15,34 @@ class ContentSecurityPolicy
     {
         $response = $next($request);
 
-        // Content Security Policy
+        $nonce = base64_encode(random_bytes(16));
+        view()->share('csp_nonce', $nonce);
+        $request->attributes->set('csp_nonce', $nonce);
+
+        $cdn = 'cdn.jsdelivr.net cdnjs.cloudflare.com unpkg.com';
+        $fonts = 'fonts.googleapis.com fonts.gstatic.com fonts.bunny.net';
+
         if (app()->environment('local')) {
-            // أكثر مرونة في بيئة التطوير لتقليل الأعطال أثناء التطوير
             $csp = [
-                "default-src * data: blob: 'unsafe-inline' 'unsafe-eval'",
-                "script-src * 'unsafe-inline' 'unsafe-eval'",
-                "style-src * 'unsafe-inline'",
-                'font-src * data:',
-                'img-src * data: blob:',
-                'connect-src *',
+                "default-src 'self' {$cdn} {$fonts}",
+                "script-src 'self' 'nonce-{$nonce}' {$cdn}",
+                "style-src 'self' 'nonce-{$nonce}' {$cdn} {$fonts}",
+                "font-src 'self' data: {$cdn} {$fonts}",
+                "img-src 'self' data: blob: https:",
+                "connect-src 'self' ws: wss:",
+                "media-src 'self' https://assets.mixkit.co",
+                "worker-src 'self' blob:",
+                "manifest-src 'self'",
                 "frame-ancestors 'none'",
+                "frame-src 'self' https://www.youtube.com https://player.vimeo.com https://js.stripe.com",
+                "base-uri 'self'",
+                "form-action 'self'",
             ];
-
-            $response->headers->set('X-CSP-Debug', 'true');
         } else {
-            // نسخة الإنتاج: قائمة بيضاء صريحة بالنطاقات بدل السماح لأي https،
-            // حتى لا يُفرَّغ الـ CSP من قيمته ضد XSS. inline scripts ما زالت مسموحة
-            // مؤقتاً لأن القوالب تعتمد عليها (خطة لاحقة: نقلها إلى Vite + nonce).
-            $cdn = 'cdn.jsdelivr.net cdnjs.cloudflare.com unpkg.com';
-            $fonts = 'fonts.googleapis.com fonts.gstatic.com fonts.bunny.net';
-
             $csp = [
                 "default-src 'self'",
-                "script-src 'self' 'unsafe-inline' 'unsafe-eval' {$cdn}",
-                "style-src 'self' 'unsafe-inline' {$cdn} {$fonts}",
+                "script-src 'self' 'nonce-{$nonce}' {$cdn}",
+                "style-src 'self' 'nonce-{$nonce}' {$cdn} {$fonts}",
                 "font-src 'self' data: {$cdn} {$fonts}",
                 "img-src 'self' data: blob: https:",
                 "connect-src 'self'",

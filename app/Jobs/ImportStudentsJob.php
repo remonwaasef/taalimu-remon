@@ -9,25 +9,19 @@ class ImportStudentsJob implements ShouldQueue
 {
     use Queueable;
 
+    public $timeout = 3600;
+
+    public $failOnTimeout = true;
+
+    public $tries = 3;
+
+    public $backoff = [60, 300];
+
     protected $filePath;
 
     protected $tenantId;
 
     protected $adminId;
-
-    /**
-     * The number of seconds the job can run before timing out.
-     *
-     * @var int
-     */
-    public $timeout = 3600; // 1 hour for large imports
-
-    /**
-     * Indicate if the job should fail if the timeout is exceeded.
-     *
-     * @var bool
-     */
-    public $failOnTimeout = true;
 
     /**
      * Create a new job instance.
@@ -53,7 +47,8 @@ class ImportStudentsJob implements ShouldQueue
         app()->instance('tenant', $tenant);
 
         // Read CSV from file
-        $path = \Illuminate\Support\Facades\Storage::path($this->filePath);
+        $disk = \Illuminate\Support\Facades\Storage::disk('local');
+        $path = $disk->path($this->filePath);
         if (! file_exists($path)) {
             return;
         }

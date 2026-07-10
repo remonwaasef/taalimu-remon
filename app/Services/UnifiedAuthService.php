@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Helpers\PhoneHelper;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -32,15 +33,7 @@ class UnifiedAuthService
                 }
             }
         } else {
-            // Phone-based login logic
-            $cleanPhone = preg_replace('/[^0-9]/', '', $emailOrPhone);
-
-            $phoneVariations = array_values(array_filter(array_unique([
-                $emailOrPhone,
-                $cleanPhone,
-                '0'.$cleanPhone,
-                substr($cleanPhone, 1),
-            ])));
+            $phoneVariations = PhoneHelper::getVariations($emailOrPhone);
 
             if (! empty($phoneVariations)) {
                 // 1. Single Query for matching User by phone variations

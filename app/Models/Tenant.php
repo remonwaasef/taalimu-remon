@@ -91,12 +91,80 @@ class Tenant extends Model
         'pm_last_four',
     ];
 
+    protected ?array $cachedSettings = null;
+
     protected $casts = [
-        // Encrypts credential values (WhatsApp tokens, etc.) at rest.
-        // Legacy plaintext values keep working and are encrypted on next save.
-        'settings' => \App\Casts\EncryptedSettings::class,
         'trial_ends_at' => 'datetime',
     ];
+
+    public function getSettingsAttribute($value): ?array
+    {
+        if ($this->cachedSettings !== null) {
+            return $this->cachedSettings;
+        }
+
+        if ($value === null) {
+            return $this->cachedSettings = null;
+        }
+
+        $settings = json_decode($value, true);
+
+        if (! is_array($settings)) {
+            return $this->cachedSettings = null;
+        }
+
+        $sensitivePaths = [
+            'whatsapp.access_token',
+            'whatsapp.token',
+        ];
+
+        foreach ($sensitivePaths as $path) {
+            $current = \Illuminate\Support\Arr::get($settings, $path);
+
+            if (is_string($current) && str_starts_with($current, 'enc-v1:')) {
+                try {
+                    \Illuminate\Support\Arr::set($settings, $path, \Illuminate\Support\Facades\Crypt::decryptString(substr($current, 7)));
+                } catch (\Throwable $e) {
+                    \Illuminate\Support\Arr::set($settings, $path, null);
+                    \Illuminate\Support\Facades\Log::error(
+                        "Tenant: failed to decrypt '{$path}' for tenant #{$this->id}"
+                    );
+                }
+            }
+        }
+
+        return $this->cachedSettings = $settings;
+    }
+
+    public function setSettingsAttribute($value): void
+    {
+        $this->cachedSettings = null;
+
+        if ($value === null) {
+            $this->attributes['settings'] = null;
+
+            return;
+        }
+
+        if (! is_array($value)) {
+            $value = (array) $value;
+        }
+
+        $sensitivePaths = [
+            'whatsapp.access_token',
+            'whatsapp.token',
+        ];
+
+        foreach ($sensitivePaths as $path) {
+            $current = \Illuminate\Support\Arr::get($value, $path);
+
+            if (is_string($current) && $current !== '' && ! str_starts_with($current, 'enc-v1:')) {
+                \Illuminate\Support\Arr::set($value, $path, 'enc-v1:'.\Illuminate\Support\Facades\Crypt::encryptString($current));
+            }
+        }
+
+        $this->attributes['settings'] = json_encode($value, JSON_UNESCAPED_UNICODE);
+    }
 
     /**
      * Get the users for the tenant.

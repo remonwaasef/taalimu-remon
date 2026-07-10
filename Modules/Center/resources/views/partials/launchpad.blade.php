@@ -29,7 +29,9 @@
                 <div class="d-flex flex-wrap align-items-center gap-3">
                     <h5 class="fw-bold mb-1 text-dark">🚀 {{ __('center::dashboard.launchpad.title', ['name' => auth()->user()->name]) }}</h5>
                     @php
-                        $hasDemoData = \App\Models\Instructor::where('tenant_id', app('tenant')->id)->where('email', 'like', '%.demo@%')->exists();
+                        $hasDemoData = \Illuminate\Support\Facades\Cache::remember('has_demo_data_'.app('tenant')->id, 3600, function () {
+                            return \App\Models\Instructor::where('tenant_id', app('tenant')->id)->where('email', 'like', '%.demo@%')->exists();
+                        });
                     @endphp
 
                     @if($hasDemoData)

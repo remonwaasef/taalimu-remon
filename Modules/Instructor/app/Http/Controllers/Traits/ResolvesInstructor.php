@@ -68,7 +68,8 @@ trait ResolvesInstructor
     protected function authorizeInstructor($student)
     {
         $instructor = $this->instructor;
-        $isRelated = $student->enrollments()->whereIn('course_id', $instructor->courses->pluck('id'))->exists();
+        $courseIds = Course::where('instructor_id', $instructor->id)->pluck('id');
+        $isRelated = $student->enrollments()->whereIn('course_id', $courseIds)->exists();
 
         if (! $isRelated) {
             abort(403, __('instructor::messages.unauthorized'));

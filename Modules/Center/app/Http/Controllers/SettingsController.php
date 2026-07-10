@@ -4,10 +4,10 @@ namespace Modules\Center\Http\Controllers;
 
 use App\Models\Stage;
 use App\Models\Tenant;
+use App\Services\SettingsService;
 use Modules\Center\Http\Controllers\CenterBaseController as Controller;
 use Modules\Center\Http\Requests\ApplyTemplateRequest;
 use Modules\Center\Http\Requests\UpdateAcademicRequest;
-use App\Services\SettingsService;
 use Modules\Center\Http\Requests\UpdateSettingsRequest;
 
 class SettingsController extends Controller

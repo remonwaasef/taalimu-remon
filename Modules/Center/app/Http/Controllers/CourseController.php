@@ -60,8 +60,8 @@ class CourseController extends Controller
     public function create()
     {
         $this->authorize('create', Course::class);
-        $instructors = Instructor::select('id', 'name', 'email')->get();
-        $classrooms = \App\Models\Classroom::select('id', 'name')->get();
+        $instructors = Instructor::select('id', 'name', 'email')->limit(500)->get();
+        $classrooms = \App\Models\Classroom::select('id', 'name')->limit(500)->get();
 
         return view('center::courses.create', compact('instructors', 'classrooms'));
     }
@@ -175,18 +175,19 @@ class CourseController extends Controller
         ]);
 
         try {
-            // 1. Create Student
-            $studentData = \App\DTOs\StudentData::fromArray($request->all());
-            $registrationResult = app(\App\Services\StudentService::class)->registerStudent($studentData, auth()->user());
-            $student = $registrationResult['student'];
+            // Use a single transaction for the entire quick enrollment
+            \Illuminate\Support\Facades\DB::transaction(function () use ($request, $course) {
+                $studentData = \App\DTOs\StudentData::fromArray($request->all());
+                $registrationResult = app(\App\Services\StudentService::class)->registerStudent($studentData, auth()->user(), true, false);
+                $student = $registrationResult['student'];
 
-            // 2. إنشاء فاتورة غير مدفوعة تلقائياً (بدلاً من التسجيل المباشر)
-            $this->financeService->createSale([
-                'student_id' => $student->id,
-                'items' => [['id' => $course->id, 'price' => $course->price]],
-                'payment_method' => 'cash',
-                'paid_amount' => 0,
-            ]);
+                $this->financeService->createSale([
+                    'student_id' => $student->id,
+                    'items' => [['id' => $course->id, 'price' => $course->price]],
+                    'payment_method' => 'cash',
+                    'paid_amount' => 0,
+                ], false);
+            });
 
             return back()->with('success', __('center::messages.msg_028'));
         } catch (\Exception $e) {
@@ -203,8 +204,8 @@ class CourseController extends Controller
     {
         $course = Course::where('tenant_id', app('tenant')->id)->with('schedules')->findOrFail($id);
         $this->authorize('update', $course);
-        $instructors = Instructor::select('id', 'name', 'email')->get();
-        $classrooms = \App\Models\Classroom::select('id', 'name')->get();
+        $instructors = Instructor::select('id', 'name', 'email')->limit(500)->get();
+        $classrooms = \App\Models\Classroom::select('id', 'name')->limit(500)->get();
 
         return view('center::courses.edit', compact('course', 'instructors', 'classrooms'));
     }

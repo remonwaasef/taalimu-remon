@@ -37,7 +37,7 @@
 | الطبقة | التقنية |
 |:---|:---|
 | **Backend** | Laravel 12, PHP 8.4 |
-| **Frontend** | Blade Templates, Tailwind CSS, Alpine.js |
+| **Frontend** | Blade Templates, Tailwind CSS, Bootstrap 5، ومكونات React/Inertia لشاشات محددة |
 | **Database** | MySQL / MariaDB |
 | **Modules** | nwidart/laravel-modules (6 وحدات) |
 | **Permissions** | spatie/laravel-permission |
@@ -187,7 +187,7 @@ php artisan test
 php artisan test --filter=RegistrationFlowTest
 ```
 
-**تغطية الاختبارات:** 29 ملف اختبار يغطي Registration, Subscription, Quiz, Sales, Security, Import/Export وأكثر.
+**تغطية الاختبارات:** اختبارات `Unit` و`Feature` و`E2E` تغطي Registration, Subscription, Quiz, Sales, Security, Import/Export وأكثر. اختبارات `Playwright` موجودة في `tests/E2E` وتُشغَّل بشكل مستقل عن PHPUnit.
 
 ---
 

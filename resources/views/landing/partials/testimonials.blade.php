@@ -14,7 +14,7 @@
                 {{ __('landing.testimonials.title_prefix') }} <span class="text-[#22c55e]">{{ __('landing.testimonials.title_highlight') }}</span>
             </h2>
             <p class="text-lg text-slate-500 max-w-2xl mx-auto font-medium">
-                {{ str_replace(config('app.name'), \App\Models\SiteSetting::get('site_name', config('app.name')), __('landing.testimonials.subtitle')) }}
+                {{ str_replace(config('app.name'), $siteSettings['site_name'] ?? config('app.name'), __('landing.testimonials.subtitle')) }}
             </p>
         </div>
 

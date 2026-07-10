@@ -14,6 +14,7 @@
 /auth.json
 /node_modules
 /public/build
+/public/build-*
 /public/hot
 /public/storage
 /storage/*.key
@@ -65,10 +66,9 @@ deployment_scripts/
 *.key
 !storage/*.key
 edu.zip
+edu.rar
 phpcpd.phar
 /database/database.sqlite
-CUsersdellDownloadsremoneduedustoragelogs/
 # Local tooling and historical reports (kept on disk, not in the repo)
-phpcpd.phar
 COMPREHENSIVE_AUDIT_REPORT.md
 security-audit-report.md

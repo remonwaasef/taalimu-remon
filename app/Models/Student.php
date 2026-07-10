@@ -162,7 +162,7 @@ class Student extends Model
 
     public function getGuardianAttribute()
     {
-        return $this->guardians->first();
+        return $this->relationLoaded('guardians') ? $this->guardians->first() : null;
     }
 
     public function enrollments()

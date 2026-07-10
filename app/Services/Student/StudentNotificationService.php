@@ -3,6 +3,7 @@
 namespace App\Services\Student;
 
 use App\Mail\NotifGroupEnrollmentMail;
+use App\Mail\NotifPaymentConfirmedMail;
 use App\Mail\WelcomeGuardianMail;
 use App\Mail\WelcomeStudentMail;
 use App\Models\Student;
@@ -131,8 +132,10 @@ class StudentNotificationService
 
             $currencySymbol = function_exists('get_currency_symbol') ? get_currency_symbol() : ($tenant->settings['financial']['currency'] ?? 'EGP');
 
+            $courses = \App\Models\Course::whereIn('id', $courseIds)->get()->keyBy('id');
+
             foreach ($courseIds as $courseId) {
-                $course = \App\Models\Course::find($courseId);
+                $course = $courses->get($courseId);
                 if (! $course) {
                     continue;
                 }
@@ -159,6 +162,77 @@ class StudentNotificationService
             }
         } catch (\Exception $e) {
             Log::error("Failed to queue group enrollment emails for student {$student->id}: ".$e->getMessage());
+        }
+    }
+
+    public function sendPaymentConfirmationEmail($tenant, $student, $amount, $balance, $method = 'cash'): void
+    {
+        try {
+            $tenantSettings = $tenant->settings['email_templates'] ?? [];
+
+            $realEmail = null;
+            $studentEmail = $student->email ?? ($student->user ? $student->user->email : null);
+
+            if ($studentEmail && ! preg_match('/^std\d+\..+@taalimu\.com$/', $studentEmail)) {
+                $realEmail = $studentEmail;
+            }
+
+            $hasParentEmail = ! empty($student->parent_email);
+
+            $paymentEmailEnabled = ! isset($tenantSettings['notif_payment_confirmed_enabled']) || $tenantSettings['notif_payment_confirmed_enabled'];
+
+            if ($paymentEmailEnabled && ($realEmail || $hasParentEmail)) {
+                $locale = $this->getTargetLocale($tenant, $student);
+
+                $subjectKey = "notif_payment_confirmed_subject_{$locale}";
+                $bodyKey = "notif_payment_confirmed_body_{$locale}";
+
+                $defaultSubjects = [
+                    'ar' => 'تأكيد الدفع',
+                    'en' => 'Payment Confirmation',
+                    'fr' => 'Confirmation de paiement',
+                ];
+
+                $defaultBodies = [
+                    'ar' => "مرحباً {student_name},\n\nنؤكد لك استلام مبلغ {paid_amount}.\nطريقة الدفع: {payment_method}\nالرصيد المتبقي: {remaining}\n\nشكراً لك,\n{center_name}",
+                    'en' => "Hello {student_name},\n\nWe confirm the receipt of {paid_amount}.\nPayment Method: {payment_method}\nRemaining Balance: {remaining}\n\nThank you,\n{center_name}",
+                    'fr' => "Bonjour {student_name},\n\nNous confirmons la réception d'un paiement de {paid_amount}.\nMéthode de paiement: {payment_method}\nSolde restant: {remaining}\n\nMerci,\n{center_name}",
+                ];
+
+                $subject = $tenantSettings[$subjectKey] ?? $tenantSettings['notif_payment_confirmed_subject'] ?? ($defaultSubjects[$locale] ?? $defaultSubjects['en']);
+                $body = $tenantSettings[$bodyKey] ?? $tenantSettings['notif_payment_confirmed_body'] ?? ($defaultBodies[$locale] ?? $defaultBodies['en']);
+
+                $currencySymbol = function_exists('get_currency_symbol') ? get_currency_symbol() : ($tenant->settings['financial']['currency'] ?? 'EGP');
+
+                $variables = [
+                    'student_name' => $student->name,
+                    'اسم_الطالب' => $student->name,
+                    'center_name' => $tenant->name,
+                    'اسم_المركز' => $tenant->name,
+                    'المبلغ_المدفوع' => $amount.' '.$currencySymbol,
+                    'paid_amount' => $amount.' '.$currencySymbol,
+                    'تاريخ_الدفع' => now()->format('Y-m-d'),
+                    'payment_date' => now()->format('Y-m-d'),
+                    'المتبقي' => max(0, $balance).' '.$currencySymbol,
+                    'remaining' => max(0, $balance).' '.$currencySymbol,
+                    'payment_method' => $method,
+                    'طريقة_الدفع' => $method,
+                ];
+
+                if ($realEmail) {
+                    Mail::to($realEmail)->queue(new NotifPaymentConfirmedMail(
+                        $subject, $body, $variables, $tenant->name, $student->name
+                    ));
+                }
+
+                if ($hasParentEmail) {
+                    Mail::to($student->parent_email)->queue(new NotifPaymentConfirmedMail(
+                        $subject, $body, $variables, $tenant->name, $student->name
+                    ));
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error('Payment confirmation email failed: '.$e->getMessage());
         }
     }
 

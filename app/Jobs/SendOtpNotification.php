@@ -15,6 +15,10 @@ class SendOtpNotification implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $tries = 3;
+
+    public $backoff = [10, 30];
+
     public $fullPhone;
 
     public $otpCode;
@@ -23,33 +27,26 @@ class SendOtpNotification implements ShouldQueue
 
     public $whatsappMessage;
 
-    /**
-     * Create a new job instance.
-     */
     public function __construct(string $fullPhone, string $otpCode, ?string $email, string $whatsappMessage)
     {
         $this->fullPhone = $fullPhone;
         $this->otpCode = $otpCode;
         $this->email = $email;
         $this->whatsappMessage = $whatsappMessage;
-
-        // High priority queue for OTPs
         $this->onQueue('high');
     }
 
-    /**
-     * Execute the job.
-     */
     public function handle(WhatsAppService $whatsapp): void
     {
-        // 1. Send via WhatsApp
+        $hasFailure = false;
+
         try {
             $whatsapp->sendSystemMessage($this->fullPhone, $this->whatsappMessage);
         } catch (\Exception $e) {
             Log::warning('Job Phone OTP WhatsApp send failed: '.$e->getMessage());
+            $hasFailure = true;
         }
 
-        // 2. Send via Email
         if ($this->email) {
             try {
                 $otpCode = $this->otpCode;
@@ -71,7 +68,12 @@ class SendOtpNotification implements ShouldQueue
                 Log::info('Job Phone OTP Email sent successfully to: '.$this->email);
             } catch (\Exception $mailEx) {
                 Log::warning('Job Phone OTP Email send failed: '.$mailEx->getMessage());
+                $hasFailure = true;
             }
+        }
+
+        if ($hasFailure) {
+            throw new \RuntimeException('OTP notification failed for phone: '.$this->fullPhone);
         }
     }
 }

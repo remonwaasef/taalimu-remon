@@ -22,7 +22,7 @@ class TenantService
         $coursesCount = Course::withoutGlobalScope(TenantScope::class)->where('tenant_id', $tenant->id)->count();
         $totalRevenue = Sale::where('tenant_id', $tenant->id)->where('status', 'paid')->sum('paid_amount');
 
-        $lastSubscription = $tenant->subscriptions->last();
+        $lastSubscription = $tenant->subscriptions()->latest()->first();
 
         $limits = [
             'students' => [
@@ -48,11 +48,15 @@ class TenantService
      */
     public function getRecentActivity(Tenant $tenant, int $limit = 5)
     {
-        $tenantUserIds = $tenant->users->pluck('id');
-
+        $tenantId = $tenant->id;
         return Activity::with(['subject', 'causer'])
-            ->whereIn('causer_id', $tenantUserIds)
             ->where('causer_type', User::class)
+            ->whereExists(function ($q) use ($tenantId) {
+                $q->select(DB::raw(1))
+                    ->from('users')
+                    ->whereColumn('users.id', 'activity_log.causer_id')
+                    ->where('users.tenant_id', $tenantId);
+            })
             ->latest()
             ->take($limit)
             ->get();
@@ -63,20 +67,10 @@ class TenantService
      */
     public function getImpersonationUser(Tenant $tenant)
     {
-        // Prioritize center_admin (Owner)
-        $admin = $tenant->users()->where('role', 'center_admin')->orderBy('id', 'asc')->first();
-
-        // Fallback to regular admin
-        if (! $admin) {
-            $admin = $tenant->users()->where('role', 'admin')->first();
-        }
-
-        // Fallback to instructor (for instructor-type tenants)
-        if (! $admin) {
-            $admin = $tenant->users()->where('role', 'instructor')->orderBy('id', 'asc')->first();
-        }
-
-        return $admin;
+        return $tenant->users()
+            ->whereIn('role', ['center_admin', 'admin', 'instructor'])
+            ->orderByRaw("FIELD(role, 'center_admin', 'admin', 'instructor')")
+            ->first();
     }
 
     /**
@@ -147,8 +141,8 @@ class TenantService
     {
         return Student::where('tenant_id', $tenant->id)
             ->where('created_at', '>=', now()->subDays(30))
-            ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
-            ->groupBy('date')
+            ->select(DB::raw('cast(created_at as date) as date'), DB::raw('count(*) as count'))
+            ->groupBy(DB::raw('cast(created_at as date)'))
             ->orderBy('date', 'asc')
             ->get();
     }

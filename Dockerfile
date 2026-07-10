@@ -26,8 +26,8 @@ RUN { \
         echo 'opcache.memory_consumption=192'; \
         echo 'opcache.interned_strings_buffer=16'; \
         echo 'opcache.max_accelerated_files=20000'; \
-        echo 'opcache.validate_timestamps=1'; \
-        echo 'opcache.revalidate_freq=60'; \
+        echo 'opcache.validate_timestamps=0'; \
+        echo 'opcache.revalidate_freq=0'; \
     } > /usr/local/etc/php/conf.d/opcache.ini
 
 # Get latest Composer
@@ -41,3 +41,6 @@ COPY . /var/www/html
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache || true
+
+# Switch to www-data user
+USER www-data

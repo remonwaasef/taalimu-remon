@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\Log;
 class PaymentController extends Controller
 {
     public function __construct(
-        protected PaymentProcessingService $paymentService
+        protected PaymentProcessingService $paymentService,
+        protected TelegramService $telegramService
     ) {}
 
     /**
@@ -334,7 +335,7 @@ class PaymentController extends Controller
             $msg .= '<b>⏳ '.__('payment.new_expiry').":</b> {$endsAt}\n\n";
             $msg .= '#SubscriptionUpgrade';
 
-            app(TelegramService::class)->sendAdminNotification($msg);
+            $this->telegramService->sendAdminNotification($msg);
         } catch (\Throwable $e) {
             Log::error('Failed to send upgrade notification: '.$e->getMessage());
         }

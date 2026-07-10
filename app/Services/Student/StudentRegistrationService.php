@@ -23,9 +23,9 @@ class StudentRegistrationService
         $this->notificationService = $notificationService;
     }
 
-    public function registerStudent(StudentData $data, User $creator, bool $notify = true)
+    public function registerStudent(StudentData $data, User $creator, bool $notify = true, bool $useTransaction = true)
     {
-        $result = DB::transaction(function () use ($data, $creator, $notify) {
+        $closure = function () use ($data, $creator, $notify) {
             $generatedPassword = Str::random(12);
             $profilePhotoPath = $data->profile_photo;
 
@@ -137,7 +137,9 @@ class StudentRegistrationService
             }
 
             return $result;
-        });
+        };
+
+        $result = $useTransaction ? DB::transaction($closure) : $closure();
 
         if (isset($result['student'])) {
             $this->notificationService->sendWelcomeEmails($result['student'], $result['generated_password']);
@@ -185,15 +187,19 @@ class StudentRegistrationService
         $tenantId = \Modules\Tenancy\Services\TenantResolver::get()->id;
         $prefix = 'S-'.($tenantId % 1000);
 
-        $lastStudent = Student::where('tenant_id', $tenantId)
-            ->where('code', 'like', $prefix.'%')
-            ->latest('id')
-            ->first();
+        $cacheKey = "student_code_counter_{$tenantId}";
+        $counter = \Illuminate\Support\Facades\Cache::get($cacheKey);
 
-        $counter = 1001;
+        if ($counter === null) {
+            $lastStudent = Student::where('tenant_id', $tenantId)
+                ->where('code', 'like', $prefix.'%')
+                ->latest('id')
+                ->first();
 
-        if ($lastStudent && preg_match('/-(\d+)$/', $lastStudent->code, $matches)) {
-            $counter = intval($matches[1]) + 1;
+            $counter = 1001;
+            if ($lastStudent && preg_match('/-(\d+)$/', $lastStudent->code, $matches)) {
+                $counter = intval($matches[1]) + 1;
+            }
         }
 
         $code = "{$prefix}-{$counter}";
@@ -202,6 +208,8 @@ class StudentRegistrationService
             $counter++;
             $code = "{$prefix}-{$counter}";
         }
+
+        \Illuminate\Support\Facades\Cache::put($cacheKey, $counter + 1, now()->addDay());
 
         return $code;
     }

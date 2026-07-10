@@ -18,7 +18,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         // Trust only local proxies (adjust this in production to match your actual LB/Proxy IP)
-        $middleware->trustProxies(at: ['127.0.0.1', '10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16']);
+        // WARNING: Private ranges (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) removed for security —
+        // they trust ALL internal traffic. Pin specific LB IPs in production via env.
+        $middleware->trustProxies(at: [
+            '127.0.0.1',
+            ...(env('TRUSTED_PROXIES') ? explode(',', env('TRUSTED_PROXIES')) : []),
+        ]);
 
         // Add SetLocale middleware globally for web routes
         $middleware->web(prepend: [

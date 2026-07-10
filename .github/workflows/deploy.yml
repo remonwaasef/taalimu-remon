@@ -1,25 +1,34 @@
 name: Deploy to Production
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
 
 jobs:
   deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     # Self-hosted runner on the production VPS itself (outbound-only polling).
     # Replaced the SSH-from-GitHub approach: Hostinger's edge firewall drops
     # inbound :22 from some Azure ranges intermittently (incident 2026-07-04).
     runs-on: [self-hosted, taalimu-prod]
     steps:
+      - uses: actions/checkout@v4
+        with:
+          path: /home/taalimu/htdocs/taalimu.com
+
       - name: Deploy on server
-        # Default runner shell is bash -e: the job fails on the FIRST failing
-        # command — a swallowed `git fetch` failure once rolled production back
-        # to a stale ref while reporting success.
         run: |
           cd /home/taalimu/htdocs/taalimu.com
 
           export GIT_TERMINAL_PROMPT=0
+
+          # Maintenance mode
+          php artisan down --retry=60 || true
+
+          # Backup before deploy
+          php artisan backup:run --only-db || echo "WARNING: pre-migration backup failed"
 
           # .env is untracked but existed in old commits, so a reset that
           # crosses those commits can delete it. Guard it around git ops.
@@ -32,16 +41,16 @@ jobs:
 
           export COMPOSER_ALLOW_SUPERUSER=1
           composer install --no-dev --optimize-autoloader
-          npm install
+          npm ci --no-audit --no-fund
           npm run build
-
-          # Safety net: back up the database before running migrations
-          php artisan backup:run --only-db || echo "WARNING: pre-migration backup failed"
 
           php artisan migrate --force
           php artisan storage:link || true
-          php artisan optimize:clear
+          php artisan optimize
           php artisan queue:restart
 
           chown -R taalimu:taalimu storage bootstrap/cache
           chmod -R 775 storage bootstrap/cache
+
+          # Bring back online
+          php artisan up

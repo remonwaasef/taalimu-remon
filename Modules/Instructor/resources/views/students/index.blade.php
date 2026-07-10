@@ -46,10 +46,7 @@
                 </div>
             </div>
         </div>
-        @php
-            $todayEnrollments = $students->filter(fn($s) => $s->created_at?->isToday())->count();
-        @endphp
-        <div class="col-md-3">
+            <div class="col-md-3">
             @php
                 $totalRevenue = \App\Models\Sale::whereIn('student_id', $students->pluck('id'))->sum('paid_amount');
             @endphp
@@ -107,16 +104,6 @@
                 <div class="col-md-3">
                     <select id="groupFilter" class="form-select rounded-pill">
                         <option value="all">{{ __('instructor::students.all_groups') }}</option>
-                        @php
-                            $uniqueCourses = collect();
-                            foreach($students as $student) {
-                                foreach($student->enrollments as $enrollment) {
-                                    if($enrollment->course) {
-                                        $uniqueCourses->put($enrollment->course->id, $enrollment->course->title);
-                                    }
-                                }
-                            }
-                        @endphp
                         @foreach($uniqueCourses as $id => $title)
                             <option value="{{ $id }}">{{ $title }}</option>
                         @endforeach
@@ -222,12 +209,8 @@
                                     $totalPaid = $student->sales->sum('paid_amount');
                                     $balance = $totalDue - $totalPaid;
 
-                                    // Attendance Rate
-                                    // Total targeted sessions for this student
                                     $totalSessions = $student->enrollments->sum(fn($e) => $e->course->sessions_count ?? 0);
-                                    $attendedSessions = \Modules\Center\Models\Attendance::where('student_id', $student->id)
-                                        ->where('status', 'present')
-                                        ->count();
+                                    $attendedSessions = $attendanceCounts[$student->id] ?? 0;
                                     $attendanceRate = $totalSessions > 0 ? round(($attendedSessions / $totalSessions) * 100) : 0;
                                 @endphp
                                 

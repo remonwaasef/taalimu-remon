@@ -15,7 +15,7 @@
 </style>
 @include('auth.partials._register-scripts')
 
-<div class="min-h-[85vh] bg-slate-50/50 flex justify-center items-start p-4 lg:p-8 mesh-gradient-soft noise-overlay register-page-offset" 
+<div class="min-h-screen bg-slate-50/50 flex justify-center items-center p-4 lg:p-8 mesh-gradient-soft noise-overlay" 
      x-data="registrationForm({
         selectedPlan: {{ Js::from(old('plan', request('plan', $packages->firstWhere('is_default', true)?->slug ?? $packages->first()?->slug ?? ''))) }},
         billingCycle: {{ Js::from(old('billing_cycle', request('cycle', 'monthly'))) }},

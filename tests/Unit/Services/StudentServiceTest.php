@@ -10,6 +10,7 @@ use App\Services\StudentService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class StudentServiceTest extends TestCase
@@ -43,7 +44,7 @@ class StudentServiceTest extends TestCase
         app()->instance(AdminNotificationService::class, $notificationService);
     }
 
-    /** @test */
+    #[Test]
     public function it_generates_unique_email_for_new_students()
     {
         // Create first student with proper hash
@@ -65,7 +66,7 @@ class StudentServiceTest extends TestCase
         $this->assertEquals('std2.test-center@taalimu.com', $email);
     }
 
-    /** @test */
+    #[Test]
     public function it_exports_data_using_lazy_collection()
     {
         // Create test students
@@ -88,7 +89,7 @@ class StudentServiceTest extends TestCase
         $this->assertEquals(5, $exportData->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_csv_injection_in_import()
     {
         $creator = User::create([
@@ -118,7 +119,7 @@ class StudentServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_bulk_import_with_batch_processing()
     {
         $creator = User::create([

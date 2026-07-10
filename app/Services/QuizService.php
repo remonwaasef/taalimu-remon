@@ -51,9 +51,15 @@ class QuizService
         $score = 0;
         $totalPoints = $quiz->questions->sum('points');
 
+        $quizQuestionIds = $quiz->questions()->pluck('id');
+        $options = QuestionOption::whereIn('id', array_values($answers))
+            ->whereIn('question_id', $quizQuestionIds)
+            ->with('question:id,points,quiz_id')
+            ->get()
+            ->keyBy('id');
+
         foreach ($answers as $questionId => $optionId) {
-            $option = QuestionOption::find($optionId);
-            // Ensure the option belongs to a question in this quiz
+            $option = $options->get($optionId);
             if ($option && $option->question->quiz_id === $quiz->id && $option->is_correct) {
                 $score += $option->question->points;
             }

@@ -273,6 +273,7 @@ class UserController extends Controller
                 '<b>❌ حذفه:</b> '.auth()->user()->name
             );
         } catch (\Throwable $e) {
+            \Log::warning('Telegram notification failed (non-critical): '.$e->getMessage());
         }
 
         return redirect()->route('center.users.index')

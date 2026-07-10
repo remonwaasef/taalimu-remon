@@ -240,6 +240,7 @@ class TenantController extends Controller
 
         // Login the admin on the CENTRAL domain's session
         auth()->login($admin);
+        session()->regenerate();
 
         return redirect()->to($centralUrl.'/admin/tenants')
             ->with('success', 'تم العودة للوحة تحكم المشرف العام بنجاح.');
