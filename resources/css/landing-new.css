@@ -874,7 +874,10 @@
     animation-delay: 0.5s;
 }
 
-
+/* Auth Page Layout Offset (accounts for fixed header) */
+.register-page-offset {
+    padding-top: 100px;
+}
 
 /* Automation Section - Result Box Gradient */
 .result-box-gradient {

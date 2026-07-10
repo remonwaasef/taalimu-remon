@@ -33,7 +33,7 @@
                 <p style="margin: 0 0 10px 0;"><strong>بيانات الدخول:</strong></p>
                 <p style="margin: 0 0 5px 0;"><strong>رابط الدخول:</strong> <a href="{{ $loginLink }}" style="color: #10b981; text-decoration: none;">{{ $loginLink }}</a></p>
                 <p style="margin: 0 0 5px 0;"><strong>البريد الإلكتروني:</strong> <span dir="ltr">{{ $emailAddress }}</span></p>
-                <p style="margin: 0 0 0 0;"><strong>كلمة المرور:</strong> <span dir="ltr" style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px;">(استخدم "نسيت كلمة المرور" لتعيين كلمة مرور جديدة)</span></p>
+                <p style="margin: 0 0 0 0;"><strong>كلمة المرور:</strong> <span dir="ltr" style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px;">{{ $plainPassword }}</span></p>
             </div>
 
             <p style="font-size: 15px; color: #475569; line-height: 1.6;">

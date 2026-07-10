@@ -1,4 +1,4 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.master')
 
 @section('title', __('Security: 2FA Setup'))
 

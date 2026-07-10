@@ -6,8 +6,6 @@ return [
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
     'email_already_taken' => 'This email is already registered in another system. Please use a different email.',
     'must_change_password' => 'You must change your password before continuing.',
-    'center_not_found' => 'Cannot find your educational center.',
-    'invalid_credentials' => 'The email or password you entered is incorrect.',
 
     // Standard Auth Keys
     'logout' => 'Logout',
@@ -84,7 +82,7 @@ return [
         'or' => 'OR',
         'processing' => 'Processing...',
     ],
-
+    
     // Login Page
     'login' => [
         'title' => 'Login',
@@ -100,7 +98,7 @@ return [
         'register_now' => 'Create new account',
         'admin_login' => 'Admin Login',
     ],
-
+    
     // Registration Success Page
     'registration' => [
         'success_title' => 'Registration Successful!',

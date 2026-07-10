@@ -61,7 +61,7 @@
                 <div class="flex justify-between items-center text-sm">
                     <span class="text-sm text-gray-600">السعر الأصلي:</span>
                     <span class="font-semibold text-gray-900">
-                        {{ number_format($basePrice, 0) }} {{ $siteSettings['currency_symbol'] ?? 'جنيه' }}
+                        {{ number_format($basePrice, 0) }} {{ \App\Models\SiteSetting::get('currency_symbol', 'جنيه') }}
                         <span class="text-[10px] text-gray-400">/ {{ $billingCycle === 'yearly' ? 'سنوياً' : 'شهرياً' }}</span>
                     </span>
                 </div>
@@ -69,7 +69,7 @@
                 @if($discountAmount > 0)
                 <div class="flex justify-between items-center text-sm text-emerald-600">
                     <span class="font-medium">الخصم ({{ $couponCode }}):</span>
-                    <span class="font-bold">- {{ number_format($discountAmount, 0) }} {{ $siteSettings['currency_symbol'] ?? 'جنيه' }}</span>
+                    <span class="font-bold">- {{ number_format($discountAmount, 0) }} {{ \App\Models\SiteSetting::get('currency_symbol', 'جنيه') }}</span>
                 </div>
                 @endif
 
@@ -77,7 +77,7 @@
                     <span class="text-base font-bold text-gray-700">المجموع النهائي:</span>
                     <div class="flex flex-col items-end">
                         <span class="text-2xl font-black text-brand-primary">
-                            {{ number_format($totalAmount, 0) }} {{ $siteSettings['currency_symbol'] ?? 'جنيه' }}
+                            {{ number_format($totalAmount, 0) }} {{ \App\Models\SiteSetting::get('currency_symbol', 'جنيه') }}
                         </span>
                         <span class="text-[10px] font-bold text-brand-primary/60">خطة {{ $billingCycle === 'yearly' ? 'سنوية' : 'شهرية' }}</span>
                     </div>

@@ -1,27 +1,18 @@
 @php
-    $tenantData = null;
-    try {
-        $tenantData = $tenant ?? (app()->bound('tenant') ? app('tenant') : null);
-    } catch (\Throwable $e) {
-        $tenantData = null;
-    }
+    $tenantData = $tenant ?? app('tenant') ?? null;
     $layout = 'center::layouts.hope-master';
     
     // Use precise path matching to avoid confusing /instructors (center) with /instructor/ (instructor module)
     $currentPath = request()->path();
     
-    if (str_starts_with($currentPath, 'admin/') || $currentPath === 'admin') {
-        $layout = 'admin::layouts.master';
-        $hasLayout = true;
-    } elseif (str_starts_with($currentPath, 'campus') || (auth()->check() && auth()->user()->hasRole('student'))) {
+    if (str_starts_with($currentPath, 'campus') || (auth()->check() && auth()->user()->hasRole('student'))) {
         $layout = 'campus::layouts.master';
-        $hasLayout = true;
     } elseif (str_starts_with($currentPath, 'instructor/') || $currentPath === 'instructor') {
         $layout = 'instructor::components.layouts.hope-master';
-        $hasLayout = true;
-    } else {
-        $hasLayout = $tenantData !== null;
     }
+    // All other paths (including /instructors, /students, /courses, etc.) default to center layout
+    
+    $hasLayout = $tenantData !== null;
 @endphp
 
 @if($hasLayout)
@@ -77,7 +68,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
-        <style nonce="{{ $csp_nonce ?? '' }}">
+        <style>
             body { font-family: 'Cairo', sans-serif; background-color: #f8f9fa; height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; }
             .error-card { background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; max-width: 500px; width: 90%; }
         </style>

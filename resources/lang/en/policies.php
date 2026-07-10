@@ -38,10 +38,10 @@ return [
         ],
         'contact' => [
             'title' => 'Contact Us',
-            'content' => 'For privacy-related inquiries, please contact us at privacy@'.config('app.tenant_domain'),
+            'content' => 'For privacy-related inquiries, please contact us at privacy@' . config('app.tenant_domain'),
         ],
     ],
-
+    
     'terms' => [
         'last_updated' => 'Last Updated',
         'acceptance' => [
@@ -62,10 +62,10 @@ return [
         ],
         'contact' => [
             'title' => 'Contact',
-            'content' => 'For questions about these terms, contact legal@'.config('app.tenant_domain'),
+            'content' => 'For questions about these terms, contact legal@' . config('app.tenant_domain'),
         ],
     ],
-
+    
     'cookies' => [
         'last_updated' => 'Last Updated',
         'what' => [

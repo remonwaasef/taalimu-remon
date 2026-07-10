@@ -38,10 +38,10 @@ return [
         ],
         'contact' => [
             'title' => 'اتصل بنا',
-            'content' => 'للاستفسارات المتعلقة بالخصوصية، يرجى الاتصال بنا على privacy@'.config('app.tenant_domain'),
+            'content' => 'للاستفسارات المتعلقة بالخصوصية، يرجى الاتصال بنا على privacy@' . config('app.tenant_domain'),
         ],
     ],
-
+    
     'terms' => [
         'last_updated' => 'آخر تحديث',
         'acceptance' => [
@@ -62,10 +62,10 @@ return [
         ],
         'contact' => [
             'title' => 'اتصل بنا',
-            'content' => 'للأسئلة حول هذه الشروط، اتصل بـ legal@'.config('app.tenant_domain'),
+            'content' => 'للأسئلة حول هذه الشروط، اتصل بـ legal@' . config('app.tenant_domain'),
         ],
     ],
-
+    
     'cookies' => [
         'last_updated' => 'آخر تحديث',
         'what' => [

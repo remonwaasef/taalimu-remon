@@ -44,7 +44,7 @@
 
 @once
 @push('scripts')
-<script nonce="{{ $csp_nonce ?? '' }}">
+<script>
     function pwaInstall() {
         return {
             deferredPrompt: null,
