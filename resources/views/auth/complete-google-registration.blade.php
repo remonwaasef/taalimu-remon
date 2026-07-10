@@ -316,7 +316,7 @@ window.addEventListener('pageshow', (event) => {
 });
 </script>
 
-<div class="min-h-screen bg-slate-50/50 flex justify-center p-4 lg:p-8 mesh-gradient-soft noise-overlay register-page-offset" 
+<div class="min-h-screen bg-slate-50/50 flex justify-center items-start p-4 lg:p-8 mesh-gradient-soft noise-overlay register-page-offset" 
      x-data="googleRegistration({
         selectedPlan: {{ Js::from($selectedPlanSlug) }},
         selectedCycle: {{ Js::from($selectedCycle) }},
@@ -328,7 +328,7 @@ window.addEventListener('pageshow', (event) => {
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
     
     <!-- Main Centered Card Container (Optimized Layout) -->
-    <div class="w-full max-w-4xl bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100/50 animate-fade-in-up md:backdrop-blur-xl relative" x-cloak>
+    <div class="w-full max-w-4xl mx-auto bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100/50 animate-fade-in-up md:backdrop-blur-xl relative" x-cloak>
         
         <div class="grid grid-cols-1 lg:grid-cols-12">
             <!-- Left Info Panel (Hidden on Mobile or as Sidebar) -->
