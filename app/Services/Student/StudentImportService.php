@@ -98,6 +98,7 @@ class StudentImportService
                 'role' => 'student',
                 'tenant_id' => $tenantId,
                 'must_change_password' => true,
+                'qr_identifier' => \Illuminate\Support\Str::random(32),
                 'created_at' => $now,
                 'updated_at' => $now,
             ];
