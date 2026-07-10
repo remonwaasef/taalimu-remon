@@ -1,5 +1,10 @@
 @php
-    $tenantData = $tenant ?? (app()->bound('tenant') ? app('tenant') : null);
+    $tenantData = null;
+    try {
+        $tenantData = $tenant ?? (app()->bound('tenant') ? app('tenant') : null);
+    } catch (\Throwable $e) {
+        $tenantData = null;
+    }
     $layout = 'center::layouts.hope-master';
     
     // Use precise path matching to avoid confusing /instructors (center) with /instructor/ (instructor module)

@@ -40,13 +40,13 @@
     </script>
 
     <!-- Fonts - Optimized Loading -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" nonce="{{ $csp_nonce ?? '' }}">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin nonce="{{ $csp_nonce ?? '' }}">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" nonce="{{ $csp_nonce ?? '' }}">
     
     <!-- Icons Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" nonce="{{ $csp_nonce ?? '' }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" nonce="{{ $csp_nonce ?? '' }}">    
     <!-- Preload Hero Image for faster LCP -->
     @php
         $heroImage = match(app()->getLocale()) {
@@ -61,13 +61,13 @@
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
     <!-- PWA Support -->
-    <link rel="manifest" href="/manifest.json?v=3">
+    <link rel="manifest" href="/manifest.json?v=3" nonce="{{ $csp_nonce ?? '' }}">
     <meta name="theme-color" content="#3A0CA3">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Taalimu">
 
-    <script>
+    <script nonce="{{ $csp_nonce ?? '' }}">
         // Global PWA State Handler
         window.pwaDeferredPrompt = null;
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -79,13 +79,13 @@
     </script>
 
     <!-- Scripts -->
-    <link rel="stylesheet" href="{{ asset('css/landing-new.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/landing-new.css') }}" nonce="{{ $csp_nonce ?? '' }}">
     <!-- Network Monitor Styles -->
-    <link rel="stylesheet" href="{{ asset('css/network-monitor.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/network-monitor.css') }}" nonce="{{ $csp_nonce ?? '' }}">
     <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" nonce="{{ $csp_nonce ?? '' }}"></script>
     <!-- Custom CSS Variables -->
-    <style>
+    <style nonce="{{ $csp_nonce ?? '' }}">
         [x-cloak] { display: none !important; }
     </style>
 </head>
@@ -107,10 +107,10 @@
     @include('components.cookie-consent')
     
     <!-- Alpine.js with Collapse plugin for interactivity -->
-    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js" nonce="{{ $csp_nonce ?? '' }}"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js" nonce="{{ $csp_nonce ?? '' }}"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" nonce="{{ $csp_nonce ?? '' }}"></script>
+    <script nonce="{{ $csp_nonce ?? '' }}">
         // SweetAlert2 Toast Configuration
         const Toast = Swal.mixin({
             toast: true,
@@ -140,7 +140,7 @@
     </script>
 
     <!-- Service Worker Registration & PWA Redirection -->
-    <script>
+    <script nonce="{{ $csp_nonce ?? '' }}">
         // Redirect to login if opened as PWA from home page
         if (window.matchMedia('(display-mode: standalone)').matches && 
             (window.location.pathname === '/' || window.location.pathname === '')) {
@@ -157,8 +157,8 @@
     </script>
 
     <!-- Network Monitor (Real Connectivity Detection) -->
-    <script src="{{ asset('js/network-monitor.js') }}"></script>
-    <script>
+    <script src="{{ asset('js/network-monitor.js') }}" nonce="{{ $csp_nonce ?? '' }}"></script>
+    <script nonce="{{ $csp_nonce ?? '' }}">
         // Toggle body class for offline CSS effects
         window.TaalimuNetwork.onStatusChange((isOnline) => {
             document.body.classList.toggle('is-network-offline', !isOnline);
@@ -166,7 +166,7 @@
     </script>
 
     <!-- V2: Scroll Animation Observer -->
-    <script>
+    <script nonce="{{ $csp_nonce ?? '' }}">
         document.addEventListener('DOMContentLoaded', () => {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {

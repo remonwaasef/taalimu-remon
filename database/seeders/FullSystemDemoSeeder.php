@@ -94,7 +94,7 @@ class FullSystemDemoSeeder extends Seeder
                 'role' => 'instructor',
                 'tenant_id' => $tenant->id,
                 'instructor_id' => $inst1->id,
-                'qr_identifier' => \Illuminate\Support\Str::random(12),
+                'qr_identifier' => \Illuminate\Support\Str::random(32),
             ]
         );
         // Fetch Global Role Object to ensure we link to the correct ID
@@ -118,7 +118,7 @@ class FullSystemDemoSeeder extends Seeder
                 'role' => 'instructor',
                 'tenant_id' => $tenant->id,
                 'instructor_id' => $inst2->id,
-                'qr_identifier' => \Illuminate\Support\Str::random(12),
+                'qr_identifier' => \Illuminate\Support\Str::random(32),
             ]
         );
         // Fetch Global Role Object to ensure we link to the correct ID
@@ -269,7 +269,7 @@ class FullSystemDemoSeeder extends Seeder
                     'password' => Hash::make('password'),
                     'role' => 'student',
                     'tenant_id' => $tenant->id,
-                    'qr_identifier' => \Illuminate\Support\Str::random(12),
+                    'qr_identifier' => \Illuminate\Support\Str::random(32),
                 ]
             );
             // Fetch Global Role Object to ensure we link to the correct ID

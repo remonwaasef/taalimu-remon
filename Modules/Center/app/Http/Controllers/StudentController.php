@@ -94,16 +94,16 @@ class StudentController extends Controller
         $query = Student::query();
         $query = $this->studentQuery->apply($query, $request->all());
 
+        // Use withSum to calculate total due from enrollments in SQL, avoiding N+1
         $students = $query->with(['grade.stage', 'enrollments.course'])
             ->withSum('sales', 'paid_amount')
+            ->withSum('enrollments.course', 'price as total_course_price')
             ->latest()
             ->paginate(10);
 
-        // Calculate financial data for each student for filtering
+        // Calculate financial data using pre-aggregated sums (no N+1)
         $students->getCollection()->transform(function ($student) {
-            $totalDue = $student->enrollments->sum(function ($enrollment) {
-                return $enrollment->course->price ?? 0;
-            });
+            $totalDue = $student->enrollments_sum_total_course_price ?? 0;
             $totalPaid = $student->sales_sum_paid_amount ?? 0;
             $student->total_balance = $totalDue - $totalPaid;
             $student->financial_status = $student->total_balance > 0 ? 'debt' : 'paid';

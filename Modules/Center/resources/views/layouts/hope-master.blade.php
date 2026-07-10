@@ -52,7 +52,7 @@
     <!-- Beta Bug Report Widget -->
     @include('center::partials.bug-report-widget')
     <!-- Global Double Submit Prevention -->
-    <script>
+    <script nonce="{{ $csp_nonce ?? '' }}">
         document.addEventListener('submit', function(e) {
             if (e.target && e.target.tagName === 'FORM') {
                 const submitBtn = e.target.querySelector('button[type="submit"]');

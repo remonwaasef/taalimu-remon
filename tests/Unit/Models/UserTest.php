@@ -35,7 +35,7 @@ class UserTest extends TestCase
         ]);
 
         $this->assertNotEmpty($user->qr_identifier);
-        $this->assertLength(12, $user->qr_identifier);
+        $this->assertLength(32, $user->qr_identifier);
     }
 
     #[Test]
