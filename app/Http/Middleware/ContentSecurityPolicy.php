@@ -42,7 +42,7 @@ class ContentSecurityPolicy
             $csp = [
                 "default-src 'self'",
                 "script-src 'self' 'nonce-{$nonce}' {$cdn}",
-                "style-src 'self' 'nonce-{$nonce}' {$cdn} {$fonts}",
+                "style-src 'self' 'unsafe-inline' 'nonce-{$nonce}' {$cdn} {$fonts}",
                 "font-src 'self' data: {$cdn} {$fonts}",
                 "img-src 'self' data: blob: https:",
                 "connect-src 'self'",
