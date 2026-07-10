@@ -38,7 +38,7 @@ class ContentSecurityPolicy
 
             $csp = [
                 "default-src 'self'",
-                "script-src 'self' 'unsafe-inline' {$cdn}",
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval' {$cdn}",
                 "style-src 'self' 'unsafe-inline' {$cdn} {$fonts}",
                 "font-src 'self' data: {$cdn} {$fonts}",
                 "img-src 'self' data: blob: https:",
