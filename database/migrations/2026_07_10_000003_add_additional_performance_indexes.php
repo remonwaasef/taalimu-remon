@@ -20,9 +20,7 @@ return new class extends Migration
             $table->index(['day_of_week', 'instructor_id', 'course_id'], 'idx_schedules_day_instructor_course');
         });
 
-        Schema::table('lesson_progress', function (Blueprint $table) {
-            $table->index(['enrollment_id', 'lesson_id'], 'idx_lesson_progress_enrollment_lesson');
-        });
+
 
         Schema::table('courses', function (Blueprint $table) {
             $table->index('registration_token', 'idx_courses_registration_token');
@@ -50,9 +48,7 @@ return new class extends Migration
             $table->dropIndex('idx_schedules_day_instructor_course');
         });
 
-        Schema::table('lesson_progress', function (Blueprint $table) {
-            $table->dropIndex('idx_lesson_progress_enrollment_lesson');
-        });
+
 
         Schema::table('courses', function (Blueprint $table) {
             $table->dropIndex('idx_courses_registration_token');
