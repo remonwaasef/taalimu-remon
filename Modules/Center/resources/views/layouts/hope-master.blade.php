@@ -41,18 +41,18 @@
 @endsection
 
 @section('scripts_extra')
-    <!-- Enterprise Reliability Scripts (versioned via filemtime) -->
-    <script src="{{ asset('js/auto-save.js') . '?v=' . (file_exists(public_path('js/auto-save.js')) ? filemtime(public_path('js/auto-save.js')) : '1') }}"></script>
-    <script src="{{ asset('js/instant-search.js') . '?v=' . (file_exists(public_path('js/instant-search.js')) ? filemtime(public_path('js/instant-search.js')) : '1') }}"></script>
-    <script src="{{ asset('js/crash-recovery.js') . '?v=' . (file_exists(public_path('js/crash-recovery.js')) ? filemtime(public_path('js/crash-recovery.js')) : '1') }}"></script>
-    <script src="{{ asset('js/status-indicators.js') . '?v=' . (file_exists(public_path('js/status-indicators.js')) ? filemtime(public_path('js/status-indicators.js')) : '1') }}"></script>
-    <script src="{{ asset('js/image-compressor.js') . '?v=' . (file_exists(public_path('js/image-compressor.js')) ? filemtime(public_path('js/image-compressor.js')) : '1') }}"></script>
-    <script src="{{ asset('js/keyboard-shortcuts.js') . '?v=' . (file_exists(public_path('js/keyboard-shortcuts.js')) ? filemtime(public_path('js/keyboard-shortcuts.js')) : '1') }}"></script>
+    <!-- Enterprise Reliability Scripts -->
+    <script src="{{ asset('js/auto-save.js') }}"></script>
+    <script src="{{ asset('js/instant-search.js') }}"></script>
+    <script src="{{ asset('js/crash-recovery.js') }}"></script>
+    <script src="{{ asset('js/status-indicators.js') }}"></script>
+    <script src="{{ asset('js/image-compressor.js') }}"></script>
+    <script src="{{ asset('js/keyboard-shortcuts.js') }}"></script>
     
     <!-- Beta Bug Report Widget -->
     @include('center::partials.bug-report-widget')
     <!-- Global Double Submit Prevention -->
-    <script nonce="{{ $csp_nonce ?? '' }}">
+    <script>
         document.addEventListener('submit', function(e) {
             if (e.target && e.target.tagName === 'FORM') {
                 const submitBtn = e.target.querySelector('button[type="submit"]');

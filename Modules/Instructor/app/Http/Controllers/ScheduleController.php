@@ -21,7 +21,7 @@ class ScheduleController extends Controller
             $query->where('instructor_id', $instructor->id);
         }
 
-        $schedules = $query->limit(200)->get();
+        $schedules = $query->get();
 
         return view('instructor::schedules.index', compact('schedules'));
     }
@@ -29,8 +29,8 @@ class ScheduleController extends Controller
     public function create()
     {
         $instructor = $this->instructor;
-        $courses = $instructor ? $instructor->courses()->select('id', 'title', 'instructor_id')->limit(500)->get() : Course::select('id', 'title', 'instructor_id')->limit(500)->get();
-        $classrooms = \App\Models\Classroom::select('id', 'name', 'capacity')->limit(500)->get();
+        $courses = $instructor ? $instructor->courses()->select('id', 'title', 'instructor_id')->get() : Course::select('id', 'title', 'instructor_id')->get();
+        $classrooms = \App\Models\Classroom::select('id', 'name', 'capacity')->get();
 
         return view('instructor::schedules.create', compact('courses', 'classrooms'));
     }

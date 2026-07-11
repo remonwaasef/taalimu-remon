@@ -10,7 +10,6 @@ use App\Models\Subscription;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class StudentSystemTest extends TestCase
@@ -85,7 +84,7 @@ class StudentSystemTest extends TestCase
         Grade::create(['name' => 'Level 1', 'tenant_id' => $this->tenant->id, 'stage_id' => $stage->id]);
     }
 
-    #[Test]
+    /** @test */
     public function it_can_create_a_student_through_the_full_stack()
     {
         $this->actingAs($this->admin);
@@ -118,7 +117,7 @@ class StudentSystemTest extends TestCase
         ]);
     }
 
-    #[Test]
+    /** @test */
     public function it_can_update_a_student_through_the_full_stack()
     {
         $this->actingAs($this->admin);

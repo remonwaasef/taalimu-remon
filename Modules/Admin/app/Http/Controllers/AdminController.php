@@ -61,8 +61,6 @@ class AdminController extends Controller
                 ];
             });
 
-        $recentTenants = \App\Models\Tenant::latest()->take(5)->get();
-
         return view('admin::index', compact(
             'totalTenants',
             'activeTenants',
@@ -73,7 +71,6 @@ class AdminController extends Controller
             'openTickets',
             'totalTickets',
             'recentTickets',
-            'recentTenants',
             'planAnalytics'
         ));
     }

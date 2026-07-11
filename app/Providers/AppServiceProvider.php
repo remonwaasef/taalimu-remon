@@ -3,8 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -72,19 +70,6 @@ class AppServiceProvider extends ServiceProvider
             }
         }
 
-        // Log slow database queries (> 1 second) in production
-        if (app()->isProduction()) {
-            DB::listen(function ($query) {
-                if ($query->time > 1000) {
-                    Log::warning('Slow query detected', [
-                        'sql' => $query->sql,
-                        'bindings' => $query->bindings,
-                        'time' => $query->time,
-                    ]);
-                }
-            });
-        }
-
         // Register Tenant Model Observers for Caching
         \App\Models\User::observe(\App\Observers\TenantModelObserver::class);
         \App\Models\User::observe(\App\Observers\UserObserver::class);
@@ -92,17 +77,6 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\Course::observe(\App\Observers\TenantModelObserver::class);
         \App\Models\Classroom::observe(\App\Observers\TenantModelObserver::class);
         \Modules\Center\Models\Branch::observe(\App\Observers\TenantModelObserver::class);
-
-        // Share cached site settings with all views to prevent repeated DB queries
-        \Illuminate\Support\Facades\View::composer('*', function ($view) {
-            static $settings = null;
-            if ($settings === null) {
-                $settings = \Illuminate\Support\Facades\Cache::remember('site_settings_all', 3600, function () {
-                    return \App\Models\SiteSetting::pluck('value', 'key')->toArray();
-                });
-            }
-            $view->with('siteSettings', $settings);
-        });
 
         // Blade directive for Feature Flags
         \Illuminate\Support\Facades\Blade::if('feature', function ($feature) {

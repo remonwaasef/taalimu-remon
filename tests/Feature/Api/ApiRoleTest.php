@@ -5,7 +5,6 @@ namespace Tests\Feature\Api;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ApiRoleTest extends TestCase
@@ -38,7 +37,7 @@ class ApiRoleTest extends TestCase
         ]);
     }
 
-    #[Test]
+    /** @test */
     public function center_admin_can_access_centers_api()
     {
         $token = $this->admin->createToken('admin-token')->plainTextToken;
@@ -55,7 +54,7 @@ class ApiRoleTest extends TestCase
         $response->assertStatus(200);
     }
 
-    #[Test]
+    /** @test */
     public function student_cannot_access_centers_api()
     {
         $token = $this->student->createToken('student-token')->plainTextToken;

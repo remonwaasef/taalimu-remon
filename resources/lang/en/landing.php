@@ -289,7 +289,7 @@ return [
         'badge' => 'Trusted by 10,000+ Centers',
         'title_prefix' => 'Real Results from',
         'title_highlight' => 'Real Centers',
-        'subtitle' => 'See how learning centers across MENA are transforming their operations with ' . config('app.name') . '.',
+        'subtitle' => 'See how learning centers across MENA are transforming their operations with '.config('app.name').'.',
         'items' => [
             0 => [
                 'quote' => 'We recovered 38% more revenue in just the first two months. The WhatsApp reminders are a game-changer for our collection rates.',
@@ -324,23 +324,23 @@ return [
         'badge' => 'Got Questions?',
         'title_prefix' => 'Frequently Asked',
         'title_highlight' => 'Questions',
-        'subtitle' => 'Everything you need to know about ' . config('app.name') . '. Can\'t find the answer? Contact our support team.',
+        'subtitle' => 'Everything you need to know about '.config('app.name').'. Can\'t find the answer? Contact our support team.',
         'items' => [
             0 => [
-                'question' => 'How quickly can I get started with ' . config('app.name') . '?',
+                'question' => 'How quickly can I get started with '.config('app.name').'?',
                 'answer' => 'You can be up and running in under 15 minutes. Simply sign up, import your student data (we support Excel/CSV), and configure your WhatsApp notifications. Our onboarding wizard guides you through every step.',
             ],
             1 => [
-                'question' => 'Is my data secure with ' . config('app.name') . '?',
+                'question' => 'Is my data secure with '.config('app.name').'?',
                 'answer' => 'Absolutely. We use bank-level encryption (AES-256) for all data, comply with GDPR and local data protection laws, and store data in secure data centers in the MENA region. We\'re also PCI-DSS compliant for payment processing.',
             ],
             2 => [
-                'question' => 'Does ' . config('app.name') . ' work with WhatsApp Business API?',
+                'question' => 'Does '.config('app.name').' work with WhatsApp Business API?',
                 'answer' => 'Yes! We\'re an official WhatsApp Business Solution Provider. This means your messages are sent through verified business accounts, ensuring high deliverability and compliance with WhatsApp\'s policies.',
             ],
             3 => [
-                'question' => 'Can I use ' . config('app.name') . ' in Arabic?',
-                'answer' => 'Yes, ' . config('app.name') . ' offers full RTL support with native Arabic and French interfaces. All dashboards, reports, and communications can be in Arabic, and we support Arabic numerals and date formats.',
+                'question' => 'Can I use '.config('app.name').' in Arabic?',
+                'answer' => 'Yes, '.config('app.name').' offers full RTL support with native Arabic and French interfaces. All dashboards, reports, and communications can be in Arabic, and we support Arabic numerals and date formats.',
             ],
             4 => [
                 'question' => 'What payment methods do you support?',
@@ -380,11 +380,12 @@ return [
             'privacy' => 'Privacy Policy',
             'terms' => 'Terms of Service',
             'cookie' => 'Cookie Policy',
+            'cookies' => 'Cookie Policy',
             'gdpr' => 'GDPR Compliance',
         ],
         'contact' => 'Contact Us',
-        'rights' => 'All rights reserved © 2024',
-        'copyright' => 'All rights reserved © 2024 ' . config('app.name') . '.',
+        'rights' => 'All rights reserved © '.date('Y'),
+        'copyright' => 'All rights reserved © '.date('Y').' '.config('app.name').'.',
         'payment_methods' => 'Secure Payment Methods',
         'product' => [
             'title' => 'Product',
@@ -416,7 +417,7 @@ return [
     ],
     'comparison' => [
         'badge' => 'Comparison',
-        'title' => 'Why <span class=\"gradient-text\">' . config('app.name') . '</span> is the Best Choice?',
+        'title' => 'Why <span class=\"gradient-text\">'.config('app.name').'</span> is the Best Choice?',
         'subtitle' => 'Compare the struggle of traditional management with the efficiency of our advanced system.',
         'manual' => [
             'title' => 'Traditional Management (Paper/Excel)',
@@ -430,7 +431,7 @@ return [
             ],
         ],
         'edu' => [
-            'title' => 'Integrated ' . config('app.name') . ' System',
+            'title' => 'Integrated '.config('app.name').' System',
             'items' => [
                 0 => 'Smart and fast attendance recording with one touch.',
                 1 => 'Automatic fee tracking and instant overdue alerts.',

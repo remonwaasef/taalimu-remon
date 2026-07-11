@@ -5,39 +5,45 @@ namespace App\Http\Middleware;
 use App\Models\Tenant;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
-use Spatie\Permission\PermissionRegistrar;
 use Symfony\Component\HttpFoundation\Response;
 
 class IdentifyTenant
 {
-    protected static ?Tenant $resolvedTenant = null;
-
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
     public function handle(Request $request, Closure $next): Response
     {
-        if (self::$resolvedTenant) {
-            return $this->setTenantContext(self::$resolvedTenant, $request, $next);
-        }
-
         $mode = config('app.tenancy_mode', 'subdomain');
         $tenant = null;
 
         if ($mode === 'path') {
+            // Path-based tenancy: Extract tenant from URL path /c/{tenant}/
             $pathSegments = $request->segments();
 
+            // Check if first segment is 'c' and second segment exists
             if (count($pathSegments) >= 2 && $pathSegments[0] === 'c') {
                 $tenantDomain = $pathSegments[1];
+
                 $tenant = $this->resolveTenant($tenantDomain);
             } else {
+                // Not a tenant path, skip tenant identification
                 return $next($request);
             }
         } else {
+            // Subdomain-based tenancy (original logic)
             $host = $request->getHost();
+
+            // Use the configured tenant domain (e.g., yourdomain.com)
             $mainHost = config('app.tenant_domain') ?: parse_url(config('app.url'), PHP_URL_HOST);
 
+            // Skip if it's 'www' or exactly the main domain
             if ($host === $mainHost || $host === 'www.'.$mainHost || $host === 'localhost') {
+                // Even if we skip deeper tenant identification, if the route matched a {tenant} group,
+                // we should ensure URL generation doesn't break for these routes.
                 if ($request->route() && $request->route()->hasParameter('tenant')) {
                     URL::defaults(['tenant' => $request->route('tenant')]);
                 }
@@ -45,30 +51,37 @@ class IdentifyTenant
                 return $next($request);
             }
 
+            // Logic to extract subdomain
+            // If host is tenant.yourdomain.com, we want 'tenant'
             $subdomain = '';
             if (str_ends_with($host, '.'.$mainHost)) {
                 $subdomain = str_replace('.'.$mainHost, '', $host);
             } else {
+                // Fallback for cases where it's not following the standard pattern
                 $parts = explode('.', $host);
                 $subdomain = $parts[0];
             }
 
+            // Avoid identifying common prefixes as tenants
             if (in_array($subdomain, ['www', 'admin', 'api', 'app'])) {
                 return $next($request);
             }
 
             $tenant = $this->resolveTenant($subdomain);
 
+            // If this is a tenant-only domain (checked by str_ends_with) and no tenant found, 404
             if (! $tenant && str_ends_with($host, '.'.$mainHost)) {
                 abort(404, 'Center not found.');
             }
         }
 
+        // If tenant found and active, set it in the container
         if ($tenant) {
             if ($tenant->status !== 'active') {
                 abort(403, 'Center is currently inactive. Please contact support.');
             }
 
+            // Compatibility: If in subdomain mode but accessed via path /c/tenant, redirect to subdomain
             if ($mode === 'subdomain' && count($request->segments()) >= 2 && $request->segments()[0] === 'c' && $request->segments()[1] === $tenant->domain) {
                 $pathSegments = $request->segments();
                 $remainingPath = implode('/', array_slice($pathSegments, 2));
@@ -76,11 +89,41 @@ class IdentifyTenant
                 return redirect(tenant_url($remainingPath, $tenant));
             }
 
-            self::$resolvedTenant = $tenant;
+            app()->instance('tenant', $tenant);
 
-            return $this->setTenantContext($tenant, $request, $next);
+            // Set Spatie Team ID to the current tenant so that user assignments (pivot table) are found.
+            app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
+
+            view()->share('tenant', $tenant);
+            URL::defaults(['tenant' => $tenant->domain]);
+
+            // Add tenant context to logs
+            \Illuminate\Support\Facades\Log::withContext([
+                'tenant_id' => $tenant->id,
+                'tenant_domain' => $tenant->domain,
+            ]);
+
+            // Set timezone dynamically for multi-region support
+            if ($tenant->timezone) {
+                config(['app.timezone' => $tenant->timezone]);
+                // If using Carbon, set its default timezone dynamically for the current request context
+                if (class_exists(\Carbon\Carbon::class)) {
+                    \Carbon\Carbon::setTestNow(); // Reset any test time and let it use the current config
+                }
+            }
+
+            // Dynamically set log file for this tenant
+            config(['logging.channels.single.path' => storage_path("logs/tenant_{$tenant->id}.log")]);
+            config(['logging.channels.daily.path' => storage_path("logs/tenant_{$tenant->id}.log")]);
+
+            if ($request->route()) {
+                $request->route()->forgetParameter('tenant');
+            }
+
+            return $next($request);
         }
 
+        // No tenant found
         if ($mode === 'path' && count($request->segments()) >= 2 && $request->segments()[0] === 'c') {
             abort(404, 'Center not found.');
         }
@@ -88,34 +131,12 @@ class IdentifyTenant
         return $next($request);
     }
 
-    protected function setTenantContext(Tenant $tenant, Request $request, Closure $next): Response
-    {
-        app()->instance('tenant', $tenant);
-        app(PermissionRegistrar::class)->setPermissionsTeamId($tenant->id);
-
-        view()->share('tenant', $tenant);
-        URL::defaults(['tenant' => $tenant->domain]);
-
-        Log::withContext([
-            'tenant_id' => $tenant->id,
-            'tenant_domain' => $tenant->domain,
-        ]);
-
-        if ($tenant->timezone) {
-            config(['app.timezone' => $tenant->timezone]);
-        }
-
-        $tenantId = (int) $tenant->id;
-        config(['logging.channels.single.path' => storage_path("logs/tenant_{$tenantId}.log")]);
-        config(['logging.channels.daily.path' => storage_path("logs/tenant_{$tenantId}.log")]);
-
-        if ($request->route()) {
-            $request->route()->forgetParameter('tenant');
-        }
-
-        return $next($request);
-    }
-
+    /**
+     * Resolve a tenant (with subscription/package/features) by domain, cached on the
+     * default cache store for one hour. Invalidation lives in the Tenant and
+     * Subscription model events — both must forget on the SAME default store,
+     * so never pin a specific store here.
+     */
     protected function resolveTenant(string $domain): ?Tenant
     {
         $loadTenant = fn () => Tenant::with(['currentSubscription.package.features'])
@@ -123,12 +144,13 @@ class IdentifyTenant
             ->first();
 
         try {
-            return Cache::remember(
+            return \Illuminate\Support\Facades\Cache::remember(
                 "taalimu:tenancy:domain:{$domain}",
                 3600,
                 $loadTenant
             );
         } catch (\Throwable $e) {
+            // Failover to DB if the cache backend is down
             return $loadTenant();
         }
     }

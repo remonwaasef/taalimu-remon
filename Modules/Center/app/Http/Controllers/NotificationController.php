@@ -3,7 +3,6 @@
 namespace Modules\Center\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Str;
 
 class NotificationController extends Controller
 {
@@ -19,16 +18,7 @@ class NotificationController extends Controller
         $notification = auth()->user()->notifications()->findOrFail($id);
         $notification->markAsRead();
 
-        $url = $notification->data['url'] ?? null;
-        if ($url && Str::startsWith($url, ['http://', 'https://'])) {
-            $parsed = parse_url($url);
-            $allowedHosts = [parse_url(config('app.url'), PHP_URL_HOST), config('app.tenant_domain')];
-            if (! in_array($parsed['host'] ?? '', $allowedHosts)) {
-                $url = '/';
-            }
-        }
-
-        return redirect($url ?? '/');
+        return redirect($notification->data['url'] ?? '#');
     }
 
     public function markAllAsRead()

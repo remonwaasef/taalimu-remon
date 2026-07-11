@@ -1,6 +1,6 @@
 # 🏗️ Architecture Overview — منصة Taalimu
 
-> آخر تحديث: يوليو 2026
+> آخر تحديث: مايو 2026
 > هذه الوثيقة تشرح بنية النظام لأي مطور أو CTO جديد يستلم المشروع.
 
 ---
@@ -11,8 +11,8 @@
 
 | العنصر | التقنية |
 |:---|:---|
-| Backend | Laravel 12 (PHP 8.4) |
-| Frontend | Blade Templates + Tailwind CSS + Bootstrap 5 + React/Inertia لبعض الشاشات |
+| Backend | Laravel 11+ (PHP 8.2) |
+| Frontend | Blade Templates + Bootstrap 5 + Vanilla JS |
 | Database | MySQL 8 (Shared Database) |
 | Caching | Database (قابل للترقية لـ Redis) |
 | Queue | Database (قابل للترقية لـ Redis) |
@@ -54,7 +54,7 @@
 - **الإعداد:** `config('app.tenancy_mode')` و `TENANT_DOMAIN` في `.env`
 
 ### العزل (Isolation)
-- كل Model متعدد المستأجرين يستخدم `BelongsToTenant` Trait → يضيف `where('tenant_id', ...)` تلقائياً
+- كل Model يستخدم `IdentifyTenant` Trait → يضيف `where('tenant_id', ...)` تلقائياً
 - Global Scope يمنع أي مستأجر من رؤية بيانات آخر
 - Spatie Permissions يستخدم `teams_id` = `tenant_id`
 
@@ -108,7 +108,7 @@ app/Services/
 ├── PaymentGateways/
 │   ├── PayPalGateway.php
 │   ├── PaymobGateway.php
-│   └── MockGateway.php
+│   └── DemoGateway.php
 │
 ├── SubscriptionService.php      ← تجديد / إيقاف / ترقية الاشتراكات
 ├── FinanceService.php           ← التقارير المالية والإحصائيات

@@ -53,7 +53,6 @@ class SettingsService
         $tenant->settings = $settings;
         $tenant->save();
 
-        Cache::forget("taalimu:tenancy:domain:{$tenant->domain}");
         Cache::forget("tenant_lookup_{$tenant->domain}");
 
         return $tenant;
@@ -180,7 +179,6 @@ class SettingsService
         $tenant->save();
 
         // Clear lookup cache
-        Cache::forget("taalimu:tenancy:domain:{$tenant->domain}");
         Cache::forget("tenant_lookup_{$tenant->domain}");
 
         Stage::clearCache();

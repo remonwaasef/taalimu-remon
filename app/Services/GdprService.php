@@ -56,11 +56,10 @@ class GdprService
                 });
         }
 
-        // 4. Activity Logs (chunked to prevent memory exhaustion)
+        // 4. Activity Logs
         $data['activity_logs'] = Activity::where('causer_id', $user->id)
             ->where('causer_type', get_class($user))
             ->latest()
-            ->limit(1000)
             ->get()
             ->map(function ($activity) {
                 return [

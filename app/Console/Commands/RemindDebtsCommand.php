@@ -44,16 +44,10 @@ class RemindDebtsCommand extends Command
                 ->having('total_debt', '>', 0)
                 ->get();
 
-            $studentIds = $studentsWithDebt->pluck('student_id');
-            $students = Student::whereIn('id', $studentIds)
-                ->whereNotNull('phone')
-                ->get()
-                ->keyBy('id');
-
             $count = 0;
             foreach ($studentsWithDebt as $record) {
-                $student = $students->get($record->student_id);
-                if ($student) {
+                $student = Student::find($record->student_id);
+                if ($student && $student->phone) {
                     $whatsappService->sendDebtReminder($tenant, $student, $record->total_debt);
                     $this->line("Sent reminder to {$student->name} for {$record->total_debt} amount.");
                     $count++;

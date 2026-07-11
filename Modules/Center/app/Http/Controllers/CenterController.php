@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\Expense;
 use App\Models\Sale;
 use App\Models\Student;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Modules\Center\Http\Controllers\CenterBaseController as Controller;
 
@@ -69,7 +70,7 @@ class CenterController extends Controller
                     ->sum('amount'),
                 'sessionsToday' => \App\Models\Schedule::where('day_of_week', strtolower(now()->format('l')))->count(),
                 'attendanceRate' => min($attendanceRate, 100),
-                'overdueAmount' => Sale::whereColumn('total_amount', '>', 'paid_amount')->sum(DB::raw('total_amount - paid_amount')),
+                'overdueAmount' => Sale::whereRaw('total_amount > paid_amount')->sum(DB::raw('total_amount - paid_amount')),
             ];
         });
 
@@ -244,9 +245,7 @@ class CenterController extends Controller
         }
 
         // Check 2: Top Course
-        $tenantId = app('tenant')->id ?? null;
         $topCourse = Course::where('status', 'published')
-            ->when($tenantId, fn($q) => $q->where('tenant_id', $tenantId))
             ->withCount('enrollments')
             ->orderByDesc('enrollments_count')
             ->first();
@@ -261,4 +260,6 @@ class CenterController extends Controller
 
         return $insights;
     }
+
+
 }

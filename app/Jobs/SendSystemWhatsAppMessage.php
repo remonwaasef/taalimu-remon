@@ -8,27 +8,34 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class SendSystemWhatsAppMessage implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $tries = 3;
-
-    public $backoff = [30, 120];
-
     public $phone;
 
     public $message;
 
+    /**
+     * Create a new job instance.
+     */
     public function __construct(string $phone, string $message)
     {
         $this->phone = $phone;
         $this->message = $message;
     }
 
+    /**
+     * Execute the job.
+     */
     public function handle(WhatsAppService $whatsapp): void
     {
-        $whatsapp->sendSystemMessage($this->phone, $this->message);
+        try {
+            $whatsapp->sendSystemMessage($this->phone, $this->message);
+        } catch (\Exception $e) {
+            Log::warning('Job SendSystemWhatsAppMessage failed: '.$e->getMessage());
+        }
     }
 }

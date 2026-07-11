@@ -28,11 +28,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->name('login.submit');
     });
 
-    // Impersonate stop - requires auth (user is on tenant domain, logged in as impersonated user)
-    Route::middleware(['auth'])->get('impersonate/stop', [TenantController::class, 'stopImpersonating'])->name('impersonate.stop');
+    // Protected Routes (General Auth - accessible while impersonating)
+    Route::middleware(['auth'])->group(function () {
+        Route::get('impersonate/stop', [TenantController::class, 'stopImpersonating'])->name('impersonate.stop');
+    });
 
-    // Impersonate return - NO auth middleware; user arrives unauthenticated on central domain
-    // after being logged out on the tenant subdomain. This route re-authenticates them.
+    // Public impersonation return (must be before auth middleware - uses one-time token)
     Route::get('impersonate/return', [TenantController::class, 'returnFromImpersonation'])->name('impersonate.return');
 
     // Protected Routes (Super Admin Only)

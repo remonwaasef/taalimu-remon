@@ -3,7 +3,6 @@
 namespace Modules\Instructor\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Helpers\PhoneHelper;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Payment;
@@ -12,7 +11,6 @@ use App\Models\Schedule;
 use App\Models\Student;
 use App\Services\AttendanceService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Modules\Center\Models\Attendance;
 use Modules\Instructor\Http\Controllers\Traits\ResolvesInstructor;
 
@@ -26,7 +24,6 @@ class InstructorController extends Controller
     public function index()
     {
         $instructor = $this->instructor;
-        $courseIds = $instructor ? Course::where('instructor_id', $instructor->id)->pluck('id') : collect();
 
         if (! $instructor) {
             $courses = Course::take(5)->get();
@@ -36,34 +33,31 @@ class InstructorController extends Controller
                 ->whereYear('created_at', now()->year)
                 ->sum('paid_amount');
         } else {
-            $courses = Course::whereIn('id', $courseIds)->withCount('enrollments')->get();
-            $totalStudents = Student::whereHas('enrollments', function ($q) use ($courseIds) {
-                $q->whereIn('course_id', $courseIds);
+            $courses = $instructor->courses()->withCount('enrollments')->get();
+            $totalStudents = Student::whereHas('enrollments', function ($q) use ($instructor) {
+                $q->whereIn('course_id', $instructor->courses->pluck('id'));
             })->count();
             $totalCourses = $courses->count();
 
             $monthlyRevenue = Sale::whereMonth('created_at', now()->month)
                 ->whereYear('created_at', now()->year)
-                ->whereHas('student.enrollments', function ($q) use ($courseIds) {
-                    $q->whereIn('course_id', $courseIds);
+                ->whereHas('student.enrollments', function ($q) use ($instructor) {
+                    $q->whereIn('course_id', $instructor->courses->pluck('id'));
                 })->sum('paid_amount');
         }
 
         // Attendance Analytics (Last 7 Days)
         $attendanceData = [];
         $days = [];
-        $attendanceCounts = Attendance::where('session_date', '>=', now()->subDays(6)->toDateString())
-            ->when($instructor, function ($q) use ($courseIds) {
-                $q->whereIn('course_id', $courseIds);
-            })
-            ->select('session_date', DB::raw('count(*) as count'))
-            ->groupBy('session_date')
-            ->pluck('count', 'session_date');
-
         for ($i = 6; $i >= 0; $i--) {
             $date = now()->subDays($i);
             $days[] = $date->translatedFormat('D');
-            $attendanceData[] = $attendanceCounts[$date->toDateString()] ?? 0;
+
+            $query = Attendance::whereDate('session_date', $date->toDateString());
+            if ($instructor) {
+                $query->whereIn('course_id', $instructor->courses->pluck('id'));
+            }
+            $attendanceData[] = $query->count();
         }
 
         return view('instructor::index', compact('courses', 'totalStudents', 'totalCourses', 'monthlyRevenue', 'attendanceData', 'days'));
@@ -85,7 +79,7 @@ class InstructorController extends Controller
     /**
      * Process a scanned QR identifier
      */
-    public function scan(Request $request, Course $course, AttendanceService $attendanceService)
+    public function scan(Request $request, Course $course)
     {
         $request->validate([
             'qr_identifier' => 'required|string',
@@ -115,6 +109,8 @@ class InstructorController extends Controller
             ], 403);
         }
 
+        $attendanceService = app(AttendanceService::class);
+
         if ($attendanceService->hasAttendedToday($student->id, $request->schedule_id)) {
             return response()->json([
                 'success' => true,
@@ -139,7 +135,7 @@ class InstructorController extends Controller
             'center' => $this->tenant->name,
         ]);
         $phoneToNotify = $student->parent_phone ?: $student->phone;
-        $whatsappUrl = 'https://wa.me/' . PhoneHelper::sanitizeForWhatsApp($phoneToNotify) . '?text=' . urlencode($msg);
+        $whatsappUrl = 'https://wa.me/'.preg_replace('/[^0-9]/', '', $phoneToNotify).'?text='.urlencode($msg);
 
         return response()->json([
             'success' => true,
@@ -156,13 +152,12 @@ class InstructorController extends Controller
     public function billing()
     {
         $instructor = $this->instructor;
-        $courseIds = $instructor ? Course::where('instructor_id', $instructor->id)->pluck('id') : collect();
 
         if (! $instructor) {
             $students = Student::with(['user', 'sales', 'enrollments.course'])->take(10)->get();
         } else {
-            $students = Student::whereHas('enrollments', function ($q) use ($courseIds) {
-                $q->whereIn('course_id', $courseIds);
+            $students = Student::whereHas('enrollments', function ($q) use ($instructor) {
+                $q->whereIn('course_id', $instructor->courses->pluck('id'));
             })->with(['user', 'sales', 'enrollments.course'])->get();
         }
 
@@ -256,24 +251,20 @@ class InstructorController extends Controller
     public function studentReports()
     {
         $instructor = $this->instructor;
-        $courseIds = $instructor ? Course::where('instructor_id', $instructor->id)->pluck('id') : Course::limit(1000)->pluck('id');
+        $courseIds = $instructor ? $instructor->courses->pluck('id') : Course::pluck('id');
 
         $students = Student::whereHas('enrollments', function ($q) use ($courseIds) {
             $q->whereIn('course_id', $courseIds);
         })->with(['enrollments' => function ($q) use ($courseIds) {
             $q->whereIn('course_id', $courseIds)->with('course');
-        }])->limit(500)->get();
-
-        $attendanceCounts = Attendance::whereIn('course_id', $courseIds)
-            ->where('status', 'present')
-            ->whereIn('student_id', $students->pluck('id'))
-            ->select('student_id', DB::raw('count(*) as count'))
-            ->groupBy('student_id')
-            ->pluck('count', 'student_id');
+        }])->get();
 
         foreach ($students as $student) {
             $totalSessions = $student->enrollments->sum('course.sessions_count');
-            $attendedSessions = $attendanceCounts[$student->id] ?? 0;
+            $attendedSessions = Attendance::where('student_id', $student->id)
+                ->whereIn('course_id', $courseIds)
+                ->where('status', 'present')
+                ->count();
 
             $student->attendance_percentage = $totalSessions > 0 ? round(($attendedSessions / $totalSessions) * 100) : 0;
             $student->attended_count = $attendedSessions;
@@ -286,13 +277,13 @@ class InstructorController extends Controller
     public function paymentReports()
     {
         $instructor = $this->instructor;
-        $courseIds = $instructor ? Course::where('instructor_id', $instructor->id)->pluck('id') : Course::limit(1000)->pluck('id');
+        $courseIds = $instructor ? $instructor->courses->pluck('id') : Course::pluck('id');
 
         $students = Student::whereHas('enrollments', function ($q) use ($courseIds) {
             $q->whereIn('course_id', $courseIds);
         })->with(['enrollments' => function ($q) use ($courseIds) {
             $q->whereIn('course_id', $courseIds)->with('course');
-        }, 'sales'])->limit(500)->get();
+        }, 'sales'])->get();
 
         foreach ($students as $student) {
             $student->total_due = $student->enrollments->sum(function ($e) {

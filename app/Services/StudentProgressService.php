@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Enrollment;
 use App\Models\LessonProgress;
 use App\Models\User;
-use Illuminate\Support\Facades\Cache;
 
 class StudentProgressService
 {
@@ -14,12 +13,10 @@ class StudentProgressService
      */
     public function getStudentRank(User $user): int
     {
-        return Cache::remember("student_rank_{$user->tenant_id}_{$user->id}", 300, function () use ($user) {
-            return User::where('tenant_id', $user->tenant_id)
-                ->where('role', 'student')
-                ->where('points', '>', $user->points)
-                ->count() + 1;
-        });
+        return User::where('tenant_id', $user->tenant_id)
+            ->where('role', 'student')
+            ->where('points', '>', $user->points)
+            ->count() + 1;
     }
 
     /**
@@ -27,7 +24,6 @@ class StudentProgressService
      */
     public function getNextLesson(Enrollment $enrollment)
     {
-        $enrollment->loadMissing('course.sections.lessons');
         $allLessons = $enrollment->course->sections->flatMap->lessons;
         $courseLessonIds = $allLessons->pluck('id');
 

@@ -3,7 +3,6 @@
 namespace Tests\Unit\Services;
 
 use App\Services\FinanceService;
-use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,28 +22,28 @@ class FinanceServiceTest extends TestCase
         $this->financeService = new FinanceService($courseService, $whatsappService);
     }
 
-    #[Test]
+    /** @test */
     public function it_determines_status_as_paid_when_paid_is_equal_to_total()
     {
         $status = $this->invokeMethod($this->financeService, 'determineStatus', [100, 100]);
         $this->assertEquals('paid', $status);
     }
 
-    #[Test]
+    /** @test */
     public function it_determines_status_as_paid_when_paid_is_greater_than_total()
     {
         $status = $this->invokeMethod($this->financeService, 'determineStatus', [100, 120]);
         $this->assertEquals('paid', $status);
     }
 
-    #[Test]
+    /** @test */
     public function it_determines_status_as_partial_when_paid_is_less_than_total_but_greater_than_zero()
     {
         $status = $this->invokeMethod($this->financeService, 'determineStatus', [100, 50]);
         $this->assertEquals('partial', $status);
     }
 
-    #[Test]
+    /** @test */
     public function it_determines_status_as_pending_when_paid_is_zero()
     {
         $status = $this->invokeMethod($this->financeService, 'determineStatus', [100, 0]);

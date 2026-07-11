@@ -10,7 +10,6 @@ use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class AnalyticsCacheTest extends TestCase
@@ -68,7 +67,7 @@ class AnalyticsCacheTest extends TestCase
         ]);
     }
 
-    #[Test]
+    /** @test */
     public function it_reduces_db_queries_on_second_request()
     {
         $this->actingAs($this->admin);

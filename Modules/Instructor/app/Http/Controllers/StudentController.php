@@ -3,7 +3,6 @@
 namespace Modules\Instructor\Http\Controllers;
 
 use App\DTOs\StudentData;
-use App\Helpers\PhoneHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Enrollment;
@@ -20,54 +19,35 @@ class StudentController extends Controller
 {
     use ResolvesInstructor;
 
+    /**
+     * Display a list of students enrolled in instructor's courses
+     */
     public function index()
     {
         $instructor = $this->instructor;
-        $courseIds = $this->getInstructorCourseIds();
 
         if (! $instructor) {
             $students = Student::with(['user', 'enrollments.course', 'sales'])->take(20)->get();
         } else {
-            $students = Student::whereHas('enrollments', function ($q) use ($courseIds) {
-                $q->whereIn('course_id', $courseIds);
-            })->with(['user', 'enrollments.course' => function ($q) use ($courseIds) {
-                $q->whereIn('course_id', $courseIds);
-            }, 'sales'])->limit(200)->get();
+            $students = Student::whereHas('enrollments', function ($q) use ($instructor) {
+                $q->whereIn('course_id', $instructor->courses->pluck('id'));
+            })->with(['user', 'enrollments.course' => function ($q) use ($instructor) {
+                $q->where('instructor_id', $instructor->id);
+            }, 'sales' => function ($q) {
+                // Optionally filter sales if needed
+            }])->get();
         }
 
-        $studentIds = $students->pluck('id')->filter()->toArray();
-        $attendanceCounts = [];
-        if (! empty($studentIds)) {
-            $attendanceCounts = \Modules\Center\Models\Attendance::whereIn('student_id', $studentIds)
-                ->where('status', 'present')
-                ->groupBy('student_id')
-                ->selectRaw('student_id, count(*) as total')
-                ->pluck('total', 'student_id')
-                ->toArray();
-        }
-
-        $uniqueCourses = collect();
-        foreach ($students as $student) {
-            foreach ($student->enrollments as $enrollment) {
-                if ($enrollment->course) {
-                    $uniqueCourses->put($enrollment->course->id, $enrollment->course->title);
-                }
-            }
-        }
-
-        $totalRevenue = ! empty($studentIds)
-            ? Sale::whereIn('student_id', $studentIds)->sum('paid_amount')
-            : 0;
-
-        return view('instructor::students.index', compact('students', 'attendanceCounts', 'uniqueCourses', 'totalRevenue'));
+        return view('instructor::students.index', compact('students'));
     }
 
+    /**
+     * Show the form for manually creating a student
+     */
     public function create()
     {
         $instructor = $this->instructor;
-        $courses = $instructor
-            ? Course::where('instructor_id', $instructor->id)->select('id', 'title', 'price')->get()
-            : Course::select('id', 'title', 'price')->get();
+        $courses = $instructor ? $instructor->courses : Course::select('id', 'title', 'price')->get();
 
         if ($courses->isEmpty()) {
             return redirect()->route('instructor.groups.create')
@@ -77,6 +57,9 @@ class StudentController extends Controller
         return view('instructor::students.create', compact('courses'));
     }
 
+    /**
+     * Store a manually created student and enroll them
+     */
     public function store(StoreStudentRequest $request, StudentService $studentService)
     {
         $instructor = $this->instructor;
@@ -86,6 +69,8 @@ class StudentController extends Controller
 
         $validated = $request->validated();
 
+        // Restrict enrolment to courses this instructor actually owns, so a forged
+        // course id from another instructor/tenant cannot be attached.
         $courseIds = Course::whereIn('id', $validated['course_ids'] ?? [])
             ->where('instructor_id', $instructor->id)
             ->pluck('id')
@@ -97,10 +82,14 @@ class StudentController extends Controller
 
         try {
             if ($request->filled('student_id')) {
+                // Enrol an existing student the instructor is allowed to manage.
                 $student = Student::findOrFail($validated['student_id']);
                 $this->authorizeInstructor($student);
                 $studentService->enrollInCourses($student, $courseIds);
             } else {
+                // Delegate creation (user, guardian, student, enrolment and the
+                // welcome/enrolment emails) to the shared registration service
+                // instead of duplicating that logic here.
                 $result = $studentService->registerStudent(
                     StudentData::fromArray([
                         'name' => $validated['name'],
@@ -124,35 +113,54 @@ class StudentController extends Controller
         }
     }
 
+    /**
+     * Show detailed profile for a student
+     */
     public function show(Student $student)
     {
-        $courseIds = $this->getInstructorCourseIds();
+        $instructor = $this->instructor;
 
-        if ($this->instructor && ! $this->isStudentEnrolledInCourse($student, $courseIds)) {
-            abort(403);
+        if ($instructor) {
+            $isEnrolled = Enrollment::where('user_id', $student->user_id)
+                ->whereIn('course_id', $instructor->courses->pluck('id'))
+                ->exists();
+            if (! $isEnrolled) {
+                abort(403);
+            }
         }
 
         $student->load(['user', 'enrollments.course', 'sales' => function ($q) {
             $q->latest();
         }]);
 
-        $attendances = \Modules\Center\Models\Attendance::where('student_id', $student->id)
-            ->when($this->instructor, function ($q) use ($courseIds) {
-                $q->whereIn('course_id', $courseIds);
-            })
+        $attendanceQuery = \Modules\Center\Models\Attendance::where('student_id', $student->id)
             ->with(['course', 'schedule'])
-            ->latest()
-            ->get();
+            ->latest();
+
+        if ($instructor) {
+            $attendanceQuery->whereIn('course_id', $instructor->courses->pluck('id'));
+        }
+
+        $attendances = $attendanceQuery->get();
 
         return view('instructor::students.show', compact('student', 'attendances'));
     }
 
+    /**
+     * Remove the specified student from storage.
+     */
     public function destroy(Student $student)
     {
-        $courseIds = $this->getInstructorCourseIds();
+        $instructor = $this->instructor;
 
-        if ($this->instructor && ! $this->isStudentEnrolledInCourse($student, $courseIds)) {
-            abort(403, __('instructor::messages.unauthorized'));
+        if ($instructor) {
+            $isAssociated = Enrollment::where('user_id', $student->user_id)
+                ->whereIn('course_id', $instructor->courses->pluck('id'))
+                ->exists();
+
+            if (! $isAssociated) {
+                abort(403, __('instructor::messages.unauthorized'));
+            }
         }
 
         try {
@@ -185,6 +193,9 @@ class StudentController extends Controller
         }
     }
 
+    /**
+     * Toggle student status (Active/Frozen)
+     */
     public function toggleStatus(Student $student)
     {
         $this->authorizeInstructor($student);
@@ -193,6 +204,9 @@ class StudentController extends Controller
         return back()->with('success', __('instructor::messages.updated'));
     }
 
+    /**
+     * Update student private notes
+     */
     public function updateNotes(Request $request, Student $student)
     {
         $this->authorizeInstructor($student);
@@ -201,6 +215,9 @@ class StudentController extends Controller
         return back()->with('success', __('instructor::messages.saved'));
     }
 
+    /**
+     * Transfer student between groups
+     */
     public function transfer(Request $request, Student $student)
     {
         $request->validate([
@@ -216,15 +233,18 @@ class StudentController extends Controller
         return back()->with('success', __('instructor::messages.updated'));
     }
 
+    /**
+     * Export students to CSV
+     */
     public function export()
     {
-        $courseIds = $this->getInstructorCourseIds();
+        $instructor = $this->instructor;
 
-        if (! $this->instructor) {
+        if (! $instructor) {
             $students = Student::with(['enrollments.course'])->get();
         } else {
-            $students = Student::whereHas('enrollments', function ($q) use ($courseIds) {
-                $q->whereIn('course_id', $courseIds);
+            $students = Student::whereHas('enrollments', function ($q) use ($instructor) {
+                $q->whereIn('course_id', $instructor->courses->pluck('id'));
             })->with(['enrollments.course'])->get();
         }
 
@@ -267,6 +287,9 @@ class StudentController extends Controller
         return response()->stream($callback, 200, $headers);
     }
 
+    /**
+     * Import students from CSV
+     */
     public function import(Request $request)
     {
         $request->validate([
@@ -319,12 +342,20 @@ class StudentController extends Controller
         return back()->with('success', __('instructor::messages.import_success', ['count' => $imported]).($errors ? ' '.__('instructor::messages.import_errors', ['count' => $errors]) : ''));
     }
 
+    /**
+     * Send an email to the student
+     */
     public function sendEmail(Request $request, Student $student, StudentService $studentService)
     {
-        $courseIds = $this->getInstructorCourseIds();
+        $instructor = $this->instructor;
 
-        if ($this->instructor && ! $this->isStudentEnrolledInCourse($student, $courseIds)) {
-            abort(403);
+        if ($instructor) {
+            $isEnrolled = Enrollment::where('user_id', $student->user_id)
+                ->whereIn('course_id', $instructor->courses->pluck('id'))
+                ->exists();
+            if (! $isEnrolled) {
+                abort(403);
+            }
         }
 
         $request->validate([
@@ -337,7 +368,7 @@ class StudentController extends Controller
                 $student,
                 $request->subject,
                 $request->message,
-                $this->instructor ? $this->instructor->name : $this->tenant->name
+                $instructor ? $instructor->name : $this->tenant->name
             );
 
             if (! $sent) {
@@ -352,10 +383,13 @@ class StudentController extends Controller
         }
     }
 
+    /**
+     * Check if a phone number already exists (AJAX)
+     */
     public function checkPhone(Request $request)
     {
-        $phone = PhoneHelper::strip((string) $request->get('phone'));
-        if (! PhoneHelper::isValid($phone)) {
+        $phone = preg_replace('/[^0-9+]/', '', (string) $request->get('phone'));
+        if (! $phone || strlen(preg_replace('/[^0-9]/', '', $phone)) < 8) {
             return response()->json(['status' => 'invalid']);
         }
 
@@ -365,9 +399,16 @@ class StudentController extends Controller
             $userQuery->where('tenant_id', app('tenant')->id);
         }
 
-        return response()->json(['status' => $userQuery->exists() ? 'exists' : 'available']);
+        if ($userQuery->exists()) {
+            return response()->json(['status' => 'exists']);
+        }
+
+        return response()->json(['status' => 'available']);
     }
 
+    /**
+     * Update student-specific payment settings
+     */
     public function updatePayment(Request $request, Student $student)
     {
         $request->validate([
@@ -383,20 +424,6 @@ class StudentController extends Controller
         ]);
 
         return back()->with('success', __('instructor::reminders.saved'));
-    }
-
-    private function getInstructorCourseIds(): \Illuminate\Support\Collection
-    {
-        return $this->instructor
-            ? Course::where('instructor_id', $this->instructor->id)->pluck('id')
-            : collect();
-    }
-
-    private function isStudentEnrolledInCourse(Student $student, $courseIds): bool
-    {
-        return Enrollment::where('user_id', $student->user_id)
-            ->whereIn('course_id', $courseIds)
-            ->exists();
     }
 
     private function getOrCreateUserForStudent($student)

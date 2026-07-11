@@ -32,7 +32,7 @@ return new class extends Migration
             $table->dropUnique(['tenant_id', 'key']);
             $table->dropForeign(['tenant_id']);
             $table->dropColumn('tenant_id');
-
+            
             $table->unique('key');
         });
     }

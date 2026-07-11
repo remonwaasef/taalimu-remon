@@ -122,7 +122,6 @@ class RoleController extends Controller
             // This ensures that existing centers get updated permissions for global role clones (if any exist)
             $tenantRoles = Role::where('name', $role->name)
                 ->whereNotNull('tenant_id')
-                ->limit(500)
                 ->get();
 
             foreach ($tenantRoles as $tenantRole) {

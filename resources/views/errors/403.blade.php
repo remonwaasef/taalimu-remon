@@ -1,18 +1,22 @@
 @php
-    $tenantData = $tenant ?? app('tenant') ?? null;
+    $tenantData = $tenant ?? (app()->bound('tenant') ? app('tenant') : null);
     $layout = 'center::layouts.hope-master';
     
     // Use precise path matching to avoid confusing /instructors (center) with /instructor/ (instructor module)
     $currentPath = request()->path();
     
-    if (str_starts_with($currentPath, 'campus') || (auth()->check() && auth()->user()->hasRole('student'))) {
+    if (str_starts_with($currentPath, 'admin/') || $currentPath === 'admin') {
+        $layout = 'admin::layouts.master';
+        $hasLayout = true;
+    } elseif (str_starts_with($currentPath, 'campus') || (auth()->check() && auth()->user()->hasRole('student'))) {
         $layout = 'campus::layouts.master';
+        $hasLayout = true;
     } elseif (str_starts_with($currentPath, 'instructor/') || $currentPath === 'instructor') {
         $layout = 'instructor::components.layouts.hope-master';
+        $hasLayout = true;
+    } else {
+        $hasLayout = $tenantData !== null;
     }
-    // All other paths (including /instructors, /students, /courses, etc.) default to center layout
-    
-    $hasLayout = $tenantData !== null;
 @endphp
 
 @if($hasLayout)

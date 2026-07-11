@@ -1,9 +1,9 @@
 <x-sidebar homeUrl="{{ route('admin.dashboard') }}">
     <x-slot name="logo">
         <div class="mb-0 bg-primary rounded-pill d-flex align-items-center justify-content-center text-white fw-bold" style="width: 38px; height: 38px; font-size: 1rem;">
-            {{ substr($siteSettings['site_name'] ?? 'T', 0, 1) }}
+            {{ substr(\App\Models\SiteSetting::get('site_name', 'T'), 0, 1) }}
         </div>
-        <h5 class="logo-title ms-2 text-truncate text-white fw-bold mb-0" style="max-width: 140px; font-size: 1rem; letter-spacing: -0.5px;">{{ $siteSettings['site_name'] ?? 'EduCentral' }}</h5>
+        <h5 class="logo-title ms-2 text-truncate text-white fw-bold mb-0" style="max-width: 140px; font-size: 1rem; letter-spacing: -0.5px;">{{ \App\Models\SiteSetting::get('site_name', 'EduCentral') }}</h5>
     </x-slot>
 
     <!-- Category: Navigation -->

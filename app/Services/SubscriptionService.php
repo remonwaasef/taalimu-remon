@@ -6,15 +6,10 @@ use App\Models\Feature;
 use App\Models\Package;
 use App\Models\Subscription;
 use App\Models\Tenant;
-use App\Services\TelegramService;
 use Carbon\Carbon;
 
 class SubscriptionService
 {
-    public function __construct(
-        protected TelegramService $telegramService
-    ) {}
-
     /**
      * Flag to silence resource limit warnings temporarily.
      */
@@ -226,7 +221,7 @@ class SubscriptionService
             // Use cache to prevent spamming (once per day per resource)
             $alertKey = "tenant_{$tenant->id}_alert_sent_{$featureCode}_".now()->format('Y-m-d');
             if (! \Illuminate\Support\Facades\Cache::has($alertKey)) {
-                $this->telegramService->sendResourceLimitWarning($tenant, $featureCode, $usage, $limit);
+                app(\App\Services\TelegramService::class)->sendResourceLimitWarning($tenant, $featureCode, $usage, $limit);
                 \Illuminate\Support\Facades\Cache::put($alertKey, true, now()->addDay());
             }
         }

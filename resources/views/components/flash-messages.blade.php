@@ -84,11 +84,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         @if(session('success'))
-            Toast.fire({ icon: 'success', title: "{!! addslashes(session('success')) !!}" });
+            Toast.fire({ icon: 'success', title: @json(session('success')) });
         @endif
-        
+
         @if(session('error'))
-            Toast.fire({ icon: 'error', title: "{!! addslashes(session('error')) !!}" });
+            Toast.fire({ icon: 'error', title: @json(session('error')) });
         @endif
     }
 });

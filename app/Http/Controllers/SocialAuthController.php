@@ -43,7 +43,6 @@ class SocialAuthController extends Controller
             $user = User::where('google_id', $googleUser->id)->first();
             if ($user) {
                 Auth::login($user, true);
-                session()->regenerate();
 
                 // Redirect based on role or tenant type
                 if ($user->role === 'instructor' || ($user->tenant && $user->tenant->type === 'instructor')) {
@@ -144,7 +143,6 @@ class SocialAuthController extends Controller
         $user = \App\Models\User::where('email', $googleData['email'])->first();
         if ($user) {
             Auth::login($user, true);
-            session()->regenerate();
             session()->forget('google_user');
 
             if ($user->role === 'instructor' || ($user->tenant && $user->tenant->type === 'instructor')) {
@@ -202,7 +200,6 @@ class SocialAuthController extends Controller
             $existingUser = User::where('email', $googleData['email'])->first();
             if ($existingUser) {
                 Auth::login($existingUser, true);
-                session()->regenerate();
                 session()->forget('google_user');
                 session()->forget($submissionKey);
                 if ($existingUser->role === 'instructor' || ($existingUser->tenant && $existingUser->tenant->type === 'instructor')) {
@@ -233,7 +230,6 @@ class SocialAuthController extends Controller
                 $existing->update(['google_id' => $googleData['id']]);
             }
             Auth::login($existing, true);
-            session()->regenerate();
             session()->forget('google_user');
 
             return redirect()->intended('/dashboard');
@@ -286,7 +282,6 @@ class SocialAuthController extends Controller
             if ($isTrialPlan) {
                 // Login the user
                 Auth::login($user, true);
-                session()->regenerate();
 
                 // Set session data for success page
                 session([

@@ -44,9 +44,9 @@ class ScheduleController extends Controller
         }
 
         return [
-            'courses' => $coursesQuery->limit(500)->get(),
-            'classrooms' => Classroom::select('id', 'name', 'capacity')->limit(500)->get(),
-            'instructors' => $instructorsQuery->limit(500)->get(),
+            'courses' => $coursesQuery->get(),
+            'classrooms' => Classroom::select('id', 'name', 'capacity')->get(),
+            'instructors' => $instructorsQuery->get(),
         ];
     }
 

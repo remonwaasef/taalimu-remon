@@ -2,9 +2,9 @@
   <div class="container-fluid navbar-inner">
     <a href="{{ route('admin.dashboard') }}" class="navbar-brand">
        <div class="mb-2 mx-auto bg-primary rounded-circle d-flex align-items-center justify-content-center text-white fw-bold shadow-sm" style="width: 45px; height: 45px; font-size: 1.2rem; background: linear-gradient(135deg, #2A4DFF 0%, #4361EE 100%) !important;">
-            {{ substr($siteSettings['site_name'] ?? 'T', 0, 1) }}
+            {{ substr(\App\Models\SiteSetting::get('site_name', 'T'), 0, 1) }}
         </div>
-      <h4 class="logo-title ms-2 text-truncate" style="max-width: 150px;">{{ $siteSettings['site_name'] ?? 'EduCentral' }}</h4>
+      <h4 class="logo-title ms-2 text-truncate" style="max-width: 150px;">{{ \App\Models\SiteSetting::get('site_name', 'EduCentral') }}</h4>
     </a>
     <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
       <i class="icon">

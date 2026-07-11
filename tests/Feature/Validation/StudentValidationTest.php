@@ -5,7 +5,6 @@ namespace Tests\Feature\Validation;
 use App\Http\Requests\Center\StoreStudentRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Validator;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class StudentValidationTest extends TestCase
@@ -27,7 +26,7 @@ class StudentValidationTest extends TestCase
         $this->grade = \App\Models\Grade::create(['tenant_id' => $this->tenant->id, 'stage_id' => $stage->id, 'name' => 'Grade 1']);
     }
 
-    #[Test]
+    /** @test */
     public function name_must_contain_only_letters()
     {
         $data = [
@@ -43,7 +42,7 @@ class StudentValidationTest extends TestCase
         $this->assertArrayHasKey('name', $validator->errors()->toArray());
     }
 
-    #[Test]
+    /** @test */
     public function phone_must_be_valid_format()
     {
         $data = [
@@ -59,7 +58,7 @@ class StudentValidationTest extends TestCase
         $this->assertArrayHasKey('phone', $validator->errors()->toArray());
     }
 
-    #[Test]
+    /** @test */
     public function valid_data_passes_validation()
     {
         $data = [

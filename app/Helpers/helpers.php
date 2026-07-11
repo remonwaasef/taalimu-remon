@@ -153,12 +153,16 @@ if (! function_exists('sanitizePhoneForWhatsApp')) {
      */
     function sanitizePhoneForWhatsApp($phone)
     {
-        $countryCode = null;
-        if (app()->bound('tenant') && app('tenant')) {
-            $countryCode = app('tenant')->settings['default_country_code'] ?? null;
+        if (! $phone) {
+            return '';
+        }
+        $phone = preg_replace('/[^0-9]/', '', $phone);
+        if (str_starts_with($phone, '0')) {
+            $countryCode = app('tenant')->settings['default_country_code'] ?? '20';
+            $phone = $countryCode.substr($phone, 1);
         }
 
-        return \App\Helpers\PhoneHelper::sanitizeForWhatsApp($phone, $countryCode ?? '20');
+        return $phone;
     }
 }
 

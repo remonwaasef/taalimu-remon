@@ -40,23 +40,23 @@ class PayoutService
                 ->orderBy('created_at', 'asc')
                 ->get();
 
-            $paidIds = [];
             foreach ($commissions as $commission) {
                 if ($remainingToSettle <= 0) {
                     break;
                 }
 
                 if ($commission->amount <= $remainingToSettle) {
-                    $paidIds[] = $commission->id;
+                    $commission->update([
+                        'status' => 'paid',
+                        'paid_at' => now(),
+                    ]);
                     $remainingToSettle -= $commission->amount;
+                } else {
+                    // Partial settlement of a single commission record is complex,
+                    // for now we only mark fully covered records as paid.
+                    // Or we could leave it as earned and just reduce the payout balance.
+                    // To keep it simple: we mark as paid only if fully covered.
                 }
-            }
-
-            if (! empty($paidIds)) {
-                Commission::whereIn('id', $paidIds)->update([
-                    'status' => 'paid',
-                    'paid_at' => now(),
-                ]);
             }
 
             // 3. Create Expense Record

@@ -36,9 +36,9 @@ class StudentService
         $this->passwordService = $passwordService;
     }
 
-    public function registerStudent(StudentData $data, User $creator, bool $notify = true, bool $useTransaction = true)
+    public function registerStudent(StudentData $data, User $creator, bool $notify = true)
     {
-        return $this->registrationService->registerStudent($data, $creator, $notify, $useTransaction);
+        return $this->registrationService->registerStudent($data, $creator, $notify);
     }
 
     public function updateStudent(Student $student, StudentData $data, User $modifier)

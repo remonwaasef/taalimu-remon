@@ -27,7 +27,7 @@ class BranchController extends Controller
     {
         $this->authorize('create', Branch::class);
         // Get potential managers (e.g. users with role center_admin or manager, or just any user)
-        $users = User::where('tenant_id', app('tenant')->id)->limit(100)->get();
+        $users = User::where('tenant_id', app('tenant')->id)->get();
 
         return view('center::branches.create', compact('users'));
     }
@@ -69,7 +69,7 @@ class BranchController extends Controller
     {
         $branch = Branch::where('tenant_id', app('tenant')->id)->findOrFail($id);
         $this->authorize('update', $branch);
-        $users = User::where('tenant_id', app('tenant')->id)->limit(100)->get();
+        $users = User::where('tenant_id', app('tenant')->id)->get();
 
         return view('center::branches.edit', compact('branch', 'users'));
     }

@@ -8,4 +8,6 @@ namespace Modules\Center\Services;
  *             existing type-hints/container resolutions keep working; new code
  *             must inject \App\Services\SettingsService directly.
  */
-class SettingsService extends \App\Services\SettingsService {}
+class SettingsService extends \App\Services\SettingsService
+{
+}

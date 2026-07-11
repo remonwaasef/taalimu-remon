@@ -46,10 +46,10 @@ class SaleController extends Controller
         // Fetch students who have at least one sale with a remaining balance
         $studentsQuery = Student::where('tenant_id', $tenant->id)
             ->whereHas('sales', function ($query) {
-                $query->whereColumn('paid_amount', '<', 'total_amount');
+                $query->whereRaw('paid_amount < total_amount');
             })
             ->with(['sales' => function ($query) {
-                $query->whereColumn('paid_amount', '<', 'total_amount');
+                $query->whereRaw('paid_amount < total_amount');
             }]);
 
         $students = $studentsQuery->paginate(15);
@@ -131,10 +131,9 @@ class SaleController extends Controller
 
         $results = Student::where('tenant_id', $tenant->id)
             ->where(function ($q) use ($query) {
-                $escaped = \App\Helpers\QueryHelper::escapeLike($query);
-                $q->where('name', 'like', "%{$escaped}%")
-                    ->orWhere('phone', 'like', "%{$escaped}%")
-                    ->orWhere('code', 'like', "%{$escaped}%");
+                $q->where('name', 'like', "%{$query}%")
+                    ->orWhere('phone', 'like', "%{$query}%")
+                    ->orWhere('code', 'like', "%{$query}%");
             })
             ->with(['grade.stage'])
             ->limit(10) // Limit for performance and UX
@@ -158,7 +157,7 @@ class SaleController extends Controller
         $this->authorize('create', Sale::class);
         $tenant = $this->tenant;
         $students = collect([]); // Don't load all students, rely on Select2 AJAX
-        $courses = Course::where('tenant_id', $tenant->id)->limit(500)->get();
+        $courses = Course::where('tenant_id', $tenant->id)->get();
 
         return view('center::sales.create', compact('students', 'courses', 'tenant'));
     }
@@ -240,7 +239,6 @@ class SaleController extends Controller
         $sales = Sale::where('student_id', $student->id)
             ->with(['items.item', 'payments'])
             ->orderBy('created_at', 'asc')
-            ->limit(500)
             ->get();
 
         $totalDebt = $sales->sum(function ($s) {

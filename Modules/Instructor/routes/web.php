@@ -56,9 +56,9 @@ $instructorRoutes = function () {
         // Auto-clear cache route (Temporary helper)
         if (app()->environment('local')) {
             Route::get('/clear-cache', function () {
-                \Illuminate\Support\Facades\Artisan::call('view:clear');
+            \Illuminate\Support\Facades\Artisan::call('view:clear');
 
-                return 'تم مسح الكاش بنجاح! يمكنك الآن الرجوع للصفحة الرئيسية وتحديثها لترى التعديلات.';
+            return 'تم مسح الكاش بنجاح! يمكنك الآن الرجوع للصفحة الرئيسية وتحديثها لترى التعديلات.';
             });
         }
     });
@@ -120,5 +120,6 @@ if ($mode === 'path' || $mode === 'subdomain') {
     }
 
     Route::domain($domain == 'localhost' ? '{tenant}.localhost' : '{tenant}.'.$domain)
+        ->middleware([\App\Http\Middleware\IdentifyTenant::class])
         ->group($instructorRoutes);
 }

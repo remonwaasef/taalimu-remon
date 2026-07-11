@@ -3,8 +3,8 @@
 namespace Modules\Center\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Asset;
 use App\Models\Classroom;
+use App\Models\Asset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -14,7 +14,7 @@ class AssetController extends Controller
     {
         $this->authorize('viewAny', Asset::class);
         $assets = Asset::with('classroom')
-            ->orderByRaw('classroom_id IS NULL ASC')
+            ->orderBy(\DB::raw('ISNULL(classroom_id)'), 'asc')
             ->orderBy('classroom_id')
             ->latest()
             ->get()
