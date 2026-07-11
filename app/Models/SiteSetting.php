@@ -36,7 +36,7 @@ class SiteSetting extends Model
                     ->first();
 
                 // Fallback to global setting if tenant-specific setting does not exist
-                if (! $setting && $tenantId !== null) {
+                if (!$setting && $tenantId !== null) {
                     $setting = self::where('key', $key)
                         ->whereNull('tenant_id')
                         ->first();
@@ -47,12 +47,12 @@ class SiteSetting extends Model
         } catch (\Throwable $e) {
             // Fallback to DB if cache fails (e.g., file permissions or Redis down)
             \Illuminate\Support\Facades\Log::warning("Cache failure in SiteSetting::get({$key}): ".$e->getMessage());
-
+            
             $setting = self::where('key', $key)
                 ->where('tenant_id', $tenantId)
                 ->first();
 
-            if (! $setting && $tenantId !== null) {
+            if (!$setting && $tenantId !== null) {
                 $setting = self::where('key', $key)
                     ->whereNull('tenant_id')
                     ->first();
@@ -79,7 +79,6 @@ class SiteSetting extends Model
         );
 
         \Illuminate\Support\Facades\Cache::forget($cacheKey);
-        \Illuminate\Support\Facades\Cache::forget('site_settings_all');
 
         // Security Alert for sensitive keys
         $sensitiveKeys = ['stripe_secret', 'stripe_key', 'stripe_webhook_secret', 'admin_email', 'maintenance_mode', 'currency_symbol'];

@@ -5,7 +5,6 @@ namespace Tests\Feature\Api;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ApiAuthTest extends TestCase
@@ -29,7 +28,7 @@ class ApiAuthTest extends TestCase
         ]);
     }
 
-    #[Test]
+    /** @test */
     public function it_returns_401_unauthorized_if_no_token_provided()
     {
         $response = $this->getJson('/api/user');
@@ -37,7 +36,7 @@ class ApiAuthTest extends TestCase
         $response->assertStatus(401);
     }
 
-    #[Test]
+    /** @test */
     public function it_returns_user_data_if_valid_token_provided()
     {
         $token = $this->user->createToken('test-token')->plainTextToken;

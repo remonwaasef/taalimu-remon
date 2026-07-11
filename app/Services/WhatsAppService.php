@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Helpers\PhoneHelper;
 use App\Traits\HasLocaleResolution;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -54,7 +53,11 @@ class WhatsAppService
             return false;
         }
 
-        $to = PhoneHelper::sanitizeForWhatsApp($to, $countryCode);
+        // Format phone number: remove any non-digit characters and ensure country code
+        $to = preg_replace('/[^0-9]/', '', $to);
+        if ($countryCode && ! str_starts_with($to, $countryCode)) {
+            $to = $countryCode.ltrim($to, '0');
+        }
 
         try {
             $response = Http::withToken($accessToken)

@@ -297,7 +297,7 @@ return [
         'badge' => 'Témoignages',
         'title_prefix' => '0 chiffre gonflé.',
         'title_highlight' => '100% construit avec vous.',
-        'subtitle' => 'Découvrez comment les centres d\'apprentissage à travers la région MENA transforment leurs opérations avec ' . config('app.name') . '.',
+        'subtitle' => 'Découvrez comment les centres d\'apprentissage à travers la région MENA transforment leurs opérations avec '.config('app.name').'.',
         'items' => [
             0 => [
                 'quote' => 'Nous avons récupéré 38% de revenus supplémentaires en seulement deux mois. Les rappels WhatsApp ont changé la donne pour nos taux de recouvrement.',
@@ -332,23 +332,23 @@ return [
         'badge' => 'Des Questions?',
         'title_prefix' => 'Questions',
         'title_highlight' => 'Fréquemment Posées',
-        'subtitle' => 'Tout ce que vous devez savoir sur ' . config('app.name') . '. Vous ne trouvez pas la réponse? Contactez notre équipe de support.',
+        'subtitle' => 'Tout ce que vous devez savoir sur '.config('app.name').'. Vous ne trouvez pas la réponse? Contactez notre équipe de support.',
         'items' => [
             0 => [
-                'question' => 'En combien de temps puis-je commencer avec ' . config('app.name') . '?',
+                'question' => 'En combien de temps puis-je commencer avec '.config('app.name').'?',
                 'answer' => 'Vous pouvez être opérationnel en moins de 15 minutes. Il suffit de vous inscrire, d\'importer vos données étudiantes (nous supportons Excel/CSV), et de configurer vos notifications WhatsApp. Notre assistant d\'intégration vous guide à chaque étape.',
             ],
             1 => [
-                'question' => 'Mes données sont-elles sécurisées avec ' . config('app.name') . '?',
+                'question' => 'Mes données sont-elles sécurisées avec '.config('app.name').'?',
                 'answer' => 'Absolument. Nous utilisons un chiffrement de niveau bancaire (AES-256) pour toutes les données, nous nous conformons au RGPD et aux lois locales de protection des données, et nous stockons les données dans des centres de données sécurisés dans la région MENA. Nous sommes également conformes PCI-DSS pour le traitement des paiements.',
             ],
             2 => [
-                'question' => config('app.name') . ' fonctionne-t-il avec l\'API WhatsApp Business?',
+                'question' => config('app.name').' fonctionne-t-il avec l\'API WhatsApp Business?',
                 'answer' => 'Oui! Nous sommes un fournisseur officiel de solutions WhatsApp Business. Cela signifie que vos messages sont envoyés via des comptes professionnels vérifiés, garantissant une haute délivrabilité et la conformité avec les politiques de WhatsApp.',
             ],
             3 => [
-                'question' => 'Puis-je utiliser ' . config('app.name') . ' en arabe?',
-                'answer' => 'Oui, ' . config('app.name') . ' offre un support RTL complet avec des interfaces natives en arabe et français. Tous les tableaux de bord, rapports et communications peuvent être en arabe, et nous supportons les chiffres arabes et les formats de date.',
+                'question' => 'Puis-je utiliser '.config('app.name').' en arabe?',
+                'answer' => 'Oui, '.config('app.name').' offre un support RTL complet avec des interfaces natives en arabe et français. Tous les tableaux de bord, rapports et communications peuvent être en arabe, et nous supportons les chiffres arabes et les formats de date.',
             ],
             4 => [
                 'question' => 'Quelles méthodes de paiement supportez-vous?',
@@ -388,11 +388,12 @@ return [
             'privacy' => 'Politique de Confidentialité',
             'terms' => 'Conditions d\'Utilisation',
             'cookie' => 'Politique des Cookies',
+            'cookies' => 'Politique des Cookies',
             'gdpr' => 'Conformité RGPD',
         ],
         'contact' => 'Contactez-Nous',
-        'rights' => 'Tous droits réservés © 2024',
-        'copyright' => 'Tous droits réservés © 2024 ' . config('app.name') . '.',
+        'rights' => 'Tous droits réservés © '.date('Y'),
+        'copyright' => 'Tous droits réservés © '.date('Y').' '.config('app.name').'.',
         'payment_methods' => 'Méthodes de Paiement Sécurisées',
         'product' => [
             'title' => 'Produit',
@@ -424,7 +425,7 @@ return [
     ],
     'comparison' => [
         'badge' => 'Comparaison',
-        'title' => 'Pourquoi <span class=\"gradient-text\">' . config('app.name') . '</span> est le Meilleur Choix ?',
+        'title' => 'Pourquoi <span class=\"gradient-text\">'.config('app.name').'</span> est le Meilleur Choix ?',
         'subtitle' => 'Comparez la difficulté de la gestion traditionnelle avec l\'efficacité de notre système avancé.',
         'manual' => [
             'title' => 'Gestion Traditionnelle (Papier/Excel)',
@@ -438,7 +439,7 @@ return [
             ],
         ],
         'edu' => [
-            'title' => 'Système ' . config('app.name') . ' Intégré',
+            'title' => 'Système '.config('app.name').' Intégré',
             'items' => [
                 0 => 'Enregistrement intelligent des présences en un seul clic.',
                 1 => 'Suivi automatique des frais et alertes instantanées.',

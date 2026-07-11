@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\PointLog;
 use App\Models\User;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class GamificationService
@@ -39,12 +38,10 @@ class GamificationService
      */
     public function getLeaderboard($tenantId, $limit = 10)
     {
-        return Cache::remember("leaderboard_{$tenantId}_{$limit}", 600, function () use ($tenantId, $limit) {
-            return User::where('tenant_id', $tenantId)
-                ->where('role', 'student')
-                ->orderByDesc('points')
-                ->limit($limit)
-                ->get();
-        });
+        return User::where('tenant_id', $tenantId)
+            ->where('role', 'student')
+            ->orderByDesc('points')
+            ->limit($limit)
+            ->get();
     }
 }

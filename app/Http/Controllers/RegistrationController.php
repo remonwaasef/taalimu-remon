@@ -3,16 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Services\DemoDataService;
 use App\Services\TelegramService;
 use Illuminate\Http\Request;
 
 class RegistrationController extends Controller
 {
-    public function __construct(
-        protected DemoDataService $demoDataService
-    ) {}
-
     public function showRegistrationForm()
     {
         // Bypassing cache to ensure data is fresh after seeder
@@ -153,7 +148,7 @@ class RegistrationController extends Controller
             // Auto-Provisioning: Inject Demo Data for new centers (non-critical)
             try {
                 \Modules\Tenancy\Services\TenantResolver::set($tenant);
-                $this->demoDataService->seedForTenant($tenant);
+                app(\App\Services\DemoDataService::class)->seedForTenant($tenant);
                 \Illuminate\Support\Facades\Log::info("Auto-Provisioning: Demo data seeded for tenant {$tenant->domain}");
             } catch (\Throwable $e) {
                 \Illuminate\Support\Facades\Log::error('Auto-Provisioning Error (Demo Data): '.$e->getMessage());

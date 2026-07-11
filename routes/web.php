@@ -17,9 +17,22 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
         ->name('register.submit');
 
     // Protected Dashboard Route
-    Route::get('/dashboard', App\Http\Controllers\DashboardController::class)
-        ->middleware(['auth'])
-        ->name('dashboard');
+    Route::get('/dashboard', function () {
+        $user = auth()->user();
+        if ($user && $user->tenant_id) {
+            $tenant = \App\Models\Tenant::find($user->tenant_id);
+            if ($tenant) {
+                // Redirect instructors to the instructor dashboard
+                if ($user->role === 'instructor' || $tenant->type === 'instructor') {
+                    return redirect()->away(tenant_url('instructor', $tenant));
+                }
+
+                return redirect()->away(tenant_url('dashboard', $tenant));
+            }
+        }
+
+        return redirect()->route('login.portal');
+    })->middleware(['auth'])->name('dashboard');
 
     Route::get('/registration-success', function () {
         if (! session('registration_success')) {
@@ -67,8 +80,25 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
     });
 
     // API endpoint for saving cookie consent
-    Route::post('/api/cookie-consent', [App\Http\Controllers\CookieConsentController::class, 'store'])
-        ->middleware(['auth', 'throttle:30,1']);
+    Route::post('/api/cookie-consent', function (\Illuminate\Http\Request $request) {
+        $validated = $request->validate([
+            'analytics' => 'nullable|boolean',
+            'marketing' => 'nullable|boolean',
+        ]);
+
+        \Illuminate\Support\Facades\DB::table('user_consents')->insert([
+            'user_id' => auth()->id(),
+            'session_id' => session()->getId(),
+            'ip_address' => $request->ip(),
+            'analytics_consent' => (bool) ($validated['analytics'] ?? false),
+            'marketing_consent' => (bool) ($validated['marketing'] ?? false),
+            'consent_date' => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return response()->json(['success' => true]);
+    })->middleware(['auth', 'throttle:30,1']);
 
     Route::get('/api/coupons/validate', [App\Http\Controllers\CouponApiController::class, 'validateCoupon'])
         ->middleware('throttle:coupons')
@@ -100,23 +130,9 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
     Route::get('auth/google/complete', [App\Http\Controllers\SocialAuthController::class, 'showCompleteRegistration'])->name('google.complete-registration');
     Route::post('auth/google/complete', [App\Http\Controllers\SocialAuthController::class, 'completeRegistration'])->name('google.complete-registration.post');
 
-    // Password Reset Routes
-    Route::get('forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])
-        ->middleware('guest')
-        ->name('password.request');
-    Route::post('forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLink'])
-        ->middleware(['guest', 'throttle:6,1'])
-        ->name('password.email');
-    Route::get('reset-password/{token}', [App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForm'])
-        ->middleware('guest')
-        ->name('password.reset');
-    Route::post('reset-password', [App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])
-        ->middleware(['guest', 'throttle:6,1'])
-        ->name('password.update');
-
     // Inertia Demo Route
     Route::get('/inertia-demo', function () {
-        $user = auth()->user() ?: (object) ['name' => 'أستاذنا الافتراضي'];
+        $user = auth()->user() ?: (object)['name' => 'أستاذنا الافتراضي'];
         $stats = [
             'activeStudents' => 1248,
             'activeCourses' => 18,
@@ -134,12 +150,38 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
         return inertia('DemoDashboard', [
             'user' => $user,
             'stats' => $stats,
-            'leaderboard' => $leaderboard,
+            'leaderboard' => $leaderboard
         ]);
     })->name('inertia.demo');
 });
 
 // Global Language Switcher (Accessible from any domain) — rate limited to prevent locale flooding
-Route::get('lang/{locale}', [App\Http\Controllers\LanguageController::class, 'switch'])
-    ->middleware('throttle:60,1')
-    ->name('lang.switch');
+Route::get('lang/{locale}', function ($locale) {
+    if (in_array($locale, ['ar', 'en', 'fr'])) {
+        session(['locale' => $locale]);
+
+        if (auth()->check()) {
+            auth()->user()->update(['locale' => $locale]);
+
+            // Auto-apply French education system when switching to French
+            if ($locale === 'fr' && auth()->user()->tenant_id) {
+                try {
+                    $tenant = \App\Models\Tenant::find(auth()->user()->tenant_id);
+                    if ($tenant) {
+                        $hasStages = \App\Models\Stage::where('tenant_id', $tenant->id)->exists();
+                        if (! $hasStages) {
+                            $settingsService = app(\App\Services\SettingsService::class);
+                            $settingsService->applyTemplate($tenant, 'french_system');
+                        }
+                    }
+                } catch (\Exception $e) {
+                    \Illuminate\Support\Facades\Log::warning(
+                        'Auto-apply French education system failed: '.$e->getMessage()
+                    );
+                }
+            }
+        }
+    }
+
+    return redirect()->back();
+})->middleware('throttle:60,1')->name('lang.switch');

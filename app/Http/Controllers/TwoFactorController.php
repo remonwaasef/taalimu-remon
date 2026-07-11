@@ -56,8 +56,8 @@ class TwoFactorController extends Controller
             $user->google2fa_enabled = true;
             $user->save();
 
-            // Mark session as verified with IP binding
-            session(['2fa_verified' => true, '2fa_verified_ip' => $request->ip()]);
+            // Mark session as verified
+            session(['2fa_verified' => true]);
 
             return redirect()->route('center.dashboard')->with('success', __('Security setup complete.'));
         }
@@ -87,7 +87,7 @@ class TwoFactorController extends Controller
         $valid = Google2FA::verifyKey($user->google2fa_secret, $request->one_time_password);
 
         if ($valid) {
-            session(['2fa_verified' => true, '2fa_verified_ip' => $request->ip()]);
+            session(['2fa_verified' => true]);
 
             // Redirect to intended url or dashboard
             return redirect()->intended(route('center.dashboard'));

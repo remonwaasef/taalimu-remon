@@ -2,17 +2,17 @@
                         <div class="row g-4">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('admin::admin.site_name') }}</label>
-                                <input type="text" class="form-control rounded-4 shadow-sm border-light" name="site_name" value="{{ $siteSettings['site_name'] ?? 'EduCentral' }}">
+                                <input type="text" class="form-control rounded-4 shadow-sm border-light" name="site_name" value="{{ \App\Models\SiteSetting::get('site_name', 'EduCentral') }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('admin::admin.admin_email') }}</label>
-                                <input type="email" class="form-control rounded-4 shadow-sm border-light" name="admin_email" value="{{ $siteSettings['admin_email'] ?? 'admin@educentral.com' }}">
+                                <input type="email" class="form-control rounded-4 shadow-sm border-light" name="admin_email" value="{{ \App\Models\SiteSetting::get('admin_email', 'admin@educentral.com') }}">
                             </div>
                             <div class="col-12" x-data="{ 
                                 activeLang: '{{ app()->getLocale() }}',
-                                arVal: {{ Js::from($siteSettings['site_description_ar'] ?? ($siteSettings['site_description'] ?? __('landing.hero.subtitle', [], 'ar'))) }},
-                                enVal: {{ Js::from($siteSettings['site_description_en'] ?? __('landing.hero.subtitle', [], 'en')) }},
-                                frVal: {{ Js::from($siteSettings['site_description_fr'] ?? __('landing.hero.subtitle', [], 'fr')) }}
+                                arVal: {{ Js::from(\App\Models\SiteSetting::get('site_description_ar', \App\Models\SiteSetting::get('site_description', __('landing.hero.subtitle', [], 'ar')))) }},
+                                enVal: {{ Js::from(\App\Models\SiteSetting::get('site_description_en', __('landing.hero.subtitle', [], 'en'))) }},
+                                frVal: {{ Js::from(\App\Models\SiteSetting::get('site_description_fr', __('landing.hero.subtitle', [], 'fr'))) }}
                             }">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <label class="form-label fw-bold mb-0">{{ __('admin::admin.site_description') }} (<span x-text="activeLang.toUpperCase()"></span>)</label>
@@ -43,16 +43,16 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">مدة باقة الترم (بالأيام)</label>
-                                <input type="number" class="form-control rounded-4 shadow-sm border-light" name="term_duration_days" value="{{ $siteSettings['term_duration_days'] ?? 150 }}">
+                                <input type="number" class="form-control rounded-4 shadow-sm border-light" name="term_duration_days" value="{{ \App\Models\SiteSetting::get('term_duration_days', 150) }}">
                                 <small class="text-muted">الافتراضي: 150 يوم</small>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">{{ __('admin::admin.currency_symbol') }}</label>
-                                <input type="text" class="form-control rounded-4 shadow-sm border-light" name="currency_symbol" value="{{ $siteSettings['currency_symbol'] ?? 'جنيه' }}">
+                                <input type="text" class="form-control rounded-4 shadow-sm border-light" name="currency_symbol" value="{{ \App\Models\SiteSetting::get('currency_symbol', 'جنيه') }}">
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">{{ __('admin::admin.currency_code') }}</label>
-                                <input type="text" class="form-control rounded-4 shadow-sm border-light" name="currency_code" value="{{ $siteSettings['currency_code'] ?? 'EGP' }}">
+                                <input type="text" class="form-control rounded-4 shadow-sm border-light" name="currency_code" value="{{ \App\Models\SiteSetting::get('currency_code', 'EGP') }}">
                             </div>
                         </div>
                     </div>

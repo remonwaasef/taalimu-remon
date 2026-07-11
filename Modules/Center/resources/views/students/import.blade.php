@@ -154,7 +154,7 @@
                     <ul class="mb-0">
                         <li class="mb-2">{{ __('center::students.import.headers_must_match') }}</li>
                         <li class="mb-2">{{ __('center::students.import.unique_email_tip') }}</li>
-                        <li>{{ __('center::students.import.default_password_tip') }}<code>'.Str::random(12).'</code> (تُنشأ عشوائياً)</li>
+                        <li>{{ __('center::students.import.default_password_tip') }}<code>password123</code></li>
                     </ul>
                 </div>
             </div>

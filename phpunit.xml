@@ -22,8 +22,7 @@
         </include>
     </source>
     <php>
-        <!-- Test-only key. Never use a real production key here. -->
-        <env name="APP_KEY" value="base64:VGVzdEtleUZvclVuaXRUZXN0aW5nQW5kTm90aGluZ0Vsc2U="/>
+        <env name="APP_KEY" value="base64:PjNP0pcvmRuyNzabFQDbgehl7s4P+nNZAiOnzYXDv+w="/>
         <env name="APP_ENV" value="testing"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>

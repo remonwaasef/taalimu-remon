@@ -88,6 +88,9 @@
                         <div class="ticket-stub-decoration bottom"></div>
                         
                         @php
+                            $studentForQr = session('student_email')
+                                ? \App\Models\Student::where('email', session('student_email'))->where('tenant_id', app('tenant')->id)->first()
+                                : null;
                             // Signed magic-login link — generated as a QR locally in the
                             // browser so this credential is never sent to a third-party service.
                             $qrUrl = $studentForQr

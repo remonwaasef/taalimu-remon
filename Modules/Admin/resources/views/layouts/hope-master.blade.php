@@ -1,6 +1,6 @@
 @extends('layouts.hope-master')
 
-@section('title')@yield('title', 'Admin Dashboard') - {{ $siteSettings['site_name'] ?? 'EduCentral' }}@endsection
+@section('title')@yield('title', 'Admin Dashboard') - {{ \App\Models\SiteSetting::get('site_name', 'EduCentral') }}@endsection
 
 @section('favicon')
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/hope-ui/images/favicon.ico') }}">

@@ -200,7 +200,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($recentTenants as $tenant)
+                    @forelse(\App\Models\Tenant::latest()->take(5)->get() as $tenant)
                         <tr>
                             <td class="px-4 position-relative">
                                 <div class="d-flex align-items-center">

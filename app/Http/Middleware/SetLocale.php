@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Services\GeoIPService;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -11,12 +10,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SetLocale
 {
-    public function __construct(
-        protected GeoIPService $geoIP
-    ) {}
-
+    /**
+     * Handle an incoming request.
+     */
     public function handle(Request $request, Closure $next): Response
     {
+        // Priority: 1. Database (if authenticated), 2. Session, 3. GeoIP Fallback, 4. Default
         $locale = null;
 
         if (auth()->check() && auth()->user()->locale) {
@@ -24,65 +23,38 @@ class SetLocale
         } else {
             $locale = Session::get('locale');
 
+            // If No session locale, try Geo-IP detection
             if (! $locale && config('app.env') !== 'testing') {
-                $locale = $this->guessLocaleFromBrowser($request);
+                $geoIP = app(\App\Services\GeoIPService::class);
+                $countryCode = $geoIP->getCountryCode($request->ip());
+                $locale = $geoIP->getLocaleFromCountry($countryCode);
 
-                if (! $locale) {
-                    $countryCode = $this->geoIP->getCountryCode($request->ip());
-                    $locale = $this->geoIP->getLocaleFromCountry($countryCode);
-                }
-
+                // Store in session so we don't hit the API on every click
                 Session::put('locale', $locale);
             }
         }
 
+        // Supported locales
         $supportedLocales = ['ar', 'en', 'fr'];
 
+        // Final Fallback and Validation
         if (! $locale || ! in_array($locale, $supportedLocales)) {
             $locale = 'ar';
         }
 
+        // Set application locale
         App::setLocale($locale);
 
+        // Determine Suggested Currency based on GeoIP
+        // Only calculate if not set yet. We no longer change currency when language changes!
         if (! Session::has('suggested_currency')) {
-            $countryCode = Session::get('user_country_code') ?: $this->geoIP->getCountryCode($request->ip());
-            $currency = $this->geoIP->getCurrencyFromCountryCode($countryCode);
+            $geoIP = app(\App\Services\GeoIPService::class);
+            $countryCode = Session::get('user_country_code') ?: $geoIP->getCountryCode($request->ip());
+            $currency = $geoIP->getCurrencyFromCountryCode($countryCode);
             Session::put('suggested_currency', $currency);
             Session::put('user_country_code', $countryCode);
         }
 
         return $next($request);
-    }
-
-    protected function guessLocaleFromBrowser(Request $request): ?string
-    {
-        $acceptLanguage = $request->header('Accept-Language');
-
-        if (! $acceptLanguage) {
-            return null;
-        }
-
-        $locales = [];
-        foreach (explode(',', $acceptLanguage) as $entry) {
-            $parts = explode(';', trim($entry));
-            $lang = strtolower(explode('-', $parts[0])[0]);
-            $q = isset($parts[1]) ? (float) str_replace('q=', '', $parts[1]) : 1.0;
-            $locales[$lang] = max($locales[$lang] ?? 0, $q);
-        }
-
-        arsort($locales);
-
-        $langMap = [
-            'ar' => 'ar',
-            'fr' => 'fr',
-        ];
-
-        foreach ($locales as $lang => $q) {
-            if (isset($langMap[$lang])) {
-                return $langMap[$lang];
-            }
-        }
-
-        return null;
     }
 }

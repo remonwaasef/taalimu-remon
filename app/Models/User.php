@@ -20,9 +20,9 @@ class User extends Authenticatable
     {
         parent::boot();
 
-static::creating(function ($user) {
+        static::creating(function ($user) {
             if ($user->role === 'student' && empty($user->qr_identifier)) {
-                $user->qr_identifier = \Illuminate\Support\Str::random(32);
+                $user->qr_identifier = \Illuminate\Support\Str::random(12);
             }
         });
 

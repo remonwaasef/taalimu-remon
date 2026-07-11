@@ -1,4 +1,4 @@
-<script nonce="{{ $csp_nonce ?? '' }}">
+<script>
 document.addEventListener('alpine:init', () => {
     Alpine.data('registrationForm', (config) => ({
         selectedPlan: config.selectedPlan,
@@ -20,6 +20,7 @@ document.addEventListener('alpine:init', () => {
         couponMessage: '',
         discountValue: 0,
         discountType: 'percentage',
+        discountText: '',
         discountText: '',
         isApplyingCoupon: false,
         selectedCurrency: config.selectedCurrency || 'EGP',
@@ -312,6 +313,7 @@ document.addEventListener('alpine:init', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         },
 
+        showPlanModal: false,
 
         get couponDiscountAmount() {
             if (this.couponStatus !== 'valid') return 0;

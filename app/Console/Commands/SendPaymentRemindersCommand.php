@@ -250,7 +250,7 @@ class SendPaymentRemindersCommand extends Command
             // We will use a generic mailer since PaymentReminderMail was built for the legacy system.
             $mailable = new \App\Mail\NotifGroupEnrollmentMail($subject, $template, $variables, $tenant->name, $student->name);
 
-            Mail::to($emails->toArray())->queue($mailable);
+            Mail::to($emails->toArray())->send($mailable);
 
             PaymentReminder::create([
                 'tenant_id' => $tenant->id,

@@ -41,7 +41,6 @@ class AttendanceController extends Controller
         $todaySessions = $query->select('schedules.*')
             ->distinct()
             ->orderBy('start_time')
-            ->limit(200)
             ->get()
             ->unique(function ($schedule) {
                 return $schedule->course_id.'-'.$schedule->start_time.'-'.$schedule->end_time;

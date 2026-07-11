@@ -2,17 +2,28 @@
 
 namespace App\Console\Commands;
 
-use App\Models\SiteSetting;
-use App\Services\TelegramService;
 use Illuminate\Console\Command;
 
 class SendDailyTelegramReport extends Command
 {
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
     protected $signature = 'app:send-daily-telegram-report';
 
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
     protected $description = 'Send a daily summary of revenue and new signups to Telegram';
 
-    public function handle(TelegramService $telegram)
+    /**
+     * Execute the console command.
+     */
+    public function handle()
     {
         $today = now()->startOfDay();
 
@@ -23,10 +34,10 @@ class SendDailyTelegramReport extends Command
         $data = [
             'مراكز جديدة (اليوم)' => $newTenants,
             'اشتراكات جديدة (اليوم)' => $newSubs,
-            'إيرادات اليوم' => number_format($dailyRevenue, 0).' '.SiteSetting::get('currency_symbol', 'جنيه'),
+            'إيرادات اليوم' => number_format($dailyRevenue, 0).' '.\App\Models\SiteSetting::get('currency_symbol', 'جنيه'),
         ];
 
-        $telegram->sendSummaryReport('التقرير اليومي للمنصة 💰', $data);
+        app(\App\Services\TelegramService::class)->sendSummaryReport('التقرير اليومي للمنصة 💰', $data);
 
         $this->info('Daily report sent to Telegram.');
     }

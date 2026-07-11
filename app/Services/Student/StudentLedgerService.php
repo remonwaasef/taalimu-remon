@@ -119,16 +119,15 @@ class StudentLedgerService
         $sales = Sale::where('student_id', $student->id)
             ->where('tenant_id', $tenant->id)
             ->orderBy('created_at', 'desc')
-            ->limit(1000)
             ->get();
 
         $payments = Payment::whereHas('sale', function ($q) use ($student) {
             $q->where('student_id', $student->id);
-        })->where('tenant_id', $tenant->id)->limit(1000)->get();
+        })->where('tenant_id', $tenant->id)->get();
 
         $refunds = Refund::whereHas('sale', function ($q) use ($student) {
             $q->where('student_id', $student->id);
-        })->where('tenant_id', $tenant->id)->limit(1000)->get();
+        })->where('tenant_id', $tenant->id)->get();
 
         // Combine into Ledger (Transactions Timeline)
         $ledger = collect();
@@ -180,7 +179,6 @@ class StudentLedgerService
         $attendance = \Modules\Center\Models\Attendance::where('student_id', $student->id)
             ->where('tenant_id', $tenant->id)
             ->orderBy('session_date', 'desc')
-            ->limit(1000)
             ->get();
 
         $totalSessions = $attendance->count();

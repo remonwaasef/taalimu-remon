@@ -2,7 +2,6 @@
 
 namespace Modules\Admin\Http\Controllers;
 
-use App\Helpers\QueryHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Package;
 use App\Models\Subscription;
@@ -21,7 +20,7 @@ class SubscriptionController extends Controller
 
         // Filtering
         if ($request->filled('search')) {
-            $search = QueryHelper::escapeLike($request->search);
+            $search = $request->search;
             $query->whereHas('tenant', function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%");
             });

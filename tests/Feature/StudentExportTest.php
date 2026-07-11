@@ -10,7 +10,6 @@ use App\Models\User;
 use App\Services\StudentService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\LazyCollection;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class StudentExportTest extends TestCase
@@ -47,7 +46,7 @@ class StudentExportTest extends TestCase
         ]);
     }
 
-    #[Test]
+    /** @test */
     public function it_can_retrieve_export_data_as_lazy_collection()
     {
         $data = $this->studentService->getExportData();
@@ -61,7 +60,7 @@ class StudentExportTest extends TestCase
         $this->assertCount(8, $firstItem); // ID, Name, Email, Phone, Grade, School, Section, Status
     }
 
-    #[Test]
+    /** @test */
     public function it_exports_data_correctly()
     {
         // Mock authentication
