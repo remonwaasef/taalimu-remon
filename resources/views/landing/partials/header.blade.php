@@ -36,7 +36,7 @@
                         <i class="fas fa-globe text-xs"></i>
                         {{ strtoupper(app()->getLocale()) }}
                     </button>
-                    <div x-show="open" x-cloak @click.away="open = false" x-transition class="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-2xl py-2 overflow-hidden z-50 border border-slate-200">
+                    <div x-show="open" style="display: none;" x-cloak @click.away="open = false" x-transition class="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-2xl py-2 overflow-hidden z-50 border border-slate-200">
                         @foreach(['ar' => 'العربية', 'fr' => 'Français'] as $code => $label)
                         <a href="{{ route('lang.switch', ['locale' => $code]) }}" class="block px-4 py-2.5 text-xs @if(app()->isLocale($code)) text-emerald-600 font-bold @else text-slate-600 hover:bg-slate-50 @endif">
                             {{ $label }}
@@ -62,7 +62,7 @@
                         <i class="fas fa-globe"></i>
                         <span>{{ strtoupper(app()->getLocale()) }}</span>
                     </button>
-                    <div x-show="open" x-cloak @click.away="open = false" x-transition class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-2xl py-2 overflow-hidden z-50 border border-slate-200">
+                    <div x-show="open" style="display: none;" x-cloak @click.away="open = false" x-transition class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-2xl py-2 overflow-hidden z-50 border border-slate-200">
                         @foreach(['ar' => 'العربية', 'fr' => 'Français'] as $code => $label)
                         <a href="{{ route('lang.switch', ['locale' => $code]) }}" class="block px-3 py-2 text-xs @if(app()->isLocale($code)) text-emerald-600 font-bold @else text-slate-600 @endif">
                             {{ $label }}
@@ -80,7 +80,7 @@
 
     <!-- Mobile Menu -->
     <div 
-        x-show="isMenuOpen" x-cloak
+        x-show="isMenuOpen" style="display: none;" x-cloak
         x-transition:enter="transition ease-out duration-200"
         x-transition:enter-start="opacity-0 -translate-y-4"
         x-transition:enter-end="opacity-100 translate-y-0"
