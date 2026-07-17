@@ -79,7 +79,7 @@
     </script>
 
     <!-- Scripts -->
-    <link rel="stylesheet" href="{{ asset('css/landing-new.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/landing-new.css') }}?v={{ filemtime(public_path('css/landing-new.css')) }}">
     <!-- Network Monitor Styles -->
     <link rel="stylesheet" href="{{ asset('css/network-monitor.css') }}">
     <!-- SweetAlert2 -->
