@@ -33,6 +33,7 @@
                     </button>
                     <div 
                         x-show="active === {{ $index }}" 
+                        style="display: none;"
                         x-collapse 
                         class="px-6 pb-5 text-slate-500 text-sm leading-relaxed"
                     >
