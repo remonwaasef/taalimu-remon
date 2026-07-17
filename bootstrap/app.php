@@ -28,7 +28,9 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\ContentSecurityPolicy::class,
             \App\Http\Middleware\BasicWAF::class,
             \App\Http\Middleware\PaginationLimit::class,
-            \App\Http\Middleware\HandleInertiaRequests::class,
+            // HandleInertiaRequests removed from global middleware.
+            // It was conflicting with Alpine.js on Blade pages (landing, register).
+            // Apply it only on Inertia/React routes using route-level middleware.
             'throttle:300,1',
         ]);
 
@@ -86,6 +88,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'feature' => \App\Http\Middleware\CheckFeature::class,
             'phone.verified' => \App\Http\Middleware\EnsurePhoneIsVerified::class,
             'onboarding.completed' => \App\Http\Middleware\EnsureOnboardingCompleted::class,
+            'inertia' => \App\Http\Middleware\HandleInertiaRequests::class,
             'abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
             'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
         ]);
