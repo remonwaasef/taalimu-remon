@@ -51,7 +51,7 @@ class ContentSecurityPolicy
                 "frame-ancestors 'none'",
                 "frame-src 'self' https://www.youtube.com https://player.vimeo.com https://js.stripe.com",
                 "base-uri 'self'",
-                "form-action 'self'",
+                "form-action 'self' https://taalimu.com https://*.taalimu.com",
             ];
         }
 
