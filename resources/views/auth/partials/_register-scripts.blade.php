@@ -21,6 +21,7 @@ document.addEventListener('alpine:init', () => {
         discountValue: 0,
         discountType: 'percentage',
         discountText: '',
+        discountText: '',
         isApplyingCoupon: false,
         selectedCurrency: config.selectedCurrency || 'EGP',
         accountType: config.accountType || null,
