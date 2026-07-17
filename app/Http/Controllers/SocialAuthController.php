@@ -266,12 +266,14 @@ class SocialAuthController extends Controller
             $isTrialPlan = $package && $package->trial_days > 0;
 
             // Send WhatsApp OTP (non-critical - account is already created)
-            try {
-                $otpCode = $user->generatePhoneVerificationCode();
-                $message = __('messages.otp_sent_sms').": {$otpCode}";
-                \App\Jobs\SendSystemWhatsAppMessage::dispatch($user->phone, $message);
-            } catch (\Exception $otpEx) {
-                \Log::warning('WhatsApp OTP dispatch failed (non-critical): '.$otpEx->getMessage());
+            if (!empty($user->phone)) {
+                try {
+                    $otpCode = $user->generatePhoneVerificationCode();
+                    $message = __('messages.otp_sent_sms').": {$otpCode}";
+                    \App\Jobs\SendSystemWhatsAppMessage::dispatch($user->phone, $message);
+                } catch (\Exception $otpEx) {
+                    \Log::warning('WhatsApp OTP dispatch failed (non-critical): '.$otpEx->getMessage());
+                }
             }
 
             // Clear session data ONLY after successful DB commit
