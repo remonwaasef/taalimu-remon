@@ -152,7 +152,7 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
             'stats' => $stats,
             'leaderboard' => $leaderboard
         ]);
-    })->name('inertia.demo');
+    })->middleware('inertia')->name('inertia.demo');
 });
 
 // Global Language Switcher (Accessible from any domain) — rate limited to prevent locale flooding
