@@ -54,7 +54,7 @@
 
             <!-- Contextual Header -->
             <div class="mb-4 text-center transition-all duration-700 ease-in-out" :class="!accountType ? 'transform scale-110 translate-y-[3vh] mb-8' : ''">
-                <div x-show="currentStep === 1" x-cloak style="display: none;" class="flex flex-col items-center">
+                <div x-show="currentStep === 1" x-cloak class="flex flex-col items-center">
                     <h1 class="text-xl lg:text-2xl font-black text-slate-900 mb-2 font-arabic leading-tight">
                         {{ app()->isLocale('ar') ? 'ابدأ رحلتك التعليمية' : 'Start Your Journey' }}
                     </h1>
