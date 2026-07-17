@@ -38,11 +38,13 @@ class ContentSecurityPolicy
 
             $csp = [
                 "default-src 'self'",
-                "script-src 'self' 'unsafe-inline' {$cdn}",
+                // unsafe-eval مطلوب لـ Alpine.js (يستخدم new Function() لتقييم التعبيرات)
+                // خطة لاحقة: الانتقال إلى @alpinejs/csp build لإزالة unsafe-eval
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval' {$cdn} https://static.cloudflareinsights.com",
                 "style-src 'self' 'unsafe-inline' {$cdn} {$fonts}",
                 "font-src 'self' data: {$cdn} {$fonts}",
                 "img-src 'self' data: blob: https:",
-                "connect-src 'self'",
+                "connect-src 'self' https://ipapi.co https://cloudflareinsights.com",
                 "media-src 'self' https://assets.mixkit.co",
                 "worker-src 'self' blob:",
                 "manifest-src 'self'",
