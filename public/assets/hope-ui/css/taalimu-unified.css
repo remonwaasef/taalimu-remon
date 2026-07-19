@@ -22,14 +22,15 @@ body {
     font-family: 'Cairo', sans-serif;
 }
 
-/* Unified Header Banner - Premium Emerald */
+/* Unified Header Banner - Premium Dark */
 .iq-navbar-header {
     padding: 0 !important;
     height: 260px !important;
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important; /* Premium Dark Slate/Navy */
     position: relative;
     overflow: hidden;
-    border-bottom: none !important;
+    border-bottom: 3px solid transparent !important;
+    border-image: linear-gradient(90deg, #6366f1, #06b6d4, #059669) 1 !important;
 }
 
 .iq-navbar-header::before {
@@ -39,9 +40,9 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.2) 1.5px, transparent 1.5px);
-    background-size: 24px 24px;
-    opacity: 0.5;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.6;
     z-index: 0;
     pointer-events: none;
 }
@@ -49,11 +50,11 @@ body {
 .iq-navbar-header::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+    top: -50%;
+    right: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
     z-index: 0;
     pointer-events: none;
 }

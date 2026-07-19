@@ -63,4 +63,8 @@ return [
     'benefit_2' => 'Track attendance quickly using QR Code',
     'benefit_3' => 'Organized reports for parents and revenue tracking',
     'create_first_group' => 'Create Your First Group Now',
+    'steps_completed' => 'completed',
+    'add_student_hint' => 'Register a new student manually',
+    'create_group_hint' => 'Organize students into groups',
+    'attendance_hint' => 'Scan QR to record attendance',
 ];
