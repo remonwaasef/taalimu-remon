@@ -1,5 +1,5 @@
                         <div class="tab-pane fade" id="reminders" role="tabpanel">
-                            @php $reminderSettings = $tenant->settings['payment_reminders'] ?? []; @endphp
+                            @php $reminderSettings = ($tenant->settings ?? [])['payment_reminders'] ?? []; @endphp
                             <form action="{{ route('instructor.reminders.update') }}" method="POST">
                                 @csrf
                                 <div class="d-flex align-items-center justify-content-between mb-4">
@@ -25,7 +25,7 @@
                                                 <label class="form-label fw-bold small text-muted">{{ __('instructor::reminders.default_monthly_fee') }}</label>
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" name="default_monthly_fee" class="form-control bg-white" value="{{ $reminderSettings['default_monthly_fee'] ?? '' }}" placeholder="0.00">
-                                                    <span class="input-group-text bg-white">{{ $tenant->settings['currency'] ?? 'ج.م' }}</span>
+                                                    <span class="input-group-text bg-white">{{ ($tenant->settings ?? [])['currency'] ?? 'ج.م' }}</span>
                                                 </div>
                                                 <div class="form-text small">{{ __('instructor::reminders.default_monthly_fee_hint') }}</div>
                                             </div>

@@ -30,11 +30,11 @@
                                             <div class="col-md-12">
                                                 <label class="form-label fw-bold small text-muted">{{ __('instructor::settings.default_currency') }}</label>
                                                 <select name="currency" class="form-control bg-white border rounded-3">
-                                                    <option value="ج.م" {{ ($tenant->settings['currency'] ?? '') == 'ج.م' ? 'selected' : '' }}>جنيه مصري (ج.م)</option>
-                                                    <option value="EGP" {{ ($tenant->settings['currency'] ?? '') == 'EGP' ? 'selected' : '' }}>Egyptian Pound (EGP)</option>
-                                                    <option value="SAR" {{ ($tenant->settings['currency'] ?? '') == 'SAR' ? 'selected' : '' }}>Saudi Riyal (SAR)</option>
-                                                    <option value="$" {{ ($tenant->settings['currency'] ?? '') == '$' ? 'selected' : '' }}>US Dollar ($)</option>
-                                                    <option value="€" {{ ($tenant->settings['currency'] ?? '') == '€' ? 'selected' : '' }}>Euro (€)</option>
+                                                    <option value="ج.م" {{ (($tenant->settings ?? [])['currency'] ?? '') == 'ج.م' ? 'selected' : '' }}>جنيه مصري (ج.م)</option>
+                                                    <option value="EGP" {{ (($tenant->settings ?? [])['currency'] ?? '') == 'EGP' ? 'selected' : '' }}>Egyptian Pound (EGP)</option>
+                                                    <option value="SAR" {{ (($tenant->settings ?? [])['currency'] ?? '') == 'SAR' ? 'selected' : '' }}>Saudi Riyal (SAR)</option>
+                                                    <option value="$" {{ (($tenant->settings ?? [])['currency'] ?? '') == '$' ? 'selected' : '' }}>US Dollar ($)</option>
+                                                    <option value="€" {{ (($tenant->settings ?? [])['currency'] ?? '') == '€' ? 'selected' : '' }}>Euro (€)</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-12">
