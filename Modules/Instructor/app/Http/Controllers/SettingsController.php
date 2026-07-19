@@ -53,7 +53,8 @@ class SettingsController extends Controller
         }
 
         $tenant = $this->tenant;
-        $settings = $tenant->settings['whatsapp'] ?? [];
+        $tenantSettings = $tenant->settings ?? [];
+        $settings = $tenantSettings['whatsapp'] ?? [];
         $packages = \App\Models\Package::with('features')->where('is_active', true)->orderBy('sort_order')->get();
 
         return view('instructor::settings', compact('tenant', 'settings', 'packages'));
@@ -102,7 +103,8 @@ class SettingsController extends Controller
     public function whatsapp()
     {
         $tenant = $this->tenant;
-        $settings = $tenant->settings['whatsapp'] ?? [
+        $tenantSettings = $tenant->settings ?? [];
+        $settings = $tenantSettings['whatsapp'] ?? [
             'enabled' => false,
             'instance_id' => '',
             'token' => '',
