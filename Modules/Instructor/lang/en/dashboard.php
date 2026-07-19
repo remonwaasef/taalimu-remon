@@ -51,4 +51,16 @@ return [
     'online_classes' => 'Online Classes',
     'no_groups' => 'No Groups Currently',
     'no_groups_desc' => 'It seems you haven\'t created any study groups yet. Start now by creating your first group to invite students and manage their attendance.',
+    
+    // Onboarding
+    'getting_started_title' => 'Getting Started Checklist 🚀',
+    'getting_started_desc' => 'Welcome to your dashboard! Let\'s set up your account so you can start managing your students efficiently.',
+    'step_create_group' => 'Create First Group',
+    'step_add_student' => 'Add First Student',
+    'no_groups_title' => 'Your workspace is ready!',
+    'no_groups_desc_extended' => 'Study groups help you organize your students and track their attendance easily. Once you create a group, you get a unique registration link to share.',
+    'benefit_1' => 'Self-registration for students via unique link',
+    'benefit_2' => 'Track attendance quickly using QR Code',
+    'benefit_3' => 'Organized reports for parents and revenue tracking',
+    'create_first_group' => 'Create Your First Group Now',
 ];

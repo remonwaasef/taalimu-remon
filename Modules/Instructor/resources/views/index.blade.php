@@ -44,12 +44,56 @@
 @endpush
 
 @section('content')
+    @if($totalCourses == 0 || $totalStudents == 0)
+    <div class="card border-0 rounded-4 mb-4" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.3);">
+        <div class="card-body p-4 p-md-5">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h3 class="fw-bold mb-2">{{ __('instructor::dashboard.getting_started_title') }}</h3>
+                    <p class="mb-4 opacity-75">{{ __('instructor::dashboard.getting_started_desc') }}</p>
+                    
+                    @php
+                        $completedSteps = 0;
+                        if($totalCourses > 0) $completedSteps++;
+                        if($totalStudents > 0) $completedSteps++;
+                        $progress = ($completedSteps / 2) * 100;
+                    @endphp
+                    
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="fw-bold me-3">{{ $completedSteps }} / 2</span>
+                        <div class="progress flex-grow-1" style="height: 8px; background: rgba(255,255,255,0.2); border-radius: 10px;">
+                            <div class="progress-bar bg-white" role="progressbar" style="width: {{ $progress }}%; border-radius: 10px;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex flex-wrap gap-3 mt-4">
+                        <a href="{{ route('instructor.groups.create') }}" class="btn {{ $totalCourses > 0 ? 'btn-success bg-opacity-25 border-0 disabled text-white' : 'btn-light text-success fw-bold' }} rounded-pill px-4">
+                            @if($totalCourses > 0) <i class="fas fa-check-circle me-2"></i> @else <i class="fas fa-circle me-2 opacity-50"></i> @endif
+                            {{ __('instructor::dashboard.step_create_group') }}
+                        </a>
+                        <a href="{{ route('instructor.students.create') }}" class="btn {{ $totalStudents > 0 ? 'btn-success bg-opacity-25 border-0 disabled text-white' : 'btn-light text-success fw-bold' }} rounded-pill px-4">
+                            @if($totalStudents > 0) <i class="fas fa-check-circle me-2"></i> @else <i class="fas fa-circle me-2 opacity-50"></i> @endif
+                            {{ __('instructor::dashboard.step_add_student') }}
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center d-none d-lg-block">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Get Started" class="img-fluid" style="max-height: 180px; opacity: 0.9; filter: drop-shadow(0px 10px 10px rgba(0,0,0,0.1));">
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <div class="row g-4 mb-5">
         <div class="col-md-4" id="tour-stats-students">
             <div class="stats-card p-4 h-100 position-relative overflow-hidden">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <div>
-                        <h6 class="text-muted mb-1">{{ __('instructor::dashboard.total_students') }}</h6>
+                        <h6 class="text-muted mb-1">
+                            {{ __('instructor::dashboard.total_students') }}
+                            <i class="fas fa-info-circle ms-1 opacity-50" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('instructor::dashboard.tour.stats_desc') }}"></i>
+                        </h6>
                         <h2 class="fw-bold mb-0 count-up text-primary">{{ number_format($totalStudents) }}</h2>
                     </div>
                     <div class="p-3 rounded-4" style="background: rgba(5, 150, 105, 0.08);">
@@ -65,7 +109,10 @@
             <div class="stats-card p-4 h-100 position-relative overflow-hidden">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <div>
-                        <h6 class="text-muted mb-1">{{ __('instructor::dashboard.active_groups') }}</h6>
+                        <h6 class="text-muted mb-1">
+                            {{ __('instructor::dashboard.active_groups') }}
+                            <i class="fas fa-info-circle ms-1 opacity-50" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('instructor::dashboard.tour.groups_desc') }}"></i>
+                        </h6>
                         <h2 class="fw-bold mb-0 count-up text-success">{{ number_format($totalCourses) }}</h2>
                     </div>
                     <div class="p-3 rounded-4" style="background: rgba(34, 197, 94, 0.08);">
@@ -81,7 +128,10 @@
             <div class="stats-card p-4 h-100 position-relative overflow-hidden">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <div>
-                        <h6 class="text-muted mb-1">{{ __('instructor::dashboard.monthly_revenue') }}</h6>
+                        <h6 class="text-muted mb-1">
+                            {{ __('instructor::dashboard.monthly_revenue') }}
+                            <i class="fas fa-info-circle ms-1 opacity-50" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('instructor::dashboard.tour.stats_desc') }}"></i>
+                        </h6>
                         <h2 class="fw-bold mb-0">
                             <span class="count-up text-info">{{ number_format($monthlyRevenue) }}</span>
                             <small class="fs-6 fw-normal text-muted">{{ app('tenant')->settings['currency'] ?? 'EGP' }}</small>
@@ -220,102 +270,42 @@
                 </tbody>
             </table>
         </div>
-        @else
-        <div class="text-center py-5 empty-state-container">
-            <div class="mb-4">
-                <div class="d-inline-flex p-4 rounded-circle mb-3" style="background: rgba(5, 150, 105, 0.05);">
-                    <i class="fas fa-layer-group text-primary" style="font-size: 3.5rem; opacity: 0.8;"></i>
+        <div class="row align-items-center bg-white p-4 p-md-5 rounded-4 border" style="border-style: dashed !important; border-color: #cbd5e1 !important;">
+            <div class="col-md-7 text-center text-md-start mb-4 mb-md-0">
+                <div class="d-inline-flex p-3 rounded-circle mb-3" style="background: rgba(5, 150, 105, 0.08);">
+                    <i class="fas fa-layer-group text-success fs-2"></i>
+                </div>
+                <h3 class="fw-bold text-dark mb-3">{{ __('instructor::dashboard.no_groups_title') }}</h3>
+                <p class="text-muted mb-4 fs-6 pe-md-4">
+                    {{ __('instructor::dashboard.no_groups_desc_extended') }}
+                </p>
+                <ul class="list-unstyled text-muted mb-4 text-start d-inline-block">
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> {{ __('instructor::dashboard.benefit_1') }}</li>
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> {{ __('instructor::dashboard.benefit_2') }}</li>
+                    <li><i class="fas fa-check-circle text-success me-2"></i> {{ __('instructor::dashboard.benefit_3') }}</li>
+                </ul>
+                <div class="d-block mt-2">
+                    <a href="{{ route('instructor.groups.create') }}" class="btn btn-success px-4 py-3 rounded-pill hover-lift fw-bold shadow-sm">
+                        <i class="fas fa-plus me-2"></i> {{ __('instructor::dashboard.create_first_group') }}
+                    </a>
                 </div>
             </div>
-            <h4 class="fw-bold text-dark mb-2">{{ __('instructor::dashboard.no_groups') }}</h4>
-            <p class="text-muted mb-4 mx-auto" style="max-width: 400px;">
-                {{ __('instructor::dashboard.no_groups_desc') }}
-            </p>
-            <a href="{{ route('instructor.groups.create') }}" class="btn btn-primary px-4 py-2 rounded-4 hover-lift fw-bold shadow-sm">
-                <i class="fas fa-plus me-2"></i> {{ __('instructor::dashboard.create_new_group') }}
-            </a>
+            <div class="col-md-5 text-center d-none d-md-block">
+                <img src="https://cdn-icons-png.flaticon.com/512/4185/4185796.png" class="img-fluid opacity-75" style="max-width: 220px;" alt="Groups">
+            </div>
         </div>
         @endif
     </div>
 @push('scripts')
-<!-- Driver.js CSS & JS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"/>
-<script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
-@php
-    $isRtl = app()->getLocale() == 'ar';
-@endphp
-<style>
-    /* Custom style for driver js */
-    .driver-popover {
-        font-family: inherit !important;
-        text-align: {{ $isRtl ? 'right' : 'left' }};
-        direction: {{ $isRtl ? 'rtl' : 'ltr' }};
-    }
-    .driver-popover-title {
-        color: #059669 !important;
-        font-weight: 700 !important;
-        margin-bottom: 10px !important;
-    }
-    .driver-popover-progress-text {
-        direction: ltr; /* Always LTR for numbers like 1 / 4 */
-    }
-</style>
+<!-- Onboarding Tour removed in favor of Getting Started Checklist -->
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Interactive Tour Setup
-    const tourKey = 'instructor_tour_v3_{{ auth()->id() }}';
-    if (!localStorage.getItem(tourKey)) {
-        const driver = window.driver.js.driver;
-        const driverObj = driver({
-            showProgress: true,
-            progressText: '<?php echo __("instructor::dashboard.tour.progress", ["current" => "{{current}}", "total" => "{{total}}"]); ?>',
-            nextBtnText: '{{ __('instructor::dashboard.tour.next') }}',
-            prevBtnText: '{{ __('instructor::dashboard.tour.prev') }}',
-            doneBtnText: '{{ __('instructor::dashboard.tour.done') }}',
-            popoverClass: 'driverjs-theme',
-            allowClose: false,
-            steps: [
-                { 
-                    popover: { 
-                        title: '{{ __('instructor::dashboard.tour.welcome_title') }}', 
-                        description: '{{ __('instructor::dashboard.tour.welcome_desc') }}' 
-                    } 
-                },
-                { 
-                    element: '#tour-groups-section', 
-                    popover: { 
-                        title: '{{ __('instructor::dashboard.tour.groups_title') }}', 
-                        description: '{{ __('instructor::dashboard.tour.groups_desc') }}',
-                    }
-                },
-                { 
-                    element: '#tour-quick-links', 
-                    popover: { 
-                        title: '{{ __('instructor::dashboard.tour.quick_links_title') }}', 
-                        description: '{{ __('instructor::dashboard.tour.quick_links_desc') }}',
-                    }
-                },
-                { 
-                    element: '#tour-stats-students', 
-                    popover: { 
-                        title: '{{ __('instructor::dashboard.tour.stats_title') }}', 
-                        description: '{{ __('instructor::dashboard.tour.stats_desc') }}' 
-                    } 
-                }
-            ],
-            onDestroyStarted: () => {
-                if (!driverObj.hasNextStep() || confirm("{{ __('instructor::dashboard.tour.skip_confirm') }}")) {
-                    localStorage.setItem(tourKey, 'true');
-                    driverObj.destroy();
-                }
-            },
-        });
-        
-        setTimeout(() => {
-            driverObj.drive();
-        }, 1200);
-    }
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
 });
 
 function copyLink(id) {

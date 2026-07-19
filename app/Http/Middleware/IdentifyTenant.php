@@ -41,7 +41,7 @@ class IdentifyTenant
             $mainHost = config('app.tenant_domain') ?: parse_url(config('app.url'), PHP_URL_HOST);
 
             // Skip if it's 'www' or exactly the main domain
-            if ($host === $mainHost || $host === 'www.'.$mainHost || $host === 'localhost') {
+            if ($host === $mainHost || $host === 'www.'.$mainHost || $host === 'localhost' || $host === '127.0.0.1') {
                 // Even if we skip deeper tenant identification, if the route matched a {tenant} group,
                 // we should ensure URL generation doesn't break for these routes.
                 if ($request->route() && $request->route()->hasParameter('tenant')) {
