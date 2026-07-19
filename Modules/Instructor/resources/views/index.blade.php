@@ -40,17 +40,27 @@
         border-radius: 1rem;
         border: 1px dashed #cbd5e1;
     }
+    
+    /* Premium Accent Colors */
+    .text-indigo { color: #6366f1 !important; }
+    .bg-indigo-soft { background-color: rgba(99, 102, 241, 0.08) !important; }
+    .text-emerald { color: #059669 !important; }
+    .bg-emerald-soft { background-color: rgba(5, 150, 105, 0.08) !important; }
+    .text-amber { color: #f59e0b !important; }
+    .bg-amber-soft { background-color: rgba(245, 158, 11, 0.08) !important; }
+    .btn-indigo { background-color: #6366f1 !important; color: white !important; border: none !important; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2) !important; transition: all 0.3s ease; }
+    .btn-indigo:hover { background-color: #4f46e5 !important; box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3) !important; transform: translateY(-2px); }
 </style>
 @endpush
 
 @section('content')
     @if($totalCourses == 0 || $totalStudents == 0)
-    <div class="card border-0 rounded-4 mb-4" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.3);">
+    <div class="card border-0 rounded-4 mb-4" style="background: #ffffff; box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05); border: 1px solid rgba(0,0,0,0.02) !important;">
         <div class="card-body p-4 p-md-5">
             <div class="row align-items-center">
                 <div class="col-lg-8">
-                    <h3 class="fw-bold mb-2">{{ __('instructor::dashboard.getting_started_title') }}</h3>
-                    <p class="mb-4 opacity-75">{{ __('instructor::dashboard.getting_started_desc') }}</p>
+                    <h3 class="fw-bold mb-2 text-dark">{{ __('instructor::dashboard.getting_started_title') }}</h3>
+                    <p class="mb-4 text-muted">{{ __('instructor::dashboard.getting_started_desc') }}</p>
                     
                     @php
                         $completedSteps = 0;
@@ -60,19 +70,19 @@
                     @endphp
                     
                     <div class="d-flex align-items-center mb-2">
-                        <span class="fw-bold me-3">{{ $completedSteps }} / 2</span>
-                        <div class="progress flex-grow-1" style="height: 8px; background: rgba(255,255,255,0.2); border-radius: 10px;">
-                            <div class="progress-bar bg-white" role="progressbar" style="width: {{ $progress }}%; border-radius: 10px;"></div>
+                        <span class="fw-bold text-dark me-3">{{ $completedSteps }} / 2</span>
+                        <div class="progress flex-grow-1" style="height: 8px; background: #f1f5f9; border-radius: 10px;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ $progress }}%; border-radius: 10px;"></div>
                         </div>
                     </div>
                     
                     <div class="d-flex flex-wrap gap-3 mt-4">
-                        <a href="{{ route('instructor.groups.create') }}" class="btn {{ $totalCourses > 0 ? 'btn-success bg-opacity-25 border-0 disabled text-white' : 'btn-light text-success fw-bold' }} rounded-pill px-4">
-                            @if($totalCourses > 0) <i class="fas fa-check-circle me-2"></i> @else <i class="fas fa-circle me-2 opacity-50"></i> @endif
+                        <a href="{{ route('instructor.groups.create') }}" class="btn {{ $totalCourses > 0 ? 'btn-light text-muted fw-bold border-0' : 'btn-success fw-bold shadow-sm' }} rounded-pill px-4 hover-lift">
+                            @if($totalCourses > 0) <i class="fas fa-check-circle text-success me-2"></i> @else <i class="fas fa-plus me-2"></i> @endif
                             {{ __('instructor::dashboard.step_create_group') }}
                         </a>
-                        <a href="{{ route('instructor.students.create') }}" class="btn {{ $totalStudents > 0 ? 'btn-success bg-opacity-25 border-0 disabled text-white' : 'btn-light text-success fw-bold' }} rounded-pill px-4">
-                            @if($totalStudents > 0) <i class="fas fa-check-circle me-2"></i> @else <i class="fas fa-circle me-2 opacity-50"></i> @endif
+                        <a href="{{ route('instructor.students.create') }}" class="btn {{ $totalStudents > 0 ? 'btn-light text-muted fw-bold border-0' : 'btn-success fw-bold shadow-sm' }} rounded-pill px-4 hover-lift">
+                            @if($totalStudents > 0) <i class="fas fa-check-circle text-success me-2"></i> @else <i class="fas fa-plus me-2"></i> @endif
                             {{ __('instructor::dashboard.step_add_student') }}
                         </a>
                     </div>
@@ -94,14 +104,14 @@
                             {{ __('instructor::dashboard.total_students') }}
                             <i class="fas fa-info-circle ms-1 opacity-50" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('instructor::dashboard.tour.stats_desc') }}"></i>
                         </h6>
-                        <h2 class="fw-bold mb-0 count-up text-primary">{{ number_format($totalStudents) }}</h2>
+                        <h2 class="fw-bold mb-0 count-up text-indigo">{{ number_format($totalStudents) }}</h2>
                     </div>
-                    <div class="p-3 rounded-4" style="background: rgba(5, 150, 105, 0.08);">
-                        <i class="fas fa-user-graduate text-primary fs-4"></i>
+                    <div class="p-3 rounded-4 bg-indigo-soft">
+                        <i class="fas fa-user-graduate text-indigo fs-4"></i>
                     </div>
                 </div>
-                <div class="progress mt-3" style="height: 4px; background: rgba(5, 150, 105, 0.05);">
-                    <div class="progress-bar bg-primary" style="width: 70%"></div>
+                <div class="progress mt-3 bg-indigo-soft" style="height: 4px;">
+                    <div class="progress-bar" style="background-color: #6366f1; width: 70%"></div>
                 </div>
             </div>
         </div>
@@ -113,14 +123,14 @@
                             {{ __('instructor::dashboard.active_groups') }}
                             <i class="fas fa-info-circle ms-1 opacity-50" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('instructor::dashboard.tour.groups_desc') }}"></i>
                         </h6>
-                        <h2 class="fw-bold mb-0 count-up text-success">{{ number_format($totalCourses) }}</h2>
+                        <h2 class="fw-bold mb-0 count-up text-emerald">{{ number_format($totalCourses) }}</h2>
                     </div>
-                    <div class="p-3 rounded-4" style="background: rgba(34, 197, 94, 0.08);">
-                        <i class="fas fa-users text-success fs-4"></i>
+                    <div class="p-3 rounded-4 bg-emerald-soft">
+                        <i class="fas fa-users text-emerald fs-4"></i>
                     </div>
                 </div>
-                <div class="progress mt-3" style="height: 4px; background: rgba(34, 197, 94, 0.05);">
-                    <div class="progress-bar bg-success" style="width: 45%"></div>
+                <div class="progress mt-3 bg-emerald-soft" style="height: 4px;">
+                    <div class="progress-bar" style="background-color: #059669; width: 45%"></div>
                 </div>
             </div>
         </div>
@@ -133,16 +143,16 @@
                             <i class="fas fa-info-circle ms-1 opacity-50" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('instructor::dashboard.tour.stats_desc') }}"></i>
                         </h6>
                         <h2 class="fw-bold mb-0">
-                            <span class="count-up text-info">{{ number_format($monthlyRevenue) }}</span>
+                            <span class="count-up text-amber">{{ number_format($monthlyRevenue) }}</span>
                             <small class="fs-6 fw-normal text-muted">{{ app('tenant')->settings['currency'] ?? 'EGP' }}</small>
                         </h2>
                     </div>
-                    <div class="p-3 rounded-4" style="background: rgba(13, 202, 240, 0.08);">
-                        <i class="fas fa-wallet text-info fs-4"></i>
+                    <div class="p-3 rounded-4 bg-amber-soft">
+                        <i class="fas fa-wallet text-amber fs-4"></i>
                     </div>
                 </div>
-                <div class="progress mt-3" style="height: 4px; background: rgba(13, 202, 240, 0.05);">
-                    <div class="progress-bar bg-info" style="width: 60%"></div>
+                <div class="progress mt-3 bg-amber-soft" style="height: 4px;">
+                    <div class="progress-bar" style="background-color: #f59e0b; width: 60%"></div>
                 </div>
             </div>
         </div>
@@ -272,20 +282,20 @@
         </div>
         <div class="row align-items-center bg-white p-4 p-md-5 rounded-4 border" style="border-style: dashed !important; border-color: #cbd5e1 !important;">
             <div class="col-md-7 text-center text-md-start mb-4 mb-md-0">
-                <div class="d-inline-flex p-3 rounded-circle mb-3" style="background: rgba(5, 150, 105, 0.08);">
-                    <i class="fas fa-layer-group text-success fs-2"></i>
+                <div class="d-inline-flex p-3 rounded-circle mb-3 bg-indigo-soft">
+                    <i class="fas fa-layer-group text-indigo fs-2"></i>
                 </div>
                 <h3 class="fw-bold text-dark mb-3">{{ __('instructor::dashboard.no_groups_title') }}</h3>
                 <p class="text-muted mb-4 fs-6 pe-md-4">
                     {{ __('instructor::dashboard.no_groups_desc_extended') }}
                 </p>
                 <ul class="list-unstyled text-muted mb-4 text-start d-inline-block">
-                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> {{ __('instructor::dashboard.benefit_1') }}</li>
-                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> {{ __('instructor::dashboard.benefit_2') }}</li>
-                    <li><i class="fas fa-check-circle text-success me-2"></i> {{ __('instructor::dashboard.benefit_3') }}</li>
+                    <li class="mb-2"><i class="fas fa-check-circle text-indigo me-2"></i> {{ __('instructor::dashboard.benefit_1') }}</li>
+                    <li class="mb-2"><i class="fas fa-check-circle text-indigo me-2"></i> {{ __('instructor::dashboard.benefit_2') }}</li>
+                    <li><i class="fas fa-check-circle text-indigo me-2"></i> {{ __('instructor::dashboard.benefit_3') }}</li>
                 </ul>
                 <div class="d-block mt-2">
-                    <a href="{{ route('instructor.groups.create') }}" class="btn btn-success px-4 py-3 rounded-pill hover-lift fw-bold shadow-sm">
+                    <a href="{{ route('instructor.groups.create') }}" class="btn btn-indigo px-4 py-3 rounded-pill fw-bold">
                         <i class="fas fa-plus me-2"></i> {{ __('instructor::dashboard.create_first_group') }}
                     </a>
                 </div>
@@ -338,12 +348,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 datasets: [{
                     label: '{{ __('instructor::dashboard.attendees_count') }}',
                     data: {!! json_encode($attendanceData) !!},
-                    borderColor: '#059669',
-                    backgroundColor: 'rgba(5, 150, 105, 0.08)',
+                    borderColor: '#6366f1',
+                    backgroundColor: 'rgba(99, 102, 241, 0.08)',
                     fill: true,
                     tension: 0.4,
                     pointRadius: 5,
-                    pointBackgroundColor: '#059669',
+                    pointBackgroundColor: '#6366f1',
                     borderWidth: 3,
                     pointHoverRadius: 7,
                     pointBorderColor: '#fff',
