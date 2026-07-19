@@ -432,6 +432,7 @@
                 </tbody>
             </table>
         </div>
+        @else
         <div class="row align-items-center bg-white p-4 p-md-5 rounded-4 border" style="border-style: dashed !important; border-color: #cbd5e1 !important;">
             <div class="col-md-7 text-center text-md-start mb-4 mb-md-0">
                 <div class="d-inline-flex p-3 rounded-circle mb-3 bg-indigo-soft">
