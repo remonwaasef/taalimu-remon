@@ -26,9 +26,9 @@
                 <div class="col-md-12">
                     <div class="flex-wrap d-flex justify-content-between align-items-center pt-2 pb-5">
                         @hasSection('page-title')
-                        <div>
-                            <h1 class="text-white display-5 mb-1 fw-bold">@yield('page-title')</h1>
-                            <p class="text-white opacity-75 mb-0 fw-medium">
+                        <div class="pt-2">
+                            <h2 class="text-slate-900 fs-3 mb-1 fw-bold font-arabic">@yield('page-title') 👋</h2>
+                            <p class="text-muted mb-0 fw-medium fs-6">
                                 @yield('page-subtitle')
                             </p>
                         </div>
