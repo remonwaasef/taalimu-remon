@@ -1,196 +1,109 @@
-@extends('instructor::components.layouts.hope-master')
+@extends('layouts.app-next')
 
-@section('page-title', __('instructor::groups.title'))
-@section('page-subtitle', __('instructor::groups.subtitle'))
+@section('title', __('instructor::groups.title') ?? 'Study Groups')
 
-@section('page-actions')
-    <a href="{{ route('instructor.groups.create') }}" class="btn btn-glass">
-        <i class="fas fa-plus me-2"></i> {{ __('instructor::groups.create_new') }}
-    </a>
+@section('sidebar')
+    <x-ui.sidebar brandName="Taalimu">
+        <div class="space-y-1">
+            <a href="{{ route('instructor.dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+                <i class="fas fa-home w-4 text-center"></i>
+                <span>{{ __('instructor::sidebar.dashboard') }}</span>
+            </a>
+
+            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Teaching</div>
+
+            <a href="{{ route('instructor.students.list') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+                <i class="fas fa-user-graduate w-4 text-center"></i>
+                <span>{{ __('instructor::sidebar.students') }}</span>
+            </a>
+
+            <a href="{{ route('instructor.groups.list') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-brand-primary bg-brand-50 dark:bg-brand-900/30">
+                <i class="fas fa-users w-4 text-center"></i>
+                <span>{{ __('instructor::sidebar.groups') }}</span>
+            </a>
+
+            <a href="{{ route('instructor.schedules.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+                <i class="fas fa-calendar-alt w-4 text-center"></i>
+                <span>{{ __('instructor::sidebar.schedules') }}</span>
+            </a>
+        </div>
+    </x-ui.sidebar>
 @endsection
 
 @section('content')
-<div class="container-fluid">
-    {{-- Search Bar --}}
+    <x-ui.page-header
+        title="{{ __('instructor::groups.title') ?? 'Study Groups' }}"
+        subtitle="{{ __('instructor::groups.subtitle') ?? 'Manage active groups, registration links, and session schedules.' }}"
+    >
+        <x-slot name="actions">
+            <x-ui.button variant="primary" icon="fas fa-plus" size="md" href="{{ route('instructor.groups.create') }}">
+                {{ __('instructor::groups.create_new') }}
+            </x-ui.button>
+        </x-slot>
+    </x-ui.page-header>
 
-    {{-- Search Bar --}}
-    <div class="card border-0 shadow-sm rounded-4 mb-3">
-        <div class="card-body p-3">
-            <div class="row g-2 align-items-center">
-                <div class="col-md-8">
-                    <div class="input-group">
-                        <span class="input-group-text bg-white border-end-0 rounded-start-pill"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" id="groupSearchInput" class="form-control border-start-0 rounded-end-pill" placeholder="{{ __('instructor::groups.search_placeholder') }}">
-                    </div>
-                </div>
-                <div class="col-md-4 text-end">
-                    <span id="groupResultCount" class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2"></span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-ui.card noPadding="true" class="mb-8">
+        @if($courses->count() > 0)
+            <x-ui.table :headers="[__('instructor::groups.table_group'), __('instructor::groups.students_count'), __('instructor::groups.registration_link'), __('instructor::groups.status'), __('instructor::groups.actions')]">
+                @foreach($courses as $course)
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                        <td class="px-6 py-4 font-semibold text-slate-900 dark:text-slate-100">
+                            <div class="text-sm font-bold text-slate-900 dark:text-slate-100 mb-1">{{ $course->title }}</div>
+                            <div class="flex flex-wrap gap-1">
+                                @forelse($course->schedules as $schedule)
+                                    <x-ui.badge variant="brand" size="sm">
+                                        {{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }} - {{ \Carbon\Carbon::parse($schedule->end_time)->format('h:i A') }}
+                                    </x-ui.badge>
+                                @empty
+                                    <span class="text-[11px] text-slate-400">No schedule assigned</span>
+                                @endforelse
+                            </div>
+                        </td>
 
-    <div class="card border-0 shadow-sm rounded-4">
-        <div class="card-body p-0">
-            <div class="table-responsive" style="min-height: 300px;">
-                <table class="table table-hover align-middle mb-0 text-center" id="groupsTable">
-                    <thead class="bg-light">
-                        <tr>
-                            <th class="border-0 px-4 py-3 text-start">{{ __('instructor::groups.table_group') }}</th>
-                            <th class="border-0">{{ __('instructor::groups.students_count') }}</th>
-                            <th class="border-0">{{ __('instructor::groups.registration_link') }}</th>
-                            <th class="border-0">{{ __('instructor::groups.status') }}</th>
-                            <th class="border-0">{{ __('instructor::groups.actions') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($courses as $course)
-                        <tr class="group-row" data-title="{{ $course->title }}">
-                            <td class="px-4 py-3 text-start">
-                                <div class="fw-bold fs-5" style="color: var(--primary-color);">{{ $course->title }}</div>
-                                <div class="d-flex flex-wrap gap-1 mt-2">
-                                    @forelse($course->schedules as $schedule)
-                                        @php
-                                            $days = [
-                                                __('instructor::groups.days.Sunday'),
-                                                __('instructor::groups.days.Monday'),
-                                                __('instructor::groups.days.Tuesday'),
-                                                __('instructor::groups.days.Wednesday'),
-                                                __('instructor::groups.days.Thursday'),
-                                                __('instructor::groups.days.Friday'),
-                                                __('instructor::groups.days.Saturday')
-                                            ];
-                                        @endphp
-                                        <span class="badge border border-primary text-primary rounded-pill fw-normal" style="color: var(--primary-color) !important; border-color: var(--primary-color) !important; background: transparent;">
-                                            <i class="bi bi-calendar-event me-1"></i>
-                                            {{ $days[$schedule->day_of_week] }} 
-                                            ({{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }} - {{ \Carbon\Carbon::parse($schedule->end_time)->format('h:i A') }})
-                                        </span>
-                                    @empty
-                                        <span class="badge bg-light text-muted border rounded-pill fw-normal">{{ __('instructor::groups.no_schedules') }}</span>
-                                    @endforelse
-                                    <a href="{{ route('instructor.schedules.create', ['course_id' => $course->id]) }}" class="badge border rounded-pill fw-normal text-decoration-none ms-1" style="color: var(--primary-color) !important; border-color: var(--primary-color) !important; border-style: dashed !important; background: transparent; transition: all 0.2s;" onmouseover="this.style.background='rgba(16,185,129,0.1)'" onmouseout="this.style.background='transparent'">
-                                        <i class="fas fa-plus fa-sm"></i> {{ __('instructor::groups.add_schedule') }}
-                                    </a>
+                        <td class="px-6 py-4">
+                            <x-ui.badge variant="brand" size="sm">{{ $course->enrollments_count ?? 0 }} enrolled</x-ui.badge>
+                        </td>
+
+                        <td class="px-6 py-4">
+                            @if($course->registration_token)
+                                <div class="flex items-center gap-2 max-w-xs">
+                                    <input type="text" class="h-8 px-3 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg w-full text-slate-600 dark:text-slate-300 font-mono" value="{{ $course->getRegistrationUrl() }}" id="group_link_{{ $course->id }}" readonly />
+                                    <x-ui.button variant="secondary" size="sm" onclick="navigator.clipboard.writeText(document.getElementById('group_link_{{ $course->id }}').value)">
+                                        <i class="fas fa-copy"></i>
+                                    </x-ui.button>
                                 </div>
-                            </td>
-                            <td>
-                                <span class="badge bg-opacity-10 rounded-pill px-3" style="background-color: rgba(58, 12, 163, 0.1); color: var(--primary-color);">{{ $course->enrollments_count ?? 0 }} {{ __('instructor::groups.student') }}</span>
-                            </td>
-                            <td>
-                                @if($course->registration_token)
-                                    <div class="input-group input-group-sm rounded-pill overflow-hidden" style="max-width: 250px; margin: 0 auto; border: 1px solid var(--primary-color);">
-                                        <input type="text" class="form-control border-0 bg-light text-center" value="{{ $course->getRegistrationUrl() }}" readonly id="link_{{ $course->id }}">
-                                        <button class="btn btn-primary px-3 border-0" style="background: var(--primary-color);" onclick="copyLink('link_{{ $course->id }}')">
-                                            <i class="fas fa-copy"></i>
-                                        </button>
-                                    </div>
-                                @else
-                                    <span class="text-muted small">{{ __('instructor::groups.no_link') }}</span>
-                                @endif
-                            </td>
-                            <td>
-                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{ __('instructor::groups.active') }}</span>
-                            </td>
-                            <td>
-                                <div class="dropdown">
-                                    <button class="btn btn-light btn-sm rounded-circle" data-bs-toggle="dropdown" data-bs-boundary="viewport" style="color: var(--primary-color);">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow rounded-4 p-2">
-                                        <li><a class="dropdown-item rounded-3" href="{{ route('instructor.scanner', $course->id) }}"><i class="fas fa-qrcode me-2" style="color: var(--primary-color);"></i> {{ __('instructor::groups.qr_scanner') }}</a></li>
-                                        <li><a class="dropdown-item rounded-3" href="{{ route('instructor.groups.edit', $course->id) }}"><i class="fas fa-edit me-2 text-muted"></i> {{ __('instructor::groups.edit_data') }}</a></li>
-                                        <li>
-                                            <form action="{{ route('instructor.groups.duplicate', $course->id) }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="dropdown-item"><i class="fas fa-copy me-2 text-muted"></i> {{ __('instructor::groups.duplicate_group') }}</button>
-                                            </form>
-                                        </li>
-                                        <li>
-                                            <form action="{{ route('instructor.groups.rotate-link', $course->id) }}" method="POST" id="rotateForm_{{ $course->id }}">
-                                                @csrf
-                                                <button type="button" class="dropdown-item" onclick="if(confirm('{{ __('instructor::groups.confirm_rotate_link') }}')) document.getElementById('rotateForm_{{ $course->id }}').submit();">
-                                                    <i class="fas fa-sync me-2 text-muted"></i> {{ __('instructor::groups.generate_new_link') }}
-                                                </button>
-                                            </form>
-                                        </li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li>
-                                            <form action="{{ route('instructor.groups.destroy', $course->id) }}" method="POST" id="deleteForm_{{ $course->id }}">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button" class="dropdown-item text-danger" onclick="if(confirm('{{ __('instructor::groups.confirm_delete_group') }}')) document.getElementById('deleteForm_{{ $course->id }}').submit();">
-                                                    <i class="fas fa-trash me-2"></i> {{ __('instructor::groups.delete_group') }}
-                                                </button>
-                                            </form>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr id="emptyRow">
-                            <td colspan="5" class="text-center py-5">
-                                <div class="mb-4">
-                                    <div class="d-inline-flex p-4 rounded-circle mb-3" style="background: rgba(16, 185, 129, 0.05);">
-                                        <i class="fas fa-folder-open text-primary" style="font-size: 3rem; opacity: 0.5;"></i>
-                                    </div>
-                                </div>
-                                <h6 class="text-muted fw-bold">{{ __('instructor::groups.no_groups') }}</h6>
-                                <p class="text-muted small">{{ __('instructor::groups.no_groups_hint') }}</p>
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                            @else
+                                <span class="text-xs text-slate-400">No registration link</span>
+                            @endif
+                        </td>
 
-            <div id="noGroupsResults" class="text-center py-5 d-none">
-                <i class="fas fa-search-minus display-4 text-light mb-3"></i>
-                <p class="text-muted">{{ __('instructor::groups.no_results') }}</p>
-            </div>
-        </div>
-    </div>
-</div>
+                        <td class="px-6 py-4">
+                            <x-ui.badge variant="success" size="sm" dot="true">Active</x-ui.badge>
+                        </td>
 
-@push('scripts')
-<script>
-    var copyText = document.getElementById(id);
-    copyText.select();
-    copyText.setSelectionRange(0, 99999);
-    navigator.clipboard.writeText(copyText.value);
-    alert("{{ __('instructor::groups.link_copied') }}");
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('groupSearchInput');
-    const rows = document.querySelectorAll('.group-row');
-    const noResults = document.getElementById('noGroupsResults');
-    const resultCount = document.getElementById('groupResultCount');
-    const table = document.getElementById('groupsTable');
-
-    function applyGroupFilters() {
-        const query = searchInput.value.trim().toLowerCase();
-        let visibleCount = 0;
-
-        rows.forEach(row => {
-            const title = row.dataset.title.toLowerCase();
-            if (!query || title.includes(query)) {
-                row.style.display = '';
-                visibleCount++;
-            } else {
-                row.style.display = 'none';
-            }
-        });
-
-        if (resultCount) resultCount.textContent = visibleCount + ' {{ __('instructor::groups.student') }}';
-        if (noResults) noResults.classList.toggle('d-none', visibleCount > 0 || rows.length === 0);
-        if (table) table.classList.toggle('d-none', visibleCount === 0 && rows.length > 0);
-    }
-
-    if (searchInput) searchInput.addEventListener('input', applyGroupFilters);
-    applyGroupFilters();
-});
-</script>
-@endpush
+                        <td class="px-6 py-4 text-end">
+                            <div class="flex items-center justify-end gap-2">
+                                <x-ui.button variant="outline" size="sm" icon="fas fa-qrcode" href="{{ route('instructor.scanner', $course->id) }}">
+                                    Scanner
+                                </x-ui.button>
+                                <x-ui.button variant="ghost" size="sm" icon="fas fa-edit" href="{{ route('instructor.groups.edit', $course->id) }}" />
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            </x-ui.table>
+        @else
+            <x-ui.empty-state
+                title="No Groups Created"
+                description="Get started by creating your first study group to invite students."
+                icon="fas fa-users"
+            >
+                <x-slot name="action">
+                    <x-ui.button variant="primary" icon="fas fa-plus" href="{{ route('instructor.groups.create') }}">
+                        Create First Group
+                    </x-ui.button>
+                </x-slot>
+            </x-ui.empty-state>
+        @endif
+    </x-ui.card>
 @endsection

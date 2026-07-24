@@ -1,214 +1,110 @@
-@extends('instructor::components.layouts.hope-master')
+@extends('layouts.app-next')
 
-@section('page-title', __('instructor::billing.title'))
-@section('page-subtitle', __('instructor::billing.subtitle'))
+@section('title', __('instructor::billing.title') ?? 'Financial Billing & Receivables')
 
-@section('page-actions')
-    <div id="resultCount" class="btn btn-glass cursor-default opacity-100">
-        <i class="fas fa-user-graduate me-2"></i> {{ $students->count() }} {{ __('instructor::billing.student_count') }}
-    </div>
+@section('sidebar')
+    <x-ui.sidebar brandName="Taalimu">
+        <div class="space-y-1">
+            <a href="{{ route('instructor.dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+                <i class="fas fa-home w-4 text-center"></i>
+                <span>{{ __('instructor::sidebar.dashboard') }}</span>
+            </a>
+
+            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Teaching</div>
+
+            <a href="{{ route('instructor.students.list') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+                <i class="fas fa-user-graduate w-4 text-center"></i>
+                <span>{{ __('instructor::sidebar.students') }}</span>
+            </a>
+
+            <a href="{{ route('instructor.groups.list') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+                <i class="fas fa-users w-4 text-center"></i>
+                <span>{{ __('instructor::sidebar.groups') }}</span>
+            </a>
+
+            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Finance</div>
+
+            <a href="{{ route('instructor.billing') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-brand-primary bg-brand-50 dark:bg-brand-900/30">
+                <i class="fas fa-wallet w-4 text-center"></i>
+                <span>{{ __('instructor::sidebar.billing') }}</span>
+            </a>
+        </div>
+    </x-ui.sidebar>
 @endsection
 
 @section('content')
+    <x-ui.page-header
+        title="{{ __('instructor::billing.title') ?? 'Financial Billing & Receivables' }}"
+        subtitle="{{ __('instructor::billing.subtitle') ?? 'Track student tuition balances, collected fees, and send WhatsApp payment reminders.' }}"
+    >
+        <x-slot name="actions">
+            <x-ui.badge variant="brand" size="lg">
+                {{ $students->count() }} {{ __('instructor::billing.student_count') }}
+            </x-ui.badge>
+        </x-slot>
+    </x-ui.page-header>
 
-    {{-- Search & Filter Bar --}}
-    <div class="card border-0 shadow-sm rounded-4 mb-4">
-        <div class="card-body p-3">
-            <div class="row g-2 align-items-center">
-                <div class="col-md-6">
-                    <div class="input-group">
-                        <span class="input-group-text bg-white rounded-start-pill px-3"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" id="searchInput" 
-                            data-smart-search="#billingTable"
-                            data-search-fields="name,phone"
-                            data-search-counter="#resultCount"
-                            data-search-empty="#noResults"
-                            data-search-container="#billingTableContainer"
-                            data-search-highlight="true"
-                            data-search-counter-suffix="{{ __('instructor::billing.student_count') }}"
-                            class="form-control bg-white rounded-end-pill py-2" 
-                            placeholder="{{ __('instructor::billing.search_placeholder') }}">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <select data-smart-filter="#billingTable" data-filter-key="status" class="form-select bg-white rounded-pill py-2">
-                        <option value="all">{{ __('instructor::billing.all_students') }}</option>
-                        <option value="unpaid">{{ __('instructor::billing.has_balance') }}</option>
-                        <option value="paid">{{ __('instructor::billing.fully_paid') }}</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-ui.card noPadding="true" class="mb-8">
+        @if($students->count() > 0)
+            <x-ui.table :headers="[__('instructor::billing.student_name'), __('instructor::billing.total_due'), __('instructor::billing.total_paid'), __('instructor::billing.balance'), __('instructor::billing.actions')]">
+                @foreach($students as $student)
+                    @php
+                        $totalDue = $student->enrollments->sum(function($e) { return $e->course->price ?? 0; });
+                        $totalPaid = $student->sales->sum('paid_amount');
+                        $balance = $totalDue - $totalPaid;
+                    @endphp
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="font-bold text-sm text-slate-900 dark:text-slate-100">{{ $student->name }}</div>
+                            <span class="text-xs text-slate-400 font-normal">{{ $student->enrollments->pluck('course.title')->filter()->implode(', ') }}</span>
+                        </td>
 
-    @if($students->isEmpty())
-        <div class="stats-card p-5 text-center">
-            <div class="mb-4">
-                <i class="fas fa-users fs-1 text-muted opacity-25"></i>
-            </div>
-            <h5 class="text-muted">{{ __('instructor::billing.no_students_registered') }}</h5>
-        </div>
-    @else
-        <div id="noResults" class="stats-card p-5 text-center d-none">
-            <div class="mb-4">
-                <i class="fas fa-search fs-1 text-muted opacity-25"></i>
-            </div>
-            <h5 class="text-muted">{{ __('instructor::billing.no_search_results') }}</h5>
-        </div>
+                        <td class="px-6 py-4 text-xs font-mono font-semibold text-slate-800 dark:text-slate-200">
+                            {{ number_format($totalDue) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }}
+                        </td>
 
-        <div class="stats-card p-0 overflow-hidden shadow-sm border-0" id="billingTableContainer">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0" id="billingTable">
-                    <thead class="bg-light">
-                        <tr>
-                            <th class="px-4 py-3 border-0">{{ __('instructor::billing.student_name') }}</th>
-                            <th class="border-0">{{ __('instructor::billing.total_due') }}</th>
-                            <th class="border-0">{{ __('instructor::billing.total_paid') }}</th>
-                            <th class="border-0">{{ __('instructor::billing.balance') }}</th>
-                            <th class="px-4 border-0 text-end">{{ __('instructor::billing.actions') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($students as $student)
-                            @php
-                                $totalDue = $student->enrollments->sum(function($e) { return $e->course->price ?? 0; });
-                                $totalPaid = $student->sales->sum('paid_amount');
-                                $balance = $totalDue - $totalPaid;
-                                $status = $balance > 0 ? 'unpaid' : 'paid';
-                            @endphp
-                            <tr class="student-row" 
-                                data-name="{{ $student->name }}" 
-                                data-phone="{{ $student->phone }}" 
-                                data-balance="{{ $balance }}"
-                                data-status="{{ $status }}">
-                                <td class="px-4 py-3">
-                                    <div class="fw-bold text-dark">{{ $student->name }}</div>
-                                    <small class="text-muted">{{ $student->enrollments->pluck('course.title')->filter()->implode(', ') }}</small>
-                                </td>
-                                <td>{{ number_format($totalDue) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }}</td>
-                                <td>{{ number_format($totalPaid) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }}</td>
-                                <td>
-                                    @if($balance > 0)
-                                        <span class="text-danger fw-bold">{{ number_format($balance) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }}</span>
-                                    @else
-                                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{ __('instructor::billing.paid') }}</span>
-                                    @endif
-                                </td>
-                                <td class="px-4 text-end">
-                                    <div class="d-flex gap-2 justify-content-end">
-                                        @if($balance > 0)
-                                            <button type="button" class="btn btn-primary btn-sm rounded-pill px-3" 
-                                                data-bs-toggle="modal" data-bs-target="#collectModal" 
-                                                data-id="{{ $student->id }}" data-name="{{ $student->name }}" data-balance="{{ $balance }}">
-                                                <i class="fas fa-hand-holding-usd me-1"></i> {{ __('instructor::billing.collect') }}
-                                            </button>
-                                            @php
-                                                $reminderMsg = __('instructor::billing.reminder_msg', [
-                                                    'student' => $student->name,
-                                                    'balance' => $balance,
-                                                    'instructor' => auth()->user()->name
-                                                ]);
-                                                $phone = $student->phone;
-                                                if (str_starts_with($phone, '0')) $phone = '2' . $phone;
-                                                $whatsappUri = "https://api.whatsapp.com/send?phone=" . preg_replace('/[^0-9]/', '', $phone) . "&text=" . urlencode($reminderMsg);
-                                            @endphp
-                                            <a href="{{ $whatsappUri }}" target="_blank" class="btn btn-success btn-sm rounded-pill px-3">
-                                                <i class="fab fa-whatsapp me-1"></i> {{ __('instructor::billing.whatsapp_reminder') }}
-                                            </a>
-                                        @else
-                                            <span class="text-success small fw-medium"><i class="fas fa-check-circle me-1"></i> {{ __('instructor::billing.collected') }}</span>
-                                        @endif
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    @endif
-</div>
+                        <td class="px-6 py-4 text-xs font-mono font-semibold text-emerald-600 dark:text-emerald-400">
+                            {{ number_format($totalPaid) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }}
+                        </td>
 
-@push('modals')
-<!-- Collection Modal -->
-<div class="modal fade" id="collectModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg rounded-4">
-            <div class="modal-header border-0 pb-0">
-                <h5 class="modal-title fw-bold">{{ __('instructor::billing.record_payment') }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form action="{{ route('instructor.students.mark-paid') }}" method="POST">
-                @csrf
-                <div class="modal-body p-4">
-                    <input type="hidden" name="student_id" id="modal_student_id">
-                    
-                    <div class="mb-4 text-center">
-                        <p class="text-muted mb-1">{{ __('instructor::billing.collect_from') }}</p>
-                        <h4 class="fw-bold mb-0" id="modal_student_name"></h4>
-                    </div>
+                        <td class="px-6 py-4">
+                            @if($balance > 0)
+                                <x-ui.badge variant="danger" size="sm" dot="true">{{ number_format($balance) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }} Due</x-ui.badge>
+                            @else
+                                <x-ui.badge variant="success" size="sm" dot="true">{{ __('instructor::billing.paid') }}</x-ui.badge>
+                            @endif
+                        </td>
 
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">{{ __('instructor::billing.amount_received') }}</label>
-                        <div class="input-group">
-                            <input type="number" name="amount" id="modal_amount" class="form-control bg-white border py-2" required>
-                            <span class="input-group-text bg-white border">{{ app('tenant')->settings['currency'] ?? 'EGP' }}</span>
-                        </div>
-                        <div class="form-text text-danger" id="modal_balance_hint"></div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">{{ __('instructor::billing.notes') }}</label>
-                        <textarea name="notes" class="form-control bg-white border" rows="3" placeholder="{{ __('instructor::billing.notes_placeholder') }}"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer border-0 pt-0 p-4">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">{{ __('instructor::billing.cancel') }}</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4">{{ __('instructor::billing.confirm_collection') }}</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-@endpush
-
-<style>
-    .bg-danger-soft { background-color: rgba(220, 53, 69, 0.1); }
-    .bg-success-soft { background-color: rgba(25, 135, 84, 0.1); }
-    .stats-card { background: #fff; border-radius: 1.25rem; }
-    #billingTable thead th { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.025em; }
-</style>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Auto-select filter from URL if present
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('status')) {
-        const urlStatus = urlParams.get('status');
-        const filterStatus = document.querySelector('[data-smart-filter="#billingTable"][data-filter-key="status"]');
-        if (filterStatus && filterStatus.querySelector(`option[value="${urlStatus}"]`)) {
-            filterStatus.value = urlStatus;
-            // Trigger change so smart search picks it up
-            filterStatus.dispatchEvent(new Event('change'));
-        }
-    }
-
-    // Modal data handling
-    const collectModal = document.getElementById('collectModal');
-    if (collectModal) {
-        collectModal.addEventListener('show.bs.modal', function(event) {
-            const button = event.relatedTarget;
-            const id = button.getAttribute('data-id');
-            const name = button.getAttribute('data-name');
-            const balance = button.getAttribute('data-balance');
-
-            document.getElementById('modal_student_id').value = id;
-            document.getElementById('modal_student_name').textContent = name;
-            document.getElementById('modal_amount').value = balance;
-            document.getElementById('modal_amount').max = balance;
-            document.getElementById('modal_balance_hint').textContent = '{{ __('instructor::billing.current_balance') }}' + new Intl.NumberFormat().format(balance);
-        });
-    }
-});
-</script>
+                        <td class="px-6 py-4 text-end">
+                            <div class="flex items-center justify-end gap-2">
+                                @if($balance > 0)
+                                    @php
+                                        $reminderMsg = __('instructor::billing.reminder_msg', [
+                                            'student' => $student->name,
+                                            'balance' => $balance,
+                                            'instructor' => auth()->user()->name
+                                        ]);
+                                        $phone = $student->phone;
+                                        if (str_starts_with($phone, '0')) $phone = '2' . $phone;
+                                        $whatsappUri = "https://api.whatsapp.com/send?phone=" . preg_replace('/[^0-9]/', '', $phone) . "&text=" . urlencode($reminderMsg);
+                                    @endphp
+                                    <x-ui.button variant="outline" size="sm" icon="fab fa-whatsapp" href="{{ $whatsappUri }}" target="_blank">
+                                        Send Reminder
+                                    </x-ui.button>
+                                @else
+                                    <span class="text-xs text-emerald-600 font-bold"><i class="fas fa-check-circle me-1"></i> Paid in Full</span>
+                                @endif
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            </x-ui.table>
+        @else
+            <x-ui.empty-state
+                title="No Billing Records Found"
+                description="{{ __('instructor::billing.no_students_registered') }}"
+                icon="fas fa-wallet"
+            />
+        @endif
+    </x-ui.card>
 @endsection

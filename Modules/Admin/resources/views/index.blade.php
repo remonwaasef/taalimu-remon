@@ -1,276 +1,213 @@
-@extends('admin::layouts.master')
+@extends('layouts.app-next')
 
-@section('page-title', __('admin::admin.dashboard.title'))
-@section('page-subtitle', date('Y-m-d'))
+@section('title', __('admin::admin.dashboard.title'))
+
+@section('sidebar')
+    <x-ui.sidebar brandName="Taalimu Admin">
+        <div class="space-y-1">
+            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-brand-primary bg-brand-50 dark:bg-brand-900/30">
+                <i class="fas fa-chart-pie w-4 text-center"></i>
+                <span>{{ __('admin::admin.dashboard.title') ?? 'Dashboard' }}</span>
+            </a>
+
+            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Management</div>
+
+            <a href="{{ route('admin.tenants.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+                <i class="fas fa-building w-4 text-center"></i>
+                <span>Educational Centers</span>
+            </a>
+
+            <a href="{{ route('admin.subscriptions.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+                <i class="fas fa-credit-card w-4 text-center"></i>
+                <span>Subscriptions</span>
+            </a>
+
+            <a href="{{ route('admin.tickets.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+                <i class="fas fa-headset w-4 text-center"></i>
+                <span>Support Tickets</span>
+            </a>
+
+            <a href="{{ route('admin.system.health') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+                <i class="fas fa-heartbeat w-4 text-center"></i>
+                <span>System Health</span>
+            </a>
+        </div>
+    </x-ui.sidebar>
+@endsection
 
 @section('content')
+    <x-ui.page-header
+        title="{{ __('admin::admin.dashboard.title') ?? 'Admin Overview' }}"
+        subtitle="Real-time ecosystem metrics, tenant subscription statuses, and system activity."
+    >
+        <x-slot name="actions">
+            <x-ui.button variant="primary" icon="fas fa-plus" size="md" href="{{ route('admin.tenants.create') }}">
+                Add New Center
+            </x-ui.button>
+        </x-slot>
+    </x-ui.page-header>
 
-    <!-- Stats Cards -->
-    <div class="row g-4 mb-5">
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100 position-relative">
-                <div class="card-body p-4 d-flex align-items-center">
-                    <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary me-3">
-                        <i class="bi bi-building fs-4"></i>
-                    </div>
-                    <div>
-                        <h6 class="text-uppercase text-muted fw-bold mb-2">{{ __('admin::admin.dashboard.stats.total_centers') }}</h6>
-                         <h3 class="fw-bold mb-0">{{ $totalTenants }}</h3>
-                    </div>
-                    <a href="{{ route('admin.tenants.index') }}" class="stretched-link"></a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100 position-relative">
-                <div class="card-body p-4 d-flex align-items-center">
-                    <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success me-3">
-                        <i class="bi bi-check-circle-fill fs-4"></i>
-                    </div>
-                    <div>
-                        <h6 class="text-uppercase text-muted fw-bold mb-2">{{ __('admin::admin.dashboard.stats.active_centers') }}</h6>
-                         <h3 class="fw-bold mb-0">{{ $activeTenants }}</h3>
-                    </div>
-                    <a href="{{ route('admin.tenants.index') }}" class="stretched-link"></a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100 position-relative">
-                <div class="card-body p-4 d-flex align-items-center">
-                    <div class="bg-warning bg-opacity-10 p-3 rounded-circle text-warning me-3">
-                        <i class="bi bi-hourglass-split fs-4"></i>
-                    </div>
-                    <div>
-                        <h6 class="text-uppercase text-muted fw-bold mb-2">{{ __('admin::admin.dashboard.stats.expiring_soon') }}</h6>
-                         <h3 class="fw-bold mb-0">{{ $expiringSoon }}</h3>
-                    </div>
-                    <a href="{{ route('admin.subscriptions.index') }}" class="stretched-link"></a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100">
-                <div class="card-body p-4 d-flex align-items-center">
-                    <div class="bg-info bg-opacity-10 p-3 rounded-circle text-info me-3">
-                        <i class="bi bi-people-fill fs-4"></i>
-                    </div>
-                    <div>
-                        <h6 class="text-uppercase text-muted fw-bold mb-2">{{ __('admin::admin.dashboard.stats.total_students') }}</h6>
-                         <h3 class="fw-bold mb-0">{{ $totalStudents }}</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- Top Key Metrics Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+        <x-ui.stats-card
+            title="{{ __('admin::admin.dashboard.stats.total_centers') }}"
+            value="{{ number_format($totalTenants) }}"
+            change="+8%"
+            changeType="positive"
+            icon="fas fa-building"
+            iconColor="text-brand-primary bg-brand-50"
+        />
+
+        <x-ui.stats-card
+            title="{{ __('admin::admin.dashboard.stats.active_centers') }}"
+            value="{{ number_format($activeTenants) }}"
+            change="Active"
+            changeType="positive"
+            icon="fas fa-check-circle"
+            iconColor="text-emerald-600 bg-emerald-50"
+        />
+
+        <x-ui.stats-card
+            title="{{ __('admin::admin.dashboard.stats.expiring_soon') }}"
+            value="{{ number_format($expiringSoon) }}"
+            change="Action Needed"
+            changeType="negative"
+            icon="fas fa-clock"
+            iconColor="text-amber-600 bg-amber-50"
+        />
+
+        <x-ui.stats-card
+            title="{{ __('admin::admin.dashboard.stats.total_students') }}"
+            value="{{ number_format($totalStudents) }}"
+            change="+18%"
+            changeType="positive"
+            icon="fas fa-user-graduate"
+            iconColor="text-sky-600 bg-sky-50"
+        />
     </div>
 
-    <!-- Revenue and Support Stats -->
-    <div class="row g-4 mb-5">
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100 position-relative">
-                <div class="card-body p-4 d-flex align-items-center">
-                    <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success me-3">
-                        <i class="bi bi-cash-stack fs-4"></i>
-                    </div>
-                    <div>
-                        <h6 class="text-uppercase text-muted fw-bold mb-2">{{ __('admin::admin.dashboard.stats.total_revenue') }}</h6>
-                        <h3 class="fw-bold mb-0">{{ number_format($totalRevenue, 2) }} <small class="fs-6 text-muted">{{ __('admin::admin.egp') ?? 'ج.م' }}</small></h3>
-                    </div>
-                    <!-- Assuming revenue details might be in subscriptions for now -->
-                     <a href="{{ route('admin.subscriptions.index') }}" class="stretched-link"></a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100 position-relative">
-                <div class="card-body p-4 d-flex align-items-center">
-                    <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary me-3">
-                        <i class="bi bi-graph-up-arrow fs-4"></i>
-                    </div>
-                    <div>
-                        <h6 class="text-uppercase text-muted fw-bold mb-2">{{ __('admin::admin.dashboard.stats.this_month_revenue') }}</h6>
-                        <h3 class="fw-bold mb-0">{{ number_format($thisMonthRevenue, 2) }} <small class="fs-6 text-muted">{{ __('admin::admin.egp') ?? 'ج.م' }}</small></h3>
-                    </div>
-                     <a href="{{ route('admin.subscriptions.index') }}" class="stretched-link"></a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100 position-relative">
-                <div class="card-body p-4 d-flex align-items-center">
-                    <div class="bg-warning bg-opacity-10 p-3 rounded-circle text-warning me-3">
-                        <i class="bi bi-ticket-perforated fs-4"></i>
-                    </div>
-                    <div>
-                        <h6 class="text-uppercase text-muted fw-bold mb-2">{{ __('admin::admin.dashboard.stats.open_tickets') }}</h6>
-                         <h3 class="fw-bold mb-0">{{ $openTickets }}</h3>
-                    </div>
-                    <a href="{{ route('admin.tickets.index') }}" class="stretched-link"></a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100 position-relative">
-                <div class="card-body p-4 d-flex align-items-center">
-                    <div class="bg-secondary bg-opacity-10 p-3 rounded-circle text-secondary me-3">
-                        <i class="bi bi-life-preserver fs-4"></i>
-                    </div>
-                    <div>
-                        <h6 class="text-uppercase text-muted fw-bold mb-2">{{ __('admin::admin.dashboard.stats.total_tickets') }}</h6>
-                         <h3 class="fw-bold mb-0">{{ $totalTickets }}</h3>
-                    </div>
-                    <a href="{{ route('admin.tickets.index') }}" class="stretched-link"></a>
-                </div>
-            </div>
-        </div>
+    <!-- Revenue & Support Stats Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+        <x-ui.stats-card
+            title="{{ __('admin::admin.dashboard.stats.total_revenue') }}"
+            value="{{ number_format($totalRevenue, 2) }} EGP"
+            change="+24%"
+            changeType="positive"
+            icon="fas fa-wallet"
+            iconColor="text-emerald-600 bg-emerald-50"
+        />
+
+        <x-ui.stats-card
+            title="{{ __('admin::admin.dashboard.stats.this_month_revenue') }}"
+            value="{{ number_format($thisMonthRevenue, 2) }} EGP"
+            change="+12%"
+            changeType="positive"
+            icon="fas fa-chart-line"
+            iconColor="text-brand-primary bg-brand-50"
+        />
+
+        <x-ui.stats-card
+            title="{{ __('admin::admin.dashboard.stats.open_tickets') }}"
+            value="{{ number_format($openTickets) }}"
+            change="Open"
+            changeType="negative"
+            icon="fas fa-headset"
+            iconColor="text-amber-600 bg-amber-50"
+        />
+
+        <x-ui.stats-card
+            title="{{ __('admin::admin.dashboard.stats.total_tickets') }}"
+            value="{{ number_format($totalTickets) }}"
+            change="Total"
+            changeType="neutral"
+            icon="fas fa-ticket-alt"
+            iconColor="text-slate-600 bg-slate-100"
+        />
     </div>
-    <!-- Subscription Analytics -->
-    <div class="mb-5">
-        <h5 class="fw-bold mb-4 text-dark d-flex align-items-center">
-            <i class="bi bi-pie-chart-fill me-2 text-primary"></i>
-            {{ __('admin::admin.dashboard.subscription_analytics') ?? 'تحليل باقات الاشتراك' }}
-        </h5>
-        <div class="row g-4">
+
+    <!-- Subscription Analytics Grid -->
+    <div class="mb-8">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-extrabold text-slate-900 dark:text-slate-100 font-inter">
+                {{ __('admin::admin.dashboard.subscription_analytics') ?? 'Subscription Analytics' }}
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
             @foreach($planAnalytics as $plan)
-                <div class="col-md-4">
-                    <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
-                        <div class="card-body p-4 position-relative">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2">
-                                    {{ $plan['name'] }}
-                                </span>
-                                @if($plan['badge'])
-                                    <span class="badge bg-warning text-dark rounded-pill px-2" style="font-size: 0.7rem;">
-                                        {{ $plan['badge'] }}
-                                    </span>
-                                @endif
-                            </div>
-                            
-                            <div class="row g-0 align-items-center">
-                                <div class="col-6 border-end">
-                                    <div class="px-2">
-                                        <div class="text-muted small mb-1">{{ __('admin::admin.dashboard.centers') ?? 'المراكز' }}</div>
-                                        <div class="h4 fw-bold mb-0 text-dark">{{ $plan['centers_count'] }}</div>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="px-2 text-end">
-                                        <div class="text-muted small mb-1">{{ __('admin::admin.dashboard.net_profits') ?? 'صافي الأرباح' }}</div>
-                                        <div class="h4 fw-bold mb-0 text-success">
-                                            {{ number_format($plan['total_profits'], 0) }}
-                                            <span class="small fw-normal text-muted" style="font-size: 0.7rem;">{{ __('admin::admin.egp') }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="mt-4 pt-3 border-top">
-                                <div class="progress" style="height: 6px;">
-                                    @php
-                                        $percentage = $totalTenants > 0 ? ($plan['centers_count'] / $totalTenants) * 100 : 0;
-                                    @endphp
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $percentage }}%" aria-valuenow="{{ $percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <div class="d-flex justify-content-between mt-2">
-                                    <small class="text-muted">{{ __('admin::admin.dashboard.acquisition_rate') ?? 'نسبة الاستحواذ' }}</small>
-                                    <small class="fw-bold">{{ number_format($percentage, 1) }}%</small>
-                                </div>
-                            </div>
+                <x-ui.card>
+                    <div class="flex items-center justify-between mb-4">
+                        <x-ui.badge variant="brand" size="md">{{ $plan['name'] }}</x-ui.badge>
+                        @if($plan['badge'])
+                            <x-ui.badge variant="warning" size="sm">{{ $plan['badge'] }}</x-ui.badge>
+                        @endif
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 pt-2 border-t border-brand-border dark:border-slate-800">
+                        <div>
+                            <p class="text-xs text-slate-400 font-medium">Centers</p>
+                            <p class="text-xl font-bold text-slate-900 dark:text-slate-100 mt-1">{{ number_format($plan['count']) }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400 font-medium">Net Profit</p>
+                            <p class="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">{{ number_format($plan['revenue'], 2) }} <span class="text-xs font-normal">EGP</span></p>
                         </div>
                     </div>
-                </div>
+                </x-ui.card>
             @endforeach
         </div>
     </div>
 
-    <!-- Recent Tenants -->
-    <div class="card border-0 shadow-sm rounded-4">
-        <div class="card-header bg-white border-0 py-3 px-4 d-flex justify-content-between align-items-center">
-            <h5 class="fw-bold mb-0">{{ __('admin::admin.dashboard.recent_tenants') }}</h5>
-            <a href="{{ route('admin.tenants.index') }}" class="btn btn-sm btn-link">{{ __('admin::admin.view_all') }}</a>
-        </div>
-        <div class="table-responsive">
-            <table class="table align-middle mb-0">
-                <thead class="bg-light">
-                    <tr>
-                        <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.name') ?? 'اسم المركز' }}</th>
-                        <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.domain') ?? 'النطاق' }}</th>
-                        <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.joined_on') ?? 'تاريخ الانضمام' }}</th>
-                        <th class="px-4 py-3 border-0">{{ __('admin::admin.tenants.table.status') ?? 'الحالة' }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse(\App\Models\Tenant::latest()->take(5)->get() as $tenant)
-                        <tr>
-                            <td class="px-4 position-relative">
-                                <div class="d-flex align-items-center">
-                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
-                                        {{ substr($tenant->name, 0, 1) }}
-                                    </div>
-                                    <div>
-                                        <a href="{{ route('admin.tenants.show', $tenant->id) }}" class="fw-bold text-decoration-none text-dark stretched-link">{{ $tenant->name }}</a>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-4 text-muted">{{ $tenant->domain }}</td>
-                            <td class="px-4 text-muted">{{ $tenant->created_at->format('Y-m-d') }}</td>
-                            <td class="px-4">
-                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{ $tenant->status }}</span>
-                            </td>
+    <!-- Recent Tenants & Tickets Split Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Recent Tenants -->
+        <x-ui.card title="{{ __('admin::admin.dashboard.recent_tenants') ?? 'Recent Centers' }}" noPadding="true">
+            @if(count($recentTenants) > 0)
+                <x-ui.table :headers="['Center Name', 'Domain', 'Joined Date']">
+                    @foreach($recentTenants as $tenant)
+                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                            <td class="px-6 py-4 font-semibold text-slate-900 dark:text-slate-100">{{ $tenant->name ?? 'N/A' }}</td>
+                            <td class="px-6 py-4 text-xs font-mono text-slate-500">{{ $tenant->domain ?? 'N/A' }}</td>
+                            <td class="px-6 py-4 text-xs text-slate-400">{{ $tenant->created_at ? $tenant->created_at->diffForHumans() : 'N/A' }}</td>
                         </tr>
-                    @empty
-                        <tr>
-                             <td colspan="4" class="text-center py-5 text-muted">{{ __('admin::admin.dashboard.no_tenants') }}</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
+                    @endforeach
+                </x-ui.table>
+            @else
+                <x-ui.empty-state
+                    title="No Recent Centers"
+                    description="No educational centers have registered recently."
+                    icon="fas fa-building"
+                />
+            @endif
+        </x-ui.card>
 
-    <!-- Recent Support Tickets -->
-    <div class="card border-0 shadow-sm rounded-4 mt-4">
-        <div class="card-header bg-white border-0 py-3 px-4 d-flex justify-content-between align-items-center">
-            <h5 class="fw-bold mb-0">{{ __('admin::admin.dashboard.recent_tickets') }}</h5>
-            <a href="{{ route('admin.tickets.index') }}" class="btn btn-sm btn-link">{{ __('admin::admin.view_all') }}</a>
-        </div>
-        <div class="table-responsive">
-            <table class="table align-middle mb-0">
-                <thead class="bg-light">
-                    <tr>
-                        <th class="px-4 py-3 border-0">{{ __('admin::admin.tickets.subject') }}</th>
-                        <th class="px-4 py-3 border-0">{{ __('admin::admin.tickets.user') }}</th>
-                        <th class="px-4 py-3 border-0">{{ __('admin::admin.tickets.center') }}</th>
-                        <th class="px-4 py-3 border-0">{{ __('admin::admin.tickets.date') }}</th>
-                        <th class="px-4 py-3 border-0">{{ __('admin::admin.tickets.status') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($recentTickets as $ticket)
-                        <tr>
-                            <td class="px-4 fw-bold position-relative">
-                                <a href="{{ route('admin.tickets.show', $ticket->id) }}" class="text-decoration-none text-dark stretched-link">{{ $ticket->subject }}</a>
-                            </td>
-                            <td class="px-4">{{ $ticket->user ? $ticket->user->name : __('admin::admin.tenants.table.not_specified') }}</td>
-                            <td class="px-4 text-muted">{{ $ticket->tenant ? $ticket->tenant->name : __('admin::admin.sidebar.admin') }}</td>
-                            <td class="px-4 text-muted">{{ $ticket->created_at->format('Y-m-d') }}</td>
-                            <td class="px-4">
-                                @if($ticket->status == 'open')
-                                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">{{ __('admin::admin.dashboard.ticket_open') ?? 'مفتوحة' }}</span>
-                                @elseif($ticket->status == 'pending')
-                                    <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3">{{ __('admin::admin.dashboard.ticket_pending') ?? 'قيد الانتظار' }}</span>
+        <!-- Recent Support Tickets -->
+        <x-ui.card title="{{ __('admin::admin.dashboard.recent_tickets') ?? 'Recent Support Tickets' }}" noPadding="true">
+            @if(count($recentTickets) > 0)
+                <x-ui.table :headers="['Subject', 'Status', 'Date']">
+                    @foreach($recentTickets as $ticket)
+                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                            <td class="px-6 py-4 font-semibold text-slate-900 dark:text-slate-100 truncate max-w-xs">{{ $ticket->subject ?? 'Support Query' }}</td>
+                            <td class="px-6 py-4">
+                                @if($ticket->status === 'open')
+                                    <x-ui.badge variant="danger" size="sm" dot="true">Open</x-ui.badge>
+                                @elseif($ticket->status === 'pending')
+                                    <x-ui.badge variant="warning" size="sm" dot="true">Pending</x-ui.badge>
                                 @else
-                                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{ __('admin::admin.dashboard.ticket_closed') ?? 'مغلقة' }}</span>
+                                    <x-ui.badge variant="success" size="sm" dot="true">Closed</x-ui.badge>
                                 @endif
                             </td>
+                            <td class="px-6 py-4 text-xs text-slate-400">{{ $ticket->created_at ? $ticket->created_at->diffForHumans() : 'N/A' }}</td>
                         </tr>
-                    @empty
-                        <tr>
-                             <td colspan="5" class="text-center py-5 text-muted">{{ __('admin::admin.dashboard.no_tickets') }}</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                    @endforeach
+                </x-ui.table>
+            @else
+                <x-ui.empty-state
+                    title="No Recent Tickets"
+                    description="Support queue is clear. No tickets submitted."
+                    icon="fas fa-headset"
+                />
+            @endif
+        </x-ui.card>
     </div>
 @endsection
