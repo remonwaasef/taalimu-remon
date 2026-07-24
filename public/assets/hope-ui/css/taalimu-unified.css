@@ -25,7 +25,7 @@ body {
 /* Unified Header Banner - Premium Dark */
 .iq-navbar-header {
     padding: 0 !important;
-    height: 260px !important;
+    height: 140px !important;
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important; /* Premium Dark Slate/Navy */
     position: relative;
     overflow: hidden;
@@ -77,7 +77,7 @@ body {
 
 /* Ensure banner content has enough space at the bottom for the overlap */
 .iq-navbar-header .iq-container {
-    padding-bottom: 4rem !important;
+    padding-bottom: 1.5rem !important;
 }
 
 .iq-navbar-header .container-fluid {
@@ -1108,10 +1108,18 @@ label {
 
 /* --- 15. Sidebar Compact --- */
 .sidebar .nav-item .nav-link {
-    padding: 0.5rem 0.85rem !important;
-    font-size: 0.825rem !important;
-    padding-left: 38px !important;
-    padding-right: 12px !important;
+    padding: 0.55rem 0.85rem !important;
+    font-size: 0.85rem !important;
+}
+
+[dir="rtl"] .sidebar .nav-item .nav-link {
+    padding-right: 0.85rem !important;
+    padding-left: 0.85rem !important;
+}
+
+[dir="ltr"] .sidebar .nav-item .nav-link {
+    padding-left: 0.85rem !important;
+    padding-right: 0.85rem !important;
 }
 
 .sidebar .static-item {
@@ -1274,8 +1282,19 @@ label {
     width: 24px !important; /* Smaller icons */
     height: 24px !important;
     font-size: 0.95rem !important;
-    margin-left: 10px !important; /* Space in RTL */
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+[dir="rtl"] .sidebar .nav-item .nav-link .icon {
+    margin-left: 10px !important;
     margin-right: 0 !important;
+}
+
+[dir="ltr"] .sidebar .nav-item .nav-link .icon {
+    margin-right: 10px !important;
+    margin-left: 0 !important;
 }
 
 /* Hover State */
