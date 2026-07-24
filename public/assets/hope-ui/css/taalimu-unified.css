@@ -1,11 +1,11 @@
-/* ===== Global Emerald Green Theme Override (Taalimu Unified) ===== */
+/* ===== Global Royal Indigo & Violet Theme (Matching Mockup Identity) ===== */
 :root {
-    --bs-primary: #059669 !important; /* Emerald 600 */
-    --bs-primary-rgb: 5, 150, 105 !important;
-    --bs-link-color: #059669 !important;
-    --bs-link-hover-color: #047857 !important; /* Emerald 700 */
-    --primary-color: #059669 !important;
-    --primary-gradient: linear-gradient(to right, #059669 0%, #14b8a6 100%); /* Emerald 600 to Teal 500 */
+    --bs-primary: #6366f1 !important; /* Royal Indigo 600 */
+    --bs-primary-rgb: 99, 102, 241 !important;
+    --bs-link-color: #6366f1 !important;
+    --bs-link-hover-color: #4f46e5 !important;
+    --primary-color: #6366f1 !important;
+    --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
 }
 
 body {
@@ -109,32 +109,33 @@ body {
     background: linear-gradient(to right, #047857, #0d9488) !important;
 }
 
-/* Override Hope UI primary color classes */
+/* Override Hope UI primary color classes (Royal Indigo Palette) */
 .bg-primary,
 .badge-primary {
-    background-color: #059669 !important;
-    border-color: #059669 !important;
+    background-color: #6366f1 !important;
+    border-color: #6366f1 !important;
 }
 
 .btn-primary {
-    background: linear-gradient(to right, #059669, #14b8a6) !important;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
     border: none !important;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25) !important;
 }
 
 .btn-primary:hover,
 .btn-primary:focus {
-    background: linear-gradient(to right, #047857, #0d9488) !important;
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%) !important;
     border: none !important;
-    box-shadow: 0 8px 15px rgba(5, 150, 105, 0.2) !important;
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35) !important;
 }
 
 .btn-outline-primary {
-    color: #059669 !important;
-    border-color: #059669 !important;
+    color: #6366f1 !important;
+    border-color: #6366f1 !important;
 }
 
 .btn-outline-primary:hover {
-    background: linear-gradient(to right, #059669, #14b8a6) !important;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
     border-color: transparent !important;
     color: white !important;
 }
@@ -1281,27 +1282,21 @@ label {
     color: #10b981 !important;
 }
 
-/* Active State - Refined Emerald */
+/* Active State - Soft Purple Pill (Matching Mockup) */
 .sidebar .nav-item .nav-link.active {
-    background: #ecfdf5 !important; /* Solid subtle background */
-    color: #059669 !important;
+    background: #f0f0ff !important; /* Soft Indigo Tint */
+    color: #6366f1 !important;
     font-weight: 700 !important;
+    border-radius: 12px !important;
     border: none !important;
 }
 
 .sidebar .nav-item .nav-link.active::after {
-    content: '';
-    position: absolute;
-    right: -8px;
-    top: 15%;
-    bottom: 15%;
-    width: 3px; /* Thinner indicator */
-    background: #10b981;
-    border-radius: 4px 0 0 4px;
+    display: none !important;
 }
 
 .sidebar .nav-item .nav-link.active .icon {
-    color: #059669 !important;
+    color: #6366f1 !important;
 }
 
 /* Category/Static Labels */
