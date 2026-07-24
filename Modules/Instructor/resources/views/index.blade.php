@@ -332,55 +332,130 @@
         </div>
     </div>
 
-    <div class="row g-4 mb-5">
-        <div class="col-lg-8">
+    <!-- Grid Row 2: Today's Schedule | Quick Actions | Setup Progress -->
+    <div class="row g-4 mb-4">
+        <!-- Today's Schedule -->
+        <div class="col-xl-5 col-lg-6">
             <div class="stats-card p-4 h-100">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h5 class="section-heading mb-0">{{ __('instructor::dashboard.attendance_analytics') }}</h5>
-                    <span class="badge-chip">{{ __('instructor::dashboard.last_7_days') }}</span>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="section-heading mb-0 d-flex align-items-center gap-2">
+                        <i class="fas fa-calendar-day text-indigo"></i>
+                        <span>Today's Schedule</span>
+                    </h5>
+                    <a href="{{ route('instructor.schedules.index') }}" class="text-indigo font-bold text-xs hover-underline">View full schedule &rarr;</a>
                 </div>
-                <div style="position: relative; height: 280px; width: 100%;">
-                    <canvas id="attendanceChart"></canvas>
+                <div class="d-grid gap-2.5">
+                    <div class="p-3 rounded-3 bg-slate-50 border border-slate-100 d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="text-center px-2 py-1 bg-white rounded-2 border">
+                                <div class="fw-bold text-xs text-indigo">09:00</div>
+                                <div class="text-muted fs-8">10:00</div>
+                            </div>
+                            <div>
+                                <div class="fw-bold text-slate-800 text-sm">Mathematics</div>
+                                <div class="text-muted text-xs">Grade 10 &bull; Group A</div>
+                            </div>
+                        </div>
+                        <span class="badge bg-emerald-50 text-emerald rounded-pill px-3 py-1 font-bold text-xs" style="background: #ecfdf5; color: #059669;">In Progress</span>
+                    </div>
+                    <div class="p-3 rounded-3 bg-white border border-slate-100 d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="text-center px-2 py-1 bg-slate-50 rounded-2 border">
+                                <div class="fw-bold text-xs text-slate-700">11:00</div>
+                                <div class="text-muted fs-8">12:00</div>
+                            </div>
+                            <div>
+                                <div class="fw-bold text-slate-800 text-sm">Physics</div>
+                                <div class="text-muted text-xs">Grade 11 &bull; Group B</div>
+                            </div>
+                        </div>
+                        <span class="badge bg-slate-100 text-slate-600 rounded-pill px-3 py-1 font-bold text-xs">Upcoming</span>
+                    </div>
+                    <div class="p-3 rounded-3 bg-white border border-slate-100 d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="text-center px-2 py-1 bg-slate-50 rounded-2 border">
+                                <div class="fw-bold text-xs text-slate-700">14:00</div>
+                                <div class="text-muted fs-8">15:00</div>
+                            </div>
+                            <div>
+                                <div class="fw-bold text-slate-800 text-sm">English Language</div>
+                                <div class="text-muted text-xs">Grade 9 &bull; Group C</div>
+                            </div>
+                        </div>
+                        <span class="badge bg-slate-100 text-slate-600 rounded-pill px-3 py-1 font-bold text-xs">Upcoming</span>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-4" id="tour-quick-links">
+
+        <!-- Quick Actions Grid -->
+        <div class="col-xl-4 col-lg-6" id="tour-quick-links">
             <div class="stats-card p-4 h-100">
-                <h5 class="section-heading mb-4">{{ __('instructor::dashboard.quick_links') }}</h5>
-                <div class="d-grid gap-3">
-                    <a href="{{ route('instructor.students.create') }}" class="btn btn-light action-card text-start p-3 rounded-4 border-0">
-                        <div class="d-flex align-items-center">
-                            <div class="action-icon action-icon-indigo me-3">
-                                <i class="fas fa-plus-circle"></i>
+                <h5 class="section-heading mb-3 d-flex align-items-center gap-2">
+                    <i class="fas fa-bolt text-amber"></i>
+                    <span>Quick Actions</span>
+                </h5>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <a href="{{ route('instructor.students.create') }}" class="btn btn-light action-card text-center p-3 rounded-4 border-0 w-100 h-100 d-flex flex-column align-items-center justify-center">
+                            <div class="action-icon action-icon-indigo mb-2">
+                                <i class="fas fa-user-plus"></i>
                             </div>
-                            <div>
-                                <div class="fw-bold text-dark" style="font-size: 0.9rem;">{{ __('instructor::dashboard.add_new_student') }}</div>
-                                <small class="text-muted">{{ __('instructor::dashboard.add_student_hint') }}</small>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="{{ route('instructor.groups.create') }}" class="btn btn-light action-card text-start p-3 rounded-4 border-0">
-                        <div class="d-flex align-items-center">
-                            <div class="action-icon action-icon-emerald me-3">
+                            <div class="fw-bold text-dark text-xs">{{ __('instructor::dashboard.add_new_student') }}</div>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{{ route('instructor.groups.create') }}" class="btn btn-light action-card text-center p-3 rounded-4 border-0 w-100 h-100 d-flex flex-column align-items-center justify-center">
+                            <div class="action-icon action-icon-emerald mb-2">
                                 <i class="fas fa-folder-plus"></i>
                             </div>
-                            <div>
-                                <div class="fw-bold text-dark" style="font-size: 0.9rem;">{{ __('instructor::dashboard.create_new_group') }}</div>
-                                <small class="text-muted">{{ __('instructor::dashboard.create_group_hint') }}</small>
+                            <div class="fw-bold text-dark text-xs">{{ __('instructor::dashboard.create_new_group') }}</div>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{{ route('instructor.attendance.index') }}" class="btn btn-light action-card text-center p-3 rounded-4 border-0 w-100 h-100 d-flex flex-column align-items-center justify-center">
+                            <div class="action-icon action-icon-cyan mb-2">
+                                <i class="fas fa-clipboard-check"></i>
+                            </div>
+                            <div class="fw-bold text-dark text-xs">{{ __('instructor::dashboard.smart_attendance') }}</div>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{{ route('instructor.settings') }}" class="btn btn-light action-card text-center p-3 rounded-4 border-0 w-100 h-100 d-flex flex-column align-items-center justify-center">
+                            <div class="action-icon action-icon-indigo mb-2" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
+                                <i class="fab fa-whatsapp"></i>
+                            </div>
+                            <div class="fw-bold text-dark text-xs">WhatsApp API</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Setup Progress Widget -->
+        <div class="col-xl-3 col-lg-12">
+            <div class="stats-card p-4 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <h5 class="section-heading mb-3 d-flex align-items-center gap-2">
+                        <i class="fas fa-tasks text-indigo"></i>
+                        <span>Setup Progress</span>
+                    </h5>
+                    <div class="text-center my-3">
+                        <div class="position-relative d-inline-flex align-items-center justify-content-center">
+                            <svg class="w-24 h-24" viewBox="0 0 36 36" style="width: 100px; height: 100px;">
+                                <path stroke="#f1f5f9" stroke-width="3.5" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path stroke="#6366f1" stroke-width="3.5" stroke-dasharray="60, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            </svg>
+                            <div class="position-absolute text-center">
+                                <span class="fw-bold fs-4 text-slate-800">60%</span>
                             </div>
                         </div>
-                    </a>
-                    <a href="{{ route('instructor.attendance.index') }}" class="btn btn-light action-card text-start p-3 rounded-4 border-0">
-                        <div class="d-flex align-items-center">
-                            <div class="action-icon action-icon-cyan me-3">
-                                <i class="fas fa-qrcode"></i>
-                            </div>
-                            <div>
-                                <div class="fw-bold text-dark" style="font-size: 0.9rem;">{{ __('instructor::dashboard.smart_attendance') }}</div>
-                                <small class="text-muted">{{ __('instructor::dashboard.attendance_hint') }}</small>
-                            </div>
-                        </div>
-                    </a>
+                    </div>
+                    <ul class="list-unstyled text-xs text-muted mb-0 space-y-1 font-arabic">
+                        <li class="text-emerald font-bold mb-1"><i class="fas fa-check-circle me-1"></i> Profile Setup</li>
+                        <li class="text-emerald font-bold mb-1"><i class="fas fa-check-circle me-1"></i> Group Creation</li>
+                        <li class="text-slate-500 mb-1"><i class="far fa-circle me-1"></i> Add Students</li>
+                    </ul>
                 </div>
             </div>
         </div>
