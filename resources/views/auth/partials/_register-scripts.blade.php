@@ -23,7 +23,7 @@ document.addEventListener('alpine:init', () => {
         discountText: '',
         isApplyingCoupon: false,
         selectedCurrency: config.selectedCurrency || 'EGP',
-        accountType: config.accountType || 'instructor',
+        accountType: config.accountType || null,
         showPlanModal: false,
         formSubmitted: false,
         phoneVerified: false,
