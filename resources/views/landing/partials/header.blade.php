@@ -1,11 +1,11 @@
 <header 
-    class="fixed top-0 left-0 right-0 z-[100] transition-all duration-300"
+    class="fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 backdrop-blur-md"
     x-data="{ 
         scrolled: false,
         isMenuOpen: false
     }"
     @scroll.window="scrolled = window.pageYOffset > 20"
-    :class="scrolled ? 'bg-white border-b border-slate-200/50 py-2 shadow-md' : 'bg-transparent py-4'"
+    :class="scrolled ? 'bg-white/95 border-b border-slate-200/80 py-2 shadow-md' : 'bg-white/80 border-b border-slate-200/50 py-3.5 shadow-sm'"
 >
     <div class="container mx-auto px-4 lg:px-12">
         <div class="flex items-center justify-between gap-4">
@@ -45,7 +45,8 @@
                     </div>
                 </div>
 
-                <a href="{{ route('login.portal') }}" class="text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors whitespace-nowrap">
+                <a href="{{ route('login.portal') }}" class="text-xs font-bold text-slate-800 hover:text-emerald-600 bg-slate-100 hover:bg-emerald-50 px-3.5 py-2 rounded-lg transition-all whitespace-nowrap border border-slate-200/60">
+                    <i class="fas fa-sign-in-alt me-1 opacity-70"></i>
                     {{ __('landing.nav.sign_in') }}
                 </a>
                 
