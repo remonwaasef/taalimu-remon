@@ -12,13 +12,39 @@
       </i>
     </div>
     
+    <div class="input-group d-none d-md-flex mx-4" style="max-width: 380px;">
+        <span class="input-group-text bg-white border-end-0 rounded-start-pill text-muted ps-3">
+            <i class="fas fa-search"></i>
+        </span>
+        <input type="text" class="form-control border-start-0 rounded-end-pill bg-white shadow-none font-arabic text-sm" placeholder="Search students, groups, classes...">
+    </div>
+    
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ms-auto  navbar-list mb-2 mb-lg-0">
+      <ul class="navbar-nav ms-auto navbar-list mb-2 mb-lg-0 align-items-center gap-2">
+        <!-- Quick Action Add Button -->
+        <li class="nav-item">
+            <div class="dropdown">
+                <button class="btn btn-primary rounded-pill px-3 py-1.5 font-bold text-xs d-flex align-items-center gap-1.5 shadow-sm" data-bs-toggle="dropdown">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Add New</span>
+                    <i class="fas fa-chevron-down ms-1 fs-8 opacity-75"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-3">
+                    <li><a class="dropdown-item py-2 text-xs font-bold" href="{{ route('instructor.students.create') }}"><i class="fas fa-user-plus me-2 text-indigo"></i> {{ __('instructor::dashboard.add_new_student') }}</a></li>
+                    <li><a class="dropdown-item py-2 text-xs font-bold" href="{{ route('instructor.groups.create') }}"><i class="fas fa-folder-plus me-2 text-emerald"></i> {{ __('instructor::dashboard.create_new_group') }}</a></li>
+                    <li><a class="dropdown-item py-2 text-xs font-bold" href="{{ route('instructor.schedules.index') }}"><i class="fas fa-calendar-plus me-2 text-amber"></i> {{ __('instructor::sidebar.schedules') }}</a></li>
+                </ul>
+            </div>
+        </li>
+
         <!-- Urgent Payments / Debts -->
-        <li class="nav-item me-2 d-flex align-items-center">
-          <a href="{{ route('instructor.billing') }}?status=unpaid" class="nav-link position-relative" title="المدفوعات العاجلة / المديونيات">
-             <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
-                 <i class="fas fa-file-invoice-dollar"></i>
+        <li class="nav-item">
+          <a href="{{ route('instructor.billing') }}?status=unpaid" class="nav-link position-relative p-1" title="Urgent Payments">
+             <div class="bg-slate-100 text-slate-700 rounded-circle d-flex align-items-center justify-content-center border" style="width: 36px; height: 36px;">
+                 <i class="fas fa-bell text-xs"></i>
+                 <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                    <span class="visually-hidden">New alerts</span>
+                 </span>
              </div>
           </a>
         </li>
