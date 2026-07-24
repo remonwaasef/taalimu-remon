@@ -86,4 +86,12 @@
                         </div>
                     </label>
                 </div>
+
+                <!-- Prominent Centered Login Link (Always visible right below selection) -->
+                <div class="mt-6 text-center">
+                    <span class="text-xs sm:text-sm text-slate-600 font-arabic font-bold inline-flex items-center gap-1 bg-slate-100/80 px-4 py-2 rounded-full border border-slate-200/60 shadow-sm">
+                        {{ __('auth.login.no_account_link') }}
+                        <a href="{{ route('login.portal') }}" class="text-brand-secondary font-black hover:underline me-1">{{ __('auth.login.title') }}</a>
+                    </span>
+                </div>
             </div>

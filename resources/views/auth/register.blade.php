@@ -175,14 +175,6 @@
             </div> <!-- End Blurred Wrapper -->
         </div>
 
-        <!-- Footer Link (Centered under card) -->
-        <div class="p-4 bg-slate-50/80 border-t border-slate-100 text-center relative z-20">
-            <span class="text-sm text-slate-600 font-arabic font-bold">
-                {{ __('auth.login.no_account_link') }}
-                <a href="{{ route('login.portal') }}" class="text-brand-secondary font-black hover:underline me-1">{{ __('auth.login.title') }}</a>
-            </span>
-        </div>
-
 @include('auth.partials._register-plan-modal')
     </div>
 @endsection
