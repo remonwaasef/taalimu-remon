@@ -44,7 +44,7 @@ class ContentSecurityPolicy
                 "style-src 'self' 'unsafe-inline' {$cdn} {$fonts}",
                 "font-src 'self' data: {$cdn} {$fonts}",
                 "img-src 'self' data: blob: https:",
-                "connect-src 'self' https://ipapi.co https://cloudflareinsights.com",
+                "connect-src 'self' https://ipapi.co https://get.geojs.io https://cloudflareinsights.com",
                 "media-src 'self' https://assets.mixkit.co",
                 "worker-src 'self' blob:",
                 "manifest-src 'self'",

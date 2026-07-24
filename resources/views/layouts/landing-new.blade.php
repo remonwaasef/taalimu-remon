@@ -48,14 +48,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">    
     <!-- Preload Hero Image for faster LCP -->
-    @php
-        $heroImage = match(app()->getLocale()) {
-            'en' => 'hero-mockup-en.webp',
-            'fr' => 'hero-mockup-fr.webp',
-            default => 'hero-mockup-v2.webp',
-        };
-    @endphp
-    <link rel="preload" as="image" href="{{ asset('images/' . $heroImage) }}" type="image/webp">
+    <link rel="preload" as="image" href="{{ asset('images/hero-dashboard.webp') }}" type="image/webp">
     
     <!-- Resource Hints -->
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
@@ -63,6 +56,7 @@
     <!-- PWA Support -->
     <link rel="manifest" href="/manifest.json?v=3">
     <meta name="theme-color" content="#3A0CA3">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Taalimu">

@@ -136,7 +136,7 @@
                         </div>
                         <!-- Image Container -->
                         <div class="relative bg-slate-100 overflow-hidden">
-                            <img src="{{ asset('images/hero-dashboard.png') }}" alt="Taalimu Dashboard"
+                            <img src="{{ asset('images/hero-dashboard.webp') }}" alt="Taalimu Dashboard"
                                 class="w-full h-auto object-cover object-top border-b border-white">
                         </div>
                     </div>
