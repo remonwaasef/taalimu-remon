@@ -21,8 +21,8 @@
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-    <!-- Vite Assets (TailwindCSS) -->
-    @vite(['resources/css/app.scss', 'resources/js/app.js'])
+    <!-- Vite Assets (TailwindCSS + App) -->
+    @vite(['resources/css/tailwind.css', 'resources/css/app.scss', 'resources/js/app.js'])
 
     @stack('styles')
 </head>

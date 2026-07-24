@@ -7,6 +7,7 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.scss',
+                'resources/css/tailwind.css',
                 'resources/js/app.js',
                 'resources/js/app.jsx',
                 'resources/css/landing-new.css'
