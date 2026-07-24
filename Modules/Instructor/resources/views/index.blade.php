@@ -1,657 +1,316 @@
-@extends('instructor::components.layouts.hope-master')
+@extends('layouts.app-next')
 
-@section('page-title', __('instructor::dashboard.title'))
+@section('title', __('instructor::dashboard.title') ?? 'Instructor Dashboard')
 
-@push('styles')
-<style>
-    /* ═══════════ Premium Design System ═══════════ */
+@section('sidebar')
+    <x-ui.sidebar brandName="Taalimu">
+        <div class="space-y-1">
+            <a href="{{ route('instructor.dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-brand-primary bg-brand-50 dark:bg-brand-900/30">
+                <i class="fas fa-home w-4 text-center"></i>
+                <span>{{ __('instructor::sidebar.dashboard') }}</span>
+            </a>
 
-    /* Stats Cards — Glassmorphism */
-    .stats-card {
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-radius: 1.25rem;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.03);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 1px solid rgba(255, 255, 255, 0.7);
-        position: relative;
-    }
-    .stats-card::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        border-radius: 1.25rem;
-        padding: 1px;
-        background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0));
-        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor;
-        mask-composite: exclude;
-        pointer-events: none;
-    }
-    .stats-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02), 0 20px 40px rgba(0, 0, 0, 0.06);
-    }
+            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Teaching</div>
 
-    /* Hover Lift — Universal */
-    .hover-lift {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .hover-lift:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06) !important;
-    }
+            <a href="{{ route('instructor.students.list') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+                <i class="fas fa-user-graduate w-4 text-center"></i>
+                <span>{{ __('instructor::sidebar.students') }}</span>
+            </a>
 
-    /* Gradient Icon Pills */
-    .icon-pill {
-        width: 52px;
-        height: 52px;
-        border-radius: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.25rem;
-        flex-shrink: 0;
-    }
-    .icon-pill-indigo { background: linear-gradient(135deg, #6366f1, #818cf8); color: #fff; }
-    .icon-pill-emerald { background: linear-gradient(135deg, #059669, #34d399); color: #fff; }
-    .icon-pill-amber { background: linear-gradient(135deg, #f59e0b, #fbbf24); color: #fff; }
+            <a href="{{ route('instructor.groups.list') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+                <i class="fas fa-users w-4 text-center"></i>
+                <span>{{ __('instructor::sidebar.groups') }}</span>
+            </a>
 
-    /* Quick Links — Premium Action Cards */
-    .action-card {
-        background: #ffffff !important;
-        border: 1px solid #f1f5f9 !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .action-card:hover {
-        border-color: transparent !important;
-        background: linear-gradient(135deg, #f8fafc, #f1f5f9) !important;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04) !important;
-    }
-    .action-icon {
-        width: 42px;
-        height: 42px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1rem;
-        flex-shrink: 0;
-        transition: transform 0.3s ease;
-    }
-    .action-card:hover .action-icon { transform: scale(1.1); }
-    .action-icon-indigo { background: rgba(99, 102, 241, 0.1); color: #6366f1; }
-    .action-icon-emerald { background: rgba(5, 150, 105, 0.1); color: #059669; }
-    .action-icon-cyan { background: rgba(6, 182, 212, 0.1); color: #06b6d4; }
+            <a href="{{ route('instructor.schedules.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+                <i class="fas fa-calendar-alt w-4 text-center"></i>
+                <span>{{ __('instructor::sidebar.schedules') }}</span>
+            </a>
 
-    /* Premium Progress Bars */
-    .progress-premium {
-        height: 4px;
-        border-radius: 100px;
-        background: #f1f5f9;
-        overflow: hidden;
-    }
-    .progress-premium .progress-bar {
-        border-radius: 100px;
-        transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .progress-indigo { background: linear-gradient(90deg, #6366f1, #818cf8); }
-    .progress-emerald { background: linear-gradient(90deg, #059669, #34d399); }
-    .progress-amber { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+            <a href="{{ route('instructor.online_classes.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+                <i class="fas fa-video w-4 text-center"></i>
+                <span>{{ __('instructor::sidebar.online_classes') }}</span>
+            </a>
 
-    /* Accent Color Text */
-    .text-indigo { color: #6366f1 !important; }
-    .text-emerald { color: #059669 !important; }
-    .text-amber { color: #f59e0b !important; }
+            <a href="{{ route('instructor.attendance.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+                <i class="fas fa-clipboard-check w-4 text-center"></i>
+                <span>{{ __('instructor::sidebar.attendance') }}</span>
+            </a>
 
-    /* Getting Started Widget — Left Accent Stripe */
-    .getting-started-card {
-        background: #ffffff;
-        border-radius: 1.25rem;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.03), 0 10px 30px rgba(0,0,0,0.04);
-        border: 1px solid rgba(0,0,0,0.03);
-        position: relative;
-        overflow: hidden;
-    }
-    .getting-started-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        width: 5px;
-        background: linear-gradient(180deg, #6366f1, #06b6d4);
-        border-radius: 1.25rem 0 0 1.25rem;
-    }
-    html[dir="rtl"] .getting-started-card::before {
-        left: auto;
-        right: 0;
-        border-radius: 0 1.25rem 1.25rem 0;
-    }
+            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Account</div>
 
-    /* Badge Chip */
-    .badge-chip {
-        background: #f1f5f9;
-        color: #64748b;
-        font-weight: 600;
-        font-size: 0.75rem;
-        padding: 6px 14px;
-        border-radius: 100px;
-        letter-spacing: 0.02em;
-    }
+            <a href="{{ route('instructor.billing') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+                <i class="fas fa-wallet w-4 text-center"></i>
+                <span>{{ __('instructor::sidebar.billing') }}</span>
+            </a>
 
-    /* Empty State CTA */
-    .btn-indigo {
-        background: linear-gradient(135deg, #6366f1, #818cf8) !important;
-        color: white !important;
-        border: none !important;
-        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25) !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .btn-indigo:hover {
-        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35) !important;
-        transform: translateY(-2px);
-    }
+            <a href="{{ route('instructor.settings') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+                <i class="fas fa-cog w-4 text-center"></i>
+                <span>{{ __('instructor::sidebar.settings') }}</span>
+            </a>
+        </div>
 
-    /* Table Row Transitions */
-    .table-hover tbody tr {
-        transition: background-color 0.2s ease;
-    }
-
-    /* Stat Number Animation */
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(12px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    .count-up {
-        animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
-    }
-
-    /* Section Heading */
-    .section-heading {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: #0f172a;
-        letter-spacing: -0.01em;
-    }
-
-    @media (max-width: 768px) {
-        .icon-pill { width: 44px; height: 44px; border-radius: 12px; font-size: 1rem; }
-    }
-</style>
-@endpush
+        <x-slot name="footer">
+            <div class="p-3 rounded-2xl bg-brand-50/60 dark:bg-brand-900/20 border border-brand-100 dark:border-brand-800/40">
+                <div class="flex items-center gap-2 mb-1">
+                    <i class="fas fa-crown text-brand-primary text-xs"></i>
+                    <span class="font-bold text-xs text-brand-primary">Upgrade to Premium</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mb-2 leading-tight">Unlock online classes & automated WhatsApp alerts.</p>
+                <x-ui.button variant="primary" size="sm" class="w-full" href="{{ route('instructor.billing') }}">
+                    Upgrade Now
+                </x-ui.button>
+            </div>
+        </x-slot>
+    </x-ui.sidebar>
+@endsection
 
 @section('content')
+    <x-ui.page-header
+        title="Good afternoon, {{ auth()->user()->name ?? 'Remon' }}! 👋"
+        subtitle="Here's what's happening with your school today."
+    >
+        <x-slot name="actions">
+            <x-ui.button variant="primary" icon="fas fa-plus" size="md" href="{{ route('instructor.students.create') }}">
+                Add New Student
+            </x-ui.button>
+        </x-slot>
+    </x-ui.page-header>
+
+    <!-- Getting Started Banner (If empty state) -->
     @if($totalCourses == 0 || $totalStudents == 0)
-    <div class="getting-started-card mb-4">
-        <div class="p-4 p-md-5">
-            <div class="row align-items-center">
-                <div class="col-lg-8">
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <span class="badge-chip">{{ __('instructor::dashboard.getting_started_title') }}</span>
-                    </div>
-                    <h3 class="fw-bold mb-2" style="color: #0f172a; font-size: 1.5rem; letter-spacing: -0.02em;">{{ __('instructor::dashboard.getting_started_desc') }}</h3>
+        <x-ui.card glass="true" class="mb-8 border-brand-primary/20 bg-gradient-to-r from-brand-50/50 to-indigo-50/30 dark:from-slate-900 dark:to-slate-900">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
+                <div class="space-y-2 max-w-xl">
+                    <x-ui.badge variant="brand" size="sm" dot="true">{{ __('instructor::dashboard.getting_started_title') }}</x-ui.badge>
+                    <h3 class="text-xl font-extrabold text-slate-900 dark:text-slate-100 font-inter">{{ __('instructor::dashboard.getting_started_desc') }}</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Complete setup steps to start inviting students and tracking attendance.</p>
                     
-                    @php
-                        $completedSteps = 0;
-                        if($totalCourses > 0) $completedSteps++;
-                        if($totalStudents > 0) $completedSteps++;
-                        $progress = ($completedSteps / 2) * 100;
-                    @endphp
-                    
-                    <div class="d-flex align-items-center mb-3 mt-3">
-                        <span class="fw-bold me-3" style="color: #6366f1; font-size: 0.85rem;">{{ $completedSteps }} / 2 {{ __('instructor::dashboard.steps_completed') }}</span>
-                        <div class="progress-premium flex-grow-1">
-                            <div class="progress-bar progress-indigo" role="progressbar" style="width: {{ $progress }}%;"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="d-flex flex-wrap gap-3 mt-4">
-                        @if($totalCourses > 0)
-                            <span class="btn btn-light text-muted fw-bold border-0 rounded-pill px-4 pe-none" style="opacity: 0.7;">
-                                <i class="fas fa-check-circle text-emerald me-2"></i>
-                                {{ __('instructor::dashboard.step_create_group') }}
-                            </span>
-                        @else
-                            <a href="{{ route('instructor.groups.create') }}" class="btn btn-indigo rounded-pill px-4 py-2 fw-bold hover-lift">
-                                <i class="fas fa-plus me-2"></i>
-                                {{ __('instructor::dashboard.step_create_group') }}
-                            </a>
-                        @endif
-                        @if($totalStudents > 0)
-                            <span class="btn btn-light text-muted fw-bold border-0 rounded-pill px-4 pe-none" style="opacity: 0.7;">
-                                <i class="fas fa-check-circle text-emerald me-2"></i>
-                                {{ __('instructor::dashboard.step_add_student') }}
-                            </span>
-                        @else
-                            <a href="{{ route('instructor.students.create') }}" class="btn btn-indigo rounded-pill px-4 py-2 fw-bold hover-lift">
-                                <i class="fas fa-plus me-2"></i>
-                                {{ __('instructor::dashboard.step_add_student') }}
-                            </a>
-                        @endif
+                    <div class="flex items-center gap-3 pt-2">
+                        <x-ui.button variant="primary" size="sm" icon="fas fa-folder-plus" href="{{ route('instructor.groups.create') }}">
+                            {{ __('instructor::dashboard.step_create_group') }}
+                        </x-ui.button>
+                        <x-ui.button variant="outline" size="sm" icon="fas fa-user-plus" href="{{ route('instructor.students.create') }}">
+                            {{ __('instructor::dashboard.step_add_student') }}
+                        </x-ui.button>
                     </div>
                 </div>
-                <div class="col-lg-4 text-center d-none d-lg-block">
-                    <div style="width: 140px; height: 140px; margin: 0 auto; background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(6,182,212,0.08)); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-rocket text-indigo" style="font-size: 3rem; opacity: 0.8;"></i>
-                    </div>
+
+                <div class="hidden lg:flex w-24 h-24 rounded-full bg-brand-primary/10 items-center justify-center text-brand-primary text-4xl shrink-0">
+                    <i class="fas fa-rocket animate-pulse"></i>
                 </div>
             </div>
-        </div>
-    </div>
+        </x-ui.card>
     @endif
 
-    <div class="row g-4 mb-4">
-        <div class="col-xl-3 col-md-6" id="tour-stats-students">
-            <div class="stats-card p-4 h-100">
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                    <div>
-                        <h6 class="text-muted mb-1" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">
-                            {{ __('instructor::dashboard.total_students') }}
-                        </h6>
-                        <h2 class="fw-bold mb-0 count-up text-indigo" style="font-size: 2.2rem; letter-spacing: -0.03em;">{{ number_format($totalStudents) }}</h2>
-                    </div>
-                    <div class="icon-pill icon-pill-indigo">
-                        <i class="fas fa-user-graduate"></i>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center mt-3 pt-2 border-top border-slate-100">
-                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2.5 py-1 fw-bold fs-7 me-2">
-                        <i class="fas fa-arrow-up me-1"></i>+15%
-                    </span>
-                    <span class="text-muted small fs-7">{{ __('instructor::dashboard.this_month') ?? 'this month' }}</span>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6" id="tour-stats-groups">
-            <div class="stats-card p-4 h-100">
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                    <div>
-                        <h6 class="text-muted mb-1" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">
-                            {{ __('instructor::dashboard.active_groups') }}
-                        </h6>
-                        <h2 class="fw-bold mb-0 count-up text-emerald" style="font-size: 2.2rem; letter-spacing: -0.03em;">{{ number_format($totalCourses) }}</h2>
-                    </div>
-                    <div class="icon-pill icon-pill-emerald">
-                        <i class="fas fa-users"></i>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center mt-3 pt-2 border-top border-slate-100">
-                    <span class="badge bg-emerald-50 text-emerald rounded-pill px-2.5 py-1 fw-bold fs-7 me-2" style="background: rgba(5, 150, 105, 0.1); color: #059669;">
-                        <i class="fas fa-check me-1"></i>Active
-                    </span>
-                    <span class="text-muted small fs-7">{{ __('instructor::dashboard.groups_count') ?? 'running groups' }}</span>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="stats-card p-4 h-100">
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                    <div>
-                        <h6 class="text-muted mb-1" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">
-                            {{ __('instructor::dashboard.monthly_revenue') }}
-                        </h6>
-                        <h2 class="fw-bold mb-0" style="font-size: 2.2rem; letter-spacing: -0.03em;">
-                            <span class="count-up text-amber">{{ number_format($monthlyRevenue) }}</span>
-                            <small class="fs-6 fw-normal text-muted">{{ app('tenant')->settings['currency'] ?? 'EGP' }}</small>
-                        </h2>
-                    </div>
-                    <div class="icon-pill icon-pill-amber">
-                        <i class="fas fa-wallet"></i>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center mt-3 pt-2 border-top border-slate-100">
-                    <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-2.5 py-1 fw-bold fs-7 me-2">
-                        <i class="fas fa-chart-line me-1"></i>+12%
-                    </span>
-                    <span class="text-muted small fs-7">{{ __('instructor::dashboard.vs_last_month') ?? 'vs last month' }}</span>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="stats-card p-4 h-100">
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                    <div>
-                        <h6 class="text-muted mb-1" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">
-                            {{ __('instructor::dashboard.attendance_rate') ?? 'Attendance Rate' }}
-                        </h6>
-                        <h2 class="fw-bold mb-0 count-up text-primary" style="font-size: 2.2rem; letter-spacing: -0.03em;">95%</h2>
-                    </div>
-                    <div class="icon-pill" style="background: linear-gradient(135deg, #06b6d4, #3b82f6); color: #fff;">
-                        <i class="fas fa-chart-pie"></i>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center mt-3 pt-2 border-top border-slate-100">
-                    <span class="badge bg-info bg-opacity-10 text-info rounded-pill px-2.5 py-1 fw-bold fs-7 me-2">
-                        <i class="fas fa-arrow-up me-1"></i>+5%
-                    </span>
-                    <span class="text-muted small fs-7">High Engagement</span>
-                </div>
-            </div>
-        </div>
+    <!-- Top Key Metrics Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+        <x-ui.stats-card
+            title="{{ __('instructor::dashboard.total_students') }}"
+            value="{{ number_format($totalStudents) }}"
+            change="+15%"
+            changeType="positive"
+            changeLabel="this month"
+            icon="fas fa-user-graduate"
+            iconColor="text-brand-primary bg-brand-50"
+        />
+
+        <x-ui.stats-card
+            title="{{ __('instructor::dashboard.active_groups') }}"
+            value="{{ number_format($totalCourses) }}"
+            change="Active"
+            changeType="positive"
+            changeLabel="running groups"
+            icon="fas fa-users"
+            iconColor="text-emerald-600 bg-emerald-50"
+        />
+
+        <x-ui.stats-card
+            title="{{ __('instructor::dashboard.monthly_revenue') }}"
+            value="{{ number_format($monthlyRevenue) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }}"
+            change="+12%"
+            changeType="positive"
+            changeLabel="vs last month"
+            icon="fas fa-wallet"
+            iconColor="text-amber-600 bg-amber-50"
+        />
+
+        <x-ui.stats-card
+            title="Attendance Rate"
+            value="95%"
+            change="+5%"
+            changeType="positive"
+            changeLabel="high engagement"
+            icon="fas fa-chart-pie"
+            iconColor="text-sky-600 bg-sky-50"
+        />
     </div>
 
-    <!-- Grid Row 2: Today's Schedule | Quick Actions | Setup Progress -->
-    <div class="row g-4 mb-4">
-        <!-- Today's Schedule -->
-        <div class="col-xl-5 col-lg-6">
-            <div class="stats-card p-4 h-100">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="section-heading mb-0 d-flex align-items-center gap-2">
-                        <i class="fas fa-calendar-day text-indigo"></i>
-                        <span>Today's Schedule</span>
-                    </h5>
-                    <a href="{{ route('instructor.schedules.index') }}" class="text-indigo font-bold text-xs hover-underline">View full schedule &rarr;</a>
-                </div>
-                <div class="d-grid gap-2.5">
-                    <div class="p-3 rounded-3 bg-slate-50 border border-slate-100 d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="text-center px-2 py-1 bg-white rounded-2 border">
-                                <div class="fw-bold text-xs text-indigo">09:00</div>
-                                <div class="text-muted fs-8">10:00</div>
+    <!-- Middle Split Grid: Today's Schedule | Quick Actions | Setup Progress -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
+        <!-- Today's Schedule (5 cols) -->
+        <div class="lg:col-span-5">
+            <x-ui.card title="Today's Schedule" subtitle="Upcoming & in-progress sessions">
+                <x-slot name="action">
+                    <a href="{{ route('instructor.schedules.index') }}" class="text-xs font-semibold text-brand-primary hover:underline">View full &rarr;</a>
+                </x-slot>
+
+                <div class="space-y-3">
+                    <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-800 flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <div class="text-center px-2.5 py-1 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700">
+                                <span class="block text-xs font-bold text-brand-primary">09:00</span>
+                                <span class="block text-[10px] text-slate-400">10:00</span>
                             </div>
                             <div>
-                                <div class="fw-bold text-slate-800 text-sm">Mathematics</div>
-                                <div class="text-muted text-xs">Grade 10 &bull; Group A</div>
+                                <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200">Mathematics</h4>
+                                <p class="text-xs text-slate-400">Grade 10 &bull; Group A</p>
                             </div>
                         </div>
-                        <span class="badge bg-emerald-50 text-emerald rounded-pill px-3 py-1 font-bold text-xs" style="background: #ecfdf5; color: #059669;">In Progress</span>
+                        <x-ui.badge variant="success" size="sm" dot="true">In Progress</x-ui.badge>
                     </div>
-                    <div class="p-3 rounded-3 bg-white border border-slate-100 d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="text-center px-2 py-1 bg-slate-50 rounded-2 border">
-                                <div class="fw-bold text-xs text-slate-700">11:00</div>
-                                <div class="text-muted fs-8">12:00</div>
+
+                    <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-800 flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <div class="text-center px-2.5 py-1 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+                                <span class="block text-xs font-bold text-slate-700 dark:text-slate-300">11:00</span>
+                                <span class="block text-[10px] text-slate-400">12:00</span>
                             </div>
                             <div>
-                                <div class="fw-bold text-slate-800 text-sm">Physics</div>
-                                <div class="text-muted text-xs">Grade 11 &bull; Group B</div>
+                                <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200">Physics</h4>
+                                <p class="text-xs text-slate-400">Grade 11 &bull; Group B</p>
                             </div>
                         </div>
-                        <span class="badge bg-slate-100 text-slate-600 rounded-pill px-3 py-1 font-bold text-xs">Upcoming</span>
+                        <x-ui.badge variant="neutral" size="sm">Upcoming</x-ui.badge>
                     </div>
-                    <div class="p-3 rounded-3 bg-white border border-slate-100 d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="text-center px-2 py-1 bg-slate-50 rounded-2 border">
-                                <div class="fw-bold text-xs text-slate-700">14:00</div>
-                                <div class="text-muted fs-8">15:00</div>
+
+                    <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-800 flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <div class="text-center px-2.5 py-1 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+                                <span class="block text-xs font-bold text-slate-700 dark:text-slate-300">14:00</span>
+                                <span class="block text-[10px] text-slate-400">15:00</span>
                             </div>
                             <div>
-                                <div class="fw-bold text-slate-800 text-sm">English Language</div>
-                                <div class="text-muted text-xs">Grade 9 &bull; Group C</div>
+                                <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200">English Language</h4>
+                                <p class="text-xs text-slate-400">Grade 9 &bull; Group C</p>
                             </div>
                         </div>
-                        <span class="badge bg-slate-100 text-slate-600 rounded-pill px-3 py-1 font-bold text-xs">Upcoming</span>
+                        <x-ui.badge variant="neutral" size="sm">Upcoming</x-ui.badge>
                     </div>
                 </div>
-            </div>
+            </x-ui.card>
         </div>
 
-        <!-- Quick Actions Grid -->
-        <div class="col-xl-4 col-lg-6" id="tour-quick-links">
-            <div class="stats-card p-4 h-100">
-                <h5 class="section-heading mb-3 d-flex align-items-center gap-2">
-                    <i class="fas fa-bolt text-amber"></i>
-                    <span>Quick Actions</span>
-                </h5>
-                <div class="row g-2">
-                    <div class="col-6">
-                        <a href="{{ route('instructor.students.create') }}" class="btn btn-light action-card text-center p-3 rounded-4 border-0 w-100 h-100 d-flex flex-column align-items-center justify-center">
-                            <div class="action-icon action-icon-indigo mb-2">
-                                <i class="fas fa-user-plus"></i>
-                            </div>
-                            <div class="fw-bold text-dark text-xs">{{ __('instructor::dashboard.add_new_student') }}</div>
-                        </a>
-                    </div>
-                    <div class="col-6">
-                        <a href="{{ route('instructor.groups.create') }}" class="btn btn-light action-card text-center p-3 rounded-4 border-0 w-100 h-100 d-flex flex-column align-items-center justify-center">
-                            <div class="action-icon action-icon-emerald mb-2">
-                                <i class="fas fa-folder-plus"></i>
-                            </div>
-                            <div class="fw-bold text-dark text-xs">{{ __('instructor::dashboard.create_new_group') }}</div>
-                        </a>
-                    </div>
-                    <div class="col-6">
-                        <a href="{{ route('instructor.attendance.index') }}" class="btn btn-light action-card text-center p-3 rounded-4 border-0 w-100 h-100 d-flex flex-column align-items-center justify-center">
-                            <div class="action-icon action-icon-cyan mb-2">
-                                <i class="fas fa-clipboard-check"></i>
-                            </div>
-                            <div class="fw-bold text-dark text-xs">{{ __('instructor::dashboard.smart_attendance') }}</div>
-                        </a>
-                    </div>
-                    <div class="col-6">
-                        <a href="{{ route('instructor.settings') }}" class="btn btn-light action-card text-center p-3 rounded-4 border-0 w-100 h-100 d-flex flex-column align-items-center justify-center">
-                            <div class="action-icon action-icon-indigo mb-2" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
-                                <i class="fab fa-whatsapp"></i>
-                            </div>
-                            <div class="fw-bold text-dark text-xs">WhatsApp API</div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Setup Progress Widget -->
-        <div class="col-xl-3 col-lg-12">
-            <div class="stats-card p-4 h-100 d-flex flex-column justify-content-between">
-                <div>
-                    <h5 class="section-heading mb-3 d-flex align-items-center gap-2">
-                        <i class="fas fa-tasks text-indigo"></i>
-                        <span>Setup Progress</span>
-                    </h5>
-                    <div class="text-center my-3">
-                        <div class="position-relative d-inline-flex align-items-center justify-content-center">
-                            <svg class="w-24 h-24" viewBox="0 0 36 36" style="width: 100px; height: 100px;">
-                                <path stroke="#f1f5f9" stroke-width="3.5" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                <path stroke="#6366f1" stroke-width="3.5" stroke-dasharray="60, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                            </svg>
-                            <div class="position-absolute text-center">
-                                <span class="fw-bold fs-4 text-slate-800">60%</span>
-                            </div>
+        <!-- Quick Actions (4 cols) -->
+        <div class="lg:col-span-4">
+            <x-ui.card title="{{ __('instructor::dashboard.quick_links') }}" subtitle="Frequently used tasks">
+                <div class="grid grid-cols-2 gap-3">
+                    <a href="{{ route('instructor.students.create') }}" class="p-4 rounded-xl border border-brand-border dark:border-slate-800 hover:border-brand-primary/40 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group">
+                        <div class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-900/30 text-brand-primary flex items-center justify-center text-base mb-2 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-user-plus"></i>
                         </div>
-                    </div>
-                    <ul class="list-unstyled text-xs text-muted mb-0 space-y-1 font-arabic">
-                        <li class="text-emerald font-bold mb-1"><i class="fas fa-check-circle me-1"></i> Profile Setup</li>
-                        <li class="text-emerald font-bold mb-1"><i class="fas fa-check-circle me-1"></i> Group Creation</li>
-                        <li class="text-slate-500 mb-1"><i class="far fa-circle me-1"></i> Add Students</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+                        <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">{{ __('instructor::dashboard.add_new_student') }}</span>
+                    </a>
 
-    <div class="stats-card p-4 mb-5" id="tour-groups-section">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h5 class="section-heading mb-0">{{ __('instructor::dashboard.groups_and_registration') }}</h5>
-        </div>
-        
-        @if($courses->count() > 0)
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead class="bg-light">
-                    <tr>
-                        <th class="border-0 rounded-start-3 px-4">{{ __('instructor::dashboard.group') }}</th>
-                        <th class="border-0">{{ __('instructor::dashboard.students') }}</th>
-                        <th class="border-0">{{ __('instructor::dashboard.registration_link') }}</th>
-                        <th class="border-0 rounded-end-3 text-end px-4">{{ __('instructor::dashboard.actions') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($courses as $course)
-                    <tr>
-                        <td class="px-4">
-                            <div class="fw-bold text-dark">{{ $course->title }}</div>
-                            <small class="text-muted">{{ $course->schedules->count() }} {{ __('instructor::dashboard.attendees_count') }}</small>
-                        </td>
-                        <td>
-                            <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-3">
-                                {{ $course->enrollments_count ?? 0 }}
-                            </span>
-                        </td>
-                        <td>
-                            @if($course->registration_token)
-                            <div class="input-group input-group-sm" style="max-width: 250px;">
-                                <input type="text" class="form-control bg-white" value="{{ route('group.register', ['token' => $course->registration_token]) }}" id="link-{{ $course->id }}" readonly>
-                                <button class="btn btn-primary px-3" onclick="copyLink('link-{{ $course->id }}')">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </div>
-                            @else
-                            <span class="text-muted small">{{ __('instructor::dashboard.no_link') }}</span>
-                            @endif
-                        </td>
-                        <td class="text-end px-4">
-                            <div class="dropdown">
-                                <button class="btn btn-light btn-sm rounded-circle" data-bs-toggle="dropdown" data-bs-boundary="viewport">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-3">
-                                    <li><a class="dropdown-item py-2" href="{{ route('instructor.scanner', $course->id) }}"><i class="fas fa-qrcode me-2 text-primary"></i> {{ __('instructor::dashboard.qr_scanner') }}</a></li>
-                                    <li><a class="dropdown-item py-2" href="{{ route('instructor.groups.edit', $course->id) }}"><i class="fas fa-edit me-2 text-success"></i> {{ __('instructor::dashboard.edit_data') }}</a></li>
-                                    <li>
-                                        <form action="{{ route('instructor.groups.duplicate', $course->id) }}" method="POST">
-                                            @csrf
-                                            <button type="submit" class="dropdown-item py-2"><i class="fas fa-copy me-2 text-info"></i> {{ __('instructor::dashboard.duplicate_group') }}</button>
-                                        </form>
-                                    </li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <form action="{{ route('instructor.groups.rotate-link', $course->id) }}" method="POST" onsubmit="return confirm('{{ __('instructor::dashboard.confirm_rotate_link') }}')">
-                                            @csrf
-                                            <button type="submit" class="dropdown-item py-2 text-warning"><i class="fas fa-sync-alt me-2"></i> {{ __('instructor::dashboard.generate_new_link') }}</button>
-                                        </form>
-                                    </li>
-                                    <li>
-                                        <form action="{{ route('instructor.groups.destroy', $course->id) }}" method="POST" onsubmit="return confirm('{{ __('instructor::dashboard.confirm_delete_group') }}')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="dropdown-item py-2 text-danger"><i class="fas fa-trash-alt me-2"></i> {{ __('instructor::dashboard.delete_group') }}</button>
-                                        </form>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-        @else
-        <div class="row align-items-center bg-white p-4 p-md-5 rounded-4 border" style="border-style: dashed !important; border-color: #cbd5e1 !important;">
-            <div class="col-md-7 text-center text-md-start mb-4 mb-md-0">
-                <div class="d-inline-flex p-3 rounded-circle mb-3 bg-indigo-soft">
-                    <i class="fas fa-layer-group text-indigo fs-2"></i>
-                </div>
-                <h3 class="fw-bold text-dark mb-3">{{ __('instructor::dashboard.no_groups_title') }}</h3>
-                <p class="text-muted mb-4 fs-6 pe-md-4">
-                    {{ __('instructor::dashboard.no_groups_desc_extended') }}
-                </p>
-                <ul class="list-unstyled text-muted mb-4 text-start d-inline-block">
-                    <li class="mb-2"><i class="fas fa-check-circle text-indigo me-2"></i> {{ __('instructor::dashboard.benefit_1') }}</li>
-                    <li class="mb-2"><i class="fas fa-check-circle text-indigo me-2"></i> {{ __('instructor::dashboard.benefit_2') }}</li>
-                    <li><i class="fas fa-check-circle text-indigo me-2"></i> {{ __('instructor::dashboard.benefit_3') }}</li>
-                </ul>
-                <div class="d-block mt-2">
-                    <a href="{{ route('instructor.groups.create') }}" class="btn btn-indigo px-4 py-3 rounded-pill fw-bold">
-                        <i class="fas fa-plus me-2"></i> {{ __('instructor::dashboard.create_first_group') }}
+                    <a href="{{ route('instructor.groups.create') }}" class="p-4 rounded-xl border border-brand-border dark:border-slate-800 hover:border-emerald-500/40 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 flex items-center justify-center text-base mb-2 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-folder-plus"></i>
+                        </div>
+                        <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">{{ __('instructor::dashboard.create_new_group') }}</span>
+                    </a>
+
+                    <a href="{{ route('instructor.attendance.index') }}" class="p-4 rounded-xl border border-brand-border dark:border-slate-800 hover:border-sky-500/40 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group">
+                        <div class="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-950/30 text-sky-600 flex items-center justify-center text-base mb-2 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">{{ __('instructor::dashboard.smart_attendance') }}</span>
+                    </a>
+
+                    <a href="{{ route('instructor.settings') }}" class="p-4 rounded-xl border border-brand-border dark:border-slate-800 hover:border-emerald-500/40 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-500 flex items-center justify-center text-base mb-2 group-hover:scale-110 transition-transform">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">WhatsApp API</span>
                     </a>
                 </div>
-            </div>
-            <div class="col-md-5 text-center d-none d-md-block">
-                <img src="https://cdn-icons-png.flaticon.com/512/4185/4185796.png" class="img-fluid opacity-75" style="max-width: 220px;" alt="Groups">
-            </div>
+            </x-ui.card>
         </div>
-        @endif
+
+        <!-- Setup Progress (3 cols) -->
+        <div class="lg:col-span-3">
+            <x-ui.card title="Setup Progress" subtitle="Completion indicator">
+                <div class="text-center my-2">
+                    <div class="inline-flex items-center justify-center relative">
+                        <svg class="w-24 h-24" viewBox="0 0 36 36">
+                            <path stroke="#E7EAF3" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path stroke="#5B5FEF" stroke-width="3" stroke-dasharray="60, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        </svg>
+                        <span class="absolute text-lg font-extrabold text-slate-800 dark:text-slate-100">60%</span>
+                    </div>
+                </div>
+                <div class="space-y-1.5 text-xs">
+                    <div class="flex items-center gap-2 text-emerald-600 font-semibold">
+                        <i class="fas fa-check-circle text-xs"></i>
+                        <span>Profile Information</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-emerald-600 font-semibold">
+                        <i class="fas fa-check-circle text-xs"></i>
+                        <span>Group Creation</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-slate-400">
+                        <i class="far fa-circle text-xs"></i>
+                        <span>Add Students</span>
+                    </div>
+                </div>
+            </x-ui.card>
+        </div>
     </div>
-@push('scripts')
-<!-- Onboarding Tour removed in favor of Getting Started Checklist -->
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize tooltips
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    });
-});
-
-function copyLink(id) {
-    var copyText = document.getElementById(id);
-    copyText.select();
-    copyText.setSelectionRange(0, 99999);
-    navigator.clipboard.writeText(copyText.value);
-    
-    // Change button icon to checkmark temporarily
-    var btn = copyText.nextElementSibling;
-    var originalHTML = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-check"></i>';
-    btn.classList.add('btn-success');
-    btn.classList.remove('btn-primary');
-    
-    setTimeout(function() {
-        btn.innerHTML = originalHTML;
-        btn.classList.remove('btn-success');
-        btn.classList.add('btn-primary');
-    }, 2000);
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    const ctx = document.getElementById('attendanceChart').getContext('2d');
-    if (ctx) {
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: {!! json_encode($days) !!},
-                datasets: [{
-                    label: '{{ __('instructor::dashboard.attendees_count') }}',
-                    data: {!! json_encode($attendanceData) !!},
-                    borderColor: '#6366f1',
-                    backgroundColor: 'rgba(99, 102, 241, 0.08)',
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 5,
-                    pointBackgroundColor: '#6366f1',
-                    borderWidth: 3,
-                    pointHoverRadius: 7,
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false,
-                        backgroundColor: '#0f172a',
-                        padding: 12,
-                        titleFont: { family: 'Cairo', size: 14 },
-                        bodyFont: { family: 'Cairo', size: 13 },
-                        cornerRadius: 8,
-                        displayColors: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false },
-                        ticks: { 
-                            stepSize: 1,
-                            font: { family: 'Cairo' }
-                        }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: { font: { family: 'Cairo' } }
-                    }
-                }
-            }
-        });
-    }
-});
-</script>
-@endpush
+    <!-- Active Groups Table -->
+    <x-ui.card title="{{ __('instructor::dashboard.groups_and_registration') }}" noPadding="true" class="mb-8">
+        @if($courses->count() > 0)
+            <x-ui.table :headers="[__('instructor::dashboard.group'), __('instructor::dashboard.students'), __('instructor::dashboard.registration_link'), __('instructor::dashboard.actions')]">
+                @foreach($courses as $course)
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                        <td class="px-6 py-4 font-semibold text-slate-900 dark:text-slate-100">
+                            <div>{{ $course->title }}</div>
+                            <span class="text-xs text-slate-400 font-normal">{{ $course->schedules->count() }} sessions</span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <x-ui.badge variant="brand" size="sm">{{ $course->enrollments_count ?? 0 }} enrolled</x-ui.badge>
+                        </td>
+                        <td class="px-6 py-4">
+                            @if($course->registration_token)
+                                <div class="flex items-center gap-2 max-w-xs">
+                                    <input type="text" class="h-8 px-3 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg w-full text-slate-600 dark:text-slate-300 font-mono" value="{{ route('group.register', ['token' => $course->registration_token]) }}" id="link-{{ $course->id }}" readonly />
+                                    <x-ui.button variant="secondary" size="sm" onclick="navigator.clipboard.writeText(document.getElementById('link-{{ $course->id }}').value)">
+                                        <i class="fas fa-copy"></i>
+                                    </x-ui.button>
+                                </div>
+                            @else
+                                <span class="text-xs text-slate-400">{{ __('instructor::dashboard.no_link') }}</span>
+                            @endif
+                        </td>
+                        <td class="px-6 py-4 text-end">
+                            <x-ui.button variant="outline" size="sm" icon="fas fa-qrcode" href="{{ route('instructor.scanner', $course->id) }}">
+                                QR Scanner
+                            </x-ui.button>
+                        </td>
+                    </tr>
+                @endforeach
+            </x-ui.table>
+        @else
+            <x-ui.empty-state
+                title="No Groups Created Yet"
+                description="Create your first study group to start registering students."
+                icon="fas fa-users"
+            >
+                <x-slot name="action">
+                    <x-ui.button variant="primary" icon="fas fa-plus" href="{{ route('instructor.groups.create') }}">
+                        Create First Group
+                    </x-ui.button>
+                </x-slot>
+            </x-ui.empty-state>
+        @endif
+    </x-ui.card>
 @endsection
