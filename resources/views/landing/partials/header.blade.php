@@ -26,6 +26,10 @@
                     {{ __("landing.nav.$nav") }}
                 </a>
                 @endforeach
+                <a href="{{ route('login.portal') }}" class="text-xs font-bold text-emerald-600 hover:text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-3.5 py-1.5 rounded-lg transition-all whitespace-nowrap border border-emerald-200/60 shadow-sm">
+                    <i class="fas fa-sign-in-alt me-1"></i>
+                    {{ __('landing.nav.sign_in') }}
+                </a>
             </nav>
 
             <!-- Actions (Desktop) -->
@@ -45,11 +49,6 @@
                     </div>
                 </div>
 
-                <a href="{{ route('login.portal') }}" class="text-xs font-bold text-slate-800 hover:text-emerald-600 bg-slate-100 hover:bg-emerald-50 px-3.5 py-2 rounded-lg transition-all whitespace-nowrap border border-slate-200/60">
-                    <i class="fas fa-sign-in-alt me-1 opacity-70"></i>
-                    {{ __('landing.nav.sign_in') }}
-                </a>
-                
                 <a href="{{ route('register') }}" class="group relative inline-flex items-center justify-center bg-slate-900 text-white px-5 py-2 lg:px-6 lg:py-2 rounded-lg font-bold text-xs transition-all hover:bg-slate-800 shadow-xl shadow-slate-900/10 hover:-translate-y-1 active:scale-95 overflow-hidden">
                     {{ __('landing.nav.start_trial') }}
                 </a>
