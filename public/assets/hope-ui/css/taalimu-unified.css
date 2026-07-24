@@ -10,7 +10,7 @@
 
 body {
     font-family: 'Outfit', 'Cairo', sans-serif;
-    background-color: #f8fafc;
+    background-color: #f8fafc !important;
     color: #1e293b;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
