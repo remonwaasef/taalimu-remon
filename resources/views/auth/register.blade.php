@@ -57,7 +57,7 @@
             </div>
 
             <!-- Contextual Header -->
-            <div class="mb-4 text-center transition-all duration-700 ease-in-out" :class="!accountType ? 'transform scale-110 translate-y-[3vh] mb-8' : ''">
+            <div class="mb-4 text-center transition-all duration-300">
                 <div x-show="currentStep === 1" x-cloak class="flex flex-col items-center">
                     <h1 class="text-xl lg:text-2xl font-black text-slate-900 mb-2 font-arabic leading-tight">
                         {{ app()->isLocale('ar') ? 'ابدأ رحلتك التعليمية' : 'Start Your Journey' }}
@@ -175,8 +175,8 @@
             </div> <!-- End Blurred Wrapper -->
         </div>
 
-        <!-- Footer Link -->
-        <div class="p-4 bg-slate-50/50 border-t border-slate-100 text-center transition-all duration-500" :class="!accountType ? 'blur-[5px] opacity-40 pointer-events-none select-none' : ''">
+        <!-- Footer Link (Always accessible and crisp) -->
+        <div class="p-4 bg-slate-50/50 border-t border-slate-100 text-center">
             <span class="text-xs text-slate-500 font-arabic font-bold">
                 {{ __('auth.login.no_account_link') }}
                 <a href="{{ route('login.portal') }}" class="text-brand-secondary font-black hover:underline ml-2">{{ __('auth.login.title') }}</a>
