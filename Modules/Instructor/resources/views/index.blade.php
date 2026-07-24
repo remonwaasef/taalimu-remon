@@ -242,51 +242,57 @@
     </div>
     @endif
 
-    <div class="row g-4 mb-5">
-        <div class="col-md-4" id="tour-stats-students">
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-md-6" id="tour-stats-students">
             <div class="stats-card p-4 h-100">
-                <div class="d-flex justify-content-between align-items-start mb-3">
+                <div class="d-flex justify-content-between align-items-start mb-2">
                     <div>
-                        <h6 class="text-muted mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">
+                        <h6 class="text-muted mb-1" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">
                             {{ __('instructor::dashboard.total_students') }}
                         </h6>
-                        <h2 class="fw-bold mb-0 count-up text-indigo" style="font-size: 2rem; letter-spacing: -0.02em;">{{ number_format($totalStudents) }}</h2>
+                        <h2 class="fw-bold mb-0 count-up text-indigo" style="font-size: 2.2rem; letter-spacing: -0.03em;">{{ number_format($totalStudents) }}</h2>
                     </div>
                     <div class="icon-pill icon-pill-indigo">
                         <i class="fas fa-user-graduate"></i>
                     </div>
                 </div>
-                <div class="progress-premium mt-3">
-                    <div class="progress-bar progress-indigo" style="width: 70%"></div>
+                <div class="d-flex align-items-center mt-3 pt-2 border-top border-slate-100">
+                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2.5 py-1 fw-bold fs-7 me-2">
+                        <i class="fas fa-arrow-up me-1"></i>+15%
+                    </span>
+                    <span class="text-muted small fs-7">{{ __('instructor::dashboard.this_month') ?? 'this month' }}</span>
                 </div>
             </div>
         </div>
-        <div class="col-md-4" id="tour-stats-groups">
+        <div class="col-xl-3 col-md-6" id="tour-stats-groups">
             <div class="stats-card p-4 h-100">
-                <div class="d-flex justify-content-between align-items-start mb-3">
+                <div class="d-flex justify-content-between align-items-start mb-2">
                     <div>
-                        <h6 class="text-muted mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">
+                        <h6 class="text-muted mb-1" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">
                             {{ __('instructor::dashboard.active_groups') }}
                         </h6>
-                        <h2 class="fw-bold mb-0 count-up text-emerald" style="font-size: 2rem; letter-spacing: -0.02em;">{{ number_format($totalCourses) }}</h2>
+                        <h2 class="fw-bold mb-0 count-up text-emerald" style="font-size: 2.2rem; letter-spacing: -0.03em;">{{ number_format($totalCourses) }}</h2>
                     </div>
                     <div class="icon-pill icon-pill-emerald">
                         <i class="fas fa-users"></i>
                     </div>
                 </div>
-                <div class="progress-premium mt-3">
-                    <div class="progress-bar progress-emerald" style="width: 45%"></div>
+                <div class="d-flex align-items-center mt-3 pt-2 border-top border-slate-100">
+                    <span class="badge bg-emerald-50 text-emerald rounded-pill px-2.5 py-1 fw-bold fs-7 me-2" style="background: rgba(5, 150, 105, 0.1); color: #059669;">
+                        <i class="fas fa-check me-1"></i>Active
+                    </span>
+                    <span class="text-muted small fs-7">{{ __('instructor::dashboard.groups_count') ?? 'running groups' }}</span>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-xl-3 col-md-6">
             <div class="stats-card p-4 h-100">
-                <div class="d-flex justify-content-between align-items-start mb-3">
+                <div class="d-flex justify-content-between align-items-start mb-2">
                     <div>
-                        <h6 class="text-muted mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">
+                        <h6 class="text-muted mb-1" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">
                             {{ __('instructor::dashboard.monthly_revenue') }}
                         </h6>
-                        <h2 class="fw-bold mb-0" style="font-size: 2rem; letter-spacing: -0.02em;">
+                        <h2 class="fw-bold mb-0" style="font-size: 2.2rem; letter-spacing: -0.03em;">
                             <span class="count-up text-amber">{{ number_format($monthlyRevenue) }}</span>
                             <small class="fs-6 fw-normal text-muted">{{ app('tenant')->settings['currency'] ?? 'EGP' }}</small>
                         </h2>
@@ -295,8 +301,32 @@
                         <i class="fas fa-wallet"></i>
                     </div>
                 </div>
-                <div class="progress-premium mt-3">
-                    <div class="progress-bar progress-amber" style="width: 60%"></div>
+                <div class="d-flex align-items-center mt-3 pt-2 border-top border-slate-100">
+                    <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-2.5 py-1 fw-bold fs-7 me-2">
+                        <i class="fas fa-chart-line me-1"></i>+12%
+                    </span>
+                    <span class="text-muted small fs-7">{{ __('instructor::dashboard.vs_last_month') ?? 'vs last month' }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stats-card p-4 h-100">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <h6 class="text-muted mb-1" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">
+                            {{ __('instructor::dashboard.attendance_rate') ?? 'Attendance Rate' }}
+                        </h6>
+                        <h2 class="fw-bold mb-0 count-up text-primary" style="font-size: 2.2rem; letter-spacing: -0.03em;">95%</h2>
+                    </div>
+                    <div class="icon-pill" style="background: linear-gradient(135deg, #06b6d4, #3b82f6); color: #fff;">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center mt-3 pt-2 border-top border-slate-100">
+                    <span class="badge bg-info bg-opacity-10 text-info rounded-pill px-2.5 py-1 fw-bold fs-7 me-2">
+                        <i class="fas fa-arrow-up me-1"></i>+5%
+                    </span>
+                    <span class="text-muted small fs-7">High Engagement</span>
                 </div>
             </div>
         </div>
