@@ -3,36 +3,7 @@
 @section('title', __('instructor::students.title') ?? 'Students Directory')
 
 @section('sidebar')
-    <x-ui.sidebar brandName="Taalimu">
-        <div class="space-y-1">
-            <a href="{{ route('instructor.dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
-                <i class="fas fa-home w-4 text-center"></i>
-                <span>{{ __('instructor::sidebar.dashboard') }}</span>
-            </a>
-
-            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Teaching</div>
-
-            <a href="{{ route('instructor.students.list') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-brand-primary bg-brand-50 dark:bg-brand-900/30">
-                <i class="fas fa-user-graduate w-4 text-center"></i>
-                <span>{{ __('instructor::sidebar.students') }}</span>
-            </a>
-
-            <a href="{{ route('instructor.groups.list') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
-                <i class="fas fa-users w-4 text-center"></i>
-                <span>{{ __('instructor::sidebar.groups') }}</span>
-            </a>
-
-            <a href="{{ route('instructor.schedules.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
-                <i class="fas fa-calendar-alt w-4 text-center"></i>
-                <span>{{ __('instructor::sidebar.schedules') }}</span>
-            </a>
-
-            <a href="{{ route('instructor.attendance.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
-                <i class="fas fa-clipboard-check w-4 text-center"></i>
-                <span>{{ __('instructor::sidebar.attendance') }}</span>
-            </a>
-        </div>
-    </x-ui.sidebar>
+    @include('instructor::partials._sidebar-next', ['active' => 'students'])
 @endsection
 
 @section('content')

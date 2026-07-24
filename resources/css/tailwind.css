@@ -85,3 +85,32 @@
         background: rgba(0, 0, 0, 0.15);
     }
 }
+
+/* Alpine.js x-cloak - Hide elements until Alpine is ready */
+[x-cloak] {
+    display: none !important;
+}
+
+/* ===== Base Layer Resets ===== */
+@layer base {
+    * {
+        border-color: hsl(var(--border));
+    }
+
+    body {
+        background-color: hsl(var(--background));
+        color: hsl(var(--foreground));
+        font-feature-settings: "rlig" 1, "calt" 1;
+    }
+
+    /* RTL Support */
+    [dir="rtl"] body {
+        font-family: 'Cairo', sans-serif;
+    }
+
+    /* Focus Visible Outline */
+    :focus-visible {
+        outline: 2px solid hsl(var(--ring));
+        outline-offset: 2px;
+    }
+}
