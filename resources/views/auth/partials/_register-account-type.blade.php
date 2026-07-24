@@ -1,6 +1,6 @@
             <!-- Account Type Selection (Premium Position) -->
-            <div x-show="currentStep === 1" x-cloak class="mb-4 transition-all duration-700 ease-in-out relative z-10" :class="!accountType ? 'transform scale-110 translate-y-[3vh] pb-12 mt-4' : ''">
-                <label class="text-[11px] font-black text-slate-500 px-1 font-arabic uppercase tracking-wider block mb-3 text-center opacity-70 transition-all duration-700" :class="!accountType ? 'text-base text-slate-800 opacity-100 font-black mb-6' : ''">
+            <div x-show="currentStep === 1" x-cloak class="mb-4 transition-all duration-300 relative z-10">
+                <label class="text-[11px] font-black text-slate-500 px-1 font-arabic uppercase tracking-wider block mb-3 text-center opacity-80">
                     {{ app()->isLocale('ar') ? 'ابدأ كـ ...' : 'Start as ...' }}
                 </label>
                 <div class="grid grid-cols-2 gap-4 px-2">
