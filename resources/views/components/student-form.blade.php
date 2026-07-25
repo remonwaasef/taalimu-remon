@@ -191,7 +191,7 @@
                 <button type="button" class="btn btn-light btn-lg rounded-pill px-4 text-secondary btn-prev-step">
                     <i class="fas fa-arrow-right me-2"></i> السابق
                 </button>
-                <button type="submit" class="btn btn-success btn-lg rounded-pill px-5 shadow-sm">
+                <button type="submit" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm">
                     <i class="fas fa-check-circle me-2"></i> {{ __('center::students.form.save_student') ?? __('instructor::students.save_and_register') }}
                 </button>
             </div>
