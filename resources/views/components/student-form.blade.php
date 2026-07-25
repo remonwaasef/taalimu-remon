@@ -12,15 +12,15 @@
     @csrf
     
     <!-- Wizard Navigation -->
-    <ul class="nav nav-pills nav-justified mb-5 pb-3 border-bottom" id="studentWizard" role="tablist">
+    <ul class="nav nav-pills nav-justified mb-8 pb-4 border-b border-brand-border dark:border-slate-800 gap-3" id="studentWizard" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active rounded-pill fw-bold shadow-sm" id="step1-tab" data-bs-toggle="pill" data-bs-target="#step1" type="button" role="tab" aria-controls="step1" aria-selected="true">
-                <i class="bi bi-person-badge me-2"></i> 1. البيانات الأساسية
+            <button class="nav-link active rounded-xl font-bold py-3 text-xs uppercase tracking-wider transition-all" id="step1-tab" data-bs-toggle="pill" data-bs-target="#step1" type="button" role="tab" aria-controls="step1" aria-selected="true">
+                <i class="fas fa-id-card me-2"></i> 1. البيانات الأساسية
             </button>
         </li>
-        <li class="nav-item mx-3" role="presentation">
-            <button class="nav-link rounded-pill fw-bold shadow-sm" id="step2-tab" data-bs-toggle="pill" data-bs-target="#step2" type="button" role="tab" aria-controls="step2" aria-selected="false">
-                <i class="bi bi-collection-play me-2"></i> 2. التسجيل والدورات
+        <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-xl font-bold py-3 text-xs uppercase tracking-wider transition-all" id="step2-tab" data-bs-toggle="pill" data-bs-target="#step2" type="button" role="tab" aria-controls="step2" aria-selected="false">
+                <i class="fas fa-graduation-cap me-2"></i> 2. التسجيل والدورات
             </button>
         </li>
     </ul>
