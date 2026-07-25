@@ -1,4 +1,10 @@
-@extends('instructor::components.layouts.hope-master')
+@extends('layouts.app-next')
+
+@section('title', __('instructor::groups.edit_title') ?? 'Edit Group')
+
+@section('sidebar')
+    @include('instructor::partials._sidebar-next', ['active' => 'groups'])
+@endsection
 
 @section('page-title', __('instructor::groups.group_details_edit'))
 

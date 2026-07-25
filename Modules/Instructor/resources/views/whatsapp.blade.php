@@ -1,7 +1,10 @@
-@extends('instructor::components.layouts.hope-master')
+@extends('layouts.app-next')
 
-@section('page-title', __('instructor::whatsapp.title'))
-@section('page-subtitle', __('instructor::whatsapp.connect_subtitle'))
+@section('title', __('instructor::whatsapp.title'))
+
+@section('sidebar')
+    @include('instructor::partials._sidebar-next', ['active' => 'settings'])
+@endsection
 
 @section('content')
     <div class="row justify-content-center">

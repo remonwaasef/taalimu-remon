@@ -1,6 +1,10 @@
-@extends('instructor::components.layouts.hope-master')
+@extends('layouts.app-next')
 
-@section('page-title', __('instructor::students.create_title'))
+@section('title', __('instructor::students.create_title'))
+
+@section('sidebar')
+    @include('instructor::partials._sidebar-next', ['active' => 'students'])
+@endsection
 
 @section('content')
     <div class="row justify-content-center">

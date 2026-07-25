@@ -1,7 +1,10 @@
-@extends('instructor::components.layouts.hope-master')
+@extends('layouts.app-next')
 
-@section('page-title', __('instructor::attendance.title'))
-@section('page-subtitle', __('instructor::attendance.subtitle'))
+@section('title', __('instructor::attendance.title'))
+
+@section('sidebar')
+    @include('instructor::partials._sidebar-next', ['active' => 'attendance'])
+@endsection
 
 @section('content')
 

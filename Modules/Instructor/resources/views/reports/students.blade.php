@@ -1,8 +1,10 @@
-@extends('instructor::components.layouts.hope-master')
+@extends('layouts.app-next')
 
 @section('title', __('instructor::reports.student_reports'))
-@section('page-title', __('instructor::reports.student_reports'))
-@section('page-subtitle', __('instructor::reports.student_reports_subtitle'))
+
+@section('sidebar')
+    @include('instructor::partials._sidebar-next', ['active' => 'reports'])
+@endsection
 
 @section('content')
 <div class="card border-0 shadow-sm rounded-4">

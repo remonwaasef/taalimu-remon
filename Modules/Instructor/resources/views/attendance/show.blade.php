@@ -1,4 +1,10 @@
-@extends('instructor::components.layouts.hope-master')
+@extends('layouts.app-next')
+
+@section('title', __('instructor::attendance.details') ?? 'Attendance Details')
+
+@section('sidebar')
+    @include('instructor::partials._sidebar-next', ['active' => 'attendance'])
+@endsection
 
 @php
     $isEnded = now()->isAfter(\Carbon\Carbon::parse($schedule->end_time));

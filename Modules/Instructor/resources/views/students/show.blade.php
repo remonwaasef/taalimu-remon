@@ -1,6 +1,10 @@
-@extends('instructor::components.layouts.hope-master')
+@extends('layouts.app-next')
 
-@section('page-title', __('instructor::students.student_profile'))
+@section('title', __('instructor::students.student_profile'))
+
+@section('sidebar')
+    @include('instructor::partials._sidebar-next', ['active' => 'students'])
+@endsection
 
 @section('content')
 <div class="container-fluid">

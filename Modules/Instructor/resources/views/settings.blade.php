@@ -1,7 +1,10 @@
-@extends('instructor::components.layouts.hope-master')
+@extends('layouts.app-next')
 
-@section('page-title', __('instructor::settings.title'))
-@section('page-subtitle', __('instructor::settings.subtitle') ?? 'Manage your account and subscription')
+@section('title', __('instructor::settings.title'))
+
+@section('sidebar')
+    @include('instructor::partials._sidebar-next', ['active' => 'settings'])
+@endsection
 
 @section('content')
     <div class="row mb-4">

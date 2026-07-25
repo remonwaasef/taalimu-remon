@@ -1,12 +1,9 @@
-@extends('instructor::components.layouts.hope-master')
+@extends('layouts.app-next')
 
-@section('page-title', __('instructor::schedules.title'))
-@section('page-subtitle', __('instructor::schedules.subtitle'))
+@section('title', __('instructor::schedules.title'))
 
-@section('page-actions')
-    <a href="{{ route('instructor.schedules.create') }}" class="btn btn-glass">
-        <i class="fas fa-plus me-2"></i> {{ __('instructor::schedules.add_schedule') }}
-    </a>
+@section('sidebar')
+    @include('instructor::partials._sidebar-next', ['active' => 'schedules'])
 @endsection
 
 @section('content')

@@ -1,4 +1,10 @@
-@extends('instructor::components.layouts.hope-master')
+@extends('layouts.app-next')
+
+@section('title', __('instructor::reports.payment_reports') ?? 'Payment Reports')
+
+@section('sidebar')
+    @include('instructor::partials._sidebar-next', ['active' => 'reports'])
+@endsection
 
 @section('title', __('instructor::reports.payment_reports'))
 @section('page-title', __('instructor::reports.payment_reports'))

@@ -1,7 +1,10 @@
-@extends('instructor::components.layouts.hope-master')
+@extends('layouts.app-next')
 
-@section('page-title', __('instructor::scanner.smart_attendance', ['title' => $course->title]))
-@section('page-subtitle', __('instructor::scanner.guide_camera'))
+@section('title', __('instructor::scanner.smart_attendance', ['title' => $course->title]))
+
+@section('sidebar')
+    @include('instructor::partials._sidebar-next', ['active' => 'attendance'])
+@endsection
 
 @section('page-actions')
     <a href="{{ route('instructor.dashboard') }}" class="btn btn-glass shadow-sm">

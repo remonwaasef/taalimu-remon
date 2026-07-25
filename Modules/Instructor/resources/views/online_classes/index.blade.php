@@ -1,12 +1,9 @@
-@extends('instructor::components.layouts.hope-master')
+@extends('layouts.app-next')
 
-@section('page-title', __('instructor::dashboard.online_classes'))
-@section('page-subtitle', __('instructor::online_classes.subtitle'))
+@section('title', __('instructor::dashboard.online_classes'))
 
-@section('page-actions')
-    <a href="{{ route('instructor.online_classes.create') }}" class="btn btn-glass">
-        <i class="fas fa-plus me-2"></i> {{ __('instructor::online_classes.add_new') }}
-    </a>
+@section('sidebar')
+    @include('instructor::partials._sidebar-next', ['active' => 'online_classes'])
 @endsection
 
 @section('content')

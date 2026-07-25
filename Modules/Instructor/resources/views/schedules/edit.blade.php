@@ -1,4 +1,10 @@
-@extends('instructor::components.layouts.hope-master')
+@extends('layouts.app-next')
+
+@section('title', __('instructor::schedules.edit_title') ?? 'Edit Schedule')
+
+@section('sidebar')
+    @include('instructor::partials._sidebar-next', ['active' => 'schedules'])
+@endsection
 
 @section('page-title', isset($schedule) ? __('instructor::schedules.edit_title') : __('instructor::schedules.create_title'))
 @section('page-subtitle', __('instructor::schedules.subtitle'))

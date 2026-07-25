@@ -1,4 +1,10 @@
-@extends('instructor::components.layouts.hope-master')
+@extends('layouts.app-next')
+
+@section('title', __('instructor::online_classes.add_new') ?? 'Create Online Class')
+
+@section('sidebar')
+    @include('instructor::partials._sidebar-next', ['active' => 'online_classes'])
+@endsection
 
 @section('page-title', __('instructor::online_classes.add_new'))
 
