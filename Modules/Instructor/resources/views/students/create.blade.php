@@ -7,23 +7,31 @@
 @endsection
 
 @section('content')
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card border-0 shadow-sm rounded-4">
-                <div class="card-header bg-white border-0 p-4">
-                    <h4 class="fw-bold mb-0">{{ __('instructor::students.create_student_data') }}</h4>
-                    <p class="text-muted small">{{ __('instructor::students.create_student_hint') }}</p>
-                </div>
-                <div class="card-body p-4">
-                    <x-student-form 
-                        actionUrl="{{ route('instructor.students.store') }}"
-                        :courses="$courses"
-                        :showGrade="false"
-                        backUrl="{{ route('instructor.students.list') }}"
-                        checkPhoneUrl="{{ route('instructor.students.check-phone') }}"
-                    />
-                </div>
-            </div>
-        </div>
+    <x-ui.page-header
+        title="{{ __('instructor::students.create_student_data') }}"
+        subtitle="{{ __('instructor::students.create_student_hint') }}"
+        :breadcrumb="[
+            __('instructor::sidebar.students') => route('instructor.students.list'),
+            __('instructor::students.create_title') => null
+        ]"
+    >
+        <x-slot name="actions">
+            <x-ui.button variant="secondary" icon="fas fa-arrow-right" href="{{ route('instructor.students.list') }}">
+                {{ __('instructor::students.back') }}
+            </x-ui.button>
+        </x-slot>
+    </x-ui.page-header>
+
+    <div class="max-w-4xl mx-auto">
+        <x-ui.card>
+            <x-student-form 
+                actionUrl="{{ route('instructor.students.store') }}"
+                :courses="$courses"
+                :showGrade="false"
+                backUrl="{{ route('instructor.students.list') }}"
+                checkPhoneUrl="{{ route('instructor.students.check-phone') }}"
+            />
+        </x-ui.card>
     </div>
-@stop
+@endsection
+
