@@ -114,3 +114,31 @@
         outline-offset: 2px;
     }
 }
+
+/* ===== Force Royal Indigo Theme Palette Overrides ===== */
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+    background-color: #5B5FEF !important;
+    background: #5B5FEF !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(91, 95, 239, 0.25) !important;
+}
+
+.btn-primary,
+.bg-primary {
+    background-color: #5B5FEF !important;
+    background: #5B5FEF !important;
+    border-color: #5B5FEF !important;
+    color: #ffffff !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: #484BE4 !important;
+    border-color: #484BE4 !important;
+}
+
+.text-primary {
+    color: #5B5FEF !important;
+}
+
