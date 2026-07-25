@@ -6,86 +6,118 @@
     @include('instructor::partials._sidebar-next', ['active' => 'groups'])
 @endsection
 
-@section('page-title', __('instructor::groups.create_new'))
-
 @section('content')
-<div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                <div class="card-header bg-white border-0 pt-4 px-4">
-                    <h4 class="fw-bold mb-0">{{ __('instructor::groups.group_details_new') }}</h4>
-                    <p class="text-muted small">{{ __('instructor::groups.group_hint') }}</p>
+    <x-ui.page-header
+        title="{{ __('instructor::groups.group_details_new') }}"
+        subtitle="{{ __('instructor::groups.group_hint') }}"
+        :breadcrumb="[
+            ['label' => __('instructor::sidebar.groups'), 'url' => route('instructor.groups.list')],
+            ['label' => __('instructor::groups.create_new')]
+        ]"
+    >
+        <x-slot name="actions">
+            <x-ui.button variant="secondary" icon="fas fa-arrow-right" href="{{ route('instructor.groups.list') }}">
+                {{ __('instructor::groups.back') }}
+            </x-ui.button>
+        </x-slot>
+    </x-ui.page-header>
+
+    <div class="max-w-3xl mx-auto">
+        <x-ui.card>
+            <form action="{{ route('instructor.groups.store') }}" method="POST" class="space-y-6">
+                @csrf
+
+                <!-- Group Name -->
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-2">
+                        {{ __('instructor::groups.group_name_placeholder_label') }} <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        name="title"
+                        value="{{ old('title') }}"
+                        required
+                        placeholder="{{ __('instructor::groups.group_name_input_placeholder') }}"
+                        class="w-full px-4 py-2.5 rounded-xl border border-brand-border dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 text-slate-800 dark:text-slate-100 text-sm focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all @error('title') border-red-500 @enderror"
+                    />
+                    @error('title')
+                        <p class="text-xs text-red-500 mt-1 font-medium">{{ $message }}</p>
+                    @enderror
                 </div>
-                <div class="card-body p-4">
-                    @if(session('info'))
-                        <div class="alert alert-info border-0 rounded-3 shadow-sm d-flex align-items-center gap-2 mb-4">
-                            <i class="fas fa-info-circle fs-5"></i>
-                            <div>{{ session('info') }}</div>
-                        </div>
-                    @endif
-                    @if(session('success'))
-                        <div class="alert alert-success border-0 rounded-3 shadow-sm d-flex align-items-center gap-2 mb-4">
-                            <i class="fas fa-check-circle fs-5"></i>
-                            <div>{{ session('success') }}</div>
-                        </div>
-                    @endif
-                    @if(session('error'))
-                        <div class="alert alert-danger border-0 rounded-3 shadow-sm d-flex align-items-center gap-2 mb-4">
-                            <i class="fas fa-exclamation-circle fs-5"></i>
-                            <div>{{ session('error') }}</div>
-                        </div>
-                    @endif
-                    <form action="{{ route('instructor.groups.store') }}" method="POST">
-                        @csrf
-                        <div class="row g-4">
-                            <div class="col-12">
-                                <label class="form-label fw-bold">{{ __('instructor::groups.group_name_placeholder_label') }}</label>
-                                <input type="text" name="title" class="form-control rounded-3 py-2 @error('title') is-invalid @enderror" value="{{ old('title') }}" required placeholder="{{ __('instructor::groups.group_name_input_placeholder') }}">
-                                @error('title')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
 
-                            <div class="col-12">
-                                <label class="form-label fw-bold">{{ __('instructor::groups.group_description') }}</label>
-                                <textarea name="description" class="form-control rounded-3 @error('description') is-invalid @enderror" rows="3" placeholder="{{ __('instructor::groups.group_description_placeholder') }}">{{ old('description') }}</textarea>
-                                @error('description')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('instructor::groups.group_price_label') }}</label>
-                                <div class="input-group">
-                                    <input type="number" name="price" class="form-control rounded-start-3 py-2 @error('price') is-invalid @enderror" value="{{ old('price') }}" required step="0.01" min="0" placeholder="0.00">
-                                    <span class="input-group-text rounded-end-3 bg-light border-start-0">{{ app('tenant')->settings['currency'] ?? __('instructor::groups.currency') }}</span>
-                                </div>
-                                @error('price')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">{{ __('instructor::groups.sessions_count') }}</label>
-                                <input type="number" name="sessions_count" class="form-control rounded-3 py-2 @error('sessions_count') is-invalid @enderror" value="{{ old('sessions_count') }}" required min="1" placeholder="{{ __('instructor::groups.sessions_placeholder') }}">
-                                @error('sessions_count')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                                <div class="d-flex gap-3 mt-4">
-                                    <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 fw-bold shadow-sm border-0" style="background: var(--primary-color);">
-                                        <i class="fas fa-save me-2"></i> {{ __('instructor::groups.save_group') }}
-                                    </button>
-                                    <a href="{{ route('instructor.groups.list') }}" class="btn btn-light rounded-pill px-4 py-2 text-muted fw-bold">{{ __('instructor::groups.back') }}</a>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                <!-- Group Description -->
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-2">
+                        {{ __('instructor::groups.group_description') }}
+                    </label>
+                    <textarea
+                        name="description"
+                        rows="3"
+                        placeholder="{{ __('instructor::groups.group_description_placeholder') }}"
+                        class="w-full px-4 py-2.5 rounded-xl border border-brand-border dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 text-slate-800 dark:text-slate-100 text-sm focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all @error('description') border-red-500 @enderror"
+                    >{{ old('description') }}</textarea>
+                    @error('description')
+                        <p class="text-xs text-red-500 mt-1 font-medium">{{ $message }}</p>
+                    @enderror
                 </div>
-            </div>
-        </div>
+
+                <!-- Price & Sessions Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- Price -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-2">
+                            {{ __('instructor::groups.group_price_label') }} <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative flex items-center">
+                            <input
+                                type="number"
+                                name="price"
+                                value="{{ old('price') }}"
+                                required
+                                step="0.01"
+                                min="0"
+                                placeholder="0.00"
+                                class="w-full px-4 py-2.5 pe-16 rounded-xl border border-brand-border dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 text-slate-800 dark:text-slate-100 text-sm focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all @error('price') border-red-500 @enderror"
+                            />
+                            <span class="absolute end-3 text-xs font-bold text-slate-400 select-none">
+                                {{ app('tenant')->settings['currency'] ?? __('instructor::groups.currency') }}
+                            </span>
+                        </div>
+                        @error('price')
+                            <p class="text-xs text-red-500 mt-1 font-medium">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Sessions Count -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-2">
+                            {{ __('instructor::groups.sessions_count') }} <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="number"
+                            name="sessions_count"
+                            value="{{ old('sessions_count') }}"
+                            required
+                            min="1"
+                            placeholder="{{ __('instructor::groups.sessions_placeholder') }}"
+                            class="w-full px-4 py-2.5 rounded-xl border border-brand-border dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 text-slate-800 dark:text-slate-100 text-sm focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all @error('sessions_count') border-red-500 @enderror"
+                        />
+                        @error('sessions_count')
+                            <p class="text-xs text-red-500 mt-1 font-medium">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- Form Action Buttons -->
+                <div class="flex items-center gap-3 pt-4 border-t border-brand-border dark:border-slate-800">
+                    <x-ui.button type="submit" variant="primary" icon="fas fa-save" size="md">
+                        {{ __('instructor::groups.save_group') }}
+                    </x-ui.button>
+                    <x-ui.button variant="secondary" size="md" href="{{ route('instructor.groups.list') }}">
+                        {{ __('instructor::groups.back') }}
+                    </x-ui.button>
+                </div>
+            </form>
+        </x-ui.card>
     </div>
-</div>
 @endsection
