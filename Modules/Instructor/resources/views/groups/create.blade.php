@@ -11,8 +11,8 @@
         title="{{ __('instructor::groups.group_details_new') }}"
         subtitle="{{ __('instructor::groups.group_hint') }}"
         :breadcrumb="[
-            ['label' => __('instructor::sidebar.groups'), 'url' => route('instructor.groups.list')],
-            ['label' => __('instructor::groups.create_new')]
+            __('instructor::sidebar.groups') => route('instructor.groups.list'),
+            __('instructor::groups.create_new') => null
         ]"
     >
         <x-slot name="actions">
