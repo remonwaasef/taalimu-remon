@@ -17,7 +17,7 @@
                 <span>{{ __('center::sidebar.students') ?? 'Students' }}</span>
             </a>
 
-            <a href="{{ route('center.groups.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+            <a href="{{ route('center.courses.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
                 <i class="fas fa-users w-4 text-center"></i>
                 <span>{{ __('center::sidebar.groups') ?? 'Groups & Classes' }}</span>
             </a>
@@ -113,7 +113,7 @@
                 <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">Add New Student</span>
             </a>
 
-            <a href="{{ route('center.groups.create') }}" class="p-4 rounded-2xl border border-brand-border dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group shadow-sm">
+            <a href="{{ route('center.courses.create') }}" class="p-4 rounded-2xl border border-brand-border dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group shadow-sm">
                 <div class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-900/30 text-brand-primary flex items-center justify-center text-base mb-2 group-hover:scale-110 transition-transform">
                     <i class="fas fa-folder-plus"></i>
                 </div>
@@ -183,7 +183,7 @@
                     icon="fas fa-users"
                 >
                     <x-slot name="action">
-                        <x-ui.button variant="primary" icon="fas fa-plus" href="{{ route('center.groups.create') }}">
+                        <x-ui.button variant="primary" icon="fas fa-plus" href="{{ route('center.courses.create') }}">
                             Create Group
                         </x-ui.button>
                     </x-slot>
