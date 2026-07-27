@@ -110,12 +110,21 @@ class CenterController extends Controller
         $performanceTrends = $aiData['performanceTrends'];
         $aiInsights = $aiData['aiInsights'];
 
+        $activeGroups = $activeCourses;
+        $activeInstructors = \App\Support\TenantCache::remember('active_instructors_count', now()->addMinutes(15), function () {
+            return \App\Models\Instructor::count();
+        });
+        $recentStudents = Student::latest()->take(5)->get();
+        $recentGroups = Course::with('instructor')->withCount('enrollments as students_count')->latest()->take(5)->get();
+
         if (request()->expectsJson()) {
             return response()->json([
                 'success' => true,
                 'data' => [
                     'activeStudents' => $activeStudents,
                     'activeCourses' => $activeCourses,
+                    'activeGroups' => $activeGroups,
+                    'activeInstructors' => $activeInstructors,
                     'monthlyRevenue' => $monthlyRevenue,
                     'monthlyExpenses' => $monthlyExpenses,
                     'netProfit' => $netProfit,
@@ -129,10 +138,14 @@ class CenterController extends Controller
         return view('center::index', compact(
             'activeStudents',
             'activeCourses',
+            'activeGroups',
+            'activeInstructors',
             'monthlyRevenue',
             'monthlyExpenses',
             'netProfit',
             'recentActivities',
+            'recentStudents',
+            'recentGroups',
             'atRiskStudents',
             'aiInsights',
             'performanceTrends',
