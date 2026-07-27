@@ -134,6 +134,9 @@ $tenantRoutes = function () {
             Route::get('students/search', [StudentController::class, 'search'])
                 ->middleware('throttle:60,1')
                 ->name('center.students.search');
+            Route::get('students/check-phone', [StudentController::class, 'checkPhone'])
+                ->middleware('throttle:60,1')
+                ->name('center.students.check-phone');
         });
 
         Route::middleware(['can:create students'])->group(function () {

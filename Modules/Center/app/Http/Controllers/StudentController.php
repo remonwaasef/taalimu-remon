@@ -404,6 +404,17 @@ class StudentController extends Controller
     }
 
     /**
+     * Check if a student phone number exists.
+     */
+    public function checkPhone(Request $request)
+    {
+        $phone = $request->query('phone');
+        $exists = Student::where('phone', $phone)->exists();
+
+        return response()->json(['exists' => $exists]);
+    }
+
+    /**
      * Look up a guardian by phone number.
      */
     public function lookupGuardian(Request $request)
