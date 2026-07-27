@@ -1,8 +1,9 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('title', __('Security: 2FA Verification'))
+@section('page-title', __('Security: 2FA Verification'))
 
-@section('content')
+@section('panel-content')
 <div class="row justify-content-center align-items-center tfa-container">
     <div class="col-md-5">
         <div class="card shadow border-0">

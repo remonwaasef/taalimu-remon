@@ -1,8 +1,9 @@
-@extends('admin::layouts.master')
+@extends('admin::layouts.app-next')
 
 @section('title', 'تقارير البلاغات (Beta Bugs)')
+@section('page-title', 'تقارير البلاغات (Beta Bugs)')
 
-@section('content')
+@section('panel-content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold mb-1">🐛 بلاغات المنصة (Beta)</h2>

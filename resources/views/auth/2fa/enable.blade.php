@@ -1,8 +1,9 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('title', 'Enable Two-Factor Authentication')
+@section('page-title', 'Enable Two-Factor Authentication')
 
-@section('content')
+@section('panel-content')
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Enable Two-Factor Authentication</h1>

@@ -1,18 +1,18 @@
 @php
     $tenantData = $tenant ?? (app()->bound('tenant') ? app('tenant') : null);
-    $layout = 'center::layouts.hope-master';
+    $layout = 'center::layouts.app-next';
     
     // Use precise path matching to avoid confusing /instructors (center) with /instructor/ (instructor module)
     $currentPath = request()->path();
     
     if (str_starts_with($currentPath, 'admin/') || $currentPath === 'admin') {
-        $layout = 'admin::layouts.master';
+        $layout = 'admin::layouts.app-next';
         $hasLayout = true;
     } elseif (str_starts_with($currentPath, 'campus') || (auth()->check() && auth()->user()->hasRole('student'))) {
-        $layout = 'campus::layouts.master';
+        $layout = 'layouts.app-next';
         $hasLayout = true;
     } elseif (str_starts_with($currentPath, 'instructor/') || $currentPath === 'instructor') {
-        $layout = 'instructor::components.layouts.hope-master';
+        $layout = 'layouts.app-next';
         $hasLayout = true;
     } else {
         $hasLayout = $tenantData !== null;
@@ -25,7 +25,7 @@
     @section('title', 'تعذر الوصول')
     @section('page-title', 'صلاحيات غير كافية')
 
-    @section('content')
+    @section('panel-content')
     <div class="row justify-content-center align-items-center" style="min-height: 60vh;">
         <div class="col-lg-6 col-md-8 text-center">
             <div class="card border-0 shadow-sm rounded-4 text-center p-5 position-relative overflow-hidden">
