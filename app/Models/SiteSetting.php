@@ -31,35 +31,41 @@ class SiteSetting extends Model
 
         try {
             return \Illuminate\Support\Facades\Cache::rememberForever($cacheKey, function () use ($key, $default, $tenantId) {
-                $setting = self::where('key', $key)
-                    ->where('tenant_id', $tenantId)
-                    ->first();
-
-                // Fallback to global setting if tenant-specific setting does not exist
-                if (!$setting && $tenantId !== null) {
-                    $setting = self::where('key', $key)
-                        ->whereNull('tenant_id')
-                        ->first();
-                }
-
-                return $setting ? $setting->value : $default;
+                return static::fetchFromDb($key, $default, $tenantId);
             });
         } catch (\Throwable $e) {
-            // Fallback to DB if cache fails (e.g., file permissions or Redis down)
+            // Fallback to DB directly if cache fails (e.g., Redis down or serialization issue)
             \Illuminate\Support\Facades\Log::warning("Cache failure in SiteSetting::get({$key}): ".$e->getMessage());
             
-            $setting = self::where('key', $key)
-                ->where('tenant_id', $tenantId)
-                ->first();
-
-            if (!$setting && $tenantId !== null) {
-                $setting = self::where('key', $key)
-                    ->whereNull('tenant_id')
-                    ->first();
+            try {
+                return static::fetchFromDb($key, $default, $tenantId);
+            } catch (\Throwable $ex) {
+                return $default;
             }
-
-            return $setting ? $setting->value : $default;
         }
+    }
+
+    /**
+     * Helper to fetch setting from database with tenant fallback.
+     */
+    protected static function fetchFromDb($key, $default = null, $tenantId = null)
+    {
+        $hasTenantCol = \Illuminate\Support\Facades\Schema::hasColumn('site_settings', 'tenant_id');
+
+        $query = self::where('key', $key);
+        if ($hasTenantCol) {
+            $query->where('tenant_id', $tenantId);
+        }
+        $setting = $query->first();
+
+        // Fallback to global setting if tenant-specific setting does not exist
+        if (!$setting && $tenantId !== null && $hasTenantCol) {
+            $setting = self::where('key', $key)
+                ->whereNull('tenant_id')
+                ->first();
+        }
+
+        return $setting ? $setting->value : $default;
     }
 
     /**
@@ -69,12 +75,22 @@ class SiteSetting extends Model
     {
         $tenantId = $tenantId ?? (app()->bound('tenant') ? app('tenant')->id : null);
         $cacheKey = $tenantId ? "tenant_{$tenantId}_setting_{$key}" : "setting_{$key}";
+        $hasTenantCol = \Illuminate\Support\Facades\Schema::hasColumn('site_settings', 'tenant_id');
 
-        $oldSetting = self::where('key', $key)->where('tenant_id', $tenantId)->first();
+        $query = self::where('key', $key);
+        if ($hasTenantCol) {
+            $query->where('tenant_id', $tenantId);
+        }
+        $oldSetting = $query->first();
         $oldValue = $oldSetting ? $oldSetting->value : null;
 
+        $matchAttributes = ['key' => $key];
+        if ($hasTenantCol) {
+            $matchAttributes['tenant_id'] = $tenantId;
+        }
+
         $setting = self::updateOrCreate(
-            ['key' => $key, 'tenant_id' => $tenantId],
+            $matchAttributes,
             ['value' => $value, 'group' => $group]
         );
 
