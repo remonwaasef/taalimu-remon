@@ -1,8 +1,8 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('title', __('center::sales.checkout_title'))
 
-@section('content')
+@section('panel-content')
 <div class="container mt-5 pt-5 pb-5">
     <div class="row justify-content-center">
         <div class="col-md-6">

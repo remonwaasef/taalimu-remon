@@ -12,13 +12,13 @@
     }
 </style>
 @endpush
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('title', __('center::settings.title'))
 
 @section('page-title', __('center::settings.title'))
 
-@section('content')
+@section('panel-content')
     @php $activeTab = request('tab', 'general'); @endphp
     
 <div class="row">

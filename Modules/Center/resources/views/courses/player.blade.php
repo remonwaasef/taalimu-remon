@@ -1,6 +1,6 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
-@section('content')
+@section('panel-content')
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar: Curriculum -->

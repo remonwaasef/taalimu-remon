@@ -1,4 +1,4 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('page-title', __('center::questions.title'))
 @section('page-subtitle', __('center::questions.subtitle'))
@@ -12,7 +12,7 @@
     </a>
 @endsection
 
-@section('content')
+@section('panel-content')
 <div class="container-fluid p-0">
 
     <div class="row">

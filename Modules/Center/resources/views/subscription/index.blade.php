@@ -1,4 +1,4 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('title', __('center::subscription.page_title'))
 
@@ -28,7 +28,7 @@
     @endif
 @endsection
 
-@section('content')
+@section('panel-content')
 <div class="container-fluid px-0">
 
     {{-- ─── Flash Messages ──────────────────────────────────── --}}

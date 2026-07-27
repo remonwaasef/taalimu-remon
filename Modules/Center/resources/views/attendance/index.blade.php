@@ -1,9 +1,9 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('page-title', __('center::attendance.management'))
 @section('page-subtitle', __('center::attendance.subtitle'))
 
-@section('content')
+@section('panel-content')
 
     <div class="row g-4">
         <!-- Today's Sessions -->

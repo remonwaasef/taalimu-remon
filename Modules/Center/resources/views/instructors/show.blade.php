@@ -1,6 +1,6 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
-@section('content')
+@section('panel-content')
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold text-dark">{{ __('center::instructors.show') }}</h2>
         <div class="d-flex gap-2">

@@ -1,6 +1,6 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
-@section('content')
+@section('panel-content')
     <div class="mb-4">
         <h2 class="fw-bold text-dark">{{ isset($schedule) ? __('center::schedules.edit_schedule') : __('center::schedules.add_new') }}</h2>
         <nav aria-label="breadcrumb">

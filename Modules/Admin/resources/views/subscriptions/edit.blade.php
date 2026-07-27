@@ -1,8 +1,8 @@
-@extends('admin::layouts.master')
+@extends('admin::layouts.app-next')
 
 @section('title', 'تعديل اشتراك ' . $subscription->tenant->name)
 
-@section('content')
+@section('panel-content')
 <div class="mb-4">
     <a href="{{ route('admin.subscriptions.index') }}" class="btn btn-outline-secondary rounded-pill px-4 x-small fw-bold">
         <i class="bi bi-arrow-right me-2"></i> العودة لقائمة الاشتراكات

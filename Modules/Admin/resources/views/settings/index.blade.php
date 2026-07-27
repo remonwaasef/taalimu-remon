@@ -1,9 +1,9 @@
-@extends('admin::layouts.master')
+@extends('admin::layouts.app-next')
 
 @section('title', __('admin::admin.title'))
 @section('page-title', __('admin::admin.title'))
 
-@section('content')
+@section('panel-content')
 <div class="container-fluid">
     <div class="premium-card">
         <div class="card-body p-0">

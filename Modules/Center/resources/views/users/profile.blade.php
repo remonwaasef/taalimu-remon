@@ -1,10 +1,10 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('title', __('center::sidebar.profile'))
 
 @section('page-title', __('center::sidebar.profile'))
 
-@section('content')
+@section('panel-content')
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-lg-8">

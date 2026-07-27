@@ -1,4 +1,4 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 @section('page-title', __('center::students.title'))
 
 @section('page-actions')
@@ -15,7 +15,7 @@
     </div>
 @endsection
 
-@section('content')
+@section('panel-content')
 
     @if(session('generated_password'))
         <div class="premium-ticket-container mb-5 animate__animated animate__fadeIn">

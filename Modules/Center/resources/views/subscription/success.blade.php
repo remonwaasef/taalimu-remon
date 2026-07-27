@@ -1,9 +1,9 @@
-@extends(auth()->check() && auth()->user()->role === 'instructor' ? 'instructor::components.layouts.hope-master' : 'center::layouts.hope-master')
+@extends(auth()->check() && auth()->user()->role === 'instructor' ? 'instructor::components.layouts.app-next' : 'center::layouts.app-next')
 
 @section('title', 'Subscription Successful')
 @section('page-title', 'Subscription Successful')
 
-@section('content')
+@section('panel-content')
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-lg-6">

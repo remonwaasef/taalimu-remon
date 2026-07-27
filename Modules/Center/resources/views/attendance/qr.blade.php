@@ -1,6 +1,6 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
-@section('content')
+@section('panel-content')
 <div class="container text-center mt-5">
     <div class="card shadow-lg border-0 rounded-4 mx-auto" style="max-width: 500px;">
         <div class="card-header bg-primary text-white p-4">

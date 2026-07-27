@@ -1,8 +1,8 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('title', __('center::students.import.title'))
 
-@section('content')
+@section('panel-content')
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold text-dark">{{ __('center::students.import.header') }}</h2>
         <a href="{{ route('center.students.index', ['tenant' => app('tenant')->domain]) }}" class="btn btn-outline-secondary rounded-pill px-4">

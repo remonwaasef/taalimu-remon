@@ -1,6 +1,6 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
-@section('content')
+@section('panel-content')
 <div class="animate__animated animate__fadeIn">
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">

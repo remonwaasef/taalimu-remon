@@ -1,6 +1,6 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
-@section('content')
+@section('panel-content')
 <div class="container-fluid p-0">
     <div class="mb-4">
         <h4 class="fw-bold mb-1"><i class="fas fa-trophy me-2 text-warning"></i>{{ __('center::leaderboard.title') }}</h4>

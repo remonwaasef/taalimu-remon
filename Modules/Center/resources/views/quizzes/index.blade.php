@@ -1,4 +1,4 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('page-title', __('center::quizzes.title'))
 @section('page-subtitle', __('center::quizzes.subtitle'))
@@ -12,7 +12,7 @@
     </a>
 @endsection
 
-@section('content')
+@section('panel-content')
 
     <!-- Statistics Cards -->
     <div class="row g-4 mb-4">

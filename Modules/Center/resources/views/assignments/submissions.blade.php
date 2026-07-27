@@ -1,6 +1,6 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
-@section('content')
+@section('panel-content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Submissions: {{ $assignment->title }}</h1>

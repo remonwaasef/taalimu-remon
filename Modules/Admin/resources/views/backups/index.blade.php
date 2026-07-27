@@ -1,8 +1,8 @@
-@extends('admin::layouts.master')
+@extends('admin::layouts.app-next')
 
 @section('title', 'إدارة النسخ الاحتياطي')
 
-@section('content')
+@section('panel-content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>

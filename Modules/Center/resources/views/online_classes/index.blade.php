@@ -1,9 +1,9 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('page-title', __('center::online_classes.live_classes'))
 @section('page-subtitle', __('center::online_classes.subtitle'))
 
-@section('content')
+@section('panel-content')
 
     <!-- Stats Cards -->
     <div class="row g-3 mb-4">

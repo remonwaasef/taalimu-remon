@@ -1,8 +1,8 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('title', __('center::instructors.account_statement') . ': ' . $instructor->name)
 
-@section('content')
+@section('panel-content')
 <div class="mb-4 d-flex align-items-center justify-content-between no-print">
     <div class="d-flex align-items-center">
         <a href="{{ route('center.instructors.show', $instructor->id) }}" class="btn btn-light rounded-circle me-3">

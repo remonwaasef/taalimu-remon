@@ -1,4 +1,4 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 @section('page-title', __('center::analytics.teacher_commissions'))
 @section('page-subtitle', __('center::analytics.commissions_detail'))
 
@@ -8,7 +8,7 @@
     </a>
 @endsection
 
-@section('content')
+@section('panel-content')
 <div class="container-fluid">
 
     <div class="row mb-5">

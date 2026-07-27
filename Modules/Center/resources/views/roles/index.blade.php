@@ -1,8 +1,8 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('title', __('center::roles.admins_and_roles'))
 
-@section('content')
+@section('panel-content')
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">

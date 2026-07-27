@@ -1,8 +1,8 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('title', __('center::sales.new_sale'))
 
-@section('content')
+@section('panel-content')
 <div class="mb-4 d-flex align-items-center">
     <a href="{{ route('center.sales.index') }}" class="btn btn-light rounded-circle me-3">
         <i class="fas fa-arrow-right"></i>

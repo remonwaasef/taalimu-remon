@@ -1,6 +1,6 @@
-@extends('admin::layouts.master')
+@extends('admin::layouts.app-next')
 
-@section('content')
+@section('panel-content')
 <div class="container-fluid">
     <!-- Breadcrumbs -->
     <nav aria-label="breadcrumb" class="mb-4">

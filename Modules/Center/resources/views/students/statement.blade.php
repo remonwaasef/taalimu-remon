@@ -1,8 +1,8 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('title', 'كشف حساب الطالب: ' . $student->name)
 
-@section('content')
+@section('panel-content')
 <div class="mb-4 d-flex align-items-center justify-content-between no-print">
     <div class="d-flex align-items-center">
         <a href="{{ route('center.students.show', $student->id) }}" class="btn btn-light rounded-circle me-3">

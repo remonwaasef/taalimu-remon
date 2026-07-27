@@ -1,8 +1,8 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('title', __('center::messages.blade_0025'))
 
-@section('content')
+@section('panel-content')
 <div class="container-fluid">
     <div class="d-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">{{ __('center::messages.blade_0017') }}</h1>

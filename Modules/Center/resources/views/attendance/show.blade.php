@@ -1,6 +1,6 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
-@section('content')
+@section('panel-content')
     <div class="mb-4">
         <h2 class="fw-bold text-dark">{{ __('center::attendance.sheet_title', ['title' => $schedule->course->title]) }}</h2>
         <nav aria-label="breadcrumb">

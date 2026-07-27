@@ -1,8 +1,8 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('title', __('center::expenses.new_expense'))
 
-@section('content')
+@section('panel-content')
 <div class="mb-4">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">

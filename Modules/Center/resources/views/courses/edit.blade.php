@@ -1,6 +1,6 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
-@section('content')
+@section('panel-content')
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold text-dark">{{ __('center::courses.edit_title', ['title' => $course->title]) }}</h2>
         <a href="{{ route('center.courses.index') }}" class="btn btn-outline-secondary rounded-pill px-4">{{ __('center::courses.cancel') }}</a>

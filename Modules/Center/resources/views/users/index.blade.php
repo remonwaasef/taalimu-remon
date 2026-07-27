@@ -1,9 +1,9 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('title', __('center::users.title'))
 @section('page-title', __('center::users.subtitle'))
 
-@section('content')
+@section('panel-content')
 <div class="row">
     <div class="col-12">
         <div class="card">

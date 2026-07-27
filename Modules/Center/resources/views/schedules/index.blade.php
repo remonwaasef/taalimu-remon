@@ -1,4 +1,4 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('page-title', __('center::sidebar.schedules'))
 @section('page-subtitle', __('center::schedules.weekly_overview'))
@@ -9,7 +9,7 @@
     </a>
 @endsection
 
-@section('content')
+@section('panel-content')
 
     @php
         $daysOfWeek = [

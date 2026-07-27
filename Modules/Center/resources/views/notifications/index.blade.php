@@ -1,8 +1,8 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('title', __('sidebar.notifications'))
 
-@section('content')
+@section('panel-content')
 <div class="row">
     <div class="col-12">
         <div class="card shadow-sm border-0">

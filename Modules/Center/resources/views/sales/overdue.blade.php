@@ -1,8 +1,8 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('title', __('center::sales.overdue_title'))
 
-@section('content')
+@section('panel-content')
 <div class="mb-4 d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center">
         <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">

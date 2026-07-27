@@ -1,8 +1,8 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('title', __('center::branches.create_branch'))
 
-@section('content')
+@section('panel-content')
 <div class="row justify-content-center">
     <div class="col-md-8">
         <div class="card shadow-sm border-0">

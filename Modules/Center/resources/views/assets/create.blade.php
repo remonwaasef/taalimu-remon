@@ -1,6 +1,6 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
-@section('content')
+@section('panel-content')
     <div class="row mb-4">
         <div class="col-12">
             <h2 class="fw-bold text-dark mb-1">{{ isset($asset) ? __('center::assets.edit') : __('center::assets.add_new') }}</h2>

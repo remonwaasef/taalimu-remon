@@ -1,8 +1,8 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('title', __('center::roles.create_role'))
 
-@section('content')
+@section('panel-content')
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-lg-12">

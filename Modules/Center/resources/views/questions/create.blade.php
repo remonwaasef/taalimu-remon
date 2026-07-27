@@ -1,6 +1,6 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
-@section('content')
+@section('panel-content')
 <div class="container-fluid p-0">
     <div class="mb-4">
         <a href="{{ route('center.questions.index') }}" class="text-muted text-decoration-none small">

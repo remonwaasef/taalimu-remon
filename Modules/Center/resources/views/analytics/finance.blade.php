@@ -1,4 +1,4 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('page-title', __('center::analytics.finance_reports'))
 
@@ -17,7 +17,7 @@
     </div>
 @endsection
 
-@section('content')
+@section('panel-content')
 
     <!-- Yearly Summary Cards -->
     <div class="row g-3 mb-5 animate__animated animate__fadeIn">

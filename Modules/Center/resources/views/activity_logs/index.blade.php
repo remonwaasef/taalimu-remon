@@ -1,8 +1,8 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('page-title', __('center::dashboard.recent_activities') ?? 'سجل النشاطات')
 
-@section('content')
+@section('panel-content')
 <div class="card border-0 shadow-sm rounded-4">
     <div class="card-body p-4">
         <div class="table-responsive">

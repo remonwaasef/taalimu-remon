@@ -1,9 +1,9 @@
-@extends('admin::layouts.master')
+@extends('admin::layouts.app-next')
 
 @section('title', 'تعديل المستخدم الإداري')
 @section('page-title', 'تعديل المستخدم الإداري')
 
-@section('content')
+@section('panel-content')
 <div class="row justify-content-center animate__animated animate__fadeIn">
     <div class="col-lg-7">
         <div class="card border-0 shadow-sm rounded-4">

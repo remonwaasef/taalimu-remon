@@ -1,4 +1,4 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('page-title', __('center::sales.title'))
 @section('page-subtitle', __('center::sales.subtitle'))
@@ -9,7 +9,7 @@
     </div>
 @endsection
 
-@section('content')
+@section('panel-content')
 <div class="container-fluid">
 
     {{-- Search & Filter Bar --}}

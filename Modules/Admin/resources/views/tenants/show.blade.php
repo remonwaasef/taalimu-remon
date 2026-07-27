@@ -1,8 +1,8 @@
-@extends('admin::layouts.master')
+@extends('admin::layouts.app-next')
 
 @section('title', 'تفاصيل المركز - ' . $tenant->name)
 
-@section('content')
+@section('panel-content')
 @php
     $sub = $tenant->activeSubscription();
 @endphp

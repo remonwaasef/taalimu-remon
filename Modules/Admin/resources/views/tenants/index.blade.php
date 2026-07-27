@@ -1,4 +1,4 @@
-@extends('admin::layouts.master')
+@extends('admin::layouts.app-next')
 
 @section('page-title', __('admin::admin.tenants.title'))
 
@@ -13,7 +13,7 @@
     </div>
 @endsection
 
-@section('content')
+@section('panel-content')
 
     <!-- Integrated Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">

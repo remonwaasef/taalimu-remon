@@ -1,4 +1,4 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('page-title', __('center::classrooms.title'))
 
@@ -8,7 +8,7 @@
     </a>
 @endsection
 
-@section('content')
+@section('panel-content')
 
     <div class="card border-0 shadow-sm rounded-4">
         <div class="card-body p-4">

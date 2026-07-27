@@ -1,9 +1,9 @@
-@extends('admin::layouts.master')
+@extends('admin::layouts.app-next')
 
 @section('title', __('admin.roles.title'))
 @section('page-title', __('admin.roles.title'))
 
-@section('content')
+@section('panel-content')
 <div class="row g-4 animate__animated animate__fadeIn">
     <div class="col-12">
         <div class="card border-0 shadow-sm rounded-4">

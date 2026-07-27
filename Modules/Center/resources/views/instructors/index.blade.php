@@ -1,4 +1,4 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('page-title', __('center::instructors.title'))
 
@@ -8,7 +8,7 @@
     </a>
 @endsection
 
-@section('content')
+@section('panel-content')
 
     <div class="row g-4 mb-4">
         <div class="col-md-3">

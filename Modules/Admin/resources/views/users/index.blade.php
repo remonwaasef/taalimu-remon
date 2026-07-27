@@ -1,9 +1,9 @@
-@extends('admin::layouts.master')
+@extends('admin::layouts.app-next')
 
 @section('title', 'مستخدمو الإدارة')
 @section('page-title', 'مستخدمو الإدارة')
 
-@section('content')
+@section('panel-content')
 <div class="row g-4 animate__animated animate__fadeIn">
 
     {{-- Header Stats --}}

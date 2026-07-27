@@ -1,6 +1,6 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
-@section('content')
+@section('panel-content')
     <div class="row mb-4">
         <div class="col-12">
             <h2 class="fw-bold text-dark mb-1">{{ isset($classroom) ? __('center::messages.blade_0194') : __('center::messages.blade_0195') }}</h2>

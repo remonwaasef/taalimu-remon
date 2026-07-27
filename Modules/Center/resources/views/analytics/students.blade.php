@@ -1,8 +1,8 @@
-@extends('center::layouts.hope-master')
+@extends('center::layouts.app-next')
 
 @section('title', __('center::analytics.student_analytics_title'))
 
-@section('content')
+@section('panel-content')
 <div class="container-fluid">
     <!-- Header -->
     <div class="d-flex align-items-center justify-content-between mb-4">
