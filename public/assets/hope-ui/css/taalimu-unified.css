@@ -1,15 +1,15 @@
-/* ===== Global Royal Indigo & Violet Theme (Matching Mockup Identity) ===== */
+/* ===== Global Emerald & Teal Theme (Matching Unified Brand Identity) ===== */
 :root {
-    --bs-primary: #6366f1 !important; /* Royal Indigo 600 */
-    --bs-primary-rgb: 99, 102, 241 !important;
-    --bs-link-color: #6366f1 !important;
-    --bs-link-hover-color: #4f46e5 !important;
-    --primary-color: #6366f1 !important;
-    --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --bs-primary: #059669 !important; /* Emerald 600 */
+    --bs-primary-rgb: 5, 150, 105 !important;
+    --bs-link-color: #059669 !important;
+    --bs-link-hover-color: #047857 !important;
+    --primary-color: #059669 !important;
+    --primary-gradient: linear-gradient(135deg, #059669 0%, #14b8a6 100%);
 }
 
 body {
-    font-family: 'Outfit', 'Cairo', sans-serif;
+    font-family: 'Inter', 'Cairo', sans-serif;
     background-color: #f8fafc !important;
     color: #1e293b;
     -webkit-font-smoothing: antialiased;

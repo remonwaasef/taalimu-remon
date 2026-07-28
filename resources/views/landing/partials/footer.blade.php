@@ -29,7 +29,7 @@
                 <h4 class="text-slate-900 font-bold text-sm uppercase tracking-wider mb-6">{{ __('landing.footer.product.title') }}</h4>
                 <ul class="space-y-3">
                     @foreach(['features', 'pricing', 'integrations', 'updates'] as $link)
-                    <li><a href="#" class="text-slate-500 hover:text-emerald-400 font-medium text-sm transition-colors">{{ __("landing.footer.product.$link") }}</a></li>
+                    <li><a href="#" class="text-slate-500 hover:text-emerald-600 font-medium text-sm transition-colors">{{ __("landing.footer.product.$link") }}</a></li>
                     @endforeach
                 </ul>
             </div>
@@ -37,7 +37,7 @@
                 <h4 class="text-slate-900 font-bold text-sm uppercase tracking-wider mb-6">{{ __('landing.footer.resources.title') }}</h4>
                 <ul class="space-y-3">
                     @foreach(['help', 'docs', 'blog', 'api'] as $link)
-                    <li><a href="#" class="text-slate-500 hover:text-emerald-400 font-medium text-sm transition-colors">{{ __("landing.footer.resources.$link") }}</a></li>
+                    <li><a href="#" class="text-slate-500 hover:text-emerald-600 font-medium text-sm transition-colors">{{ __("landing.footer.resources.$link") }}</a></li>
                     @endforeach
                 </ul>
             </div>

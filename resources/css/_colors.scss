@@ -1,16 +1,16 @@
 // Global Color Palette
 
 // SCSS Variables (for usage in Sass files)
-$primary: #140342;
-$secondary: #00FF84;
-$accent: #00FF84;
-$success: #00FF84;
+$primary: #059669;
+$secondary: #0f172a;
+$accent: #14b8a6;
+$success: #22c55e;
 $warning: #F59E0B;
 $danger: #EF4444;
 $info: #3B82F6;
 
-$light: #F3F4F6;
-$dark: #140342;
+$light: #F8FAFC;
+$dark: #0f172a;
 $white: #FFFFFF;
 
 // CSS Custom Properties (for usage in CSS/JS)
@@ -24,10 +24,10 @@ $white: #FFFFFF;
     --info-color: #{$info};
 
     --bg-light: #{$light};
-    --text-dark: #4F547B;
+    --text-dark: #475569;
     --bg-white: #{$white};
 
     // Gradients
-    --primary-gradient: linear-gradient(135deg, #{$primary} 0%, #2a0685 100%);
-    --accent-gradient: linear-gradient(135deg, #{$accent} 0%, #4ade80 100%);
+    --primary-gradient: linear-gradient(135deg, #{$primary} 0%, #047857 100%);
+    --accent-gradient: linear-gradient(135deg, #{$accent} 0%, #22c55e 100%);
 }

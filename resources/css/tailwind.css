@@ -115,21 +115,21 @@
     }
 }
 
-/* ===== Force Royal Indigo Theme Palette Overrides ===== */
+/* ===== Force Emerald Theme Palette Overrides ===== */
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
-    background-color: #5B5FEF !important;
-    background: #5B5FEF !important;
+    background-color: #059669 !important;
+    background: #059669 !important;
     color: #ffffff !important;
-    box-shadow: 0 4px 12px rgba(91, 95, 239, 0.25) !important;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25) !important;
 }
 
 .btn-primary,
 .bg-primary,
 .btn.btn-primary {
-    background-color: #5B5FEF !important;
-    background: #5B5FEF !important;
-    border-color: #5B5FEF !important;
+    background-color: #059669 !important;
+    background: #059669 !important;
+    border-color: #059669 !important;
     color: #ffffff !important;
 }
 
@@ -139,14 +139,14 @@
 .btn.btn-primary:hover,
 .btn.btn-primary:focus,
 .btn.btn-primary:active {
-    background-color: #484BE4 !important;
-    background: #484BE4 !important;
-    border-color: #484BE4 !important;
+    background-color: #047857 !important;
+    background: #047857 !important;
+    border-color: #047857 !important;
     color: #ffffff !important;
-    box-shadow: 0 4px 14px rgba(72, 75, 228, 0.35) !important;
+    box-shadow: 0 4px 14px rgba(4, 120, 87, 0.35) !important;
 }
 
 .text-primary {
-    color: #5B5FEF !important;
+    color: #059669 !important;
 }
 
