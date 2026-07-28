@@ -1,0 +1,47 @@
+# DOCUMENTATION INDEX - Taalimu.com AI Knowledge Base
+
+> **Purpose**: Master index of all 36 documentation files in the `docs/` directory, detailing their responsibilities, reading context triggers, and post-task update triggers for AI assistants.
+
+---
+
+## Master Documentation Directory Index
+
+| File | Purpose | Read When | Update When |
+| :--- | :--- | :--- | :--- |
+| **[00_AI_BOOT.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/00_AI_BOOT.md)** | Session initialization checklist & minimal inspection policy | At start of EVERY AI session | When session boot rules change |
+| **[01_MASTER_CONTEXT.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/01_MASTER_CONTEXT.md)** | Single source of truth master context reference document (< 5000 words) | Before ANY code analysis | After major architectural/domain changes |
+| **[02_CURRENT_STATE.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/02_CURRENT_STATE.md)** | Real-time status snapshot, completion %, priorities, debt | Orienting on active sprint/tasks | After completing major features/milestones |
+| **[03_AI_RULES.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/03_AI_RULES.md)** | Mandatory AI assistant operating rules and safety constraints | Prior to executing code edits | When AI governance directives change |
+| **[04_TASK_TEMPLATE.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/04_TASK_TEMPLATE.md)** | Standardized 8-step workflow template for development tasks | Formatting task responses | When task workflow steps evolve |
+| **[05_PROJECT_SUMMARY.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/05_PROJECT_SUMMARY.md)** | Executive overview, business goals, target user roles | Understanding project domain | When business mission or user roles change |
+| **[06_PROJECT_STRUCTURE.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/06_PROJECT_STRUCTURE.md)** | Complete directory map & folder responsibility dictionary | Locating files or module paths | When new directories/modules are added |
+| **[07_ARCHITECTURE.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/07_ARCHITECTURE.md)** | Modular monolith design, multi-tenancy, request flow | Modifying core design patterns | When architectural patterns change |
+| **[08_TECH_STACK.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/08_TECH_STACK.md)** | Inventory of PHP 8.4, Laravel 12, React 19, Inertia, packages | Checking framework versions | When upgrading stack or core libraries |
+| **[09_FEATURES.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/09_FEATURES.md)** | Breakdown of 12 primary system feature domains | Adding or modifying features | When adding/modifying system features |
+| **[10_MODULES.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/10_MODULES.md)** | Specifications for 6 `nwidart` modules (`Admin`, `Center`, etc.) | Working inside `Modules/*` | When adding or altering modules |
+| **[11_DATABASE.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/11_DATABASE.md)** | Schema reference for 50+ relational tables, indexes, constraints | Writing migrations or DB queries| When creating/altering database tables |
+| **[12_MODELS.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/12_MODELS.md)** | Eloquent model directory, `BelongsToTenant` traits, scopes | Modifying Eloquent models | When modifying model relations/scopes |
+| **[13_CONTROLLERS.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/13_CONTROLLERS.md)** | Catalog of HTTP controllers across core and module layers | Modifying HTTP controllers | When adding/modifying controllers |
+| **[14_SERVICES.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/14_SERVICES.md)** | Domain business service layer catalog (35+ service classes) | Implementing business logic | When adding/modifying service classes |
+| **[15_ROUTES.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/15_ROUTES.md)** | System routing table, domain constraints, named routes | Adding or modifying web/API routes| When registering new web or API routes |
+| **[16_API.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/16_API.md)** | REST API endpoints, OTP verification, webhooks, schemas | Working on REST APIs or webhooks | When adding/modifying API endpoints |
+| **[17_BUSINESS_LOGIC.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/17_BUSINESS_LOGIC.md)** | Core domain rules, workflow logic, sequence diagrams | Implementing complex workflows | When business rules or flows change |
+| **[18_AUTHENTICATION.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/18_AUTHENTICATION.md)** | Multi-role login, Socialite OAuth, 2FA, OTP, Sanctum | Modifying auth or session logic | When updating login, 2FA, or OAuth |
+| **[19_AUTHORIZATION.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/19_AUTHORIZATION.md)** | Spatie RBAC, policy catalog, custom middleware gates | Enforcing permissions/policies | When adding policies or middleware gates |
+| **[20_PERMISSIONS.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/20_PERMISSIONS.md)** | Role definitions (`super_admin`, `center_owner`, etc.) & matrix | Assigning roles & permissions | When adding roles or permission flags |
+| **[21_FRONTEND.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/21_FRONTEND.md)** | Hybrid frontend engine (Blade + Alpine.js + Inertia React 19) | Modifying views, Inertia, Vite | When modifying frontend architecture |
+| **[22_BACKEND.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/22_BACKEND.md)** | Backend execution stack, service providers, queues, CLI | Modifying queues, jobs, tasks | When adding async jobs or cron tasks |
+| **[23_UI_GUIDE.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/23_UI_GUIDE.md)** | Design tokens, color palette, glassmorphism UI components | Building or styling UI views | When updating CSS tokens or UI controls |
+| **[24_STYLE_GUIDE.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/24_STYLE_GUIDE.md)** | PSR-12 formatting, clean code guidelines, SRP, DB transactions| Reviewing code standards | When code style rules are updated |
+| **[25_DEPENDENCIES.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/25_DEPENDENCIES.md)** | Complete Composer PHP and NPM JavaScript package catalog | Adding third-party packages | When running `composer` or `npm` install |
+| **[26_PROJECT_MEMORY.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/26_PROJECT_MEMORY.md)** | Long-term architectural knowledge, business rules, invariants | Checking non-negotiable rules | When new architectural ADRs are adopted |
+| **[27_DECISIONS.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/27_DECISIONS.md)** | Architectural Decision Record (ADR) history logs and templates | Reviewing historical decisions | When adopting major technical decisions |
+| **[28_TODO.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/28_TODO.md)** | Roadmap, checklists, priority levels, technical debt | Reviewing backlog & roadmap | When adding/completing roadmap tasks |
+| **[29_CODE_REVIEW.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/29_CODE_REVIEW.md)** | Quality review checklist (SOLID, performance, security, DB) | Before finalizing pull requests | When review rules are updated |
+| **[30_TESTING_GUIDE.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/30_TESTING_GUIDE.md)** | Testing strategy (Unit, Integration, Feature, E2E Playwright) | Writing automated tests | When adding test strategies or suites |
+| **[31_DEPLOYMENT_GUIDE.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/31_DEPLOYMENT_GUIDE.md)** | Server requirements, deployment script (`deploy.sh`), rollback | Preparing production deploy | When server setup or deploy scripts change|
+| **[32_RELEASE_CHECKLIST.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/32_RELEASE_CHECKLIST.md)** | Pre-release, deployment, and post-deployment verification | Performing production releases | When release verification rules change |
+| **[33_AFTER_EVERY_CHANGE.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/33_AFTER_EVERY_CHANGE.md)** | Mandatory post-task documentation update matrix | After completing ANY change | When documentation rules change |
+| **[34_CHANGELOG.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/34_CHANGELOG.md)** | Semantic versioning changelog tracking system | After completing ANY change | After EVERY completed change |
+| **[35_KNOWN_LIMITATIONS.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/35_KNOWN_LIMITATIONS.md)** | System boundaries, single-DB scaling limits, WhatsApp limits | Evaluating technical debt | When identifying or resolving limits |
+| **[DOCUMENTATION_CLEANUP_REPORT.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/DOCUMENTATION_CLEANUP_REPORT.md)** | Documentation audit report detailing merged & deleted files | Audit reference | Historical audit record |

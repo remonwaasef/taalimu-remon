@@ -133,3 +133,213 @@
     color: var(--color-primary);
     border: 1px solid var(--color-primary-border);
 }
+
+/* --------------------------------------------------------------------------
+   5. Global Sidebar Component Styles (استخراج تنسيقات الـ Sidebar)
+   -------------------------------------------------------------------------- */
+.sidebar-base {
+    box-shadow: 2px 0 24px rgba(0,0,0,0.03) !important;
+}
+.sidebar-base .sidebar-header {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+.sidebar-base .logo-title {
+    color: #0f172a !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.5px;
+}
+.sidebar-base .nav-link {
+    color: #475569 !important;
+    border-radius: 10px !important;
+    margin: 4px 8px !important;
+    padding: 10px 12px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    font-weight: 600;
+}
+.sidebar-base .nav-link:hover {
+    background: #f8fafc !important;
+    color: #0f172a !important;
+    transform: translateX(4px);
+}
+html[dir="rtl"] .sidebar-base .nav-link:hover {
+    transform: translateX(-4px);
+}
+.sidebar-base .nav-link.active {
+    background: rgba(5, 150, 105, 0.1) !important;
+    color: var(--color-primary, #059669) !important;
+    box-shadow: inset 3px 0 0 var(--color-primary, #059669);
+}
+html[dir="rtl"] .sidebar-base .nav-link.active {
+    box-shadow: inset -3px 0 0 var(--color-primary, #059669);
+}
+.sidebar-base .nav-link i, .sidebar-base .nav-link svg {
+    color: #94a3b8 !important;
+    transition: color 0.3s ease;
+}
+.sidebar-base .nav-link:hover i {
+    color: #475569 !important;
+}
+.sidebar-base .nav-link.active i {
+    color: var(--color-primary, #059669) !important;
+}
+.sidebar-base .sub-nav .nav-link {
+    font-size: 0.9rem !important;
+    padding: 10px 0 !important;
+    font-weight: 500;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    direction: rtl !important;
+}
+html[dir="rtl"] .sidebar-base .sub-nav .nav-link {
+    padding-right: 1.2rem !important;
+    padding-left: 0.5rem !important;
+    margin: 0 !important;
+}
+.sidebar-base .sub-nav .sidenav-mini-icon,
+.sidebar-base .sub-nav .nav-link::before,
+.sidebar-base .sub-nav .nav-link::after,
+.sidebar-base .sub-nav .nav-link .right-icon {
+    display: none !important;
+    content: none !important;
+}
+.sidebar-base .sub-nav .item-name {
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: right !important;
+    flex-grow: 1;
+}
+.sidebar-base .hr-horizontal {
+    border-color: rgba(0,0,0,0.05) !important;
+    margin: 1rem 0;
+}
+.brand-logo-container {
+    background: #ffffff !important;
+    border: 1px solid rgba(0,0,0,0.08) !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+}
+.brand-logo-fallback {
+    background: linear-gradient(135deg, var(--color-primary, #059669) 0%, var(--color-primary-hover, #047857) 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 10px rgba(5, 150, 105, 0.2);
+}
+.sidebar-toggle .icon svg {
+    color: #64748b;
+    transition: color 0.3s ease;
+}
+.sidebar-toggle:hover .icon svg {
+    color: #0f172a;
+}
+
+/* --------------------------------------------------------------------------
+   6. Cookie Banner Styles (استخراج تنسيقات Cookie Consent)
+   -------------------------------------------------------------------------- */
+.cookie-banner-container {
+    position: fixed;
+    bottom: -150px;
+    left: 0;
+    right: 0;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    color: #fff;
+    padding: 1rem 2rem;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    transition: bottom 0.5s ease-in-out;
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.cookie-banner-container.show {
+    bottom: 0;
+}
+.cookie-content {
+    font-size: 0.9rem;
+    text-align: center;
+}
+.cookie-content a {
+    color: var(--color-primary-border, #a7f3d0);
+    text-decoration: underline;
+}
+.cookie-buttons {
+    display: flex;
+    gap: 1rem;
+}
+.cookie-btn {
+    padding: 0.5rem 1.5rem;
+    border-radius: var(--btn-radius, 0.75rem);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--btn-transition);
+    border: none;
+}
+.btn-accept {
+    background-color: var(--color-primary, #059669);
+    color: white;
+}
+.btn-accept:hover {
+    background-color: var(--color-primary-hover, #047857);
+}
+.btn-decline {
+    background-color: transparent;
+    color: #d1d5db;
+    border: 1px solid #4b5563;
+}
+.btn-decline:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+@media(min-width: 768px) {
+    .cookie-banner-container {
+        flex-direction: row;
+        text-align: left;
+        padding: 1.5rem 3rem;
+    }
+    html[dir="rtl"] .cookie-banner-container {
+        text-align: right;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   7. Student Form Component Styles (استخراج تنسيقات student-form)
+   -------------------------------------------------------------------------- */
+.hover-shadow-sm:hover, .custom-checkbox-card:hover { 
+    transform: translateY(-3px);
+    border-color: var(--color-primary, #059669) !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05) !important;
+    background-color: var(--color-primary-light, #ecfdf5) !important;
+}
+.custom-checkbox-card:has(input:checked) {
+    border: 2px solid var(--color-primary, #059669) !important;
+    background-color: var(--color-primary-light, #ecfdf5) !important;
+    transform: translateY(-3px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05) !important;
+}
+.grade-card.active {
+    border-color: var(--color-primary, #059669) !important;
+    background-color: var(--color-primary-light, #ecfdf5);
+}
+.grade-card.active .grade-icon {
+    background-color: var(--color-primary, #059669) !important;
+}
+.grade-card.active i {
+    color: white !important;
+}
+
+#gradePickerTrigger.pulse-btn {
+    animation: pulse-primary 2s infinite;
+}
+
+@keyframes pulse-primary {
+    0% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(5, 150, 105, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0); }
+}

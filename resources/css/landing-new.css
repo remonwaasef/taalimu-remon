@@ -1088,4 +1088,68 @@
 #pricing {
     padding-bottom: 8rem !important;
 }
+
+/* =====================================================
+   Hero 3D Perspective & Keyframe Animations
+   ===================================================== */
+@keyframes heroFadeInRight {
+    from { opacity: 0; transform: translateX(30px) scale(0.98); }
+    to { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes heroFadeInLeft {
+    from { opacity: 0; transform: translateX(-30px) scale(0.98); }
+    to { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes heroFadeUpMobile {
+    from { opacity: 0; transform: translateY(30px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+[data-animate="fade-text"],
+[data-animate="fade-image"] {
+    animation: heroFadeUpMobile 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (min-width: 1024px) {
+    [dir="rtl"] [data-animate="fade-text"],
+    .rtl [data-animate="fade-text"] { animation: heroFadeInRight 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+    [dir="rtl"] [data-animate="fade-image"],
+    .rtl [data-animate="fade-image"] { animation: heroFadeInLeft 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+    [dir="ltr"] [data-animate="fade-text"] { animation: heroFadeInLeft 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    [dir="ltr"] [data-animate="fade-image"] { animation: heroFadeInRight 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+}
+
+.perspective-2000 { perspective: 2000px; }
+.hero-3d-wrapper { transform-style: preserve-3d; }
+
+.hero-3d-side {
+    transform: rotateY(-8deg) rotateX(2deg) scale(1);
+    transform-origin: center;
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[dir="rtl"] .hero-3d-side,
+.rtl .hero-3d-side {
+    transform: rotateY(8deg) rotateX(2deg) scale(1);
+}
+
+@media (min-width: 1024px) {
+    .hero-3d-side { transform: rotateY(-12deg) rotateX(4deg) scale(0.98); }
+    [dir="rtl"] .hero-3d-side,
+    .rtl .hero-3d-side { transform: rotateY(12deg) rotateX(4deg) scale(0.98); }
+}
+
+.hero-3d-wrapper:hover .hero-3d-side {
+    transform: rotateY(0deg) rotateX(0deg) scale(1.02);
+    filter: drop-shadow(0 30px 60px rgba(16, 185, 129, 0.15));
+}
+
+.glass-card-premium {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(15px);
+}
 
