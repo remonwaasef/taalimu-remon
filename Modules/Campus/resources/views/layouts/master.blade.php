@@ -294,32 +294,17 @@
             @yield('content')
         </div>
 
-        <footer style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-top: 1px solid rgba(16, 185, 129, 0.15); padding: 0; margin-top: auto;">
-            <div class="container-fluid" style="padding: 14px 24px;">
+        <footer>
+            <div class="container-fluid">
                 <div class="row align-items-center">
-                    <div class="col-md-4 text-center text-md-start">
-                        <span style="color: #64748b; font-size: 12px; font-weight: 500;">
-                            &copy; {{ date('Y') }} {{ $tenant->name ?? 'EduCentral' }}
-                        </span>
+                    <div class="col-md-6 text-center text-md-start">
+                        <span class="text-muted small">&copy; {{ date('Y') }} {{ $tenant->name ?? 'EduCentral' }}. جميع الحقوق محفوظة.</span>
                     </div>
-                    <div class="col-md-4 text-center mt-2 mt-md-0">
-                        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 14px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 20px; font-size: 10px; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.05em;">
-                            <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; display: inline-block; animation: campus-pulse 2s infinite;"></span>
-                            All Systems Operational
-                        </span>
-                    </div>
-                    <div class="col-md-4 text-center text-md-end mt-2 mt-md-0">
-                        <span style="display: inline-flex; align-items: center; gap: 6px; color: #64748b; font-size: 11px; font-weight: 500;">
-                            Powered by
-                            <span style="font-weight: 700; background: linear-gradient(135deg, #10b981, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Taalimu</span>
-                            <span style="display: inline-flex; align-items: center; gap: 3px; padding: 2px 8px; background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 4px; font-size: 9px; font-weight: 600; color: #818cf8; -webkit-text-fill-color: #818cf8;">
-                                <i class="fas fa-code-branch" style="font-size: 8px;"></i> v{{ config('app.version', '1.0') }}
-                            </span>
-                        </span>
+                    <div class="col-md-6 text-center text-md-end mt-2 mt-md-0">
+                        <span class="text-muted small">مدعوّ لبيئة تعليمية ذكية 🚀</span>
                     </div>
                 </div>
             </div>
-            <style>@keyframes campus-pulse{0%,100%{opacity:1}50%{opacity:.4}}</style>
         </footer>
     </main>
 

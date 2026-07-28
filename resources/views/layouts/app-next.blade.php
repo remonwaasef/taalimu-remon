@@ -192,40 +192,6 @@
                 {{ $slot ?? '' }}
                 @yield('content')
             </main>
-
-            <!-- Professional Footer -->
-            <footer class="border-t border-brand-border dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm mt-auto">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="h-14 flex items-center justify-between gap-4">
-                        {{-- Left: Copyright --}}
-                        <div class="flex items-center gap-3">
-                            <span class="text-xs font-medium text-slate-400 dark:text-slate-500">
-                                ©{{ date('Y') }} {{ config('app.name') }}
-                            </span>
-                            <span class="hidden sm:inline-block w-px h-3.5 bg-slate-200 dark:bg-slate-700"></span>
-                            <a href="{{ route('privacy') }}" class="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 dark:text-slate-500 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
-                                <i class="fas fa-shield-alt text-[10px]"></i>
-                                Privacy
-                            </a>
-                        </div>
-
-                        {{-- Right: Status + Version --}}
-                        <div class="flex items-center gap-3">
-                            <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200/50 dark:border-emerald-800/30">
-                                <span class="relative flex h-1.5 w-1.5">
-                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                    <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-                                </span>
-                                <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Online</span>
-                            </div>
-                            <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/50 text-[10px] font-semibold text-slate-400 dark:text-slate-500">
-                                <i class="fas fa-code-branch text-[9px]"></i>
-                                v{{ config('app.version', '1.0') }}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </footer>
         </div>
     </div>
 

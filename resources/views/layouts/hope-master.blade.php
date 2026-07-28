@@ -64,32 +64,16 @@
         </div>
 
         <!-- Footer -->
-        <footer class="footer" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-top: 1px solid rgba(99, 102, 241, 0.15); padding: 0; margin-top: auto;">
-            <div class="footer-body" style="padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-                <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
-                    <ul class="left-panel list-inline mb-0 p-0" style="display: flex; align-items: center; gap: 8px; margin: 0; padding: 0; list-style: none;">
-                        <li class="list-inline-item" style="margin: 0;">
-                            <a href="{{ route('privacy') }}" style="color: #94a3b8; font-size: 12px; font-weight: 500; text-decoration: none; padding: 4px 10px; border-radius: 6px; transition: all 0.2s; border: 1px solid transparent;" onmouseover="this.style.color='#10b981';this.style.borderColor='rgba(16,185,129,0.3)';this.style.backgroundColor='rgba(16,185,129,0.05)'" onmouseout="this.style.color='#94a3b8';this.style.borderColor='transparent';this.style.backgroundColor='transparent'">
-                                <i class="fas fa-shield-alt" style="margin-inline-end: 4px; font-size: 10px;"></i>Privacy Policy
-                            </a>
-                        </li>
-                        @yield('footer_left_extra')
-                    </ul>
-                </div>
-                <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
-                    <span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 20px; font-size: 10px; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.05em;">
-                        <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; display: inline-block; animation: pulse 2s infinite;"></span>
-                        Operational
-                    </span>
-                    <span style="color: #64748b; font-size: 12px; font-weight: 500;">
-                        ©{{ date('Y') }} {{ config('app.name') }}
-                    </span>
-                    <span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 6px; font-size: 10px; font-weight: 600; color: #818cf8;">
-                        <i class="fas fa-code-branch" style="font-size: 9px;"></i> v{{ config('app.version', '1.0') }}
-                    </span>
+        <footer class="footer">
+            <div class="footer-body">
+                <ul class="left-panel list-inline mb-0 p-0">
+                    <li class="list-inline-item"><a href="{{ route('privacy') }}">Privacy Policy</a></li>
+                    @yield('footer_left_extra')
+                </ul>
+                <div class="right-panel">
+                    ©{{ date('Y') }} {{ config('app.name') }}. All rights reserved.
                 </div>
             </div>
-            <style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}</style>
         </footer>
     </main>
 
