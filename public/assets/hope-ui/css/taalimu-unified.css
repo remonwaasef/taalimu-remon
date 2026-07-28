@@ -1,11 +1,11 @@
 /* ===== Global Emerald & Teal Theme (Matching Unified Brand Identity) ===== */
 :root {
-    --bs-primary: #059669 !important; /* Emerald 600 */
+    --bs-primary: var(--color-primary, #059669) !important;
     --bs-primary-rgb: 5, 150, 105 !important;
-    --bs-link-color: #059669 !important;
-    --bs-link-hover-color: #047857 !important;
-    --primary-color: #059669 !important;
-    --primary-gradient: linear-gradient(135deg, #059669 0%, #14b8a6 100%);
+    --bs-link-color: var(--color-primary, #059669) !important;
+    --bs-link-hover-color: var(--color-primary-hover, #047857) !important;
+    --primary-color: var(--color-primary, #059669) !important;
+    --primary-gradient: linear-gradient(135deg, var(--color-primary, #059669) 0%, var(--color-accent, #14b8a6) 100%);
 }
 
 body {

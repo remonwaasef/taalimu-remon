@@ -13,9 +13,9 @@
     $baseClasses = "inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none rounded-xl";
     
     $variants = [
-        'primary' => 'bg-brand-primary text-white hover:bg-brand-600 focus:ring-brand-primary shadow-sm hover:shadow active:scale-[0.99]',
-        'secondary' => 'bg-slate-100 text-slate-700 hover:bg-slate-200 focus:ring-slate-400 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700',
-        'outline' => 'border border-brand-border text-slate-700 hover:bg-slate-50 focus:ring-brand-primary dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800',
+        'primary' => 'btn-primary-global bg-brand-primary text-white hover:bg-brand-600 focus:ring-brand-primary shadow-sm hover:shadow active:scale-[0.99]',
+        'secondary' => 'btn-secondary-global bg-slate-100 text-slate-700 hover:bg-slate-200 focus:ring-slate-400 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700',
+        'outline' => 'btn-outline-global border border-brand-border text-slate-700 hover:bg-slate-50 focus:ring-brand-primary dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800',
         'ghost' => 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus:ring-slate-300 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100',
         'danger' => 'bg-red-500 text-white hover:bg-red-600 focus:ring-red-500 shadow-sm hover:shadow active:scale-[0.99]',
         'success' => 'bg-emerald-500 text-white hover:bg-emerald-600 focus:ring-emerald-500 shadow-sm hover:shadow active:scale-[0.99]',

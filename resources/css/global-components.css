@@ -1,0 +1,135 @@
+/* ==========================================================================
+   TAALIMU GLOBAL COMPONENTS STYLESHEET
+   --------------------------------------------------------------------------
+   Unified component classes built on top of design-tokens.css.
+   Imported across Landing, Dashboard layouts, and Hope UI.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Global Button System (نظام الأزرار الموحد)
+   -------------------------------------------------------------------------- */
+.btn-global {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--btn-font-weight);
+    border-radius: var(--btn-radius);
+    transition: var(--btn-transition);
+    cursor: pointer;
+    user-select: none;
+    text-decoration: none;
+    line-height: 1.5;
+}
+
+.btn-global:active {
+    transform: scale(0.98);
+}
+
+/* Primary Button */
+.btn-primary-global {
+    background-color: var(--btn-primary-bg) !important;
+    color: var(--btn-primary-text) !important;
+    border: 1px solid transparent !important;
+    box-shadow: var(--btn-primary-shadow);
+}
+
+.btn-primary-global:hover {
+    background-color: var(--btn-primary-hover-bg) !important;
+    box-shadow: var(--btn-primary-hover-shadow);
+    transform: translateY(-1px);
+}
+
+/* Secondary Button */
+.btn-secondary-global {
+    background-color: var(--btn-secondary-bg) !important;
+    color: var(--btn-secondary-text) !important;
+    border: 1px solid transparent !important;
+    box-shadow: var(--btn-secondary-shadow);
+}
+
+.btn-secondary-global:hover {
+    background-color: var(--btn-secondary-hover-bg) !important;
+    transform: translateY(-1px);
+}
+
+/* Outline Button */
+.btn-outline-global {
+    background-color: transparent !important;
+    color: var(--btn-outline-text) !important;
+    border: 1px solid var(--btn-outline-border) !important;
+}
+
+.btn-outline-global:hover {
+    background-color: var(--btn-outline-hover-bg) !important;
+    color: var(--btn-outline-hover-text) !important;
+    border-color: var(--color-primary-border) !important;
+}
+
+/* Hero Pill Button */
+.btn-hero-global {
+    background-color: var(--btn-primary-bg) !important;
+    color: var(--btn-primary-text) !important;
+    border-radius: 9999px !important;
+    padding: 0.875rem 2rem;
+    font-weight: 800;
+    box-shadow: var(--btn-primary-shadow);
+}
+
+.btn-hero-global:hover {
+    background-color: var(--btn-primary-hover-bg) !important;
+    transform: translateY(-2px);
+    box-shadow: var(--btn-primary-hover-shadow);
+}
+
+/* --------------------------------------------------------------------------
+   2. Global Card System (نظام الكروت الموحد)
+   -------------------------------------------------------------------------- */
+.card-global {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    transition: var(--btn-transition);
+}
+
+.card-global-hover:hover {
+    box-shadow: var(--card-hover-shadow);
+    transform: translateY(-2px);
+}
+
+/* --------------------------------------------------------------------------
+   3. Global Input System (نظام الحقول والمدخلات)
+   -------------------------------------------------------------------------- */
+.input-global {
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: var(--input-radius);
+    padding: 0.625rem 1rem;
+    color: var(--color-text-main);
+    transition: var(--btn-transition);
+}
+
+.input-global:focus {
+    outline: none;
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 3px var(--input-focus-ring);
+    background-color: var(--color-surface);
+}
+
+/* --------------------------------------------------------------------------
+   4. Global Badge System (نظام الشارات الموحد)
+   -------------------------------------------------------------------------- */
+.badge-global {
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--badge-radius);
+    font-weight: var(--badge-font-weight);
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+}
+
+.badge-primary-global {
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary-border);
+}
