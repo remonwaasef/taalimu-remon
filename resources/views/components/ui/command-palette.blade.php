@@ -37,50 +37,50 @@
             <input
                 type="text"
                 class="h-12 w-full border-0 bg-transparent ps-11 pe-4 text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:ring-0 focus:outline-none"
-                placeholder="Type a command or search..."
+                placeholder="ابحث عن أمر أو صفحة..."
                 x-init="$watch('open', value => value && $nextTick(() => $el.focus()))"
             />
         </div>
 
         <div class="max-h-80 overflow-y-auto p-2 space-y-1">
-            <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Quick Navigation</div>
+            <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">التنقل السريع</div>
             
             <a href="{{ route('instructor.dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
                 <i class="fas fa-chart-pie w-4 text-center"></i>
-                <span>Go to Dashboard</span>
+                <span>الانتقال للوحة التحكم</span>
             </a>
 
             <a href="{{ route('instructor.students.list') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
                 <i class="fas fa-user-graduate w-4 text-center"></i>
-                <span>View Students Directory</span>
+                <span>دليل وقائمة الطلاب</span>
             </a>
 
             <a href="{{ route('instructor.groups.list') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
                 <i class="fas fa-users w-4 text-center"></i>
-                <span>Manage Study Groups</span>
+                <span>إدارة المجموعات الدراسية</span>
             </a>
 
             <a href="{{ route('instructor.schedules.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
                 <i class="fas fa-calendar-alt w-4 text-center"></i>
-                <span>Check Class Schedules</span>
+                <span>جدول المواعيد والحصص</span>
             </a>
 
-            <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider pt-3">Actions</div>
+            <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider pt-3">إجراءات سريعة</div>
 
             <a href="{{ route('instructor.students.create') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
                 <i class="fas fa-user-plus w-4 text-center text-emerald-500"></i>
-                <span>Add New Student</span>
+                <span>إضافة طالب جديد</span>
             </a>
 
             <a href="{{ route('instructor.groups.create') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
                 <i class="fas fa-folder-plus w-4 text-center text-brand-primary"></i>
-                <span>Create New Group</span>
+                <span>إنشاء مجموعة جديدة</span>
             </a>
         </div>
 
         <div class="px-4 py-2 bg-slate-50 dark:bg-slate-800/50 border-t border-brand-border dark:border-slate-800 text-[10px] text-slate-400 flex items-center justify-between">
-            <span>Navigation Shortcut</span>
-            <span class="font-mono font-medium">ESC to close</span>
+            <span>اختصار البحث</span>
+            <span class="font-mono font-medium">اضغط ESC للإغلاق</span>
         </div>
     </div>
 </div>

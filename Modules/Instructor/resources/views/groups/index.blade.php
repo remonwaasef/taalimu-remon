@@ -1,6 +1,6 @@
 @extends('layouts.app-next')
 
-@section('title', __('instructor::groups.title') ?? 'Study Groups')
+@section('title', __('instructor::groups.title') ?? 'المجموعات الدراسية')
 
 @section('sidebar')
     @include('instructor::partials._sidebar-next', ['active' => 'groups'])
@@ -8,19 +8,19 @@
 
 @section('content')
     <x-ui.page-header
-        title="{{ __('instructor::groups.title') ?? 'Study Groups' }}"
-        subtitle="{{ __('instructor::groups.subtitle') ?? 'Manage active groups, registration links, and session schedules.' }}"
+        title="{{ __('instructor::groups.title') ?? 'المجموعات الدراسية' }}"
+        subtitle="{{ __('instructor::groups.subtitle') ?? 'إدارة المجموعات والروابط ومواعيد الحصص.' }}"
     >
         <x-slot name="actions">
             <x-ui.button variant="primary" icon="fas fa-plus" size="md" href="{{ route('instructor.groups.create') }}">
-                {{ __('instructor::groups.create_new') }}
+                {{ __('instructor::groups.create_new') ?? 'إنشاء مجموعة جديدة' }}
             </x-ui.button>
         </x-slot>
     </x-ui.page-header>
 
     <x-ui.card noPadding="true" class="mb-8">
         @if($courses->count() > 0)
-            <x-ui.table :headers="[__('instructor::groups.table_group'), __('instructor::groups.students_count'), __('instructor::groups.registration_link'), __('instructor::groups.status'), __('instructor::groups.actions')]">
+            <x-ui.table :headers="[__('instructor::groups.table_group') ?? 'المجموعة', __('instructor::groups.students_count') ?? 'الطلاب المسجلون', __('instructor::groups.registration_link') ?? 'رابط تسجيل الطلاب', __('instructor::groups.status') ?? 'الحالة', __('instructor::groups.actions') ?? 'الإجراءات']">
                 @foreach($courses as $course)
                     <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
                         <td class="px-6 py-4 font-semibold text-slate-900 dark:text-slate-100">
@@ -31,13 +31,13 @@
                                         {{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }} - {{ \Carbon\Carbon::parse($schedule->end_time)->format('h:i A') }}
                                     </x-ui.badge>
                                 @empty
-                                    <span class="text-[11px] text-slate-400">No schedule assigned</span>
+                                    <span class="text-[11px] text-slate-400">لم يحدد جدول بعد</span>
                                 @endforelse
                             </div>
                         </td>
 
                         <td class="px-6 py-4">
-                            <x-ui.badge variant="brand" size="sm">{{ $course->enrollments_count ?? 0 }} enrolled</x-ui.badge>
+                            <x-ui.badge variant="brand" size="sm">{{ $course->enrollments_count ?? 0 }} طالب مسجل</x-ui.badge>
                         </td>
 
                         <td class="px-6 py-4">
@@ -49,18 +49,18 @@
                                     </x-ui.button>
                                 </div>
                             @else
-                                <span class="text-xs text-slate-400">No registration link</span>
+                                <span class="text-xs text-slate-400">لا يوجد رابط</span>
                             @endif
                         </td>
 
                         <td class="px-6 py-4">
-                            <x-ui.badge variant="success" size="sm" dot="true">Active</x-ui.badge>
+                            <x-ui.badge variant="success" size="sm" dot="true">نشطة</x-ui.badge>
                         </td>
 
                         <td class="px-6 py-4 text-end">
                             <div class="flex items-center justify-end gap-2">
                                 <x-ui.button variant="outline" size="sm" icon="fas fa-qrcode" href="{{ route('instructor.scanner', $course->id) }}">
-                                    Scanner
+                                    ماسح الـ QR
                                 </x-ui.button>
                                 <x-ui.button variant="ghost" size="sm" icon="fas fa-edit" href="{{ route('instructor.groups.edit', $course->id) }}" />
                             </div>
@@ -70,13 +70,13 @@
             </x-ui.table>
         @else
             <x-ui.empty-state
-                title="No Groups Created"
-                description="Get started by creating your first study group to invite students."
+                title="لا توجد مجموعات حتى الآن"
+                description="ابدأ بإنشاء أول مجموعة دراسية لدعوة الطلاب وتسجيل حضورهم."
                 icon="fas fa-users"
             >
                 <x-slot name="action">
                     <x-ui.button variant="primary" icon="fas fa-plus" href="{{ route('instructor.groups.create') }}">
-                        Create First Group
+                        إنشاء مجموعة جديدة
                     </x-ui.button>
                 </x-slot>
             </x-ui.empty-state>

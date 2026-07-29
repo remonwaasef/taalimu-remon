@@ -1,6 +1,6 @@
 @extends('layouts.app-next')
 
-@section('title', __('instructor::billing.title') ?? 'Financial Billing & Receivables')
+@section('title', __('instructor::billing.title') ?? 'إدارة الحسابات والمدفوعات')
 
 @section('sidebar')
     @include('instructor::partials._sidebar-next', ['active' => 'billing'])
@@ -8,19 +8,19 @@
 
 @section('content')
     <x-ui.page-header
-        title="{{ __('instructor::billing.title') ?? 'Financial Billing & Receivables' }}"
-        subtitle="{{ __('instructor::billing.subtitle') ?? 'Track student tuition balances, collected fees, and send WhatsApp payment reminders.' }}"
+        title="{{ __('instructor::billing.title') ?? 'إدارة الحسابات والمدفوعات' }}"
+        subtitle="{{ __('instructor::billing.subtitle') ?? 'متابعة مستحقات الطلاب والرسوم المحصلة وإرسال تذكيرات سداد عبر الواتساب.' }}"
     >
         <x-slot name="actions">
             <x-ui.badge variant="brand" size="lg">
-                {{ $students->count() }} {{ __('instructor::billing.student_count') }}
+                {{ $students->count() }} {{ __('instructor::billing.student_count') ?? 'طالب' }}
             </x-ui.badge>
         </x-slot>
     </x-ui.page-header>
 
     <x-ui.card noPadding="true" class="mb-8">
         @if($students->count() > 0)
-            <x-ui.table :headers="[__('instructor::billing.student_name'), __('instructor::billing.total_due'), __('instructor::billing.total_paid'), __('instructor::billing.balance'), __('instructor::billing.actions')]">
+            <x-ui.table :headers="[__('instructor::billing.student_name') ?? 'اسم الطالب', __('instructor::billing.total_due') ?? 'إجمالي المستحق', __('instructor::billing.total_paid') ?? 'المسدد', __('instructor::billing.balance') ?? 'الرصيد/المتبقي', __('instructor::billing.actions') ?? 'الإجراءات']">
                 @foreach($students as $student)
                     @php
                         $totalDue = $student->enrollments->sum(function($e) { return $e->course->price ?? 0; });
@@ -43,9 +43,9 @@
 
                         <td class="px-6 py-4">
                             @if($balance > 0)
-                                <x-ui.badge variant="danger" size="sm" dot="true">{{ number_format($balance) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }} Due</x-ui.badge>
+                                <x-ui.badge variant="danger" size="sm" dot="true">{{ number_format($balance) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }} مستحق</x-ui.badge>
                             @else
-                                <x-ui.badge variant="success" size="sm" dot="true">{{ __('instructor::billing.paid') }}</x-ui.badge>
+                                <x-ui.badge variant="success" size="sm" dot="true">{{ __('instructor::billing.paid') ?? 'خالص السداد' }}</x-ui.badge>
                             @endif
                         </td>
 
@@ -63,10 +63,10 @@
                                         $whatsappUri = "https://api.whatsapp.com/send?phone=" . preg_replace('/[^0-9]/', '', $phone) . "&text=" . urlencode($reminderMsg);
                                     @endphp
                                     <x-ui.button variant="outline" size="sm" icon="fab fa-whatsapp" href="{{ $whatsappUri }}" target="_blank">
-                                        Send Reminder
+                                        إرسال تذكير
                                     </x-ui.button>
                                 @else
-                                    <span class="text-xs text-emerald-600 font-bold"><i class="fas fa-check-circle me-1"></i> Paid in Full</span>
+                                    <span class="text-xs text-emerald-600 font-bold"><i class="fas fa-check-circle me-1"></i> خالص السداد</span>
                                 @endif
                             </div>
                         </td>
@@ -75,8 +75,8 @@
             </x-ui.table>
         @else
             <x-ui.empty-state
-                title="No Billing Records Found"
-                description="{{ __('instructor::billing.no_students_registered') }}"
+                title="لا توجد سجلات مالية حتى الآن"
+                description="{{ __('instructor::billing.no_students_registered') ?? 'لم يتم تسجِيل أي مستحقات مالية للطلاب حتى الآن.' }}"
                 icon="fas fa-wallet"
             />
         @endif

@@ -1,6 +1,6 @@
 @extends('layouts.app-next')
 
-@section('title', __('instructor::students.title') ?? 'Students Directory')
+@section('title', __('instructor::students.title') ?? 'دليل وقائمة الطلاب')
 
 @section('sidebar')
     @include('instructor::partials._sidebar-next', ['active' => 'students'])
@@ -8,18 +8,18 @@
 
 @section('content')
     <x-ui.page-header
-        title="{{ __('instructor::students.title') ?? 'Students Directory' }}"
-        subtitle="{{ __('instructor::students.subtitle') ?? 'Manage student rosters, group assignments, and contact channels.' }}"
+        title="{{ __('instructor::students.title') ?? 'دليل وقائمة الطلاب' }}"
+        subtitle="{{ __('instructor::students.subtitle') ?? 'إدارة قائمة الطلاب، والمجموعات المسجلة، وطرق التواصل.' }}"
     >
         <x-slot name="actions">
             <x-ui.button variant="outline" icon="fas fa-file-import" size="md" data-bs-toggle="modal" data-bs-target="#importModal">
-                {{ __('instructor::students.import') }}
+                {{ __('instructor::students.import') ?? 'استيراد طلاب' }}
             </x-ui.button>
             <x-ui.button variant="outline" icon="fas fa-file-export" size="md" href="{{ route('instructor.students.export') }}">
-                {{ __('instructor::students.export') }}
+                {{ __('instructor::students.export') ?? 'تصدير القائمة' }}
             </x-ui.button>
             <x-ui.button variant="primary" icon="fas fa-user-plus" size="md" href="{{ route('instructor.students.create') }}">
-                {{ __('instructor::students.add_new') }}
+                {{ __('instructor::students.add_new') ?? 'إضافة طالب جديد' }}
             </x-ui.button>
         </x-slot>
     </x-ui.page-header>
@@ -27,18 +27,18 @@
     <!-- Students Overview Metrics -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
         <x-ui.stats-card
-            title="{{ __('instructor::students.total_students') }}"
+            title="{{ __('instructor::students.total_students') ?? 'إجمالي الطلاب' }}"
             value="{{ number_format($students->count()) }}"
-            change="Roster"
+            change="نشط"
             changeType="positive"
             icon="fas fa-user-graduate"
             iconColor="text-brand-primary bg-brand-50"
         />
 
         <x-ui.stats-card
-            title="{{ __('instructor::students.currently_enrolled') }}"
+            title="{{ __('instructor::students.currently_enrolled') ?? 'الاشتراكات الفعالة' }}"
             value="{{ number_format($students->sum(fn($s) => $s->enrollments->count())) }}"
-            change="Active"
+            change="مجموعة"
             changeType="positive"
             icon="fas fa-layer-group"
             iconColor="text-emerald-600 bg-emerald-50"
@@ -50,18 +50,18 @@
         @endphp
 
         <x-ui.stats-card
-            title="{{ __('instructor::students.total_collected') }}"
-            value="{{ number_format($totalRevenue, 0) }} EGP"
-            change="Collected"
+            title="{{ __('instructor::students.total_collected') ?? 'المبالغ المحصلة' }}"
+            value="{{ number_format($totalRevenue, 0) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }}"
+            change="تحصيل"
             changeType="positive"
             icon="fas fa-wallet"
             iconColor="text-amber-600 bg-amber-50"
         />
 
         <x-ui.stats-card
-            title="{{ __('instructor::students.registered_today') }}"
+            title="{{ __('instructor::students.registered_today') ?? 'المسجلون اليوم' }}"
             value="{{ number_format($todayEnrollments) }}"
-            change="Today"
+            change="اليوم"
             changeType="neutral"
             icon="fas fa-user-plus"
             iconColor="text-sky-600 bg-sky-50"
@@ -71,7 +71,7 @@
     <!-- Student Table Card Component -->
     <x-ui.card noPadding="true" class="mb-8">
         @if($students->count() > 0)
-            <x-ui.table :headers="[__('instructor::students.student'), __('instructor::students.parent_phone'), 'Enrolled Groups', 'Actions']">
+            <x-ui.table :headers="[__('instructor::students.student') ?? 'الطالب', __('instructor::students.parent_phone') ?? 'هاتف ولي الأمر', 'المجموعات المسجلة', 'الإجراءات']">
                 @foreach($students as $student)
                     <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
                         <td class="px-6 py-4">
@@ -79,7 +79,7 @@
                                 <x-ui.avatar :name="$student->name" size="md" />
                                 <div>
                                     <h4 class="font-bold text-sm text-slate-900 dark:text-slate-100">{{ $student->name }}</h4>
-                                    <p class="text-xs text-slate-400 font-mono">{{ $student->phone ?? 'No phone' }}</p>
+                                    <p class="text-xs text-slate-400 font-mono">{{ $student->phone ?? 'لا يوجد هاتف' }}</p>
                                 </div>
                             </div>
                         </td>
@@ -93,7 +93,7 @@
                                     </a>
                                 </div>
                             @else
-                                <span class="text-slate-400">N/A</span>
+                                <span class="text-slate-400">--</span>
                             @endif
                         </td>
 
@@ -104,14 +104,14 @@
                                         <x-ui.badge variant="brand" size="sm">{{ $enrollment->course->title }}</x-ui.badge>
                                     @endif
                                 @empty
-                                    <span class="text-xs text-slate-400">Not enrolled</span>
+                                    <span class="text-xs text-slate-400">غير مسجل في مجموعة</span>
                                 @endforelse
                             </div>
                         </td>
 
                         <td class="px-6 py-4 text-end">
                             <x-ui.button variant="outline" size="sm" icon="fas fa-edit" href="{{ route('instructor.students.edit', $student->id) }}">
-                                Edit
+                                تعديل
                             </x-ui.button>
                         </td>
                     </tr>
@@ -119,13 +119,13 @@
             </x-ui.table>
         @else
             <x-ui.empty-state
-                title="No Students Found"
-                description="Get started by adding your first student or importing a student list."
+                title="لا يوجد طلاب مسجلون حتى الآن"
+                description="ابدأ بإضافة أول طالب أو استيراد قائمة الطلاب."
                 icon="fas fa-user-graduate"
             >
                 <x-slot name="action">
                     <x-ui.button variant="primary" icon="fas fa-user-plus" href="{{ route('instructor.students.create') }}">
-                        Add First Student
+                        إضافة طالب جديد
                     </x-ui.button>
                 </x-slot>
             </x-ui.empty-state>
