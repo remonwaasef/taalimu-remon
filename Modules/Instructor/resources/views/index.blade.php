@@ -49,9 +49,9 @@
         <x-ui.stats-card
             title="{{ __('instructor::dashboard.total_students') }}"
             value="{{ number_format($totalStudents) }}"
-            change="+15%"
-            changeType="positive"
-            changeLabel="this month"
+            change="{{ $totalStudents > 0 ? '+'.$totalStudents : '0' }}"
+            changeType="{{ $totalStudents > 0 ? 'positive' : 'neutral' }}"
+            changeLabel="enrolled students"
             icon="fas fa-user-graduate"
             iconColor="text-brand-primary bg-brand-50"
         />
@@ -59,8 +59,8 @@
         <x-ui.stats-card
             title="{{ __('instructor::dashboard.active_groups') }}"
             value="{{ number_format($totalCourses) }}"
-            change="Active"
-            changeType="positive"
+            change="{{ $totalCourses > 0 ? $totalCourses : '0' }}"
+            changeType="{{ $totalCourses > 0 ? 'positive' : 'neutral' }}"
             changeLabel="running groups"
             icon="fas fa-users"
             iconColor="text-emerald-600 bg-emerald-50"
@@ -69,19 +69,19 @@
         <x-ui.stats-card
             title="{{ __('instructor::dashboard.monthly_revenue') }}"
             value="{{ number_format($monthlyRevenue) }} {{ app('tenant')->settings['currency'] ?? 'EGP' }}"
-            change="+12%"
-            changeType="positive"
-            changeLabel="vs last month"
+            change="{{ $monthlyRevenue > 0 ? 'Active' : '0' }}"
+            changeType="{{ $monthlyRevenue > 0 ? 'positive' : 'neutral' }}"
+            changeLabel="this month"
             icon="fas fa-wallet"
             iconColor="text-amber-600 bg-amber-50"
         />
 
         <x-ui.stats-card
             title="Attendance Rate"
-            value="95%"
-            change="+5%"
-            changeType="positive"
-            changeLabel="high engagement"
+            value="{{ $totalAttendanceCount > 0 ? $attendanceRate.'%' : '0%' }}"
+            change="{{ $totalAttendanceCount > 0 ? $totalAttendanceCount : '0' }}"
+            changeType="{{ $totalAttendanceCount > 0 ? 'positive' : 'neutral' }}"
+            changeLabel="recorded logs"
             icon="fas fa-chart-pie"
             iconColor="text-sky-600 bg-sky-50"
         />
@@ -97,47 +97,26 @@
                 </x-slot>
 
                 <div class="space-y-3">
-                    <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-800 flex items-center justify-between gap-3">
-                        <div class="flex items-center gap-3">
-                            <div class="text-center px-2.5 py-1 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700">
-                                <span class="block text-xs font-bold text-brand-primary">09:00</span>
-                                <span class="block text-[10px] text-slate-400">10:00</span>
+                    @forelse($todaySchedules as $sched)
+                        <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-800 flex items-center justify-between gap-3">
+                            <div class="flex items-center gap-3">
+                                <div class="text-center px-2.5 py-1 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+                                    <span class="block text-xs font-bold text-brand-primary">{{ $sched->start_time ? \Carbon\Carbon::parse($sched->start_time)->format('H:i') : '--:--' }}</span>
+                                    <span class="block text-[10px] text-slate-400">{{ $sched->end_time ? \Carbon\Carbon::parse($sched->end_time)->format('H:i') : '--:--' }}</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200">{{ $sched->course->title ?? 'Session' }}</h4>
+                                    <p class="text-xs text-slate-400">{{ $sched->room ?? 'Main Hall' }}</p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200">Mathematics</h4>
-                                <p class="text-xs text-slate-400">Grade 10 &bull; Group A</p>
-                            </div>
+                            <x-ui.badge variant="success" size="sm">Active</x-ui.badge>
                         </div>
-                        <x-ui.badge variant="success" size="sm" dot="true">In Progress</x-ui.badge>
-                    </div>
-
-                    <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-800 flex items-center justify-between gap-3">
-                        <div class="flex items-center gap-3">
-                            <div class="text-center px-2.5 py-1 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
-                                <span class="block text-xs font-bold text-slate-700 dark:text-slate-300">11:00</span>
-                                <span class="block text-[10px] text-slate-400">12:00</span>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200">Physics</h4>
-                                <p class="text-xs text-slate-400">Grade 11 &bull; Group B</p>
-                            </div>
+                    @empty
+                        <div class="text-center py-8 text-slate-400 text-xs font-medium">
+                            <i class="far fa-calendar-times text-3xl block mb-2 opacity-40"></i>
+                            <span>No sessions scheduled for today</span>
                         </div>
-                        <x-ui.badge variant="neutral" size="sm">Upcoming</x-ui.badge>
-                    </div>
-
-                    <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-800 flex items-center justify-between gap-3">
-                        <div class="flex items-center gap-3">
-                            <div class="text-center px-2.5 py-1 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
-                                <span class="block text-xs font-bold text-slate-700 dark:text-slate-300">14:00</span>
-                                <span class="block text-[10px] text-slate-400">15:00</span>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200">English Language</h4>
-                                <p class="text-xs text-slate-400">Grade 9 &bull; Group C</p>
-                            </div>
-                        </div>
-                        <x-ui.badge variant="neutral" size="sm">Upcoming</x-ui.badge>
-                    </div>
+                    @endforelse
                 </div>
             </x-ui.card>
         </div>
@@ -184,22 +163,22 @@
                     <div class="inline-flex items-center justify-center relative">
                         <svg class="w-24 h-24" viewBox="0 0 36 36">
                             <path stroke="#E7EAF3" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                            <path stroke="#5B5FEF" stroke-width="3" stroke-dasharray="60, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path stroke="#5B5FEF" stroke-width="3" stroke-dasharray="{{ $setupProgress }}, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                         </svg>
-                        <span class="absolute text-lg font-extrabold text-slate-800 dark:text-slate-100">60%</span>
+                        <span class="absolute text-lg font-extrabold text-slate-800 dark:text-slate-100">{{ $setupProgress }}%</span>
                     </div>
                 </div>
                 <div class="space-y-1.5 text-xs">
-                    <div class="flex items-center gap-2 text-emerald-600 font-semibold">
-                        <i class="fas fa-check-circle text-xs"></i>
+                    <div class="flex items-center gap-2 {{ $hasProfile ? 'text-emerald-600 font-semibold' : 'text-slate-400' }}">
+                        <i class="{{ $hasProfile ? 'fas fa-check-circle' : 'far fa-circle' }} text-xs"></i>
                         <span>Profile Information</span>
                     </div>
-                    <div class="flex items-center gap-2 text-emerald-600 font-semibold">
-                        <i class="fas fa-check-circle text-xs"></i>
+                    <div class="flex items-center gap-2 {{ $hasGroup ? 'text-emerald-600 font-semibold' : 'text-slate-400' }}">
+                        <i class="{{ $hasGroup ? 'fas fa-check-circle' : 'far fa-circle' }} text-xs"></i>
                         <span>Group Creation</span>
                     </div>
-                    <div class="flex items-center gap-2 text-slate-400">
-                        <i class="far fa-circle text-xs"></i>
+                    <div class="flex items-center gap-2 {{ $hasStudents ? 'text-emerald-600 font-semibold' : 'text-slate-400' }}">
+                        <i class="{{ $hasStudents ? 'fas fa-check-circle' : 'far fa-circle' }} text-xs"></i>
                         <span>Add Students</span>
                     </div>
                 </div>

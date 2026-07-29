@@ -46,6 +46,31 @@ class InstructorController extends Controller
                 })->sum('paid_amount');
         }
 
+        // Attendance Rate Calculation
+        $attendanceQuery = Attendance::query();
+        if ($instructor) {
+            $attendanceQuery->whereIn('course_id', $instructor->courses->pluck('id'));
+        }
+        $totalAttendanceCount = (clone $attendanceQuery)->count();
+        $presentAttendanceCount = (clone $attendanceQuery)->where('status', 'present')->count();
+        $attendanceRate = $totalAttendanceCount > 0 ? round(($presentAttendanceCount / $totalAttendanceCount) * 100) : 0;
+
+        // Today's Schedules
+        $dayOfWeek = now()->dayOfWeek;
+        $todaySchedulesQuery = Schedule::where('day_of_week', $dayOfWeek)->with('course');
+        if ($instructor) {
+            $todaySchedulesQuery->whereIn('course_id', $instructor->courses->pluck('id'));
+        }
+        $todaySchedules = $todaySchedulesQuery->get();
+
+        // Real Setup Progress
+        $hasProfile = !empty(auth()->user()->name);
+        $hasGroup = $totalCourses > 0;
+        $hasStudents = $totalStudents > 0;
+        
+        $completedSteps = ($hasProfile ? 1 : 0) + ($hasGroup ? 1 : 0) + ($hasStudents ? 1 : 0);
+        $setupProgress = round(($completedSteps / 3) * 100);
+
         // Attendance Analytics (Last 7 Days)
         $attendanceData = [];
         $days = [];
@@ -60,7 +85,21 @@ class InstructorController extends Controller
             $attendanceData[] = $query->count();
         }
 
-        return view('instructor::index', compact('courses', 'totalStudents', 'totalCourses', 'monthlyRevenue', 'attendanceData', 'days'));
+        return view('instructor::index', compact(
+            'courses',
+            'totalStudents',
+            'totalCourses',
+            'monthlyRevenue',
+            'attendanceRate',
+            'totalAttendanceCount',
+            'todaySchedules',
+            'hasProfile',
+            'hasGroup',
+            'hasStudents',
+            'setupProgress',
+            'attendanceData',
+            'days'
+        ));
     }
 
     /**
