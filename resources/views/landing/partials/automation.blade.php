@@ -1,35 +1,39 @@
-<!-- Steps Section -->
-<section class="py-24 bg-white relative overflow-hidden">
+{{-- How It Works Section --}}
+<section class="section-alt" style="padding:6rem 0; border-top:1px solid #e2e8f0; border-bottom:1px solid #e2e8f0;">
     <div class="container mx-auto px-4 lg:px-12">
-        <div class="text-center mb-20" data-animate>
-            <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
-                {!! __('landing.features.title') !!}
+        <div class="text-center mb-16" data-animate>
+            <div class="section-badge" style="margin-bottom:1.5rem; display:inline-flex;">
+                <span style="color:#047857 !important; font-weight:700;">{{ __('landing.automation.badge') ?? 'كيف يعمل' }}</span>
+            </div>
+            <h2 style="color:#0f172a !important; font-size:clamp(1.875rem, 4vw, 3rem); font-weight:900; margin-bottom:1.5rem; letter-spacing:-0.025em; line-height:1.2;">
+                {{ __('landing.automation.title') ?? 'ابدأ في 3 خطوات بسيطة' }}
             </h2>
-            <p class="text-lg text-slate-500 max-w-2xl mx-auto font-medium">
-                {{ __('landing.features.subtitle') }}
+            <p style="color:#475569 !important; font-size:1.125rem; max-width:42rem; margin:0 auto; font-weight:500; line-height:1.7;">
+                {{ __('landing.automation.subtitle') ?? 'من التسجيل إلى الإدارة الكاملة في دقائق معدودة' }}
             </p>
         </div>
 
-        <!-- 3-Step Horizontal Timeline -->
+        {{-- 3-Step Timeline --}}
         <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto relative" data-stagger>
-            <!-- Connector Line -->
-            <div class="hidden md:block absolute top-10 left-[16.66%] right-[16.66%] h-px bg-slate-200"></div>
+            {{-- Connector Line --}}
+            <div class="hidden md:block absolute top-10 left-[16.66%] right-[16.66%]" style="height:2px; background:linear-gradient(90deg, #a7f3d0, #059669, #a7f3d0);"></div>
 
             @foreach([
-                ['num' => '01', 'icon' => 'fa-user-plus', 'color' => 'bg-emerald-500', 'key' => 0],
-                ['num' => '02', 'icon' => 'fa-cogs', 'color' => 'bg-blue-500', 'key' => 1],
-                ['num' => '03', 'icon' => 'fa-rocket', 'color' => 'bg-violet-500', 'key' => 2],
+                ['num' => '01', 'icon' => 'fa-user-plus', 'bg' => '#059669', 'key' => 0],
+                ['num' => '02', 'icon' => 'fa-cogs', 'bg' => '#3b82f6', 'key' => 1],
+                ['num' => '03', 'icon' => 'fa-rocket', 'bg' => '#8b5cf6', 'key' => 2],
             ] as $step)
-            <div class="group text-center relative">
-                <!-- Step Number Circle -->
-                <div class="w-20 h-20 mx-auto mb-8 rounded-full {{ $step['color'] }} flex items-center justify-center text-white text-2xl shadow-lg group-hover:scale-110 transition-transform relative z-10">
-                    <i class="fas {{ $step['icon'] }}"></i>
+            <div class="text-center relative">
+                <div class="step-circle" style="background:{{ $step['bg'] }};">
+                    <i class="fas {{ $step['icon'] }}" style="color:#ffffff;"></i>
                 </div>
-                <div class="text-xs font-black text-slate-300 uppercase tracking-widest mb-3">{{ __('landing.automation.badge') ?? 'Step' }} {{ $step['num'] }}</div>
-                <h3 class="text-xl font-bold text-slate-900 mb-3">
+                <div style="color:#94a3b8; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.15em; margin-bottom:0.75rem;">
+                    {{ __('landing.automation.badge') ?? 'خطوة' }} {{ $step['num'] }}
+                </div>
+                <h3 style="color:#0f172a !important; font-size:1.25rem; font-weight:800; margin-bottom:0.75rem;">
                     {{ __("landing.automation.step" . ($step['key'] + 1) . ".title") }}
                 </h3>
-                <p class="text-slate-500 text-sm leading-relaxed max-w-xs mx-auto">
+                <p style="color:#64748b !important; font-size:0.875rem; line-height:1.6; max-width:18rem; margin:0 auto;">
                     {{ __("landing.automation.step" . ($step['key'] + 1) . ".description") }}
                 </p>
             </div>

@@ -1,41 +1,41 @@
-<!-- Features Light Section -->
-<section id="features" class="py-24 lg:py-32 bg-slate-100/70 relative overflow-hidden border-y border-slate-200">
+{{-- Features Section --}}
+<section id="features" class="section-light" style="padding:6rem 0;">
     <div class="container mx-auto px-4 lg:px-12">
-        <!-- Centered Header -->
-        <div class="text-center mb-16 lg:mb-20" data-animate>
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 text-white mb-6 shadow-md">
-                <span class="text-xs font-black text-emerald-400 uppercase tracking-widest">{{ __('landing.features.badge') }}</span>
+        {{-- Header --}}
+        <div class="text-center mb-16" data-animate>
+            <div class="section-badge section-badge-dark" style="margin-bottom:1.5rem; display:inline-flex;">
+                <span style="color:#6ee7b7 !important; font-weight:700;">{{ __('landing.features.badge') }}</span>
             </div>
-            <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
+            <h2 style="color:#0f172a !important; font-size:clamp(1.875rem, 4vw, 3rem); font-weight:900; margin-bottom:1.5rem; letter-spacing:-0.025em; line-height:1.2;">
                 {!! __('landing.features.title') !!}
             </h2>
-            <p class="text-base sm:text-lg text-slate-700 max-w-2xl mx-auto font-bold leading-relaxed">
+            <p style="color:#475569 !important; font-size:1.125rem; max-width:42rem; margin:0 auto; font-weight:500; line-height:1.7;">
                 {{ __('landing.features.subtitle') }}
             </p>
         </div>
 
-        <!-- Feature Cards Grid -->
+        {{-- Feature Cards --}}
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8" data-stagger>
             @php
                 $featuresData = [
-                    ['icon' => 'fa-users', 'bg' => 'bg-emerald-600', 'text' => 'text-emerald-700'],
-                    ['icon' => 'fa-calendar-check', 'bg' => 'bg-blue-600', 'text' => 'text-blue-700'],
-                    ['icon' => 'fa-credit-card', 'bg' => 'bg-purple-600', 'text' => 'text-purple-700'],
-                    ['icon' => 'fa-chart-pie', 'bg' => 'bg-amber-600', 'text' => 'text-amber-700'],
+                    ['icon' => 'fa-users', 'bg' => '#059669', 'shadow' => 'rgba(5,150,105,0.25)'],
+                    ['icon' => 'fa-calendar-check', 'bg' => '#3b82f6', 'shadow' => 'rgba(59,130,246,0.25)'],
+                    ['icon' => 'fa-credit-card', 'bg' => '#8b5cf6', 'shadow' => 'rgba(139,92,246,0.25)'],
+                    ['icon' => 'fa-chart-pie', 'bg' => '#f59e0b', 'shadow' => 'rgba(245,158,11,0.25)'],
                 ];
             @endphp
             @foreach(__('landing.features.items') as $index => $item)
                 @if($index >= 4) @break @endif
                 @php $data = $featuresData[$index] ?? $featuresData[0]; @endphp
-                <div class="bg-white rounded-3xl p-8 border-2 border-slate-200 shadow-xl hover:border-emerald-500 transition-all duration-300 group hover:-translate-y-2 text-center flex flex-col justify-between">
+                <div class="landing-card" style="text-align:center; display:flex; flex-direction:column; justify-content:space-between;">
                     <div>
-                        <div class="w-16 h-16 mx-auto rounded-2xl {{ $data['bg'] }} flex items-center justify-center mb-6 text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
-                            <i class="fas {{ $data['icon'] }} text-2xl"></i>
+                        <div style="width:4rem; height:4rem; margin:0 auto 1.5rem; border-radius:1rem; background:{{ $data['bg'] }}; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 20px {{ $data['shadow'] }}; transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                            <i class="fas {{ $data['icon'] }}" style="color:#ffffff; font-size:1.25rem;"></i>
                         </div>
-                        <h3 class="text-slate-900 font-black text-xl mb-3 group-hover:text-emerald-600 transition-colors">{{ $item['title'] }}</h3>
-                        <p class="text-slate-700 text-sm leading-relaxed font-bold">{{ Str::limit($item['description'], 110) }}</p>
+                        <h3 style="color:#0f172a !important; font-weight:800; font-size:1.125rem; margin-bottom:0.75rem;">{{ $item['title'] }}</h3>
+                        <p style="color:#64748b !important; font-size:0.875rem; line-height:1.6;">{{ Str::limit($item['description'], 110) }}</p>
                     </div>
-                    <div class="mt-6 pt-4 border-t border-slate-200 flex items-center justify-center text-xs font-black text-emerald-700 group-hover:translate-x-1 transition-transform">
+                    <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; color:#059669; transition:transform 0.2s;">
                         <span>{{ __('landing.nav.features') }}</span>
                         <i class="fas {{ app()->getLocale() == 'ar' ? 'fa-arrow-left me-1' : 'fa-arrow-right ms-1' }}"></i>
                     </div>
@@ -44,5 +44,3 @@
         </div>
     </div>
 </section>
-
-

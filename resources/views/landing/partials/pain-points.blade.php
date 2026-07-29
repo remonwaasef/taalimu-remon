@@ -1,32 +1,26 @@
-<!-- Pain Points Section -->
-<section class="py-24 bg-white relative overflow-hidden"
-    x-data="{ visible: false }"
-    x-intersect.once="visible = true"
->
-    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
-    
+{{-- Pain Points Section --}}
+<section class="section-light" style="padding:6rem 0;">
     <div class="container mx-auto px-4 lg:px-12">
         <div class="text-center mb-16" data-animate>
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-50 border border-red-100 mb-6">
-                <span class="text-xs font-bold text-red-500 uppercase tracking-widest">{{ __('landing.pain_points.badge') }}</span>
+            <div class="section-badge" style="margin-bottom:1.5rem; display:inline-flex;">
+                <span style="color:#dc2626 !important; font-weight:700;">{{ __('landing.pain_points.badge') }}</span>
             </div>
-            <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
-                {{ __('landing.pain_points.title_prefix') }} <span class="text-emerald-600">{{ __('landing.pain_points.title_highlight') }}</span> {{ __('landing.pain_points.title_suffix') }}
+            <h2 style="color:#0f172a !important; font-size:clamp(1.875rem, 4vw, 3rem); font-weight:900; margin-bottom:1.5rem; letter-spacing:-0.025em; line-height:1.2;">
+                {{ __('landing.pain_points.title_prefix') }} <span style="color:#059669 !important;">{{ __('landing.pain_points.title_highlight') }}</span> {{ __('landing.pain_points.title_suffix') }}
             </h2>
-            <p class="text-lg text-slate-600 max-w-2xl mx-auto font-medium">
+            <p style="color:#475569 !important; font-size:1.125rem; max-width:42rem; margin:0 auto; font-weight:500; line-height:1.7;">
                 {{ __('landing.pain_points.subtitle') }}
             </p>
         </div>
 
         <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto" data-stagger>
             @foreach([
-                ['stat' => '35', 'suffix' => '%', 'color' => 'text-red-500', 'border' => 'border-red-100 hover:border-red-200', 'bg' => 'bg-red-50', 'key' => 'revenue_lost'],
-                ['stat' => '12', 'suffix' => 'h', 'color' => 'text-orange-500', 'border' => 'border-orange-100 hover:border-orange-200', 'bg' => 'bg-orange-50', 'key' => 'time_wasted'],
-                ['stat' => '24', 'suffix' => '/7', 'color' => 'text-blue-500', 'border' => 'border-blue-100 hover:border-blue-200', 'bg' => 'bg-blue-50', 'key' => 'complaints'],
+                ['stat' => '35', 'suffix' => '%', 'color' => '#ef4444', 'border_hover' => '#fca5a5', 'bg_icon' => '#fef2f2', 'key' => 'revenue_lost'],
+                ['stat' => '12', 'suffix' => 'h', 'color' => '#f97316', 'border_hover' => '#fdba74', 'bg_icon' => '#fff7ed', 'key' => 'time_wasted'],
+                ['stat' => '24', 'suffix' => '/7', 'color' => '#3b82f6', 'border_hover' => '#93c5fd', 'bg_icon' => '#eff6ff', 'key' => 'complaints'],
             ] as $pain)
-            <div class="group bg-white rounded-2xl p-8 border {{ $pain['border'] }} transition-all duration-300 hover:-translate-y-1 hover:shadow-lg text-center">
-                <div class="text-5xl font-black mb-3 tracking-tighter {{ $pain['color'] }}"
-                     x-data="{ shown: false }" x-intersect.once="shown = true"
+            <div class="stat-card" x-data="{ shown: false }" x-intersect.once="shown = true">
+                <div class="stat-number" style="color:{{ $pain['color'] }};"
                 >
                     <span x-show="!shown">0{{ $pain['suffix'] }}</span>
                     <span x-show="shown" x-text="''" x-init="
@@ -42,29 +36,10 @@
                         })
                     ">0{{ $pain['suffix'] }}</span>
                 </div>
-                <h3 class="text-base font-bold text-slate-800 mb-2">{{ __("landing.pain_points.{$pain['key']}.title") }}</h3>
-                <p class="text-slate-500 text-sm leading-relaxed">{{ __("landing.pain_points.{$pain['key']}.description") }}</p>
+                <h3 style="color:#0f172a !important; font-size:1rem; font-weight:700; margin-bottom:0.5rem;">{{ __("landing.pain_points.{$pain['key']}.title") }}</h3>
+                <p style="color:#64748b !important; font-size:0.875rem; line-height:1.6;">{{ __("landing.pain_points.{$pain['key']}.description") }}</p>
             </div>
             @endforeach
         </div>
-
-        <!-- Second row -->
-        <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mt-6" data-stagger>
-            @foreach([
-                ['stat' => '100', 'suffix' => '%', 'color' => 'text-emerald-500', 'border' => 'border-emerald-100 hover:border-emerald-200', 'key' => 'manual_work'],
-                ['stat' => '98', 'suffix' => '%', 'color' => 'text-violet-500', 'border' => 'border-violet-100 hover:border-violet-200', 'key' => 'revenue_lost'],
-                ['stat' => '0', 'suffix' => '', 'color' => 'text-slate-800', 'border' => 'border-slate-200 hover:border-slate-300', 'key' => 'complaints'],
-            ] as $pain)
-            <div class="group bg-white rounded-2xl p-8 border {{ $pain['border'] }} transition-all duration-300 hover:-translate-y-1 hover:shadow-lg text-center">
-                <div class="text-5xl font-black mb-3 tracking-tighter {{ $pain['color'] }}">
-                    {{ $pain['stat'] }}{{ $pain['suffix'] }}
-                </div>
-                <h3 class="text-base font-bold text-slate-800 mb-2">{{ __("landing.pain_points.{$pain['key']}.title") }}</h3>
-                <p class="text-slate-500 text-sm leading-relaxed">{{ __("landing.pain_points.{$pain['key']}.description") }}</p>
-            </div>
-            @endforeach
-        </div>
-
-
     </div>
 </section>
