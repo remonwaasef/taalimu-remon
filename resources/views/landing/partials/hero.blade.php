@@ -162,25 +162,25 @@
                     </div>
                 </div>
 
-                {{-- 6. Trust Metrics --}}
+                {{-- 6. Product Value Pillars (Honest & High Value) --}}
                 <div style="
                     display: flex;
                     align-items: center;
                     gap: 2rem;
                 ">
                     <div>
-                        <div style="font-size: 1.5rem; font-weight: 900; color: #0f172a;">+5,000</div>
-                        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">طالب ومُتدرّب</div>
+                        <div style="font-size: 1.5rem; font-weight: 900; color: #059669;">100%</div>
+                        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">أتمتة وتنبيهات الواتساب</div>
                     </div>
                     <div style="width: 1px; height: 2rem; background: #cbd5e1;"></div>
                     <div>
-                        <div style="font-size: 1.5rem; font-weight: 900; color: #0f172a;">+120</div>
-                        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">مركز تعليمي</div>
+                        <div style="font-size: 1.5rem; font-weight: 900; color: #0f172a;">فوري</div>
+                        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">تسجيل حضور بـ QR</div>
                     </div>
                     <div style="width: 1px; height: 2rem; background: #cbd5e1;"></div>
                     <div>
-                        <div style="font-size: 1.5rem; font-weight: 900; color: #059669;">99.9%</div>
-                        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">استقرار وتشغيل</div>
+                        <div style="font-size: 1.5rem; font-weight: 900; color: #059669;">14 يوم</div>
+                        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">تجربة مجانية كاملة</div>
                     </div>
                 </div>
 
