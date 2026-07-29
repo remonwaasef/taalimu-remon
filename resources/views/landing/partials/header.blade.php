@@ -1,11 +1,11 @@
 <header
     class="landing-header fixed top-0 left-0 right-0 z-[1000] transition-all duration-300"
+    style="background: #ffffff !important; border-bottom: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.06);"
     x-data="{
         scrolled: false,
         isMenuOpen: false
     }"
     @scroll.window="scrolled = window.pageYOffset > 20"
-    :class="scrolled ? 'scrolled py-2' : 'py-3'"
 >
     <div class="container mx-auto px-4 lg:px-12">
         <div class="flex items-center justify-between gap-4">
