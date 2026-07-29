@@ -14,4 +14,14 @@ return [
     'subscription' => 'الاشتراك',
     'activity_logs' => 'سجل النشاطات',
     'profile' => 'الملف الشخصي',
+
+    // Dashboard Metric Labels
+    'overdue_amount' => 'المبالغ المتأخرة',
+    'target_reached' => 'المستهدف المحقق',
+    'running_now' => 'جاري العمل الآن',
+    'since_last_month' => 'مقارنة بالشهر الماضي',
+    'this_week' => 'هذا الأسبوع',
+    'details' => 'التفاصيل',
+    'view_all' => 'عرض الكل',
+    'main_branch' => 'الفرع الرئيسي',
 ];

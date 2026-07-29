@@ -13,10 +13,13 @@ return [
     'welcome' => 'Welcome',
     'instructor' => 'Instructor',
     'panel_title' => 'Instructor Panel',
+    'teaching' => 'Teaching & Study',
+    'account' => 'Account & Settings',
     'online_classes' => 'Online Classes',
     'add' => 'Add',
     'edit' => 'Edit',
     'delete' => 'Delete',
     'cancel' => 'Cancel',
     'back' => 'Back',
+    'save' => 'Save',
 ];
