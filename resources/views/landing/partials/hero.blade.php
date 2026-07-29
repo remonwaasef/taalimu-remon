@@ -51,7 +51,7 @@
                 ">
                     <span style="width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #059669; display: inline-block;"></span>
                     <span style="color: #047857 !important; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em;">
-                        منصة SaaS رقم 1 لإدارة المراكز التعليمية
+                        النظام الأحدث والأذكى لإدارة المراكز التعليمية
                     </span>
                     <i class="fas fa-sparkles" style="color: #d97706; font-size: 0.75rem;"></i>
                 </div>
