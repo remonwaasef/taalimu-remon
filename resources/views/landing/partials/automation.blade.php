@@ -6,10 +6,10 @@
                 <span style="color:#047857 !important; font-weight:700;">{{ __('landing.automation.badge') ?? 'كيف يعمل' }}</span>
             </div>
             <h2 style="color:#0f172a !important; font-size:clamp(1.875rem, 4vw, 3rem); font-weight:900; margin-bottom:1.5rem; letter-spacing:-0.025em; line-height:1.2;">
-                {{ __('landing.automation.title') ?? 'ابدأ في 3 خطوات بسيطة' }}
+                {{ __('landing.automation.title_prefix') }} <span style="color:#059669 !important;">{{ __('landing.automation.title_highlight') }}</span>
             </h2>
             <p style="color:#475569 !important; font-size:1.125rem; max-width:42rem; margin:0 auto; font-weight:500; line-height:1.7;">
-                {{ __('landing.automation.subtitle') ?? 'من التسجيل إلى الإدارة الكاملة في دقائق معدودة' }}
+                {{ __('landing.automation.subtitle') }}
             </p>
         </div>
 

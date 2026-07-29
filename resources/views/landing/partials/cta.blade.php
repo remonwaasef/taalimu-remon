@@ -1,37 +1,37 @@
-<!-- Light CTA Section -->
-<section class="py-24 bg-white relative overflow-hidden">
-    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-100 to-transparent"></div>
-    <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none"></div>
-
+{{-- CTA Section --}}
+<section style="padding:6rem 0; background:#ffffff;">
     <div class="container mx-auto px-4 lg:px-12">
         <div class="max-w-4xl mx-auto">
-            <div class="bg-gradient-to-br from-emerald-600 to-teal-700 rounded-3xl p-12 lg:p-16 text-center shadow-2xl shadow-emerald-900/20 relative overflow-hidden" data-animate="scale">
-                <!-- Glow -->
-                <div class="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-[100px]"></div>
-                <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-emerald-400/10 rounded-full blur-[100px]"></div>
-                
-                <div class="relative z-10">
-                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-6 tracking-tight leading-tight">
+            <div class="force-white" style="background:linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f2720 100%); border-radius:1.5rem; padding:3rem 2rem; text-align:center; position:relative; overflow:hidden; box-shadow:0 25px 60px -15px rgba(15,23,42,0.3);" data-animate="scale">
+                {{-- Glow Effects --}}
+                <div style="position:absolute; top:-5rem; right:-5rem; width:16rem; height:16rem; background:radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%); pointer-events:none;"></div>
+                <div style="position:absolute; bottom:-5rem; left:-5rem; width:16rem; height:16rem; background:radial-gradient(circle, rgba(14,165,233,0.1) 0%, transparent 70%); pointer-events:none;"></div>
+
+                <div style="position:relative; z-index:10;">
+                    <h2 style="color:#ffffff !important; font-size:clamp(1.5rem, 4vw, 2.75rem); font-weight:900; margin-bottom:1.5rem; letter-spacing:-0.025em; line-height:1.2;">
                         {{ __('landing.cta.title') }}
                     </h2>
 
-                    <p class="text-lg text-emerald-50/80 mb-10 max-w-2xl mx-auto font-medium">
+                    <p style="color:rgba(226,232,240,0.8) !important; font-size:1.125rem; margin-bottom:2.5rem; max-width:36rem; margin-left:auto; margin-right:auto; font-weight:500; line-height:1.7;">
                         {{ __('landing.cta.subtitle') }}
                     </p>
 
-                    <!-- CTA Button -->
-                    <div class="flex justify-center mb-10">
-                        <a href="{{ route('register') }}" 
-                           class="group bg-white text-emerald-700 hover:bg-emerald-50 px-12 py-6 lg:px-16 lg:py-7 rounded-2xl font-black text-xl lg:text-2xl shadow-2xl transition-all hover:scale-[1.03] hover:-translate-y-1 flex items-center justify-center gap-3 lg:gap-4 ring-4 ring-white/20">
-                            {{ __('landing.cta.cta_primary') }}
-                            <i class="fas {{ app()->getLocale() == 'ar' ? 'fa-arrow-left group-hover:-translate-x-2' : 'fa-arrow-right group-hover:translate-x-2' }} text-lg lg:text-2xl opacity-70 transition-transform duration-300"></i>
+                    {{-- CTA Button --}}
+                    <div style="display:flex; justify-content:center; margin-bottom:2.5rem;">
+                        <a href="{{ route('register') }}"
+                           style="background:#ffffff; color:#059669 !important; padding:1.25rem 3rem; border-radius:1rem; font-weight:900; font-size:1.25rem; display:inline-flex; align-items:center; gap:0.75rem; box-shadow:0 15px 40px rgba(0,0,0,0.2); transition:all 0.3s; text-decoration:none; ring:4px solid rgba(255,255,255,0.1);"
+                           onmouseover="this.style.transform='translateY(-3px) scale(1.02)'; this.style.boxShadow='0 20px 50px rgba(0,0,0,0.25)'"
+                           onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 15px 40px rgba(0,0,0,0.2)'"
+                        >
+                            <span style="color:#059669 !important;">{{ __('landing.cta.cta_primary') }}</span>
+                            <i class="fas {{ app()->getLocale() == 'ar' ? 'fa-arrow-left' : 'fa-arrow-right' }}" style="color:#059669 !important; font-size:1rem;"></i>
                         </a>
                     </div>
 
-                    <!-- Trust -->
-                    <p class="text-xs font-semibold text-emerald-100 flex items-center justify-center gap-2 uppercase tracking-wider">
-                        <i class="fas fa-shield-check text-white"></i>
-                        {{ __('landing.cta.trust_note') }}
+                    {{-- Trust Note --}}
+                    <p style="font-size:0.75rem; font-weight:600; color:rgba(148,163,184,0.8) !important; display:flex; align-items:center; justify-content:center; gap:0.5rem; text-transform:uppercase; letter-spacing:0.08em;">
+                        <i class="fas fa-shield-check" style="color:#34d399;"></i>
+                        <span style="color:rgba(148,163,184,0.8) !important;">{{ __('landing.cta.trust_note') }}</span>
                     </p>
                 </div>
             </div>

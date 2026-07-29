@@ -108,6 +108,13 @@
         .landing-page .force-white h3,
         .landing-page .force-white span { color: #ffffff !important; }
         .landing-page .force-white .text-desc { color: rgba(255,255,255,0.85) !important; }
+        .landing-page .gradient-text {
+            background: none !important;
+            -webkit-background-clip: unset !important;
+            background-clip: unset !important;
+            -webkit-text-fill-color: #059669 !important;
+            color: #059669 !important;
+        }
 
         /* ============================================================
            PREMIUM HEADER
