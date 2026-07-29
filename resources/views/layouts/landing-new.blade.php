@@ -80,10 +80,10 @@
     <style>
         [x-cloak] { display: none !important; }
 
-        /* ============================================================
-           LANDING PAGE — GLOBAL COLOR & CONTRAST FIX
-           Forces dark readable text, overriding compiled Tailwind HSL vars
-           ============================================================ */
+        html {
+            scroll-padding-top: 90px !important;
+            scroll-behavior: smooth;
+        }
 
         /* Base Text — Force dark readable colors */
         .landing-page h1, .landing-page h2, .landing-page h3,
