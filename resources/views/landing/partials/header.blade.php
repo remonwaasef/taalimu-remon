@@ -1,6 +1,6 @@
 <header
-    class="landing-header fixed top-0 left-0 right-0 z-[1000] transition-all duration-300"
-    style="background: #ffffff !important; border-bottom: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.06);"
+    class="landing-header fixed top-0 left-0 right-0"
+    style="background-color: #ffffff !important; background: #ffffff !important; opacity: 1 !important; border-bottom: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.06); z-index: 99999 !important;"
     x-data="{
         scrolled: false,
         isMenuOpen: false

@@ -117,15 +117,23 @@
         }
 
         /* ============================================================
-           PREMIUM HEADER
+           PREMIUM HEADER — FORCE 100% SOLID OPAQUE WHITE
            ============================================================ */
+        header.landing-header,
         .landing-header {
-            background: #ffffff;
-            border-bottom: 1px solid #e2e8f0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            background-color: #ffffff !important;
+            background: #ffffff !important;
+            opacity: 1 !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
+            z-index: 99999 !important;
         }
         .landing-header.scrolled {
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            background-color: #ffffff !important;
+            background: #ffffff !important;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.08) !important;
         }
         .landing-header a.nav-link {
             color: #334155 !important;
