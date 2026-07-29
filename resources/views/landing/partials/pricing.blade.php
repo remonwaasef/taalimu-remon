@@ -61,28 +61,28 @@
     <div class="container mx-auto px-4 lg:px-12">
         <!-- Header -->
         <div class="text-center mb-16 lg:mb-20" data-animate>
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 border border-emerald-200/80 mb-6 shadow-sm">
-                <span class="text-xs font-black text-emerald-600 uppercase tracking-widest">{{ __('landing.pricing.badge') ?? 'خطط الأسعار' }}</span>
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 text-white mb-6 shadow-md">
+                <span class="text-xs font-black text-emerald-400 uppercase tracking-widest">{{ __('landing.pricing.badge') ?? 'خطط الأسعار' }}</span>
             </div>
             <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
                 {!! __('landing.pricing.title') !!}
             </h2>
-            <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto font-medium leading-relaxed">
+            <p class="text-base sm:text-lg text-slate-700 max-w-2xl mx-auto font-bold leading-relaxed">
                 {{ __('landing.pricing.subtitle') }}
             </p>
 
             <!-- Billing Cycle Toggles -->
             <div class="mt-10 flex flex-col items-center gap-6">
-                <div class="inline-flex items-center bg-slate-100/80 p-2 rounded-2xl border border-slate-200 shadow-inner">
+                <div class="inline-flex items-center bg-slate-200 p-2 rounded-2xl border-2 border-slate-300 shadow-sm">
                     @foreach(['monthly' => 'landing.pricing.monthly', 'term' => 'landing.pricing.term', 'yearly' => 'landing.pricing.yearly'] as $cycle => $label)
                     <button 
                         @click="billingCycle = '{{$cycle}}'"
-                        class="px-6 py-2.5 rounded-xl text-sm font-extrabold transition-all duration-300 relative"
-                        :class="billingCycle === '{{$cycle}}' ? 'bg-white text-slate-900 shadow-md border border-slate-200/60' : 'text-slate-500 hover:text-slate-800'"
+                        class="px-6 py-2.5 rounded-xl text-sm font-black transition-all duration-300 relative"
+                        :class="billingCycle === '{{$cycle}}' ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-700 hover:text-slate-900'"
                     >
                         {{ __($label) }}
                         @if($cycle === 'yearly')
-                        <span class="absolute -top-2.5 -right-2 px-2 py-0.5 rounded-full bg-emerald-500 text-white text-[10px] font-black border-2 border-white shadow-sm">
+                        <span class="absolute -top-2.5 -right-2 px-2 py-0.5 rounded-full bg-amber-400 text-slate-900 text-[10px] font-black border-2 border-white shadow-sm">
                             -17%
                         </span>
                         @endif
@@ -101,13 +101,13 @@
                 @endphp
 
                 <div
-                    class="group relative rounded-3xl p-8 lg:p-10 border transition-all duration-300 flex flex-col
+                    class="group relative rounded-3xl p-8 lg:p-10 border-2 transition-all duration-300 flex flex-col
                     {{ $isFeatured 
-                        ? 'bg-gradient-to-b from-white to-emerald-50/20 border-emerald-500 shadow-2xl shadow-emerald-500/15 ring-2 ring-emerald-500/20 lg:-translate-y-2 z-10' 
-                        : 'bg-white border-slate-200/90 hover:border-emerald-300 hover:shadow-xl hover:-translate-y-1' }}"
+                        ? 'bg-white border-emerald-600 shadow-2xl shadow-emerald-600/20 ring-4 ring-emerald-600/10 lg:-translate-y-2 z-10' 
+                        : 'bg-white border-slate-300 hover:border-emerald-500 hover:shadow-xl hover:-translate-y-1' }}"
                 >
                     @if($isFeatured)
-                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 py-1.5 rounded-full text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-500/30 flex items-center gap-1.5">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-emerald-600 text-white px-6 py-1.5 rounded-full text-xs font-black uppercase tracking-wider shadow-lg flex items-center gap-1.5">
                         <i class="fas fa-crown text-amber-300 text-xs"></i>
                         <span>{{ __('landing.pricing.featured') }}</span>
                     </div>
@@ -130,7 +130,7 @@
                             @endphp
                             {{ $packageName ?: __('landing.pricing.plans.' . $package->slug . '.name') }}
                         </h3>
-                        <p class="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed mb-6">
+                        <p class="text-xs sm:text-sm text-slate-600 font-bold leading-relaxed mb-6">
                             {{ $packageDesc ?: __('landing.pricing.plans.' . $package->slug . '.description') }}
                         </p>
                         
@@ -139,7 +139,7 @@
                         >
                             @if($package->trial_days > 0)
                                 <div class="mb-4">
-                                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100/70 border border-emerald-200 text-emerald-700 text-xs font-black uppercase tracking-widest shadow-sm">
+                                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs font-black uppercase tracking-widest shadow-sm">
                                         <i class="fas fa-gift text-emerald-600"></i>
                                         {{ __('landing.pricing.trial_days', ['days' => $package->trial_days]) }}
                                     </span>
@@ -148,7 +148,7 @@
                             
                             <div class="flex items-baseline gap-2">
                                 @if(app()->getLocale() == 'ar')
-                                    <span class="text-base font-black text-emerald-600" x-text="localPrice.currency"></span>
+                                    <span class="text-base font-black text-emerald-700" x-text="localPrice.currency"></span>
                                     <span class="text-4xl lg:text-5xl font-black text-slate-900 tracking-tighter" 
                                           x-text="billingCycle === 'monthly' ? localPrice.amount : (billingCycle === 'term' ? localPrice.term_price : localPrice.yearly_price)">
                                     </span>
@@ -156,10 +156,10 @@
                                     <span class="text-4xl lg:text-5xl font-black text-slate-900 tracking-tighter" 
                                           x-text="billingCycle === 'monthly' ? localPrice.amount : (billingCycle === 'term' ? localPrice.term_price : localPrice.yearly_price)">
                                     </span>
-                                    <span class="text-base font-black text-emerald-600" x-text="localPrice.currency"></span>
+                                    <span class="text-base font-black text-emerald-700" x-text="localPrice.currency"></span>
                                 @endif
                             </div>
-                            <div class="mt-2 text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                            <div class="mt-2 text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
                                 <span x-show="billingCycle === 'monthly'">{{ __('landing.pricing.per_month') }}</span>
                                 <span x-show="billingCycle === 'term'">{{ __('landing.pricing.per_term') }}</span>
                                 <span x-show="billingCycle === 'yearly'">{{ __('landing.pricing.per_year') }}</span>

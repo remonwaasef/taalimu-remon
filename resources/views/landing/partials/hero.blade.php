@@ -14,26 +14,26 @@
                 data-animate="fade-text">
                 <!-- Premium Pill Badge -->
                 <div
-                    class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/90 backdrop-blur-md border border-emerald-200/80 shadow-sm hover:shadow-md hover:border-emerald-400 transition-all duration-300 cursor-pointer mb-6 lg:mb-8">
+                    class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-900 text-white shadow-md hover:bg-slate-800 transition-all duration-300 cursor-pointer mb-6 lg:mb-8">
                     <span class="relative flex h-2.5 w-2.5">
                         <span
-                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
                     </span>
                     <span
-                        class="text-xs font-extrabold text-slate-800 uppercase tracking-widest leading-none">{{ __('landing.hero.badge') }}</span>
-                    <i class="fas fa-sparkles text-amber-400 text-xs ms-1"></i>
+                        class="text-xs font-black uppercase tracking-widest leading-none text-emerald-300">{{ __('landing.hero.badge') }}</span>
+                    <i class="fas fa-sparkles text-amber-300 text-xs ms-1"></i>
                 </div>
 
                 <!-- Massive Headline -->
                 <h1
                     class="text-3xl sm:text-4xl md:text-5xl lg:text-[3.75rem] font-black text-slate-900 leading-[1.15] lg:leading-[1.1] mb-6 tracking-tight">
-                    {!! __('landing.hero.title', ['highlight' => '<span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-500">' . __('landing.hero.title_highlight', [], app()->getLocale()) . '</span>']) !!}
+                    {!! __('landing.hero.title', ['highlight' => '<span class="text-emerald-600 underline decoration-emerald-300 decoration-wavy underline-offset-8">' . __('landing.hero.title_highlight', [], app()->getLocale()) . '</span>']) !!}
                 </h1>
 
                 <!-- Refined Subtitle -->
                 <p
-                    class="text-base sm:text-lg md:text-xl text-slate-600 mb-8 lg:mb-10 max-w-xl mx-auto md:mx-0 font-medium leading-relaxed">
+                    class="text-base sm:text-lg md:text-xl text-slate-700 mb-8 lg:mb-10 max-w-xl mx-auto md:mx-0 font-bold leading-relaxed">
                     {{ __('landing.hero.subtitle') }}
                 </p>
 
@@ -41,7 +41,7 @@
                 <div
                     class="flex flex-col sm:flex-row gap-4 items-center justify-center md:justify-start mb-10 lg:mb-14 mx-auto md:mx-0">
                     <a href="{{ route('register') }}"
-                        class="group relative inline-flex items-center justify-center bg-gradient-to-r from-slate-900 to-slate-800 hover:from-emerald-600 hover:to-teal-600 text-white px-8 py-4 lg:px-10 lg:py-4.5 rounded-2xl font-black text-base lg:text-lg transition-all duration-300 shadow-xl shadow-slate-900/15 hover:shadow-emerald-500/25 hover:-translate-y-1 overflow-hidden w-full sm:w-auto">
+                        class="group relative inline-flex items-center justify-center bg-slate-900 hover:bg-emerald-600 text-white px-8 py-4 lg:px-10 lg:py-4.5 rounded-2xl font-black text-base lg:text-lg transition-all duration-300 shadow-xl hover:-translate-y-1 overflow-hidden w-full sm:w-auto">
                         <span class="relative flex items-center justify-center gap-3">
                             <span>{{ __('landing.hero.cta_primary') }}</span>
                             <i
@@ -50,29 +50,29 @@
                     </a>
 
                     <a href="#features"
-                        class="inline-flex items-center justify-center text-slate-700 hover:text-emerald-600 bg-white hover:bg-slate-50 border border-slate-200/90 px-7 py-4 lg:px-8 lg:py-4.5 rounded-2xl font-bold text-base transition-all duration-200 hover:border-slate-300 w-full sm:w-auto shadow-sm">
-                        <i class="fas fa-play-circle text-emerald-500 text-lg me-2.5"></i>
+                        class="inline-flex items-center justify-center text-slate-900 hover:text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border-2 border-emerald-300 px-7 py-4 lg:px-8 lg:py-4.5 rounded-2xl font-black text-base transition-all duration-200 shadow-sm w-full sm:w-auto">
+                        <i class="fas fa-play-circle text-emerald-600 text-lg me-2.5"></i>
                         <span>{{ __('landing.nav.features') }}</span>
                     </a>
                 </div>
 
                 <!-- Trust Badges / Social Proof Stats -->
-                <div class="pt-6 border-t border-slate-200/60 flex items-center justify-center md:justify-start gap-8">
+                <div class="pt-6 border-t border-slate-200 flex items-center justify-center md:justify-start gap-8">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 font-bold">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-700 font-black">
                             <i class="fas fa-bolt"></i>
                         </div>
                         <div>
-                            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">سريع وعملي</div>
+                            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">سريع وعملي</div>
                             <div class="text-sm font-black text-slate-900">إعداد خلال دقيقتين</div>
                         </div>
                     </div>
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 font-bold">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-700 font-black">
                             <i class="fab fa-whatsapp"></i>
                         </div>
                         <div>
-                            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">تنبيهات فورية</div>
+                            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">تنبيهات فورية</div>
                             <div class="text-sm font-black text-slate-900">ربط مع الواتساب</div>
                         </div>
                     </div>
@@ -85,33 +85,32 @@
                 data-animate="fade-image">
 
                 <!-- Floating WhatsApp Card -->
-                <div class="hidden sm:block absolute top-6 -left-4 lg:top-8 lg:-left-8 z-30 w-60 lg:w-72 transition-all duration-300 hover:scale-105"
+                <div class="hidden sm:block absolute top-6 -left-4 lg:top-8 lg:-left-8 z-30 w-64 lg:w-80 transition-all duration-300 hover:scale-105"
                     data-animate="fade-up">
                     <div
-                        class="bg-white/95 backdrop-blur-xl border border-emerald-200/80 rounded-2xl shadow-2xl overflow-hidden ring-1 ring-emerald-500/10">
-                        <div class="bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-2.5 flex items-center justify-between">
+                        class="bg-white border-2 border-emerald-500 rounded-2xl shadow-2xl overflow-hidden ring-4 ring-emerald-500/10">
+                        <div class="bg-emerald-600 px-4 py-2.5 flex items-center justify-between">
                             <div class="flex items-center gap-2">
-                                <i class="fab fa-whatsapp text-white text-sm"></i>
+                                <i class="fab fa-whatsapp text-white text-base"></i>
                                 <span
-                                    class="text-white text-[11px] font-extrabold uppercase tracking-wider">{{ __('landing.hero.mockup.whatsapp.title') }}</span>
+                                    class="text-white text-xs font-black uppercase tracking-wider">{{ __('landing.hero.mockup.whatsapp.title') }}</span>
                             </div>
                             <span
-                                class="text-white/90 text-[10px] font-medium">{{ __('landing.hero.mockup.whatsapp.now') }}</span>
+                                class="text-white text-xs font-bold">{{ __('landing.hero.mockup.whatsapp.now') }}</span>
                         </div>
-                        <div class="p-4">
+                        <div class="p-4 bg-white">
                             <div class="flex items-start gap-3 mb-3">
                                 <div
-                                    class="w-8 h-8 rounded-full bg-emerald-100 flex-shrink-0 flex items-center justify-center">
-                                    <i class="fas fa-user-check text-emerald-700 text-xs"></i>
+                                    class="w-9 h-9 rounded-full bg-emerald-100 flex-shrink-0 flex items-center justify-center border border-emerald-200">
+                                    <i class="fas fa-user-check text-emerald-800 text-sm"></i>
                                 </div>
-                                <p class="text-xs lg:text-sm text-slate-700 leading-snug font-medium">
+                                <p class="text-xs lg:text-sm text-slate-900 leading-snug font-bold">
                                     {{ __('landing.hero.mockup.whatsapp.message') }}
                                 </p>
                             </div>
                             <div
-                                class="bg-emerald-50/80 rounded-xl py-2 px-3 text-center border border-emerald-100 shadow-sm">
-                                <span
-                                    class="text-emerald-700 font-extrabold text-xs lg:text-sm">{{ __('landing.hero.mockup.whatsapp.cta') }}</span>
+                                class="bg-emerald-600 text-white rounded-xl py-2 px-3 text-center font-black text-xs lg:text-sm shadow-md hover:bg-emerald-700 transition-colors">
+                                <span>{{ __('landing.hero.mockup.whatsapp.cta') }}</span>
                             </div>
                         </div>
                     </div>
@@ -119,16 +118,16 @@
 
                 <!-- Floating Indicators (Attendance Success) -->
                 <div
-                    class="hidden sm:flex absolute -bottom-6 -right-2 lg:-bottom-6 lg:-right-6 glass-card-premium p-4 rounded-2xl shadow-2xl z-30 items-center gap-4 border border-emerald-100 bg-white/95 backdrop-blur-xl hover:scale-105 transition-transform">
+                    class="hidden sm:flex absolute -bottom-6 -right-2 lg:-bottom-6 lg:-right-6 p-4 rounded-2xl shadow-2xl z-30 items-center gap-4 border-2 border-emerald-500 bg-white hover:scale-105 transition-transform">
                     <div
-                        class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
+                        class="w-12 h-12 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shadow-md shadow-emerald-500/30">
                         <i class="fas fa-qrcode text-xl"></i>
                     </div>
                     <div>
                         <div
-                            class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
+                            class="text-xs font-black text-slate-500 uppercase tracking-widest mb-0.5">
                             {{ __('landing.hero.mockup.success.label') }}</div>
-                        <div class="text-base lg:text-lg font-black text-slate-900 leading-none">
+                        <div class="text-base lg:text-xl font-black text-slate-900 leading-none">
                             {{ __('landing.hero.mockup.success.amount') }}</div>
                     </div>
                 </div>

@@ -22,13 +22,13 @@
             <!-- Nav Links (Desktop) -->
             <nav class="hidden lg:flex items-center gap-6 xl:gap-8">
                 @foreach(['features', 'pricing', 'faq'] as $nav)
-                <a href="#{{$nav}}" class="text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors whitespace-nowrap">
+                <a href="#{{$nav}}" class="text-sm font-bold text-slate-800 hover:text-emerald-600 transition-colors whitespace-nowrap">
                     {{ __("landing.nav.$nav") }}
                 </a>
                 @endforeach
-                <a href="{{ route('login.portal') }}" class="text-xs font-bold text-emerald-600 hover:text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-3.5 py-1.5 rounded-lg transition-all whitespace-nowrap border border-emerald-200/60 shadow-sm">
-                    <i class="fas fa-sign-in-alt me-1"></i>
-                    {{ __('landing.nav.sign_in') }}
+                <a href="{{ route('login.portal') }}" class="text-sm font-extrabold text-emerald-700 hover:text-emerald-800 bg-emerald-100/80 hover:bg-emerald-200/80 px-4 py-2 rounded-xl transition-all whitespace-nowrap border border-emerald-300/80 shadow-sm flex items-center gap-2">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>{{ __('landing.nav.sign_in') }}</span>
                 </a>
             </nav>
 
@@ -36,20 +36,20 @@
             <div class="hidden lg:flex items-center gap-3 xl:gap-4">
                 <!-- Lang -->
                 <div x-data="{ open: false }" class="relative">
-                    <button @click="open = !open" class="flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors px-3 py-2 rounded-lg hover:bg-slate-100">
-                        <i class="fas fa-globe text-xs"></i>
-                        {{ strtoupper(app()->getLocale()) }}
+                    <button @click="open = !open" class="flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-slate-900 transition-colors px-3 py-2 rounded-xl hover:bg-slate-100 border border-slate-200">
+                        <i class="fas fa-globe text-emerald-600"></i>
+                        <span>{{ strtoupper(app()->getLocale()) }}</span>
                     </button>
                     <div x-show="open" style="display: none;" x-cloak @click.away="open = false" x-transition class="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-2xl py-2 overflow-hidden z-50 border border-slate-200">
                         @foreach(['ar' => 'العربية', 'fr' => 'Français'] as $code => $label)
-                        <a href="{{ route('lang.switch', ['locale' => $code]) }}" class="block px-4 py-2.5 text-xs @if(app()->isLocale($code)) text-emerald-600 font-bold @else text-slate-600 hover:bg-slate-50 @endif">
+                        <a href="{{ route('lang.switch', ['locale' => $code]) }}" class="block px-4 py-2.5 text-sm @if(app()->isLocale($code)) text-emerald-600 font-bold bg-emerald-50 @else text-slate-700 hover:bg-slate-50 @endif">
                             {{ $label }}
                         </a>
                         @endforeach
                     </div>
                 </div>
 
-                <a href="{{ route('register') }}" class="group relative inline-flex items-center justify-center bg-slate-900 text-white px-5 py-2 lg:px-6 lg:py-2 rounded-lg font-bold text-xs transition-all hover:bg-slate-800 shadow-xl shadow-slate-900/10 hover:-translate-y-1 active:scale-95 overflow-hidden">
+                <a href="{{ route('register') }}" class="group relative inline-flex items-center justify-center bg-slate-900 hover:bg-emerald-600 text-white px-6 py-2.5 rounded-xl font-extrabold text-sm transition-all duration-300 shadow-md hover:-translate-y-0.5 overflow-hidden">
                     {{ __('landing.nav.start_trial') }}
                 </a>
             </div>
