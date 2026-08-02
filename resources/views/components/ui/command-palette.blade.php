@@ -44,38 +44,52 @@
 
         <div class="max-h-80 overflow-y-auto p-2 space-y-1">
             <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">التنقل السريع</div>
-            
-            <a href="{{ route('instructor.dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
-                <i class="fas fa-chart-pie w-4 text-center"></i>
-                <span>الانتقال للوحة التحكم</span>
-            </a>
 
-            <a href="{{ route('instructor.students.list') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
-                <i class="fas fa-user-graduate w-4 text-center"></i>
-                <span>دليل وقائمة الطلاب</span>
-            </a>
+            @if (app()->bound('tenant'))
+                <a href="{{ route('instructor.dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
+                    <i class="fas fa-chart-pie w-4 text-center"></i>
+                    <span>الانتقال للوحة التحكم</span>
+                </a>
 
-            <a href="{{ route('instructor.groups.list') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
-                <i class="fas fa-users w-4 text-center"></i>
-                <span>إدارة المجموعات الدراسية</span>
-            </a>
+                <a href="{{ route('instructor.students.list') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
+                    <i class="fas fa-user-graduate w-4 text-center"></i>
+                    <span>دليل وقائمة الطلاب</span>
+                </a>
 
-            <a href="{{ route('instructor.schedules.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
-                <i class="fas fa-calendar-alt w-4 text-center"></i>
-                <span>جدول المواعيد والحصص</span>
-            </a>
+                <a href="{{ route('instructor.groups.list') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
+                    <i class="fas fa-users w-4 text-center"></i>
+                    <span>إدارة المجموعات الدراسية</span>
+                </a>
 
-            <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider pt-3">إجراءات سريعة</div>
+                <a href="{{ route('instructor.schedules.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
+                    <i class="fas fa-calendar-alt w-4 text-center"></i>
+                    <span>جدول المواعيد والحصص</span>
+                </a>
 
-            <a href="{{ route('instructor.students.create') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
-                <i class="fas fa-user-plus w-4 text-center text-emerald-500"></i>
-                <span>إضافة طالب جديد</span>
-            </a>
+                <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider pt-3">إجراءات سريعة</div>
 
-            <a href="{{ route('instructor.groups.create') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
-                <i class="fas fa-folder-plus w-4 text-center text-brand-primary"></i>
-                <span>إنشاء مجموعة جديدة</span>
-            </a>
+                <a href="{{ route('instructor.students.create') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
+                    <i class="fas fa-user-plus w-4 text-center text-emerald-500"></i>
+                    <span>إضافة طالب جديد</span>
+                </a>
+
+                <a href="{{ route('instructor.groups.create') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
+                    <i class="fas fa-folder-plus w-4 text-center text-brand-primary"></i>
+                    <span>إنشاء مجموعة جديدة</span>
+                </a>
+            @else
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
+                    <i class="fas fa-chart-pie w-4 text-center"></i>
+                    <span>الانتقال للوحة التحكم</span>
+                </a>
+
+                <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider pt-3">إجراءات سريعة</div>
+
+                <a href="{{ route('admin.tenants.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-primary transition-colors">
+                    <i class="fas fa-building w-4 text-center text-brand-primary"></i>
+                    <span>إدارة المراكز</span>
+                </a>
+            @endif
         </div>
 
         <div class="px-4 py-2 bg-slate-50 dark:bg-slate-800/50 border-t border-brand-border dark:border-slate-800 text-[10px] text-slate-400 flex items-center justify-between">
