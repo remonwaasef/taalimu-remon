@@ -1,8 +1,8 @@
-@extends('admin::layouts.master')
+@extends('admin::layouts.app-next')
 
-@section('title', __('admin::admin.dashboard.title') ?? 'لوحة القيادة')
+@section('page-title', __('admin::admin.dashboard.title') ?? 'لوحة القيادة')
 
-@section('content')
+@section('panel-content')
     <x-ui.page-header
         title="{{ __('admin::admin.dashboard.title') ?? 'Admin Overview' }}"
         subtitle="Real-time ecosystem metrics, tenant subscription statuses, and system activity."
