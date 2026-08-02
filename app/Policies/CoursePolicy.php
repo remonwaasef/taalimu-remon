@@ -15,7 +15,7 @@ class CoursePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $this->hasAnyRole($user, ['center_admin', 'instructor']) || $user->checkPermissionTo('view courses');
+        return $user->role === 'super_admin' || $this->hasAnyRole($user, ['center_admin', 'admin', 'center_owner', 'instructor', 'secretary', 'staff']) || $user->checkPermissionTo('view courses');
     }
 
     /**
@@ -24,7 +24,7 @@ class CoursePolicy
     public function view(User $user, Course $course): bool
     {
         return $course->tenant_id === $user->tenant_id &&
-               ($this->hasAnyRole($user, ['center_admin', 'instructor']) || $user->checkPermissionTo('view courses'));
+               ($user->role === 'super_admin' || $this->hasAnyRole($user, ['center_admin', 'admin', 'center_owner', 'instructor', 'secretary', 'staff']) || $user->checkPermissionTo('view courses'));
     }
 
     /**
@@ -32,12 +32,12 @@ class CoursePolicy
      */
     public function create(User $user): bool
     {
-        return $this->hasAnyRole($user, ['center_admin', 'instructor']) || $user->checkPermissionTo('create courses');
+        return $user->role === 'super_admin' || $this->hasAnyRole($user, ['center_admin', 'admin', 'center_owner', 'instructor', 'secretary', 'staff']) || $user->checkPermissionTo('create courses');
     }
 
     public function update(User $user, Course $course): bool
     {
-        if ($this->hasAnyRole($user, ['center_admin']) || $user->checkPermissionTo('edit courses')) {
+        if ($user->role === 'super_admin' || $this->hasAnyRole($user, ['center_admin', 'admin', 'center_owner']) || $user->checkPermissionTo('edit courses')) {
             return $course->tenant_id === $user->tenant_id;
         }
 
@@ -56,7 +56,7 @@ class CoursePolicy
     public function delete(User $user, Course $course): bool
     {
         return $course->tenant_id === $user->tenant_id &&
-               ($this->hasAnyRole($user, ['center_admin']) || $user->checkPermissionTo('delete courses'));
+               ($user->role === 'super_admin' || $this->hasAnyRole($user, ['center_admin', 'admin', 'center_owner']) || $user->checkPermissionTo('delete courses'));
     }
 
     /**
@@ -65,6 +65,6 @@ class CoursePolicy
     public function enroll(User $user, Course $course): bool
     {
         return $course->tenant_id === $user->tenant_id &&
-               ($this->hasAnyRole($user, ['center_admin', 'admin', 'secretary']) || $user->checkPermissionTo('manage students'));
+               ($user->role === 'super_admin' || $this->hasAnyRole($user, ['center_admin', 'admin', 'center_owner', 'secretary']) || $user->checkPermissionTo('manage students'));
     }
 }
