@@ -1,5 +1,5 @@
 {{-- Hero Section — Premium Light SaaS Redesign --}}
-<section class="hero-section" dir="rtl" style="
+<section class="hero-section" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}" style="
     position: relative;
     background: linear-gradient(180deg, #f8fafc 0%, #ffffff 50%, #f0fdf4 100%);
     padding: 7rem 0 5rem 0;
@@ -9,8 +9,8 @@
 ">
     {{-- Soft Ambient Glows (Light Mode) --}}
     <div style="position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1;">
-        <div style="position: absolute; top: -80px; right: 15%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%);"></div>
-        <div style="position: absolute; bottom: -80px; left: 10%; width: 450px; height: 450px; background: radial-gradient(circle, rgba(59, 130, 246, 0.05) 0%, transparent 70%);"></div>
+        <div style="position: absolute; top: -80px; {{ app()->getLocale() == 'ar' ? 'right: 15%;' : 'left: 15%;' }} width: 500px; height: 500px; background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%);"></div>
+        <div style="position: absolute; bottom: -80px; {{ app()->getLocale() == 'ar' ? 'left: 10%;' : 'right: 10%;' }} width: 450px; height: 450px; background: radial-gradient(circle, rgba(59, 130, 246, 0.05) 0%, transparent 70%);"></div>
     </div>
 
     {{-- Main Container --}}
@@ -29,12 +29,12 @@
             gap: 3rem;
         ">
             
-            {{-- RIGHT COLUMN: Text & Actions --}}
+            {{-- TEXT COLUMN --}}
             <div style="
                 flex: 1 1 520px;
                 max-width: 600px;
                 width: 100%;
-                text-align: right;
+                text-align: {{ app()->getLocale() == 'ar' ? 'right' : 'left' }};
             ">
                 
                 {{-- 1. Badge --}}
@@ -51,7 +51,7 @@
                 ">
                     <span style="width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #059669; display: inline-block;"></span>
                     <span style="color: #047857 !important; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em;">
-                        النظام الأحدث والأذكى لإدارة المراكز التعليمية
+                        {{ __('landing.hero.badge_new') }}
                     </span>
                     <i class="fas fa-sparkles" style="color: #d97706; font-size: 0.75rem;"></i>
                 </div>
@@ -65,13 +65,13 @@
                     margin: 0 0 1.5rem 0;
                     letter-spacing: -0.02em;
                 ">
-                    أدر مركزك التعليمي بالكامل
+                    {{ __('landing.hero.headline') }}
                     <span style="
                         color: #059669 !important;
                         display: block;
                         margin-top: 0.375rem;
                     ">
-                        من منصة واحدة ذكية
+                        {{ __('landing.hero.headline_highlight') }}
                     </span>
                 </h1>
 
@@ -84,7 +84,7 @@
                     margin: 0 0 2rem 0;
                     max-width: 540px;
                 ">
-                    نظام متكامل يجمع إدارة الطلاب، الحضور الذكي بـ <strong style="color: #0f172a;">QR Code</strong>، الفواتير والاشتراكات، والتقارير المالية، مع أتمتة كاملة لإشعارات <strong style="color: #059669;">الواتساب</strong> لأولياء الأمور.
+                    {!! __('landing.hero.description') !!}
                 </p>
 
                 {{-- 4. CTA Buttons --}}
@@ -110,8 +110,8 @@
                         box-shadow: 0 10px 25px rgba(5, 150, 105, 0.3);
                         transition: transform 0.2s, box-shadow 0.2s;
                     " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
-                        <span style="color: #ffffff !important;">ابدأ التجربة المجانية</span>
-                        <i class="fas fa-arrow-left" style="color: #ffffff !important; font-size: 0.875rem;"></i>
+                        <span style="color: #ffffff !important;">{{ __('landing.hero.cta_free') }}</span>
+                        <i class="fas fa-arrow-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}" style="color: #ffffff !important; font-size: 0.875rem;"></i>
                     </a>
 
                     <a href="#features" style="
@@ -131,7 +131,7 @@
                         transition: background 0.2s, border-color 0.2s;
                     " onmouseover="this.style.background='#f8fafc'; this.style.borderColor='#94a3b8';" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#cbd5e1';">
                         <i class="fas fa-play-circle" style="color: #059669; font-size: 1.125rem;"></i>
-                        <span style="color: #0f172a !important;">شاهد عرضاً لمدة دقيقتين</span>
+                        <span style="color: #0f172a !important;">{{ __('landing.hero.cta_demo') }}</span>
                     </a>
                 </div>
 
@@ -146,19 +146,19 @@
                 ">
                     <div style="display: flex; align-items: center; gap: 0.5rem; color: #334155; font-size: 0.85rem; font-weight: 700;">
                         <i class="fas fa-check-circle" style="color: #059669;"></i>
-                        <span>إعداد خلال دقيقتين</span>
+                        <span>{{ __('landing.hero.check_setup') }}</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.5rem; color: #334155; font-size: 0.85rem; font-weight: 700;">
                         <i class="fas fa-check-circle" style="color: #059669;"></i>
-                        <span>بدون بطاقة بنكية</span>
+                        <span>{{ __('landing.hero.check_nocard') }}</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.5rem; color: #334155; font-size: 0.85rem; font-weight: 700;">
                         <i class="fas fa-check-circle" style="color: #059669;"></i>
-                        <span>دعم عربي دائم</span>
+                        <span>{{ __('landing.hero.check_support') }}</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.5rem; color: #334155; font-size: 0.85rem; font-weight: 700;">
                         <i class="fas fa-check-circle" style="color: #059669;"></i>
-                        <span>تجربة مجانية 14 يوم</span>
+                        <span>{{ __('landing.hero.check_trial') }}</span>
                     </div>
                 </div>
 
@@ -169,24 +169,24 @@
                     gap: 2rem;
                 ">
                     <div>
-                        <div style="font-size: 1.5rem; font-weight: 900; color: #059669;">100%</div>
-                        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">أتمتة وتنبيهات الواتساب</div>
+                        <div style="font-size: 1.5rem; font-weight: 900; color: #059669;">{{ __('landing.hero.pillar1_title') }}</div>
+                        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">{{ __('landing.hero.pillar1_sub') }}</div>
                     </div>
                     <div style="width: 1px; height: 2rem; background: #cbd5e1;"></div>
                     <div>
-                        <div style="font-size: 1.5rem; font-weight: 900; color: #0f172a;">فوري</div>
-                        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">تسجيل حضور بـ QR</div>
+                        <div style="font-size: 1.5rem; font-weight: 900; color: #0f172a;">{{ __('landing.hero.pillar2_title') }}</div>
+                        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">{{ __('landing.hero.pillar2_sub') }}</div>
                     </div>
                     <div style="width: 1px; height: 2rem; background: #cbd5e1;"></div>
                     <div>
-                        <div style="font-size: 1.5rem; font-weight: 900; color: #059669;">14 يوم</div>
-                        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">تجربة مجانية كاملة</div>
+                        <div style="font-size: 1.5rem; font-weight: 900; color: #059669;">{{ __('landing.hero.pillar3_title') }}</div>
+                        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">{{ __('landing.hero.pillar3_sub') }}</div>
                     </div>
                 </div>
 
             </div>
 
-            {{-- LEFT COLUMN: SaaS Visual Mockup Composition --}}
+            {{-- VISUAL MOCKUP COLUMN --}}
             <div style="
                 flex: 1 1 480px;
                 max-width: 560px;
@@ -244,11 +244,11 @@
 
                 {{-- Floating Mini Cards (Clean, Light Glass Cards) --}}
                 
-                {{-- Card 1: WhatsApp Notification (Top Right in RTL) --}}
+                {{-- Card 1: WhatsApp Notification --}}
                 <div style="
                     position: absolute;
                     top: -1.25rem;
-                    right: -1rem;
+                    {{ app()->getLocale() == 'ar' ? 'right: -1rem;' : 'left: -1rem;' }}
                     background: rgba(255, 255, 255, 0.98);
                     border: 1px solid #a7f3d0;
                     border-radius: 0.875rem;
@@ -273,16 +273,16 @@
                         <i class="fab fa-whatsapp" style="color: #059669; font-size: 1.125rem;"></i>
                     </div>
                     <div style="overflow: hidden;">
-                        <div style="font-size: 0.75rem; font-weight: 800; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">إشعار أولياء الأمور</div>
-                        <div style="font-size: 0.65rem; color: #059669; font-weight: 700;">تم إرسال الفاتورة تلقائياً</div>
+                        <div style="font-size: 0.75rem; font-weight: 800; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ __('landing.hero.card_whatsapp_title') }}</div>
+                        <div style="font-size: 0.65rem; color: #059669; font-weight: 700;">{{ __('landing.hero.card_whatsapp_sub') }}</div>
                     </div>
                 </div>
 
-                {{-- Card 2: QR Attendance (Bottom Left in RTL) --}}
+                {{-- Card 2: QR Attendance --}}
                 <div style="
                     position: absolute;
                     bottom: -1.25rem;
-                    left: -1rem;
+                    {{ app()->getLocale() == 'ar' ? 'left: -1rem;' : 'right: -1rem;' }}
                     background: rgba(255, 255, 255, 0.98);
                     border: 1px solid #bfdbfe;
                     border-radius: 0.875rem;
@@ -307,8 +307,8 @@
                         <i class="fas fa-qrcode" style="color: #2563eb; font-size: 1rem;"></i>
                     </div>
                     <div>
-                        <div style="font-size: 0.75rem; font-weight: 800; color: #0f172a;">حضور بـ QR Code</div>
-                        <div style="font-size: 0.65rem; color: #475569; font-weight: 600;">أحمد علي - 09:00 ص</div>
+                        <div style="font-size: 0.75rem; font-weight: 800; color: #0f172a;">{{ __('landing.hero.card_qr_title') }}</div>
+                        <div style="font-size: 0.65rem; color: #475569; font-weight: 600;">{{ __('landing.hero.card_qr_sub') }}</div>
                     </div>
                 </div>
 
