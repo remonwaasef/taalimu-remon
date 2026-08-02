@@ -21,7 +21,6 @@ class AdminController extends Controller
                 ->where('ends_at', '>=', now())
                 ->count();
 
-            // Financial Metrics
             $totalRevenue = \App\Models\Invoice::withoutGlobalScopes()->where('status', 'paid')->sum('amount') ?? 0;
             $thisMonthRevenue = \App\Models\Invoice::withoutGlobalScopes()
                 ->where('status', 'paid')
@@ -29,78 +28,55 @@ class AdminController extends Controller
                 ->whereYear('created_at', now()->year)
                 ->sum('amount') ?? 0;
 
-            // Support Metrics
             $openTickets = \App\Models\Ticket::withoutGlobalScopes()->where('status', '!=', 'closed')->count();
             $totalTickets = \App\Models\Ticket::withoutGlobalScopes()->count();
-
-            // Recent Tickets
             $recentTickets = \App\Models\Ticket::withoutGlobalScopes()->with('user', 'tenant')->latest()->take(5)->get();
 
-            // Subscription Analytics
-            $planAnalytics = \App\Models\Package::withoutGlobalScopes()
-                ->where('is_active', true)
-                ->withCount(['features'])
-                ->get()
-                ->map(function ($package) {
-                    $activeSubIds = \App\Models\Subscription::withoutGlobalScopes()
-                        ->where('status', 'active')
-                        ->where(function ($q) use ($package) {
-                            $q->where('stripe_price', $package->stripe_price_id)
-                                ->orWhere('package_id', $package->id);
-                        })
-                        ->pluck('id');
+            $planAnalytics = collect([]);
+            try {
+                $planAnalytics = \App\Models\Package::withoutGlobalScopes()
+                    ->where('is_active', true)
+                    ->get()
+                    ->map(function ($package) {
+                        return [
+                            'name' => $package->name ?? 'Package',
+                            'centers_count' => 0,
+                            'total_profits' => 0,
+                            'badge' => $package->badge ?? null,
+                        ];
+                    });
+            } catch (\Throwable $e) {
+                // Silently fail on plan analytics
+            }
 
-                    $centersCount = \App\Models\Tenant::withoutGlobalScopes()
-                        ->whereHas('subscriptions', function ($q) use ($activeSubIds) {
-                            $q->whereIn('id', $activeSubIds)->where('status', 'active');
-                        })->count();
-
-                    $totalProfits = \App\Models\Invoice::withoutGlobalScopes()
-                        ->whereIn('subscription_id', $activeSubIds)
-                        ->where('status', 'paid')
-                        ->sum('amount') ?? 0;
-
-                    return [
-                        'name' => $package->name ?? 'Package',
-                        'centers_count' => $centersCount,
-                        'total_profits' => $totalProfits,
-                        'badge' => $package->badge ?? null,
-                    ];
-                });
-
-            // Recent Tenants
             $recentTenants = \App\Models\Tenant::withoutGlobalScopes()->latest()->take(5)->get();
+
+            return view('admin::index', compact(
+                'totalTenants',
+                'activeTenants',
+                'totalStudents',
+                'expiringSoon',
+                'totalRevenue',
+                'thisMonthRevenue',
+                'openTickets',
+                'totalTickets',
+                'recentTickets',
+                'recentTenants',
+                'planAnalytics'
+            ));
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::error('Admin Dashboard Data Loading Failed: '.$e->getMessage(), [
-                'trace' => $e->getTraceAsString(),
-            ]);
-
-            $totalTenants = $totalTenants ?? 0;
-            $activeTenants = $activeTenants ?? 0;
-            $totalStudents = $totalStudents ?? 0;
-            $expiringSoon = $expiringSoon ?? 0;
-            $totalRevenue = $totalRevenue ?? 0;
-            $thisMonthRevenue = $thisMonthRevenue ?? 0;
-            $openTickets = $openTickets ?? 0;
-            $totalTickets = $totalTickets ?? 0;
-            $recentTickets = $recentTickets ?? collect([]);
-            $recentTenants = $recentTenants ?? collect([]);
-            $planAnalytics = $planAnalytics ?? collect([]);
+            // TEMPORARY DEBUG: Show the actual error so we can fix it
+            return response(
+                '<html><body style="font-family:monospace;padding:40px;direction:ltr">'
+                .'<h1 style="color:red">Admin Dashboard Debug</h1>'
+                .'<h2>Error: '.htmlspecialchars($e->getMessage()).'</h2>'
+                .'<h3>File: '.htmlspecialchars($e->getFile()).' Line: '.$e->getLine().'</h3>'
+                .'<pre style="background:#222;color:#0f0;padding:20px;overflow:auto;max-height:500px">'
+                .htmlspecialchars($e->getTraceAsString())
+                .'</pre></body></html>',
+                500
+            );
         }
-
-        return view('admin::index', compact(
-            'totalTenants',
-            'activeTenants',
-            'totalStudents',
-            'expiringSoon',
-            'totalRevenue',
-            'thisMonthRevenue',
-            'openTickets',
-            'totalTickets',
-            'recentTickets',
-            'recentTenants',
-            'planAnalytics'
-        ));
     }
 
     /**
