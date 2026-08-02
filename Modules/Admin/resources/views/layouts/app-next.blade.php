@@ -7,7 +7,7 @@
 @section('content')
     @hasSection('page-title')
         <x-ui.page-header>
-            <x-slot name="title">@yield('page-title', __('admin.title'))</x-slot>
+            <x-slot name="title">@yield('page-title', __('admin::admin.title'))</x-slot>
             @hasSection('page-subtitle')
                 <x-slot name="subtitle">@yield('page-subtitle')</x-slot>
             @endif
@@ -16,5 +16,6 @@
             @endif
         </x-ui.page-header>
     @endif
+
     @yield('panel-content')
 @endsection
