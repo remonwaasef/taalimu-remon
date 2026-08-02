@@ -27,7 +27,7 @@
                 <span>Support Tickets</span>
             </a>
 
-            <a href="{{ route('admin.system.health') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
                 <i class="fas fa-heartbeat w-4 text-center"></i>
                 <span>System Health</span>
             </a>
@@ -146,11 +146,11 @@
                     <div class="grid grid-cols-2 gap-4 pt-2 border-t border-brand-border dark:border-slate-800">
                         <div>
                             <p class="text-xs text-slate-400 font-medium">Centers</p>
-                            <p class="text-xl font-bold text-slate-900 dark:text-slate-100 mt-1">{{ number_format($plan['count']) }}</p>
+                            <p class="text-xl font-bold text-slate-900 dark:text-slate-100 mt-1">{{ number_format($plan['centers_count']) }}</p>
                         </div>
                         <div>
                             <p class="text-xs text-slate-400 font-medium">Net Profit</p>
-                            <p class="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">{{ number_format($plan['revenue'], 2) }} <span class="text-xs font-normal">EGP</span></p>
+                            <p class="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">{{ number_format($plan['total_profits'], 2) }} <span class="text-xs font-normal">EGP</span></p>
                         </div>
                     </div>
                 </x-ui.card>
