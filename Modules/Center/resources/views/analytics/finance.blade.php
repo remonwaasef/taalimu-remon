@@ -278,7 +278,7 @@
     .x-small { font-size: 0.75rem; }
     .hover-lift { transition: transform 0.2s ease; }
     .hover-lift:hover { transform: translateY(-3px); }
-    .btn-glass { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); color: white; border: 1px solid rgba(255,255,255,0.2); }
-    .btn-glass:hover { background: rgba(255, 255, 255, 0.25); color: white; }
+    .btn-glass { background: #ffffff; backdrop-filter: blur(10px); color: #334155; border: 1px solid rgba(15,23,42,0.08); box-shadow: 0 1px 2px rgba(15,23,42,0.06); }
+    .btn-glass:hover { background: #f1f5f9; color: #1e293b; }
 </style>
 @endpush
