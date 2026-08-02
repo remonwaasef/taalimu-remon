@@ -53,6 +53,42 @@
     --btn-secondary-text: #ffffff;
     --btn-secondary-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
 
+    /* Success Button */
+    --btn-success-bg: #059669;
+    --btn-success-hover-bg: #047857;
+    --btn-success-text: #ffffff;
+    --btn-success-shadow: 0 4px 14px rgba(5, 150, 105, 0.22);
+
+    /* Danger Button */
+    --btn-danger-bg: #dc2626;
+    --btn-danger-hover-bg: #b91c1c;
+    --btn-danger-text: #ffffff;
+    --btn-danger-shadow: 0 4px 14px rgba(220, 38, 38, 0.2);
+
+    /* Warning Button */
+    --btn-warning-bg: #f59e0b;
+    --btn-warning-hover-bg: #d97706;
+    --btn-warning-text: #ffffff;
+    --btn-warning-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);
+
+    /* Info Button */
+    --btn-info-bg: #0ea5e9;
+    --btn-info-hover-bg: #0284c7;
+    --btn-info-text: #ffffff;
+    --btn-info-shadow: 0 4px 14px rgba(14, 165, 233, 0.22);
+
+    /* Dark Button */
+    --btn-dark-bg: #0f172a;
+    --btn-dark-hover-bg: #1e293b;
+    --btn-dark-text: #ffffff;
+
+    /* Light Button */
+    --btn-light-bg: #f1f5f9;
+    --btn-light-hover-bg: #e2e8f0;
+    --btn-light-text: #475569;
+    --btn-light-hover-text: #1e293b;
+    --btn-light-border: #e2e8f0;
+
     /* Light / Outline Button */
     --btn-outline-border: var(--color-border);
     --btn-outline-text: var(--color-text-main);

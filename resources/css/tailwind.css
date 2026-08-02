@@ -130,10 +130,10 @@
 .btn-primary,
 .bg-primary,
 .btn.btn-primary {
-    background-color: #059669 !important;
-    background: #059669 !important;
-    border-color: #059669 !important;
-    color: #ffffff !important;
+    background-color: var(--btn-primary-bg) !important;
+    background: var(--btn-primary-bg) !important;
+    border-color: var(--btn-primary-bg) !important;
+    color: var(--btn-primary-text) !important;
 }
 
 .btn-primary:hover,
@@ -142,14 +142,14 @@
 .btn.btn-primary:hover,
 .btn.btn-primary:focus,
 .btn.btn-primary:active {
-    background-color: #047857 !important;
-    background: #047857 !important;
-    border-color: #047857 !important;
-    color: #ffffff !important;
-    box-shadow: 0 4px 14px rgba(4, 120, 87, 0.35) !important;
+    background-color: var(--btn-primary-hover-bg) !important;
+    background: var(--btn-primary-hover-bg) !important;
+    border-color: var(--btn-primary-hover-bg) !important;
+    color: var(--btn-primary-text) !important;
+    box-shadow: var(--btn-primary-hover-shadow) !important;
 }
 
 .text-primary {
-    color: #059669 !important;
+    color: var(--color-primary) !important;
 }
 

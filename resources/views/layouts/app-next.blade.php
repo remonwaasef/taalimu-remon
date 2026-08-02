@@ -26,10 +26,10 @@
 
     <!-- Hope UI & Bootstrap CSS (Legacy Component Support) -->
     <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/libs.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/hope-ui.css?v=1.2.0') }}">
-    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/taalimu-unified.css?v=1.2.0') }}">
+    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/hope-ui.css?v=1.3.0') }}">
+    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/taalimu-unified.css?v=1.3.0') }}">
     @if(app()->getLocale() == 'ar')
-        <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/rtl.css?v=1.2.0') }}">
+        <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/rtl.css?v=1.3.0') }}">
     @endif
 
     <!-- Vite Assets (TailwindCSS + App) -->

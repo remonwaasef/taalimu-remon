@@ -111,43 +111,251 @@ body {
     background: linear-gradient(to right, #047857, #0d9488) !important;
 }
 
-/* Override Hope UI primary color classes (Royal Indigo Palette) */
+/* ===== Unified Buttons (Global Source: resources/css/design-tokens.css) =====
+   Every button variant reads from --btn-* / --color-* tokens.
+   Change a token once to restyle every button in the platform. */
 .bg-primary,
 .badge-primary {
-    background-color: #6366f1 !important;
-    border-color: #6366f1 !important;
+    background-color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
+    background: var(--btn-primary-bg) !important;
     border: none !important;
-    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25) !important;
+    color: var(--btn-primary-text) !important;
+    box-shadow: var(--btn-primary-shadow) !important;
 }
 
 .btn-primary:hover,
-.btn-primary:focus {
-    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%) !important;
+.btn-primary:focus,
+.btn-primary:active {
+    background: var(--btn-primary-hover-bg) !important;
     border: none !important;
-    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35) !important;
+    color: var(--btn-primary-text) !important;
+    transform: translateY(-1px);
+    box-shadow: var(--btn-primary-hover-shadow) !important;
 }
 
 .btn-outline-primary {
-    color: #6366f1 !important;
-    border-color: #6366f1 !important;
+    color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+    background: transparent !important;
 }
 
-.btn-outline-primary:hover {
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
-    border-color: transparent !important;
-    color: white !important;
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active {
+    background: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+    color: #ffffff !important;
+    box-shadow: var(--btn-primary-shadow) !important;
+}
+
+.btn-success {
+    background: var(--btn-success-bg) !important;
+    border-color: var(--btn-success-bg) !important;
+    color: var(--btn-success-text) !important;
+    box-shadow: var(--btn-success-shadow) !important;
+}
+
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active {
+    background: var(--btn-success-hover-bg) !important;
+    border-color: var(--btn-success-hover-bg) !important;
+    color: var(--btn-success-text) !important;
+    transform: translateY(-1px);
+    box-shadow: var(--btn-success-shadow) !important;
+}
+
+.btn-danger {
+    background: var(--btn-danger-bg) !important;
+    border-color: var(--btn-danger-bg) !important;
+    color: var(--btn-danger-text) !important;
+    box-shadow: var(--btn-danger-shadow) !important;
+}
+
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active {
+    background: var(--btn-danger-hover-bg) !important;
+    border-color: var(--btn-danger-hover-bg) !important;
+    color: var(--btn-danger-text) !important;
+    transform: translateY(-1px);
+    box-shadow: var(--btn-danger-shadow) !important;
+}
+
+.btn-warning {
+    background: var(--btn-warning-bg) !important;
+    border-color: var(--btn-warning-bg) !important;
+    color: var(--btn-warning-text) !important;
+    box-shadow: var(--btn-warning-shadow) !important;
+}
+
+.btn-warning:hover,
+.btn-warning:focus,
+.btn-warning:active {
+    background: var(--btn-warning-hover-bg) !important;
+    border-color: var(--btn-warning-hover-bg) !important;
+    color: var(--btn-warning-text) !important;
+    transform: translateY(-1px);
+    box-shadow: var(--btn-warning-shadow) !important;
+}
+
+.btn-info {
+    background: var(--btn-info-bg) !important;
+    border-color: var(--btn-info-bg) !important;
+    color: var(--btn-info-text) !important;
+    box-shadow: var(--btn-info-shadow) !important;
+}
+
+.btn-info:hover,
+.btn-info:focus,
+.btn-info:active {
+    background: var(--btn-info-hover-bg) !important;
+    border-color: var(--btn-info-hover-bg) !important;
+    color: var(--btn-info-text) !important;
+    transform: translateY(-1px);
+    box-shadow: var(--btn-info-shadow) !important;
+}
+
+.btn-secondary {
+    background: var(--btn-secondary-bg) !important;
+    border-color: var(--btn-secondary-bg) !important;
+    color: var(--btn-secondary-text) !important;
+    box-shadow: var(--btn-secondary-shadow) !important;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:active {
+    background: var(--btn-secondary-hover-bg) !important;
+    border-color: var(--btn-secondary-hover-bg) !important;
+    color: var(--btn-secondary-text) !important;
+    transform: translateY(-1px);
+    box-shadow: var(--btn-secondary-shadow) !important;
+}
+
+.btn-dark {
+    background: var(--btn-dark-bg) !important;
+    border-color: var(--btn-dark-bg) !important;
+    color: var(--btn-dark-text) !important;
+}
+
+.btn-dark:hover,
+.btn-dark:focus,
+.btn-dark:active {
+    background: var(--btn-dark-hover-bg) !important;
+    border-color: var(--btn-dark-hover-bg) !important;
+    color: var(--btn-dark-text) !important;
+    transform: translateY(-1px);
+}
+
+.btn-light {
+    background: var(--btn-light-bg) !important;
+    border: 1px solid var(--btn-light-border) !important;
+    color: var(--btn-light-text) !important;
+}
+
+.btn-light:hover,
+.btn-light:focus,
+.btn-light:active {
+    background: var(--btn-light-hover-bg) !important;
+    color: var(--btn-light-hover-text) !important;
+}
+
+/* Outline Variants */
+.btn-outline-secondary {
+    color: var(--color-secondary) !important;
+    border-color: var(--color-secondary) !important;
+    background: transparent !important;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus,
+.btn-outline-secondary:active {
+    background: var(--color-secondary) !important;
+    border-color: var(--color-secondary) !important;
+    color: #ffffff !important;
+}
+
+.btn-outline-success {
+    color: var(--btn-success-bg) !important;
+    border-color: var(--btn-success-bg) !important;
+    background: transparent !important;
+}
+
+.btn-outline-success:hover,
+.btn-outline-success:focus,
+.btn-outline-success:active {
+    background: var(--btn-success-bg) !important;
+    border-color: var(--btn-success-bg) !important;
+    color: #ffffff !important;
+}
+
+.btn-outline-danger {
+    color: var(--btn-danger-bg) !important;
+    border-color: var(--btn-danger-bg) !important;
+    background: transparent !important;
+}
+
+.btn-outline-danger:hover,
+.btn-outline-danger:focus,
+.btn-outline-danger:active {
+    background: var(--btn-danger-bg) !important;
+    border-color: var(--btn-danger-bg) !important;
+    color: #ffffff !important;
+}
+
+.btn-outline-warning {
+    color: var(--btn-warning-bg) !important;
+    border-color: var(--btn-warning-bg) !important;
+    background: transparent !important;
+}
+
+.btn-outline-warning:hover,
+.btn-outline-warning:focus,
+.btn-outline-warning:active {
+    background: var(--btn-warning-bg) !important;
+    border-color: var(--btn-warning-bg) !important;
+    color: #ffffff !important;
+}
+
+.btn-outline-info {
+    color: var(--btn-info-bg) !important;
+    border-color: var(--btn-info-bg) !important;
+    background: transparent !important;
+}
+
+.btn-outline-info:hover,
+.btn-outline-info:focus,
+.btn-outline-info:active {
+    background: var(--btn-info-bg) !important;
+    border-color: var(--btn-info-bg) !important;
+    color: #ffffff !important;
+}
+
+.btn-outline-dark {
+    color: var(--btn-dark-bg) !important;
+    border-color: var(--btn-dark-bg) !important;
+    background: transparent !important;
+}
+
+.btn-outline-dark:hover,
+.btn-outline-dark:focus,
+.btn-outline-dark:active {
+    background: var(--btn-dark-bg) !important;
+    border-color: var(--btn-dark-bg) !important;
+    color: #ffffff !important;
 }
 
 .text-primary {
-    color: #059669 !important;
+    color: var(--color-primary) !important;
 }
 
 .border-primary {
-    border-color: #059669 !important;
+    border-color: var(--color-primary) !important;
 }
 
 a {
@@ -335,52 +543,52 @@ label:not(.form-floating > label):not(.custom-form-floating > label) {
 
 /* ===== Premium Buttons ===== */
 .btn {
-    border-radius: 12px !important;
-    font-weight: 700 !important;
+    border-radius: var(--btn-radius) !important;
+    font-weight: var(--btn-font-weight) !important;
     font-size: 0.85rem !important;
     padding: 0.6rem 1.25rem !important;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition: var(--btn-transition) !important;
     letter-spacing: 0.015em;
 }
 
 .btn-sm {
     padding: 0.4rem 0.9rem !important;
     font-size: 0.8rem !important;
-    border-radius: 10px !important;
+    border-radius: calc(var(--btn-radius) - 2px) !important;
 }
 
 .btn-lg {
     padding: 0.85rem 1.75rem !important;
     font-size: 0.95rem !important;
-    border-radius: 14px !important;
+    border-radius: calc(var(--btn-radius) + 2px) !important;
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
+    background: var(--btn-primary-bg) !important;
     border: none !important;
-    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25) !important;
+    box-shadow: var(--btn-primary-shadow) !important;
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%) !important;
+    background: var(--btn-primary-hover-bg) !important;
     transform: translateY(-1px);
-    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35) !important;
+    box-shadow: var(--btn-primary-hover-shadow) !important;
 }
 
 .btn-success {
-    background: #059669 !important;
-    border-color: #059669 !important;
+    background: var(--btn-success-bg) !important;
+    border-color: var(--btn-success-bg) !important;
 }
 
 .btn-light {
-    background: #f1f5f9 !important;
-    border: 1px solid #e2e8f0 !important;
-    color: #475569 !important;
+    background: var(--btn-light-bg) !important;
+    border: 1px solid var(--btn-light-border) !important;
+    color: var(--btn-light-text) !important;
 }
 
 .btn-light:hover {
-    background: #e2e8f0 !important;
-    color: #1e293b !important;
+    background: var(--btn-light-hover-bg) !important;
+    color: var(--btn-light-hover-text) !important;
 }
 
 /* ===== Premium Badges ===== */
@@ -1016,19 +1224,19 @@ label {
 .btn {
     padding: 0.45rem 1rem !important;
     font-size: 0.8rem !important;
-    border-radius: 10px !important;
+    border-radius: var(--btn-radius) !important;
 }
 
 .btn-sm {
     padding: 0.3rem 0.7rem !important;
     font-size: 0.75rem !important;
-    border-radius: 8px !important;
+    border-radius: calc(var(--btn-radius) - 4px) !important;
 }
 
 .btn-lg {
     padding: 0.65rem 1.4rem !important;
     font-size: 0.9rem !important;
-    border-radius: 12px !important;
+    border-radius: calc(var(--btn-radius) + 2px) !important;
 }
 
 /* --- 9. Modal Compact --- */
