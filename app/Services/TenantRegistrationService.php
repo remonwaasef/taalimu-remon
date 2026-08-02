@@ -96,6 +96,7 @@ class TenantRegistrationService
                 'phone' => $data['phone'],
                 'role' => 'center_admin',
                 'tenant_id' => $tenant->id,
+                'locale' => session('locale', 'ar'),
             ];
 
             if ($password) {

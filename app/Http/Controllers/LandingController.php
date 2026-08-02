@@ -16,9 +16,13 @@ class LandingController extends Controller
      */
     public function index(Request $request)
     {
-        // SEO: Allow manual locale override via URL parameter
+        // SEO: Allow manual locale override via URL parameter and persist to session
         if ($request->has('hl') && in_array($request->hl, ['en', 'ar', 'fr'])) {
+            session(['locale' => $request->hl]);
             app()->setLocale($request->hl);
+            if (auth()->check()) {
+                auth()->user()->update(['locale' => $request->hl]);
+            }
         }
         // Fetch packages directly (No Cache) to ensure real-time price updates
         $packages = Package::with('features')

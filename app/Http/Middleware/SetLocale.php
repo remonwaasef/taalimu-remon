@@ -15,29 +15,31 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Priority: 1. Database (if authenticated), 2. Session, 3. GeoIP Fallback, 4. Default
-        $locale = null;
+        // Priority: 1. Explicit Session Locale, 2. Authenticated User Locale (if custom), 3. GeoIP Fallback, 4. Default ('ar')
+        $locale = Session::get('locale');
 
-        if (auth()->check() && auth()->user()->locale) {
+        if (! $locale && auth()->check() && auth()->user()->locale && auth()->user()->locale !== 'en') {
             $locale = auth()->user()->locale;
-        } else {
-            $locale = Session::get('locale');
+        }
 
-            // If No session locale, try Geo-IP detection
-            if (! $locale && config('app.env') !== 'testing') {
-                $geoIP = app(\App\Services\GeoIPService::class);
-                $countryCode = $geoIP->getCountryCode($request->ip());
-                $locale = $geoIP->getLocaleFromCountry($countryCode);
+        // If No session locale, try Geo-IP detection
+        if (! $locale && config('app.env') !== 'testing') {
+            $geoIP = app(\App\Services\GeoIPService::class);
+            $countryCode = $geoIP->getCountryCode($request->ip());
+            $locale = $geoIP->getLocaleFromCountry($countryCode);
 
-                // Store in session so we don't hit the API on every click
-                Session::put('locale', $locale);
+            // Store in session so we don't hit the API on every click
+            Session::put('locale', $locale);
+
+            if (auth()->check()) {
+                auth()->user()->update(['locale' => $locale]);
             }
         }
 
         // Supported locales
         $supportedLocales = ['ar', 'en', 'fr'];
 
-        // Final Fallback and Validation
+        // Final Fallback and Validation (Default to 'ar' if null or invalid)
         if (! $locale || ! in_array($locale, $supportedLocales)) {
             $locale = 'ar';
         }

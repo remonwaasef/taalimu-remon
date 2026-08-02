@@ -16,6 +16,21 @@ class GeoIPService
      */
     public function getCountryCode($ip)
     {
+        // 1. Check Cloudflare / Proxy headers first if available
+        if (request()->hasHeader('CF-IPCountry')) {
+            $country = request()->header('CF-IPCountry');
+            if ($country && strlen($country) === 2 && $country !== 'XX') {
+                return strtoupper($country);
+            }
+        }
+
+        if (request()->hasHeader('X-Country-Code')) {
+            $country = request()->header('X-Country-Code');
+            if ($country && strlen($country) === 2) {
+                return strtoupper($country);
+            }
+        }
+
         // Skip local or reserved IPs
         if ($ip === '127.0.0.1' || $ip === '::1' || str_starts_with($ip, '192.168.') || str_starts_with($ip, '10.')) {
             return 'EG'; // Default for local dev if needed
@@ -51,24 +66,17 @@ class GeoIPService
             return 'ar'; // Default
         }
 
-        $arabicCountries = [
-            'EG', 'SA', 'AE', 'JO', 'LB', 'KW', 'QA', 'BH', 'OM', 'IQ',
-            'YE', 'SY', 'PS', 'LY', 'SD', 'MA', 'DZ', 'TN', 'MR', 'DJ', 'KM',
-        ];
-
         $frenchCountries = [
             'FR', 'BE', 'MC', 'LU', 'CH', 'CA', 'SN', 'ML', 'CI', 'BF', 'NE', 'TG', 'BJ', 'GN',
+            'CD', 'CG', 'GA', 'CF', 'TD', 'HT', 'MG', 'VU', 'KM', 'DJ', 'BI', 'RW'
         ];
 
-        if (in_array($countryCode, $arabicCountries)) {
-            return 'ar';
-        }
-
-        if (in_array($countryCode, $frenchCountries)) {
+        if (in_array(strtoupper($countryCode), $frenchCountries)) {
             return 'fr';
         }
 
-        return 'en'; // Global default
+        // Default to Arabic for all other countries (skipping English fallback)
+        return 'ar';
     }
 
     /**
