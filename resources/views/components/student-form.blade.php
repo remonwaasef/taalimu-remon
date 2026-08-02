@@ -158,17 +158,17 @@
             {{-- 4. Course Enrollment --}}
             <div class="row mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="text-secondary mb-0"><i class="bi bi-collection-play me-2"></i>{{ __('center::students.initial_registration_optional') }}</h5>
+                    <h5 class="text-secondary mb-0"><i class="bi bi-collection-play me-2"></i>اختيار المجموعة الدراسية <span class="text-danger">*</span></h5>
                 </div>
                 
                 <div class="col-md-12 mb-3">
-                    <label class="form-label fw-bold mb-3">{{ __('center::students.choose_groups_courses') ?? __('instructor::students.target_group') }} <span class="text-muted fw-normal">({{ __('center::students.choose_more_than_one') ?? 'يمكنك اختيار أكثر من واحدة' }})</span></label>
+                    <label class="form-label fw-bold mb-3">اختر المجموعات أو الدورات المراد تسجيل الطالب بها <span class="text-danger">*</span> <span class="text-muted fw-normal">(يمكن اختيار أكثر من مجموعة)</span></label>
                     @if($courses->count() > 0)
                         <div class="row g-3">
                             @foreach($courses as $course)
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-check custom-checkbox-card bg-light border-0 rounded-4 p-3 h-100 d-flex align-items-center transition-all cursor-pointer" onclick="document.getElementById('course_{{ $course->id }}').click();">
-                                        <input class="form-check-input ms-0 me-3" style="transform: scale(1.3);" type="checkbox" name="course_ids[]" value="{{ $course->id }}" id="course_{{ $course->id }}" {{ (is_array(old('course_ids')) && in_array($course->id, old('course_ids'))) ? 'checked' : '' }} onclick="event.stopPropagation();">
+                                        <input class="form-check-input ms-0 me-3 course-checkbox-item" style="transform: scale(1.3);" type="checkbox" name="course_ids[]" value="{{ $course->id }}" id="course_{{ $course->id }}" {{ (is_array(old('course_ids')) && in_array($course->id, old('course_ids'))) ? 'checked' : '' }} onclick="event.stopPropagation();">
                                         <label class="form-check-label w-100 cursor-pointer fw-bold text-dark m-0" for="course_{{ $course->id }}" onclick="event.stopPropagation();">
                                             {{ $course->title }}
                                         </label>
@@ -177,13 +177,29 @@
                             @endforeach
                         </div>
                     @else
-                        <div class="alert alert-light border-0 rounded-4 small text-muted">
-                            <i class="bi bi-info-circle me-1"></i> لا توجد مجموعات أو دورات متاحة حالياً.
+                        <div class="alert alert-warning border-0 rounded-4 p-4 shadow-sm">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle bg-warning bg-opacity-20 text-warning p-3">
+                                    <i class="fas fa-exclamation-triangle fs-3"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold text-dark mb-1">لا توجد مجموعات أو دورات متاحة حالياً!</h6>
+                                    <p class="text-muted small mb-0">يتطلب تسجيل أي طالب تحديده ضمن مجموعة دراسية محددة. يرجى إنشاء مجموعة دراسية أولاً.</p>
+                                </div>
+                            </div>
+                            <div class="mt-3 pt-3 border-top border-warning border-opacity-20 d-flex justify-content-end">
+                                <a href="{{ route('center.courses.create') }}" class="btn btn-warning rounded-pill px-4 font-bold shadow-sm">
+                                    <i class="fas fa-plus-circle me-1"></i> إنشاء مجموعة دراسية جديدة الآن
+                                </a>
+                            </div>
                         </div>
                     @endif
                     @error('course_ids')
-                        <div class="text-danger small mt-2">{{ $message }}</div>
+                        <div class="text-danger small mt-2 fw-bold"><i class="fas fa-exclamation-circle me-1"></i> {{ $message }}</div>
                     @enderror
+                    <div id="course-selection-error" class="text-danger small mt-2 fw-bold d-none">
+                        <i class="fas fa-exclamation-circle me-1"></i> يجب اختيار مجموعة دراسية واحدة على الأقل لتسجيل الطالب بها.
+                    </div>
                 </div>
             </div>
 
@@ -191,7 +207,7 @@
                 <button type="button" class="btn btn-light btn-lg rounded-pill px-4 text-secondary btn-prev-step">
                     <i class="fas fa-arrow-right me-2"></i> السابق
                 </button>
-                <button type="submit" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm">
+                <button type="submit" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm" id="btnSubmitStudent">
                     <i class="fas fa-check-circle me-2"></i> {{ __('center::students.form.save_student') ?? __('instructor::students.save_and_register') }}
                 </button>
             </div>
@@ -409,5 +425,24 @@
             }
         }
         @endif
+
+        // Ensure course selection is required on form submit
+        const formEl = document.querySelector('form[action="{{ $actionUrl }}"]');
+        const courseErr = document.getElementById('course-selection-error');
+        if (formEl) {
+            formEl.addEventListener('submit', function(e) {
+                const checkedCourses = document.querySelectorAll('.course-checkbox-item:checked');
+                if (checkedCourses.length === 0) {
+                    e.preventDefault();
+                    if (courseErr) courseErr.classList.remove('d-none');
+                    const step2Tab = new bootstrap.Tab(document.querySelector('#step2-tab'));
+                    step2Tab.show();
+                    const step2El = document.getElementById('step2');
+                    if (step2El) step2El.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    if (courseErr) courseErr.classList.add('d-none');
+                }
+            });
+        }
     });
 </script>

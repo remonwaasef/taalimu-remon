@@ -55,7 +55,7 @@ class StoreStudentRequest extends FormRequest
             'school_name' => 'nullable|string|max:255',
             'section_type' => ['nullable', 'string', 'max:100', 'regex:/^[\pL\s]+$/u'],
             'profile_photo' => 'nullable|image|max:2048',
-            'course_ids' => 'nullable|array',
+            'course_ids' => 'required|array|min:1',
             'course_ids.*' => 'exists:courses,id',
         ];
     }
@@ -63,6 +63,8 @@ class StoreStudentRequest extends FormRequest
     public function messages()
     {
         return [
+            'course_ids.required' => 'يجب اختيار مجموعة دراسية واحدة على الأقل لتسجيل الطالب بها.',
+            'course_ids.min' => 'يجب اختيار مجموعة دراسية واحدة على الأقل لتسجيل الطالب بها.',
             'name.regex' => __('center::students.val_name_regex'),
             'phone.regex' => __('center::students.val_phone_regex'),
             'phone.min' => __('center::students.val_phone_min'),
