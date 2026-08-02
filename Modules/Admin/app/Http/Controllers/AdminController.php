@@ -12,57 +12,81 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $totalTenants = \App\Models\Tenant::count();
-        $activeTenants = \App\Models\Tenant::where('status', 'active')->count();
-        $totalStudents = \App\Models\Student::count();
-        $expiringSoon = \App\Models\Subscription::where('ends_at', '<=', now()->addDays(7))
-            ->where('ends_at', '>=', now())
-            ->count();
+        try {
+            $totalTenants = \App\Models\Tenant::withoutGlobalScopes()->count();
+            $activeTenants = \App\Models\Tenant::withoutGlobalScopes()->where('status', 'active')->count();
+            $totalStudents = \App\Models\Student::withoutGlobalScopes()->count();
+            $expiringSoon = \App\Models\Subscription::withoutGlobalScopes()
+                ->where('ends_at', '<=', now()->addDays(7))
+                ->where('ends_at', '>=', now())
+                ->count();
 
-        // Financial Metrics
-        $totalRevenue = \App\Models\Invoice::where('status', 'paid')->sum('amount');
-        $thisMonthRevenue = \App\Models\Invoice::where('status', 'paid')
-            ->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
-            ->sum('amount');
+            // Financial Metrics
+            $totalRevenue = \App\Models\Invoice::withoutGlobalScopes()->where('status', 'paid')->sum('amount') ?? 0;
+            $thisMonthRevenue = \App\Models\Invoice::withoutGlobalScopes()
+                ->where('status', 'paid')
+                ->whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->sum('amount') ?? 0;
 
-        // Support Metrics
-        $openTickets = \App\Models\Ticket::where('status', '!=', 'closed')->count();
-        $totalTickets = \App\Models\Ticket::count();
+            // Support Metrics
+            $openTickets = \App\Models\Ticket::withoutGlobalScopes()->where('status', '!=', 'closed')->count();
+            $totalTickets = \App\Models\Ticket::withoutGlobalScopes()->count();
 
-        // Recent Tickets
-        $recentTickets = \App\Models\Ticket::with('user', 'tenant')->latest()->take(5)->get();
+            // Recent Tickets
+            $recentTickets = \App\Models\Ticket::withoutGlobalScopes()->with('user', 'tenant')->latest()->take(5)->get();
 
-        // Subscription Analytics
-        $planAnalytics = \App\Models\Package::where('is_active', true)
-            ->withCount(['features'])
-            ->get()
-            ->map(function ($package) {
-                $activeSubIds = \App\Models\Subscription::where('status', 'active')
-                    ->where(function ($q) use ($package) {
-                        $q->where('stripe_price', $package->stripe_price_id)
-                            ->orWhere('package_id', $package->id);
-                    })
-                    ->pluck('id');
+            // Subscription Analytics
+            $planAnalytics = \App\Models\Package::withoutGlobalScopes()
+                ->where('is_active', true)
+                ->withCount(['features'])
+                ->get()
+                ->map(function ($package) {
+                    $activeSubIds = \App\Models\Subscription::withoutGlobalScopes()
+                        ->where('status', 'active')
+                        ->where(function ($q) use ($package) {
+                            $q->where('stripe_price', $package->stripe_price_id)
+                                ->orWhere('package_id', $package->id);
+                        })
+                        ->pluck('id');
 
-                $centersCount = \App\Models\Tenant::whereHas('subscriptions', function ($q) use ($activeSubIds) {
-                    $q->whereIn('id', $activeSubIds)->where('status', 'active');
-                })->count();
+                    $centersCount = \App\Models\Tenant::withoutGlobalScopes()
+                        ->whereHas('subscriptions', function ($q) use ($activeSubIds) {
+                            $q->whereIn('id', $activeSubIds)->where('status', 'active');
+                        })->count();
 
-                $totalProfits = \App\Models\Invoice::whereIn('subscription_id', $activeSubIds)
-                    ->where('status', 'paid')
-                    ->sum('amount');
+                    $totalProfits = \App\Models\Invoice::withoutGlobalScopes()
+                        ->whereIn('subscription_id', $activeSubIds)
+                        ->where('status', 'paid')
+                        ->sum('amount') ?? 0;
 
-                return [
-                    'name' => $package->name,
-                    'centers_count' => $centersCount,
-                    'total_profits' => $totalProfits,
-                    'badge' => $package->badge,
-                ];
-            });
+                    return [
+                        'name' => $package->name ?? 'Package',
+                        'centers_count' => $centersCount,
+                        'total_profits' => $totalProfits,
+                        'badge' => $package->badge ?? null,
+                    ];
+                });
 
-        // Recent Tenants
-        $recentTenants = \App\Models\Tenant::latest()->take(5)->get();
+            // Recent Tenants
+            $recentTenants = \App\Models\Tenant::withoutGlobalScopes()->latest()->take(5)->get();
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Admin Dashboard Data Loading Failed: '.$e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            $totalTenants = $totalTenants ?? 0;
+            $activeTenants = $activeTenants ?? 0;
+            $totalStudents = $totalStudents ?? 0;
+            $expiringSoon = $expiringSoon ?? 0;
+            $totalRevenue = $totalRevenue ?? 0;
+            $thisMonthRevenue = $thisMonthRevenue ?? 0;
+            $openTickets = $openTickets ?? 0;
+            $totalTickets = $totalTickets ?? 0;
+            $recentTickets = $recentTickets ?? collect([]);
+            $recentTenants = $recentTenants ?? collect([]);
+            $planAnalytics = $planAnalytics ?? collect([]);
+        }
 
         return view('admin::index', compact(
             'totalTenants',
