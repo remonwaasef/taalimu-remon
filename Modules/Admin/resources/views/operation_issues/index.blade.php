@@ -160,9 +160,11 @@
                                     {{ $issue->message }}
                                 </div>
                                 <small class="badge badge-light border text-muted mt-1">
-                                    {{ __('admin.operation_issues.actions_map.' . $issue->action) != 'admin.operation_issues.actions_map.' . $issue->action 
-                                        ? __('admin.operation_issues.actions_map.' . $issue->action) 
-                                        : $issue->action }}
+                                    @php
+                                        $actionSafe = str_replace('.', '_', trim($issue->action ?? ''));
+                                        $actionKey = 'admin.operation_issues.actions_dictionary.' . $actionSafe;
+                                    @endphp
+                                    {{ __($actionKey) != $actionKey ? __($actionKey) : ($issue->action ?: __('admin.operation_issues.history.system')) }}
                                 </small>
                             </td>
                             <td>{{ $issue->tenant->name ?? 'N/A' }}</td>
