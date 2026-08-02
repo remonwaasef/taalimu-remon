@@ -1,53 +1,8 @@
-@extends('layouts.app-next')
+@extends('center::layouts.app-next')
 
 @section('title', __('center::dashboard.title'))
 
-@section('sidebar')
-    <x-ui.sidebar brandName="{{ $tenant->name ?? 'Taalimu Center' }}">
-        <div class="space-y-1">
-            <a href="{{ route('center.dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-brand-primary bg-brand-50 dark:bg-brand-900/30">
-                <i class="fas fa-chart-pie w-4 text-center"></i>
-                <span>{{ __('center::sidebar.dashboard') }}</span>
-            </a>
-
-            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('center::sidebar.management') }}</div>
-
-            <a href="{{ route('center.students.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
-                <i class="fas fa-user-graduate w-4 text-center"></i>
-                <span>{{ __('center::sidebar.students') }}</span>
-            </a>
-
-            <a href="{{ route('center.courses.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
-                <i class="fas fa-users w-4 text-center"></i>
-                <span>{{ __('center::sidebar.groups') }}</span>
-            </a>
-
-            <a href="{{ route('center.instructors.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
-                <i class="fas fa-chalkboard-teacher w-4 text-center"></i>
-                <span>{{ __('center::sidebar.instructors') }}</span>
-            </a>
-
-            <a href="{{ route('center.attendance.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
-                <i class="fas fa-clipboard-check w-4 text-center"></i>
-                <span>{{ __('center::sidebar.attendance') }}</span>
-            </a>
-
-            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('center::sidebar.finance_settings') }}</div>
-
-            <a href="{{ route('center.sales.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
-                <i class="fas fa-wallet w-4 text-center"></i>
-                <span>{{ __('center::sidebar.payments') }}</span>
-            </a>
-
-            <a href="{{ route('center.settings.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
-                <i class="fas fa-cog w-4 text-center"></i>
-                <span>{{ __('center::sidebar.settings') }}</span>
-            </a>
-        </div>
-    </x-ui.sidebar>
-@endsection
-
-@section('content')
+@section('panel-content')
     <x-ui.page-header
         title="{{ __('center::dashboard.welcome_back', ['name' => auth()->user()->name ?? 'Manager']) }}"
         subtitle="{{ $tenant->name ?? 'Educational Center' }} &bull; {{ now()->translatedFormat('l, d F Y') }}"
