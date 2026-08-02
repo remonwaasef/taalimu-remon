@@ -1,47 +1,47 @@
 @extends('layouts.app-next')
 
-@section('title', __('center::dashboard.title') ?? 'Center Dashboard')
+@section('title', __('center::dashboard.title'))
 
 @section('sidebar')
     <x-ui.sidebar brandName="{{ $tenant->name ?? 'Taalimu Center' }}">
         <div class="space-y-1">
             <a href="{{ route('center.dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-brand-primary bg-brand-50 dark:bg-brand-900/30">
                 <i class="fas fa-chart-pie w-4 text-center"></i>
-                <span>{{ __('center::sidebar.dashboard') ?? 'Dashboard' }}</span>
+                <span>{{ __('center::sidebar.dashboard') }}</span>
             </a>
 
-            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Management</div>
+            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('center::sidebar.management') }}</div>
 
             <a href="{{ route('center.students.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
                 <i class="fas fa-user-graduate w-4 text-center"></i>
-                <span>{{ __('center::sidebar.students') ?? 'Students' }}</span>
+                <span>{{ __('center::sidebar.students') }}</span>
             </a>
 
             <a href="{{ route('center.courses.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
                 <i class="fas fa-users w-4 text-center"></i>
-                <span>{{ __('center::sidebar.groups') ?? 'Groups & Classes' }}</span>
+                <span>{{ __('center::sidebar.groups') }}</span>
             </a>
 
             <a href="{{ route('center.instructors.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
                 <i class="fas fa-chalkboard-teacher w-4 text-center"></i>
-                <span>{{ __('center::sidebar.instructors') ?? 'Instructors' }}</span>
+                <span>{{ __('center::sidebar.instructors') }}</span>
             </a>
 
             <a href="{{ route('center.attendance.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
                 <i class="fas fa-clipboard-check w-4 text-center"></i>
-                <span>{{ __('center::sidebar.attendance') ?? 'Attendance' }}</span>
+                <span>{{ __('center::sidebar.attendance') }}</span>
             </a>
 
-            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Finance & Settings</div>
+            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('center::sidebar.finance_settings') }}</div>
 
             <a href="{{ route('center.sales.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
                 <i class="fas fa-wallet w-4 text-center"></i>
-                <span>{{ __('center::sidebar.payments') ?? 'Finance & Billing' }}</span>
+                <span>{{ __('center::sidebar.payments') }}</span>
             </a>
 
             <a href="{{ route('center.settings.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
                 <i class="fas fa-cog w-4 text-center"></i>
-                <span>{{ __('center::sidebar.settings') ?? 'Center Settings' }}</span>
+                <span>{{ __('center::sidebar.settings') }}</span>
             </a>
         </div>
     </x-ui.sidebar>
@@ -49,12 +49,12 @@
 
 @section('content')
     <x-ui.page-header
-        title="Welcome back, {{ auth()->user()->name ?? 'Center Manager' }}! 👋"
+        title="{{ __('center::dashboard.welcome_back', ['name' => auth()->user()->name ?? 'Manager']) }}"
         subtitle="{{ $tenant->name ?? 'Educational Center' }} &bull; {{ now()->translatedFormat('l, d F Y') }}"
     >
         <x-slot name="actions">
             <x-ui.button variant="primary" icon="fas fa-user-plus" size="md" href="{{ route('center.students.create') }}">
-                {{ __('center::sidebar.add_student') ?? 'Add Student' }}
+                {{ __('center::dashboard.add_new_student') }}
             </x-ui.button>
         </x-slot>
     </x-ui.page-header>
@@ -62,41 +62,41 @@
     <!-- Top Center Key Metrics Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
         <x-ui.stats-card
-            title="{{ __('center::dashboard.models.Student') ?? 'Active Students' }}"
+            title="{{ __('center::dashboard.models.Student') }}"
             value="{{ number_format($activeStudents) }}"
             change="+12%"
             changeType="positive"
-            changeLabel="enrolled students"
+            changeLabel="{{ __('center::dashboard.enrolled_students_label') }}"
             icon="fas fa-user-graduate"
             iconColor="text-emerald-600 bg-emerald-50"
         />
 
         <x-ui.stats-card
-            title="{{ __('center::dashboard.models.Group') ?? 'Active Groups' }}"
+            title="{{ __('center::dashboard.models.Group') }}"
             value="{{ number_format($activeGroups) }}"
-            change="Running"
+            change="Active"
             changeType="positive"
-            changeLabel="active study groups"
+            changeLabel="{{ __('center::dashboard.active_study_groups_label') }}"
             icon="fas fa-users"
             iconColor="text-brand-primary bg-brand-50"
         />
 
         <x-ui.stats-card
-            title="{{ __('center::dashboard.models.Instructor') ?? 'Instructors' }}"
+            title="{{ __('center::dashboard.models.Instructor') }}"
             value="{{ number_format($activeInstructors) }}"
             change="Verified"
             changeType="neutral"
-            changeLabel="teaching staff"
+            changeLabel="{{ __('center::dashboard.teaching_staff') }}"
             icon="fas fa-chalkboard-teacher"
             iconColor="text-sky-600 bg-sky-50"
         />
 
         <x-ui.stats-card
-            title="{{ __('center::dashboard.monthly_revenue') ?? 'Monthly Revenue' }}"
-            value="{{ number_format($monthlyRevenue) }} EGP"
+            title="{{ __('center::dashboard.monthly_revenue') }}"
+            value="{{ number_format($monthlyRevenue) }} {{ __('center::dashboard.currency') }}"
             change="+18%"
             changeType="positive"
-            changeLabel="vs last month"
+            changeLabel="{{ __('center::dashboard.vs_last_month') }}"
             icon="fas fa-wallet"
             iconColor="text-amber-600 bg-amber-50"
         />
@@ -104,34 +104,34 @@
 
     <!-- Quick Actions Grid Bar -->
     <div class="mb-8">
-        <h2 class="text-sm font-bold text-slate-900 dark:text-slate-100 font-inter mb-4 uppercase tracking-wider text-xs">Center Quick Actions</h2>
+        <h2 class="text-sm font-bold text-slate-900 dark:text-slate-100 font-inter mb-4 uppercase tracking-wider text-xs">{{ __('center::dashboard.center_quick_actions') }}</h2>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <a href="{{ route('center.students.create') }}" class="p-4 rounded-2xl border border-brand-border dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group shadow-sm">
                 <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 flex items-center justify-center text-base mb-2 group-hover:scale-110 transition-transform">
                     <i class="fas fa-user-plus"></i>
                 </div>
-                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">Add New Student</span>
+                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">{{ __('center::dashboard.add_new_student') }}</span>
             </a>
 
             <a href="{{ route('center.courses.create') }}" class="p-4 rounded-2xl border border-brand-border dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group shadow-sm">
                 <div class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-900/30 text-brand-primary flex items-center justify-center text-base mb-2 group-hover:scale-110 transition-transform">
                     <i class="fas fa-folder-plus"></i>
                 </div>
-                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">Create Group</span>
+                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">{{ __('center::dashboard.create_new_group') }}</span>
             </a>
 
             <a href="{{ route('center.attendance.index') }}" class="p-4 rounded-2xl border border-brand-border dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group shadow-sm">
                 <div class="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-950/30 text-sky-600 flex items-center justify-center text-base mb-2 group-hover:scale-110 transition-transform">
                     <i class="fas fa-qrcode"></i>
                 </div>
-                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">Smart Attendance</span>
+                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">{{ __('center::dashboard.smart_attendance_btn') }}</span>
             </a>
 
             <a href="{{ route('center.sales.index') }}" class="p-4 rounded-2xl border border-brand-border dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group shadow-sm">
                 <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/30 text-amber-600 flex items-center justify-center text-base mb-2 group-hover:scale-110 transition-transform">
                     <i class="fas fa-receipt"></i>
                 </div>
-                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">Collect Fees</span>
+                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">{{ __('center::dashboard.collect_fees_btn') }}</span>
             </a>
         </div>
     </div>
@@ -139,9 +139,9 @@
     <!-- Recent Registrations & Active Groups Split Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Recent Student Registrations -->
-        <x-ui.card title="Recent Student Registrations" subtitle="Newly enrolled students in center groups" noPadding="true">
+        <x-ui.card title="{{ __('center::dashboard.recent_student_registrations') }}" subtitle="{{ __('center::dashboard.recent_registrations_sub') }}" noPadding="true">
             @if(isset($recentStudents) && count($recentStudents) > 0)
-                <x-ui.table :headers="['Student Name', 'Phone', 'Registered']">
+                <x-ui.table :headers="[__('center::dashboard.student_name'), __('center::dashboard.phone_number'), __('center::dashboard.registration_date')]">
                     @foreach($recentStudents as $student)
                         <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
                             <td class="px-6 py-4 font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-3">
@@ -155,36 +155,36 @@
                 </x-ui.table>
             @else
                 <x-ui.empty-state
-                    title="No Recent Student Registrations"
-                    description="When students register for groups, they will appear here."
+                    title="{{ __('center::dashboard.no_recent_students') }}"
+                    description="{{ __('center::dashboard.no_recent_students_desc') }}"
                     icon="fas fa-user-graduate"
                 />
             @endif
         </x-ui.card>
 
         <!-- Active Center Groups -->
-        <x-ui.card title="Active Study Groups" subtitle="Current running groups & student counts" noPadding="true">
+        <x-ui.card title="{{ __('center::dashboard.active_study_groups') }}" subtitle="{{ __('center::dashboard.active_study_groups_sub') }}" noPadding="true">
             @if(isset($recentGroups) && count($recentGroups) > 0)
-                <x-ui.table :headers="['Group Title', 'Instructor', 'Students']">
+                <x-ui.table :headers="[__('center::dashboard.group_title'), __('center::dashboard.instructor_label'), __('center::dashboard.students_count_label')]">
                     @foreach($recentGroups as $group)
                         <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
                             <td class="px-6 py-4 font-semibold text-slate-900 dark:text-slate-100">{{ $group->title ?? 'Untitled Group' }}</td>
                             <td class="px-6 py-4 text-xs text-slate-500">{{ $group->instructor->name ?? 'Staff' }}</td>
                             <td class="px-6 py-4">
-                                <x-ui.badge variant="brand" size="sm">{{ $group->students_count ?? 0 }} enrolled</x-ui.badge>
+                                <x-ui.badge variant="brand" size="sm">{{ $group->students_count ?? 0 }} {{ __('center::dashboard.enrolled_badge') }}</x-ui.badge>
                             </td>
                         </tr>
                     @endforeach
                 </x-ui.table>
             @else
                 <x-ui.empty-state
-                    title="No Groups Configured"
-                    description="Set up your center's study groups to organize student classes."
+                    title="{{ __('center::dashboard.no_groups_configured') }}"
+                    description="{{ __('center::dashboard.no_groups_configured_desc') }}"
                     icon="fas fa-users"
                 >
                     <x-slot name="action">
                         <x-ui.button variant="primary" icon="fas fa-plus" href="{{ route('center.courses.create') }}">
-                            Create Group
+                            {{ __('center::dashboard.create_group_action') }}
                         </x-ui.button>
                     </x-slot>
                 </x-ui.empty-state>

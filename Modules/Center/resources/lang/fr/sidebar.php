@@ -52,7 +52,11 @@ return [
     'financial_discounts' => 'Remises Accordées',
     'financial_taxes' => 'Taxes Perçues',
     'list' => 'Liste',
-    'online_classes' => 'Classes en direct',
     'admin' => 'Admin',
     'login' => 'Login',
+    'groups' => 'Groupes d\'études',
+    'payments' => 'Paiements & Factures',
+    'classes_structure' => 'Classes & Structure',
+    'management' => 'Gestion',
+    'finance_settings' => 'Finance & Paramètres',
 ];

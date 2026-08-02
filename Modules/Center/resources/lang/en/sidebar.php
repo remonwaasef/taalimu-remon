@@ -52,7 +52,11 @@ return [
     'financial_discounts' => 'Discounts Granted',
     'financial_taxes' => 'Taxes Collected',
     'list' => 'List',
-    'online_classes' => 'Live Classes',
     'admin' => 'Admin',
     'login' => 'Login',
+    'groups' => 'Study Groups',
+    'payments' => 'Payments & Invoices',
+    'classes_structure' => 'Classes & Structure',
+    'management' => 'Management',
+    'finance_settings' => 'Finance & Settings',
 ];
