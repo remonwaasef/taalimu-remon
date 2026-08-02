@@ -117,6 +117,19 @@ class CenterController extends Controller
         $recentStudents = Student::latest()->take(5)->get();
         $recentGroups = Course::with('instructor')->withCount('enrollments as students_count')->latest()->take(5)->get();
 
+        // Launchpad Setup Steps Detection
+        $launchpadSteps = [
+            'education_system' => \App\Models\Stage::exists(),
+            'instructor'       => \App\Models\Instructor::exists(),
+            'course'           => Course::exists(),
+            'student'          => Student::exists(),
+            'attendance'       => \Modules\Center\Models\Attendance::exists(),
+        ];
+
+        $completedCount = count(array_filter($launchpadSteps));
+        $launchpadProgress = round(($completedCount / count($launchpadSteps)) * 100);
+        $showLaunchpad = $launchpadProgress < 100;
+
         if (request()->expectsJson()) {
             return response()->json([
                 'success' => true,
@@ -131,6 +144,8 @@ class CenterController extends Controller
                     'sessionsToday' => $sessionsToday,
                     'attendanceRate' => $attendanceRate,
                     'overdueAmount' => $overdueAmount,
+                    'launchpadProgress' => $launchpadProgress,
+                    'showLaunchpad' => $showLaunchpad,
                 ],
             ]);
         }
@@ -151,7 +166,10 @@ class CenterController extends Controller
             'performanceTrends',
             'sessionsToday',
             'attendanceRate',
-            'overdueAmount'
+            'overdueAmount',
+            'launchpadSteps',
+            'launchpadProgress',
+            'showLaunchpad'
         ));
     }
 

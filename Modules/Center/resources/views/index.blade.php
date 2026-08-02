@@ -14,6 +14,10 @@
         </x-slot>
     </x-ui.page-header>
 
+    @if(isset($showLaunchpad) && $showLaunchpad)
+        @include('center::partials.launchpad')
+    @endif
+
     <!-- Top Center Key Metrics Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
         <x-ui.stats-card
