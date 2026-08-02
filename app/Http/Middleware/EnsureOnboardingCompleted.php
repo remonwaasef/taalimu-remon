@@ -37,25 +37,7 @@ class EnsureOnboardingCompleted
             return $next($request);
         }
 
-        $status = $user->tenant->onboarding_status;
-
-        // If completed, let them pass
-        if ($status === 'completed') {
-            return $next($request);
-        }
-
-        // Allow access to logout and specific onboarding routes to prevent redirect loops
-        $allowedRoutes = [
-            'logout',
-            'center.onboarding.show',
-            'center.onboarding.submit',
-        ];
-
-        if ($request->route() && in_array($request->route()->getName(), $allowedRoutes)) {
-            return $next($request);
-        }
-
-        // 5. Redirect to onboarding wizard
-        return redirect()->route('center.onboarding.show');
+        // Non-blocking onboarding mode: Always allow direct access to dashboard
+        return $next($request);
     }
 }

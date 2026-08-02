@@ -72,6 +72,7 @@ class TenantRegistrationService
                 'type' => $data['account_type'],
                 'database_name' => 'edu_central',
                 'status' => 'active',
+                'onboarding_status' => 'completed',
             ]);
 
             // Save locale and currency
