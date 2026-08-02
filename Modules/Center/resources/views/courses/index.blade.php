@@ -3,7 +3,7 @@
 @section('page-title', __('center::courses.title'))
 
 @section('page-actions')
-    <a href="{{ route('center.courses.create') }}" class="btn btn-glass">
+    <a href="{{ route('center.courses.create') }}" class="btn btn-primary">
         <i class="fas fa-plus me-2"></i> {{ __('center::courses.add_new') }}
     </a>
 @endsection

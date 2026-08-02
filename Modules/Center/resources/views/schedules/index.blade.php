@@ -4,7 +4,7 @@
 @section('page-subtitle', __('center::schedules.weekly_overview'))
 
 @section('page-actions')
-    <a href="{{ route('center.schedules.create') }}" class="btn btn-glass">
+    <a href="{{ route('center.schedules.create') }}" class="btn btn-primary">
         <i class="fas fa-plus me-2"></i> {{ __('center::schedules.add_new') }}
     </a>
 @endsection

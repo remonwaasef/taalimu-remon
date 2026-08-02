@@ -4,7 +4,7 @@
 @section('page-subtitle', __('center::sales.subtitle') ?? 'قائمة الفواتير والتحصيل المالي للطلاب')
 
 @section('page-actions')
-    <a href="{{ route('center.sales.create') }}" class="btn btn-glass">
+    <a href="{{ route('center.sales.create') }}" class="btn btn-primary">
         <i class="fas fa-plus me-2"></i> {{ __('center::sales.new_sale') }}
     </a>
 @endsection

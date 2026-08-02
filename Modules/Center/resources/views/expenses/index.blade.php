@@ -3,7 +3,7 @@
 @section('page-title', __('center::expenses.title'))
 
 @section('page-actions')
-    <a href="{{ route('center.expenses.create') }}" class="btn btn-glass shadow-sm">
+    <a href="{{ route('center.expenses.create') }}" class="btn btn-primary shadow-sm">
         <i class="fas fa-plus me-2"></i> {{ __('center::expenses.new_expense') }}
     </a>
 @endsection

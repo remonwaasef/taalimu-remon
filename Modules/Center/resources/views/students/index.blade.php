@@ -9,7 +9,7 @@
         <a href="{{ route('center.students.import') }}" class="btn btn-glass">
             <i class="fas fa-file-import me-2"></i> {{ __('center::students.import_file') }}
         </a>
-        <a href="{{ route('center.students.create') }}" class="btn btn-glass">
+        <a href="{{ route('center.students.create') }}" class="btn btn-primary">
             <span class="me-2">+</span> {{ __('center::students.add_new') }}
         </a>
     </div>
