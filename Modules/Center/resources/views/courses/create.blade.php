@@ -7,9 +7,9 @@
         title="{{ __('center::courses.add_new') }}"
         subtitle="{{ __('center::courses.create_subtitle') ?? 'قم بإدخال تفاصيل الدورة ومواعيد الحصص الدراسية' }}"
         :breadcrumb="[
-            ['label' => __('center::dashboard.title'), 'url' => route('center.dashboard')],
-            ['label' => __('center::courses.title'), 'url' => route('center.courses.index')],
-            ['label' => __('center::courses.add_new')]
+            __('center::dashboard.title') => route('center.dashboard'),
+            __('center::courses.title') => route('center.courses.index'),
+            __('center::courses.add_new') => null
         ]"
     >
         <x-slot name="actions">
