@@ -79,17 +79,17 @@ body {
 }
 
 .btn-glass {
-    background: #ffffff !important;
+    background: var(--btn-light-bg) !important;
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(15, 23, 42, 0.08) !important;
-    color: #334155 !important;
+    border: 1px solid var(--btn-light-border) !important;
+    color: var(--btn-light-text) !important;
     box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
     transition: all 0.3s ease !important;
 }
 
 .btn-glass:hover {
-    background: #f1f5f9 !important;
-    color: #1e293b !important;
+    background: var(--btn-light-hover-bg) !important;
+    color: var(--btn-light-hover-text) !important;
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(15, 23, 42, 0.1);
 }
