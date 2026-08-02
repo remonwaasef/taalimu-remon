@@ -1,39 +1,6 @@
-@extends('layouts.app-next')
+@extends('admin::layouts.master')
 
-@section('title', __('admin::admin.dashboard.title'))
-
-@section('sidebar')
-    <x-ui.sidebar brandName="Taalimu Admin">
-        <div class="space-y-1">
-            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-brand-primary bg-brand-50 dark:bg-brand-900/30">
-                <i class="fas fa-chart-pie w-4 text-center"></i>
-                <span>{{ __('admin::admin.dashboard.title') ?? 'Dashboard' }}</span>
-            </a>
-
-            <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Management</div>
-
-            <a href="{{ route('admin.tenants.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
-                <i class="fas fa-building w-4 text-center"></i>
-                <span>Educational Centers</span>
-            </a>
-
-            <a href="{{ route('admin.subscriptions.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
-                <i class="fas fa-credit-card w-4 text-center"></i>
-                <span>Subscriptions</span>
-            </a>
-
-            <a href="{{ route('admin.tickets.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
-                <i class="fas fa-headset w-4 text-center"></i>
-                <span>Support Tickets</span>
-            </a>
-
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
-                <i class="fas fa-heartbeat w-4 text-center"></i>
-                <span>System Health</span>
-            </a>
-        </div>
-    </x-ui.sidebar>
-@endsection
+@section('title', __('admin::admin.dashboard.title') ?? 'لوحة القيادة')
 
 @section('content')
     <x-ui.page-header
