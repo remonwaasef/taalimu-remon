@@ -258,13 +258,6 @@
             document.querySelectorAll('.schedule-item').forEach(checkScheduleConflict);
         });
 
-        // Listen for classroom changes to re-check all schedules
-        document.querySelectorAll('select[name*="classroom_id"]').forEach(function(classroomSelect) {
-            classroomSelect.addEventListener('change', () => {
-                document.querySelectorAll('.schedule-item').forEach(checkScheduleConflict);
-            });
-        });
-
         // Initial UI update
         updateScheduleCountUI();
     });
