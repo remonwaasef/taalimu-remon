@@ -232,15 +232,15 @@
                                     </select>
                                 </div>
 
-                                <div>
-                                    <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">{{ __('center::schedules.classroom') }}</label>
-                                    <select name="schedules[INDEX][classroom_id]" class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-xs">
-                                        <option value="">{{ __('center::schedules.choose_classroom') }}</option>
-                                        @foreach($classrooms as $classroom)
-                                            <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">{{ __('center::schedules.classroom') }}</label>
+                        <select name="schedules[INDEX][classroom_id]" class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-xs">
+                            <option value="">{{ $classrooms->isEmpty() ? __('center::courses.without_classroom') ?? 'بدون قاعة' : __('center::schedules.choose_classroom') }}</option>
+                            @foreach($classrooms as $classroom)
+                                <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
                                 <div>
                                     <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">{{ __('center::schedules.from') }}</label>

@@ -70,6 +70,15 @@
             // Final submit button control
             const canSubmit = countValid && validation.isComplete && !validation.hasConflicts;
             submitBtn.disabled = !canSubmit;
+
+            // Re-check schedules when classroom select changes for validation
+            const classroomSelect = document.querySelector('select[name*="classroom_id"]');
+            if (classroomSelect) {
+                classroomSelect.addEventListener('change', () => {
+                    document.querySelectorAll('.schedule-item').forEach(checkScheduleConflict);
+                });
+            }
+        };
             if (canSubmit) {
                 submitBtn.classList.remove('btn-secondary');
                 submitBtn.classList.add('btn-primary');

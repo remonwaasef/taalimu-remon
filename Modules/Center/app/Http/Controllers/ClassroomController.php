@@ -34,10 +34,13 @@ class ClassroomController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): \Illuminate\Http\JsonResponse|RedirectResponse
     {
         $this->authorize('create', Classroom::class);
         if (! app('tenant')->hasFeature('max_classrooms')) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => __('center::messages.msg_021')], 422);
+            }
             return redirect()->back()->with('error', __('center::messages.msg_021'));
         }
 
@@ -50,6 +53,17 @@ class ClassroomController extends Controller
 
         $classroom = Classroom::create($validated);
 
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => __('center::messages.msg_022'),
+                'classroom' => [
+                    'id' => $classroom->id,
+                    'name' => $classroom->name,
+                ],
+            ]);
+        }
+
         // Handle Quick Assets
         if ($request->has('quick_assets')) {
             foreach ($request->quick_assets as $assetName) {
@@ -60,6 +74,17 @@ class ClassroomController extends Controller
                     'status' => 'active',
                 ]);
             }
+        }
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => __('center::messages.msg_022'),
+                'classroom' => [
+                    'id' => $classroom->id,
+                    'name' => $classroom->name,
+                ],
+            ]);
         }
 
         return redirect()->route('center.classrooms.index')
