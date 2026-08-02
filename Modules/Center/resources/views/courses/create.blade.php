@@ -267,9 +267,9 @@
             </form>
         </x-ui.card>
     </div>
-@endsection
 
-@include('center::partials._quick-instructor-modal')
+    @include('center::partials._quick-instructor-modal')
+@endsection
 
 @push('scripts')
 @include('center::courses.partials._create-scripts')
