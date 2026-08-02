@@ -63,15 +63,34 @@
                     <!-- Instructor Selection -->
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                            {{ __('center::courses.instructor') }} <span class="text-rose-500">*</span>
+                            {{ __('center::courses.instructor') }} <span class="text-xs font-medium text-slate-400 normal-case">(اختياري)</span>
                         </label>
+
+                        @if($instructors->isEmpty())
+                            <div data-empty-instructors-notice class="p-4 mb-3 rounded-xl border border-amber-200 dark:border-amber-800/40 bg-amber-50 dark:bg-amber-950/30 text-amber-800 dark:text-amber-300 text-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                <div class="flex items-start gap-2.5">
+                                    <i class="fas fa-info-circle mt-0.5 text-base"></i>
+                                    <div>
+                                        <div class="font-bold mb-1">لا يوجد مدرسون بعد</div>
+                                        <p class="text-amber-700 dark:text-amber-400 leading-relaxed">يمكنك إنشاء الدورة الآن بدون مدرس وتعيينه لاحقاً من صفحة تعديل الدورة، أو إضافة مدرس جديد بسرعة.</p>
+                                    </div>
+                                </div>
+                                <button type="button" data-quick-instructor-trigger class="btn btn-primary btn-sm shrink-0">
+                                    <i class="fas fa-user-plus me-1"></i> إضافة مدرس جديد
+                                </button>
+                            </div>
+                        @endif
+
                         <select name="instructor_id" 
                                 class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm @error('instructor_id') border-rose-500 focus:ring-rose-500/20 @enderror">
-                            <option value="">{{ __('center::courses.choose_instructor') }}</option>
+                            <option value="">{{ $instructors->isEmpty() ? 'بدون مدرس' : __('center::courses.choose_instructor') }}</option>
                             @foreach($instructors as $instructor)
                                 <option value="{{ $instructor->id }}" {{ old('instructor_id') == $instructor->id ? 'selected' : '' }}>{{ $instructor->name }}</option>
                             @endforeach
                         </select>
+                        <p class="text-xs text-slate-400 mt-1.5 flex items-center gap-1">
+                            <i class="fas fa-info-circle"></i> اختياري — يمكنك تعيين المدرس لاحقاً من صفحة تعديل الدورة
+                        </p>
                         @error('instructor_id')
                             <p class="text-rose-500 text-xs mt-1.5 flex items-center gap-1"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
                         @enderror
@@ -249,6 +268,8 @@
         </x-ui.card>
     </div>
 @endsection
+
+@include('center::partials._quick-instructor-modal')
 
 @push('scripts')
 @include('center::courses.partials._create-scripts')

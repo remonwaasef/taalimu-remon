@@ -50,11 +50,14 @@ class InstructorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreInstructorRequest $request): RedirectResponse
+    public function store(StoreInstructorRequest $request): \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
     {
         $this->authorize('create', Instructor::class);
 
         if (! app('tenant')->hasFeature('max_instructors')) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => __('center::messages.msg_048')], 422);
+            }
             return redirect()->back()->with('error', __('center::messages.msg_048'));
         }
 
@@ -93,6 +96,17 @@ class InstructorController extends Controller
                 'image' => $imagePath ?? null,
             ]);
 
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => __('center::messages.msg_049'),
+                    'instructor' => [
+                        'id' => $instructor->id,
+                        'name' => $instructor->name,
+                    ],
+                ]);
+            }
+
             if ($request->email) {
                 try {
                     \Illuminate\Support\Facades\Mail::to($user->email)->queue(
@@ -130,6 +144,10 @@ class InstructorController extends Controller
             return redirect()->route('center.instructors.index')->with('success', __('center::messages.msg_049'));
         } catch (\Exception $e) {
             \Log::error('Instructor creation failed: '.$e->getMessage());
+
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => __('center::messages.error_unexpected')], 500);
+            }
 
             return redirect()->back()->withInput()->with('error', __('center::messages.error_unexpected'));
         }
