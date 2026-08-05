@@ -1,4 +1,4 @@
-{{-- Pricing Section --}}
+﻿{{-- Pricing Section --}}
 <section id="pricing" class="section-alt" style="padding:6rem 0; border-top:1px solid #e2e8f0;"
          x-data="{
             billingCycle: 'monthly',
@@ -112,12 +112,12 @@
                     transition:all 0.3s;
                     position:relative;
                     {{ $isFeatured
-                        ? 'border:2px solid #059669; box-shadow:0 25px 60px -12px rgba(5,150,105,0.15); transform:translateY(-8px); z-index:10;'
+                        ? 'border:2px solid #2E8B83; box-shadow:0 25px 60px -12px rgba(46,139,131,0.15); transform:translateY(-8px); z-index:10;'
                         : 'border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.04);'
                     }}
                 ">
                     @if($isFeatured)
-                    <div style="position:absolute; top:-0.875rem; left:50%; transform:translateX(-50%); background:#059669; color:#ffffff; padding:0.375rem 1.5rem; border-radius:9999px; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; box-shadow:0 4px 12px rgba(5,150,105,0.3); display:flex; align-items:center; gap:0.375rem; white-space:nowrap;">
+                    <div style="position:absolute; top:-0.875rem; left:50%; transform:translateX(-50%); background:#2E8B83; color:#ffffff; padding:0.375rem 1.5rem; border-radius:9999px; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; box-shadow:0 4px 12px rgba(46,139,131,0.3); display:flex; align-items:center; gap:0.375rem; white-space:nowrap;">
                         <i class="fas fa-crown" style="color:#fde68a; font-size:0.65rem;"></i>
                         <span>{{ __('landing.pricing.featured') }}</span>
                     </div>
@@ -149,8 +149,8 @@
                         >
                             @if($package->trial_days > 0)
                                 <div style="margin-bottom:1rem;">
-                                    <span style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.375rem 1rem; border-radius:9999px; background:#ecfdf5; border:1px solid #a7f3d0; font-size:0.75rem; font-weight:700; color:#047857;">
-                                        <i class="fas fa-gift" style="color:#059669;"></i>
+                                    <span style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.375rem 1rem; border-radius:9999px; background:#E6F4F3; border:1px solid #B2DDD9; font-size:0.75rem; font-weight:700; color:#25746D;">
+                                        <i class="fas fa-gift" style="color:#2E8B83;"></i>
                                         {{ __('landing.pricing.trial_days', ['days' => $package->trial_days]) }}
                                     </span>
                                 </div>
@@ -158,7 +158,7 @@
 
                             <div style="display:flex; align-items:baseline; gap:0.5rem;">
                                 @if(app()->getLocale() == 'ar')
-                                    <span style="color:#059669; font-size:1rem; font-weight:800;" x-text="localPrice.currency"></span>
+                                    <span style="color:#2E8B83; font-size:1rem; font-weight:800;" x-text="localPrice.currency"></span>
                                     <span style="color:#0f172a; font-size:clamp(2.25rem, 5vw, 3rem); font-weight:900; letter-spacing:-0.05em;"
                                           x-text="billingCycle === 'monthly' ? localPrice.amount : (billingCycle === 'term' ? localPrice.term_price : localPrice.yearly_price)">
                                     </span>
@@ -166,7 +166,7 @@
                                     <span style="color:#0f172a; font-size:clamp(2.25rem, 5vw, 3rem); font-weight:900; letter-spacing:-0.05em;"
                                           x-text="billingCycle === 'monthly' ? localPrice.amount : (billingCycle === 'term' ? localPrice.term_price : localPrice.yearly_price)">
                                     </span>
-                                    <span style="color:#059669; font-size:1rem; font-weight:800;" x-text="localPrice.currency"></span>
+                                    <span style="color:#2E8B83; font-size:1rem; font-weight:800;" x-text="localPrice.currency"></span>
                                 @endif
                             </div>
                             <div style="margin-top:0.5rem; font-size:0.75rem; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:0.1em;">
@@ -218,18 +218,18 @@
                                 transition:all 0.3s;
                                 text-decoration:none;
                                 {{ $isFeatured
-                                    ? 'background:linear-gradient(135deg, #059669, #10b981); color:#ffffff; box-shadow:0 8px 25px rgba(5,150,105,0.3);'
+                                    ? 'background:linear-gradient(135deg, #2E8B83, #10b981); color:#ffffff; box-shadow:0 8px 25px rgba(46,139,131,0.3);'
                                     : 'background:#0f172a; color:#ffffff; box-shadow:0 4px 12px rgba(15,23,42,0.15);'
                                 }}
                            "
                            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 35px rgba(0,0,0,0.2)'"
-                           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='{{ $isFeatured ? '0 8px 25px rgba(5,150,105,0.3)' : '0 4px 12px rgba(15,23,42,0.15)' }}'"
+                           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='{{ $isFeatured ? '0 8px 25px rgba(46,139,131,0.3)' : '0 4px 12px rgba(15,23,42,0.15)' }}'"
                         >
                             {{ $package->trial_days > 0 ? __('landing.pricing.cta_free') : __('landing.pricing.cta_paid') }}
                         </a>
                         @if($package->trial_days > 0)
                             <p style="text-align:center; font-size:0.7rem; font-weight:600; color:#94a3b8; margin-top:0.875rem; text-transform:uppercase; letter-spacing:0.05em;">
-                                <i class="fas fa-shield-alt" style="color:#059669; margin-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}:0.25rem;"></i>
+                                <i class="fas fa-shield-alt" style="color:#2E8B83; margin-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}:0.25rem;"></i>
                                 {{ __('landing.pricing.cta_note') ?? 'إلغاء في أي وقت' }}
                             </p>
                         @endif

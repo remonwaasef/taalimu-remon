@@ -1,9 +1,9 @@
-{{-- FAQ Section --}}
+﻿{{-- FAQ Section --}}
 <section id="faq" class="section-light" style="padding:6rem 0;">
     <div class="container mx-auto px-4 lg:px-12">
         <div class="text-center mb-16" data-animate>
             <h2 style="color:#0f172a !important; font-size:clamp(1.875rem, 4vw, 3rem); font-weight:900; margin-bottom:1.5rem; letter-spacing:-0.025em; line-height:1.2;">
-                {{ __('landing.faq.title_prefix') }} <span style="color:#059669 !important;">{{ __('landing.faq.title_highlight') }}</span>
+                {{ __('landing.faq.title_prefix') }} <span style="color:#2E8B83 !important;">{{ __('landing.faq.title_highlight') }}</span>
             </h2>
             @php $siteName = \App\Models\SiteSetting::get('site_name', 'Taalimu'); @endphp
             <p style="color:#475569 !important; font-size:1.125rem; max-width:42rem; margin:0 auto; font-weight:500; line-height:1.7;">
@@ -24,11 +24,11 @@
                         @click="active = (active === {{ $index }} ? null : {{ $index }})"
                         style="display:flex; align-items:center; justify-content:space-between; width:100%; text-align:start; padding:1.25rem 1.5rem; background:transparent; border:none; cursor:pointer;"
                     >
-                        <span class="faq-question" style="font-size:1rem; font-weight:700; color:#0f172a;" :style="active === {{ $index }} ? 'color:#059669' : 'color:#0f172a'">
+                        <span class="faq-question" style="font-size:1rem; font-weight:700; color:#0f172a;" :style="active === {{ $index }} ? 'color:#2E8B83' : 'color:#0f172a'">
                             {{ $question }}
                         </span>
                         <div style="width:1.75rem; height:1.75rem; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-{{ app()->getLocale() == 'ar' ? 'right' : 'left' }}:1rem; transition:all 0.3s;"
-                             :style="active === {{ $index }} ? 'background:#059669; color:#ffffff; transform:rotate(180deg);' : 'background:#f1f5f9; color:#64748b;'">
+                             :style="active === {{ $index }} ? 'background:#2E8B83; color:#ffffff; transform:rotate(180deg);' : 'background:#f1f5f9; color:#64748b;'">
                             <i class="fas fa-chevron-down" style="font-size:0.625rem;"></i>
                         </div>
                     </button>

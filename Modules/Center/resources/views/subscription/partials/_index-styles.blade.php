@@ -1,4 +1,4 @@
-<style>
+﻿<style>
     .subscription-hero {
         background: #fff;
         border-radius: 1.25rem;
@@ -61,7 +61,7 @@
         100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
     }
     .contact-card {
-        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        background: linear-gradient(135deg, #2E8B83 0%, #10b981 100%);
         border-radius: 1rem;
         color: #fff;
     }

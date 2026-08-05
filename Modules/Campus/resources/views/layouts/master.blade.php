@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="rtl">
 <head>
     <meta charset="utf-8">
@@ -26,7 +26,7 @@
     <style>
         :root {
             --primary-color: #10b981;
-            --primary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --primary-gradient: linear-gradient(135deg, #10b981 0%, #2E8B83 100%);
             --sidebar-width: 280px;
             --topbar-height: 70px;
             --bg-body: #f8fafc;

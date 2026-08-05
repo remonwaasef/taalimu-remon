@@ -1,4 +1,4 @@
-{{-- Features Section --}}
+﻿{{-- Features Section --}}
 <section id="features" class="section-light" style="padding:6rem 0;">
     <div class="container mx-auto px-4 lg:px-12">
         {{-- Header --}}
@@ -18,7 +18,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8" data-stagger>
             @php
                 $featuresData = [
-                    ['icon' => 'fa-users', 'bg' => '#059669', 'shadow' => 'rgba(5,150,105,0.25)'],
+                    ['icon' => 'fa-users', 'bg' => '#2E8B83', 'shadow' => 'rgba(46,139,131,0.25)'],
                     ['icon' => 'fa-calendar-check', 'bg' => '#3b82f6', 'shadow' => 'rgba(59,130,246,0.25)'],
                     ['icon' => 'fa-credit-card', 'bg' => '#8b5cf6', 'shadow' => 'rgba(139,92,246,0.25)'],
                     ['icon' => 'fa-chart-pie', 'bg' => '#f59e0b', 'shadow' => 'rgba(245,158,11,0.25)'],
@@ -35,7 +35,7 @@
                         <h3 style="color:#0f172a !important; font-weight:800; font-size:1.125rem; margin-bottom:0.75rem;">{{ $item['title'] }}</h3>
                         <p style="color:#64748b !important; font-size:0.875rem; line-height:1.6;">{{ Str::limit($item['description'], 110) }}</p>
                     </div>
-                    <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; color:#059669; transition:transform 0.2s;">
+                    <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; color:#2E8B83; transition:transform 0.2s;">
                         <span>{{ __('landing.nav.features') }}</span>
                         <i class="fas {{ app()->getLocale() == 'ar' ? 'fa-arrow-left me-1' : 'fa-arrow-right ms-1' }}"></i>
                     </div>

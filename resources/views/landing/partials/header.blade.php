@@ -1,4 +1,4 @@
-<header
+﻿<header
     class="landing-header fixed top-0 left-0 right-0"
     style="background-color: #ffffff !important; background: #ffffff !important; opacity: 1 !important; border-bottom: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.06); z-index: 99999 !important;"
     x-data="{
@@ -22,11 +22,11 @@
             <!-- Nav Links (Desktop) -->
             <nav class="hidden lg:flex items-center gap-6 xl:gap-8">
                 @foreach(['features', 'pricing', 'faq'] as $nav)
-                <a href="#{{$nav}}" class="nav-link" style="color:#334155; font-weight:600; font-size:0.875rem; transition:color 0.2s;" onmouseover="this.style.color='#059669'" onmouseout="this.style.color='#334155'">
+                <a href="#{{$nav}}" class="nav-link" style="color:#334155; font-weight:600; font-size:0.875rem; transition:color 0.2s;" onmouseover="this.style.color='#2E8B83'" onmouseout="this.style.color='#334155'">
                     {{ __("landing.nav.$nav") }}
                 </a>
                 @endforeach
-                <a href="{{ route('login.portal') }}" style="color:#059669; font-weight:700; font-size:0.875rem; background:#ecfdf5; border:1px solid #a7f3d0; padding:0.5rem 1rem; border-radius:0.75rem; display:inline-flex; align-items:center; gap:0.5rem; transition:all 0.2s;" onmouseover="this.style.background='#d1fae5'" onmouseout="this.style.background='#ecfdf5'">
+                <a href="{{ route('login.portal') }}" style="color:#2E8B83; font-weight:700; font-size:0.875rem; background:#E6F4F3; border:1px solid #B2DDD9; padding:0.5rem 1rem; border-radius:0.75rem; display:inline-flex; align-items:center; gap:0.5rem; transition:all 0.2s;" onmouseover="this.style.background='#CCE9E7'" onmouseout="this.style.background='#E6F4F3'">
                     <i class="fas fa-sign-in-alt"></i>
                     <span>{{ __('landing.nav.sign_in') }}</span>
                 </a>
@@ -37,19 +37,19 @@
                 <!-- Lang -->
                 <div x-data="{ open: false }" class="relative">
                     <button @click="open = !open" style="color:#334155; font-weight:600; font-size:0.875rem; display:flex; align-items:center; gap:0.5rem; padding:0.5rem 0.75rem; border-radius:0.75rem; border:1px solid #e2e8f0; transition:all 0.2s; background:transparent;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
-                        <i class="fas fa-globe" style="color:#059669;"></i>
+                        <i class="fas fa-globe" style="color:#2E8B83;"></i>
                         <span>{{ strtoupper(app()->getLocale()) }}</span>
                     </button>
                     <div x-show="open" style="display: none;" x-cloak @click.away="open = false" x-transition class="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-2xl py-2 overflow-hidden z-50 border border-slate-200">
                         @foreach(['ar' => 'العربية', 'fr' => 'Français'] as $code => $label)
-                        <a href="{{ route('lang.switch', ['locale' => $code]) }}" style="display:block; padding:0.625rem 1rem; font-size:0.875rem; {{ app()->isLocale($code) ? 'color:#059669; font-weight:700; background:#ecfdf5;' : 'color:#334155;' }} transition:background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='{{ app()->isLocale($code) ? '#ecfdf5' : 'transparent' }}'">
+                        <a href="{{ route('lang.switch', ['locale' => $code]) }}" style="display:block; padding:0.625rem 1rem; font-size:0.875rem; {{ app()->isLocale($code) ? 'color:#2E8B83; font-weight:700; background:#E6F4F3;' : 'color:#334155;' }} transition:background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='{{ app()->isLocale($code) ? '#E6F4F3' : 'transparent' }}'">
                             {{ $label }}
                         </a>
                         @endforeach
                     </div>
                 </div>
 
-                <a href="{{ route('register') }}" class="btn-landing-primary" style="padding:0.625rem 1.5rem; font-size:0.875rem; border-radius:0.75rem; box-shadow:0 4px 14px rgba(5,150,105,0.25);">
+                <a href="{{ route('register') }}" class="btn-landing-primary" style="padding:0.625rem 1.5rem; font-size:0.875rem; border-radius:0.75rem; box-shadow:0 4px 14px rgba(46,139,131,0.25);">
                     {{ __('landing.nav.start_trial') }}
                 </a>
             </div>
@@ -64,7 +64,7 @@
                     </button>
                     <div x-show="open" style="display: none;" x-cloak @click.away="open = false" x-transition class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-2xl py-2 overflow-hidden z-50 border border-slate-200">
                         @foreach(['ar' => 'العربية', 'fr' => 'Français'] as $code => $label)
-                        <a href="{{ route('lang.switch', ['locale' => $code]) }}" style="display:block; padding:0.5rem 0.75rem; font-size:0.75rem; {{ app()->isLocale($code) ? 'color:#059669; font-weight:700;' : 'color:#334155;' }}">
+                        <a href="{{ route('lang.switch', ['locale' => $code]) }}" style="display:block; padding:0.5rem 0.75rem; font-size:0.75rem; {{ app()->isLocale($code) ? 'color:#2E8B83; font-weight:700;' : 'color:#334155;' }}">
                             {{ $label }}
                         </a>
                         @endforeach

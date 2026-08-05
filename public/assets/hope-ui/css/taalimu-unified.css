@@ -1,11 +1,11 @@
-/* ===== Global Emerald & Teal Theme (Matching Unified Brand Identity) ===== */
+﻿/* ===== Global Emerald & Teal Theme (Matching Unified Brand Identity) ===== */
 :root {
-    --bs-primary: var(--color-primary, #059669) !important;
-    --bs-primary-rgb: 5, 150, 105 !important;
-    --bs-link-color: var(--color-primary, #059669) !important;
-    --bs-link-hover-color: var(--color-primary-hover, #047857) !important;
-    --primary-color: var(--color-primary, #059669) !important;
-    --primary-gradient: linear-gradient(135deg, var(--color-primary, #059669) 0%, var(--color-accent, #14b8a6) 100%);
+    --bs-primary: var(--color-primary, #2E8B83) !important;
+    --bs-primary-rgb: 46, 139, 131 !important;
+    --bs-link-color: var(--color-primary, #2E8B83) !important;
+    --bs-link-hover-color: var(--color-primary-hover, #25746D) !important;
+    --primary-color: var(--color-primary, #2E8B83) !important;
+    --primary-gradient: linear-gradient(135deg, var(--color-primary, #2E8B83) 0%, var(--color-accent, #69B7C8) 100%);
 }
 
 body {
@@ -96,10 +96,10 @@ body {
 
 /* Premium Buttons in Header */
 .iq-navbar-header .btn-primary {
-    background: linear-gradient(to right, #059669, #14b8a6) !important;
+    background: linear-gradient(to right, #2E8B83, #69B7C8) !important;
     color: #ffffff !important;
     border: none;
-    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2) !important;
+    box-shadow: 0 4px 12px rgba(46, 139, 131, 0.2) !important;
     font-weight: 700 !important;
     padding: 0.75rem 1.5rem !important;
     transition: all 0.3s ease !important;
@@ -107,8 +107,8 @@ body {
 
 .iq-navbar-header .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(5, 150, 105, 0.3) !important;
-    background: linear-gradient(to right, #047857, #0d9488) !important;
+    box-shadow: 0 8px 20px rgba(46, 139, 131, 0.3) !important;
+    background: linear-gradient(to right, #25746D, #4F7DF3) !important;
 }
 
 /* ===== Unified Buttons (Global Source: resources/css/design-tokens.css) =====
@@ -359,20 +359,20 @@ body {
 }
 
 a {
-    color: #059669;
+    color: #2E8B83;
     transition: all 0.2s ease;
 }
 
 a:hover {
-    color: #047857;
+    color: #25746D;
 }
 
 /* Sidebar active item - Soft Premium (All Levels) */
 .sidebar .nav-item .nav-link.active,
 .sidebar-default .sidebar-list .nav-item li>.nav-link.active {
-    background: linear-gradient(to right, rgba(5, 150, 105, 0.1), rgba(20, 184, 166, 0.1)) !important;
+    background: linear-gradient(to right, rgba(46, 139, 131, 0.1), rgba(20, 184, 166, 0.1)) !important;
     /* Soft Emerald/Teal Gradient */
-    color: #059669 !important;
+    color: #2E8B83 !important;
     /* Deep Emerald */
     box-shadow: none !important;
     border-radius: 10px !important;
@@ -381,7 +381,7 @@ a:hover {
 
 .sidebar .nav-item .nav-link.active i,
 .sidebar-default .sidebar-list .nav-item li>.nav-link.active i {
-    color: #059669 !important;
+    color: #2E8B83 !important;
 }
 
 .sidebar .nav-item .nav-link {
@@ -391,9 +391,9 @@ a:hover {
 }
 
 .sidebar .nav-item .nav-link:hover:not(.active) {
-    background: rgba(5, 150, 105, 0.05);
+    background: rgba(46, 139, 131, 0.05);
     /* Very light emerald tint on hover */
-    color: #059669 !important;
+    color: #2E8B83 !important;
 }
 
 /* Header banner */
@@ -441,8 +441,8 @@ a:hover {
 
 .form-control:focus,
 .form-select:focus {
-    border-color: #059669 !important;
-    box-shadow: 0 0 0 0.25rem rgba(5, 150, 105, 0.1) !important;
+    border-color: #2E8B83 !important;
+    box-shadow: 0 0 0 0.25rem rgba(46, 139, 131, 0.1) !important;
     background-color: #ffffff !important;
 }
 
@@ -459,8 +459,8 @@ label:not(.form-floating > label):not(.custom-form-floating > label) {
 }
 
 .form-check-input:checked {
-    background-color: #059669 !important;
-    border-color: #059669 !important;
+    background-color: #2E8B83 !important;
+    border-color: #2E8B83 !important;
 }
 
 .input-group-text {
@@ -493,13 +493,13 @@ label:not(.form-floating > label):not(.custom-form-floating > label) {
 }
 
 .nav-tabs .nav-link:hover:not(.active) {
-    color: #059669 !important;
-    background: rgba(5, 150, 105, 0.05) !important;
+    color: #2E8B83 !important;
+    background: rgba(46, 139, 131, 0.05) !important;
 }
 
 .nav-tabs .nav-link.active {
     background: #ffffff !important;
-    color: #059669 !important;
+    color: #2E8B83 !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
 }
 
@@ -513,9 +513,9 @@ label:not(.form-floating > label):not(.custom-form-floating > label) {
 }
 
 .nav-pills .nav-link.active {
-    background: linear-gradient(to right, #059669, #14b8a6) !important;
+    background: linear-gradient(to right, #2E8B83, #69B7C8) !important;
     color: #ffffff !important;
-    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25) !important;
+    box-shadow: 0 4px 12px rgba(46, 139, 131, 0.25) !important;
 }
 
 /* ===== Premium Breadcrumbs ===== */
@@ -533,7 +533,7 @@ label:not(.form-floating > label):not(.custom-form-floating > label) {
 }
 
 .breadcrumb-item a:hover {
-    color: #059669 !important;
+    color: #2E8B83 !important;
 }
 
 .breadcrumb-item.active {
@@ -602,8 +602,8 @@ label:not(.form-floating > label):not(.custom-form-floating > label) {
 
 .badge.bg-success,
 .badge.bg-primary {
-    background: #ecfdf5 !important;
-    color: #059669 !important;
+    background: #E6F4F3 !important;
+    color: #2E8B83 !important;
 }
 
 .badge.bg-danger {
@@ -686,8 +686,8 @@ label:not(.form-floating > label):not(.custom-form-floating > label) {
 }
 
 .alert-success {
-    background: #ecfdf5 !important;
-    color: #065f46 !important;
+    background: #E6F4F3 !important;
+    color: #1E5E58 !important;
 }
 
 .alert-danger {
@@ -726,7 +726,7 @@ label:not(.form-floating > label):not(.custom-form-floating > label) {
 .dropdown-item:hover,
 .dropdown-item:focus {
     background: #f0fdf4 !important;
-    color: #059669 !important;
+    color: #2E8B83 !important;
 }
 
 @keyframes fadeInDown {
@@ -935,7 +935,7 @@ h6 {
 .content-inner>.d-flex:first-child .btn-primary:hover,
 .content-inner>.mb-4:first-child .btn-primary:hover {
     background-color: #f8fafc !important;
-    color: #059669 !important;
+    color: #2E8B83 !important;
     transform: translateY(-1px);
 }
 
@@ -1034,8 +1034,8 @@ h6 {
 
 .dropdown-item:hover,
 .dropdown-item:focus {
-    color: #059669 !important;
-    -webkit-text-fill-color: #059669 !important;
+    color: #2E8B83 !important;
+    -webkit-text-fill-color: #2E8B83 !important;
 }
 
 .dropdown-item.text-danger {
@@ -1049,8 +1049,8 @@ h6 {
 }
 
 .dropdown-item.text-success {
-    color: #059669 !important;
-    -webkit-text-fill-color: #059669 !important;
+    color: #2E8B83 !important;
+    -webkit-text-fill-color: #2E8B83 !important;
 }
 
 .dropdown-item.text-primary {
@@ -1553,7 +1553,7 @@ label {
 
 .sidebar .sub-nav .nav-link.active {
     background: #f0fdf4 !important;
-    color: #059669 !important;
+    color: #2E8B83 !important;
     font-weight: 600 !important;
 }
 

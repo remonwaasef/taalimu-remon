@@ -1,4 +1,4 @@
-{{-- CTA Section --}}
+﻿{{-- CTA Section --}}
 <section style="padding:6rem 0; background:#ffffff;">
     <div class="container mx-auto px-4 lg:px-12">
         <div class="max-w-4xl mx-auto">
@@ -19,12 +19,12 @@
                     {{-- CTA Button --}}
                     <div style="display:flex; justify-content:center; margin-bottom:2.5rem;">
                         <a href="{{ route('register') }}"
-                           style="background:#ffffff; color:#059669 !important; padding:1.25rem 3rem; border-radius:1rem; font-weight:900; font-size:1.25rem; display:inline-flex; align-items:center; gap:0.75rem; box-shadow:0 15px 40px rgba(0,0,0,0.2); transition:all 0.3s; text-decoration:none; ring:4px solid rgba(255,255,255,0.1);"
+                           style="background:#ffffff; color:#2E8B83 !important; padding:1.25rem 3rem; border-radius:1rem; font-weight:900; font-size:1.25rem; display:inline-flex; align-items:center; gap:0.75rem; box-shadow:0 15px 40px rgba(0,0,0,0.2); transition:all 0.3s; text-decoration:none; ring:4px solid rgba(255,255,255,0.1);"
                            onmouseover="this.style.transform='translateY(-3px) scale(1.02)'; this.style.boxShadow='0 20px 50px rgba(0,0,0,0.25)'"
                            onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 15px 40px rgba(0,0,0,0.2)'"
                         >
-                            <span style="color:#059669 !important;">{{ __('landing.cta.cta_primary') }}</span>
-                            <i class="fas {{ app()->getLocale() == 'ar' ? 'fa-arrow-left' : 'fa-arrow-right' }}" style="color:#059669 !important; font-size:1rem;"></i>
+                            <span style="color:#2E8B83 !important;">{{ __('landing.cta.cta_primary') }}</span>
+                            <i class="fas {{ app()->getLocale() == 'ar' ? 'fa-arrow-left' : 'fa-arrow-right' }}" style="color:#2E8B83 !important; font-size:1rem;"></i>
                         </a>
                     </div>
 

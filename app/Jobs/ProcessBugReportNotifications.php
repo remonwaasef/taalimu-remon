@@ -177,12 +177,12 @@ class ProcessBugReportNotifications implements ShouldQueue
             $subject = "[Taalimu Bug #{$report->id}] [{$report->priority}] {$report->title}";
 
             $body = "<div style='font-family: Cairo, Arial, sans-serif; direction: rtl; padding: 20px;'>";
-            $body .= "<div style='background: linear-gradient(135deg, #059669, #047857); color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px;'>";
+            $body .= "<div style='background: linear-gradient(135deg, #2E8B83, #25746D); color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px;'>";
             $body .= "<h2 style='margin: 0;'>🚨 بلاغ جديد - تعليمُه</h2>";
             $body .= "<p style='margin: 5px 0 0; opacity: 0.9;'>#{$report->id} | {$report->priority} | {$report->category}</p>";
             $body .= '</div>';
 
-            $body .= "<div style='background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;'>";
+            $body .= "<div style='background: #F6F8FA; padding: 20px; border-radius: 12px; border: 1px solid #E7ECEF;'>";
             $body .= "<h3 style='color: #1e293b;'>📌 {$report->title}</h3>";
             $body .= "<p style='color: #475569; line-height: 1.8;'>{$report->description}</p>";
             $body .= "<hr style='border: none; border-top: 1px solid #e2e8f0;'>";

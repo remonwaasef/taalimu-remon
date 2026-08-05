@@ -59,8 +59,8 @@
 
 /* ─── Online State ───────────────────────────────────────── */
 .taalimu-network-banner.is-online .taalimu-network-banner__content {
-    background: linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%);
-    box-shadow: 0 4px 24px rgba(5, 150, 105, 0.35),
+    background: linear-gradient(135deg, #2E8B83 0%, #25746D 50%, #1E5E58 100%);
+    box-shadow: 0 4px 24px rgba(46, 139, 131, 0.35),
                 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 

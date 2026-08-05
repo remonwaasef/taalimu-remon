@@ -1,4 +1,4 @@
-@php
+﻿@php
     $tenant = app('tenant');
     $locale = $tenant->settings['locale'] ?? app()->getLocale();
     $isRtl = ($locale === 'ar');
@@ -89,7 +89,7 @@
                     
                     {{-- Header --}}
                     <tr>
-                        <td style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 50px 40px; text-align: center;">
+                        <td style="background: linear-gradient(135deg, #10b981 0%, #2E8B83 100%); padding: 50px 40px; text-align: center;">
                             <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 700;">
                                 {{ $tenantName }}
                             </h1>
@@ -118,9 +118,9 @@
                             {{-- Amount Card --}}
                             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px;">
                                 <tr>
-                                    <td style="background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); border: 1px solid #bbf7d0; border-radius: 12px; padding: 24px; text-align: center;">
+                                    <td style="background: linear-gradient(135deg, #f0fdf4 0%, #E6F4F3 100%); border: 1px solid #bbf7d0; border-radius: 12px; padding: 24px; text-align: center;">
                                         <p style="color: #6b7280; font-size: 13px; margin: 0 0 8px; font-weight: 600;">{{ $t['amount_due'] }}</p>
-                                        <p style="color: #059669; font-size: 32px; font-weight: 800; margin: 0;">
+                                        <p style="color: #2E8B83; font-size: 32px; font-weight: 800; margin: 0;">
                                             {{ $amount }} <span style="font-size: 16px;">{{ $currency }}</span>
                                         </p>
                                         <p style="color: #9ca3af; font-size: 12px; margin: 8px 0 0;">{{ $currentMonth }}</p>

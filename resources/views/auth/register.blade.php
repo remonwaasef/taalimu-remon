@@ -1,4 +1,4 @@
-@extends('layouts.landing-new')
+﻿@extends('layouts.landing-new')
 
 @section('content')
 <!-- Import Google Fonts -->
@@ -6,11 +6,11 @@
 
 <style>
     /* Premium Identity Missing Classes (since Tailwind JIT isn't running) */
-    .bg-emerald-600 { background-color: #059669 !important; }
-    .shadow-emerald-600\/20 { box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.2), 0 4px 6px -4px rgba(5, 150, 105, 0.1) !important; }
-    .from-emerald-600 { --tw-gradient-from: #059669 !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(5, 150, 105, 0)) !important; }
+    .bg-emerald-600 { background-color: #2E8B83 !important; }
+    .shadow-emerald-600\/20 { box-shadow: 0 10px 15px -3px rgba(46, 139, 131, 0.2), 0 4px 6px -4px rgba(46, 139, 131, 0.1) !important; }
+    .from-emerald-600 { --tw-gradient-from: #2E8B83 !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(46, 139, 131, 0)) !important; }
     .to-teal-500 { --tw-gradient-to: #14b8a6 !important; }
-    .hover\:from-emerald-700:hover { --tw-gradient-from: #047857 !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(4, 120, 87, 0)) !important; }
+    .hover\:from-emerald-700:hover { --tw-gradient-from: #25746D !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(4, 120, 87, 0)) !important; }
     .hover\:to-teal-600:hover { --tw-gradient-to: #0d9488 !important; }
 
     /* Blur/Unblur effect for account type selection (JIT-only classes missing from built CSS) */

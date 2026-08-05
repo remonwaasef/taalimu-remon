@@ -158,20 +158,20 @@
     font-weight: 600;
 }
 .sidebar-base .nav-link:hover {
-    background: #f8fafc !important;
-    color: #0f172a !important;
+    background: #F6F8FA !important;
+    color: #1F2937 !important;
     transform: translateX(4px);
 }
 html[dir="rtl"] .sidebar-base .nav-link:hover {
     transform: translateX(-4px);
 }
 .sidebar-base .nav-link.active {
-    background: rgba(5, 150, 105, 0.1) !important;
-    color: var(--color-primary, #059669) !important;
-    box-shadow: inset 3px 0 0 var(--color-primary, #059669);
+    background: rgba(46, 139, 131, 0.1) !important;
+    color: var(--color-primary, #2E8B83) !important;
+    box-shadow: inset 3px 0 0 var(--color-primary, #2E8B83);
 }
 html[dir="rtl"] .sidebar-base .nav-link.active {
-    box-shadow: inset -3px 0 0 var(--color-primary, #059669);
+    box-shadow: inset -3px 0 0 var(--color-primary, #2E8B83);
 }
 .sidebar-base .nav-link i, .sidebar-base .nav-link svg {
     color: #94a3b8 !important;
@@ -181,7 +181,7 @@ html[dir="rtl"] .sidebar-base .nav-link.active {
     color: #475569 !important;
 }
 .sidebar-base .nav-link.active i {
-    color: var(--color-primary, #059669) !important;
+    color: var(--color-primary, #2E8B83) !important;
 }
 .sidebar-base .sub-nav .nav-link {
     font-size: 0.9rem !important;
@@ -223,9 +223,9 @@ html[dir="rtl"] .sidebar-base .sub-nav .nav-link {
     box-shadow: 0 4px 10px rgba(0,0,0,0.03);
 }
 .brand-logo-fallback {
-    background: linear-gradient(135deg, var(--color-primary, #059669) 0%, var(--color-primary-hover, #047857) 100%) !important;
+    background: linear-gradient(135deg, var(--color-primary, #2E8B83) 0%, var(--color-primary-hover, #25746D) 100%) !important;
     color: white !important;
-    box-shadow: 0 4px 10px rgba(5, 150, 105, 0.2);
+    box-shadow: 0 4px 10px rgba(46, 139, 131, 0.2);
 }
 .sidebar-toggle .icon svg {
     color: #64748b;
@@ -265,7 +265,7 @@ html[dir="rtl"] .sidebar-base .sub-nav .nav-link {
     text-align: center;
 }
 .cookie-content a {
-    color: var(--color-primary-border, #a7f3d0);
+    color: var(--color-primary-border, #B2DDD9);
     text-decoration: underline;
 }
 .cookie-buttons {
@@ -282,11 +282,11 @@ html[dir="rtl"] .sidebar-base .sub-nav .nav-link {
     border: none;
 }
 .btn-accept {
-    background-color: var(--color-primary, #059669);
+    background-color: var(--color-primary, #2E8B83);
     color: white;
 }
 .btn-accept:hover {
-    background-color: var(--color-primary-hover, #047857);
+    background-color: var(--color-primary-hover, #25746D);
 }
 .btn-decline {
     background-color: transparent;
@@ -313,22 +313,22 @@ html[dir="rtl"] .sidebar-base .sub-nav .nav-link {
    -------------------------------------------------------------------------- */
 .hover-shadow-sm:hover, .custom-checkbox-card:hover { 
     transform: translateY(-3px);
-    border-color: var(--color-primary, #059669) !important;
+    border-color: var(--color-primary, #2E8B83) !important;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05) !important;
-    background-color: var(--color-primary-light, #ecfdf5) !important;
+    background-color: var(--color-primary-light, #E6F4F3) !important;
 }
 .custom-checkbox-card:has(input:checked) {
-    border: 2px solid var(--color-primary, #059669) !important;
-    background-color: var(--color-primary-light, #ecfdf5) !important;
+    border: 2px solid var(--color-primary, #2E8B83) !important;
+    background-color: var(--color-primary-light, #E6F4F3) !important;
     transform: translateY(-3px);
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05) !important;
 }
 .grade-card.active {
-    border-color: var(--color-primary, #059669) !important;
-    background-color: var(--color-primary-light, #ecfdf5);
+    border-color: var(--color-primary, #2E8B83) !important;
+    background-color: var(--color-primary-light, #E6F4F3);
 }
 .grade-card.active .grade-icon {
-    background-color: var(--color-primary, #059669) !important;
+    background-color: var(--color-primary, #2E8B83) !important;
 }
 .grade-card.active i {
     color: white !important;
@@ -339,7 +339,7 @@ html[dir="rtl"] .sidebar-base .sub-nav .nav-link {
 }
 
 @keyframes pulse-primary {
-    0% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.4); }
-    70% { box-shadow: 0 0 0 10px rgba(5, 150, 105, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0); }
+    0% { box-shadow: 0 0 0 0 rgba(46, 139, 131, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(46, 139, 131, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(46, 139, 131, 0); }
 }

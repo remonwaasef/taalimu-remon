@@ -1,4 +1,4 @@
-@extends('admin::layouts.app-next')
+﻿@extends('admin::layouts.app-next')
 
 @section('title', 'تفاصيل المركز - ' . $tenant->name)
 
@@ -38,7 +38,7 @@
     {{-- Main Profile Card --}}
     <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
         <div class="card-body p-0">
-            <div class="p-4 p-md-5 bg-gradient-emerald text-white position-relative overflow-hidden" style="background: linear-gradient(135deg, #059669 0%, #065f46 100%);">
+            <div class="p-4 p-md-5 bg-gradient-emerald text-white position-relative overflow-hidden" style="background: linear-gradient(135deg, #2E8B83 0%, #1E5E58 100%);">
                 <div class="position-absolute top-0 end-0 p-5 opacity-10">
                     <i class="bi bi-building" style="font-size: 10rem;"></i>
                 </div>
@@ -222,7 +222,7 @@
                             @php $admin = $tenant->users->whereIn('role', ['center_admin', 'admin', 'instructor'])->first(); @endphp
                             @if($admin)
                                 <div class="d-flex align-items-center gap-3 p-3 rounded-4 bg-light border border-light">
-                                    <div class="rounded-circle d-flex align-items-center justify-content-center bg-white shadow-sm" style="width: 50px; height: 50px; font-size: 1.25rem; color: #059669;">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center bg-white shadow-sm" style="width: 50px; height: 50px; font-size: 1.25rem; color: #2E8B83;">
                                         {{ mb_substr($admin->name, 0, 1) }}
                                     </div>
                                     <div class="overflow-hidden">
@@ -552,13 +552,13 @@
                 datasets: [{
                     label: 'الطلاب الجدد',
                     data: growthData.map(d => d.count),
-                    borderColor: '#059669',
-                    backgroundColor: 'rgba(5, 150, 105, 0.1)',
+                    borderColor: '#2E8B83',
+                    backgroundColor: 'rgba(46, 139, 131, 0.1)',
                     fill: true,
                     tension: 0.4,
                     pointRadius: 4,
                     pointBackgroundColor: '#fff',
-                    pointBorderColor: '#059669',
+                    pointBorderColor: '#2E8B83',
                     pointBorderWidth: 2
                 }]
             },
@@ -578,7 +578,7 @@
 
 <style>
     .bg-gradient-emerald {
-        background: linear-gradient(135deg, #059669 0%, #065f46 100%) !important;
+        background: linear-gradient(135deg, #2E8B83 0%, #1E5E58 100%) !important;
     }
     .nav-pills .nav-link {
         color: #64748b;
@@ -587,12 +587,12 @@
     }
     .nav-pills .nav-link:hover {
         background-color: rgba(0,0,0,0.02);
-        color: #059669;
+        color: #2E8B83;
     }
     .nav-pills .nav-link.active {
         background-color: transparent !important;
-        color: #059669 !important;
-        border-bottom-color: #059669;
+        color: #2E8B83 !important;
+        border-bottom-color: #2E8B83;
         border-radius: 0 !important;
     }
     .font-sans { font-family: 'Inter', 'Noto Sans Arabic', sans-serif; }

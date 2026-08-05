@@ -1,4 +1,4 @@
-@php
+﻿@php
     $tenant = app('tenant');
     $locale = $tenant->settings['locale'] ?? app()->getLocale();
     $isRtl = ($locale === 'ar');
@@ -37,9 +37,9 @@
     <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; box-shadow: 0 4px 24px rgba(16, 185, 129, 0.1); overflow: hidden;">
         
         {{-- Header --}}
-        <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 30px; text-align: center;">
+        <div style="background: linear-gradient(135deg, #10b981 0%, #2E8B83 100%); padding: 30px; text-align: center;">
             <h1 style="color: #ffffff; margin: 0; font-size: 24px;">{{ $titles[$locale] ?? $titles['en'] }}</h1>
-            <p style="color: #d1fae5; margin: 10px 0 0 0; font-size: 14px;">{{ $senderName }}</p>
+            <p style="color: #CCE9E7; margin: 10px 0 0 0; font-size: 14px;">{{ $senderName }}</p>
         </div>
 
         {{-- Body --}}

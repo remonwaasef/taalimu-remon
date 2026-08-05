@@ -1,4 +1,4 @@
-<style>
+﻿<style>
     /* Floating Bug Report Button */
     .bug-report-fab {
         position: fixed;
@@ -8,10 +8,10 @@
         width: 56px;
         height: 56px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        background: linear-gradient(135deg, #2E8B83 0%, #25746D 100%);
         color: white;
         border: none;
-        box-shadow: 0 4px 20px rgba(5, 150, 105, 0.4);
+        box-shadow: 0 4px 20px rgba(46, 139, 131, 0.4);
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -23,13 +23,13 @@
 
     .bug-report-fab:hover {
         transform: scale(1.1);
-        box-shadow: 0 6px 28px rgba(5, 150, 105, 0.5);
+        box-shadow: 0 6px 28px rgba(46, 139, 131, 0.5);
         animation: none;
     }
 
     @keyframes bug-fab-pulse {
-        0%, 100% { box-shadow: 0 4px 20px rgba(5, 150, 105, 0.4); }
-        50% { box-shadow: 0 4px 28px rgba(5, 150, 105, 0.6); }
+        0%, 100% { box-shadow: 0 4px 20px rgba(46, 139, 131, 0.4); }
+        50% { box-shadow: 0 4px 28px rgba(46, 139, 131, 0.6); }
     }
 
     .bug-report-fab .fab-tooltip {
@@ -61,7 +61,7 @@
     }
 
     #bugReportModal .modal-header {
-        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        background: linear-gradient(135deg, #2E8B83 0%, #25746D 100%);
         color: white;
         border: none;
         padding: 20px 24px;
@@ -85,8 +85,8 @@
 
     #bugReportModal .form-control:focus,
     #bugReportModal .form-select:focus {
-        border-color: #059669;
-        box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        border-color: #2E8B83;
+        box-shadow: 0 0 0 3px rgba(46, 139, 131, 0.1);
     }
 
     .bug-report-success {
@@ -115,7 +115,7 @@
     }
 
     .screenshot-box.has-image {
-        border-color: #059669;
+        border-color: #2E8B83;
     }
 
     .screenshot-box .screenshot-img {

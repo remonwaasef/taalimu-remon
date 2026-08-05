@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ============================================================
  * Taalimu Service Worker v7 — Network-Aware Caching
  * ============================================================
@@ -184,10 +184,10 @@ function offlineFallback() {
                     display: inline-flex; align-items: center; gap: 8px;
                     padding: 12px 32px; border: none; border-radius: 12px; cursor: pointer;
                     font-family: inherit; font-size: 1rem; font-weight: 600;
-                    background: linear-gradient(135deg, #059669, #047857); color: white;
-                    transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(5,150,105,0.3);
+                    background: linear-gradient(135deg, #2E8B83, #25746D); color: white;
+                    transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(46,139,131,0.3);
                 }
-                .retry-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(5,150,105,0.4); }
+                .retry-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(46,139,131,0.4); }
                 @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
             </style>
         </head>

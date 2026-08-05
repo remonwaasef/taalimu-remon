@@ -1,17 +1,17 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="utf-8">
     <title>كشف حساب - {{ $student->name }}</title>
     <style>
         body { font-family: 'DejaVu Sans', 'Arial', sans-serif; direction: rtl; text-align: right; color: #333; }
-        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #059669; padding-bottom: 10px; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #2E8B83; padding-bottom: 10px; }
         .footer { position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 10px; color: #777; border-top: 1px solid #eee; padding-top: 5px; }
         .info-section { margin-bottom: 20px; }
         .info-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
         .info-table td { padding: 5px; vertical-align: top; }
         .data-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .data-table th { background-color: #f8f9fa; color: #059669; font-weight: bold; border: 1px solid #dee2e6; padding: 10px; text-align: center; }
+        .data-table th { background-color: #f8f9fa; color: #2E8B83; font-weight: bold; border: 1px solid #dee2e6; padding: 10px; text-align: center; }
         .data-table td { border: 1px solid #dee2e6; padding: 10px; text-align: center; font-size: 12px; }
         .total-box { margin-top: 30px; text-align: left; }
         .total-amount { display: inline-block; background-color: #fef2f2; border: 1px solid #fee2e2; color: #dc2626; padding: 10px 20px; border-radius: 5px; font-weight: bold; font-size: 18px; }
@@ -23,7 +23,7 @@
 </head>
 <body>
     <div class="header">
-        <h1 style="color: #059669; margin: 0;">{{ $tenantName }}</h1>
+        <h1 style="color: #2E8B83; margin: 0;">{{ $tenantName }}</h1>
         <h3 style="margin: 5px 0;">كشف حساب طالب</h3>
     </div>
 
@@ -44,7 +44,7 @@
         </table>
     </div>
 
-    <h4 style="border-right: 4px solid #059669; padding-right: 10px;">سجل الحركات المالية</h4>
+    <h4 style="border-right: 4px solid #2E8B83; padding-right: 10px;">سجل الحركات المالية</h4>
     <table class="data-table">
         <thead>
             <tr>

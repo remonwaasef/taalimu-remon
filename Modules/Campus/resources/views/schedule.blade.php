@@ -1,4 +1,4 @@
-@extends('layouts.app-next')
+﻿@extends('layouts.app-next')
 
 @section('title', 'Class Schedule')
 
@@ -249,7 +249,7 @@
 
     .classroom-badge.online {
         background: rgba(16, 185, 129, 0.1);
-        color: #059669;
+        color: #2E8B83;
     }
 
     .session-status-dot {

@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}" class="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- PWA Meta Tags -->
     <link rel="manifest" href="{{ asset('manifest.json') }}?v=3">
-    <meta name="theme-color" content="#059669">
+    <meta name="theme-color" content="#2E8B83">
     <link rel="apple-touch-icon" href="{{ asset('images/icons/icon-192x192.png') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -112,8 +112,8 @@
             background: none !important;
             -webkit-background-clip: unset !important;
             background-clip: unset !important;
-            -webkit-text-fill-color: #059669 !important;
-            color: #059669 !important;
+            -webkit-text-fill-color: #2E8B83 !important;
+            color: #2E8B83 !important;
         }
 
         /* ============================================================
@@ -140,7 +140,7 @@
             font-weight: 600;
             transition: color 0.2s;
         }
-        .landing-header a.nav-link:hover { color: #059669 !important; }
+        .landing-header a.nav-link:hover { color: #2E8B83 !important; }
 
         /* ============================================================
            HERO SECTION — Dark Premium Theme
@@ -199,7 +199,7 @@
             left: 0;
             width: 100%;
             height: 3px;
-            background: linear-gradient(90deg, #34d399, #059669);
+            background: linear-gradient(90deg, #34d399, #2E8B83);
             border-radius: 2px;
         }
 
@@ -212,7 +212,7 @@
             justify-content: center;
             gap: 0.75rem;
             padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            background: linear-gradient(135deg, #2E8B83 0%, #10b981 100%);
             color: #ffffff !important;
             font-weight: 800;
             font-size: 1.125rem;
@@ -220,13 +220,13 @@
             border: none;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 30px rgba(5,150,105,0.35);
+            box-shadow: 0 8px 30px rgba(46,139,131,0.35);
             text-decoration: none;
         }
         .btn-landing-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(5,150,105,0.45);
-            background: linear-gradient(135deg, #047857 0%, #059669 100%);
+            box-shadow: 0 12px 40px rgba(46,139,131,0.45);
+            background: linear-gradient(135deg, #25746D 0%, #2E8B83 100%);
         }
         .btn-landing-primary span, .btn-landing-primary i { color: #ffffff !important; }
 
@@ -289,7 +289,7 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
         .landing-card:hover {
-            border-color: #a7f3d0;
+            border-color: #B2DDD9;
             box-shadow: 0 20px 40px -12px rgba(0,0,0,0.08);
             transform: translateY(-4px);
         }
@@ -298,10 +298,10 @@
 
         .landing-card-featured {
             background: #ffffff;
-            border: 2px solid #059669;
+            border: 2px solid #2E8B83;
             border-radius: 1.25rem;
             padding: 2.5rem;
-            box-shadow: 0 25px 50px -12px rgba(5,150,105,0.15);
+            box-shadow: 0 25px 50px -12px rgba(46,139,131,0.15);
             position: relative;
         }
 
@@ -345,9 +345,9 @@
             gap: 0.375rem;
             padding: 0.5rem 1.25rem;
             border-radius: 9999px;
-            background: #ecfdf5;
-            border: 1px solid #a7f3d0;
-            color: #047857 !important;
+            background: #E6F4F3;
+            border: 1px solid #B2DDD9;
+            color: #25746D !important;
             font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -394,10 +394,10 @@
             overflow: hidden;
             transition: all 0.3s;
         }
-        .faq-item:hover { border-color: #a7f3d0; }
+        .faq-item:hover { border-color: #B2DDD9; }
         .faq-item.active {
-            border-color: #059669;
-            box-shadow: 0 8px 25px rgba(5,150,105,0.08);
+            border-color: #2E8B83;
+            box-shadow: 0 8px 25px rgba(46,139,131,0.08);
         }
         .faq-question {
             color: #0f172a !important;
@@ -431,7 +431,7 @@
         .landing-footer h4 { color: #0f172a !important; }
         .landing-footer p { color: #64748b !important; }
         .landing-footer a { color: #64748b !important; transition: color 0.2s; }
-        .landing-footer a:hover { color: #059669 !important; }
+        .landing-footer a:hover { color: #2E8B83 !important; }
 
         /* ============================================================
            ANIMATIONS
@@ -500,12 +500,12 @@
             width: 1.25rem;
             height: 1.25rem;
             border-radius: 50%;
-            background: #ecfdf5;
+            background: #E6F4F3;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            color: #059669;
+            color: #2E8B83;
             font-size: 0.625rem;
         }
     </style>

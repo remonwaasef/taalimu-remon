@@ -1,4 +1,4 @@
-{{-- Hero Section — Premium Light SaaS Redesign --}}
+﻿{{-- Hero Section — Premium Light SaaS Redesign --}}
 <section class="hero-section" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}" style="
     position: relative;
     background: linear-gradient(180deg, #f8fafc 0%, #ffffff 50%, #f0fdf4 100%);
@@ -44,13 +44,13 @@
                     gap: 0.625rem;
                     padding: 0.5rem 1.25rem;
                     border-radius: 9999px;
-                    background: #ecfdf5;
-                    border: 1px solid #a7f3d0;
+                    background: #E6F4F3;
+                    border: 1px solid #B2DDD9;
                     margin-bottom: 1.5rem;
-                    box-shadow: 0 2px 4px rgba(5, 150, 105, 0.05);
+                    box-shadow: 0 2px 4px rgba(46, 139, 131, 0.05);
                 ">
-                    <span style="width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #059669; display: inline-block;"></span>
-                    <span style="color: #047857 !important; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em;">
+                    <span style="width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #2E8B83; display: inline-block;"></span>
+                    <span style="color: #25746D !important; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em;">
                         {{ __('landing.hero.badge_new') }}
                     </span>
                     <i class="fas fa-sparkles" style="color: #d97706; font-size: 0.75rem;"></i>
@@ -67,7 +67,7 @@
                 ">
                     {{ __('landing.hero.headline') }}
                     <span style="
-                        color: #059669 !important;
+                        color: #2E8B83 !important;
                         display: block;
                         margin-top: 0.375rem;
                     ">
@@ -101,13 +101,13 @@
                         justify-content: center;
                         gap: 0.75rem;
                         padding: 1rem 2.25rem;
-                        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+                        background: linear-gradient(135deg, #2E8B83 0%, #10b981 100%);
                         color: #ffffff !important;
                         font-weight: 800;
                         font-size: 1.05rem;
                         border-radius: 0.875rem;
                         text-decoration: none;
-                        box-shadow: 0 10px 25px rgba(5, 150, 105, 0.3);
+                        box-shadow: 0 10px 25px rgba(46, 139, 131, 0.3);
                         transition: transform 0.2s, box-shadow 0.2s;
                     " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                         <span style="color: #ffffff !important;">{{ __('landing.hero.cta_free') }}</span>
@@ -130,7 +130,7 @@
                         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
                         transition: background 0.2s, border-color 0.2s;
                     " onmouseover="this.style.background='#f8fafc'; this.style.borderColor='#94a3b8';" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#cbd5e1';">
-                        <i class="fas fa-play-circle" style="color: #059669; font-size: 1.125rem;"></i>
+                        <i class="fas fa-play-circle" style="color: #2E8B83; font-size: 1.125rem;"></i>
                         <span style="color: #0f172a !important;">{{ __('landing.hero.cta_demo') }}</span>
                     </a>
                 </div>
@@ -145,19 +145,19 @@
                     margin-bottom: 1.75rem;
                 ">
                     <div style="display: flex; align-items: center; gap: 0.5rem; color: #334155; font-size: 0.85rem; font-weight: 700;">
-                        <i class="fas fa-check-circle" style="color: #059669;"></i>
+                        <i class="fas fa-check-circle" style="color: #2E8B83;"></i>
                         <span>{{ __('landing.hero.check_setup') }}</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.5rem; color: #334155; font-size: 0.85rem; font-weight: 700;">
-                        <i class="fas fa-check-circle" style="color: #059669;"></i>
+                        <i class="fas fa-check-circle" style="color: #2E8B83;"></i>
                         <span>{{ __('landing.hero.check_nocard') }}</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.5rem; color: #334155; font-size: 0.85rem; font-weight: 700;">
-                        <i class="fas fa-check-circle" style="color: #059669;"></i>
+                        <i class="fas fa-check-circle" style="color: #2E8B83;"></i>
                         <span>{{ __('landing.hero.check_support') }}</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.5rem; color: #334155; font-size: 0.85rem; font-weight: 700;">
-                        <i class="fas fa-check-circle" style="color: #059669;"></i>
+                        <i class="fas fa-check-circle" style="color: #2E8B83;"></i>
                         <span>{{ __('landing.hero.check_trial') }}</span>
                     </div>
                 </div>
@@ -169,7 +169,7 @@
                     gap: 2rem;
                 ">
                     <div>
-                        <div style="font-size: 1.5rem; font-weight: 900; color: #059669;">{{ __('landing.hero.pillar1_title') }}</div>
+                        <div style="font-size: 1.5rem; font-weight: 900; color: #2E8B83;">{{ __('landing.hero.pillar1_title') }}</div>
                         <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">{{ __('landing.hero.pillar1_sub') }}</div>
                     </div>
                     <div style="width: 1px; height: 2rem; background: #cbd5e1;"></div>
@@ -179,7 +179,7 @@
                     </div>
                     <div style="width: 1px; height: 2rem; background: #cbd5e1;"></div>
                     <div>
-                        <div style="font-size: 1.5rem; font-weight: 900; color: #059669;">{{ __('landing.hero.pillar3_title') }}</div>
+                        <div style="font-size: 1.5rem; font-weight: 900; color: #2E8B83;">{{ __('landing.hero.pillar3_title') }}</div>
                         <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">{{ __('landing.hero.pillar3_sub') }}</div>
                     </div>
                 </div>
@@ -230,7 +230,7 @@
                             gap: 0.375rem;
                             box-shadow: inset 0 1px 2px rgba(0,0,0,0.03);
                         ">
-                            <i class="fas fa-lock" style="font-size: 0.55rem; color: #059669;"></i>
+                            <i class="fas fa-lock" style="font-size: 0.55rem; color: #2E8B83;"></i>
                             <span>app.taalimu.com</span>
                         </div>
                         <div style="width: 2rem;"></div>
@@ -250,7 +250,7 @@
                     top: -1.25rem;
                     {{ app()->getLocale() == 'ar' ? 'right: -1rem;' : 'left: -1rem;' }}
                     background: rgba(255, 255, 255, 0.98);
-                    border: 1px solid #a7f3d0;
+                    border: 1px solid #B2DDD9;
                     border-radius: 0.875rem;
                     padding: 0.75rem 1rem;
                     box-shadow: 0 15px 30px rgba(15, 23, 42, 0.1);
@@ -264,17 +264,17 @@
                         width: 2.25rem;
                         height: 2.25rem;
                         border-radius: 0.5rem;
-                        background: #ecfdf5;
+                        background: #E6F4F3;
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         flex-shrink: 0;
                     ">
-                        <i class="fab fa-whatsapp" style="color: #059669; font-size: 1.125rem;"></i>
+                        <i class="fab fa-whatsapp" style="color: #2E8B83; font-size: 1.125rem;"></i>
                     </div>
                     <div style="overflow: hidden;">
                         <div style="font-size: 0.75rem; font-weight: 800; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ __('landing.hero.card_whatsapp_title') }}</div>
-                        <div style="font-size: 0.65rem; color: #059669; font-weight: 700;">{{ __('landing.hero.card_whatsapp_sub') }}</div>
+                        <div style="font-size: 0.65rem; color: #2E8B83; font-weight: 700;">{{ __('landing.hero.card_whatsapp_sub') }}</div>
                     </div>
                 </div>
 

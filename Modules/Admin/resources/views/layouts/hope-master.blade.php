@@ -1,4 +1,4 @@
-@extends('layouts.hope-master')
+﻿@extends('layouts.hope-master')
 
 @section('title')@yield('title', 'Admin Dashboard') - {{ \App\Models\SiteSetting::get('site_name', 'EduCentral') }}@endsection
 
@@ -52,14 +52,14 @@
             border-color: var(--bs-primary) !important;
         }
         .btn-primary:hover, .btn-primary:focus {
-            background-color: #059669 !important;
-            border-color: #059669 !important;
+            background-color: #2E8B83 !important;
+            border-color: #2E8B83 !important;
             box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2) !important;
         }
 
         /* Header banner */
         .iq-navbar-header { 
-            background: linear-gradient(135deg, #10b981 0%, #059669 50%, #064e3b 100%) !important; 
+            background: linear-gradient(135deg, #10b981 0%, #2E8B83 50%, #174843 100%) !important; 
             border-bottom: 5px solid rgba(255,255,255,0.1);
         }
         .iq-header-img img {
@@ -174,7 +174,7 @@
         }
         .iq-navbar-header .btn-primary:hover {
             background-color: #ffffff !important;
-            color: #059669 !important;
+            color: #2E8B83 !important;
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
         }

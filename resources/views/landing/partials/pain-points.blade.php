@@ -1,4 +1,4 @@
-{{-- Pain Points Section --}}
+﻿{{-- Pain Points Section --}}
 <section class="section-light" style="padding:6rem 0;">
     <div class="container mx-auto px-4 lg:px-12">
         <div class="text-center mb-16" data-animate>
@@ -6,7 +6,7 @@
                 <span style="color:#dc2626 !important; font-weight:700;">{{ __('landing.pain_points.badge') }}</span>
             </div>
             <h2 style="color:#0f172a !important; font-size:clamp(1.875rem, 4vw, 3rem); font-weight:900; margin-bottom:1.5rem; letter-spacing:-0.025em; line-height:1.2;">
-                {{ __('landing.pain_points.title_prefix') }} <span style="color:#059669 !important;">{{ __('landing.pain_points.title_highlight') }}</span> {{ __('landing.pain_points.title_suffix') }}
+                {{ __('landing.pain_points.title_prefix') }} <span style="color:#2E8B83 !important;">{{ __('landing.pain_points.title_highlight') }}</span> {{ __('landing.pain_points.title_suffix') }}
             </h2>
             <p style="color:#475569 !important; font-size:1.125rem; max-width:42rem; margin:0 auto; font-weight:500; line-height:1.7;">
                 {{ __('landing.pain_points.subtitle') }}

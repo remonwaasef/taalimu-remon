@@ -1,4 +1,4 @@
-<script>
+﻿<script>
 // ========== Screenshot Capture ==========
 
 function captureScreenshot() {
@@ -344,7 +344,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 icon: 'error',
                 title: 'Oops!',
                 text: error.message || '{{ __("center::bug_report.submit_error") }}',
-                confirmButtonColor: '#059669',
+                confirmButtonColor: '#2E8B83',
             });
         })
         .finally(() => {

@@ -1,4 +1,4 @@
-@extends('layouts.landing-new')
+﻿@extends('layouts.landing-new')
 
 @section('content')
 <!-- Import Google Fonts (if not already in layout) -->
@@ -9,7 +9,7 @@
         --font-outfit: 'Outfit', sans-serif;
         --font-cairo: 'Cairo', sans-serif;
         --brand-emerald: #10b981;
-        --brand-emerald-hover: #059669;
+        --brand-emerald-hover: #2E8B83;
         --panel-dark: #0F172A;
         --bg-field: #F8FAFC;
     }

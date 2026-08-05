@@ -1,4 +1,4 @@
-<style>
+﻿<style>
     /* Custom Tab Styling for Settings */
     #settingsTabs .nav-link {
         color: var(--text-muted);
@@ -107,7 +107,7 @@
 
     .premium-switch:checked {
         background-color: #10b981 !important; /* Success Green */
-        border-color: #059669 !important;
+        border-color: #2E8B83 !important;
         background-position: right center;
         box-shadow: 0 0 10px rgba(16, 185, 129, 0.4) !important;
     }

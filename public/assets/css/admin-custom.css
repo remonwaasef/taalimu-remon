@@ -1,4 +1,4 @@
-            /* Power Palette - Aligning with landing-new.css */
+﻿            /* Power Palette - Aligning with landing-new.css */
             --dark-purple: 258 86% 34%;      /* Deep Indigo #3A0CA3 */
             --primary-purple: 230 100% 58%;   /* Royal Blue #2A4DFF */
             --light-purple: 229 83% 60%;    /* Lighter Blue #4361EE */
@@ -226,8 +226,8 @@
         }
         
         .alert-success {
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-            color: #065f46;
+            background: linear-gradient(135deg, #CCE9E7 0%, #B2DDD9 100%);
+            color: #1E5E58;
         }
         
         /* Mobile Responsive Sync */

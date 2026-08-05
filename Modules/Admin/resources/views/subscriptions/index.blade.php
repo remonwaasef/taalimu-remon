@@ -1,4 +1,4 @@
-@extends('admin::layouts.app-next')
+﻿@extends('admin::layouts.app-next')
 
 @section('page-title', __('admin::admin.subscriptions.title'))
 
@@ -62,14 +62,14 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100" style="background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); border-right: 4px solid #059669 !important;">
+            <div class="card border-0 shadow-sm rounded-4 h-100" style="background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); border-right: 4px solid #2E8B83 !important;">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <div class="text-muted x-small fw-bold text-uppercase mb-1">{{ __('admin::admin.subscriptions.stats.revenue') }}</div>
                             <div class="h3 fw-bold mb-0 text-dark">{{ number_format($stats['total_revenue'], 2) }} <small class="text-muted small">{{ __('admin::admin.egp') }}</small></div>
                         </div>
-                        <div class="icon-box bg-success text-white rounded-3 shadow-sm" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #059669 0%, #34d399 100%);">
+                        <div class="icon-box bg-success text-white rounded-3 shadow-sm" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #2E8B83 0%, #34d399 100%);">
                             <i class="bi bi-wallet2 fs-5"></i>
                         </div>
                     </div>

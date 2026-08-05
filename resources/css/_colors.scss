@@ -1,7 +1,7 @@
-// Global Color Palette
+﻿// Global Color Palette
 
 // SCSS Variables (for usage in Sass files)
-$primary: #059669;
+$primary: #2E8B83;
 $secondary: #0f172a;
 $accent: #14b8a6;
 $success: #22c55e;
@@ -28,6 +28,6 @@ $white: #FFFFFF;
     --bg-white: #{$white};
 
     // Gradients
-    --primary-gradient: linear-gradient(135deg, #{$primary} 0%, #047857 100%);
+    --primary-gradient: linear-gradient(135deg, #{$primary} 0%, #25746D 100%);
     --accent-gradient: linear-gradient(135deg, #{$accent} 0%, #22c55e 100%);
 }

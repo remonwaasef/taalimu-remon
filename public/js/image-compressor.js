@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ============================================================
  * Taalimu Image Compressor — Smart Client-side Compression
  * ============================================================
@@ -206,8 +206,8 @@
         let indicator = wrapper.querySelector('.compress-indicator');
         if (!indicator) return;
 
-        indicator.style.background = '#ecfdf5';
-        indicator.style.borderColor = '#a7f3d0';
+        indicator.style.background = '#E6F4F3';
+        indicator.style.borderColor = '#B2DDD9';
         indicator.style.color = '#10b981';
         indicator.innerHTML = `
             <i class="fas fa-check-circle"></i>

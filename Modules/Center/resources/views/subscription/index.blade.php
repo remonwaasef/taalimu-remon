@@ -1,4 +1,4 @@
-@extends('center::layouts.app-next')
+﻿@extends('center::layouts.app-next')
 
 @section('title', __('center::subscription.page_title'))
 
@@ -209,7 +209,7 @@
                                     <i class="fas fa-check-circle me-1"></i> {{ __('center::subscription.current_plan') }}
                                 </span>
                             @elseif($isFeatured)
-                                <span class="badge" style="background: linear-gradient(90deg,#059669,#10b981); color:#fff; border-radius:999px;" class="rounded-pill mb-2 px-3 py-1">
+                                <span class="badge" style="background: linear-gradient(90deg,#2E8B83,#10b981); color:#fff; border-radius:999px;" class="rounded-pill mb-2 px-3 py-1">
                                     ⚡ {{ __('center::subscription.recommended') }}
                                 </span>
                             @endif

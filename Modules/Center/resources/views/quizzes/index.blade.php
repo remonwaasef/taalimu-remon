@@ -1,4 +1,4 @@
-@extends('center::layouts.app-next')
+﻿@extends('center::layouts.app-next')
 
 @section('page-title', __('center::quizzes.title'))
 @section('page-subtitle', __('center::quizzes.subtitle'))
@@ -24,8 +24,8 @@
                             <p class="text-muted small fw-bold mb-1 text-uppercase" style="letter-spacing: 0.5px;">{{ __('center::quizzes.total_quizzes') }}</p>
                             <h2 class="fw-bolder text-dark mb-0">{{ number_format($totalQuizzesCount) }}</h2>
                         </div>
-                        <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 56px; height: 56px; background: #ecfdf5;">
-                            <i class="fas fa-file-alt fa-lg" style="color: #059669;"></i>
+                        <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 56px; height: 56px; background: #E6F4F3;">
+                            <i class="fas fa-file-alt fa-lg" style="color: #2E8B83;"></i>
                         </div>
                     </div>
                 </div>
@@ -102,7 +102,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="badge rounded-pill px-3 py-2" style="background: #ecfdf5; color: #059669;">
+                                            <span class="badge rounded-pill px-3 py-2" style="background: #E6F4F3; color: #2E8B83;">
                                                 {{ $quiz->passing_score }}%
                                             </span>
                                         </td>
@@ -154,21 +154,21 @@
                 <div class="card-body p-4 pt-0">
                     @forelse($recentAttempts as $attempt)
                         <div class="d-flex align-items-center gap-3 p-3 mb-2 rounded-3" style="background: #f8fafc; transition: all 0.2s ease;">
-                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; background: {{ $attempt->passed ? '#ecfdf5' : '#fef2f2' }};">
-                                <i class="fas fa-{{ $attempt->passed ? 'check' : 'times' }}" style="color: {{ $attempt->passed ? '#059669' : '#dc2626' }};"></i>
+                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; background: {{ $attempt->passed ? '#E6F4F3' : '#fef2f2' }};">
+                                <i class="fas fa-{{ $attempt->passed ? 'check' : 'times' }}" style="color: {{ $attempt->passed ? '#2E8B83' : '#dc2626' }};"></i>
                             </div>
                             <div class="flex-grow-1 min-width-0">
                                 <div class="fw-bold text-dark small mb-0">{{ $attempt->user->name }}</div>
                                 <div class="text-muted text-truncate" style="font-size: 0.75rem; max-width: 140px;">{{ $attempt->quiz->title }}</div>
                                 <div class="d-flex align-items-center gap-2 mt-1">
-                                    <span class="badge rounded-pill px-2" style="font-size: 0.65rem; background: {{ $attempt->passed ? '#ecfdf5' : '#fef2f2' }}; color: {{ $attempt->passed ? '#059669' : '#dc2626' }};">
+                                    <span class="badge rounded-pill px-2" style="font-size: 0.65rem; background: {{ $attempt->passed ? '#E6F4F3' : '#fef2f2' }}; color: {{ $attempt->passed ? '#2E8B83' : '#dc2626' }};">
                                         {{ $attempt->passed ? __('center::quizzes.passed') : __('center::quizzes.failed') }}
                                     </span>
                                     <small class="text-muted" style="font-size: 0.65rem;"><i class="fas fa-clock me-1"></i>{{ $attempt->completed_at ? $attempt->completed_at->diffForHumans() : __('center::quizzes.incomplete') }}</small>
                                 </div>
                             </div>
                             <div class="text-end flex-shrink-0">
-                                <div class="fw-bolder fs-5" style="color: {{ $attempt->passed ? '#059669' : '#dc2626' }};">{{ number_format($attempt->score, 0) }}%</div>
+                                <div class="fw-bolder fs-5" style="color: {{ $attempt->passed ? '#2E8B83' : '#dc2626' }};">{{ number_format($attempt->score, 0) }}%</div>
                             </div>
                         </div>
                     @empty

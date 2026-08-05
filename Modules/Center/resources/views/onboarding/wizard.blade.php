@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}" class="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 <head>
     <meta charset="utf-8">
@@ -29,7 +29,7 @@
             -webkit-text-fill-color: transparent;
         }
         .step-line-active {
-            box-shadow: 0 0 8px rgba(5, 150, 105, 0.25);
+            box-shadow: 0 0 8px rgba(46, 139, 131, 0.25);
         }
     </style>
 </head>
@@ -67,7 +67,7 @@
                     <template x-for="(stepObj, index) in steps" :key="index">
                         <div class="space-y-3 group cursor-default">
                             <div class="h-1.5 rounded-full overflow-hidden bg-slate-100 relative shadow-inner">
-                                <div class="h-full bg-emerald-600 transition-all duration-700 ease-out shadow-[0_0_10px_rgba(5,150,105,0.3)]"
+                                <div class="h-full bg-emerald-600 transition-all duration-700 ease-out shadow-[0_0_10px_rgba(46,139,131,0.3)]"
                                      :class="currentStepIndex >= index ? 'step-line-active' : ''"
                                      :style="'width: ' + (currentStepIndex > index ? '100%' : (currentStepIndex === index ? '75%' : '0%'))">
                                 </div>

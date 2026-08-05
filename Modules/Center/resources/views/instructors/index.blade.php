@@ -1,4 +1,4 @@
-@extends('center::layouts.app-next')
+﻿@extends('center::layouts.app-next')
 
 @section('page-title', __('center::instructors.title'))
 
@@ -12,9 +12,9 @@
 
     <div class="row g-4 mb-4">
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4" style="background-color: #ecfdf5; color: #064e3b;">
+            <div class="card border-0 shadow-sm rounded-4" style="background-color: #E6F4F3; color: #174843;">
                 <div class="card-body p-4">
-                    <h6 class="opacity-75 small fw-bold" style="color: #065f46;">{{ __('center::instructors.total_instructors') }}</h6>
+                    <h6 class="opacity-75 small fw-bold" style="color: #1E5E58;">{{ __('center::instructors.total_instructors') }}</h6>
                     <h2 class="fw-bold mb-0">{{ $instructors->total() }}</h2>
                 </div>
             </div>

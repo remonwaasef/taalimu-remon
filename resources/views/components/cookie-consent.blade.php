@@ -1,4 +1,4 @@
-<div id="gdprCookieBanner" class="cookie-banner-container" style="
+﻿<div id="gdprCookieBanner" class="cookie-banner-container" style="
     position: fixed;
     bottom: 1.5rem;
     left: 1.5rem;
@@ -38,15 +38,15 @@
         <button id="acceptCookies" style="
             padding: 0.5rem 1.25rem;
             border-radius: 0.5rem;
-            background: #059669;
+            background: #2E8B83;
             border: none;
             color: #ffffff;
             font-size: 0.8rem;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(5,150,105,0.3);
+            box-shadow: 0 4px 12px rgba(46,139,131,0.3);
             transition: background 0.2s;
-        " onmouseover="this.style.background='#047857'" onmouseout="this.style.background='#059669'">قبول الكل</button>
+        " onmouseover="this.style.background='#25746D'" onmouseout="this.style.background='#2E8B83'">قبول الكل</button>
     </div>
 </div>
 

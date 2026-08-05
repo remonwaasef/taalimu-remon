@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ============================================================
  * Taalimu Status Indicators — Clear Visual Feedback
  * ============================================================
@@ -16,8 +16,8 @@
             text: 'تم الحفظ',
             textEn: 'Saved',
             color: '#10b981',
-            bg: '#ecfdf5',
-            border: '#a7f3d0'
+            bg: '#E6F4F3',
+            border: '#B2DDD9'
         },
         saving: {
             icon: 'fas fa-spinner fa-spin',

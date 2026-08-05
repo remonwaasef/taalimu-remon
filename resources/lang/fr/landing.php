@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 return [
     'hero' => [
@@ -8,7 +8,7 @@ return [
         'title_highlight' => 'enseigner',
         'headline' => 'Gérez entièrement votre centre éducatif',
         'headline_highlight' => 'depuis une seule plateforme intelligente',
-        'description' => 'Un système complet combinant la gestion des étudiants, la présence intelligente via <strong style="color: #0f172a;">QR Code</strong>, la facturation, les abonnements et les rapports financiers, avec l\'automatisation complète des notifications <strong style="color: #059669;">WhatsApp</strong> aux parents.',
+        'description' => 'Un système complet combinant la gestion des étudiants, la présence intelligente via <strong style="color: #0f172a;">QR Code</strong>, la facturation, les abonnements et les rapports financiers, avec l\'automatisation complète des notifications <strong style="color: #2E8B83;">WhatsApp</strong> aux parents.',
         'subtitle' => 'Il est temps de passer à un système intelligent qui gère la facturation, le suivi de l\'avancement, la fréquentation... le tout en quelques clics.',
         'cta_primary' => 'Démarrer gratuitement',
         'cta_secondary' => 'Voir la vidéo',

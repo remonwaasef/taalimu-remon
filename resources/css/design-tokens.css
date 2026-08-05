@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    TAALIMU GLOBAL DESIGN TOKENS
    --------------------------------------------------------------------------
    This is the Central Source of Truth for all Design Tokens across Taalimu.
@@ -10,19 +10,19 @@
     /* ----------------------------------------------------------------------
        1. Core Color Palette (تنسيق الألوان الأساسي)
        ---------------------------------------------------------------------- */
-    --color-primary: #059669;            /* Emerald 600 - اللون الرئيسي للمنصة */
-    --color-primary-hover: #047857;      /* Emerald 700 - حالة التحويم */
-    --color-primary-active: #065f46;     /* Emerald 800 - حالة الضغط */
-    --color-primary-light: #ecfdf5;      /* Emerald 50 - خلفيات فاتحة */
-    --color-primary-border: #a7f3d0;     /* Emerald 200 - حدود خفيفة */
+    --color-primary: #2E8B83;            /* Taalimu Teal 500 - اللون الرئيسي للمنصة */
+    --color-primary-hover: #25746D;      /* Taalimu Teal 600 - حالة التحويم */
+    --color-primary-active: #1E5E58;     /* Taalimu Teal 700 - حالة الضغط */
+    --color-primary-light: #E6F4F3;      /* Taalimu Teal 50 - خلفيات فاتحة */
+    --color-primary-border: #B2DDD9;     /* Taalimu Teal 200 - حدود خفيفة */
 
     --color-secondary: #0f172a;          /* Slate 900 - اللون الثانوي الداكن */
     --color-secondary-hover: #1e293b;    /* Slate 800 */
     --color-secondary-light: #f8fafc;    /* Slate 50 */
 
-    --color-accent: #14b8a6;             /* Teal 500 - لون التمييز والتأكيد */
-    --color-accent-hover: #0d9488;       /* Teal 600 */
-    --color-accent-light: #f0fdf4;       /* Teal/Emerald tint */
+    --color-accent: #69B7C8;             /* Soft Blue - لون التمييز والتأكيد */
+    --color-accent-hover: #4F7DF3;       /* Blue - حالة التحويم */
+    --color-accent-light: #E6F4F3;       /* Taalimu Teal tint */
 
     /* Status Colors */
     --color-success: #22c55e;
@@ -31,11 +31,11 @@
     --color-info: #3b82f6;
 
     /* Base Layout Colors */
-    --color-bg-main: #f8fafc;
-    --color-surface: #ffffff;
-    --color-border: #e2e8f0;
-    --color-text-main: #0f172a;
-    --color-text-muted: #64748b;
+    --color-bg-main: #F6F8FA;
+    --color-surface: #FFFFFF;
+    --color-border: #E7ECEF;
+    --color-text-main: #1F2937;
+    --color-text-muted: #6B7280;
 
     /* ----------------------------------------------------------------------
        2. Global Button Tokens (متغيرات الأزرار الموحدة)
@@ -44,8 +44,8 @@
     --btn-primary-bg: var(--color-primary);
     --btn-primary-hover-bg: var(--color-primary-hover);
     --btn-primary-text: #ffffff;
-    --btn-primary-shadow: 0 4px 14px rgba(5, 150, 105, 0.25);
-    --btn-primary-hover-shadow: 0 6px 20px rgba(5, 150, 105, 0.35);
+    --btn-primary-shadow: 0 4px 14px rgba(46, 139, 131, 0.25);
+    --btn-primary-hover-shadow: 0 6px 20px rgba(46, 139, 131, 0.35);
 
     /* Secondary Button */
     --btn-secondary-bg: var(--color-secondary);
@@ -54,10 +54,10 @@
     --btn-secondary-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
 
     /* Success Button */
-    --btn-success-bg: #059669;
-    --btn-success-hover-bg: #047857;
+    --btn-success-bg: #22C55E;
+    --btn-success-hover-bg: #16A34A;
     --btn-success-text: #ffffff;
-    --btn-success-shadow: 0 4px 14px rgba(5, 150, 105, 0.22);
+    --btn-success-shadow: 0 4px 14px rgba(34, 197, 94, 0.22);
 
     /* Danger Button */
     --btn-danger-bg: #dc2626;
@@ -116,7 +116,7 @@
     --input-border: #cbd5e1;
     --input-radius: 0.75rem;
     --input-focus-border: var(--color-primary);
-    --input-focus-ring: rgba(5, 150, 105, 0.2);
+    --input-focus-ring: rgba(46, 139, 131, 0.2);
 
     /* ----------------------------------------------------------------------
        5. Global Badge Tokens (متغيرات الشارات)
@@ -129,18 +129,18 @@
    Dark Mode Overrides (متغيرات الوضع الداكن)
    -------------------------------------------------------------------------- */
 .dark {
-    --color-bg-main: #020617;
-    --color-surface: #0f172a;
-    --color-border: #1e293b;
-    --color-text-main: #f8fafc;
-    --color-text-muted: #94a3b8;
+    --color-bg-main: #0F1720;
+    --color-surface: #17202B;
+    --color-border: #2B3644;
+    --color-text-main: #F9FAFB;
+    --color-text-muted: #CBD5E1;
 
-    --btn-outline-border: #334155;
-    --btn-outline-text: #f1f5f9;
-    --btn-outline-hover-bg: #1e293b;
+    --btn-outline-border: #313D4C;
+    --btn-outline-text: #F9FAFB;
+    --btn-outline-hover-bg: #1D2935;
     
-    --card-bg: #0f172a;
-    --card-border: #1e293b;
-    --input-bg: #1e293b;
-    --input-border: #334155;
+    --card-bg: #1D2935;
+    --card-border: #2B3644;
+    --input-bg: #1D2935;
+    --input-border: #313D4C;
 }
