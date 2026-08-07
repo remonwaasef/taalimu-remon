@@ -1,4 +1,4 @@
-﻿<script>
+<script>
 // ========== Screenshot Capture ==========
 
 function captureScreenshot() {
@@ -301,7 +301,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const formData = new FormData(this);
 
-        fetch('{{ route("center.bug-report.store") }}', {
+        fetch('{{ tenant_route("center.bug-report.store") }}', {
             method: 'POST',
             body: formData,
             headers: {

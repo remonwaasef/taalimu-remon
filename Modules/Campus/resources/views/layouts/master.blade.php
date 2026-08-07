@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="rtl">
 <head>
     <meta charset="utf-8">
@@ -262,7 +262,7 @@
         </div>
         
         <div class="p-3 mt-auto">
-            <form action="{{ route('center.logout') }}" method="POST">
+            <form action="{{ tenant_route('center.logout') }}" method="POST">
                 @csrf
                 <button type="submit" class="btn btn-light w-100 rounded-4 py-2 text-danger fw-bold border-0">
                     <i class="bi bi-box-arrow-right me-2"></i> تسجيل الخروج

@@ -170,7 +170,7 @@
                             </div>
                             <div class="py-1">
                                 @if (app()->bound('tenant'))
-                                    <a href="{{ route('instructor.settings') }}" class="w-full flex items-center gap-2 px-4 py-2 text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 text-start">
+                                    <a href="{{ tenant_route('instructor.settings') }}" class="w-full flex items-center gap-2 px-4 py-2 text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 text-start">
                                         <i class="fas fa-cog w-4 text-center"></i> Settings
                                     </a>
                                     <form method="POST" action="{{ tenant_route('center.logout') }}">

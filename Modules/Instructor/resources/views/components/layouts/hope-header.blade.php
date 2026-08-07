@@ -78,7 +78,7 @@
             </a></li>
             <li><hr class="dropdown-divider"></li>
             <li>
-              <form method="POST" action="{{ route('center.logout') }}">
+              <form method="POST" action="{{ tenant_route('center.logout') }}">
                 @csrf
                 <a href="javascript:void(0)" class="dropdown-item text-danger" onclick="event.preventDefault(); this.closest('form').submit();">
                     <i class="fas fa-sign-out-alt me-2"></i> {{ __('instructor::sidebar.logout') }}

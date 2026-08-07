@@ -99,7 +99,7 @@
     </div>
 
     <li class="nav-item mt-2">
-        <form action="{{ route('center.logout') }}" method="POST">
+        <form action="{{ tenant_route('center.logout') }}" method="POST">
             @csrf
             <button type="submit" class="nav-link text-danger border-0 bg-transparent w-100 text-start">
                 <i class="icon"><i class="fas fa-sign-out-alt"></i></i>

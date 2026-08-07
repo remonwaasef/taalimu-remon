@@ -105,7 +105,7 @@
                 </div>
                 <div class="py-1">
                     @if (app()->bound('tenant'))
-                        <form method="POST" action="{{ route('center.logout') }}">
+                        <form method="POST" action="{{ tenant_route('center.logout') }}">
                             @csrf
                             <button type="submit" class="w-full flex items-center gap-2 px-4 py-2 text-xs text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 text-start">
                                 <i class="fas fa-sign-out-alt"></i> Sign Out
