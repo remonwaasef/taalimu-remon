@@ -1,4 +1,4 @@
-﻿/* ===== Global Emerald & Teal Theme (Matching Unified Brand Identity) ===== */
+/* ===== Global Emerald & Teal Theme (Matching Unified Brand Identity) ===== */
 :root {
     --bs-primary: var(--color-primary, #2E8B83) !important;
     --bs-primary-rgb: 46, 139, 131 !important;
@@ -1585,4 +1585,272 @@ label {
 
 [dir="rtl"] .sidebar .nav-item .nav-link[aria-expanded="true"] .right-icon {
     transform: rotate(270deg); /* Point down when open */
+}
+
+/* ============================================================
+   DARK MODE UNIFIED OVERRIDES (الوضع الداكن الموحد)
+   Fixes color contrast conflicts for Sidebar, Cards, Inputs, Tables & Typography
+   ============================================================ */
+
+.dark body,
+html.dark body,
+body.dark {
+    background-color: var(--color-bg-main, #0F1720) !important;
+    color: var(--color-text-main, #F9FAFB) !important;
+}
+
+/* --- Sidebar Dark Overrides --- */
+.dark .sidebar,
+html.dark .sidebar,
+body.dark .sidebar,
+.dark aside,
+html.dark aside {
+    background-color: #17202B !important;
+    border-color: #2B3644 !important;
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark .sidebar .sidebar-header,
+html.dark .sidebar .sidebar-header {
+    border-color: #2B3644 !important;
+}
+
+.dark .sidebar .sidebar-header .logo-title,
+html.dark .sidebar .sidebar-header .logo-title {
+    color: #F9FAFB !important;
+}
+
+.dark .sidebar .nav-item .nav-link,
+html.dark .sidebar .nav-item .nav-link {
+    color: #CBD5E1 !important;
+}
+
+.dark .sidebar .nav-item .nav-link .item-name,
+html.dark .sidebar .nav-item .nav-link .item-name {
+    color: #CBD5E1 !important;
+}
+
+.dark .sidebar .nav-item .nav-link:hover:not(.active),
+html.dark .sidebar .nav-item .nav-link:hover:not(.active) {
+    background-color: #1D2935 !important;
+    color: #2E8B83 !important;
+}
+
+.dark .sidebar .nav-item .nav-link.active,
+html.dark .sidebar .nav-item .nav-link.active {
+    background: rgba(46, 139, 131, 0.2) !important;
+    color: #2E8B83 !important;
+}
+
+.dark .sidebar .nav-item .nav-link.active .icon,
+html.dark .sidebar .nav-item .nav-link.active .icon {
+    color: #2E8B83 !important;
+}
+
+.dark .sidebar .nav-item.static-item .default-icon,
+html.dark .sidebar .nav-item.static-item .default-icon {
+    color: #64748B !important;
+}
+
+.dark .sidebar .sub-nav .nav-link,
+html.dark .sidebar .sub-nav .nav-link {
+    color: #94A3B8 !important;
+}
+
+.dark .sidebar .sub-nav .nav-link.active,
+html.dark .sidebar .sub-nav .nav-link.active {
+    background: rgba(46, 139, 131, 0.15) !important;
+    color: #2E8B83 !important;
+}
+
+/* --- Card & Container Dark Overrides --- */
+.dark .card,
+html.dark .card,
+body.dark .card {
+    background-color: #17202B !important;
+    border-color: #2B3644 !important;
+    color: #F9FAFB !important;
+}
+
+.dark .card-header,
+.dark .card-footer,
+html.dark .card-header,
+html.dark .card-footer {
+    border-color: #2B3644 !important;
+    background-color: transparent !important;
+}
+
+.dark .card-body,
+html.dark .card-body {
+    color: #CBD5E1 !important;
+}
+
+/* Overriding nuclear black text rules for dark mode */
+.dark .content-inner .card h1,
+.dark .content-inner .card h2,
+.dark .content-inner .card h3,
+.dark .content-inner .card h4,
+.dark .content-inner .card h5,
+.dark .content-inner .card h6,
+.dark .content-inner .card .h2,
+html.dark .content-inner .card h1,
+html.dark .content-inner .card h2,
+html.dark .content-inner .card h3,
+html.dark .content-inner .card h4,
+html.dark .content-inner .card h5,
+html.dark .content-inner .card h6,
+html.dark .content-inner .card .h2,
+.dark .content-inner .card>.card-body>p,
+html.dark .content-inner .card>.card-body>p,
+.dark .content-inner .card>.card-body>span:not(.badge):not(.dropdown-item),
+html.dark .content-inner .card>.card-body>span:not(.badge):not(.dropdown-item),
+.dark .content-inner .card>.card-body>div:not(.dropdown-menu):not(.dropdown):not(.btn-group):not(.table-responsive)>span:not(.badge),
+html.dark .content-inner .card>.card-body>div:not(.dropdown-menu):not(.dropdown):not(.btn-group):not(.table-responsive)>span:not(.badge),
+.dark .page-title,
+.dark .card-title,
+html.dark .page-title,
+html.dark .card-title,
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6,
+html.dark h1, html.dark h2, html.dark h3, html.dark h4, html.dark h5, html.dark h6 {
+    color: #F9FAFB !important;
+    -webkit-text-fill-color: #F9FAFB !important;
+}
+
+.dark .text-dark,
+html.dark .text-dark {
+    color: #F9FAFB !important;
+}
+
+.dark .text-muted,
+html.dark .text-muted {
+    color: #94A3B8 !important;
+}
+
+/* --- Form Control Dark Overrides --- */
+.dark .form-control,
+.dark .form-select,
+html.dark .form-control,
+html.dark .form-select {
+    background-color: #1D2935 !important;
+    border-color: #313D4C !important;
+    color: #F9FAFB !important;
+}
+
+.dark .form-control::placeholder,
+html.dark .form-control::placeholder {
+    color: #64748B !important;
+}
+
+.dark .form-control:focus,
+.dark .form-select:focus,
+html.dark .form-control:focus,
+html.dark .form-select:focus {
+    background-color: #1D2935 !important;
+    border-color: #2E8B83 !important;
+    color: #F9FAFB !important;
+}
+
+.dark .form-label,
+.dark label,
+html.dark .form-label,
+html.dark label {
+    color: #CBD5E1 !important;
+}
+
+.dark .input-group-text,
+html.dark .input-group-text {
+    background-color: #17202B !important;
+    border-color: #2B3644 !important;
+    color: #94A3B8 !important;
+}
+
+/* --- Navigation & Navbar Dark Overrides --- */
+.dark .iq-navbar,
+html.dark .iq-navbar,
+.dark nav.navbar,
+html.dark nav.navbar {
+    background-color: #17202B !important;
+    border-color: #2B3644 !important;
+}
+
+.dark .dropdown-menu,
+html.dark .dropdown-menu {
+    background-color: #17202B !important;
+    border-color: #2B3644 !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark .dropdown-item,
+html.dark .dropdown-item {
+    color: #CBD5E1 !important;
+    -webkit-text-fill-color: #CBD5E1 !important;
+}
+
+.dark .dropdown-item:hover,
+.dark .dropdown-item:focus,
+html.dark .dropdown-item:hover,
+html.dark .dropdown-item:focus {
+    background-color: #1D2935 !important;
+    color: #2E8B83 !important;
+    -webkit-text-fill-color: #2E8B83 !important;
+}
+
+/* --- Table Dark Overrides --- */
+.dark .table tbody tr,
+html.dark .table tbody tr {
+    background-color: #17202B !important;
+    border-color: #2B3644 !important;
+}
+
+.dark .table tbody tr:hover,
+html.dark .table tbody tr:hover {
+    background-color: #1D2935 !important;
+}
+
+.dark .table thead th,
+html.dark .table thead th {
+    color: #94A3B8 !important;
+}
+
+.dark .table tbody td,
+html.dark .table tbody td {
+    color: #CBD5E1 !important;
+}
+
+/* --- Modal Dark Overrides --- */
+.dark .modal-content,
+html.dark .modal-content {
+    background-color: #17202B !important;
+    border-color: #2B3644 !important;
+    color: #F9FAFB !important;
+}
+
+.dark .modal-header,
+.dark .modal-footer,
+html.dark .modal-header,
+html.dark .modal-footer {
+    border-color: #2B3644 !important;
+}
+
+.dark .modal-title,
+html.dark .modal-title {
+    color: #F9FAFB !important;
+}
+
+.dark .btn-close,
+html.dark .btn-close {
+    filter: invert(1) !important;
+}
+
+/* --- Launchpad Dark Overrides --- */
+.dark .launchpad-card,
+html.dark .launchpad-card {
+    background: linear-gradient(135deg, rgba(23, 32, 43, 0.95), rgba(29, 41, 53, 0.85)) !important;
+    border: 1px solid #2B3644 !important;
+}
+
+.dark .launchpad-step-card,
+html.dark .launchpad-step-card {
+    background-color: #17202B !important;
+    border-color: #2B3644 !important;
 }

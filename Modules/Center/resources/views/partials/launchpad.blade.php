@@ -17,7 +17,7 @@
     }
 @endphp
 
-<div class="card glass-card border-0 rounded-4 mb-4 overflow-hidden position-relative" style="background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,249,250,0.8));">
+<div class="card glass-card launchpad-card border-0 rounded-4 mb-4 overflow-hidden position-relative">
     <!-- Decorative background elements -->
     <div class="position-absolute top-0 end-0 p-3 opacity-10">
         <i class="fas fa-rocket fa-7x transform-rotate-15"></i>
@@ -27,7 +27,7 @@
         <div class="row align-items-center mb-4">
             <div class="col-lg-7">
                 <div class="d-flex flex-wrap align-items-center gap-3">
-                    <h5 class="fw-bold mb-1 text-dark">🚀 {{ __('center::dashboard.launchpad.title', ['name' => auth()->user()->name]) }}</h5>
+                    <h5 class="fw-bold mb-1 text-dark dark:text-slate-100">🚀 {{ __('center::dashboard.launchpad.title', ['name' => auth()->user()->name]) }}</h5>
                     @php
                         $hasDemoData = \App\Models\Instructor::where('tenant_id', app('tenant')->id)->where('email', 'like', '%.demo@%')->exists();
                     @endphp
@@ -81,7 +81,7 @@
                     $isCurrent = ($key === $highlightStep);
                 @endphp
                 <div class="col-md-6 col-xl">
-                    <div class="card h-100 border-0 shadow-sm rounded-4 transition-all hover-translate-y-n3 {{ $isCurrent ? 'border-primary border-2' : '' }} {{ $isCompleted ? 'bg-success bg-opacity-10' : 'bg-white' }}"
+                    <div class="card launchpad-step-card h-100 border-0 shadow-sm rounded-4 transition-all hover-translate-y-n3 {{ $isCurrent ? 'border-primary border-2' : '' }} {{ $isCompleted ? 'bg-success bg-opacity-10' : '' }}"
                          style="{{ $isCurrent ? 'box-shadow: 0 10px 25px rgba(13, 110, 253, 0.15) !important;' : '' }}">
                         <div class="card-body p-4 d-flex flex-column text-center">
                             <!-- Icon and Status Circle -->
@@ -99,7 +99,7 @@
                             </div>
 
                             <!-- Content -->
-                            <h6 class="fw-bold mb-1 {{ $isCompleted ? 'text-success' : 'text-dark' }}">
+                            <h6 class="fw-bold mb-1 {{ $isCompleted ? 'text-success' : 'text-dark dark:text-slate-100' }}">
                                 {{ __('center::dashboard.launchpad.steps.'.$key.'.title') }}
                             </h6>
                             
