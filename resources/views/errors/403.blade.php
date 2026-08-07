@@ -1,5 +1,9 @@
 @php
-    $tenantData = $tenant ?? (app()->bound('tenant') ? app('tenant') : null);
+    try {
+        $tenantData = $tenant ?? (app()->bound('tenant') ? app('tenant') : null);
+    } catch (\Throwable $e) {
+        $tenantData = null;
+    }
     $layout = 'center::layouts.app-next';
     
     // Use precise path matching to avoid confusing /instructors (center) with /instructor/ (instructor module)
