@@ -1599,7 +1599,110 @@ body.dark {
     color: var(--color-text-main, #F9FAFB) !important;
 }
 
-/* --- Sidebar Dark Overrides --- */
+/* Base Utility Overrides for Dark Mode */
+.dark .bg-white,
+html.dark .bg-white,
+body.dark .bg-white {
+    background-color: #17202B !important;
+    color: #F9FAFB !important;
+}
+
+.dark .bg-light,
+html.dark .bg-light,
+body.dark .bg-light {
+    background-color: #1D2935 !important;
+    color: #CBD5E1 !important;
+}
+
+.dark .btn-glass,
+html.dark .btn-glass,
+body.dark .btn-glass {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    color: #F9FAFB !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark .btn-glass:hover,
+html.dark .btn-glass:hover,
+body.dark .btn-glass:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #FFFFFF !important;
+}
+
+.dark .btn-light,
+html.dark .btn-light,
+body.dark .btn-light {
+    background-color: #1D2935 !important;
+    border-color: #313D4C !important;
+    color: #CBD5E1 !important;
+}
+
+.dark .btn-light:hover,
+html.dark .btn-light:hover,
+body.dark .btn-light:hover {
+    background-color: #2B3644 !important;
+    color: #F9FAFB !important;
+}
+
+/* Radio button & Checkbox groups */
+.dark .btn-check:checked + .btn,
+.dark .btn-check:checked + label,
+html.dark .btn-check:checked + .btn,
+html.dark .btn-check:checked + label {
+    background-color: #2E8B83 !important;
+    color: #FFFFFF !important;
+    border-color: #2E8B83 !important;
+    box-shadow: 0 2px 8px rgba(46, 139, 131, 0.3) !important;
+}
+
+.dark .btn-check:checked + .btn-outline-danger,
+.dark .btn-check:checked + label[for*="Debt"],
+html.dark .btn-check:checked + .btn-outline-danger {
+    background-color: #EF4444 !important;
+    color: #FFFFFF !important;
+    border-color: #EF4444 !important;
+}
+
+.dark .btn-check:checked + .btn-outline-success,
+.dark .btn-check:checked + label[for*="Paid"],
+html.dark .btn-check:checked + .btn-outline-success {
+    background-color: #22C55E !important;
+    color: #FFFFFF !important;
+    border-color: #22C55E !important;
+}
+
+/* Table Headers & Rows */
+.dark .table thead,
+.dark .table thead tr,
+.dark .table thead th,
+.dark .custom-table thead th,
+html.dark .table thead th,
+html.dark .custom-table thead th {
+    background-color: #1D2935 !important;
+    color: #94A3B8 !important;
+    border-color: #2B3644 !important;
+}
+
+.dark .table tbody tr,
+html.dark .table tbody tr {
+    background-color: #17202B !important;
+    border-color: #2B3644 !important;
+}
+
+.dark .table tbody tr:hover,
+.dark .student-row:hover,
+html.dark .table tbody tr:hover {
+    background-color: #1D2935 !important;
+}
+
+.dark .table tbody td,
+html.dark .table tbody td {
+    color: #CBD5E1 !important;
+    border-color: #2B3644 !important;
+}
+
+/* Sidebar Overrides */
 .dark .sidebar,
 html.dark .sidebar,
 body.dark .sidebar,
@@ -1663,7 +1766,7 @@ html.dark .sidebar .sub-nav .nav-link.active {
     color: #2E8B83 !important;
 }
 
-/* --- Card & Container Dark Overrides --- */
+/* Card & Container Overrides */
 .dark .card,
 html.dark .card,
 body.dark .card {
@@ -1685,7 +1788,7 @@ html.dark .card-body {
     color: #CBD5E1 !important;
 }
 
-/* Overriding nuclear black text rules for dark mode */
+/* Text & Typography Overrides */
 .dark .content-inner .card h1,
 .dark .content-inner .card h2,
 .dark .content-inner .card h3,
@@ -1726,7 +1829,12 @@ html.dark .text-muted {
     color: #94A3B8 !important;
 }
 
-/* --- Form Control Dark Overrides --- */
+.dark .text-secondary,
+html.dark .text-secondary {
+    color: #CBD5E1 !important;
+}
+
+/* Form Controls & Inputs */
 .dark .form-control,
 .dark .form-select,
 html.dark .form-control,
@@ -1764,11 +1872,13 @@ html.dark .input-group-text {
     color: #94A3B8 !important;
 }
 
-/* --- Navigation & Navbar Dark Overrides --- */
+/* Navigation & Header */
 .dark .iq-navbar,
 html.dark .iq-navbar,
 .dark nav.navbar,
-html.dark nav.navbar {
+html.dark nav.navbar,
+.dark header,
+html.dark header {
     background-color: #17202B !important;
     border-color: #2B3644 !important;
 }
@@ -1795,29 +1905,7 @@ html.dark .dropdown-item:focus {
     -webkit-text-fill-color: #2E8B83 !important;
 }
 
-/* --- Table Dark Overrides --- */
-.dark .table tbody tr,
-html.dark .table tbody tr {
-    background-color: #17202B !important;
-    border-color: #2B3644 !important;
-}
-
-.dark .table tbody tr:hover,
-html.dark .table tbody tr:hover {
-    background-color: #1D2935 !important;
-}
-
-.dark .table thead th,
-html.dark .table thead th {
-    color: #94A3B8 !important;
-}
-
-.dark .table tbody td,
-html.dark .table tbody td {
-    color: #CBD5E1 !important;
-}
-
-/* --- Modal Dark Overrides --- */
+/* Modals */
 .dark .modal-content,
 html.dark .modal-content {
     background-color: #17202B !important;
@@ -1842,7 +1930,7 @@ html.dark .btn-close {
     filter: invert(1) !important;
 }
 
-/* --- Launchpad Dark Overrides --- */
+/* Launchpad */
 .dark .launchpad-card,
 html.dark .launchpad-card {
     background: linear-gradient(135deg, rgba(23, 32, 43, 0.95), rgba(29, 41, 53, 0.85)) !important;
