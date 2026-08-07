@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Api\app\Http\Middleware;
+namespace Modules\Api\Http\Middleware;
 
 use App\Models\Tenant;
 use Closure;

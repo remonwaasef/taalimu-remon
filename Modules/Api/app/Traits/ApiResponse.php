@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Api\app\Traits;
+namespace Modules\Api\Traits;
 
 trait ApiResponse
 {

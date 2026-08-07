@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Api\app\Http\Middleware\ApiTenantMiddleware;
+use Modules\Api\Http\Middleware\ApiTenantMiddleware;
 use Modules\Tenancy\Services\TenantResolver;
 
 /*
