@@ -104,201 +104,186 @@
                                                 <span class="badge bg-white text-muted border">{{ __('admin::admin.auto_detected') }}</span>
                                             </div>
                                             
-                                            <div class="accordion accordion-flush" id="regionalAccordion{{ $package->id }}" x-data="{ activeRegion: null }">
+                                            <div class="mb-3" id="regionalAccordion{{ $package->id }}" x-data="{ activeRegion: null }">
                                                 @php $regional = $package->regional_prices ?? []; @endphp
                                                 
                                                 <!-- Region: Egypt -->
-                                                <div class="accordion-item bg-white border rounded-3 mb-2">
-                                                    <h2 class="accordion-header">
-                                                        <button class="accordion-button py-2 small fw-bold" :class="{ 'collapsed': activeRegion !== 'eg' }" type="button" @click="activeRegion = (activeRegion === 'eg' ? null : 'eg')">
-                                                            🇪🇬 Egypt (EGP)
-                                                        </button>
-                                                    </h2>
-                                                    <div id="reg_eg_{{ $package->id }}" class="accordion-collapse collapse" :class="{ 'show': activeRegion === 'eg' }" x-show="activeRegion === 'eg'">
-                                                        <div class="accordion-body p-3">
-                                                            <div class="row g-2 d-none">
-                                                                <div class="col-3">
-                                                                    <label class="small text-muted mb-0">Slug (ID Unique)</label>
-                                                                    <input type="text" class="form-control form-control-sm rounded-3 fw-bold bg-light" name="packages[{{ $package->id }}][slug]" value="{{ $package->slug }}" disabled>
-                                                                </div>
-                                                                <div class="col-3">
-                                                                    <label class="small text-muted mb-0">Nom du Forfait (EN)</label>
-                                                                    <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][name_en]" value="{{ $package->name_en }}" disabled>
-                                                                </div>
-                                                                <div class="col-3">
-                                                                    <label class="small text-muted mb-0">Nom du Forfait (FR)</label>
-                                                                    <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][name_fr]" value="{{ $package->name_fr }}" disabled>
-                                                                </div>
-                                                                <div class="col-3">
-                                                                    <label class="small text-muted mb-0">اسم الباقة (AR)</label>
-                                                                    <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][name]" value="{{ $package->name }}" disabled>
-                                                                </div>
+                                                <div class="border rounded-3 bg-white mb-2 overflow-hidden">
+                                                    <button class="w-100 d-flex align-items-center justify-content-between p-2 px-3 border-0 bg-transparent small fw-bold text-start" type="button" @click="activeRegion = (activeRegion === 'eg' ? null : 'eg')">
+                                                        <span>🇪🇬 Egypt (EGP)</span>
+                                                        <i class="bi" :class="activeRegion === 'eg' ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                                                    </button>
+                                                    <div x-show="activeRegion === 'eg'" class="p-3 border-top bg-light" style="display: none;">
+                                                        <div class="row g-2 d-none">
+                                                            <div class="col-3">
+                                                                <label class="small text-muted mb-0">Slug (ID Unique)</label>
+                                                                <input type="text" class="form-control form-control-sm rounded-3 fw-bold bg-light" name="packages[{{ $package->id }}][slug]" value="{{ $package->slug }}" disabled>
                                                             </div>
-                                                            <div class="row g-2 mt-2">
-                                                                <input type="hidden" name="packages[{{ $package->id }}][regional_prices][EG][currency]" value="EGP">
-                                                                <div class="col-4">
-                                                                    <label class="small text-muted mb-0">{{ __('admin::admin.price_monthly') }}</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][EG][amount]" value="{{ $regional['EG']['amount'] ?? '' }}">
-                                                                </div>
-                                                                <div class="col-4">
-                                                                    <label class="small text-muted mb-0">سعر الترم</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][EG][term_price]" value="{{ $regional['EG']['term_price'] ?? '' }}">
-                                                                </div>
-                                                                <div class="col-4">
-                                                                    <label class="small text-muted mb-0">{{ __('admin.price_yearly') }}</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][EG][yearly_price]" value="{{ $regional['EG']['yearly_price'] ?? '' }}">
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <label class="small text-muted mb-0">{{ __('admin.old_price') }}</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][EG][old_price]" value="{{ $regional['EG']['old_price'] ?? '' }}">
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <label class="small text-muted mb-0">{{ __('admin.discount_label') }}</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][EG][discount_label]" value="{{ $regional['EG']['discount_label'] ?? '' }}" placeholder="وفر 20%">
-                                                                </div>
+                                                            <div class="col-3">
+                                                                <label class="small text-muted mb-0">Nom du Forfait (EN)</label>
+                                                                <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][name_en]" value="{{ $package->name_en }}" disabled>
+                                                            </div>
+                                                            <div class="col-3">
+                                                                <label class="small text-muted mb-0">Nom du Forfait (FR)</label>
+                                                                <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][name_fr]" value="{{ $package->name_fr }}" disabled>
+                                                            </div>
+                                                            <div class="col-3">
+                                                                <label class="small text-muted mb-0">اسم الباقة (AR)</label>
+                                                                <input type="text" class="form-control form-control-sm rounded-3" name="packages[{{ $package->id }}][name]" value="{{ $package->name }}" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-2 mt-1">
+                                                            <input type="hidden" name="packages[{{ $package->id }}][regional_prices][EG][currency]" value="EGP">
+                                                            <div class="col-4">
+                                                                <label class="small text-muted mb-0">{{ __('admin::admin.price_monthly') }}</label>
+                                                                <input type="number" step="0.01" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][EG][amount]" value="{{ $regional['EG']['amount'] ?? '' }}">
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <label class="small text-muted mb-0">سعر الترم</label>
+                                                                <input type="number" step="0.01" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][EG][term_price]" value="{{ $regional['EG']['term_price'] ?? '' }}">
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <label class="small text-muted mb-0">{{ __('admin.price_yearly') }}</label>
+                                                                <input type="number" step="0.01" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][EG][yearly_price]" value="{{ $regional['EG']['yearly_price'] ?? '' }}">
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <label class="small text-muted mb-0">{{ __('admin.old_price') }}</label>
+                                                                <input type="number" step="0.01" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][EG][old_price]" value="{{ $regional['EG']['old_price'] ?? '' }}">
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <label class="small text-muted mb-0">{{ __('admin.discount_label') }}</label>
+                                                                <input type="text" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][EG][discount_label]" value="{{ $regional['EG']['discount_label'] ?? '' }}" placeholder="وفر 20%">
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <!-- Region: Saudi -->
-                                                <div class="accordion-item bg-white border rounded-3 mb-2">
-                                                    <h2 class="accordion-header">
-                                                        <button class="accordion-button py-2 small fw-bold" :class="{ 'collapsed': activeRegion !== 'sa' }" type="button" @click="activeRegion = (activeRegion === 'sa' ? null : 'sa')">
-                                                            🇸🇦 Saudi Arabia (SAR)
-                                                        </button>
-                                                    </h2>
-                                                    <div id="reg_sa_{{ $package->id }}" class="accordion-collapse collapse" :class="{ 'show': activeRegion === 'sa' }" x-show="activeRegion === 'sa'">
-                                                        <div class="accordion-body p-3">
-                                                            <div class="row g-2">
-                                                                <input type="hidden" name="packages[{{ $package->id }}][regional_prices][SA][currency]" value="SAR">
-                                                                <div class="col-4">
-                                                                    <label class="small text-muted mb-0">{{ __('admin.price_monthly') }}</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][SA][amount]" value="{{ $regional['SA']['amount'] ?? '' }}">
-                                                                </div>
-                                                                <div class="col-4">
-                                                                    <label class="small text-muted mb-0">سعر الترم</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][SA][term_price]" value="{{ $regional['SA']['term_price'] ?? '' }}">
-                                                                </div>
-                                                                <div class="col-4">
-                                                                    <label class="small text-muted mb-0">{{ __('admin.price_yearly') }}</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][SA][yearly_price]" value="{{ $regional['SA']['yearly_price'] ?? '' }}">
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <label class="small text-muted mb-0">{{ __('admin.old_price') }}</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][SA][old_price]" value="{{ $regional['SA']['old_price'] ?? '' }}">
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <label class="small text-muted mb-0">{{ __('admin.discount_label') }}</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][SA][discount_label]" value="{{ $regional['SA']['discount_label'] ?? '' }}" placeholder="Save 20%">
-                                                                </div>
+                                                <div class="border rounded-3 bg-white mb-2 overflow-hidden">
+                                                    <button class="w-100 d-flex align-items-center justify-content-between p-2 px-3 border-0 bg-transparent small fw-bold text-start" type="button" @click="activeRegion = (activeRegion === 'sa' ? null : 'sa')">
+                                                        <span>🇸🇦 Saudi Arabia (SAR)</span>
+                                                        <i class="bi" :class="activeRegion === 'sa' ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                                                    </button>
+                                                    <div x-show="activeRegion === 'sa'" class="p-3 border-top bg-light" style="display: none;">
+                                                        <div class="row g-2">
+                                                            <input type="hidden" name="packages[{{ $package->id }}][regional_prices][SA][currency]" value="SAR">
+                                                            <div class="col-4">
+                                                                <label class="small text-muted mb-0">{{ __('admin.price_monthly') }}</label>
+                                                                <input type="number" step="0.01" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][SA][amount]" value="{{ $regional['SA']['amount'] ?? '' }}">
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <label class="small text-muted mb-0">سعر الترم</label>
+                                                                <input type="number" step="0.01" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][SA][term_price]" value="{{ $regional['SA']['term_price'] ?? '' }}">
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <label class="small text-muted mb-0">{{ __('admin.price_yearly') }}</label>
+                                                                <input type="number" step="0.01" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][SA][yearly_price]" value="{{ $regional['SA']['yearly_price'] ?? '' }}">
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <label class="small text-muted mb-0">{{ __('admin.old_price') }}</label>
+                                                                <input type="number" step="0.01" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][SA][old_price]" value="{{ $regional['SA']['old_price'] ?? '' }}">
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <label class="small text-muted mb-0">{{ __('admin.discount_label') }}</label>
+                                                                <input type="text" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][SA][discount_label]" value="{{ $regional['SA']['discount_label'] ?? '' }}" placeholder="Save 20%">
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <!-- Region: UAE -->
-                                                <div class="accordion-item bg-white border rounded-3 mb-2">
-                                                    <h2 class="accordion-header">
-                                                        <button class="accordion-button py-2 small fw-bold" :class="{ 'collapsed': activeRegion !== 'ae' }" type="button" @click="activeRegion = (activeRegion === 'ae' ? null : 'ae')">
-                                                            🇦🇪 UAE (AED)
-                                                        </button>
-                                                    </h2>
-                                                    <div id="reg_ae_{{ $package->id }}" class="accordion-collapse collapse" :class="{ 'show': activeRegion === 'ae' }" x-show="activeRegion === 'ae'">
-                                                        <div class="accordion-body p-3">
-                                                            <div class="row g-2">
-                                                                <input type="hidden" name="packages[{{ $package->id }}][regional_prices][AE][currency]" value="AED">
-                                                                <div class="col-4">
-                                                                    <label class="small text-muted mb-0">{{ __('admin.price_monthly') }}</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][AE][amount]" value="{{ $regional['AE']['amount'] ?? '' }}">
-                                                                </div>
-                                                                <div class="col-4">
-                                                                    <label class="small text-muted mb-0">سعر الترم</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][AE][term_price]" value="{{ $regional['AE']['term_price'] ?? '' }}">
-                                                                </div>
-                                                                <div class="col-4">
-                                                                    <label class="small text-muted mb-0">{{ __('admin.price_yearly') }}</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][AE][yearly_price]" value="{{ $regional['AE']['yearly_price'] ?? '' }}">
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <label class="small text-muted mb-0">{{ __('admin.old_price') }}</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][AE][old_price]" value="{{ $regional['AE']['old_price'] ?? '' }}">
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <label class="small text-muted mb-0">{{ __('admin.discount_label') }}</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][AE][discount_label]" value="{{ $regional['AE']['discount_label'] ?? '' }}" placeholder="Save 20%">
-                                                                </div>
+                                                <div class="border rounded-3 bg-white mb-2 overflow-hidden">
+                                                    <button class="w-100 d-flex align-items-center justify-content-between p-2 px-3 border-0 bg-transparent small fw-bold text-start" type="button" @click="activeRegion = (activeRegion === 'ae' ? null : 'ae')">
+                                                        <span>🇦🇪 UAE (AED)</span>
+                                                        <i class="bi" :class="activeRegion === 'ae' ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                                                    </button>
+                                                    <div x-show="activeRegion === 'ae'" class="p-3 border-top bg-light" style="display: none;">
+                                                        <div class="row g-2">
+                                                            <input type="hidden" name="packages[{{ $package->id }}][regional_prices][AE][currency]" value="AED">
+                                                            <div class="col-4">
+                                                                <label class="small text-muted mb-0">{{ __('admin.price_monthly') }}</label>
+                                                                <input type="number" step="0.01" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][AE][amount]" value="{{ $regional['AE']['amount'] ?? '' }}">
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <label class="small text-muted mb-0">سعر الترم</label>
+                                                                <input type="number" step="0.01" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][AE][term_price]" value="{{ $regional['AE']['term_price'] ?? '' }}">
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <label class="small text-muted mb-0">{{ __('admin.price_yearly') }}</label>
+                                                                <input type="number" step="0.01" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][AE][yearly_price]" value="{{ $regional['AE']['yearly_price'] ?? '' }}">
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <label class="small text-muted mb-0">{{ __('admin.old_price') }}</label>
+                                                                <input type="number" step="0.01" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][AE][old_price]" value="{{ $regional['AE']['old_price'] ?? '' }}">
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <label class="small text-muted mb-0">{{ __('admin.discount_label') }}</label>
+                                                                <input type="text" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][AE][discount_label]" value="{{ $regional['AE']['discount_label'] ?? '' }}" placeholder="Save 20%">
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <!-- Region: Europe -->
-                                                <div class="accordion-item bg-white border rounded-3 mb-2">
-                                                    <h2 class="accordion-header">
-                                                        <button class="accordion-button py-2 small fw-bold" :class="{ 'collapsed': activeRegion !== 'eu' }" type="button" @click="activeRegion = (activeRegion === 'eu' ? null : 'eu')">
-                                                            🇪🇺 Europe (EUR)
-                                                        </button>
-                                                    </h2>
-                                                    <div id="reg_eu_{{ $package->id }}" class="accordion-collapse collapse" :class="{ 'show': activeRegion === 'eu' }" x-show="activeRegion === 'eu'">
-                                                        <div class="accordion-body p-3">
-                                                            <div class="row g-2">
-                                                                <input type="hidden" name="packages[{{ $package->id }}][regional_prices][FR][currency]" value="EUR">
-                                                                <div class="col-4">
-                                                                    <label class="small text-muted mb-0">{{ __('admin.price_monthly') }}</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][FR][amount]" value="{{ $regional['FR']['amount'] ?? '' }}">
-                                                                </div>
-                                                                <div class="col-4">
-                                                                    <label class="small text-muted mb-0">سعر الترم</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][FR][term_price]" value="{{ $regional['FR']['term_price'] ?? '' }}">
-                                                                </div>
-                                                                <div class="col-4">
-                                                                    <label class="small text-muted mb-0">{{ __('admin.price_yearly') }}</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][FR][yearly_price]" value="{{ $regional['FR']['yearly_price'] ?? '' }}">
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <label class="small text-muted mb-0">{{ __('admin.old_price') }}</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][FR][old_price]" value="{{ $regional['FR']['old_price'] ?? '' }}">
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <label class="small text-muted mb-0">{{ __('admin.discount_label') }}</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][FR][discount_label]" value="{{ $regional['FR']['discount_label'] ?? '' }}" placeholder="OFF 20%">
-                                                                </div>
+                                                <div class="border rounded-3 bg-white mb-2 overflow-hidden">
+                                                    <button class="w-100 d-flex align-items-center justify-content-between p-2 px-3 border-0 bg-transparent small fw-bold text-start" type="button" @click="activeRegion = (activeRegion === 'eu' ? null : 'eu')">
+                                                        <span>🇪🇺 Europe (EUR)</span>
+                                                        <i class="bi" :class="activeRegion === 'eu' ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                                                    </button>
+                                                    <div x-show="activeRegion === 'eu'" class="p-3 border-top bg-light" style="display: none;">
+                                                        <div class="row g-2">
+                                                            <input type="hidden" name="packages[{{ $package->id }}][regional_prices][FR][currency]" value="EUR">
+                                                            <div class="col-4">
+                                                                <label class="small text-muted mb-0">{{ __('admin.price_monthly') }}</label>
+                                                                <input type="number" step="0.01" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][FR][amount]" value="{{ $regional['FR']['amount'] ?? '' }}">
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <label class="small text-muted mb-0">سعر الترم</label>
+                                                                <input type="number" step="0.01" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][FR][term_price]" value="{{ $regional['FR']['term_price'] ?? '' }}">
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <label class="small text-muted mb-0">{{ __('admin.price_yearly') }}</label>
+                                                                <input type="number" step="0.01" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][FR][yearly_price]" value="{{ $regional['FR']['yearly_price'] ?? '' }}">
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <label class="small text-muted mb-0">{{ __('admin.old_price') }}</label>
+                                                                <input type="number" step="0.01" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][FR][old_price]" value="{{ $regional['FR']['old_price'] ?? '' }}">
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <label class="small text-muted mb-0">{{ __('admin.discount_label') }}</label>
+                                                                <input type="text" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][FR][discount_label]" value="{{ $regional['FR']['discount_label'] ?? '' }}" placeholder="OFF 20%">
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <!-- Region: United States -->
-                                                <div class="accordion-item bg-white border rounded-3 mb-2">
-                                                    <h2 class="accordion-header">
-                                                        <button class="accordion-button py-2 small fw-bold" :class="{ 'collapsed': activeRegion !== 'us' }" type="button" @click="activeRegion = (activeRegion === 'us' ? null : 'us')">
-                                                            🇺🇸 United States (USD)
-                                                        </button>
-                                                    </h2>
-                                                    <div id="reg_us_{{ $package->id }}" class="accordion-collapse collapse" :class="{ 'show': activeRegion === 'us' }" x-show="activeRegion === 'us'">
-                                                        <div class="accordion-body p-3">
-                                                            <div class="row g-2">
-                                                                <input type="hidden" name="packages[{{ $package->id }}][regional_prices][US][currency]" value="USD">
-                                                                <div class="col-4">
-                                                                    <label class="small text-muted mb-0">{{ __('admin.price_monthly') }}</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][US][amount]" value="{{ $regional['US']['amount'] ?? '' }}">
-                                                                </div>
-                                                                <div class="col-4">
-                                                                    <label class="small text-muted mb-0">سعر الترم</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][US][term_price]" value="{{ $regional['US']['term_price'] ?? '' }}">
-                                                                </div>
-                                                                <div class="col-4">
-                                                                    <label class="small text-muted mb-0">{{ __('admin.price_yearly') }}</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][US][yearly_price]" value="{{ $regional['US']['yearly_price'] ?? '' }}">
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <label class="small text-muted mb-0">{{ __('admin.old_price') }}</label>
-                                                                    <input type="number" step="0.01" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][US][old_price]" value="{{ $regional['US']['old_price'] ?? '' }}">
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <label class="small text-muted mb-0">{{ __('admin.discount_label') }}</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="packages[{{ $package->id }}][regional_prices][US][discount_label]" value="{{ $regional['US']['discount_label'] ?? '' }}" placeholder="Save 20%">
-                                                                </div>
+                                                <div class="border rounded-3 bg-white mb-2 overflow-hidden">
+                                                    <button class="w-100 d-flex align-items-center justify-content-between p-2 px-3 border-0 bg-transparent small fw-bold text-start" type="button" @click="activeRegion = (activeRegion === 'us' ? null : 'us')">
+                                                        <span>🇺🇸 United States (USD)</span>
+                                                        <i class="bi" :class="activeRegion === 'us' ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                                                    </button>
+                                                    <div x-show="activeRegion === 'us'" class="p-3 border-top bg-light" style="display: none;">
+                                                        <div class="row g-2">
+                                                            <input type="hidden" name="packages[{{ $package->id }}][regional_prices][US][currency]" value="USD">
+                                                            <div class="col-4">
+                                                                <label class="small text-muted mb-0">{{ __('admin.price_monthly') }}</label>
+                                                                <input type="number" step="0.01" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][US][amount]" value="{{ $regional['US']['amount'] ?? '' }}">
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <label class="small text-muted mb-0">سعر الترم</label>
+                                                                <input type="number" step="0.01" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][US][term_price]" value="{{ $regional['US']['term_price'] ?? '' }}">
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <label class="small text-muted mb-0">{{ __('admin.price_yearly') }}</label>
+                                                                <input type="number" step="0.01" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][US][yearly_price]" value="{{ $regional['US']['yearly_price'] ?? '' }}">
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <label class="small text-muted mb-0">{{ __('admin.old_price') }}</label>
+                                                                <input type="number" step="0.01" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][US][old_price]" value="{{ $regional['US']['old_price'] ?? '' }}">
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <label class="small text-muted mb-0">{{ __('admin.discount_label') }}</label>
+                                                                <input type="text" class="form-control form-control-sm text-dark bg-white" name="packages[{{ $package->id }}][regional_prices][US][discount_label]" value="{{ $regional['US']['discount_label'] ?? '' }}" placeholder="Save 20%">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -385,54 +370,48 @@
                                         </div>
 
                                         <!-- Features Accordion -->
-                                        <div class="accordion premium-accordion mb-4" id="package_acc_{{ $package->id }}" x-data="{ openMarketing: false, openLimits: false }">
+                                        <div class="mb-4" id="package_acc_{{ $package->id }}" x-data="{ openMarketing: false, openLimits: false }">
                                             <!-- Marketing Features -->
-                                            <div class="accordion-item border-0 mb-2 rounded-4">
-                                                <h2 class="accordion-header">
-                                                    <button class="accordion-button py-2 rounded-4 bg-light fw-bold" :class="{ 'collapsed': !openMarketing }" type="button" @click="openMarketing = !openMarketing">
-                                                        <i class="bi bi-megaphone me-2 text-primary"></i> {{ __('admin.marketing_features') }}
-                                                    </button>
-                                                </h2>
-                                                <div id="collapse_marketing_{{ $package->id }}" class="accordion-collapse collapse" :class="{ 'show': openMarketing }" x-show="openMarketing">
-                                                    <div class="accordion-body bg-light pt-0">
-                                                        <textarea class="form-control rounded-3 bg-white" name="packages[{{ $package->id }}][display_features]" rows="4">{{ is_array($package->display_features) ? implode("\n", $package->display_features) : '' }}</textarea>
-                                                        <small class="text-muted">{{ __('admin.one_feature_per_line') }}</small>
-                                                    </div>
+                                            <div class="border rounded-4 mb-2 overflow-hidden bg-light">
+                                                <button class="w-100 d-flex align-items-center justify-content-between p-3 border-0 bg-transparent fw-bold text-start" type="button" @click="openMarketing = !openMarketing">
+                                                    <span class="text-primary"><i class="bi bi-megaphone me-2"></i> {{ __('admin.marketing_features') }}</span>
+                                                    <i class="bi" :class="openMarketing ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                                                </button>
+                                                <div x-show="openMarketing" class="p-3 pt-0 border-top bg-light" style="display: none;">
+                                                    <textarea class="form-control rounded-3 bg-white text-dark mt-2" name="packages[{{ $package->id }}][display_features]" rows="4">{{ is_array($package->display_features) ? implode("\n", $package->display_features) : '' }}</textarea>
+                                                    <small class="text-muted d-block mt-1">{{ __('admin.one_feature_per_line') }}</small>
                                                 </div>
                                             </div>
 
                                             <!-- System Limits -->
-                                            <div class="accordion-item border-0 rounded-4">
-                                                <h2 class="accordion-header">
-                                                    <button class="accordion-button py-2 rounded-4 bg-light fw-bold" :class="{ 'collapsed': !openLimits }" type="button" @click="openLimits = !openLimits">
-                                                        <i class="bi bi-gear-wide-connected me-2 text-primary"></i> {{ __('admin.system_limits') }}
-                                                    </button>
-                                                </h2>
-                                                <div id="collapse_limits_{{ $package->id }}" class="accordion-collapse collapse" :class="{ 'show': openLimits }" x-show="openLimits">
-                                                    <div class="accordion-body bg-light pt-0">
-                                                        <div class="row g-2 mt-1">
-                                                            @foreach($features as $feature)
-                                                            @php
-                                                                $packageFeature = $package->features->where('id', $feature->id)->first();
-                                                                $value = $packageFeature ? $packageFeature->pivot->value : '';
-                                                            @endphp
-                                                            <div class="col-6">
-                                                                <div class="p-2 bg-white rounded-3 border border-light text-center h-100 shadow-sm">
-                                                                    <label class="d-block small text-muted fw-bold mb-1" style="font-size: 0.65rem;">
-                                                                        {{ app()->getLocale() === 'ar' ? $feature->name : $feature->name_en }}
-                                                                    </label>
-                                                                    @if($feature->type === 'limit')
-                                                                        <input type="text" class="form-control form-control-sm border-0 bg-light rounded-2 text-center" name="packages[{{ $package->id }}][limits][{{ $feature->id }}]" value="{{ $value }}" placeholder="-1">
-                                                                    @else
-                                                                        <div class="form-check form-switch p-0 m-0 d-flex justify-content-center">
-                                                                            <input type="hidden" name="packages[{{ $package->id }}][limits][{{ $feature->id }}]" value="false">
-                                                                            <input class="form-check-input premium-switch ms-0" type="checkbox" name="packages[{{ $package->id }}][limits][{{ $feature->id }}]" value="true" {{ $value == 'true' ? 'checked' : '' }}>
-                                                                        </div>
-                                                                    @endif
-                                                                </div>
+                                            <div class="border rounded-4 overflow-hidden bg-light">
+                                                <button class="w-100 d-flex align-items-center justify-content-between p-3 border-0 bg-transparent fw-bold text-start" type="button" @click="openLimits = !openLimits">
+                                                    <span class="text-primary"><i class="bi bi-gear-wide-connected me-2"></i> {{ __('admin.system_limits') }}</span>
+                                                    <i class="bi" :class="openLimits ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                                                </button>
+                                                <div x-show="openLimits" class="p-3 pt-0 border-top bg-light" style="display: none;">
+                                                    <div class="row g-2 mt-1">
+                                                        @foreach($features as $feature)
+                                                        @php
+                                                            $packageFeature = $package->features->where('id', $feature->id)->first();
+                                                            $value = $packageFeature ? $packageFeature->pivot->value : '';
+                                                        @endphp
+                                                        <div class="col-6">
+                                                            <div class="p-2 bg-white rounded-3 border text-center h-100 shadow-sm">
+                                                                <label class="d-block small text-dark fw-bold mb-1" style="font-size: 0.7rem;">
+                                                                    {{ app()->getLocale() === 'ar' ? $feature->name : $feature->name_en }}
+                                                                </label>
+                                                                @if($feature->type === 'limit')
+                                                                    <input type="text" class="form-control form-control-sm border bg-light rounded-2 text-center text-dark font-monospace" name="packages[{{ $package->id }}][limits][{{ $feature->id }}]" value="{{ $value }}" placeholder="-1">
+                                                                @else
+                                                                    <div class="form-check form-switch p-0 m-0 d-flex justify-content-center">
+                                                                        <input type="hidden" name="packages[{{ $package->id }}][limits][{{ $feature->id }}]" value="false">
+                                                                        <input class="form-check-input premium-switch ms-0" type="checkbox" name="packages[{{ $package->id }}][limits][{{ $feature->id }}]" value="true" {{ $value == 'true' ? 'checked' : '' }}>
+                                                                    </div>
+                                                                @endif
                                                             </div>
-                                                            @endforeach
                                                         </div>
+                                                        @endforeach
                                                     </div>
                                                 </div>
                                             </div>
