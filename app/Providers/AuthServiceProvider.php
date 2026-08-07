@@ -72,9 +72,9 @@ class AuthServiceProvider extends ServiceProvider
 
             // Case-insensitive check for Super Admin, Admin and Center Admin
             // These roles get full access to all features without needing individual permissions
-            $bypassRoles = ['super_admin', 'Super Admin', 'admin', 'Admin', 'center_admin'];
+            $bypassRoles = ['super_admin', 'Super Admin', 'admin', 'Admin', 'center_admin', 'center_owner', 'Center Owner'];
             if ($user->hasAnyRole($bypassRoles) ||
-                in_array(strtolower($user->role ?? ''), ['super_admin', 'admin', 'center_admin'])) {
+                in_array(strtolower($user->role ?? ''), ['super_admin', 'admin', 'center_admin', 'center_owner'])) {
                 return true;
             }
         });

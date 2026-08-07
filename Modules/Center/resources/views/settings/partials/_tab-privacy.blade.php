@@ -14,7 +14,7 @@
                                             <h6 class="fw-bold mb-1">{{ __('center::settings.privacy.export_title') }}</h6>
                                             <p class="text-muted small mb-0">{{ __('center::settings.privacy.export_desc') }}</p>
                                         </div>
-                                        <a href="{{ route('gdpr.export') }}" class="btn btn-outline-primary rounded-pill px-4">
+                                        <a href="{{ tenant_route('gdpr.export', ['tenant' => $tenant->domain ?? 'center']) }}" class="btn btn-outline-primary rounded-pill px-4">
                                             <i class="fas fa-download me-2"></i> {{ __('center::settings.privacy.export_btn') }}
                                         </a>
                                     </div>
@@ -51,7 +51,7 @@
                 <h5 class="modal-title fw-bold text-danger">{{ __('center::settings.privacy.confirm_delete_title') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('gdpr.delete') }}" method="POST">
+            <form action="{{ tenant_route('gdpr.delete', ['tenant' => $tenant->domain ?? 'center']) }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <p class="mb-3 text-muted">{{ __('center::settings.privacy.confirm_delete_desc') }}</p>

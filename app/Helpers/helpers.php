@@ -13,13 +13,13 @@ if (! function_exists('tenant_url')) {
     {
         // Get tenant
         if (is_null($tenant)) {
-            $tenant = app('tenant');
+            $tenant = app()->bound('tenant') ? app('tenant') : null;
         }
 
         $tenantDomain = is_object($tenant) ? $tenant->domain : $tenant;
 
         if (empty($tenantDomain)) {
-            throw new \RuntimeException('Cannot generate tenant URL: no tenant specified');
+            return url($path);
         }
 
         // Determine protocol
@@ -59,15 +59,14 @@ if (! function_exists('tenant_route')) {
     {
         // Get tenant
         if (is_null($tenant)) {
-            $tenant = app('tenant');
+            $tenant = app()->bound('tenant') ? app('tenant') : null;
         }
 
         $tenantDomain = is_object($tenant) ? $tenant->domain : $tenant;
 
         $mode = config('app.tenancy_mode', 'subdomain');
 
-        if ($mode === 'path') {
-            // In path mode, add tenant parameter
+        if (! isset($parameters['tenant']) && $tenantDomain) {
             $parameters['tenant'] = $tenantDomain;
         }
 
@@ -81,7 +80,7 @@ if (! function_exists('current_tenant')) {
      */
     function current_tenant(): ?\App\Models\Tenant
     {
-        return app()->has('tenant') ? app('tenant') : null;
+        return app()->bound('tenant') ? app('tenant') : null;
     }
 }
 

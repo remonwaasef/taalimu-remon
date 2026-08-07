@@ -310,7 +310,7 @@ function confirmTemplate() {
 }
 
 // Dynamic Academic Structure Management JS
-let stageCounter = {{ count($stages) }};
+let stageCounter = {{ count($stages ?? []) }};
 
 function addStage() {
     const container = document.getElementById('stages-container');
@@ -389,7 +389,7 @@ function removeGrade(btn, id = null) {
 }
 
 // Attendance / Late Rules Management JS
-let lateLevelCounter = {{ count($lateLevels) }};
+let lateLevelCounter = {{ count($lateLevels ?? []) }};
 
 function addLateLevel() {
     const container = document.getElementById('late-levels-container');
