@@ -104,17 +104,17 @@
                                                 <span class="badge bg-white text-muted border">{{ __('admin::admin.auto_detected') }}</span>
                                             </div>
                                             
-                                            <div class="accordion accordion-flush" id="regionalAccordion{{ $package->id }}">
+                                            <div class="accordion accordion-flush" id="regionalAccordion{{ $package->id }}" x-data="{ activeRegion: null }">
                                                 @php $regional = $package->regional_prices ?? []; @endphp
                                                 
                                                 <!-- Region: Egypt -->
                                                 <div class="accordion-item bg-white border rounded-3 mb-2">
                                                     <h2 class="accordion-header">
-                                                        <button class="accordion-button collapsed py-2 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#reg_eg_{{ $package->id }}">
+                                                        <button class="accordion-button py-2 small fw-bold" :class="{ 'collapsed': activeRegion !== 'eg' }" type="button" @click="activeRegion = (activeRegion === 'eg' ? null : 'eg')">
                                                             🇪🇬 Egypt (EGP)
                                                         </button>
                                                     </h2>
-                                                    <div id="reg_eg_{{ $package->id }}" class="accordion-collapse collapse" data-bs-parent="#regionalAccordion{{ $package->id }}">
+                                                    <div id="reg_eg_{{ $package->id }}" class="accordion-collapse collapse" :class="{ 'show': activeRegion === 'eg' }" x-show="activeRegion === 'eg'">
                                                         <div class="accordion-body p-3">
                                                             <div class="row g-2 d-none">
                                                                 <div class="col-3">
@@ -164,11 +164,11 @@
                                                 <!-- Region: Saudi -->
                                                 <div class="accordion-item bg-white border rounded-3 mb-2">
                                                     <h2 class="accordion-header">
-                                                        <button class="accordion-button collapsed py-2 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#reg_sa_{{ $package->id }}">
+                                                        <button class="accordion-button py-2 small fw-bold" :class="{ 'collapsed': activeRegion !== 'sa' }" type="button" @click="activeRegion = (activeRegion === 'sa' ? null : 'sa')">
                                                             🇸🇦 Saudi Arabia (SAR)
                                                         </button>
                                                     </h2>
-                                                    <div id="reg_sa_{{ $package->id }}" class="accordion-collapse collapse" data-bs-parent="#regionalAccordion{{ $package->id }}">
+                                                    <div id="reg_sa_{{ $package->id }}" class="accordion-collapse collapse" :class="{ 'show': activeRegion === 'sa' }" x-show="activeRegion === 'sa'">
                                                         <div class="accordion-body p-3">
                                                             <div class="row g-2">
                                                                 <input type="hidden" name="packages[{{ $package->id }}][regional_prices][SA][currency]" value="SAR">
@@ -200,11 +200,11 @@
                                                 <!-- Region: UAE -->
                                                 <div class="accordion-item bg-white border rounded-3 mb-2">
                                                     <h2 class="accordion-header">
-                                                        <button class="accordion-button collapsed py-2 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#reg_ae_{{ $package->id }}">
+                                                        <button class="accordion-button py-2 small fw-bold" :class="{ 'collapsed': activeRegion !== 'ae' }" type="button" @click="activeRegion = (activeRegion === 'ae' ? null : 'ae')">
                                                             🇦🇪 UAE (AED)
                                                         </button>
                                                     </h2>
-                                                    <div id="reg_ae_{{ $package->id }}" class="accordion-collapse collapse" data-bs-parent="#regionalAccordion{{ $package->id }}">
+                                                    <div id="reg_ae_{{ $package->id }}" class="accordion-collapse collapse" :class="{ 'show': activeRegion === 'ae' }" x-show="activeRegion === 'ae'">
                                                         <div class="accordion-body p-3">
                                                             <div class="row g-2">
                                                                 <input type="hidden" name="packages[{{ $package->id }}][regional_prices][AE][currency]" value="AED">
@@ -236,11 +236,11 @@
                                                 <!-- Region: Europe -->
                                                 <div class="accordion-item bg-white border rounded-3 mb-2">
                                                     <h2 class="accordion-header">
-                                                        <button class="accordion-button collapsed py-2 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#reg_eu_{{ $package->id }}">
+                                                        <button class="accordion-button py-2 small fw-bold" :class="{ 'collapsed': activeRegion !== 'eu' }" type="button" @click="activeRegion = (activeRegion === 'eu' ? null : 'eu')">
                                                             🇪🇺 Europe (EUR)
                                                         </button>
                                                     </h2>
-                                                    <div id="reg_eu_{{ $package->id }}" class="accordion-collapse collapse" data-bs-parent="#regionalAccordion{{ $package->id }}">
+                                                    <div id="reg_eu_{{ $package->id }}" class="accordion-collapse collapse" :class="{ 'show': activeRegion === 'eu' }" x-show="activeRegion === 'eu'">
                                                         <div class="accordion-body p-3">
                                                             <div class="row g-2">
                                                                 <input type="hidden" name="packages[{{ $package->id }}][regional_prices][FR][currency]" value="EUR">
@@ -271,11 +271,11 @@
                                                 <!-- Region: United States -->
                                                 <div class="accordion-item bg-white border rounded-3 mb-2">
                                                     <h2 class="accordion-header">
-                                                        <button class="accordion-button collapsed py-2 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#reg_us_{{ $package->id }}">
+                                                        <button class="accordion-button py-2 small fw-bold" :class="{ 'collapsed': activeRegion !== 'us' }" type="button" @click="activeRegion = (activeRegion === 'us' ? null : 'us')">
                                                             🇺🇸 United States (USD)
                                                         </button>
                                                     </h2>
-                                                    <div id="reg_us_{{ $package->id }}" class="accordion-collapse collapse" data-bs-parent="#regionalAccordion{{ $package->id }}">
+                                                    <div id="reg_us_{{ $package->id }}" class="accordion-collapse collapse" :class="{ 'show': activeRegion === 'us' }" x-show="activeRegion === 'us'">
                                                         <div class="accordion-body p-3">
                                                             <div class="row g-2">
                                                                 <input type="hidden" name="packages[{{ $package->id }}][regional_prices][US][currency]" value="USD">
@@ -385,15 +385,15 @@
                                         </div>
 
                                         <!-- Features Accordion -->
-                                        <div class="accordion premium-accordion mb-4" id="package_acc_{{ $package->id }}">
+                                        <div class="accordion premium-accordion mb-4" id="package_acc_{{ $package->id }}" x-data="{ openMarketing: false, openLimits: false }">
                                             <!-- Marketing Features -->
-                                            <div class="accordion-item border-0 mb-2 rounded-4 overflow-hidden">
+                                            <div class="accordion-item border-0 mb-2 rounded-4">
                                                 <h2 class="accordion-header">
-                                                    <button class="accordion-button collapsed py-2 rounded-4 bg-light fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_marketing_{{ $package->id }}">
+                                                    <button class="accordion-button py-2 rounded-4 bg-light fw-bold" :class="{ 'collapsed': !openMarketing }" type="button" @click="openMarketing = !openMarketing">
                                                         <i class="bi bi-megaphone me-2 text-primary"></i> {{ __('admin.marketing_features') }}
                                                     </button>
                                                 </h2>
-                                                <div id="collapse_marketing_{{ $package->id }}" class="accordion-collapse collapse" data-bs-parent="#package_acc_{{ $package->id }}">
+                                                <div id="collapse_marketing_{{ $package->id }}" class="accordion-collapse collapse" :class="{ 'show': openMarketing }" x-show="openMarketing">
                                                     <div class="accordion-body bg-light pt-0">
                                                         <textarea class="form-control rounded-3 bg-white" name="packages[{{ $package->id }}][display_features]" rows="4">{{ is_array($package->display_features) ? implode("\n", $package->display_features) : '' }}</textarea>
                                                         <small class="text-muted">{{ __('admin.one_feature_per_line') }}</small>
@@ -402,13 +402,13 @@
                                             </div>
 
                                             <!-- System Limits -->
-                                            <div class="accordion-item border-0 rounded-4 overflow-hidden">
+                                            <div class="accordion-item border-0 rounded-4">
                                                 <h2 class="accordion-header">
-                                                    <button class="accordion-button collapsed py-2 rounded-4 bg-light fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_limits_{{ $package->id }}">
+                                                    <button class="accordion-button py-2 rounded-4 bg-light fw-bold" :class="{ 'collapsed': !openLimits }" type="button" @click="openLimits = !openLimits">
                                                         <i class="bi bi-gear-wide-connected me-2 text-primary"></i> {{ __('admin.system_limits') }}
                                                     </button>
                                                 </h2>
-                                                <div id="collapse_limits_{{ $package->id }}" class="accordion-collapse collapse" data-bs-parent="#package_acc_{{ $package->id }}">
+                                                <div id="collapse_limits_{{ $package->id }}" class="accordion-collapse collapse" :class="{ 'show': openLimits }" x-show="openLimits">
                                                     <div class="accordion-body bg-light pt-0">
                                                         <div class="row g-2 mt-1">
                                                             @foreach($features as $feature)
