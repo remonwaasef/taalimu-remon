@@ -1,4 +1,4 @@
-﻿<style>
+<style>
     .subscription-hero {
         background: #fff;
         border-radius: 1.25rem;
@@ -140,5 +140,81 @@
         0%   { box-shadow: 0 0 0 0 rgba(245,158,11,0.5); transform: translateX(-50%) scale(1); }
         70%  { box-shadow: 0 0 0 8px rgba(245,158,11,0); transform: translateX(-50%) scale(1.05); }
         100% { box-shadow: 0 0 0 0 rgba(245,158,11,0); transform: translateX(-50%) scale(1); }
+    }
+
+    /* --- Dark Mode Overrides for Subscription Page --- */
+    .dark .subscription-hero,
+    html.dark .subscription-hero {
+        background: #17202B !important;
+        border-color: #2B3644 !important;
+        color: #F9FAFB !important;
+    }
+
+    .dark .plan-card,
+    html.dark .plan-card {
+        background: #17202B !important;
+        border-color: #2B3644 !important;
+        color: #F9FAFB !important;
+    }
+
+    .dark .plan-card:hover,
+    html.dark .plan-card:hover {
+        border-color: #2E8B83 !important;
+        box-shadow: 0 12px 30px rgba(46, 139, 131, 0.25) !important;
+    }
+
+    .dark .plan-card.current-plan,
+    html.dark .plan-card.current-plan {
+        background: linear-gradient(135deg, #10322E, #17202B) !important;
+        border-color: #2E8B83 !important;
+    }
+
+    .dark .plan-card.featured-plan,
+    html.dark .plan-card.featured-plan {
+        border-color: #2E8B83 !important;
+    }
+
+    .dark .plan-card h5,
+    .dark .plan-card p,
+    .dark .plan-card ul li span,
+    .dark .plan-card .text-muted,
+    html.dark .plan-card h5,
+    html.dark .plan-card p,
+    html.dark .plan-card ul li span,
+    html.dark .plan-card .text-muted {
+        color: #F9FAFB !important;
+    }
+
+    .dark .plan-card .text-muted.small,
+    html.dark .plan-card .text-muted.small {
+        color: #CBD5E1 !important;
+    }
+
+    .dark .info-tile,
+    html.dark .info-tile {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border-color: #2B3644 !important;
+        color: #F9FAFB !important;
+    }
+
+    .dark .billing-toggle,
+    html.dark .billing-toggle {
+        background: #17202B !important;
+        border-color: #2B3644 !important;
+    }
+
+    .dark .billing-toggle label,
+    html.dark .billing-toggle label {
+        color: #CBD5E1 !important;
+    }
+
+    .dark .billing-toggle input[type="radio"]:checked + label,
+    html.dark .billing-toggle input[type="radio"]:checked + label {
+        color: #FFFFFF !important;
+    }
+
+    .dark .toggle-slider,
+    html.dark .toggle-slider {
+        background: #2E8B83 !important;
     }
 </style>

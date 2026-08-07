@@ -1942,3 +1942,11 @@ html.dark .launchpad-step-card {
     background-color: #17202B !important;
     border-color: #2B3644 !important;
 }
+
+/* Sidebar Active Nav Link Text Color Fix */
+.dark .sidebar a.text-brand-primary,
+html.dark .sidebar a.text-brand-primary,
+.dark .sidebar button.text-brand-primary,
+html.dark .sidebar button.text-brand-primary {
+    color: #5EEAD4 !important;
+}
