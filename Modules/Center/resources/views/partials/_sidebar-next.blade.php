@@ -223,7 +223,7 @@
     </div>
 
     <x-slot name="footer">
-        <form method="POST" action="{{ route('center.logout') }}">
+        <form method="POST" action="{{ route('center.logout', ['tenant' => $domain]) }}">
             @csrf
             <button type="submit" class="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors">
                 <i class="fas fa-sign-out-alt w-4 text-center"></i>
