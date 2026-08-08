@@ -125,13 +125,13 @@
                 </a>
                 @endcan
                 @canany(['view reports', 'view analytics'])
-                <a href="{{ route('center.analytics.finance') }}"
+                <a href="{{ route('center.analytics.finance', ['tenant' => $domain]) }}"
                    class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-colors
                           {{ Route::currentRouteNamed('center.analytics.finance') ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800' }}">
                     <i class="fas fa-chart-line w-4 text-center"></i>
                     <span>{{ __('center::sidebar.financial_analytics') }}</span>
                 </a>
-                <a href="{{ route('center.analytics.commissions') }}"
+                <a href="{{ route('center.analytics.commissions', ['tenant' => $domain]) }}"
                    class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-colors
                           {{ Route::currentRouteNamed('center.analytics.commissions') ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800' }}">
                     <i class="fas fa-percentage w-4 text-center"></i>
@@ -139,7 +139,7 @@
                 </a>
                 @endcanany
                 @if($hasAdvancedReports)
-                <a href="{{ route('center.analytics.index') }}"
+                <a href="{{ route('center.analytics.index', ['tenant' => $domain]) }}"
                    class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-colors
                           {{ Route::currentRouteNamed('center.analytics.index') ? 'text-brand-primary bg-brand-50 dark:bg-brand-900/30' : 'text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800' }}">
                     <i class="fas fa-chart-pie w-4 text-center"></i>
