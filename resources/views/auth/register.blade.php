@@ -120,13 +120,14 @@
                                 {{ app()->isLocale('ar') ? 'رابط منصتك' : 'Your platform link' }}
                             </label>
                             <div class="relative flex items-center w-full" dir="ltr">
-                                <div class="absolute left-0 inset-y-0 flex items-center px-3 pointer-events-none text-brand-secondary font-bold text-[11px] bg-brand-secondary/5 border-r border-brand-secondary/10 rounded-l-xl">https://</div>
+                                <div class="absolute left-0 inset-y-0 flex items-center px-3 pointer-events-none text-brand-secondary font-bold text-[11px] bg-brand-secondary/5 border-r border-brand-secondary/10 rounded-l-xl z-10">https://</div>
                                 <input type="text" name="subdomain" x-model="subdomain"
                                     @input="manuallyEditedSubdomain = true; subdomain = cleanSlug(subdomain);"
                                     @input.debounce.500ms="checkSubdomain()"
-                                    class="w-full h-9 pl-[72px] pr-[110px] bg-slate-50/80 border border-slate-200 rounded-xl text-sm font-bold font-sans focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all"
+                                    style="padding-left: 70px !important; padding-right: 110px !important;"
+                                    class="w-full h-9 bg-slate-50/80 border border-slate-200 rounded-xl text-sm font-bold font-sans focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-secondary/10 focus:border-brand-secondary transition-all"
                                     placeholder="center-name" :required="currentStep === 1">
-                                <div class="absolute right-0 inset-y-0 flex items-center pr-3 pointer-events-none text-slate-400 font-bold text-[11px] gap-2">
+                                <div class="absolute right-0 inset-y-0 flex items-center pr-3 pointer-events-none text-slate-400 font-bold text-[11px] gap-2 z-10">
                                     <span>.taalimu.com</span>
                                     <div class="flex items-center justify-center w-4 h-4">
                                         <template x-if="subdomainStatus === 'loading'"><div class="w-3.5 h-3.5 border-2 border-brand-secondary border-t-transparent rounded-full animate-spin"></div></template>
