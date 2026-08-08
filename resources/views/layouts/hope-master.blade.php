@@ -16,17 +16,17 @@
     
     <!-- Hope UI CSS (from public/assets/hope-ui) -->
     <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/libs.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/hope-ui.css?v=1.1.0') }}">
-    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/custom.css?v=1.1.0') }}">
+    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/hope-ui.css?v=1.1.1') }}">
+    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/custom.css?v=1.1.1') }}">
     @if(isset($tenant) && ($tenant->settings['appearance']['dark_mode'] ?? false))
-        <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/dark.css?v=1.1.0') }}">
+        <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/dark.css?v=1.1.1') }}">
     @elseif(isset($tenant->settings['appearance']['dark_mode']) && $tenant->settings['appearance']['dark_mode'])
-        <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/dark.css?v=1.1.0') }}">
+        <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/dark.css?v=1.1.1') }}">
     @endif
     @if(app()->getLocale() == 'ar')
-        <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/rtl.css?v=1.1.0') }}">
+        <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/rtl.css?v=1.1.1') }}">
     @endif
-    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/customizer.css?v=1.1.0') }}">
+    <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/customizer.css?v=1.1.1') }}">
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
