@@ -477,6 +477,80 @@ html.dark .modal-header, html.dark .modal-footer {
 .dark .bg-pink-50, html.dark .bg-pink-50 { background-color: rgba(236, 72, 153, 0.15) !important; color: #F472B6 !important; }
 
 /* --------------------------------------------------------------------------
+    12b. Hardcoded Dark-Text Overrides (taalimu-unified.css "Nuclear Fix")
+    --------------------------------------------------------------------------
+    taalimu-unified.css forces black/dark-slate text (#1e293b / #0f172a /
+    #000000 with -webkit-text-fill-color) on labels, card texts, breadcrumbs,
+    modal titles and outline buttons at higher specificity than the standard
+    overrides. Mirror the exact selectors under html.dark to win the cascade.
+   -------------------------------------------------------------------------- */
+html.dark label,
+html.dark .form-label,
+html.dark label:not(.form-floating > label):not(.custom-form-floating > label) {
+    color: #CBD5E1 !important;
+    -webkit-text-fill-color: #CBD5E1 !important;
+}
+
+html.dark .content-inner .card h1,
+html.dark .content-inner .card h2,
+html.dark .content-inner .card h3,
+html.dark .content-inner .card h4,
+html.dark .content-inner .card h5,
+html.dark .content-inner .card h6,
+html.dark .content-inner .card .h2,
+html.dark .content-inner .card>.card-body>p,
+html.dark .content-inner .card>.card-body>span:not(.badge):not(.dropdown-item),
+html.dark .content-inner .card>.card-body>div:not(.dropdown-menu):not(.dropdown):not(.btn-group):not(.table-responsive)>span:not(.badge) {
+    color: #CBD5E1 !important;
+    -webkit-text-fill-color: #CBD5E1 !important;
+    text-shadow: none !important;
+}
+
+html.dark .content-inner .card h1,
+html.dark .content-inner .card h2,
+html.dark .content-inner .card h3,
+html.dark .content-inner .card h4,
+html.dark .content-inner .card h5,
+html.dark .content-inner .card h6,
+html.dark .content-inner .card .h2 {
+    color: #F9FAFB !important;
+    -webkit-text-fill-color: #F9FAFB !important;
+}
+
+html.dark .breadcrumb-item.active,
+html.dark .content-inner>.mb-4:first-child .breadcrumb-item.active {
+    color: #CBD5E1 !important;
+    -webkit-text-fill-color: #CBD5E1 !important;
+}
+
+html.dark .modal-header .modal-title {
+    color: #F9FAFB !important;
+    -webkit-text-fill-color: #F9FAFB !important;
+}
+
+html.dark .page-title,
+html.dark .card-title {
+    color: #F9FAFB !important;
+    -webkit-text-fill-color: #F9FAFB !important;
+}
+
+html.dark .btn-outline-secondary,
+html.dark .content-inner>.d-flex:first-child .btn-outline-secondary,
+html.dark .content-inner>.mb-4:first-child .btn-outline-secondary {
+    color: #CBD5E1 !important;
+    border-color: #3A4A5E !important;
+    background: transparent !important;
+}
+
+html.dark .btn-outline-secondary:hover,
+html.dark .btn-outline-secondary:focus,
+html.dark .btn-outline-secondary:active {
+    background: #2B3644 !important;
+    border-color: #2B3644 !important;
+    color: #FFFFFF !important;
+}
+
+/* --------------------------------------------------------------------------
    13. Lists, Badges & Misc Components
    -------------------------------------------------------------------------- */
 .dark .list-group-item, html.dark .list-group-item {
