@@ -1689,6 +1689,96 @@ html.dark .btn-check:checked + .btn-outline-success {
     border-color: #22C55E !important;
 }
 
+/* Alert Banners & SweetAlert2 Dark Mode Overrides */
+.dark .alert-danger,
+html.dark .alert-danger,
+body.dark .alert-danger {
+    background-color: rgba(239, 68, 68, 0.18) !important;
+    border-color: rgba(239, 68, 68, 0.35) !important;
+    color: #FCA5A5 !important;
+}
+.dark .alert-danger .alert-text,
+html.dark .alert-danger .alert-text,
+.dark .alert-danger .text-danger,
+html.dark .alert-danger .text-danger,
+.dark .alert-danger h6,
+html.dark .alert-danger h6,
+.dark .alert-danger li,
+html.dark .alert-danger li {
+    color: #FCA5A5 !important;
+    -webkit-text-fill-color: #FCA5A5 !important;
+}
+
+.dark .alert-success,
+html.dark .alert-success,
+body.dark .alert-success {
+    background-color: rgba(34, 197, 94, 0.18) !important;
+    border-color: rgba(34, 197, 94, 0.35) !important;
+    color: #86EFAC !important;
+}
+.dark .alert-success .alert-text,
+html.dark .alert-success .alert-text,
+.dark .alert-success .text-success,
+html.dark .alert-success .text-success {
+    color: #86EFAC !important;
+    -webkit-text-fill-color: #86EFAC !important;
+}
+
+.dark .alert-warning,
+html.dark .alert-warning,
+body.dark .alert-warning {
+    background-color: rgba(245, 158, 11, 0.18) !important;
+    border-color: rgba(245, 158, 11, 0.35) !important;
+    color: #FDE047 !important;
+}
+.dark .alert-warning .alert-text,
+html.dark .alert-warning .alert-text,
+.dark .alert-warning .text-warning,
+html.dark .alert-warning .text-warning {
+    color: #FDE047 !important;
+    -webkit-text-fill-color: #FDE047 !important;
+}
+
+.dark .alert-info,
+html.dark .alert-info,
+body.dark .alert-info {
+    background-color: rgba(14, 165, 233, 0.18) !important;
+    border-color: rgba(14, 165, 233, 0.35) !important;
+    color: #7DD3FC !important;
+}
+.dark .alert-info .alert-text,
+html.dark .alert-info .alert-text,
+.dark .alert-info .text-info,
+html.dark .alert-info .text-info {
+    color: #7DD3FC !important;
+    -webkit-text-fill-color: #7DD3FC !important;
+}
+
+.dark .alert .btn-close,
+html.dark .alert .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* SweetAlert2 Toast & Popup Dark Mode Override */
+.dark .swal2-popup,
+html.dark .swal2-popup,
+body.dark .swal2-popup {
+    background-color: #1E293B !important;
+    color: #F8FAFC !important;
+    border: 1px solid #334155 !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dark .swal2-title,
+html.dark .swal2-title,
+.dark .swal2-html-container,
+html.dark .swal2-html-container,
+.dark .swal2-content,
+html.dark .swal2-content {
+    color: #F8FAFC !important;
+    -webkit-text-fill-color: #F8FAFC !important;
+}
+
 /* Table Headers & Rows */
 .dark .table,
 html.dark .table,
