@@ -342,6 +342,12 @@ html.dark .dropdown-item:hover, html.dark .dropdown-item:focus {
     border-color: #2B3644 #2B3644 #17202B !important;
 }
 
+.dark .nav-pills .nav-link.active, html.dark .nav-pills .nav-link.active {
+    background-color: #1D2935 !important;
+    color: #2E8B83 !important;
+    box-shadow: none !important;
+}
+
 /* --------------------------------------------------------------------------
    9. Sidebar Component
    -------------------------------------------------------------------------- */
