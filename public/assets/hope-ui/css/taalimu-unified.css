@@ -1602,14 +1602,18 @@ body.dark {
 /* Base Utility Overrides for Dark Mode */
 .dark .bg-white,
 html.dark .bg-white,
-body.dark .bg-white {
+body.dark .bg-white,
+.dark [class*="bg-white"],
+html.dark [class*="bg-white"] {
     background-color: #17202B !important;
     color: #F9FAFB !important;
 }
 
 .dark .bg-light,
 html.dark .bg-light,
-body.dark .bg-light {
+body.dark .bg-light,
+.dark .bg-slate-50,
+html.dark .bg-slate-50 {
     background-color: #1D2935 !important;
     color: #CBD5E1 !important;
 }

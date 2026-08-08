@@ -153,3 +153,52 @@
     color: var(--color-primary) !important;
 }
 
+/* ===== Global Dark Mode Utility Overrides ===== */
+.dark .bg-white,
+html.dark .bg-white {
+    background-color: #17202B !important;
+    color: #F9FAFB !important;
+}
+
+.dark .bg-slate-50,
+html.dark .bg-slate-50,
+.dark .bg-slate-50\/50,
+html.dark .bg-slate-50\/50 {
+    background-color: #1D2935 !important;
+    color: #CBD5E1 !important;
+}
+
+.dark .text-slate-900,
+html.dark .text-slate-900,
+.dark .text-slate-800,
+html.dark .text-slate-800,
+.dark .text-slate-700,
+html.dark .text-slate-700 {
+    color: #F9FAFB !important;
+}
+
+.dark .text-slate-600,
+html.dark .text-slate-600,
+.dark .text-slate-500,
+html.dark .text-slate-500,
+.dark .text-slate-400,
+html.dark .text-slate-400 {
+    color: #94A3B8 !important;
+}
+
+.dark .border-brand-border,
+html.dark .border-brand-border,
+.dark .border-slate-100,
+html.dark .border-slate-100,
+.dark .border-slate-200,
+html.dark .border-slate-200 {
+    border-color: #2B3644 !important;
+}
+
+/* Icon container background soft colors in dark mode */
+.dark .bg-emerald-50, html.dark .bg-emerald-50 { background-color: rgba(16, 185, 129, 0.15) !important; color: #34D399 !important; }
+.dark .bg-brand-50, html.dark .bg-brand-50 { background-color: rgba(46, 139, 131, 0.2) !important; color: #7FC7C0 !important; }
+.dark .bg-sky-50, html.dark .bg-sky-50 { background-color: rgba(14, 165, 233, 0.15) !important; color: #38BDF8 !important; }
+.dark .bg-amber-50, html.dark .bg-amber-50 { background-color: rgba(245, 158, 11, 0.15) !important; color: #FBBF24 !important; }
+
+
