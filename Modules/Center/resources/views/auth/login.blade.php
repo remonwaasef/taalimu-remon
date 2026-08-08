@@ -1,6 +1,7 @@
 ﻿@extends('layouts.landing-new')
 
 @section('content')
+@include('partials.login-dark-theme')
 <!-- Import Google Fonts (if not already in layout) -->
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
@@ -67,10 +68,10 @@
     }
 </style>
 
-<div class="min-h-screen bg-slate-50/50 flex justify-center items-center p-4 lg:p-8" 
+<div class="login-page-wrap min-h-screen bg-slate-50/50 flex justify-center items-center p-4 lg:p-8" 
      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
     
-    <div class="w-full max-w-md bg-white rounded-[40px] shadow-2xl shadow-slate-200/60 p-8 lg:p-10 border border-slate-100 animate-fade-in-up">
+    <div class="login-card w-full max-w-md bg-white rounded-[40px] shadow-2xl shadow-slate-200/60 p-8 lg:p-10 border border-slate-100 animate-fade-in-up">
         
         <!-- Header -->
         <div class="text-center mb-8">

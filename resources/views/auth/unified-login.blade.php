@@ -1,9 +1,10 @@
 @extends('layouts.landing-new')
 
 @section('content')
-<div class="min-h-[80vh] flex items-center justify-center py-10 lg:py-16 px-4 sm:px-6 lg:px-8 bg-slate-50/50 mesh-gradient-soft noise-overlay">
+@include('partials.login-dark-theme')
+<div class="login-page-wrap min-h-[80vh] flex items-center justify-center py-10 lg:py-16 px-4 sm:px-6 lg:px-8 bg-slate-50/50 mesh-gradient-soft noise-overlay">
     <div class="max-w-md w-full space-y-6 animate-fade-in-up">
-        <div class="bg-white border border-slate-100/50 rounded-[1.5rem] shadow-2xl shadow-blue-900/5 p-6 lg:p-8 backdrop-blur-xl relative overflow-hidden">
+        <div class="login-card bg-white border border-slate-100/50 rounded-[1.5rem] shadow-2xl shadow-blue-900/5 p-6 lg:p-8 backdrop-blur-xl relative overflow-hidden">
             <!-- Decorative glow -->
             <div class="absolute -top-24 -right-24 w-64 h-64 bg-brand-primary/10 blur-[80px] rounded-full pointer-events-none"></div>
             <div class="text-center mb-6">
