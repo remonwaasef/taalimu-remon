@@ -56,48 +56,26 @@
                 </div>
             </div>
 
-            <!-- Contextual Header -->
-            <div class="mb-4 text-center transition-all duration-700 ease-in-out">
+            <!-- Contextual Header (Clean & Compact) -->
+            <div class="mb-3 text-center">
                 <div x-show="currentStep === 1" x-cloak class="flex flex-col items-center">
-                    <h1 class="text-xl lg:text-2xl font-black text-slate-900 mb-2 font-arabic leading-tight">
+                    <h1 class="text-lg lg:text-xl font-black text-slate-900 mb-1.5 font-arabic leading-tight">
                         {{ app()->isLocale('ar') ? 'ابدأ رحلتك التعليمية' : 'Start Your Journey' }}
                     </h1>
-                    
-                    <!-- Premium Trial Badge -->
                     <template x-if="currentPlan.trial_days > 0">
-                        <div class="flex flex-col items-center">
-                            <div class="inline-flex items-center gap-2.5 py-2 px-5 rounded-full bg-emerald-50 border border-emerald-100 mb-2 shadow-sm animate-fade-in hover:scale-105 transition-transform duration-300">
-                                <div class="relative flex h-2.5 w-2.5">
-                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                                </div>
-                                <span class="text-sm font-black text-emerald-700 font-arabic tracking-tight">
-                                     <span x-text="currentPlan.trial_days"></span>
-                                     {{ app()->isLocale('ar') ? 'يوم تجربة مجانية بالكامل' : 'Days Full Free Trial' }}
-                                </span>
+                        <div class="inline-flex items-center gap-2 py-1 px-4 rounded-full bg-emerald-50 border border-emerald-100 mb-1">
+                            <div class="relative flex h-2 w-2">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                             </div>
-                            
-                            <div class="flex items-center gap-1.5 mb-4 opacity-80">
-                                <i class="bi bi-shield-check text-emerald-600 text-xs"></i>
-                                <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                                    {{ app()->isLocale('ar') ? 'لا يلزم وجود بطاقة ائتمان' : 'No Credit Card Required' }}
-                                </span>
-                            </div>
-                        </div>
-                    </template>
-
-                    <template x-if="!currentPlan.trial_days || currentPlan.trial_days <= 0">
-                        <div class="inline-flex items-center justify-center gap-2 mb-4 bg-brand-secondary/5 py-1 px-4 rounded-full w-fit mx-auto">
-                            <i class="bi bi-rocket-takeoff text-brand-secondary text-xs"></i>
-                            <span class="text-[10px] font-black text-brand-secondary uppercase tracking-widest">
-                                {{ app()->isLocale('ar') ? 'ابدأ الآن' : 'Start Now' }}
+                            <span class="text-xs font-black text-emerald-700 font-arabic">
+                                <span x-text="currentPlan.trial_days"></span>
+                                {{ app()->isLocale('ar') ? 'يوم تجربة مجانية' : 'Days Free Trial' }}
+                                <span class="text-emerald-500 mx-1">·</span>
+                                <span class="text-[10px] text-emerald-600/70 font-bold">{{ app()->isLocale('ar') ? 'بدون بطاقة ائتمان' : 'No Card Required' }}</span>
                             </span>
                         </div>
                     </template>
-
-                    <p class="text-slate-500 text-xs font-arabic font-medium opacity-80 max-w-[320px] mx-auto">
-                        {{ app()->isLocale('ar') ? 'خطوات بسيطة لامتلاك منصتك التعليمية المتكاملة' : 'Simple steps to own your integrated platform' }}
-                    </p>
                 </div>
                 <div x-show="currentStep === 2" x-cloak>
                     <h1 class="text-lg lg:text-xl font-black text-slate-900 mb-1 font-arabic leading-tight">
@@ -114,10 +92,10 @@
             <!-- Content below account type selection -> blurred until selected -->
             <div class="transition-all duration-500">
                 
-            <!-- Google Shortcut (Now below selection) -->
-            <div class="mb-6">
-                <a :href="'{{ route('auth.google') }}?plan=' + selectedPlan + '&cycle=' + billingCycle + '&account_type=' + (accountType || 'center')" class="w-full flex items-center justify-center gap-2 py-2.5 px-6 border-2 border-slate-200 rounded-2xl shadow-sm text-base font-black text-slate-800 bg-white hover:bg-slate-50 hover:border-blue-500/30 hover:shadow-md transition-all group">
-                    <svg class="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <!-- Google Shortcut -->
+            <div class="mb-4">
+                <a :href="'{{ route('auth.google') }}?plan=' + selectedPlan + '&cycle=' + billingCycle + '&account_type=' + (accountType || 'center')" class="w-full flex items-center justify-center gap-2 py-2 px-6 border border-slate-200 rounded-xl text-sm font-black text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-300 hover:shadow-sm transition-all group">
+                    <svg class="w-4 h-4 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                         <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                         <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
@@ -125,7 +103,7 @@
                     </svg>
                     <span>{{ __('auth.register.google_signup') }}</span>
                 </a>
-                <div class="relative my-4 px-8">
+                <div class="relative my-3 px-8">
                     <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-100/80"></div></div>
                     <div class="relative flex justify-center text-[10px] uppercase"><span class="bg-white px-5 text-slate-300 font-bold tracking-[0.2em]">{{ trans('auth.register.or') }}</span></div>
                 </div>
@@ -163,16 +141,20 @@
 
 @include('auth.partials._register-step2')
 
-                <div class="mt-4 text-center">
+                <div class="mt-3 text-center space-y-2">
                     <p class="text-[10px] text-slate-400 font-arabic leading-relaxed">
                         {{ __('auth.register.terms_prefix') }}
                         <a href="{{ route('terms') }}" class="text-slate-900 font-black hover:underline underline-offset-4">{{ __('auth.register.terms_of_service') }}</a> 
                         {{ __('auth.register.and') }} 
                         <a href="{{ route('privacy') }}" class="text-slate-900 font-black hover:underline underline-offset-4">{{ __('auth.register.privacy_policy') }}</a>
                     </p>
+                    <p class="text-xs text-slate-500 font-arabic font-bold pb-2">
+                        {{ __('auth.login.no_account_link') }}
+                        <a href="{{ route('login.portal') }}" class="text-brand-secondary font-black hover:underline">{{ __('auth.login.title') }}</a>
+                    </p>
                 </div>
             </form>
-            </div> <!-- End Blurred Wrapper -->
+            </div> <!-- End Wrapper -->
         </div>
 
 @include('auth.partials._register-plan-modal')
