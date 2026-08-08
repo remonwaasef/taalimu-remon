@@ -20,6 +20,19 @@ class User extends Authenticatable
     {
         parent::boot();
 
+        // Global users (tenant_id = null, e.g. super admins) must stay visible
+        // even when a tenant is bound to the request (u.taalimu.com binds a
+        // tenant, and the default TenantScope hides tenant_id = null rows).
+        static::removeGlobalScope(\App\Scopes\TenantScope::class);
+        static::addGlobalScope('tenant_users_or_global', function ($builder) {
+            if (app()->bound('tenant')) {
+                $builder->where(function ($q) {
+                    $q->where((new static)->getTable().'.tenant_id', app('tenant')->id)
+                        ->orWhereNull((new static)->getTable().'.tenant_id');
+                });
+            }
+        });
+
         static::creating(function ($user) {
             if ($user->role === 'student' && empty($user->qr_identifier)) {
                 $user->qr_identifier = \Illuminate\Support\Str::random(12);
