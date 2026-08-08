@@ -1,6 +1,6 @@
 # DOCUMENTATION INDEX - Taalimu.com AI Knowledge Base
 
-> **Purpose**: Master index of all 36 documentation files in the `docs/` directory, detailing their responsibilities, reading context triggers, and post-task update triggers for AI assistants.
+> **Purpose**: Master index of all 37 documentation files in the `docs/` directory, detailing their responsibilities, reading context triggers, and post-task update triggers for AI assistants.
 
 ---
 
@@ -43,5 +43,6 @@
 | **[32_RELEASE_CHECKLIST.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/32_RELEASE_CHECKLIST.md)** | Pre-release, deployment, and post-deployment verification | Performing production releases | When release verification rules change |
 | **[33_AFTER_EVERY_CHANGE.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/33_AFTER_EVERY_CHANGE.md)** | Mandatory post-task documentation update matrix | After completing ANY change | When documentation rules change |
 | **[34_CHANGELOG.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/34_CHANGELOG.md)** | Semantic versioning changelog tracking system | After completing ANY change | After EVERY completed change |
-| **[35_KNOWN_LIMITATIONS.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/35_KNOWN_LIMITATIONS.md)** | System boundaries, single-DB scaling limits, WhatsApp limits | Evaluating technical debt | When identifying or resolving limits |
+| **[35_KNOWN_LIMITATIONS.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/35_KNOWN_LIMITATIONS.md)** | System boundaries, single-DB scaling limits, WhatsApp limits | Evaluating technical debt | When the situation is new or limits |
+| **[36_VIDEO_STRATEGY.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/36_VIDEO_STRATEGY.md)** | Live class (online-classes) strategy: external links only, Zoom/Meet limits, feature roadmap | Developing live-class or video features | When executing live-video related tasks |
 | **[DOCUMENTATION_CLEANUP_REPORT.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/DOCUMENTATION_CLEANUP_REPORT.md)** | Documentation audit report detailing merged & deleted files | Audit reference | Historical audit record |
