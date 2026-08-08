@@ -342,6 +342,14 @@ html.dark .dropdown-item:hover, html.dark .dropdown-item:focus {
     border-color: #2B3644 #2B3644 #17202B !important;
 }
 
+/* hope-ui.css sets generic .nav { background: #ffffff } which turns any
+   Bootstrap nav container (e.g. wizard tabs <ul class="nav nav-pills">)
+   into a white block in dark mode. dark.css override is NOT loaded by
+   app-next layout, so fix it here. */
+.dark .nav, html.dark .nav {
+    background-color: transparent !important;
+}
+
 .dark .nav-pills .nav-link.active, html.dark .nav-pills .nav-link.active {
     background-color: #1D2935 !important;
     color: #2E8B83 !important;
