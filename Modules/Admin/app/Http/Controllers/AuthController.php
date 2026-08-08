@@ -38,25 +38,26 @@ class AuthController extends Controller
             ])->onlyInput('email');
         }
 
-        if (Auth::attempt($credentials)) {
+        // Global admins (tenant_id = null) are hidden by TenantScope whenever a
+        // tenant is bound to the request (e.g. u.taalimu.com). Look the admin up
+        // without the tenant scope so super-admins can sign in from any host.
+        $user = \App\Models\User::withoutGlobalScope(\App\Scopes\TenantScope::class)
+            ->where('email', $credentials['email'])
+            ->first();
+
+        if ($user
+            && in_array($user->role, ['super_admin', 'admin'])
+            && \Illuminate\Support\Facades\Hash::check($credentials['password'], $user->password)) {
             \Illuminate\Support\Facades\RateLimiter::clear($throttleKey);
+            Auth::login($user);
             $request->session()->regenerate();
-
-            // Check if user is admin (Super Admin)
-            if (! in_array(auth()->user()->role, ['super_admin', 'admin'])) {
-                Auth::logout();
-
-                return back()->withErrors([
-                    'email' => 'You do not have access to this area.',
-                ]);
-            }
 
             $intended = redirect()->getIntendedUrl();
             if ($intended && str_contains($intended, '/admin')) {
                 return redirect()->intended(route('admin.dashboard'));
             }
 
-            session()->forget('url.intended');
+            $request->session()->forget('url.intended');
 
             return redirect()->route('admin.dashboard');
         }
