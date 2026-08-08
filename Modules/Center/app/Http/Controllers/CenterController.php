@@ -26,9 +26,12 @@ class CenterController extends Controller
             return redirect()->route('instructor.dashboard', ['tenant' => $tenantDomain]);
         }
 
-        $validCenterRoles = ['admin', 'center_admin', 'instructor', 'secretary', 'accountant', 'staff', 'support_agent', 'finance_manager', 'content_manager'];
+        $validCenterRoles = ['admin', 'super_admin', 'center_admin', 'center_owner', 'instructor', 'secretary', 'accountant', 'staff', 'support_agent', 'finance_manager', 'content_manager'];
 
-        if ($user && $user->role !== 'center_admin' && ! $user->hasAnyRole($validCenterRoles)) {
+        $userRole = $user?->role;
+        $hasValidRole = $user && (in_array($userRole, $validCenterRoles) || $user->hasAnyRole($validCenterRoles));
+
+        if ($user && ! $hasValidRole) {
             if (request()->expectsJson()) {
                 return response()->json(['message' => 'Unauthorized role'], 403);
             }
