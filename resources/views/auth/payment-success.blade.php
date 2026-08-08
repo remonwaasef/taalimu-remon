@@ -1,4 +1,4 @@
-@extends('landing.layouts.app')
+@extends('layouts.landing-new')
 
 @section('content')
 <div class="min-h-screen flex items-center justify-center bg-gray-50">
