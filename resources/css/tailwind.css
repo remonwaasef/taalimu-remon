@@ -201,4 +201,34 @@ html.dark .border-slate-200 {
 .dark .bg-sky-50, html.dark .bg-sky-50 { background-color: rgba(14, 165, 233, 0.15) !important; color: #38BDF8 !important; }
 .dark .bg-amber-50, html.dark .bg-amber-50 { background-color: rgba(245, 158, 11, 0.15) !important; color: #FBBF24 !important; }
 
+/* Buttons & Tables in Dark Mode */
+.dark .btn-glass,
+html.dark .btn-glass,
+.dark a.btn-glass,
+html.dark a.btn-glass {
+    background: #1D2935 !important;
+    background-color: #1D2935 !important;
+    border-color: #313D4C !important;
+    color: #F9FAFB !important;
+}
+
+.dark .btn-group .btn-check:checked + .btn,
+html.dark .btn-group .btn-check:checked + .btn,
+.dark .btn-group .btn-check:checked + label,
+html.dark .btn-group .btn-check:checked + label {
+    background-color: #2E8B83 !important;
+    color: #FFFFFF !important;
+    border-color: #2E8B83 !important;
+}
+
+.dark .table thead th,
+html.dark .table thead th,
+.dark .custom-table thead th,
+html.dark .custom-table thead th {
+    background-color: #151E28 !important;
+    color: #94A3B8 !important;
+    border-color: #2B3644 !important;
+}
+
+
 

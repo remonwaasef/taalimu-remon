@@ -1620,17 +1620,24 @@ html.dark .bg-slate-50 {
 
 .dark .btn-glass,
 html.dark .btn-glass,
-body.dark .btn-glass {
-    background: rgba(255, 255, 255, 0.08) !important;
-    border-color: rgba(255, 255, 255, 0.15) !important;
+body.dark .btn-glass,
+.dark a.btn-glass,
+html.dark a.btn-glass,
+body.dark a.btn-glass {
+    background: #1D2935 !important;
+    background-color: #1D2935 !important;
+    border-color: #313D4C !important;
     color: #F9FAFB !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
 }
 
 .dark .btn-glass:hover,
 html.dark .btn-glass:hover,
-body.dark .btn-glass:hover {
-    background: rgba(255, 255, 255, 0.15) !important;
+body.dark .btn-glass:hover,
+.dark a.btn-glass:hover,
+html.dark a.btn-glass:hover {
+    background: #2B3644 !important;
+    background-color: #2B3644 !important;
     color: #FFFFFF !important;
 }
 
@@ -1650,6 +1657,10 @@ body.dark .btn-light:hover {
 }
 
 /* Radio button & Checkbox groups */
+.dark .btn-group .btn-check:checked + .btn,
+html.dark .btn-group .btn-check:checked + .btn,
+.dark .btn-group .btn-check:checked + label,
+html.dark .btn-group .btn-check:checked + label,
 .dark .btn-check:checked + .btn,
 .dark .btn-check:checked + label,
 html.dark .btn-check:checked + .btn,
@@ -1660,6 +1671,7 @@ html.dark .btn-check:checked + label {
     box-shadow: 0 2px 8px rgba(46, 139, 131, 0.3) !important;
 }
 
+.dark .btn-group .btn-check:checked + .btn-outline-danger,
 .dark .btn-check:checked + .btn-outline-danger,
 .dark .btn-check:checked + label[for*="Debt"],
 html.dark .btn-check:checked + .btn-outline-danger {
@@ -1668,6 +1680,7 @@ html.dark .btn-check:checked + .btn-outline-danger {
     border-color: #EF4444 !important;
 }
 
+.dark .btn-group .btn-check:checked + .btn-outline-success,
 .dark .btn-check:checked + .btn-outline-success,
 .dark .btn-check:checked + label[for*="Paid"],
 html.dark .btn-check:checked + .btn-outline-success {
@@ -1677,13 +1690,26 @@ html.dark .btn-check:checked + .btn-outline-success {
 }
 
 /* Table Headers & Rows */
+.dark .table,
+html.dark .table,
+.dark .custom-table,
+html.dark .custom-table {
+    --bs-table-bg: #17202B !important;
+    --bs-table-color: #F9FAFB !important;
+    color: #F9FAFB !important;
+}
+
 .dark .table thead,
 .dark .table thead tr,
 .dark .table thead th,
+.dark .custom-table thead,
+.dark .custom-table thead tr,
 .dark .custom-table thead th,
 html.dark .table thead th,
-html.dark .custom-table thead th {
-    background-color: #1D2935 !important;
+html.dark .custom-table thead th,
+html.dark .table > :not(caption) > * > th,
+html.dark .custom-table > :not(caption) > * > th {
+    background-color: #151E28 !important;
     color: #94A3B8 !important;
     border-color: #2B3644 !important;
 }
