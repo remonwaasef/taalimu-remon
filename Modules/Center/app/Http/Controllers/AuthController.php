@@ -42,6 +42,10 @@ class AuthController extends Controller
                             return redirect()->route('campus.index', ['tenant' => app('tenant')->domain]);
                         }
 
+                        if ($user->role === 'parent') {
+                            return redirect()->route('parent.index', ['tenant' => app('tenant')->domain]);
+                        }
+
                         return redirect()->route('center.dashboard', ['tenant' => app('tenant')->domain]);
                     }
 
@@ -177,6 +181,10 @@ class AuthController extends Controller
                 return redirect()->route('campus.index', ['tenant' => app('tenant')->domain]);
             }
 
+            if ($user->role === 'parent') {
+                return redirect()->route('parent.index', ['tenant' => app('tenant')->domain]);
+            }
+
             // All other roles (center_admin, instructor, staff, secretary, accountant, etc.)
             // go to the main center dashboard.
             return redirect()->route('center.dashboard', ['tenant' => app('tenant')->domain]);
@@ -246,6 +254,11 @@ class AuthController extends Controller
         // Redirect based on role
         if ($user->role === 'student') {
             return redirect()->route('campus.index', ['tenant' => app('tenant')->domain])
+                ->with('success', __('Password updated successfully.'));
+        }
+
+        if ($user->role === 'parent') {
+            return redirect()->route('parent.index', ['tenant' => app('tenant')->domain])
                 ->with('success', __('Password updated successfully.'));
         }
 

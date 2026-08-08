@@ -1,0 +1,11 @@
+{
+    "name": "Parent",
+    "alias": "parent",
+    "description": "بوابة ولي الأمر - متابعة الأبناء (الحضور، الجدول، المدفوعات، الدورات)",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Parent\\Providers\\ParentServiceProvider"
+    ],
+    "files": []
+}

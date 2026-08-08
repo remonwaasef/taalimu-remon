@@ -13,6 +13,7 @@ class Guardian extends Model
 
     protected $fillable = [
         'tenant_id',
+        'user_id',
         'name',
         'phone',
         'job',
@@ -33,6 +34,11 @@ class Guardian extends Model
         return $this->belongsToMany(Student::class, 'guardian_student')
             ->withPivot('relation')
             ->withTimestamps();
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function tenant()

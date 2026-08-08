@@ -325,8 +325,46 @@ class FullSystemDemoSeeder extends Seeder
             }
         }
 
+        // 10. Parent (ولي الأمر) — demo parent portal account
+        $guardian = \App\Models\Guardian::updateOrCreate(
+            ['email' => 'parent@demo.com', 'tenant_id' => $tenant->id],
+            [
+                'name' => 'وليد رمضان',
+                'phone' => '01012345678',
+                'job' => 'مهندس',
+                'address' => 'القاهرة، مصر',
+                'status' => 'active',
+            ]
+        );
+
+        $parentUser = User::updateOrCreate(
+            ['email' => 'parent@demo.com'],
+            [
+                'name' => $guardian->name,
+                'password' => Hash::make('password'),
+                'role' => 'parent',
+                'tenant_id' => $tenant->id,
+                'qr_identifier' => \Illuminate\Support\Str::random(12),
+            ]
+        );
+        $parentRole = \Spatie\Permission\Models\Role::where('name', 'parent')->whereNull('tenant_id')->first();
+        if ($parentRole) {
+            $parentUser->assignRole($parentRole);
+        }
+        $guardian->update(['user_id' => $parentUser->id]);
+
+        // Link the guardian to two enrolled students
+        foreach (array_slice($students, 0, 2) as $index => $student) {
+            $guardian->students()->syncWithoutDetaching([
+                $student->id => ['relation' => $index === 0 ? 'الأب' : 'الأم'],
+            ]);
+        }
+
         echo "✅ تمت عملية إنشاء البيانات التجريبية بنجاح بنظام مرن (Idempotent)!\n";
         echo "نطاق المركز: demo-center\n";
         echo "البريد: admin@demo.com | كلمة السر: password\n";
+        echo "البريد: instructor1@demo.com | كلمة السر: password\n";
+        echo "البريد: student1@demo.com | كلمة السر: password\n";
+        echo "البريد: parent@demo.com | كلمة السر: password\n";
     }
 }

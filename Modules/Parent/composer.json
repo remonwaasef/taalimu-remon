@@ -1,0 +1,22 @@
+{
+    "name": "taalimu/parent",
+    "description": "بوابة ولي الأمر",
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Parent\\": "app/",
+            "Modules\\Parent\\Database\\Factories\\": "database/factories/",
+            "Modules\\Parent\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Parent\\Tests\\": "tests/"
+        }
+    }
+}

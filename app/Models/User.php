@@ -126,6 +126,11 @@ class User extends Authenticatable
         return $this->hasOne(Instructor::class);
     }
 
+    public function guardian()
+    {
+        return $this->hasOne(Guardian::class);
+    }
+
     public function enrollments()
     {
         return $this->hasMany(Enrollment::class);

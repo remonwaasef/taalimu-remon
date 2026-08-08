@@ -41,6 +41,10 @@ class RedirectIfAuthenticated
                             return redirect()->route('campus.index', ['tenant' => $tenantDomain]);
                         }
 
+                        if ($user->role === 'parent') {
+                            return redirect()->route('parent.index', ['tenant' => $tenantDomain]);
+                        }
+
                         // Redirect to Center Dashboard for admins/others
                         return redirect()->route('center.dashboard', ['tenant' => $tenantDomain]);
                     }
@@ -57,6 +61,9 @@ class RedirectIfAuthenticated
                     if ($tenant) {
                         if ($user->role === 'student') {
                             return redirect()->away(tenant_url('campus', $tenant));
+                        }
+                        if ($user->role === 'parent') {
+                            return redirect()->away(tenant_url('parent', $tenant));
                         }
                         if ($user->role === 'instructor' || $tenant->type === 'instructor') {
                             return redirect()->away(tenant_url('instructor', $tenant));

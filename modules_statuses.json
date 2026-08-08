@@ -4,5 +4,6 @@
     "Campus": true,
     "Instructor": true,
     "Tenancy": true,
-    "Api": true
+    "Api": true,
+    "Parent": true
 }
