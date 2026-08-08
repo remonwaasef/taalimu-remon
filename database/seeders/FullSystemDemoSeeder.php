@@ -353,11 +353,25 @@ class FullSystemDemoSeeder extends Seeder
         }
         $guardian->update(['user_id' => $parentUser->id]);
 
-        // Link the guardian to two enrolled students
+// Link the guardian to two enrolled students
         foreach (array_slice($students, 0, 2) as $index => $student) {
             $guardian->students()->syncWithoutDetaching([
                 $student->id => ['relation' => $index === 0 ? 'الأب' : 'الأم'],
             ]);
+        }
+
+        // 11. Unpaid invoices for the guardian's kids — powers the "ادفع الآن" demo
+        foreach (array_slice($students, 0, 2) as $student) {
+            $unpaidCourse = ($student->id % 2 === 0) ? $course2 : $course1;
+            Sale::updateOrCreate(
+                ['tenant_id' => $tenant->id, 'student_id' => $student->id, 'notes' => 'رسوم دورة متبقية — سداد إلكتروني'],
+                [
+                    'total_amount' => $unpaidCourse->price / 2,
+                    'paid_amount' => 0,
+                    'status' => 'pending',
+                    'payment_method' => 'card',
+                ]
+            );
         }
 
         echo "✅ تمت عملية إنشاء البيانات التجريبية بنجاح بنظام مرن (Idempotent)!\n";

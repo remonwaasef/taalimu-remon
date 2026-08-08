@@ -58,6 +58,18 @@ $tenantRoutes = function () {
         Route::post('password/change', [AuthController::class, 'changePassword'])->name('center.password.change.submit');
     });
 
+    // Self-Service Online Payment — public link (signed), no login required
+    // The page is gated by the online_payments feature per tenant.
+    Route::get('pay/{sale}', [\Modules\Center\Http\Controllers\OnlinePaymentController::class, 'show'])
+        ->middleware(['signed'])
+        ->name('center.pay.show');
+    Route::post('pay/{sale}', [\Modules\Center\Http\Controllers\OnlinePaymentController::class, 'pay'])
+        ->middleware(['signed'])
+        ->name('center.pay.submit');
+    Route::get('pay/{sale}/result/{status}', [\Modules\Center\Http\Controllers\OnlinePaymentController::class, 'result'])
+        ->whereIn('status', ['success', 'failed', 'paid'])
+        ->name('center.pay.result');
+
     // Student Self-Registration via Token (Public)
     // Throttled: public, unauthenticated endpoints that create users + sales,
     // so they must be rate-limited against mass account creation / spam.

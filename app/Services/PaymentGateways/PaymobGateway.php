@@ -67,6 +67,99 @@ class PaymobGateway implements PaymentGatewayInterface
         }
     }
 
+    /**
+     * Create a Paymob iframe checkout URL for a student invoice (sale).
+     * Merchant order id encodes: sale_{saleId}_{tenantId}_{paymentToken}
+     * so both the redirect callback and the webhook can restore context.
+     */
+    public function createSaleCheckout(\App\Models\Sale $sale, string $paymentToken, float $amount = null, array $billingData = []): string
+    {
+        $amount = $amount ?? ($sale->total_amount - $sale->paid_amount);
+        $amountInCents = (int) round($amount * 100);
+
+        if ($amountInCents <= 0) {
+            throw new \InvalidArgumentException('Invoice already fully paid.');
+        }
+
+        $customer = $sale->relationLoaded('student') ? $sale->student : $sale->student()->first();
+
+        $billingData = array_merge([
+            'first_name' => $customer?->name ?: 'طالب',
+            'last_name' => 'Student',
+            'email' => $customer?->email ?: ($sale->tenant?->email ?: 'student@example.com'),
+            'phone_number' => $customer?->parent_phone ?: ($sale->tenant?->phone ?: '+201234567890'),
+            'apartment' => 'NA',
+            'floor' => 'NA',
+            'street' => 'NA',
+            'building' => 'NA',
+            'shipping_method' => 'NA',
+            'postal_code' => 'NA',
+            'city' => 'NA',
+            'country' => 'EG',
+            'state' => 'NA',
+        ], $billingData);
+
+        // 1. Auth + 2. Order
+        $authToken = $this->getAuthToken();
+
+        $merchantOrderId = 'sale_'.$sale->id.'_'.$sale->tenant_id.'_'.$paymentToken;
+
+        $response = Http::post("{$this->baseUrl}/ecommerce/orders", [
+            'auth_token' => $authToken,
+            'delivery_needed' => 'false',
+            'amount_cents' => (string) $amountInCents,
+            'currency' => 'EGP',
+            'items' => [],
+            'merchant_order_id' => $merchantOrderId,
+        ]);
+
+        if ($response->failed()) {
+            throw new \Exception('Paymob Order Creation Failed for sale '.$sale->id);
+        }
+
+        $orderId = $response->json()['id'];
+
+        // 3. Payment key
+        $paymentResponse = Http::post("{$this->baseUrl}/acceptance/payment_keys", [
+            'auth_token' => $authToken,
+            'amount_cents' => (string) $amountInCents,
+            'expiration' => 3600,
+            'order_id' => $orderId,
+            'billing_data' => $billingData,
+            'currency' => 'EGP',
+            'integration_id' => $this->cardIntegrationId,
+        ]);
+
+        if ($paymentResponse->failed()) {
+            throw new \Exception('Paymob Payment Key Generation Failed for sale '.$sale->id);
+        }
+
+        // 4. Iframe URL
+        return "https://accept.paymob.com/api/acceptance/iframes/{$this->iframeId}?payment_token={$paymentResponse->json()['token']}";
+    }
+
+    /**
+     * Parse a sale payment merchant_order_id back into its parts.
+     * Format: sale_{saleId}_{tenantId}_{paymentToken}
+     */
+    public function parseSaleOrderId(?string $merchantOrderId): ?array
+    {
+        if (! $merchantOrderId || ! str_starts_with($merchantOrderId, 'sale_')) {
+            return null;
+        }
+
+        $parts = explode('_', $merchantOrderId);
+        if (count($parts) !== 4) {
+            return null;
+        }
+
+        return [
+            'sale_id' => (int) $parts[1],
+            'tenant_id' => (int) $parts[2],
+            'payment_token' => $parts[3],
+        ];
+    }
+
     protected function getAuthToken()
     {
         $apiKey = $this->apiKey;

@@ -59,6 +59,7 @@
                                 <th class="py-3 px-3 font-semibold">المدفوع</th>
                                 <th class="py-3 px-3 font-semibold">المتبقي</th>
                                 <th class="py-3 px-3 font-semibold">الحالة</th>
+                                <th class="py-3 px-3 font-semibold">دفع</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -71,10 +72,22 @@
                                     <td class="py-3 px-3 font-semibold text-slate-700 dark:text-slate-200">{{ format_price($sale->total_amount) }}</td>
                                     <td class="py-3 px-3 text-emerald-600 font-semibold">{{ format_price($sale->paid_amount) }}</td>
                                     <td class="py-3 px-3 font-semibold {{ $remaining > 0 ? 'text-rose-600' : 'text-slate-400' }}">{{ format_price($remaining) }}</td>
-                                    <td class="py-3 px-3">
+<td class="py-3 px-3">
                                         <x-ui.badge variant="{{ $remaining > 0 ? 'warning' : 'success' }}" size="sm">
                                             {{ $remaining > 0 ? 'متبقي' : 'مسدد' }}
                                         </x-ui.badge>
+                                    </td>
+                                    <td class="py-3 px-3">
+                                        @if($remaining > 0)
+                                            <a href="{{ \Modules\Center\Http\Controllers\OnlinePaymentController::payLink($sale) }}"
+                                               target="_blank"
+                                               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-[11px] font-bold hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors">
+                                                <i class="fas fa-credit-card text-[10px]"></i>
+                                                ادفع الآن
+                                            </a>
+                                        @else
+                                            <span class="text-[11px] text-slate-300 dark:text-slate-600 font-semibold">—</span>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

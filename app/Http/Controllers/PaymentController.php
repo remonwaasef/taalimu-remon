@@ -94,6 +94,25 @@ class PaymentController extends Controller
         $transactionId = $request->get('id');
         $merchantOrderId = $request->get('merchant_order_id') ?? $request->get('order');
 
+        // --- Self-service invoice payment (sale flow): redirect user to the result page ---
+        // Accounting is performed by the webhook (PaymobWebhookController), which verifies
+        // the HMAC, the invoice token and posts the payment idempotently.
+        if (is_string($merchantOrderId) && str_starts_with($merchantOrderId, 'sale_')) {
+            $context = $gateway->parseSaleOrderId($merchantOrderId);
+            $sale = $context ? \App\Models\Sale::withoutGlobalScopes()
+                ->where('id', $context['sale_id'])
+                ->where('tenant_id', $context['tenant_id'])
+                ->first() : null;
+
+            if ($sale) {
+                $status = $success ? 'success' : 'failed';
+
+                return redirect()->route('center.pay.result', ['sale' => $sale, 'status' => $status]);
+            }
+
+            return redirect()->route('home')->withErrors(['error' => 'تعذر العثور على الفاتورة.']);
+        }
+
         Log::info('Paymob Redirect Received', [
             'success' => $success, 'transaction_id' => $transactionId,
             'merchant_order_id' => $merchantOrderId, 'hmac_valid' => $isHmacValid,

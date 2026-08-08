@@ -311,7 +311,7 @@ class SaleController extends Controller
     }
 
     /**
-     * Initiate online checkout for an invoice (Mock implementation).
+     * Initiate online checkout for an invoice — real Paymob flow.
      */
     public function checkout($id)
     {
@@ -324,7 +324,25 @@ class SaleController extends Controller
             return redirect()->back()->with('info', 'هذه الفاتورة مدفوعة بالكامل.');
         }
 
-        return view('center::sales.checkout', compact('sale', 'tenant'));
+        if (! $tenant->hasFeature('online_payments')) {
+            return redirect()->back()->with('error', 'الدفع الإلكتروني غير متاح في باقتك الحالية.');
+        }
+
+        try {
+            if (! $sale->payment_token) {
+                $sale->forceFill(['payment_token' => \Illuminate\Support\Str::random(16)])->save();
+            }
+
+            $iframeUrl = app(\App\Services\PaymentGateways\PaymobGateway::class)
+                ->createSaleCheckout($sale, $sale->payment_token);
+
+            return redirect()->away($iframeUrl);
+        } catch (\Exception $e) {
+            \Log::error('Sale checkout failed: '.$e->getMessage(), ['sale_id' => $sale->id]);
+
+            return redirect()->route('center.sales.show', $sale->id)
+                ->with('error', 'تعذر إنشاء رابط الدفع حالياً، يرجى المحاولة لاحقاً.');
+        }
     }
 
     /**

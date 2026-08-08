@@ -221,6 +221,21 @@
                         <a href="{{ route('center.sales.checkout', $sale->id) }}" class="btn btn-outline-primary w-100 rounded-pill fs-6 py-2 fw-bold">
                             <i class="fas fa-credit-card me-2"></i> {{ __('center::sales.pay_with_card') }}
                         </a>
+
+                        <div class="mt-3">
+                            <p class="small text-muted mb-2">
+                                <i class="fas fa-share-alt me-1"></i> رابط دفع آمن يمكن إرساله لولي الأمر (واتساب/إيميل)
+                            </p>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control form-control-sm bg-light text-muted" readonly
+                                       value="{{ \Modules\Center\Http\Controllers\OnlinePaymentController::payLink($sale) }}" id="payShareLink">
+                                <button type="button"
+                                        class="btn btn-outline-secondary btn-sm"
+                                        onclick="navigator.clipboard.writeText(document.getElementById('payShareLink').value).then(() => { this.textContent = '✓ تم النسخ'; setTimeout(() => this.textContent = 'نسخ', 1500); })">
+                                    نسخ
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 @else
                     <div class="alert alert-success border-0 rounded-4 text-center p-4">
