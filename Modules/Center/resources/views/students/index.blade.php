@@ -396,13 +396,17 @@
                                             <li><a class="dropdown-item rounded-3 mb-1" target="_blank" href="{{ route('center.students.id-card', $student->id) }}"><i class="fas fa-print me-2 text-secondary opacity-75"></i> {{ __('center::students.print_id_card') }}</a></li>
                                             <li><hr class="dropdown-divider opacity-10"></li>
                                             <li>
-                                                <form action="{{ route('center.students.destroy', $student->id) }}" method="POST" class="d-inline delete-student-form" data-name="{{ $student->name }}">
+                                                <form id="delete-student-form-{{ $student->id }}" action="{{ route('center.students.destroy', $student->id) }}" method="POST" class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="dropdown-item rounded-3 text-danger mb-0">
-                                                        <i class="fas fa-trash-alt me-2 opacity-75"></i> {{ __('center::students.delete') }}
-                                                    </button>
                                                 </form>
+                                                <button type="button" class="dropdown-item rounded-3 text-danger mb-0"
+                                                        data-confirm-delete
+                                                        data-form="delete-student-form-{{ $student->id }}"
+                                                        data-title="{{ __('center::students.delete_confirm_title') ?? 'هل أنت متأكد من حذف الطالب؟' }}"
+                                                        data-text="{{ $student->name }}">
+                                                    <i class="fas fa-trash-alt me-2 opacity-75"></i> {{ __('center::students.delete') }}
+                                                </button>
                                             </li>
                                         </ul>
                                     </div>

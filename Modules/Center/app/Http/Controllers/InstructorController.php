@@ -21,6 +21,9 @@ class InstructorController extends Controller
     public function index(Request $request)
     {
         $this->authorize('viewAny', Instructor::class);
+        
+        $activeCount = Instructor::where('status', 'active')->count();
+
         $query = Instructor::query()->withCount('courses');
 
         if ($request->has('search')) {
@@ -31,7 +34,6 @@ class InstructorController extends Controller
             });
         }
 
-        $activeCount = (clone $query)->where('status', 'active')->count();
         $instructors = $query->latest()->paginate(10);
 
         return view('center::instructors.index', compact('instructors', 'activeCount'));

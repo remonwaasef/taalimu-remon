@@ -67,30 +67,15 @@
     @endif
 </div>
 
+{{-- Toast notifications now use global TaalimuToast from taalimu-global.js --}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    if (typeof Swal !== 'undefined') {
-        const isDark = document.documentElement.classList.contains('dark') || document.body.classList.contains('dark');
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 4000,
-            timerProgressBar: true,
-            background: isDark ? '#1E293B' : '#ffffff',
-            color: isDark ? '#F8FAFC' : '#1E293B',
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
-        });
-
+    if (typeof TaalimuToast !== 'undefined') {
         @if(session('success'))
-            Toast.fire({ icon: 'success', title: @json(session('success')) });
+            TaalimuToast.success(@json(session('success')));
         @endif
-
         @if(session('error'))
-            Toast.fire({ icon: 'error', title: @json(session('error')) });
+            TaalimuToast.error(@json(session('error')));
         @endif
     }
 });

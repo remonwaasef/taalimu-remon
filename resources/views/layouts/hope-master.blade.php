@@ -34,8 +34,9 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Taalimu Unified Premium Emerald Theme -->
+    <!-- Taalimu Unified Premium Emerald Theme & Global Dark Mode -->
     <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/taalimu-unified.css?v=' . time()) }}">
+    @vite(['resources/css/dark-mode-global.css'])
     <!-- Network Monitor Styles -->
     <link rel="stylesheet" href="{{ asset('css/network-monitor.css') }}">
     
@@ -84,6 +85,9 @@
     
     <!-- app script -->
     <script src="{{ asset('assets/hope-ui/js/hope-ui.js') }}"></script>
+
+    <!-- Taalimu Global Interactions (Delete confirmations, Toasts, etc.) -->
+    @vite(['resources/js/taalimu-global.js'])
 
     <!-- Network Monitor (Real Connectivity Detection) -->
     <script src="{{ asset('js/network-monitor.js') }}"></script>

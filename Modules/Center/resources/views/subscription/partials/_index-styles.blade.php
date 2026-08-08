@@ -19,18 +19,6 @@
         background: linear-gradient(90deg, #7ecbff, #fff);
         transition: width 1s ease;
     }
-    .status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 14px;
-        border-radius: 999px;
-        font-size: 0.8rem;
-        font-weight: 700;
-    }
-    .status-active   { background: rgba(34,197,94,0.15); color: #16a34a; }
-    .status-trial    { background: rgba(251,191,36,0.15); color: #d97706; }
-    .status-expired  { background: rgba(239,68,68,0.15);  color: #dc2626; }
     .plan-card {
         border: 2px solid #e5e7eb;
         border-radius: 1rem;
@@ -49,75 +37,10 @@
         padding: 1rem 1.25rem;
         border: 1px solid rgba(0,0,0,0.05);
     }
-    .pulse-dot {
-        width: 10px; height: 10px;
-        border-radius: 50%;
-        background: #10b981;
-        animation: pulse-green 2s infinite;
-    }
-    @keyframes pulse-green {
-        0%   { box-shadow: 0 0 0 0 rgba(16,185,129,0.6); }
-        70%  { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
-        100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
-    }
     .contact-card {
         background: linear-gradient(135deg, #2E8B83 0%, #10b981 100%);
         border-radius: 1rem;
         color: #fff;
-    }
-    /* Redesigned Toggle Styles - Upgraded to 3 choices */
-    .billing-toggle {
-        display: inline-flex;
-        background: #f1f5f9;
-        border: 1px solid #e2e8f0;
-        border-radius: 999px;
-        padding: 5px;
-        position: relative;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-        direction: ltr !important; 
-    }
-    .billing-toggle label {
-        cursor: pointer;
-        padding: 10px 18px;
-        font-weight: 800;
-        border-radius: 999px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 1;
-        font-size: 0.85rem;
-        color: #64748b;
-        position: relative;
-        min-width: 100px;
-        text-align: center;
-    }
-    .billing-toggle input[type="radio"]:checked + label {
-        color: #fff !important;
-    }
-    .billing-toggle input[type="radio"] {
-        display: none;
-    }
-    .toggle-slider {
-        position: absolute;
-        top: 4px;
-        bottom: 4px;
-        left: 4px; 
-        width: calc(33.33% - 5px);
-        background: #10b981;
-        border-radius: 999px;
-        transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-        z-index: 0;
-        box-shadow: 0 4px 12px rgba(16,185,129, 0.3);
-    }
-    .dual-toggle .toggle-slider {
-        width: calc(50% - 6px);
-    }
-    .billing-toggle input[type="radio"]:nth-of-type(2):checked ~ .toggle-slider {
-        transform: translateX(100%);
-    }
-    .dual-toggle input[type="radio"]:nth-of-type(2):checked ~ .toggle-slider {
-        transform: translateX(100%);
-    }
-    .billing-toggle input[type="radio"]:nth-of-type(3):checked ~ .toggle-slider {
-        transform: translateX(200%);
     }
     .save-badge {
         position: absolute;
@@ -140,81 +63,5 @@
         0%   { box-shadow: 0 0 0 0 rgba(245,158,11,0.5); transform: translateX(-50%) scale(1); }
         70%  { box-shadow: 0 0 0 8px rgba(245,158,11,0); transform: translateX(-50%) scale(1.05); }
         100% { box-shadow: 0 0 0 0 rgba(245,158,11,0); transform: translateX(-50%) scale(1); }
-    }
-
-    /* --- Dark Mode Overrides for Subscription Page --- */
-    .dark .subscription-hero,
-    html.dark .subscription-hero {
-        background: #17202B !important;
-        border-color: #2B3644 !important;
-        color: #F9FAFB !important;
-    }
-
-    .dark .plan-card,
-    html.dark .plan-card {
-        background: #17202B !important;
-        border-color: #2B3644 !important;
-        color: #F9FAFB !important;
-    }
-
-    .dark .plan-card:hover,
-    html.dark .plan-card:hover {
-        border-color: #2E8B83 !important;
-        box-shadow: 0 12px 30px rgba(46, 139, 131, 0.25) !important;
-    }
-
-    .dark .plan-card.current-plan,
-    html.dark .plan-card.current-plan {
-        background: linear-gradient(135deg, #10322E, #17202B) !important;
-        border-color: #2E8B83 !important;
-    }
-
-    .dark .plan-card.featured-plan,
-    html.dark .plan-card.featured-plan {
-        border-color: #2E8B83 !important;
-    }
-
-    .dark .plan-card h5,
-    .dark .plan-card p,
-    .dark .plan-card ul li span,
-    .dark .plan-card .text-muted,
-    html.dark .plan-card h5,
-    html.dark .plan-card p,
-    html.dark .plan-card ul li span,
-    html.dark .plan-card .text-muted {
-        color: #F9FAFB !important;
-    }
-
-    .dark .plan-card .text-muted.small,
-    html.dark .plan-card .text-muted.small {
-        color: #CBD5E1 !important;
-    }
-
-    .dark .info-tile,
-    html.dark .info-tile {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border-color: #2B3644 !important;
-        color: #F9FAFB !important;
-    }
-
-    .dark .billing-toggle,
-    html.dark .billing-toggle {
-        background: #17202B !important;
-        border-color: #2B3644 !important;
-    }
-
-    .dark .billing-toggle label,
-    html.dark .billing-toggle label {
-        color: #CBD5E1 !important;
-    }
-
-    .dark .billing-toggle input[type="radio"]:checked + label,
-    html.dark .billing-toggle input[type="radio"]:checked + label {
-        color: #FFFFFF !important;
-    }
-
-    .dark .toggle-slider,
-    html.dark .toggle-slider {
-        background: #2E8B83 !important;
     }
 </style>

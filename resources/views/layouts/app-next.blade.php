@@ -32,8 +32,8 @@
         <link rel="stylesheet" href="{{ asset('assets/hope-ui/css/rtl.css?v=1.3.0') }}">
     @endif
 
-    <!-- Vite Assets (TailwindCSS + App) -->
-    @vite(['resources/css/tailwind.css', 'resources/css/app.scss', 'resources/js/app.js'])
+    <!-- Vite Assets (TailwindCSS + App + Global Interactions) -->
+    @vite(['resources/css/tailwind.css', 'resources/css/app.scss', 'resources/js/app.js', 'resources/js/taalimu-global.js'])
 
     @stack('styles')
 </head>

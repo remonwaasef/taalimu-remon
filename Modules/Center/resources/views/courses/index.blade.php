@@ -137,14 +137,18 @@
                                                 <li><a class="dropdown-item" href="{{ route('center.schedules.create', ['course_id' => $course->id]) }}"><i class="fas fa-calendar-plus me-2 text-info"></i> {{ __('center::students.add_new_schedule') }}</a></li>
                                                 <li><hr class="dropdown-divider"></li>
                                                 <li>
-                                                    <form action="{{ route('center.courses.destroy', $course->id) }}" method="POST" onsubmit="return confirm('{{ __('center::courses.delete_confirm') }}');">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="dropdown-item text-danger">
-                                                            <i class="fas fa-trash-alt me-2"></i> {{ __('center::courses.delete') }}
-                                                        </button>
-                                                    </form>
-                                                </li>
+                                                     <form id="delete-course-form-{{ $course->id }}" action="{{ route('center.courses.destroy', $course->id) }}" method="POST" class="d-inline">
+                                                         @csrf
+                                                         @method('DELETE')
+                                                     </form>
+                                                     <button type="button" class="dropdown-item text-danger"
+                                                             data-confirm-delete
+                                                             data-form="delete-course-form-{{ $course->id }}"
+                                                             data-title="{{ __('center::courses.delete_confirm') }}"
+                                                             data-text="{{ $course->title }}">
+                                                         <i class="fas fa-trash-alt me-2"></i> {{ __('center::courses.delete') }}
+                                                     </button>
+                                                 </li>
                                             </ul>
                                         </div>
                                     </div>

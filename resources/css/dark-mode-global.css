@@ -1,0 +1,499 @@
+/* ==========================================================================
+   TAALIMU GLOBAL DARK MODE SYSTEM (الوضع الليلي العالمي الموحد)
+   --------------------------------------------------------------------------
+   Central source of truth for all Dark Mode overrides across the platform.
+   Covers Bootstrap 5, Hope UI, TailwindCSS, SweetAlert2, Alpine.js & Blade components.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Base Body & Layout Overrides
+   -------------------------------------------------------------------------- */
+.dark body,
+html.dark body,
+body.dark {
+    background-color: var(--color-bg-main, #0F1720) !important;
+    color: var(--color-text-main, #F9FAFB) !important;
+}
+
+.dark .bg-white,
+html.dark .bg-white,
+body.dark .bg-white,
+.dark [class*="bg-white"],
+html.dark [class*="bg-white"] {
+    background-color: #17202B !important;
+    color: #F9FAFB !important;
+}
+
+.dark .bg-light,
+html.dark .bg-light,
+body.dark .bg-light,
+.dark .bg-slate-50,
+html.dark .bg-slate-50,
+.dark .bg-slate-50\/50,
+html.dark .bg-slate-50\/50 {
+    background-color: #1D2935 !important;
+    color: #CBD5E1 !important;
+}
+
+.dark .bg-slate-100,
+html.dark .bg-slate-100 {
+    background-color: #24303E !important;
+    color: #F9FAFB !important;
+}
+
+/* --------------------------------------------------------------------------
+   2. Typography & Color Contrast Overrides
+   -------------------------------------------------------------------------- */
+.dark .text-slate-900, html.dark .text-slate-900,
+.dark .text-slate-800, html.dark .text-slate-800,
+.dark .text-slate-700, html.dark .text-slate-700,
+.dark .text-dark, html.dark .text-dark {
+    color: #F9FAFB !important;
+}
+
+.dark .text-slate-600, html.dark .text-slate-600,
+.dark .text-slate-500, html.dark .text-slate-500,
+.dark .text-slate-400, html.dark .text-slate-400,
+.dark .text-muted, html.dark .text-muted {
+    color: #94A3B8 !important;
+}
+
+.dark .text-secondary,
+html.dark .text-secondary {
+    color: #CBD5E1 !important;
+}
+
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6,
+html.dark h1, html.dark h2, html.dark h3, html.dark h4, html.dark h5, html.dark h6,
+.dark .page-title, html.dark .page-title,
+.dark .card-title, html.dark .card-title {
+    color: #F9FAFB !important;
+    -webkit-text-fill-color: #F9FAFB !important;
+}
+
+.dark .border-brand-border, html.dark .border-brand-border,
+.dark .border-slate-100, html.dark .border-slate-100,
+.dark .border-slate-200, html.dark .border-slate-200,
+.dark .border-slate-300, html.dark .border-slate-300,
+.dark .border, html.dark .border {
+    border-color: #2B3644 !important;
+}
+
+/* --------------------------------------------------------------------------
+   3. Card & Container Overrides
+   -------------------------------------------------------------------------- */
+.dark .card,
+html.dark .card,
+body.dark .card {
+    background-color: #17202B !important;
+    border-color: #2B3644 !important;
+    color: #F9FAFB !important;
+}
+
+.dark .card-header,
+.dark .card-footer,
+html.dark .card-header,
+html.dark .card-footer {
+    border-color: #2B3644 !important;
+    background-color: transparent !important;
+}
+
+.dark .card-body,
+html.dark .card-body {
+    color: #CBD5E1 !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. Table Overrides
+   -------------------------------------------------------------------------- */
+.dark .table,
+html.dark .table,
+.dark .custom-table,
+html.dark .custom-table {
+    --bs-table-bg: #17202B !important;
+    --bs-table-color: #F9FAFB !important;
+    color: #F9FAFB !important;
+}
+
+.dark .table thead,
+.dark .table thead tr,
+.dark .table thead th,
+.dark .custom-table thead,
+.dark .custom-table thead tr,
+.dark .custom-table thead th,
+html.dark .table thead th,
+html.dark .custom-table thead th,
+html.dark .table > :not(caption) > * > th,
+html.dark .custom-table > :not(caption) > * > th {
+    background-color: #151E28 !important;
+    color: #94A3B8 !important;
+    border-color: #2B3644 !important;
+}
+
+.dark .table tbody tr,
+html.dark .table tbody tr {
+    background-color: #17202B !important;
+    border-color: #2B3644 !important;
+}
+
+.dark .table tbody tr:hover,
+.dark .student-row:hover,
+html.dark .table tbody tr:hover {
+    background-color: #1D2935 !important;
+}
+
+.dark .table tbody td,
+html.dark .table tbody td {
+    color: #CBD5E1 !important;
+    border-color: #2B3644 !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. Form Controls & Inputs
+   -------------------------------------------------------------------------- */
+.dark .form-control,
+.dark .form-select,
+html.dark .form-control,
+html.dark .form-select {
+    background-color: #1D2935 !important;
+    border-color: #313D4C !important;
+    color: #F9FAFB !important;
+}
+
+.dark .form-control::placeholder,
+html.dark .form-control::placeholder {
+    color: #64748B !important;
+}
+
+.dark .form-control:focus,
+.dark .form-select:focus,
+html.dark .form-control:focus,
+html.dark .form-select:focus {
+    background-color: #1D2935 !important;
+    border-color: #2E8B83 !important;
+    color: #F9FAFB !important;
+}
+
+.dark .form-label,
+.dark label,
+html.dark .form-label,
+html.dark label {
+    color: #CBD5E1 !important;
+}
+
+.dark .input-group-text,
+html.dark .input-group-text {
+    background-color: #17202B !important;
+    border-color: #2B3644 !important;
+    color: #94A3B8 !important;
+}
+
+/* --------------------------------------------------------------------------
+   6. Alert Banners (Bootstrap & Custom Alerts)
+   -------------------------------------------------------------------------- */
+.dark .alert-danger, html.dark .alert-danger, body.dark .alert-danger {
+    background-color: rgba(239, 68, 68, 0.18) !important;
+    border-color: rgba(239, 68, 68, 0.35) !important;
+    color: #FCA5A5 !important;
+}
+.dark .alert-danger .alert-text, html.dark .alert-danger .alert-text,
+.dark .alert-danger .text-danger, html.dark .alert-danger .text-danger,
+.dark .alert-danger h6, html.dark .alert-danger h6,
+.dark .alert-danger li, html.dark .alert-danger li {
+    color: #FCA5A5 !important;
+    -webkit-text-fill-color: #FCA5A5 !important;
+}
+
+.dark .alert-success, html.dark .alert-success, body.dark .alert-success {
+    background-color: rgba(34, 197, 94, 0.18) !important;
+    border-color: rgba(34, 197, 94, 0.35) !important;
+    color: #86EFAC !important;
+}
+.dark .alert-success .alert-text, html.dark .alert-success .alert-text,
+.dark .alert-success .text-success, html.dark .alert-success .text-success {
+    color: #86EFAC !important;
+    -webkit-text-fill-color: #86EFAC !important;
+}
+
+.dark .alert-warning, html.dark .alert-warning, body.dark .alert-warning {
+    background-color: rgba(245, 158, 11, 0.18) !important;
+    border-color: rgba(245, 158, 11, 0.35) !important;
+    color: #FDE047 !important;
+}
+.dark .alert-warning .alert-text, html.dark .alert-warning .alert-text,
+.dark .alert-warning .text-warning, html.dark .alert-warning .text-warning {
+    color: #FDE047 !important;
+    -webkit-text-fill-color: #FDE047 !important;
+}
+
+.dark .alert-info, html.dark .alert-info, body.dark .alert-info {
+    background-color: rgba(14, 165, 233, 0.18) !important;
+    border-color: rgba(14, 165, 233, 0.35) !important;
+    color: #7DD3FC !important;
+}
+.dark .alert-info .alert-text, html.dark .alert-info .alert-text,
+.dark .alert-info .text-info, html.dark .alert-info .text-info {
+    color: #7DD3FC !important;
+    -webkit-text-fill-color: #7DD3FC !important;
+}
+
+.dark .alert .btn-close, html.dark .alert .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* --------------------------------------------------------------------------
+   7. Buttons & Control Group Overrides
+   -------------------------------------------------------------------------- */
+.dark .btn-glass, html.dark .btn-glass, body.dark .btn-glass,
+.dark a.btn-glass, html.dark a.btn-glass, body.dark a.btn-glass {
+    background: #1D2935 !important;
+    background-color: #1D2935 !important;
+    border-color: #313D4C !important;
+    color: #F9FAFB !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark .btn-glass:hover, html.dark .btn-glass:hover, body.dark .btn-glass:hover,
+.dark a.btn-glass:hover, html.dark a.btn-glass:hover {
+    background: #2B3644 !important;
+    background-color: #2B3644 !important;
+    color: #FFFFFF !important;
+}
+
+.dark .btn-light, html.dark .btn-light, body.dark .btn-light {
+    background-color: #1D2935 !important;
+    border-color: #313D4C !important;
+    color: #CBD5E1 !important;
+}
+
+.dark .btn-light:hover, html.dark .btn-light:hover, body.dark .btn-light:hover {
+    background-color: #2B3644 !important;
+    color: #F9FAFB !important;
+}
+
+.dark .btn-group .btn-check:checked + .btn,
+html.dark .btn-group .btn-check:checked + .btn,
+.dark .btn-group .btn-check:checked + label,
+html.dark .btn-group .btn-check:checked + label,
+.dark .btn-check:checked + .btn,
+.dark .btn-check:checked + label,
+html.dark .btn-check:checked + .btn,
+html.dark .btn-check:checked + label {
+    background-color: #2E8B83 !important;
+    color: #FFFFFF !important;
+    border-color: #2E8B83 !important;
+    box-shadow: 0 2px 8px rgba(46, 139, 131, 0.3) !important;
+}
+
+.dark .btn-group .btn-check:checked + .btn-outline-danger,
+.dark .btn-check:checked + .btn-outline-danger,
+.dark .btn-check:checked + label[for*="Debt"],
+html.dark .btn-check:checked + .btn-outline-danger {
+    background-color: #EF4444 !important;
+    color: #FFFFFF !important;
+    border-color: #EF4444 !important;
+}
+
+.dark .btn-group .btn-check:checked + .btn-outline-success,
+.dark .btn-check:checked + .btn-outline-success,
+.dark .btn-check:checked + label[for*="Paid"],
+html.dark .btn-check:checked + .btn-outline-success {
+    background-color: #22C55E !important;
+    color: #FFFFFF !important;
+    border-color: #22C55E !important;
+}
+
+/* --------------------------------------------------------------------------
+   8. Navigation & Header
+   -------------------------------------------------------------------------- */
+.dark .iq-navbar, html.dark .iq-navbar,
+.dark nav.navbar, html.dark nav.navbar,
+.dark header, html.dark header {
+    background-color: #17202B !important;
+    border-color: #2B3644 !important;
+}
+
+.dark .dropdown-menu, html.dark .dropdown-menu {
+    background-color: #17202B !important;
+    border-color: #2B3644 !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark .dropdown-item, html.dark .dropdown-item {
+    color: #CBD5E1 !important;
+    -webkit-text-fill-color: #CBD5E1 !important;
+}
+
+.dark .dropdown-item:hover, .dark .dropdown-item:focus,
+html.dark .dropdown-item:hover, html.dark .dropdown-item:focus {
+    background-color: #1D2935 !important;
+    color: #2E8B83 !important;
+    -webkit-text-fill-color: #2E8B83 !important;
+}
+
+.dark .nav-tabs .nav-link, html.dark .nav-tabs .nav-link,
+.dark .nav-pills .nav-link:not(.active), html.dark .nav-pills .nav-link:not(.active) {
+    color: #94A3B8 !important;
+}
+
+.dark .nav-tabs .nav-link.active, html.dark .nav-tabs .nav-link.active {
+    background-color: #17202B !important;
+    color: #2E8B83 !important;
+    border-color: #2B3644 #2B3644 #17202B !important;
+}
+
+/* --------------------------------------------------------------------------
+   9. Sidebar Component
+   -------------------------------------------------------------------------- */
+.dark .sidebar, html.dark .sidebar, body.dark .sidebar,
+.dark aside, html.dark aside {
+    background-color: #17202B !important;
+    border-color: #2B3644 !important;
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark .sidebar .sidebar-header, html.dark .sidebar .sidebar-header {
+    border-color: #2B3644 !important;
+}
+
+.dark .sidebar .sidebar-header .logo-title, html.dark .sidebar .sidebar-header .logo-title {
+    color: #F9FAFB !important;
+}
+
+.dark .sidebar .nav-item .nav-link, html.dark .sidebar .nav-item .nav-link {
+    color: #CBD5E1 !important;
+}
+
+.dark .sidebar .nav-item .nav-link .item-name, html.dark .sidebar .nav-item .nav-link .item-name {
+    color: #CBD5E1 !important;
+}
+
+.dark .sidebar .nav-item .nav-link:hover:not(.active),
+html.dark .sidebar .nav-item .nav-link:hover:not(.active) {
+    background-color: #1D2935 !important;
+    color: #2E8B83 !important;
+}
+
+.dark .sidebar .nav-item .nav-link.active,
+html.dark .sidebar .nav-item .nav-link.active {
+    background: rgba(46, 139, 131, 0.2) !important;
+    color: #2E8B83 !important;
+}
+
+.dark .sidebar .nav-item .nav-link.active .icon,
+html.dark .sidebar .nav-item .nav-link.active .icon {
+    color: #2E8B83 !important;
+}
+
+.dark .sidebar .nav-item.static-item .default-icon,
+html.dark .sidebar .nav-item.static-item .default-icon {
+    color: #64748B !important;
+}
+
+.dark .sidebar .sub-nav .nav-link, html.dark .sidebar .sub-nav .nav-link {
+    color: #94A3B8 !important;
+}
+
+.dark .sidebar .sub-nav .nav-link.active, html.dark .sidebar .sub-nav .nav-link.active {
+    background: rgba(46, 139, 131, 0.15) !important;
+    color: #2E8B83 !important;
+}
+
+.dark .sidebar a.text-brand-primary, html.dark .sidebar a.text-brand-primary,
+.dark .sidebar button.text-brand-primary, html.dark .sidebar button.text-brand-primary {
+    color: #5EEAD4 !important;
+}
+
+/* --------------------------------------------------------------------------
+   10. Modals & Popups
+   -------------------------------------------------------------------------- */
+.dark .modal-content, html.dark .modal-content {
+    background-color: #17202B !important;
+    border-color: #2B3644 !important;
+    color: #F9FAFB !important;
+}
+
+.dark .modal-header, .dark .modal-footer,
+html.dark .modal-header, html.dark .modal-footer {
+    border-color: #2B3644 !important;
+}
+
+.dark .modal-title, html.dark .modal-title {
+    color: #F9FAFB !important;
+}
+
+.dark .btn-close, html.dark .btn-close {
+    filter: invert(1) !important;
+}
+
+/* --------------------------------------------------------------------------
+   11. SweetAlert2 Toast & Popup Overrides
+   -------------------------------------------------------------------------- */
+.dark .swal2-popup, html.dark .swal2-popup, body.dark .swal2-popup {
+    background-color: #1E293B !important;
+    color: #F8FAFC !important;
+    border: 1px solid #334155 !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dark .swal2-title, html.dark .swal2-title,
+.dark .swal2-html-container, html.dark .swal2-html-container,
+.dark .swal2-content, html.dark .swal2-content {
+    color: #F8FAFC !important;
+    -webkit-text-fill-color: #F8FAFC !important;
+}
+
+/* --------------------------------------------------------------------------
+   12. Tailwind Soft Color Backgrounds (*-50 Universal Overrides)
+   -------------------------------------------------------------------------- */
+.dark .bg-emerald-50, html.dark .bg-emerald-50 { background-color: rgba(16, 185, 129, 0.15) !important; color: #34D399 !important; }
+.dark .bg-brand-50, html.dark .bg-brand-50 { background-color: rgba(46, 139, 131, 0.2) !important; color: #7FC7C0 !important; }
+.dark .bg-sky-50, html.dark .bg-sky-50 { background-color: rgba(14, 165, 233, 0.15) !important; color: #38BDF8 !important; }
+.dark .bg-amber-50, html.dark .bg-amber-50 { background-color: rgba(245, 158, 11, 0.15) !important; color: #FBBF24 !important; }
+.dark .bg-red-50, html.dark .bg-red-50 { background-color: rgba(239, 68, 68, 0.15) !important; color: #FCA5A5 !important; }
+.dark .bg-green-50, html.dark .bg-green-50 { background-color: rgba(34, 197, 94, 0.15) !important; color: #86EFAC !important; }
+.dark .bg-blue-50, html.dark .bg-blue-50 { background-color: rgba(59, 130, 246, 0.15) !important; color: #93C5FD !important; }
+.dark .bg-yellow-50, html.dark .bg-yellow-50 { background-color: rgba(234, 179, 8, 0.15) !important; color: #FDE047 !important; }
+.dark .bg-indigo-50, html.dark .bg-indigo-50 { background-color: rgba(99, 102, 241, 0.15) !important; color: #A5B4FC !important; }
+.dark .bg-rose-50, html.dark .bg-rose-50 { background-color: rgba(244, 63, 94, 0.15) !important; color: #FDA4AF !important; }
+.dark .bg-purple-50, html.dark .bg-purple-50 { background-color: rgba(168, 85, 247, 0.15) !important; color: #D8B4FE !important; }
+.dark .bg-orange-50, html.dark .bg-orange-50 { background-color: rgba(249, 115, 22, 0.15) !important; color: #FDBA74 !important; }
+.dark .bg-teal-50, html.dark .bg-teal-50 { background-color: rgba(20, 184, 166, 0.15) !important; color: #5EEAD4 !important; }
+.dark .bg-cyan-50, html.dark .bg-cyan-50 { background-color: rgba(6, 182, 212, 0.15) !important; color: #67E8F9 !important; }
+.dark .bg-pink-50, html.dark .bg-pink-50 { background-color: rgba(236, 72, 153, 0.15) !important; color: #F472B6 !important; }
+
+/* --------------------------------------------------------------------------
+   13. Lists, Badges & Misc Components
+   -------------------------------------------------------------------------- */
+.dark .list-group-item, html.dark .list-group-item {
+    background-color: #17202B !important;
+    border-color: #2B3644 !important;
+    color: #CBD5E1 !important;
+}
+
+.dark .pagination .page-link, html.dark .pagination .page-link {
+    background-color: #17202B !important;
+    border-color: #2B3644 !important;
+    color: #CBD5E1 !important;
+}
+
+.dark .pagination .page-item.active .page-link, html.dark .pagination .page-item.active .page-link {
+    background-color: #2E8B83 !important;
+    border-color: #2E8B83 !important;
+    color: #FFFFFF !important;
+}
+
+.dark .launchpad-card, html.dark .launchpad-card {
+    background: linear-gradient(135deg, rgba(23, 32, 43, 0.95), rgba(29, 41, 53, 0.85)) !important;
+    border: 1px solid #2B3644 !important;
+}
+
+.dark .launchpad-step-card, html.dark .launchpad-step-card {
+    background-color: #17202B !important;
+    border-color: #2B3644 !important;
+}
+
+/* Scrollbar in Dark Mode */
+.dark ::-webkit-scrollbar-thumb, html.dark ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15) !important;
+}

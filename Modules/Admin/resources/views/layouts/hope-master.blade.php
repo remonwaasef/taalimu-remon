@@ -1,4 +1,4 @@
-﻿@extends('layouts.hope-master')
+@extends('layouts.hope-master')
 
 @section('title')@yield('title', 'Admin Dashboard') - {{ \App\Models\SiteSetting::get('site_name', 'EduCentral') }}@endsection
 
@@ -9,7 +9,7 @@
 @section('body_class', 'rtl')
 
 @section('head_extra')
-    @vite(['resources/css/app.scss', 'resources/js/app.js'])
+    @vite(['resources/css/app.scss', 'resources/js/app.js', 'resources/js/taalimu-global.js'])
     <style>
         /* ===== Admin Specific Overrides (Bento Pro Palette) ===== */
         :root {

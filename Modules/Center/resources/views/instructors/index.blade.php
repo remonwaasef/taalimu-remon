@@ -1,4 +1,4 @@
-﻿@extends('center::layouts.app-next')
+@extends('center::layouts.app-next')
 
 @section('page-title', __('center::instructors.title'))
 
@@ -113,15 +113,19 @@
                                             <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('center.instructors.show', $instructor->id) }}"><i class="far fa-eye me-2 text-primary opacity-75"></i> {{ __('center::instructors.show') }}</a></li>
                                             <li><a class="dropdown-item rounded-3 mb-1" href="{{ route('center.instructors.edit', $instructor->id) }}"><i class="far fa-edit me-2 text-success opacity-75"></i> {{ __('center::instructors.edit') }}</a></li>
                                             <li><hr class="dropdown-divider opacity-10"></li>
-                                            <li>
-                                                <form action="{{ route('center.instructors.destroy', $instructor->id) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('center::instructors.confirm_delete_instructor') }}');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="dropdown-item rounded-3 text-danger mb-0">
-                                                        <i class="fas fa-trash-alt me-2 opacity-75"></i> {{ __('center::instructors.delete') }}
-                                                    </button>
-                                                </form>
-                                            </li>
+                                             <li>
+                                                 <form id="delete-instructor-form-{{ $instructor->id }}" action="{{ route('center.instructors.destroy', $instructor->id) }}" method="POST" class="d-inline">
+                                                     @csrf
+                                                     @method('DELETE')
+                                                 </form>
+                                                 <button type="button" class="dropdown-item rounded-3 text-danger mb-0"
+                                                         data-confirm-delete
+                                                         data-form="delete-instructor-form-{{ $instructor->id }}"
+                                                         data-title="{{ __('center::instructors.confirm_delete_instructor') }}"
+                                                         data-text="{{ $instructor->name }}">
+                                                     <i class="fas fa-trash-alt me-2 opacity-75"></i> {{ __('center::instructors.delete') }}
+                                                 </button>
+                                             </li>
                                         </ul>
                                     </div>
                                 </td>

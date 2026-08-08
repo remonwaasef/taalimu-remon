@@ -83,13 +83,17 @@
                                     <i class="fas fa-paperclip text-muted"></i>
                                 </a>
                                 @endif
-                                <form action="{{ route('center.expenses.destroy', $expense->id) }}" method="POST" class="d-inline">
+                                <form id="delete-expense-form-{{ $expense->id }}" action="{{ route('center.expenses.destroy', $expense->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-light border-0 rounded-pill" onclick="return confirm('{{ __('center::expenses.delete_confirm') }}')">
-                                        <i class="fas fa-trash text-danger opacity-75"></i>
-                                    </button>
                                 </form>
+                                <button type="button" class="btn btn-sm btn-light border-0 rounded-pill"
+                                        data-confirm-delete
+                                        data-form="delete-expense-form-{{ $expense->id }}"
+                                        data-title="{{ __('center::expenses.delete_confirm') }}"
+                                        data-text="{{ $expense->title }}">
+                                    <i class="fas fa-trash text-danger opacity-75"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>
