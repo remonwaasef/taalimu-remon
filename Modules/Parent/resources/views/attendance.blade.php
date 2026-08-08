@@ -28,7 +28,7 @@
                             <tr class="border-b border-brand-border/50 dark:border-slate-800/50 last:border-0">
                                 <td class="py-3 px-3 font-semibold text-slate-700 dark:text-slate-200">{{ $attendance->student?->name }}</td>
                                 <td class="py-3 px-3 text-slate-500 dark:text-slate-400">{{ $attendance->course?->title }}</td>
-                                <td class="py-3 px-3 text-slate-500 dark:text-slate-400">{{ $attendance->date->format('Y-m-d') }}</td>
+                                <td class="py-3 px-3 text-slate-500 dark:text-slate-400">{{ $attendance->date?->format('Y-m-d') ?? $attendance->session_date ?? '—' }}</td>
                                 <td class="py-3 px-3">
                                     @php
                                         $statusColors = [
