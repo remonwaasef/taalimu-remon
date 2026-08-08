@@ -17,6 +17,18 @@ class TenantScope implements Scope
     public function apply(Builder $builder, Model $model): void
     {
         if (app()->bound('tenant')) {
+            // Global users (tenant_id = null, e.g. global super-admins) must stay
+            // accessible even when a tenant is bound to the request — otherwise
+            // they can never sign in on tenant-bound hosts (u.taalimu.com).
+            if ($model instanceof \App\Models\User) {
+                $builder->where(function (Builder $q) use ($model) {
+                    $q->where($model->getTable().'.tenant_id', app('tenant')->id)
+                        ->orWhereNull($model->getTable().'.tenant_id');
+                });
+
+                return;
+            }
+
             $builder->where($model->getTable().'.tenant_id', app('tenant')->id);
         }
     }
