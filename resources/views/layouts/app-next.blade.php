@@ -5,6 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <!-- Apply saved theme before first paint to prevent white flash (FOUC) -->
+    <script>
+        (function () {
+            var theme = null;
+            try { theme = localStorage.getItem('theme'); } catch (e) {}
+            var dark = theme === 'dark' ||
+                ((theme === null || theme === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            if (dark) {
+                document.documentElement.classList.add('dark');
+            }
+            if (theme === null || theme === 'system') {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+                    document.documentElement.classList.toggle('dark', e.matches);
+                });
+            }
+        })();
+    </script>
+
     <title>@yield('title', config('app.name', 'Taalimu'))</title>
 
     <!-- Google Fonts: Inter & Cairo -->
