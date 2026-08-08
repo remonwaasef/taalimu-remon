@@ -28,7 +28,7 @@ class IssueLogger
             // Check for existing similar issue
             $existing = $this->duplicateDetector->find($fingerprint);
             if ($existing) {
-                $existing->incrementOccurrence();
+                app(OperationIssueService::class)->incrementOccurrence($existing);
 
                 return $existing;
             }

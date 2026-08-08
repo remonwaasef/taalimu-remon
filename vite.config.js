@@ -8,8 +8,10 @@ export default defineConfig({
             input: [
                 'resources/css/app.scss',
                 'resources/css/tailwind.css',
+                'resources/css/dark-mode-global.css',
                 'resources/js/app.js',
                 'resources/js/app.jsx',
+                'resources/js/taalimu-global.js',
                 'resources/css/landing-new.css'
             ],
             refresh: true,
