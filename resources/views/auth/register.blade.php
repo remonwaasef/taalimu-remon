@@ -1,4 +1,4 @@
-﻿@extends('layouts.landing-new')
+@extends('layouts.landing-new')
 
 @section('content')
 <!-- Import Google Fonts -->
@@ -41,7 +41,7 @@
         <!-- Minimalist Progress & Header -->
         <div class="bg-white p-4 lg:p-6 pb-0">
             <!-- Multi-Step Indicator -->
-            <div class="mb-6 relative transition-all duration-500" x-cloak :class="!accountType ? 'blur-[5px] opacity-40 pointer-events-none select-none' : ''">
+            <div class="mb-6 relative transition-all duration-500" x-cloak>
                 <div class="flex justify-between mb-1.5 px-1">
                     <span class="text-[10px] font-black uppercase tracking-[0.2em] transition-colors" :class="currentStep === 1 ? 'text-brand-secondary' : 'text-slate-300'">
                         {{ app()->isLocale('ar') ? 'بيانات المركز' : 'Center Info' }}
@@ -57,7 +57,7 @@
             </div>
 
             <!-- Contextual Header -->
-            <div class="mb-4 text-center transition-all duration-700 ease-in-out" :class="!accountType ? 'transform scale-110 translate-y-[3vh] mb-8' : ''">
+            <div class="mb-4 text-center transition-all duration-700 ease-in-out">
                 <div x-show="currentStep === 1" x-cloak class="flex flex-col items-center">
                     <h1 class="text-xl lg:text-2xl font-black text-slate-900 mb-2 font-arabic leading-tight">
                         {{ app()->isLocale('ar') ? 'ابدأ رحلتك التعليمية' : 'Start Your Journey' }}
@@ -112,7 +112,7 @@
 @include('auth.partials._register-account-type')
 
             <!-- Content below account type selection -> blurred until selected -->
-            <div class="transition-all duration-500" :class="!accountType ? 'blur-[5px] opacity-40 pointer-events-none select-none' : ''">
+            <div class="transition-all duration-500">
                 
             <!-- Google Shortcut (Now below selection) -->
             <div class="mb-6">

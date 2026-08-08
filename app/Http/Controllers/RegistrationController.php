@@ -27,7 +27,7 @@ class RegistrationController extends Controller
 
         $accountType = request('account_type');
         if (! in_array($accountType, ['center', 'instructor'])) {
-            $accountType = null;
+            $accountType = 'center';
         }
 
         return view('auth.register', compact('packages', 'packagesData', 'accountType'));
