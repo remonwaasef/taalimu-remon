@@ -8,7 +8,7 @@
         subtitle="{{ $tenant->name ?? 'Educational Center' }} • {{ now()->translatedFormat('l, d F Y') }}"
     >
         <x-slot name="actions">
-            <x-ui.button variant="primary" icon="fas fa-user-plus" size="md" href="{{ route('center.students.create') }}">
+            <x-ui.button variant="primary" icon="fas fa-user-plus" size="md" href="{{ route('center.students.create', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}">
                 {{ __('center::dashboard.add_new_student') }}
             </x-ui.button>
         </x-slot>
@@ -65,28 +65,28 @@
     <div class="mb-8">
         <h2 class="text-sm font-bold text-slate-900 dark:text-slate-100 font-inter mb-4 uppercase tracking-wider text-xs">{{ __('center::dashboard.center_quick_actions') }}</h2>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <a href="{{ route('center.students.create') }}" class="p-4 rounded-2xl border border-brand-border dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group shadow-sm">
+            <a href="{{ route('center.students.create', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="p-4 rounded-2xl border border-brand-border dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group shadow-sm">
                 <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-base mb-2 group-hover:scale-110 transition-transform">
                     <i class="fas fa-user-plus"></i>
                 </div>
                 <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">{{ __('center::dashboard.add_new_student') }}</span>
             </a>
 
-            <a href="{{ route('center.courses.create') }}" class="p-4 rounded-2xl border border-brand-border dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group shadow-sm">
+            <a href="{{ route('center.courses.create', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="p-4 rounded-2xl border border-brand-border dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group shadow-sm">
                 <div class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-900/40 text-brand-primary dark:text-brand-300 flex items-center justify-center text-base mb-2 group-hover:scale-110 transition-transform">
                     <i class="fas fa-folder-plus"></i>
                 </div>
                 <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">{{ __('center::dashboard.create_new_group') }}</span>
             </a>
 
-            <a href="{{ route('center.attendance.index') }}" class="p-4 rounded-2xl border border-brand-border dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group shadow-sm">
+            <a href="{{ route('center.attendance.index', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="p-4 rounded-2xl border border-brand-border dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group shadow-sm">
                 <div class="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400 flex items-center justify-center text-base mb-2 group-hover:scale-110 transition-transform">
                     <i class="fas fa-qrcode"></i>
                 </div>
                 <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">{{ __('center::dashboard.smart_attendance_btn') }}</span>
             </a>
 
-            <a href="{{ route('center.sales.index') }}" class="p-4 rounded-2xl border border-brand-border dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group shadow-sm">
+            <a href="{{ route('center.sales.index', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" class="p-4 rounded-2xl border border-brand-border dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all text-center flex flex-col items-center justify-center group shadow-sm">
                 <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center text-base mb-2 group-hover:scale-110 transition-transform">
                     <i class="fas fa-receipt"></i>
                 </div>
@@ -142,7 +142,7 @@
                     icon="fas fa-users"
                 >
                     <x-slot name="action">
-                        <x-ui.button variant="primary" icon="fas fa-plus" href="{{ route('center.courses.create') }}">
+                        <x-ui.button variant="primary" icon="fas fa-plus" href="{{ route('center.courses.create', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}">
                             {{ __('center::dashboard.create_group_action') }}
                         </x-ui.button>
                     </x-slot>

@@ -33,7 +33,7 @@
                     @endphp
 
                     @if($hasDemoData)
-                        <form action="{{ route('center.demo.reset') }}" method="POST" id="demoDataResetForm" onsubmit="return confirm('{{ __('center::launchpad.confirm_reset') }}');">
+                        <form action="{{ route('center.demo.reset', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" method="POST" id="demoDataResetForm" onsubmit="return confirm('{{ __('center::launchpad.confirm_reset') }}');">
                             @csrf
                             <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1 border-dotted" 
                                     style="border-style: dashed !important; font-size: 0.7rem;"
@@ -43,7 +43,7 @@
                             </button>
                         </form>
                     @else
-                        <form action="{{ route('center.demo.seed') }}" method="POST" id="demoDataForm">
+                        <form action="{{ route('center.demo.seed', ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" method="POST" id="demoDataForm">
                             @csrf
                             <button type="submit" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 border-dotted" 
                                     style="border-style: dashed !important; font-size: 0.7rem;"
@@ -124,7 +124,7 @@
                                    {{ __('center::dashboard.launchpad.action') }}
                                 </button>
                             @else
-                                <a href="{{ route($data['route']) }}" 
+                                <a href="{{ route($data['route'], ['tenant' => $tenant->domain ?? app('tenant')?->domain]) }}" 
                                    class="btn {{ $isCurrent ? 'btn-'.$data['color'] : 'btn-outline-light text-muted border-0' }} rounded-pill btn-sm fw-bold px-3 py-1 mt-auto"
                                    style="font-size: 0.75rem;">
                                    {{ __('center::dashboard.launchpad.action') }}

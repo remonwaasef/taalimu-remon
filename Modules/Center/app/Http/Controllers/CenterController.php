@@ -18,20 +18,22 @@ class CenterController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $tenant = $this->tenant ?? (app()->bound('tenant') ? app('tenant') : null);
+        $tenantDomain = $tenant?->domain ?? $user?->tenant?->domain;
 
         // Redirect instructors to their specific dashboard
         if ($user && ($user->role === 'instructor' || ($user->tenant && $user->tenant->type === 'instructor'))) {
-            return redirect()->route('instructor.dashboard', ['tenant' => $user->tenant->domain]);
+            return redirect()->route('instructor.dashboard', ['tenant' => $tenantDomain]);
         }
 
         $validCenterRoles = ['admin', 'center_admin', 'instructor', 'secretary', 'accountant', 'staff', 'support_agent', 'finance_manager', 'content_manager'];
 
-        if ($user->role !== 'center_admin' && ! $user->hasAnyRole($validCenterRoles)) {
+        if ($user && $user->role !== 'center_admin' && ! $user->hasAnyRole($validCenterRoles)) {
             if (request()->expectsJson()) {
                 return response()->json(['message' => 'Unauthorized role'], 403);
             }
 
-            return redirect()->route('campus.index');
+            return redirect()->route('campus.index', ['tenant' => $tenantDomain]);
         }
 
         if ($user && $user->role === 'student') {
@@ -39,7 +41,7 @@ class CenterController extends Controller
                 return response()->json(['message' => 'Unauthorized role'], 403);
             }
 
-            return redirect()->route('campus.index');
+            return redirect()->route('campus.index', ['tenant' => $tenantDomain]);
         }
 
         // 1. Summary Metrics & Setup Progress (Cached for 15 minutes)
