@@ -35,14 +35,14 @@ class AuthController extends Controller
 
                     $user = auth()->user();
 
-                    if ($user && $user->tenant_id === app('tenant')->id) {
+                    if ($user && ($user->tenant_id === app('tenant')->id || $user->role === 'admin' || $user->hasRole('super_admin'))) {
                         \Illuminate\Support\Facades\Log::info('Unified Login: Success', ['user_id' => $user->id]);
 
-                        if ($user->role === 'center_admin') {
-                            return redirect()->route('center.dashboard', ['tenant' => app('tenant')->domain]);
-                        } elseif ($user->role === 'student') {
+                        if ($user->role === 'student') {
                             return redirect()->route('campus.index', ['tenant' => app('tenant')->domain]);
                         }
+
+                        return redirect()->route('center.dashboard', ['tenant' => app('tenant')->domain]);
                     }
 
                     Auth::logout();
