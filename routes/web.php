@@ -156,30 +156,15 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
 });
 
 // Global Language Switcher (Accessible from any domain) — rate limited to prevent locale flooding
+// Arabic-market phase: only 'ar' is active. en/fr routes stay (not deleted) but are no-ops.
 Route::get('lang/{locale}', function ($locale) {
-    if (in_array($locale, ['ar', 'en', 'fr'])) {
+    $activeLocales = ['ar'];
+
+    if (in_array($locale, $activeLocales)) {
         session(['locale' => $locale]);
 
         if (auth()->check()) {
             auth()->user()->update(['locale' => $locale]);
-
-            // Auto-apply French education system when switching to French
-            if ($locale === 'fr' && auth()->user()->tenant_id) {
-                try {
-                    $tenant = \App\Models\Tenant::find(auth()->user()->tenant_id);
-                    if ($tenant) {
-                        $hasStages = \App\Models\Stage::where('tenant_id', $tenant->id)->exists();
-                        if (! $hasStages) {
-                            $settingsService = app(\App\Services\SettingsService::class);
-                            $settingsService->applyTemplate($tenant, 'french_system');
-                        }
-                    }
-                } catch (\Exception $e) {
-                    \Illuminate\Support\Facades\Log::warning(
-                        'Auto-apply French education system failed: '.$e->getMessage()
-                    );
-                }
-            }
         }
     }
 

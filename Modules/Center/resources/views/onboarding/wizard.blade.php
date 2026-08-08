@@ -515,11 +515,6 @@
                             class="px-4 py-2 rounded-xl text-[10px] font-black transition-all flex items-center gap-2">
                         <span class="text-sm">🇸🇦</span> العربية
                     </button>
-                    <button @click="updateLanguage('fr')" 
-                            :class="formData.step_1.locale === 'fr' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-400 hover:bg-slate-50'" 
-                            class="px-4 py-2 rounded-xl text-[10px] font-black transition-all flex items-center gap-2">
-                        <span class="text-sm">🇫🇷</span> Français
-                    </button>
                 </div>
 
                 <p class="inline-flex items-center gap-3 px-6 py-2 rounded-full text-slate-300 text-[10px] font-black uppercase tracking-widest">

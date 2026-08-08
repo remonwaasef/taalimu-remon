@@ -241,11 +241,11 @@ class SettingsController extends Controller
     }
 
     /**
-     * Set the application locale
+     * Set the application locale (Arabic-market phase: only 'ar' is active).
      */
     public function setLocale($locale)
     {
-        if (in_array($locale, ['ar', 'en', 'fr'])) {
+        if (in_array($locale, ['ar'])) {
             session(['locale' => $locale]);
 
             if (auth()->check()) {

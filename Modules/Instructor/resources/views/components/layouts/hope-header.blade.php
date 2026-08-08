@@ -57,8 +57,6 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="langDropdown">
               <li><a class="dropdown-item" href="{{ route('instructor.set-locale', 'ar') }}">العربية</a></li>
-              <li><a class="dropdown-item" href="{{ route('instructor.set-locale', 'en') }}">English</a></li>
-              <li><a class="dropdown-item" href="{{ route('instructor.set-locale', 'fr') }}">Français</a></li>
           </ul>
         </li>
 

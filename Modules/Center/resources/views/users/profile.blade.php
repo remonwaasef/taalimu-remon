@@ -69,15 +69,6 @@
                                 @endif
                             </a>
                         </div>
-                        <div class="col-md-6">
-                            <a href="{{ route('lang.switch', 'fr') }}" class="btn w-100 py-3 rounded-4 border-2 {{ app()->getLocale() == 'fr' ? 'btn-primary border-primary shadow' : 'bg-light border-light text-dark' }} d-flex flex-column align-items-center gap-2 transition-all">
-                                <span class="fs-2">🇫🇷</span>
-                                <span class="fw-bold">{{ __('center::profile.french') }}</span>
-                                @if(app()->getLocale() == 'fr')
-                                    <i class="fas fa-check-circle position-absolute top-0 end-0 m-2 text-white"></i>
-                                @endif
-                            </a>
-                        </div>
                     </div>
                 </div>
             </div>

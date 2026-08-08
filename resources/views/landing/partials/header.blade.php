@@ -41,7 +41,7 @@
                         <span>{{ strtoupper(app()->getLocale()) }}</span>
                     </button>
                     <div x-show="open" style="display: none;" x-cloak @click.away="open = false" x-transition class="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-2xl py-2 overflow-hidden z-50 border border-slate-200">
-                        @foreach(['ar' => 'العربية', 'fr' => 'Français'] as $code => $label)
+                        @foreach(['ar' => 'العربية'] as $code => $label)
                         <a href="{{ route('lang.switch', ['locale' => $code]) }}" style="display:block; padding:0.625rem 1rem; font-size:0.875rem; {{ app()->isLocale($code) ? 'color:#2E8B83; font-weight:700; background:#E6F4F3;' : 'color:#334155;' }} transition:background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='{{ app()->isLocale($code) ? '#E6F4F3' : 'transparent' }}'">
                             {{ $label }}
                         </a>
@@ -63,7 +63,7 @@
                         <span>{{ strtoupper(app()->getLocale()) }}</span>
                     </button>
                     <div x-show="open" style="display: none;" x-cloak @click.away="open = false" x-transition class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-2xl py-2 overflow-hidden z-50 border border-slate-200">
-                        @foreach(['ar' => 'العربية', 'fr' => 'Français'] as $code => $label)
+                        @foreach(['ar' => 'العربية'] as $code => $label)
                         <a href="{{ route('lang.switch', ['locale' => $code]) }}" style="display:block; padding:0.5rem 0.75rem; font-size:0.75rem; {{ app()->isLocale($code) ? 'color:#2E8B83; font-weight:700;' : 'color:#334155;' }}">
                             {{ $label }}
                         </a>

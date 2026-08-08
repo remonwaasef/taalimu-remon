@@ -24,8 +24,6 @@
                 $currentLocale = app()->getLocale();
                 $locales = [
                     'ar' => ['name' => 'العربية', 'flag' => '🇸🇦'],
-                    'en' => ['name' => 'English', 'flag' => '🇺🇸'],
-                    'fr' => ['name' => 'Français', 'flag' => '🇫🇷'],
                 ];
             @endphp
             <span class="me-1">{{ $locales[$currentLocale]['flag'] }}</span>

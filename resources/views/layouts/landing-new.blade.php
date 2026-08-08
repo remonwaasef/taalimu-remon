@@ -11,9 +11,8 @@
 
     {!! SEO::generate() !!}
     
-    <!-- Multilingual SEO -->
+    <!-- Multilingual SEO (Arabic-market phase: only 'ar' active) -->
     <link rel="alternate" hreflang="ar" href="{{ url()->current() }}?hl=ar" />
-    <link rel="alternate" hreflang="fr" href="{{ url()->current() }}?hl=fr" />
     <link rel="alternate" hreflang="x-default" href="{{ url()->current() }}" />
     
     <!-- Favicon -->
