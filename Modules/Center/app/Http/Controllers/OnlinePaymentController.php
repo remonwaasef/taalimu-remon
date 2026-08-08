@@ -60,7 +60,12 @@ $remaining = $sale->total_amount - $sale->paid_amount;
 
         $this->ensurePaymentToken($sale);
 
-        return view('center::pay-payment.payment', compact('sale', 'remaining'));
+        $checkoutUrl = \Illuminate\Support\Facades\URL::signedRoute('center.pay.submit', [
+            'sale' => $sale->id,
+            'tenant' => app('tenant')->domain,
+        ]);
+
+        return view('center::pay-payment.payment', compact('sale', 'remaining', 'checkoutUrl'));
     }
 
     /**

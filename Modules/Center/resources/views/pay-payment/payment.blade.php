@@ -63,7 +63,7 @@
                     </div>
                 </div>
 
-                <form method="POST" action="{{ route('center.pay.submit', ['sale' => $sale]) }}" class="mt-6">
+                <form method="POST" action="{{ $checkoutUrl }}" class="mt-6">
                     @csrf
                     <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 rounded-2xl text-sm transition-all shadow-lg shadow-emerald-600/25 flex items-center justify-center gap-2">
                         <i class="fas fa-lock text-xs"></i>
