@@ -74,7 +74,10 @@
                     </p>
                 </div>
 
-                <!-- ① Google Fast Registration (PROMINENT AT TOP) -->
+                <!-- Account Type Selector (First Interaction Step) -->
+@include('auth.partials._register-account-type')
+
+                <!-- ① Google Fast Registration (Right After Account Type Selection) -->
                 <div class="mb-4">
                     <a :href="'{{ route('auth.google') }}?plan=' + selectedPlan + '&cycle=' + billingCycle + '&account_type=' + (accountType || 'center')" 
                        class="w-full flex items-center justify-center gap-3 py-2.5 px-6 border-2 border-slate-200 rounded-xl text-sm font-black text-slate-800 bg-white hover:bg-slate-50 hover:border-brand-secondary/40 hover:shadow-md transition-all group">
@@ -93,13 +96,10 @@
                     <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-100"></div></div>
                     <div class="relative flex justify-center text-[10px] uppercase">
                         <span class="bg-white px-4 text-slate-400 font-bold tracking-[0.15em]">
-                            {{ app()->isLocale('ar') ? 'أو أدخل بيانات مركزك' : 'OR ENTER YOUR DETAILS' }}
+                            {{ app()->isLocale('ar') ? 'أو ادخل البيانات التالية' : 'OR FILL DETAILS BELOW' }}
                         </span>
                     </div>
                 </div>
-
-                <!-- Account Type Selector -->
-@include('auth.partials._register-account-type')
 
                 <!-- THE FORM -->
                 <form action="{{ route('register.submit') }}" method="POST" 
