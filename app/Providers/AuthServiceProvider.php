@@ -71,10 +71,27 @@ class AuthServiceProvider extends ServiceProvider
             */
 
             // Case-insensitive check for Super Admin, Admin and Center Admin
-            // These roles get full access to all features without needing individual permissions
-            $bypassRoles = ['super_admin', 'Super Admin', 'admin', 'Admin', 'center_admin', 'center_owner', 'Center Owner'];
-            if ($user->hasAnyRole($bypassRoles) ||
-                in_array(strtolower($user->role ?? ''), ['super_admin', 'admin', 'center_admin', 'center_owner'])) {
+            // These roles get full access to all features without needing individual permissions.
+            // SEC-01: the literal 'admin'/'Admin' roles grant a bypass ONLY for global
+            // accounts (tenant_id null); a tenant user holding a custom role named
+            // 'admin' must never inherit full-panel powers.
+            $roleColumn = strtolower($user->role ?? '');
+            if ($roleColumn === 'super_admin') {
+                return true;
+            }
+
+            if ($user->tenant_id === null && $roleColumn === 'admin') {
+                return true;
+            }
+
+            if (in_array($roleColumn, ['center_admin', 'center_owner']) ||
+                $user->hasAnyRole(['center_admin', 'Center Owner', 'center_owner'])) {
+                return true;
+            }
+
+            if ($user->tenant_id === null && (
+                $user->hasAnyRole(['super_admin', 'Super Admin', 'admin', 'Admin'])
+            )) {
                 return true;
             }
         });

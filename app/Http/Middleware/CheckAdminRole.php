@@ -24,9 +24,16 @@ class CheckAdminRole
         // Bypasses Spatie strictly isolated teams validation which blocks global roles.
         // Impersonated tenant sessions must not inherit admin-panel access; returning
         // from impersonation is handled by the dedicated auth-only route.
-        if (in_array(strtolower($user->role), ['admin', 'super_admin']) ||
-            $user->hasRole('super_admin') ||
-            $user->hasRole('Super Admin')) {
+        // SEC-01: the admin panel is reserved for GLOBAL accounts (tenant_id = null) —
+        // a tenant user must never pass by role-column value alone.
+        $isGlobal = $user->tenant_id === null;
+        $roleColumn = strtolower((string) $user->role);
+
+        if ($isGlobal && (
+                in_array($roleColumn, ['admin', 'super_admin']) ||
+                $user->hasRole('super_admin') ||
+                $user->hasRole('Super Admin')
+            )) {
             return $next($request);
         }
 

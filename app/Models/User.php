@@ -16,6 +16,15 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use \App\Traits\BelongsToTenant, HasApiTokens, HasFactory, HasRoles, LogsActivity, ManagesTokens, Notifiable;
 
+    /**
+     * Role names that must never be assignable to tenant users — they
+     * escalate into the global admin panel (sec: SEC-01).
+     */
+    public const RESERVED_ROLE_NAMES = [
+        'super_admin', 'admin', 'center_admin', 'center_owner',
+        'instructor', 'student', 'parent', 'guardian', 'staff',
+    ];
+
     protected static function boot()
     {
         parent::boot();

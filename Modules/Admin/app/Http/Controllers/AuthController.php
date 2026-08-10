@@ -46,6 +46,7 @@ class AuthController extends Controller
             ->first();
 
         if ($user
+            && $user->tenant_id === null
             && in_array($user->role, ['super_admin', 'admin'])
             && \Illuminate\Support\Facades\Hash::check($credentials['password'], $user->password)) {
             \Illuminate\Support\Facades\RateLimiter::clear($throttleKey);

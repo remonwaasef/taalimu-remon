@@ -48,8 +48,14 @@ class RoleController extends Controller
         $request->validate([
             'name' => [
                 'nullable',
-
                 'string',
+                'max:50',
+                function ($attribute, $value, $fail) {
+                    $names = array_map('strtolower', \App\Models\User::RESERVED_ROLE_NAMES);
+                    if (in_array(strtolower(trim((string) $value)), $names, true)) {
+                        $fail(__('The role name is reserved and cannot be used.'));
+                    }
+                },
                 Rule::unique('roles')->where(function ($query) {
                     return $query->where('tenant_id', app('tenant')->id)
                         ->orWhereNull('tenant_id');
@@ -93,8 +99,14 @@ class RoleController extends Controller
         $request->validate([
             'name' => [
                 'nullable',
-
                 'string',
+                'max:50',
+                function ($attribute, $value, $fail) {
+                    $names = array_map('strtolower', \App\Models\User::RESERVED_ROLE_NAMES);
+                    if (in_array(strtolower(trim((string) $value)), $names, true)) {
+                        $fail(__('The role name is reserved and cannot be used.'));
+                    }
+                },
                 Rule::unique('roles')->where(function ($query) {
                     return $query->where('tenant_id', app('tenant')->id)
                         ->orWhereNull('tenant_id');

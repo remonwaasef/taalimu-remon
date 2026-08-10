@@ -102,6 +102,10 @@ class UserController extends Controller
         // Auto-generate secure password if not provided
         $plainPassword = $validated['password'] ?? \Illuminate\Support\Str::random(12);
 
+        if (in_array(strtolower($validated['role']), array_map('strtolower', \App\Models\User::RESERVED_ROLE_NAMES), true)) {
+            abort(403, 'Reserved role name cannot be assigned.');
+        }
+
         $user = new User([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -219,6 +223,9 @@ class UserController extends Controller
         $user->email = $validated['email'] ?? $user->email;
 
         if (! empty($validated['role']) && $user->role !== $validated['role']) {
+            if (in_array(strtolower($validated['role']), array_map('strtolower', \App\Models\User::RESERVED_ROLE_NAMES), true)) {
+                abort(403, 'Reserved role name cannot be assigned.');
+            }
             $user->role = $validated['role'];
             $user->syncRoles([$validated['role']]);
         }
