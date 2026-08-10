@@ -9,7 +9,7 @@ use Modules\Instructor\Http\Controllers\SettingsController;
 use Modules\Instructor\Http\Controllers\StudentController;
 
 $instructorRoutes = function () {
-    Route::middleware(['auth', 'verified', 'subscription', 'instructor.role'])->prefix('instructor')->group(function () {
+    Route::middleware(['auth', '2fa', 'verified', 'subscription', 'instructor.role'])->prefix('instructor')->group(function () {
         Route::get('/', [InstructorController::class, 'index'])->name('instructor.dashboard');
         Route::get('/set-locale/{locale}', [SettingsController::class, 'setLocale'])->name('instructor.set-locale');
         Route::get('/scanner/{course}', [InstructorController::class, 'scanner'])->name('instructor.scanner');
@@ -68,7 +68,7 @@ $instructorRoutes = function () {
         ->middleware('throttle:20,1')
         ->name('instructor.students.check-phone');
 
-    Route::middleware(['auth', 'verified', 'subscription', 'instructor.role'])->prefix('instructor')->group(function () {
+    Route::middleware(['auth', '2fa', 'verified', 'subscription', 'instructor.role'])->prefix('instructor')->group(function () {
 
         // Online Classes
         Route::resource('online-classes', \Modules\Instructor\Http\Controllers\OnlineClassController::class)->names('instructor.online_classes');

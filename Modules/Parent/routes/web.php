@@ -11,7 +11,7 @@ use Modules\Parent\Http\Controllers\ParentController;
 */
 
 Route::domain(config('app.tenant_domain') == 'localhost' ? '{tenant}.localhost' : '{tenant}.'.config('app.tenant_domain'))
-    ->middleware([\App\Http\Middleware\IdentifyTenant::class, 'auth', 'feature:parent_portal'])
+    ->middleware([\App\Http\Middleware\IdentifyTenant::class, 'auth', '2fa', 'feature:parent_portal'])
     ->group(function () {
         Route::prefix('parent')->name('parent.')->group(function () {
             Route::get('/', [ParentController::class, 'index'])->name('index');
