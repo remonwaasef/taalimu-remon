@@ -24,16 +24,13 @@ class ResetPasswordController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        $record = DB::table('password_reset_tokens')
-            ->where('email', $validated['email'])
-            ->where('token', $validated['token'])
-            ->first();
-
-        if (! $record) {
+        if (! $record || ! Hash::check($validated['token'], $record->token)) {
             return back()->withErrors(['email' => 'رابط إعادة تعيين كلمة المرور غير صالح أو منتهي الصلاحية.']);
         }
 
-        if ($record->created_at < now()->subHours(24)) {
+        // SEC-04: expiry unified with the auth config (auth.passwords.users.expire).
+        $expiryMinutes = (int) config('auth.passwords.users.expire', 15);
+        if ($record->created_at < now()->subMinutes($expiryMinutes)) {
             DB::table('password_reset_tokens')->where('email', $validated['email'])->delete();
 
             return back()->withErrors(['email' => 'انتهت صلاحية رابط إعادة تعيين كلمة المرور. يرجى طلب رابط جديد.']);

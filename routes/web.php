@@ -122,6 +122,19 @@ Route::middleware(['web', 'throttle:global'])->domain(config('app.tenant_domain'
         ->middleware('throttle:login') // Uses the 'login' rate limiter defined in AppServiceProvider
         ->name('unified.login.submit');
 
+    // SEC-04: password reset flow (was orphaned — controllers/views existed but
+    // no routes were registered, so password reset emails pointed to a dead URL).
+    Route::get('/password/reset', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])
+        ->name('password.request');
+    Route::post('/password/email', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLink'])
+        ->middleware('throttle:6,1')
+        ->name('password.email');
+    Route::get('/password/reset/{token}', [App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForm'])
+        ->name('password.reset');
+    Route::post('/password/reset', [App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])
+        ->middleware('throttle:6,1')
+        ->name('password.update');
+
     Route::post('logout', [App\Http\Controllers\UnifiedAuthController::class, 'logout'])->name('logout');
 
     // Social Auth Routes

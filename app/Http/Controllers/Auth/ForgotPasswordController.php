@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Notifications\PasswordResetNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -30,18 +31,12 @@ class ForgotPasswordController extends Controller
         }
 
         $token = Str::random(64);
-        $used = DB::table('password_reset_tokens')
-            ->where('email', $user->email)
-            ->where('created_at', '>', now()->subHour())
-            ->exists();
 
-        if ($used) {
-            return back()->withErrors(['email' => 'تم إرسال رابط إعادة تعيين كلمة المرور مسبقاً. يرجى التحقق من بريدك الإلكتروني.']);
-        }
-
+        // SEC-04: never persist the raw token — store a hash so a DB read can
+        // never be replayed as a working reset link.
         DB::table('password_reset_tokens')->updateOrInsert(
             ['email' => $user->email],
-            ['token' => $token, 'created_at' => now()]
+            ['token' => Hash::make($token), 'created_at' => now()]
         );
 
         try {
