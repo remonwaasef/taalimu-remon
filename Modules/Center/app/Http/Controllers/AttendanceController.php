@@ -233,6 +233,8 @@ class AttendanceController extends Controller
             abort(403, 'انتهت صلاحية رمز QR أو أنه غير صالح. يرجى مسح الرمز مرة أخرى.');
         }
 
+        $this->assertTenantSchedule($schedule);
+
         if (! auth()->check()) {
             return view('center::attendance.scan-login', [
                 'schedule' => $schedule,
@@ -251,6 +253,14 @@ class AttendanceController extends Controller
             ]);
         }
 
+        if (! $this->assertStudentTenant($student)) {
+            return view('center::attendance.scan-login', [
+                'schedule' => $schedule,
+                'qrUrl' => $request->fullUrl(),
+                'message' => 'هذا الحساب لا ينتمي إلى هذا المركز.',
+            ]);
+        }
+
         return $this->processQrAttendance($student, $schedule);
     }
 
@@ -265,7 +275,18 @@ class AttendanceController extends Controller
             'qr_url' => 'nullable|string',
         ]);
 
-        if (! auth()->attempt(['email' => $request->email, 'password' => $request->password])) {
+        // TEN-4: the POST route is equally public — it must carry the same
+        // signed-URL protection as markByQr, and the schedule must belong to
+        // the tenant serving the QR code.
+        if (! $request->hasValidSignature()) {
+            abort(403, 'انتهت صلاحية رمز QR أو أنه غير صالح. يرجى مسح الرمز مرة أخرى.');
+        }
+
+        $this->assertTenantSchedule($schedule);
+
+        // Only credentials of THIS tenant's users may be used here — never a
+        // platform-wide attempt with another center's account.
+        if (! auth()->attempt(['email' => $request->email, 'password' => $request->password, 'tenant_id' => $this->tenant->id])) {
             return back()->withErrors(['email' => 'بيانات الدخول غير صحيحة.'])->withInput();
         }
 
@@ -276,7 +297,37 @@ class AttendanceController extends Controller
             return back()->with('message', __('center::messages.msg_014'));
         }
 
+        if (! $this->assertStudentTenant($student)) {
+            auth()->logout();
+
+            return back()->with('message', 'هذا الحساب لا ينتمي إلى هذا المركز.');
+        }
+
         return $this->processQrAttendance($student, $schedule);
+    }
+
+    /**
+     * TEN-4: fail closed when no tenant context, or when the schedule was
+     * created by a different tenant (guards route-model binding on hosts
+     * where no tenant is bound).
+     */
+    private function assertTenantSchedule(Schedule $schedule): void
+    {
+        if (! $this->tenant || $schedule->tenant_id !== $this->tenant->id) {
+            abort(404, 'Center not found.');
+        }
+    }
+
+    /**
+     * TEN-4: the student row (and its user) must belong to the current tenant.
+     */
+    private function assertStudentTenant(\App\Models\Student $student): bool
+    {
+        if (! $this->tenant || $student->tenant_id !== $this->tenant->id) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
