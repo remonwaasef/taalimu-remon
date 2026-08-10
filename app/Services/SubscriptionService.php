@@ -91,7 +91,9 @@ class SubscriptionService
             return filter_var($limit, FILTER_VALIDATE_BOOLEAN);
         }
 
-        if ($limit == -1) {
+        // PR-1: tolerate legacy 'unlimited' string values stored before it was
+        // standardized to -1 (see PackageSeeder).
+        if ($limit === 'unlimited' || (int) $limit === -1) {
             return true; // Unlimited
         }
 

@@ -67,7 +67,7 @@ class PackageSeeder extends Seeder
                 'features' => [
                     'max_students' => '100',
                     'max_instructors' => '1',
-                    'max_courses' => 'unlimited',
+                    'max_courses' => '-1',
                     'max_classrooms' => '5',
                     'multi_branch' => 'false',
                     'whatsapp_alerts' => 'true',
