@@ -41,3 +41,6 @@ Schedule::command('onboarding:send-emails')->dailyAt('10:00')->withoutOverlappin
 // Automated Backups (Database + Files)
 Schedule::command('backup:clean')->dailyAt('01:00')->withoutOverlapping();
 Schedule::command('backup:run')->dailyAt('01:30')->withoutOverlapping();
+
+// SEO: regenerate the sitemap nightly
+Schedule::command('sitemap:generate')->dailyAt('03:30')->withoutOverlapping();

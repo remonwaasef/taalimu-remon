@@ -44,6 +44,9 @@ class SubscriptionService
         // Cancel existing active subscriptions
         $tenant->subscriptions()->where('status', 'active')->update(['status' => 'cancelled']);
 
+        // Usage counters from the previous package are meaningless now
+        $this->forgetUsage($tenant);
+
         return Subscription::forceCreate([
             'tenant_id' => $tenant->id,
             'name' => 'default',
@@ -148,7 +151,7 @@ class SubscriptionService
             }
         }
 
-        return \Illuminate\Support\Facades\Cache::remember($cacheKey, 86400, function () use ($tenant, $featureCode) {
+        return \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($tenant, $featureCode) {
             switch ($featureCode) {
                 case 'max_students':
                     return $tenant->users()->where('role', 'student')->count();
@@ -247,6 +250,31 @@ class SubscriptionService
         } catch (\Throwable $e) {
             // Best-effort counter: never break the request, but record the failure.
             \Illuminate\Support\Facades\Log::warning("SubscriptionService: Failed to decrement usage for tenant {$tenant->id}, feature {$featureCode}. Error: ".$e->getMessage());
+        }
+    }
+
+    /**
+     * Drop cached usage counters for a tenant (all features or a single one).
+     * Call this whenever a subscription/package changes so stale usage can never
+     * outlive the new limits.
+     */
+    public function forgetUsage(Tenant $tenant, ?string $featureCode = null): void
+    {
+        $featureCodes = $featureCode
+            ? [$featureCode]
+            : ['max_students', 'max_instructors', 'max_courses', 'max_classrooms', 'max_branches'];
+
+        foreach ($featureCodes as $code) {
+            $cacheKey = "tenant_{$tenant->id}_usage_{$code}";
+            try {
+                if ($this->usesRedisCache()) {
+                    \Illuminate\Support\Facades\Cache::store('redis')->forget($cacheKey);
+                } else {
+                    \Illuminate\Support\Facades\Cache::forget($cacheKey);
+                }
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning("SubscriptionService: Failed to forget usage for tenant {$tenant->id}, feature {$code}. Error: ".$e->getMessage());
+            }
         }
     }
 }

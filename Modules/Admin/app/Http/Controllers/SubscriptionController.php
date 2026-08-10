@@ -60,7 +60,12 @@ class SubscriptionController extends Controller
         }
 
         $subscription = Subscription::findOrFail($id);
+        $tenant = $subscription->tenant;
         $subscription->delete();
+
+        if ($tenant) {
+            app(\App\Services\SubscriptionService::class)->forgetUsage($tenant);
+        }
 
         return back()->with('success', 'تم حذف الاشتراك بنجاح.');
     }
@@ -103,6 +108,12 @@ class SubscriptionController extends Controller
             'total_amount' => $request->total_amount,
             'ends_at' => $request->ends_at,
         ]);
+
+        // Package/limits may have changed: drop cached usage counters so the new
+        // limits apply immediately instead of waiting for the cache to expire.
+        if ($subscription->tenant) {
+            app(\App\Services\SubscriptionService::class)->forgetUsage($subscription->tenant);
+        }
 
         return redirect()->route('admin.subscriptions.index')->with('success', 'تم تحديث بيانات الاشتراك بنجاح.');
     }

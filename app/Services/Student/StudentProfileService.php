@@ -173,9 +173,9 @@ class StudentProfileService
 
         $data = [
             'recent_activity' => $student->activities()->with('causer')->latest()->take(10)->get(),
-            'enrollments' => $student->enrollments()->with('course')->get(),
-            'sales' => $student->sales()->latest()->get(),
-            'bookings' => $student->bookings()->with(['schedule.course', 'schedule.classroom'])->get(),
+            'enrollments' => $student->enrollments()->with('course')->latest()->limit(100)->get(),
+            'sales' => $student->sales()->latest()->limit(100)->get(),
+            'bookings' => $student->bookings()->with(['schedule.course', 'schedule.classroom'])->latest()->limit(50)->get(),
             'availableSchedules' => \App\Models\Schedule::where('tenant_id', $tenantId)
                 ->with(['course', 'classroom', 'instructor'])
                 ->get(),
@@ -210,6 +210,7 @@ class StudentProfileService
             })
             ->where('students.id', '!=', $student->id)
             ->with('grade')
+            ->limit(50)
             ->get();
         } else {
             $data['siblings'] = collect();

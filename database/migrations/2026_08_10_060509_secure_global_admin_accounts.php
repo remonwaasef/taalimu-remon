@@ -20,12 +20,16 @@ return new class extends Migration
         // 1. Neutralize tenant-owned custom roles named 'admin'/'super_admin'
         //    (created before the RoleController denylist existed). Renaming keeps
         //    the record/deletions safe while stripping its power.
+        //    Done in PHP (not CONCAT) so the migration also runs on SQLite tests.
         DB::table('roles')
             ->whereNotNull('tenant_id')
             ->whereIn(DB::raw('LOWER(name)'), $reserved)
-            ->update([
-                'name' => DB::raw("CONCAT(name, '-custom')"),
-            ]);
+            ->get(['id', 'name'])
+            ->each(function ($role) {
+                DB::table('roles')
+                    ->where('id', $role->id)
+                    ->update(['name' => $role->name.'-custom']);
+            });
 
         // 2. The canonical platform super admin must stay global — regardless of
         //    how its tenant_id drifted.

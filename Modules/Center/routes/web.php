@@ -226,6 +226,17 @@ $tenantRoutes = function () {
         Route::middleware(['can:create courses'])->group(function () {
             Route::get('courses/create', [CourseController::class, 'create'])->name('center.courses.create');
             Route::post('courses', [CourseController::class, 'store'])->name('center.courses.store');
+
+            // AI content assistant (external paid API — strict per-user rate limit)
+            Route::post('courses/ai/outline', [\Modules\Center\Http\Controllers\AIAssistantController::class, 'generateOutline'])
+                ->middleware('throttle:ai')
+                ->name('center.courses.ai.outline');
+            Route::post('courses/ai/quiz', [\Modules\Center\Http\Controllers\AIAssistantController::class, 'generateQuiz'])
+                ->middleware('throttle:ai')
+                ->name('center.courses.ai.quiz');
+            Route::post('courses/ai/description', [\Modules\Center\Http\Controllers\AIAssistantController::class, 'improveDescription'])
+                ->middleware('throttle:ai')
+                ->name('center.courses.ai.description');
         });
 
         Route::middleware(['can:view courses'])->group(function () {

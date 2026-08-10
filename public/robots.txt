@@ -1,2 +1,6 @@
 User-agent: *
-Disallow:
+Disallow: /admin
+Disallow: /center
+Disallow: /portal
+
+Sitemap: https://taalimu.com/sitemap.xml

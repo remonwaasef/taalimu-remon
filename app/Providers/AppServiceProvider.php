@@ -142,6 +142,15 @@ class AppServiceProvider extends ServiceProvider
             return \Illuminate\Cache\RateLimiting\Limit::perMinute(30)->by($request->ip());
         });
 
+        // AI assistant calls hit an external paid API (Gemini): keep them strict
+        \Illuminate\Support\Facades\RateLimiter::for('ai', function (\Illuminate\Http\Request $request) {
+            if ($request->user()) {
+                return \Illuminate\Cache\RateLimiting\Limit::perMinute(5)->by($request->user()->id);
+            }
+
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute(2)->by($request->ip());
+        });
+
         \Illuminate\Support\Facades\RateLimiter::for('global', function (\Illuminate\Http\Request $request) {
             return \Illuminate\Cache\RateLimiting\Limit::perMinute(1000)->by($request->ip());
         });
