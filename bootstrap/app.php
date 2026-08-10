@@ -89,6 +89,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'phone.verified' => \App\Http\Middleware\EnsurePhoneIsVerified::class,
             'onboarding.completed' => \App\Http\Middleware\EnsureOnboardingCompleted::class,
             'inertia' => \App\Http\Middleware\HandleInertiaRequests::class,
+            'instructor.role' => \App\Http\Middleware\EnsureInstructorAccess::class,
             'abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
             'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
         ]);

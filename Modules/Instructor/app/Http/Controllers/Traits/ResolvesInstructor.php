@@ -53,14 +53,16 @@ trait ResolvesInstructor
 
     protected function authorizeCourse($course)
     {
-        if ($this->instructor && $course->instructor_id !== $this->instructor->id) {
+        // SEC-02: fail closed — a missing instructor profile must never pass.
+        if (! $this->instructor || $course->instructor_id !== $this->instructor->id) {
             abort(403, 'غير مصرح لك بإدارة هذا الكورس');
         }
     }
 
     protected function authorizeSchedule($schedule)
     {
-        if ($this->instructor && $schedule->instructor_id !== $this->instructor->id) {
+        // SEC-02: fail closed — a missing instructor profile must never pass.
+        if (! $this->instructor || $schedule->instructor_id !== $this->instructor->id) {
             abort(403, 'غير مصرح لك بإدارة هذا الموعد');
         }
     }
@@ -68,6 +70,10 @@ trait ResolvesInstructor
     protected function authorizeInstructor($student)
     {
         $instructor = $this->instructor;
+        if (! $instructor) {
+            abort(403, __('instructor::messages.unauthorized'));
+        }
+
         $isRelated = $student->enrollments()->whereIn('course_id', $instructor->courses->pluck('id'))->exists();
 
         if (! $isRelated) {

@@ -216,6 +216,10 @@ class InstructorController extends Controller
 
         $student = Student::with(['enrollments.course', 'sales'])->findOrFail($request->student_id);
 
+        // SEC-02: the acting user must actually be the instructor of record;
+        // never allow arbitrary authenticated users to manufacture paid Sales.
+        $this->authorizeInstructor($student);
+
         $totalDue = $student->enrollments->sum(function ($enrollment) {
             return $enrollment->course->price ?? 0;
         });
