@@ -125,7 +125,8 @@ class PaymentProcessingService
 
     /**
      * استعادة سياق الدفع من merchant_order_id (لـ Paymob عندما ينتهي الـ session).
-     * Format: tx_{time}_{tenant_id}_{package_slug}_{billing_cycle}_{is_change}
+     * PAY-2: القراءة من خريطة online_checkouts المربوطة برقم أمر Paymob الموقّع
+     * (وليس من النص غير الموقّع نفسه).
      */
     public function restoreContextFromMerchantOrder(string $merchantOrderId): ?array
     {
@@ -133,18 +134,22 @@ class PaymentProcessingService
             return null;
         }
 
-        $parts = explode('_', $merchantOrderId);
-        if (count($parts) < 6) {
+        $checkout = \App\Models\OnlineCheckout::where('merchant_order_id', $merchantOrderId)
+            ->first();
+
+        if (! $checkout) {
+            Log::warning("Payment context NOT restored (no checkout row) for merchant_order_id: {$merchantOrderId}");
+
             return null;
         }
 
-        Log::info("Payment context restored from merchant_order_id: {$merchantOrderId}");
+        Log::info("Payment context restored from verified checkout row for merchant_order_id: {$merchantOrderId}");
 
         return [
-            'tenant_id' => $parts[2],
-            'plan_slug' => $parts[3],
-            'billing_cycle' => $parts[4],
-            'is_change' => $parts[5] === '1',
+            'tenant_id' => $checkout->tenant_id,
+            'plan_slug' => $checkout->package_slug,
+            'billing_cycle' => $checkout->billing_cycle,
+            'is_change' => (bool) $checkout->is_change,
         ];
     }
 }

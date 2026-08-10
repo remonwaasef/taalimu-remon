@@ -53,79 +53,148 @@ class PaymobWebhookController extends Controller
 
             Log::info("Paymob Subscription Updated for Trans ID: {$transactionId}");
         } else {
-            // Restore context from merchant_order_id
-            $merchantOrderId = $result['merchant_order_id'] ?? null;
+            // PAY-2: subscription activation is authorized ONLY through the
+            // server-side online_checkouts map keyed by the HMAC-covered
+            // Paymob order id — the unsigned merchant_order_id is never trusted.
+            $checkout = \App\Models\OnlineCheckout::where('paymob_order_id', $orderId)
+                ->where('status', 'pending')
+                ->first();
 
-            if ($merchantOrderId && str_starts_with($merchantOrderId, 'tx_')) {
-                $parts = explode('_', $merchantOrderId);
-                if (count($parts) >= 6) {
-                    $tenantId = $parts[2];
-                    $planSlug = $parts[3];
-                    $billingCycle = $parts[4];
-                    $isChange = $parts[5] === '1';
+            if (! $checkout) {
+                Log::channel('security')->warning('Paymob Webhook: no pending checkout for order', [
+                    'order_id' => $orderId,
+                    'transaction_id' => $transactionId,
+                ]);
 
-                    $tenant = Tenant::find($tenantId);
-                    if ($tenant) {
-                        $package = \App\Models\Package::where('slug', $planSlug)->first();
-
-                        $totalAmount = ($billingCycle === 'yearly' ? ($package->yearly_price ?? 0) : ($billingCycle === 'term' ? ($package->term_price ?? 0) : ($package->price ?? 0)));
-
-                        if ($billingCycle === 'monthly') {
-                            $days = 30;
-                        } elseif ($billingCycle === 'term') {
-                            $termDuration = (int) \App\Models\SiteSetting::get('term_duration_days', 150);
-                            $days = $termDuration;
-                        } elseif ($billingCycle === 'yearly') {
-                            $days = 365;
-                        } elseif ($package) {
-                            $days = $package->duration_in_days;
-                        } else {
-                            $days = 30;
-                        }
-
-                        $tenant->subscriptions()->updateOrCreate(
-                            ['name' => 'default'],
-                            [
-                                'gateway' => 'paymob',
-                                'stripe_id' => 'sub_paymob_'.$transactionId,
-                                'stripe_status' => 'active',
-                                'stripe_price' => 'price_paymob_'.($package->slug ?? ($planSlug ?: 'unknown')),
-                                'quantity' => 1,
-                                'billing_cycle' => $billingCycle,
-                                'base_price' => $totalAmount,
-                                'total_amount' => $totalAmount,
-                                'discount_amount' => 0,
-                                'status' => 'active',
-                                'ends_at' => now()->addDays($days),
-                            ]
-                        );
-
-                        // Log the subscription operation
-                        $operationType = $isChange ? 'upgrade' : 'subscription';
-                        \App\Models\SubscriptionLog::logOperation(
-                            $tenant->id,
-                            $operationType,
-                            $package->slug ?? ($planSlug ?: 'unknown'),
-                            $package->name ?? 'مخصص',
-                            $billingCycle,
-                            'paymob',
-                            $totalAmount,
-                            $transactionId,
-                            now(),
-                            now()->addDays($days)
-                        );
-
-                        Log::info("Paymob Webhook: Subscription created from context restoration for Trans ID: {$transactionId}");
-
-                        return response()->json(['status' => 'success']);
-                    }
-                }
+                return response()->json(['status' => 'error'], 400);
             }
 
-            Log::info("Paymob Webhook: Subscription not found and context restoration failed for Trans ID: {$transactionId}.");
+            return $this->handleSubscriptionCheckout($result, $checkout);
         }
 
         return response()->json(['status' => 'success']);
+    }
+
+    /**
+     * Activate a tenant subscription from a verified online checkout row.
+     * Runs atomically: the checkout is consumed (pending → processed) under
+     * the same transaction as the subscription activation so a replayed
+     * webhook can never double-activate.
+     */
+    protected function handleSubscriptionCheckout(array $result, \App\Models\OnlineCheckout $checkout)
+    {
+        $transactionId = $result['transaction_id'];
+
+        // Amount must match what we minted the order for — the payload
+        // amount is covered by the HMAC, the checkout amount is server-side.
+        $payloadCents = (int) round($result['amount'] * 100);
+        if ($payloadCents !== (int) $checkout->amount_cents) {
+            Log::channel('security')->error('Paymob Webhook: checkout amount mismatch', [
+                'checkout_id' => $checkout->id,
+                'expected_cents' => $checkout->amount_cents,
+                'received_cents' => $payloadCents,
+            ]);
+
+            return response()->json(['status' => 'error'], 400);
+        }
+
+        // Belt-and-braces: the merchant_order_id must match what we sent
+        // when the order was created (it is not HMAC-covered itself).
+        $merchantOrderId = $result['merchant_order_id'] ?? null;
+        if ($checkout->merchant_order_id && $merchantOrderId !== $checkout->merchant_order_id) {
+            Log::channel('security')->error('Paymob Webhook: merchant_order_id mismatch', [
+                'checkout_id' => $checkout->id,
+                'expected' => $checkout->merchant_order_id,
+                'received' => $merchantOrderId,
+            ]);
+
+            return response()->json(['status' => 'error'], 400);
+        }
+
+        try {
+            return \Illuminate\Support\Facades\DB::transaction(function () use ($result, $checkout, $transactionId) {
+                // Lock the row: concurrent duplicate webhooks serialize here.
+                $locked = \App\Models\OnlineCheckout::whereKey($checkout->id)->lockForUpdate()->first();
+                if (! $locked || $locked->status !== 'pending') {
+                    Log::info('Paymob Webhook: checkout already processed, duplicate ignored', [
+                        'checkout_id' => $checkout->id,
+                    ]);
+
+                    return response()->json(['status' => 'duplicate']);
+                }
+
+                $tenantId = $locked->tenant_id;
+                $planSlug = $locked->package_slug;
+                $billingCycle = $locked->billing_cycle;
+                $isChange = $locked->is_change;
+
+                $tenant = Tenant::find($tenantId);
+                if (! $tenant) {
+                    Log::error('Paymob Webhook: checkout tenant not found', ['tenant_id' => $tenantId]);
+
+                    return response()->json(['status' => 'error'], 404);
+                }
+
+                $package = \App\Models\Package::where('slug', $planSlug)->first();
+
+                $totalAmount = $locked->amount_cents / 100;
+
+                if ($billingCycle === 'monthly') {
+                    $days = 30;
+                } elseif ($billingCycle === 'term') {
+                    $days = (int) \App\Models\SiteSetting::get('term_duration_days', 150);
+                } elseif ($billingCycle === 'yearly') {
+                    $days = 365;
+                } elseif ($package) {
+                    $days = $package->duration_in_days;
+                } else {
+                    $days = 30;
+                }
+
+                $tenant->subscriptions()->updateOrCreate(
+                    ['name' => 'default'],
+                    [
+                        'gateway' => 'paymob',
+                        'stripe_id' => 'sub_paymob_'.$transactionId,
+                        'stripe_status' => 'active',
+                        'stripe_price' => 'price_paymob_'.($package->slug ?? ($planSlug ?: 'unknown')),
+                        'quantity' => 1,
+                        'billing_cycle' => $billingCycle,
+                        'base_price' => $totalAmount,
+                        'total_amount' => $totalAmount,
+                        'discount_amount' => 0,
+                        'status' => 'active',
+                        'ends_at' => now()->addDays($days),
+                    ]
+                );
+
+                \App\Models\SubscriptionLog::logOperation(
+                    $tenant->id,
+                    $isChange ? 'upgrade' : 'subscription',
+                    $package->slug ?? ($planSlug ?: 'unknown'),
+                    $package->name ?? 'مخصص',
+                    $billingCycle,
+                    'paymob',
+                    $totalAmount,
+                    $transactionId,
+                    now(),
+                    now()->addDays($days)
+                );
+
+                $locked->forceFill(['status' => 'processed'])->save();
+
+                Log::info("Paymob Webhook: Subscription activated from verified checkout {$locked->id} for Trans ID: {$transactionId}");
+
+                return response()->json(['status' => 'success']);
+            });
+        } catch (\Throwable $e) {
+            Log::error('Paymob Webhook: subscription activation failed: '.$e->getMessage(), [
+                'checkout_id' => $checkout->id,
+                'transaction_id' => $transactionId,
+            ]);
+
+            return response()->json(['status' => 'error'], 500);
+        }
     }
 
     /**

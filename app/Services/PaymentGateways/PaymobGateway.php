@@ -199,20 +199,40 @@ class PaymobGateway implements PaymentGatewayInterface
             $isChange,
         ]);
 
+        $merchantOrderId = 'tx_'.time().'_'.$context;
+
         $response = Http::post("{$this->baseUrl}/ecommerce/orders", [
             'auth_token' => $token,
             'delivery_needed' => 'false',
             'amount_cents' => (string) $amountInCents,
             'currency' => 'EGP',
             'items' => [],
-            'merchant_order_id' => 'tx_'.time().'_'.$context,
+            'merchant_order_id' => $merchantOrderId,
         ]);
 
         if ($response->failed()) {
             throw new \Exception('Paymob Order Creation Failed');
         }
 
-        return $response->json()['id'];
+        $orderId = $response->json()['id'];
+
+        // PAY-2: persist the HMAC-covered Paymob order id → context map so the
+        // webhook can verify subscription activations against server-side truth
+        // instead of the unsigned merchant_order_id.
+        \App\Models\OnlineCheckout::updateOrCreate(
+            ['paymob_order_id' => $orderId],
+            [
+                'tenant_id' => $tenant->id,
+                'package_slug' => $packageSlug,
+                'billing_cycle' => $billingCycle,
+                'is_change' => $isChange === '1',
+                'amount_cents' => (int) $amountInCents,
+                'merchant_order_id' => $merchantOrderId,
+                'status' => 'pending',
+            ]
+        );
+
+        return $orderId;
     }
 
     protected function getPaymentKey($token, $orderId, $amountInCents, $tenant, $package)
