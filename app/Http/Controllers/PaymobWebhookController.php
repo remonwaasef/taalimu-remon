@@ -231,8 +231,10 @@ class PaymobWebhookController extends Controller
             return response()->json(['status' => 'error'], 400);
         }
 
-        // Idempotency guard — never double post the same transaction
-        $alreadyRecorded = \App\Models\Payment::where('reference_number', 'paymob_'.$result['transaction_id'])->exists();
+        // Idempotency guard — fast-path check (the unique index below is the
+        // authoritative race-proof backstop).
+        $referenceNumber = 'paymob_'.$result['transaction_id'];
+        $alreadyRecorded = \App\Models\Payment::where('reference_number', $referenceNumber)->exists();
         if ($alreadyRecorded) {
             Log::info('Paymob Sale Webhook: duplicate transaction ignored', [
                 'sale_id' => $sale->id,
@@ -253,16 +255,9 @@ class PaymobWebhookController extends Controller
                 $sale,
                 $amount,
                 'online',
-                'دفعة إلكترونية عبر بوابة الدفع (Paymob #'.$result['transaction_id'].')'
+                'دفعة إلكترونية عبر بوابة الدفع (Paymob #'.$result['transaction_id'].')',
+                $referenceNumber
             );
-
-            // Attach the transaction reference to the created payment row for idempotency
-            \App\Models\Payment::where('sale_id', $sale->id)
-                ->whereNull('reference_number')
-                ->latest('id')
-                ->first()
-                ?->forceFill(['reference_number' => 'paymob_'.$result['transaction_id']])
-                ->save();
 
             Log::info('Paymob Sale Webhook: payment recorded', [
                 'sale_id' => $sale->id,
@@ -271,6 +266,20 @@ class PaymobWebhookController extends Controller
             ]);
 
             return response()->json(['status' => 'success']);
+        } catch (\Illuminate\Database\QueryException $e) {
+            // PAY-3: the unique index on payments.reference_number closes the
+            // check-then-insert race — a concurrent duplicate webhook surfaces
+            // here as a constraint violation and is treated as a duplicate.
+            if ($e->getCode() === 23000 || str_contains($e->getMessage(), 'Duplicate entry')) {
+                Log::info('Paymob Sale Webhook: concurrent duplicate transaction rejected by unique index', [
+                    'sale_id' => $sale->id,
+                    'transaction_id' => $result['transaction_id'],
+                ]);
+
+                return response()->json(['status' => 'duplicate']);
+            }
+
+            throw $e;
         } catch (\Throwable $e) {
             Log::error('Paymob Sale Webhook: recording failed: '.$e->getMessage(), [
                 'sale_id' => $sale->id ?? null,

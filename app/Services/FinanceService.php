@@ -235,9 +235,9 @@ class FinanceService
      * @param  string|null  $notes
      * @return Sale
      */
-    public function addPayment(Sale $sale, $amount, $method = null, $notes = null)
+    public function addPayment(Sale $sale, $amount, $method = null, $notes = null, $referenceNumber = null)
     {
-        return DB::transaction(function () use ($sale, $amount, $method, $notes) {
+        return DB::transaction(function () use ($sale, $amount, $method, $notes, $referenceNumber) {
             // Lock the row to prevent a lost update when two payments post concurrently.
             $sale = Sale::lockForUpdate()->findOrFail($sale->id);
 
@@ -250,6 +250,9 @@ class FinanceService
             ]);
 
             // Create Payment Record
+            // PAY-3: reference_number (when provided) is protected by a unique
+            // index — duplicate gateway transactions raise a constraint
+            // violation instead of double-posting.
             Payment::create([
                 'tenant_id' => $sale->tenant_id,
                 'sale_id' => $sale->id,
@@ -258,6 +261,7 @@ class FinanceService
                 'received_by' => auth()->id(),
                 'paid_at' => now(),
                 'notes' => $notes ?? 'سداد دفعة مالية',
+                'reference_number' => $referenceNumber,
             ]);
 
             // Eager load student and user to prevent N+1
