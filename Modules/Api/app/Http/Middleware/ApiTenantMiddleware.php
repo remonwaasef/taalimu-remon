@@ -14,19 +14,32 @@ class ApiTenantMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $tenantDomain = $request->header('X-Tenant-Domain');
+        $tenantDomain = strtolower(trim((string) $request->header('X-Tenant-Domain')));
 
-        if (! $tenantDomain) {
+        // Normalize the same way the web layer does: 'www.' is never a tenant.
+        if (str_starts_with($tenantDomain, 'www.')) {
+            $tenantDomain = substr($tenantDomain, 4);
+        }
+
+        if ($tenantDomain === '' || strlen($tenantDomain) > 255) {
             return response()->json([
                 'success' => false,
-                'message' => 'Missing X-Tenant-Domain header.',
+                'message' => 'Invalid X-Tenant-Domain header.',
             ], 400);
         }
 
-        // Add proper caching for API resolution if necessary
-        $tenant = \Illuminate\Support\Facades\Cache::remember("tenant_api_domain_{$tenantDomain}", 3600, function () use ($tenantDomain) {
-            return Tenant::where('domain', $tenantDomain)->where('status', 'active')->first();
-        });
+        $resolveTenant = fn () => Tenant::where('domain', $tenantDomain)->where('status', 'active')->first();
+
+        try {
+            $tenant = \Illuminate\Support\Facades\Cache::remember(
+                "tenant_api_domain_{$tenantDomain}",
+                3600,
+                $resolveTenant
+            );
+        } catch (\Throwable $e) {
+            // Failover to DB if the cache backend is down
+            $tenant = $resolveTenant();
+        }
 
         if (! $tenant) {
             return response()->json([
