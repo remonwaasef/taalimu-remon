@@ -204,6 +204,11 @@ class TenantController extends Controller
         // Log out the impersonated user from this (tenant) domain's session
         auth()->logout();
 
+        // Fully invalidate the tenant session — otherwise impersonation data
+        // (tenant_id binding, 2fa_verified, locale) leaks into the next login.
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+
         // Generate a secure one-time token and store it in cache for 2 minutes
         $token = \Illuminate\Support\Str::random(64);
         \Illuminate\Support\Facades\Cache::put("impersonation_return:{$token}", $adminId, 120);

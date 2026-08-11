@@ -53,6 +53,11 @@ return Application::configure(basePath: dirname(__DIR__))
                 return route('admin.login');
             }
 
+            // 2. Parent Portal -> Parent Login
+            if ($request->is('parent') || $request->is('parent/*')) {
+                return route('parent.login');
+            }
+
             $host = $request->getHost();
             $mainDomain = config('app.tenant_domain');
 

@@ -19,6 +19,20 @@ class AuthController extends Controller
     {
         if ($request->has('token')) {
             $token = $request->input('token');
+
+            // The unified login signs the token with the app key. Verify it so
+            // a leaked/guessed cache entry cannot be replayed from anywhere.
+            $expectedSignature = hash_hmac('sha256', $token, config('app.key'));
+            if (! is_string($request->input('signature')) || ! hash_equals($expectedSignature, $request->input('signature'))) {
+                \Illuminate\Support\Facades\Log::warning('Unified Login: Signature mismatch', [
+                    'token' => substr($token, 0, 10).'...',
+                    'ip' => $request->ip(),
+                ]);
+
+                return redirect()->route('center.login', ['tenant' => app('tenant')->domain])
+                    ->withErrors(['email' => 'الرابط منتهي الصلاحية أو غير صالح.']);
+            }
+
             $data = \Illuminate\Support\Facades\Cache::pull('login_token_'.$token);
 
             if ($data) {

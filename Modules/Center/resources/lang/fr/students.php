@@ -85,6 +85,7 @@ return [
     'send_email' => 'Envoyer un E-mail',
     'scan_qr_tip' => 'Scannez le code pour une connexion directe',
     'valid_unlimited' => 'Valable pour une durée illimitée',
+    'qr_expires_15' => 'Le lien de connexion est valable 15 minutes seulement',
     'selected_count' => 'étudiant(s) sélectionné(s)',
     'activate' => 'Activer',
     'deactivate' => 'Désactiver',

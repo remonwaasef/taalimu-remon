@@ -86,6 +86,7 @@ return [
     'send_email' => 'إرسال إيميل',
     'scan_qr_tip' => 'امسح الكود للدخول المباشر',
     'valid_unlimited' => 'صالح لمدة غير محدودة',
+    'qr_expires_15' => 'رابط الدخول صالح لمدة 15 دقيقة فقط',
     'selected_count' => 'طالب محدد',
     'activate' => 'تفعيل',
     'deactivate' => 'إلغاء تفعيل',

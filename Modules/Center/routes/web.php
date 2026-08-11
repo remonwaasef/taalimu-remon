@@ -49,9 +49,12 @@ $tenantRoutes = function () {
         Route::post('login/sso', [AuthController::class, 'ssoLogin'])->name('center.login.sso');
 
         // Magic Login (QR Code) - Support both GET (page) and POST (confirmation)
-        Route::match(['get', 'post'], 'magic-login/{student}', [AuthController::class, 'magicLogin'])
+        Route::get('magic-login/{student}', [AuthController::class, 'magicLogin'])
             ->name('center.login.magic')
             ->middleware('signed');
+        Route::post('magic-login/{student}', [AuthController::class, 'magicLogin'])
+            ->middleware(['signed', 'throttle:10,1'])
+            ->name('center.login.magic.post');
 
         // Force Password Change Routes
         Route::get('password/change', [AuthController::class, 'showChangePasswordForm'])->name('center.password.change');

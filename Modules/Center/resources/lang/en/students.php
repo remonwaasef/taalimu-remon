@@ -85,6 +85,7 @@ return [
     'send_email' => 'Send Email',
     'scan_qr_tip' => 'Scan code for direct login',
     'valid_unlimited' => 'Valid for unlimited duration',
+    'qr_expires_15' => 'Login link is valid for 15 minutes only',
     'selected_count' => 'student selected',
     'activate' => 'Activate',
     'deactivate' => 'Deactivate',

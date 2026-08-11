@@ -91,10 +91,11 @@
                             $studentForQr = session('student_email')
                                 ? \App\Models\Student::where('email', session('student_email'))->where('tenant_id', app('tenant')->id)->first()
                                 : null;
-                            // Signed magic-login link — generated as a QR locally in the
-                            // browser so this credential is never sent to a third-party service.
+                            // Temporary signed magic-login link — expires after 15 minutes
+                            // so a leaked QR cannot be reused indefinitely. Generated as a
+                            // QR locally in the browser; never sent to a third-party service.
                             $qrUrl = $studentForQr
-                                ? \Illuminate\Support\Facades\URL::signedRoute('center.login.magic', ['student' => $studentForQr->id, 'tenant' => app('tenant')->domain])
+                                ? \Illuminate\Support\Facades\URL::temporarySignedRoute('center.login.magic', now()->addMinutes(15), ['student' => $studentForQr->id, 'tenant' => app('tenant')->domain])
                                 : url('/login');
                         @endphp
                         <div class="qr-container bg-white p-2 rounded-3 shadow-sm mb-3">
@@ -114,7 +115,7 @@
                         @endpush
                         <p class="small text-muted mb-0">{{ __('center::students.scan_qr_tip') }}</p>
                         <div class="mt-3 text-secondary small">
-                            <i class="fas fa-clock me-1"></i> {{ __('center::students.valid_unlimited') }}
+                            <i class="fas fa-clock me-1"></i> {{ __('center::students.qr_expires_15') }}
                         </div>
                     </div>
                 </div>
