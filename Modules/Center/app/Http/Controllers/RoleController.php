@@ -4,7 +4,9 @@ namespace Modules\Center\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Role;
+use App\Repositories\RoleRepository;
 use App\Services\PermissionService;
+use App\Services\RolePresetService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -14,10 +16,16 @@ class RoleController extends Controller
 
     protected $roleRepository;
 
-    public function __construct(PermissionService $permissionService, \App\Repositories\RoleRepository $roleRepository)
-    {
+    protected $presetService;
+
+    public function __construct(
+        PermissionService $permissionService,
+        RoleRepository $roleRepository,
+        RolePresetService $presetService
+    ) {
         $this->permissionService = $permissionService;
         $this->roleRepository = $roleRepository;
+        $this->presetService = $presetService;
     }
 
     /**
@@ -36,9 +44,12 @@ class RoleController extends Controller
     public function create()
     {
         $this->authorize('create', Role::class);
-        $permissions = $this->permissionService->getGroupedPermissions();
 
-        return view('center::roles.create', compact('permissions'));
+        // Only tenant-assignable permissions are shown — system groups never appear
+        $permissions = $this->permissionService->getTenantGroupedPermissions();
+        $presets = $this->presetService->presets();
+
+        return view('center::roles.create', compact('permissions', 'presets'));
     }
 
     public function store(Request $request)
@@ -75,6 +86,8 @@ class RoleController extends Controller
             $role->syncPermissions($this->safePermissions($request->permissions));
         }
 
+        $this->roleRepository->clearCache(app('tenant')->id);
+
         return redirect()->route('center.roles.index')->with('success', __('center::messages.msg_070'));
     }
 
@@ -87,7 +100,8 @@ class RoleController extends Controller
         // System roles render the same page in read-only mode (see edit.blade.php)
         $this->authorize('view', $role);
 
-        $permissions = $this->permissionService->getGroupedPermissions();
+        // Only tenant-assignable permissions are shown — system groups never appear
+        $permissions = $this->permissionService->getTenantGroupedPermissions();
 
         return view('center::roles.edit', compact('role', 'permissions'));
     }
@@ -126,6 +140,8 @@ class RoleController extends Controller
             $role->syncPermissions($this->safePermissions($request->permissions));
         }
 
+        $this->roleRepository->clearCache(app('tenant')->id);
+
         return redirect()->route('center.roles.index')->with('success', __('center::messages.msg_071'));
     }
 
@@ -143,18 +159,21 @@ class RoleController extends Controller
 
         $role->delete();
 
+        $this->roleRepository->clearCache(app('tenant')->id);
+
         return redirect()->route('center.roles.index')->with('success', __('center::messages.msg_073'));
     }
 
     /**
      * Restrict assignable permissions to the center-scope.
-     * System-wide (admin.*, centers.*) permissions are reserved for the super-admin portal.
+     * System-wide groups (e.g. admin.*, centers.*) are reserved for the super-admin portal.
      */
     protected function safePermissions(array $permissions): array
     {
         return array_values(array_filter($permissions, function (string $permission) {
-            return str_contains($permission, 'admin.') === false
-                && str_contains($permission, 'centers.') === false;
+            $parts = explode(' ', $permission);
+
+            return ! in_array($parts[1] ?? '', PermissionService::SYSTEM_GROUPS, true);
         }));
     }
 }

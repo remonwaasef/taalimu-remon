@@ -32,9 +32,7 @@
 ---
 
 # Current Priorities
-1. **Role Permission Granularity UI**: Custom role permission UI for center accountants and receptionists.
-2. **Image Upload WebP Auto-Compression**: `app/Traits/HandlesFileUploads.php`.
-3. **Database Phase A hardening**: MariaDB 10.6+ standardization (KVM), docker-compose `mariadb:10.11` alignment, slow-query/monitoring cron (see [37_DATABASE_SCALING.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/37_DATABASE_SCALING.md)).
+1. **Database Phase A hardening**: MariaDB 10.6+ standardization (KVM), docker-compose `mariadb:10.11` alignment, slow-query/monitoring cron (see [37_DATABASE_SCALING.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/37_DATABASE_SCALING.md)).
 
 ---
 
@@ -53,6 +51,6 @@
 ---
 
 # Upcoming Milestones & Next Tasks
+- [x] Implement custom role permission UI for center accountants and receptionists (sub-role preset templates + tenant-scoped permission matrix + cache invalidation).
 - [ ] Deploy Redis instance for cache and session management.
 - [ ] Add Meilisearch container and configure Laravel Scout.
-- [ ] Implement custom role permission UI for center accountants and receptionists.

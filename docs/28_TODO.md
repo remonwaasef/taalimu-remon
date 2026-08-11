@@ -6,8 +6,8 @@
 - [x] **Enterprise Database Scaling Evaluation** (رُفض تقسيم tenant_id لأسباب قاطعة — انظر 37_DATABASE_SCALING.md؛ الخطة: MariaDB 10.6+ + RANGE شهري للجداول بلا FK).
 
 ### Medium Priority
-- [ ] **Role Permission Granularity UI** (Sub-roles for accountants & receptionists).
-- [ ] **Image Upload WebP Auto-Compression** (`app/Traits/HandlesFileUploads.php`).
+- [x] **Role Permission Granularity UI** (Sub-roles for accountants & receptionists — preset templates, tenant-scoped permission matrix, cache invalidation on CRUD).
+- [x] **Image Upload WebP Auto-Compression** (`app/Traits/HandlesFileUploads.php` — GD/Imagick, alpha-preserving, animated-GIF guard, keep-smaller-only, configurable via `config/uploads.php`).
 
 ### Completed
 - [x] Complete AI-First Numbered Knowledge Operating System (`00_` through `35_`).

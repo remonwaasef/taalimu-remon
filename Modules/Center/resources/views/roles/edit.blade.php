@@ -24,7 +24,7 @@
                 </div>
                 
                 <div class="card-body p-4">
-                    <form action="{{ route('center.roles.update', ['role' => $role->id, 'tenant' => $tenant->domain]) }}" method="POST">
+                    <form action="{{ route('center.roles.update', ['role' => $role->id, 'tenant' => $tenant->domain]) }}" method="POST" id="roleForm">
                         @csrf
                         @method('PUT')
                         
@@ -43,17 +43,30 @@
                             @endif
                         </div>
 
-                        <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
-                            <h6 class="fw-bold mb-0 text-uppercase tracking-wider text-secondary">{{ __('center::roles.permissions_matrix') }}</h6>
-                            <button type="button" class="btn btn-sm btn-light text-primary fw-bold" onclick="toggleAllPermissions()">
-                                {{ __('center::roles.toggle_all_globally') }}
-                            </button>
+                        <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2 flex-wrap gap-2">
+                            <div class="d-flex align-items-center gap-3">
+                                <h6 class="fw-bold mb-0 text-uppercase tracking-wider text-secondary">{{ __('center::roles.permissions_matrix') }}</h6>
+                                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3" id="selectedCount">
+                                    {{ $role->permissions->count() }} {{ __('center::roles.selected_permissions') }}
+                                </span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="position-relative">
+                                    <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted small"></i>
+                                    <input type="text" id="permissionSearch" class="form-control form-control-sm ps-5 border rounded-pill" style="width: 240px;" placeholder="{{ __('center::roles.search_permissions') }}">
+                                </div>
+                                @if(!is_null($role->tenant_id))
+                                    <button type="button" class="btn btn-sm btn-light text-primary fw-bold" onclick="toggleAllPermissions()">
+                                        {{ __('center::roles.toggle_all_globally') }}
+                                    </button>
+                                @endif
+                            </div>
                         </div>
 
                         <!-- Permission Matrix -->
                         <div class="row g-4">
                             @foreach($permissions as $group => $perms)
-                                <div class="col-md-6 col-xl-4 permission-group-card">
+                                <div class="col-md-6 col-xl-4 permission-group-card" data-group-name="{{ $group }}">
                                     <div class="card h-100 border shadow-none hover-shadow transition-all">
                                         <div class="card-header bg-light border-bottom-0 d-flex justify-content-between align-items-center py-2">
                                             <span class="fw-bold text-uppercase small text-dark">
@@ -63,20 +76,21 @@
                                                 <input class="form-check-input group-toggle" type="checkbox" role="switch" 
                                                        data-group="group-{{ Str::slug($group) }}" 
                                                        id="toggle_{{ Str::slug($group) }}"
-                                                       title="{{ __('center::roles.select_all_in_group') }}">
+                                                       title="{{ __('center::roles.select_all_in_group') }}"
+                                                       @if(is_null($role->tenant_id)) disabled @endif>
                                             </div>
                                         </div>
                                         <div class="card-body p-0">
                                             <div class="list-group list-group-flush">
                                                 @foreach($perms as $permission)
-                                                    <label class="list-group-item list-group-item-action d-flex align-items-center cursor-pointer border-0 py-2 px-3">
+                                                    <label class="list-group-item list-group-item-action d-flex align-items-center cursor-pointer border-0 py-2 px-3 permission-row">
                                                         <input class="form-check-input me-3 mt-0 group-{{ Str::slug($group) }} permission-checkbox" 
                                                                type="checkbox" name="permissions[]" 
                                                                value="{{ $permission->name }}" 
                                                                id="perm_{{ $permission->id }}"
                                                                {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }}
                                                                @if(is_null($role->tenant_id)) disabled @endif>
-                                                        <span class="small user-select-none">
+                                                        <span class="small user-select-none permission-label">
                                                             {{ __('center::roles.perm_' . str_replace(' ', '_', $permission->name)) }}
                                                         </span>
                                                     </label>
@@ -116,16 +130,30 @@
             }
         });
         
+        function updateSelectedCount() {
+            const count = Array.from(document.querySelectorAll('.permission-checkbox:not([disabled])')).filter(cb => cb.checked).length;
+            const total = Array.from(document.querySelectorAll('.permission-checkbox')).filter(cb => cb.checked).length;
+            document.getElementById('selectedCount').textContent = total + ' ' + '{{ __('center::roles.selected_permissions') }}';
+        }
+
+        function syncGroupToggle(groupClass) {
+            const allInGroup = document.querySelectorAll('.' + groupClass);
+            const toggle = document.querySelector('.group-toggle[data-group="' + groupClass + '"]');
+            if (toggle && allInGroup.length > 0) {
+                toggle.checked = Array.from(allInGroup).every(cb => cb.checked);
+            }
+        }
+
         // Handle Group Toggles
         document.querySelectorAll('.group-toggle').forEach(toggle => {
             toggle.addEventListener('change', function() {
-                const groupClass = this.dataset.group;
                 const isChecked = this.checked;
-                document.querySelectorAll('.' + groupClass).forEach(checkbox => {
+                document.querySelectorAll('.' + this.dataset.group).forEach(checkbox => {
                     if (!checkbox.disabled) {
                         checkbox.checked = isChecked;
                     }
                 });
+                updateSelectedCount();
             });
         });
 
@@ -138,21 +166,40 @@
                 });
 
                 if (groupClass) {
-                    const allInGroup = document.querySelectorAll('.' + groupClass);
-                    const allChecked = Array.from(allInGroup).every(cb => cb.checked);
-                    const toggle = document.querySelector('.group-toggle[data-group="' + groupClass + '"]');
-                    if (toggle) toggle.checked = allChecked;
+                    syncGroupToggle(groupClass);
                 }
+                updateSelectedCount();
             });
         });
+
+        // Permission search filter
+        const searchInput = document.getElementById('permissionSearch');
+        searchInput.addEventListener('input', function() {
+            const term = this.value.trim().toLowerCase();
+            document.querySelectorAll('.permission-group-card').forEach(group => {
+                let visibleRows = 0;
+                group.querySelectorAll('.permission-row').forEach(row => {
+                    const label = (row.querySelector('.permission-label')?.textContent || '').toLowerCase();
+                    const matches = !term || label.includes(term) || row.querySelector('.permission-checkbox').value.includes(term);
+                    row.style.display = matches ? '' : 'none';
+                    if (matches) visibleRows++;
+                });
+                group.style.display = visibleRows > 0 ? '' : 'none';
+            });
+        });
+
+        updateSelectedCount();
     });
 
     function toggleAllPermissions() {
-        const allCheckboxes = document.querySelectorAll('.permission-checkbox:not([disabled])');
-        const allChecked = Array.from(allCheckboxes).every(cb => cb.checked);
+        const allCheckboxes = Array.from(document.querySelectorAll('.permission-checkbox:not([disabled])'));
+        const allChecked = allCheckboxes.every(cb => cb.checked);
         
         allCheckboxes.forEach(cb => cb.checked = !allChecked);
-        document.querySelectorAll('.group-toggle').forEach(toggle => toggle.checked = !allChecked);
+        document.querySelectorAll('.group-toggle:not([disabled])').forEach(toggle => toggle.checked = !allChecked);
+        
+        const total = document.querySelectorAll('.permission-checkbox:checked').length;
+        document.getElementById('selectedCount').textContent = total + ' ' + '{{ __('center::roles.selected_permissions') }}';
     }
 </script>
 
