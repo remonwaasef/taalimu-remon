@@ -24,6 +24,8 @@ class ResetPasswordController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
+        $record = DB::table('password_reset_tokens')->where('email', $validated['email'])->first();
+
         if (! $record || ! Hash::check($validated['token'], $record->token)) {
             return back()->withErrors(['email' => 'رابط إعادة تعيين كلمة المرور غير صالح أو منتهي الصلاحية.']);
         }

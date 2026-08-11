@@ -15,11 +15,19 @@ class TwoFactorMiddleware
     {
         $user = auth()->user();
 
-        if ($user && ! empty($user->google2fa_secret)) {
+        // Gate on google2fa_enabled (only true after a valid OTP was
+        // confirmed). A stored secret alone must never trigger the challenge —
+        // unconfirmed setup secrets no longer reach the database.
+        if ($user && (bool) $user->google2fa_enabled) {
             // Check if 2fa is verified in the current session
             if (! $request->session()->has('2fa_verified')) {
                 // If not verified, and the user is not currently trying to verify, redirect them
-                if (! $request->is('2fa*') && ! $request->is('logout')) {
+                $on2faFlow = $request->routeIs('2fa.*')
+                    || $request->routeIs('center.logout')
+                    || $request->routeIs('logout')
+                    || $request->is('logout');
+
+                if (! $on2faFlow) {
                     return redirect()->route('2fa.verify');
                 }
             }

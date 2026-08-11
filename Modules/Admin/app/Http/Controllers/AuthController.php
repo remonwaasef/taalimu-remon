@@ -50,8 +50,19 @@ class AuthController extends Controller
             && in_array($user->role, ['super_admin', 'admin'])
             && \Illuminate\Support\Facades\Hash::check($credentials['password'], $user->password)) {
             \Illuminate\Support\Facades\RateLimiter::clear($throttleKey);
+
+            // 2FA challenge: password is valid but we must verify the TOTP
+            // before the session is authenticated.
+            if ($user->google2fa_enabled) {
+                $request->session()->put('admin_2fa_pending', $user->id);
+                $request->session()->regenerate();
+
+                return redirect()->route('admin.login.2fa');
+            }
+
             Auth::login($user);
             $request->session()->regenerate();
+            session(['tenant_id' => $user->tenant_id]);
 
             $intended = redirect()->getIntendedUrl();
             if ($intended && str_contains($intended, '/admin')) {
@@ -68,6 +79,58 @@ class AuthController extends Controller
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
+    }
+
+    public function showTwoFactorForm(Request $request)
+    {
+        $pendingId = $request->session()->get('admin_2fa_pending');
+
+        if (! $pendingId) {
+            return redirect()->route('admin.login');
+        }
+
+        $user = \App\Models\User::withoutGlobalScope(\App\Scopes\TenantScope::class)->find($pendingId);
+
+        if (! $user || ! $user->google2fa_enabled) {
+            $request->session()->forget('admin_2fa_pending');
+
+            return redirect()->route('admin.login');
+        }
+
+        return view('admin::auth.2fa', ['email' => $user->email]);
+    }
+
+    public function verifyTwoFactor(Request $request)
+    {
+        $pendingId = $request->session()->get('admin_2fa_pending');
+
+        if (! $pendingId) {
+            return redirect()->route('admin.login');
+        }
+
+        $request->validate([
+            'one_time_password' => ['required', 'digits:6'],
+        ]);
+
+        $user = \App\Models\User::withoutGlobalScope(\App\Scopes\TenantScope::class)->find($pendingId);
+
+        if (! $user || ! $user->google2fa_enabled) {
+            $request->session()->forget('admin_2fa_pending');
+
+            return redirect()->route('admin.login');
+        }
+
+        if (! \PragmaRX\Google2FALaravel\Facade::verifyKey($user->google2fa_secret, $request->one_time_password)) {
+            return back()->withErrors(['one_time_password' => __('Invalid OTP code.')])->onlyInput('one_time_password');
+        }
+
+        $request->session()->forget('admin_2fa_pending');
+        Auth::login($user);
+        $request->session()->regenerate();
+        session(['tenant_id' => $user->tenant_id]);
+        session(['2fa_verified' => true]);
+
+        return redirect()->route('admin.dashboard');
     }
 
     public function logout(Request $request)

@@ -4,6 +4,11 @@
 .env.backup
 .env.production
 .env.local
+# Environment backup files — must never be tracked (contain real credentials)
+.env.deploy_backup
+.env.bak_queue_setup
+.env.bak*
+.env.*_backup
 .phpactor.json
 .phpunit.result.cache
 /.fleet

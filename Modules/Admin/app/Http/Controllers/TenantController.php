@@ -176,6 +176,7 @@ class TenantController extends Controller
         session(['impersonator_id' => auth()->id()]);
 
         auth()->login($admin);
+        session(['tenant_id' => $admin->tenant_id]);
 
         // Redirect to tenant's dashboard on their subdomain
         $protocol = request()->secure() ? 'https://' : 'http://';
@@ -240,6 +241,7 @@ class TenantController extends Controller
 
         // Login the admin on the CENTRAL domain's session
         auth()->login($admin);
+        session(['tenant_id' => $admin->tenant_id]);
 
         return redirect()->to($centralUrl.'/admin/tenants')
             ->with('success', 'تم العودة للوحة تحكم المشرف العام بنجاح.');

@@ -26,6 +26,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('login', [AuthController::class, 'login'])
             ->middleware('throttle:login')
             ->name('login.submit');
+        Route::get('login/2fa', [AuthController::class, 'showTwoFactorForm'])->name('login.2fa');
+        Route::post('login/2fa', [AuthController::class, 'verifyTwoFactor'])
+            ->middleware('throttle:5,1')
+            ->name('login.2fa.verify');
     });
 
     // Protected Routes (General Auth - accessible while impersonating)

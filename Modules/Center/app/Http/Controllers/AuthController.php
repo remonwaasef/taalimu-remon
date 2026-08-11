@@ -28,6 +28,7 @@ class AuthController extends Controller
                 if ($tenantMatches && isset($data['user_id'])) {
                     Auth::loginUsingId($data['user_id']);
                     $request->session()->regenerate();
+                    session(['tenant_id' => auth()->user()?->tenant_id]);
 
                     if (isset($data['locale'])) {
                         session(['locale' => $data['locale']]);
@@ -175,6 +176,7 @@ class AuthController extends Controller
             \Illuminate\Support\Facades\RateLimiter::clear($throttleKey);
             Auth::login($user);
             $request->session()->regenerate();
+            session(['tenant_id' => $user->tenant_id]);
 
             // Redirect based on role
             if ($user->role === 'student') {
@@ -223,6 +225,7 @@ class AuthController extends Controller
         if ($student->user) {
             Auth::login($student->user);
             $request->session()->regenerate();
+            session(['tenant_id' => $student->user->tenant_id]);
 
             return redirect()->route('campus.index', ['tenant' => app('tenant')->domain])
                 ->with('success', __('Welcome back, :name!', ['name' => $student->name]));
