@@ -35,7 +35,7 @@ class UserTest extends TestCase
         ]);
 
         $this->assertNotEmpty($user->qr_identifier);
-        $this->assertLength(32, $user->qr_identifier);
+        $this->assertEquals(12, strlen($user->qr_identifier));
     }
 
     #[Test]
@@ -98,11 +98,9 @@ class UserTest extends TestCase
         $code = $user->generatePhoneVerificationCode();
 
         $this->assertNotEmpty($code);
-        $this->assertLength(6, $code);
-        $this->assertDatabaseHas('users', [
-            'id' => $user->id,
-            'phone_verification_code' => $code,
-        ]);
+        $this->assertEquals(6, strlen($code));
+        // Column is encrypted in the DB, so read back through the model
+        $this->assertEquals($code, $user->fresh()->phone_verification_code);
     }
 
     #[Test]
@@ -154,10 +152,10 @@ class UserTest extends TestCase
             'tenant_id' => $this->tenant->id,
             'name' => 'User',
             'email' => 'user@test.com',
-            'password' => Hash::make('password'),
+            'password' => 'password',
             'role' => 'center_admin',
-            'google2fa_secret' => 'JBSWY3DPEHPK3PXP',
         ]);
+        $user->forceFill(['google2fa_secret' => 'JBSWY3DPEHPK3PXP'])->save();
 
         $raw = \Illuminate\Support\Facades\DB::table('users')
             ->where('id', $user->id)

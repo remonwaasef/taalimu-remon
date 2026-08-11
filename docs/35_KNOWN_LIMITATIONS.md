@@ -25,6 +25,6 @@
 
 # Technical Debt & Roadmap Improvements
 
-- **Full-Text Search Engine**: Replace MySQL `LIKE` queries with Laravel Scout + Meilisearch for instant student and course lookups.
-- **Redis Cache Layer**: Transition default file cache driver to Redis for high-speed session storage.
-- **Database Partitioning**: Evaluate database table partitioning by `tenant_id` for enterprise accounts.
+- **Full-Text Search Engine**: ✅ Implemented — Laravel Scout + Meilisearch powers student/course searches (`SearchService`) with automatic LIKE fallback when the engine is unreachable. Remaining: evaluate expanding to more models (invoices, quizzes) and enabling `SCOUT_DRIVER=meilisearch` on the production server with `php artisan scout:sync-index-settings` + `scout:import`.
+- **Redis Cache Layer**: ✅ Implemented — cache/session/queue run on Redis with automatic database fallback.
+- **Database Partitioning**: ✅ Evaluated — partitioning by `tenant_id` was rejected (ADR-004); time-based RANGE partitioning for FK-free tables (e.g., `activity_log`) is the recommended retention strategy. See [37_DATABASE_SCALING.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/37_DATABASE_SCALING.md).

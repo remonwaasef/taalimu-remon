@@ -37,7 +37,7 @@ class TenantTest extends TestCase
             'tenant_id' => $tenant->id,
             'name' => 'Admin',
             'email' => 'admin@test.com',
-            'password' => bcrypt('password'),
+            'password' => 'password',
             'role' => 'center_admin',
         ]);
 
@@ -52,7 +52,7 @@ class TenantTest extends TestCase
             'tenant_id' => $tenant->id,
             'name' => 'Student',
             'email' => 'student@test.com',
-            'password' => bcrypt('password'),
+            'password' => 'password',
             'role' => 'student',
         ]);
         \App\Models\Student::create([
@@ -112,11 +112,13 @@ class TenantTest extends TestCase
             'tenant_id' => $tenant->id,
             'amount' => 100,
             'status' => 'paid',
+            'due_date' => now(),
         ]);
         Invoice::create([
             'tenant_id' => $tenant->id,
             'amount' => 200,
             'status' => 'paid',
+            'due_date' => now(),
         ]);
 
         $this->assertEquals(300, $tenant->ltv);

@@ -74,14 +74,14 @@ services:
       - laravel_network
 
   db:
-    image: mysql:8.0
+    image: mariadb:10.11
     container_name: laravel_db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE:-laravel}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-secret}
-      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
-      MYSQL_USER: ${DB_USERNAME:-laravel}
+      MARIADB_DATABASE: ${DB_DATABASE:-laravel}
+      MARIADB_ROOT_PASSWORD: ${DB_PASSWORD:-secret}
+      MARIADB_PASSWORD: ${DB_PASSWORD:-secret}
+      MARIADB_USER: ${DB_USERNAME:-laravel}
     volumes:
       - db_data:/var/lib/mysql
     networks:

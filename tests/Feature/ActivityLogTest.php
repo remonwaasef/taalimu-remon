@@ -25,10 +25,10 @@ class ActivityLogTest extends TestCase
         // Setup Tenant
         $this->tenant = Tenant::create(['domain' => 'test', 'name' => 'Test Center']);
 
-        // Setup Admin
+        // Setup Admin (global account — admin panel requires tenant_id = null,
+        // see SEC-01 CheckAdminRole middleware)
         $this->admin = User::factory()->create([
             'email' => 'admin@test.com',
-            'tenant_id' => $this->tenant->id,
             'role' => 'super_admin',
         ]);
 

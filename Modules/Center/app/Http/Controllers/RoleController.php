@@ -72,7 +72,7 @@ class RoleController extends Controller
         ]);
 
         if ($request->has('permissions')) {
-            $role->syncPermissions($request->permissions);
+            $role->syncPermissions($this->safePermissions($request->permissions));
         }
 
         return redirect()->route('center.roles.index')->with('success', __('center::messages.msg_070'));
@@ -80,11 +80,12 @@ class RoleController extends Controller
 
     public function edit($id)
     {
-        // Use Repository or Direct Find. We need to check if it's editable.
-        // Even if we find a Global Role, the Policy should block 'update'.
-        $role = Role::where('tenant_id', app('tenant')->id)->findOrFail($id);
+        $role = $this->roleRepository->findForTenant($id, app('tenant')->id);
 
-        $this->authorize('update', $role); // This will throw 403 if it's a System Role
+        abort_unless($role, 404);
+
+        // System roles render the same page in read-only mode (see edit.blade.php)
+        $this->authorize('view', $role);
 
         $permissions = $this->permissionService->getGroupedPermissions();
 
@@ -93,7 +94,10 @@ class RoleController extends Controller
 
     public function update(Request $request, $id)
     {
-        $role = Role::where('tenant_id', app('tenant')->id)->findOrFail($id);
+        $role = $this->roleRepository->findForTenant($id, app('tenant')->id);
+
+        abort_unless($role, 404);
+
         $this->authorize('update', $role);
 
         $request->validate([
@@ -119,7 +123,7 @@ class RoleController extends Controller
         $role->update(['name' => $request->name]);
 
         if ($request->has('permissions')) {
-            $role->syncPermissions($request->permissions);
+            $role->syncPermissions($this->safePermissions($request->permissions));
         }
 
         return redirect()->route('center.roles.index')->with('success', __('center::messages.msg_071'));
@@ -127,7 +131,10 @@ class RoleController extends Controller
 
     public function destroy($id)
     {
-        $role = Role::where('tenant_id', app('tenant')->id)->findOrFail($id);
+        $role = $this->roleRepository->findForTenant($id, app('tenant')->id);
+
+        abort_unless($role, 404);
+
         $this->authorize('delete', $role);
 
         if ($role->users()->count() > 0) {
@@ -137,5 +144,17 @@ class RoleController extends Controller
         $role->delete();
 
         return redirect()->route('center.roles.index')->with('success', __('center::messages.msg_073'));
+    }
+
+    /**
+     * Restrict assignable permissions to the center-scope.
+     * System-wide (admin.*, centers.*) permissions are reserved for the super-admin portal.
+     */
+    protected function safePermissions(array $permissions): array
+    {
+        return array_values(array_filter($permissions, function (string $permission) {
+            return str_contains($permission, 'admin.') === false
+                && str_contains($permission, 'centers.') === false;
+        }));
     }
 }

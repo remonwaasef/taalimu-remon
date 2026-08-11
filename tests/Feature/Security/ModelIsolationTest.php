@@ -27,6 +27,7 @@ class ModelIsolationTest extends TestCase
             'Coupon', // System-wide coupons for subscriptions
             'SiteSetting', // Global platform settings
             'SaleItem', // Child of Sale (implicitly isolated)
+            'OnlineCheckout', // Platform-level checkout map (created on main domain, not tenant context)
             'PersonalAccessToken', // Sanctum's token (managed by library)
             'Modules\Center\Models\Asset', // Deprecated subclass stub
         ];

@@ -8,6 +8,11 @@ use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
     /**
+     * Whether the Redis fallback warning has been logged for the current process.
+     */
+    protected static bool $redisFallbackLogged = false;
+
+    /**
      * Register any application services.
      */
     public function register(): void
@@ -20,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->configureResilientCaching();
         if (app()->environment('production') || \Illuminate\Support\Str::startsWith(config('app.url'), 'https://') || request()->header('x-forwarded-proto') === 'https') {
             \Illuminate\Support\Facades\URL::forceScheme('https');
         }
@@ -87,6 +93,42 @@ class AppServiceProvider extends ServiceProvider
 
             return $tenant->hasFeature($feature);
         });
+    }
+
+    /**
+     * Verify Redis availability and gracefully fall back to the database
+     * drivers when it is unreachable, keeping the platform online.
+     *
+     * Only runs when the active environment is configured to use Redis.
+     */
+    protected function configureResilientCaching(): void
+    {
+        $usesRedis = config('cache.default') === 'redis'
+            || config('session.driver') === 'redis'
+            || config('queue.default') === 'redis';
+
+        if (! $usesRedis) {
+            return;
+        }
+
+        try {
+            \Illuminate\Support\Facades\Redis::connection('default')->ping();
+        } catch (\Throwable $e) {
+            config([
+                'cache.default' => 'database',
+                'session.driver' => 'database',
+                'queue.default' => 'database',
+            ]);
+
+            if (! static::$redisFallbackLogged) {
+                static::$redisFallbackLogged = true;
+
+                \Illuminate\Support\Facades\Log::warning(
+                    'Redis is unreachable; falling back to database drivers for cache, session and queue.',
+                    ['error' => $e->getMessage()]
+                );
+            }
+        }
     }
 
     /**

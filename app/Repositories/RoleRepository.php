@@ -27,9 +27,11 @@ class RoleRepository
                 $query->where('tenant_id', $tenantId)
                     ->orWhereNull('tenant_id');
             })
-                ->where('guard_name', 'web')
-                ->orderBy('tenant_id', 'desc') // Local roles first (non-null)
-                ->get();
+            ->where('guard_name', 'web')
+            ->withCount('users')
+            ->with('permissions')
+            ->orderBy('tenant_id', 'desc') // Local roles first (non-null)
+            ->get();
 
             // Deduplicate by name, keeping the first one found (the tenant one, due to ordering)
             return $roles->unique('name')->map(function ($role) {

@@ -18,44 +18,65 @@ class QuizTest extends TestCase
 
     protected $tenant;
 
+    protected $lesson;
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->tenant = Tenant::create(['domain' => 'test', 'name' => 'Test', 'onboarding_status' => 'completed']);
         app()->instance('tenant', $this->tenant);
+
+        // Quizzes belong to a lesson (schema requires lesson_id)
+        $course = \App\Models\Course::create([
+            'tenant_id' => $this->tenant->id,
+            'title' => 'Math Course',
+        ]);
+        $section = \App\Models\Section::create([
+            'tenant_id' => $this->tenant->id,
+            'course_id' => $course->id,
+            'title' => 'Chapter 1',
+        ]);
+        $this->lesson = \App\Models\Lesson::create([
+            'tenant_id' => $this->tenant->id,
+            'section_id' => $section->id,
+            'title' => 'Lesson 1',
+        ]);
+    }
+
+    private function makeQuiz(array $overrides = []): Quiz
+    {
+        return Quiz::create(array_merge([
+            'tenant_id' => $this->tenant->id,
+            'lesson_id' => $this->lesson->id,
+            'title' => 'Math Quiz 1',
+        ], $overrides));
     }
 
     #[Test]
     public function it_can_create_a_quiz()
     {
-        $quiz = Quiz::create([
-            'tenant_id' => $this->tenant->id,
-            'title' => 'Math Quiz 1',
+        $quiz = $this->makeQuiz([
             'description' => 'Basic algebra',
-            'time_limit' => 30,
             'duration_minutes' => 30,
             'passing_score' => 60,
             'is_randomized' => false,
         ]);
 
         $this->assertDatabaseHas('quizzes', ['title' => 'Math Quiz 1']);
-        $this->assertEquals(30, $quiz->time_limit);
+        $this->assertEquals(30, $quiz->duration_minutes);
         $this->assertEquals(60, $quiz->passing_score);
     }
 
     #[Test]
     public function it_has_questions_relationship()
     {
-        $quiz = Quiz::create([
-            'tenant_id' => $this->tenant->id,
-            'title' => 'Math Quiz 1',
-        ]);
+        $quiz = $this->makeQuiz();
 
         Question::create([
             'tenant_id' => $this->tenant->id,
             'quiz_id' => $quiz->id,
-            'question_text' => 'What is 2+2?',
-            'question_type' => 'multiple_choice',
+            'content' => 'What is 2+2?',
+            'type' => 'mcq',
             'points' => 10,
         ]);
 
@@ -69,14 +90,11 @@ class QuizTest extends TestCase
             'tenant_id' => $this->tenant->id,
             'name' => 'Student',
             'email' => 'student@test.com',
-            'password' => bcrypt('password'),
+            'password' => 'password',
             'role' => 'student',
         ]);
 
-        $quiz = Quiz::create([
-            'tenant_id' => $this->tenant->id,
-            'title' => 'Math Quiz 1',
-        ]);
+        $quiz = $this->makeQuiz();
 
         QuizAttempt::create([
             'tenant_id' => $this->tenant->id,
@@ -92,8 +110,7 @@ class QuizTest extends TestCase
     #[Test]
     public function it_casts_is_randomized_to_boolean()
     {
-        $quiz = Quiz::create([
-            'tenant_id' => $this->tenant->id,
+        $quiz = $this->makeQuiz([
             'title' => 'Quiz',
             'is_randomized' => 1,
         ]);
@@ -110,8 +127,7 @@ class QuizTest extends TestCase
             'name' => 'Mathematics',
         ]);
 
-        $quiz = Quiz::create([
-            'tenant_id' => $this->tenant->id,
+        $quiz = $this->makeQuiz([
             'title' => 'Quiz',
             'category_id' => $category->id,
         ]);

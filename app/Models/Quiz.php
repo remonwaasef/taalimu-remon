@@ -19,6 +19,7 @@ class Quiz extends Model
         'passing_score',
         'is_randomized',
         'random_questions_count',
+        'category_id',
     ];
 
     protected $casts = [

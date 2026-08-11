@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -12,7 +13,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Course extends Model
 {
-    use \App\Traits\BelongsToTenant, \App\Traits\ClearsDashboardCache, HasFactory, LogsActivity, SoftDeletes;
+    use \App\Traits\BelongsToTenant, \App\Traits\ClearsDashboardCache, HasFactory, LogsActivity, Searchable, SoftDeletes;
 
     protected static function boot()
     {
@@ -70,6 +71,24 @@ class Course extends Model
     ];
 
     /**
+     * Determine the data sent to the search index.
+     *
+     * `tenant_id` is intentionally included so every search can be
+     * hard-filtered by tenant, guaranteeing cross-tenant isolation.
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'tenant_id' => (int) $this->tenant_id,
+            'title' => $this->title,
+            'description' => $this->description,
+            'status' => $this->status,
+            'created_at' => (int) ($this->created_at?->timestamp ?? 0),
+        ];
+    }
+
+    /**
      * Get the public registration URL for this course/group
      */
     public function getRegistrationUrl()
@@ -78,7 +97,17 @@ class Course extends Model
             return null;
         }
 
-        return route('group.register', ['token' => $this->registration_token]);
+        $params = ['token' => $this->registration_token];
+
+        // The "group.register" route lives on the tenant subdomain; resolve the
+        // tenant domain explicitly so the URL also works outside that context
+        // (e.g. generated from the main domain or from queued jobs).
+        $tenant = app()->bound('tenant') ? app('tenant') : ($this->tenant_id ? Tenant::find($this->tenant_id) : null);
+        if ($tenant && ! isset($params['tenant'])) {
+            $params['tenant'] = $tenant->domain;
+        }
+
+        return route('group.register', $params);
     }
 
     public function instructor()

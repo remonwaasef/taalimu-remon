@@ -27,11 +27,32 @@ DB_USERNAME=root
 DB_PASSWORD=
 
 # إعدادات الجلسات (Sessions)
-SESSION_DRIVER=database
+SESSION_DRIVER=redis
+SESSION_CONNECTION=session
 SESSION_LIFETIME=120
 SESSION_ENCRYPT=false
 SESSION_PATH=/
 SESSION_DOMAIN=null
+
+# إعدادات الكاش والجوهرة (Cache & Queue)
+CACHE_STORE=redis
+QUEUE_CONNECTION=redis
+
+# إعدادات Redis
+REDIS_CLIENT=predis
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+REDIS_DB=0
+REDIS_CACHE_DB=1
+REDIS_SESSION_DB=2
+
+# إعدادات البحث النصي (محلياً: database/LIKE — إنتاجياً: meilisearch)
+SCOUT_DRIVER=database
+SCOUT_QUEUE=true
+SCOUT_SOFT_DELETE=true
+MEILISEARCH_HOST=http://127.0.0.1:7700
+MEILISEARCH_KEY=null
 
 # دومين المستأجرين الأساسي
 TENANT_DOMAIN=localhost
@@ -61,11 +82,32 @@ DB_USERNAME=your_db_user
 DB_PASSWORD=your_secure_password
 
 # إعدادات الجلسات
-SESSION_DRIVER=database
+SESSION_DRIVER=redis
+SESSION_CONNECTION=session
 SESSION_LIFETIME=120
 SESSION_ENCRYPT=false
 SESSION_PATH=/
 SESSION_DOMAIN=.yourdomain.com
+
+# إعدادات الكاش والجوهرة (Cache & Queue)
+CACHE_STORE=redis
+QUEUE_CONNECTION=redis
+
+# إعدادات Redis (phpredis على السيرفر)
+REDIS_CLIENT=phpredis
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+REDIS_DB=0
+REDIS_CACHE_DB=1
+REDIS_SESSION_DB=2
+
+# إعدادات البحث النصي (Meilisearch)
+SCOUT_DRIVER=meilisearch
+SCOUT_QUEUE=true
+SCOUT_SOFT_DELETE=true
+MEILISEARCH_HOST=http://127.0.0.1:7700
+MEILISEARCH_KEY=your_master_key
 
 # دومين المستأجرين الأساسي (النطاق الرئيسي)
 TENANT_DOMAIN=yourdomain.com

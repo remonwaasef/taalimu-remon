@@ -438,7 +438,9 @@ $tenantRoutes = function () {
 
         // Role Management
         Route::middleware(['feature:advanced_roles'])->group(function () {
-            Route::resource('roles', \Modules\Center\Http\Controllers\RoleController::class)->names('center.roles');
+            Route::resource('roles', \Modules\Center\Http\Controllers\RoleController::class)
+                ->except(['show'])
+                ->names('center.roles');
         });
 
         // Branch Management

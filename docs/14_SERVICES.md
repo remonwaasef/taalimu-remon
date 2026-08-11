@@ -10,3 +10,4 @@ Business logic is decoupled into 35+ domain Service classes inside `app/Services
 - **`WhatsAppService` & `TelegramService`**: Messaging integrations and automated reporting.
 - **`OperationIssueService`**: Exception capture, deduplication, triage.
 - **`ScheduleConflictService`**: Timetable double-booking validation.
+- **`SearchService`**: Unified student/course full-text search (Scout/Meilisearch) with tenant isolation and automatic LIKE fallback.

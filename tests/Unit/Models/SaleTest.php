@@ -136,8 +136,10 @@ class SaleTest extends TestCase
         SaleItem::create([
             'tenant_id' => $this->tenant->id,
             'sale_id' => $sale->id,
+            'item_type' => \App\Models\Course::class,
+            'item_id' => 1,
             'description' => 'Course Fee',
-            'amount' => 100,
+            'price' => 100,
         ]);
 
         $this->assertCount(1, $sale->items);

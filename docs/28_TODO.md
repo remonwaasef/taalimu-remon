@@ -1,8 +1,9 @@
 # 28_TODO - Roadmap & Priority Checklist
 
 ### High Priority
-- [ ] **Redis Caching Driver Integration** (Session persistence & rate limiting).
-- [ ] **Full-Text Search Engine Integration** (Laravel Scout + Meilisearch).
+- [x] **Redis Caching Driver Integration** (Cache/Session/Queue على Redis مع fallback تلقائي لقاعدة البيانات).
+- [x] **Full-Text Search Engine Integration** (Laravel Scout + Meilisearch مع عزل المستأجرين وfallback إلى LIKE).
+- [x] **Enterprise Database Scaling Evaluation** (رُفض تقسيم tenant_id لأسباب قاطعة — انظر 37_DATABASE_SCALING.md؛ الخطة: MariaDB 10.6+ + RANGE شهري للجداول بلا FK).
 
 ### Medium Priority
 - [ ] **Role Permission Granularity UI** (Sub-roles for accountants & receptionists).

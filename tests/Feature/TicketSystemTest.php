@@ -25,6 +25,11 @@ class TicketSystemTest extends TestCase
         // Seed roles and permissions
         $this->seed(\Database\Seeders\RolesAndPermissionsSeeder::class);
 
+        // Setup Super Admin (must be created BEFORE a tenant is bound, otherwise
+        // the BelongsToTenant creating-hook forces a tenant_id and the admin
+        // panel middleware rejects non-global accounts)
+        $this->admin = User::factory()->create(['email' => 'superadmin@test.com', 'role' => 'super_admin']);
+
         // Setup Tenant
         $this->tenant = $this->createTenant(['domain' => 'test', 'name' => 'Test Center']);
         app()->instance('tenant', $this->tenant);
@@ -32,8 +37,6 @@ class TicketSystemTest extends TestCase
         // Setup Tenant User (Center Admin)
         $this->tenantUser = User::factory()->create(['email' => 'center@test.com', 'tenant_id' => $this->tenant->id, 'role' => 'center_admin']);
 
-        // Setup Super Admin
-        $this->admin = User::factory()->create(['email' => 'superadmin@test.com', 'role' => 'super_admin']);
         app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId(null);
         $this->admin->assignRole('super_admin');
     }

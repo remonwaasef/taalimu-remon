@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Course;
 use App\Models\Grade;
 use App\Models\Package;
 use App\Models\Stage;
@@ -82,6 +83,8 @@ class StudentSystemTest extends TestCase
         // 3. Setup Grade
         $stage = Stage::create(['name' => 'Elementary', 'tenant_id' => $this->tenant->id]);
         Grade::create(['name' => 'Level 1', 'tenant_id' => $this->tenant->id, 'stage_id' => $stage->id]);
+
+        Course::create(['title' => 'Group A', 'tenant_id' => $this->tenant->id]);
     }
 
     /** @test */
@@ -96,6 +99,7 @@ class StudentSystemTest extends TestCase
             'phone' => '01000000000',
             'gender' => 'male',
             'grade_id' => $grade->id,
+            'course_ids' => [Course::first()->id],
             'password' => 'password123',
         ];
 

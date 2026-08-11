@@ -61,12 +61,15 @@ class StudentValidationTest extends TestCase
     /** @test */
     public function valid_data_passes_validation()
     {
+        $course = \App\Models\Course::create(['tenant_id' => $this->tenant->id, 'title' => 'Group A']);
+
         $data = [
             'name' => 'رامل محمد',
             'phone' => '01234567890',
             'email' => 'valid@email.com',
             'gender' => 'male',
             'grade_id' => $this->grade->id,
+            'course_ids' => [$course->id],
         ];
         $request = new StoreStudentRequest;
 

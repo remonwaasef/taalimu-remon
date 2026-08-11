@@ -36,7 +36,8 @@ The system isolates domain responsibilities into 6 core modules in `Modules/`:
 - **Multi-Tenancy Engine**: Single-database multi-tenancy partitioned via `tenant_id` foreign keys and the `BelongsToTenant` Eloquent trait (`TenantScope`).
 - **Frontend Hybrid**: Server-rendered Blade templates + Alpine.js micro-interactions + Inertia.js React 19 interactive dashboards.
 - **Styling**: TailwindCSS 3.4 + Bootstrap 5.3 + Custom CSS design tokens (`resources/css/design-tokens.css`).
-- **Realtime & Queue**: Laravel Reverb (WebSockets), database/redis Laravel Queues (`queue:listen`).
+- **Realtime & Queue**: Laravel Reverb (WebSockets), Redis-backed queue/cache/session (`CACHE_STORE=redis`, `SESSION_DRIVER=redis`, `QUEUE_CONNECTION=redis`) with automatic database fallback when Redis is unreachable; `predis/predis` client on dev, `phpredis` on production servers.
+- **Full-Text Search**: Laravel Scout + Meilisearch (`SearchService`) for instant, tenant-isolated student/course search, degrading to LIKE queries when the engine is down.
 - **Integrations**: WhatsApp API, Telegram Bot API, PayPal REST SDK, Paymob Gateway, Sentry, Spatie Activitylog & Backup, Barryvdh DomPDF.
 
 ---

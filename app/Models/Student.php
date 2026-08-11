@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Student extends Model
 {
-    use \App\Traits\BelongsToTenant, \App\Traits\ClearsDashboardCache, HasFactory, LogsActivity, SoftDeletes;
+    use \App\Traits\BelongsToTenant, \App\Traits\ClearsDashboardCache, HasFactory, LogsActivity, Searchable, SoftDeletes;
 
     protected static function boot()
     {
@@ -42,6 +43,28 @@ class Student extends Model
         return LogOptions::defaults()
             ->logOnly(['name', 'email', 'status'])
             ->logOnlyDirty();
+    }
+
+    /**
+     * Determine the data sent to the search index.
+     *
+     * `tenant_id` is intentionally included so every search can be
+     * hard-filtered by tenant, guaranteeing cross-tenant isolation.
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'tenant_id' => (int) $this->tenant_id,
+            'name' => $this->name,
+            'phone' => $this->phone,
+            'email' => $this->email,
+            'code' => $this->code,
+            'parent_name' => $this->parent_name,
+            'parent_phone' => $this->parent_phone,
+            'status' => $this->status,
+            'created_at' => (int) ($this->created_at?->timestamp ?? 0),
+        ];
     }
 
     protected $fillable = [

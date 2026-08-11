@@ -60,24 +60,12 @@ class StudentController extends Controller
             'exclude_course_id' => 'nullable|integer',
         ]);
 
-        $query = Student::query()->select('id', 'name', 'phone');
-
-        if (! empty($validated['q'])) {
-            $term = $validated['q'];
-            $query->where(function ($q) use ($term) {
-                $q->where('name', 'like', "%{$term}%")
-                    ->orWhere('phone', 'like', "%{$term}%")
-                    ->orWhere('code', 'like', "%{$term}%");
-            });
-        }
-
-        // Optionally hide students already enrolled in a given course
-        if (! empty($validated['exclude_course_id'])) {
-            $courseId = (int) $validated['exclude_course_id'];
-            $query->whereDoesntHave('user.enrollments', fn ($q) => $q->where('course_id', $courseId));
-        }
-
-        $students = $query->orderBy('name')->limit(20)->get();
+        $students = app(\App\Services\SearchService::class)->searchStudents(
+            tenant: $this->tenant,
+            term: (string) ($validated['q'] ?? ''),
+            limit: 20,
+            excludeCourseId: isset($validated['exclude_course_id']) ? (int) $validated['exclude_course_id'] : null
+        );
 
         return response()->json(
             $students->map(fn ($s) => [

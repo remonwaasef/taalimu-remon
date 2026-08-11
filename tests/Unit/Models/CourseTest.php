@@ -35,7 +35,7 @@ class CourseTest extends TestCase
         ]);
 
         $this->assertNotEmpty($course->registration_token);
-        $this->assertLength(16, $course->registration_token);
+        $this->assertEquals(16, strlen($course->registration_token));
     }
 
     #[Test]
@@ -49,7 +49,7 @@ class CourseTest extends TestCase
         Section::create([
             'tenant_id' => $this->tenant->id,
             'course_id' => $course->id,
-            'name' => 'Chapter 1',
+            'title' => 'Chapter 1',
             'sort_order' => 1,
         ]);
 
@@ -96,8 +96,11 @@ class CourseTest extends TestCase
         $course = Course::create([
             'tenant_id' => $this->tenant->id,
             'title' => 'Math 101',
-            'registration_token' => null,
         ]);
+
+        // The creating hook auto-fills a token; simulate a legacy record
+        // without one, which the model must tolerate.
+        $course->forceFill(['registration_token' => null])->save();
 
         $this->assertNull($course->getRegistrationUrl());
     }

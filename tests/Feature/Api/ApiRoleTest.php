@@ -45,6 +45,7 @@ class ApiRoleTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '.$token,
             'Accept' => 'application/json',
+            'X-Tenant-Domain' => $this->tenant->domain,
         ])->getJson('/api/v1/centers');
 
         // It might redirect if the controller logic forces it,
@@ -62,6 +63,7 @@ class ApiRoleTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '.$token,
             'Accept' => 'application/json',
+            'X-Tenant-Domain' => $this->tenant->domain,
         ])->getJson('/api/v1/centers');
 
         // The controller currently redirects students to campus.index

@@ -21,6 +21,9 @@
 ---
 
 # Recent Major Work
+- Completed **full-text search integration**: Laravel Scout + Meilisearch wired into `SearchService` (students + courses) with hard `tenant_id` filtering, ranked results, async JSON pickers, and automatic LIKE fallback when the engine is unreachable.
+- Completed **Redis integration**: Cache/Session/Queue moved from file/database to Redis (separate Redis DBs: queue=0, cache=1, session=2) with an automatic graceful fallback to database drivers when Redis is unreachable, plus `predis/predis` for environments without the phpredis extension.
+- **Security patch**: Upgraded `dompdf` (→3.1.6) and `guzzle` (→7.15.x) to patched versions; `composer audit` reports zero advisories.
 - Built numbered AI-first Knowledge Operating System inside `docs/` (`00_` through `35_`) and root entry points (`PROJECT_MANIFEST.md`, `README_AI.md`).
 - Added composite database performance indexes (`2026_07_10_000001_add_performance_indexes.php`) across 20+ tenant-partitioned tables.
 - Implemented automated operation issue triage (`OperationIssue`) capturing production stack traces with timeline logs and attachments.
@@ -29,9 +32,9 @@
 ---
 
 # Current Priorities
-1. **Cache Strategy Optimization**: Transition default file cache driver to Redis for session persistence and query caching.
-2. **Full-Text Search Engine**: Integrate Laravel Scout with Meilisearch for instant student and course searches.
-3. **Enterprise Database Scaling**: Evaluate database table partitioning strategy by `tenant_id` for enterprise centers.
+1. **Role Permission Granularity UI**: Custom role permission UI for center accountants and receptionists.
+2. **Image Upload WebP Auto-Compression**: `app/Traits/HandlesFileUploads.php`.
+3. **Database Phase A hardening**: MariaDB 10.6+ standardization (KVM), docker-compose `mariadb:10.11` alignment, slow-query/monitoring cron (see [37_DATABASE_SCALING.md](file:///d:/new%20project/antigravty/taalimu.com/taalimu.com/docs/37_DATABASE_SCALING.md)).
 
 ---
 
